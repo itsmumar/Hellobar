@@ -3,15 +3,16 @@ puts 'Loading Rails...'
 begin
   load File.expand_path('../spring', __FILE__)
 rescue LoadError
+  puts 'Spring is not found. Keeping calm...'
 end
 require_relative '../config/boot'
 require_relative '../config/environment'
 require 'fileutils'
 
 date = ARGV.first
-input_log = File.join(Rails.root, 'log', 'queue_worker.log')
-output_log = File.join(Rails.root, 'log', "failed_jobs.#{ date }.log")
-tmp_log = File.join(Rails.root, 'log', "failed_jobs.#{ date }.tmp")
+input_log = Rails.root.join('log', 'queue_worker.log')
+output_log = Rails.root.join('log', "failed_jobs.#{ date }.log")
+tmp_log = Rails.root.join('log', "failed_jobs.#{ date }.tmp")
 
 # Get just the entries relative to the input date
 puts "Searching #{ input_log } for #{ date }..."
@@ -20,7 +21,7 @@ puts 'Parsing jobs...'
 jobs = {}
 File.open(tmp_log, 'r') do |fp|
   loop do
-    break unless line = fp.gets
+    break unless (line = fp.gets)
     next unless line =~ /(Received|Processed) message\[(.*?)\]: "(.*)"/
     type = Regexp.last_match(1)
     message_id = Regexp.last_match(2)

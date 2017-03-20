@@ -1,5 +1,5 @@
 module TargetedSegmentsHelper
-  SALT = '7f9d074257b1400c55d0b838d8e7f5bdd8330151'
+  SALT = '7f9d074257b1400c55d0b838d8e7f5bdd8330151'.freeze
 
   def create_targeted_content_link(site, targeted_segment)
     segment, value = targeted_segment.split(':', 2)

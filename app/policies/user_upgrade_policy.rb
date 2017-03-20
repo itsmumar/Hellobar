@@ -23,7 +23,7 @@ class UserUpgradePolicy
   private
 
   def no_script_installed?
-    @user.sites.select(&:has_script_installed?).empty?
+    @user.sites.select(&:script_installed?).empty?
   end
 
   def any_max_total_views_in_month?

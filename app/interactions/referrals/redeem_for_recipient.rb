@@ -26,7 +26,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
     send_success_email_to_sender
   rescue Referrals::NotSignedUp => ex
     # This really is an exceptional situation, but because the caller of this interaction,
-    # Site#has_script_installed? is referenced from so many places, let's play it safe
+    # Site#script_installed? is referenced from so many places, let's play it safe
     # and not have the user see an exception they're not directly affected by.
     Raven.capture_exception(ex)
   end

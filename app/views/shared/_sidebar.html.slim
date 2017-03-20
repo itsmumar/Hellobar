@@ -8,7 +8,7 @@
       = active_link_to site_site_elements_path(current_site) do
         i.icon-manage
         | Manage
-    - if current_site.has_script_installed?
+    - if current_site.script_installed?
       li
         = active_link_to site_improve_path(current_site) do
           i.icon-growthbars

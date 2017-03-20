@@ -12,7 +12,8 @@ describe Subscribable, '#subscription_bill_and_status' do
     serializer = double 'SiteSerializer'
     SiteSerializer.stub new: serializer
 
-    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil).should == { bill: bill, site: serializer, is_upgrade: true, status: :ok }
+    expect(controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil))
+      .to eq(bill: bill, site: serializer, is_upgrade: true, status: :ok)
   end
 
   it 'returns errors and an unprocessable_entity status when NOT successful' do
@@ -20,7 +21,8 @@ describe Subscribable, '#subscription_bill_and_status' do
     bill.errors.add(:status, 'oops')
     controller.stub update_subscription: [false, bill]
 
-    controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil).should == { errors: bill.errors.full_messages, status: :unprocessable_entity }
+    expect(controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil))
+      .to eq(errors: bill.errors.full_messages, status: :unprocessable_entity)
   end
 
   it 'tracks changes to subscription' do
@@ -33,7 +35,8 @@ describe Subscribable, '#subscription_bill_and_status' do
     allow(controller).to receive(:track_upgrade)
     expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, anything)
 
-    controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil).should == { bill: bill, site: serializer, is_upgrade: true, status: :ok }
+    expect(controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil))
+      .to eq(bill: bill, site: serializer, is_upgrade: true, status: :ok)
   end
 end
 
@@ -45,31 +48,31 @@ describe Subscribable, '#build_subscription_instance' do
   it 'builds a free subscription instance properly' do
     billing_params = { plan: 'free', schedule: 'yearly' }
 
-    controller.build_subscription_instance(billing_params).class.should == Subscription::Free
+    expect(controller.build_subscription_instance(billing_params).class).to eq(Subscription::Free)
   end
 
   it 'builds a pro subscription instance properly' do
     billing_params = { plan: 'pro', schedule: 'yearly' }
 
-    controller.build_subscription_instance(billing_params).class.should == Subscription::Pro
+    expect(controller.build_subscription_instance(billing_params).class).to eq(Subscription::Pro)
   end
 
   it 'builds an enterprise subscription instance properly' do
     billing_params = { plan: 'enterprise', schedule: 'yearly' }
 
-    controller.build_subscription_instance(billing_params).class.should == Subscription::Enterprise
+    expect(controller.build_subscription_instance(billing_params).class).to eq(Subscription::Enterprise)
   end
 
   it 'sets the schedule to monthly properly' do
     billing_params = { plan: 'pro', schedule: 'monthly' }
 
-    controller.build_subscription_instance(billing_params).schedule.should == 'monthly'
+    expect(controller.build_subscription_instance(billing_params).schedule).to eq('monthly')
   end
 
   it 'sets the schedule to yearly properly' do
     billing_params = { plan: 'pro', schedule: 'yearly' }
 
-    controller.build_subscription_instance(billing_params).schedule.should == 'yearly'
+    expect(controller.build_subscription_instance(billing_params).schedule).to eq('yearly')
   end
 end
 
@@ -98,14 +101,14 @@ describe Subscribable, '#update_subscription' do
     it 'translates the trial_period to days' do
       billing_params = { plan: 'pro', schedule: 'yearly', trial_period: '60' }
       site = create(:site)
-      site.should_receive(:change_subscription).with(anything, nil, 60.days)
+      expect(site).to receive(:change_subscription).with(anything, nil, 60.days)
       controller.update_subscription(site, nil, billing_params)
     end
 
     it 'translates the trial_period to nil if not given' do
       billing_params = { plan: 'pro', schedule: 'yearly' }
       site = create(:site)
-      site.should_receive(:change_subscription).with(anything, nil, nil)
+      expect(site).to receive(:change_subscription).with(anything, nil, nil)
       controller.update_subscription(site, nil, billing_params)
     end
   end

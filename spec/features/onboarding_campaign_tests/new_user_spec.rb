@@ -7,7 +7,7 @@ feature 'New User Onboarding email campaigns' do
   given(:invitee) { User.find_or_invite_by_email(email, user.sites.first) }
 
   before do
-    UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(true)
+    allow_any_instance_of(UserOnboardingStatusSetter).to receive(:in_campaign_ab_test?).and_return(true)
     record_mailer_gateway_request_history!
   end
 

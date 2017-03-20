@@ -12,7 +12,7 @@ class UserMigrationController < ApplicationController
 
     if User.where(email: email).exists?
       redirect_to login_path, notice: 'This email has already been upgraded.  Please log in.'
-    elsif wordpress_user = Hello::WordpressUser.authenticate(email, password, !!current_admin)
+    elsif (wordpress_user = Hello::WordpressUser.authenticate(email, password, current_admin.present?))
       session[:wordpress_user_id] = wordpress_user.id
       redirect_to new_user_migration_path
     else
@@ -47,7 +47,7 @@ class UserMigrationController < ApplicationController
           site.change_subscription(subscription, nil, Hello::WordpressUser::PRO_TRIAL_PERIOD)
 
           site_hash[:bar_ids].each do |id|
-            if bar = load_wordpress_bar(id)
+            if (bar = load_wordpress_bar(id))
               bar.convert_to_site_element!(site.rules.first)
             end
           end
@@ -75,10 +75,9 @@ class UserMigrationController < ApplicationController
 
   def current_wordpress_user
     return @wordpress_user if @wordpress_user
+    return unless session[:wordpress_user_id] && (@wordpress_user = Hello::WordpressUser.find_by(id: session[:wordpress_user_id]))
 
-    if session[:wordpress_user_id] && @wordpress_user = Hello::WordpressUser.where(id: session[:wordpress_user_id]).first
-      return @wordpress_user
-    end
+    @wordpress_user
   end
 
   def load_wordpress_bar(id)

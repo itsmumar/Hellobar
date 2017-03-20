@@ -7,13 +7,13 @@ class Permissions
       billing: false,
       delete_site: false,
       invite_user: false
-    },
+    }.freeze,
     OWNER => {
       billing: true,
       delete_site: true,
       invite_user: true
-    }
-  }
+    }.freeze
+  }.freeze
 
   def self.view_bills?(user, site)
     permission_for(user, site, :billing)

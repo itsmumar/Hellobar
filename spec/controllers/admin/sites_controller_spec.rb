@@ -9,7 +9,7 @@ describe Admin::SitesController do
   context 'PUT update' do
     it 'changes the subscription with the correct payment method and detail' do
       put :update, id: site.id, user_id: site.owners.first.id, subscription: { plan: 'ProComped', schedule: 'monthly' }
-      site.reload.current_subscription.is_a?(Subscription::ProComped).should be_true
+      expect(site.reload.current_subscription.is_a?(Subscription::ProComped)).to be_truthy
     end
   end
 

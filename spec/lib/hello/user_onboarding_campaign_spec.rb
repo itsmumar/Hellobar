@@ -4,8 +4,8 @@ describe UserOnboardingCampaign do
   describe 'UserOnboardingCampaign.deliver_all_onboarding_campaign_email!' do
     before do
       klass = UserOnboardingCampaign.onboarding_campaign_classes.first
-      klass.stub(:users).and_return([double('User', current_onboarding_status: nil)])
-      klass.stub(:new).and_return(mock_campaign)
+      allow(klass).to receive(:users).and_return([double('User', current_onboarding_status: nil)])
+      allow(klass).to receive(:new).and_return(mock_campaign)
     end
     let(:mock_campaign) { double('UserOnboardingCampaign') }
 

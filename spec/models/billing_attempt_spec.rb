@@ -12,16 +12,16 @@ describe BillingAttempt do
     set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
 
     before do
-      PaymentMethodDetails.any_instance.stub(:charge).and_return([:success, 'response'])
+      allow_any_instance_of(PaymentMethodDetails).to receive(:charge).and_return([:success, 'response'])
     end
 
     let(:paid_bill) { create(:pro_bill, :paid) }
 
     it 'should create a refund' do
       billing_attempt = paid_bill.billing_attempts.last
-      refund_bill, refund_attempt = billing_attempt.refund!
-      refund_bill.amount.should == billing_attempt.bill.amount * -1
-      refund_bill.paid?.should be_true
+      refund_bill, _refund_attempt = billing_attempt.refund!
+      expect(refund_bill.amount).to eq(billing_attempt.bill.amount * -1)
+      expect(refund_bill.paid?).to be_truthy
     end
 
     it 'should not try to refund more than paid' do

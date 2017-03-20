@@ -27,7 +27,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
   def email_exists?(list_id, email)
     member_id = Digest::MD5.hexdigest(email)
-    !!@client.lists(list_id).members(member_id).retrieve
+    @client.lists(list_id).members(member_id).retrieve.present?
   rescue Gibbon::MailChimpError => error
     if error.status_code == 404
       false
@@ -123,6 +123,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     super message
   end
 
+  # rubocop: disable Lint/EmptyWhen
   def handle_error(error)
     case error.status_code
     when 250
@@ -139,6 +140,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       raise error
     end
   end
+  # rubocop: enable Lint/EmptyWhen
 
   def handle_result(result)
     if result['errors']
@@ -172,7 +174,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   def catch_required_merge_var_error!(_error)
     # pause identity by deleting it
     user = @identity.site.users.first
-    if user.has_temporary_email?
+    if user.temporary_email?
       Rails.logger.warn "Cannot catch required_merge_var error for Identity #{ @identity.id } -- user has not yet added their email address."
       return
     end

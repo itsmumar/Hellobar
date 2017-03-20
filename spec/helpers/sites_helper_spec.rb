@@ -9,16 +9,16 @@ describe SitesHelper do
       s1 = user.sites.create(url: 'http://asdf.com')
       s2 = user.sites.create(url: 'http://bsdf.com')
       s3 = user.sites.create(url: 'http://zsdf.com')
-      helper.stub(:current_user).and_return(user)
-      helper.stub(:current_site).and_return(s2)
-      helper.sites_for_team_view.should == [s2, s1, s3]
+      allow(helper).to receive(:current_user).and_return(user)
+      allow(helper).to receive(:current_site).and_return(s2)
+      expect(helper.sites_for_team_view).to eq([s2, s1, s3])
     end
   end
 
   describe 'bill_due_at' do
     it 'formats the due date of the bill' do
       bill = build(:bill)
-      allow(bill).to receive(:due_at).and_return(DateTime.new(2001, 2, 3, 4, 5, 6))
+      allow(bill).to receive(:due_at).and_return(Time.zone.local(2001, 2, 3, 4, 5, 6))
       expect(helper.bill_due_at(bill)).to eq('2-3-2001')
     end
   end

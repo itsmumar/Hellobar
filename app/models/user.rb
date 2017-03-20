@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   include QueueWorker::Delay
   after_initialize  :check_if_temporary
   before_save       :clear_invite_token
-  after_save        :disconnect_oauth, if: :is_oauth_user?
+  after_save        :disconnect_oauth, if: :oauth_user?
   after_save        :track_temporary_status_change
 
   after_create :add_to_onboarding_campaign
@@ -51,12 +51,12 @@ class User < ActiveRecord::Base
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
-  validate :oauth_email_change, if: :is_oauth_user?
+  validate :oauth_email_change, if: :oauth_user?
 
   attr_accessor :legacy_migration, :timezone, :is_impersonated
 
-  ACTIVE_STATUS = 'active'
-  TEMPORARY_STATUS = 'temporary'
+  ACTIVE_STATUS = 'active'.freeze
+  TEMPORARY_STATUS = 'temporary'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
 
   # returns a user with a random email and password
@@ -79,13 +79,12 @@ class User < ActiveRecord::Base
   end
 
   def self.find_and_create_by_referral(email)
-    if Referral.find_by(email: email)
-      password = Devise.friendly_token[9, 20]
+    return unless Referral.find_by(email: email)
+    password = Devise.friendly_token[9, 20]
 
-      User.create email: email,
-                  status: TEMPORARY_STATUS,
-                  password: password, password_confirmation: password
-    end
+    User.create email: email,
+                status: TEMPORARY_STATUS,
+                password: password, password_confirmation: password
   end
 
   # dont require the password virtual attribute to be present
@@ -131,11 +130,11 @@ class User < ActiveRecord::Base
     status == TEMPORARY_STATUS
   end
 
-  def has_temporary_email?
+  def temporary_email?
     email.match(/hello\-[0-9]+@hellobar.com/)
   end
 
-  def has_paying_subscription?
+  def paying_subscription?
     subscriptions.active.any? { |subscription| subscription.capabilities.acts_as_paid_subscription? }
   end
 
@@ -154,7 +153,7 @@ class User < ActiveRecord::Base
   end
 
   def onboarding_status_setter
-    @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, has_paying_subscription?, onboarding_statuses)
+    @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, paying_subscription?, onboarding_statuses)
   end
 
   def send_devise_notification(notification, *args)
@@ -162,7 +161,7 @@ class User < ActiveRecord::Base
 
     case notification
     when :reset_password_instructions
-      if is_oauth_user?
+      if oauth_user?
         reset_link = "#{ host }/auth/google_oauth2"
         MailerGateway.send_email('Reset Password Oauth', email, email: email, reset_link: reset_link)
       else
@@ -173,16 +172,14 @@ class User < ActiveRecord::Base
   end
 
   def role_for_site(site)
-    if membership = site_memberships.find_by(site: site)
-      membership.role.to_sym
-    end
+    return unless (membership = site_memberships.find_by(site: site))
+    membership.role.to_sym
   end
 
   def track_temporary_status_change
-    if @was_temporary && !temporary?
-      Analytics.track(:user, id, 'Completed Signup', email: email)
-      @was_temporary = false
-    end
+    return unless @was_temporary && !temporary?
+    Analytics.track(:user, id, 'Completed Signup', email: email)
+    @was_temporary = false
   end
 
   def check_if_temporary
@@ -200,7 +197,7 @@ class User < ActiveRecord::Base
     false
   end
 
-  def is_oauth_user?
+  def oauth_user?
     !authentications.empty?
   end
 
@@ -208,7 +205,8 @@ class User < ActiveRecord::Base
     invite_token_expire_at && invite_token_expire_at <= Time.now
   end
 
-  def has_permission_for(feature, site)
+  # @deprecated unusued?
+  def permission_for?(feature, site)
     role = site.membership_for_user(self).try(:role)
     role && Hellobar::Settings[:permissions][role].try(:include?, feature)
   end
@@ -231,7 +229,7 @@ class User < ActiveRecord::Base
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-    elsif user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] })
+    elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
       user.first_name = info['first_name'] if info['first_name'].present?
       user.last_name = info['last_name'] if info['last_name'].present?
 
@@ -311,12 +309,12 @@ class User < ActiveRecord::Base
   private
 
   def user_upgrade_policy
-    @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, has_paying_subscription?)
+    @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, paying_subscription?)
   end
 
   def send_team_invite_email(site)
     host = ActionMailer::Base.default_url_options[:host]
-    login_link = is_oauth_user? ? "#{ host }/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
+    login_link = oauth_user? ? "#{ host }/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
     MailerGateway.send_email('Team Invite', email, site_url: site.url, login_url: login_link)
   end
 
@@ -329,9 +327,8 @@ class User < ActiveRecord::Base
 
   # Disconnect oauth logins if user sets their own password
   def disconnect_oauth
-    if !id_changed? && encrypted_password_changed? && is_oauth_user?
-      authentications.destroy_all
-    end
+    return unless !id_changed? && encrypted_password_changed? && oauth_user?
+    authentications.destroy_all
   end
 
   def clear_invite_token
@@ -345,9 +342,8 @@ class User < ActiveRecord::Base
   end
 
   def oauth_email_change
-    if !id_changed? && is_oauth_user? && email_changed? && !encrypted_password_changed?
-      errors.add(:email, 'cannot be changed without a password.')
-    end
+    return unless !id_changed? && oauth_user? && email_changed? && !encrypted_password_changed?
+    errors.add(:email, 'cannot be changed without a password.')
   end
 
   def email_does_not_exist_in_wordpress

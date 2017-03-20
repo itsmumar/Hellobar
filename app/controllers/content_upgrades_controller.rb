@@ -12,7 +12,7 @@ class ContentUpgradesController < ApplicationController
 
   def new
     @content_upgrade = SiteElement.new
-    @styles = @site.get_content_upgrade_styles
+    @styles = @site.content_upgrade_styles
     # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
@@ -23,7 +23,7 @@ class ContentUpgradesController < ApplicationController
   end
 
   def edit
-    @styles = @site.get_content_upgrade_styles
+    @styles = @site.content_upgrade_styles
   end
 
   def show
@@ -53,7 +53,7 @@ class ContentUpgradesController < ApplicationController
   end
 
   def style_editor
-    @styles = @site.get_content_upgrade_styles
+    @styles = @site.content_upgrade_styles
   end
 
   def update_styles
@@ -105,15 +105,14 @@ class ContentUpgradesController < ApplicationController
   end
 
   def verify_capability
-    unless @site && @site.capabilities.content_upgrades?
-      render json: { error: 'forbidden' }, status: :forbidden
-    end
+    return if @site && @site.capabilities.content_upgrades?
+    render json: { error: 'forbidden' }, status: :forbidden
   end
 
   def load_content_upgrade
     @content_upgrade = @site.site_elements.find(params[:id])
-    if @content_upgrade.rule.site_id != @site.id
-      render json: { error: 'forbidden' }, status: :forbidden
-    end
+    return unless @content_upgrade.rule.site_id != @site.id
+
+    render json: { error: 'forbidden' }, status: :forbidden
   end
 end

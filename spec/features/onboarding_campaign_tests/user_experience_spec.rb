@@ -5,7 +5,7 @@ feature 'One User In all onboarding Campaigns' do
   before(:each) { Timecop.freeze(start) }
   after(:each)  { Timecop.return }
 
-  before { UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(true) }
+  before { allow_any_instance_of(UserOnboardingStatusSetter).to receive(:in_campaign_ab_test?).and_return(true) }
   before { record_mailer_gateway_request_history! }
 
   let(:start)      { Time.zone.now }
@@ -42,7 +42,7 @@ feature 'One User In all onboarding Campaigns' do
 
   feature 'users excluded from the onboarding campaign a/b tests' do
     let(:excluded_user) do
-      UserOnboardingStatusSetter.any_instance.stub(:in_campaign_ab_test?).and_return(false)
+      allow_any_instance_of(UserOnboardingStatusSetter).to receive(:in_campaign_ab_test?).and_return(false)
       login
     end
 

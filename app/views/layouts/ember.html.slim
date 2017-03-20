@@ -18,7 +18,7 @@ html
     = csrf_meta_tags
 
   body#hb-editor.loading
-    - if get_ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
+    - if ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
       = render "shared/modals/contact_list"
     - else
       = render "shared/modals/contact_list"
@@ -37,7 +37,7 @@ html
 
     javascript:
       HB_DNT = 1;
-      HB_ONBOARDING_EMAIL_VOLUME = "#{get_ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
+      HB_ONBOARDING_EMAIL_VOLUME = "#{ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
 
       var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};

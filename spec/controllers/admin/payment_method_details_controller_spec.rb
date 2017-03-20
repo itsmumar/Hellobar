@@ -9,7 +9,7 @@ describe Admin::PaymentMethodDetailsController do
     before do
       cscc = CyberSourceCreditCard.new data: { 'token' => 'my_cool_token' }
       cscc.save(validate: false)
-      CyberSourceCreditCard.stub(:find).and_return(cscc)
+      allow(CyberSourceCreditCard).to receive(:find).and_return(cscc)
     end
 
     it 'removes the payment method' do

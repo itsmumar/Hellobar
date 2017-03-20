@@ -3,29 +3,29 @@ namespace :queue_worker do
 
   desc 'Starts all the queue workers'
   task :start do
-    require File.join(Rails.root, "config", "initializers", "settings.rb")
+    require Rails.root.join('config', 'initializers', 'settings.rb')
+    root = Rails.root
 
     {
       Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [3, "--skip-old"]
+      Hellobar::Settings[:low_priority_queue] => [3, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
-      additional_options = options[1] || ""
-      puts "Starting #{num_workers} workers for #{queue.inspect}"
-      cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers} #{additional_options}"
+      additional_options = options[1] || ''
+      puts "Starting #{ num_workers } workers for #{ queue.inspect }"
+      cmd = "cd #{ root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers } #{ additional_options }"
       puts cmd
       `#{cmd}`
     end
   end
 
-
   desc 'Stops all the queue workers'
   task :stop do
-    processes = `ps aux`.split("\n").reject{|l| l !~ WORKER_PATTERN}
-    puts "Stopping #{processes.length} queue workers..."
+    processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
+    puts "Stopping #{ processes.length } queue workers..."
     processes.each do |process|
       pid = process.split(/\s+/)[1].to_i
-      cmd = "kill #{pid}"
+      cmd = "kill #{ pid }"
       puts cmd
       `#{cmd}`
     end
@@ -33,37 +33,35 @@ namespace :queue_worker do
 
   desc 'Restarts all the queue workers'
   task :restart do
-    Rake::Task["queue_worker:stop"].invoke
-    Rake::Task["queue_worker:start"].invoke
+    Rake::Task['queue_worker:stop'].invoke
+    Rake::Task['queue_worker:start'].invoke
   end
 
   desc 'Restarts only workers that are not currently running'
   task :resurrect do
-    require File.join(Rails.root, "config", "initializers", "settings.rb")
+    root = Rails.root
+    require Rails.root.join('config', 'initializers', 'settings.rb')
 
-    processes = `ps aux`.split("\n").reject{|l| l !~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
     {
       Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [3, "--skip-old"]
+      Hellobar::Settings[:low_priority_queue] => [3, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
-      additional_options = options[1] || ""
-      puts "Expecting #{num_workers} workers for #{queue.inspect}"
+      additional_options = options[1] || ''
+      puts "Expecting #{ num_workers } workers for #{ queue.inspect }"
       num_workers_found = 0
       processes.each do |process|
         if process =~ WORKER_PATTERN
-          if $1 == queue.to_s
-            num_workers_found += 1
-          end
+          num_workers_found += 1 if Regexp.last_match(1) == queue.to_s
         end
       end
-      num_workers_needed = num_workers-num_workers_found
-      puts "Found #{num_workers_found}. Starting #{num_workers_needed}..."
-      if num_workers_needed > 0
-        cmd = "cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec bin/queue_worker -- -q #{queue} -n #{num_workers_needed} #{additional_options}"
-        puts cmd
-        `#{cmd}`
-      end
+      num_workers_needed = num_workers - num_workers_found
+      puts "Found #{ num_workers_found }. Starting #{ num_workers_needed }..."
+      next unless num_workers_needed > 0
+      cmd = "cd #{ root } && RAILS_ENV=#{ Rails.env } bundle exec bin/queue_worker -- -q #{ queue } -n #{ num_workers_needed } #{ additional_options }"
+      puts cmd
+      `#{cmd}`
     end
   end
 
@@ -71,12 +69,12 @@ namespace :queue_worker do
   task :metrics do
     # Note: the cutoff time should match how frequently
     # the metrics are updated
-    cut_off_time = Time.now-5.minutes
+    cut_off_time = Time.now - 5.minutes
     # Set zero values in case the logs don't have any values
     stats = {
-      "Errors" => 0,
-      "NumJobsReceived" => 0,
-      "NumJobsProcessed" => 0
+      'Errors' => 0,
+      'NumJobsReceived' => 0,
+      'NumJobsProcessed' => 0
     }
     # Scan through the log backwards using Efil until
     # you find a line that doesn't meet the cut_off_time
@@ -91,46 +89,47 @@ namespace :queue_worker do
         num_lines += 1
         break unless line
         # Parse the line
-        if line =~ log_line_pattern
-          type, date, message = $1, $2, $3
-          date = Time.parse(date)
-          # Stop processing once we reach the cut off date
-          break unless date > cut_off_time
-          if type == "ERRO"
-            stats["Errors"] += 1
-          elsif message =~ /Received/
-            stats["NumJobsReceived"] += 1
-          elsif message =~ /Processed/
-            stats["NumJobsProcessed"] += 1
-          end
+        next unless line =~ log_line_pattern
+        type = Regexp.last_match(1)
+        date = Regexp.last_match(2)
+        message = Regexp.last_match(3)
+        date = Time.parse(date)
+        # Stop processing once we reach the cut off date
+        break unless date > cut_off_time
+        if type == 'ERRO'
+          stats['Errors'] += 1
+        elsif message =~ /Received/
+          stats['NumJobsReceived'] += 1
+        elsif message =~ /Processed/
+          stats['NumJobsProcessed'] += 1
         end
       end
     end
-    puts "Scanned #{num_lines} lines of data"
+    puts "Scanned #{ num_lines } lines of data"
 
     # Convert the data into the Cloudwatch format
     metrics = []
     host = `hostname`.chomp # Get the hostname so we can filter by host
     dimensions = [
-      [{name: "Host", value: host}],
-      [{name: "System", value: "All"}]
+      [{ name: 'Host', value: host }],
+      [{ name: 'System', value: 'All' }]
     ]
     stats.each do |name, value|
       dimensions.each do |dimension|
         metrics << {
-          metric_name: "QueueWorker#{name}",
+          metric_name: "QueueWorker#{ name }",
           dimensions: dimension,
           value: value,
-          unit: "Count"
+          unit: 'Count'
         }
       end
     end
 
     # Send the data to Cloudwatch
-    require File.join(Rails.root, "config/initializers/settings.rb")
+    require Rails.root.join('config', 'initializers', 'settings.rb')
     stage = Hellobar::Settings[:env_name]
     data = {
-      namespace: "HB/#{stage}",
+      namespace: "HB/#{ stage }",
       metric_data: metrics
     }
     pp data

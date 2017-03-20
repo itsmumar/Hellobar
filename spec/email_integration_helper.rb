@@ -1,15 +1,14 @@
 def record_mailer_gateway_request_history!
   @email_history = {}
 
-  stub = MailerGateway.stub(:send_email) do |type, recipient, _params|
+  allow(MailerGateway).to receive(:send_email) { |type, recipient, _params|
     date = Time.zone.today
     ((@email_history[date] ||= {})[recipient] ||= []) << type
-  end
-  stub.and_return(true)
+  }.and_return(true)
 end
 
 def day_from_current_spec_description
-  example.metadata[:description].match(/\d*$/).to_s.to_i
+  RSpec.current_example.metadata[:description].match(/\d*$/).to_s.to_i
 end
 
 def expect_no_email(user)

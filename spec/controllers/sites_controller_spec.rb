@@ -44,13 +44,13 @@ describe SitesController do
         }.to change(User, :count).by(1)
 
         temp_user = User.last
-        temp_user.status.should == User::TEMPORARY_STATUS
-        controller.current_user.should == temp_user
+        expect(temp_user.status).to eq(User::TEMPORARY_STATUS)
+        expect(controller.current_user).to eq(temp_user)
       end
 
       it 'redirects to oauth login if oauth is set' do
         post :create, site: { url: 'temporary-sitee.com' }, oauth: true
-        response.should redirect_to('/auth/google_oauth2')
+        expect(response).to redirect_to('/auth/google_oauth2')
       end
 
       it 'creates a new site and sets a temporary user as the owner' do
@@ -61,7 +61,7 @@ describe SitesController do
           post :create, site: { url: 'temporary-site.com' }
         }.to change(Site, :count).by(1)
 
-        temp_user.sites.should include(Site.last)
+        expect(temp_user.sites).to include(Site.last)
       end
 
       it "creates a new referral if a user's token is given" do
@@ -102,21 +102,21 @@ describe SitesController do
       it 'redirects to the editor after creation' do
         post :create, site: { url: 'temporary-site.com' }
 
-        response.should redirect_to new_site_site_element_path(Site.last)
+        expect(response).to redirect_to new_site_site_element_path(Site.last)
       end
 
       it 'redirects to the landing page with an error if site is not valid' do
         post :create, site: { url: 'not a url lol' }
 
-        response.should redirect_to root_path
-        flash[:error].should =~ /not valid/
+        expect(response).to redirect_to root_path
+        expect(flash[:error]).to match(/not valid/)
       end
 
       it 'redirects to the landing page with an error if site is an email address' do
         post :create, site: { url: 'asdf@mail.com' }
 
-        response.should redirect_to root_path
-        flash[:error].should =~ /not valid/
+        expect(response).to redirect_to root_path
+        expect(flash[:error]).to match(/not valid/)
       end
 
       it 'creates the site with an initial free subscription' do
@@ -124,14 +124,14 @@ describe SitesController do
 
         site = Site.last
 
-        site.current_subscription.should be_present
-        site.current_subscription.is_a?(Subscription::Free).should be_true
+        expect(site.current_subscription).to be_present
+        expect(site.current_subscription.is_a?(Subscription::Free)).to be_truthy
       end
 
       it 'redirects to login page if base URL has already been taken' do
         post :create, site: { url: "#{ site.url }/path" }, source: 'landing'
 
-        response.should redirect_to(new_user_session_path(existing_url: site.url))
+        expect(response).to redirect_to(new_user_session_path(existing_url: site.url))
       end
     end
 
@@ -146,19 +146,19 @@ describe SitesController do
           post :create, site: { url: 'newzombo.com' }
         }.to change(user.sites, :count).by(1)
 
-        site.url.should == 'http://newzombo.com'
-        user.role_for_site(site).should == :owner
+        expect(site.url).to eq('http://newzombo.com')
+        expect(user.role_for_site(site)).to eq(:owner)
       end
 
       it 'creates a site with a rule set' do
         post :create, site: { url: 'newzombo.com' }
-        site.rules.size.should == 3
+        expect(site.rules.size).to eq(3)
       end
 
       it 'redirects to the editor' do
         post :create, site: { url: 'temporary-site.com' }
 
-        response.should redirect_to new_site_site_element_path(Site.last)
+        expect(response).to redirect_to new_site_site_element_path(Site.last)
       end
 
       it 'redirects to the site when using existing url' do
@@ -210,7 +210,7 @@ describe SitesController do
 
       get :show, id: site
 
-      session[:current_site].should == site.id
+      expect(session[:current_site]).to eq(site.id)
     end
   end
 
@@ -223,10 +223,10 @@ describe SitesController do
 
       get :preview_script, id: site
 
-      response.should be_success
+      expect(response).to be_success
 
       SiteElement.all_templates.each do |template|
-        response.body.should include("HB.setTemplate(\"#{ template }\"")
+        expect(response.body).to include("HB.setTemplate(\"#{ template }\"")
       end
     end
   end
@@ -245,16 +245,16 @@ describe SitesController do
       request.env['HTTP_ACCEPT'] = 'application/json'
       get :chart_data, id: site_element.site.id, type: :total, days: 2
       json = JSON.parse(response.body)
-      json.size.should == 2
-      json[0]['value'].should == 12
-      json[1]['value'].should == 18
+      expect(json.size).to eq(2)
+      expect(json[0]['value']).to eq(12)
+      expect(json[1]['value']).to eq(18)
     end
 
     it 'should return the the max amount of data if requesting more days than there is data' do
       request.env['HTTP_ACCEPT'] = 'application/json'
       get :chart_data, id: site_element.site.id, type: :total, days: 10
       json = JSON.parse(response.body)
-      json.size.should == 3
+      expect(json.size).to eq(3)
     end
   end
 

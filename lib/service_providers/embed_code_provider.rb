@@ -28,7 +28,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
 
   def embed_url
     html = Nokogiri::HTML embed_code
-    reference_object = get_reference_object(html)
+    reference_object = reference_object(html)
     url_for_form(reference_object)
   end
 
@@ -73,11 +73,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def name_param
-    if name_params.length == 1
-      name_params.first
-    else
-      raise FirstAndLastNameRequired
-    end
+    raise FirstAndLastNameRequired unless name_params.length == 1
+    name_params.first
   end
 
   def name_params
@@ -118,7 +115,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     @cached_embed_code = embed_code
     html = Nokogiri::HTML embed_code
 
-    reference_object = get_reference_object(html)
+    reference_object = reference_object(html)
     url = url_for_form(reference_object)
 
     return @html = html if url.nil? || (!embed_code.match(URL_REGEX) && reference_object.nil?)
@@ -133,11 +130,8 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     # Pull from scripts and run
     if reference_object.try(:name) == 'script'
       match_data = extract_html_from_script(remote_html)
-      if match_data.nil?
-        raise 'Cannot parse remote html'
-      else
-        remote_html = match_data[1].gsub('\n', '').delete('\\')
-      end
+      raise 'Cannot parse remote html' if match_data.nil?
+      remote_html = match_data[1].gsub('\n', '').delete('\\')
     end
 
     @html = Nokogiri::HTML(remote_html)
@@ -147,7 +141,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
     remote_html.match(/^document.write\("(.+)"\)/)
   end
 
-  def get_reference_object html
+  def reference_object html
     html.css('body > iframe').first || html.css('head > script').first
   end
 

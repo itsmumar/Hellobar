@@ -46,7 +46,7 @@ class Referral < ActiveRecord::Base
 
   def expiration_date_string
     expiration_date = (created_at + FOLLOWUP_INTERVAL)
-    expiration_date_string = expiration_date.strftime('%B ') + expiration_date.day.ordinalize
+    expiration_date.strftime('%B ') + expiration_date.day.ordinalize
   end
 
   def accepted?
@@ -54,11 +54,11 @@ class Referral < ActiveRecord::Base
   end
 
   def redeemable_by_sender?
-    state == 'installed' && available_to_sender == true && redeemed_by_sender_at.nil?
+    state == 'installed' && available_to_sender == true && redeemed_by_sender_at.blank?
   end
 
   def redeemed_by_sender?
-    state == 'installed' && available_to_sender == false && !redeemed_by_sender_at.nil?
+    state == 'installed' && available_to_sender == false && redeemed_by_sender_at.present?
   end
 
   def email_already_registered?
