@@ -81,7 +81,7 @@ namespace :cloudwatch_metrics do
       period: 5 * 60, # required - 5 minutes
       unit: 'Kilobytes', # accepts Seconds, Microseconds, Milliseconds, Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes, Bits, Kilobits, Megabits, Gigabits, Terabits, Percent, Count, Bytes/Second, Kilobytes/Second, Megabytes/Second, Gigabytes/Second, Terabytes/Second, Bits/Second, Kilobits/Second, Megabits/Second, Gigabits/Second, Terabits/Second, Count/Second, None
       evaluation_periods: 2, # required
-      threshold: 5000000.0, # required - 5GB
+      threshold: 5_000_000.0, # required - 5GB
       comparison_operator: 'LessThanOrEqualToThreshold', # required, accepts GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold
     )
 
@@ -105,7 +105,7 @@ namespace :cloudwatch_metrics do
       period: 5 * 60, # required - 5 minutes
       unit: 'Kilobytes', # accepts Seconds, Microseconds, Milliseconds, Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes, Bits, Kilobits, Megabits, Gigabits, Terabits, Percent, Count, Bytes/Second, Kilobytes/Second, Megabytes/Second, Gigabytes/Second, Terabytes/Second, Bits/Second, Kilobits/Second, Megabits/Second, Gigabits/Second, Terabits/Second, Count/Second, None
       evaluation_periods: 2, # required
-      threshold: 500000.0, # required - 500MB
+      threshold: 500_000.0, # required - 500MB
       comparison_operator: 'LessThanOrEqualToThreshold', # required, accepts GreaterThanOrEqualToThreshold, GreaterThanThreshold, LessThanThreshold, LessThanOrEqualToThreshold
     )
   end

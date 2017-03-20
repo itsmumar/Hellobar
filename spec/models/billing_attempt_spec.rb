@@ -19,7 +19,7 @@ describe BillingAttempt do
 
     it 'should create a refund' do
       billing_attempt = paid_bill.billing_attempts.last
-      refund_bill, = billing_attempt.refund!
+      refund_bill, _refund_attempt = billing_attempt.refund!
       expect(refund_bill.amount).to eq(billing_attempt.bill.amount * -1)
       expect(refund_bill.paid?).to be_truthy
     end

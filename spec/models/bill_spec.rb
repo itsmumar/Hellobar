@@ -414,21 +414,21 @@ describe PaymentMethod do
     it 'should let you do a partial refund' do
       subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, = billing_attempt.refund!(nil, -5)
+      refund_bill, _refund_attempt = billing_attempt.refund!(nil, -5)
       expect(refund_bill.amount).to eq(-5)
     end
 
     it 'should allow a positive number and treat it as negative' do
       subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, = billing_attempt.refund!(nil, 5)
+      refund_bill, _refund_attempt = billing_attempt.refund!(nil, 5)
       expect(refund_bill.amount).to eq(-5)
     end
 
     it 'should let you specify description' do
       subscription = create(:pro_subscription)
       billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, = billing_attempt.refund!('custom description')
+      refund_bill, _refund_attempt = billing_attempt.refund!('custom description')
       expect(refund_bill.description).to eq('custom description')
     end
 
