@@ -12,7 +12,7 @@ module FeatureHelper
   def login(user = nil)
     user ||= create(:user)
     unless user.sites.present?
-      site = user.sites.create(url: random_uniq_url) # Setup a site so that it goes directly to summary page
+      user.sites.create(url: random_uniq_url) # Setup a site so that it goes directly to summary page
     end
 
     login_as user, scope: :user, run_callbacks: false

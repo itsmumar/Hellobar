@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-CY_MAD_MIMI_EMBED_CODE = '<html><body><iframe><form>Here I am</form></iframe></body></html>'
+CY_MAD_MIMI_EMBED_CODE = '<html><body><iframe><form>Here I am</form></iframe></body></html>'.freeze
 
 require 'rake'
 load 'lib/tasks/contact_list.rake'

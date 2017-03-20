@@ -113,7 +113,7 @@ describe 'Autofills requests' do
 
         expect {
           patch site_autofill_path(site, autofill), params
-        }.not_to change { autofill.reload.name }.to autofill_params[:name]
+        }.not_to change { autofill.reload.name }
 
         expect(response).to be_successful
       end

@@ -12,7 +12,7 @@ describe UserController do
       it 'rejects password change when incorrect current_password' do
         put :update, user: { password: 'asdfffff', password_confirmation: 'asdfffff', current_password: 'oops' }
 
-        user.reload.valid_password?(current_password).should be_true
+        expect(user.reload.valid_password?(current_password)).to be_truthy
       end
 
       it 'allows the user to change their password with correct current_password' do
@@ -20,20 +20,20 @@ describe UserController do
         update_params = { password: new_password, password_confirmation: new_password, current_password: current_password }
         put :update, user: update_params
 
-        user.reload.valid_password?(new_password).should be_true
+        expect(user.reload.valid_password?(new_password)).to be_truthy
       end
 
       it 'allows the user to change other settings with blank password params' do
         put :update, user: { first_name: 'Sexton', last_name: 'Hardcastle', password: '', password_confirmation: '' }
 
-        user.reload.first_name.should == 'Sexton'
-        user.reload.last_name.should == 'Hardcastle'
+        expect(user.reload.first_name).to eq('Sexton')
+        expect(user.reload.last_name).to eq('Hardcastle')
       end
 
       it 'sets the timezone on all sites when passed in' do
         put :update, user: { timezone: 'America/Chicago' }
 
-        user.sites.reload.map(&:timezone).should == ['America/Chicago', 'America/Chicago', 'America/Chicago']
+        expect(user.sites.reload.map(&:timezone)).to eq(['America/Chicago', 'America/Chicago', 'America/Chicago'])
       end
 
       it 'does not override a sites timezone if already set' do
@@ -41,7 +41,7 @@ describe UserController do
 
         put :update, user: { timezone: 'America/Chicago' }
 
-        user.sites.reload.map(&:timezone).should == ['FIRST', 'America/Chicago', 'America/Chicago']
+        expect(user.sites.reload.map(&:timezone)).to eq(['FIRST', 'America/Chicago', 'America/Chicago'])
       end
     end
 
@@ -57,9 +57,9 @@ describe UserController do
 
         user.reload
 
-        user.encrypted_password.should_not == original_hash
-        user.email.should == 'myrealemail@gmail.com'
-        user.status.should == User::ACTIVE_STATUS
+        expect(user.encrypted_password).not_to eq(original_hash)
+        expect(user.email).to eq('myrealemail@gmail.com')
+        expect(user.status).to eq(User::ACTIVE_STATUS)
       end
 
       it 'does not update the user if the password param is blank' do
@@ -67,8 +67,8 @@ describe UserController do
 
         user.reload
 
-        user.email.should_not == 'myrealemail@gmail.com'
-        user.status.should == User::TEMPORARY_STATUS
+        expect(user.email).not_to eq('myrealemail@gmail.com')
+        expect(user.status).to eq(User::TEMPORARY_STATUS)
       end
 
       it 'does not update the user if the email param is blank' do
@@ -78,8 +78,8 @@ describe UserController do
 
         user.reload
 
-        user.encrypted_password.should == original_hash
-        user.status.should == User::TEMPORARY_STATUS
+        expect(user.encrypted_password).to eq(original_hash)
+        expect(user.status).to eq(User::TEMPORARY_STATUS)
       end
     end
   end

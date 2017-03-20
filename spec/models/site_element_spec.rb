@@ -9,15 +9,15 @@ describe SiteElement do
 
   it 'belongs to a site through a rule set' do
     element.rule = nil
-    element.site.should be_nil
+    expect(element.site).to be_nil
   end
 
   describe 'validations' do
     it 'requires a contact list if element_subtype is "email"' do
-      element.should be_valid
+      expect(element).to be_valid
 
       element.contact_list = contact_list
-      element.should be_valid
+      expect(element).to be_valid
     end
 
     describe '#site_is_capable_of_creating_element' do
@@ -29,14 +29,14 @@ describe SiteElement do
         element.stub site: site
         element.valid?
 
-        element.errors[:site].should == ['is currently at its limit to create site elements']
+        expect(element.errors[:site]).to eq(['is currently at its limit to create site elements'])
       end
 
       it 'allows a persisted element to be updated when site is at its limit' do
         capability = double('capability', at_site_element_limit?: true)
         site.stub(capabilities: capability)
         element.stub site: site
-        element.should be_valid
+        expect(element).to be_valid
       end
     end
 
@@ -63,7 +63,7 @@ describe SiteElement do
 
       it 'does not remove image uploads that are active for other elements' do
         image = create(:image_upload, site: element.site)
-        elementTwo = create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
+        create(:site_element, active_image_id: image.id, rule: create(:rule, site: element.site))
 
         expect {
           element.headline = 'a new headline'
@@ -77,37 +77,37 @@ describe SiteElement do
         let(:element) { create(:site_element, :email) }
 
         it 'requires a the correct capabilities' do
-          element.site.capabilities.stub(:after_submit_redirect?).and_return(false)
+          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(false)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
           element.save
 
-          element.errors['settings.redirect_url'].should include('is a pro feature')
+          expect(element.errors['settings.redirect_url']).to include('is a pro feature')
         end
 
         it 'requires a redirect url if after_email_submit_action is :redirect' do
-          element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
           element.save
 
-          element.errors['settings.redirect_url'].should include('cannot be blank')
+          expect(element.errors['settings.redirect_url']).to include('cannot be blank')
         end
 
         it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-          element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
 
           element.save
 
-          element.errors['settings.redirect_url'].should be_empty
+          expect(element.errors['settings.redirect_url']).to be_empty
         end
       end
 
       context 'when subtype is not email' do
         it "doesn't care about redirect url" do
           element.save
-          element.errors['settings.redirect_url'].should be_empty
+          expect(element.errors['settings.redirect_url']).to be_empty
         end
       end
     end
@@ -144,37 +144,37 @@ describe SiteElement do
 
     context 'when subtype is email' do
       it 'requires a the correct capabilities' do
-        element.site.capabilities.stub(:after_submit_redirect?).and_return(false)
+        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(false)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
         element.save
 
-        element.errors['settings.redirect_url'].should include('is a pro feature')
+        expect(element.errors['settings.redirect_url']).to include('is a pro feature')
       end
 
       it 'requires a redirect url if after_email_submit_action is :redirect' do
-        element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
         element.save
 
-        element.errors['settings.redirect_url'].should include('cannot be blank')
+        expect(element.errors['settings.redirect_url']).to include('cannot be blank')
       end
 
       it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-        element.site.capabilities.stub(:after_submit_redirect?).and_return(true)
+        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
 
         element.save
 
-        element.errors['settings.redirect_url'].should be_empty
+        expect(element.errors['settings.redirect_url']).to be_empty
       end
     end
 
     context 'when subtype is not email' do
       it "doesn't care about redirect url" do
         element.save
-        element.errors['settings.redirect_url'].should be_empty
+        expect(element.errors['settings.redirect_url']).to be_empty
       end
     end
   end
@@ -184,27 +184,27 @@ describe SiteElement do
 
     context 'when subtype is email' do
       it 'requires a the correct capabilities' do
-        element.site.capabilities.stub(:custom_thank_you_text?).and_return(false)
+        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(false)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
 
         element.save
 
-        element.errors['custom_thank_you_text'].should include('is a pro feature')
+        expect(element.errors['custom_thank_you_text']).to include('is a pro feature')
       end
 
       it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
-        element.site.capabilities.stub(:custom_thank_you_text?).and_return(true)
+        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
 
         element.save
 
-        element.errors['custom_thank_you_text'].should include('cannot be blank')
+        expect(element.errors['custom_thank_you_text']).to include('cannot be blank')
       end
 
       it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
-        element.site.capabilities.stub(:custom_thank_you_text?).and_return(true)
+        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(true)
         element.save
-        element.errors['custom_thank_you_text'].should be_empty
+        expect(element.errors['custom_thank_you_text']).to be_empty
       end
     end
   end
@@ -232,18 +232,18 @@ describe SiteElement do
     let(:site) { element.site }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.stub(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      element.total_views.should == 12
+      allow(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+      expect(element.total_views).to eq(12)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      element.total_views.should == 0
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
+      expect(element.total_views).to eq(0)
     end
 
     it 'returns zero if data API returns nil' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
-      element.total_views.should == 0
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      expect(element.total_views).to eq(0)
     end
   end
 
@@ -252,33 +252,33 @@ describe SiteElement do
     let(:site) { element.site }
 
     it 'returns total views as reported by the data API' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      element.total_conversions.should == 6
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+      expect(element.total_conversions).to eq(6)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      element.total_conversions.should == 0
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
+      expect(element.total_conversions).to eq(0)
     end
 
     it 'returns zero if data API returns nil' do
-      Hello::DataAPI.should_receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
-      element.total_conversions.should == 0
+      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      expect(element.total_conversions).to eq(0)
     end
   end
 
-  describe '#has_converted?' do
+  describe '#converted?' do
     let(:element) { create(:site_element, :traffic) }
     let(:site) { element.site }
 
     it 'is false when there are no conversions', aggregate_failures: true do
       expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element).not_to have_converted
+      expect(element).not_to be_converted
     end
 
     it 'is true when there are conversions', aggregate_failures: true do
       expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      expect(element).to have_converted
+      expect(element).to be_converted
     end
   end
 
@@ -299,7 +299,7 @@ describe SiteElement do
 
         it 'should return the default message regardless of the thank you text' do
           element.thank_you_text = 'do not show this'
-          element.display_thank_you_text.should == SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
         end
       end
 
@@ -329,22 +329,22 @@ describe SiteElement do
       context 'when after_email_submit_action is :show_default_message' do
         it 'should return the default message regardless of the thank you text' do
           element.thank_you_text = 'test'
-          element.stub(:after_email_submit_action).and_return(:show_default_message)
-          element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+          allow(element).to receive(:after_email_submit_action).and_return(:show_default_message)
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_EMAIL_THANK_YOU)
         end
       end
 
       context 'when after_email_submit_action is not :show_default_message' do
         it 'should return the default message if thank you text not set' do
           element.thank_you_text = ''
-          element.stub(:after_email_submit_action).and_return(:something)
-          element.display_thank_you_text.should == SiteElement::DEFAULT_EMAIL_THANK_YOU
+          allow(element).to receive(:after_email_submit_action).and_return(:something)
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_EMAIL_THANK_YOU)
         end
 
         it 'should return the thank you text' do
           element.thank_you_text = 'test'
-          element.stub(:after_email_submit_action).and_return(:something)
-          element.display_thank_you_text.should == 'test'
+          allow(element).to receive(:after_email_submit_action).and_return(:something)
+          expect(element.display_thank_you_text).to eq('test')
         end
       end
     end

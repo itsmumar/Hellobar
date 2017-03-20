@@ -10,7 +10,7 @@ feature 'Manage Bars', js: true do
 
   context 'script is not installed' do
     before do
-      allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(false)
+      allow_any_instance_of(Site).to receive(:script_installed?).and_return(false)
     end
 
     scenario 'shows install instructions if user has site elements' do
@@ -28,7 +28,7 @@ feature 'Manage Bars', js: true do
 
   context 'script is installed' do
     before do
-      allow_any_instance_of(Site).to receive(:has_script_installed?).and_return(true)
+      allow_any_instance_of(Site).to receive(:script_installed?).and_return(true)
     end
 
     scenario 'shows option for adding new bar when no bars exist' do

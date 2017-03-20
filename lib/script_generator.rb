@@ -8,12 +8,12 @@ class ScriptGenerator < Mustache
 
   class << self
     def compile
-      FileUtils.rm_r Rails.root.join('tmp/script'), force: true
+      FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
       manifest(true).compile('*.js', '*.css', '*.html')
     end
 
     def load_templates
-      self.template_path = Rails.root.join('lib/script_generator/')
+      self.template_path = Rails.root.join('lib', 'script_generator')
       self.template_name = 'template.js'
     end
 
@@ -89,12 +89,12 @@ class ScriptGenerator < Mustache
     # 2) Don't use SiteSerializer here, the code should be moved to model
     {
       no_b: @site.capabilities.remove_branding? || @options[:preview],
-      b_variation: get_branding_variation,
+      b_variation: branding_variation,
       preview: @options[:preview]
     }.merge(SiteSerializer.new(@site).capabilities)
   end
 
-  def get_branding_variation
+  def branding_variation
     # Options are ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
     'animated'
   end
@@ -123,7 +123,7 @@ class ScriptGenerator < Mustache
   end
 
   def content_upgrades_styles_json
-    site.get_content_upgrade_styles.to_json
+    site.content_upgrade_styles.to_json
   end
 
   def hb_backend_host
@@ -175,9 +175,9 @@ class ScriptGenerator < Mustache
   end
 
   def branding_templates
-    base = Rails.root.join('lib/script_generator/')
+    base = Rails.root.join('lib', 'script_generator')
     without_escaping_html_in_json do
-      Dir.glob(base.join('branding/*.html')).map do |f|
+      Dir.glob(base.join('branding', '*.html')).map do |f|
         path = Pathname.new(f)
         content = render_asset(path.relative_path_from(base)).to_json
         { name: path.basename.sub_ext('').to_s, markup: content }
@@ -377,19 +377,17 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    ).select { |_, value| !value.nil? || !value == '' }
+    ).select { |_, value| value.present? || !value == '' }
   end
 
   def site_elements_for_rule(rule, hashify = true)
     site_elements =
       if options[:bar_id]
         [rule.site_elements.find(options[:bar_id])]
+      elsif options[:render_paused_site_elements]
+        rule.site_elements
       else
-        if options[:render_paused_site_elements]
-          rule.site_elements
-        else
-          rule.site_elements.active
-        end
+        rule.site_elements.active
       end
 
     hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements

@@ -74,15 +74,15 @@ describe Users::SessionsController do
     let!(:user) { create(:user, password: 'password') }
 
     it 'logs in a user with valid params' do
-      controller.current_user.should be_nil
+      expect(controller.current_user).to be_nil
       post :create, user: { email: user.email, password: 'password' }
-      controller.current_user.should == user
+      expect(controller.current_user).to eq(user)
     end
 
     it 'redirects oauth users to their respective oauth path' do
       user.authentications.create(provider: 'google_oauth2', uid: '123')
       post :create, user: { email: user.email, password: 'some incorrect pass' }
-      response.should redirect_to('/auth/google_oauth2')
+      expect(response).to redirect_to('/auth/google_oauth2')
     end
 
     it 'redirects 1.0 users to migration wizard if the correct password is used' do
@@ -91,12 +91,12 @@ describe Users::SessionsController do
       email = 'user@website.com'
       password = 'asdfasdf'
 
-      Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
-      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(wordpress_user)
+      expect(Hello::WordpressUser).to receive(:email_exists?).with(email).and_return(true)
+      expect(Hello::WordpressUser).to receive(:authenticate).with(email, password).and_return(wordpress_user)
 
       post :create, user: { email: email, password: password }
 
-      response.should redirect_to(new_user_migration_path)
+      expect(response).to redirect_to(new_user_migration_path)
     end
 
     it 'asks 1.0 users to reauthenticate if their password is wrong' do
@@ -105,13 +105,13 @@ describe Users::SessionsController do
       email = 'user@website.com'
       password = 'asdfasdf'
 
-      Hello::WordpressUser.should_receive(:email_exists?).with(email).and_return(true)
-      Hello::WordpressUser.should_receive(:authenticate).with(email, password).and_return(nil)
+      expect(Hello::WordpressUser).to receive(:email_exists?).with(email).and_return(true)
+      expect(Hello::WordpressUser).to receive(:authenticate).with(email, password).and_return(nil)
 
       post :create, user: { email: email, password: password }
 
-      flash.now[:alert].should =~ /Invalid/
-      response.should render_template('users/sessions/new')
+      expect(flash.now[:alert]).to match(/Invalid/)
+      expect(response).to render_template('users/sessions/new')
     end
   end
 end

@@ -6,12 +6,12 @@ describe ApplicationController do
 
     it 'returns nil if no current_user' do
       stub_current_user(nil)
-      controller.current_site.should be_nil
+      expect(controller.current_site).to be_nil
     end
 
     it "returns current_user's first site if nothing is set in session" do
       user = stub_current_user(current_user)
-      controller.current_site.should == user.sites.first
+      expect(controller.current_site).to eq(user.sites.first)
     end
 
     it 'returns site stored in session if available' do
@@ -19,14 +19,14 @@ describe ApplicationController do
       site = user.sites.last
       session[:current_site] = site.id
 
-      controller.current_site.should == site
+      expect(controller.current_site).to eq(site)
     end
 
     it "returns user's first site if site stored in session is not available or doesn't belong to user" do
       user = stub_current_user(current_user)
       session[:current_site] = create(:site).id
 
-      controller.current_site.should == user.sites.first
+      expect(controller.current_site).to eq(user.sites.first)
     end
 
     context 'when user has no sites' do
@@ -34,7 +34,7 @@ describe ApplicationController do
 
       it 'returns nil' do
         stub_current_user(current_user)
-        controller.current_site.should be_nil
+        expect(controller.current_site).to be_nil
       end
     end
   end
@@ -43,7 +43,7 @@ describe ApplicationController do
     it 'records the tracking param' do
       controller.stub(params: { trk: 'asdf' })
 
-      Hello::TrackingParam.should_receive(:track).with('asdf')
+      expect(Hello::TrackingParam).to receive(:track).with('asdf')
 
       controller.record_tracking_param
     end
@@ -64,7 +64,7 @@ describe ApplicationController, '#require_admin' do
   it 'redirects the user to the admin login path when there is no current_admin' do
     get :index
 
-    response.should redirect_to(admin_access_path)
+    expect(response).to redirect_to(admin_access_path)
   end
 
   it 'redirects the user to the reset password path if they need to set a new password' do
@@ -74,7 +74,7 @@ describe ApplicationController, '#require_admin' do
 
     get :index
 
-    response.should redirect_to(admin_reset_password_path)
+    expect(response).to redirect_to(admin_reset_password_path)
   end
 
   it 'does not redirect if the user needs to reset their password and is currently on the page' do
@@ -84,7 +84,7 @@ describe ApplicationController, '#require_admin' do
 
     get :index
 
-    response.should_not be_redirect
+    expect(response).not_to be_redirect
   end
 end
 
@@ -105,13 +105,13 @@ describe ApplicationController, '#require_no_user' do
 
     get :index
 
-    response.should redirect_to(dashboard_path)
+    expect(response).to redirect_to(dashboard_path)
   end
 
   it 'does not redirect a non logged in user' do
     get :index
 
-    response.should_not be_redirect
+    expect(response).not_to be_redirect
   end
 end
 

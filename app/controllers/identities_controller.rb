@@ -70,12 +70,12 @@ class IdentitiesController < ApplicationController
   end
 
   def add_account_details(identity)
-    if identity.provider == 'drip'
-      service_provider = identity.service_provider
-      account = service_provider.accounts.first
-      identity.extra['account_id'] = account.id
-      identity.extra['account_name'] = account.name
-    end
+    return unless identity.provider == 'drip'
+
+    service_provider = identity.service_provider
+    account = service_provider.accounts.first
+    identity.extra['account_id'] = account.id
+    identity.extra['account_name'] = account.name
   end
 
   def load_site

@@ -6,12 +6,12 @@ module ServiceProviders
 
     def campaign_id
       span = html.css('span[name*="campaign_name"]').try(:first)
-      if span
-        url = span.try(:attr, 'name')
-        url = URI.decode(url)
-        query_params = CGI.parse URI.parse(url).query
-        query_params['campaign_name'][0]
-      end
+      return unless span
+
+      url = span.try(:attr, 'name')
+      url = URI.decode(url)
+      query_params = CGI.parse URI.parse(url).query
+      query_params['campaign_name'][0]
     end
 
     def webform_id

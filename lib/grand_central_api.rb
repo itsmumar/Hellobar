@@ -1,10 +1,4 @@
-begin
-  require 'openssl'
-rescue LoadError
-  # If they don't have this we don't want to kill everything with a load error
-  # howver if you attempt to use this API it will error out
-end
-
+require 'openssl'
 require 'net/http'
 require 'uri'
 require 'cgi'
@@ -13,7 +7,7 @@ require 'fileutils'
 class GrandCentralApi
   class << self
     def request_log_path
-      File.join(Rails.root, 'log', "grand-central-api_#{ Rails.env }.log")
+      Rails.root.join('log', "grand-central-api_#{ Rails.env }.log")
     end
 
     def digest

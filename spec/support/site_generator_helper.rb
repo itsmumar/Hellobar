@@ -1,5 +1,5 @@
 module SiteGeneratorHelper
-  INTEGRATION_SITE_DIRECTORY = 'integration'
+  INTEGRATION_SITE_DIRECTORY = 'integration'.freeze
 
   def setup_site_generator
     dir = site_generator_directory

@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 Rails:
   Enabled: true
 
@@ -11,6 +9,7 @@ AllCops:
     - Gemfile
     - Capfile
     - config.ru
+    - '**/*.rake'
   Exclude:
     - 'db/schema.rb'
     - 'bin/*'
@@ -19,6 +18,10 @@ AllCops:
     - 'editor/**/*'
     - 'backend-mock/**/*'
 
+#### BEGIN STYLES
+
+Style/Documentation:
+  Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false
@@ -26,19 +29,16 @@ Style/FrozenStringLiteralComment:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-#Metrics/LineLength:
-#  Max: 130
-#
-#Metrics/AbcSize:
-#  Max: 16
+Style/MethodDefParentheses:
+  Enabled: false
 
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  EnforcedStyle: slashes
-  AllowInnerSlashes: true
-  Exclude:
-    - spec/teaspoon_env.rb
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
@@ -64,41 +64,23 @@ Style/IndentHash:
 Style/NumericLiteralPrefix:
   EnforcedOctalStyle: zero_only
 
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
-# TODO: enable after updating rails/rspec
-# Configuration parameters: Include.
-# Include: spec/**/*, test/**/*
-Rails/HttpPositionalArguments:
-  Enabled: false
-
-# SupportedStyles: referer, referrer
-Rails/RequestReferer:
-  EnforcedStyle: referrer
+# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
+# SupportedStyles: slashes, percent_r, mixed
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+  Exclude:
+    - spec/teaspoon_env.rb
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-Style/MethodDefParentheses:
-  Enabled: false
-
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 
-Metrics/BlockLength:
-  Exclude:
-    - spec/**/*
-
-Style/NumericLiterals:
-  Enabled: false
-
 Style/ConstantName:
   Exclude:
-    - lib/hello/segments.rb
-    - config/initializers/settings.rb
+    - 'config/initializers/settings.rb'
 
 Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
@@ -109,8 +91,109 @@ Style/WordArray:
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
+#### END STYLES
+
+#### BEGIN RAILS
+
+# TODO: enable after updating rails/rspec
+Rails/HttpPositionalArguments:
+  Enabled: false
+
+# Configuration parameters: Blacklist.
+# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
+Rails/SkipsModelValidations:
+  Enabled: false
+
+# SupportedStyles: referer, referrer
+Rails/RequestReferer:
+  EnforcedStyle: referrer
+
 Rails/DynamicFindBy:
   Whitelist:
     - find_by_sql
     - find_by_email
     - find_by_script
+
+# TODO: issue XOHB-1599
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: strict, flexible
+Rails/TimeZone:
+  Exclude:
+    - 'app/models/user.rb'
+    - 'app/models/site.rb'
+    - 'app/models/admin.rb'
+    - 'app/models/contact_list.rb'
+    - 'app/models/billing/subscription.rb'
+    - 'app/models/billing/billing_attempt.rb'
+    - 'app/models/billing/bill.rb'
+    - 'app/interactions/coupon_uses/apply_from_referrals.rb'
+    - 'app/helpers/site_elements_helper.rb'
+    - 'lib/tasks/site.rake'
+    - 'lib/tasks/queue_worker.rake'
+    - 'lib/tasks/marketing.rake'
+    - 'lib/tasks/billing.rake'
+    - 'lib/tasks/backend.rake'
+    - 'lib/queue_worker/queue_worker.rb'
+    - 'lib/legacy_migrator.rb'
+    - 'lib/hello/suggested_opportunities.rb'
+    - 'lib/hello/data_api.rb'
+    - 'lib/analytics.rb'
+
+# TODO: issue XOHB-1599
+# Configuration parameters: EnforcedStyle, SupportedStyles.
+# SupportedStyles: strict, flexible
+Rails/Date:
+  Exclude:
+    - 'app/controllers/sites_controller.rb'
+    - 'app/helpers/email_digest_helper.rb'
+    - 'app/helpers/sites_helper.rb'
+    - 'lib/hello/api_performance.rb'
+    - 'spec/lib/hello/api_performance_spec.rb'
+
+#### END RAILS
+
+
+#### BEGIN METRICS
+
+Metrics/AbcSize:
+  Max: 101 # ideally 16
+
+# Configuration parameters: CountComments, ExcludedMethods.
+Metrics/BlockLength:
+  Max: 516 # ideally 25
+
+# Configuration parameters: CountComments.
+Metrics/ClassLength:
+  Max: 185 # ideally 100
+  Exclude:
+    - 'app/models/site.rb'
+    - 'app/models/site_element.rb'
+    - 'lib/legacy_migrator.rb'
+    - 'lib/script_generator.rb'
+    - 'app/models/user.rb'
+
+Metrics/CyclomaticComplexity:
+  Max: 17 # ideally 6
+
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
+# URISchemes: http, https
+Metrics/LineLength:
+  Max: 1246 # ideally 120
+  IgnoreCopDirectives: true
+
+Metrics/MethodLength:
+  Max: 82 # ideally 10
+  CountComments: false
+
+Metrics/ModuleLength:
+  Max: 186 # ideally 10
+  CountComments: false
+
+Metrics/ParameterLists:
+  Exclude:
+    - 'lib/hello/data_api_helper.rb'
+
+Metrics/PerceivedComplexity:
+  Max: 18 # ideally 7
+
+#### END METRICS

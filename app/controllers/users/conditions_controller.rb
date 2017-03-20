@@ -9,8 +9,6 @@ class ConditionsController < ApplicationController
   end
 
   def create
-    condition = @rule.conditions.new condition_params
-
     if rule.save
       render json: rule
     else
@@ -31,8 +29,6 @@ class ConditionsController < ApplicationController
   end
 
   def destroy
-    condition = @rule.rules.find(params[:id])
-
     if @site.rules.count == 1
       render nothing: true, status: :unprocessable_entity
     elsif rule.editable? && rule.destroy
@@ -50,8 +46,7 @@ class ConditionsController < ApplicationController
   end
 
   def verify_capability
-    unless @site && @site.capabilities.custom_targeted_bars?
-      render json: { error: 'forbidden' }, status: :forbidden
-    end
+    return if @site && @site.capabilities.custom_targeted_bars?
+    render json: { error: 'forbidden' }, status: :forbidden
   end
 end

@@ -1,1 +1,1 @@
-require "#{ Rails.root }/app/serializers/api/user_state_serializer"
+require Rails.root.join('app', 'serializers', 'api', 'user_state_serializer')

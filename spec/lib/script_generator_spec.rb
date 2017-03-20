@@ -14,7 +14,7 @@ describe ScriptGenerator do
     it 'renders the site id variable' do
       expected_string = "HB_SITE_ID = #{ site.id };"
 
-      generator.render.should include(expected_string)
+      expect(generator.render).to include(expected_string)
     end
 
     it 'renders the backend host variable' do
@@ -22,7 +22,7 @@ describe ScriptGenerator do
       Hellobar::Settings[:tracking_host] = 'hi-there.hellobar.com'
       expected_string = 'HB_BACKEND_HOST = "hi-there.hellobar.com";'
 
-      generator.render.should include(expected_string)
+      expect(generator.render).to include(expected_string)
       Hellobar::Settings[:tracking_host] = original_setting
     end
 
@@ -31,15 +31,15 @@ describe ScriptGenerator do
       Time.zone = 'America/Chicago'
       expected_string = "HB_TZ = \"#{ Time.zone.now.formatted_offset }\";"
 
-      generator.render.should include(expected_string)
+      expect(generator.render).to include(expected_string)
     end
 
     it 'includes the minified hellobar css' do
-      generator.stub :hellobar_container_css
+      allow(generator).to receive :hellobar_container_css
       hellobar_css = ScriptGenerator.assets['common.css'].to_s
       element_css = ScriptGenerator.assets['bar/element.css'].to_s
 
-      CSSMin.stub(:minify) { |x| x }
+      allow(CSSMin).to receive(:minify) { |x| x }
       result = generator.render
 
       expect(hellobar_css).not_to be_empty
@@ -49,14 +49,14 @@ describe ScriptGenerator do
     end
 
     it 'includes the hellobar container css' do
-      generator.stub :hellobar_element_css
+      allow(generator).to receive :hellobar_element_css
       allow(generator).to receive(:pro_secret) { 'random' }
       container_css = ScriptGenerator.assets['container_common.css'].to_s
       container_css.gsub!('hellobar-container', 'random-container')
       element_container_css = ScriptGenerator.assets['bar/container.css'].to_s
       element_container_css.gsub!('hellobar-container', 'random-container')
 
-      CSSMin.stub(:minify) { |x| x }
+      allow(CSSMin).to receive(:minify) { |x| x }
       result = generator.render
 
       expect(container_css).not_to be_empty
@@ -68,19 +68,19 @@ describe ScriptGenerator do
     it 'renders the initialization of the hellobar queue object' do
       hbq_initialization = '_hbq = new HBQ();'
 
-      generator.render.should include(hbq_initialization)
+      expect(generator.render).to include(hbq_initialization)
     end
 
     context 'when templates are present' do
       it 'renders the setTemplate function on HB with the template name and markup' do
         template = { name: 'yey name', markup: 'yey markup' }
         generator.stub templates: [template]
-        generator.stub(:hellobar_container_css)
-        generator.stub(:hellobar_element_css)
+        allow(generator).to receive(:hellobar_container_css)
+        allow(generator).to receive(:hellobar_element_css)
 
         expected_string = 'HB.setTemplate("yey name", yey markup);'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'renders only the setTemplate definition and 1 call per bar type' do
@@ -89,7 +89,7 @@ describe ScriptGenerator do
 
         generator = ScriptGenerator.new site
 
-        generator.render.scan('setTemplate').size.should == 2
+        expect(generator.render.scan('setTemplate').size).to eq(2)
       end
 
       it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
@@ -99,7 +99,7 @@ describe ScriptGenerator do
 
         generator = ScriptGenerator.new site
 
-        generator.render.scan('setTemplate').size.should == 3
+        expect(generator.render.scan('setTemplate').size).to eq(3)
       end
     end
 
@@ -112,7 +112,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'does NOT have a start date constraint when not present' do
@@ -121,7 +121,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [], [])}'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'has an end date constraint when present' do
@@ -132,7 +132,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is before","value":{"end_date":"2015-01-01"}}], [])}'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'does NOT have a start date constraint when not present' do
@@ -141,7 +141,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [], [])}'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'adds an exlusion constraint for all blacklisted URLs' do
@@ -152,7 +152,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"/signup"}], [])'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'converts does_not_include urls to paths' do
@@ -163,7 +163,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'does NOT have exclusion constraints when no sites are blacklisted' do
@@ -172,7 +172,7 @@ describe ScriptGenerator do
 
         expected_string = /HB.umatch(.*)/
 
-        generator.render.should_not match(expected_string)
+        expect(generator.render).not_to match(expected_string)
       end
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
@@ -183,7 +183,7 @@ describe ScriptGenerator do
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"includes","value":"/signup"}], [])'
 
-        generator.render.should include(expected_string)
+        expect(generator.render).to include(expected_string)
       end
 
       it 'does NOT have inclusion constraints when no sites are whitelisted' do
@@ -192,7 +192,7 @@ describe ScriptGenerator do
 
         expected_string = /HB.umatch(.*)/
 
-        generator.render.should_not match(expected_string)
+        expect(generator.render).not_to match(expected_string)
       end
     end
 
@@ -260,7 +260,7 @@ describe ScriptGenerator do
         site_elements: [].to_json
       }
 
-      generator.rules.should == [expected_hash]
+      expect(generator.rules).to eq([expected_hash])
     end
 
     it 'returns the proper hash when a single bar_id is passed as an option' do
@@ -278,7 +278,7 @@ describe ScriptGenerator do
         site_elements: [{ id: bar.id, template_name: bar.element_subtype }].to_json
       }
 
-      generator.rules.should == [expected_hash]
+      expect(generator.rules).to eq([expected_hash])
     end
 
     it 'renders all bar json when the render_paused_site_elements is true' do
@@ -295,11 +295,11 @@ describe ScriptGenerator do
         site_elements: [{ id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' } }].to_json
       }
 
-      generator.rules.should == [expected_hash]
+      expect(generator.rules).to eq([expected_hash])
     end
 
     it 'renders only active bar json by default' do
-      paused = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
+      SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
       generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.element_subtype }
@@ -312,7 +312,7 @@ describe ScriptGenerator do
         site_elements: [{ id: active_bar.id, template_name: active_bar.element_subtype }].to_json
       }
 
-      generator.rules.should == [expected_hash]
+      expect(generator.rules).to eq([expected_hash])
     end
 
     describe '#pro_secret' do
@@ -327,8 +327,8 @@ describe ScriptGenerator do
         generator = ScriptGenerator.new('site')
         generator.stub render: 'template'
 
-        Uglifier.should_not_receive(:new)
-        generator.should_receive(:render)
+        expect(Uglifier).not_to receive(:new)
+        expect(generator).to receive(:render)
 
         generator.generate_script
       end

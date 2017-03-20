@@ -9,7 +9,7 @@ module EmailSynchronizer
     URI::InvalidURIError,
     ArgumentError,
     RestClient::ResourceNotFound
-  ]
+  ].freeze
 
   ESP_NONTRANSIENT_ERRORS = [
     'Invalid MailChimp List ID',
@@ -17,7 +17,7 @@ module EmailSynchronizer
     'This account has been deactivated',
     '122: Revoked OAuth Token',
     '404 Resource Not Found'
-  ]
+  ].freeze
 
   # Extracted from contact_list#subscribe_all_emails_to_list!
   def sync_all!
@@ -26,7 +26,7 @@ module EmailSynchronizer
     Rails.logger.info "Syncing all emails for contact_list #{ id }"
 
     perform_sync do
-      contacts = Hello::DataAPI.get_contacts(self) || []
+      contacts = Hello::DataAPI.contacts(self) || []
       contacts.in_groups_of(1000, false).each do |group|
         if oauth? || api_key? || webhook?
           group = group.map { |g| { email: g[0], name: g[1].blank? ? nil : g[1], created_at: g[2] } }
@@ -81,16 +81,15 @@ module EmailSynchronizer
       log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
     end
 
-    if ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
-      Raven.capture_exception(e)
-      if oauth?
-        # Clear identity on failure
-        Rails.logger.warn "Removing identity #{ identity.try(:id) }\n#{ e.message }"
-        identity.try(:destroy_and_notify_user)
-      end
-    else
-      raise e
+    raise e unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
+    Raven.capture_exception(e)
+
+    if oauth?
+      # Clear identity on failure
+      Rails.logger.warn "Removing identity #{ identity.try(:id) }\n#{ e.message }"
+      identity.try(:destroy_and_notify_user)
     end
+
   rescue => e
     log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n")) if log_entry
     raise e

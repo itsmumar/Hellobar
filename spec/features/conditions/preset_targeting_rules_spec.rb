@@ -15,7 +15,7 @@ feature 'Users can use site element targeting rule presets', :js do
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
 
-    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
+    stub_out_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
   feature 'Free subscription sites' do

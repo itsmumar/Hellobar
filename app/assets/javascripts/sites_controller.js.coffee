@@ -2,7 +2,7 @@ $ ->
   if window.location.search.indexOf("upgrade=true") != -1
     options =
       package:
-        is_trial: false
+        trial: false
         monthly_amount: "15"
         payment_valid: true
         schedule: "yearly"

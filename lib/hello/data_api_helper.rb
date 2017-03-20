@@ -74,7 +74,7 @@ module Hello
         #
         # [[email, name, timestamp] [email, name, timestamp], ...]
         #
-        def get_contacts(site_id, contact_list_id, read_key, limit = nil, start_timestamp = nil, additional_params = {})
+        def contacts(site_id, contact_list_id, read_key, limit = nil, start_timestamp = nil, additional_params = {})
           sign_path_and_params(generate_path('e', site_id, contact_list_id), { 'l' => limit.to_i, 'd' => start_timestamp.to_i }.merge(additional_params), read_key)
         end
 

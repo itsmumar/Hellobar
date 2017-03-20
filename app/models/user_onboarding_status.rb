@@ -11,8 +11,8 @@ class UserOnboardingStatus < ActiveRecord::Base
     created_element: 4,
     installed_script: 5,
     bought_subscription: 6
-  }
-  STATUS_IDS = STATUSES.invert
+  }.freeze
+  STATUS_IDS = STATUSES.invert.freeze
 
   def status_name
     STATUS_IDS[status_id]

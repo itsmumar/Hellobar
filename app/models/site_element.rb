@@ -3,18 +3,18 @@ require 'fog'
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade]
+  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade].freeze
 
-  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site..."
+  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
+  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
     2 => :redirect
-  }
+  }.freeze
 
-  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote)
-  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation)
+  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote).freeze
+  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation).freeze
 
   # valid bar types and their conversion units
   BAR_TYPES = {
@@ -35,10 +35,10 @@ class SiteElement < ActiveRecord::Base
 
     # themes type `template`
     'traffic_growth'                  => 'Emails'
-  }
+  }.freeze
 
-  TEMPLATE_NAMES = %w(traffic_growth)
-  SHORT_SUBTYPES = %w(traffic email call social announcement)
+  TEMPLATE_NAMES = %w(traffic_growth).freeze
+  SHORT_SUBTYPES = %w(traffic email call social announcement).freeze
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -51,10 +51,10 @@ class SiteElement < ActiveRecord::Base
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
-  validates :contact_list, association_exists: true, if: :is_email?
+  validates :contact_list, association_exists: true, if: :email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
-  validate :redirect_has_url, if: :is_email?
-  validate :has_thank_you_text, if: :is_email?
+  validate :redirect_has_url, if: :email?
+  validate :thank_you_text, if: :email?
   validate :subscription_for_custom_targeting
 
   scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
@@ -71,7 +71,7 @@ class SiteElement < ActiveRecord::Base
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
-  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.is_announcement? || se.has_converted? } }
+  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
   scope :matching_content, lambda { |*query|
     matching(:content, *query)
   }
@@ -95,7 +95,7 @@ class SiteElement < ActiveRecord::Base
     :updated_at,
     :deleted_at,
     :paused
-  ]
+  ].freeze
 
   QUESTION_DEFAULTS = {
     question: 'First time here?',
@@ -105,7 +105,7 @@ class SiteElement < ActiveRecord::Base
     answer2response: 'Welcome back! Check out our new sale.',
     answer1link_text: 'Take the tour',
     answer2link_text: 'Shop now'
-  }
+  }.freeze
 
   QUESTION_DEFAULTS.keys.each do |attr_name|
     define_method attr_name do
@@ -140,8 +140,8 @@ class SiteElement < ActiveRecord::Base
     site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{ short_subtype }%"))
   end
 
-  def has_activity_message?
-    has_converted? || is_announcement?
+  def activity_message?
+    converted? || announcement?
   end
 
   def cloneable_attributes
@@ -160,7 +160,7 @@ class SiteElement < ActiveRecord::Base
     total_views == 0 ? 0 : total_conversions.to_f / total_views
   end
 
-  def has_converted?
+  def converted?
     total_conversions > 0
   end
 
@@ -243,7 +243,7 @@ class SiteElement < ActiveRecord::Base
     after_email_submit_action == :redirect
   end
 
-  def is_announcement?
+  def announcement?
     element_subtype == 'announcement'
   end
 
@@ -307,7 +307,7 @@ class SiteElement < ActiveRecord::Base
       .where('site_elements.id IS NULL').destroy_all
   end
 
-  def is_email?
+  def email?
     element_subtype == 'email'
   end
 
@@ -317,38 +317,36 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
-    if site && site.capabilities.at_site_element_limit?
-      errors.add(:site, 'is currently at its limit to create site elements')
-    end
+    return unless site && site.capabilities.at_site_element_limit?
+    errors.add(:site, 'is currently at its limit to create site elements')
   end
 
   def redirect_has_url
-    if after_email_submit_action == :redirect
-      if !site.capabilities.after_submit_redirect?
-        errors.add('settings.redirect_url', 'is a pro feature')
-      elsif !settings['redirect_url'].present?
-        errors.add('settings.redirect_url', 'cannot be blank')
-      end
+    return unless after_email_submit_action == :redirect
+
+    if !site.capabilities.after_submit_redirect?
+      errors.add('settings.redirect_url', 'is a pro feature')
+    elsif !settings['redirect_url'].present?
+      errors.add('settings.redirect_url', 'cannot be blank')
     end
   end
 
-  def has_thank_you_text
-    if after_email_submit_action == :custom_thank_you_text
-      if !site.capabilities.custom_thank_you_text?
-        errors.add('custom_thank_you_text', 'is a pro feature')
-      elsif self[:thank_you_text].blank?
-        errors.add('custom_thank_you_text', 'cannot be blank')
-      end
+  def thank_you_text
+    return unless after_email_submit_action == :custom_thank_you_text
+
+    if !site.capabilities.custom_thank_you_text?
+      errors.add('custom_thank_you_text', 'is a pro feature')
+    elsif self[:thank_you_text].blank?
+      errors.add('custom_thank_you_text', 'cannot be blank')
     end
   end
 
-  def has_custom_targeting?
+  def custom_targeting?
     rule && rule.conditions.any?
   end
 
   def subscription_for_custom_targeting
-    if has_custom_targeting? && !site.capabilities.custom_targeted_bars?
-      errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
-    end
+    return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
+    errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
   end
 end

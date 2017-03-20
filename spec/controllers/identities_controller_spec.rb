@@ -14,21 +14,21 @@ describe IdentitiesController do
   describe 'GET :show' do
     it 'should return the identity' do
       Gibbon::Request.stubs(new: double('gibbon'))
-      ServiceProviders::MailChimp.any_instance.stub(:lists).and_return([])
+      allow_any_instance_of(ServiceProviders::MailChimp).to receive(:lists).and_return([])
       get :show, site_id: identity.site.id, id: 'mailchimp'
       json = JSON.parse(response.body)
-      json['id'].should == identity.id
+      expect(json['id']).to eq(identity.id)
     end
 
     it 'should return null when identity doesnt exist' do
       get :show, site_id: identity.site.id, id: 'made_up_identity'
-      response.body.should == 'null'
+      expect(response.body).to eq('null')
     end
 
     it 'should return nothing when there is an error retrieving the service provider' do
-      ServiceProviders::MailChimp.should_receive(:new).and_raise(Gibbon::MailChimpError)
+      expect(ServiceProviders::MailChimp).to receive(:new).and_raise(Gibbon::MailChimpError)
       get :show, site_id: identity.site.id, id: 'mailchimp'
-      response.body.should == 'null'
+      expect(response.body).to eq('null')
     end
   end
 

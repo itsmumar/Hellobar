@@ -6,8 +6,8 @@ class Admin < ActiveRecord::Base
   MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MAX_TIME_TO_VALIDATE_ACCESS_TOKEN = 15.minutes
   MIN_PASSWORD_LENGTH = 8
-  SALT = 'thisismyawesomesaltgoducks'
-  ISSUER = 'HelloBar'
+  SALT = 'thisismyawesomesaltgoducks'.freeze
+  ISSUER = 'HelloBar'.freeze
 
   include Rails.application.routes.url_helpers
 
@@ -29,13 +29,10 @@ class Admin < ActiveRecord::Base
     end
 
     def validate_session(access_token, token)
-      if admin = Admin.find_by(session_access_token: access_token, session_token: token)
-        if Time.now - admin.session_last_active > MAX_SESSION_TIME
-          return nil
-        else
-          admin.session_heartbeat!
-        end
+      if (admin = Admin.find_by(session_access_token: access_token, session_token: token))
+        return if Time.now - admin.session_last_active > MAX_SESSION_TIME
 
+        admin.session_heartbeat!
         return nil if admin.locked?
       end
 
@@ -43,7 +40,7 @@ class Admin < ActiveRecord::Base
     end
 
     def any_validated_access_token?(access_token)
-      Admin.all.any? { |a| a.has_validated_access_token?(access_token) }
+      Admin.all.any? { |a| a.validated_access_token?(access_token) }
     end
 
     def record_login_attempt(email, ip, user_agent, access_cookie)
@@ -135,9 +132,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
       access_token_list = []
 
       # First build an array of access tokens with a sortable field
-      updated_access_tokens.each do |access_token, timestamps|
+      updated_access_tokens.each do |token, timestamps|
         most_recent_timestamp = timestamps.collect(&:to_i).max
-        access_token_list << [access_token, most_recent_timestamp, timestamps]
+        access_token_list << [token, most_recent_timestamp, timestamps]
       end
 
       # Only store the most recent access tokens
@@ -165,7 +162,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     return false if locked? ||
                     !valid_authentication_otp?(entered_otp) ||
                     password_hashed != encrypt_password(password) ||
-                    !has_validated_access_token?(access_token)
+                    !validated_access_token?(access_token)
 
     login!(access_token)
     true
@@ -177,8 +174,9 @@ If this is not you, this may be an attack and you should lock down the admin by 
 
   def reset_password!(unencrypted_password)
     timestamp = Time.now
-    update_attribute(:password_last_reset, timestamp)
-    set_password!(unencrypted_password)
+    self.password_last_reset = timestamp
+    self.password = unencrypted_password
+    save!
 
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Hellobar::Settings[:host])
 
@@ -220,7 +218,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attributes(locked: false, login_attempts: 0)
   end
 
-  def has_validated_access_token?(access_token)
+  def validated_access_token?(access_token)
     valid_access_tokens.key?(access_token)
   end
 
@@ -228,13 +226,8 @@ If this is not you, this may be an attack and you should lock down the admin by 
     update_attribute(:session_last_active, Time.now)
   end
 
-  def set_password(plaintext)
+  def password=(plaintext)
     self.password_hashed = encrypt_password(plaintext)
-  end
-
-  def set_password!(plaintext)
-    set_password(plaintext)
-    save!
   end
 
   def encrypt_password(plaintext)
@@ -261,7 +254,7 @@ If this is not you, this may be an attack and you should lock down the admin by 
   end
 
   def set_default_password
-    set_password(initial_password) if new_record? && password_hashed.blank?
+    self.password = initial_password if new_record? && password_hashed.blank?
   end
 
   def generate_rotp_secret_base!

@@ -4,7 +4,7 @@ class SitesController < ApplicationController
 
   before_action :authenticate_user!, except: :create
   before_action :load_site, except: [:index, :new, :create]
-  before_action :get_top_performers, only: :improve
+  before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
   skip_before_action :verify_authenticity_token, only: [:preview_script, :script]
@@ -23,20 +23,16 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
+    elsif !@site.valid?
+      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      redirect_to root_path
+    elsif params[:source] == 'landing' && @site.url_exists?
+      redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
+    elsif params[:oauth]
+      session[:new_site_url] = @site.url
+      redirect_to '/auth/google_oauth2'
     else
-      if !@site.valid?
-        flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-        redirect_to root_path
-      else
-        if params[:source] == 'landing' && @site.url_exists?
-          redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
-        elsif params[:oauth]
-          session[:new_site_url] = @site.url
-          redirect_to '/auth/google_oauth2'
-        else
-          create_for_temporary_user
-        end
-      end
+      create_for_temporary_user
     end
   end
 
@@ -46,12 +42,12 @@ class SitesController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to(action: 'install') unless @site.has_script_installed?
+        redirect_to(action: 'install') unless @site.script_installed?
 
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
+        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
         @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render json: @site }
@@ -59,7 +55,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: is_page_refresh?)
+    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
   end
 
   def update
@@ -180,7 +176,7 @@ class SitesController < ApplicationController
     end
   end
 
-  def get_top_performers
+  def load_top_performers
     @top_performers = {}
     all_elements = @site.site_elements.sort_by { |e| -1 * e.conversion_percentage }
 

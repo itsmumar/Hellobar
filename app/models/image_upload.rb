@@ -6,10 +6,10 @@ class ImageUpload < ActiveRecord::Base
   after_validation :better_error_messages, on: [:create]
 
   def better_error_messages
-    if errors[:image].include?('Paperclip::Errors::NotIdentifiedByImageMagickError')
-      errors.delete(:image)
-      errors[:image] = 'Invalid image file.'
-    end
+    return unless errors[:image].include?('Paperclip::Errors::NotIdentifiedByImageMagickError')
+
+    errors.delete(:image)
+    errors[:image] = 'Invalid image file.'
   end
 
   def url
