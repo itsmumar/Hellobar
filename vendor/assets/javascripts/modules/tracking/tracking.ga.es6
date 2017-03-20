@@ -41,7 +41,9 @@ hellobar.defineModule('tracking.ga', ['hellobar'], function (hellobar) {
   }
 
   function trackCtaClick(ctaElement, externalEventType) {
-    //TODO do this in site_element: const ctaElement = element.querySelector('.js-cta');
+    if (!ctaElement) {
+      return;
+    }
     const clickHandler = (evt) => {
       sendCtaClick(externalEventType);
     };
