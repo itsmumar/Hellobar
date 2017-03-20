@@ -500,7 +500,7 @@ describe Site do
       # Switch to Free
       success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_truthy
-      
+
       # Void the pro bill
       pro_bill.void!
 
