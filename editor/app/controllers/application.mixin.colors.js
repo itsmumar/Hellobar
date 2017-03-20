@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-// GLOBALS: one object (https://github.com/One-com/one-color)
+// GLOBALS: one object (https://github.com/One-com/one-color), ColorThief
 
 export default Ember.Mixin.create({
 
@@ -68,6 +68,25 @@ export default Ember.Mixin.create({
         'model.link_color': white
       });
     }
-  }.observes('colorPalette')
+  }.observes('colorPalette'),
+
+  detectColorPalette() {
+    function formatRGB(rgbArray) {
+      rgbArray.push(1);
+      return rgbArray;
+    }
+
+    const colorThief = new ColorThief();
+    const image = $('.preview-image-for-colorpicker').get(0);
+
+    return imagesLoaded(image, () => {
+      const dominantColor = formatRGB(colorThief.getColor(image));
+      const colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
+
+      this.set('dominantColor', dominantColor);
+      this.set('colorPalette', colorPalette);
+    });
+  }
+
 
 });

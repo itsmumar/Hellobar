@@ -4,7 +4,6 @@ export default Ember.Component.extend({
 
   classNames: ['preview-area'],
 
-  applicationController: Ember.inject.controller('application'),
   inlineEditing: Ember.inject.service(),
   imaging: Ember.inject.service(),
 
@@ -16,10 +15,6 @@ export default Ember.Component.extend({
         this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );
-
-    Ember.run.next(() => {
-      this.detectColorPalette();
-    });
   },
 
   //-----------  Template Properties  -----------#
@@ -42,25 +37,6 @@ export default Ember.Component.extend({
     }
   }).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
 
-  //-----------  Color Intelligence  -----------#
-
-  detectColorPalette() {
-    function formatRGB(rgbArray) {
-      rgbArray.push(1);
-      return rgbArray;
-    }
-
-    const colorThief = new ColorThief();
-    const image = $('.preview-image-for-colorpicker').get(0);
-
-    return imagesLoaded(image, () => {
-      const dominantColor = formatRGB(colorThief.getColor(image));
-      const colorPalette = colorThief.getPalette(image, 4).map(color => formatRGB(color));
-
-      this.set('applicationController.dominantColor', dominantColor);
-      this.set('applicationController.colorPalette', colorPalette);
-    });
-  },
 
   previewContainerCssClasses: (function () {
     let classes = [];

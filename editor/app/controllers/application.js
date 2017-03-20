@@ -38,6 +38,7 @@ export default Ember.Controller.extend(
     _subscribeToBusEvents() {
       this.get('bus').subscribe('hellobar.core.application.initialized', params => {
         $('body').removeClass('loading');
+        Ember.run.next(() => this.detectColorPalette());
       });
     },
 
