@@ -431,7 +431,7 @@ class @ContactListModal extends Modal
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
-        if @_showListsAndTags(defaultContext)
+        if data.provider != "infusionsoft"
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if data.provider == "infusionsoft" or @_showListsAndTags(defaultContext)
