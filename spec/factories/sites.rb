@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :site do
     transient do
       elements []
+      user nil
     end
 
     url { random_uniq_url }
@@ -12,6 +13,9 @@ FactoryGirl.define do
       evaluator.elements.each do |element|
         create(:site_element, element, site: site)
       end
+
+      site.users << evaluator.user if evaluator.user.present?
+      site.reload
     end
 
     trait :with_rule do
