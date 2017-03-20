@@ -52,6 +52,22 @@
         }
       });
 
+      !isPreviewMode() && hellobar('tracking.ga', {
+        configurator: function(configuration) {
+          var mockExternalEvent = {
+            id: 73454,
+            site_element_id: 2,
+            provider: 'google_analytics',
+            type: 'email_conversion',
+            category: 'Conversions',
+            action: 'email_submission',
+            label: 'Email conversion from HelloBar',
+            value: null
+          };
+          configuration.externalEvents([mockExternalEvent]);
+        }
+      });
+
       // Loading bar modules
       // TODO
 
