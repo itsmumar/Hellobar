@@ -31,12 +31,7 @@ export default Ember.Component.extend({
 
   templateThemes: function () {
     const elementType = this.get('elementType');
-    // TODO drop support for outdated element_type property
-    return _.filter(this.get('allThemes'),
-      (theme) => theme.type === 'template'
-      && (theme.element_type === elementType
-      || _.includes(theme.element_type, elementType)
-      || _.includes(theme.element_types, elementType)));
+    return _.filter(this.get('allThemes'), (theme) => theme.type === 'template' && _.includes(theme.element_types, elementType));
   }.property('allThemes', 'elementType'),
 
   hasAnyTemplateThemes: function() {
