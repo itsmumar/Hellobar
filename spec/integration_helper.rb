@@ -8,11 +8,11 @@ RSpec.configure do |config|
   config.include FeatureHelper
 
   OmniAuth.config.test_mode = true
-  OmniAuth.config.mock_auth[:drip] = OmniAuth::AuthHash.new({
+  OmniAuth.config.mock_auth[:drip] = OmniAuth::AuthHash.new(
     provider: 'drip',
     extra: { account_id: '8056783' },
     credentials: { token: '....' }
-  })
+  )
 
   config.before(:all) do
     setup_site_generator
