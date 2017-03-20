@@ -8,7 +8,7 @@ export default Ember.Component.extend({
   classNames: ['theme-tile'],
 
   /**
-   * @property {object} Theme object. Required property.
+   * @property [object] Theme object. Can be empty.
    */
   theme: null,
 
@@ -19,7 +19,13 @@ export default Ember.Component.extend({
 
   imageSrc: (function () {
     const elementTypeFolder = (this.get('elementType') || '').toLowerCase();
-    return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/${this.get('theme.id')}.png`);
+    const theme = this.get('theme');
+    if (theme) {
+      return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/${this.get('theme.id')}.png`);
+    } else {
+      // TODO use special image
+      return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/classic.png`);
+    }
   }).property('theme', 'elementType'),
 
   init() {
@@ -29,11 +35,11 @@ export default Ember.Component.extend({
   selectButtonIsVisible: false,
 
   mouseEnter() {
-    return this.set('selectButtonIsVisible', true);
+    this.set('selectButtonIsVisible', true);
   },
 
   mouseLeave() {
-    return this.set('selectButtonIsVisible', false);
+    this.set('selectButtonIsVisible', false);
   },
 
   actions: {

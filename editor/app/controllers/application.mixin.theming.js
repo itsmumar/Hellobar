@@ -17,22 +17,25 @@ export default Ember.Mixin.create({
   applyCurrentTheme() {
     const allThemes = this.get('theming').availableThemes();
     const currentThemeId = this.get('model.theme_id');
-    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-    const currentThemeType = this.get('model.type');
-    if (currentTheme.defaults && currentTheme.defaults[currentThemeType]) {
-      let themeStyleDefaults = currentTheme.defaults[currentThemeType] || {};
-      _.each(themeStyleDefaults, (value, key) => {
-          return this.set(`model.${key}`, value);
-        }
-      );
+    if (currentThemeId) {
+      const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+      const currentElementType = this.get('model.type');
+      if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
+        const themeStyleDefaults = currentTheme.defaults[currentElementType] || {};
+        _.each(themeStyleDefaults, (value, key) => {
+            this.set(`model.${key}`, value);
+          }
+        );
+      }
+    } else {
+      this.setSiteColors();
     }
   },
 
   currentTheme: (function () {
     const allThemes = this.get('theming').availableThemes();
     const currentThemeId = this.get('model.theme_id');
-    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-    return currentTheme;
+    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('theming').autodetectedTheme();
   }).property('model.theme_id'),
 
 
@@ -56,14 +59,15 @@ export default Ember.Mixin.create({
       this.set('model.element_subtype', 'email');
       this.get('inlineEditing').initializeBlocks(this.get('model'), this.get('model.theme_id'));
     }
-    if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
+    /*if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
       _.each(this.get('originalTheme'), (value, key) => {
-          return this.set(`model.${key}`, value);
+          this.set(`model.${key}`, value);
         }
       );
     } else {
-      return this.applyCurrentTheme();
-    }
+
+    }*/
+    this.applyCurrentTheme();
   }).observes('model.theme_id')
 
 });
