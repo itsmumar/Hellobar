@@ -15,6 +15,11 @@ export default Ember.Controller.extend(HasPlacement, HasTriggerOptions, AfterCon
       {value: 'bar-bottom', label: 'Bottom'}
     ],
 
+    setDefaults: (function () {
+      if (this.get('model.pushes_page_down') === null)
+        this.set('model.pushes_page_down', true)
+    }).observes('model').on('init'),
+
     canWiggle: (function () {
       return this.get("model.element_subtype") === "traffic" || this.get("model.element_subtype") === "email";
     }).property("model.element_subtype"),
