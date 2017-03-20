@@ -43,7 +43,7 @@ describe ServiceProviders::Drip do
 
       VCR.use_cassette('service_providers/drip/subscribe_cpn_id') do
         service_provider.subscribe('81207609', 'raj.kumar+7@crossover.com', 'Test Mname User', false)
-        WebMock.should have_requested(:post, subscribe_url)
+        expect(WebMock).to have_requested(:post, subscribe_url)
       end
     end
 
@@ -56,7 +56,7 @@ describe ServiceProviders::Drip do
       VCR.use_cassette('service_providers/drip/subscribe_with_tags') do
         service_provider.subscribe('98654057', 'raj.kumar+9@crossover.com', 'Test Mname User', false)
 
-        WebMock.should have_requested(:post, subscribe_url).with { |req|
+        expect(WebMock).to have_requested(:post, subscribe_url).with { |req|
           JSON.parse(req.body) == {
             'subscribers' => [{
               'new_email' => 'raj.kumar+9@crossover.com',
@@ -80,7 +80,7 @@ describe ServiceProviders::Drip do
 
       VCR.use_cassette('service_providers/drip/subscribe_account') do
         service_provider.subscribe(nil, 'raj.kumar+6@crossover.com', 'Test Mname User', false)
-        WebMock.should have_requested(:post, subscribe_url)
+        expect(WebMock).to have_requested(:post, subscribe_url)
       end
     end
   end

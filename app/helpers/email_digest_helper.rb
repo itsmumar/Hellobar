@@ -32,12 +32,10 @@ module EmailDigestHelper
       else
         'New Email Digest (First Time, Pro)'
       end
+    elsif site.free?
+      'New Email Digest'
     else
-      if site.free?
-        'New Email Digest'
-      else
-        'New Email Digest (Pro)'
-      end
+      'New Email Digest (Pro)'
     end
   end
 end

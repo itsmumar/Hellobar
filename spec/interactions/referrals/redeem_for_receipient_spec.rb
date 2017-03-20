@@ -17,9 +17,9 @@ describe Referrals::RedeemForRecipient do
 
     referral.reload
 
-    expect(referral.installed?).to be_true
+    expect(referral.installed?).to be_truthy
     expect(referral.redeemed_by_recipient_at).not_to be_nil
-    expect(referral.available_to_sender).to be_true
+    expect(referral.available_to_sender).to be_truthy
     expect(site.current_subscription).to be_a(Subscription::Pro)
     expect(bill.amount).to eq(0.0)
     expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
@@ -27,20 +27,20 @@ describe Referrals::RedeemForRecipient do
 
   it 'subscribes the sender to Pro too' do
     sender_ownership = create(:site_membership)
-    sender_user = sender_ownership.user
     sender_site = sender_ownership.site
     sender_site.change_subscription(build(:free_subscription))
-    referral = create(:referral, recipient: user, state: :signed_up, site: sender_site)
+
+    create(:referral, recipient: user, state: :signed_up, site: sender_site)
     Referrals::RedeemForRecipient.run(site: site)
 
     expect(sender_site.reload.current_subscription).to be_a(Subscription::Pro)
   end
 
   it 'subscribes to Pro with a 0.00 bill but only once' do
-    referral = create(:referral, recipient: user, state: :signed_up)
+    create(:referral, recipient: user, state: :signed_up)
     Referrals::RedeemForRecipient.run(site: site)
 
-    site.stub(:change_subscription)
+    allow(site).to receive(:change_subscription)
     Referrals::RedeemForRecipient.run(site: site)
     expect(site).not_to have_received(:change_subscription)
   end

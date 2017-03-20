@@ -3,6 +3,7 @@ puts 'Loading Rails...'
 begin
   load File.expand_path('../spring', __FILE__)
 rescue LoadError
+  puts 'Spring is not found. Keeping calm...'
 end
 require_relative '../config/boot'
 require_relative '../config/environment'
@@ -24,7 +25,7 @@ files.each_with_index do |file, i|
       begin
         QueueWorker.send_sqs_message(line, Hellobar::Settings[:env_name], Hellobar::Settings[:low_priority_queue])
         num_jobs += 1
-      rescue Exception => e
+      rescue => _
         puts "Failed on #{ line.inspect }"
         raise
       end

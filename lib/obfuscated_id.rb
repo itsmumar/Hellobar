@@ -5,9 +5,9 @@
 # will not always be the same.
 #
 class ObfuscatedID
-  SEP = '-'
-  ZERO_ENCODE = '_'
-  ENCODE = 'S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta'
+  SEP = '-'.freeze
+  ZERO_ENCODE = '_'.freeze
+  ENCODE = 'S6pjZ9FbD8RmIvT3rfzVWAloJKMqg7CcGe1OHULNuEkiQByns5d4Y0PhXw2xta'.freeze
 
   class << self
     def generate(int)

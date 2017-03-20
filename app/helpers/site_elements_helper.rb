@@ -106,6 +106,7 @@ module SiteElementsHelper
     verb && opts[:verb] ? "#{ pluralized_unit } #{ verb }" : pluralized_unit
   end
 
+  # rubocop: disable Rails/OutputSafety
   def site_element_age(site_element)
     age = Time.now - site_element.created_at
     units =
@@ -122,6 +123,7 @@ module SiteElementsHelper
       end
     "#{ units[0] } <small>#{ units[1].pluralize(units[0]) } old</small>".html_safe
   end
+  # rubocop: enable Rails/OutputSafety
 
   def type_icon_class_for_element(element)
     case element.element_subtype
@@ -147,6 +149,7 @@ module SiteElementsHelper
     site.site_elements.collect(&:element_subtype)
   end
 
+  # rubocop: disable Rails/OutputSafety
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
@@ -161,6 +164,7 @@ module SiteElementsHelper
       "<i class='testing-icon icon-circle #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     end
   end
+  # rubocop: enable Rails/OutputSafety
 
   def difference_is_significant?(elements)
     values = {}
@@ -199,18 +203,17 @@ module SiteElementsHelper
     [elements['email'], social_elements, elements['traffic'], elements['call'], elements['announcement']].compact
   end
 
+  # rubocop: disable Rails/OutputSafety
   def render_headline(site_element)
-    # Condering `blocks` field will be present only for `templates`
-    headline = if site_element.blocks.present?
-                 h = ''
-                 site_element.blocks.each do |block|
-                   h += "#{ block['content']['text'] } " if block['id'].include?('headline')
-                 end
-                 h
-               else
-                 site_element.headline || ''
-               end
+    return raw(site_element.question) if site_element.use_question?
 
-    strip_tags(site_element.use_question? ? site_element.question : headline).html_safe
+    # Condering `blocks` field will be present only for `templates`
+    return raw(site_element.headline) unless site_element.blocks.present?
+
+    headline_blocks = site_element.blocks.select { |block| block['id'].include?('headline') }
+    headline_blocks.inject(''.html_safe) do |result, block|
+      result.safe_concat "#{ block['content']['text'] } "
+    end
   end
+  # rubocop: enable Rails/OutputSafety
 end

@@ -9,7 +9,7 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
 
-    stub_out_get_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
+    stub_out_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
   scenario "hides the UrlCondition if the site doesn't already have it as a rule" do

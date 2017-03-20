@@ -12,11 +12,11 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   def lists
-    @client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
+    @client.lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    cc_list = @client.get_list(@token, list_id)
+    cc_list = @client.list(@token, list_id)
     cc_contact = ConstantContact::Components::Contact.new
     cc_email = ConstantContact::Components::EmailAddress.new
 
@@ -27,7 +27,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
 
     add_contact(cc_contact, double_optin)
   rescue RestClient::Conflict
-    cc_contact = @client.get_contact_by_email(@token, email).results[0]
+    cc_contact = @client.contact_by_email(@token, email).results[0]
     cc_contact.lists ||= []
     cc_contact.lists << cc_list
 
@@ -40,29 +40,24 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     # this can still fail a second time if CC isn't happy with how the data matches. for some reason.
     return true
   rescue RestClient::BadRequest => e
-    if e.inspect =~ /not be opted in using/
-      # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
-      # if that happens, try adding contact again WITH double opt-in
-      @client.update_contact(@token, contact, true)
-    else
-      raise e
-    end
+    # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
+    # if that happens, try adding contact again WITH double opt-in
+    raise e unless e.inspect =~ /not be opted in using/
+
+    @client.update_contact(@token, contact, true)
   end
 
   def add_contact(contact, double_optin)
     @client.add_contact(@token, contact, double_optin)
   rescue RestClient::BadRequest => e
-    if e.inspect =~ /not a valid email address/
-      # if the email is not valid, CC will raise an exception and we end up here
-      # when this happens, just return true and continue
-      return true
-    elsif e.inspect =~ /not be opted in using/
-      # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
-      # if that happens, try adding contact again WITH double opt-in
-      @client.add_contact(@token, contact, true)
-    else
-      raise e
-    end
+    # if the email is not valid, CC will raise an exception and we end up here
+    # when this happens, just return true and continue
+    return true if e.inspect =~ /not a valid email address/
+    raise e unless e.inspect =~ /not be opted in using/
+
+    # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
+    # if that happens, try adding contact again WITH double opt-in
+    @client.add_contact(@token, contact, true)
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
@@ -89,11 +84,9 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
     valid_subscribers = subscribers.select { |s| s[:email] =~ pattern }
 
-    if valid_subscribers.count < subscribers.count
-      # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
-      batch_subscribe(list_id, valid_subscribers)
-    else
-      return true
-    end
+    return true unless valid_subscribers.count < subscribers.count
+
+    # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
+    batch_subscribe(list_id, valid_subscribers)
   end
 end

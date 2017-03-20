@@ -19,11 +19,10 @@ class WelcomeController < ApplicationController
   private
 
   def set_site_url
-    if stored_url
-      @site_url = stored_url
+    return unless stored_url
 
-      session.delete(:new_site_url)
-    end
+    @site_url = stored_url
+    session.delete(:new_site_url)
   end
 
   def stored_url

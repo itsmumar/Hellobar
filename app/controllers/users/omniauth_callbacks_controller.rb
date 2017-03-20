@@ -6,7 +6,7 @@ class Users::OmniauthCallbacksController < ApplicationController
     @user = User.find_by(email: request.env['omniauth.auth']['info']['email'])
     register_flow = true unless @user.present?
 
-    if !@user.present? || @user.is_oauth_user?
+    if !@user.present? || @user.oauth_user?
       @user = User.find_for_google_oauth2(request.env['omniauth.auth'], cookies[:login_email], track_options)
     end
 
@@ -35,11 +35,11 @@ class Users::OmniauthCallbacksController < ApplicationController
   end
 
   def failure
+    flash[:error] = 'Sorry, we could not authenticate with Google. Please try again.'
+
     if session[:new_site_url]
-      flash[:error] = 'Sorry, we could not authenticate with Google. Please try again.'
       redirect_to root_path
     else
-      flash[:error] = 'Sorry, we could not authenticate with Google. Please try again.'
       redirect_to new_user_session_path
     end
   end

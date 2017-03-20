@@ -9,7 +9,7 @@ feature 'Adding and editing bars', :js do
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController)
-      .to receive(:get_ab_variation).and_return('original')
+      .to receive(:ab_variation).and_return('original')
   end
 
   scenario 'new user can create a site element' do
@@ -40,10 +40,9 @@ feature 'Adding and editing bars', :js do
 
   scenario 'existing user can create a site element' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
-    user = create(:user)
-    site = user.sites.create(url: random_uniq_url)
-    create(:rule, site: site)
-    auth = user.authentications.create(provider: 'google_oauth2', uid: '12345')
+    site = create(:site, :with_rule, :with_user)
+    user = site.owners.last
+    user.authentications.create(provider: 'google_oauth2', uid: '12345')
 
     visit new_user_session_path
     fill_in 'Your Email', with: user.email
@@ -81,7 +80,7 @@ feature 'Adding and editing bars', :js do
   context 'Collect Email goal' do
     before do
       allow_any_instance_of(ApplicationController)
-        .to receive(:get_ab_variation).and_return('variant')
+        .to receive(:ab_variation).and_return('variant')
 
       membership = create(:site_membership, :with_site_rule)
       user = membership.user

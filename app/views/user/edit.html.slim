@@ -17,7 +17,7 @@ nav.tabs-wrapper
   = form_for @user, :url => user_path, :html => {:class => ['personal-form']} do |f|
     .column
       = f.label :email
-      = f.text_field :email, :disabled => @user.is_oauth_user?
+      = f.text_field :email, :disabled => @user.oauth_user?
 
       = f.label :first_name
       = f.text_field :first_name
@@ -28,16 +28,16 @@ nav.tabs-wrapper
       = f.submit "Save & Update", class: "button"
 
     .column
-      - if @user.is_oauth_user?
+      - if @user.oauth_user?
         div.label This account was created using google authentication.
         div#show-password-form.button Change email / password
 
       .password-fields
-        - unless @user.is_oauth_user?
+        - unless @user.oauth_user?
           = f.label :current_password, "Current Password"
           = f.password_field :current_password, autocomplete: "off"
 
-        div class=[@user.is_oauth_user? ? "hidden" : ""]
+        div class=[@user.oauth_user? ? "hidden" : ""]
           = f.label :password, "New Password"
           = f.password_field :password
 

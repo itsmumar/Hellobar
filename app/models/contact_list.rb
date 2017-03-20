@@ -5,7 +5,7 @@ class ContactList < ActiveRecord::Base
   include DeserializeWithErrors
   include EmailSynchronizer
 
-  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0']
+  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
 
   attr_accessor :provider
 
@@ -74,7 +74,7 @@ class ContactList < ActiveRecord::Base
   def subscribers(limit = nil)
     return @subscribers if @subscribers
 
-    data = Hello::DataAPI.get_contacts(self, limit) || []
+    data = Hello::DataAPI.contacts(self, limit) || []
     @subscribers = data.map { |d| { email: d[0], name: d[1], subscribed_at: d[2].is_a?(Integer) ? Time.at(d[2]) : nil } }
   end
 
@@ -182,9 +182,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_valid?
-    if service_provider && !service_provider.embed_code_valid?
-      errors.add(:base, 'Embed code is invalid')
-    end
+    return unless service_provider && !service_provider.embed_code_valid?
+    errors.add(:base, 'Embed code is invalid')
   end
 
   def service_provider_class
@@ -198,8 +197,7 @@ class ContactList < ActiveRecord::Base
   def webhook_url_valid?
     uri = Addressable::URI.parse(data['webhook_url'])
 
-    if !%w(http https).include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
-      errors.add(:base, 'webhook URL is invalid')
-    end
+    return unless !%w(http https).include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+    errors.add(:base, 'webhook URL is invalid')
   end
 end

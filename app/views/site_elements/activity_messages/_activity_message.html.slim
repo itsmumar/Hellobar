@@ -2,9 +2,9 @@ tr class="type-#{element.short_subtype}"
   td.color-flag style="background-color: ##{element.background_color}"
   td
     = render "site_elements/activity_messages/intro", element: element
-    - if element.has_converted?
+    - if element.converted?
       = activity_message_for_conversion(element, element.related_site_elements).html_safe
-    - elsif element.is_announcement?
+    - elsif element.announcement?
       '  has already resulted in
       = number_with_delimiter(element.total_views)
       |  views.

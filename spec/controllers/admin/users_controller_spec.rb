@@ -15,7 +15,7 @@ describe Admin::UsersController do
     it 'allows admins to search users by site URL' do
       get :index, q: site.url
 
-      expect(assigns(:users).include?(site.owners.first)).to be_true
+      expect(assigns(:users).include?(site.owners.first)).to be_truthy
     end
 
     it 'finds deleted users' do
@@ -23,7 +23,7 @@ describe Admin::UsersController do
       user.destroy
       get :index, q: 'test'
 
-      expect(assigns(:users).include?(user)).to be_true
+      expect(assigns(:users).include?(user)).to be_truthy
     end
 
     it 'finds users by script' do
@@ -32,7 +32,7 @@ describe Admin::UsersController do
       user.sites << site
       get :index, q: site.script_name
 
-      expect(assigns(:users).include?(user)).to be_true
+      expect(assigns(:users).include?(user)).to be_truthy
     end
   end
 

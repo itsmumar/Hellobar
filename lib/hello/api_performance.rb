@@ -43,9 +43,13 @@ module Hello::DataAPI
       super(sym, include_private) || data.respond_to?(sym, include_private)
     end
 
-    def method_missing(sym, *args, &block)
-      return data.send(sym, *args, &block) if data.respond_to?(sym)
-      super(sym, *args, &block)
+    def method_missing(method, *args, &block)
+      return data.send(method, *args, &block) if data.respond_to?(method)
+      super
+    end
+
+    def respond_to_missing?(method, *)
+      data.respond_to?(method) || super
     end
 
     private

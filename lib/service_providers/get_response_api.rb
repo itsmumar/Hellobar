@@ -56,7 +56,7 @@ module ServiceProviders
             # This is a little bit of a hack, but it should give us 95% of what
             # is required when it comes to tagging.
             # We add tags only to contacts which are also stored at HelloBar,
-            # so that unknown origin contacts at GR won’t get tagged by us
+            # so that unknown origin contacts at GR won't get tagged by us
             # https://crossover.atlassian.net/browse/XOHB-1397
             contacts = fetch_latest_contacts(20)
             subscribers = @contact_list.subscribers(10)
@@ -86,7 +86,7 @@ module ServiceProviders
     end
 
     def valid?
-      !!lists
+      lists.present?
     rescue => error
       log "Getting lists raised #{ error }"
       false

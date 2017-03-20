@@ -9,12 +9,12 @@ Bundler.require(*Rails.groups)
 module Hellobar
   class Application < Rails::Application
     # Require Hellobar::Settings so that we can use them in this config file
-    require File.join(Rails.root, 'config/initializers', 'settings.rb')
+    require Rails.root.join('config', 'initializers', 'settings.rb')
 
     # We'll handle our own errors
     config.exceptions_app = routes
 
-    config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
+    config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
     config.autoload_paths += %W(#{ config.root }/lib/queue_worker/)
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load
@@ -22,7 +22,7 @@ module Hellobar
     # code (config, etc.)
     # config.autoload_paths += %W(#{config.root}/lib)
 
-    config.action_mailer.preview_path = "#{ Rails.root }/spec/mailers/previews"
+    config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
 
     config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }

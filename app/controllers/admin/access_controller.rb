@@ -33,7 +33,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def process_step1
-    return redirect_to(admin_access_path) unless email = params[:login_email]
+    return redirect_to(admin_access_path) unless (email = params[:login_email])
 
     session[:admin_access_email] = email
 
@@ -43,7 +43,7 @@ class Admin::AccessController < ApplicationController
 
     Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
 
-    if @admin = Admin.where(email: email).first
+    if (@admin = Admin.find_by(email: email))
       process_login(@admin)
     else
       # Always render step2 - this way attackers don't know if the login
@@ -53,13 +53,13 @@ class Admin::AccessController < ApplicationController
   end
 
   def process_step2
-    return redirect_to(admin_access_path) unless email = session[:admin_access_email]
+    return redirect_to(admin_access_path) unless (email = session[:admin_access_email])
 
     @admin = Admin.where(email: email).first
 
     return render(:step2) unless @admin
     return redirect_to(admin_locked_path) if @admin.locked?
-    return render(:validate_access_token) unless @admin.has_validated_access_token?(access_token)
+    return render(:validate_access_token) unless @admin.validated_access_token?(access_token)
 
     if @admin.validate_login(access_token, params[:admin_password], params[:otp])
       # Successful login
@@ -81,7 +81,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def validate_access_token
-    return redirect_to(admin_access_path) unless email = params[:email]
+    return redirect_to(admin_access_path) unless (email = params[:email])
 
     admin = Admin.where(email: email).first
 
@@ -102,7 +102,7 @@ class Admin::AccessController < ApplicationController
 
     # If they have validated the access token then we
     # can render step 2
-    unless admin.has_validated_access_token?(access_token)
+    unless admin.validated_access_token?(access_token)
       admin.send_validate_access_token_email!(access_token)
       return render(:validate_access_token)
     end

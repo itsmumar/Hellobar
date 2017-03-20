@@ -43,6 +43,6 @@ class ServiceProviders::AWeber < ServiceProviders::Email
   def handle_errors
     yield
   rescue AWeber::CreationError
-    # Do nothing, this is raised when the email already exists or email is invalid
+    nil # Do nothing, this is raised when the email already exists or email is invalid
   end
 end

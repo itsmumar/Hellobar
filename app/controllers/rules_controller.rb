@@ -64,8 +64,7 @@ class RulesController < ApplicationController
   end
 
   def verify_capability
-    unless @site && @site.capabilities.custom_targeted_bars?
-      render json: { error: 'forbidden' }, status: :forbidden
-    end
+    return if @site && @site.capabilities.custom_targeted_bars?
+    render json: { error: 'forbidden' }, status: :forbidden
   end
 end

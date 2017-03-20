@@ -1,7 +1,7 @@
 class QueueWorker
-  STAGES = %w(edge staging production designqa)
-  VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds)
-  LOG_FILE = File.join(Rails.root, 'log', 'queue_worker.log')
+  STAGES = %w(edge staging production designqa).freeze
+  VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds).freeze
+  LOG_FILE = Rails.root.join('log', 'queue_worker.log')
 
   module Delay
     def delay(task_name, options = {})
@@ -13,11 +13,8 @@ class QueueWorker
           # Ensure private methods are called.
           method(task_name).call
         rescue NoMethodError => e
-          if e.message.include?("undefined method `#{ task_name }'")
-            raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
-          else
-            raise e
-          end
+          raise e unless e.message.include?("undefined method `#{ task_name }'")
+          raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
         end
       else
         QueueWorker.send_sqs_message(body, nil, queue)
@@ -32,7 +29,7 @@ class QueueWorker
     queues = filtered_queues(sqs, queue_name_filter)
 
     queues.collect do |queue|
-      sqs.client.get_queue_attributes(queue_url: queue.url, attribute_names: VIEW_ATTRIBUTES)
+      sqs.client.queue_attributes(queue_url: queue.url, attribute_names: VIEW_ATTRIBUTES)
     end
   end
 
