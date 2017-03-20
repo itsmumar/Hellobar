@@ -74,12 +74,6 @@ export default Ember.Controller.extend({
   // Editor UI Properties
   imageUploadCopy: Ember.computed.oneWay('currentTheme.image.upload_copy'),
 
-  // TODO remove this
-  //showImagePlacementField: Ember.computed.oneWay('currentTheme.image.position_selectable'),
-  // TODO right now we hide the image placement dropdown, after that we'll need to remove it completely as we want to do it inline
-  showImagePlacementField: false,
-
-
   // Site Element Theme Properties
   themeChanged: Ember.observer('currentTheme', function () {
       Ember.run.next(this, function () {
