@@ -57,30 +57,33 @@ namespace :billing do
         else
           # Try to bill the person if they haven't been within the last MIN_RETRY_TIME
           last_billing_attempt = bill.billing_attempts.last
-          if last_billing_attempt && now - last_billing_attempt.created_at < MIN_RETRY_TIME
+          no_retry = last_billing_attempt && now - last_billing_attempt.created_at < MIN_RETRY_TIME
+
+          if no_retry
             billing_report "Not attempting bill #{ bill.id } because last billing attempt was #{ last_billing_attempt.created_at }"
+            next
+          end
+
+          # Attempt the billing
+          msg = "Attempting to bill #{ bill.id }: #{ bill.subscription.site.url } for #{ number_to_currency(bill.amount) }..."
+          if (bill.amount != 0) && bill.subscription.payment_method && (!bill.subscription.payment_method.current_details || !bill.subscription.payment_method.current_details.token)
+            num_failed += 1
+            amount_failed += bill.amount
+            billing_report(msg + 'Skipped: no payment method details available')
+          elsif (bill.amount != 0) && !bill.subscription.payment_method
+            num_failed += 1
+            amount_failed += bill.amount
+            billing_report(msg + 'Skipped: no payment method available')
           else
-            # Attempt the billing
-            msg = "Attempting to bill #{ bill.id }: #{ bill.subscription.site.url } for #{ number_to_currency(bill.amount) }..."
-            if (bill.amount != 0) && bill.subscription.payment_method && (!bill.subscription.payment_method.current_details || !bill.subscription.payment_method.current_details.token)
-              num_failed += 1
-              amount_failed += bill.amount
-              billing_report(msg + 'Skipped: no payment method details available')
-            elsif (bill.amount != 0) && !bill.subscription.payment_method
-              num_failed += 1
-              amount_failed += bill.amount
-              billing_report(msg + 'Skipped: no payment method available')
+            attempt = bill.attempt_billing!
+            if (attempt == true) || attempt.success?
+              num_successful += 1
+              amount_successful += bill.amount
+              billing_report(msg + 'OK')
             else
-              attempt = bill.attempt_billing!
-              if (attempt == true) || attempt.success?
-                num_successful += 1
-                amount_successful += bill.amount
-                billing_report(msg + 'OK')
-              else
-                num_failed += 1
-                amount_failed += bill.amount
-                billing_report(msg + "Failed: #{ attempt.response }")
-              end
+              num_failed += 1
+              amount_failed += bill.amount
+              billing_report(msg + "Failed: #{ attempt.response }")
             end
           end
         end
