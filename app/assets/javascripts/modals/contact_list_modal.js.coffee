@@ -452,7 +452,9 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
-        @$modal.find("#contact_list_remote_list_id").val(lists[0].id) if lists and lists.length > 0
+        if lists and lists.length > 0
+          selectedList = defaultContext.contactList.data.remote_id or lists[0].id
+          @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
         @_showListInstructions(defaultContext)
