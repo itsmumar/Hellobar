@@ -23,7 +23,7 @@ hellobar.defineModule('tracking.ga', ['hellobar'], function (hellobar) {
     };
   };
 
-  function sendGaEvent(eventType) => {
+  function sendGaEvent(eventType) {
     const processExternalEvent = (externalEvent) => {
       const { category, action, label } = externalEvent;
       ga()('send', {
