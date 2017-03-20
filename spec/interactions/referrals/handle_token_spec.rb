@@ -10,7 +10,7 @@ describe Referrals::HandleToken do
     user = create(:user, :with_sites, count: 2)
     referral = create(:referral, state: :sent)
 
-    expect(user.sites.count > 1).to be_true
+    expect(user.sites.count > 1).to be_truthy
     expect_any_instance_of(Referral).not_to receive(:save)
 
     Referrals::HandleToken.run(user: user, token: referral.referral_token.token)
@@ -29,6 +29,6 @@ describe Referrals::HandleToken do
     referral = create(:referral, state: :sent)
 
     Referrals::HandleToken.run(user: build(:user), token: referral.referral_token.token)
-    expect(referral.reload.signed_up?).to be_true
+    expect(referral.reload.signed_up?).to be_truthy
   end
 end

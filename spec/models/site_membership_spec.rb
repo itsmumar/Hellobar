@@ -22,14 +22,14 @@ describe SiteMembership do
   describe 'can_destroy?' do
     it 'returns false if there are no other owners' do # ie, sites need at least one owner
       membership = create(:site_membership)
-      expect(membership.can_destroy?).to be_false
+      expect(membership.can_destroy?).to be_falsey
     end
 
     it 'returns true if there are other owners' do # ie, sites need at least one owner
       site = create(:site, :with_user)
       create(:site_membership, site: site)
       ownership = create(:site_membership, site: site)
-      expect(ownership.can_destroy?).to be_true
+      expect(ownership.can_destroy?).to be_truthy
     end
   end
 

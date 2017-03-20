@@ -125,7 +125,7 @@ describe SitesController do
         site = Site.last
 
         expect(site.current_subscription).to be_present
-        expect(site.current_subscription.is_a?(Subscription::Free)).to be_true
+        expect(site.current_subscription.is_a?(Subscription::Free)).to be_truthy
       end
 
       it 'redirects to login page if base URL has already been taken' do

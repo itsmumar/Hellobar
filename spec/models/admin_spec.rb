@@ -54,17 +54,17 @@ describe Admin do
     it "returns false if we've both authentication_code and rotp_secret_base added" do
       allow(admin).to receive(:rotp_secret_base).and_return('whateverkey')
       allow(admin).to receive(:authentication_code).and_return('123')
-      expect(admin.needs_otp_code?).to be_false
+      expect(admin.needs_otp_code?).to be_falsey
     end
 
     it "returns true if don't have rotp_secret_base added" do
       allow(admin).to receive(:rotp_secret_base).and_return(nil)
-      expect(admin.needs_otp_code?).to be_true
+      expect(admin.needs_otp_code?).to be_truthy
     end
 
     it "returns true if we don't have authentication_code added" do
       allow(admin).to receive(:authentication_code).and_return(nil)
-      expect(admin.needs_otp_code?).to be_true
+      expect(admin.needs_otp_code?).to be_truthy
     end
   end
 
@@ -90,27 +90,27 @@ describe Admin do
 
     it 'returns false if locked' do
       allow(admin).to receive(:locked?).and_return(true)
-      expect(admin.validate_login('token', 'password', admin.initial_password)).to be_false
+      expect(admin.validate_login('token', 'password', admin.initial_password)).to be_falsey
     end
 
     it 'returns false if otp is not valid' do
       allow(admin).to receive(:needs_otp_code?).and_return(true)
-      expect(admin.validate_login('token', 'password', 'notthecode')).to be_false
+      expect(admin.validate_login('token', 'password', 'notthecode')).to be_falsey
     end
 
     it 'returns false if the wrong password is used' do
-      expect(admin.validate_login('token', 'notthepassword', admin.initial_password)).to be_false
+      expect(admin.validate_login('token', 'notthepassword', admin.initial_password)).to be_falsey
     end
 
     it 'returns false if the access token is invalid' do
-      expect(admin.validate_login('notthetoken', 'password', admin.initial_password)).to be_false
+      expect(admin.validate_login('notthetoken', 'password', admin.initial_password)).to be_falsey
     end
 
     it 'logs the admin in if all params are valid' do
       allow(admin).to receive(:needs_otp_code?).and_return(true)
       allow(admin).to receive(:valid_authentication_otp?).with('123').and_return(true)
       expect(admin).to receive(:login!)
-      expect(admin.validate_login('token', 'password', '123')).to be_true
+      expect(admin.validate_login('token', 'password', '123')).to be_truthy
     end
   end
 

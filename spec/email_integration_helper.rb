@@ -8,7 +8,7 @@ def record_mailer_gateway_request_history!
 end
 
 def day_from_current_spec_description
-  example.metadata[:description].match(/\d*$/).to_s.to_i
+  RSpec.current_example.metadata[:description].match(/\d*$/).to_s.to_i
 end
 
 def expect_no_email(user)

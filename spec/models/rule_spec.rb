@@ -29,7 +29,7 @@ describe Rule do
 
     it 'is not editable' do
       defaults.each do |rule|
-        expect(rule.editable).to be_false
+        expect(rule.editable).to be_falsey
       end
     end
 
@@ -148,8 +148,8 @@ describe Rule do
     let(:date_after) { create(:condition, :date_after) }
 
     it 'returns true if neither rule has conditions' do
-      expect(rule.conditions.any?).to be_false
-      expect(other_rule.conditions.any?).to be_false
+      expect(rule.conditions.any?).to be_falsey
+      expect(other_rule.conditions.any?).to be_falsey
 
       expect(rule).to be_same_as(other_rule)
     end

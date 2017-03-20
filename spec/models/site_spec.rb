@@ -226,13 +226,13 @@ describe Site do
       s2 = membership.user.sites.create(url: 'different.com')
       s2.url = membership.site.url
 
-      expect(s2.valid?).to be_false
+      expect(s2.valid?).to be_falsey
     end
 
     it 'returns true if the url is unqiue to the user' do
       s2 = membership.user.sites.create(url: 'uniqueurl.com')
 
-      expect(s2.valid?).to be_true
+      expect(s2.valid?).to be_truthy
     end
   end
 
@@ -366,22 +366,22 @@ describe Site do
   describe '#script_installed_api?' do
     it 'is true if there is only one day of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is true if there are multiple days of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0], [2, 0]])
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is false if the api returns nil' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is false if the api returns an empty hash' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is true if one element has views but others do not' do
@@ -392,7 +392,7 @@ describe Site do
           '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
         )
 
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is true if any of the elements have been installed in the last 7 days' do
@@ -403,7 +403,7 @@ describe Site do
           '2' => [[1, 0], [1, 0]]
         )
 
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is false if there have been no views in the last 10 days' do
@@ -414,7 +414,7 @@ describe Site do
           '2' => [[0, 0]]
         )
 
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
   end
 
@@ -426,21 +426,21 @@ describe Site do
 
     it 'is true if installed_at is set' do
       site.script_installed_at = 1.week.ago
-      expect(site.script_installed_db?).to be_true
+      expect(site.script_installed_db?).to be_truthy
     end
 
     it 'is true if installed_at is more recent than uninstalled_at' do
       site.script_installed_at = 1.day.ago
       site.script_uninstalled_at = 1.week.ago
 
-      expect(site.script_installed_db?).to be_true
+      expect(site.script_installed_db?).to be_truthy
     end
 
     it 'is false if uninstalled_at is more recent than installed_at' do
       site.script_installed_at = 1.week.ago
       site.script_uninstalled_at = 1.day.ago
 
-      expect(site.script_installed_db?).to be_false
+      expect(site.script_installed_db?).to be_falsey
     end
   end
 
@@ -478,31 +478,31 @@ describe Site do
 
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_false
+      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
     end
 
     it 'should return true if another site exists with the url' do
       Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'http://abc.com').url_exists?).to be_true
+      expect(Site.new(url: 'http://abc.com').url_exists?).to be_truthy
     end
 
     it 'should return true if another site exists even with other protocol' do
       Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'https://abc.com').url_exists?).to be_true
+      expect(Site.new(url: 'https://abc.com').url_exists?).to be_truthy
     end
 
     it 'should scope to user if user is given' do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
     end
 
     it 'should ignore protocol if user scoped call' do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
     end
   end
 
@@ -515,7 +515,7 @@ describe Site do
 
       it 'does not show branding' do
         site.send(:set_branding_on_site_elements)
-        expect(element.reload.show_branding).to be_false
+        expect(element.reload.show_branding).to be_falsey
       end
     end
 
@@ -524,7 +524,7 @@ describe Site do
 
       it 'shows branding' do
         site.send(:set_branding_on_site_elements)
-        expect(element.reload.show_branding).to be_true
+        expect(element.reload.show_branding).to be_truthy
       end
     end
   end

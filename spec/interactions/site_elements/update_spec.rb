@@ -26,7 +26,7 @@ describe SiteElements::Update do
 
     it 'returns true' do
       result = run_interaction
-      expect(result).to be_true
+      expect(result).to be_truthy
     end
 
     it 'regenerates the script' do
@@ -38,8 +38,8 @@ describe SiteElements::Update do
     it 'updates the attributes' do
       run_interaction
 
-      expect(new_element.closable).to be_true
-      expect(new_element.show_border).to be_true
+      expect(new_element.closable).to be_truthy
+      expect(new_element.show_border).to be_truthy
       expect(new_element.headline).to eq('We are Polymathic!')
     end
 
@@ -67,7 +67,7 @@ describe SiteElements::Update do
       it 'disables the original element' do
         run_interaction
 
-        expect(element.reload.paused).to be_true
+        expect(element.reload.paused).to be_truthy
       end
     end
   end
@@ -76,7 +76,7 @@ describe SiteElements::Update do
     let(:params) { { background_color: '' } }
 
     it 'returns false' do
-      expect(interaction.run).to be_false
+      expect(interaction.run).to be_falsey
     end
 
     xit "doesn't regenerate the script" do
@@ -95,7 +95,7 @@ describe SiteElements::Update do
       it "doesn't disable original element" do
         run_interaction
 
-        expect(element.reload.paused).to be_false
+        expect(element.reload.paused).to be_falsey
       end
 
       context 'when update succeeds but disabling fails' do
@@ -105,7 +105,7 @@ describe SiteElements::Update do
           allow(element).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           run_interaction
 
-          expect(element.reload.paused).to be_false
+          expect(element.reload.paused).to be_falsey
         end
       end
     end

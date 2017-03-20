@@ -108,7 +108,7 @@ describe CyberSourceCreditCard do
 
   it 'should let you charge the card and return the transaction ID' do
     success, response = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method).charge(100)
-    expect(success).to be_true
+    expect(success).to be_truthy
     expect(response).not_to be_nil
     expect(response).to match(/^.*?;.*?;.*$/)
   end
@@ -137,10 +137,10 @@ describe CyberSourceCreditCard do
   it 'should let you refund a payment' do
     credit_card = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method)
     charge_success, charge_response = credit_card.charge(100)
-    expect(charge_success).to be_true
+    expect(charge_success).to be_truthy
     expect(charge_response).not_to be_nil
     refund_success, refund_response = credit_card.refund(50, charge_response)
-    expect(refund_success).to be_true
+    expect(refund_success).to be_truthy
     expect(refund_response).not_to be_nil
     expect(refund_response).not_to eq(charge_response)
   end

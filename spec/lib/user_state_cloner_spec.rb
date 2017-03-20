@@ -21,7 +21,7 @@ describe UserStateCloner, '#save' do
 
     user = cloner.user
 
-    expect(user.valid_password?('password')).to be_true
+    expect(user.valid_password?('password')).to be_truthy
   end
 
   it 'creates the sites' do

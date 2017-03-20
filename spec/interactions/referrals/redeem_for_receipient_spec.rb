@@ -17,9 +17,9 @@ describe Referrals::RedeemForRecipient do
 
     referral.reload
 
-    expect(referral.installed?).to be_true
+    expect(referral.installed?).to be_truthy
     expect(referral.redeemed_by_recipient_at).not_to be_nil
-    expect(referral.available_to_sender).to be_true
+    expect(referral.available_to_sender).to be_truthy
     expect(site.current_subscription).to be_a(Subscription::Pro)
     expect(bill.amount).to eq(0.0)
     expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)

@@ -59,7 +59,7 @@ describe Identity do
       it 'should do nothing' do
         identity = create(:contact_list, :mailchimp).identity
         identity.contact_lists_updated
-        expect(identity.destroyed?).to be_false
+        expect(identity.destroyed?).to be_falsey
       end
     end
 
@@ -67,7 +67,7 @@ describe Identity do
       it 'should do nothing' do
         identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
         identity.contact_lists_updated
-        expect(identity.destroyed?).to be_true
+        expect(identity.destroyed?).to be_truthy
       end
     end
   end

@@ -86,14 +86,14 @@ describe Bill do
   describe '#during_trial_subscription?' do
     it 'should not be on trial subscription' do
       bill = create(:pro_bill, :paid)
-      expect(bill.during_trial_subscription?).to be_false
+      expect(bill.during_trial_subscription?).to be_falsey
     end
 
     it 'should be on trial subscription' do
       bill = create(:pro_bill, :paid)
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      expect(bill.during_trial_subscription?).to be_true
+      expect(bill.during_trial_subscription?).to be_truthy
     end
   end
 

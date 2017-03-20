@@ -39,13 +39,13 @@ describe ReferralsController do
     it 'creates when an email is set' do
       post :create, referral: { email: 'kaitlen@hellobar.com' }
 
-      expect(assigns(:referral).persisted?).to be_true
+      expect(assigns(:referral).persisted?).to be_truthy
     end
 
     it 'does not create when an email is not set' do
       post :create, referral: { email: '' }
 
-      expect(assigns(:referral).persisted?).to be_false
+      expect(assigns(:referral).persisted?).to be_falsey
     end
   end
 
@@ -78,7 +78,7 @@ describe ReferralsController do
       referral.reload
 
       expect(referral.site_id).to eq site.id
-      expect(referral.available_to_sender).to be_false
+      expect(referral.available_to_sender).to be_falsey
       expect(referral.redeemed_by_sender_at).not_to be_nil
     end
 
@@ -88,7 +88,7 @@ describe ReferralsController do
       referral.reload
 
       expect(referral.site_id).to eq site.id
-      expect(referral.available_to_sender).to be_false
+      expect(referral.available_to_sender).to be_falsey
       expect(referral.redeemed_by_sender_at).not_to be_nil
     end
 

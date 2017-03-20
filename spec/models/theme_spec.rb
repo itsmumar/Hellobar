@@ -6,7 +6,7 @@ describe Theme do
 
   describe '.sorted' do
     it 'returns the default theme first' do
-      expect(Theme.sorted.first.default_theme).to be_true
+      expect(Theme.sorted.first.default_theme).to be_truthy
     end
   end
 end
