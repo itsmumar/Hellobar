@@ -10,8 +10,8 @@ export default Ember.Component.extend({
   classNames: ['theme-tile-grid'],
   classNameBindings: ['elementTypeCssClass'],
 
+  bus: Ember.inject.service(),
   theming: Ember.inject.service(),
-
 
   elementType: function() {
     return this.get('options.elementType');
@@ -37,6 +37,16 @@ export default Ember.Component.extend({
   hasAnyTemplateThemes: function() {
     const templateThemes = this.get('templateThemes');
     return templateThemes && templateThemes.length > 0;
-  }.property('templateThemes')
+  }.property('templateThemes'),
+
+  actions: {
+    autodetectColors() {
+      this.get('bus').trigger('hellobar.core.bar.themeChanged', {
+        themeId: null,
+        elementType: this.get('elementType')
+      });
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    }
+  }
 
 });

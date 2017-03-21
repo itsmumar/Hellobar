@@ -4,19 +4,12 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
+  coloring: Ember.inject.service(),
+
   colorPalette: [],
   focusedColor: null,
 
   setSiteColors: function () {
-
-    const brightness = (color) => {
-      let rgb = Ember.copy(color);
-      [0, 1, 2].forEach((i) => {
-        let val = rgb[i] / 255;
-        rgb[i] = val < 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
-      });
-      return ((0.2126 * rgb[0]) + (0.7152 * rgb[1]) + (0.0722 * rgb[2]));
-    };
 
     if (this.get('model.id') || window.elementToCopyID) {
       return;
@@ -48,19 +41,16 @@ export default Ember.Mixin.create({
     const white = 'ffffff';
     const black = '000000';
 
-    if (brightness(primaryColor) < 0.5) {
+    if (this.get('coloring').brightness(primaryColor) < 0.5) {
       this.setProperties({
         'model.text_color': white,
         'model.button_color': white,
         'model.link_color': one.color(primaryColor).hex().replace('#', '')
       });
     } else {
-      colorPalette.sort((a, b) => {
-          return brightness(a) - brightness(b);
-        }
-      );
+      colorPalette.sort((a, b) => this.get('coloring').brightness(a) - this.get('coloring').brightness(b));
 
-      const darkest = brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#', '');
+      const darkest = this.get('coloring').brightness(colorPalette[0]) >= 0.5 ? black : one.color(colorPalette[0]).hex().replace('#', '');
 
       this.setProperties({
         'model.text_color': darkest,

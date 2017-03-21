@@ -17,20 +17,11 @@ export default Ember.Component.extend({
    */
   elementType: null,
 
-  imageSrc: (function () {
+  imageSrc: function () {
     const elementTypeFolder = (this.get('elementType') || '').toLowerCase();
     const theme = this.get('theme');
-    if (theme) {
-      return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/${this.get('theme.id')}.png`);
-    } else {
-      // TODO use special image
-      return this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/classic.png`);
-    }
-  }).property('theme', 'elementType'),
-
-  init() {
-    return this._super();
-  },
+    return theme ? this.get('imaging').imagePath(`themes/tiles/${elementTypeFolder}/${this.get('theme.id')}.png`) : '';
+  }.property('theme', 'elementType'),
 
   selectButtonIsVisible: false,
 
