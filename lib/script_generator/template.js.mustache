@@ -110,5 +110,8 @@
         _hbq = new HBQ();
       }
     })();
+  } else {
+    window.__hb_script_included = window.__hb_script_included || 1
+    console.warn(`Hellobar script has been included ${++window.__hb_script_included} times`)
   }
 })();
