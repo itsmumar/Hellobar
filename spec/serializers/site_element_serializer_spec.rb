@@ -25,12 +25,4 @@ describe SiteElementSerializer do
 
     expect(serialized_site_element.serializable_hash).to have_key :email_redirect
   end
-
-  it 'serializes :external_events' do
-    site_element = build_stubbed :site_element
-
-    serialized_site_element = SiteElementSerializer.new site_element
-
-    expect(serialized_site_element.serializable_hash).to have_key :external_events
-  end
 end
