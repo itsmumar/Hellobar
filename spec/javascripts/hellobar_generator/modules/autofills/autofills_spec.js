@@ -1,7 +1,7 @@
 //= require modules/core
 //= require modules/autofills/autofills
 
-describe('Module base.dom', function () {
+describe('Module autofills', function () {
   var module;
 
   function dependencies() {
