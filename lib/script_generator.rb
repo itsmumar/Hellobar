@@ -377,7 +377,7 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    ).select { |_, value| value.present? || !value == '' }
+    ).select { |_, value| !value.nil? }
   end
 
   def site_elements_for_rule(rule, hashify = true)
