@@ -111,7 +111,7 @@
       }
     })();
   } else {
-    window.__hb_script_included = window.__hb_script_included || 1
-    console.warn(`Hellobar script has been included ${++window.__hb_script_included} times`)
+    window.__hb_script_included = window.__hb_script_included || 2
+    console.warn('Hellobar script has been included ' + window.__hb_script_included++ + ' times')
   }
 })();
