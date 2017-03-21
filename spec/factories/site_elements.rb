@@ -19,6 +19,14 @@ FactoryGirl.define do
       placement 'top-left'
     end
 
+    trait :with_blocks do
+      blocks [
+        { 'id' => 'headline_first', 'content' => { 'text' => '<strong>Grow your blog traffic by</strong>' } },
+        { 'id' => 'headline_second', 'content' => { 'text' => '<strong>300%</strong>' } },
+        { 'id' => 'headline_third', 'content' => { 'text' => '<strong>with our free tool</strong>' } }
+      ]
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil
