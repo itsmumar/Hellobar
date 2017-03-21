@@ -276,7 +276,7 @@ class SiteElement < ActiveRecord::Base
     category = 'Hello Bar'
     label = "SiteElement-#{ id }"
 
-    default_event = Hash[provider: provider, category: category, label: label]
+    default_event = Hash[site_element_id: id, provider: provider, category: category, label: label]
 
     [
       default_event.merge(type: 'view', action: 'View'),

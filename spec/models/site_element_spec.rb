@@ -410,6 +410,7 @@ describe SiteElement do
         expect(event).to be_a Hash
         expect(event[:provider]).to eq 'google_analytics'
         expect(event[:category]).to eq 'Hello Bar'
+        expect(event[:site_element_id]).to eq id
         expect(event[:label]).to include id.to_s
       end
     end
