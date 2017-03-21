@@ -305,4 +305,15 @@ describe SiteElementsHelper do
       expect(grouped_elements[3].count).to eq 1
     end
   end
+
+  describe '#render_headline' do
+    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+    let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
+    let(:slider_element) { create(:site_element, :slider, site: site) }
+
+    it 'strips tags' do
+      expect(helper.render_headline(element_with_blocks)).to eql 'Grow your blog traffic by 300% with our free tool '
+      expect(helper.render_headline(slider_element)).to eql 'Hello, HelloBar!'
+    end
+  end
 end
