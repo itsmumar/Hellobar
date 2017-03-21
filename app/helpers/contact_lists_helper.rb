@@ -5,19 +5,20 @@ module ContactListsHelper
       [
         provider_attributes[:name],
         provider_name,
-        requires_app_url:     !!provider_attributes[:requires_app_url],
-        requires_embed_code:  !!provider_attributes[:requires_embed_code],
-        requires_account_id:  !!provider_attributes[:requires_account_id],
-        requires_api_key:     !!provider_attributes[:requires_api_key],
-        requires_username:    !!provider_attributes[:requires_username],
-        requires_webhook_url: !!provider_attributes[:requires_webhook_url],
-        oauth:                !!provider_attributes[:oauth]
+        requires_app_url:     provider_attributes[:requires_app_url].present?,
+        requires_embed_code:  provider_attributes[:requires_embed_code].present?,
+        requires_account_id:  provider_attributes[:requires_account_id].present?,
+        requires_api_key:     provider_attributes[:requires_api_key].present?,
+        requires_username:    provider_attributes[:requires_username].present?,
+        requires_webhook_url: provider_attributes[:requires_webhook_url].present?,
+        oauth:                provider_attributes[:oauth].present?
       ]
     end
 
     [['In Hello Bar only', 0]] + providers_array
   end
 
+  # rubocop: disable Rails/OutputSafety
   def contact_list_sync_details(contact_list)
     if contact_list.data['remote_name'].present? && contact_list.service_provider.present?
       "<small>Syncing contacts with</small><span>#{ contact_list.service_provider.name } list \"#{ contact_list.data['remote_name'] }\"</span>".html_safe
@@ -27,6 +28,7 @@ module ContactListsHelper
       '<small>Storing contacts in</small><span>Hello Bar</span>'.html_safe
     end
   end
+  # rubocop: enable Rails/OutputSafety
 
   def contact_list_provider_name(contact_list)
     contact_list.service_provider.try(:name) || 'Hello Bar'

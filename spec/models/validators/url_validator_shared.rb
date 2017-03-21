@@ -14,8 +14,8 @@ shared_examples 'an object with a valid url' do
   it 'requires the url field' do
     webby.url = ''
 
-    webby.should_not be_valid
-    webby.errors[:url].should include("can't be blank")
+    expect(webby).not_to be_valid
+    expect(webby.errors[:url]).to include("can't be blank")
   end
 
   it 'requires a url with a valid format' do
@@ -30,8 +30,8 @@ shared_examples 'an object with a valid url' do
       test_case = WebClass.new
       test_case.url = url
 
-      test_case.should_not be_valid
-      test_case.errors[:url].should include('is invalid')
+      expect(test_case).not_to be_valid
+      expect(test_case.errors[:url]).to include('is invalid')
     end
   end
 
@@ -47,7 +47,7 @@ shared_examples 'an object with a valid url' do
       test_case = WebClass.new
       test_case.url = url
 
-      test_case.should be_valid
+      expect(test_case).to be_valid
     end
   end
 end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SiteElementEditorHelper do
   describe 'render_interstitial?' do
     before do
-      helper.stub(:params).and_return(params)
+      allow(helper).to receive(:params).and_return(params)
     end
     let(:params) { {} }
 

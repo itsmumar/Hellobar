@@ -29,8 +29,6 @@ describe Site do
 
   describe '#free?' do
     it 'is true when there is no subscription' do
-      site = Site.new
-
       expect(site).to be_free
     end
 
@@ -40,7 +38,6 @@ describe Site do
 
     it 'is true for sites with a free-plus-level subscriptions' do
       site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
-
       expect(site).to be_free
     end
 
@@ -68,7 +65,6 @@ describe Site do
 
     it 'applies the discount when changing subscription to pro and it belongs to a discount tier' do
       user = create(:user)
-      bills = []
 
       zero_discount_slots = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
       zero_discount_slots.times do
@@ -128,14 +124,14 @@ describe Site do
     end
   end
 
-  describe '#has_pro_managed_subscription?' do
+  describe '#pro_managed_subscription?' do
     it 'returns true if the site has a ProManaged subscription' do
       site = build_stubbed :site
       subscription = build_stubbed :subscription, :pro_managed
 
       expect(site).to receive(:subscriptions).and_return [subscription]
 
-      expect(site).to have_pro_managed_subscription
+      expect(site).to be_pro_managed_subscription
     end
 
     it 'returns false if the site does not have a ProManaged subscription' do
@@ -145,7 +141,7 @@ describe Site do
 
       expect(site).to receive(:subscriptions).and_return [free, pro]
 
-      expect(site).not_to have_pro_managed_subscription
+      expect(site).not_to be_pro_managed_subscription
     end
   end
 
@@ -248,13 +244,13 @@ describe Site do
       s2 = membership.user.sites.create(url: 'different.com')
       s2.url = membership.site.url
 
-      expect(s2.valid?).to be_false
+      expect(s2.valid?).to be_falsey
     end
 
     it 'returns true if the url is unqiue to the user' do
       s2 = membership.user.sites.create(url: 'uniqueurl.com')
 
-      expect(s2.valid?).to be_true
+      expect(s2.valid?).to be_truthy
     end
   end
 
@@ -334,14 +330,14 @@ describe Site do
     expect(Site.only_deleted).to include(site)
   end
 
-  describe '#has_script_installed?' do
+  describe '#script_installed?' do
     context 'when installed' do
       it 'updates the script_installed_at' do
         allow(site).to receive(:script_installed_db?) { false }
         allow(site).to receive(:script_installed_api?) { true }
 
         expect {
-          site.has_script_installed?
+          site.script_installed?
         }.to change(site, :script_installed_at)
       end
 
@@ -351,7 +347,7 @@ describe Site do
 
         expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
 
-        site.has_script_installed?
+        site.script_installed?
       end
 
       it 'tracks the install event' do
@@ -360,7 +356,7 @@ describe Site do
 
         expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
 
-        site.has_script_installed?
+        site.script_installed?
       end
     end
 
@@ -370,7 +366,7 @@ describe Site do
         allow(site).to receive(:script_installed_api?) { false }
 
         expect {
-          site.has_script_installed?
+          site.script_installed?
         }.to change(site, :script_uninstalled_at)
       end
 
@@ -380,7 +376,7 @@ describe Site do
 
         expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
 
-        site.has_script_installed?
+        site.script_installed?
       end
     end
   end
@@ -388,22 +384,22 @@ describe Site do
   describe '#script_installed_api?' do
     it 'is true if there is only one day of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is true if there are multiple days of data' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0], [2, 0]])
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is false if the api returns nil' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is false if the api returns an empty hash' do
       expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
 
     it 'is true if one element has views but others do not' do
@@ -414,7 +410,7 @@ describe Site do
           '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
         )
 
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is true if any of the elements have been installed in the last 7 days' do
@@ -425,7 +421,7 @@ describe Site do
           '2' => [[1, 0], [1, 0]]
         )
 
-      expect(site.script_installed_api?).to be_true
+      expect(site.script_installed_api?).to be_truthy
     end
 
     it 'is false if there have been no views in the last 10 days' do
@@ -436,7 +432,7 @@ describe Site do
           '2' => [[0, 0]]
         )
 
-      expect(site.script_installed_api?).to be_false
+      expect(site.script_installed_api?).to be_falsey
     end
   end
 
@@ -448,21 +444,21 @@ describe Site do
 
     it 'is true if installed_at is set' do
       site.script_installed_at = 1.week.ago
-      expect(site.script_installed_db?).to be_true
+      expect(site.script_installed_db?).to be_truthy
     end
 
     it 'is true if installed_at is more recent than uninstalled_at' do
       site.script_installed_at = 1.day.ago
       site.script_uninstalled_at = 1.week.ago
 
-      expect(site.script_installed_db?).to be_true
+      expect(site.script_installed_db?).to be_truthy
     end
 
     it 'is false if uninstalled_at is more recent than installed_at' do
       site.script_installed_at = 1.week.ago
       site.script_uninstalled_at = 1.day.ago
 
-      expect(site.script_installed_db?).to be_false
+      expect(site.script_installed_db?).to be_falsey
     end
   end
 
@@ -479,8 +475,8 @@ describe Site do
       end
 
       it 'should set the end_at of the bill to the current time + the trial period' do
-        travel_to Time.now do
-          expect(bill(trial: 20.days).end_date).to eql(Time.now + 20.days)
+        travel_to Time.current do
+          expect(bill(trial: 20.days).end_date).to eql(20.days.from_now)
         end
       end
     end
@@ -500,31 +496,31 @@ describe Site do
 
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_false
+      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
     end
 
     it 'should return true if another site exists with the url' do
       Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'http://abc.com').url_exists?).to be_true
+      expect(Site.new(url: 'http://abc.com').url_exists?).to be_truthy
     end
 
     it 'should return true if another site exists even with other protocol' do
       Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'https://abc.com').url_exists?).to be_true
+      expect(Site.new(url: 'https://abc.com').url_exists?).to be_truthy
     end
 
     it 'should scope to user if user is given' do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
     end
 
     it 'should ignore protocol if user scoped call' do
       u1 = create(:user, :with_site)
       u1.sites.create(url: 'http://abc.com')
       u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_false
+      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
     end
   end
 
@@ -537,7 +533,7 @@ describe Site do
 
       it 'does not show branding' do
         site.send(:set_branding_on_site_elements)
-        expect(element.reload.show_branding).to be_false
+        expect(element.reload.show_branding).to be_falsey
       end
     end
 
@@ -546,7 +542,7 @@ describe Site do
 
       it 'shows branding' do
         site.send(:set_branding_on_site_elements)
-        expect(element.reload.show_branding).to be_true
+        expect(element.reload.show_branding).to be_truthy
       end
     end
   end

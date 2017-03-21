@@ -30,12 +30,9 @@ class GoogleAnalytics
       urls.include?(self.class.normalize_url(url))
     end
   rescue Google::Apis::ClientError => error
-    if error.to_s =~ /insufficientPermissions/
-      nil # handle for when a user doesn't have a Google Analytics account
-    else
-      raise error
-    end
-  rescue ActionView::Template::Error => error
+    return if error.to_s =~ /insufficientPermissions/
+    raise error
+  rescue ActionView::Template::Error => _
     nil # handle for timeouts
   rescue => e
     Rails.logger.warn e.inspect
@@ -44,23 +41,22 @@ class GoogleAnalytics
   end
 
   # what if we don't have an exact url match?
-  def get_latest_pageviews(url)
+  def latest_pageviews(url)
     account = find_account_by_url(url)
+    return unless account
 
-    if account
-      # what if you have multiple profiles?
-      profile = account.web_properties.find { |property|
-        next unless property.website_url.present?
+    # what if you have multiple profiles?
+    profile = account.web_properties.find { |property|
+      next unless property.website_url.present?
 
-        self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
-      }.profiles.first
+      self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
+    }.profiles.first
 
-      ids = "ga:#{ profile.id }"
-      start_date = '30daysAgo'
-      end_date = 'today'
-      metrics = 'ga:pageviews'
+    ids = "ga:#{ profile.id }"
+    start_date = '30daysAgo'
+    end_date = 'today'
+    metrics = 'ga:pageviews'
 
-      analytics.get_ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
-    end
+    analytics.ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
   end
 end

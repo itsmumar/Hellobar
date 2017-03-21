@@ -49,7 +49,7 @@ class ServiceProvider
     end
 
     def current_provider?(array)
-      key, value = *array
+      _key, value = *array
       klass = name.demodulize
       value[:service_provider_class] == klass || value[:name] == klass
     end
@@ -65,7 +65,7 @@ class ServiceProvider
         yield(self)
         break # will not break if exception is raised
       rescue Net::OpenTimeout => e
-        puts "Caught #{ e }, retrying after 5 seconds"
+        Rails.logger.error "Caught #{ e }, retrying after 5 seconds"
         sleep 5
       end
     end

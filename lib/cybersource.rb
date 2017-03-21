@@ -20,8 +20,8 @@ module HB
 end
 
 class CyberSourceCreditCard < PaymentMethodDetails
-  CC_FIELDS = %w(number month year first_name last_name brand verification_value)
-  ADDRESS_FIELDS = %w(city state zip address1 country)
+  CC_FIELDS = %w(number month year first_name last_name brand verification_value).freeze
+  ADDRESS_FIELDS = %w(city state zip address1 country).freeze
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
@@ -36,7 +36,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       end
       begin
         record.send(:save_to_cybersource)
-      rescue Exception => e
+      rescue => e
         record.errors[:base] = e.message
       end
     end
@@ -104,14 +104,11 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
     begin
       response = HB::CyberSource.gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
-
       audit << "Charging #{ amount_in_dollars.inspect }, got response: #{ response.inspect }"
-      if response.success?
-        return true, response.authorization
-      else
-        return false, response.message
-      end
-    rescue Exception => e
+      return false, response.message unless response.success?
+
+      [true, response.authorization]
+    rescue => e
       audit << "Error charging #{ amount_in_dollars.inspect }: #{ e.message }"
       raise
     end
@@ -128,14 +125,11 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
     begin
       response = HB::CyberSource.gateway.refund(amount_in_dollars * 100, original_transaction_id)
-
       audit << "Refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }, got response: #{ response.inspect }"
-      if response.success?
-        return true, response.authorization
-      else
-        return false, response.message
-      end
-    rescue Exception => e
+      return false, response.message unless response.success?
+
+      [true, response.authorization]
+    rescue => e
       audit << "Error refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }: #{ e.message }"
       raise
     end
@@ -207,16 +201,14 @@ class CyberSourceCreditCard < PaymentMethodDetails
         audit << "Create new token with #{ sanitized_data.inspect } response: #{ response.inspect }"
       end
       unless response.success?
-        if field = response.params['invalidField']
-          if field == 'c:cardType'
-            raise 'Invalid credit card'
-          else
-            raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
-          end
+        if (field = response.params['invalidField'])
+          raise 'Invalid credit card' if field == 'c:cardType'
+
+          raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
         end
         raise response.message
       end
-    rescue Exception => e
+    rescue => e
       audit << "Error tokenizing with #{ sanitized_data.inspect } response: #{ response.inspect } error: #{ e.message }"
       raise
     end

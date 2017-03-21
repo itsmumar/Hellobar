@@ -1,4 +1,4 @@
-- if current_user.try(:can_view_exit_intent_modal?) && get_ab_variation("Exit Intent Pop-up Based on Bar Goals 2016-06-08") == "pop_up"
+- if current_user.try(:can_view_exit_intent_modal?) && ab_variation("Exit Intent Pop-up Based on Bar Goals 2016-06-08") == "pop_up"
   - element_subtype = current_user.most_viewed_site_element_subtype
   - if element_subtype
     script id='exit-intent-modal-template' type='text/x-handlebars-template' data={ 'user-id' => current_user.id }

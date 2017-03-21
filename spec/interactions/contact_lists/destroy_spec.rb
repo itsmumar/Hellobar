@@ -28,7 +28,7 @@ describe ContactLists::Destroy do
 
   context 'when user does not specify a valid site action' do
     it 'returns false' do
-      expect(destroy(action: -1)).to be_false
+      expect(destroy(action: -1)).to be_falsey
     end
 
     it 'has an error' do

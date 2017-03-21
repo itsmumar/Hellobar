@@ -5,7 +5,7 @@ module Hello::EmailDigest
     def send(site)
       site.owners_and_admins.each do |recipient|
         mailer = mailer_for_site(site, recipient)
-        return if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
+        next if mailer.nil? || mailer.is_a?(ActionMailer::Base::NullMail) || mailer.html_part.nil?
 
         end_date = EmailDigestHelper.date_of_previous('Sunday')
         start_date = end_date - 6
@@ -23,13 +23,12 @@ module Hello::EmailDigest
     def mailer_for_site(site, user)
       return nil if site.site_elements.active.count == 0
 
-      if site.has_script_installed?
-        return DigestMailer.weekly_digest(site, user)
-      elsif site.site_elements.where('site_elements.created_at > ?', 10.days.ago).count > 0
-        if site.script_installed_at.nil? # Only send if the site never had it installed in the first place
-          return DigestMailer.not_installed(site, user)
-        end
-      end
+      return DigestMailer.weekly_digest(site, user) if site.script_installed?
+
+      has_element = site.site_elements.where('site_elements.created_at > ?', 10.days.ago).count > 0
+      script_has_not_been_installed = site.script_installed_at.nil?
+
+      DigestMailer.not_installed(site, user) if has_element && script_has_not_been_installed
     end
   end
 end

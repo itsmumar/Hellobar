@@ -2,7 +2,7 @@ class SiteDetector
   attr_reader :url
   # Spoof the user agent because many sites (like square space ones) send a
   # 403 forbidden when using the httparty default user agent
-  USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36'
+  USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36'.freeze
 
   def initialize(url)
     @url = url

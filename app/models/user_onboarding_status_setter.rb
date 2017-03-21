@@ -10,7 +10,7 @@ class UserOnboardingStatusSetter
   end
 
   def in_campaign_ab_test?(test_name)
-    get_ab_variation_or_nil(test_name, user) == 'campaign'
+    ab_variation_or_nil(test_name, user) == 'campaign'
   end
 
   def new_user!
@@ -44,10 +44,9 @@ class UserOnboardingStatusSetter
   private
 
   def create_status_if_able!(new_status, ab_test = nil, sequence_delivered_last = nil)
-    if can_enter_status?(new_status, ab_test)
-      user.onboarding_statuses.create!(status_id: UserOnboardingStatus::STATUSES[new_status],
-                                       sequence_delivered_last: sequence_delivered_last)
-    end
+    return unless can_enter_status?(new_status, ab_test)
+    user.onboarding_statuses.create!(status_id: UserOnboardingStatus::STATUSES[new_status],
+                                     sequence_delivered_last: sequence_delivered_last)
   end
 
   def can_enter_status?(new_status, ab_test = nil)

@@ -66,7 +66,7 @@ class ContactListsController < ApplicationController
   end
 
   def contact_list_csv_url(list)
-    path, params = Hello::DataAPIHelper::RequestParts.get_contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
+    path, params = Hello::DataAPIHelper::RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
     path_with_params = Hello::DataAPIHelper.url_for(path, params)
     URI.join(Hellobar::Settings[:data_api_url], path_with_params).to_s
   end

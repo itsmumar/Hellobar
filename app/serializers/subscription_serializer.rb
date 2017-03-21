@@ -1,6 +1,6 @@
 class SubscriptionSerializer < ActiveModel::Serializer
   attributes :schedule, :type, :yearly_amount, :monthly_amount
-  attributes :is_trial, :payment_method_details_id, :payment_method_number
+  attributes :trial, :payment_method_details_id, :payment_method_number
   attributes :payment_valid
 
   def schedule
@@ -22,18 +22,16 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def payment_method_details_id
-    if object.payment_method.try(:current_details)
-      object.payment_method.current_details.id
-    end
+    return unless object.payment_method.try(:current_details)
+    object.payment_method.current_details.id
   end
 
   def payment_method_number
-    if object.payment_method.try(:current_details)
-      (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
-    end
+    return unless object.payment_method.try(:current_details)
+    (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
   end
 
-  def is_trial
+  def trial
     object.currently_on_trial?
   end
 
@@ -45,6 +43,6 @@ class SubscriptionSerializer < ActiveModel::Serializer
 
   def amount_to_string(amount)
     return '' if amount.nil?
-    ('%.2f' % amount).chomp('.00')
+    format('%.2f', amount).chomp('.00')
   end
 end

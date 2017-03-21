@@ -21,14 +21,12 @@ module Subscribable
       response[:old_subscription] = SubscriptionSerializer.new(old_subscription) if old_subscription
 
       response
+    elsif bill.errors.empty?
+      { errors:
+        ['There was an error processing your payment.  Please contact your credit card company or try using a different credit card.'],
+        status: :unprocessable_entity }
     else
-      if bill.errors.empty?
-        { errors:
-          ['There was an error processing your payment.  Please contact your credit card company or try using a different credit card.'],
-          status: :unprocessable_entity }
-      else
-        { errors: bill.errors.full_messages, status: :unprocessable_entity }
-      end
+      { errors: bill.errors.full_messages, status: :unprocessable_entity }
     end
   end
 
@@ -52,7 +50,7 @@ module Subscribable
       props[:from_schedule] = old_subscription.schedule
     end
 
-    if new_subscription = site.current_subscription
+    if (new_subscription = site.current_subscription)
       props[:to_plan] = new_subscription.values[:name]
       props[:to_schedule] = new_subscription.schedule
     end

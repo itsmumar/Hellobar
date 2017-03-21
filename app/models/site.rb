@@ -74,7 +74,7 @@ class Site < ActiveRecord::Base
   end
 
   def needs_script_regeneration?
-    !!@needs_script_regeneration
+    @needs_script_regeneration.present?
   end
 
   def regenerate_script
@@ -92,13 +92,13 @@ class Site < ActiveRecord::Base
       lines << "\t#{ line }"
     end
 
-    File.open(File.join(Rails.root, 'log', 'debug_install.log'), 'a') do |file|
+    File.open(Rails.root.join('log', 'debug_install.log'), 'a') do |file|
       file.puts(lines.join("\n"))
     end
   end
 
   # check and report whether script is installed, recording timestamp and tracking event if status has changed
-  def has_script_installed?
+  def script_installed?
     if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
       store_script_installation!
     elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
@@ -229,7 +229,7 @@ class Site < ActiveRecord::Base
     default_rules.first
   end
 
-  def has_custom_rules?
+  def custom_rules?
     rules.map(&:editable).any?
   end
 
@@ -241,7 +241,7 @@ class Site < ActiveRecord::Base
     subscriptions.active.sort_by(&:significance).last
   end
 
-  def has_pro_managed_subscription?
+  def pro_managed_subscription?
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end
 
@@ -390,20 +390,20 @@ class Site < ActiveRecord::Base
     url
   end
 
-  def get_settings
-    JSON.parse(settings)
+  def settings
+    JSON.parse(self[:settings])
   rescue
     return {}
   end
 
   def update_content_upgrade_styles!(style_params)
-    site_settings = get_settings
+    site_settings = settings
     site_settings['content_upgrade'] = style_params
 
     update_attribute(:settings, site_settings.to_json)
   end
 
-  def get_content_upgrade_styles
+  def content_upgrade_styles
     return JSON.parse(settings)['content_upgrade']
   rescue
     return {}
@@ -489,34 +489,32 @@ class Site < ActiveRecord::Base
 
   def do_generate_script_and_check_installation(options = {})
     generate_static_assets(options)
-    has_script_installed?
+    script_installed?
   end
 
   def do_check_installation(_options = {})
-    has_script_installed?
+    script_installed?
   end
 
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.now)
 
-    Timeout.timeout(20) do
-      store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
-      compress_script = !store_site_scripts_locally
+    store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
+    compress_script = !store_site_scripts_locally
 
-      generated_script_content = options[:script_content] || script_content(compress_script)
+    generated_script_content = options[:script_content] || script_content(compress_script)
 
-      if store_site_scripts_locally
-        File.open(File.join(Rails.root, 'public/generated_scripts/', script_name), 'w') { |f| f.puts(generated_script_content) }
-      else
-        Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
+    if store_site_scripts_locally
+      File.open(Rails.root.join('public', 'generated_scripts', script_name), 'w') { |f| f.puts(generated_script_content) }
+    else
+      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
-        site_elements.each do |site_element|
-          next unless site_element.wordpress_bar_id
-          users.each do |user|
-            if user.wordpress_user_id
-              name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-              Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-            end
+      site_elements.each do |site_element|
+        next unless site_element.wordpress_bar_id
+        users.each do |user|
+          if user.wordpress_user_id
+            name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
+            Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
           end
         end
       end
@@ -534,6 +532,7 @@ class Site < ActiveRecord::Base
     normalized_url = self.class.normalize_url(url)
     self.url = "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
   rescue Addressable::URI::InvalidURIError
+    nil
   end
 
   def generate_read_write_keys

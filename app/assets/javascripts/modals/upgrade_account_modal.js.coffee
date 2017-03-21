@@ -66,7 +66,7 @@ class @UpgradeAccountModal extends Modal
       buttonPackage = $(button).data("package")
 
       if buttonPackage.type == @options.site.current_subscription.type
-        if @options.site.current_subscription.is_trial || !@options.site.current_subscription.payment_valid
+        if @options.site.current_subscription.trial || !@options.site.current_subscription.payment_valid
           $(button).text("Enter Billing Info")
         else
           $(button).attr("disabled", "disabled")

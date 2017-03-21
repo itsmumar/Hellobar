@@ -26,8 +26,7 @@ class MissingSpecGenerator
           "#{ namespace }#{ file_name.camelcase }::")
         next
       end
-      spec_file("#{ Rails.root }/spec/#{ path }",
-        file_name, spec_template, namespace)
+      spec_file(Rails.root.join('spec', path, file_name, spec_template, namespace))
     end
   end
 

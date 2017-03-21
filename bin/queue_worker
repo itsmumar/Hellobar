@@ -115,7 +115,7 @@ class QueueWorker
               # We need to re-enable the Rake task so it can be called
               # more than once
               Rake::Task[task_name].reenable
-            rescue Exception => e
+            rescue => _
               # Ignore failed attempts to reenable
             end
             # Invoke the task
@@ -142,7 +142,7 @@ class QueueWorker
 
             QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.now.to_f-start_time}s")
           end
-        rescue Exception => e
+        rescue => e
           # Let's see if this is a MySQL connection issue
           if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
             QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
@@ -156,7 +156,7 @@ class QueueWorker
                 ActiveRecord::Base.connection.reconnect!
                 User.all.first.email # do a test query
                 successful_reconnect = true # if we made this far with no exception it's working again!
-              rescue Exception => e
+              rescue => _
                 # still broken
               end
               break if successful_reconnect
@@ -190,7 +190,7 @@ class QueueWorker
           message.delete
         end
       end
-    rescue Exception => e
+    rescue => e
       # If we hit this rescue it means that the there was an error
       # getting the messages from the queue
       QueueWorker.log(e)
@@ -251,7 +251,7 @@ else
     # Attempt to make a nice process ID if the platform
     # supports it
     Process.setsid
-  rescue Exception => e
+  rescue => _
   end
   # Fork the worker into a new process and execute in a loop
   config[:num_workers].times do

@@ -95,19 +95,18 @@ class Subscription < ActiveRecord::Base
   end
 
   def set_initial_values
-    unless persisted?
-      values = self.class.values_for(site)
-      self.amount ||= monthly? ? values[:monthly_amount] : values[:yearly_amount]
-      self.visit_overage ||= values[:visit_overage]
-      self.visit_overage_unit ||= values[:visit_overage_unit]
-      self.visit_overage_amount ||= values[:visit_overage_amount]
-    end
+    return if persisted?
+
+    values = self.class.values_for(site)
+    self.amount ||= monthly? ? values[:monthly_amount] : values[:yearly_amount]
+    self.visit_overage ||= values[:visit_overage]
+    self.visit_overage_unit ||= values[:visit_overage_unit]
+    self.visit_overage_amount ||= values[:visit_overage_amount]
   end
 
   def mark_user_onboarding_as_bought_subscription!
-    if capabilities.acts_as_paid_subscription? && (user || site)
-      (user || site.owners.unscoped.first).onboarding_status_setter.bought_subscription!
-    end
+    return unless capabilities.acts_as_paid_subscription? && (user || site)
+    (user || site.owners.unscoped.first).onboarding_status_setter.bought_subscription!
   end
 
   class Capabilities
@@ -431,8 +430,7 @@ class Subscription < ActiveRecord::Base
   end
 
   # These need to be in the order of least expensive to most expensive
-  PLANS = [Free, ProblemWithPayment, Pro, Enterprise]
-
+  PLANS = [Free, ProblemWithPayment, Pro, Enterprise].freeze
   class Comparison
     attr_reader :from_subscription, :to_subscription, :direction
 

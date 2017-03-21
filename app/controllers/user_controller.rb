@@ -5,16 +5,14 @@ class UserController < ApplicationController
 
   def new
     load_user_from_invitation
+    return unless @user.nil? || @user.invite_token_expired?
 
-    if @user.nil? || @user.invite_token_expired?
-      flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
-      redirect_to root_path
-    end
+    flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
+    redirect_to root_path
   end
 
   def create
     load_user_from_invitation
-    attr_hash = user_params.delete(:email)
     attr_hash = user_params.merge!(status: User::ACTIVE_STATUS)
     if @user.update(attr_hash)
       sign_in @user, event: :authentication
@@ -31,7 +29,7 @@ class UserController < ApplicationController
     if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
       sign_in @user, bypass: true
 
-      set_timezones_on_sites(@user)
+      update_timezones_on_sites(@user)
 
       respond_to do |format|
         format.html do
@@ -98,13 +96,12 @@ class UserController < ApplicationController
     @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first
   end
 
-  def set_timezones_on_sites(user)
-    if params[:user] && params[:user][:timezone]
-      timezone = params[:user][:timezone]
+  def update_timezones_on_sites(user)
+    return unless params[:user] && params[:user][:timezone]
+    timezone = params[:user][:timezone]
 
-      user.sites.each do |site|
-        site.update_attribute :timezone, timezone unless site.timezone
-      end
+    user.sites.each do |site|
+      site.update_attribute :timezone, timezone unless site.timezone
     end
   end
 
@@ -112,7 +109,7 @@ class UserController < ApplicationController
     # If the user is active then they must supply a current_password
     # to update the password.
     if user.active?
-      if !user.is_oauth_user? && user_params[:password].present?
+      if !user.oauth_user? && user_params[:password].present?
         unless user.valid_password?(params[:user][:current_password])
           user.errors.add(:current_password, 'is incorrect')
           return false

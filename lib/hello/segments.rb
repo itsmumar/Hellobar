@@ -32,6 +32,6 @@ module Hello
       { key: 'gl_ctr', name: 'Geolocation Country', type: :string },
       { key: 'gl_rgn', name: 'Geolocation Region', type: :string },
       { key: 'tc', name: 'Time', type: :string }
-    ]
+    ].freeze
   end
 end
