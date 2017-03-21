@@ -104,8 +104,9 @@ describe ScriptGenerator do
     end
 
     context 'when rules are present' do
+      let(:rule) { Rule.new }
+
       it 'has a start date constraint when present' do
-        rule = Rule.new
         condition = Condition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after], segment: 'DateCondition'
         rule.stub conditions: [condition]
         site.stub rules: [rule]
@@ -116,7 +117,6 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have a start date constraint when not present' do
-        rule = Rule.new
         site.stub rules: [rule]
 
         expected_string = 'HB.addRule("", [], [])}'
@@ -125,7 +125,6 @@ describe ScriptGenerator do
       end
 
       it 'has an end date constraint when present' do
-        rule = Rule.new
         condition = Condition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before], segment: 'DateCondition'
         rule.stub conditions: [condition]
         site.stub rules: [rule]
@@ -136,7 +135,6 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have a start date constraint when not present' do
-        rule = Rule.new
         site.stub rules: [rule]
 
         expected_string = 'HB.addRule("", [], [])}'
@@ -145,7 +143,6 @@ describe ScriptGenerator do
       end
 
       it 'adds an exlusion constraint for all blacklisted URLs' do
-        rule = Rule.new
         conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: 'UrlCondition')]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
@@ -156,7 +153,6 @@ describe ScriptGenerator do
       end
 
       it 'converts does_not_include urls to paths' do
-        rule = Rule.new
         conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: 'UrlCondition')]
         rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
         site.stub rules: [rule]
@@ -167,7 +163,6 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have exclusion constraints when no sites are blacklisted' do
-        rule = Rule.new
         site.stub rules: [rule]
 
         expected_string = /HB.umatch(.*)/
@@ -176,7 +171,6 @@ describe ScriptGenerator do
       end
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
-        rule = Rule.new
         conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: 'UrlCondition')]
         rule.stub conditions: conditions
         site.stub rules: [rule]
@@ -187,12 +181,33 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have inclusion constraints when no sites are whitelisted' do
-        rule = Rule.new
         generator.stub rules: [rule]
 
         expected_string = /HB.umatch(.*)/
 
         expect(generator.render).not_to match(expected_string)
+      end
+
+      it 'does NOT include nil values' do
+        site_element = build(:site_element, :bar, custom_js: '', custom_css: nil)
+        site_elements = [site_element]
+        allow(site).to receive(:rules).and_return([rule])
+        allow(site_elements).to receive(:active).and_return(site_elements)
+        allow(rule).to receive(:site_elements).and_return(site_elements)
+
+        expect(generator.rules.first[:site_elements]).to include 'custom_js'
+        expect(generator.rules.first[:site_elements]).not_to include 'custom_css'
+      end
+
+      it 'includes false values' do
+        site_element = build(:site_element, :bar)
+        site_elements = [site_element]
+        allow(site).to receive(:rules).and_return([rule])
+        allow(site_elements).to receive(:active).and_return(site_elements)
+        allow(rule).to receive(:site_elements).and_return(site_elements)
+        allow(site_element).to receive(:email_redirect?).and_return(false)
+
+        expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
       end
     end
 
