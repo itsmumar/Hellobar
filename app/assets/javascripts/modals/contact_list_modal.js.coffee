@@ -387,6 +387,7 @@ class @ContactListModal extends Modal
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       requiresWebhookUrl: option.data('requiresWebhookUrl')
+      canConnect: !option.data('requiresWebhookUrl') && !option.data('requiresEmbedCode')
       webhookIsPost: @options.contactList?.data?.webhook_method == "post"
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
