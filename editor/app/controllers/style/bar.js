@@ -16,8 +16,9 @@ export default Ember.Controller.extend(HasPlacement, HasTriggerOptions, AfterCon
     ],
 
     setDefaults: (function () {
-      if (this.get('model.pushes_page_down') === null)
-        this.set('model.pushes_page_down', true)
+      if (this.get('model.pushes_page_down') === null) { 
+        this.set('model.pushes_page_down', true);
+      }
     }).observes('model').on('init'),
 
     canWiggle: (function () {
