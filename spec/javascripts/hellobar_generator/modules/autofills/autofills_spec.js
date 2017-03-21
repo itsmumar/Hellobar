@@ -3,9 +3,9 @@
 
 describe('Module autofills', function () {
   var module;
+  var storedValue = 'autofilled-value';
 
   function dependencies() {
-    var storedValue = 'autofilled-value';
     var dependencies = {
       'base.storage': jasmine.createSpyObj('base.storage', ['getValue', 'setValue']),
       'base.dom': {
@@ -45,7 +45,7 @@ describe('Module autofills', function () {
   it('runs successfully', function () {
     document.body.innerHTML = '<div><input id="test-input"></div>';
     module.run();
-    expect(document.getElementById('test-input').value).toEqual('autofilled-value');
+    expect(document.getElementById('test-input').value).toEqual(storedValue);
     document.body.innerHTML = '';
   });
 
