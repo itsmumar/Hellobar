@@ -1,5 +1,5 @@
 (function() {
-  if (typeof(HB) == "undefined") {
+  if (typeof(window.HB) == "undefined") {
     HB_BACKEND_HOST = "{{hb_backend_host}}";
 
     HB_SITE_ID = {{site_id}};
@@ -110,5 +110,7 @@
         _hbq = new HBQ();
       }
     })();
+  } else {
+    console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }
 })();
