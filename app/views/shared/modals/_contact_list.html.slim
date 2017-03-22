@@ -160,9 +160,9 @@ script id="contact-list-variant-modal-provider-instructions-template" type="text
   |   <textarea class="contact_list_embed_code" id="contact_list_embed_code" name="contact_list[data][embed_code]" placeholder="Paste your embed code here">{{contactList.data.embed_code}}</textarea>
   | {{/if}}
   |
-  | {{#unless requiresWebhookUrl}}
+  | {{#if canConnect}}
   |   <a class="button ready">Connect</a>
-  | {{/unless}}
+  | {{/if}}
 
 /-----------  No Provider Template  -----------/
 
