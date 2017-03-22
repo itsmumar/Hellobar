@@ -148,7 +148,7 @@ class ScriptGenerator < Mustache
 
   def external_events_json
     external_events =
-      site.site_elements.each_with_object([]) do |site_element, memo|
+      site.site_elements.active.each_with_object([]) do |site_element, memo|
         site_element.external_events.each do |external_event|
           memo << external_event
         end
