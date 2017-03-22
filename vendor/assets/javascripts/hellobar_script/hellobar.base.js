@@ -76,13 +76,16 @@ HBQ.prototype.push = function () {
 }
 // Keep everything within the HB namespace
 var HB = {
+  // TODO check all usages of HB.CAP, change to base.capabilities
   CAP: {}, // Capabilies
   geoRequestInProgress: false,
 
+  // TODO -> base.selfcheck (make it inner)
   getLocation: function () {
     return window.location;
   },
 
+  // TODO -> base.selfcheck
   scriptIsInstalledProperly: function () {
     // return true when viewing in preview pane
     if (HB.CAP.preview)
@@ -98,6 +101,7 @@ var HB = {
     return HB_SITE_URL === 'http://mysite.com' || HB.n(hostname) === HB.n(window.HB_SITE_URL);
   },
 
+  // TODO -> elements
   // Grabs site elements from valid rules and displays them
   showSiteElements: function () {
     var siteElements = [];
@@ -113,7 +117,7 @@ var HB = {
     }
   },
 
-  //
+  // TODO -> contentUpgrades
   showContentUpgrade: function (id) {
     if (HB.CONTENT_UPGRADES[id]){
       siteElement = HB.CONTENT_UPGRADES[id];
@@ -126,6 +130,7 @@ var HB = {
     }
   },
 
+  // TODO this is inner for createClass
   // Copy functions from spec into klass
   cpFuncs: function (spec, klass) {
     for (var key in spec) {
@@ -138,10 +143,12 @@ var HB = {
     }
   },
 
+  // TODO -> base.environment
   isMobileDevice: function () {
     return HB.getVisitorData('dv') === 'mobile';
   },
 
+  // TODO !!! Do we really need to maintain hierarchy of classes for bars?
   // Creates a class
   createClass: function (spec, superClass) {
     // Set up the initializer
@@ -168,6 +175,7 @@ var HB = {
     return klass;
   },
 
+  // TODO -> base.dom
   // Returns the element or looks it up via getElementById
   $: function (idOrElement) {
     if (typeof(idOrElement) === 'string')
@@ -176,20 +184,25 @@ var HB = {
       return idOrElement;
   },
 
+  // TODO -> format
   // Returns whether or not a setting is true (treats 'false' and string '0' as the boolean false)
   t: function (value) {
     return (value && value != 'false' && value != '0') ? true : false;
   },
 
+  // TODO inner for isExternalURL
   currentURL: function () {
     return window.location.href;
   },
 
+  // TODO -> base.format
   isExternalURL: function (url) {
     var regex = /^https?:\/\/([^\/]+)/i;
     return regex.exec(HB.currentURL())[1] !== regex.exec(url)[1];
   },
 
+
+  // TODO -> base.dom
   /**
    * Adds the CSS class to the target element
    * @param element {Element}
@@ -202,6 +215,8 @@ var HB = {
     }
   },
 
+
+  // TODO -> base.dom
   /**
    * Removes the CSS class from the target element
    * @param element {Element}
@@ -221,6 +236,8 @@ var HB = {
     element.className = newClassNames.join(' ');
   },
 
+
+  // TODO -> base.dom
   /**
    * Adds/removes CSS class for the target element
    * @param element {Element}
@@ -231,6 +248,7 @@ var HB = {
     shouldBeSet ? HB.addClass(element, className) : HB.removeClass(element, className);
   },
 
+  // TODO make it inner function of isMobileWidth
   windowWidth: function() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   },
@@ -249,6 +267,7 @@ var HB = {
     HB.css += '<style>' + css + '</style>';
   },
 
+  // TODO -> base.format (or make it inner function of getShortestKeyForURL)
   // Takes a URL and returns normalized domain (downcase and strip www)
   getNDomain: function (url) {
     if (!url) {
@@ -261,6 +280,7 @@ var HB = {
     return url.replace(/.*?\:\/\//, '').replace(/(.*?)\/.*/, '$1').replace(/www\./i, '').toLowerCase();
   },
 
+  // TODO -> base.format
   // Normalizes a URL so that "https://www.google.com/#foo" becomes "http://google.com"
   // Also sorts the params alphabetically
   n: function (url, pathOnly) {
@@ -307,10 +327,12 @@ var HB = {
     return HB.stripTrailingSlash(urlParts[0] + '/') + '?' + sortedParams;
   },
 
+  // TODO make it inner function of "n"
   stripTrailingSlash: function (urlPart) {
     return urlPart.replace(/(.+)\/$/i, '$1');
   },
 
+  // TODO remove (not used)
   // Returns true if the specified url matches the source pattern
   umatch: function (srcPattern, url) {
     if (srcPattern.indexOf('?') === -1) // srcPattern does not have any query params...
@@ -319,6 +341,7 @@ var HB = {
     return HB.n(srcPattern, true) == HB.n(url, true);
   },
 
+  // TODO ???
   getVisitorAttributes: function () {
     // Ignore first and last view timestamps and email and social conversions
     var ignoredAttributes = 'fv lv ec sc dt';
@@ -335,6 +358,7 @@ var HB = {
     return HB.serializeCookieValues(attributes);
   },
 
+  // TODO -> tracking.hb
   // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
   s: function (path, itemID, params, callback) {
     // If we are not tracking or this or no site ID then just issue the
@@ -378,12 +402,14 @@ var HB = {
     img.src = HB.hi(url);
   },
 
+  // TODO -> tracking.hb (make it inner function)
   // Returns the URL for the backend server (e.g. "hi.hellobar.com").
   hi: function (url) {
     return (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + HB_BACKEND_HOST + url;
   },
 
-  // Recoards the rule being formed when the visitor clicks the specified element
+  // TODO this is called from html pieces. Should it be in tracking.hb module?
+  // Records the rule being formed when the visitor clicks the specified element
   trackClick: function (domElement, siteElement) {
     var url = domElement.href;
     HB.converted(siteElement, function () {
@@ -391,6 +417,7 @@ var HB = {
     });
   },
 
+  // TODO -> some tracking module ???
   // Returns the conversion key used in the cookies to determine if this
   // conversion has already happened or not
   getConversionKey: function (siteElement) {
@@ -410,6 +437,7 @@ var HB = {
     }
   },
 
+  // TODO should be inner (used in getConversionKey)
   // Returns the shortest possible key for the given URL,
   // which may be a SHA1 hash of the url
   getShortestKeyForURL: function (url) {
@@ -429,6 +457,7 @@ var HB = {
     }
   },
 
+  // TODO -> some tracking module ???
   // Called when a conversion happens (e.g. link clicked, email form filled out)
   converted: function (siteElement, callback) {
     var conversionKey = HB.getConversionKey(siteElement);
@@ -461,6 +490,7 @@ var HB = {
       callback();
   },
 
+  // TODO -> elements.visibility
   /**
    * Generates a name for visibility control cookie
    * @param cookieType {string}
@@ -471,6 +501,7 @@ var HB = {
     return 'HB-visibilityControl-' + cookieType + '-' + siteElementId;
   },
 
+  // TODO -> elements.visibility
   /**
    * Stores visibility control information with corresponding expiration date.
    * siteElement.settings.cookie_settings is used to calculate expiration.
@@ -504,6 +535,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.visibility
   /**
    * Checks if the site element should be shown considering visibility control cookies.
    * If at least one visibility control cookie prohibits the element then it won't be shown.
@@ -522,16 +554,19 @@ var HB = {
     return result;
   },
 
+  // TODO -> some tracking module ??? inner?? (called from "viewed")
   // Returns true if the visitor did this conversion or not
   didConvert: function (siteElement) {
     return HB.getVisitorData(HB.getConversionKey(siteElement));
   },
 
+  // TODO -> some tracking module ??? or element.visibility ? (because it uses the same storage key for checking)
   // Returns true if the visitor previously closed a site element
   didDismissHB: function (siteElement) {
     return HB.gc('HBDismissed-' + siteElement.id) != null;
   },
 
+  // TODO -> some tracking module ???
   // Returns true if the visitor previously closed this particular site element
   didDismissThisHB: function (se) {
     var cookie_name = (se.type === 'Takeover' || se.type === 'Modal') ? 'HBDismissedModals' : 'HBDismissedBars';
@@ -542,6 +577,7 @@ var HB = {
     return false;
   },
 
+  // TODO -> elements.collecting
   /**
    * Creates a field for collecting information
    * @param field
@@ -597,6 +633,8 @@ var HB = {
     return html;
   },
 
+
+  // TODO -> elements.collecting
   // This takes the the email field, name field, and target siteElement DOM element.
   // It then checks the validity of the fields and if valid it records the
   // email and then sets the message in the siteElement to "Thank you". If invalid it
@@ -672,6 +710,8 @@ var HB = {
     return false;
   },
 
+
+  // TODO inner function in siteElements.dataCollection
   // Called to validate the email. Does not actually submit the email
   validateEmail: function (email, successCallback, failCallback) {
     if (email && email.match(/.+@.+\..+/) && !email.match(/,/))
@@ -680,6 +720,7 @@ var HB = {
       failCallback();
   },
 
+  // TODO inner function in siteElements.dataCollection
   // Called to record an email for the rule without validation (also used by submitEmail)
   recordEmail: function (siteElement, values, callback) {
     if (values && values.length > 0) {
@@ -710,6 +751,7 @@ var HB = {
     return hellobar('base.serialization').deserialize(string);
   },
 
+  // TODO totally refactor this, get rid of globals
   // Loads the cookies from the browser cookies into global hash HB.cookies
   // in the format of {siteElements:{...}}, visitor:{...}}
   loadCookies: function () {
@@ -736,6 +778,7 @@ var HB = {
     }
   },
 
+  // TODO totally refactor this
   // Saves HB.cookies into the actual cookie
   saveCookies: function () {
     // Don't let any cookies get set without a site ID
@@ -754,6 +797,7 @@ var HB = {
     }
   },
 
+  // TODO -> visitorData or tracking.hb
   // Gets the visitor attribute specified by the key or returns null
   getVisitorData: function (key) {
     if (!key) {
@@ -773,6 +817,8 @@ var HB = {
     }
   },
 
+  // TODO get rid of this public setter - is this possible? There many usages of this function
+  // TODO ideally we need a separate module visitorData
   // Sets the visitor attribute specified by the key to the value in the HB.cookies hash
   // Also updates the cookies via HB.saveCookies
   setVisitorData: function (key, value, skipEmptyValue) {
@@ -782,6 +828,7 @@ var HB = {
     HB.saveCookies();
   },
 
+  // TODO where should it be moved?
   // Gets the siteElement attribute from HB.cookies specified by the siteElementID and key
   getSiteElementData: function (siteElementID, key) {
     if (!siteElementID)
@@ -793,6 +840,8 @@ var HB = {
     return s[siteElementID][key];
   },
 
+
+  // TODO where should it be moved?
   // Sets the siteElement attribute specified by the key and siteElementID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
   setSiteElementData: function (siteElementID, key, value) {
@@ -820,6 +869,7 @@ var HB = {
     hellobar('base.storage').setValue(key, value, exdays);
   },
 
+  // TODO -> visitorData (or call it visitor?) Visitor should be bars agnostic?
   // Returns the visitor's unique ID which should be a random value
   i: function () {
     var uuid;
@@ -840,6 +890,7 @@ var HB = {
     return uuid;
   },
 
+  // TODO remove this. Already have this function in base.dom
   // Calls the specificied callback once the DOM is ready.
   domReady: function (callback) {
     // To save on script size we do the simplest possible thing which
@@ -856,17 +907,23 @@ var HB = {
     }
   },
 
+  // TODO -> base.templating
   // A global variable to store templates
   templateHTML: {},
+
+  // TODO refactor, generalize, make it work with base.templating
   brandingTemplates: {},
   contentUpgradeTemplates: {},
 
+  // TODO -> base.templating
   // Sets the template HTML. Note if you override getTemplate this will have
   // no affect
   setTemplate: function (type, html) {
     HB.templateHTML[type] = html;
   },
 
+
+  // TODO -> base.templating
   // Returns the template HTML for the given siteElement. Most of the time the same
   // template will be returned for the same siteElement. The values in {{}} are replaced with
   // the values from the siteElement
@@ -876,29 +933,36 @@ var HB = {
     return HB.getTemplateByName(siteElement.template_name);
   },
 
+
+  // TODO -> base.templating
   getTemplateByName: function (templateName) {
     return HB.templateHTML[templateName];
   },
 
+  // TODO -> ??? elements.templating or base.templating? generalize
   // Sets the branding HTML.
   setBrandingTemplate: function (type, html) {
     HB.brandingTemplates[type] = html;
   },
 
+  // TODO -> ??? elements.templating or base.templating? generalize
   getBrandingTemplate: function (type) {
     return HB.brandingTemplates[type];
   },
 
+  // TODO -> ??? contentUpgrades.templating or base.templating? generalize
   // Sets the content upgrade HTML.
   setContentUpgradeTemplate: function (type, html) {
     HB.contentUpgradeTemplates[type] = html;
   },
 
+  // TODO -> ??? contentUpgrades.templating or base.templating? generalize
   getContentUpgradeTemplate: function (type) {
     return HB.contentUpgradeTemplates[type];
   },
 
 
+  // TODO -> base.sanitizing
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
   sanitize: function(siteElement, whitelist) {
@@ -914,11 +978,13 @@ var HB = {
     return siteElement;
   },
 
+  // TODO -> base.environment
   isIE11: function () {
     var myNav = navigator.userAgent.toLowerCase();
     return myNav.indexOf('rv:11') != -1;
   },
 
+  // TODO -> base.environment
   isIEXOrLess: function (x) {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
@@ -932,12 +998,14 @@ var HB = {
     }
   },
 
+  // TODO -> base.environment
   // Returns true if the device is using mobile safari (ie, ipad / iphone)
   isMobileSafari: function () {
     var ua = navigator.userAgent.toLowerCase();
     return (ua.indexOf('safari') > -1 && (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1));
   },
 
+  // TODO -> base.templating
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
   renderTemplate: function (html, siteElement) {
@@ -946,6 +1014,7 @@ var HB = {
     });
   },
 
+  // TODO -> base.templating (should be inner)
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
   parseTemplateVar: function (value, siteElement) {
     try {
@@ -958,6 +1027,7 @@ var HB = {
     return value;
   },
 
+  // TODO -> base.bus
   // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "siteElementshown")
   on: function (eventName, callback) {
     if (!HB.eventCallbacks)
@@ -967,6 +1037,7 @@ var HB = {
     HB.eventCallbacks[eventName].push(callback);
   },
 
+  // TODO -> base.bus
   // This is called internally to trigger a Hello Bar event (e.g. "siteElementshown")
   // Although it may look like no arguments are passed to trigger that is not true.
   // The first argument is the event name and all subsequent arguments are passed to
@@ -993,6 +1064,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements (name the method just 'create')
   // Returns a SiteElement object from a hash of data
   createSiteElement: function (data) {
     var siteElement;
@@ -1014,6 +1086,7 @@ var HB = {
     return siteElement;
   },
 
+  // TODO -> elements (join with createSiteElement?)
   // Adds the SiteElement to the page
   addToPage: function (siteElement) {
     if (siteElement.use_question) {
@@ -1049,6 +1122,8 @@ var HB = {
     siteElement.attach();
   },
 
+  // TODO -> elements ?
+  // TODO this has three usages (traffic_growth, site_element.es6 and also this file)
   findSiteElementOnPageById: function (site_element_id) {
     var lookup = {};
     for (var i = 0, len = HB.siteElementsOnPage.length; i < len; i++) {
@@ -1062,6 +1137,7 @@ var HB = {
     }
   },
 
+  // TODO this is used from editor only (application.mixin.preview.js)
   removeAllSiteElements: function () {
     for (var i = 0; i < HB.siteElementsOnPage.length; i++) {
       HB.siteElementsOnPage[i].remove();
@@ -1069,6 +1145,7 @@ var HB = {
     HB.siteElementsOnPage = [];
   },
 
+  // TODO -> elements.conversion ???
   // Called when the siteElement is viewed
   viewed: function (siteElement) {
     // Track number of views if not yet converted for this site element
@@ -1086,6 +1163,8 @@ var HB = {
     HB.trigger('shown', siteElement); // New trigger
   },
 
+  // TODO -> elements
+  // TODO used from bar.es6, site_element.es6, overridden in editor
   // Injects the specified element at the top of the body tag
   // or bottom if reverse is selected
   injectAtTop: function (element, reverse) {
@@ -1098,6 +1177,7 @@ var HB = {
   },
 
 
+  // TODO -> elements.rules
   // Adds a rule to the list of rules.
   //  matchType: is either 'any' or 'all' - refers to the conditions
   //  conditions: serialized array of conditions for the rule to be true
@@ -1116,6 +1196,8 @@ var HB = {
     }
   },
 
+
+  // TODO ???
   // If window.HB_element_id is set, use that to find the site element
   // Will return null if HB_element_id is not set or no site element exists with that id
   getFixedSiteElement: function () {
@@ -1132,6 +1214,7 @@ var HB = {
     return null;
   },
 
+  // TODO -> elements.rules
   // applyRules scans through all the rules added via addRule and finds the
   // all rules that are true and pushes the site elements into a list of
   // possible results. Next it tries to find the "highest priority" site
@@ -1185,10 +1268,12 @@ var HB = {
     return results;
   },
 
+  // TODO -> elements.visibility (make it inner)
   nonMobileClickToCall: function (siteElementData) {
     return siteElementData.subtype === 'call' && !HB.isMobileDevice();
   },
 
+  // TODO -> base.environment
   /**
    * Determines if the screen width is considered mobile for given element
    * @param siteElementData {object}
@@ -1205,6 +1290,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.visibility
   /**
    * Determines if an element should be displayed
    * @param siteElementData {object}
@@ -1241,6 +1327,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.visibility (make it inner)
   updatedSinceLastVisit: function (siteElement) {
     var lastVisited = new Date(HB.getSiteElementData(siteElement.id, 'lv') * 1000);
     var lastUpdated = new Date(siteElement.updated_at);
@@ -1248,6 +1335,7 @@ var HB = {
     return lastUpdated > lastVisited;
   },
 
+  // TODO -> elements.rules (make it inner)
   // Returns the best element to show from a group of elements
   getBestElement: function (elements) {
     elements = HB.filterMostRelevantElements(elements);
@@ -1325,6 +1413,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.rules (make it inner)
   // Get elements that are most relevant, namely they meet the most narrow set of rules.
   // For example, having 2 similar modals: one set to be shown to everybody (0 conditions),
   // and another - to mobile visitors only (1 condition), we should always show the latter on mobile devices.
@@ -1345,6 +1434,7 @@ var HB = {
     });
   },
 
+  // TODO -> elements.rules (make it inner)
   // Find the most relevant (narrow) set of rules.
   // For "all" rules the most narrow set is one with the maximum number of conditions (X and Y and Z < X and Y)
   // For "any" rules the most narrow set is one with the minimum number of conditions (X or Y < X or Y or Z), except for 0
@@ -1380,7 +1470,8 @@ var HB = {
     return groups[maxWeight];
   },
 
-  // Checkes if the rule is true by checking each of the conditions and
+  // TODO -> elements.rules (make it inner)
+  // Checks if the rule is true by checking each of the conditions and
   // the matching logic of the rule (any vs all).
   ruleTrue: function (rule) {
     for (var i = 0; i < rule.conditions.length; i++) {
@@ -1404,6 +1495,7 @@ var HB = {
     return true;
   },
 
+  // TODO -> elements.rules (make it inner)
   timeConditionTrue: function (condition) {
     var conditionHour = parseInt(condition.value[0]),
       conditionMinute = parseInt(condition.value[1]),
@@ -1418,6 +1510,7 @@ var HB = {
       return false;
   },
 
+  // TODO -> elements.rules (make it inner)
   geoLocationConditionTrue: function (condition) {
     var currentValue = HB.getSegmentValue(condition.segment);
 
@@ -1428,6 +1521,7 @@ var HB = {
     return HB.applyOperands(currentValue, condition.operand, condition.value, condition.segment)
   },
 
+  // TODO -> elements.rules (make it inner)
   // Determines if the condition (a rule is made of one or more conditions)
   // is true. It gets the current value and applies the operand
   conditionTrue: function (condition) {
@@ -1456,6 +1550,7 @@ var HB = {
     return HB.applyOperands(currentValue, condition.operand, values, condition.segment);
   },
 
+  // TODO -> elements.rules (make it inner)
   // Sanitizes the value parameter based on the segment and input
   // Value is the value to sanitize
   // Input is the users value condition
@@ -1468,6 +1563,7 @@ var HB = {
     return value;
   },
 
+  // TODO -> elements.rules ????? (make it inner) (also have something to do with visitorData)
   // Gets the current segment value that will be compared to the conditions
   // value
   getSegmentValue: function (segmentName) {
@@ -1487,6 +1583,7 @@ var HB = {
     return HB.getVisitorData(segmentName);
   },
 
+  // TODO -> elements.rules (make it inner)
   // Applies the operand specified to the array of possible values
   applyOperands: function (currentValue, operand, values, segment) {
     // Put the value in an array if it is not an array
@@ -1513,6 +1610,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.rules (make it inner)
   // Applies the operand specified to the arguments passed in
   applyOperand: function (currentValue, operand, input, segment) {
     var a = HB.sanitizeConditionValue(segment, currentValue, input);
@@ -1560,12 +1658,14 @@ var HB = {
     }
   },
 
+  // TODO -> elements.rules (make it inner)
   // Returns a normalized string value
   // Used for applying operands
   stringify: function (o) {
     return (o + '').toLowerCase();
   },
 
+  // TODO -> ??? (this is called during script initialization)
   // This just sets the default segments/tracking data for the visitor
   // (such as when the suer visited, referrer, etc)
   setDefaultSegments: function () {
@@ -1654,6 +1754,7 @@ var HB = {
     HB.setVisitorData('dv', HB.device());
   },
 
+  // TODO this should be inner for setDefaultSegments
   paramsFromString: function (url) {
     var params = {};
     if (!url)
@@ -1680,6 +1781,7 @@ var HB = {
     return params;
   },
 
+  // TODO this should be inner for s (tracking.hb)
   paramsToString: function (params) {
     var pairs = [];
     for (var k in params) {
@@ -1690,6 +1792,7 @@ var HB = {
     return pairs.join('&');
   },
 
+  // TODO this should be inner for setDefaultSegments
   // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
   // will return kissmetrics.com. It does so by setting a cookie on each "part" until successful (first tries ".jp" then ".co.jp"
   // then "yahoo.co.jp"
@@ -1708,6 +1811,7 @@ var HB = {
     return document.location.hostname;
   },
 
+  // TODO -> base.dom
   // Takes the given element and "shakes" it a few times and returns
   // it to its original style and positioning. Used to shake the
   // email field when it is invalid.
@@ -1742,6 +1846,7 @@ var HB = {
     })(HB.$(element));
   },
 
+  // TODO -> base.coloring
   colorIsBright: function (hex) {
     var rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (rgb == null)
@@ -1752,6 +1857,7 @@ var HB = {
     return brightness >= 0.5
   },
 
+  // TODO -> base.coloring (make it inner)
   luminance: function (r, g, b) {
     // http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
     var rgb = [r, g, b];
@@ -1765,6 +1871,7 @@ var HB = {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   },
 
+  // TODO -> elements.bars
   barSizeCssClass: function (size) {
     if (size === 'large' || size === 'regular') {
       return size;
@@ -1779,6 +1886,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements.bars
   barHeight: function (size) {
     switch (size) {
       case 'large':
@@ -1790,6 +1898,7 @@ var HB = {
     }
   },
 
+  // TODO -> base.dom
   animateIn: function (element, time) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
@@ -1801,6 +1910,8 @@ var HB = {
     HB.showElement(element); // unhide if hidden
   },
 
+
+  // TODO -> base.dom
   animateOut: function (element, callback) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
@@ -1818,6 +1929,7 @@ var HB = {
     }
   },
 
+  // TODO -> base.dom (+generalize implementation)
   // Delays & restarts wiggle animation before & after mousing over bar
   wiggleEventListeners: function (context) {
     var element = context.querySelector('#hellobar');
@@ -1857,6 +1969,8 @@ var HB = {
     return ((hour * 60 * 60) + (minute * 60)) * signMultiplier;
   },
 
+
+  // TODO used in setDefaultSegments and siteElements.rules
   // Returns a Date object adjusted to the timezone specified (if none is
   // specified we try to use HB_TZ - if that is not present we use the user
   // timezone. The timezone of the actual Date object wills till be the
@@ -1876,12 +1990,14 @@ var HB = {
     return new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000) + (zoneOffset * 1000))
   },
 
+  // TODO this is inner of setDefaultSegments
   ymd: function (date) {
     if (typeof date === 'undefined') date = new Date();
     var m = date.getMonth() + 1;
     return date.getFullYear() + '-' + this.zeropad(m) + '-' + this.zeropad(date.getDate());
   },
 
+  // TODO this is inner of setDefaultSegments
   // Copied from zeropad.jquery.js
   zeropad: function (string, length) {
     // default to 2
@@ -1891,6 +2007,7 @@ var HB = {
     return string.length >= length ? string : this.zeropad('0' + string, length);
   },
 
+  // TODO this is inner of 's' (tracking)
   // Takes an input ID and returns an obfuscated ID
   // This is the required format for IDs for hi.hellobar.com
   obfID: function (number) {
@@ -1933,6 +2050,7 @@ var HB = {
     return outputs.join(SEP);
   },
 
+  // TODO this is inner of 's' (tracking)
   // Signs a given path and params with the provided key
   signature: function (key, path, params) {
 
@@ -1951,6 +2069,8 @@ var HB = {
 
   },
 
+  // TODO -> base.dom ???? (it's actually about showing condition)
+  // TODO rename payload (it's a function)
   // Runs a function if the visitor has scrolled to a given height.
   scrollTargetCheck: function (scrollTarget, payload) {
     // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
@@ -1964,7 +2084,6 @@ var HB = {
       // triggers just before middle of page - feels right due to polling rate
       scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
     }
-    ;
 
     // first condition checks if visitor has scrolled.
     // second condition guards against pages too small to scroll, displays immediately.
@@ -1974,6 +2093,9 @@ var HB = {
     }
   },
 
+  // TODO -> elements.intents ???
+  // TODO it's for intentCheck from site_element.es6
+  // TODO rename payload
   // Runs a function "payload" if the visitor meets intent-detection conditions
   intentCheck: function (intentSetting, payload) {
     var vistorIntendsTo = false;
@@ -2009,6 +2131,7 @@ var HB = {
     }
   },
 
+  // TODO called from setupIFrame from site_element.es6
   initializeIntentListeners: function () {
     HB.intentConditionCache = {
       mouseInTime: null,
@@ -2050,11 +2173,13 @@ var HB = {
     });
   },
 
+  // TODO -> ???
   branding_template: function () {
     var stored = HB.gc('b_template');
     return stored != null ? stored : HB.CAP.b_variation;
   },
 
+  // TODO -> elements
   hideElement: function (element) {
     if (element == null) {
       return
@@ -2068,6 +2193,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements
   showElement: function (element, display) {
     if (element == null) {
       return
@@ -2084,6 +2210,7 @@ var HB = {
     }
   },
 
+  // TODO -> elements ????
   // Replaces the site element with the question variation.
   // Sets the displayResponse callback to show the original element
   questionifySiteElement: function (siteElement) {
@@ -2153,10 +2280,12 @@ var HB = {
     return siteElement;
   },
 
+  // TODO remove it (not used)
   sample: function (items) {
     return items[Math.floor(Math.random() * items.length)];
   },
 
+  // TODO this is called during initialization
   // Sets the disableTracking cookie to true or false based on hb_ignore=
   setTracking: function (queryString) {
     if (queryString.match(/hb_ignore/i)) {
@@ -2165,6 +2294,7 @@ var HB = {
     }
   },
 
+  // TODO remove it (not used)
   setCustomConditionValue: function (segmentKey, value) {
     HB.setVisitorData(segmentKey, value);
     if (HB.siteElementsOnPage.length === 0) {
@@ -2172,10 +2302,12 @@ var HB = {
     }
   },
 
+  // TODO -> base.environment (should be inner)
   getUserAgent: function () {
     return navigator.userAgent;
   },
 
+  // TODO -> base.environment
   device: function () {
     var ua = HB.getUserAgent();
     if (ua.match(/ipad/i))
@@ -2188,6 +2320,7 @@ var HB = {
       return 'computer';
   },
 
+  // TODO -> base.format
   isIpAddress: function (ipaddress) {
     if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
       return true;
@@ -2195,11 +2328,13 @@ var HB = {
       return false;
   },
 
+  // TODO -> elements.rules (make it inner)
   // Escapes all regex characters EXCEPT for the asterisk
   sanitizeRegexString: function (str) {
     return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&');
   },
 
+  // TODO -> base.format
   stringLiteral: function(s) {
     return s ? '\'' + s.replace(/\'/g, ' ') + '\'' : 'null';
   }
