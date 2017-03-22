@@ -20,7 +20,8 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "Gemfile.lock" }}
-            - dependency-cache-{{ checksum "editor/bower.json" }}-{{ checksum "editor/package.json" }}
+            - dependency-cache-{{ checksum "editor/bower.json" }}
+            - dependency-cache-{{ checksum "editor/package.json" }}
       - run:
           name: Install Bundler
           command: gem install bundler && bundle config git.allow_insecure true && bundle config github.https true
@@ -44,16 +45,25 @@ jobs:
               encoding: utf8
               pool: 5
             ' > config/database.yml
-      - run:
-          name: Install editor dependencies
-          command: |
-            npm install -g ember-cli bower
-            cd editor && npm install && bower install --allow-root
 
+      - run:
+          name: Install npm dependencies
+          command: |
+            npm install -g ember-cli
+            cd editor && npm install
       - save_cache:
-          key: dependency-cache-{{ checksum "editor/bower.json" }}-{{ checksum "editor/package.json" }}
+          key: dependency-cache-{{ checksum "editor/package.json" }}
           paths:
             - editor/node_modules
+
+      - run:
+          name: Install bower dependencies
+          command: |
+            npm install -g bower
+            cd editor && bower install --allow-root
+      - save_cache:
+          key: dependency-cache-{{ checksum "editor/bower.json" }}
+          paths:
             - editor/bower_components
 
       - run:
