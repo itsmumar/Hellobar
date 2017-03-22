@@ -14,7 +14,7 @@ jobs:
           keys:
             - dependency-cache-{{ checksum "Gemfile.lock" }}
             - dependency-cache-{{ checksum "editor/bower.json" }}
-            - dependency-cache-{{ checksum "editor/package.json" }}
+            - dependency-cache-{{ checksum "editor/yarn.lock" }}
       - run:
           name: Install Ruby Dependencies
           command: bundle install --path vendor/bundle
@@ -32,10 +32,10 @@ jobs:
 
       - run:
           name: Install npm dependencies
-          command: cd editor && npm install
+          command: cd editor && yarn install
 
       - save_cache:
-          key: dependency-cache-{{ checksum "editor/package.json" }}
+          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
           paths:
             - editor/node_modules
 
