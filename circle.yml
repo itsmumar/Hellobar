@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Install ember
           command: |
-            npm install -g ember-cli
+            npm install -g ember-cli bower
             cd editor && npm install && bower install && ember build --environment=production
       - save_cache:
           key: dependency-cache-{{ checksum "editor/bower.json" }}-{{ checksum "editor/package.json" }}
