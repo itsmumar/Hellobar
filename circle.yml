@@ -13,15 +13,46 @@ jobs:
           name: Install Dependencies
           command: |
             apt-get update && apt-get install -qq -y --no-install-recommends \
-            build-essential git qt5-default libqt5webkit5-dev && \
+            build-essential git qt5-default libqt5webkit5-dev nodejs && \
             apt-get clean && \
             rm -rf /var/lib/apt/lists/*
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "Gemfile.lock" }}
+            - dependency-cache-{{ checksum "editor/bower.json" }}-{{ checksum "editor/package.json" }}
       - run:
           name: Install Bundler
           command: gem install bundler && bundle config git.allow_insecure true && bundle config github.https true
       - run:
           name: Install Ruby Dependencies
-          command: bundle install
+          command: bundle install --path vendor/bundle
+      - save_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Make configs
+          command: |
+            cp config/settings.yml.example config/settings.yml
+            echo 'test:
+              host: localhost
+              username: root
+              password: root
+              database: hellobar_test
+              adapter: mysql2
+              encoding: utf8
+              pool: 5
+            ' > config/database.yml
+      - run:
+          name: Install ember
+          command: |
+            npm install -g ember-cli
+            cd editor && npm install && bower install && ember build --environment=production
+      - save_cache:
+          key: dependency-cache-{{ checksum "editor/bower.json" }}-{{ checksum "editor/package.json" }}
+          paths:
+            - editor/node_modules
+            - editor/bower_components
       - run:
           name: Create DB
           command: bundle exec rake db:create db:schema:load --trace
