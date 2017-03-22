@@ -112,8 +112,6 @@ HB.SiteElement = HB.createClass({
           this.useFroala();
         }
 
-        hellobar('tracking.ga').trackCtaClick(this.w.contentDocument.querySelector('.js-cta'), 'email_conversion');
-
       }.bind(this), 1);
     }.bind(this));
   },

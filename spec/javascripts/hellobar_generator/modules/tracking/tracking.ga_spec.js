@@ -5,61 +5,46 @@ describe('Module tracking.ga', function () {
   var module;
   var gaSpy;
 
-  function simulateClick(element) {
-    var ev = document.createEvent('Events');
-    ev.initEvent('click', true, false);
-    element.dispatchEvent(ev);
-  }
-
   beforeEach(function () {
-    var externalEvent = {
-      id: 73454,
+    var externalEvents = [{
       site_element_id: 2,
       provider: 'google_analytics',
-      type: 'test_type',
-      category: 'Conversions',
-      action: 'email_submission',
-      label: 'Email conversion from HelloBar',
-      value: null
-    };
+      type: 'view',
+      category: 'HelloBar',
+      action: 'View',
+      label: 'Bar viewing from HelloBar'
+    }, {
+      site_element_id: 2,
+      provider: 'google_analytics',
+      type: 'traffic_conversion',
+      category: 'HelloBar',
+      action: 'Converted',
+      label: 'Email conversion from HelloBar'
+    }];
     gaSpy = jasmine.createSpy('gaSpy');
     module = hellobar('tracking.ga', {
       dependencies: {},
       configurator: function (configuration) {
-        configuration.externalEvents([externalEvent]).gaProvider(function() {
+        configuration.externalEvents(externalEvents).gaProvider(function() {
           return gaSpy;
         });
       }
     });
   });
 
-  it('sends GA event on explicit module call', function () {
-    module.sendCtaClick('test_type');
+  it('sends GA event with view type', function () {
+    module.send('view');
     expect(gaSpy).toHaveBeenCalledWith('send', jasmine.any(Object));
   });
 
-  it('sends GA event with DOM element tracking', function () {
-    document.body.innerHTML = '<div><a href="#" class="js-cta"></a></div>';
-    var ctaElement = document.querySelector('.js-cta');
-    var controlObject = module.trackCtaClick(ctaElement, 'test_type');
-    simulateClick(ctaElement);
-    controlObject.stopTracking();
-    simulateClick(ctaElement);
-
+  it('sends GA event with conversion type', function () {
+    module.send('traffic_conversion');
     expect(gaSpy).toHaveBeenCalledWith('send', jasmine.any(Object));
-    expect(gaSpy.calls.count()).toEqual(1);
   });
 
-  it('frees handlers during finalization', function () {
-    document.body.innerHTML = '<div><a href="#" class="js-cta"></a></div>';
-    var ctaElement = document.querySelector('.js-cta');
-    module.trackCtaClick(ctaElement, 'test_type');
-    simulateClick(ctaElement);
-    module.finalize();
-    simulateClick(ctaElement);
-
-    expect(gaSpy).toHaveBeenCalledWith('send', jasmine.any(Object));
-    expect(gaSpy.calls.count()).toEqual(1);
+  it('does not send GA event with unknown event type', function () {
+    module.send('unknown');
+    expect(gaSpy).not.toHaveBeenCalled();
   });
 
 });
