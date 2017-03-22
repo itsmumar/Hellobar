@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature 'Autofills' do
+feature 'Autofills management' do
   given!(:subscription) { create :subscription, :pro_managed }
   given(:user) { subscription.user }
   given(:site) { subscription.site }
