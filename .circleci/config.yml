@@ -2,36 +2,28 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ruby:2.1.9
+      - image: asozontov/hb-base:2.1.9
       - image: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
     working_directory: /tmp/hellobar_new
     steps:
       - checkout
-      - run:
-          name: Install Dependencies
-          command: |
-            apt-get update && apt-get install -qq -y --no-install-recommends \
-            build-essential git qt5-default libqt5webkit5-dev nodejs npm && \
-            apt-get clean && \
-            ln -s /usr/bin/nodejs /usr/bin/node && \
-            rm -rf /var/lib/apt/lists/*
+
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum "Gemfile.lock" }}
             - dependency-cache-{{ checksum "editor/bower.json" }}
             - dependency-cache-{{ checksum "editor/package.json" }}
       - run:
-          name: Install Bundler
-          command: gem install bundler && bundle config git.allow_insecure true && bundle config github.https true
-      - run:
           name: Install Ruby Dependencies
           command: bundle install --path vendor/bundle
+
       - save_cache:
           key: dependency-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+
       - run:
           name: Make configs
           command: |
@@ -48,9 +40,8 @@ jobs:
 
       - run:
           name: Install npm dependencies
-          command: |
-            npm install -g ember-cli
-            cd editor && npm install
+          command: cd editor && npm install
+
       - save_cache:
           key: dependency-cache-{{ checksum "editor/package.json" }}
           paths:
@@ -58,9 +49,8 @@ jobs:
 
       - run:
           name: Install bower dependencies
-          command: |
-            npm install -g bower
-            cd editor && bower install --allow-root
+          command: cd editor && bower install --allow-root
+
       - save_cache:
           key: dependency-cache-{{ checksum "editor/bower.json" }}
           paths:
@@ -69,12 +59,15 @@ jobs:
       - run:
           name: Install editor
           command: cd editor && ember build --environment=production
+
       - run:
           name: Create DB
           command: bundle exec rake db:create db:schema:load --trace
+
       - run:
           name: DB Migrations
           command: bundle exec rake db:migrate
+
       - run:
           name: Run Tests
           command: bundle exec rake test
