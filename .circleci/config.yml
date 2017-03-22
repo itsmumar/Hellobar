@@ -28,15 +28,7 @@ jobs:
           name: Make configs
           command: |
             cp config/settings.yml.example config/settings.yml
-            echo 'test:
-              host: localhost
-              username: root
-              password: root
-              database: hellobar_test
-              adapter: mysql2
-              encoding: utf8
-              pool: 5
-            ' > config/database.yml
+            cp .circleci/database.yml config/database.yml
 
       - run:
           name: Install npm dependencies
