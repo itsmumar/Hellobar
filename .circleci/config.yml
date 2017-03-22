@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: asozontov/hb-base:2.1.9
+      - image: hellobarcom/base:2.1.9
       - image: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
