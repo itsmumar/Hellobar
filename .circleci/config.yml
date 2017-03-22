@@ -58,7 +58,7 @@ jobs:
 
       - run:
           name: DB Migrations
-          command: bundle exec rake db:migrate
+          command: bundle exec rake db:migrate RAILS_ENV=test
 
       - run:
           name: Run Brakeman
