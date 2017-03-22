@@ -27,6 +27,9 @@ feature 'Autofills', :js do
     # reload the page to test if autofilling works
     visit site_path
 
+    # give a chance for the autofills script to execute
+    sleep 0.3
+
     # expect input email field to contain the autofilled value
     expect(find('input.email').value).to eq email
   end
