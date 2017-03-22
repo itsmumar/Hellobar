@@ -24,7 +24,7 @@ class SiteSerializer < ActiveModel::Serializer
     end
 
   rescue Google::Apis::AuthorizationError => error # user has not authenticated with the needed permissions
-    return unless scope.is_impersonated
+    return if scope.is_impersonated
     raise error # the error needs to bubble up to the controller to cause the user to re-authenticate
   end
 
