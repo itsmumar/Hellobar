@@ -59,14 +59,6 @@ export default Ember.Mixin.create({
       this.set('model.element_subtype', 'email');
       this.get('inlineEditing').initializeBlocks(this.get('model'), this.get('model.theme_id'));
     }
-    /*if (this.get('originalTheme').theme_id === this.get('model.theme_id')) {
-      _.each(this.get('originalTheme'), (value, key) => {
-          this.set(`model.${key}`, value);
-        }
-      );
-    } else {
-
-    }*/
     this.applyCurrentTheme();
   }).observes('model.theme_id')
 
