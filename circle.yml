@@ -1,59 +1,26 @@
-# CircleCI configuration
-general:
-  branches:
-    ignore:
-      - staging
-      - edge
-      - production
-
-checkout:
-  post:
-    - cp config/settings.yml.example config/settings.yml
-
-machine:
-  ruby:
-    version: 2.1.9
-
-database:
-  override:
-    - mkdir -p config
-    - |
-      echo 'test:
-        host: localhost
-        username: ubuntu
-        database: circle_ruby_test
-        adapter: mysql2
-      ' > config/database.yml
-    - bundle exec rake db:create:all db:schema:load --trace
-    - bundle exec rake db:setup --trace
-
-test:
-  pre:
-    - cp config/settings.yml.example config/settings.yml
-    - npm install -g ember-cli
-    - cd editor && npm install
-    - cd editor && bower install
-    - cd editor && ember build --environment=production
-
-  override:
-    - bundle exec brakeman
-    - bundle exec rubocop
-    -
-      RAILS_ENV=test bundle exec rspec -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml:
-        parallel: true
-
-  post:
-    - RAILS_ENV=test SUITE=default bundle exec rake teaspoon
-
-deployment:
-  designqa:
-    branch: designqa
-    commands:
-      - BRANCH=designqa bundle exec cap designqa deploy:
-          timeout: 600
-
-  production:
-    branch: production
-    commands:
-      - BRANCH=production bundle exec cap production deploy:
-          timeout: 2400
+version: 2
+jobs:
+  build:
+    docker:
+      - image: ruby:2.1.9
+      - image: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+    working_directory: /tmp/hellobar_new
+    steps:
+      - checkout
+      - run:
+          name: Install Bundler
+          command: gem install bundler && bundle config git.allow_insecure true && bundle config github.https true
+      - run:
+          name: Install Ruby Dependencies
+          command: bundle install
+      - run:
+          name: Create DB
+          command: bundle exec rake db:create db:schema:load --trace
+      - run:
+          name: DB Migrations
+          command: bundle exec rake db:migrate
+      - run:
+          name: Run Tests
+          command: bundle exec rake test
