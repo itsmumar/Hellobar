@@ -1,12 +1,13 @@
 //= require modules/core
-//= require modules/tracking/tracking.ga
+//= require modules/analytics/analytics.ga
 
-describe('Module tracking.ga', function () {
+describe('Module analytics.ga', function () {
   var module;
   var gaSpy;
 
   beforeEach(function () {
-    var externalEvents = [{
+    hellobar.finalize();
+    var analyticsEvents = [{
       site_element_id: 2,
       provider: 'google_analytics',
       type: 'view',
@@ -22,10 +23,10 @@ describe('Module tracking.ga', function () {
       label: 'Email conversion from HelloBar'
     }];
     gaSpy = jasmine.createSpy('gaSpy');
-    module = hellobar('tracking.ga', {
+    module = hellobar('analytics.ga', {
       dependencies: {},
       configurator: function (configuration) {
-        configuration.externalEvents(externalEvents).gaProvider(function() {
+        configuration.analyticsEvents(analyticsEvents).gaProvider(function() {
           return gaSpy;
         });
       }

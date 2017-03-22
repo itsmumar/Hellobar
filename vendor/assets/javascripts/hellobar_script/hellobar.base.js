@@ -460,7 +460,7 @@ var HB = {
     // Send the data to the backend if this is the first conversion
     if (conversionCount === 1) {
       HB.s('g', siteElement.id, {a: HB.getVisitorAttributes()}, callback);
-      hellobar('tracking.ga').send(gaEventType());
+      hellobar('analytics.ga').send(gaEventType());
     }
     else if (typeof(callback) === typeof(Function)) {
       callback();
@@ -1081,7 +1081,7 @@ var HB = {
     // Track number of views if not yet converted for this site element
     if (!HB.didConvert(siteElement)) {
       HB.s('v', siteElement.id, {a: HB.getVisitorAttributes()});
-      hellobar('tracking.ga').send('view');
+      hellobar('analytics.ga').send('view');
     }
 
     // Record the number of views, first seen and last seen

@@ -1,14 +1,14 @@
-hellobar.defineModule('tracking.ga', ['hellobar'], function (hellobar) {
+hellobar.defineModule('analytics.ga', ['hellobar'], function (hellobar) {
 
   const configuration = hellobar.createModuleConfiguration({
-    externalEvents: {
+    analyticsEvents: {
       type: Array,
       defaultValue: []
     },
     gaProvider: 'function'
   });
 
-  const eventsByType = (type) => (configuration.externalEvents() || []).filter((event) => event.type === type);
+  const eventsByType = (type) => (configuration.analyticsEvents() || []).filter((event) => event.type === type);
 
   const ga = () => {
     const gaProvider = configuration.gaProvider();
@@ -20,8 +20,8 @@ hellobar.defineModule('tracking.ga', ['hellobar'], function (hellobar) {
   };
 
   function send(eventType) {
-    const processExternalEvent = (externalEvent) => {
-      const { category, action, label } = externalEvent;
+    const processAnalyticsEvent = (event) => {
+      const { category, action, label } = event;
       ga()('send', {
         hitType: 'event',
         eventCategory: category,
@@ -29,7 +29,7 @@ hellobar.defineModule('tracking.ga', ['hellobar'], function (hellobar) {
         eventLabel: label
       });
     };
-    eventsByType(eventType).forEach((externalEvent) => processExternalEvent(externalEvent));
+    eventsByType(eventType).forEach((event) => processAnalyticsEvent(event));
   }
 
   /**

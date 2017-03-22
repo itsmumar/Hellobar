@@ -1,1 +1,1 @@
-//= require ./tracking.ga
+//= require ./analytics.ga
