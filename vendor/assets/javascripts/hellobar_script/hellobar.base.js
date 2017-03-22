@@ -332,15 +332,6 @@ var HB = {
     return urlPart.replace(/(.+)\/$/i, '$1');
   },
 
-  // TODO remove (not used)
-  // Returns true if the specified url matches the source pattern
-  umatch: function (srcPattern, url) {
-    if (srcPattern.indexOf('?') === -1) // srcPattern does not have any query params...
-      return HB.n(srcPattern, true) == HB.n(url, true).split('?')[0]; // ...so ignore them in the url
-    // Otherwise URLs must match exactly
-    return HB.n(srcPattern, true) == HB.n(url, true);
-  },
-
   // TODO ???
   getVisitorAttributes: function () {
     // Ignore first and last view timestamps and email and social conversions
@@ -892,7 +883,7 @@ var HB = {
 
   // TODO remove this. Already have this function in base.dom
   // Calls the specificied callback once the DOM is ready.
-  domReady: function (callback) {
+  /*domReady: function (callback) {
     // To save on script size we do the simplest possible thing which
     // is to loop until the body exists
     if (document.body)
@@ -905,7 +896,7 @@ var HB = {
         }
       }, 50);
     }
-  },
+  },*/
 
   // TODO -> base.templating
   // A global variable to store templates
@@ -2280,25 +2271,12 @@ var HB = {
     return siteElement;
   },
 
-  // TODO remove it (not used)
-  sample: function (items) {
-    return items[Math.floor(Math.random() * items.length)];
-  },
-
   // TODO this is called during initialization
   // Sets the disableTracking cookie to true or false based on hb_ignore=
   setTracking: function (queryString) {
     if (queryString.match(/hb_ignore/i)) {
       var bool = !!queryString.match(/hb_ignore=true/i);
       HB.sc('disableTracking', bool, 5 * 365);
-    }
-  },
-
-  // TODO remove it (not used)
-  setCustomConditionValue: function (segmentKey, value) {
-    HB.setVisitorData(segmentKey, value);
-    if (HB.siteElementsOnPage.length === 0) {
-      HB.showSiteElements();
     }
   },
 
