@@ -9,24 +9,33 @@ jobs:
 
     docker:
       - image: hellobarcom/base:2.1.9
+        environment:
+          DISPLAY: :99
+
       - image: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
+
     working_directory: /tmp/hellobar_new
     steps:
       - checkout
 
       - restore_cache:
           keys:
-            - dependency-cache-{{ checksum "Gemfile.lock" }}
-            - dependency-cache-{{ checksum "editor/bower.json" }}
-            - dependency-cache-{{ checksum "editor/yarn.lock" }}
+            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/bower.json" }}
+            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
+            - dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
+            - dependency-cache-phantomjs-v2.1.1
+
+      - run: env
+
       - run:
           name: Install Ruby Dependencies
           command: bundle install --path vendor/bundle
 
       - save_cache:
-          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -38,19 +47,21 @@ jobs:
 
       - run:
           name: Install npm dependencies
-          command: cd editor && yarn install
+          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
       - save_cache:
-          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
+          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
           paths:
             - editor/node_modules
+            - editor/.yarn
+            - /root/.cache/yarn
 
       - run:
           name: Install bower dependencies
           command: cd editor && bower install --allow-root
 
       - save_cache:
-          key: dependency-cache-{{ checksum "editor/bower.json" }}
+          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/bower.json" }}
           paths:
             - editor/bower_components
 
@@ -58,9 +69,14 @@ jobs:
           name: Install editor
           command: cd editor && ember build --environment=production
 
+      - save_cache:
+          key: dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
+          paths:
+            - editor/dist/assets
+
       - run:
           name: Setup DB
-          command: RAILS_ENV=test bundle exec rake db:create db:schema:load --trace
+          command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
 
       - run:
           name: Run Brakeman
@@ -71,13 +87,18 @@ jobs:
           command: bundle exec rubocop
 
       - run:
-          name: Run teaspoon
-          command: SUITE=default bundle exec rake teaspoon --trace
-
-      - run:
           name: Run unit tests
           command: bundle exec rspec --tag ~@type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
 
       - run:
+          name: Run teaspoon
+          command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
+
+      - run:
           name: Run feature tests
-          command: bundle exec rspec -b --tag @type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+          command: xvfb-run -a bundle exec rspec -b --tag @type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+
+      - save_cache:
+          key: dependency-cache-phantomjs-v2.1.1
+          paths:
+            - /root/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
