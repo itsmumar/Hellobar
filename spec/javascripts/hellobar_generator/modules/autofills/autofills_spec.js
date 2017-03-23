@@ -43,10 +43,10 @@ describe('Module autofills', function () {
   });
 
   it('runs successfully', function () {
-    document.body.innerHTML = '<div><input id="test-input"></div>';
+    document.body.insertAdjacentHTML('beforeend', '<div id="test-container"><input id="test-input"></div>');
     module.run();
     expect(document.getElementById('test-input').value).toEqual(storedValue);
-    document.body.innerHTML = '';
+    document.getElementById('test-container').remove();
   });
 
 });
