@@ -72,7 +72,7 @@ jobs:
 
       - run:
           name: Run teaspoon
-          command: SUITE=default bundle exec rake teaspoon
+          command: SUITE=default bundle exec rake teaspoon --trace
 
       - run:
           name: Run unit tests
