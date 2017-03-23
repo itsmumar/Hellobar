@@ -15,14 +15,14 @@ describe('Module tracking.external', function () {
       type: 'view',
       category: 'HelloBar',
       action: 'View',
-      label: 'Bar viewing from HelloBar'
+      label: 'SiteElement-2'
     }, {
       site_element_id: 2,
       provider: 'google_analytics',
       type: 'traffic_conversion',
       category: 'HelloBar',
       action: 'Converted',
-      label: 'Email conversion from HelloBar'
+      label: 'SiteElement-2'
     }];
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
     module = hellobar('tracking.external', {
