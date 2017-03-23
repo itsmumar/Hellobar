@@ -52,10 +52,10 @@
         }
       });
 
-      !isPreviewMode() && hasCapability('external_tracking') && hellobar('analytics.ga', {
+      !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
         configurator: function(configuration) {
-          var analyticsEvents = {{{external_tracking_json}}};
-          configuration.analyticsEvents(analyticsEvents);
+          var externalTrackings = {{{external_tracking_json}}};
+          configuration.externalTrackings(externalTrackings);
         }
       });
 

@@ -1,1 +1,2 @@
-//= require ./analytics.ga
+//= require ./tracking.external
+//= require ./tracking.external.googleAnalytics
