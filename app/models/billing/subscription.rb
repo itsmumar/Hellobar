@@ -187,7 +187,7 @@ class Subscription < ActiveRecord::Base
       false
     end
 
-    def external_events?
+    def external_tracking?
       false
     end
 
@@ -402,7 +402,7 @@ class Subscription < ActiveRecord::Base
         true
       end
 
-      def external_events?
+      def external_tracking?
         true
       end
     end

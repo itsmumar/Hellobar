@@ -379,8 +379,8 @@ describe SiteElement do
     end
   end
 
-  describe '#external_events' do
-    let(:capabilities) { double 'Capabilities', external_events?: false }
+  describe '#external_tracking' do
+    let(:capabilities) { double 'Capabilities', external_tracking?: false }
     let(:site) { create :site }
     let(:id) { 777 }
     let(:site_element) { SiteElement.new id: id }
@@ -390,22 +390,22 @@ describe SiteElement do
       allow(site_element).to receive(:site).and_return site
     end
 
-    context 'when site does not have `external_events` capabilities' do
+    context 'when site does not have `external_tracking` capabilities' do
       it 'is an empty array' do
-        expect(site_element.external_events).to eq []
+        expect(site_element.external_tracking).to eq []
       end
     end
 
-    context 'when site has `external_events` capabilities' do
+    context 'when site has `external_tracking` capabilities' do
       it 'is an array of Google Analytics external events' do
-        allow(capabilities).to receive(:external_events?).and_return true
+        allow(capabilities).to receive(:external_tracking?).and_return true
 
-        external_events = site_element.external_events
+        external_tracking = site_element.external_tracking
 
-        expect(external_events).to be_an Array
-        expect(external_events.count).to be > 1
+        expect(external_tracking).to be_an Array
+        expect(external_tracking.count).to be > 1
 
-        event = external_events.first
+        event = external_tracking.first
 
         expect(event).to be_a Hash
         expect(event[:provider]).to eq 'google_analytics'

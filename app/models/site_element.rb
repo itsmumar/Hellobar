@@ -269,20 +269,20 @@ class SiteElement < ActiveRecord::Base
 
   # Hardcoded array of external events for Google Analytics
   # In the future we will consider providing a customizable UI for this
-  def external_events
-    return [] unless site && site.capabilities.external_events?
+  def external_tracking
+    return [] unless site && site.capabilities.external_tracking?
 
     provider = 'google_analytics'
     category = 'Hello Bar'
     label = "SiteElement-#{ id }"
 
-    default_event = Hash[site_element_id: id, provider: provider, category: category, label: label]
+    default = Hash[site_element_id: id, provider: provider, category: category, label: label]
 
     [
-      default_event.merge(type: 'view', action: 'View'),
-      default_event.merge(type: 'email_conversion', action: 'Conversion'),
-      default_event.merge(type: 'social_conversion', action: 'Conversion'),
-      default_event.merge(type: 'traffic_conversion', action: 'Conversion')
+      default.merge(type: 'view', action: 'View'),
+      default.merge(type: 'email_conversion', action: 'Conversion'),
+      default.merge(type: 'social_conversion', action: 'Conversion'),
+      default.merge(type: 'traffic_conversion', action: 'Conversion')
     ]
   end
 
