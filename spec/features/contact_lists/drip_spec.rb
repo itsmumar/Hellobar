@@ -5,6 +5,12 @@ feature 'Drip Integration', js: true do
   let(:provider) { 'drip' }
 
   before do
+    OmniAuth.config.mock_auth[:drip] = OmniAuth::AuthHash.new(
+      provider: 'drip',
+      extra: { account_id: '8056783' },
+      credentials: { token: '....' }
+    )
+
     @fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
     @user = login
