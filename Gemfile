@@ -109,7 +109,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'byebug'
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
