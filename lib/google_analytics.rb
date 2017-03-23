@@ -57,6 +57,6 @@ class GoogleAnalytics
     end_date = 'today'
     metrics = 'ga:pageviews'
 
-    analytics.ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
+    analytics.get_ga_data(ids, start_date, end_date, metrics).rows.try(:first).try(:first).to_i
   end
 end
