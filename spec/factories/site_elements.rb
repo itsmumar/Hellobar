@@ -27,6 +27,12 @@ FactoryGirl.define do
       ]
     end
 
+    trait :geolocation do
+      headline '<p>
+        Country: <span data-hb-geolocation="country"></span>,
+        City: <span data-hb-geolocation="city"></span></p>'
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil
