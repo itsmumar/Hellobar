@@ -59,12 +59,8 @@ jobs:
           command: cd editor && ember build --environment=production
 
       - run:
-          name: Create DB
-          command: bundle exec rake db:create db:schema:load --trace
-
-      - run:
-          name: DB Migrations
-          command: bundle exec rake db:migrate RAILS_ENV=test
+          name: Setup DB
+          command: RAILS_ENV=test bundle exec rake db:create db:schema:load --trace
 
       - run:
           name: Run Brakeman
