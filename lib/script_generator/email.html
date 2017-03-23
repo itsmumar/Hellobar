@@ -2,7 +2,7 @@
   <div id="hb-fields-form">
     {{ siteElement.settings.fields_to_collect ? siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return HB.createInputFieldHtml(field, siteElement); }).join('') : '' }}
 
-    <{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta js-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
+    <{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
             onclick="if(window.parent.HB.isPreviewMode) {
                        return false;
                      } else {

@@ -1,4 +1,4 @@
-<{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta js-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
+<{{ HB.CAP.preview ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
    href="tel:{{siteElement.phone_number}}"
    onclick="if(window.parent.HB.isPreviewMode) { return false } else { window.parent.HB.trackClick(this, {{siteElement.me}}); return {{HB.t(siteElement.open_in_new_window) ? 'true' : 'false'}} };"
    style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
