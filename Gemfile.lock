@@ -135,6 +135,8 @@ GEM
     capybara-webkit (1.12.0)
       capybara (>= 2.3.0, < 2.13.0)
       json
+    capybara_discoball (0.0.2)
+      capybara (~> 2.7)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     childprocess (0.5.9)
@@ -671,6 +673,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.2)
   capybara
   capybara-webkit
+  capybara_discoball
   coffee-rails (~> 4.0.0)
   constantcontact (~> 1.1.2)
   countries (= 0.9.3)

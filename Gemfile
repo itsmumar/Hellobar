@@ -100,7 +100,6 @@ group :development do
   gem 'brakeman', require: false
   gem 'hound-tools', '~> 0.0.4', require: false
   gem 'rubocop', require: false
-  gem 'sinatra'
 
   # Deployment
   gem 'capistrano',                '~> 3.6.1'
@@ -123,15 +122,23 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.99'
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem 'simplecov', '~> 0.7.1'
+  gem 'sinatra'
+  gem 'teaspoon-jasmine'
+
+  # Spring preloader
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'teaspoon-jasmine'
 end
 
 group :test do
-  gem 'database_cleaner', '~> 1.3'
+  # Fake ip-api.com server for specs (Geolocation)
+  gem 'capybara_discoball'
+
+  # Spec formatters
   gem 'fivemat'
   gem 'rspec_junit_formatter'
+
+  gem 'database_cleaner', '~> 1.3'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'vcr'
