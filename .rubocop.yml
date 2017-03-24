@@ -160,7 +160,7 @@ Metrics/AbcSize:
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 516 # ideally 25
+  Max: 1000 # ideally 25
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
