@@ -134,7 +134,6 @@ group :test do
   gem 'capybara_discoball'
 
   # Spec formatters
-  gem 'fivemat'
   gem 'rspec_junit_formatter'
 
   gem 'database_cleaner', '~> 1.3'
