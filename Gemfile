@@ -118,7 +118,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
-  gem 'rspec-rails', '~> 2.99'
+  gem 'rspec-rails', '~> 3.4.2'
   gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
   gem 'simplecov', '~> 0.7.1'
   gem 'sinatra'

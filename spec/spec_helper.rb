@@ -2,7 +2,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'simplecov'
 require 'metric_fu/metrics/rcov/simplecov_formatter'
 require 'database_cleaner'
@@ -107,9 +106,6 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
-  # Allow tagging js specs using just symbols
-  config.treat_symbols_as_metadata_keys_with_true_values = true
-
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
@@ -136,12 +132,12 @@ RSpec.configure do |config|
 end
 
 def stub_current_admin(admin)
-  controller.stub current_admin: admin
+  allow(controller).to receive(:current_admin).and_return(admin)
 end
 
 def stub_current_user(user)
-  request.env['warden'].stub authenticate!: user
-  controller.stub current_user: user
+  allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+  allow(controller).to receive(:current_user).and_return(user)
 
   user
 end
