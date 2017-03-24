@@ -169,8 +169,8 @@ def stub_out_ab_variations(*variations)
     .and_return(yield)
 end
 
-Hellobar::Settings[:host] = 'http://hellobar.com'
-Hellobar::Settings[:store_site_scripts_locally] = false
+Hellobar::Settings[:host] = 'localhost'
+Hellobar::Settings[:store_site_scripts_locally] = true
 Hellobar::Settings[:fake_data_api] = false
 Hellobar::Settings[:cybersource_environment] = :test
 Hellobar::Settings[:syncable] = true
