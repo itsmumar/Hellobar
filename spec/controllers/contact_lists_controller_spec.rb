@@ -12,7 +12,7 @@ describe ContactListsController, type: :controller do
     allow_any_instance_of(Identity).to receive(:extra)
       .and_return('metadata' => { 'api_endpoint' => 'test' })
 
-    stub_out_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_out_ab_variations('Exit Intent Pop-up Based on Bar Goals 2016-06-08') { 'original' }
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([])
   end
