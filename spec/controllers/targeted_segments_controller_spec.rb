@@ -19,7 +19,7 @@ describe TargetedSegmentsController do
     end
 
     it 'redirects to the editor to create a new element for the new rule' do
-      Rule.stub(create_from_segment: mock_rule)
+      allow(Rule).to receive(:create_from_segment).and_return(mock_rule)
 
       post :create, site_id: site, targeted_segment: { token: token, segment: segment }
 

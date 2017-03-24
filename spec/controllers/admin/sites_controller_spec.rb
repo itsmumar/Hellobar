@@ -24,7 +24,7 @@ describe Admin::SitesController do
   describe 'POST #regenerate' do
     context 'when the site exists' do
       before do
-        Hello::DataAPI.stub(lifetime_totals: nil)
+        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
 
         allow(User).to receive(:find).and_return(user)
         allow(Site).to receive(:where).and_return([site])

@@ -23,10 +23,10 @@ describe SiteElement do
     describe '#site_is_capable_of_creating_element' do
       it 'does not allow an unpersisted element to be created when site is at its limit' do
         capability = double 'capability', at_site_element_limit?: true
-        site.stub capabilities: capability
+        allow(site).to receive(:capabilities).and_return(capability)
 
         element = SiteElement.new
-        element.stub site: site
+        allow(element).to receive(:site).and_return(site)
         element.valid?
 
         expect(element.errors[:site]).to eq(['is currently at its limit to create site elements'])
@@ -34,8 +34,8 @@ describe SiteElement do
 
       it 'allows a persisted element to be updated when site is at its limit' do
         capability = double('capability', at_site_element_limit?: true)
-        site.stub(capabilities: capability)
-        element.stub site: site
+        allow(site).to receive(:capabilities).and_return(capability)
+        allow(element).to receive(:site).and_return(site)
         expect(element).to be_valid
       end
     end

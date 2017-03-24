@@ -40,7 +40,7 @@ describe Referral do
   end
 
   it 'has a formatted expiration date string' do
-    referral.stub(created_at: Time.zone.local(2016, 1, 15))
+    allow(referral).to receive(:created_at).and_return(Time.zone.local(2016, 1, 15))
     expect(referral.expiration_date_string).to eq('January 20th')
   end
 

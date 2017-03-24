@@ -26,7 +26,7 @@ describe ContactListsController, type: :controller do
 
     before do
       allow(Hello::DataAPI).to receive(:contact_list_totals) { data_api_response }.at_least(1).times
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
     end
 
     it 'returns success' do
@@ -51,8 +51,8 @@ describe ContactListsController, type: :controller do
 
   describe 'GET #show' do
     before do
-      Hello::DataAPI.stub(lifetime_totals: nil)
-      Hello::DataAPI.stub(contact_list_totals: { '1' => 20 })
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
+      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return('1' => 20)
     end
 
     it 'gets contacts from the api at least once' do

@@ -5,7 +5,7 @@ describe WelcomeController, '#index' do
     site = create(:site, :with_user)
     user = site.owners.first
 
-    controller.stub current_user: user
+    stub_current_user(user)
 
     get :index
 

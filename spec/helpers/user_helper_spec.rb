@@ -20,7 +20,7 @@ describe UserHelper do
     it 'should display the correct text for referrerd users on free trial' do
       bill.update_attribute(:amount, 0)
       bill.subscription.payment_method = nil
-      bill.subscription.user.stub was_referred?: true
+      allow(bill.subscription.user).to receive(:was_referred?).and_return(true)
       user = bill.subscription.user
       expect(helper.context_for_trial(user, bill)).to eq('via referral')
     end

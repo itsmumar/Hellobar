@@ -29,7 +29,7 @@ describe 'service providers' do
 
   describe ServiceProviders::ConstantContact do
     before do
-      ConstantContact::Api.stub_chain(:new) { double(:client) }
+      allow(ConstantContact::Api).to receive(:new).and_return(double(:client))
     end
 
     describe '#name' do

@@ -134,8 +134,8 @@ describe User do
     let(:site_element_w_more_views) { create(:site_element, rule: site.rules.first) }
 
     before do
-      site_element.stub(total_views: 5)
-      site_element_w_more_views.stub(total_views: 10)
+      allow(site_element).to receive(:total_views).and_return(5)
+      allow(site_element_w_more_views).to receive(:total_views).and_return(10)
     end
 
     it 'returns the site element that has the most views' do
