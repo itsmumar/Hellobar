@@ -16,7 +16,6 @@ describe Admin::SitesController do
   context 'PUT update site invoice_information' do
     it 'with the correct data' do
       put :update, id: site.id, user_id: site.owners.first.id, site: { invoice_information: '12345 Main St' }
-      pending('revisiting this later')
       expect(site.reload.invoice_information).to eq '12345 Main St'
     end
   end
