@@ -32,6 +32,8 @@ Setup the `settings.yml` file:
 
 `cp config/settings.yml.example config/settings.yml`
 
+(ask another developer to send you the settings.yml file with appropriate keys set)
+
 
 Let rake setup and migrate your database:
 

@@ -1,7 +1,8 @@
 RSpec.configure do |config|
   # Save a screenshot after JS spec failure
   config.after(:each, js: true) do
-    if RSpec.current_example.exception
+    example = RSpec.current_example
+    if example.exception
       meta = example.metadata
       description = example.description.gsub(/[ (),]/, '_')
       timestamp = Time.current.strftime('%Y%m%d-%H%M%S')

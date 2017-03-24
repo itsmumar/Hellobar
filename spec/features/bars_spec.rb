@@ -6,6 +6,8 @@ feature 'Adding and editing bars', :js do
   given(:user) { create :user, email: email }
 
   before do
+    allow_any_instance_of(SiteSerializer)
+      .to receive(:monthly_pageviews).and_return(nil)
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
     allow_any_instance_of(ApplicationController)

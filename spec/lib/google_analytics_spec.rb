@@ -62,6 +62,8 @@ describe GoogleAnalytics, '#find_account_by_url' do
 end
 
 describe GoogleAnalytics, '#latest_pageviews' do
+  let(:analytics) { Google::Apis::AnalyticsV3::AnalyticsService.new }
+
   it 'returns nil if we could not find the corresponding site' do
     service = GoogleAnalytics.new
     allow(service).to receive(:find_account_by_url) { nil }
@@ -72,7 +74,7 @@ describe GoogleAnalytics, '#latest_pageviews' do
   it 'returns the pageviews for the past 30 days for the specified site' do
     service = GoogleAnalytics.new
     rows = double('rows', rows: [['9001']])
-    analytics = double('analytics', ga_data: rows)
+    allow(analytics).to receive(:get_ga_data).and_return(rows)
     profile = double('profile', id: 1)
     property = double('web property', website_url: 'http://www.site.com', profiles: [profile])
     account = double('account', web_properties: [property])
@@ -85,7 +87,7 @@ describe GoogleAnalytics, '#latest_pageviews' do
   it 'does not raise an error if the web property has a nil website_url' do
     service = GoogleAnalytics.new
     rows = double('rows', rows: [['9001']])
-    analytics = double('analytics', ga_data: rows)
+    allow(analytics).to receive(:get_ga_data).and_return(rows)
     profile = double('profile', id: 1)
     property_without_url = double('web property', website_url: nil, profiles: [profile])
     property = double('web property', website_url: 'http://www.site.com', profiles: [profile])
@@ -99,7 +101,7 @@ describe GoogleAnalytics, '#latest_pageviews' do
   it 'does not raise an error if google analytics returns nil rows' do
     service = GoogleAnalytics.new
     rows = double('rows', rows: nil)
-    analytics = double('analytics', ga_data: rows)
+    allow(analytics).to receive(:get_ga_data).and_return(rows)
     profile = double('profile', id: 1)
     property_without_url = double('web property', website_url: nil, profiles: [profile])
     property = double('web property', website_url: 'http://www.site.com', profiles: [profile])
