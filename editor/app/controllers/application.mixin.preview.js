@@ -109,7 +109,8 @@ export default Ember.Mixin.create({
         wiggle_wait: 0,
         font: font.value,
         google_font: font.google_font,
-        theme: currentTheme
+        theme: currentTheme,
+        branding_url: 'http://www.hellobar.com?sid=preview'
       }
     );
 
