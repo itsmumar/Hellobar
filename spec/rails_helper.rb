@@ -7,9 +7,9 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'paperclip/matchers'
 
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each &method(:require)
-Dir[Rails.root.join('spec', 'models', 'concerns', '**', '*.rb')].each { |f| require f }
-Dir[Rails.root.join('spec', 'models', 'validators', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec', 'models', 'concerns', '**', '*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec', 'models', 'validators', '**', '*.rb')].each(&method(:require))
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -68,4 +68,3 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ControllerSpecHelper, type: :controller
 end
-

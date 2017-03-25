@@ -15,17 +15,17 @@ module StubsHelper
 
     allow_any_instance_of(ApplicationController)
       .to receive(:ab_variation)
-            .with(variation_matcher)
-            .and_return(yield)
+      .with(variation_matcher)
+      .and_return(yield)
 
     allow_any_instance_of(ApplicationController)
       .to receive(:ab_variation)
-            .with(variation_matcher, anything)
-            .and_return(yield)
+      .with(variation_matcher, anything)
+      .and_return(yield)
 
     allow_any_instance_of(ApplicationController)
       .to receive(:ab_variation_or_nil)
-            .with(variation_matcher)
-            .and_return(yield)
+      .with(variation_matcher)
+      .and_return(yield)
   end
 end
