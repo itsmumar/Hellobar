@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::MadMimiApi do
   describe '.initialize' do
     it 'raises an error if no identity is provided' do

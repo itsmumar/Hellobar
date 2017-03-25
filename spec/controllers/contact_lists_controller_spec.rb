@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactListsController, type: :controller do
   let(:site) { create :site, :with_user }
   let(:contact_list) { create(:contact_list, :mailchimp, site: site) }

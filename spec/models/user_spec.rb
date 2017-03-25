@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe User do
   before do
     allow(Infusionsoft).to receive(:contact_add_with_dup_check)

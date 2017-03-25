@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElementsHelper do
   describe 'site_element_subtypes_for_site' do
     let(:site) { create(:site) }

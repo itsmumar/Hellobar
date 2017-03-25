@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteMembership do
   describe 'validations' do
     let(:site_membership)           { create(:site_membership) }

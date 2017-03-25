@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin::PaymentMethodDetailsController do
   let!(:admin) { create(:admin) }
   let!(:user) { create(:user, :with_payment_method) }

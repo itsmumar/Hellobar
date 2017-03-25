@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe GoogleAnalytics, '#find_account_by_url' do
   it 'returns the account that contains the current site url' do
     service = GoogleAnalytics.new

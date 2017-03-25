@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Hello::EmailDigest do
   let(:site) { create(:site, :with_user, elements: [:email]) }
 

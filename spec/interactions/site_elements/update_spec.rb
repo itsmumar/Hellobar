@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElements::Update do
   let!(:element) { create(:site_element, :email) }
   let(:valid_params) do

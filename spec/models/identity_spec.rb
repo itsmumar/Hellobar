@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Identity do
   let(:site) { create(:site, :with_user) }
   let(:identity) { create(:identity, :mailchimp, site: site) }

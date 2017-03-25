@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe UserStateCloner, '#save' do
   let(:json) { Rails.root.join('spec', 'fixtures', 'user_state.json').read }
 

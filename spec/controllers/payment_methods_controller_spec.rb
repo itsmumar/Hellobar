@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe PaymentMethodsController, '#index' do
   let!(:site) { create(:site, :with_user, :free_subscription) }
   let!(:user) { site.users.first }

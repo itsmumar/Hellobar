@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin::SitesController do
   let!(:admin) { create(:admin) }
   let(:site) { create(:site, :with_user) }

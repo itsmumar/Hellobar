@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 UNAUTHORIZED = '401'.freeze
 
 describe RulesController do

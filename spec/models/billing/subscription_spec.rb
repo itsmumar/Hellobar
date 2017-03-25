@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)

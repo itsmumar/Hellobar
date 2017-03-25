@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::ActiveCampaign do
   let(:identity) do
     Identity.new(

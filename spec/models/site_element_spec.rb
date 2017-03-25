@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElement do
   it_behaves_like 'a model triggering script regeneration'
 

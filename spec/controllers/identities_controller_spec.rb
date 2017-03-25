@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe IdentitiesController do
   before do
     request.env['HTTP_ACCEPT'] = 'application/json'

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::MailChimp do
   let(:identity) { Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {}) }
   let(:service_provider) { identity.service_provider }

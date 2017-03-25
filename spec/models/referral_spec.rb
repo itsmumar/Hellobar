@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referral do
   let(:user) { create(:user) }
   let(:referral) { user.sent_referrals.build }

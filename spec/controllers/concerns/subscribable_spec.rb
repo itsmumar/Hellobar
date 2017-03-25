@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Subscribable', '#subscription_bill_and_status' do
   controller do
     include Subscribable

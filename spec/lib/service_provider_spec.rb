@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'service providers' do
   let(:identity) { double(:identity, credentials: {}).as_null_object }
   subject(:service_provider) { described_class.new(identity: identity) }

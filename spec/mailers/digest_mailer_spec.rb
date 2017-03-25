@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe DigestMailer do
   describe 'weekly_digest' do
     let(:site) { create(:site, :with_user, elements: [:email]) }

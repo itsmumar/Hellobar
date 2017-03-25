@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SitesController do
   let(:user) { create(:user) }
   let(:site) { create(:site) }

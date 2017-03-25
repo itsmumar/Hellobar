@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::AWeber do
   let(:identity) do
     Identity.new(

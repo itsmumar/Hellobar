@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe TargetedSegmentsController do
   let(:site) { create(:site, :with_user) }
   let(:user) { site.owners.first }

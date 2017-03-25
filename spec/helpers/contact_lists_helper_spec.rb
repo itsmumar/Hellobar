@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactListsHelper, type: :helper do
   let(:site) { create(:site) }
   let(:contact_list) { create(:contact_list, :mailchimp, site: site) }

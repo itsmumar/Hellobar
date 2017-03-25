@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referrals::Create do
   let(:user) { create(:user) }
   let(:hellobar_host) { Hellobar::Settings[:host] }

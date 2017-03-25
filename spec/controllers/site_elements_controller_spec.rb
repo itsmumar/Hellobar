@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElementsController do
   let(:settings) do
     {

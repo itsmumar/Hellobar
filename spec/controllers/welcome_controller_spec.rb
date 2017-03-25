@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe WelcomeController, '#index' do
   it 'redirects a logged in user to their dashboard' do
     site = create(:site, :with_user)

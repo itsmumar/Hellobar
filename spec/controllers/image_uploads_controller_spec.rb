@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ImageUploadsController do
   before do
     @user = create(:user)

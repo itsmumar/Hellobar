@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 shared_examples 'an object with a valid url' do
   class WebClass
     include ActiveModel::Validations

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactList do
   let(:site) { create(:site) }
   let(:provider) { 'email' }
