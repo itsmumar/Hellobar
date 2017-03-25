@@ -1,5 +1,13 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
+
+require 'simplecov'
+SimpleCov.coverage_dir 'tmp/coverage'
+SimpleCov.start do
+  # we test seeds in a different way - just by running them
+  add_filter '/lib/seeds/'
+end
+
 require File.expand_path('../../config/environment', __FILE__)
 
 abort('The Rails environment is running in production mode!') if Rails.env.production?
