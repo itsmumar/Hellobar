@@ -1,7 +1,9 @@
 # INTEGRATION
-require 'spec_helper'
+require 'rails_helper'
 require 'webmock/rspec'
 require 'support/ab_test_config'
+
+SimpleCov.command_name 'test:features'
 
 RSpec.configure do |config|
   config.include SiteGeneratorHelper
