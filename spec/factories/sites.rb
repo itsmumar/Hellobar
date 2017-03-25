@@ -4,7 +4,7 @@ FactoryGirl.define do
       elements []
     end
 
-    url { random_uniq_url }
+    url { generate(:random_uniq_url) }
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?

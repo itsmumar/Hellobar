@@ -154,7 +154,7 @@ describe User do
 
     it 'returns false if the user logging in for the first time and does have bars' do
       user = create(:user)
-      site = user.sites.create(url: random_uniq_url)
+      site = user.sites.create(url: generate(:random_uniq_url))
       rule = site.rules.create(name: 'test rule', match: 'all')
       create(:site_element, rule: rule)
       # normaly devise would set it

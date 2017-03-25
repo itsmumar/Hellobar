@@ -1,6 +1,4 @@
-require 'spec_helper'
-
-describe UserHelper do
+RSpec.describe UserHelper do
   describe '#context_for_trial(user, bill)' do
     let(:bill) { create(:pro_bill, :paid) }
 

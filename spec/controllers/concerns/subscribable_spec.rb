@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Subscribable, '#subscription_bill_and_status' do
+describe 'Subscribable', '#subscription_bill_and_status' do
   controller do
     include Subscribable
   end
@@ -40,7 +40,7 @@ describe Subscribable, '#subscription_bill_and_status' do
   end
 end
 
-describe Subscribable, '#build_subscription_instance' do
+describe 'Subscribable', '#build_subscription_instance' do
   controller do
     include Subscribable
   end
@@ -76,7 +76,7 @@ describe Subscribable, '#build_subscription_instance' do
   end
 end
 
-describe Subscribable, '#update_subscription' do
+describe 'Subscribable', '#update_subscription' do
   controller do
     include Subscribable
   end

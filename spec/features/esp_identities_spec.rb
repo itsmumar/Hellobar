@@ -5,7 +5,7 @@ feature 'App handles oauth error', js: true do
 
   scenario 'and redirects to contact list ' do
     OmniAuth.config.mock_auth[:mailchimp] = :invalid_credentials
-    site = @user.sites.create(url: random_uniq_url)
+    site = @user.sites.create(url: generate(:random_uniq_url))
 
     visit new_site_identity_path(site, provider: 'mailchimp')
 

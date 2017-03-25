@@ -26,7 +26,7 @@ shared_context 'service provider request setup' do
 end
 
 def open_provider_form(user, pname)
-  site = user.sites.create(url: random_uniq_url)
+  site = user.sites.create(url: generate(:random_uniq_url))
   contact_list = create(:contact_list, site: site)
 
   visit site_contact_list_path(site, contact_list)
