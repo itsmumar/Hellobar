@@ -252,27 +252,6 @@ var HB = {
     HB.saveCookies();
   },
 
-  // TODO -> visitorData (or call it visitor?) Visitor should be bars agnostic?
-  // Returns the visitor's unique ID which should be a random value
-  i: function () {
-    var uuid;
-    // Check if we have a cookie
-    if (uuid = HB.gc('hbuid'))
-      return uuid; // If so return that
-    // Otherwise generate a new value
-    var d = new Date().getTime();
-    uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
-    });
-    // Set it in the cookie
-    HB.sc('hbuid', uuid, 5 * 365);
-
-    // Return it
-    return uuid;
-  },
-
   // TODO remove this. Already have this function in base.dom
   // Calls the specificied callback once the DOM is ready.
   /*domReady: function (callback) {

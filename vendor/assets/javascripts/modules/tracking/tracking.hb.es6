@@ -19,8 +19,8 @@ hellobar.defineModule('tracking.internal', [], function () {
     var now = Math.round(new Date().getTime() / 1000)
 
     params['t'] = now; // Timestamp
-    params['v'] = HB.i(); // visitor UUID
-    params['f'] = 'i' // Make sure we return an image
+    params['v'] = i(); // visitor UUID
+    params['f'] = 'i'; // Make sure we return an image
 
     // Sign the URL
     params['s'] = HB.signature(HB_WK, url, params);
@@ -123,6 +123,27 @@ hellobar.defineModule('tracking.internal', [], function () {
 
     return HBCrypto.HmacSHA512(path + '?' + sortedParamPairs.join('|'), key).toString();
 
+  }
+
+  // TODO rename it to more meaningful name
+  // Returns the visitor's unique ID which should be a random value
+  function i() {
+    var uuid;
+    // Check if we have a cookie
+    if (uuid = HB.gc('hbuid'))
+      return uuid; // If so return that
+    // Otherwise generate a new value
+    var d = new Date().getTime();
+    uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+    });
+    // Set it in the cookie
+    HB.sc('hbuid', uuid, 5 * 365);
+
+    // Return it
+    return uuid;
   }
 
   const module = {
