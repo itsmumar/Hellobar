@@ -1,4 +1,4 @@
-hellobar.defineModule('base.format', [], function() {
+hellobar.defineModule('base.format', [], function () {
 
   function stripTrailingSlash(urlPart) {
     return urlPart.replace(/(.+)\/$/i, '$1');
@@ -53,6 +53,27 @@ hellobar.defineModule('base.format', [], function() {
     return stripTrailingSlash(urlParts[0] + '/') + '?' + sortedParams;
   }
 
+  // TODO rename to asBool, publish
+  // TODO -> format
+  // Returns whether or not a setting is true (treats 'false' and string '0' as the boolean false)
+  function t(value) {
+    return (value && value != 'false' && value != '0') ? true : false;
+  }
+
+  // TODO -> base.format
+  isExternalURL: function (url) {
+    function currentURL() {
+      return window.location.href;
+    }
+
+    var regex = /^https?:\/\/([^\/]+)/i;
+    return regex.exec(currentURL())[1] !== regex.exec(url)[1];
+  }
+
+  // TODO -> base.format
+  function stringLiteral(s) {
+    return s ? '\'' + s.replace(/\'/g, ' ') + '\'' : 'null';
+  }
 
   return {
     normalizeUrl
