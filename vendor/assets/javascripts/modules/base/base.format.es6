@@ -61,7 +61,7 @@ hellobar.defineModule('base.format', [], function () {
   }
 
   // TODO -> base.format
-  isExternalURL: function (url) {
+  function isExternalURL(url) {
     function currentURL() {
       return window.location.href;
     }

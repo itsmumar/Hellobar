@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.intents', [], function () {
+hellobar.defineModule('elements.conversion', ['base.visitor'], function (visitor) {
 
   // TODO -> some tracking module ??? (elements.conversion??)
 // Called when a conversion happens (e.g. link clicked, email form filled out)
@@ -7,12 +7,7 @@ hellobar.defineModule('elements.intents', [], function () {
     var now = Math.round(new Date().getTime() / 1000);
     var conversionCount = (HB.getVisitorData(conversionKey) || 0 ) + 1;
 
-    // Set the number of conversions for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey, conversionCount);
-    // Record first time converted, unless already set for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey + '_f', now);
-    // Record last time converted for the visitor for this type of conversion
-    HB.setVisitorData(conversionKey + '_l', now);
+    visitor.setConverted(conversionKey);
 
     HB.setVisibilityControlCookie('success', siteElement);
 

@@ -74,6 +74,8 @@ hellobar.defineModule('base.environment', [], function () {
       return 'computer';
   }
 
-  return {};
+  return {
+    device
+  };
 
 });
