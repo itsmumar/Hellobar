@@ -51,9 +51,10 @@ hellobar.defineModule('elements.conversion', ['base.visitor'], function (visitor
     // Ignore first and last view timestamps and email and social conversions
     var ignoredAttributes = 'fv lv ec sc dt';
     // Ignore first and last converted timestamps and number of traffic conversions
-    var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/
+    var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
     var attributes = {};
     // Remove ignored attributes
+    // TODO eliminate cookies, get this from base.visitor module
     for (var k in HB.cookies.visitor) {
       var value = HB.cookies.visitor[k];
       if ((typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') && ignoredAttributes.indexOf(k) === -1 && !k.match(ignoredAttributePattern)) {

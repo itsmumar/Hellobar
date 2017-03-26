@@ -1,7 +1,9 @@
 hellobar.defineModule('base.visitor',
-  ['base.format', 'base.timezone', 'base.environment'],
-  function (format, timezone, environment) {
+  ['base.format', 'base.timezone', 'base.environment', 'base.storage', 'base.serialization', 'base.site'],
+  function (format, timezone, environment, storage, serialization, site) {
 
+    // Visitor data cache
+    let visitor = {};
 
     // TODO -> ??? (this is called during script initialization)
     // This just sets the default segments/tracking data for the visitor
@@ -156,7 +158,7 @@ hellobar.defineModule('base.visitor',
       return string.length >= length ? string : zeropad('0' + string, length);
     }
 
-    // TODO -> visitorData or tracking.hb
+    // TODO -> base.visitor
     // Gets the visitor attribute specified by the key or returns null
     function getVisitorData(key) {
       if (!key) {
@@ -166,25 +168,30 @@ hellobar.defineModule('base.visitor',
       if (key.indexOf('gl_') !== -1) {
         return hellobar('geolocation').getGeolocationData(key, function (data, isCached) {
           if (isCached === false) {
+            // TODO ??? move this to another place
             HB.loadCookies();
             HB.showSiteElements();
           }
         });
       }
       else {
-        return HB.cookies.visitor[key];
+        return visitor[key];
       }
     }
 
-    // TODO get rid of this public setter - is this possible? There many usages of this function
-    // TODO ideally we need a separate module visitorData
-    // Sets the visitor attribute specified by the key to the value in the HB.cookies hash
-    // Also updates the cookies via HB.saveCookies
     function setVisitorData(key, value, skipEmptyValue) {
       if (skipEmptyValue && !value) // This allows us to only conditionally set values
         return;
-      HB.cookies.visitor[key] = value;
-      HB.saveCookies();
+      visitor[key] = value;
+      saveVisitorData();
+    }
+
+    function saveVisitorData() {
+      storage.setValue('hbv_' + site.siteId(), serialization.serialize(visitor), 365 * 5);
+    }
+
+    function loadVisitorData() {
+      visitor = serialization.deserialize(storage.getValue('hbv_' + site.siteId()));
     }
 
     function setConverted(conversionKey) {
@@ -201,6 +208,7 @@ hellobar.defineModule('base.visitor',
 
     return {
       initialize() {
+        loadVisitorData();
         setDefaultSegments();
       },
       setConverted,
