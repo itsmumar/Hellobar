@@ -3,7 +3,8 @@
 hellobar.defineModule('tracking.internal', [], function () {
 
   // TODO -> tracking.hb
-// Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
+  // TODO rename it to 'send'
+  // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
   function s(path, itemID, params, callback) {
     // If we are not tracking or this or no site ID then just issue the
     // callback without sending any data
