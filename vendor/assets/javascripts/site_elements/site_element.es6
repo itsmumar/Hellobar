@@ -13,8 +13,9 @@ HB.SiteElement = HB.createClass({
     if (this.animated)
       HB.addClass(iframe, "hb-animated");
 
-    if (this.theme.id)
+    if (this.theme && this.theme.id) {
       HB.addClass(iframe, this.theme.id);
+    }
 
     // Any view_condition including string 'intent' will run the intent event listeners
     if (this.view_condition.indexOf('intent') !== -1) {
@@ -165,7 +166,7 @@ HB.SiteElement = HB.createClass({
     d.close();
     d.body.className = this.type;
 
-    if (this.theme.id) {
+    if (this.theme && this.theme.id) {
       HB.addClass(d.body, this.theme.id);
     }
 

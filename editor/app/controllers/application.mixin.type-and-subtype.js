@@ -30,7 +30,8 @@ export default Ember.Mixin.create({
     const currentTheme = this.get('currentTheme');
     const previousElementType = this.get('previousElementType');
     if (elementType && previousElementType && elementType !== previousElementType) {
-      if (currentTheme.type === 'template') {
+      if (currentTheme && (currentTheme.type === 'template')) {
+        // TODO set to null?
         this.set('model.theme_id', this.get('theming').defaultGenericTheme().id);
       }
     }

@@ -10,8 +10,8 @@ export default Ember.Component.extend({
   classNames: ['theme-tile-grid'],
   classNameBindings: ['elementTypeCssClass'],
 
+  bus: Ember.inject.service(),
   theming: Ember.inject.service(),
-
 
   elementType: function() {
     return this.get('options.elementType');
@@ -31,17 +31,22 @@ export default Ember.Component.extend({
 
   templateThemes: function () {
     const elementType = this.get('elementType');
-    // TODO drop support for outdated element_type property
-    return _.filter(this.get('allThemes'),
-      (theme) => theme.type === 'template'
-      && (theme.element_type === elementType
-      || _.includes(theme.element_type, elementType)
-      || _.includes(theme.element_types, elementType)));
+    return _.filter(this.get('allThemes'), (theme) => theme.type === 'template' && _.includes(theme.element_types, elementType));
   }.property('allThemes', 'elementType'),
 
   hasAnyTemplateThemes: function() {
     const templateThemes = this.get('templateThemes');
     return templateThemes && templateThemes.length > 0;
-  }.property('templateThemes')
+  }.property('templateThemes'),
+
+  actions: {
+    autodetectColors() {
+      this.get('bus').trigger('hellobar.core.bar.themeChanged', {
+        themeId: null,
+        elementType: this.get('elementType')
+      });
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    }
+  }
 
 });

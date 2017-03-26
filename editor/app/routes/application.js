@@ -69,21 +69,7 @@ export default Ember.Route.extend({
       new ContactListModal($.extend(baseOptions, options)).open();
     }
   },
-
-  //-----------  Controller Setup  -----------#
-
-  setupController(controller, model) {
-    this.controller.set('originalTheme', {
-      "theme_id": model.theme_id,
-      "button_color": model.button_color,
-      "background_color": model.background_color,
-      "text_color": model.text_color,
-      "link_color": model.link_color
-    });
-
-    return this._super(controller, model);
-  },
-
+  
   //-----------  Actions  -----------#
 
   // Actions bubble up the routers from most specific to least specific.
