@@ -72,6 +72,15 @@ RSpec.configure do |config|
     end
   end
 
+  config.before(:suite) do
+    begin
+      DatabaseCleaner.start
+      FactoryGirl.lint
+    ensure
+      DatabaseCleaner.clean
+    end
+  end
+
   config.include Devise::TestHelpers, type: :controller
   config.include EmbedCodeFileHelper
   config.include StubsHelper

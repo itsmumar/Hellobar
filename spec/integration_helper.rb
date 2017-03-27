@@ -1,5 +1,4 @@
 # INTEGRATION
-require 'rails_helper'
 require 'webmock/rspec'
 require 'support/ab_test_config'
 
@@ -18,8 +17,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     begin
       DatabaseCleaner.start
-      FactoryGirl.lint
-
       Rake.application.rake_require 'tasks/onboarding_campaigns'
       Rake::Task.define_task(:environment)
     ensure
