@@ -44,16 +44,18 @@ jobs:
           command: |
             cp config/settings.yml.example config/settings.yml
             cp .circleci/database.yml config/database.yml
-
       - run:
           name: Install npm dependencies
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
+
+      - run: ls -l ~/.config/yarn editor/.yarn
 
       - save_cache:
           key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
           paths:
             - editor/node_modules
             - editor/.yarn
+            - ~/.config/yarn
             - /root/.cache/yarn
 
       - run:
