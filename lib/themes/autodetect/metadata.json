@@ -1,0 +1,6 @@
+{
+  "name": "Autodetect",
+  "type": "generic",
+  "id": "autodetect",
+  "element_types": ["Bar", "Modal", "Slider", "Takeover"]
+}
