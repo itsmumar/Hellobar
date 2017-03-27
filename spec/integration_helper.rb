@@ -3,9 +3,7 @@ require 'rails_helper'
 require 'webmock/rspec'
 require 'support/ab_test_config'
 
-if ENV['COVERAGE'] || ENV['CI']
-  SimpleCov.command_name 'test:features'
-end
+SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 
 RSpec.configure do |config|
   config.include SiteGeneratorHelper
