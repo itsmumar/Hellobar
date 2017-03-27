@@ -10,11 +10,6 @@ export default Ember.Mixin.create({
   focusedColor: null,
 
   setSiteColors: function () {
-
-    if (this.get('model.id') || window.elementToCopyID) {
-      return;
-    }
-
     const colorPalette = this.get('colorPalette');
     const dominantColor = this.get('dominantColor');
 
@@ -58,7 +53,7 @@ export default Ember.Mixin.create({
         'model.link_color': white
       });
     }
-  }.observes('colorPalette'),
+  },
 
   detectColorPalette() {
     function formatRGB(rgbArray) {

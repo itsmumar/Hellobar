@@ -26,7 +26,7 @@ export default Ember.Component.extend({
   }.property(),
 
   genericThemes: function () {
-    return _.filter(this.get('allThemes'), (theme) => theme.type === 'generic');
+    return _.filter(this.get('allThemes'), (theme) => theme.type === 'generic' && theme.id !== 'autodetect');
   }.property('allThemes'),
 
   templateThemes: function () {
@@ -42,7 +42,7 @@ export default Ember.Component.extend({
   actions: {
     autodetectColors() {
       this.get('bus').trigger('hellobar.core.bar.themeChanged', {
-        themeId: null,
+        themeId: 'autodetect',
         elementType: this.get('elementType')
       });
       this.get('bus').trigger('hellobar.core.rightPane.hide');

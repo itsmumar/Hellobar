@@ -14,7 +14,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
-    :animated, :wiggle_button, :theme,
+    :animated, :wiggle_button, :theme, :theme_id,
 
     # image
     :image_url, :image_placement, :active_image_id, :image_file_name, :use_default_image,
@@ -65,6 +65,10 @@ class SiteElementSerializer < ActiveModel::Serializer
 
   def theme
     ThemeSerializer.new(object.theme, scope: scope)
+  end
+
+  def theme_id
+    object.theme.try(:id)
   end
 
   def site_preview_image
