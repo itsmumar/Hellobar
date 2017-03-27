@@ -146,6 +146,17 @@ class ScriptGenerator < Mustache
     site.autofills.to_json
   end
 
+  def external_tracking_json
+    events =
+      site.site_elements.active.each_with_object([]) do |site_element, memo|
+        site_element.external_tracking.each do |event|
+          memo << event
+        end
+      end
+
+    events.to_json
+  end
+
   def modules_js
     render_asset('modules.js')
   end

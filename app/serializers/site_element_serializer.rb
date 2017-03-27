@@ -14,7 +14,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
-    :animated, :wiggle_button, :theme,
+    :animated, :wiggle_button, :theme, :theme_id,
 
     # image
     :image_url, :image_placement, :active_image_id, :image_file_name, :use_default_image,
@@ -23,7 +23,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
 
-    # custom
+    # custom html
     :custom_html, :custom_css, :custom_js,
 
     # other
@@ -65,6 +65,10 @@ class SiteElementSerializer < ActiveModel::Serializer
 
   def theme
     ThemeSerializer.new(object.theme, scope: scope)
+  end
+
+  def theme_id
+    object.theme.try(:id)
   end
 
   def site_preview_image
