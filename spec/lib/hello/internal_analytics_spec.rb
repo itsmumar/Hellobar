@@ -1,4 +1,14 @@
 class ModuleTestingClass
+  def cookies
+    @cookies ||= ActionDispatch::Cookies::CookieJar.new('key_generator')
+  end
+
+  def current_user
+  end
+
+  def request
+    @request ||= ActionDispatch::Request.new({})
+  end
 end
 
 describe Hello::InternalAnalytics do
@@ -65,6 +75,7 @@ describe Hello::InternalAnalytics do
 
       it 'raises an error if cookies, current_user, or user are not present' do
         allow(object).to receive(:current_user) { nil }
+        allow(object.cookies).to receive(:present?).and_return(false)
 
         expect { object.ab_variation('Example Test') }.to raise_error('Cookies or user must be present for A/B test')
       end
@@ -83,6 +94,7 @@ describe Hello::InternalAnalytics do
       end
 
       it 'returns current visitor ID if there is no user and no cookies' do
+        allow(object).to receive(:user_id_from_cookie).and_return(0)
         expect(object.ab_variation_index_without_setting('Example Test')).to eq([0, :new])
       end
     end
