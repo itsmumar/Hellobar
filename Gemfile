@@ -137,7 +137,8 @@ group :test do
   gem 'fivemat'
   gem 'rspec_junit_formatter'
 
-  gem 'database_cleaner', '~> 1.3'
+  gem 'database_cleaner', '~> 1.5'
+  gem 'rspec-retry'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'vcr'
