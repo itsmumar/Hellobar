@@ -2,11 +2,6 @@ describe ContactListsHelper, type: :helper do
   let(:site) { create(:site) }
   let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
 
-  before do
-    allow_any_instance_of(Identity).to receive(:credentials).and_return('token' => 'test')
-    allow_any_instance_of(Identity).to receive(:extra).and_return('metadata' => { 'api_endpoint' => 'test' })
-  end
-
   context 'MailChimp' do
     it 'has valid results' do
       expect(helper.contact_list_provider_name(contact_list)).to eq 'MailChimp'

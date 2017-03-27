@@ -2,7 +2,7 @@ describe ContactList do
   let(:site) { create(:site) }
   let(:provider) { 'email' }
   let(:identity) { Identity.new(site: site, provider: provider) }
-  let(:contact_list) { create(:contact_list).tap { |c| c.identity = identity } }
+  let(:contact_list) { create(:contact_list, identity: identity) }
   let(:service_provider) { contact_list.service_provider }
 
   before do
@@ -11,7 +11,7 @@ describe ContactList do
       allow(ServiceProviders::Email).to receive(:settings).and_return(oauth: false)
       allow(contact_list).to receive(:syncable?).and_return(true)
       expect(service_provider).to be_a(ServiceProviders::Email)
-      allow(service_provider).to receive(:batch_subscribe).and_return(nil)
+      # allow(service_provider).to receive(:batch_subscribe).and_return(nil)
     end
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([
@@ -96,6 +96,9 @@ describe ContactList do
       contact_list.save!
       allow(contact_list).to receive(:syncable?).and_return(true)
     end
+
+    let(:identity) { Identity.new(site: site, provider: provider, api_key: 'api-key') }
+    let(:provider) { 'convert_kit' }
 
     context 'oauth provider' do
       let(:provider) { 'mailchimp' }
@@ -278,6 +281,8 @@ describe ContactList do
   end
 
   describe '#subscriber_statuses' do
+    let(:provider) { 'mail_chimp' }
+
     it 'returns empty hash if service provider does not retreive statuses' do
       allow(service_provider).to receive(:respond_to?).with(:subscriber_statuses).and_return false
       expect(contact_list.subscriber_statuses([{ email: 'test' }])).to eq({})

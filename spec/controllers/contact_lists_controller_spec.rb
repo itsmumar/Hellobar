@@ -5,11 +5,6 @@ describe ContactListsController, type: :controller do
 
   before do
     stub_current_user(site.owners.first)
-
-    allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
-    allow_any_instance_of(Identity).to receive(:extra)
-      .and_return('metadata' => { 'api_endpoint' => 'test' })
-
     stub_out_ab_variations('Exit Intent Pop-up Based on Bar Goals 2016-06-08') { 'original' }
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([])
