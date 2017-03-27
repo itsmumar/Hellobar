@@ -133,7 +133,7 @@ group :test do
   # Spec formatters
   gem 'rspec_junit_formatter'
 
-  gem 'database_cleaner', '~> 1.3'
+  gem 'database_cleaner', '~> 1.5'
   gem 'shoulda-matchers'
   gem 'timecop'
   gem 'vcr'
