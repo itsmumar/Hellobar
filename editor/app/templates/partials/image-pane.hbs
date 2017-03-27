@@ -19,18 +19,6 @@
       }}
     </div>
 
-    {{#if showImagePlacementField}}
-      <label>Image placement</label>
-      <div class="select-wrapper">
-        {{#power-select options=imagePlacementOptions
-          selected=selectedImagePlacementOption
-          renderInPlace=true
-          searchEnabled=false
-          onchange=(action "selectImagePlacement") as |option|}}
-          {{option.label}}
-        {{/power-select}}
-      </div>
-    {{/if}}
   {{/unless}}
 {{else}}
   <label>Site Bars do not support images.
