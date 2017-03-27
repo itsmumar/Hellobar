@@ -114,7 +114,7 @@ namespace :deploy do
   end
 
   # TODO: Move node and bower dependencies to some shared folder
-  before 'assets:precompile', 'node:npm_install'
+  before 'assets:precompile', 'node:yarn_install'
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
@@ -188,15 +188,47 @@ namespace :deploy do
 end
 
 namespace :prerequisites do
-  desc 'Install necessary ubuntu packages'
+  desc 'Install necessary global ubuntu/yarn packages'
   task :install do
     on roles(:web) do
       execute 'sudo apt-get -y install imagemagick'
 
       execute 'curl -sL https://deb.nodesource.com/setup | sudo bash -'
       execute 'sudo apt-get install -y nodejs'
-      execute 'sudo npm install -g bower'
-      execute 'sudo npm install -g ember-cli'
+      execute 'sudo yarn global add bower'
+      execute 'sudo yarn global add ember-cli'
+    end
+  end
+end
+
+namespace :ember do
+  desc 'Build Ember application'
+  task :build do
+    on roles(:web) do
+      execute "cd #{ fetch(:ember_app_path) } && ember build --environment=production >/dev/null"
+    end
+  end
+
+  desc 'Move non digested specific fonts to public'
+  task :move_non_digest_fonts do
+    on roles(:web) do
+      execute "cd #{ fetch(:release_path) } && cp app/assets/fonts/* public/assets/"
+    end
+  end
+end
+
+namespace :node do
+  desc 'Install node modules'
+  task :yarn_install do
+    on roles(:web) do
+      execute "cd #{ fetch(:ember_app_path) } && yarn install --frozen-lockfile"
+    end
+  end
+
+  desc 'Install bower components'
+  task :bower_install do
+    on roles(:web) do
+      execute "cd #{ fetch(:ember_app_path) } && bower install >/dev/null"
     end
   end
 end

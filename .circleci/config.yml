@@ -21,20 +21,16 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys:
-            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
 
       - restore_cache:
-          keys:
-            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/bower.json" }}
+          key: dependency-cache-{{ checksum "editor/bower.json" }}
 
       - restore_cache:
-          keys:
-            - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
+          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
 
       - restore_cache:
-          keys:
-            - dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
+          key: dependency-cache-editor-{{ .Revision }}
 
       - restore_cache:
           keys:
@@ -44,51 +40,51 @@ jobs:
       - run: env
 
       - run:
-          name: Install Ruby Dependencies
+          name: Bundle install
           command: bundle install --path vendor/bundle
 
       - save_cache:
-          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
       - run:
-          name: Make configs
+          name: Copy configs
           command: |
             cp config/settings.yml.example config/settings.yml
             cp .circleci/database.yml config/database.yml
 
       - run:
-          name: Install npm dependencies
+          name: Yarn install
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
       - save_cache:
-          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
+          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
           paths:
             - editor/node_modules
             - editor/.yarn
             - ~/.config/yarn
 
       - run:
-          name: Install bower dependencies
+          name: Bower install
           command: cd editor && bower install --allow-root
 
       - save_cache:
-          key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/bower.json" }}
+          key: dependency-cache-{{ checksum "editor/bower.json" }}
           paths:
             - editor/bower_components
 
       - run:
-          name: Install editor
+          name: Build Ember application (editor)
           command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
 
       - save_cache:
-          key: dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
+          key: dependency-cache-editor-{{ .Revision }}
           paths:
             - editor/dist/assets
 
       - run:
-          name: Setup DB
+          name: Setup database
           command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
 
       - run:
@@ -104,7 +100,7 @@ jobs:
           command: bundle exec rspec --tag ~@type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
 
       - run:
-          name: Run teaspoon
+          name: Run teaspoon tests
           command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
 
       - run:

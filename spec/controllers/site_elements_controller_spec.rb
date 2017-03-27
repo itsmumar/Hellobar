@@ -163,11 +163,10 @@ describe SiteElementsController do
         expect_json_response_to_include(show_branding: true)
       end
 
-      it 'sets the theme id to the default theme id' do
+      it 'sets the theme id to nil' do
         get :new, site_id: subscription.site.id, format: :json
 
-        default_theme = Theme.where(default_theme: true).first
-        expect_json_response_to_include(theme_id: default_theme.id)
+        expect_json_response_to_include(theme: nil)
       end
 
       it "doesn't push an unsaved element into the site.site_elements association" do
