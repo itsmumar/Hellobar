@@ -60,8 +60,6 @@ jobs:
           name: Install npm dependencies
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
-      - run: ls -l ~/.config/yarn editor/.yarn
-
       - save_cache:
           key: dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
           paths:
