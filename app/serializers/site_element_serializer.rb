@@ -68,7 +68,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def theme_id
-    object.theme.id
+    object.theme.try(:id)
   end
 
   def site_preview_image

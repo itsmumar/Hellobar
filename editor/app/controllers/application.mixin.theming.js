@@ -17,7 +17,7 @@ export default Ember.Mixin.create({
   applyCurrentTheme() {
     const allThemes = this.get('theming').availableThemes();
     const currentThemeId = this.get('model.theme_id');
-    if (currentThemeId && currentThemeId !== 'authodetect') {
+    if (currentThemeId && currentThemeId !== 'autodetect') {
       const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
       const currentElementType = this.get('model.type');
       if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
