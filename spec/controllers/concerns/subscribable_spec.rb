@@ -1,16 +1,14 @@
-require 'spec_helper'
-
-describe Subscribable, '#subscription_bill_and_status' do
+describe 'Subscribable', '#subscription_bill_and_status' do
   controller do
     include Subscribable
   end
 
   it 'returns the bill, updated site, and successful status when successful' do
     bill = double 'bill'
-    controller.stub update_subscription: [true, bill]
+    allow(controller).to receive(:update_subscription).and_return([true, bill])
     site = create(:site)
     serializer = double 'SiteSerializer'
-    SiteSerializer.stub new: serializer
+    allow(SiteSerializer).to receive(:new).and_return(serializer)
 
     expect(controller.subscription_bill_and_status(site, 'payment_method', 'billing_params', nil))
       .to eq(bill: bill, site: serializer, is_upgrade: true, status: :ok)
@@ -19,7 +17,7 @@ describe Subscribable, '#subscription_bill_and_status' do
   it 'returns errors and an unprocessable_entity status when NOT successful' do
     bill = Bill.new
     bill.errors.add(:status, 'oops')
-    controller.stub update_subscription: [false, bill]
+    allow(controller).to receive(:update_subscription).and_return([false, bill])
 
     expect(controller.subscription_bill_and_status('site', 'payment_method', 'billing_params', nil))
       .to eq(errors: bill.errors.full_messages, status: :unprocessable_entity)
@@ -27,10 +25,10 @@ describe Subscribable, '#subscription_bill_and_status' do
 
   it 'tracks changes to subscription' do
     bill = double 'bill'
-    controller.stub update_subscription: [true, bill]
+    allow(controller).to receive(:update_subscription).and_return([true, bill])
     site = create(:site)
     serializer = double 'SiteSerializer'
-    SiteSerializer.stub new: serializer
+    allow(SiteSerializer).to receive(:new).and_return(serializer)
 
     allow(controller).to receive(:track_upgrade)
     expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, anything)
@@ -40,7 +38,7 @@ describe Subscribable, '#subscription_bill_and_status' do
   end
 end
 
-describe Subscribable, '#build_subscription_instance' do
+describe 'Subscribable', '#build_subscription_instance' do
   controller do
     include Subscribable
   end
@@ -76,7 +74,7 @@ describe Subscribable, '#build_subscription_instance' do
   end
 end
 
-describe Subscribable, '#update_subscription' do
+describe 'Subscribable', '#update_subscription' do
   controller do
     include Subscribable
   end

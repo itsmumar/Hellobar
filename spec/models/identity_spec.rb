@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Identity do
   let(:site) { create(:site, :with_user) }
   let(:identity) { create(:identity, :mailchimp, site: site) }
@@ -20,7 +18,7 @@ describe Identity do
     end
 
     it 'uses the provider name to get the API client class' do
-      Gibbon::Request.stubs(new: double('gibbon'))
+      allow(Gibbon::Request).to receive(:new).and_return(double('gibbon'))
 
       identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
       expect(identity.service_provider).to be_an_instance_of ServiceProviders::MailChimp
@@ -31,7 +29,7 @@ describe Identity do
 
     describe 'service provider' do
       it 'should call destroy_and_notify_user when it encounters an error' do
-        Gibbon::Request.stubs(new: double('gibbon'))
+        allow(Gibbon::Request).to receive(:new).and_return(double('gibbon'))
 
         identity = Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {})
         expect(ServiceProviders::MailChimp).to receive(:new).and_raise(Gibbon::MailChimpError)

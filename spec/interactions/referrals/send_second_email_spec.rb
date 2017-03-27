@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referrals::SendSecondEmail do
   let(:user) { create(:user) }
   let(:email) { 'user@hellobar.com' }

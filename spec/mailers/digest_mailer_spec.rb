@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe DigestMailer do
   describe 'weekly_digest' do
     let(:site) { create(:site, :with_user, elements: [:email]) }
@@ -9,7 +7,7 @@ describe DigestMailer do
     it 'should work correctly when there are no site elements' do
       site.site_elements.each(&:destroy)
       site.reload
-      Hello::DataAPI.stub(lifetime_totals: {})
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
       expect { mail.body }.to_not raise_error
     end
 

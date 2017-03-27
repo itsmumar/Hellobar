@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Hello::DataAPI do
   def for_comparison(results)
     {}.tap do |r|

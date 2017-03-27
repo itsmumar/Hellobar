@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe PaymentMethod do
   it 'should soft-delete' do
     p = PaymentMethod.create

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::Maropost do
   it 'raises an error if no identity is provided' do
     expect { ServiceProviders::Maropost.new }.to raise_error('Must provide an identity')

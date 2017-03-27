@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe UserOnboardingCampaign do
   describe 'UserOnboardingCampaign.deliver_all_onboarding_campaign_email!' do
     before do

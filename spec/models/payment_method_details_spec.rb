@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe PaymentMethodDetails do
   it 'should be read-only' do
     d = PaymentMethodDetails.create

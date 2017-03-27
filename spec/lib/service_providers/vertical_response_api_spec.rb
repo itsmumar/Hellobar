@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::VerticalResponseApi do
   let(:identity) { Identity.new(provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {}) }
   let(:service_provider) { identity.service_provider }

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElementsController do
   let(:settings) do
     {
@@ -69,7 +67,7 @@ describe SiteElementsController do
 
     it 'serializes a site_element to json' do
       stub_current_user(user)
-      Site.any_instance.stub(script_installed?: true)
+      allow_any_instance_of(Site).to receive(:script_installed?).and_return(true)
 
       get :show, site_id: element.site, id: element, format: :json
 
@@ -90,7 +88,7 @@ describe SiteElementsController do
     end
 
     it 'sets the correct error if a rule is not provided' do
-      Site.any_instance.stub(generate_script: true)
+      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
 
       post :create, site_id: site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
 
@@ -122,7 +120,8 @@ describe SiteElementsController do
     end
 
     it 'sets the success flash message on create' do
-      SiteElement.any_instance.stub(valid?: true, save!: true)
+      allow_any_instance_of(SiteElement).to receive(:valid?).and_return(true)
+      allow_any_instance_of(SiteElement).to receive(:save!).and_return(true)
 
       expect {
         post :create, site_id: site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }

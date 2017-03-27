@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::EmbedCodeProvider do
   let(:contact_list) { create(:contact_list, :embed_code) }
 

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referrals::RedeemForSender do
   let(:past_due_site) { create(:site, :past_due_site) }
 

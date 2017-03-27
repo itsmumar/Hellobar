@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteSerializer do
   let(:site) { build_stubbed :site }
   let(:user) { build_stubbed :user }

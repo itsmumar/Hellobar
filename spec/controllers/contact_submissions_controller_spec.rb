@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactSubmissionsController do
   describe 'GET :new' do
     render_views

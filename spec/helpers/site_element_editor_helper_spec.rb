@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElementEditorHelper do
   describe 'render_interstitial?' do
     before do

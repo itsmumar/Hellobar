@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ReferralToken do
   it 'should be generated for a new user' do
     user = create(:user)

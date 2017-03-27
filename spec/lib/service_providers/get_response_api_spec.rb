@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::GetResponseApi do
   it 'raises an error if no identity is provided' do
     expect { ServiceProviders::GetResponseApi.new }

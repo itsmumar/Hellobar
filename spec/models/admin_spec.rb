@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin do
   let!(:admin) { create :admin, session_last_active: Time.current }
 

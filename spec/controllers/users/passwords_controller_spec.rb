@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Users::PasswordsController do
   before(:each) do
     request.env['devise.mapping'] = Devise.mappings[:user]

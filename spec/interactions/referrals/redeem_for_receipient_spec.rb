@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referrals::RedeemForRecipient do
   let(:ownership) { create(:site_membership) }
   let(:site) { ownership.site }

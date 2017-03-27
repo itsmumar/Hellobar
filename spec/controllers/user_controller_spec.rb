@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe UserController do
   describe 'PUT update' do
     context 'user is active' do

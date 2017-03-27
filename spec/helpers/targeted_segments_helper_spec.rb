@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe TargetedSegmentsHelper do
   let(:site) { create(:site, :with_rule) }
 

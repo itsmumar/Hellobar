@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Font do
   describe '#guess' do
     it 'guesses correctly with the first value' do

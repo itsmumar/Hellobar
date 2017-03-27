@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Hello::DataAPI::Performance do
   describe '#views' do
     it 'should return total views' do

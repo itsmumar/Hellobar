@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactLists::Destroy do
   def destroy(action:)
     action = ContactLists::SITE_ELEMENTS_ACTIONS[action] if action.is_a?(Symbol)

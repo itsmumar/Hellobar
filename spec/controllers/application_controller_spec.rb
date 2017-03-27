@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ApplicationController do
   describe 'current_site' do
     let!(:current_user) { create :user, :with_site }
@@ -41,8 +39,7 @@ describe ApplicationController do
 
   describe 'record_tracking_param' do
     it 'records the tracking param' do
-      controller.stub(params: { trk: 'asdf' })
-
+      allow(controller).to receive(:params).and_return(trk: 'asdf')
       expect(Hello::TrackingParam).to receive(:track).with('asdf')
 
       controller.record_tracking_param
@@ -68,9 +65,9 @@ describe ApplicationController, '#require_admin' do
   end
 
   it 'redirects the user to the reset password path if they need to set a new password' do
-    admin.stub needs_to_set_new_password?: true
-    controller.stub current_admin: admin
-    controller.stub url_for: 'http://google.com'
+    allow(admin).to receive(:needs_to_set_new_password?).and_return(true)
+    allow(controller).to receive(:current_admin).and_return(admin)
+    allow(controller).to receive(:url_for).and_return('http://google.com')
 
     get :index
 
@@ -78,9 +75,9 @@ describe ApplicationController, '#require_admin' do
   end
 
   it 'does not redirect if the user needs to reset their password and is currently on the page' do
-    admin.stub needs_to_set_new_password?: true
-    controller.stub current_admin: admin
-    controller.stub url_for: admin_reset_password_path
+    allow(admin).to receive(:needs_to_set_new_password?).and_return(true)
+    allow(controller).to receive(:current_admin).and_return(admin)
+    allow(controller).to receive(:url_for).and_return(admin_reset_password_path)
 
     get :index
 
@@ -100,7 +97,7 @@ describe ApplicationController, '#require_no_user' do
   let(:user) { create :user, :with_site }
 
   it 'redirects a logged in user to the dashboard of their most recent site' do
-    controller.stub current_user: user
+    allow(controller).to receive(:current_user).and_return(user)
     dashboard_path = site_path(user.sites.first)
 
     get :index

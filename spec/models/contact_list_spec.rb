@@ -1,19 +1,17 @@
-require 'spec_helper'
-
 describe ContactList do
   let(:site) { create(:site) }
   let(:provider) { 'email' }
   let(:identity) { Identity.new(site: site, provider: provider) }
-  let(:contact_list) { create(:contact_list).tap { |c| c.identity = identity } }
+  let(:contact_list) { create(:contact_list, identity: identity) }
   let(:service_provider) { contact_list.service_provider }
 
   before do
     if identity.provider == 'email'
       allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::Email)
       allow(ServiceProviders::Email).to receive(:settings).and_return(oauth: false)
-      contact_list.stub(syncable?: true)
+      allow(contact_list).to receive(:syncable?).and_return(true)
       expect(service_provider).to be_a(ServiceProviders::Email)
-      allow(service_provider).to receive(:batch_subscribe).and_return(nil)
+      # allow(service_provider).to receive(:batch_subscribe).and_return(nil)
     end
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([
@@ -96,8 +94,11 @@ describe ContactList do
     before do
       allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
       contact_list.save!
-      contact_list.stub(syncable?: true)
+      allow(contact_list).to receive(:syncable?).and_return(true)
     end
+
+    let(:identity) { Identity.new(site: site, provider: provider, api_key: 'api-key') }
+    let(:provider) { 'convert_kit' }
 
     context 'oauth provider' do
       let(:provider) { 'mailchimp' }
@@ -151,14 +152,14 @@ describe ContactList do
     it 'saves the error in a log entry' do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error
+      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error('this error')
       expect(contact_list.contact_list_logs.last.error).to include('this error')
     end
 
     it 'saves the stacktrace in a log entry' do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error
+      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error('this error')
       expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
     end
 
@@ -175,14 +176,14 @@ describe ContactList do
   it 'should handle invalid JSON correctly' do
     contact_list.update_column :data, '{"url":"http://yoursite.com/goal",does_not_include":[",'
 
-    expect { contact_list.reload.data }.to raise_error
+    expect { contact_list.reload.data }.to raise_error(JSON::ParserError)
   end
 
   describe 'email syncing errors' do
     before do
       allow(Hello::DataAPI).to receive(:contacts).and_return([:foo, :bar])
-      contact_list.stub(syncable?: true)
-      contact_list.stub(oauth?: true)
+      allow(contact_list).to receive(:syncable?).and_return(true)
+      allow(contact_list).to receive(:oauth?).and_return(true)
     end
 
     after { contact_list.sync! }
@@ -280,6 +281,16 @@ describe ContactList do
   end
 
   describe '#subscriber_statuses' do
+    let(:provider) { 'mailchimp' }
+    let(:credentials) { { 'token' => 'token' } }
+    let(:extra) { { 'metadata' => { 'api_endpoint' => 'api_endpoint' } } }
+    let(:identity) { Identity.new(site: site, provider: provider, credentials: credentials, extra: extra) }
+    let(:service_provider) { identity.service_provider(contact_list: contact_list) }
+
+    before do
+      allow(contact_list).to receive(:syncable?).and_return(true)
+    end
+
     it 'returns empty hash if service provider does not retreive statuses' do
       allow(service_provider).to receive(:respond_to?).with(:subscriber_statuses).and_return false
       expect(contact_list.subscriber_statuses([{ email: 'test' }])).to eq({})
@@ -297,12 +308,12 @@ describe ContactList do
 
   describe '#num_subscribers' do
     it 'gets number of subscribers from the data API' do
-      Hello::DataAPI.stub(contact_list_totals: { contact_list.id.to_s => 5 })
+      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(contact_list.id.to_s => 5)
       expect(contact_list.num_subscribers).to eq(5)
     end
 
     it 'defaults to 0 if data API returns nil' do
-      Hello::DataAPI.stub(contact_list_totals: nil)
+      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(nil)
       expect(contact_list.num_subscribers).to eq(0)
     end
   end
