@@ -23,9 +23,21 @@ jobs:
       - restore_cache:
           keys:
             - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "Gemfile.lock" }}
+
+      - restore_cache:
+          keys:
             - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/bower.json" }}
+
+      - restore_cache:
+          keys:
             - dependency-cache-{{ checksum ".circleci/config.yml" }}-{{ checksum "editor/yarn.lock" }}
+
+      - restore_cache:
+          keys:
             - dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
+
+      - restore_cache:
+          keys:
             - dependency-cache-phantomjs-v2.1.1
 
       - run: env
@@ -56,7 +68,6 @@ jobs:
             - editor/node_modules
             - editor/.yarn
             - ~/.config/yarn
-            - /root/.cache/yarn
 
       - run:
           name: Install bower dependencies
