@@ -16,11 +16,11 @@ class ServiceProviders::Email < ServiceProvider
     raise NoMethodError, 'must be implemented'
   end
 
-  def subscribe(list_id, email, name = nil, double_optin = true)
+  def subscribe(_list_id, _email, _name = nil, _double_optin = true)
     raise NoMethodError, 'must be implemented'
   end
 
-  def subscriber_statuses(contact_list, emails)
+  def subscriber_statuses(_contact_list, _emails)
     raise NoMethodError, 'must be implemented'
   end
 end
