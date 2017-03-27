@@ -15,6 +15,10 @@ class Hello::WordpressUser < Hello::WordpressModel
     nil
   end
 
+  def self.respond_to?(method, *other)
+    (method =~ /find_by_email/) || super
+  end
+
   def self.authenticate(email, password, skip_password_check = false)
     user = where(['user_email = ? or user_login = ?', email, email]).first
 

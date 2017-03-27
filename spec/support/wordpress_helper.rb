@@ -1,6 +1,7 @@
 RSpec.configure do |config|
   config.before :suite do
-    # stub columns hash so that Hello::WordpressUser.respond_to?(:find_by_email) works
-    Hello::WordpressUser.instance_variable_set :@columns_hash, 'email' => ''
+    # make class abstract so that no db queries are processed
+    # and Hello::WordpressUser.respond_to?(:find_by_email) works
+    Hello::WordpressUser.abstract_class = true
   end
 end
