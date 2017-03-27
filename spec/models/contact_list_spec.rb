@@ -281,7 +281,15 @@ describe ContactList do
   end
 
   describe '#subscriber_statuses' do
-    let(:provider) { 'mail_chimp' }
+    let(:provider) { 'mailchimp' }
+    let(:credentials) { { 'token' => 'token' } }
+    let(:extra) { { 'metadata' => { 'api_endpoint' => 'api_endpoint' } } }
+    let(:identity) { Identity.new(site: site, provider: provider, credentials: credentials, extra: extra) }
+    let(:service_provider) { identity.service_provider(contact_list: contact_list) }
+
+    before do
+      allow(contact_list).to receive(:syncable?).and_return(true)
+    end
 
     it 'returns empty hash if service provider does not retreive statuses' do
       allow(service_provider).to receive(:respond_to?).with(:subscriber_statuses).and_return false
