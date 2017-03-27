@@ -276,7 +276,7 @@ describe SitesController do
 
     it 'redirects to the current sites install page' do
       stub_current_user(user)
-      session[:current_site] = site.id
+      allow(controller).to receive(:current_site).and_return(site)
 
       get :install_redirect
 
