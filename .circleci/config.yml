@@ -111,4 +111,9 @@ jobs:
           key: dependency-cache-tmp-{{ .Branch }}
           paths:
             - /root/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
-            - tmp
+            - /tmp/hellobar_new/tmp/cache
+            - /tmp/hellobar_new/tmp/script
+
+      - store_artifacts:
+          path: /tmp/hellobar_new/tmp/coverage
+          destination: coverage
