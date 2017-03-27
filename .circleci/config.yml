@@ -31,7 +31,7 @@ jobs:
       - run: env
 
       - run:
-          name: Install Ruby Dependencies
+          name: Bundle install
           command: bundle install --path vendor/bundle
 
       - save_cache:
@@ -40,13 +40,13 @@ jobs:
             - vendor/bundle
 
       - run:
-          name: Make configs
+          name: Copy configs
           command: |
             cp config/settings.yml.example config/settings.yml
             cp .circleci/database.yml config/database.yml
 
       - run:
-          name: Install npm dependencies
+          name: Yarn install
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
       - save_cache:
@@ -57,7 +57,7 @@ jobs:
             - /root/.cache/yarn
 
       - run:
-          name: Install bower dependencies
+          name: Bower install
           command: cd editor && bower install --allow-root
 
       - save_cache:
@@ -66,7 +66,7 @@ jobs:
             - editor/bower_components
 
       - run:
-          name: Install editor
+          name: Build Ember application (editor)
           command: cd editor && ember build --environment=production
 
       - save_cache:
@@ -75,7 +75,7 @@ jobs:
             - editor/dist/assets
 
       - run:
-          name: Setup DB
+          name: Setup database
           command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
 
       - run:
@@ -91,7 +91,7 @@ jobs:
           command: bundle exec rspec --tag ~@type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
 
       - run:
-          name: Run teaspoon
+          name: Run teaspoon tests
           command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
 
       - run:
