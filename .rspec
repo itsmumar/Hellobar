@@ -1,1 +1,3 @@
---color --format Fivemat
+--color
+--require rails_helper
+--format d

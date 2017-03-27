@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'service providers' do
   let(:identity) { double(:identity, credentials: {}).as_null_object }
   subject(:service_provider) { described_class.new(identity: identity) }
@@ -29,7 +27,7 @@ describe 'service providers' do
 
   describe ServiceProviders::ConstantContact do
     before do
-      ConstantContact::Api.stub_chain(:new) { double(:client) }
+      allow(ConstantContact::Api).to receive(:new).and_return(double(:client))
     end
 
     describe '#name' do

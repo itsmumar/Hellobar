@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Autofill do
   it { should validate_presence_of :site }
   it { should validate_presence_of :name }

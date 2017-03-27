@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Cleaners::EmbedCode do
   subject { create(:contact_list, :embed_code) }
   let(:embed_code) { 'Here I am' }

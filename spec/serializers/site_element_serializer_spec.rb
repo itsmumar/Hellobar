@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElementSerializer do
   let(:element) { create(:site_element, :traffic) }
 

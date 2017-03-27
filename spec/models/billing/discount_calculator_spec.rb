@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe DiscountCalculator do
   let(:user) { create(:user) }
 

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin::AdminsController do
   let!(:admin) { create(:admin) }
   before(:each) { stub_current_admin(admin) }

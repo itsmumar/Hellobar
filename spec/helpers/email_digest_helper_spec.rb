@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe EmailDigestHelper, type: :helper do
   context 'format_number' do
     it 'should format 1,580 as 1.6k' do

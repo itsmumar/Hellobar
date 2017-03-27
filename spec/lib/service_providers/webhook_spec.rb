@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::Webhook, 'subscribe' do
   let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'post' }) }
   let(:url) { 'http://hellobar.com' }

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)
@@ -333,7 +331,7 @@ describe Subscription do
       it 'returns false when it can still add site elements' do
         max_elements = @site.capabilities.max_site_elements
         elements = ['element'] * max_elements
-        @site.stub site_elements: elements
+        allow(@site).to receive(:site_elements).and_return(elements)
 
         expect(@site.capabilities.at_site_element_limit?).to be_truthy
       end

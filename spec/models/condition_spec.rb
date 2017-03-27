@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Condition, type: :model do
   it_behaves_like 'a model triggering script regeneration'
 

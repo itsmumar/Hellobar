@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ContactListsController, type: :controller do
   let(:site) { create :site, :with_user }
   let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
@@ -7,12 +5,7 @@ describe ContactListsController, type: :controller do
 
   before do
     stub_current_user(site.owners.first)
-
-    allow_any_instance_of(Identity).to receive(:credentials).and_return(token: 'test')
-    allow_any_instance_of(Identity).to receive(:extra)
-      .and_return('metadata' => { 'api_endpoint' => 'test' })
-
-    stub_out_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_out_ab_variations('Exit Intent Pop-up Based on Bar Goals 2016-06-08') { 'original' }
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([])
   end
@@ -26,7 +19,7 @@ describe ContactListsController, type: :controller do
 
     before do
       allow(Hello::DataAPI).to receive(:contact_list_totals) { data_api_response }.at_least(1).times
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
     end
 
     it 'returns success' do
@@ -51,8 +44,8 @@ describe ContactListsController, type: :controller do
 
   describe 'GET #show' do
     before do
-      Hello::DataAPI.stub(lifetime_totals: nil)
-      Hello::DataAPI.stub(contact_list_totals: { '1' => 20 })
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
+      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return('1' => 20)
     end
 
     it 'gets contacts from the api at least once' do

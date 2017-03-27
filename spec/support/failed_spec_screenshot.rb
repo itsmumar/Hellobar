@@ -1,7 +1,6 @@
 RSpec.configure do |config|
   # Save a screenshot after JS spec failure
-  config.after(:each, js: true) do
-    example = RSpec.current_example
+  config.after(:each, js: true) do |example|
     if example.exception
       meta = example.metadata
       description = example.description.gsub(/[ (),]/, '_')

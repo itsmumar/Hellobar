@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe BillingAttempt do
   it 'should be read-only' do
     b = BillingAttempt.create

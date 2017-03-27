@@ -9,7 +9,7 @@ feature 'Connect to api ESP', js: true do
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
 
-    site = @user.sites.create(url: random_uniq_url)
+    site = @user.sites.create(url: generate(:random_uniq_url))
     contact_list = create(:contact_list, site: site)
 
     visit site_contact_list_path(site, contact_list)
@@ -41,7 +41,7 @@ feature 'Connect to api ESP', js: true do
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
 
-    site = @user.sites.create(url: random_uniq_url)
+    site = @user.sites.create(url: generate(:random_uniq_url))
     contact_list = create(:contact_list, site: site)
 
     visit site_contact_list_path(site, contact_list)
@@ -71,7 +71,7 @@ feature 'Connect to api ESP', js: true do
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
 
-    site = @user.sites.create(url: random_uniq_url)
+    site = @user.sites.create(url: generate(:random_uniq_url))
     contact_list = create(:contact_list, site: site)
 
     visit site_contact_list_path(site, contact_list)
@@ -103,7 +103,7 @@ feature 'Connect to api ESP', js: true do
     fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
 
-    site = @user.sites.create(url: random_uniq_url)
+    site = @user.sites.create(url: generate(:random_uniq_url))
     contact_list = create(:contact_list, site: site)
 
     visit site_contact_list_path(site, contact_list)

@@ -112,15 +112,12 @@ group :development, :test do
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
-  gem 'metric_fu'
-  gem 'minitest'
   gem 'phantomjs'
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
-  gem 'rspec-rails', '~> 2.99'
-  gem 'selenium-webdriver', '~> 2.53.4' # Ubuntu firefox compatible version: 47.0.1
-  gem 'simplecov', '~> 0.7.1'
+  gem 'rspec-rails', '~> 3.5'
+  gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
 
@@ -134,10 +131,9 @@ group :test do
   gem 'capybara_discoball'
 
   # Spec formatters
-  gem 'fivemat'
   gem 'rspec_junit_formatter'
 
-  gem 'database_cleaner', '~> 1.5'
+  gem 'database_cleaner'
   gem 'rspec-retry'
   gem 'shoulda-matchers'
   gem 'timecop'

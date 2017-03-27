@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ImageUpload do
   it { should have_attached_file(:image) }
   it do

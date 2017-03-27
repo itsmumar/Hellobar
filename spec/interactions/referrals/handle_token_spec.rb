@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Referrals::HandleToken do
   it 'does nothing if no token is passed in' do
     expect_any_instance_of(Referral).not_to receive(:save)

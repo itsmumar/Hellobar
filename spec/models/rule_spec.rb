@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Rule do
   it_behaves_like 'a model triggering script regeneration'
 
@@ -155,22 +153,28 @@ describe Rule do
     end
 
     it 'returns true if both rules have the same conditions' do
-      rule.stub(conditions: [date_between])
-      other_rule.stub(conditions: [date_between])
+      allow(rule).to receive(:conditions).and_return([date_between])
+      allow(other_rule).to receive(:conditions).and_return([date_between])
 
       expect(rule).to be_same_as(other_rule)
     end
 
     it 'returns true if the rules "match" values are different, but there is only one rule' do
-      rule.stub(match: 'any', conditions: [date_between])
-      other_rule.stub(match: 'all', conditions: [date_between])
+      allow(rule).to receive(:match).and_return('any')
+      allow(rule).to receive(:conditions).and_return([date_between])
+
+      allow(other_rule).to receive(:match).and_return('all')
+      allow(other_rule).to receive(:conditions).and_return([date_between])
 
       expect(rule).to be_same_as(other_rule)
     end
 
     it 'returns false if the rules "match" values are different and there is more than one rule' do
-      rule.stub(match: 'any', conditions: [date_between, date_after])
-      other_rule.stub(match: 'all', conditions: [date_between, date_after])
+      allow(rule).to receive(:match).and_return('any')
+      allow(rule).to receive(:conditions).and_return([date_between, date_after])
+
+      allow(other_rule).to receive(:match).and_return('all')
+      allow(other_rule).to receive(:conditions).and_return([date_between, date_after])
 
       expect(rule).not_to be_same_as(other_rule)
     end

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Site do
   let(:site) { create(:site, :with_user, :with_rule) }
   let(:pro_site) { create(:site, :pro) }
@@ -75,7 +73,7 @@ describe Site do
         bill.update(discount: bill.calculate_discount)
       end
 
-      site = user.sites.create(url: random_uniq_url)
+      site = user.sites.create(url: generate(:random_uniq_url))
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), user.payment_methods.first)
 
       expect(site.bills.paid.first.discount > 0).to be(true)
@@ -221,7 +219,7 @@ describe Site do
     let!(:element) { create(:site_element, site: site) }
 
     it 'generates the contents of the script for a site' do
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content(false)
 
       expect(script).to match(/HB_SITE_ID/)
@@ -229,7 +227,7 @@ describe Site do
     end
 
     it 'generates the compressed contents of the script for a site' do
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content
 
       expect(script).to match(/HB_SITE_ID/)
@@ -279,14 +277,14 @@ describe Site do
     end
 
     it 'generates and uploads the script content for a site' do
-      ScriptGenerator.any_instance.stub(pro_secret: 'asdf')
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script_content = site.script_content(true)
       script_name = site.script_name
 
       mock_storage = double('asset_storage')
       expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
-      Hello::AssetStorage.stub(new: mock_storage)
+      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
 
       site.generate_script
     end
@@ -321,7 +319,7 @@ describe Site do
     it 'blanks-out the site script when destroyed' do
       mock_storage = double('asset_storage')
       expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
-      Hello::AssetStorage.stub(new: mock_storage)
+      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
 
       site.destroy
     end

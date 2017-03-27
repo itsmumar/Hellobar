@@ -1,4 +1,7 @@
-require 'spec_helper'
+module SitesHelper
+  def current_site
+  end
+end
 
 describe SitesHelper do
   let(:user) { create(:user, :with_site) }

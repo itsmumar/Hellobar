@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe IdentitiesController do
   before do
     request.env['HTTP_ACCEPT'] = 'application/json'
@@ -13,7 +11,7 @@ describe IdentitiesController do
 
   describe 'GET :show' do
     it 'should return the identity' do
-      Gibbon::Request.stubs(new: double('gibbon'))
+      allow(Gibbon::Request).to receive(:new).and_return(double('gibbon'))
       allow_any_instance_of(ServiceProviders::MailChimp).to receive(:lists).and_return([])
       get :show, site_id: identity.site.id, id: 'mailchimp'
       json = JSON.parse(response.body)

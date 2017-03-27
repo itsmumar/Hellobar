@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe WordpressPluginController do
   it 'generates the wordpress plugin without errors' do
     site = create(:site, :with_user)

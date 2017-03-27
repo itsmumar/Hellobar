@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SitesController do
   let(:user) { create(:user) }
   let(:site) { create(:site) }
@@ -29,7 +27,7 @@ describe SitesController do
   describe 'POST create' do
     before do
       mock_storage = double('asset_storage', create_or_update_file_with_contents: true)
-      Hello::AssetStorage.stub(new: mock_storage)
+      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
     end
 
     context 'when no user is logged-in' do
@@ -55,7 +53,7 @@ describe SitesController do
 
       it 'creates a new site and sets a temporary user as the owner' do
         temp_user = User.new
-        User.stub(generate_temporary_user: temp_user)
+        allow(User).to receive(:generate_temporary_user).and_return(temp_user)
 
         expect {
           post :create, site: { url: 'temporary-site.com' }
@@ -66,8 +64,8 @@ describe SitesController do
 
       it "creates a new referral if a user's token is given" do
         user = User.new(email: 'temporary@email.com')
-        user.stub(temporary?: true)
-        User.stub(generate_temporary_user: user)
+        allow(user).to receive(:temporary?).and_return(true)
+        allow(User).to receive(:generate_temporary_user).and_return(user)
 
         expect {
           post(
@@ -84,7 +82,7 @@ describe SitesController do
 
       it 'updates an existing referral if its token is given' do
         ref = create(:referral, state: :sent)
-        User.stub(generate_temporary_user: user)
+        allow(User).to receive(:generate_temporary_user).and_return(user)
 
         expect {
           post(
@@ -205,7 +203,7 @@ describe SitesController do
     let(:site) { user.sites.last }
 
     it 'sets current_site session value' do
-      Hello::DataAPI.stub(lifetime_totals: nil)
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       stub_current_user(user)
 
       get :show, id: site
@@ -238,7 +236,7 @@ describe SitesController do
 
     before do
       stub_current_user(user)
-      Hello::DataAPI.stub(lifetime_totals: { total: [[10, 1], [12, 1], [18, 2]] })
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(total: [[10, 1], [12, 1], [18, 2]])
     end
 
     it 'should return the latest lifeteime totals' do
@@ -255,16 +253,6 @@ describe SitesController do
       get :chart_data, id: site_element.site.id, type: :total, days: 10
       json = JSON.parse(response.body)
       expect(json.size).to eq(3)
-    end
-  end
-
-  describe 'GET improve' do
-    let(:site) { create(:site, :with_user) }
-    let(:user) { site.owners.first }
-
-    before do
-      stub_current_user(user)
-      Hello::DataAPI.stub(lifetime_totals: nil)
     end
   end
 
@@ -288,7 +276,7 @@ describe SitesController do
 
     it 'redirects to the current sites install page' do
       stub_current_user(user)
-      session[:current_site] = site.id
+      allow(controller).to receive(:current_site).and_return(site)
 
       get :install_redirect
 

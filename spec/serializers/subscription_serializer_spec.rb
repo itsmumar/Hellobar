@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SubscriptionSerializer do
   let(:user) { create(:user) }
 
