@@ -11,4 +11,16 @@ class ServiceProviders::Email < ServiceProvider
   def valid?
     true
   end
+
+  def batch_subscribe
+    raise NoMethodError, 'must be implemented'
+  end
+
+  def subscribe(list_id, email, name = nil, double_optin = true)
+    raise NoMethodError, 'must be implemented'
+  end
+
+  def subscriber_statuses(contact_list, emails)
+    raise NoMethodError, 'must be implemented'
+  end
 end
