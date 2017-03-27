@@ -117,7 +117,7 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'rspec-rails', '~> 3.5'
-  gem 'simplecov', '~> 0.7.1'
+  gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
 
