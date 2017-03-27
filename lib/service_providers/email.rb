@@ -13,14 +13,14 @@ class ServiceProviders::Email < ServiceProvider
   end
 
   def batch_subscribe
-    raise NoMethodError, 'must be implemented'
+    # to be implemented in a child class
   end
 
   def subscribe(_list_id, _email, _name = nil, _double_optin = true)
-    raise NoMethodError, 'must be implemented'
+    # to be implemented in a child class
   end
 
   def subscriber_statuses(_contact_list, _emails)
-    raise NoMethodError, 'must be implemented'
+    # to be implemented in a child class
   end
 end
