@@ -38,7 +38,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - dependency-cache-phantomjs-v2.1.1
+            - dependency-cache-tmp-{{ .Branch }}
+            - dependency-cache-tmp-master
 
       - run: env
 
@@ -56,6 +57,7 @@ jobs:
           command: |
             cp config/settings.yml.example config/settings.yml
             cp .circleci/database.yml config/database.yml
+
       - run:
           name: Install npm dependencies
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
@@ -78,7 +80,7 @@ jobs:
 
       - run:
           name: Install editor
-          command: cd editor && ember build --environment=production
+          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
 
       - save_cache:
           key: dependency-cache-editor-{{ checksum ".circleci/config.yml" }}-{{ .Revision }}
@@ -110,6 +112,7 @@ jobs:
           command: xvfb-run -a bundle exec rspec -b --tag @type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
 
       - save_cache:
-          key: dependency-cache-phantomjs-v2.1.1
+          key: dependency-cache-tmp-{{ .Branch }}
           paths:
             - /root/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
+            - tmp
