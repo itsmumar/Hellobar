@@ -267,6 +267,25 @@ class SiteElement < ActiveRecord::Base
     '[hellobar_content_upgrade id="' + id.to_s + '"]'
   end
 
+  # Hardcoded array of external events for Google Analytics
+  # In the future we will consider providing a customizable UI for this
+  def external_tracking
+    return [] unless site && site.capabilities.external_tracking?
+
+    provider = 'google_analytics'
+    category = 'Hello Bar'
+    label = "SiteElement-#{ id }"
+
+    default = Hash[site_element_id: id, provider: provider, category: category, label: label]
+
+    [
+      default.merge(type: 'view', action: 'View'),
+      default.merge(type: 'email_conversion', action: 'Conversion'),
+      default.merge(type: 'social_conversion', action: 'Conversion'),
+      default.merge(type: 'traffic_conversion', action: 'Conversion')
+    ]
+  end
+
   def pushes_page_down
     false
   end
@@ -313,11 +332,13 @@ class SiteElement < ActiveRecord::Base
 
   def lifetime_totals(opts = {})
     return nil if site.nil?
+
     site.lifetime_totals(opts).try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element
     return unless site && site.capabilities.at_site_element_limit?
+
     errors.add(:site, 'is currently at its limit to create site elements')
   end
 

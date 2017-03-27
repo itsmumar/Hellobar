@@ -51,7 +51,8 @@ class SiteSerializer < ActiveModel::Serializer
       custom_html: object.capabilities.custom_html?,
       content_upgrades: object.capabilities.content_upgrades?,
       autofills: object.capabilities.autofills?,
-      geolocation_injection: object.capabilities.geolocation_injection?
+      geolocation_injection: object.capabilities.geolocation_injection?,
+      external_tracking: object.capabilities.external_tracking?
     }
   end
 

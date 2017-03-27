@@ -38,6 +38,12 @@ FactoryGirl.define do
       end
     end
 
+    trait :pro_managed do
+      after(:create) do |site|
+        create(:subscription, :pro_managed, site: site, user: site.users.first)
+      end
+    end
+
     trait :past_due_site do
       after(:create) do |site|
         subscription = create(:pro_subscription, site: site, user: site.users.first)

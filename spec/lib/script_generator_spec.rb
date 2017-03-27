@@ -85,7 +85,9 @@ describe ScriptGenerator do
 
       it 'renders only the setTemplate definition and 1 call per bar type' do
         bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
-        site.stub(site_elements: double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
+        site_elements = double 'site_elements', active: [bar, bar], active_content_upgrades: [], none?: true
+
+        site.stub site_elements: site_elements
 
         generator = ScriptGenerator.new site
 
@@ -95,7 +97,9 @@ describe ScriptGenerator do
       it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
         traffic_bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
         email_bar = Bar.new(element_subtype: 'email', theme_id: 'classic')
-        site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar], active_content_upgrades: [], none?: true)
+        site_elements = double 'site_elements', active: [traffic_bar, email_bar], active_content_upgrades: [], none?: true
+
+        site.stub site_elements: site_elements
 
         generator = ScriptGenerator.new site
 

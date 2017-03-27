@@ -52,6 +52,13 @@
         }
       });
 
+      !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
+        configurator: function(configuration) {
+          var externalTrackings = {{{external_tracking_json}}};
+          configuration.externalTrackings(externalTrackings);
+        }
+      });
+
       // Loading bar modules
       // TODO
 

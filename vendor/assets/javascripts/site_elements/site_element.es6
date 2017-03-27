@@ -112,6 +112,7 @@ HB.SiteElement = HB.createClass({
         if (HB.CAP.preview) {
           this.useFroala();
         }
+
       }.bind(this), 1);
     }.bind(this));
   },

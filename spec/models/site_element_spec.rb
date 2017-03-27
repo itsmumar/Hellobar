@@ -378,4 +378,41 @@ describe SiteElement do
       expect(site_element).to be_email_redirect
     end
   end
+
+  describe '#external_tracking' do
+    let(:capabilities) { double 'Capabilities', external_tracking?: false }
+    let(:site) { create :site }
+    let(:id) { 777 }
+    let(:site_element) { SiteElement.new id: id }
+
+    before do
+      allow(site).to receive(:capabilities).and_return capabilities
+      allow(site_element).to receive(:site).and_return site
+    end
+
+    context 'when site does not have `external_tracking` capabilities' do
+      it 'is an empty array' do
+        expect(site_element.external_tracking).to eq []
+      end
+    end
+
+    context 'when site has `external_tracking` capabilities' do
+      it 'is an array of Google Analytics external events' do
+        allow(capabilities).to receive(:external_tracking?).and_return true
+
+        external_tracking = site_element.external_tracking
+
+        expect(external_tracking).to be_an Array
+        expect(external_tracking.count).to be > 1
+
+        event = external_tracking.first
+
+        expect(event).to be_a Hash
+        expect(event[:provider]).to eq 'google_analytics'
+        expect(event[:category]).to eq 'Hello Bar'
+        expect(event[:site_element_id]).to eq id
+        expect(event[:label]).to include id.to_s
+      end
+    end
+  end
 end

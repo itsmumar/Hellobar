@@ -187,6 +187,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def external_tracking?
+      false
+    end
+
     protected
 
     def parent_class
@@ -395,6 +399,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def geolocation_injection?
+        true
+      end
+
+      def external_tracking?
         true
       end
     end

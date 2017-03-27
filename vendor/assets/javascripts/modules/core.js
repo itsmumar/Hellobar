@@ -188,6 +188,7 @@
    *   autoRun: 'boolean', // boolean setting
    *   limit: 'number', // number setting
    *   caption: 'string', // string setting
+   *   expirationPolicy: 'function', // function setting
    *   itemRenderer: ItemRenderer, // setting specified with custom class
    *   items: Array, // array
    *   attachment: null, // setting with no type checking

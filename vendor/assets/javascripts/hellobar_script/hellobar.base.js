@@ -431,6 +431,9 @@ var HB = {
 
   // Called when a conversion happens (e.g. link clicked, email form filled out)
   converted: function (siteElement, callback) {
+    function gaEventType() {
+      return siteElement.subtype + '_conversion';
+    }
     var conversionKey = HB.getConversionKey(siteElement);
     var now = Math.round(new Date().getTime() / 1000);
     var conversionCount = (HB.getVisitorData(conversionKey) || 0 ) + 1;
@@ -455,10 +458,14 @@ var HB = {
     HB.trigger('conversion', siteElement); // Old-style trigger
     HB.trigger('converted', siteElement); // Updated trigger
     // Send the data to the backend if this is the first conversion
-    if (conversionCount === 1)
+    if (conversionCount === 1) {
       HB.s('g', siteElement.id, {a: HB.getVisitorAttributes()}, callback);
-    else if (typeof(callback) === typeof(Function))
+      hellobar('tracking.external').send(gaEventType());
+    }
+    else if (typeof(callback) === typeof(Function)) {
       callback();
+    }
+
   },
 
   /**
@@ -1072,8 +1079,10 @@ var HB = {
   // Called when the siteElement is viewed
   viewed: function (siteElement) {
     // Track number of views if not yet converted for this site element
-    if (!HB.didConvert(siteElement))
+    if (!HB.didConvert(siteElement)) {
       HB.s('v', siteElement.id, {a: HB.getVisitorAttributes()});
+      hellobar('tracking.external').send('view');
+    }
 
     // Record the number of views, first seen and last seen
     HB.setSiteElementData(siteElement.id, 'nv', (HB.getSiteElementData(siteElement.id, 'nv') || 0) + 1);
