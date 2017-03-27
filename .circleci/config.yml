@@ -109,7 +109,7 @@ jobs:
 
       - run:
           name: Run feature tests
-          command: xvfb-run -a bundle exec rspec -b --tag @type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+          command: xvfb-run -a bundle exec rspec spec/feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
 
       - save_cache:
           key: dependency-cache-tmp-{{ .Branch }}
