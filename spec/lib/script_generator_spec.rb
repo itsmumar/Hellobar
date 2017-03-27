@@ -192,10 +192,8 @@ describe ScriptGenerator do
 
       it 'does NOT include nil values' do
         site_element = build(:site_element, :bar, custom_js: '', custom_css: nil)
-        site_elements = [site_element]
         allow(site).to receive(:rules).and_return([rule])
-        allow(site_elements).to receive(:active).and_return(site_elements)
-        allow(rule).to receive(:site_elements).and_return(site_elements)
+        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
 
         expect(generator.rules.first[:site_elements]).to include 'custom_js'
         expect(generator.rules.first[:site_elements]).not_to include 'custom_css'
@@ -203,10 +201,8 @@ describe ScriptGenerator do
 
       it 'includes false values' do
         site_element = build(:site_element, :bar)
-        site_elements = [site_element]
         allow(site).to receive(:rules).and_return([rule])
-        allow(site_elements).to receive(:active).and_return(site_elements)
-        allow(rule).to receive(:site_elements).and_return(site_elements)
+        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
         allow(site_element).to receive(:email_redirect?).and_return(false)
 
         expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
