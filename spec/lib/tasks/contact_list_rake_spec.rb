@@ -23,7 +23,7 @@ describe 'contact_list:sync_one' do
   it 'should require an email' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     user[:email] = nil
-    expect { perform! }.to raise_error, 'Cannot sync without email present'
+    expect { perform! }.to raise_error 'Cannot sync without email present'
   end
 
   it 'should require a contact_list_id' do
