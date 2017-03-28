@@ -9,7 +9,7 @@
   .site-title
     text-align: center
     font-size: 1.33em
-    @include antialiased()
+    font-smoothing: antialiased
 
   .billing-options
     text-align: center
@@ -31,7 +31,7 @@
       text-transform: uppercase
       font-size: 0.95em !important
       @include inline-block()
-      @include antialiased()
+      font-smoothing: antialiased
       transition: all 0.15s ease-out 0s
 
       &:first-child
@@ -68,7 +68,7 @@
   .package-block
     margin-bottom: 0.5em
     border-color: $grayLighter
-    @include justify-content(flex-start)
+    justify-content: flex-start
     align-content: center
     align-items: stretch
     flex-flow: row nowrap
@@ -79,7 +79,7 @@
       padding-bottom: 1.5em
       border-style: solid
       border-color: inherit
-      @include antialiased()
+      font-smoothing: antialiased
 
     .package-title
       text-align: center
@@ -110,7 +110,7 @@
 
     .package-features
       border-width: 1px 1px 1px 0
-      @include justify-content(center)
+      justify-content: center
       align-content: center
       align-items: center
       flex-flow: row nowrap
@@ -165,7 +165,7 @@
         .button
           display: block
           font-size: 0.85em !important
-          @include antialiased(false)
+          font-smoothing: subpixel-antialiased
 
           &[disabled]
             color: $gray
@@ -304,7 +304,7 @@
 
           .flex-container
             padding-top: $gutterSm
-            @include justify-content(center)
+            justify-content: center
             align-content: center
             align-items: center
             flex-flow: row nowrap

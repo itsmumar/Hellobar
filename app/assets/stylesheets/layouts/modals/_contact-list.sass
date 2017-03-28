@@ -32,7 +32,7 @@
       margin-bottom: 0
       font-weight: normal
       font-size: 1em
-      @include antialiased()
+      font-smoothing: antialiased
 
     .icon-close
       position: absolute
@@ -185,7 +185,7 @@
           margin-bottom: 0
           font-weight: normal
           padding-left: 3.75rem
-          @include antialiased()
+          font-smoothing: antialiased
 
       .is-connected
         right: 4rem
@@ -274,8 +274,8 @@
 .contact-list-radio-wrapper
   margin-bottom: 1rem
   display: flex
-  @include flex-wrap(wrap)
-  @include justify-content(flex-start)
+  flex-wrap: wrap
+  justify-content: flex-start
   align-content: flex-start
   align-items: flex-start
 
@@ -331,22 +331,22 @@
 
     &.mailchimp-provider
       display: block
-      @include order(1)
+      order: 1
       flex: 0 0 8.75rem
 
     &.aweber-provider
       display: block
-      @include order(2)
+      order: 2
       flex: 0 0 8.75rem
 
     &.get_response_api-provider
       display: block
-      @include order(3)
+      order: 3
       flex: 0 0 8.75rem
 
     &:last-child
       display: block
-      @include order(4)
+      order: 4
       flex: 0 0 8.75rem
 
   /*-----------  STATE: Expanded  -----------*/
@@ -356,7 +356,7 @@
     .contact-list-radio-block
       height: 5.67em
       display: block
-      @include order(unset)
+      order: unset
       flex: 0 0 6.67rem
 
       label

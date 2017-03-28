@@ -34,7 +34,7 @@
 
   .color-select
     position: relative
-    @include user-select(none)
+    user-select: none
 
     .color-select-spacer
       height: 2.67em
@@ -52,7 +52,7 @@
       margin: 0.5em auto
       background-color: $white
       border: 1px solid $grayLighter
-      @include transition(0.15s ease-in-out)
+      transition: 0.15s ease-in-out
       @extend .select-wrapper
 
       &:before
@@ -98,7 +98,7 @@
         margin: 0 auto
         padding: 0.67em 0
         border-top: 1px solid $grayLightest
-        @include transition(0.25s ease-in-out)
+        transition: 0.25s ease-in-out
 
         .color-preview-row
           @include clearfix()
@@ -108,10 +108,10 @@
             margin-bottom: 0.5em
             // TODO uncomment and adopt
             //cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
-            @include justify-content(space-between)
-            @include align-items(stretch)
-            @include flex-flow(row nowrap)
-            @include display(flex)
+            justify-content: space-between
+            align-items: stretch
+            flex-flow: row nowrap
+            display: flex
 
 
             .color-preview
@@ -223,7 +223,7 @@
 
         &:before
           color: $grayDark
-          @include transform(rotate(-180deg))
+          transform: rotate(-180deg)
 
         .color-dropdown
           opacity: 1
@@ -250,8 +250,8 @@
       margin: 0 -0.5em
       border-radius: 10em
       padding: 1em 0.5em 1.1em
-      @include transition(0.67s)
-      @include antialiased()
+      transition: 0.67s
+      font-smoothing: antialiased
 
       i
         top: -0.5em
@@ -324,7 +324,7 @@
         margin-left: 0.5rem
         border-radius: 10em
         background-color: $grayLighter
-        @include transition(0.67s)
+        transition: 0.67s
 
         &:before
           top: 3px

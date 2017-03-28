@@ -1,13 +1,5 @@
 @charset "UTF-8"
 
-/*-----------  Weight Corrections  -----------*/
-
-@mixin antialiased($smooth: true)
-  @if $smooth
-    @include prefixer(font-smoothing, antialiased, webkit moz ms o spec)
-  @else
-    @include prefixer(font-smoothing, subpixel-antialiased, webkit moz ms o spec)
-
 /*-----------  Icon Mixin  -----------*/
 
 @mixin use-icon($content: "")

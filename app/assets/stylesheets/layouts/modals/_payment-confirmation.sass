@@ -4,7 +4,7 @@
   .package-block
     margin-bottom: 1.5em
     border-color: $grayLighter
-    @include justify-content(flex-start)
+    justify-content: flex-start
     align-content: center
     align-items: stretch
     flex-flow: row nowrap
@@ -15,7 +15,7 @@
       padding-bottom: 1.5em
       border-style: solid
       border-color: inherit
-      @include antialiased()
+      font-smoothing: antialiased
 
     .package-title
       color: $white
@@ -46,7 +46,7 @@
 
     .package-features
       border-width: 1px 1px 1px 0
-      @include justify-content(center)
+      justify-content: center
       align-content: center
       align-items: center
       flex-flow: row nowrap
@@ -90,7 +90,7 @@
         .button
           display: block
           font-size: 0.85em !important
-          @include antialiased(false)
+          font-smoothing: subpixel-antialiased
 
           &[disabled]
             color: $gray
@@ -108,7 +108,7 @@
       .package-features
 
         li
-          @include antialiased(false)
+          font-smoothing: subpixel-antialiased
 
           i
             top: 18%

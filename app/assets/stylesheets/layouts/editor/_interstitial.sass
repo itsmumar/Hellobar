@@ -54,7 +54,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     padding: 0 0.75em
     text-align: center
     margin: 6em auto 4em
-    @include justify-content(center)
+    justify-content: center
     flex-flow: row nowrap
     align-items: stretch
     display: flex
@@ -192,11 +192,11 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
 
       header,
       footer
-        @include filter(blur(2px))
+        filter: blur(2px)
 
       .goal-block
         transform: scale(0.75)
-        @include filter(blur(2px))
+        filter: blur(2px)
 
         &.selected
           transform: scale(1.15)
@@ -279,7 +279,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
       border-radius: $radiusLg
       background-color: $white
       flex: 0 1 15.75em
-      @include antialiased()
+      font-smoothing: antialiased
 
       small
         display: block
