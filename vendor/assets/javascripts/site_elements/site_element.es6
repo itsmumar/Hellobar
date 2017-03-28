@@ -1,3 +1,0 @@
-HB.SiteElement = HB.createClass({
-
-});
