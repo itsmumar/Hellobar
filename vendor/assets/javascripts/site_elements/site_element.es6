@@ -110,8 +110,8 @@ HB.SiteElement = HB.createClass({
         this.useGoogleFont();
         if (HB.CAP.preview) {
           this.useFroala();
-          const brandingLink = this.w.contentDocument.querySelector('.js-branding')
-          brandingLink.addEventListener('click', (event) => event.preventDefault())
+          const brandingLink = this.w.contentDocument.querySelector('.js-branding');
+          brandingLink.addEventListener('click', (event) => event.preventDefault());
         }
       }.bind(this), 1);
     }.bind(this));
