@@ -372,7 +372,7 @@ GEM
       yard (~> 0.9)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
-    psych (2.0.5)
+    psych (2.2.4)
     public_suffix (1.5.1)
     rack (1.5.5)
     rack-protection (1.5.3)
@@ -631,7 +631,7 @@ DEPENDENCIES
   pry
   pry-doc
   pry-nav
-  psych (~> 2.0.5)
+  psych (>= 2.2)
   public_suffix (~> 1.5.1)
   rack-ssl-enforcer (~> 0.2.8)
   rails (~> 4.1.16)
