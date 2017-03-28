@@ -95,12 +95,12 @@ FactoryGirl.define do
 
     trait :with_custom_fields do
       transient do
-        fields ['email', 'phone', 'name']
+        fields %w(email phone name)
       end
 
       settings do
         fields_to_collect = fields.each_with_index.map do |field, index|
-          { id: "some-long-id-#{ index }", type: "builtin-#{field}", is_enabled: true }.stringify_keys
+          { id: "some-long-id-#{ index }", type: "builtin-#{ field }", is_enabled: true }.stringify_keys
         end
 
         {
