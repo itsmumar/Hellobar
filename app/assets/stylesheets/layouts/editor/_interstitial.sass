@@ -195,11 +195,11 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         @include filter(blur(2px))
 
       .goal-block
-        @include transform(scale(0.75))
+        transform: scale(0.75)
         @include filter(blur(2px))
 
         &.selected
-          @include transform(scale(1.15))
+          transform: scale(1.15)
 
   /*-----------  Template Forms  -----------*/
 

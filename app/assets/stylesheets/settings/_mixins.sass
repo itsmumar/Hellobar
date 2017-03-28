@@ -25,13 +25,13 @@
 
 @mixin vertical-align()
   top: 50%
-  @include transform(translateY(-50%))
+  transform: translateY(-50%)
 
 /*-----------  Horizontal Alignment  -----------*/
 
 @mixin horizontal-align()
   left: 50%
-  @include transform(translateX(-50%))
+  transform: translateX(-50%)
 
 /*-----------  Center Alignment  -----------*/
 
@@ -39,7 +39,7 @@
   top: 50%
   left: 50%
   position: $position
-  @include transform(translate(-50%, -50%))
+  transform: translate(-50%, -50%)
 
 /*-----------  Arrows  -----------*/
 

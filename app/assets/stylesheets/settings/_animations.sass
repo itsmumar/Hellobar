@@ -2,9 +2,9 @@
 
 @include keyframes(spin)
   from
-    @include transform(rotate(0deg))
-  to 
-    @include transform(rotate(-360deg))
+    transform: rotate(0deg)
+  to
+    transform: rotate(-360deg)
 
 /*-----------  Barberpole  -----------*/
 
@@ -18,23 +18,23 @@
 
 @include keyframes(jingle)
   0%
-    @include transform(rotate(-20deg))
+    transform: rotate(-20deg)
   12.5%
-    @include transform(rotate(20deg))
+    transform: rotate(20deg)
   25%
-    @include transform(rotate(-12deg))
+    transform: rotate(-12deg)
   37.5%
-    @include transform(rotate(12deg))
+    transform: rotate(12deg)
   50%
-    @include transform(rotate(-8deg))
+    transform: rotate(-8deg)
   62.5%
-    @include transform(rotate(8deg))
+    transform: rotate(8deg)
   75%
-    @include transform(rotate(-4deg))
+    transform: rotate(-4deg)
   87.5%
-    @include transform(rotate(4deg))
+    transform: rotate(4deg)
   100%
-    @include transform(rotate(-2deg))
+    transform: rotate(-2deg)
 
 /*-----------  Bounce In  -----------*/
 

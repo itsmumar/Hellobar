@@ -47,10 +47,10 @@ table
             opacity: 1
 
         &.headerSortUp:after
-          @include transform(rotate(-90deg))
+          transform: rotate(-90deg)
 
         &.headerSortDown:after
-          @include transform(rotate(90deg))
+          transform: rotate(90deg)
 
     td
       font-size: 0.9em
@@ -123,11 +123,11 @@ table
           font-size: 0.5em
           margin-left: 1.5em
           font-family: 'hellobar'
-          @include transform(rotate(270deg))
+          transform: rotate(270deg)
           @include inline-block()
 
     &.see-more td a.seeing-more:after
-      @include transform(rotate(90deg))
+      transform: rotate(90deg)
 
     /*-----------  Type Variations  -----------*/
 
