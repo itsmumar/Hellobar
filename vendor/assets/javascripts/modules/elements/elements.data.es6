@@ -24,7 +24,7 @@ hellobar.defineModule('elements', ['base.storage', 'base.serialization', 'base.s
     if (!siteElementID)
       return;
     siteElementID = siteElementID + '';
-    var s = HB.cookies.siteElements;
+    var s = siteElementData;
     if (!s[siteElementID])
       s[siteElementID] = {};
     return s[siteElementID][key];

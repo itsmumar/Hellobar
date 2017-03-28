@@ -55,10 +55,11 @@ hellobar.defineModule('elements.conversion', ['base.visitor'], function (visitor
     var attributes = {};
     // Remove ignored attributes
     // TODO eliminate cookies, get this from base.visitor module
-    for (var k in HB.cookies.visitor) {
-      var value = HB.cookies.visitor[k];
+    const visitorData = visitor.getData();
+    for (var k in visitorData) {
+      var value = visitorData[k];
       if ((typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') && ignoredAttributes.indexOf(k) === -1 && !k.match(ignoredAttributePattern)) {
-        attributes[k.toLowerCase()] = (HB.cookies.visitor[k] + '').toLowerCase().substr(0, 150);
+        attributes[k.toLowerCase()] = (visitorData[k] + '').toLowerCase().substr(0, 150);
       }
     }
     return HB.serializeCookieValues(attributes);
