@@ -157,7 +157,7 @@
   height: 20em
   position: relative
   border: 2px solid $grayLightest
-  @include transition(0.5s)
+  transition: 0.5s
 
   &:before
     top: 0
@@ -170,7 +170,7 @@
     position: absolute
     pointer-events: none
     background-color: $white
-    @include transition(0.5s)
+    transition: 0.5s
 
   &:after
     top: 45%
@@ -182,7 +182,7 @@
     position: absolute
     pointer-events: none
     font-family: 'hellobar'
-    @include transition(opacity 0.5s)
+    transition: opacity 0.5s
 
   > div
     z-index: 50

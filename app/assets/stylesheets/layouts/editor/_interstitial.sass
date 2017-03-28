@@ -19,7 +19,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     text-align: center
     background-color: $white
     border-bottom: 1px solid $grayLighter
-    @include transition($transition all ease-in-out)
+    transition: $transition all ease-in-out
 
     h5
       margin: 0
@@ -32,7 +32,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     margin: 0 auto
     text-align: center
     border-top: 1px solid $grayLighter
-    @include transition($transition all ease-in-out)
+    transition: $transition all ease-in-out
     @include inline-block()
 
     a
@@ -133,7 +133,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
       border-radius: $radiusLg
       background-color: $white
       box-shadow: 0 0 0 rgba(0,0,0,0)
-      @include transition($transition/1.5 all ease-in-out)
+      transition: $transition/1.5 all ease-in-out
       @include flex(0 1 18.5em)
       flex-flow: column nowrap
       display: flex
@@ -175,15 +175,15 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     left: 0
     right: 0
     z-index: 10000 //should equal to baseZIndex variable specified in "interstitial-view.coffee"
-    @include transition($transition opacity ease-in-out)
+    transition: $transition opacity ease-in-out
 
     &.no-transition //force no transition delay when preparing setting views to initial state before transitioning
-      @include transition(none)
+      transition: none
 
       header,
       footer,
       .goal-block
-        @include transition(none)
+        transition: none
 
     &.transitioning
       opacity: 0
