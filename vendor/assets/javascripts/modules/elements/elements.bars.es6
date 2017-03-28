@@ -1,5 +1,7 @@
 hellobar.defineModule('elements.bar', [], function() {
 
+  // TODO can we move this to elements.class.bar?
+
   // TODO -> elements.bars
   function barSizeCssClass(size) {
     if (size === 'large' || size === 'regular') {
