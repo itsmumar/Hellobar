@@ -16,13 +16,13 @@ module ServiceProviders
 
     def subscribe(_, email, name = nil, _double_optin = true)
       method = contact_list.data['webhook_method'].downcase.to_sym
-      fields = collect_fields(email, name)
+      params = determine_params(email, name)
 
       client.public_send(method) do |request|
         if method == :get
-          request.params = fields
+          request.params = params
         else
-          request.body = fields
+          request.body = params
         end
       end
     end
@@ -39,7 +39,7 @@ module ServiceProviders
 
     private
 
-    def collect_fields(email, name)
+    def determine_params(email, name)
       return { email: email, name: name } unless name.to_s.include?(',')
 
       fields = extract_fields(email, name)
