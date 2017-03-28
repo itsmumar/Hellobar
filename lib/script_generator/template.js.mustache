@@ -84,15 +84,15 @@
           HB.CONTENT_UPGRADES_STYLES  = {{{content_upgrades_styles_json}}}
 
           {{#templates}}
-            HB.setTemplate("{{name}}", {{{markup}}});
+            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
           {{/templates}}
 
           {{#branding_templates}}
-            HB.setBrandingTemplate("{{name}}", {{{markup}}});
+            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
           {{/branding_templates}}
 
           {{#content_upgrade_template}}
-            HB.setContentUpgradeTemplate("{{name}}", {{{markup}}});
+            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
           {{/content_upgrade_template}}
 
           HB.addCSS({{{hellobar_element_css}}});

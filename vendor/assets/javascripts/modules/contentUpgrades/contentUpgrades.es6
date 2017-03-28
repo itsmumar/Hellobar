@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.bar', [], function() {
+hellobar.defineModule('elements.bar', ['base.templating'], function(templating) {
 
   // TODO adopt
 
@@ -7,9 +7,9 @@ hellobar.defineModule('elements.bar', [], function() {
       siteElement = HB.CONTENT_UPGRADES[id];
       HB.viewed(siteElement);
       siteStyles = HB.CONTENT_UPGRADES_STYLES;
-      var tpl =  HB.contentUpgradeTemplates['contentupgrade'];
-      content =  HB.renderTemplate(tpl, siteElement);
-      content =  HB.renderTemplate(content, siteStyles);
+      var tpl =  templating.getTemplateByName['contentupgrade'];
+      content =  templating.renderTemplate(tpl, siteElement);
+      content =  templating.renderTemplate(content, siteStyles);
       document.getElementById('hb-cu-'+id).outerHTML = content;
     }
   }

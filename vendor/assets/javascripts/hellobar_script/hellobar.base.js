@@ -181,42 +181,6 @@ var HB = {
     }
   },*/
 
-  // TODO -> base.templating
-  // A global variable to store templates
-  templateHTML: {},
-
-  // TODO refactor, generalize, make it work with base.templating
-  brandingTemplates: {},
-  contentUpgradeTemplates: {},
-
-
-
-
-
-
-  /*// TODO -> ??? elements.templating or base.templating? generalize
-  // Sets the branding HTML.
-  setBrandingTemplate: function (type, html) {
-    HB.brandingTemplates[type] = html;
-  },
-
-  // TODO -> ??? elements.templating or base.templating? generalize
-  getBrandingTemplate: function (type) {
-    return HB.brandingTemplates[type];
-  },*/
-
-  /*// TODO -> ??? contentUpgrades.templating or base.templating? generalize
-  // Sets the content upgrade HTML.
-  setContentUpgradeTemplate: function (type, html) {
-    HB.contentUpgradeTemplates[type] = html;
-  },
-
-  // TODO -> ??? contentUpgrades.templating or base.templating? generalize
-  getContentUpgradeTemplate: function (type) {
-    return HB.contentUpgradeTemplates[type];
-  },*/
-
-
   // TODO ???
   // If window.HB_element_id is set, use that to find the site element
   // Will return null if HB_element_id is not set or no site element exists with that id

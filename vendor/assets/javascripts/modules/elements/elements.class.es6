@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.class', [], function () {
+hellobar.defineModule('elements.class', ['base.templating'], function (templating) {
 
   class SiteElement {
 
@@ -82,11 +82,11 @@ hellobar.defineModule('elements.class', [], function () {
         var template = '';
         if (that.theme && that.theme.type === 'template') {
           var templateName = that.type.toLowerCase() + '_' + that.theme.id.replace(/\-/g, '_');
-          template = HB.getTemplateByName(templateName);
+          template = templating.getTemplateByName(templateName);
         } else {
-          template = HB.getTemplate(that);
+          template = templating.getTemplateByName(that.template_name);
         }
-        return HB.renderTemplate(template, that);
+        return templating.renderTemplate(template, that);
       }
 
       var html = generateHtml();
