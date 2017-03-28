@@ -112,7 +112,7 @@ hellobar.defineModule('elements.conversion', ['base.visitor'], function (visitor
 
   // TODO (should be inner) - used in getShortestKeyForURL
   // Takes a URL and returns normalized domain (downcase and strip www)
-  getNDomain: function (url) {
+  function getNDomain(url) {
     if (!url) {
       return '';
     }

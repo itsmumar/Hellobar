@@ -225,32 +225,10 @@ var HB = {
   },
 
 
-  // TODO where should it be moved?
-  // Gets the siteElement attribute from HB.cookies specified by the siteElementID and key
-  getSiteElementData: function (siteElementID, key) {
-    if (!siteElementID)
-      return;
-    siteElementID = siteElementID + '';
-    var s = HB.cookies.siteElements;
-    if (!s[siteElementID])
-      s[siteElementID] = {}
-    return s[siteElementID][key];
-  },
 
 
-  // TODO where should it be moved?
-  // Sets the siteElement attribute specified by the key and siteElementID to the value in HB.cookies
-  // Also updates the cookies via HB.saveCookies
-  setSiteElementData: function (siteElementID, key, value) {
-    if (!siteElementID)
-      return;
-    siteElementID = siteElementID + '';
-    var s = HB.cookies.siteElements;
-    if (!s[siteElementID])
-      s[siteElementID] = {}
-    s[siteElementID][key] = value;
-    HB.saveCookies();
-  },
+
+
 
   // TODO remove this. Already have this function in base.dom
   // Calls the specificied callback once the DOM is ready.
