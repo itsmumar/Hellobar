@@ -287,7 +287,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def pushes_page_down
-    false
+    nil
   end
 
   private
