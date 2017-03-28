@@ -60,7 +60,6 @@ gem 'rails',                     '~> 4.1.16'
 gem 'rake', '~> 10.3.2'
 
 gem 'rake_running',              github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
-gem 'rb-readline',               '~> 0.5.1'
 gem 'recaptcha',                 '~> 0.3.6', require: 'recaptcha/rails'
 gem 'render_anywhere',           '~> 0.0.9'
 gem 'roadie-rails'
