@@ -303,7 +303,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
-    nokogiri (1.6.8.1)
+    nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     oauth (0.4.7)
     oauth2 (1.0.0)
@@ -614,7 +614,7 @@ DEPENDENCIES
   mini_racer
   mustache (~> 0.99.5)
   mysql2 (~> 0.3.18)
-  nokogiri (~> 1.6.7)
+  nokogiri (>= 1.6.7)
   omniauth (~> 1.0)
   omniauth-aweber (~> 1.0)
   omniauth-constantcontact2 (~> 1.0)
