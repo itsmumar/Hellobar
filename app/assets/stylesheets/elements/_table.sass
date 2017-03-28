@@ -27,7 +27,7 @@ table
 
       &.header
         cursor: pointer
-        @include transition()
+        transition: all 0.15s ease-out 0s
 
         &:after
           opacity: 0
@@ -37,7 +37,7 @@ table
           margin-left: 1.5em
           font-family: 'hellobar'
           @include inline-block()
-          @include transition()
+          transition: all 0.15s ease-out 0s
 
         &.headerSortUp,
         &.headerSortDown
@@ -55,16 +55,16 @@ table
     td
       font-size: 0.9em
       border-top: 1px solid $grayLighter
-      border-bottom: 1px solid $grayLighter      
+      border-bottom: 1px solid $grayLighter
 
       &.color-flag
         background-color: $red
 
       &:first-of-type
-        border-left: 1px solid $grayLighter      
+        border-left: 1px solid $grayLighter
 
       &:last-of-type
-        border-right: 1px solid $grayLighter   
+        border-right: 1px solid $grayLighter
 
       > p
         margin: 0
@@ -132,15 +132,15 @@ table
     /*-----------  Type Variations  -----------*/
 
     &.type-social
-      
+
       .color-flag
         background-color: $blue
-    
+
     &.type-traffic
 
       .color-flag
         background-color: $yellow
-    
+
     &.type-email
 
       .color-flag
