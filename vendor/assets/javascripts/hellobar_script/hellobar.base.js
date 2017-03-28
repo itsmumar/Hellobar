@@ -198,27 +198,6 @@ var HB = {
     return null;
   },
 
-  // TODO -> elements.rules ????? (make it inner) (also have something to do with visitorData)
-  // Gets the current segment value that will be compared to the conditions
-  // value
-  getSegmentValue: function (segmentName) {
-    // Convert long names to short names
-    if (segmentName === 'url')
-      segmentName = 'pu';
-    else if (segmentName === 'device')
-      segmentName = 'dv';
-    else if (segmentName === 'country')
-      segmentName = 'co';
-    else if (segmentName === 'referrer' || segmentName === 'referer')
-      segmentName = 'rf';
-    else if (segmentName === 'date')
-      segmentName = 'dt';
-
-    // All other segment names
-    return HB.getVisitorData(segmentName);
-  },
-
-
 
 
 

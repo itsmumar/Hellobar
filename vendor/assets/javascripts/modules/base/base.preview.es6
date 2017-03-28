@@ -1,9 +1,12 @@
 hellobar.defineModule('base.preview', ['hellobar'], function(hellobar) {
 
-  // TODO implement this module (init bool value via configuration)
+  let isActive = false;
 
   return {
-    isActive: () => false
+    isActive: () => isActive,
+    setActive () {
+      isActive = true;
+    }
   };
 
 });

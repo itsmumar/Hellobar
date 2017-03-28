@@ -3,7 +3,7 @@ hellobar.defineModule('elements.questions', [], function () {
   // TODO -> elements.questions ????
   // Replaces the site element with the question variation.
   // Sets the displayResponse callback to show the original element
-  questionifySiteElement: function (siteElement) {
+  function questionifySiteElement(siteElement) {
     if (!siteElement.use_question || !siteElement.dataCopy)
       return siteElement;
 
@@ -68,7 +68,10 @@ hellobar.defineModule('elements.questions', [], function () {
     }
 
     return siteElement;
-  },
+  }
 
+  return {
+    questionifySiteElement
+  };
 
 });

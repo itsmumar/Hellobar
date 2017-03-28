@@ -52,8 +52,13 @@
         }
       });
 
-      // Loading bar modules
-      // TODO
+      hellobar('elements.rules', {
+        configurator: function(configuration) {
+          {{#rules}}
+            configuration.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}});
+          {{/rules}}
+        }
+      });
 
       !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
         configurator: function(configuration) {
@@ -102,9 +107,7 @@
 
       HBInit();
 
-      {{#rules}}
-        _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
-      {{/rules}}
+
 
       if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
         _hbq = new HBQ();
