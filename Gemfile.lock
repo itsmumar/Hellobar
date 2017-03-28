@@ -476,7 +476,7 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
-    simple_form (3.1.0.rc1)
+    simple_form (3.1.1)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
     simplecov (0.14.1)
@@ -657,7 +657,7 @@ DEPENDENCIES
   sentry-raven (~> 0.9)
   shoulda-matchers
   signet (~> 0.7.0)
-  simple_form (= 3.1.0.rc1)
+  simple_form (~> 3.1.1)
   simplecov
   sinatra
   slackistrano

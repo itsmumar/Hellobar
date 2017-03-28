@@ -70,7 +70,7 @@ gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'sassc-rails',               '~> 1.3'
 gem 'sentry-raven',              '~> 0.9'
 gem 'signet',                    '~> 0.7.0'
-gem 'simple_form',               '3.1.0.rc1'
+gem 'simple_form',               '~> 3.1.1'
 gem 'slim-rails',                '~> 2.1.4'
 gem 'sprockets',                 '~> 3.7.1'
 gem 'sprockets-es6'
