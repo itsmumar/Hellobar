@@ -53,7 +53,7 @@ hellobar.defineModule('base.environment', [], function () {
 
   // TODO -> base.environment
   function isMobileDevice() {
-    return HB.getVisitorData('dv') === 'mobile';
+    return device() === 'mobile';
   }
 
   // TODO -> base.environment (should be inner)
@@ -75,7 +75,9 @@ hellobar.defineModule('base.environment', [], function () {
   }
 
   return {
-    device
+    device,
+    isMobileDevice,
+    isMobileWidth
   };
 
 });

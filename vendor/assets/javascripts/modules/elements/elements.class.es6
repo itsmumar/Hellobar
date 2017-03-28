@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.class', ['base.templating'], function (templating) {
+hellobar.defineModule('elements.class', ['base.templating', 'elementsVisibility'], function (templating, elementsvVisibility) {
 
   class SiteElement {
 
@@ -504,8 +504,7 @@ hellobar.defineModule('elements.class', ['base.templating'], function (templatin
 
           // expire (i.e. delete) the VisibilityControl cookie
           // (because the user has asked the bar to be shown again)
-          var cookieName = HB.visibilityControlCookieName('dismiss', this.id);
-          HB.sc(cookieName, JSON.stringify({}), new Date().toString());
+          elementsvVisibility.expireVisibilityControlCookie('dismiss', this.id);
 
           // if the pusher exists, unhide it since it should be hidden at this point
           if (this.pushes_page_down && HB.p) {
