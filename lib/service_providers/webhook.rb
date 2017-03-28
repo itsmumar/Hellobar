@@ -16,18 +16,18 @@ module ServiceProviders
 
     def subscribe(_, email, name = nil, _double_optin = true)
       method = contact_list.data['webhook_method'].downcase.to_sym
+      fields = collect_fields(email, name)
 
       client.public_send(method) do |request|
         if method == :get
-          request.params[:email] = email
-          request.params[:name] = name
+          request.params = fields
         else
-          request.body = { name: name, email: email }
+          request.body = fields
         end
       end
     end
 
-    def batch_subscribe(_, subscribers, _double_optin = true)
+    def batch_subscribe(_list_id, subscribers, _double_optin = true)
       subscribers.each do |subscriber|
         subscribe(nil, subscriber[:email], subscriber[:name])
       end
@@ -35,6 +35,42 @@ module ServiceProviders
 
     def valid?
       true
+    end
+
+    private
+
+    def collect_fields(email, name)
+      return { email: email, name: name } unless name.to_s.include?(',')
+
+      fields = extract_fields(email, name)
+      site_element = find_related_site_element(fields)
+      field_names = extract_field_names(site_element)
+      field_names.zip(fields).to_h.symbolize_keys
+    end
+
+    def extract_fields(email, name)
+      return [email] unless name
+
+      other_fields = name.split(',')
+      [email, *other_fields]
+    end
+
+    def find_related_site_element(fields)
+      contact_list.site_elements.find do |element|
+        select_enabled_fields(element.settings).count == fields.count
+      end
+    end
+
+    def select_enabled_fields(settings)
+      settings ||= {}
+      settings.fetch(:fields_to_collect, []).select { |field| field['is_enabled'] }
+    end
+
+    def extract_field_names(site_element)
+      return ['email'] unless site_element
+
+      field_names = select_enabled_fields(site_element.settings).map { |field| field['type'].to_s.sub('builtin-', '') }
+      field_names.unshift field_names.delete('email')
     end
   end
 end

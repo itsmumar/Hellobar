@@ -93,6 +93,22 @@ FactoryGirl.define do
       closable true
     end
 
+    trait :with_custom_fields do
+      transient do
+        fields ['email', 'phone', 'name']
+      end
+
+      settings do
+        fields_to_collect = fields.each_with_index.map do |field, index|
+          { id: "some-long-id-#{ index }", type: "builtin-#{field}", is_enabled: true }.stringify_keys
+        end
+
+        {
+          fields_to_collect: fields_to_collect
+        }
+      end
+    end
+
     after :create do |element, evaluator|
       element.update! rule: evaluator.site.rules.first! if evaluator.site
     end
