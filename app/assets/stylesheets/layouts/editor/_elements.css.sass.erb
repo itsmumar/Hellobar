@@ -34,7 +34,7 @@
 
   .color-select
     position: relative
-    @include user-select(none)
+    user-select: none
 
     .color-select-spacer
       height: 2.67em
@@ -107,10 +107,10 @@
             width: 69%
             margin-bottom: 0.5em
             cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
-            @include justify-content(space-between)
-            @include align-items(stretch)
-            @include flex-flow(row nowrap)
-            @include display(flex)
+            justify-content: space-between
+            align-items: stretch
+            flex-flow: row nowrap
+            display: flex
 
 
             .color-preview

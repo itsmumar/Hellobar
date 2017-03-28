@@ -2,21 +2,21 @@
 
 .chart-wrapper
   margin: 1em 0
-  @include justify-content(space-between)
-  @include align-content(stretch)
-  @include align-items(stretch)
-  @include flex-flow(row wrap)
-  @include display(flex)
+  justify-content: space-between
+  align-content: stretch
+  align-items: stretch
+  flex-flow: row wrap
+  display: flex
 
   .chart-block
     width: 19%
     cursor: pointer
     border: 2px solid $grayLightest
-    @include justify-content(space-between)
-    @include align-content(stretch)
-    @include align-items(center)
-    @include flex-flow(row wrap)
-    @include display(flex)
+    justify-content: space-between
+    align-content: stretch
+    align-items: center
+    flex-flow: row wrap
+    display: flex
     transition: all 0.15s ease-out 0s
 
     > i

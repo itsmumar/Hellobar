@@ -211,10 +211,10 @@
 
     nav
       margin-bottom: 1.75em
-      @include justify-content(space-between)
-      @include align-items(center)
-      @include flex-flow(row nowrap)
-      @include display(flex)
+      justify-content: space-between
+      align-items: center
+      flex-flow: row nowrap
+      display: flex
 
       .button
         padding-top: 0.55em
@@ -426,7 +426,7 @@
       span
         font-size: 0.85em
         line-height: 100%
-        @include user-select(none)
+        user-select: none
         @include inline-block()
 
         small

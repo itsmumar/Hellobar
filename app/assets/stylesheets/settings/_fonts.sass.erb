@@ -4,9 +4,9 @@
 
 @mixin antialiased($smooth: true)
   @if $smooth
-    @include prefixer(font-smoothing, antialiased, webkit moz ms o spec)
+    font-smoothing: antialiased
   @else
-    @include prefixer(font-smoothing, subpixel-antialiased, webkit moz ms o spec)
+    font-smoothing: subpixel-antialiased
 
 /*-----------  Icon Mixin  -----------*/
 
