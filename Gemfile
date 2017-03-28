@@ -54,11 +54,11 @@ gem 'pony',                      '~> 1.8'
 gem 'psych',                     '~> 2.0.5'
 gem 'public_suffix',             '~> 1.5.1'
 gem 'rack-ssl-enforcer',         '~> 0.2.8'
-gem 'rails',                     '4.1.5'
+gem 'rails',                     '~> 4.1.16'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
-gem 'rake', '10.3.2'
+gem 'rake', '~> 10.3.2'
 
 gem 'rake_running',              github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'rb-readline',               '~> 0.5.1'
