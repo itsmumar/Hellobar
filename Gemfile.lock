@@ -439,6 +439,8 @@ GEM
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
+    rspec-retry (0.5.3)
+      rspec-core (> 3.3, < 3.6)
     rspec-support (3.5.0)
     rspec_junit_formatter (0.2.3)
       builder (< 4)
@@ -597,7 +599,7 @@ DEPENDENCIES
   createsend (~> 3.4.0)
   cssmin (~> 1.0.3)
   dalli (~> 2.7.2)
-  database_cleaner (~> 1.5)
+  database_cleaner
   devise (~> 3.2.4)
   drip-ruby (~> 0.0.10)
   elif (~> 0.1)
@@ -651,6 +653,7 @@ DEPENDENCIES
   rotp
   rqrcode
   rspec-rails (~> 3.5)
+  rspec-retry
   rspec_junit_formatter
   rubocop
   ruby-hmac
