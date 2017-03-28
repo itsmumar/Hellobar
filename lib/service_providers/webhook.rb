@@ -55,6 +55,9 @@ module ServiceProviders
       [email, *other_fields]
     end
 
+    # TODO: this method is a terrible, terrible, ter-rib-le hack
+    # it should be removed with the introduction of proper support for custom fields on backend application
+    # we had no choice...
     def find_related_site_element(fields)
       contact_list.site_elements.find do |element|
         select_enabled_fields(element.settings).count == fields.count
