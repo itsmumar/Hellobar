@@ -73,6 +73,10 @@ export default Ember.Controller.extend({
               let list = lists[i];
               if (list.id === data.id) {
                 lists.removeObject(list);
+
+                if (lists.length > 0)
+                  this.set('model.contact_list_id', lists[0].id)
+
                 break;
               }
             }
