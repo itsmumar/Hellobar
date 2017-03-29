@@ -15,25 +15,31 @@ describe 'contact_list:sync_one' do
     end
   end
 
-  it 'should call sync_one!' do
+  it 'calls sync_one!' do
     expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', 'Test Testerson')
     perform!
   end
 
-  it 'should require an email' do
+  it 'requires an email' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     user[:email] = nil
     expect { perform! }.to raise_error 'Cannot sync without email present'
   end
 
-  it 'should require a contact_list_id' do
+  it 'requires a contact_list_id' do
     expect_any_instance_of(ContactList).not_to receive(:sync_one!)
     expect { perform!(nil) }.to raise_error ActiveRecord::RecordNotFound, "Couldn't find ContactList without an ID"
   end
 
-  it 'should not require a name' do
+  it 'does not require a name' do
     expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', nil)
     user[:name] = nil
+    perform!
+  end
+
+  it 'accepts custom fields' do
+    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', 'Name,phone,gender')
+    user[:name] = 'Name,phone,gender'
     perform!
   end
 
