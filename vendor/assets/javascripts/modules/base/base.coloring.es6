@@ -25,6 +25,8 @@ hellobar.defineModule('base.coloring', [], function() {
     return .2126 * rgb[0] + .7152 * rgb[1] + 0.0722 * rgb[2];
   }
 
-  return {};
+  return {
+    colorIsBright
+  };
 
 });

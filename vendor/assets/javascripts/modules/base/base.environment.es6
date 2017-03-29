@@ -8,7 +8,7 @@ hellobar.defineModule('base.environment', [], function () {
    * @returns {boolean}
    */
   function isMobileWidth(siteElementData) {
-    var windowWidth = HB.windowWidth();
+    var windowWidth = windowWidth();
     if (siteElementData.type === 'Modal') {
       return windowWidth <= 640;
     } else if (siteElementData.type === 'Slider') {
@@ -63,7 +63,7 @@ hellobar.defineModule('base.environment', [], function () {
 
   // TODO -> base.environment
   function device() {
-    var ua = HB.getUserAgent();
+    var ua = getUserAgent();
     if (ua.match(/ipad/i))
       return 'tablet';
     else if (ua.match(/(mobi|phone|ipod|blackberry|docomo)/i))
@@ -77,7 +77,10 @@ hellobar.defineModule('base.environment', [], function () {
   return {
     device,
     isMobileDevice,
-    isMobileWidth
+    isMobileWidth,
+    isMobileSafari,
+    isIE11,
+    isIEXOrLess
   };
 
 });

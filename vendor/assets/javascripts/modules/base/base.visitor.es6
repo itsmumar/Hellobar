@@ -166,6 +166,7 @@ hellobar.defineModule('base.visitor',
       }
 
       if (key.indexOf('gl_') !== -1) {
+        // TODO can we move geolocation dependency to another place?
         return hellobar('geolocation').getGeolocationData(key, function (data, isCached) {
           if (isCached === false) {
             // TODO ??? move this to another place

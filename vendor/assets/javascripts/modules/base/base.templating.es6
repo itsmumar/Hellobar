@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.bar', [], function () {
+hellobar.defineModule('elements.bar', ['base.preview'], function (preview) {
 
   let templates = {};
 
@@ -30,20 +30,18 @@ hellobar.defineModule('elements.bar', [], function () {
     try {
       value = eval(value);
     } catch (e) {
-      HB.isPreviewMode && console.log('Templating error: ', e);
+      preview.isActive() && console.log('Templating error: ', e);
     }
     if (value === undefined || value === null)
       return '';
     return value;
   }
 
-  const module = {
+  return {
     setTemplate,
     getTemplateByName,
     renderTemplate
   };
-
-  return module;
 
 });
 

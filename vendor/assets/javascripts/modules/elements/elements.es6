@@ -1,134 +1,227 @@
-hellobar.defineModule('elements', [], function () {
+hellobar.defineModule('elements',
+  ['hellobar', 'base.sanitizing', 'base.preview'],
+  function (hellobar, sanitizing, preview) {
 
-  // TODO -> elements (name the method just 'create')
-  // Returns a SiteElement object from a hash of data
-  function createSiteElement(data) {
-    var siteElement;
+    const configuration = hellobar.createModuleConfiguration({
+      elementCSS: 'string'
+    });
 
-    var whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
+    let siteElementsOnPage = [];
 
-    // TODO do we need to sanitize blocks property?
-    // Sanitize the data
-    data = HB.sanitize(data, whitelistedProperties);
-    // Make a copy of the siteElement
-    var fn = window.HB[data.type + 'Element'];
-    if (typeof fn === 'function') {
-      siteElement = new window.HB[data.type + 'Element'](data);
-    } else {
-      siteElement = new HB.SiteElement(data);
+    function createAndAddToPage(siteElementModel) {
+      return addToPage(create(siteElementModel));
     }
 
-    siteElement.dataCopy = data;
-    return siteElement;
-  }
+    // TODO -> elements (name the method just 'create')
+    // TODO it was createSiteElement previously
+    // Returns a SiteElement object from a hash of data
+    function create(data) {
+      var siteElement;
 
-  // TODO -> elements (join with createSiteElement?)
-  // Adds the SiteElement to the page
-  function addToPage(siteElement) {
-    if (siteElement.use_question) {
-      siteElement = HB.questionifySiteElement(siteElement);
-    }
-    // Return if already added to the page
-    if (typeof(siteElement.pageIndex) != 'undefined')
-      return;
-    // Set the page index so it can be referenced
-    siteElement.pageIndex = HB.siteElementsOnPage.length;
+      var whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
 
-    // Helper for template that returns the Javascript for a reference
-    // to this object
-    siteElement.me = 'window.parent.HB.findSiteElementOnPageById(' + siteElement.id + ')';
+      // Sanitize the data
+      data = sanitizing.sanitize(data, whitelistedProperties);
 
-    // skip adding to the page if it is already on the page
-    if (HB.siteElementsOnPage.indexOf(siteElement) !== -1)
-      return;
+      // TODO REFACTOR class instance creation
+      // Make a copy of the siteElement
+      var fn = window.HB[data.type + 'Element'];
+      if (typeof fn === 'function') {
+        siteElement = new window.HB[data.type + 'Element'](data);
+      } else {
+        siteElement = new HB.SiteElement(data);
+      }
 
-    // skip adding to the page if it is already on the page (by ID)
-    elementOnPage = HB.siteElementsOnPage.reduce(function (found, existingElement) {
-      return found || existingElement.id === siteElement.id
-    }, false);
-
-    if (elementOnPage === true)
-      return;
-
-    HB.siteElementsOnPage.push(siteElement);
-
-    // If there is a #nohb in the has we don't render anything
-    if (document.location.hash === '#nohb')
-      return;
-    siteElement.attach();
-  }
-
-  // TODO -> elements ?
-  // TODO this has three usages (traffic_growth, site_element.es6 and also this file)
-  function findSiteElementOnPageById(site_element_id) {
-    var lookup = {};
-    for (var i = 0, len = HB.siteElementsOnPage.length; i < len; i++) {
-      lookup[HB.siteElementsOnPage[i].id] = HB.siteElementsOnPage[i];
+      siteElement.dataCopy = data;
+      return siteElement;
     }
 
-    if (lookup[site_element_id] === undefined) {
-      return null;
-    } else {
-      return lookup[site_element_id];
+    // TODO -> elements
+    // Adds the SiteElement to the page
+    function addToPage(siteElement) {
+      if (siteElement.use_question) {
+        siteElement = questionifySiteElement(siteElement);
+      }
+      // Return if already added to the page
+      if (typeof(siteElement.pageIndex) != 'undefined') {
+        return;
+      }
+
+      // Set the page index so it can be referenced
+      siteElement.pageIndex = siteElementsOnPage.length;
+
+      // Helper for template that returns the Javascript for a reference
+      // to this object
+      // TODO REFACTOR remove HB usage
+      siteElement.me = 'window.parent.HB.findSiteElementOnPageById(' + siteElement.id + ')';
+
+      // skip adding to the page if it is already on the page
+      if (siteElementsOnPage.indexOf(siteElement) !== -1)
+        return;
+
+      // skip adding to the page if it is already on the page (by ID)
+      const elementOnPage = siteElementsOnPage.reduce(function (found, existingElement) {
+        return found || existingElement.id === siteElement.id
+      }, false);
+
+      if (elementOnPage === true) {
+        return;
+      }
+
+      siteElementsOnPage.push(siteElement);
+
+      // If there is a #nohb in the has we don't render anything
+      if (document.location.hash === '#nohb') {
+        return;
+      }
+      siteElement.setCSS(configuration.elementCSS());
+      siteElement.attach();
     }
-  }
 
-  // TODO this is used from editor only (application.mixin.preview.js)
-  function removeAllSiteElements() {
-    for (var i = 0; i < HB.siteElementsOnPage.length; i++) {
-      HB.siteElementsOnPage[i].remove();
-    }
-    HB.siteElementsOnPage = [];
-  }
+    // TODO -> elements ?
+    // TODO REFACTOR this has three usages (traffic_growth, site_element.es6 and also this file)
+    function findSiteElementOnPageById(site_element_id) {
+      var lookup = {};
+      for (var i = 0, len = siteElementsOnPage.length; i < len; i++) {
+        lookup[siteElementsOnPage[i].id] = siteElementsOnPage[i];
+      }
 
-  // TODO -> elements
-  // TODO used from bar.es6, site_element.es6, overridden in editor
-  // Injects the specified element at the top of the body tag
-  // or bottom if reverse is selected
-  function injectAtTop(element, reverse) {
-    reverse = typeof reverse !== 'undefined' ? reverse : false;
-
-    if (!reverse && document.body.children.length > 0)
-      document.body.insertBefore(element, document.body.children[0]);
-    else
-      document.body.appendChild(element);
-  }
-
-  // TODO -> elements
-  function hideElement(element) {
-    if (element == null) {
-      return
-    } // do nothing
-    if (element.length == undefined) {
-      element.style.display = 'none';
-    } else {
-      for (var i = 0; i < element.length; ++i) {
-        element[i].style.display = 'none';
+      if (lookup[site_element_id] === undefined) {
+        return null;
+      } else {
+        return lookup[site_element_id];
       }
     }
-  }
 
-  // TODO -> elements
-  function showElement(element, display) {
-    if (element == null) {
-      return
-    } // do nothing
-    if (typeof display === 'undefined') {
-      display = 'inline';
+    // TODO this is used from editor only (application.mixin.preview.js)
+    function removeAllSiteElements() {
+      for (var i = 0; i < siteElementsOnPage.length; i++) {
+        siteElementsOnPage[i].remove();
+      }
+      siteElementsOnPage = [];
     }
-    if (element.length == undefined) {
-      element.style.display = display;
-    } else {
-      for (var i = 0; i < element.length; ++i) {
-        element[i].style.display = display;
+
+    // TODO -> elements
+    // TODO used from bar.es6, site_element.es6, overridden in editor
+    // Injects the specified element at the top of the body tag
+    // or bottom if reverse is selected
+    // TODO REFACTOR how to do overriding from editor here
+    function injectAtTop(element, reverse) {
+      reverse = typeof reverse !== 'undefined' ? reverse : false;
+
+      if (!reverse && document.body.children.length > 0)
+        document.body.insertBefore(element, document.body.children[0]);
+      else
+        document.body.appendChild(element);
+    }
+
+    // TODO -> elements
+    function hideElement(element) {
+      if (element == null) {
+        return
+      } // do nothing
+      if (element.length == undefined) {
+        element.style.display = 'none';
+      } else {
+        for (var i = 0; i < element.length; ++i) {
+          element[i].style.display = 'none';
+        }
       }
     }
-  }
 
-  const module = {
-    initialize: () => null
-  };
+    // TODO -> elements
+    function showElement(element, display) {
+      if (element == null) {
+        return
+      } // do nothing
+      if (typeof display === 'undefined') {
+        display = 'inline';
+      }
+      if (element.length == undefined) {
+        element.style.display = display;
+      } else {
+        for (var i = 0; i < element.length; ++i) {
+          element[i].style.display = display;
+        }
+      }
+    }
 
-  return module;
+    // TODO -> elements
+    // Replaces the site element with the question variation.
+    // Sets the displayResponse callback to show the original element
+    function questionifySiteElement(siteElement) {
+      if (!siteElement.use_question || !siteElement.dataCopy) {
+        return siteElement;
+      }
 
-});
+      // Create a copy of the siteElement
+      var originalSiteElement = siteElement;
+      siteElement = siteElement.dataCopy;
+
+      siteElement.questionified = true;
+
+      // Set the template and headline
+      // Remove the image from the question
+      siteElement.template_name = siteElement.template_name.split('_')[0] + '_question';
+      siteElement.headline = siteElement.question;
+      siteElement.caption = null;
+      siteElement.use_question = false;
+      siteElement.image_url = null;
+
+      // Create the new question site element
+      siteElement = create(siteElement);
+
+      // Set the callback.  When this is called, it sets the values on the original element
+      // and displays it.
+      siteElement.displayResponse = function (choice) {
+        // If showResponse has not been set (ie, not forcing an answer to display)
+        // trigger the answerSelected event
+        // TODO REFACTOR:
+        if (!HB.showResponse) {
+          HB.trigger('answerSelected', choice); // Old-style trigger
+          HB.trigger('answered', siteElement, choice); // New trigger
+        }
+
+        if (choice === 1) {
+          originalSiteElement.headline = siteElement.answer1response;
+          originalSiteElement.caption = siteElement.answer1caption;
+          originalSiteElement.link_text = siteElement.answer1link_text;
+        } else {
+          originalSiteElement.headline = siteElement.answer2response;
+          originalSiteElement.caption = siteElement.answer2caption;
+          originalSiteElement.link_text = siteElement.answer2link_text;
+        }
+
+        // Dont use the question, otherwise we end up in a loop.
+        // Also, don't animate in since the element will already be on the screen
+        // Also, don't record the view since it's already been recorded
+        originalSiteElement.use_question = false;
+        originalSiteElement.animated = false;
+        originalSiteElement.dontRecordView = true;
+        originalSiteElement.view_condition = 'immediately';
+
+        // Remove the siteElement and show the original in non preview environments
+        if (!preview.isActive()) {
+          siteElement.remove();
+          // also remove siteElement object from HB.siteElementsOnPage array
+          siteElementsOnPage.splice(siteElementsOnPage.indexOf(siteElement), 1);
+          addToPage(originalSiteElement);
+        }
+      };
+
+      // If showResponse is set the preview environments, skip right to showing the response
+      // TODO REFACTOR HB.showResponse
+      if (preview.isActive() && HB.showResponse) {
+        siteElement.displayResponse(HB.showResponse);
+        siteElement = originalSiteElement;
+      }
+
+      return siteElement;
+    }
+
+    return {
+      createAndAddToPage,
+      removeAllSiteElements
+    };
+
+  });

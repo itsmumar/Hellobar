@@ -2,7 +2,8 @@ hellobar.defineModule('base.site', ['hellobar'], function (hellobar) {
 
   var configuration = hellobar.createModuleConfiguration({
     siteId: 'number',
-    siteUrl: 'string'
+    siteUrl: 'string',
+    secret: 'string'
   });
 
   /**
@@ -17,6 +18,9 @@ hellobar.defineModule('base.site', ['hellobar'], function (hellobar) {
     },
     siteUrl: function () {
       return configuration.siteUrl();
+    },
+    secret: function() {
+      return configuration.secret();
     }
   };
 

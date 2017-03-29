@@ -185,7 +185,15 @@ hellobar.defineModule('base.dom', [], function () {
      * Runs specified callback once DOM has been loaded
      * @param callback {function}
      */
-    runOnDocumentReady: runOnDocumentReady
+    runOnDocumentReady: runOnDocumentReady,
+
+    shake,
+
+    animateIn,
+
+    animateOut,
+
+    wiggleEventListeners
 
   };
 

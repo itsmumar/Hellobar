@@ -133,9 +133,11 @@ export default Ember.Component.extend({
   togglePreview: ( function () {
     if (this.get('isSelecting')) {
       // Hide the preview frame for Modal and Takeovers so that they can select colors
+      // TODO REFACTOR window.HB_PS global usage here
       return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeOut();
     } else {
       // Show the Modal and Takeover in case it was hidden
+      // TODO REFACTOR window.HB_PS global usage here
       return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeIn();
     }
   }).observes('isSelecting'),

@@ -15,20 +15,9 @@ if (typeof(_hbq) === 'undefined') {
 }
 
 var HBQ = function () {
-  // Initialize the rules array so it can be pushed into
-  HB.rules = [];
-  HB.siteElementsOnPage = [];
   HB.isMobile = false;
-  HB.maxSliderSize = 380;
   /* IF CHANGED, UPDATE SLIDER ELEMENT CSS */
   HB.mobilePreviewWidth = 250;
-  HB.id_type_map = {
-    'hellobar-bar': 'bar',
-    'hellobar-modal': 'modal',
-    'hellobar-slider': 'slider',
-    'hellobar-takeover': 'takeover',
-    'hellobar-custom': 'custom'
-  }
 
   // Need to load the serialized cookies
   HB.loadCookies();
@@ -92,6 +81,7 @@ var HB = {
     else
       siteElements = HB.applyRules();
     for (var i = 0; i < siteElements.length; i++) {
+      // TODO REFACTOR use createAndAddToPage
       HB.addToPage(HB.createSiteElement(siteElements[i]));
     }
   },
@@ -149,6 +139,7 @@ var HB = {
       HB.css = '';
     }
     // Update CSS related to hellobar logo
+    // TODO REFACTOR change HB_PS to site.secret()
     css = css.split('hellobar-logo-wrapper').join('hellobar-logo-wrapper_' + HB_PS);
 
     HB.css += '<style>' + css + '</style>';
@@ -203,29 +194,6 @@ var HB = {
 
 
 
-  // TODO -> base.dom ???? (it's actually about showing condition)
-  // TODO rename payload (it's a function)
-  // Runs a function if the visitor has scrolled to a given height.
-  scrollTargetCheck: function (scrollTarget, payload) {
-    // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
-    // scrollTarget also accepts distance from top in pixels
-
-    if (scrollTarget === 'bottom') {
-      // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
-      scrollTarget = (document.body.scrollHeight - window.innerHeight - 300);
-    }
-    else if (scrollTarget === 'middle') {
-      // triggers just before middle of page - feels right due to polling rate
-      scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
-    }
-
-    // first condition checks if visitor has scrolled.
-    // second condition guards against pages too small to scroll, displays immediately.
-    // window.pageYOffset is same as window.scrollY, but with better compatibility.
-    if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
-      payload();
-    }
-  },
 
 
 
@@ -237,14 +205,7 @@ var HB = {
   },*/
 
 
-  // TODO this is called during initialization
-  // Sets the disableTracking cookie to true or false based on hb_ignore=
-  setTracking: function (queryString) {
-    if (queryString.match(/hb_ignore/i)) {
-      var bool = !!queryString.match(/hb_ignore=true/i);
-      HB.sc('disableTracking', bool, 5 * 365);
-    }
-  }
+
 
 };
 window.HB = HB;

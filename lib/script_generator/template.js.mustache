@@ -5,7 +5,7 @@
     HB_SITE_ID = {{site_id}};
     HB_SITE_URL = "{{site_url}}";
     HB_WK = "{{site_write_key}}"; // The site's write key
-    HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
+    HB_TZ = "{{site_timezone}}";
     HB_PS = "{{pro_secret}}";
     HB_GL_URL = "{{geolocation_url}}";
 
@@ -36,7 +36,19 @@
 
       hellobar('base.site', {
         configurator: function(configuration) {
-          configuration.siteId({{site_id}}).siteUrl('{{site_url}}');
+          configuration.siteId({{site_id}}).siteUrl('{{site_url}}').secret('{{pro_secret}}');
+        }
+      });
+
+      hellobar('base.timezone', {
+        configurator: function(configuration) {
+          configuration.defaultTimezone('{{site_timezone}}');
+        }
+      });
+
+      hellobar('base.styling', {
+        configurator: function(configuration) {
+          configuration.externalCSS({{{hellobar_container_css}}});
         }
       });
 
@@ -52,11 +64,29 @@
         }
       });
 
+      hellobar('elements', {
+        configurator: function(configuration) {
+          configuration.elementCSS({{{hellobar_element_css}}});
+        }
+      });
+
       hellobar('elements.rules', {
         configurator: function(configuration) {
           {{#rules}}
-            configuration.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}});
+            configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
           {{/rules}}
+        }
+      });
+
+      hellobar('tracking.internal', {
+        configurator: function(configuration) {
+          configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
+        }
+      });
+
+      hellobar('contentUpgrades', {
+        configurator: function(configuration) {
+          configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
         }
       });
 
@@ -85,9 +115,6 @@
             }
           }
 
-          HB.CONTENT_UPGRADES  = {{{content_upgrades_json}}}
-          HB.CONTENT_UPGRADES_STYLES  = {{{content_upgrades_styles_json}}}
-
           {{#templates}}
             hellobar('templating').setTemplate("{{name}}", {{{markup}}});
           {{/templates}}
@@ -100,8 +127,7 @@
             hellobar('templating').setTemplate("{{name}}", {{{markup}}});
           {{/content_upgrade_template}}
 
-          HB.addCSS({{{hellobar_element_css}}});
-          HB.extCSS = {{{hellobar_container_css}}};
+
         }
       }
 

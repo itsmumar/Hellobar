@@ -9,17 +9,15 @@ hellobar.defineModule('base.sanitizing', [], function() {
         if (siteElement[k].replace && !(whitelist && (whitelist.indexOf(k) >= 0))) {
           siteElement[k] = siteElement[k].replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g, '&quot;');
         } else if(!Array.isArray(siteElement[k])) {
-          siteElement[k] = HB.sanitize(siteElement[k]);
+          siteElement[k] = sanitize(siteElement[k]);
         }
       }
     }
     return siteElement;
   }
 
-  const module = {
-    initialize: () => null
+  return {
+    sanitize
   };
-
-  return module;
 
 });

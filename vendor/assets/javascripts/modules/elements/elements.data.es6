@@ -13,7 +13,6 @@ hellobar.defineModule('elements', ['base.storage', 'base.serialization', 'base.s
     if (!s[siteElementID])
       s[siteElementID] = {};
     s[siteElementID][key] = value;
-    //HB.saveCookies();
     saveToStorage();
   }
 

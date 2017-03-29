@@ -1,4 +1,8 @@
-hellobar.defineModule('base.timezone', [], function () {
+hellobar.defineModule('base.timezone', ['hellobar'], function (hellobar) {
+
+  const configuration = hellobar.createModuleConfiguration({
+    defaultTimezone: 'string' // The site's timezone offset in the format "+/-HH:MM"
+  });
 
   // Parses the zone and returns the offset in seconds. If it can
   // not be parsed returns null.
@@ -34,9 +38,9 @@ hellobar.defineModule('base.timezone', [], function () {
   // You can also pass in the value "visitor" which will use the visitor's
   // timezone
   function nowInTimezone(zone) {
-    // If no zone is specified try the HB_TZ variable
-    if (!zone && typeof(HB_TZ) == 'string')
-      zone = HB_TZ;
+    if (!zone && typeof(configuration.defaultTimezone()) == 'string') {
+      zone = configuration.defaultTimezone();
+    }
     var zoneOffset = parseTimezone(zone);
     if (zoneOffset === null)
       return new Date();

@@ -1,14 +1,14 @@
 hellobar.defineModule('base.bus', [], function() {
 
+  let eventCallbacks = {};
 
   // TODO -> base.bus
   // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "siteElementshown")
   function on(eventName, callback) {
-    if (!HB.eventCallbacks)
-      HB.eventCallbacks = {};
-    if (!HB.eventCallbacks[eventName])
-      HB.eventCallbacks[eventName] = [];
-    HB.eventCallbacks[eventName].push(callback);
+    if (!eventCallbacks[eventName]) {
+      eventCallbacks[eventName] = [];
+    }
+    eventCallbacks[eventName].push(callback);
   }
 
   // TODO -> base.bus
@@ -20,8 +20,8 @@ hellobar.defineModule('base.bus', [], function() {
   // 3 in this case.
   function trigger() {
     var eventName = arguments[0];
-    if (HB.eventCallbacks && HB.eventCallbacks[eventName]) {
-      var l = HB.eventCallbacks[eventName].length;
+    if (eventCallbacks && eventCallbacks[eventName]) {
+      var l = eventCallbacks[eventName].length;
       var origArgs = [];
       for (var i = 1; i < arguments.length; i++) {
         origArgs.push(arguments[i]);
@@ -31,14 +31,16 @@ hellobar.defineModule('base.bus', [], function() {
         // asynchronously
         (function (eventName, i) {
           setTimeout(function () {
-            (HB.eventCallbacks[eventName][i]).apply(HB, origArgs);
+            (eventCallbacks[eventName][i]).apply(HB, origArgs);
           }, i)
         })(eventName, i);
       }
     }
   }
 
-  return {};
-
+  return {
+    on,
+    trigger
+  };
 
 });

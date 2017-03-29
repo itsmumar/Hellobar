@@ -53,10 +53,8 @@ hellobar.defineModule('base.format', [], function () {
     return stripTrailingSlash(urlParts[0] + '/') + '?' + sortedParams;
   }
 
-  // TODO rename to asBool, publish
-  // TODO -> format
   // Returns whether or not a setting is true (treats 'false' and string '0' as the boolean false)
-  function t(value) {
+  function asBool(value) {
     return (value && value != 'false' && value != '0') ? true : false;
   }
 
@@ -76,7 +74,8 @@ hellobar.defineModule('base.format', [], function () {
   }
 
   return {
-    normalizeUrl
+    normalizeUrl,
+    asBool
   };
 
 });

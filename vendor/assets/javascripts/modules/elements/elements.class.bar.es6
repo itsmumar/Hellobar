@@ -1,95 +1,100 @@
-hellobar.defineModule('elements.class.bar', ['elements.class'], function (SiteElement) {
+hellobar.defineModule('elements.class.bar',
+  ['base.dom', 'base.format', 'elements.class'],
+  function (dom, format, SiteElement) {
 
-  class BarElement extends SiteElement {
-    initialize(props) {
-      this.callSuper("initialize", props);
-    }
-
-    setupIFrame(iframe) {
-      this.callSuper('setupIFrame', iframe)
-      HB.addClass(iframe, "hb-" + this.size);
-      HB.addClass(iframe, "hb-" + this.placement);
-      HB.addClass(iframe, (HB.t(this.remains_at_top) ? " remains-in-place" : ""));
-
-      if (this.animated) {
-        HB.addClass(iframe, "hellobar");
+    class BarElement extends SiteElement {
+      initialize(props) {
+        this.callSuper('initialize', props);
       }
 
-      iframe.scrolling = "no";
-      iframe.setAttribute("frameBorder", 0); // IE 9 and less
+      setupIFrame(iframe) {
+        this.callSuper('setupIFrame', iframe);
+        dom.addClass(iframe, 'hb-' + this.size);
+        dom.addClass(iframe, 'hb-' + this.placement);
+        dom.addClass(iframe, (format.asBool(this.remains_at_top) ? ' remains-in-place' : ''));
 
-      // Remove the pusher if it exists
-      if (HB.p) {
-        HB.p.parentNode.removeChild(HB.p);
-      }
-
-      HB.p = null;
-
-      // Create the pusher (which pushes the page down) if needed
-      if (HB.t(this.pushes_page_down)) {
-        HB.p = document.createElement("div");
-        HB.p.id = "hellobar-pusher";
-        HB.p.className = "hb-" + this.size;
-
-        // shrinks pusher if siteElement hidden by viewCondition rules
-        if (this.w.style.display === "none") {
-          HB.p.style.height = 0
+        if (this.animated) {
+          dom.addClass(iframe, 'hellobar');
         }
 
-        HB.injectAtTop(HB.p, this.placement == "bar-bottom");
+        iframe.scrolling = 'no';
+        iframe.setAttribute('frameBorder', 0); // IE 9 and less
+
+        // Remove the pusher if it exists
+        if (HB.p) {
+          HB.p.parentNode.removeChild(HB.p);
+        }
+
+        HB.p = null;
+
+        // Create the pusher (which pushes the page down) if needed
+        if (HB.t(this.pushes_page_down)) {
+          HB.p = document.createElement('div');
+          HB.p.id = 'hellobar-pusher';
+          HB.p.className = 'hb-' + this.size;
+
+          // shrinks pusher if siteElement hidden by viewCondition rules
+          if (this.w.style.display === 'none') {
+            HB.p.style.height = 0;
+          }
+
+          HB.injectAtTop(HB.p, this.placement == 'bar-bottom');
+        }
       }
+
+      minimize() {
+        dom.animateOut(this.w, this.onHidden());
+
+        if (HB.p) {
+          HB.p.style.display = 'none';
+        }
+
+        dom.animateIn(this.pullDown);
+      }
+
+      onHidden() {
+        HB.setVisibilityControlCookie('dismiss', this);
+      }
+
+      attach() {
+        // Disable wiggle on Mobile Safari because it blocks the click action
+        if (this.wiggle_button && !HB.isMobileSafari()) {
+          this.wiggle = 'wiggle';
+        } else {
+          this.wiggle = '';
+        }
+
+        this.callSuper('attach');
+      }
+
+      barSizeCssClass() {
+        const size = this.size;
+        if (size === 'large' || size === 'regular') {
+          return size;
+        }
+        var sizeAsInt = parseInt(size);
+        if (sizeAsInt < 40) {
+          return 'regular';
+        } else if (sizeAsInt >= 40 && sizeAsInt < 70) {
+          return 'large';
+        } else {
+          return 'x-large';
+        }
+      }
+
+      barHeight() {
+        const size = this.size;
+        switch (size) {
+          case 'large':
+            return '50px';
+          case 'regular':
+            return '30px';
+          default:
+            return size + 'px';
+        }
+      }
+
     }
 
-    minimize() {
-      HB.animateOut(this.w, this.onHidden());
-
-      if (HB.p) {
-        HB.p.style.display = 'none';
-      }
-
-      HB.animateIn(this.pullDown);
-    }
-
-    onHidden() {
-      // Track specific elements longer, for takeovers/modals
-      var expiration, cookie_name, cookie_str, dismissed_elements;
-      // Track specific elements 24 hours, for bars/sliders
-      expiration = 86400000; // 24 hours
-      cookie_name = "HBDismissedBars";
-      cookie_str = HB.gc(cookie_name) || "[]";
-      dismissed_elements = JSON.parse(cookie_str) || [];
-
-      if (dismissed_elements.indexOf(this.id) == -1) {
-        dismissed_elements.push(this.id);
-      }
-
-      if (dismissed_elements) {
-        HB.sc(
-          cookie_name,
-          JSON.stringify(dismissed_elements),
-          new Date((new Date().getTime() + expiration)),
-          "path=/"
-        );
-      }
-
-      // The above HBDismissedBars cookie is currently being *ignored* when
-      // displaying a bar (dead code) so instead set a regular visibility cookie
-      // based on user settings
-      HB.setVisibilityControlCookie('dismiss', this);
-    }
-
-    attach() {
-      // Disable wiggle on Mobile Safari because it blocks the click action
-      if (this.wiggle_button && !HB.isMobileSafari()) {
-        this.wiggle = 'wiggle';
-      } else {
-        this.wiggle = '';
-      }
-
-      this.callSuper('attach')
-    }
-
-  }
-
-  return BarElement;
-});
+    return BarElement;
+  });

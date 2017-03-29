@@ -1,24 +1,28 @@
-hellobar.defineModule('elements.bar', ['base.templating'], function(templating) {
+hellobar.defineModule('elements.bar', ['hellobar', 'base.templating'], function (hellobar, templating) {
 
-  // TODO adopt
+  const configuration = hellobar.createModuleConfiguration({
+    contentUpgrades: 'object',
+    styles: 'object'
+  });
 
-  function showContentUpgrade(id) {
-    if (HB.CONTENT_UPGRADES[id]){
-      siteElement = HB.CONTENT_UPGRADES[id];
+  // TODO is was showContentUpgrade previously
+  function show(contentUpgradeId) {
+    const contentUpgrades = configuration.contentUpgrades() || {};
+    if (contentUpgrades[contentUpgradeId]) {
+      const siteElement = contentUpgrades[contentUpgradeId];
+      // TODO REFACTOR
       HB.viewed(siteElement);
-      siteStyles = HB.CONTENT_UPGRADES_STYLES;
-      var tpl =  templating.getTemplateByName['contentupgrade'];
-      content =  templating.renderTemplate(tpl, siteElement);
-      content =  templating.renderTemplate(content, siteStyles);
-      document.getElementById('hb-cu-'+id).outerHTML = content;
+      const siteStyles = configuration.styles() || {};
+      var tpl = templating.getTemplateByName['contentupgrade'];
+      const content1 = templating.renderTemplate(tpl, siteElement);
+      const content2 = templating.renderTemplate(content1, siteStyles);
+      document.getElementById('hb-cu-' + contentUpgradeId).outerHTML = content2;
     }
   }
 
-  const module = {
-    initialize: () => null
+  return {
+    show
   };
-
-  return module;
 
 });
 

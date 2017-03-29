@@ -1,48 +1,74 @@
-hellobar.defineModule('elements.intents', [], function() {
+hellobar.defineModule('elements.intents', ['base.environment'], function (environment) {
+
+  let intentConditionCache = {};
 
   // TODO -> elements.intents ???
   // TODO it's for intentCheck from site_element.es6
   // TODO rename payload
   // Runs a function "payload" if the visitor meets intent-detection conditions
   function intentCheck(intentSetting, payload) {
-    var vistorIntendsTo = false;
+    var visitorIntendsTo = false;
 
     // if intent is set to exit and we have enough mouse position data...
     if (intentSetting === 'exit') {
 
       // catch a keyboard move towards the address bar via onBlur event; resets onBlur state
-      if (HB.intentConditionCache.intentBodyBlurEvent) {
-        vistorIntendsTo = true;
-        HB.intentConditionCache.intentBodyBlurEvent = false;
+      if (intentConditionCache.intentBodyBlurEvent) {
+        visitorIntendsTo = true;
+        intentConditionCache.intentBodyBlurEvent = false;
       }
 
-      if (HB.intentConditionCache.mousedOut) {
-        vistorIntendsTo = true;
+      if (intentConditionCache.mousedOut) {
+        visitorIntendsTo = true;
       }
 
       //  catch page inactive state
       if (document.hidden || document.unloaded) {
-        vistorIntendsTo = true
+        visitorIntendsTo = true;
       }
 
       // if on mobile, display the bar after N ms regardless of mouse behavior
       var mobileDelaySetting = 30000;
       var date = new Date();
-      if (HB.device() === 'mobile' && date.getTime() - HB.intentConditionCache.intentStartTime > mobileDelaySetting) {
-        vistorIntendsTo = true
+      if (environment.device() === 'mobile' && date.getTime() - intentConditionCache.intentStartTime > mobileDelaySetting) {
+        visitorIntendsTo = true;
       }
     }
 
-    if (vistorIntendsTo) {
+    if (visitorIntendsTo) {
+      payload();
+    }
+  }
+
+  // TODO -> elements.intents
+  // TODO rename payload (it's a function)
+  // Runs a function if the visitor has scrolled to a given height.
+  function scrollTargetCheck(scrollTarget, payload) {
+    // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;
+    // scrollTarget also accepts distance from top in pixels
+
+    if (scrollTarget === 'bottom') {
+      // arbitrary 300 pixels subtracted from page height to assume visitor will not scroll through a footer
+      scrollTarget = (document.body.scrollHeight - window.innerHeight - 300);
+    }
+    else if (scrollTarget === 'middle') {
+      // triggers just before middle of page - feels right due to polling rate
+      scrollTarget = ((document.body.scrollHeight - (window.innerHeight * 2)) / 2);
+    }
+
+    // first condition checks if visitor has scrolled.
+    // second condition guards against pages too small to scroll, displays immediately.
+    // window.pageYOffset is same as window.scrollY, but with better compatibility.
+    if (window.pageYOffset >= scrollTarget || document.body.scrollHeight <= scrollTarget + window.innerHeight) {
       payload();
     }
   }
 
 
   // TODO called from setupIFrame from site_element.es6
-  // TODO where it should be?
+  // TODO REFACTOR where it should be? -> It should be called via bus (subscription should be done in initialize)
   function initializeIntentListeners() {
-    HB.intentConditionCache = {
+    intentConditionCache = {
       mouseInTime: null,
       mousedOut: false,
       intentBodyBlurEvent: false,
@@ -52,9 +78,9 @@ hellobar.defineModule('elements.intents', [], function() {
     // When a mouse enters the document, reset the mouseOut state and
     // set the time the document was entered
     document.body.addEventListener('mouseenter', function (e) {
-      if (!HB.intentConditionCache.mouseInTime) {
-        HB.intentConditionCache.mousedOut = false;
-        HB.intentConditionCache.mouseInTime = new Date();
+      if (!intentConditionCache.mouseInTime) {
+        intentConditionCache.mousedOut = false;
+        intentConditionCache.mouseInTime = new Date();
       }
     });
 
@@ -65,25 +91,26 @@ hellobar.defineModule('elements.intents', [], function() {
       setTimeout(function () {
         //if active (focused) element after blur event is "body", it means focus has gone outside of the document
         //otherwise active element could be a link, an input, an iframe, etc. In that case we don't trigger intent
-        HB.intentConditionCache.intentBodyBlurEvent = document.activeElement === document.body;
+        intentConditionCache.intentBodyBlurEvent = document.activeElement === document.body;
       }, 0);
     };
 
     // When the mouse leaves the document, check the current time vs when the mouse entered
     // the document.  If greater than the specified timespan, set the mouseOut state
     document.body.addEventListener('mouseleave', function (e) {
-      if (HB.intentConditionCache.mouseInTime) {
+      if (intentConditionCache.mouseInTime) {
         var currentTime = new Date();
-        if (currentTime.getTime() - HB.intentConditionCache.mouseInTime.getTime() > 2000) {
-          HB.intentConditionCache.mouseInTime = null;
-          HB.intentConditionCache.mousedOut = true;
+        if (currentTime.getTime() - intentConditionCache.mouseInTime.getTime() > 2000) {
+          intentConditionCache.mouseInTime = null;
+          intentConditionCache.mousedOut = true;
         }
       }
     });
   }
 
   const module = {
-    initialize: () => null
+    intentCheck,
+    scrollTargetCheck
   };
 
   return module;
