@@ -15,6 +15,6 @@ class ContactListSerializer < ActiveModel::Serializer
   end
 
   def provider
-    object.identity.try(:provider) || 0
+    provider_name = object.identity && object.identity.provider.titlecase || 'Hello Bar'
   end
 end
