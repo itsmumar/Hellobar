@@ -148,7 +148,7 @@ hellobar.defineModule('elements',
 
     // TODO -> elements
     // Replaces the site element with the question variation.
-    // Sets the displayResponse callback to show the original element
+    // Sets the displayAnswer callback to show the original element
     function questionifySiteElement(siteElement) {
       if (!siteElement.use_question || !siteElement.dataCopy) {
         return siteElement;
@@ -173,15 +173,7 @@ hellobar.defineModule('elements',
 
       // Set the callback.  When this is called, it sets the values on the original element
       // and displays it.
-      siteElement.displayResponse = function (choice) {
-        // If showResponse has not been set (ie, not forcing an answer to display)
-        // trigger the answerSelected event
-        // TODO REFACTOR:
-        if (!HB.showResponse) {
-          HB.trigger('answerSelected', choice); // Old-style trigger
-          HB.trigger('answered', siteElement, choice); // New trigger
-        }
-
+      siteElement.displayAnswer = function (choice) {
         if (choice === 1) {
           originalSiteElement.headline = siteElement.answer1response;
           originalSiteElement.caption = siteElement.answer1caption;
@@ -209,10 +201,8 @@ hellobar.defineModule('elements',
         }
       };
 
-      // If showResponse is set the preview environments, skip right to showing the response
-      // TODO REFACTOR HB.showResponse
-      if (preview.isActive() && HB.showResponse) {
-        siteElement.displayResponse(HB.showResponse);
+      if (preview.isActive() && preview.getAnswerToDisplay()) {
+        siteElement.displayAnswer(preview.getAnswerToDisplay());
         siteElement = originalSiteElement;
       }
 

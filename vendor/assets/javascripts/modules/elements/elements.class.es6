@@ -705,8 +705,7 @@ hellobar.defineModule('elements.class',
       }
 
       questionOrAnswerIsShown() {
-        // TODO REFACTOR HB.showResponse
-        return format.asBool(this.questionified) || HB.showResponse;
+        return format.asBool(this.questionified) || preview.getAnswerToDisplay();
       }
 
       renderBranding() {
