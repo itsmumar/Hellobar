@@ -15,7 +15,7 @@
       padding-bottom: 1.5em
       border-style: solid
       border-color: inherit
-      font-smoothing: antialiased
+      @include antialiased()
 
     .package-title
       color: $white
@@ -90,7 +90,7 @@
         .button
           display: block
           font-size: 0.85em !important
-          font-smoothing: subpixel-antialiased
+          @include antialiased(false)
 
           &[disabled]
             color: $gray
@@ -108,7 +108,7 @@
       .package-features
 
         li
-          font-smoothing: subpixel-antialiased
+          @include antialiased(false)
 
           i
             top: 18%

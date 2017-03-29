@@ -14,7 +14,7 @@
     .site-title
       font-size: 1.33em
       margin-bottom: 1em
-      font-smoothing: antialiased
+      @include antialiased()
 
       &.downgrade-free
         margin: 3em 0 2.5em 0
@@ -65,12 +65,12 @@
             position: relative
             padding-left: 2.5em
             padding-top: 1.5em
-            font-smoothing: subpixel-antialiased
+            @include antialiased(false)
 
             small
               color: $gray
               display: block
-              font-smoothing: antialiased
+              @include antialiased()
 
               strong
                 color: $red
@@ -124,7 +124,7 @@
                 margin-right: 0
 
             label
-              font-smoothing: subpixel-antialiased
+              @include antialiased(false)
 
             input
               margin-bottom: 0em !important

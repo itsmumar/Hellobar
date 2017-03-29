@@ -23,7 +23,7 @@ a
     color: $blue
     font-size: 0.8rem
     text-decoration: underline
-    font-smoothing: antialiased
+    @include antialiased()
 
     &:hover
       color: $blueLight
@@ -35,7 +35,7 @@ h1, h2, h3, h4, h5, h6, legend
   color: $red
   line-height: 100%
   font-weight: $fontWeightNormal
-  font-smoothing: antialiased
+  @include antialiased()
 
 h1
   font-size: 2.5em
@@ -67,7 +67,7 @@ p
   margin-top: 0
   font-weight: $fontWeightLight
   line-height: 150%
-  font-smoothing: antialiased
+  @include antialiased()
 
 /*-----------  Lists  -----------*/
 

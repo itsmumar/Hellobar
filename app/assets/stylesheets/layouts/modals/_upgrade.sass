@@ -9,7 +9,7 @@
   .site-title
     text-align: center
     font-size: 1.33em
-    font-smoothing: antialiased
+    @include antialiased()
 
   .billing-options
     text-align: center
@@ -31,7 +31,7 @@
       text-transform: uppercase
       font-size: 0.95em !important
       @include inline-block()
-      font-smoothing: antialiased
+      @include antialiased()
       transition: all 0.15s ease-out 0s
 
       &:first-child
@@ -79,7 +79,7 @@
       padding-bottom: 1.5em
       border-style: solid
       border-color: inherit
-      font-smoothing: antialiased
+      @include antialiased()
 
     .package-title
       text-align: center
@@ -165,7 +165,7 @@
         .button
           display: block
           font-size: 0.85em !important
-          font-smoothing: subpixel-antialiased
+          @include antialiased(false)
 
           &[disabled]
             color: $gray
