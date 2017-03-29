@@ -63,7 +63,7 @@ class ScriptGenerator < Mustache
 
   def script_is_installed_properly
     return true if Rails.env.test?
-    'HB.scriptIsInstalledProperly()'
+    'scriptIsInstalledProperly()'
   end
 
   # returns the sites tz offset as "+/-HH:MM"

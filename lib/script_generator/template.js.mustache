@@ -1,7 +1,7 @@
 (function() {
-  if (typeof(HB) == "undefined") {
-    
-    // HelloBar JS Modules
+  if (typeof(hellobar) === 'undefined') {
+
+    // Load HelloBar JS Core and Modules
     (function() {
       // Loading core for module management
       var hellobar = {{{core_js}}}
@@ -15,11 +15,14 @@
       }
 
       function isPreviewMode() {
-        return hasCapability('preview');
+        return hellobar('base.preview').isActive();
       }
 
-      // Configure modules
+      function scriptIsInstalledProperly() {
+        return hellobar('base.selfcheck').scriptIsInstalledProperly();
+      }
 
+      // Initialize and configure modules
       hellobar('base.capabilities', {
         configurator: function(configuration) {
           configuration.capabilities({{{capabilities_json}}});
@@ -32,110 +35,87 @@
         }
       });
 
-      hellobar('base.timezone', {
-        configurator: function(configuration) {
-          configuration.defaultTimezone('{{site_timezone}}');
-        }
-      });
+      function initializeProtectedModules() {
 
-      hellobar('base.styling', {
-        configurator: function(configuration) {
-          configuration.externalCSS({{{hellobar_container_css}}});
-        }
-      });
+        hellobar('base.timezone', {
+          configurator: function(configuration) {
+            configuration.defaultTimezone('{{site_timezone}}');
+          }
+        });
 
-      hellobar('base.templating', {
-        configurator: function(configuration) {
-          {{#templates}}
-            configuration.addTemplate("{{name}}", {{{markup}}});
-          {{/templates}}
+        hellobar('base.styling', {
+          configurator: function(configuration) {
+            configuration.externalCSS({{{hellobar_container_css}}});
+          }
+        });
 
-          {{#branding_templates}}
-            configuration.addTemplate("{{name}}", {{{markup}}});
-          {{/branding_templates}}
+        hellobar('base.templating', {
+          configurator: function(configuration) {
+            {{#templates}}
+              configuration.addTemplate("{{name}}", {{{markup}}});
+            {{/templates}}
 
-          {{#content_upgrade_template}}
-            configuration.addTemplate("{{name}}", {{{markup}}});
-          {{/content_upgrade_template}}
-        }
-      });
+            {{#branding_templates}}
+              configuration.addTemplate("{{name}}", {{{markup}}});
+            {{/branding_templates}}
 
-      hellobar('geolocation', {
-        configurator: function(configuration) {
-          configuration.geolocationUrl('{{geolocation_url}}');
-        }
-      });
+            {{#content_upgrade_template}}
+              configuration.addTemplate("{{name}}", {{{markup}}});
+            {{/content_upgrade_template}}
+          }
+        });
 
-      !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
-        configurator: function(configuration) {
-          configuration.autoRun(true);
-        }
-      });
+        hellobar('geolocation', {
+          configurator: function(configuration) {
+            configuration.geolocationUrl('{{geolocation_url}}');
+          }
+        });
 
-      hellobar('elements', {
-        configurator: function(configuration) {
-          configuration.elementCSS({{{hellobar_element_css}}});
-        }
-      });
+        !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
+          configurator: function(configuration) {
+            configuration.autoRun(true);
+          }
+        });
 
-      hellobar('elements.rules', {
-        configurator: function(configuration) {
-          {{#rules}}
-            configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
-          {{/rules}}
-        }
-      });
+        hellobar('elements', {
+          configurator: function(configuration) {
+            configuration.elementCSS({{{hellobar_element_css}}});
+          }
+        });
 
-      hellobar('tracking.internal', {
-        configurator: function(configuration) {
-          configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
-        }
-      });
+        hellobar('elements.rules', {
+          configurator: function(configuration) {
+            {{#rules}}
+              configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
+            {{/rules}}
+          }
+        });
 
-      hellobar('contentUpgrades', {
-        configurator: function(configuration) {
-          configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
-        }
-      });
+        hellobar('tracking.internal', {
+          configurator: function(configuration) {
+            configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
+          }
+        });
 
-      !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
-        configurator: function(configuration) {
-          var autofills = {{{autofills_json}}};
-          configuration.autofills(autofills).autoRun(true);
-        }
-      });
+        hellobar('contentUpgrades', {
+          configurator: function(configuration) {
+            configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
+          }
+        });
+
+        !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
+          configurator: function(configuration) {
+            var autofills = {{{autofills_json}}};
+            configuration.autofills(autofills).autoRun(true);
+          }
+        });
+      }
+
+      if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
+        initializeProtectedModules();
+      }
     })();
 
     {{{libs_js}}}
-
-    (function() {
-
-      HBInit = function () {
-        if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
-          HB.CAP = {{{capabilities_json}}};
-          // Protect capabilities from being modified
-          if ( typeof(Object.defineProperty) != "undefined")
-          {
-            try{Object.defineProperty(HB, 'CAP', {writable:false, configurable: false});}catch(e){};
-            for(var p in HB.CAP)
-            {
-              try{Object.defineProperty(HB.CAP, p, {writable:false, configurable: false})}catch(e){};
-            }
-          }
-
-
-
-
-        }
-      }
-
-      HBInit();
-
-
-
-      if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
-        _hbq = new HBQ();
-      }
-    })();
   }
 })();
