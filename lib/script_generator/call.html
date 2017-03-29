@@ -1,6 +1,6 @@
-<{{ hellobar('preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
+<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
    href="tel:{{siteElement.phone_number}}"
-   onclick="if (hellobar('preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.open_in_new_window ? 'true' : 'false'}} };"
+   onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.open_in_new_window ? 'true' : 'false'}} };"
    style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
   <img class="icon-phone"
     src="{{hellobar('base.coloring').colorIsBright(siteElement.secondary_color) ? 'https://s3.amazonaws.com/assets.hellobar.com/dark-phone.png' : 'https://s3.amazonaws.com/assets.hellobar.com/white-phone.png'}}"
@@ -10,4 +10,4 @@
        data-hb-inline-editor-placeholder="Action">
     {{siteElement.link_text}}
   </div>
-</{{ hellobar('preview').isActive() ? 'div' : 'a' }}>
+</{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}>

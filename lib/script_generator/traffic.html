@@ -1,7 +1,7 @@
-<{{ hellobar('preview').isActive() ? 'div' : 'a' }}
+<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}
   id="hb-traffic-cta"
   class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
-  onclick="if (hellobar('preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.open_in_new_window ? 'true' : 'false'}} };"
+  onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.open_in_new_window ? 'true' : 'false'}} };"
   href="{{siteElement.settings.url}}"
   target="{{siteElement.open_in_new_window ? '_blank' : '_parent'}}"
   style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}"
@@ -12,4 +12,4 @@
        data-hb-inline-editor-placeholder="Action">
     {{siteElement.link_text}}
   </div>
-</{{ hellobar('preview').isActive() ? 'div' : 'a' }}>
+</{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}>
