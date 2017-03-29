@@ -171,7 +171,7 @@ hellobar.defineModule('elements.class',
         // Render the siteElement in the container.
         var d = this.w.contentWindow.document;
         d.open();
-        d.write('<html><head>' + (this.css || '') + '</head><body>' + html + '</body></html>');
+        d.write('<html><head>' + (this.css ? '<style>' + this.css + '</style>' : '') + '</head><body>' + html + '</body></html>');
         d.close();
         d.body.className = this.type;
 
