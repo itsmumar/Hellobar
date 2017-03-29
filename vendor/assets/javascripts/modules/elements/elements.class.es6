@@ -709,6 +709,20 @@ hellobar.defineModule('elements.class',
         return format.asBool(this.questionified) || HB.showResponse;
       }
 
+      renderBranding() {
+        const template = templating.getTemplateByName('branding_animated');
+        return templating.renderTemplate(template, this);
+      }
+
+      brandingName() {
+        return 'animated';
+      }
+
+      shouldShowBranding() {
+        return this.show_branding;
+        // TODO initially it was HB.t(siteElement.show_branding) || !HB.CAP.no_b
+      }
+
     }
 
     return SiteElement;

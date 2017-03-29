@@ -180,7 +180,7 @@ class ScriptGenerator < Mustache
       Dir.glob(base.join('branding', '*.html')).map do |f|
         path = Pathname.new(f)
         content = render_asset(path.relative_path_from(base)).to_json
-        { name: path.basename.sub_ext('').to_s, markup: content }
+        { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
       end
     end
   end

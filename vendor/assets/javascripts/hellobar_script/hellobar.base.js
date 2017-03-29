@@ -146,14 +146,7 @@ var HB = {
   },
 
 
-  // TODO this is called from html pieces. Should it be in tracking.hb module? or in elements.conversion?
-  // Records the rule being formed when the visitor clicks the specified element
-  trackClick: function (domElement, siteElement) {
-    var url = domElement.href;
-    HB.converted(siteElement, function () {
-      if (domElement.target != '_blank') document.location = url;
-    });
-  },
+
 
   // TODO remove this. Already have this function in base.dom
   // Calls the specificied callback once the DOM is ready.

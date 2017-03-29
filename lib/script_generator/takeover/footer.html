@@ -3,8 +3,8 @@
     {{siteElement.imageFor(['right'])}}
   </div>
 
-  <div class="hb-logo-wrapper {{HB.branding_template()}}" >
-    {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
+  <div class="hb-logo-wrapper {{siteElement.brandingName()}}" >
+    {{siteElement.renderBranding()}}
   </div>
 
   <a class="icon-close" onclick="{{siteElement.me}}.close()"></a>

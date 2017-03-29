@@ -7,17 +7,17 @@ hellobar.defineModule('elements.collecting',
      * Creates a field for collecting information
      * @param field
      */
-    function createInputFieldHtml(field, barModel) {
+    function createInputFieldHtml(field, siteElement) {
       function fieldAttrs() {
         var label = '';
         var type = 'text';
 
         switch (field.type) {
           case 'builtin-name':
-            label = field.label || barModel.name_placeholder || 'Name';
+            label = field.label || siteElement.name_placeholder || 'Name';
             break;
           case 'builtin-email':
-            label = field.label || barModel.email_placeholder || 'Email';
+            label = field.label || siteElement.email_placeholder || 'Email';
             type = preview.isActive() ? 'text' : 'email';
             break;
           case 'builtin-phone':

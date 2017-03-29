@@ -126,10 +126,19 @@ hellobar.defineModule('elements.conversion',
       return url.replace(/.*?\:\/\//, '').replace(/(.*?)\/.*/, '$1').replace(/www\./i, '').toLowerCase();
     }
 
+    // Records the rule being formed when the visitor clicks the specified element
+    function trackClick(domElement, siteElement) {
+      var url = domElement.href;
+      converted(siteElement, function () {
+        if (domElement.target != '_blank') document.location = url;
+      });
+    }
+
 
     return {
       converted,
-      viewed
+      viewed,
+      trackClick
     };
 
   });
