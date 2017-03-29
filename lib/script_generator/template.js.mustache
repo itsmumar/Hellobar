@@ -52,6 +52,22 @@
         }
       });
 
+      hellobar('base.templating', {
+        configurator: function(configuration) {
+          {{#templates}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/templates}}
+
+          {{#branding_templates}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/branding_templates}}
+
+          {{#content_upgrade_template}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/content_upgrade_template}}
+        }
+      });
+
       hellobar('geolocation', {
         configurator: function(configuration) {
           configuration.geolocationUrl('{{geolocation_url}}');
@@ -115,17 +131,7 @@
             }
           }
 
-          {{#templates}}
-            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
-          {{/templates}}
 
-          {{#branding_templates}}
-            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
-          {{/branding_templates}}
-
-          {{#content_upgrade_template}}
-            hellobar('templating').setTemplate("{{name}}", {{{markup}}});
-          {{/content_upgrade_template}}
 
 
         }

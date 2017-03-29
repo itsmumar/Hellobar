@@ -1,14 +1,12 @@
-hellobar.defineModule('elements.bar', ['base.preview'], function (preview) {
+hellobar.defineModule('elements.bar', ['hellobar', 'base.preview'], function (hellobar, preview) {
 
   let templates = {};
 
-  // TODO -> base.templating
-  // TODO replace setTemplate with module configuration
-// Sets the template HTML. Note if you override getTemplate this will have
-// no affect
-  function setTemplate(type, html) {
-    templates[type] = html;
-  }
+  const configuration = {
+    addTemplate(name, html) {
+      templates[name] = html;
+    }
+  };
 
   // TODO -> base.templating
   function getTemplateByName(templateName) {
@@ -38,11 +36,9 @@ hellobar.defineModule('elements.bar', ['base.preview'], function (preview) {
   }
 
   return {
-    setTemplate,
+    configuration: () => configuration,
     getTemplateByName,
     renderTemplate
   };
 
 });
-
-
