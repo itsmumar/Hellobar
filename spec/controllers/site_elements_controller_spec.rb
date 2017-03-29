@@ -58,7 +58,7 @@ describe SiteElementsController do
     { 'fields_to_collect' => settings['fields_to_collect'] }
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     let(:user) { create(:user) }
     let(:element) { create(:site_element) }
     before do
@@ -79,7 +79,7 @@ describe SiteElementsController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     let!(:site) { create(:site) }
     let(:owner) { site.owners.first }
 
@@ -129,7 +129,7 @@ describe SiteElementsController do
     end
   end
 
-  describe 'POST new' do
+  describe 'GET #new' do
     it 'defaults the font_id to the column default' do
       membership = create(:site_membership)
       stub_current_user(membership.user)
@@ -157,16 +157,16 @@ describe SiteElementsController do
       let(:subscription) { create(:free_subscription, site: site) }
       before { stub_current_user(site.owners.first) }
 
-      it 'defaults branding to true if free user' do
+      it 'defaults branding to true' do
         get :new, site_id: subscription.site.id, format: :json
 
         expect_json_response_to_include(show_branding: true)
       end
 
-      it 'sets the theme id to nil' do
+      it 'sets `theme_id` to `autodetect`' do
         get :new, site_id: subscription.site.id, format: :json
 
-        expect_json_response_to_include(theme: nil)
+        expect_json_response_to_include(theme_id: 'autodetect')
       end
 
       it "doesn't push an unsaved element into the site.site_elements association" do
@@ -180,7 +180,7 @@ describe SiteElementsController do
     end
   end
 
-  describe 'POST update' do
+  describe 'POST #update' do
     let(:user) { create(:user) }
     let(:element) { create(:site_element) }
     before do

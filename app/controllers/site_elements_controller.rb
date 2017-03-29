@@ -28,6 +28,7 @@ class SiteElementsController < ApplicationController
       rule: @site.rules.first,
       show_branding: !@site.capabilities(true).remove_branding?,
       closable: false,
+      theme_id: 'autodetect',
       settings: { url: @site.url, url_to_like: @site.url }
     )
 
