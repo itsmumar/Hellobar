@@ -30,7 +30,6 @@ class SiteSerializer < ActiveModel::Serializer
 
   def contact_lists
     object.contact_lists.map do |list|
-      identity = list.identity_id && Identity.find_by(id: list.identity_id)
       {
         id: list.id,
         name: list.name,
