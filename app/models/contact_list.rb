@@ -152,6 +152,10 @@ class ContactList < ActiveRecord::Base
     data['tags'] || []
   end
 
+  def provider_name
+    identity && identity.provider.titlecase || 'Hello Bar'
+  end
+
   private
 
   def notify_identity

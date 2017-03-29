@@ -5,16 +5,12 @@ class ContactListSerializer < ActiveModel::Serializer
     :errors,
     :id,
     :name,
-    :provider,
+    :provider_name,
     :site_elements_count,
     :site_id
   )
 
   def errors
     object.errors.full_messages
-  end
-
-  def provider
-    provider_name = object.identity && object.identity.provider.titlecase || 'Hello Bar'
   end
 end

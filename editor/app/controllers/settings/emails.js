@@ -97,7 +97,7 @@ export default Ember.Controller.extend({
 
           success: (data, modal) => {
             let lists = this.get('model.site.contact_lists').slice(0);
-            lists.push({id: data.id, name: data.name, provider: data.provider});
+            lists.push({id: data.id, name: data.name, provider_name: data.provider_name});
             this.set('model.site.contact_lists', lists);
             setTimeout(( () => {
                 this.set('model.contact_list_id', data.id);
