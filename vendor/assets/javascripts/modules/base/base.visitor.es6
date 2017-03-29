@@ -161,6 +161,8 @@ hellobar.defineModule('base.visitor',
     // TODO -> base.visitor
     // Gets the visitor attribute specified by the key or returns null
     function getVisitorData(key) {
+
+      // TODO REFACTOR is key is empty return whole data object
       if (!key) {
         return null;
       }
