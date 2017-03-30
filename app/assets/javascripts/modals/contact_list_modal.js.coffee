@@ -392,7 +392,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      notags: !(@options.contactList?.data?.tags?.length)
+      noTags: !(@options.contactList?.data?.tags?.length)
       tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
               @options.contactList?.data?.tags
             else
