@@ -6,7 +6,7 @@ hellobar.defineModule('base.coloring', [], function() {
     if (rgb == null)
       return true;
 
-    var brightness = HB.luminance(parseInt(rgb[1], 16), parseInt(rgb[2], 16), parseInt(rgb[3], 16));
+    var brightness = luminance(parseInt(rgb[1], 16), parseInt(rgb[2], 16), parseInt(rgb[3], 16));
 
     return brightness >= 0.5
   }
