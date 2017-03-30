@@ -3,7 +3,8 @@ import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
-  countries: HB.countryCodes,
+  // TODO get red of this global usage
+  countries: HBEditor.countryCodes,
 
   applicationController: Ember.inject.controller('application'),
 

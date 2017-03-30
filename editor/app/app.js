@@ -49,6 +49,7 @@ Ember.throttledObserver = function () {
 
 //-----------  Preview Injection  -----------#
 
+// TODO remove this global
 window.HBEditor = {};
 
 // TODO remove  this from global space
@@ -99,7 +100,7 @@ $(function () {
 
 //-----------  Phone Data  -----------#
 
-HB.countryCodes = [
+HBEditor.countryCodes = [
   {code: "AF", name: "Afghanistan"},
   {code: "AL", name: "Albania"},
   {code: "DZ", name: "Algeria"},
