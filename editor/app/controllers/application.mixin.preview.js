@@ -115,13 +115,12 @@ export default Ember.Mixin.create({
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
-    HB.isPreviewMode = true;
-    HB.previewMode = this.get('isMobile') ? 'mobile' : 'fullscreen';
-    if (HB.removeAllSiteElements) {
+    hellobar('base.preview').setActive();
+    const elements = hellobar('elements');
+    if (elements.removeAllSiteElements) {
       this.get('inlineEditing').cleanup();
-      HB.removeAllSiteElements();
-      // TODO REFACTOR use createAndAddToPage
-      HB.addToPage(HB.createSiteElement(previewElement));
+      elements.removeAllSiteElements();
+      elements.createAndAddToPage(previewElement);
     }
   }
 
