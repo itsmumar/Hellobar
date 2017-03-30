@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.class.bar',
-  ['base.dom', 'base.format', 'elements.class'],
-  function (dom, format, SiteElement) {
+  ['base.dom', 'base.format', 'elements.class', 'elements.injection'],
+  function (dom, format, SiteElement, elementsInjection) {
 
     class BarElement extends SiteElement {
       initialize(props) {
@@ -38,7 +38,7 @@ hellobar.defineModule('elements.class.bar',
             HB.p.style.height = 0;
           }
 
-          HB.injectAtTop(HB.p, this.placement == 'bar-bottom');
+          elementsInjection.inject(HB.p, this.placement === 'bar-bottom');
         }
       }
 

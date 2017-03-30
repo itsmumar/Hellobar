@@ -49,24 +49,24 @@ Ember.throttledObserver = function () {
 
 //-----------  Preview Injection  -----------#
 
-// TODO why HB is not defined here? Fix this
-if (typeof HB === 'undefined') {
-  window.HB = {};
-}
+window.HBEditor = {};
 
-HB._listeners = [];
+// TODO remove  this from global space
+HBEditor._listeners = [];
 
-HB.addPreviewInjectionListener = listener => HB._listeners.push(listener);
+// TODO remove  this from global space
+HBEditor.addPreviewInjectionListener = listener => HBEditor._listeners.push(listener);
 
-HB.injectAtTop = function (element) {
-  const container = HB.$("#hellobar-preview-container");
+hellobar('elements.injection').overrideInjectionPolicy(function (element) {
+  const dom = hellobar('dom');
+  const container = dom.$("#hellobar-preview-container");
   if (container.children[0]) {
     container.insertBefore(element, container.children[0]);
   } else {
     container.appendChild(element);
   }
-  HB._listeners.forEach(listener => listener(container));
-};
+  HBEditor._listeners.forEach(listener => listener(container));
+});
 
 //-----------  Set Application Height  -----------#
 

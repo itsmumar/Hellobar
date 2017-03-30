@@ -1,8 +1,8 @@
 hellobar.defineModule('elements.class',
   ['base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities',
-    'elements', 'elements.visibility', 'elements.collecting', 'elements.intents'],
+    'elements', 'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection'],
   function (templating, dom, site, environment, preview, coloring, format, capabilities,
-            elements, elementsVisibility, elementsCollecting, elementsIntents) {
+            elements, elementsVisibility, elementsCollecting, elementsIntents, elementsInjection) {
 
     const maxSliderSize = 380;
 
@@ -166,8 +166,7 @@ hellobar.defineModule('elements.class',
         this.setupIFrame(this.w);
 
         // Inject the container into the DOM
-        // TODO REFACTOR this may be overridden from editor
-        HB.injectAtTop(this.w);
+        elementsInjection.inject(this.w);
         // Render the siteElement in the container.
         var d = this.w.contentWindow.document;
         d.open();
@@ -476,8 +475,7 @@ hellobar.defineModule('elements.class',
           pdLink.innerHTML = svgArrow;
 
           pullDown.appendChild(pdLink);
-          // TODO REFACTOR
-          HB.injectAtTop(pullDown);
+          elementsInjection.inject(pullDown);
           this.pullDown = pullDown;
         }
       }

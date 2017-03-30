@@ -102,20 +102,6 @@ hellobar.defineModule('elements',
     }
 
     // TODO -> elements
-    // TODO used from bar.es6, site_element.es6, overridden in editor
-    // Injects the specified element at the top of the body tag
-    // or bottom if reverse is selected
-    // TODO REFACTOR how to do overriding from editor here
-    function injectAtTop(element, reverse) {
-      reverse = typeof reverse !== 'undefined' ? reverse : false;
-
-      if (!reverse && document.body.children.length > 0)
-        document.body.insertBefore(element, document.body.children[0]);
-      else
-        document.body.appendChild(element);
-    }
-
-    // TODO -> elements
     function hideElement(element) {
       if (element == null) {
         return
