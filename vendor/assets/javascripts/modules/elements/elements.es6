@@ -55,7 +55,7 @@ hellobar.defineModule('elements',
 
       // Helper for template that returns the Javascript for a reference
       // to this object
-      siteElement.me = 'hellobar("elements").findById(' + siteElement.id + ')';
+      siteElement.me = 'hellobar(\'elements\').findById(' + siteElement.id + ')';
 
       // skip adding to the page if it is already on the page
       if (siteElementsOnPage.indexOf(siteElement) !== -1)

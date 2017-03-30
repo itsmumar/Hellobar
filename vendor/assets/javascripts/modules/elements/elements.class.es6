@@ -1,7 +1,9 @@
 hellobar.defineModule('elements.class',
-  ['base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
+  ['hellobar',
+    'base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
     'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection', 'elements.conversion'],
-  function (templating, dom, site, environment, preview, coloring, format, capabilities, bus,
+  function (hellobar,
+            templating, dom, site, environment, preview, coloring, format, capabilities, bus,
             elementsVisibility, elementsCollecting, elementsIntents, elementsInjection, elementsConversion) {
 
     const maxSliderSize = 380;
@@ -112,7 +114,7 @@ hellobar.defineModule('elements.class',
         var html = generateHtml();
         if (this.type === 'Custom') {
           var customJs = this.custom_js || '';
-          html = html + '<script>var hbElement=hellobar("elements").findById(' + this.id + '); ' + customJs + '<\/script>'
+          html = html + '<script>var hbElement=hellobar(\'elements\').findById(' + this.id + '); ' + customJs + '<\/script>'
         }
         // Once the dom is ready we inject the html returned from renderTemplate
         dom.runOnDocumentReady(function () {
@@ -176,6 +178,9 @@ hellobar.defineModule('elements.class',
         d.write('<html><head>' + prepareStyle() + '</head><body>' + html + '</body></html>');
         d.close();
         d.body.className = this.type;
+
+        // Make HelloBar JS Core accessible to inner (iframe) document event handlers
+        this.w.contentWindow.hellobar = hellobar;
 
         if (this.theme.id) {
           dom.addClass(d.body, this.theme.id);
