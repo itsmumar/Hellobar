@@ -23,6 +23,12 @@
       }
 
       // Initialize and configure modules
+      hellobar('base.preview', {
+        configurator: function(configuration) {
+          configuration.previewIsActive({{preview_is_active}});
+        }
+      });
+
       hellobar('base.capabilities', {
         configurator: function(configuration) {
           configuration.capabilities({{{capabilities_json}}});

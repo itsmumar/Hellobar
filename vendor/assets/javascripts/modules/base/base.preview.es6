@@ -1,13 +1,18 @@
-hellobar.defineModule('base.preview', ['hellobar'], function(hellobar) {
+hellobar.defineModule('base.preview', ['hellobar'], function (hellobar) {
 
-  let isActive = false;
+  const configuration = hellobar.createModuleConfiguration({
+    previewIsActive: {
+      type: 'boolean',
+      defaultValue: false
+    }
+  });
+
   let answerToDisplay = null;
 
   return {
-    isActive: () => isActive,
-    setActive () {
-      isActive = true;
-    },
+    configuration: () => configuration,
+    isActive: () => configuration.previewIsActive(),
+
     setAnswerToDisplay(answer) {
       answerToDisplay = answer;
     },

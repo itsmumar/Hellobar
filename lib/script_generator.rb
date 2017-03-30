@@ -99,6 +99,10 @@ class ScriptGenerator < Mustache
     'animated'
   end
 
+  def preview_is_active
+    @options[:preview]
+  end
+
   def capabilities_json
     capabilities.to_json
   end

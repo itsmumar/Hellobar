@@ -115,7 +115,6 @@ export default Ember.Mixin.create({
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
-    hellobar('base.preview').setActive();
     const elements = hellobar('elements');
     if (elements.removeAllSiteElements) {
       this.get('inlineEditing').cleanup();
