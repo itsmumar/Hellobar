@@ -59,7 +59,7 @@ HBEditor._listeners = [];
 HBEditor.addPreviewInjectionListener = listener => HBEditor._listeners.push(listener);
 
 hellobar('elements.injection').overrideInjectionPolicy(function (element) {
-  const dom = hellobar('dom');
+  const dom = hellobar('base.dom');
   const container = dom.$("#hellobar-preview-container");
   if (container.children[0]) {
     container.insertBefore(element, container.children[0]);

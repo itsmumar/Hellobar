@@ -224,7 +224,8 @@ hellobar.defineModule('base.dom', [], function () {
     animateOut,
     wiggleEventListeners,
     showElement,
-    hideElement
+    hideElement,
+    $
   };
 
 });

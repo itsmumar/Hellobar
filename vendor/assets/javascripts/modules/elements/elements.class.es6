@@ -115,7 +115,7 @@ hellobar.defineModule('elements.class',
           html = html + '<script>var hbElement=hellobar("elements").findById(' + this.id + '); ' + customJs + '<\/script>'
         }
         // Once the dom is ready we inject the html returned from renderTemplate
-        dom.domReady(function () {
+        dom.runOnDocumentReady(function () {
 
           // Set an arbitrary timeout to prevent some rendering
           // conflicts with certain sites

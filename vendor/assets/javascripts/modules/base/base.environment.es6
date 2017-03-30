@@ -8,13 +8,13 @@ hellobar.defineModule('base.environment', [], function () {
    * @returns {boolean}
    */
   function isMobileWidth(siteElementData) {
-    var windowWidth = windowWidth();
+    var width = windowWidth();
     if (siteElementData.type === 'Modal') {
-      return windowWidth <= 640;
+      return width <= 640;
     } else if (siteElementData.type === 'Slider') {
-      return windowWidth <= 375;
+      return width <= 375;
     } else {
-      return windowWidth <= 640;
+      return width <= 640;
     }
   }
 
