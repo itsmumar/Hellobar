@@ -1,6 +1,6 @@
 <div class="hb-input-wrapper">
   <div id="hb-fields-form">
-    {{ siteElement.settings.fields_to_collect ? siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return hellobar('elements.collection').createInputFieldHtml(field, siteElement); }).join('') : '' }}
+    {{ siteElement.settings.fields_to_collect ? siteElement.settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return hellobar('elements.collecting').createInputFieldHtml(field, siteElement); }).join('') : '' }}
 
     <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
             onclick="if (hellobar('base.preview').isActive()) {

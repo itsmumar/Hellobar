@@ -76,7 +76,8 @@ hellobar.defineModule('base.format', [], function () {
   return {
     normalizeUrl,
     isExternalURL,
-    asBool
+    asBool,
+    stringLiteral
   };
 
 });
