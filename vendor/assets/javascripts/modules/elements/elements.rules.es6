@@ -79,7 +79,7 @@ hellobar.defineModule('elements.rules',
         }
         applyingDeferred.resolve(siteElementResults);
       });
-      return applyingDeferred;
+      return applyingDeferred.promise();
 
       // TODO remove
       /*for (i = 0; i < rules.length; i++) {
