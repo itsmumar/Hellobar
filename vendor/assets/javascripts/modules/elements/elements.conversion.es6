@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.conversion',
-  ['visitor', 'base.format', 'base.serialization', 'elements.data', 'elements.visibility', 'tracking.internal'],
-  function (visitor, format, serialization, elementsData, elementsVisibility, trackingInternal) {
+  ['visitor', 'base.format', 'base.serialization', 'base.bus', 'elements.data', 'elements.visibility', 'tracking.internal'],
+  function (visitor, format, serialization, bus, elementsData, elementsVisibility, trackingInternal) {
 
     // TODO -> some tracking module ??? (elements.conversion??)
     // Called when a conversion happens (e.g. link clicked, email form filled out)
@@ -21,7 +21,7 @@ hellobar.defineModule('elements.conversion',
       // Set the last time converted for the site element to now
       elementsData.setData(siteElement.id, 'lc', now);
       // Trigger the event
-      HB.trigger('converted', siteElement); // Updated trigger
+      bus.trigger('converted', siteElement); // Updated trigger
       // Send the data to the backend if this is the first conversion
       if (conversionCount === 1) {
         trackingInternal.send('g', siteElement.id, {a: getVisitorAttributes()}, callback);
@@ -45,7 +45,7 @@ hellobar.defineModule('elements.conversion',
         elementsData.setData(siteElement.id, 'fv', now);
       elementsData.setData(siteElement.id, 'lv', now);
       // Trigger siteElement shown event
-      HB.trigger('shown', siteElement); // New trigger
+      bus.trigger('shown', siteElement); // New trigger
     }
 
     // TODO -> elements.conversion (should be inner)

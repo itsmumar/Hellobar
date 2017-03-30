@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.collecting',
-  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'tracking.internal', 'elements.conversion'],
-  function (preview, format, dom, site, sanitizing, trackingInternal, elementsConversion) {
+  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal', 'elements.conversion'],
+  function (preview, format, dom, site, sanitizing, bus, trackingInternal, elementsConversion) {
 
     // TODO -> elements.collecting
     /**
@@ -118,7 +118,7 @@ hellobar.defineModule('elements.collecting',
             // Successfully saved
           });
 
-          HB.trigger('emailSubmitted', siteElement, values);
+          bus.trigger('emailSubmitted', siteElement, values);
 
           if (doRedirect) {
             window.location.href = redirectUrl;

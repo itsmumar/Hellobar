@@ -65,8 +65,6 @@ hellobar.defineModule('elements.intents', ['base.environment'], function (enviro
   }
 
 
-  // TODO called from setupIFrame from site_element.es6
-  // TODO REFACTOR where it should be? -> It should be called via bus (subscription should be done in initialize)
   function initializeIntentListeners() {
     intentConditionCache = {
       mouseInTime: null,
@@ -110,7 +108,8 @@ hellobar.defineModule('elements.intents', ['base.environment'], function (enviro
 
   const module = {
     intentCheck,
-    scrollTargetCheck
+    scrollTargetCheck,
+    initializeIntentListeners
   };
 
   return module;

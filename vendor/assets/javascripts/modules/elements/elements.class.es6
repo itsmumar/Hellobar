@@ -1,8 +1,8 @@
 hellobar.defineModule('elements.class',
-  ['base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities',
-    'elements', 'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection'],
-  function (templating, dom, site, environment, preview, coloring, format, capabilities,
-            elements, elementsVisibility, elementsCollecting, elementsIntents, elementsInjection) {
+  ['base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
+    'elements', 'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection', 'elements.conversion'],
+  function (templating, dom, site, environment, preview, coloring, format, capabilities, bus,
+            elements, elementsVisibility, elementsCollecting, elementsIntents, elementsInjection, elementsConversion) {
 
     const maxSliderSize = 380;
 
@@ -37,8 +37,7 @@ hellobar.defineModule('elements.class',
 
         // Any view_condition including string 'intent' will run the intent event listeners
         if (this.view_condition.indexOf('intent') !== -1) {
-          // TODO REFACTOR via element lifecycle
-          HB.initializeIntentListeners();
+          elementsIntents.initializeIntentListeners();
         }
 
         // Starts setIntervals that check display setting conditions
@@ -306,8 +305,7 @@ hellobar.defineModule('elements.class',
 
           // Track the view
           if (!this.dontRecordView) {
-            // TODO REFACTOR call it via module or via bus?
-            HB.viewed(this);
+            elementsConversion.viewed(this);
           }
 
           // Next line is a Safari hack.  Couldn't find out why but sometimes safari
@@ -442,7 +440,7 @@ hellobar.defineModule('elements.class',
           elementsVisibility.setVisibilityControlCookie('dismiss', this);
         }
 
-        HB.trigger('closed', this); // New trigger
+        bus.trigger('closed', this); // New trigger
       }
 
       // Create the pulldown arrow element for when a bar/slider is hidden
@@ -594,8 +592,7 @@ hellobar.defineModule('elements.class',
       // Necessary convenience method for saying this
       // SiteElement has converted (used in templates)
       converted() {
-        // TODO REFACTOR call it like this or use lifecycle
-        HB.converted(this);
+        elementsConversion.converted(this);
       }
 
       useGoogleFont() {

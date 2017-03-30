@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.bar',
-  ['hellobar', 'base.templating', 'base.format', 'elements.collecting'],
-  function (hellobar, templating, format, elementsCollecting) {
+  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.converison'],
+  function (hellobar, templating, format, elementsCollecting, elementsConversion) {
 
     const configuration = hellobar.createModuleConfiguration({
       contentUpgrades: 'object',
@@ -12,8 +12,7 @@ hellobar.defineModule('elements.bar',
       const contentUpgrades = configuration.contentUpgrades() || {};
       if (contentUpgrades[contentUpgradeId]) {
         const siteElement = contentUpgrades[contentUpgradeId];
-        // TODO REFACTOR
-        HB.viewed(siteElement);
+        elementsConversion.viewed(siteElement);
         const siteStyles = configuration.styles() || {};
         var tpl = templating.getTemplateByName['contentupgrade'];
         const content1 = templating.renderTemplate(tpl, siteElement);

@@ -81,7 +81,6 @@ hellobar.defineModule('elements',
     }
 
     // TODO -> elements ?
-    // TODO REFACTOR this has three usages (traffic_growth, site_element.es6 and also this file)
     // TODO it was findSiteElementOnPageById previously
     function findById(siteElementId) {
       var lookup = {};
