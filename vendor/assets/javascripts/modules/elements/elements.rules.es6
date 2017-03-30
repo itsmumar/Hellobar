@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.rules',
-  ['base.format', 'base.environment', 'base.visitor', 'base.timezone', 'elements.visibility', 'elements.data'],
-  function (format, environment, visitor, timezone, elementsVisibility, elementsData) {
+  ['base.format', 'base.environment', 'base.visitor', 'base.timezone', 'base.deferred', 'elements.visibility', 'elements.data'],
+  function (format, environment, visitor, timezone, deferred, elementsVisibility, elementsData) {
 
     let rules = [];
 
@@ -39,7 +39,50 @@ hellobar.defineModule('elements.rules',
       // First get all the site elements from all the rules that the
       // person matches
 
-      for (i = 0; i < rules.length; i++) {
+      const applyingDeferred = deferred();
+
+      const rulePromises = rules.map((rule) => {
+        if (rule.siteElements.length > 0) {
+          const ruleResult = ruleTrue(rule);
+          return ruleResult instanceof deferred.Promise ? ruleResult : deferred.constant(ruleResult);
+        }
+      });
+      deferred.all(rulePromises).then((ruleResults) => {
+        ruleResults.forEach((result, ruleIndex) => {
+          rules[ruleIndex].siteElements.forEach((siteElement) => {
+            visibilityGroup = siteElement.type;
+            // For showing multiple elements at the same time a modal and a takeover are the same thing
+            if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
+              visibilityGroup = 'Modal/Takeover';
+            if (!visibilityGroups[visibilityGroup]) {
+              visibilityGroups[visibilityGroup] = [];
+              visibilityGroupNames.push(visibilityGroup);
+            }
+            visibilityGroups[visibilityGroup].push(siteElement);
+          });
+        });
+        // Now we have all elements that can be shown based on the rules
+        // broken up into visibility groups
+        // The next step is to pick one per visibility group
+        var siteElementResults = [];
+        // We need to specify the order that elements appear in. Whichever is first
+        // in the array is on top
+        var visibilityOrder = ['Custom', 'Modal/Takeover', 'Slider', 'Bar'];
+        for (i = 0; i < visibilityOrder.length; i++) {
+          var visibleElements = visibilityGroups[visibilityOrder[i]];
+          if (visibleElements) {
+            siteElement = getBestElement(visibleElements);
+            if (siteElement && elementsVisibility.shouldShowElement(siteElement)) {
+              siteElementResults.push(siteElement);
+            }
+          }
+        }
+        applyingDeferred.resolve(siteElementResults);
+      });
+      return applyingDeferred;
+
+      // TODO remove
+      /*for (i = 0; i < rules.length; i++) {
         var rule = rules[i];
 
         if (rule.siteElements.length && ruleTrue(rule)) {
@@ -76,7 +119,7 @@ hellobar.defineModule('elements.rules',
           }
         }
       }
-      return results;
+      return results;*/
     }
 
 
@@ -218,25 +261,33 @@ hellobar.defineModule('elements.rules',
     // Checks if the rule is true by checking each of the conditions and
     // the matching logic of the rule (any vs all).
     function ruleTrue(rule) {
-      for (var i = 0; i < rule.conditions.length; i++) {
-        if (conditionTrue(rule.conditions[i])) {
-          // If we just need to match any condition and we have matched
-          // one then return true
-          if (rule.matchType === 'any')
-            return true;
+      const results = rule.conditions.map((condition) => conditionTrue(condition));
+      const checkResult = (results) => {
+        if (rule.matchType === 'any' && results.filter((result) => result === true).length > 0) {
+          return true;
         }
-        else {
-          // We didn't match a condition. Return false if we needed to
-          // match all of them
-          if (rule.matchType != 'any')
-            return false;
+        if (rule.matchType !== 'any' && results.filter((result) => result === false).length > 0) {
+          return false;
         }
+        return undefined;
+      };
+      const checkedResult = checkResult(results);
+      if (checkedResult !== undefined) {
+        return checkedResult;
       }
-      // If we needed to match any condition (and we had at least one)
-      // and didn't yet return false
-      if (rule.matchType === 'any' && rule.conditions.length > 0)
-        return false;
-      return true;
+
+      return deferred.all(results.map((result) => result instanceof deferred.Promise ? result : deferred.constant(result))).then((finalResults) => {
+        const checkedResult = checkResult(finalResults);
+        if (checkedResult !== undefined) {
+          return checkedResult;
+        }
+        // If we needed to match any condition (and we had at least one)
+        // and didn't yet return false
+        if (rule.matchType === 'any' && rule.conditions.length > 0) {
+          return false;
+        }
+        return true;
+      });
     }
 
     function timeConditionTrue(condition) {
@@ -255,13 +306,13 @@ hellobar.defineModule('elements.rules',
     }
 
     function geoLocationConditionTrue(condition) {
-      var currentValue = getSegmentValue(condition.segment);
-
-      // geolocation conditions are undefined until the geolocation request completes
-      if (typeof currentValue === 'undefined')
-        return false;
-
-      return applyOperands(currentValue, condition.operand, condition.value, condition.segment)
+      const apply = (value) => applyOperands(value, condition.operand, condition.value, condition.segment)
+      const currentValue = getSegmentValue(condition.segment);
+      if (currentValue instanceof deferred.Promise) {
+        return currentValue.then((result) => apply(result));
+      } else {
+        return apply(currentValue);
+      }
     }
 
     // Determines if the condition (a rule is made of one or more conditions)

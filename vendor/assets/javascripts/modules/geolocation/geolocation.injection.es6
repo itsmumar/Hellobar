@@ -9,7 +9,7 @@ hellobar.defineModule('geolocation.injection', ['hellobar', 'base.dom', 'geoloca
       return placeholder.getAttribute(geolocationDefaultAttributeName) || '';
     };
     var dataKey = placeholder.getAttribute(geolocationAttributeName) + 'Name';
-    geolocation.getGeolocationData(dataKey, function (value) {
+    geolocation.getGeolocationData(dataKey).then((value) => {
       placeholder.textContent = (value || defaultValue());
     });
   }

@@ -1,6 +1,6 @@
 hellobar.defineModule('geolocation',
-  ['hellobar', 'base.storage', 'base.ajax', 'base.site', 'base.serialization'],
-  function (hellobar, storage, ajax, site, serialization) {
+  ['hellobar', 'base.storage', 'base.ajax', 'base.site', 'base.serialization', 'base.deferred'],
+  function (hellobar, storage, ajax, site, serialization, deferred) {
 
     function storageKey() {
       // TODO ideally we should standardize localStorage naming (i.e. HB-something-NNNNN)
@@ -49,27 +49,28 @@ hellobar.defineModule('geolocation',
 
     var locationDataStorage = new GeolocationDataStorage();
 
-    function syncAsyncGetData(dataKey, onSuccess) {
+    function syncAsyncGetData(dataKey) {
       function returnValue(locationData) {
         return dataKey ? locationData[dataKey] : locationData;
       }
 
-      var storedLocationData = locationDataStorage.getData();
-      var parsedLocationData = typeof storedLocationData === 'string' ? serialization.deserialize(storedLocationData) : storedLocationData;
+      const deferredValue = deferred();
+      const storedLocationData = locationDataStorage.getData();
+      const parsedLocationData = typeof storedLocationData === 'string' ? serialization.deserialize(storedLocationData) : storedLocationData;
+
       if (parsedLocationData) {
         // Return cached geolocation data
-        var value = returnValue(parsedLocationData);
-        onSuccess && onSuccess(value, true);
-        return value;
+        const value = returnValue(parsedLocationData);
+        deferredValue.resolve(value);
       } else {
         // No cached data, we're trying to get geolocation data via AJAX call
         ajax.get(configuration.geolocationUrl(), function (response) {
           var locationData = responseToLocationData(response);
           locationDataStorage.setData(locationData);
-          onSuccess && onSuccess(returnValue(locationData), false);
+          deferredValue.resolve(returnValue(locationData));
         });
-        return false;
       }
+      return deferredValue.promise();
     }
 
     var configuration = new hellobar.createModuleConfiguration({
@@ -86,51 +87,39 @@ hellobar.defineModule('geolocation',
 
       /**
        * Gets all geolocation data (or just single specified value).
-       * Operation can execute in sync or async way:
-       * if we have cached geolocation data, then cached data is returned synchronously from the method
-       * (and also passed to onSuccess callback if the callback is specified)
-       * otherwise false boolean is returned,
-       * then AJAX request to service is done to server and the result is returned asynchronously via onSuccess callback.
        * @param key {string} If specified then only this value will be returned,
        * otherwise all values will be returned as an object.
        * Currently we support keys:
        * countryName, regionName, cityName - new keys
        * gl_cty, gl_ctr, gl_rgn - lagacy keys
-       * @param [onSuccess] {function}
-       * @returns {string|object|boolean}
+       * @returns {deferred.Promise}
        */
-      getGeolocationData: function (key, onSuccess) {
-        return syncAsyncGetData(key, onSuccess);
+      getGeolocationData: function (key) {
+        return syncAsyncGetData(key);
       },
 
       /**
        * Gets region name.
-       * The method works in both sync/async ways (see getGeolocationData docs for details).
-       * @param [onSuccess] {function}
        * @returns {string|boolean}
        */
-      regionName: function (onSuccess) {
-        return syncAsyncGetData('regionName', onSuccess);
+      regionName: function () {
+        return syncAsyncGetData('regionName');
       },
 
       /**
        * Gets city name.
-       * The method works in both sync/async ways (see getGeolocationData docs for details).
-       * @param [onSuccess] {function}
        * @returns {string|boolean}
        */
-      cityName: function (onSuccess) {
-        return syncAsyncGetData('cityName', onSuccess);
+      cityName: function () {
+        return syncAsyncGetData('cityName');
       },
 
       /**
        * Gets country name.
-       * The method works in both sync/async ways (see getGeolocationData docs for details).
-       * @param [onSuccess] {function}
        * @returns {string|boolean}
        */
-      countryName: function (onSuccess) {
-        return syncAsyncGetData('countryName', onSuccess);
+      countryName: function () {
+        return syncAsyncGetData('countryName');
       }
     };
 

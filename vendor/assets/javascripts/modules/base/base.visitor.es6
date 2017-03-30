@@ -1,6 +1,6 @@
 hellobar.defineModule('base.visitor',
-  ['base.format', 'base.timezone', 'base.environment', 'base.storage', 'base.serialization', 'base.site'],
-  function (format, timezone, environment, storage, serialization, site) {
+  ['base.format', 'base.timezone', 'base.environment', 'base.storage', 'base.serialization', 'base.site', 'geolocation'],
+  function (format, timezone, environment, storage, serialization, site, geolocation) {
 
     // Visitor data cache
     let visitor = {};
@@ -159,7 +159,7 @@ hellobar.defineModule('base.visitor',
     }
 
     // TODO -> base.visitor
-    // Gets the visitor attribute specified by the key or returns null
+    // Gets the visitor attribute specified by the key or returns Promise or returns null
     function getVisitorData(key) {
 
       // TODO REFACTOR is key is empty return whole data object
@@ -168,14 +168,7 @@ hellobar.defineModule('base.visitor',
       }
 
       if (key.indexOf('gl_') !== -1) {
-        // TODO can we move geolocation dependency to another place?
-        return hellobar('geolocation').getGeolocationData(key, function (data, isCached) {
-          if (isCached === false) {
-            // TODO ??? move this to another place
-            HB.loadCookies();
-            HB.showSiteElements();
-          }
-        });
+        return geolocation.getGeolocationData(key);
       }
       else {
         return visitor[key];

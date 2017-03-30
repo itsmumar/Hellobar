@@ -22,6 +22,8 @@ describe('Module geolocation', function () {
     return dependencies;
   }
 
+  // TODO fix tests, introduce promises
+
   it('returns city name', function () {
     var module = hellobar('geolocation', {
       dependencies: dependencies()
