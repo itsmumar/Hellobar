@@ -189,7 +189,8 @@ hellobar.defineModule('elements',
 
     return {
       configuration: () => configuration,
-      initialize() {
+      initialize(configurator) {
+        configurator && configurator(configuration);
         showSiteElements();
       },
       createAndAddToPage,
