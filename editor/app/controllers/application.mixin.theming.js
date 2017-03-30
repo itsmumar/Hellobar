@@ -5,6 +5,8 @@ export default Ember.Mixin.create({
 
   theming: Ember.inject.service(),
 
+  firstAttemptOfThemeApplying: false,
+
   initializeTheme() {
     Ember.run.next(() => {
         if (this.get('model.id') === null) {
@@ -15,21 +17,24 @@ export default Ember.Mixin.create({
   },
 
   applyCurrentTheme() {
-    const allThemes = this.get('theming').availableThemes();
-    const currentThemeId = this.get('model.theme_id');
-    if (currentThemeId && currentThemeId !== 'autodetect') {
-      const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-      const currentElementType = this.get('model.type');
-      if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
-        const themeStyleDefaults = currentTheme.defaults[currentElementType] || {};
-        _.each(themeStyleDefaults, (value, key) => {
-            this.set(`model.${key}`, value);
-          }
-        );
+    if (!this.get('model.id') || this.firstAttemptOfThemeApplying) {
+      const allThemes = this.get('theming').availableThemes();
+      const currentThemeId = this.get('model.theme_id');
+      if (currentThemeId && currentThemeId !== 'autodetect') {
+        const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+        const currentElementType = this.get('model.type');
+        if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
+          const themeStyleDefaults = currentTheme.defaults[currentElementType] || {};
+          _.each(themeStyleDefaults, (value, key) => {
+              this.set(`model.${key}`, value);
+            }
+          );
+        }
+      } else {
+        this.setSiteColors();
       }
-    } else {
-      this.setSiteColors();
     }
+    this.firstAttemptOfThemeApplying = true;
   },
 
   currentTheme: (function () {
