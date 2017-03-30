@@ -89,7 +89,7 @@ describe 'Subscribable', '#update_subscription' do
       expect(site.capabilities(true).remove_branding?).to be(false)
       expect(site.site_elements.all?(&:show_branding)).to be(true)
 
-      controller.update_subscription(site, create(:payment_method), billing_params)
+      controller.update_subscription(site, create(:payment_method, :success), billing_params)
       expect(site.capabilities(true).remove_branding?).to be(true)
       expect(site.site_elements.none?(&:show_branding)).to be(true)
     end

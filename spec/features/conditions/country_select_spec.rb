@@ -14,7 +14,7 @@ feature 'Render the country select for the Rule modal', :js do
 
   it 'sets the United States as the default country' do
     site = @user.sites.first
-    payment_method = create(:payment_method, user: @user)
+    payment_method = create(:payment_method, :success, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
     custom_rule = create(:rule)
     site.rules << custom_rule
@@ -35,7 +35,7 @@ feature 'Render the country select for the Rule modal', :js do
 
   it 'properly sets the value when the condition has been set previously' do
     site = @user.sites.first
-    payment_method = create(:payment_method, user: @user)
+    payment_method = create(:payment_method, :success, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
     custom_rule = create(:rule)
     custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])

@@ -8,7 +8,7 @@ feature 'Manage Settings', :js do
 
     allow_any_instance_of(Site).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
 
-    payment_method = create(:payment_method, user: @user)
+    payment_method = create(:payment_method, :success, user: @user)
     @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
 
     visit edit_site_path(@site)

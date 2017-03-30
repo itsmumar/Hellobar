@@ -81,7 +81,7 @@ describe Site do
   end
 
   describe '#highest_tier_active_subscription' do
-    let(:payment_method) { create(:payment_method) }
+    let(:payment_method) { create(:payment_method, :success) }
     let(:ownership) { create(:site_membership, user: payment_method.user) }
     let(:site) { ownership.site }
 

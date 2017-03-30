@@ -14,7 +14,7 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
 
   scenario "hides the UrlCondition if the site doesn't already have it as a rule" do
     site = @user.sites.first
-    payment_method = create(:payment_method, user: @user)
+    payment_method = create(:payment_method, :success, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
     custom_rule = create(:rule)
     site.rules << custom_rule
@@ -35,7 +35,7 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
 
   scenario 'shows the UrlCondition if the site already has it as a rule' do
     site = @user.sites.first
-    payment_method = create(:payment_method, user: @user)
+    payment_method = create(:payment_method, :success, user: @user)
     site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
     rule = create(:rule)
     rule.conditions.create segment: 'UrlCondition', operand: 'is', value: ['http://www.whatever.com']
