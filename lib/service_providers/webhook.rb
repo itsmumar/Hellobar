@@ -72,7 +72,7 @@ module ServiceProviders
     def extract_field_names(site_element)
       return ['email'] unless site_element
 
-      field_names = select_enabled_fields(site_element.settings).map &method(:determine_field_name)
+      field_names = select_enabled_fields(site_element.settings).map(&method(:determine_field_name))
       field_names.unshift field_names.delete('email')
     end
 
