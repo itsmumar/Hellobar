@@ -33,16 +33,6 @@ VCR.configure do |c|
   c.default_cassette_options = { record: :none } # *TEMPORARILY* set to :new_episodes or :once if you add a spec that makes a network request
 end
 
-# Use Webkit as js driver
-Capybara.javascript_driver = :webkit
-Capybara::Webkit.configure do |config|
-  config.block_unknown_urls
-  config.timeout = 60
-  config.skip_image_loading
-end
-# Wait longer than the default 2 seconds for Ajax requests to finish
-Capybara.default_max_wait_time = ENV['CI'] ? 30 : 20
-
 Fog.mock!
 
 ActiveMerchant::Billing::Base.mode = :test
