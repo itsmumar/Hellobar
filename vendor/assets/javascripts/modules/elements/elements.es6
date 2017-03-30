@@ -1,10 +1,18 @@
 hellobar.defineModule('elements',
-  ['hellobar', 'base.sanitizing', 'base.preview'],
-  function (hellobar, sanitizing, preview) {
+  ['hellobar', 'base.sanitizing', 'base.preview',
+    'elements.class', 'elements.class.bar', 'elements.class.slider'],
+  function (hellobar, sanitizing, preview,
+            SiteElement, BarElement, SliderElement) {
 
     const configuration = hellobar.createModuleConfiguration({
       elementCSS: 'string'
     });
+
+    const elementClasses = {
+      SiteElement,
+      BarElement,
+      SliderElement
+    };
 
     let siteElementsOnPage = [];
 
@@ -16,21 +24,14 @@ hellobar.defineModule('elements',
     // TODO it was createSiteElement previously
     // Returns a SiteElement object from a hash of data
     function create(data) {
-      var siteElement;
-
-      var whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
+      const whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
 
       // Sanitize the data
       data = sanitizing.sanitize(data, whitelistedProperties);
 
-      // TODO REFACTOR class instance creation
-      // Make a copy of the siteElement
-      var fn = window.HB[data.type + 'Element'];
-      if (typeof fn === 'function') {
-        siteElement = new window.HB[data.type + 'Element'](data);
-      } else {
-        siteElement = new HB.SiteElement(data);
-      }
+      const elementClassName = data.type + 'Element';
+      const elementClass = elementClasses[elementClassName] || SiteElement;
+      const siteElement = new elementClass(data);
 
       siteElement.dataCopy = data;
       return siteElement;
