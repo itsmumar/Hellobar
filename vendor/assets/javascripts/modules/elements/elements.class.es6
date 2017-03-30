@@ -164,12 +164,17 @@ hellobar.defineModule('elements.class',
 
         this.setupIFrame(this.w);
 
+        const prepareStyle = () =>
+          this.css
+            ? '<style>' + this.css.split('hellobar-logo-wrapper').join('hellobar-logo-wrapper_' + site.secret()) + '</style>'
+            : '';
+
         // Inject the container into the DOM
         elementsInjection.inject(this.w);
         // Render the siteElement in the container.
         var d = this.w.contentWindow.document;
         d.open();
-        d.write('<html><head>' + (this.css ? '<style>' + this.css + '</style>' : '') + '</head><body>' + html + '</body></html>');
+        d.write('<html><head>' + prepareStyle() + '</head><body>' + html + '</body></html>');
         d.close();
         d.body.className = this.type;
 

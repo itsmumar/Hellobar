@@ -110,44 +110,7 @@ var HB = {
     HB.cpFuncs(spec, klass);
 
     return klass;
-  },
-
-
-  // Adds CSS to the page
-  addCSS: function (css) {
-    if (!css) {
-      return;
-    }
-    if (!HB.css) {
-      HB.css = '';
-    }
-    // Update CSS related to hellobar logo
-    // TODO REFACTOR change HB_PS to site.secret()
-    css = css.split('hellobar-logo-wrapper').join('hellobar-logo-wrapper_' + HB_PS);
-
-    HB.css += '<style>' + css + '</style>';
-  },
-
-
-
-
-  // TODO remove this. Already have this function in base.dom
-  // Calls the specificied callback once the DOM is ready.
-  /*domReady: function (callback) {
-    // To save on script size we do the simplest possible thing which
-    // is to loop until the body exists
-    if (document.body)
-      callback();
-    else {
-      var intervalID = setInterval(function () {
-        if (document.body) {
-          callback();
-          clearInterval(intervalID);
-        }
-      }, 50);
-    }
-  },*/
-
+  }
 
 
 
