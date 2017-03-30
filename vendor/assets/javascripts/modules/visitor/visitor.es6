@@ -1,4 +1,4 @@
-hellobar.defineModule('base.visitor',
+hellobar.defineModule('visitor',
   ['base.format', 'base.timezone', 'base.environment', 'base.storage', 'base.serialization', 'base.site', 'geolocation'],
   function (format, timezone, environment, storage, serialization, site, geolocation) {
 
@@ -158,13 +158,10 @@ hellobar.defineModule('base.visitor',
       return string.length >= length ? string : zeropad('0' + string, length);
     }
 
-    // TODO -> base.visitor
     // Gets the visitor attribute specified by the key or returns Promise or returns null
     function getVisitorData(key) {
-
-      // TODO REFACTOR is key is empty return whole data object
       if (!key) {
-        return null;
+        return visitor;
       }
 
       if (key.indexOf('gl_') !== -1) {

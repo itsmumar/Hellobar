@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.rules',
-  ['base.format', 'base.environment', 'base.visitor', 'base.timezone', 'base.deferred', 'elements.visibility', 'elements.data'],
-  function (format, environment, visitor, timezone, deferred, elementsVisibility, elementsData) {
+  ['base.format', 'base.environment', 'base.timezone', 'base.deferred', 'visitor', 'elements.visibility', 'elements.data'],
+  function (format, environment, timezone, deferred, visitor, elementsVisibility, elementsData) {
 
     let rules = [];
 

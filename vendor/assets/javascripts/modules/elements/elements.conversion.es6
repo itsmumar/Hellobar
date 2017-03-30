@@ -1,5 +1,5 @@
 hellobar.defineModule('elements.conversion',
-  ['base.visitor', 'base.format', 'base.serialization', 'elements.data', 'elements.visibility', 'tracking.internal'],
+  ['visitor', 'base.format', 'base.serialization', 'elements.data', 'elements.visibility', 'tracking.internal'],
   function (visitor, format, serialization, elementsData, elementsVisibility, trackingInternal) {
 
     // TODO -> some tracking module ??? (elements.conversion??)
