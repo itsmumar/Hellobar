@@ -201,7 +201,7 @@ class @ContactListModal extends Modal
         localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
         localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-        newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+        newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider_token}"
         queryParams = {}
         queryParams["api_key"]  = @_getFormData().data.api_key
         queryParams["username"] = @_getFormData().data.username
@@ -296,10 +296,10 @@ class @ContactListModal extends Modal
 
   _getFormData: ->
     {
-      name         : @$modal.find("form #contact_list_name").val()
-      provider     : @$modal.find("form #contact_list_provider").val()
-      double_optin : if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
-      data         : @_getContactListData()
+      name: @$modal.find("form #contact_list_name").val()
+      provider_token: @$modal.find("form #contact_list_provider").val()
+      double_optin: if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
+      data: @_getContactListData()
     }
 
   _getContactListData: ->

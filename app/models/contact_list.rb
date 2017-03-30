@@ -7,7 +7,7 @@ class ContactList < ActiveRecord::Base
 
   EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
 
-  attr_accessor :provider
+  attr_accessor :provider_token
 
   belongs_to :site
   belongs_to :identity
@@ -97,19 +97,19 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    !EMPTY_PROVIDER_VALUES.include?(provider)
+    !EMPTY_PROVIDER_VALUES.include?(provider_token)
   end
 
   def set_identity
-    return unless provider.present?
+    return unless provider_token.present?
 
     self.identity =
       if !provider_set? || service_provider_class.nil?
         nil # Don't create an invalid provider
       elsif embed_code? || (provider == 'webhooks')
-        site.identities.find_or_create_by(provider: provider)
+        site.identities.find_or_create_by(provider: provider_token)
       else
-        site.identities.find_by(provider: provider)
+        site.identities.find_by(provider: provider_token)
       end
   end
 
