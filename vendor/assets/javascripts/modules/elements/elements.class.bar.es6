@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.class.bar',
-  ['base.dom', 'base.format', 'elements.class', 'elements.injection'],
-  function (dom, format, SiteElement, elementsInjection) {
+  ['base.dom', 'base.format', 'base.environment', 'elements.class', 'elements.injection'],
+  function (dom, format, environment, SiteElement, elementsInjection) {
 
     class BarElement extends SiteElement {
       constructor(props) {
@@ -58,7 +58,7 @@ hellobar.defineModule('elements.class.bar',
 
       attach() {
         // Disable wiggle on Mobile Safari because it blocks the click action
-        if (this.wiggle_button && !HB.isMobileSafari()) {
+        if (this.wiggle_button && !environment.isMobileSafari()) {
           this.wiggle = 'wiggle';
         } else {
           this.wiggle = '';
