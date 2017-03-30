@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
     'model.phone_country_code'
   ),
 
-  // TODO get red of this global usage
+  // TODO get rid of this global usage
   countries: HBEditor.countryCodes,
 
   selectedCountry: function() {

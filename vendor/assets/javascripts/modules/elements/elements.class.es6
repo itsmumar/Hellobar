@@ -1,8 +1,8 @@
 hellobar.defineModule('elements.class',
   ['base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
-    'elements', 'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection', 'elements.conversion'],
+    'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection', 'elements.conversion'],
   function (templating, dom, site, environment, preview, coloring, format, capabilities, bus,
-            elements, elementsVisibility, elementsCollecting, elementsIntents, elementsInjection, elementsConversion) {
+            elementsVisibility, elementsCollecting, elementsIntents, elementsInjection, elementsConversion) {
 
     const maxSliderSize = 380;
 

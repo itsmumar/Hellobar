@@ -187,8 +187,6 @@ hellobar.defineModule('elements',
     }
 
 
-
-
     return {
       configuration: () => configuration,
       initialize() {
