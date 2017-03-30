@@ -53,8 +53,7 @@ hellobar.defineModule('elements',
 
       // Helper for template that returns the Javascript for a reference
       // to this object
-      // TODO REFACTOR remove HB usage
-      siteElement.me = 'window.parent.HB.findSiteElementOnPageById(' + siteElement.id + ')';
+      siteElement.me = 'hellobar("elements").findById(' + siteElement.id + ')';
 
       // skip adding to the page if it is already on the page
       if (siteElementsOnPage.indexOf(siteElement) !== -1)
@@ -81,16 +80,17 @@ hellobar.defineModule('elements',
 
     // TODO -> elements ?
     // TODO REFACTOR this has three usages (traffic_growth, site_element.es6 and also this file)
-    function findSiteElementOnPageById(site_element_id) {
+    // TODO it was findSiteElementOnPageById previously
+    function findById(siteElementId) {
       var lookup = {};
       for (var i = 0, len = siteElementsOnPage.length; i < len; i++) {
         lookup[siteElementsOnPage[i].id] = siteElementsOnPage[i];
       }
 
-      if (lookup[site_element_id] === undefined) {
+      if (lookup[siteElementId] === undefined) {
         return null;
       } else {
-        return lookup[site_element_id];
+        return lookup[siteElementId];
       }
     }
 
@@ -198,7 +198,8 @@ hellobar.defineModule('elements',
 
     return {
       createAndAddToPage,
-      removeAllSiteElements
+      removeAllSiteElements,
+      findById
     };
 
   });
