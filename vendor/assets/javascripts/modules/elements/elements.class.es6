@@ -18,7 +18,7 @@ hellobar.defineModule('elements.class',
 
     class SiteElement {
 
-      initialize(props) {
+      constructor(props) {
         for (var key in props) {
           this[key] = props[key];
         }

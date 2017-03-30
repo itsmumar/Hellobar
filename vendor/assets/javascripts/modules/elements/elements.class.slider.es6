@@ -3,13 +3,13 @@ hellobar.defineModule('elements.class.slider',
   function (dom, SiteElement, elementsVisibility) {
 
     class SliderElement extends SiteElement {
-      initialize(props) {
-        this.callSuper('initialize', props);
+      constructor(props) {
+        super(props);
       }
 
       setupIFrame(iframe) {
-        this.callSuper('setupIFrame', iframe);
-        dom.addClass(iframe, "hb-" + this.placement)
+        super.setupIFrame(iframe);
+        dom.addClass(iframe, 'hb-' + this.placement);
       }
 
       minimize() {

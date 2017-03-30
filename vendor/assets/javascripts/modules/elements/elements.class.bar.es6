@@ -3,12 +3,12 @@ hellobar.defineModule('elements.class.bar',
   function (dom, format, SiteElement, elementsInjection) {
 
     class BarElement extends SiteElement {
-      initialize(props) {
-        this.callSuper('initialize', props);
+      constructor(props) {
+        super(props);
       }
 
       setupIFrame(iframe) {
-        this.callSuper('setupIFrame', iframe);
+        super.setupIFrame(iframe);
         dom.addClass(iframe, 'hb-' + this.size);
         dom.addClass(iframe, 'hb-' + this.placement);
         dom.addClass(iframe, (format.asBool(this.remains_at_top) ? ' remains-in-place' : ''));
@@ -64,7 +64,7 @@ hellobar.defineModule('elements.class.bar',
           this.wiggle = '';
         }
 
-        this.callSuper('attach');
+        super.attach();
       }
 
       barSizeCssClass() {
