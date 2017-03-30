@@ -2,7 +2,7 @@
   <h5 class="step-title">Targeting</h5>
 
   <div class="{{targetingListCssClasses}}">
-    {{#link-to 'targeting.everyone' class='step-link-block'}}
+    {{#link-to 'targeting.everyone' (query-params showDropdown=false) class='step-link-block'}}
       <i class="hellobar-icon hellobar-icon-people"></i>
       <h6>Everyone</h6>
 
@@ -10,7 +10,7 @@
     {{/link-to}}
 
     {{#if isTopBarStyle}}
-      {{#link-to 'targeting.mobile' classBinding="canTarget:can-target" class='step-link-block'}}
+      {{#link-to 'targeting.mobile' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
         <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
         <h6>
           Mobile Visitors
@@ -21,7 +21,7 @@
       {{/link-to}}
     {{/if}}
 
-    {{#link-to 'targeting.homepage' classBinding="canTarget:can-target" class='step-link-block'}}
+    {{#link-to 'targeting.homepage' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
       <i class="hellobar-icon hellobar-icon-house"></i>
       <h6>
         Homepage Visitors
@@ -31,7 +31,7 @@
       <p>Show your Hello Bar on your site’s homepage only.</p>
     {{/link-to}}
 
-    {{#link-to 'targeting.custom' classBinding="canTarget:can-target" class='step-link-block'}}
+    {{#link-to 'targeting.custom' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
 
       <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
       <h6>

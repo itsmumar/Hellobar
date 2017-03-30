@@ -2,6 +2,8 @@ import Ember from 'ember';
 import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
+  queryParams: ['showDropdown'],
+  showDropdown: false,
 
   applicationController: Ember.inject.controller('application'),
 
@@ -176,7 +178,7 @@ export default Ember.Controller.extend({
         default:
           this.associateRuleToModel(null);
       }
-      this.set('targetingSelectionInProgress', false);
+      this.set('targetingSelectionInProgress', this.get('showDropdown'));
 
       if (trackEditorFlow) {
         InternalTracking.track_current_person('Editor Flow', {
@@ -278,6 +280,7 @@ export default Ember.Controller.extend({
           controller.notifyPropertyChange('model.site.rules');
         },
         close() {
+          controller.transitionToRoute('targeting.index', { queryParams: { showDropdown: 'true' } });
           isNewRule && controller.send('resetRuleDropdown', ruleData);
         }
       };
