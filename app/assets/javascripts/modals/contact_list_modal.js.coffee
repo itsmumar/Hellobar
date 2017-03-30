@@ -392,6 +392,7 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
+      noTags: !(@options.contactList?.data?.tags?.length)
       tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
               @options.contactList?.data?.tags
             else
@@ -428,7 +429,7 @@ class @ContactListModal extends Modal
         data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
 
-        if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
+        if (lists?.length && lists[0].error != undefined) || (tags?.length && tags[0].error != undefined)
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
@@ -453,8 +454,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
-        if lists and lists.length > 0
-          selectedList = defaultContext.contactList.data.remote_id or lists[0].id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
