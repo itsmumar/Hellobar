@@ -1,5 +1,5 @@
 hellobar.defineModule('contentUpgrades',
-  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.converison'],
+  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion'],
   function (hellobar, templating, format, elementsCollecting, elementsConversion) {
 
     const configuration = hellobar.createModuleConfiguration({
