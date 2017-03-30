@@ -160,7 +160,7 @@ hellobar.defineModule('elements.class',
         this.w.id = site.secret() + '-container';
         this.w.className = 'HB-' + this.type;
         this.w.name = this.frameName();
-        elements.hideElement(this.w); // Start all site elements as hidden
+        dom.hideElement(this.w); // Start all site elements as hidden
 
         this.setupIFrame(this.w);
 
@@ -302,7 +302,7 @@ hellobar.defineModule('elements.class',
 
         var show = function () {
           clearInterval(this.displayCheckInterval);
-          elements.showElement(this.w);
+          dom.showElement(this.w);
 
           // Track the view
           if (!this.dontRecordView) {
@@ -334,7 +334,7 @@ hellobar.defineModule('elements.class',
         }.bind(this);
 
         var showMinimizedBar = function () {
-          elements.hideElement(this.w);
+          dom.hideElement(this.w);
           this.pullDown && dom.animateIn(this.pullDown);
         }.bind(this);
 
@@ -471,7 +471,7 @@ hellobar.defineModule('elements.class',
 
             // if the pusher exists, unhide it since it should be hidden at this point
             if (this.pushes_page_down && HB.p) {
-              elements.showElement(HB.p, '');
+              dom.showElement(HB.p, '');
             }
           }.bind(this);
 

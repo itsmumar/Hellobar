@@ -102,36 +102,6 @@ hellobar.defineModule('elements',
       siteElementsOnPage = [];
     }
 
-    // TODO -> elements
-    function hideElement(element) {
-      if (element == null) {
-        return
-      } // do nothing
-      if (element.length == undefined) {
-        element.style.display = 'none';
-      } else {
-        for (var i = 0; i < element.length; ++i) {
-          element[i].style.display = 'none';
-        }
-      }
-    }
-
-    // TODO -> elements
-    function showElement(element, display) {
-      if (element == null) {
-        return
-      } // do nothing
-      if (typeof display === 'undefined') {
-        display = 'inline';
-      }
-      if (element.length == undefined) {
-        element.style.display = display;
-      } else {
-        for (var i = 0; i < element.length; ++i) {
-          element[i].style.display = display;
-        }
-      }
-    }
 
     // TODO -> elements
     // Replaces the site element with the question variation.

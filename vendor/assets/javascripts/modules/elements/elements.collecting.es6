@@ -101,8 +101,7 @@ hellobar.defineModule('elements.collecting',
 
             if (removeElements != null) {
               for (var i = 0; i < removeElements.length; i++) {
-                // TODO REFACTOR how to handle this?
-                HB.hideElement(removeElements[i]);
+                dom.hideElement(removeElements[i]);
               }
             }
           }

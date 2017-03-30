@@ -39,7 +39,7 @@ hellobar.defineModule('base.dom', [], function () {
    * @param className {string}
    */
   function addClass(element, className) {
-    element = HB.$(element);
+    element = $(element);
     if (element.className.indexOf(className) < 0) {
       element.className += ' ' + className;
     }
@@ -53,7 +53,7 @@ hellobar.defineModule('base.dom', [], function () {
    * @param className {string}
    */
   function removeClass(element, className) {
-    element = HB.$(element);
+    element = $(element);
     // Get all the CSS class names and then add them
     // back by building a new array minus the target CSS class name
     var classNames = element.className.split(' ');
@@ -75,7 +75,7 @@ hellobar.defineModule('base.dom', [], function () {
    * @param shouldBeSet {boolean} if true then CSS class should be added otherwise CSS class should be removed
    */
   function setClass(element, className, shouldBeSet) {
-    shouldBeSet ? HB.addClass(element, className) : HB.removeClass(element, className);
+    shouldBeSet ? addClass(element, className) : removeClass(element, className);
   }
 
   // TODO -> base.dom
@@ -119,7 +119,7 @@ hellobar.defineModule('base.dom', [], function () {
         }
         element.style.left = Math.round(x) + 'px';
       }, 5);
-    })(HB.$(element));
+    })($(element));
   }
 
 
@@ -132,7 +132,7 @@ hellobar.defineModule('base.dom', [], function () {
       element.classList.add('hb-animateIn');
     }
 
-    HB.showElement(element); // unhide if hidden
+    showElement(element); // unhide if hidden
   }
 
   // TODO -> base.dom
@@ -144,7 +144,7 @@ hellobar.defineModule('base.dom', [], function () {
       element.classList.add('hb-animateOut');
     } // else just hide
     else {
-      HB.hideElement(element);
+      hideElement(element);
     }
 
     // if a callback is given, wait for animation then execute
@@ -160,15 +160,45 @@ hellobar.defineModule('base.dom', [], function () {
     var cta = element.querySelector('.hellobar-cta');
 
     element.addEventListener('mouseenter', function () {
-      HB.removeClass(cta, 'wiggle');
+      removeClass(cta, 'wiggle');
     });
 
     element.addEventListener('mouseleave', function () {
       setTimeout(function () {
-        HB.addClass(cta, 'wiggle');
+        addClass(cta, 'wiggle');
       }, 2500);
     });
   }
+
+  function hideElement(element) {
+    if (element == null) {
+      return
+    } // do nothing
+    if (element.length == undefined) {
+      element.style.display = 'none';
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = 'none';
+      }
+    }
+  }
+
+  function showElement(element, display) {
+    if (element == null) {
+      return
+    } // do nothing
+    if (typeof display === 'undefined') {
+      display = 'inline';
+    }
+    if (element.length == undefined) {
+      element.style.display = display;
+    } else {
+      for (var i = 0; i < element.length; ++i) {
+        element[i].style.display = display;
+      }
+    }
+  }
+
 
   /**
    * @module base.dom {object} Performs DOM-related operations (traversing, modifying etc)
@@ -186,15 +216,15 @@ hellobar.defineModule('base.dom', [], function () {
      * @param callback {function}
      */
     runOnDocumentReady: runOnDocumentReady,
-
+    addClass,
+    removeClass,
+    setClass,
     shake,
-
     animateIn,
-
     animateOut,
-
-    wiggleEventListeners
-
+    wiggleEventListeners,
+    showElement,
+    hideElement
   };
 
 });
