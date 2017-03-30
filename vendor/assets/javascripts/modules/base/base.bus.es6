@@ -2,7 +2,6 @@ hellobar.defineModule('base.bus', [], function() {
 
   let eventCallbacks = {};
 
-  // TODO -> base.bus
   // This lets users set a callback for a Hello Bar event specified by eventName (e.g. "siteElementshown")
   function on(eventName, callback) {
     if (!eventCallbacks[eventName]) {
@@ -11,7 +10,6 @@ hellobar.defineModule('base.bus', [], function() {
     eventCallbacks[eventName].push(callback);
   }
 
-  // TODO -> base.bus
   // This is called internally to trigger a Hello Bar event (e.g. "siteElementshown")
   // Although it may look like no arguments are passed to trigger that is not true.
   // The first argument is the event name and all subsequent arguments are passed to

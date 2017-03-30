@@ -2,7 +2,6 @@ hellobar.defineModule('elements.conversion',
   ['visitor', 'base.format', 'base.serialization', 'base.bus', 'elements.data', 'elements.visibility', 'tracking.internal'],
   function (visitor, format, serialization, bus, elementsData, elementsVisibility, trackingInternal) {
 
-    // TODO -> some tracking module ??? (elements.conversion??)
     // Called when a conversion happens (e.g. link clicked, email form filled out)
     function converted(siteElement, callback) {
       var conversionKey = getConversionKey(siteElement);
@@ -31,7 +30,6 @@ hellobar.defineModule('elements.conversion',
 
     }
 
-    // TODO -> elements.conversion ???
     // Called when the siteElement is viewed
     function viewed(siteElement) {
       // Track number of views if not yet converted for this site element
@@ -48,7 +46,6 @@ hellobar.defineModule('elements.conversion',
       bus.trigger('shown', siteElement); // New trigger
     }
 
-    // TODO -> elements.conversion (should be inner)
     function getVisitorAttributes() {
       // Ignore first and last view timestamps and email and social conversions
       var ignoredAttributes = 'fv lv ec sc dt';
@@ -66,13 +63,11 @@ hellobar.defineModule('elements.conversion',
       return serialization.serialize(attributes);
     }
 
-    // TODO -> elements.conversion (should be inner)
     // Returns true if the visitor did this conversion or not
     function didConvert(siteElement) {
       return visitor.getData(getConversionKey(siteElement));
     }
 
-    // TODO -> elements.conversion (should be inner)
     // Returns the conversion key used in the cookies to determine if this
     // conversion has already happened or not
     function getConversionKey(siteElement) {
@@ -92,7 +87,6 @@ hellobar.defineModule('elements.conversion',
       }
     }
 
-    // TODO should be inner (used in getConversionKey)
     // Returns the shortest possible key for the given URL,
     // which may be a SHA1 hash of the url
     function getShortestKeyForURL(url) {
@@ -113,7 +107,6 @@ hellobar.defineModule('elements.conversion',
       }
     }
 
-    // TODO (should be inner) - used in getShortestKeyForURL
     // Takes a URL and returns normalized domain (downcase and strip www)
     function getNDomain(url) {
       if (!url) {

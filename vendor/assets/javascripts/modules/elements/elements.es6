@@ -22,8 +22,6 @@ hellobar.defineModule('elements',
       return addToPage(create(siteElementModel));
     }
 
-    // TODO -> elements (name the method just 'create')
-    // TODO it was createSiteElement previously
     // Returns a SiteElement object from a hash of data
     function create(data) {
       const whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
@@ -39,7 +37,6 @@ hellobar.defineModule('elements',
       return siteElement;
     }
 
-    // TODO -> elements
     // Adds the SiteElement to the page
     function addToPage(siteElement) {
       if (siteElement.use_question) {
@@ -80,8 +77,6 @@ hellobar.defineModule('elements',
       siteElement.attach();
     }
 
-    // TODO -> elements ?
-    // TODO it was findSiteElementOnPageById previously
     function findById(siteElementId) {
       var lookup = {};
       for (var i = 0, len = siteElementsOnPage.length; i < len; i++) {
@@ -95,7 +90,6 @@ hellobar.defineModule('elements',
       }
     }
 
-    // TODO this is used from editor only (application.mixin.preview.js)
     function removeAllSiteElements() {
       for (var i = 0; i < siteElementsOnPage.length; i++) {
         siteElementsOnPage[i].remove();
@@ -104,7 +98,6 @@ hellobar.defineModule('elements',
     }
 
 
-    // TODO -> elements
     // Replaces the site element with the question variation.
     // Sets the displayAnswer callback to show the original element
     function questionifySiteElement(siteElement) {

@@ -7,7 +7,6 @@ hellobar.defineModule('contentUpgrades',
       styles: 'object'
     });
 
-    // TODO is was showContentUpgrade previously
     function show(contentUpgradeId) {
       const contentUpgrades = configuration.contentUpgrades() || {};
       if (contentUpgrades[contentUpgradeId]) {

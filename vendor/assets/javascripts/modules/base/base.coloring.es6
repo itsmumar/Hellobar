@@ -1,6 +1,5 @@
 hellobar.defineModule('base.coloring', [], function() {
 
-  // TODO -> base.coloring
   function colorIsBright(hex) {
     var rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (rgb == null)
@@ -11,7 +10,6 @@ hellobar.defineModule('base.coloring', [], function() {
     return brightness >= 0.5
   }
 
-  // TODO -> base.coloring (make it inner)
   function luminance(r, g, b) {
     // http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
     var rgb = [r, g, b];

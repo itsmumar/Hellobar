@@ -32,7 +32,6 @@ hellobar.defineModule('base.dom', [], function () {
     }
   }
 
-  // TODO -> base.dom
   /**
    * Adds the CSS class to the target element
    * @param element {Element}
@@ -46,7 +45,6 @@ hellobar.defineModule('base.dom', [], function () {
   }
 
 
-  // TODO -> base.dom
   /**
    * Removes the CSS class from the target element
    * @param element {Element}
@@ -67,7 +65,6 @@ hellobar.defineModule('base.dom', [], function () {
   }
 
 
-  // TODO -> base.dom
   /**
    * Adds/removes CSS class for the target element
    * @param element {Element}
@@ -78,7 +75,6 @@ hellobar.defineModule('base.dom', [], function () {
     shouldBeSet ? addClass(element, className) : removeClass(element, className);
   }
 
-  // TODO -> base.dom
   // Returns the element or looks it up via getElementById
   function $(idOrElement) {
     if (typeof(idOrElement) === 'string')
@@ -87,7 +83,6 @@ hellobar.defineModule('base.dom', [], function () {
       return idOrElement;
   }
 
-  // TODO -> base.dom
   // Takes the given element and "shakes" it a few times and returns
   // it to its original style and positioning. Used to shake the
   // email field when it is invalid.
@@ -123,7 +118,6 @@ hellobar.defineModule('base.dom', [], function () {
   }
 
 
-  // TODO -> base.dom
   function animateIn(element, time) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
@@ -135,7 +129,6 @@ hellobar.defineModule('base.dom', [], function () {
     showElement(element); // unhide if hidden
   }
 
-  // TODO -> base.dom
   function animateOut(element, callback) {
     // HTML 5 supported so show the animation
     if (typeof element.classList == 'object') {
@@ -153,7 +146,6 @@ hellobar.defineModule('base.dom', [], function () {
     }
   }
 
-  // TODO -> base.dom (+generalize implementation)
   // Delays & restarts wiggle animation before & after mousing over bar
   function wiggleEventListeners(context) {
     var element = context.querySelector('#hellobar');

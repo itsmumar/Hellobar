@@ -2,9 +2,6 @@ hellobar.defineModule('elements.intents', ['base.environment'], function (enviro
 
   let intentConditionCache = {};
 
-  // TODO -> elements.intents ???
-  // TODO it's for intentCheck from site_element.es6
-  // TODO rename payload
   // Runs a function "payload" if the visitor meets intent-detection conditions
   function intentCheck(intentSetting, payload) {
     var visitorIntendsTo = false;
@@ -40,8 +37,6 @@ hellobar.defineModule('elements.intents', ['base.environment'], function (enviro
     }
   }
 
-  // TODO -> elements.intents
-  // TODO rename payload (it's a function)
   // Runs a function if the visitor has scrolled to a given height.
   function scrollTargetCheck(scrollTarget, payload) {
     // scrollTarget of "bottom" and "middle" are computed during check, in case page size changes;

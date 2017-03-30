@@ -7,7 +7,6 @@ hellobar.defineModule('tracking.internal',
       siteWriteKey: 'string'
     });
 
-    // TODO -> tracking.internal
     // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
     function send(path, itemID, params, callback) {
       if (isTrackingDisabled()) {
@@ -61,13 +60,11 @@ hellobar.defineModule('tracking.internal',
       return preview.isActive() || format.asBool(storage.getValue('disableTracking'));
     }
 
-// TODO -> tracking.hb (make it inner function)
-// Returns the URL for the backend server (e.g. "hi.hellobar.com").
+    // Returns the URL for the backend server (e.g. "hi.hellobar.com").
     function hi(url) {
       return (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + configuration.backendHost() + url;
     }
 
-    // TODO this should be inner for s (tracking.hb)
     function paramsToString(params) {
       var pairs = [];
       for (var k in params) {
@@ -78,7 +75,6 @@ hellobar.defineModule('tracking.internal',
       return pairs.join('&');
     }
 
-    // TODO this is inner of 's' (tracking)
     // Takes an input ID and returns an obfuscated ID
     // This is the required format for IDs for hi.hellobar.com
     function obfID(number) {
@@ -121,7 +117,6 @@ hellobar.defineModule('tracking.internal',
       return outputs.join(SEP);
     }
 
-    // TODO this is inner of 's' (tracking)
     // Signs a given path and params with the provided key
     function signature(key, path, params) {
 

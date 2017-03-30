@@ -1,6 +1,5 @@
 hellobar.defineModule('base.sanitizing', [], function() {
 
-  // TODO -> base.sanitizing
   // Takes each string value in the siteElement and escapes HTML < > chars
   // with the matching symbol
   function sanitize(siteElement, whitelist) {

@@ -2,7 +2,6 @@ hellobar.defineModule('elements.collecting',
   ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal', 'elements.conversion'],
   function (preview, format, dom, site, sanitizing, bus, trackingInternal, elementsConversion) {
 
-    // TODO -> elements.collecting
     /**
      * Creates a field for collecting information
      * @param field
@@ -59,7 +58,6 @@ hellobar.defineModule('elements.collecting',
     }
 
 
-    // TODO -> elements.collecting
     // This takes the the email field, name field, and target siteElement DOM element.
     // It then checks the validity of the fields and if valid it records the
     // email and then sets the message in the siteElement to "Thank you". If invalid it
@@ -133,7 +131,6 @@ hellobar.defineModule('elements.collecting',
     }
 
 
-    // TODO inner function in elements.collecting
     // Called to validate the email. Does not actually submit the email
     function validateEmail(email, successCallback, failCallback) {
       if (email && email.match(/.+@.+\..+/) && !email.match(/,/))
@@ -142,7 +139,6 @@ hellobar.defineModule('elements.collecting',
         failCallback();
     }
 
-    // TODO inner function in elements.collecting
     // Called to record an email for the rule without validation (also used by submitEmail)
     function recordEmail(siteElement, values, callback) {
       if (values && values.length > 0) {

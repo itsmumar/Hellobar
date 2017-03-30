@@ -8,12 +8,10 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
     }
   };
 
-  // TODO -> base.templating
   function getTemplateByName(templateName) {
     return templates[templateName];
   }
 
-  // TODO -> base.templating
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
   function renderTemplate(html, siteElement) {
@@ -22,7 +20,6 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
     });
   }
 
-  // TODO -> base.templating (should be inner)
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
   function parseTemplateVar(value, siteElement) {
     try {

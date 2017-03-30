@@ -5,7 +5,6 @@ hellobar.defineModule('visitor',
     // Visitor data cache
     let visitor = {};
 
-    // TODO -> ??? (this is called during script initialization)
     // This just sets the default segments/tracking data for the visitor
     // (such as when the suer visited, referrer, etc)
     function setDefaultSegments() {
@@ -94,8 +93,6 @@ hellobar.defineModule('visitor',
       setVisitorData('dv', environment.device());
     }
 
-
-    // TODO this should be inner for setDefaultSegments
     function paramsFromString(url) {
       var params = {};
       if (!url)
@@ -122,7 +119,6 @@ hellobar.defineModule('visitor',
       return params;
     }
 
-    // TODO this should be inner for setDefaultSegments
     // This code returns the root domain of the current site so "www.yahoo.co.jp" will return "yahoo.co.jp" and "blog.kissmetrics.com
     // will return kissmetrics.com. It does so by setting a cookie on each "part" until successful (first tries ".jp" then ".co.jp"
     // then "yahoo.co.jp"
@@ -141,14 +137,12 @@ hellobar.defineModule('visitor',
       return document.location.hostname;
     }
 
-    // TODO this is inner of setDefaultSegments
     function ymd(date) {
       if (typeof date === 'undefined') date = new Date();
       var m = date.getMonth() + 1;
       return date.getFullYear() + '-' + zeropad(m) + '-' + zeropad(date.getDate());
     }
 
-    // TODO this is inner of setDefaultSegments
     // Copied from zeropad.jquery.js
     function zeropad(string, length) {
       // default to 2

@@ -2,7 +2,6 @@ hellobar.defineModule('elements.data', ['base.storage', 'base.serialization', 'b
 
   let siteElementData = {};
 
-  // TODO it was setSiteElementData previously
   // Sets the siteElement attribute specified by the key and siteElementID to the value in HB.cookies
   // Also updates the cookies via HB.saveCookies
   function setData(siteElementID, key, value) {
@@ -16,8 +15,6 @@ hellobar.defineModule('elements.data', ['base.storage', 'base.serialization', 'b
     saveToStorage();
   }
 
-
-  // TODO it was getSiteElementData previously
   // Gets the siteElement attribute from HB.cookies specified by the siteElementID and key
   function getData(siteElementID, key) {
     if (!siteElementID)

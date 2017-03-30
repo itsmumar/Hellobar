@@ -80,46 +80,6 @@ hellobar.defineModule('elements.rules',
         applyingDeferred.resolve(siteElementResults);
       });
       return applyingDeferred.promise();
-
-      // TODO remove
-      /*for (i = 0; i < rules.length; i++) {
-        var rule = rules[i];
-
-        if (rule.siteElements.length && ruleTrue(rule)) {
-          // Get all site elements that are a part of this rule that the
-          // visitor has not done
-          for (j = 0; j < rule.siteElements.length; j++) {
-            siteElement = rule.siteElements[j];
-            visibilityGroup = siteElement.type;
-            // For showing multiple elements at the same time a modal and a takeover are the same thing
-            if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
-              visibilityGroup = 'Modal/Takeover';
-            if (!visibilityGroups[visibilityGroup]) {
-              visibilityGroups[visibilityGroup] = [];
-              visibilityGroupNames.push(visibilityGroup);
-            }
-            visibilityGroups[visibilityGroup].push(siteElement);
-          }
-        }
-      }
-
-      // Now we have all elements that can be shown based on the rules
-      // broken up into visibility groups
-      // The next step is to pick one per visibility group
-      var results = [];
-      // We need to specify the order that elements appear in. Whichever is first
-      // in the array is on top
-      var visibilityOrder = ['Custom', 'Modal/Takeover', 'Slider', 'Bar'];
-      for (i = 0; i < visibilityOrder.length; i++) {
-        var visibleElements = visibilityGroups[visibilityOrder[i]];
-        if (visibleElements) {
-          siteElement = getBestElement(visibleElements);
-          if (siteElement && elementsVisibility.shouldShowElement(siteElement)) {
-            results.push(siteElement);
-          }
-        }
-      }
-      return results;*/
     }
 
 
@@ -440,7 +400,6 @@ hellobar.defineModule('elements.rules',
       return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&');
     }
 
-    // TODO -> elements.rules ????? (make it inner) (also have something to do with visitorData)
     // Gets the current segment value that will be compared to the conditions
     // value
     function getSegmentValue(segmentName) {

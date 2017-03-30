@@ -28,7 +28,6 @@ hellobar.defineModule('base.timezone', ['hellobar'], function (hellobar) {
   }
 
 
-  // TODO used in setDefaultSegments and elements.rules
   // Returns a Date object adjusted to the timezone specified (if none is
   // specified we try to use HB_TZ - if that is not present we use the user
   // timezone. The timezone of the actual Date object wills till be the

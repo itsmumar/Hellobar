@@ -4,7 +4,6 @@ hellobar.defineModule('base.format', [], function () {
     return urlPart.replace(/(.+)\/$/i, '$1');
   }
 
-  // TODO previously it was called HB.n
   // Normalizes a URL so that "https://www.google.com/#foo" becomes "http://google.com"
   // Also sorts the params alphabetically
   function normalizeUrl(url, pathOnly) {
@@ -58,7 +57,6 @@ hellobar.defineModule('base.format', [], function () {
     return (value && value != 'false' && value != '0') ? true : false;
   }
 
-  // TODO -> base.format
   function isExternalURL(url) {
     function currentURL() {
       return window.location.href;
@@ -68,7 +66,6 @@ hellobar.defineModule('base.format', [], function () {
     return regex.exec(currentURL())[1] !== regex.exec(url)[1];
   }
 
-  // TODO -> base.format
   function stringLiteral(s) {
     return s ? '\'' + s.replace(/\'/g, ' ') + '\'' : 'null';
   }

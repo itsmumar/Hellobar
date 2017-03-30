@@ -1,7 +1,6 @@
 hellobar.defineModule('base.environment', [], function () {
 
 
-  // TODO -> base.environment
   /**
    * Determines if the screen width is considered mobile for given element
    * @param siteElementData {object}
@@ -18,19 +17,16 @@ hellobar.defineModule('base.environment', [], function () {
     }
   }
 
-  // TODO make it inner function of isMobileWidth
   function windowWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
 
 
-  // TODO -> base.environment
   function isIE11() {
     var myNav = navigator.userAgent.toLowerCase();
     return myNav.indexOf('rv:11') != -1;
   }
 
-  // TODO -> base.environment
   function isIEXOrLess(x) {
     var myNav = navigator.userAgent.toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
@@ -44,24 +40,20 @@ hellobar.defineModule('base.environment', [], function () {
     }
   }
 
-  // TODO -> base.environment
   // Returns true if the device is using mobile safari (ie, ipad / iphone)
   function isMobileSafari() {
     var ua = navigator.userAgent.toLowerCase();
     return (ua.indexOf('safari') > -1 && (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1));
   }
 
-  // TODO -> base.environment
   function isMobileDevice() {
     return device() === 'mobile';
   }
 
-  // TODO -> base.environment (should be inner)
   function getUserAgent() {
     return navigator.userAgent;
   }
 
-  // TODO -> base.environment
   function device() {
     var ua = getUserAgent();
     if (ua.match(/ipad/i))

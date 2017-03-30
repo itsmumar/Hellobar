@@ -2,7 +2,6 @@ hellobar.defineModule('elements.visibility',
   ['base.storage', 'base.environment', 'elements.data'],
   function (storage, environment, elementsData) {
 
-    // TODO -> elements.visibility (make it inner)
     /**
      * Generates a name for visibility control cookie
      * @param cookieType {string}
@@ -18,7 +17,6 @@ hellobar.defineModule('elements.visibility',
       storage.setValue(cookieName, JSON.stringify({}), new Date().toString());
     }
 
-    // TODO -> elements.visibility
     /**
      * Stores visibility control information with corresponding expiration date.
      * siteElement.settings.cookie_settings is used to calculate expiration.
@@ -52,7 +50,6 @@ hellobar.defineModule('elements.visibility',
       }
     }
 
-    // TODO -> elements.visibility (make it inner)
     /**
      * Checks if the site element should be shown considering visibility control cookies.
      * If at least one visibility control cookie prohibits the element then it won't be shown.
@@ -71,12 +68,10 @@ hellobar.defineModule('elements.visibility',
       return result;
     }
 
-    // TODO -> elements.visibility (make it inner)
     function nonMobileClickToCall(siteElementData) {
       return siteElementData.subtype === 'call' && !environment.isMobileDevice();
     }
 
-    // TODO -> elements.visibility
     /**
      * Determines if an element should be displayed
      * @param siteElementData {object}
@@ -113,7 +108,6 @@ hellobar.defineModule('elements.visibility',
       }
     }
 
-    // TODO -> elements.visibility (make it inner)
     function updatedSinceLastVisit(siteElement) {
       var lastVisited = new Date(elementsData.getData(siteElement.id, 'lv') * 1000);
       var lastUpdated = new Date(siteElement.updated_at);
