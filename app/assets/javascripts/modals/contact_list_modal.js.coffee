@@ -473,7 +473,7 @@ class @ContactListModal extends Modal
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
-    @$modal.find("#contact_list_provider").val(data.provider || "0").trigger('change')
+    @$modal.find("#contact_list_provider").val(data.provider_token || "0").trigger('change')
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id
