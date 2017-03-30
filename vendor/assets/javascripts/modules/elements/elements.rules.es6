@@ -460,10 +460,28 @@ hellobar.defineModule('elements.rules',
       return visitor.getData(segmentName);
     }
 
+    // If window.HB_element_id is set, use that to find the site element
+    // Will return null if HB_element_id is not set or no site element exists with that id
+    function getFixedSiteElement() {
+      var i, j;
+      if (window.HB_element_id != null) {
+        for (i = 0; i < rules.length; i++) {
+          var rule = rules[i];
+          for (j = 0; j < rule.siteElements.length; j++) {
+            var siteElement = rule.siteElements[j];
+            if (siteElement.wordpress_bar_id === window.HB_element_id)
+              return siteElement;
+          }
+        }
+      }
+      return null;
+    }
+
 
     return {
       configuration: () => configuration,
-      applyRules
+      applyRules,
+      getFixedSiteElement
     };
 
   });

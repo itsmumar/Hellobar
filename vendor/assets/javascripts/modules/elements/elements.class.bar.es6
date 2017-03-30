@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.class.bar',
-  ['base.dom', 'base.format', 'base.environment', 'elements.class', 'elements.injection'],
-  function (dom, format, environment, SiteElement, elementsInjection) {
+  ['base.dom', 'base.format', 'base.environment', 'elements.class', 'elements.injection', 'elements.visibility'],
+  function (dom, format, environment, SiteElement, elementsInjection, elementsVisibility) {
 
     class BarElement extends SiteElement {
       constructor(props) {
@@ -21,39 +21,39 @@ hellobar.defineModule('elements.class.bar',
         iframe.setAttribute('frameBorder', 0); // IE 9 and less
 
         // Remove the pusher if it exists
-        if (HB.p) {
-          HB.p.parentNode.removeChild(HB.p);
+        if (this.pusher) {
+          this.pusher.parentNode.removeChild(this.pusher);
         }
 
-        HB.p = null;
+        this.pusher = null;
 
         // Create the pusher (which pushes the page down) if needed
-        if (HB.t(this.pushes_page_down)) {
-          HB.p = document.createElement('div');
-          HB.p.id = 'hellobar-pusher';
-          HB.p.className = 'hb-' + this.size;
+        if (format.asBool(this.pushes_page_down)) {
+          this.pusher = document.createElement('div');
+          this.pusher.id = 'hellobar-pusher';
+          this.pusher.className = 'hb-' + this.size;
 
           // shrinks pusher if siteElement hidden by viewCondition rules
           if (this.w.style.display === 'none') {
-            HB.p.style.height = 0;
+            this.pusher.style.height = 0;
           }
 
-          elementsInjection.inject(HB.p, this.placement === 'bar-bottom');
+          elementsInjection.inject(this.pusher, this.placement === 'bar-bottom');
         }
       }
 
       minimize() {
         dom.animateOut(this.w, this.onHidden());
 
-        if (HB.p) {
-          HB.p.style.display = 'none';
+        if (this.pusher) {
+          this.pusher.style.display = 'none';
         }
 
         dom.animateIn(this.pullDown);
       }
 
       onHidden() {
-        HB.setVisibilityControlCookie('dismiss', this);
+        elementsVisibility.setVisibilityControlCookie('dismiss', this);
       }
 
       attach() {

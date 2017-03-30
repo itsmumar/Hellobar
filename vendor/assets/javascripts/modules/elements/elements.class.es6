@@ -218,7 +218,7 @@ hellobar.defineModule('elements.class',
         // Monitor siteElement height to update HTML/CSS
         if (thisElement) {
           if (thisElement.clientHeight) {
-            var isMobile = HB.isMobileWidth(this);
+            var isMobile = environment.isMobileWidth(this);
             // Update the CSS class based on the width
             dom.setClass(thisElement, 'mobile', isMobile);
 
@@ -228,18 +228,18 @@ hellobar.defineModule('elements.class',
             // Bar specific adjustments
             if (this.type === 'Bar') {
               // Adjust the pusher
-              if (HB.p) {
+              if (this.pusher) {
                 // handle case where display-condition check has hidden this.w
                 if (this.w.style.display === 'none') {
                   return;
                 }
-                var borderPush = HB.t((this.show_border) ? 3 : 0);
-                HB.p.style.height = (thisElement.clientHeight + borderPush) + 'px';
+                var borderPush = format.asBool((this.show_border) ? 3 : 0);
+                this.pusher.style.height = (thisElement.clientHeight + borderPush) + 'px';
               }
 
               // Add multiline class
               var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
-              HB.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
+              dom.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
             }
           }
         }
@@ -470,8 +470,8 @@ hellobar.defineModule('elements.class',
             elementsVisibility.expireVisibilityControlCookie('dismiss', this.id);
 
             // if the pusher exists, unhide it since it should be hidden at this point
-            if (this.pushes_page_down && HB.p) {
-              dom.showElement(HB.p, '');
+            if (this.pushes_page_down && this.pusher) {
+              dom.showElement(this.pusher, '');
             }
           }.bind(this);
 

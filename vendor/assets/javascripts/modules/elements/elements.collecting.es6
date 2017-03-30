@@ -1,6 +1,6 @@
 hellobar.defineModule('elements.collecting',
-  ['base.preview', 'base.format', 'base.dom', 'base.site', 'tracking.internal', 'elements.conversion'],
-  function (preview, format, dom, site, trackingInternal, elementsConversion) {
+  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'tracking.internal', 'elements.conversion'],
+  function (preview, format, dom, site, sanitizing, trackingInternal, elementsConversion) {
 
     // TODO -> elements.collecting
     /**
@@ -25,7 +25,7 @@ hellobar.defineModule('elements.collecting',
             type = 'tel';
             break;
           default:
-            label = HB.sanitize({label: field.label}).label;
+            label = sanitizing.sanitize({label: field.label}).label;
         }
 
         return {label: label, type: type}
