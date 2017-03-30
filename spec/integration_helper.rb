@@ -11,8 +11,8 @@ Capybara::Webkit.configure do |config|
   config.timeout = 60
   config.skip_image_loading
 end
-# Wait longer than the default 2 seconds for Ajax requests to finish
-Capybara.default_max_wait_time = ENV['CI'] ? 30 : 20
+
+Capybara.default_max_wait_time = 5
 
 RSpec.configure do |config|
   config.include SiteGeneratorHelper
