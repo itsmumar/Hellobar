@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.bar',
+hellobar.defineModule('contentUpgrades',
   ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.converison'],
   function (hellobar, templating, format, elementsCollecting, elementsConversion) {
 

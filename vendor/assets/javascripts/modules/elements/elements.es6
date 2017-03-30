@@ -1,6 +1,6 @@
 hellobar.defineModule('elements',
   ['hellobar', 'base.sanitizing', 'base.preview',
-    'elementsRules',
+    'elements.rules',
     'elements.class', 'elements.class.bar', 'elements.class.slider'],
   function (hellobar, sanitizing, preview,
             elementsRules,

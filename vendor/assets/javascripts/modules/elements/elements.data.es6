@@ -1,4 +1,4 @@
-hellobar.defineModule('elements', ['base.storage', 'base.serialization', 'base.site'], function (storage, serialization, site) {
+hellobar.defineModule('elements.data', ['base.storage', 'base.serialization', 'base.site'], function (storage, serialization, site) {
 
   let siteElementData = {};
 

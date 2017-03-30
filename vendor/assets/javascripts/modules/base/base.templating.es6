@@ -1,4 +1,4 @@
-hellobar.defineModule('elements.bar', ['hellobar', 'base.preview'], function (hellobar, preview) {
+hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function (hellobar, preview) {
 
   let templates = {};
 
