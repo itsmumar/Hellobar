@@ -346,7 +346,7 @@ class @ContactListModal extends Modal
     $.get @options.loadURL, (contactList) =>
       @options.contactList = $.extend(@options.contactList, data: contactList.data,
                                       name: contactList.name, id: contactList.id,
-                                      provider: contactList.provider)
+                                      provider_token: contactList.provider_token)
       @_setFormValues(contactList)
       @_loadRemoteLists(listData: contactList)
 
@@ -369,7 +369,7 @@ class @ContactListModal extends Modal
     option = $(select).find("option:selected")
     label = option.text()
     cycle_day = @options.contactList?.data?.cycle_day
-    originalProvider = @options.contactList?.provider
+    originalProvider = @options.contactList?.provider_token
     cycle_day_enabled = cycle_day != undefined
     hasTags = @options.contactList?.data?.hasOwnProperty('tags')
 
