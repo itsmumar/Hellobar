@@ -69,23 +69,6 @@ var HB = {
   CAP: {}, // Capabilies
   geoRequestInProgress: false,
 
-  // TODO -> elements
-  // Grabs site elements from valid rules and displays them
-  showSiteElements: function () {
-    var siteElements = [];
-    // If a specific element has already been set, use it
-    // Otherwise use the tradition apply rules method
-    var siteElement = HB.getFixedSiteElement();
-    if (siteElement)
-      siteElements = [siteElement];
-    else
-      siteElements = HB.applyRules();
-    for (var i = 0; i < siteElements.length; i++) {
-      // TODO REFACTOR use createAndAddToPage
-      HB.addToPage(HB.createSiteElement(siteElements[i]));
-    }
-  },
-
 
 
   // TODO this is inner for createClass
@@ -165,37 +148,6 @@ var HB = {
     }
   },*/
 
-  // TODO ???
-  // If window.HB_element_id is set, use that to find the site element
-  // Will return null if HB_element_id is not set or no site element exists with that id
-  getFixedSiteElement: function () {
-    if (window.HB_element_id != null) {
-      for (i = 0; i < HB.rules.length; i++) {
-        var rule = HB.rules[i];
-        for (j = 0; j < rule.siteElements.length; j++) {
-          var siteElement = rule.siteElements[j];
-          if (siteElement.wordpress_bar_id === window.HB_element_id)
-            return siteElement;
-        }
-      }
-    }
-    return null;
-  },
-
-
-
-
-
-
-
-
-
-
-  /*// TODO -> ???
-  branding_template: function () {
-    var stored = HB.gc('b_template');
-    return stored != null ? stored : HB.CAP.b_variation;
-  },*/
 
 
 
