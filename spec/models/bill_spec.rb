@@ -165,7 +165,7 @@ describe Bill do
 
     it 'should call payment_method.pay if the bill.amount > 0' do
       bill = create(:bill)
-      bill.subscription.payment_method = create(:payment_method)
+      bill.subscription.payment_method = create(:payment_method, :success)
       expect_any_instance_of(PaymentMethod).to receive(:pay).with(bill)
       bill.attempt_billing!
     end
@@ -292,7 +292,7 @@ describe Bill do
 
     it "should return false if due, but haven't tried billing yet" do
       bill = create(:past_due_bill)
-      pm = create(:payment_method)
+      pm = create(:payment_method, :success)
       # Get around destroying read-only records
       BillingAttempt.connection.execute("DELETE FROM #{ BillingAttempt.table_name }")
       expect(bill.should_bill?).to eq(true)
@@ -350,7 +350,7 @@ describe PaymentMethod do
 
   describe 'pay' do
     it 'should attempt to charge the bill with the payment method' do
-      payment_method = create(:payment_method)
+      payment_method = create(:payment_method, :success)
       bill = create(:bill)
       expect_any_instance_of(AlwaysSuccessfulPaymentMethodDetails).to receive(:charge).with(bill.amount)
       payment_method.pay(bill)
@@ -358,7 +358,7 @@ describe PaymentMethod do
 
     it 'should mark the bill as paid if successul' do
       bill = create(:bill)
-      expect(create(:payment_method).pay(bill)).to be_success
+      expect(create(:payment_method, :success).pay(bill)).to be_success
       expect(bill).to be_paid
     end
 
@@ -370,7 +370,7 @@ describe PaymentMethod do
     end
 
     it 'should create a BillingAttempt either way' do
-      billing_attempt = create(:payment_method).pay(create(:bill))
+      billing_attempt = create(:payment_method, :success).pay(create(:bill))
       expect(billing_attempt).not_to be_nil
       expect(billing_attempt).to be_persisted
       expect(billing_attempt.payment_method_details).not_to be_nil

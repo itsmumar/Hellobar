@@ -35,7 +35,7 @@ describe CyberSourceCreditCard do
     country: 'United Kingdom'
   }.freeze
 
-  let(:payment_method) { create(:payment_method) }
+  let(:payment_method) { create(:payment_method, :success) }
 
   it 'should remove all non-standard fields from data' do
     cc = CyberSourceCreditCard.new(payment_method: payment_method)
