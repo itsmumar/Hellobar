@@ -11,7 +11,7 @@ hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], f
 
     const ga = window['_gaq'];
 
-    return typeof ga === 'object' ? ga : null;
+    return typeof ga === 'object' ? ga : { push: () => null };
   };
 
   function send(externalTracking) {
