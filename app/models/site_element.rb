@@ -272,18 +272,18 @@ class SiteElement < ActiveRecord::Base
   def external_tracking
     return [] unless site && site.capabilities.external_tracking?
 
-    provider = 'google_analytics'
+    providers = ['google_analytics', 'legacy_google_analytics']
     category = 'Hello Bar'
     label = "SiteElement-#{ id }"
 
-    default = Hash[site_element_id: id, provider: provider, category: category, label: label]
+    default = Hash[site_element_id: id, category: category, label: label]
 
-    [
-      default.merge(type: 'view', action: 'View'),
-      default.merge(type: 'email_conversion', action: 'Conversion'),
-      default.merge(type: 'social_conversion', action: 'Conversion'),
-      default.merge(type: 'traffic_conversion', action: 'Conversion')
-    ]
+    providers.each_with_object([]) do |provider, memo|
+      memo << default.merge(provider: provider, type: 'view', action: 'View')
+      memo << default.merge(provider: provider, type: 'email_conversion', action: 'Conversion')
+      memo << default.merge(provider: provider, type: 'social_conversion', action: 'Conversion')
+      memo << default.merge(provider: provider, type: 'traffic_conversion', action: 'Conversion')
+    end
   end
 
   def pushes_page_down

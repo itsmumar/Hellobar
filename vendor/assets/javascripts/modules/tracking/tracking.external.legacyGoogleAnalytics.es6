@@ -1,4 +1,4 @@
-hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], function (hellobar) {
+hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], function (hellobar) {
 
   const configuration = hellobar.createModuleConfiguration({gaProvider: 'function'});
 
@@ -9,29 +9,24 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
       return gaProvider();
     }
 
-    const ga = window[window['GoogleAnalyticsObject'] || 'ga'];
+    const ga = window['_gaq'];
 
-    return typeof ga === 'function' ? ga : () => null;
+    return typeof ga === 'object' ? ga : { push: () => null };
   };
 
   function send(externalTracking) {
     const { category, action, label } = externalTracking;
 
-    ga()('send', {
-      hitType: 'event',
-      eventCategory: category,
-      eventAction: action,
-      eventLabel: label
-    });
+    ga().push(['_trackEvent', category, action, label]);
   }
 
   /**
-   * @module Supports sending data to Google Analytics to track user's actions.
+   * @module Supports sending data to Legacy Google Analytics to track user's actions.
    */
   return {
     configuration: () => configuration,
     /**
-     * Sends event data to Google Analytics
+     * Sends event data to Legacy Google Analytics
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
     send

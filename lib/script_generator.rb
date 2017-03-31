@@ -147,14 +147,14 @@ class ScriptGenerator < Mustache
   end
 
   def external_tracking_json
-    events =
+    external_tracking_events =
       site.site_elements.active.each_with_object([]) do |site_element, memo|
         site_element.external_tracking.each do |event|
           memo << event
         end
       end
 
-    events.to_json
+    external_tracking_events.to_json
   end
 
   def modules_js
