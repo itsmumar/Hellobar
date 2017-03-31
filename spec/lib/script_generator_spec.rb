@@ -11,7 +11,7 @@ describe ScriptGenerator do
 
     it 'renders the site id variable' do
       allow(generator).to receive(:pro_secret).and_return('pro_secret')
-      expected_string = "configuration.siteId(#{ site.id }).siteUrl('#{site.url}').secret('pro_secret');"
+      expected_string = "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }').secret('pro_secret');"
 
       expect(generator.render).to include(expected_string)
     end
@@ -19,7 +19,7 @@ describe ScriptGenerator do
     it 'renders the backend host variable' do
       original_setting = Hellobar::Settings[:tracking_host]
       Hellobar::Settings[:tracking_host] = 'hi-there.hellobar.com'
-      expected_string = "configuration.backendHost('hi-there.hellobar.com').siteWriteKey('#{site.write_key}');"
+      expected_string = "configuration.backendHost('hi-there.hellobar.com').siteWriteKey('#{ site.write_key }');"
 
       expect(generator.render).to include(expected_string)
       Hellobar::Settings[:tracking_host] = original_setting
