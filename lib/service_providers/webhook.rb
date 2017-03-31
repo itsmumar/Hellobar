@@ -80,7 +80,7 @@ module ServiceProviders
       if field['type'] =~ /builtin/
         field['type'].sub('builtin-', '')
       else
-        field['label']
+        field['label'].parameterize('_')
       end
     end
   end
