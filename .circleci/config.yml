@@ -1,0 +1,119 @@
+version: 2
+jobs:
+  build:
+    branches:
+      ignore:
+        - staging
+        - edge
+        - production
+
+    docker:
+      - image: hellobarcom/base:2.1.9
+        environment:
+          DISPLAY: :99
+
+      - image: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+
+    working_directory: /tmp/hellobar_new
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "editor/bower.json" }}
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
+
+      - restore_cache:
+          key: dependency-cache-editor-{{ .Revision }}
+
+      - restore_cache:
+          keys:
+            - dependency-cache-tmp-{{ .Branch }}
+            - dependency-cache-tmp-master
+
+      - run: env
+
+      - run:
+          name: Bundle install
+          command: bundle install --path vendor/bundle
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Copy configs
+          command: |
+            cp config/settings.yml.example config/settings.yml
+            cp .circleci/database.yml config/database.yml
+
+      - run:
+          name: Yarn install
+          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "editor/yarn.lock" }}
+          paths:
+            - editor/node_modules
+            - editor/.yarn
+            - ~/.config/yarn
+
+      - run:
+          name: Bower install
+          command: cd editor && bower install --allow-root
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "editor/bower.json" }}
+          paths:
+            - editor/bower_components
+
+      - run:
+          name: Build Ember application (editor)
+          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
+
+      - save_cache:
+          key: dependency-cache-editor-{{ .Revision }}
+          paths:
+            - editor/dist/assets
+
+      - run:
+          name: Setup database
+          command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
+
+      - run:
+          name: Run Brakeman
+          command: bundle exec brakeman
+
+      - run:
+          name: Run Rubocop
+          command: bundle exec rubocop
+
+      - run:
+          name: Run unit tests
+          command: bundle exec rspec --tag ~@type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+
+      - run:
+          name: Run teaspoon tests
+          command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
+
+      - run:
+          name: Run feature tests
+          command: xvfb-run -a bundle exec rspec spec/features -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+
+      - save_cache:
+          key: dependency-cache-tmp-{{ .Branch }}
+          paths:
+            - /root/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
+            - /tmp/hellobar_new/tmp/cache
+            - /tmp/hellobar_new/tmp/script
+
+      - store_artifacts:
+          path: /tmp/hellobar_new/tmp/coverage
+          destination: coverage

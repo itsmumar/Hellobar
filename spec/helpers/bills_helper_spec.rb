@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe BillsHelper do
   it 'yields a list of coupons and uses' do
     coupon = create(:referral_coupon)

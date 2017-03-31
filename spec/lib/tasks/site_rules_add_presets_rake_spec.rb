@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 require 'rake'
 load 'lib/tasks/site.rake'
 

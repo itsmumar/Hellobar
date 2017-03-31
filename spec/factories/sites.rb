@@ -2,9 +2,10 @@ FactoryGirl.define do
   factory :site do
     transient do
       elements []
+      user nil
     end
 
-    url { random_uniq_url }
+    url { generate(:random_uniq_url) }
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?
@@ -12,6 +13,9 @@ FactoryGirl.define do
       evaluator.elements.each do |element|
         create(:site_element, element, site: site)
       end
+
+      site.users << evaluator.user if evaluator.user.present?
+      site.reload
     end
 
     trait :with_rule do
@@ -35,6 +39,12 @@ FactoryGirl.define do
     trait :pro do
       after(:create) do |site|
         create(:pro_subscription, site: site, user: site.users.first)
+      end
+    end
+
+    trait :pro_managed do
+      after(:create) do |site|
+        create(:subscription, :pro_managed, site: site, user: site.users.first)
       end
     end
 

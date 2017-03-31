@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Theme do
   extend ThemeMacros
   use_theme_fixtures

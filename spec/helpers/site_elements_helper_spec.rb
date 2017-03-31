@@ -1,12 +1,10 @@
-require 'spec_helper'
-
 describe SiteElementsHelper do
   describe 'site_element_subtypes_for_site' do
     let(:site) { create(:site) }
 
     context 'none' do
       before do
-        site.stub(site_elements: [])
+        allow(site).to receive(:site_elements).and_return([])
       end
 
       it 'returns valid types' do
@@ -16,7 +14,7 @@ describe SiteElementsHelper do
 
     context 'traffic' do
       before do
-        site.stub(site_elements: [create(:site_element, :traffic)])
+        allow(site).to receive(:site_elements).and_return([create(:site_element, :traffic)])
       end
 
       it 'returns valid types' do
@@ -26,7 +24,7 @@ describe SiteElementsHelper do
 
     context 'email' do
       before do
-        site.stub(site_elements: [create(:site_element, :email)])
+        allow(site).to receive(:site_elements).and_return([create(:site_element, :email)])
       end
 
       it 'returns valid types' do
@@ -36,7 +34,8 @@ describe SiteElementsHelper do
 
     context 'multiple' do
       before do
-        site.stub(site_elements: [create(:site_element, :traffic), create(:site_element, :email)])
+        allow(site)
+          .to receive(:site_elements).and_return([create(:site_element, :traffic), create(:site_element, :email)])
       end
 
       it 'returns valid types' do
@@ -48,34 +47,41 @@ describe SiteElementsHelper do
   describe '#helper.activity_message' do
     it "doesn't pluralize when there was only one conversion" do
       element = create(:site_element, :email)
-      element.stub(total_conversions: 1, total_views: 1)
+      allow(element).to receive(:total_conversions).and_return(1)
+      allow(element).to receive(:total_views).and_return(1)
+
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 1 email collected/)
     end
 
     context 'with multiple conversions' do
+      def stub_views_and_conversations(element)
+        allow(element).to receive(:total_conversions).and_return(5)
+        allow(element).to receive(:total_views).and_return(5)
+      end
+
       it 'returns the correct message for traffic elements' do
         element = create(:site_element, :traffic)
-        element.stub(total_conversions: 5, total_views: 5)
+        stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 clicks/)
       end
 
       it 'returns the correct message for email elements' do
         element = create(:site_element, :email)
-        element.stub(total_conversions: 5, total_views: 5)
+        stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 emails collected/)
       end
 
       it 'returns the correct message for twitter elements' do
-        Hello::DataAPI.stub(lifetime_totals: {})
+        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
         element = create(:site_element, :twitter)
-        element.stub(total_conversions: 5, total_views: 5)
+        stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 tweets/)
       end
 
       it 'returns the correct message for facebook elements' do
-        Hello::DataAPI.stub(lifetime_totals: {})
+        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
         element = create(:site_element, :facebook)
-        element.stub(total_conversions: 5, total_views: 5)
+        stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 likes/)
       end
     end
@@ -83,10 +89,10 @@ describe SiteElementsHelper do
     it 'shows the conversion rate relative to other elements of the same type' do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      Hello::DataAPI.stub(lifetime_totals: {
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
         element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
-      })
+      )
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
     end
@@ -94,20 +100,20 @@ describe SiteElementsHelper do
     it "doesn't show a percentage when comparing against other bars with no conversions" do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      Hello::DataAPI.stub(lifetime_totals: {
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
         element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
         create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 0]])
-      })
+      )
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting better than your other social bars/)
     end
 
     it 'doesnt return the conversion rate when it is Infinite' do
       element = create(:site_element, :twitter)
-      Hello::DataAPI.stub(lifetime_totals: {
+      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
         element.id.to_s => Hello::DataAPI::Performance.new([[0, 5]]),
         create(:site_element, :facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
-      })
+      )
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).not_to match(/Currently this bar is converting/)
     end
@@ -303,6 +309,36 @@ describe SiteElementsHelper do
       expect(grouped_elements[1].count).to eq 2
       expect(grouped_elements[2].count).to eq 1
       expect(grouped_elements[3].count).to eq 1
+    end
+  end
+
+  describe '#render_headline' do
+    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+
+    context 'when use_question' do
+      let(:slider_element) { create(:site_element, site: site, use_question: true, question: '<b>Questions?</b>') }
+
+      it 'strips tags' do
+        expect(helper.render_headline(slider_element)).to eql 'Questions?'
+      end
+    end
+
+    context 'when blocks are empty' do
+      let(:slider_element) { create(:site_element, site: site, headline: '<b>Headline</b>') }
+      it 'strips tags' do
+        expect(helper.render_headline(slider_element)).to eql 'Headline'
+      end
+    end
+
+    context 'when blocks are present' do
+      let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+      let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
+      let(:slider_element) { create(:site_element, :slider, site: site) }
+
+      it 'strips tags' do
+        expect(helper.render_headline(element_with_blocks)).to eql 'Grow your blog traffic by 300% with our free tool '
+        expect(helper.render_headline(slider_element)).to eql 'Hello, HelloBar!'
+      end
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ServiceProviders::Infusionsoft do
   let(:identity) { Identity.new(provider: 'infusionsoft', api_key: 'test-api-key', extra: { app_url: 'test1.infusionsoft.com' }) }
   let(:service_provider) { identity.service_provider }

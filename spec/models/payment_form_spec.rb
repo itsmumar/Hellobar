@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe PaymentForm do
   let(:data) do
     {

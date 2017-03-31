@@ -1,10 +1,8 @@
-require 'spec_helper'
-
 describe ScriptGenerator do
   extend ThemeMacros
 
   before do
-    Hello::DataAPI.stub(lifetime_totals: nil)
+    allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
   end
 
   describe '#render' do
@@ -27,7 +25,7 @@ describe ScriptGenerator do
     end
 
     it 'renders the HB_TZ timezone variable' do
-      site.stub timezone: 'America/Chicago'
+      allow(site).to receive(:timezone).and_return('America/Chicago')
       Time.zone = 'America/Chicago'
       expected_string = "HB_TZ = \"#{ Time.zone.now.formatted_offset }\";"
 
@@ -74,7 +72,7 @@ describe ScriptGenerator do
     context 'when templates are present' do
       it 'renders the setTemplate function on HB with the template name and markup' do
         template = { name: 'yey name', markup: 'yey markup' }
-        generator.stub templates: [template]
+        allow(generator).to receive(:templates).and_return([template])
         allow(generator).to receive(:hellobar_container_css)
         allow(generator).to receive(:hellobar_element_css)
 
@@ -85,7 +83,7 @@ describe ScriptGenerator do
 
       it 'renders only the setTemplate definition and 1 call per bar type' do
         bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
-        site.stub(site_elements: double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
+        allow(site).to receive(:site_elements).and_return(double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
 
         generator = ScriptGenerator.new site
 
@@ -95,7 +93,7 @@ describe ScriptGenerator do
       it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
         traffic_bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
         email_bar = Bar.new(element_subtype: 'email', theme_id: 'classic')
-        site.stub site_elements: double('site_elements', active: [traffic_bar, email_bar], active_content_upgrades: [], none?: true)
+        allow(site).to receive(:site_elements).and_return(double('site_elements', active: [traffic_bar, email_bar], active_content_upgrades: [], none?: true))
 
         generator = ScriptGenerator.new site
 
@@ -104,11 +102,12 @@ describe ScriptGenerator do
     end
 
     context 'when rules are present' do
+      let(:rule) { Rule.new }
+
       it 'has a start date constraint when present' do
-        rule = Rule.new
         condition = Condition.new value: { 'start_date' => Date.new(2000, 01, 01) }, operand: Condition::OPERANDS[:after], segment: 'DateCondition'
-        rule.stub conditions: [condition]
-        site.stub rules: [rule]
+        allow(rule).to receive(:conditions).and_return([condition])
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
 
@@ -116,8 +115,7 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have a start date constraint when not present' do
-        rule = Rule.new
-        site.stub rules: [rule]
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [], [])}'
 
@@ -125,10 +123,9 @@ describe ScriptGenerator do
       end
 
       it 'has an end date constraint when present' do
-        rule = Rule.new
         condition = Condition.new value: { 'end_date' => Date.new(2015, 01, 01) }, operand: Condition::OPERANDS[:before], segment: 'DateCondition'
-        rule.stub conditions: [condition]
-        site.stub rules: [rule]
+        allow(rule).to receive(:conditions).and_return([condition])
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is before","value":{"end_date":"2015-01-01"}}], [])}'
 
@@ -136,8 +133,7 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have a start date constraint when not present' do
-        rule = Rule.new
-        site.stub rules: [rule]
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [], [])}'
 
@@ -145,10 +141,11 @@ describe ScriptGenerator do
       end
 
       it 'adds an exlusion constraint for all blacklisted URLs' do
-        rule = Rule.new
         conditions = [Condition.new(value: '/signup', operand: :does_not_include, segment: 'UrlCondition')]
-        rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
-        site.stub rules: [rule]
+        allow(rule).to receive(:site_elements).and_return(double('site_elements', active: []))
+        allow(rule).to receive(:attributes).and_return({})
+        allow(rule).to receive(:conditions).and_return(conditions)
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"/signup"}], [])'
 
@@ -156,10 +153,11 @@ describe ScriptGenerator do
       end
 
       it 'converts does_not_include urls to paths' do
-        rule = Rule.new
         conditions = [Condition.new(value: 'http://soamazing.com/signup', operand: :does_not_include, segment: 'UrlCondition')]
-        rule.stub site_elements: double('site_elements', active: []), attributes: {}, conditions: conditions
-        site.stub rules: [rule]
+        allow(rule).to receive(:site_elements).and_return(double('site_elements', active: []))
+        allow(rule).to receive(:attributes).and_return({})
+        allow(rule).to receive(:conditions).and_return(conditions)
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
 
@@ -167,8 +165,7 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have exclusion constraints when no sites are blacklisted' do
-        rule = Rule.new
-        site.stub rules: [rule]
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = /HB.umatch(.*)/
 
@@ -176,10 +173,9 @@ describe ScriptGenerator do
       end
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
-        rule = Rule.new
         conditions = [Condition.new(value: '/signup', operand: Condition::OPERANDS[:includes], segment: 'UrlCondition')]
-        rule.stub conditions: conditions
-        site.stub rules: [rule]
+        allow(rule).to receive(:conditions).and_return(conditions)
+        allow(site).to receive(:rules).and_return([rule])
 
         expected_string = 'HB.addRule("", [{"segment":"pu","operand":"includes","value":"/signup"}], [])'
 
@@ -187,12 +183,29 @@ describe ScriptGenerator do
       end
 
       it 'does NOT have inclusion constraints when no sites are whitelisted' do
-        rule = Rule.new
-        generator.stub rules: [rule]
+        allow(generator).to receive(:rules).and_return([rule])
 
         expected_string = /HB.umatch(.*)/
 
         expect(generator.render).not_to match(expected_string)
+      end
+
+      it 'does NOT include nil values' do
+        site_element = build(:site_element, :bar, custom_js: '', custom_css: nil)
+        allow(site).to receive(:rules).and_return([rule])
+        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+
+        expect(generator.rules.first[:site_elements]).to include 'custom_js'
+        expect(generator.rules.first[:site_elements]).not_to include 'custom_css'
+      end
+
+      it 'includes false values' do
+        site_element = build(:site_element, :bar)
+        allow(site).to receive(:rules).and_return([rule])
+        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+        allow(site_element).to receive(:email_redirect?).and_return(false)
+
+        expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
       end
     end
 
@@ -251,8 +264,8 @@ describe ScriptGenerator do
 
     it 'returns the proper array of hashes for a sites rules' do
       rule = Rule.new id: 1
-      site.stub rules: [rule]
-      generator.stub site_elements_for_rule: []
+      allow(site).to receive(:rules).and_return([rule])
+      allow(generator).to receive(:site_elements_for_rule).and_return([])
 
       expected_hash = {
         match: nil,
@@ -268,9 +281,9 @@ describe ScriptGenerator do
       options = { bar_id: bar.id }
 
       generator = ScriptGenerator.new(site, options)
-      generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype }
+      allow(generator).to receive(:site_element_settings).and_return(id: bar.id, template_name: bar.element_subtype)
 
-      site.stub rules: [rule]
+      allow(site).to receive(:rules).and_return([rule])
 
       expected_hash = {
         match: nil,
@@ -285,9 +298,9 @@ describe ScriptGenerator do
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
       generator = ScriptGenerator.new(site, options)
-      generator.stub site_element_settings: { id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' } }
+      allow(generator).to receive(:site_element_settings).and_return(id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' })
 
-      site.stub rules: [rule]
+      allow(site).to receive(:rules).and_return([rule])
 
       expected_hash = {
         match: nil,
@@ -302,9 +315,9 @@ describe ScriptGenerator do
       SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
-      generator.stub site_element_settings: { id: active_bar.id, template_name: active_bar.element_subtype }
+      allow(generator).to receive(:site_element_settings).and_return(id: active_bar.id, template_name: active_bar.element_subtype)
 
-      site.stub rules: [rule]
+      allow(site).to receive(:rules).and_return([rule])
 
       expected_hash = {
         match: nil,
@@ -325,7 +338,7 @@ describe ScriptGenerator do
     describe '#generate_script' do
       it 'does not compress the template if the compress option is not set' do
         generator = ScriptGenerator.new('site')
-        generator.stub render: 'template'
+        allow(generator).to receive(:render).and_return('template')
 
         expect(Uglifier).not_to receive(:new)
         expect(generator).to receive(:render)
@@ -335,7 +348,7 @@ describe ScriptGenerator do
 
       it 'compresses the template when the compress option is true' do
         generator = ScriptGenerator.new('site', compress: true)
-        generator.stub render: 'template'
+        allow(generator).to receive(:render).and_return('template')
 
         expect(ScriptGenerator.uglifier).to receive(:compress).with('template')
 

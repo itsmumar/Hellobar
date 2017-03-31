@@ -5,4 +5,3 @@
 //= require ./geolocation
 //= require ./tracking
 //= require ./visitor
-

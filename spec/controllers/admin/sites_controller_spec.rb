@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin::SitesController do
   let!(:admin) { create(:admin) }
   let(:site) { create(:site, :with_user) }
@@ -16,7 +14,6 @@ describe Admin::SitesController do
   context 'PUT update site invoice_information' do
     it 'with the correct data' do
       put :update, id: site.id, user_id: site.owners.first.id, site: { invoice_information: '12345 Main St' }
-      pending('revisiting this later')
       expect(site.reload.invoice_information).to eq '12345 Main St'
     end
   end
@@ -24,7 +21,7 @@ describe Admin::SitesController do
   describe 'POST #regenerate' do
     context 'when the site exists' do
       before do
-        Hello::DataAPI.stub(lifetime_totals: nil)
+        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
 
         allow(User).to receive(:find).and_return(user)
         allow(Site).to receive(:where).and_return([site])

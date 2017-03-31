@@ -25,16 +25,19 @@ FactoryGirl.define do
   factory :free_subscription, parent: :subscription, class: 'Subscription::Free' do
     amount 0.0
     schedule :monthly
-    payment_method
+
+    association :payment_method, factory: [:payment_method, :success]
   end
 
   factory :pro_subscription, parent: :subscription, class: 'Subscription::Pro' do
     schedule :monthly
-    payment_method
+
+    association :payment_method, factory: [:payment_method, :success]
   end
 
   factory :enterprise_subscription, parent: :subscription, class: 'Subscription::Enterprise' do
     schedule :monthly
-    payment_method
+
+    association :payment_method, factory: [:payment_method, :success]
   end
 end

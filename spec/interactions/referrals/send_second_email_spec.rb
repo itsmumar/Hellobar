@@ -1,15 +1,14 @@
-require 'spec_helper'
-
 describe Referrals::SendSecondEmail do
   let(:user) { create(:user) }
   let(:email) { 'user@hellobar.com' }
   let!(:referral) { create(:referral, sender: user, state: :sent, email: email) }
+  let(:hellobar_host) { Hellobar::Settings[:host] }
 
   it 'will send the email under normal circumstances' do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referal Invite Second'
       expect(email).to eq email
-      expect(params[:referral_link]).to include('http://hellobar.com/referrals/accept')
+      expect(params[:referral_link]).to include("http://#{ hellobar_host }/referrals/accept")
       expect(params[:referral_sender]).to eq user.name
     end
 

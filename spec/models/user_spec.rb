@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe User do
   before do
     allow(Infusionsoft).to receive(:contact_add_with_dup_check)
@@ -134,8 +132,8 @@ describe User do
     let(:site_element_w_more_views) { create(:site_element, rule: site.rules.first) }
 
     before do
-      site_element.stub(total_views: 5)
-      site_element_w_more_views.stub(total_views: 10)
+      allow(site_element).to receive(:total_views).and_return(5)
+      allow(site_element_w_more_views).to receive(:total_views).and_return(10)
     end
 
     it 'returns the site element that has the most views' do
@@ -154,7 +152,7 @@ describe User do
 
     it 'returns false if the user logging in for the first time and does have bars' do
       user = create(:user)
-      site = user.sites.create(url: random_uniq_url)
+      site = user.sites.create(url: generate(:random_uniq_url))
       rule = site.rules.create(name: 'test rule', match: 'all')
       create(:site_element, rule: rule)
       # normaly devise would set it

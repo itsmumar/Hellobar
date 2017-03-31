@@ -1,10 +1,8 @@
-require 'spec_helper'
-
 module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)
     @site = create(:site)
-    @payment_method = create(:payment_method, user: @user)
+    @payment_method = create(:payment_method, :success, user: @user)
     @free = Subscription::Free.new(user: @user, site: @site)
     @pro = Subscription::Pro.new(user: @user, site: @site)
     @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
@@ -213,7 +211,7 @@ describe Subscription do
       expect(@site.site_elements.all?(&:show_branding)).to be_truthy
       expect(@site.site_elements.all?(&:closable)).to be_truthy
 
-      @site.change_subscription(@pro, create(:payment_method))
+      @site.change_subscription(@pro, create(:payment_method, :success))
 
       expect(@site.capabilities(true).remove_branding?).to be_truthy
       expect(@site.capabilities(true).closable?).to be_truthy
@@ -302,7 +300,7 @@ describe Subscription do
     end
 
     context 'Subscription::ProManaged capabilities' do
-      specify 'Subscription::Free does not have ProManaged capabilities' do
+      specify 'Subscription::Free does not have the ProManaged capabilities' do
         subscription = build_stubbed :subscription, :free
         capabilities = subscription.capabilities
 
@@ -310,6 +308,7 @@ describe Subscription do
         expect(capabilities.content_upgrades?).to be_falsey
         expect(capabilities.autofills?).to be_falsey
         expect(capabilities.geolocation_injection?).to be_falsey
+        expect(capabilities.external_tracking?).to be_falsey
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -320,6 +319,7 @@ describe Subscription do
         expect(capabilities.content_upgrades?).to be_truthy
         expect(capabilities.autofills?).to be_truthy
         expect(capabilities.geolocation_injection?).to be_truthy
+        expect(capabilities.external_tracking?).to be_truthy
       end
     end
 
@@ -331,7 +331,7 @@ describe Subscription do
       it 'returns false when it can still add site elements' do
         max_elements = @site.capabilities.max_site_elements
         elements = ['element'] * max_elements
-        @site.stub site_elements: elements
+        allow(@site).to receive(:site_elements).and_return(elements)
 
         expect(@site.capabilities.at_site_element_limit?).to be_truthy
       end

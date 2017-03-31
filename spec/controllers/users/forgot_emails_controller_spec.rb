@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Users::ForgotEmailsController, '#new' do
   it 'renders the template' do
     get :new

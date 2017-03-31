@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 class CyberSourceCreditCardValidator < ActiveModel::Validator; end
 
 describe CyberSourceCreditCard do

@@ -1,9 +1,7 @@
-require 'spec_helper'
-
 describe PaymentMethodsController, '#index' do
   let!(:site) { create(:site, :with_user, :free_subscription) }
   let!(:user) { site.users.first }
-  let!(:payment_methods) { create_list :payment_method, 2, user: user }
+  let!(:payment_methods) { create_list :payment_method, 2, :success, user: user }
 
   before do
     stub_current_user(user)
@@ -39,8 +37,8 @@ describe PaymentMethodsController, '#index' do
 
     it 'sets current_site_payment_method key to true if the site uses the payment for its subscription' do
       subscription = double('subscription', payment_method_id: user.payment_methods.first.id)
-      site.stub current_subscription: subscription
-      user.stub_chain :sites, find: site
+      allow(site).to receive(:current_subscription).and_return(subscription)
+      allow(user).to receive_message_chain(:sites, :find).and_return(site)
 
       get :index, site_id: site.id
 
@@ -62,7 +60,7 @@ describe PaymentMethodsController, '#update' do
   end
 
   context 'updating a payment detail' do
-    let(:payment_method) { create(:payment_method, user: user) }
+    let(:payment_method) { create(:payment_method, :success, user: user) }
     let(:data) { PaymentForm.new({}).to_hash }
     let(:put_params) do
       {
@@ -73,7 +71,7 @@ describe PaymentMethodsController, '#update' do
       }
     end
     before do
-      Site.any_instance.stub(script_installed?: true)
+      allow_any_instance_of(Site).to receive(:script_installed?).and_return(true)
       allow(CyberSourceCreditCard).to receive(:new)
         .with(payment_method: payment_method, data: data)
         .and_return(PaymentMethodDetails.new)

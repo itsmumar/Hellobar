@@ -1,9 +1,11 @@
-require 'spec_helper'
-
 describe ServiceProviders::MailChimp do
   let(:identity) { Identity.new(provider: 'mailchimp', extra: { 'metadata' => {} }, credentials: {}) }
   let(:service_provider) { identity.service_provider }
-  let(:client) { service_provider.instance_variable_get(:@client) }
+  let(:client) { double('Gibbon::Request') }
+
+  before do
+    allow(Gibbon::Request).to receive(:new).and_return client
+  end
 
   describe 'subscribe' do
     it 'catches -100 errors (email invalid)' do

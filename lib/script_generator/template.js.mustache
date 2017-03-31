@@ -97,9 +97,16 @@
           }
         });
 
-        hellobar('tracking.internal', {
+        !isPreviewMode() && hellobar('tracking.internal', {
           configurator: function(configuration) {
             configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
+          }
+        });
+
+        !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
+          configurator: function(configuration) {
+            var externalTrackings = {{{external_tracking_json}}};
+            configuration.externalTrackings(externalTrackings);
           }
         });
 
@@ -123,5 +130,8 @@
     })();
 
     {{{libs_js}}}
+
+  } else {
+    console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }
 })();

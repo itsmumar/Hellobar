@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe RuleSerializer do
   let!(:condition) { create(:condition, :date_between) }
   let!(:rule) { condition.rule.reload }

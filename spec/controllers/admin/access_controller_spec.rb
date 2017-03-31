@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Admin::AccessController do
   let!(:admin) { create(:admin) }
 

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe ConditionSerializer do
   let(:condition) { create(:condition, :date_between) }
 

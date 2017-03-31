@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe BillingLog do
   it 'should not let you edit a BillingLog' do
     log = BillingLog.create(message: 'test')

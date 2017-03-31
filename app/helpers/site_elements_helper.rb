@@ -205,14 +205,14 @@ module SiteElementsHelper
 
   # rubocop: disable Rails/OutputSafety
   def render_headline(site_element)
-    return raw(site_element.question) if site_element.use_question?
+    return raw strip_tags(site_element.question) if site_element.use_question?
 
     # Condering `blocks` field will be present only for `templates`
-    return raw(site_element.headline) unless site_element.blocks.present?
+    return raw strip_tags(site_element.headline) unless site_element.blocks.present?
 
     headline_blocks = site_element.blocks.select { |block| block['id'].include?('headline') }
     headline_blocks.inject(''.html_safe) do |result, block|
-      result.safe_concat "#{ block['content']['text'] } "
+      result.safe_concat strip_tags "#{ block['content']['text'] } "
     end
   end
   # rubocop: enable Rails/OutputSafety

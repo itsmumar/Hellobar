@@ -387,10 +387,12 @@ class @ContactListModal extends Modal
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       requiresWebhookUrl: option.data('requiresWebhookUrl')
+      canConnect: !option.data('requiresWebhookUrl') && !option.data('requiresEmbedCode')
       webhookIsPost: @options.contactList?.data?.webhook_method == "post"
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
+      noTags: !(@options.contactList?.data?.tags?.length)
       tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
               @options.contactList?.data?.tags
             else
@@ -413,7 +415,9 @@ class @ContactListModal extends Modal
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
-      if data and (lists = data.lists or tags = data.tags) # an identity was found for the selected provider
+      lists = data?.lists
+      tags = data?.tags
+      if data and (lists or tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
         @blocks.nevermind.hide()
@@ -424,16 +428,15 @@ class @ContactListModal extends Modal
         @_renderBlock("instructions", defaultContext).hide()
         data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
-        showListsAndTags = defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse or defaultContext.isProviderDrip
 
-        if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
+        if (lists?.length && lists[0].error != undefined) || (tags?.length && tags[0].error != undefined)
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
-        showListsAndTags = defaultContext.isProviderConvertKit or defaultContext.isProviderGetResponse or defaultContext.showTagTextfield
-        if data.provider == "infusionsoft" or showListsAndTags
-          if showListsAndTags
-            @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+        if data.provider != "infusionsoft"
+          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+
+        if data.provider == "infusionsoft" or @_showListsAndTags(defaultContext)
           tagsContext = $.extend(true, {}, defaultContext, {identity: data})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
@@ -442,10 +445,7 @@ class @ContactListModal extends Modal
             )
             { tag: tag, lists: clonedTags}
           )
-
           @_renderBlock("tagListSelect", tagsContext, false).show()
-        else
-          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         $cycle_day = $('#contact_list_cycle_day')
         if ($cycle_day).length
@@ -454,7 +454,8 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
-        @$modal.find("#contact_list_remote_list_id").val(lists[0].id) if lists and lists.length > 0
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
+          @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
         @_showListInstructions(defaultContext)
@@ -463,6 +464,12 @@ class @ContactListModal extends Modal
       ).always( =>
         @$modal.trigger 'complete'
       )
+
+  _showListsAndTags: (context) ->
+    context.isProviderConvertKit or
+      context.isProviderGetResponse or
+      context.isProviderDrip or
+      context.showTagTextfield
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)

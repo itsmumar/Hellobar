@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 UNAUTHORIZED = '401'.freeze
 
 describe RulesController do
@@ -36,7 +34,7 @@ describe RulesController do
 
   describe 'POST :create' do
     before do
-      Site.any_instance.stub(generate_script: true)
+      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
     end
 
     it 'should fail when not logged in' do
@@ -88,7 +86,7 @@ describe RulesController do
 
   describe 'DELETE :destroy' do
     before do
-      Site.any_instance.stub(generate_script: true)
+      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
     end
 
     let!(:second_rule) { create(:rule, site: site) }
@@ -129,7 +127,7 @@ describe RulesController do
 
   describe 'PUT :update' do
     before do
-      Site.any_instance.stub(generate_script: true)
+      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
     end
 
     it 'should fail when not logged in' do

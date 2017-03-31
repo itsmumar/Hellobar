@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe UserCampaignController, '#update_exit_intent' do
   let(:user) { create(:user) }
   before { stub_current_user(user) }

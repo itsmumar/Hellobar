@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SiteElement do
   it_behaves_like 'a model triggering script regeneration'
 
@@ -23,10 +21,10 @@ describe SiteElement do
     describe '#site_is_capable_of_creating_element' do
       it 'does not allow an unpersisted element to be created when site is at its limit' do
         capability = double 'capability', at_site_element_limit?: true
-        site.stub capabilities: capability
+        allow(site).to receive(:capabilities).and_return(capability)
 
         element = SiteElement.new
-        element.stub site: site
+        allow(element).to receive(:site).and_return(site)
         element.valid?
 
         expect(element.errors[:site]).to eq(['is currently at its limit to create site elements'])
@@ -34,8 +32,8 @@ describe SiteElement do
 
       it 'allows a persisted element to be updated when site is at its limit' do
         capability = double('capability', at_site_element_limit?: true)
-        site.stub(capabilities: capability)
-        element.stub site: site
+        allow(site).to receive(:capabilities).and_return(capability)
+        allow(element).to receive(:site).and_return(site)
         expect(element).to be_valid
       end
     end
@@ -376,6 +374,43 @@ describe SiteElement do
       site_element = SiteElement.new settings: settings
 
       expect(site_element).to be_email_redirect
+    end
+  end
+
+  describe '#external_tracking' do
+    let(:capabilities) { double 'Capabilities', external_tracking?: false }
+    let(:site) { create :site }
+    let(:id) { 777 }
+    let(:site_element) { SiteElement.new id: id }
+
+    before do
+      allow(site).to receive(:capabilities).and_return capabilities
+      allow(site_element).to receive(:site).and_return site
+    end
+
+    context 'when site does not have `external_tracking` capabilities' do
+      it 'is an empty array' do
+        expect(site_element.external_tracking).to eq []
+      end
+    end
+
+    context 'when site has `external_tracking` capabilities' do
+      it 'is an array of Google Analytics external events' do
+        allow(capabilities).to receive(:external_tracking?).and_return true
+
+        external_tracking = site_element.external_tracking
+
+        expect(external_tracking).to be_an Array
+        expect(external_tracking.count).to be > 1
+
+        event = external_tracking.first
+
+        expect(event).to be_a Hash
+        expect(event[:provider]).to eq 'google_analytics'
+        expect(event[:category]).to eq 'Hello Bar'
+        expect(event[:site_element_id]).to eq id
+        expect(event[:label]).to include id.to_s
+      end
     end
   end
 end

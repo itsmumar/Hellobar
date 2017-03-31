@@ -3,7 +3,7 @@ require 'integration_helper'
 feature 'Payment modal interaction', :js do
   given(:user) { login }
   given(:site) { user.sites.first }
-  given(:payment_method) { create(:payment_method, user: user) }
+  given(:payment_method) { create(:payment_method, :success, user: user) }
 
   context 'pro subscription' do
     scenario "downgrade to free from pro should say when it's active until" do

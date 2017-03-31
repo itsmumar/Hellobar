@@ -19,6 +19,20 @@ FactoryGirl.define do
       placement 'top-left'
     end
 
+    trait :with_blocks do
+      blocks [
+        { 'id' => 'headline_first', 'content' => { 'text' => '<strong>Grow your blog traffic by</strong>' } },
+        { 'id' => 'headline_second', 'content' => { 'text' => '<strong>300%</strong>' } },
+        { 'id' => 'headline_third', 'content' => { 'text' => '<strong>with our free tool</strong>' } }
+      ]
+    end
+
+    trait :geolocation do
+      headline '<p>
+        Country: <span data-hb-geolocation="country"></span>,
+        City: <span data-hb-geolocation="city"></span></p>'
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil
@@ -77,6 +91,22 @@ FactoryGirl.define do
 
     trait :closable do
       closable true
+    end
+
+    trait :with_custom_fields do
+      transient do
+        fields %w(email phone name)
+      end
+
+      settings do
+        fields_to_collect = fields.each_with_index.map do |field, index|
+          { id: "some-long-id-#{ index }", type: "builtin-#{ field }", is_enabled: true }.stringify_keys
+        end
+
+        {
+          fields_to_collect: fields_to_collect
+        }
+      end
     end
 
     after :create do |element, evaluator|

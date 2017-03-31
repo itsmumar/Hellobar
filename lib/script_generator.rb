@@ -150,6 +150,17 @@ class ScriptGenerator < Mustache
     site.autofills.to_json
   end
 
+  def external_tracking_json
+    events =
+      site.site_elements.active.each_with_object([]) do |site_element, memo|
+        site_element.external_tracking.each do |event|
+          memo << event
+        end
+      end
+
+    events.to_json
+  end
+
   def modules_js
     render_asset('modules.js')
   end
@@ -381,7 +392,7 @@ class ScriptGenerator < Mustache
       wiggle_wait: 0,
       blocks: site_element.blocks,
       theme: site_element.theme.attributes
-    ).select { |_, value| value.present? || !value == '' }
+    ).select { |_, value| !value.nil? }
   end
 
   def site_elements_for_rule(rule, hashify = true)

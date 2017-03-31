@@ -45,7 +45,7 @@ div.row
                   li
                     = "#{details.brand} X#{details.data["number"][-5,5]}"
                     - if details.token
-                      = link_to "remove", admin_payment_method_detail_remove_cc_info_path(details, user_id: user.id), :method => :put, data: { confirm: "Are you sure?" }
+                      = link_to "remove", admin_payment_method_detail_path(details), method: :delete, data: { confirm: "Are you sure?" }
                     - else
                       = "(token removed)"
             td= user.created_at.strftime("%b %d, %Y")

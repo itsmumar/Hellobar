@@ -54,13 +54,11 @@ export default Ember.Controller.extend({
   ),
 
   getImagePlacement() {
-    let positionIsSelectable = this.get('currentTheme.image.position_selectable');
-    let imageIsbackground = (this.get('model.image_placement') === 'background');
-    let positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
+    const positionIsSelectable = this.get('currentTheme.image.position_selectable');
+    const imageIsBackground = (this.get('model.image_placement') === 'background');
+    const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
 
-    if (!positionIsSelectable) {
-      return this.get('currentTheme.image.position_default');
-    } else if (imageIsbackground || positionIsEmpty) {
+    if (!positionIsSelectable || imageIsBackground || positionIsEmpty) {
       return this.get('currentTheme.image.position_default');
     } else {
       return this.get('model.image_placement');
@@ -76,15 +74,9 @@ export default Ember.Controller.extend({
   // Editor UI Properties
   imageUploadCopy: Ember.computed.oneWay('currentTheme.image.upload_copy'),
 
-  // TODO remove this
-  //showImagePlacementField: Ember.computed.oneWay('currentTheme.image.position_selectable'),
-  // TODO right now we hide the image placement dropdown, after that we'll need to remove it completely as we want to do it inline
-  showImagePlacementField: false,
-
-
   // Site Element Theme Properties
   themeChanged: Ember.observer('currentTheme', function () {
-      return Ember.run.next(this, function () {
+      Ember.run.next(this, function () {
           return this.setProperties({
             'model.image_placement': this.getImagePlacement()
           });
@@ -100,9 +92,9 @@ export default Ember.Controller.extend({
   }).observes('model.use_default_image').on('init'),
 
   setDefaultImage() {
-    let imageID = this.get('currentTheme.image_upload_id');
-    let imageUrl = this.get('currentTheme.image.default_url');
-    return this.send('setImageProps', imageID, imageUrl, 'default');
+    const imageID = this.get('currentTheme.image_upload_id');
+    const imageUrl = this.get('currentTheme.image.default_url');
+    this.send('setImageProps', imageID, imageUrl, 'default');
   },
 
   //-----------  Text Settings  -----------#
@@ -122,10 +114,7 @@ export default Ember.Controller.extend({
       );
 
       if (foundTheme && foundTheme.fonts) {
-        return _.map(foundTheme.fonts, fontId =>
-            _.find(availableFonts, font => font.id === fontId
-            )
-        );
+        return _.map(foundTheme.fonts, fontId => _.find(availableFonts, font => font.id === fontId));
       } else {
         return availableFonts;
       }
@@ -200,10 +189,6 @@ export default Ember.Controller.extend({
   shouldShowThankYouEditor: Ember.computed.equal('model.element_subtype', 'email'),
 
   actions: {
-
-    selectTheme(theme) {
-      this.set('model.theme_id', theme.id);
-    },
 
     selectImagePlacement(imagePlacement) {
       this.set('model.image_placement', imagePlacement.value);

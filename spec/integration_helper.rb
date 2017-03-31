@@ -1,7 +1,18 @@
 # INTEGRATION
-require 'spec_helper'
 require 'webmock/rspec'
 require 'support/ab_test_config'
+
+SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
+
+# Use Webkit as js driver
+Capybara.javascript_driver = :webkit
+Capybara::Webkit.configure do |config|
+  config.block_unknown_urls
+  config.timeout = 60
+  config.skip_image_loading
+end
+
+Capybara.default_max_wait_time = 5
 
 RSpec.configure do |config|
   config.include SiteGeneratorHelper
@@ -16,8 +27,6 @@ RSpec.configure do |config|
   config.before(:suite) do
     begin
       DatabaseCleaner.start
-      FactoryGirl.lint
-
       Rake.application.rake_require 'tasks/onboarding_campaigns'
       Rake::Task.define_task(:environment)
     ensure

@@ -32,6 +32,8 @@ Setup the `settings.yml` file:
 
 `cp config/settings.yml.example config/settings.yml`
 
+(ask another developer to send you the settings.yml file with appropriate keys set)
+
 
 Let rake setup and migrate your database:
 
@@ -49,24 +51,25 @@ and add new or use existing Google OAuth credentials to be able to log in.
 
 ### Front-end
 
-Install `node.js` together with `npm`:
+Install `node.js` together with `yarn`:
 
 ```
 brew install node
+brew install yarn
 ```
 
 Install `bower` and `ember-cli` globally:
 
 ```
-npm install -g ember-cli
-npm install -g bower
+yarn global add ember-cli
+yarn global add bower
 ```
 
 Install all dependencies:
 
 ```
 cd editor/
-npm install
+yarn install
 bower install
 ```
 

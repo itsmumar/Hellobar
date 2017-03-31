@@ -154,7 +154,7 @@ module Hello
       user ||= current_user if defined?(current_user)
 
       if status == :new
-        if defined?(cookies)
+        if try(:cookies).present?
           cookie_value = set_ab_test_value_index_from_cookie(cookies[ab_test_cookie_name], ab_test[:index], value_index)
           cookies.permanent[ab_test_cookie_name.to_sym] = cookie_value
         elsif user.blank?

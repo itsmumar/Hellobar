@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe Hello::TrackingParam do
   it 'encodes and decodes a tracker' do
     user_id = '1'
