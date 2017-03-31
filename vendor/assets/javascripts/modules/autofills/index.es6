@@ -1,1 +1,1 @@
-//= require ./autofills.js
+//= require ./autofills.es6

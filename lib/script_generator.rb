@@ -9,7 +9,7 @@ class ScriptGenerator < Mustache
   class << self
     def compile
       FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
-      manifest(true).compile('*.js', '*.css', '*.html')
+      manifest(true).compile('*.js', '*.es6', '*.css', '*.html')
     end
 
     def load_templates
