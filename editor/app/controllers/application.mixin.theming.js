@@ -7,15 +7,6 @@ export default Ember.Mixin.create({
 
   firstAttemptOfThemeApplying: false,
 
-  initializeTheme() {
-    Ember.run.next(() => {
-        if (this.get('model.id') === null) {
-          this.applyCurrentTheme();
-        }
-      }
-    );
-  },
-
   applyCurrentTheme() {
     if (!this.get('model.id') || this.firstAttemptOfThemeApplying) {
       const allThemes = this.get('theming').availableThemes();
