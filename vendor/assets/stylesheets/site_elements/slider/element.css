@@ -8,6 +8,10 @@
   min-height: 120px;
 }
 
+#hellobar-slider.show-branding .slider-content {
+  padding-bottom: 38px;
+}
+
 #hellobar-slider .slider-content {
   padding: 18px 25px 10px 20px;
 }
