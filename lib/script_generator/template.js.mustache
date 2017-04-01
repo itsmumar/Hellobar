@@ -31,105 +31,81 @@
         return hellobar('base.selfcheck').scriptIsInstalledProperly();
       }
 
+      function configure(moduleName, configurator) {
+        hellobar(moduleName, { configurator: configurator });
+      }
+
       // Initialize and configure modules
-      hellobar('base.preview', {
-        configurator: function(configuration) {
-          configuration.previewIsActive({{preview_is_active}});
-        }
+      configure('base.preview', function(configuration) {
+        configuration.previewIsActive({{preview_is_active}});
       });
 
-      hellobar('base.capabilities', {
-        configurator: function(configuration) {
-          configuration.capabilities({{{capabilities_json}}});
-        }
+      configure('base.capabilities', function(configuration) {
+        configuration.capabilities({{{capabilities_json}}});
       });
 
-      hellobar('base.site', {
-        configurator: function(configuration) {
-          configuration.siteId({{site_id}}).siteUrl('{{site_url}}').secret('{{pro_secret}}');
-        }
+      configure('base.site', function(configuration) {
+        configuration.siteId({{site_id}}).siteUrl('{{site_url}}').secret('{{pro_secret}}');
       });
 
       function initializeProtectedModules() {
 
-        hellobar('base.timezone', {
-          configurator: function(configuration) {
-            configuration.defaultTimezone('{{site_timezone}}');
-          }
+        configure('base.timezone', function(configuration) {
+          configuration.defaultTimezone('{{site_timezone}}');
         });
 
-        hellobar('base.styling', {
-          configurator: function(configuration) {
-            configuration.externalCSS({{{hellobar_container_css}}});
-          }
+        configure('base.styling', function(configuration) {
+          configuration.externalCSS({{{hellobar_container_css}}});
         });
 
-        hellobar('base.templating', {
-          configurator: function(configuration) {
-            {{#templates}}
-              configuration.addTemplate("{{name}}", {{{markup}}});
-            {{/templates}}
+        configure('base.templating', function(configuration) {
+          {{#templates}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/templates}}
 
-            {{#branding_templates}}
-              configuration.addTemplate("{{name}}", {{{markup}}});
-            {{/branding_templates}}
+          {{#branding_templates}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/branding_templates}}
 
-            {{#content_upgrade_template}}
-              configuration.addTemplate("{{name}}", {{{markup}}});
-            {{/content_upgrade_template}}
-          }
+          {{#content_upgrade_template}}
+            configuration.addTemplate("{{name}}", {{{markup}}});
+          {{/content_upgrade_template}}
         });
 
-        hellobar('geolocation', {
-          configurator: function(configuration) {
-            configuration.geolocationUrl('{{geolocation_url}}');
-          }
+        configure('geolocation', function(configuration) {
+          configuration.geolocationUrl('{{geolocation_url}}');
         });
 
-        !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
-          configurator: function(configuration) {
-            configuration.autoRun(true);
-          }
+        !isPreviewMode() && hasCapability('geolocation_injection') && configure('geolocation.injection', function(configuration) {
+          configuration.autoRun(true);
         });
 
-        !isPreviewMode() && hellobar('tracking.internal', {
-          configurator: function(configuration) {
-            configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
-          }
+        !isPreviewMode() && configure('tracking.internal', function(configuration) {
+          configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
         });
 
-        !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
-          configurator: function(configuration) {
-            var externalTrackings = {{{external_tracking_json}}};
-            configuration.externalTrackings(externalTrackings);
-          }
+        !isPreviewMode() && hasCapability('external_tracking') && configure('tracking.external', function(configuration) {
+          var externalTrackings = {{{external_tracking_json}}};
+          configuration.externalTrackings(externalTrackings);
         });
 
-        hellobar('elements.rules', {
-          configurator: function(configuration) {
-            {{#rules}}
-              configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
-            {{/rules}}
-          }
+        configure('elements.rules', function(configuration) {
+          {{#rules}}
+            configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
+          {{/rules}}
         });
 
-        hellobar('elements', {
-          configurator: function(configuration) {
-            configuration.elementCSS({{{hellobar_element_css}}}).autoRun(true);
-          }
+        configure('elements', function(configuration) {
+          configuration.elementCSS({{{hellobar_element_css}}}).autoRun(true);
         });
 
-        hellobar('contentUpgrades', {
-          configurator: function(configuration) {
-            configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
-          }
+        configure('contentUpgrades', function(configuration) {
+          configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
         });
 
-        !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
-          configurator: function(configuration) {
-            var autofills = {{{autofills_json}}};
-            configuration.autofills(autofills).autoRun(true);
-          }
+        !isPreviewMode() && hasCapability('autofills') && configure('autofills', function(configuration) {
+          var autofills = {{{autofills_json}}};
+          configuration.autofills(autofills).autoRun(true);
         });
       }
 
