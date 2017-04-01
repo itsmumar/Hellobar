@@ -392,7 +392,6 @@ class @ContactListModal extends Modal
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
       cycleDay: cycle_day || 0
-      noTags: !(@options.contactList?.data?.tags?.length)
       tags: if hasTags && value == originalProvider && @options.contactList?.data?.tags.length > 0
               @options.contactList?.data?.tags
             else
@@ -437,7 +436,7 @@ class @ContactListModal extends Modal
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if data.provider == "infusionsoft" or @_showListsAndTags(defaultContext)
-          tagsContext = $.extend(true, {}, defaultContext, {identity: data})
+          tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: !data.tags.length})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
             clonedTags.forEach((clonedTag) =>
