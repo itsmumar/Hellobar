@@ -164,11 +164,11 @@ class ScriptGenerator < Mustache
   end
 
   def modules_js
-    render_asset('modules.es6')
+    render_asset('modules.js')
   end
 
   def core_js
-    render_asset('core.es6')
+    render_asset('core.js')
   end
 
   def hellobar_container_css

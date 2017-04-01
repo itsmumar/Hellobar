@@ -22,17 +22,17 @@
    * @param message {string} error text
    * @constructor
    */
-  class HellobarException extends Error {
-    constructor(message) {
-      super(message);
-      this.name = this.constructor.name;
-      if (typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(this, this.constructor);
-      } else {
-        this.stack = (new Error(message)).stack;
-      }
+  function HellobarException(message) {
+    this.name = 'HellobarException';
+    this.message = message;
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, this.constructor);
+    } else {
+      this.stack = (new Error(message)).stack;
     }
   }
+  HellobarException.prototype = Object.create(Error.prototype);
+  HellobarException.prototype.constructor = HellobarException;
 
   function verifiedToBeNonEmpty(value, errorMessage) {
     if (!value) {
