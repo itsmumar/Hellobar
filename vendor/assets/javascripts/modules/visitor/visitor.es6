@@ -200,7 +200,7 @@ hellobar.defineModule('visitor',
       },
       setConverted,
       getData(key) {
-        return getVisitorData();
+        return getVisitorData(key);
       }
     };
 
