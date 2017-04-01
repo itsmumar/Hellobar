@@ -46,20 +46,23 @@ hellobar.defineModule('elements.rules',
           const ruleResult = ruleTrue(rule);
           return ruleResult instanceof deferred.Promise ? ruleResult : deferred.constant(ruleResult);
         }
+        return deferred.constant(false);
       });
       deferred.all(rulePromises).then((ruleResults) => {
         ruleResults.forEach((result, ruleIndex) => {
-          rules[ruleIndex].siteElements.forEach((siteElement) => {
-            visibilityGroup = siteElement.type;
-            // For showing multiple elements at the same time a modal and a takeover are the same thing
-            if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
-              visibilityGroup = 'Modal/Takeover';
-            if (!visibilityGroups[visibilityGroup]) {
-              visibilityGroups[visibilityGroup] = [];
-              visibilityGroupNames.push(visibilityGroup);
-            }
-            visibilityGroups[visibilityGroup].push(siteElement);
-          });
+          if (result) {
+            rules[ruleIndex].siteElements.forEach((siteElement) => {
+              visibilityGroup = siteElement.type;
+              // For showing multiple elements at the same time a modal and a takeover are the same thing
+              if (siteElement.type === 'Modal' || siteElement.type === 'Takeover')
+                visibilityGroup = 'Modal/Takeover';
+              if (!visibilityGroups[visibilityGroup]) {
+                visibilityGroups[visibilityGroup] = [];
+                visibilityGroupNames.push(visibilityGroup);
+              }
+              visibilityGroups[visibilityGroup].push(siteElement);
+            });
+          }
         });
         // Now we have all elements that can be shown based on the rules
         // broken up into visibility groups
