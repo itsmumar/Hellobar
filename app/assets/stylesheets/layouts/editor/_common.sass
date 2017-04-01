@@ -4,7 +4,7 @@
   @include striped-bg()
 
   &.loading
-    @include animation(barberpole 5s linear infinite)
+    animation: barberpole 5s linear infinite
 
 .editor-wrapper
   width: 100%
@@ -37,7 +37,7 @@
       font-size: 16px
       text-align: center
       position: relative
-      @include user-select(none)
+      user-select: none
 
       a
         display: block
@@ -128,7 +128,7 @@
           width: 200%
           margin-left: -100%
           position: relative
-          @include transition(0.25s)
+          transition: 0.25s
 
           i
             width: 50%
@@ -159,7 +159,7 @@
 
       .toggle-fullscreen a i:first-child
         margin-top: -6px
-        @include transform(rotate(180deg))
+        transform: rotate(180deg)
 
       .icon-close:before
         font-size: 0.75em
@@ -178,10 +178,10 @@
     width: 100%
     height: 100%
     padding-left: $linkWidth * 1.075
-    @include justify-content(space-between)
-    @include align-items(stretch)
-    @include flex-flow(row nowrap)
-    @include display(flex)
+    justify-content: space-between
+    align-items: stretch
+    flex-flow: row nowrap
+    display: flex
 
     /*-----------  Steps  -----------*/
 
@@ -193,11 +193,11 @@
       max-width: $stepWidth
       border-right: $border
       z-index: 10
-      @include transition(0.25s)
-      @include flex(1 0 auto)
+      transition: 0.25s
+      flex: 1 0 auto
 
     .preview-area
-      @include flex(0 1 auto)
+      flex: 0 1 auto
 
   /*-----------  Alternate States  -----------*/
 

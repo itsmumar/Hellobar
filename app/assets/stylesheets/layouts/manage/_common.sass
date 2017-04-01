@@ -97,7 +97,7 @@
 
       &.site-element-block
         border-color: $grayLighter
-        @include transition()
+        transition: all 0.15s ease-out 0s
 
         td
           padding: 0
@@ -239,7 +239,7 @@
         /*-----------  Deleting State  -----------*/
 
         &.deleting
-          @include animation(barberpole 5s linear infinite)
+          animation: barberpole 5s linear infinite
           @include striped-bg(lighten($grayLightest, 5%))
 
           td

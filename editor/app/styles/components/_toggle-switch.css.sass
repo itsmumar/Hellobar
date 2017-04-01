@@ -8,16 +8,16 @@
   border-radius: $radiusSm
   background-color: $white
   border: 1px solid $grayLighter
-  @include user-select(none)
+  user-select: none
   @include inline-block()
-  @include transition()
+  transition: all 0.15s ease-out 0s
 
   span
     color: $grayLighter
     text-align: center
     line-height: 1.25rem
     text-transform: uppercase
-    @include transition()
+    transition: all 0.15s ease-out 0s
 
     &.toggle-on
       opacity: 0
@@ -40,7 +40,7 @@
     border-radius: 2px
     margin-right: 1.75em
     background-color: $grayLighter
-    @include transition(0.2s)
+    transition: 0.2s
 
   &:hover
     border-color: $grayLight
@@ -48,11 +48,11 @@
 
     span
       color: $grayLight
-  
+
     .toggle-floater
       box-shadow: $shadowSubtle
       background-color: $grayLight
-  
+
   &.is-selected
     border-color: $green
     background-color: $green
@@ -70,9 +70,9 @@
       margin-right: 0
       margin-left: 1.75em
       background-color: $white
-  
+
     &:hover
       box-shadow: inset $shadow
-    
+
       .toggle-floater
         box-shadow: $shadow

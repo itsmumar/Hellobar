@@ -76,7 +76,7 @@
     padding: 0.67em 1em
     box-shadow: 0 0 0 rgba(0,0,0,0)
     @include clearfix()
-    @include transition()
+    transition: all 0.15s ease-out 0s
 
     .message
       float: left
@@ -101,7 +101,7 @@
 
     .wordpress-bar
       box-shadow: 2px 2px 12px rgba(0,0,0,0.12)
-      @include transform(scale(1.05))
+      transform: scale(1.05)
 
 .unassigned-wordpress-bars
   padding: 1em
