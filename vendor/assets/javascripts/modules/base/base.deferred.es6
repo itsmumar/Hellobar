@@ -58,7 +58,7 @@ hellobar.defineModule('base.deferred', [], function () {
     let resolvedCount = 0;
     let results = [];
     const resolve = () => allDeferred.resolve(results);
-    promises.filter((promise) => promise).forEach((promise, index) => promise.then((result) => {
+    promises.forEach((promise, index) => promise.then((result) => {
       resolvedCount++;
       results[index] = result;
       (resolvedCount >= promises.length) && resolve();
