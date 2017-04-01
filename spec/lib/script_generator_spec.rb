@@ -37,7 +37,6 @@ describe ScriptGenerator do
       hellobar_css = ScriptGenerator.assets['common.css'].to_s
       element_css = ScriptGenerator.assets['bar/element.css'].to_s
 
-      allow(CSSMin).to receive(:minify) { |x| x }
       result = generator.render
 
       expect(hellobar_css).not_to be_empty
@@ -54,7 +53,6 @@ describe ScriptGenerator do
       element_container_css = ScriptGenerator.assets['bar/container.css'].to_s
       element_container_css.gsub!('hellobar-container', 'random-container')
 
-      allow(CSSMin).to receive(:minify) { |x| x }
       result = generator.render
 
       expect(container_css).not_to be_empty
