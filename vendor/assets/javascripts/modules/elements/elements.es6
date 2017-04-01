@@ -186,6 +186,9 @@ hellobar.defineModule('elements',
         configurator && configurator(configuration);
         showSiteElements();
       },
+      introspect: () => ({
+        allElements: () => siteElementsOnPage
+      }),
       createAndAddToPage,
       removeAllSiteElements,
       findById

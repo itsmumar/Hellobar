@@ -34,6 +34,9 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
 
   return {
     configuration: () => configuration,
+    introspect: () => ({
+      allTemplates: () => templates
+    }),
     getTemplateByName,
     renderTemplate
   };

@@ -30,7 +30,10 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
      * Sends event data to Google Analytics
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
-    send
+    send,
+    introspect: () => ({
+      ga
+    })
   };
 
 });

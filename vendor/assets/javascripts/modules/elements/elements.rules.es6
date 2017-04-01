@@ -439,6 +439,9 @@ hellobar.defineModule('elements.rules',
 
     return {
       configuration: () => configuration,
+      introspect: () => ({
+        allRules: () => rules
+      }),
       applyRules,
       getFixedSiteElement
     };

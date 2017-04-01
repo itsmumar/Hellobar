@@ -117,7 +117,17 @@ hellobar.defineModule('elements.visibility',
     return {
       setVisibilityControlCookie,
       expireVisibilityControlCookie,
-      shouldShowElement
+      shouldShowElement,
+      introspect: () => ({
+        allCookies() {
+          let introspectionResult = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            key.indexOf('HB-visibilityControl-') === 0 && (introspectionResult[key] = localStorage.getItem(key));
+          }
+          return introspectionResult;
+        }
+      })
     };
 
   });
