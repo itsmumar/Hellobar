@@ -201,13 +201,13 @@ hellobar.defineModule('base.dom', [], function () {
      * Runs specified callback for all the documents - main HTML document and iframe documents (those that we have access to).
      * @param callback {function}
      */
-    forAllDocuments: forAllDocuments,
+    forAllDocuments,
 
     /**
      * Runs specified callback once DOM has been loaded
      * @param callback {function}
      */
-    runOnDocumentReady: runOnDocumentReady,
+    runOnDocumentReady,
     addClass,
     removeClass,
     setClass,
