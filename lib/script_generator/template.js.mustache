@@ -84,9 +84,16 @@
           }
         });
 
-        hellobar('elements', {
+        !isPreviewMode() && hellobar('tracking.internal', {
           configurator: function(configuration) {
-            configuration.elementCSS({{{hellobar_element_css}}});
+            configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
+          }
+        });
+
+        !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
+          configurator: function(configuration) {
+            var externalTrackings = {{{external_tracking_json}}};
+            configuration.externalTrackings(externalTrackings);
           }
         });
 
@@ -98,16 +105,9 @@
           }
         });
 
-        !isPreviewMode() && hellobar('tracking.internal', {
+        hellobar('elements', {
           configurator: function(configuration) {
-            configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
-          }
-        });
-
-        !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
-          configurator: function(configuration) {
-            var externalTrackings = {{{external_tracking_json}}};
-            configuration.externalTrackings(externalTrackings);
+            configuration.elementCSS({{{hellobar_element_css}}});
           }
         });
 
