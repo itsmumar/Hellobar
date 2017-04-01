@@ -30,6 +30,9 @@
     } else {
       this.stack = (new Error(message)).stack;
     }
+    this.toString = function () {
+      return message;
+    };
   }
   HellobarException.prototype = Object.create(Error.prototype);
   HellobarException.prototype.constructor = HellobarException;
