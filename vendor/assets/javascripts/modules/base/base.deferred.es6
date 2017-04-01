@@ -10,6 +10,7 @@ hellobar.defineModule('base.deferred', [], function () {
     then(callback) {
       this._callbacks.push(callback);
       this._resolved && this._runCallbacks();
+      return this;
     }
 
     _runCallbacks() {
@@ -35,6 +36,7 @@ hellobar.defineModule('base.deferred', [], function () {
     resolve(result) {
       if (!this._resolved) {
         this._resolved = true;
+        this._result = result;
         this._runCallbacks();
       }
     }

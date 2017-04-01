@@ -100,7 +100,7 @@ hellobar.defineModule('geolocation',
 
       /**
        * Gets region name.
-       * @returns {string|boolean}
+       * @returns {deferred.Promise}
        */
       regionName: function () {
         return syncAsyncGetData('regionName');
@@ -108,7 +108,7 @@ hellobar.defineModule('geolocation',
 
       /**
        * Gets city name.
-       * @returns {string|boolean}
+       * @returns {deferred.Promise}
        */
       cityName: function () {
         return syncAsyncGetData('cityName');
@@ -116,7 +116,7 @@ hellobar.defineModule('geolocation',
 
       /**
        * Gets country name.
-       * @returns {string|boolean}
+       * @returns {deferred.Promise}
        */
       countryName: function () {
         return syncAsyncGetData('countryName');
