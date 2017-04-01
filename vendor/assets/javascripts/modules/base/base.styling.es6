@@ -23,7 +23,8 @@ hellobar.defineModule('base.styling', ['hellobar'], function(hellobar) {
 
   return {
     configuration: () => configuration,
-    initialize: () => {
+    initialize: (configurator) => {
+      configurator && configurator(configuration);
       applyExternalStyles();
     }
   }
