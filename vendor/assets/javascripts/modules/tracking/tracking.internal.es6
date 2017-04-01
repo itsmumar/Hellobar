@@ -158,7 +158,8 @@ hellobar.defineModule('tracking.internal',
 
     return {
       configuration: () => configuration,
-      initialize () {
+      initialize (configurator) {
+        configurator && configurator(configuration);
         disableTrackingIfRequired(location.search);
       },
       send
