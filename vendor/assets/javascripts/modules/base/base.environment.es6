@@ -1,5 +1,16 @@
-hellobar.defineModule('base.environment', [], function () {
+hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
 
+  const configuration = hellobar.createModuleConfiguration({
+    userAgentProvider: 'function'
+  });
+
+  function getUserAgent() {
+    const userAgentProvider = configuration.userAgentProvider();
+    if (userAgentProvider) {
+      return userAgentProvider();
+    }
+    return navigator.userAgent;
+  }
 
   /**
    * Determines if the screen width is considered mobile for given element
@@ -23,12 +34,12 @@ hellobar.defineModule('base.environment', [], function () {
 
 
   function isIE11() {
-    var myNav = navigator.userAgent.toLowerCase();
+    var myNav = getUserAgent().toLowerCase();
     return myNav.indexOf('rv:11') != -1;
   }
 
   function isIEXOrLess(x) {
-    var myNav = navigator.userAgent.toLowerCase();
+    var myNav = getUserAgent().toLowerCase();
     var version = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
 
     if (isNaN(version) || version == null || version == false) {
@@ -42,7 +53,7 @@ hellobar.defineModule('base.environment', [], function () {
 
   // Returns true if the device is using mobile safari (ie, ipad / iphone)
   function isMobileSafari() {
-    var ua = navigator.userAgent.toLowerCase();
+    var ua = getUserAgent().toLowerCase();
     return (ua.indexOf('safari') > -1 && (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1));
   }
 
@@ -50,9 +61,7 @@ hellobar.defineModule('base.environment', [], function () {
     return device() === 'mobile';
   }
 
-  function getUserAgent() {
-    return navigator.userAgent;
-  }
+
 
   function device() {
     var ua = getUserAgent();
@@ -66,7 +75,12 @@ hellobar.defineModule('base.environment', [], function () {
       return 'computer';
   }
 
+  // TODO Semantics of this module is very controversial. Should be refactored. Namely:
+  // What is exactly a 'mobile' device? Why iPad returns true in isMobileSafari but false in isMobileDevice?
+  // Also we should split device and browser detection functions.
+
   return {
+    configuration: () => configuration,
     device,
     isMobileDevice,
     isMobileWidth,
