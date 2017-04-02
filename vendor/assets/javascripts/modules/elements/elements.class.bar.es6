@@ -2,6 +2,8 @@ hellobar.defineModule('elements.class.bar',
   ['base.dom', 'base.format', 'base.environment', 'elements.class', 'elements.injection', 'elements.visibility'],
   function (dom, format, environment, SiteElement, elementsInjection, elementsVisibility) {
 
+    let pusher = null;
+
     class BarElement extends SiteElement {
       constructor(props) {
         super(props);
@@ -21,32 +23,32 @@ hellobar.defineModule('elements.class.bar',
         iframe.setAttribute('frameBorder', 0); // IE 9 and less
 
         // Remove the pusher if it exists
-        if (this.pusher) {
-          this.pusher.parentNode.removeChild(this.pusher);
+        if (pusher) {
+          pusher.parentNode.removeChild(pusher);
         }
 
-        this.pusher = null;
+        pusher = null;
 
         // Create the pusher (which pushes the page down) if needed
         if (format.asBool(this.pushes_page_down)) {
-          this.pusher = document.createElement('div');
-          this.pusher.id = 'hellobar-pusher';
-          this.pusher.className = 'hb-' + this.size;
+          pusher = document.createElement('div');
+          pusher.id = 'hellobar-pusher';
+          pusher.className = 'hb-' + this.size;
 
           // shrinks pusher if siteElement hidden by viewCondition rules
           if (this.w.style.display === 'none') {
-            this.pusher.style.height = 0;
+            pusher.style.height = 0;
           }
 
-          elementsInjection.inject(this.pusher, this.placement === 'bar-bottom');
+          elementsInjection.inject(pusher, this.placement === 'bar-bottom');
         }
       }
 
       minimize() {
         dom.animateOut(this.w, this.onHidden());
 
-        if (this.pusher) {
-          this.pusher.style.display = 'none';
+        if (pusher) {
+          pusher.style.display = 'none';
         }
 
         dom.animateIn(this.pullDown);
@@ -65,6 +67,23 @@ hellobar.defineModule('elements.class.bar',
         }
 
         super.attach();
+      }
+
+      performElementTypeSpecificAdjustment() {
+        const domElement = this.getSiteElementDomNode();
+        // Adjust the pusher
+        if (pusher) {
+          // handle case where display-condition check has hidden this.w
+          if (this.w.style.display === 'none') {
+            return;
+          }
+          var borderPush = format.asBool((this.show_border) ? 3 : 0);
+          pusher.style.height = (domElement.clientHeight + borderPush) + 'px';
+        }
+
+        // Add multiline class
+        var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
+        dom.setClass(domElement, 'multiline', domElement.clientHeight > barBounds);
       }
 
       barSizeCssClass() {

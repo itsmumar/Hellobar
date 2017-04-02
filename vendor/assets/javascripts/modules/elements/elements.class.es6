@@ -229,22 +229,7 @@ hellobar.defineModule('elements.class',
             // Adjust the container size
             this.setContainerSize(this.w, thisElement, this.type, isMobile);
 
-            // Bar specific adjustments
-            if (this.type === 'Bar') {
-              // Adjust the pusher
-              if (this.pusher) {
-                // handle case where display-condition check has hidden this.w
-                if (this.w.style.display === 'none') {
-                  return;
-                }
-                var borderPush = format.asBool((this.show_border) ? 3 : 0);
-                this.pusher.style.height = (thisElement.clientHeight + borderPush) + 'px';
-              }
-
-              // Add multiline class
-              var barBounds = (this.w.className.indexOf('regular') > -1 ? 32 : 52 );
-              dom.setClass(thisElement, 'multiline', thisElement.clientHeight > barBounds);
-            }
+            this.performElementTypeSpecificAdjustment && this.performElementTypeSpecificAdjustment();
           }
         }
       }
