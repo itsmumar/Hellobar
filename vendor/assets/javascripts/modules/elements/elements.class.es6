@@ -329,11 +329,6 @@ hellobar.defineModule('elements.class',
             dom.animateIn(this.w)
           }
 
-          // TODO REFACTOR this (it's a temporary solution). Finally we shouldn't run autofills from bar show method
-          setTimeout(function () {
-            var autofills = hellobar('autofills', {allowUndefined: true});
-            autofills && autofills.run();
-          }, 1);
         }.bind(this);
 
         var showMinimizedBar = function () {
