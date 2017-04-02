@@ -116,7 +116,7 @@ hellobar.defineModule('elements.collecting',
             // Successfully saved
           });
 
-          bus.trigger('emailSubmitted', siteElement, values);
+          bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
 
           if (doRedirect) {
             window.location.href = redirectUrl;

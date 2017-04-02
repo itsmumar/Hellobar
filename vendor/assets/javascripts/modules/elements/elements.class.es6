@@ -445,7 +445,7 @@ hellobar.defineModule('elements.class',
           elementsVisibility.setVisibilityControlCookie('dismiss', this);
         }
 
-        bus.trigger('closed', this); // New trigger
+        bus.trigger('hellobar.elements.closed', this);
       }
 
       // Create the pulldown arrow element for when a bar/slider is hidden

@@ -1,4 +1,4 @@
-hellobar.defineModule('base.bus', [], function() {
+hellobar.defineModule('base.bus', ['hellobar'], function(hellobar) {
 
   let eventCallbacks = {};
 
@@ -29,7 +29,7 @@ hellobar.defineModule('base.bus', [], function() {
         // asynchronously
         (function (eventName, i) {
           setTimeout(function () {
-            (eventCallbacks[eventName][i]).apply(HB, origArgs);
+            (eventCallbacks[eventName][i]).apply(hellobar, origArgs);
           }, i)
         })(eventName, i);
       }

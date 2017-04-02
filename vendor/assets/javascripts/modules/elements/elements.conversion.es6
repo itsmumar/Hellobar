@@ -22,7 +22,7 @@ hellobar.defineModule('elements.conversion',
       // Set the last time converted for the site element to now
       elementsData.setData(siteElement.id, 'lc', now);
       // Trigger the event
-      bus.trigger('converted', siteElement); // Updated trigger
+      bus.trigger('hellobar.elements.converted', siteElement);
       // Send the data to the backend if this is the first conversion
       if (conversionCount === 1) {
         trackingInternal.send('g', siteElement.id, {a: getVisitorAttributes()}, callback);
@@ -44,8 +44,8 @@ hellobar.defineModule('elements.conversion',
       if (!elementsData.getData(siteElement.id, 'fv'))
         elementsData.setData(siteElement.id, 'fv', now);
       elementsData.setData(siteElement.id, 'lv', now);
-      // Trigger siteElement shown event
-      bus.trigger('shown', siteElement); // New trigger
+      // Trigger event
+      bus.trigger('hellobar.elements.viewed', siteElement);
     }
 
     function getVisitorAttributes() {
