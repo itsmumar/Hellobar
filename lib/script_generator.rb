@@ -144,10 +144,6 @@ class ScriptGenerator < Mustache
     render_asset('site_elements.js')
   end
 
-  def libs_js
-    render_asset('libs.js')
-  end
-
   def autofills_json
     site.autofills.to_json
   end

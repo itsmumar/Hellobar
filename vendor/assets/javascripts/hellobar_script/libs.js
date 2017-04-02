@@ -1,1 +1,0 @@
-//= require ./ie_shims
