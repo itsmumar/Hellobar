@@ -74,13 +74,13 @@ describe ServiceProviders::Webhook do
       end
 
       context 'with custom fields' do
-        let(:custom_fields) { %w(phone email name empty gender) }
-        let(:params) { { email: 'email@email.com', phone: '+1000000000', name: 'Name', empty: '', gender: 'Male' } }
+        let(:custom_fields) { %w(phone email name Empty Gẹndêr Two\ words) }
+        let(:params) { { email: 'email@email.com', phone: '+1000000000', name: 'Name', empty: '', g_nder: 'Male', two_words: '1' } }
         let!(:site_element) { create(:site_element, :with_custom_fields, contact_list: contact_list, fields: custom_fields) }
 
         it 'sends email and all other custom fields' do
           expect(request).to receive(:params=).with(params)
-          webhook.subscribe(nil, 'email@email.com', '+1000000000,Name,,Male')
+          webhook.subscribe(nil, 'email@email.com', '+1000000000,Name,,Male,1')
         end
 
         context 'when fields mismatch settings' do

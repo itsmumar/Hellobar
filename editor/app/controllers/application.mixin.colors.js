@@ -19,16 +19,7 @@ export default Ember.Mixin.create({
 
     //----------- Primary Color  -----------#
 
-    let primaryColor = dominantColor;
-
-    for (let i = 0; i < colorPalette.length; i++) {
-      const color = colorPalette[i];
-      if (Math.abs(color[0] - color[1]) > 10 || Math.abs(color[1] - color[2]) > 10 || Math.abs(color[0] - color[2]) > 10) {
-        primaryColor = color;
-        break;
-      }
-    }
-
+    const primaryColor = dominantColor;
     this.set('model.background_color', one.color(primaryColor).hex().replace('#', ''));
 
     //----------- Other Colors  -----------#
@@ -70,6 +61,10 @@ export default Ember.Mixin.create({
 
       this.set('dominantColor', dominantColor);
       this.set('colorPalette', colorPalette);
+
+      if (!this.get('model.id') && !window.elementToCopyID) {
+        Ember.run.next(() => this.setSiteColors());
+      }
     });
   }
 

@@ -395,21 +395,29 @@ describe SiteElement do
     end
 
     context 'when site has `external_tracking` capabilities' do
-      it 'is an array of Google Analytics external events' do
+      let(:external_tracking) { site_element.external_tracking }
+
+      before do
         allow(capabilities).to receive(:external_tracking?).and_return true
+      end
 
-        external_tracking = site_element.external_tracking
+      %w(google_analytics legacy_google_analytics).each do |provider|
+        it "is an array of external `#{ provider }` events" do
+          expect(external_tracking).to be_an Array
+          expect(external_tracking.count).to be > 1
 
-        expect(external_tracking).to be_an Array
-        expect(external_tracking.count).to be > 1
+          google_analytics_events = external_tracking.select do |tracking|
+            tracking[:provider] == provider
+          end
 
-        event = external_tracking.first
+          expect(google_analytics_events).not_to be_empty
 
-        expect(event).to be_a Hash
-        expect(event[:provider]).to eq 'google_analytics'
-        expect(event[:category]).to eq 'Hello Bar'
-        expect(event[:site_element_id]).to eq id
-        expect(event[:label]).to include id.to_s
+          google_analytics_event = google_analytics_events.first
+
+          expect(google_analytics_event[:category]).to eq 'Hello Bar'
+          expect(google_analytics_event[:site_element_id]).to eq id
+          expect(google_analytics_event[:label]).to include id.to_s
+        end
       end
     end
   end

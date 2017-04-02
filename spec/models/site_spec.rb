@@ -489,7 +489,7 @@ describe Site do
 
       it 'should set the bill end_date to ' do
         travel_to Time.current do
-          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current) - 1.hour)
+          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current - 1.hour))
         end
       end
     end
