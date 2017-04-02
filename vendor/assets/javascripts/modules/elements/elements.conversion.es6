@@ -1,6 +1,8 @@
 hellobar.defineModule('elements.conversion',
-  ['visitor', 'base.format', 'base.serialization', 'base.bus', 'elements.data', 'elements.visibility', 'tracking.internal'],
-  function (visitor, format, serialization, bus, elementsData, elementsVisibility, trackingInternal) {
+  ['base.format', 'base.serialization', 'base.bus', 'lib.crypto',
+    'visitor', 'elements.data', 'elements.visibility', 'tracking.internal'],
+  function (format, serialization, bus, crypto,
+            visitor, elementsData, elementsVisibility, trackingInternal) {
 
     // Called when a conversion happens (e.g. link clicked, email form filled out)
     function converted(siteElement, callback) {
@@ -99,8 +101,7 @@ hellobar.defineModule('elements.conversion',
       }
       // If the URL is shorter than 40 chars just return it
       if (url.length > 40) {
-        // TODO REFACTOR here's external library usage!
-        return HBCrypto.SHA1(url).toString();
+        return crypto.SHA1(url).toString();
       } else {
         return url;
         // Otherwise return a SHA1 hash of the URL

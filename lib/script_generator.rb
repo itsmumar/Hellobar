@@ -168,7 +168,19 @@ class ScriptGenerator < Mustache
   end
 
   def core_js
+    #binding.pry
     render_asset('core.js')
+  end
+
+  def crypto_js
+    files = [
+        'crypto.core.js',
+        'crypto.x64-core.js',
+        'crypto.hmac.js',
+        'crypto.sha1.js',
+        'crypto.sha512.js'
+    ]
+    files.map { |file| render_asset('lib/crypto', file) }.join("\n")
   end
 
   def hellobar_container_css

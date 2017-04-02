@@ -1,13 +1,22 @@
 (function() {
   if (typeof(hellobar) === 'undefined') {
-    {{{libs_js}}}
+
+    function defineExternalLibrariesAsModules() {
+      hellobar.defineModule('lib.crypto', [], function () {
+        {{{crypto_js}}}
+        return CryptoJS;
+      });
+
+    }
 
     // Load HelloBar JS Core and Modules
     (function() {
       // Loading core for module management
       var hellobar = {{{core_js}}}
 
-      // Loading all modules
+      defineExternalLibrariesAsModules();
+
+      // Loading all HelloBar modules
       {{{modules_js}}}
 
       // A few helper functions

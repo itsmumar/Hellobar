@@ -1,6 +1,6 @@
 hellobar.defineModule('tracking.internal',
-  ['hellobar', 'base.site', 'base.storage', 'base.preview', 'base.format'],
-  function (hellobar, site, storage, preview, format) {
+  ['hellobar', 'base.site', 'base.storage', 'base.preview', 'base.format', 'lib.crypto'],
+  function (hellobar, site, storage, preview, format, crypto) {
 
     const configuration = hellobar.createModuleConfiguration({
       backendHost: 'string',
@@ -131,7 +131,7 @@ hellobar.defineModule('tracking.internal',
       }
       sortedParamPairs.sort();
 
-      return HBCrypto.HmacSHA512(path + '?' + sortedParamPairs.join('|'), key).toString();
+      return crypto.HmacSHA512(path + '?' + sortedParamPairs.join('|'), key).toString();
 
     }
 
