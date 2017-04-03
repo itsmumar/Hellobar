@@ -1,3 +1,5 @@
+// ** this file should be in es5 notation (.js, not .es6) otherwise babel can add additional code and break everything down **
+
 (function () {
 
   var moduleWrappers = {};
