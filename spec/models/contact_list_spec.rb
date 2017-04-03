@@ -242,8 +242,9 @@ describe ContactList do
       end
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        response = OpenStruct.new(code: 404, body: '404 Resource Not Found')
-        expect(contact_list).to receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
+        exception = RestClient::ResourceNotFound.new
+        allow(exception).to receive(:message).and_return('404 Resource Not Found')
+        expect(contact_list).to receive(:batch_subscribe).and_raise(exception)
         expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end
