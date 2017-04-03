@@ -436,7 +436,8 @@ class @ContactListModal extends Modal
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if data.provider == "infusionsoft" or @_showListsAndTags(defaultContext)
-          tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: !data.tags.length})
+          noTags = $.isArray(data.tags) && data.tags.length == 0
+          tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: noTags})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
             clonedTags.forEach((clonedTag) =>
