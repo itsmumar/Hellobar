@@ -100,7 +100,11 @@ FactoryGirl.define do
 
       settings do
         fields_to_collect = fields.each_with_index.map do |field, index|
-          { id: "some-long-id-#{ index }", type: "builtin-#{ field }", is_enabled: true }.stringify_keys
+          if field =~ /name|email|phone/
+            { id: "some-long-id-#{ index }", type: "builtin-#{ field }", is_enabled: true }.stringify_keys
+          else
+            { id: "some-long-id-#{ index }", type: 'text', label: field, is_enabled: true }.stringify_keys
+          end
         end
 
         {

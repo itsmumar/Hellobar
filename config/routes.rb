@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   end
 
   get '/admin', to: 'admin/users#index', as: :admin
+
   namespace :admin do
     post 'users/:id/impersonate', to: 'users#impersonate', as: :impersonate_user
     delete 'users/unimpersonate', to: 'users#unimpersonate', as: :unimpersonate_user
@@ -104,9 +105,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :payment_method_details, only: [] do
-      put 'remove_cc_info'
-    end
+    resources :payment_method_details, only: [:destroy]
 
     resources :users, only: [:index, :show, :destroy] do
       resources :sites, only: [:update] do

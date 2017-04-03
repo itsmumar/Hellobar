@@ -47,7 +47,7 @@ feature 'Users can use site element targeting rule presets', :js do
     given(:default_option)     { 'Choose a saved rule...' }
 
     before do
-      payment_method = create(:payment_method, user: @user)
+      payment_method = create(:payment_method, :success, user: @user)
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])

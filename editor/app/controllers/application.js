@@ -23,7 +23,6 @@ export default Ember.Controller.extend(
 
     init() {
       this.initializeValidation();
-      this.initializeTheme();
       this._initializeInlineEditing();
       this._subscribeToBusEvents();
     },

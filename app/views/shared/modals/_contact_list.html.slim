@@ -191,6 +191,7 @@ script id="contact-list-variant-modal-tag-select-template" type="text/x-handleba
 
   | <label for="contact_list_remote_list_ids">Apply Tags (Optional)</label>
   | {{#if tags}}
+  |   {{#if noTags}}<span class="no-tags-message">You have no tags in your {{providerName}} account</span>{{/if}}
   |   {{#each preparedLists}}
   |     <div class="select-wrapper {{#if ../showTagTextfield}}textfield-wrapper{{/if}}">
   |       <div>
