@@ -7,7 +7,8 @@ hellobar.defineModule('elements',
             SiteElement, BarElement, SliderElement) {
 
     const configuration = hellobar.createModuleConfiguration({
-      elementCSS: 'string'
+      elementCSS: 'string',
+      autoRun: 'boolean'
     });
 
     const elementClasses = {
@@ -184,7 +185,9 @@ hellobar.defineModule('elements',
       configuration: () => configuration,
       initialize(configurator) {
         configurator && configurator(configuration);
-        showSiteElements();
+        if (configuration.autoRun()) {
+          showSiteElements();
+        }
       },
       introspect: () => ({
         allElements: () => siteElementsOnPage
