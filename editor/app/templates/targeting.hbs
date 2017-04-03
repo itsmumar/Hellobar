@@ -3,54 +3,63 @@
 
   <div class="{{targetingListCssClasses}}">
     {{#link-to 'targeting.everyone' (query-params showDropdown=false) class='step-link-block'}}
-      <i class="hellobar-icon hellobar-icon-people"></i>
-      <h6>Everyone</h6>
+      <span {{action 'closeDropdown'}}>
+        <i class="hellobar-icon hellobar-icon-people"></i>
+        <h6>Everyone</h6>
 
-      <p>Show your Hello Bar to everyone on every page of your site.</p>
+        <p>Show your Hello Bar to everyone on every page of your site.</p>
+      </span>
     {{/link-to}}
 
     {{#if isTopBarStyle}}
       {{#link-to 'targeting.mobile' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
-        <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
-        <h6>
-          Mobile Visitors
-          <span class="button paid">PAID</span>
-        </h6>
+        <span {{action 'closeDropdown'}}>
+          <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+          <h6>
+            Mobile Visitors
+            <span class="button paid">PAID</span>
+          </h6>
 
-        <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+          <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+        </span>
       {{/link-to}}
     {{/if}}
 
     {{#link-to 'targeting.homepage' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
-      <i class="hellobar-icon hellobar-icon-house"></i>
-      <h6>
-        Homepage Visitors
-        <span class="button paid">PAID</span>
-      </h6>
+      <span {{action 'closeDropdown'}}>
+        <i class="hellobar-icon hellobar-icon-house"></i>
+        <h6>
+          Homepage Visitors
+          <span class="button paid">PAID</span>
+        </h6>
 
-      <p>Show your Hello Bar on your site’s homepage only.</p>
+        <p>Show your Hello Bar on your site’s homepage only.</p>
+      </span>
     {{/link-to}}
 
     {{#link-to 'targeting.custom' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
+      <span {{action 'closeDropdown'}}>
+        <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
+        <h6>
+          Custom Rule
+          <span class="button paid">PAID</span>
+        </h6>
 
-      <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
-      <h6>
-        Custom Rule
-        <span class="button paid">PAID</span>
-      </h6>
-
-      <p>Show your Hello Bar to a custom audience of your choice.</p>
+        <p>Show your Hello Bar to a custom audience of your choice.</p>
+      </span>
     {{/link-to}}
 
     {{#if hasCustomRules}}
       {{#link-to 'targeting.saved' classBinding="canTarget:can-target" class='step-link-block saved-rule'}}
-        <i class="hellobar-icon hellobar-icon-saved-segment"></i>
-        <h6 class="left-condense">
-          <span class="left">Show to a saved targeting rule</span>
-          <span class="button paid">PAID</span>
-        </h6>
+        <span {{action 'closeDropdown'}}>
+          <i class="hellobar-icon hellobar-icon-saved-segment"></i>
+          <h6 class="left-condense">
+            <span class="left">Show to a saved targeting rule</span>
+            <span class="button paid">PAID</span>
+          </h6>
 
-        <p>Show your Hello Bar to a custom targeting rule that you’ve saved before.</p>
+          <p>Show your Hello Bar to a custom targeting rule that you’ve saved before.</p>
+        </span>
       {{/link-to}}
     {{/if}}
 

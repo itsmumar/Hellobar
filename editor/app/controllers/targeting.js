@@ -230,6 +230,10 @@ export default Ember.Controller.extend({
 
   actions: {
 
+    closeDropdown() {
+      this.set('targetingSelectionInProgress', false);
+    },
+
     resetRuleDropdown(ruleData = {}) {
       this.set('targetingSelectionInProgress', true);
       if (ruleData.id === undefined) {
