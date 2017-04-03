@@ -1,4 +1,4 @@
-require 'fog'
+require 'fog/aws'
 
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
