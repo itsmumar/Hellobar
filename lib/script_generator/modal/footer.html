@@ -1,6 +1,6 @@
       {{siteElement.imageFor(['bottom'])}}
-      <div class="hb-logo-wrapper {{HB.colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{HB.branding_template()}}" >
-        {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
+      <div class="hb-logo-wrapper {{hellobar('base.coloring').colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{siteElement.brandingName()}}" >
+        {{siteElement.renderBranding()}}
       </div>
     </div>
   </div>

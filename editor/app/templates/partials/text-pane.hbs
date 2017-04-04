@@ -8,8 +8,8 @@
     {{#ivy-tabs selection=questionTabSelection as |tabs|}}
       {{#tabs.tablist as |tablist|}}
         {{#tablist.tab "TabQuestion" on-select=(action 'showQuestion')}}Question{{/tablist.tab}}
-        {{#tablist.tab "TabAnswer1" on-select=(action 'showResponse1')}}Answer 1{{/tablist.tab}}
-        {{#tablist.tab "TabAnswer2" on-select=(action 'showResponse2')}}Answer 2{{/tablist.tab}}
+        {{#tablist.tab "TabAnswer1" on-select=(action 'showAnswer1')}}Answer 1{{/tablist.tab}}
+        {{#tablist.tab "TabAnswer2" on-select=(action 'showAnswer2')}}Answer 2{{/tablist.tab}}
       {{/tabs.tablist}}
 
       {{#tabs.tabpanel "TabQuestion"}}

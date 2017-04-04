@@ -4,8 +4,8 @@ feature 'Every x number of sessions condition', js: true do
   def set_ns_cookie(page, sessions)
     page.execute_script("
       var d = new Date();
-      HB.setVisitorData('lv', (d.getTime())/1000);
-      HB.setVisitorData('ns', #{ sessions });
+      hellobar('visitor').introspect().setData('lv', (d.getTime())/1000);
+      hellobar('visitor').introspect().setData('ns', #{ sessions });
     ")
   end
 

@@ -1,3 +1,5 @@
+// ** this file should be in es5 notation (.js, not .es6) otherwise babel can add additional code and break everything down **
+
 (function () {
 
   var moduleWrappers = {};
@@ -23,14 +25,19 @@
    * @constructor
    */
   function HellobarException(message) {
-    var _message = 'HelloBar: ' + message;
-    this.message = function () {
-      return _message;
-    };
+    this.name = 'HellobarException';
+    this.message = message;
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, this.constructor);
+    } else {
+      this.stack = (new Error(message)).stack;
+    }
     this.toString = function () {
-      return _message;
+      return message;
     };
   }
+  HellobarException.prototype = Object.create(Error.prototype);
+  HellobarException.prototype.constructor = HellobarException;
 
   function verifiedToBeNonEmpty(value, errorMessage) {
     if (!value) {

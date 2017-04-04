@@ -10,7 +10,8 @@ describe ScriptGenerator do
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do
-      expected_string = "HB_SITE_ID = #{ site.id };"
+      allow(generator).to receive(:pro_secret).and_return('pro_secret')
+      expected_string = "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }').secret('pro_secret');"
 
       expect(generator.render).to include(expected_string)
     end
@@ -18,7 +19,7 @@ describe ScriptGenerator do
     it 'renders the backend host variable' do
       original_setting = Hellobar::Settings[:tracking_host]
       Hellobar::Settings[:tracking_host] = 'hi-there.hellobar.com'
-      expected_string = 'HB_BACKEND_HOST = "hi-there.hellobar.com";'
+      expected_string = "configuration.backendHost('hi-there.hellobar.com').siteWriteKey('#{ site.write_key }');"
 
       expect(generator.render).to include(expected_string)
       Hellobar::Settings[:tracking_host] = original_setting
@@ -27,7 +28,7 @@ describe ScriptGenerator do
     it 'renders the HB_TZ timezone variable' do
       allow(site).to receive(:timezone).and_return('America/Chicago')
       Time.zone = 'America/Chicago'
-      expected_string = "HB_TZ = \"#{ Time.zone.now.formatted_offset }\";"
+      expected_string = "configuration.defaultTimezone('#{ Time.zone.now.formatted_offset }');"
 
       expect(generator.render).to include(expected_string)
     end
@@ -61,12 +62,6 @@ describe ScriptGenerator do
       expect(result).to include element_container_css.to_json[1..-2]
     end
 
-    it 'renders the initialization of the hellobar queue object' do
-      hbq_initialization = '_hbq = new HBQ();'
-
-      expect(generator.render).to include(hbq_initialization)
-    end
-
     context 'when templates are present' do
       it 'renders the setTemplate function on HB with the template name and markup' do
         template = { name: 'yey name', markup: 'yey markup' }
@@ -74,18 +69,17 @@ describe ScriptGenerator do
         allow(generator).to receive(:hellobar_container_css)
         allow(generator).to receive(:hellobar_element_css)
 
-        expected_string = 'HB.setTemplate("yey name", yey markup);'
+        expected_string = 'configuration.addTemplate("yey name", yey markup);'
 
         expect(generator.render).to include(expected_string)
       end
 
-      it 'renders only the setTemplate definition and 1 call per bar type' do
+      it 'renders addTemplate once for each bar type' do
         bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
         allow(site).to receive(:site_elements).and_return(double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
 
         generator = ScriptGenerator.new site
-
-        expect(generator.render.scan('setTemplate').size).to eq(2)
+        expect(generator.render.scan('configuration.addTemplate("bar_traffic",').size).to eq(1)
       end
 
       it 'renders the setTemplate definition and 1 call per bar type for multiple types' do
@@ -95,7 +89,8 @@ describe ScriptGenerator do
 
         generator = ScriptGenerator.new site
 
-        expect(generator.render.scan('setTemplate').size).to eq(3)
+        expect(generator.render.scan('configuration.addTemplate("bar_traffic",').size).to eq(1)
+        expect(generator.render.scan('configuration.addTemplate("bar_email",').size).to eq(1)
       end
     end
 
@@ -107,15 +102,14 @@ describe ScriptGenerator do
         allow(rule).to receive(:conditions).and_return([condition])
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
-
+        expected_string = 'configuration.addRule(\'\', [{"segment":"dt","operand":"is after","value":{"start_date":"2000-01-01"}}], [])'
         expect(generator.render).to include(expected_string)
       end
 
       it 'does NOT have a start date constraint when not present' do
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [], [])}'
+        expected_string = 'configuration.addRule(\'\', [], [])'
 
         expect(generator.render).to include(expected_string)
       end
@@ -125,7 +119,7 @@ describe ScriptGenerator do
         allow(rule).to receive(:conditions).and_return([condition])
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [{"segment":"dt","operand":"is before","value":{"end_date":"2015-01-01"}}], [])}'
+        expected_string = 'configuration.addRule(\'\', [{"segment":"dt","operand":"is before","value":{"end_date":"2015-01-01"}}], [])'
 
         expect(generator.render).to include(expected_string)
       end
@@ -133,7 +127,7 @@ describe ScriptGenerator do
       it 'does NOT have a start date constraint when not present' do
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [], [])}'
+        expected_string = 'configuration.addRule(\'\', [], [])'
 
         expect(generator.render).to include(expected_string)
       end
@@ -145,7 +139,7 @@ describe ScriptGenerator do
         allow(rule).to receive(:conditions).and_return(conditions)
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"/signup"}], [])'
+        expected_string = 'configuration.addRule(\'\', [{"segment":"pu","operand":"does_not_include","value":"/signup"}], [])'
 
         expect(generator.render).to include(expected_string)
       end
@@ -157,17 +151,9 @@ describe ScriptGenerator do
         allow(rule).to receive(:conditions).and_return(conditions)
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [{"segment":"pu","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])}'
+        expected_string = 'configuration.addRule(\'\', [{"segment":"pu","operand":"does_not_include","value":"http://soamazing.com/signup"}], [])'
 
         expect(generator.render).to include(expected_string)
-      end
-
-      it 'does NOT have exclusion constraints when no sites are blacklisted' do
-        allow(site).to receive(:rules).and_return([rule])
-
-        expected_string = /HB.umatch(.*)/
-
-        expect(generator.render).not_to match(expected_string)
       end
 
       it 'adds an inclusion constraint for all whitelisted URLs' do
@@ -175,17 +161,9 @@ describe ScriptGenerator do
         allow(rule).to receive(:conditions).and_return(conditions)
         allow(site).to receive(:rules).and_return([rule])
 
-        expected_string = 'HB.addRule("", [{"segment":"pu","operand":"includes","value":"/signup"}], [])'
+        expected_string = 'configuration.addRule(\'\', [{"segment":"pu","operand":"includes","value":"/signup"}], [])'
 
         expect(generator.render).to include(expected_string)
-      end
-
-      it 'does NOT have inclusion constraints when no sites are whitelisted' do
-        allow(generator).to receive(:rules).and_return([rule])
-
-        expected_string = /HB.umatch(.*)/
-
-        expect(generator.render).not_to match(expected_string)
       end
 
       it 'does NOT include nil values' do
