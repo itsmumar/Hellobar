@@ -1,6 +1,7 @@
 /*-----------  Override Anchors (links)  -----------*/
 
 .style, .targeting, .settings
-  a.step-link-block
-    &.active
-      cursor: pointer
+  :not(.is-selected)
+    a.step-link-block
+      &.active
+        cursor: pointer
