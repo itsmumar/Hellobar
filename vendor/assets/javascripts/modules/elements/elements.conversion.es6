@@ -1,11 +1,12 @@
 hellobar.defineModule('elements.conversion',
   ['base.format', 'base.serialization', 'base.bus', 'lib.crypto',
-    'visitor', 'elements.data', 'elements.visibility', 'tracking.internal'],
+    'visitor', 'elements.data', 'elements.visibility', 'tracking.internal', 'tracking.external'],
   function (format, serialization, bus, crypto,
-            visitor, elementsData, elementsVisibility, trackingInternal) {
+            visitor, elementsData, elementsVisibility, trackingInternal, trackingExternal) {
 
     // Called when a conversion happens (e.g. link clicked, email form filled out)
     function converted(siteElement, callback) {
+      const gaEventType = () => siteElement.subtype + '_conversion';
       var conversionKey = getConversionKey(siteElement);
       var now = Math.round(new Date().getTime() / 1000);
       var conversionCount = (visitor.getData(conversionKey) || 0 ) + 1;
@@ -26,6 +27,7 @@ hellobar.defineModule('elements.conversion',
       // Send the data to the backend if this is the first conversion
       if (conversionCount === 1) {
         trackingInternal.send('g', siteElement.id, {a: getVisitorAttributes()}, callback);
+        trackingExternal.send(gaEventType(), siteElement.id);
       } else if (typeof(callback) === typeof(Function)) {
         callback();
       }
@@ -35,8 +37,10 @@ hellobar.defineModule('elements.conversion',
     // Called when the siteElement is viewed
     function viewed(siteElement) {
       // Track number of views if not yet converted for this site element
-      if (!didConvert(siteElement))
+      if (!didConvert(siteElement)) {
         trackingInternal.send('v', siteElement.id, {a: getVisitorAttributes()});
+        trackingExternal.send('view', siteElement.id);
+      }
 
       // Record the number of views, first seen and last seen
       elementsData.setData(siteElement.id, 'nv', (elementsData.getData(siteElement.id, 'nv') || 0) + 1);
