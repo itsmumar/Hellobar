@@ -54,7 +54,7 @@ class SiteElement < ActiveRecord::Base
   validates :contact_list, association_exists: true, if: :email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :redirect_has_url, if: :email?
-  validate :thank_you_text, if: :email?
+  validate :validate_thank_you_text, if: :email?
   validate :subscription_for_custom_targeting
 
   scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
@@ -352,7 +352,7 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
-  def thank_you_text
+  def validate_thank_you_text
     return unless after_email_submit_action == :custom_thank_you_text
 
     if !site.capabilities.custom_thank_you_text?

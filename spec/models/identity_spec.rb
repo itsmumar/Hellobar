@@ -77,7 +77,7 @@ describe Identity do
     let(:file_name) { file || provider }
 
     let(:service_provider) do
-      contact_list.provider = provider
+      contact_list.provider_token = provider
       contact_list.data['embed_code'] = embed_code_file_for(file_name)
       contact_list.send(:set_identity)
       contact_list.service_provider

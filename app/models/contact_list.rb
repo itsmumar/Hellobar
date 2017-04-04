@@ -7,7 +7,7 @@ class ContactList < ActiveRecord::Base
 
   EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
 
-  attr_accessor :provider
+  attr_accessor :provider_token
 
   belongs_to :site
   belongs_to :identity
@@ -97,19 +97,19 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    !EMPTY_PROVIDER_VALUES.include?(provider)
+    !EMPTY_PROVIDER_VALUES.include?(provider_token)
   end
 
   def set_identity
-    return unless provider.present?
+    return unless provider_token.present?
 
     self.identity =
       if !provider_set? || service_provider_class.nil?
         nil # Don't create an invalid provider
-      elsif embed_code? || (provider == 'webhooks')
-        site.identities.find_or_create_by(provider: provider)
+      elsif embed_code? || (provider_token == 'webhooks')
+        site.identities.find_or_create_by(provider: provider_token)
       else
-        site.identities.find_by(provider: provider)
+        site.identities.find_by(provider: provider_token)
       end
   end
 
@@ -152,6 +152,10 @@ class ContactList < ActiveRecord::Base
     data['tags'] || []
   end
 
+  def provider_name
+    identity && identity.provider.titlecase || 'Hello Bar'
+  end
+
   private
 
   def notify_identity
@@ -164,7 +168,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_credentials_exist
-    errors.add(:provider, 'credentials have not been set yet') unless identity && identity.provider == provider
+    errors.add(:provider, 'credentials have not been set yet') unless identity && identity.provider == provider_token
   end
 
   def clean_embed_code
@@ -190,7 +194,7 @@ class ContactList < ActiveRecord::Base
     if identity
       identity.service_provider_class
     elsif provider_set?
-      ServiceProvider[provider.to_sym]
+      ServiceProvider[provider_token.to_sym]
     end
   end
 
