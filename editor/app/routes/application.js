@@ -45,6 +45,7 @@ export default Ember.Route.extend({
           resolvedModel.site.contact_lists.forEach((list) => {
             if (list.id === data.id) {
               Ember.set(list, 'name', data.name);
+              Ember.set(list, 'provider_name', data.provider_name);
             }
           });
           modal.close();
@@ -54,7 +55,7 @@ export default Ember.Route.extend({
         saveMethod: 'POST',
         success: (data, modal) => {
           let lists = resolvedModel.site.contact_lists.slice(0);
-          lists.push({id: data.id, name: data.name});
+          lists.push({id: data.id, name: data.name, provider_name: data.provider_name});
           this.controller.set('model.site.contact_lists', lists);
           setTimeout((() => {
               this.controller.set('model.contact_list_id', data.id);
@@ -69,7 +70,7 @@ export default Ember.Route.extend({
       new ContactListModal($.extend(baseOptions, options)).open();
     }
   },
-  
+
   //-----------  Actions  -----------#
 
   // Actions bubble up the routers from most specific to least specific.
