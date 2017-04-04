@@ -5,7 +5,8 @@ class ContactListSerializer < ActiveModel::Serializer
     :errors,
     :id,
     :name,
-    :provider,
+    :provider_name,
+    :provider_token,
     :site_elements_count,
     :site_id
   )
@@ -14,7 +15,7 @@ class ContactListSerializer < ActiveModel::Serializer
     object.errors.full_messages
   end
 
-  def provider
-    object.identity.try(:provider) || 0
+  def provider_token
+    object.identity && object.identity.provider || '0'
   end
 end

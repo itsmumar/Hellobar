@@ -81,7 +81,7 @@ describe Site do
   end
 
   describe '#highest_tier_active_subscription' do
-    let(:payment_method) { create(:payment_method) }
+    let(:payment_method) { create(:payment_method, :success) }
     let(:ownership) { create(:site_membership, user: payment_method.user) }
     let(:site) { ownership.site }
 
@@ -489,7 +489,7 @@ describe Site do
 
       it 'should set the bill end_date to ' do
         travel_to Time.current do
-          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current) - 1.hour)
+          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current - 1.hour))
         end
       end
     end

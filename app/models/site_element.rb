@@ -54,7 +54,7 @@ class SiteElement < ActiveRecord::Base
   validates :contact_list, association_exists: true, if: :email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :redirect_has_url, if: :email?
-  validate :thank_you_text, if: :email?
+  validate :validate_thank_you_text, if: :email?
   validate :subscription_for_custom_targeting
 
   scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
@@ -272,18 +272,18 @@ class SiteElement < ActiveRecord::Base
   def external_tracking
     return [] unless site && site.capabilities.external_tracking?
 
-    provider = 'google_analytics'
+    providers = ['google_analytics', 'legacy_google_analytics']
     category = 'Hello Bar'
     label = "SiteElement-#{ id }"
 
-    default = Hash[site_element_id: id, provider: provider, category: category, label: label]
+    default = Hash[site_element_id: id, category: category, label: label]
 
-    [
-      default.merge(type: 'view', action: 'View'),
-      default.merge(type: 'email_conversion', action: 'Conversion'),
-      default.merge(type: 'social_conversion', action: 'Conversion'),
-      default.merge(type: 'traffic_conversion', action: 'Conversion')
-    ]
+    providers.each_with_object([]) do |provider, memo|
+      memo << default.merge(provider: provider, type: 'view', action: 'View')
+      memo << default.merge(provider: provider, type: 'email_conversion', action: 'Conversion')
+      memo << default.merge(provider: provider, type: 'social_conversion', action: 'Conversion')
+      memo << default.merge(provider: provider, type: 'traffic_conversion', action: 'Conversion')
+    end
   end
 
   def pushes_page_down
@@ -352,7 +352,7 @@ class SiteElement < ActiveRecord::Base
     end
   end
 
-  def thank_you_text
+  def validate_thank_you_text
     return unless after_email_submit_action == :custom_thank_you_text
 
     if !site.capabilities.custom_thank_you_text?

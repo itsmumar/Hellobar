@@ -28,4 +28,16 @@ feature 'Drip Integration', js: true do
     expect(page).to have_content('Apply Tags (Optional)')
     expect(page).to have_link('+ Add tag')
   end
+
+  context 'when no tags' do
+    scenario 'displays campaigns' do
+      open_provider_form(@user, provider)
+      page.find('.button.ready').click
+
+      expect(page).to have_content('Choose a Drip campaign to sync with')
+      expect(page).to have_content('Apply Tags (Optional)')
+      expect(page).to have_link('+ Add tag')
+      expect(page).to have_content('You have no tags in your Drip account')
+    end
+  end
 end

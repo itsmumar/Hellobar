@@ -1,7 +1,7 @@
 describe PaymentMethodsController, '#index' do
   let!(:site) { create(:site, :with_user, :free_subscription) }
   let!(:user) { site.users.first }
-  let!(:payment_methods) { create_list :payment_method, 2, user: user }
+  let!(:payment_methods) { create_list :payment_method, 2, :success, user: user }
 
   before do
     stub_current_user(user)
@@ -60,7 +60,7 @@ describe PaymentMethodsController, '#update' do
   end
 
   context 'updating a payment detail' do
-    let(:payment_method) { create(:payment_method, user: user) }
+    let(:payment_method) { create(:payment_method, :success, user: user) }
     let(:data) { PaymentForm.new({}).to_hash }
     let(:put_params) do
       {

@@ -2,7 +2,7 @@ module SubscriptionHelper
   def setup_subscriptions
     @user = create(:user)
     @site = create(:site)
-    @payment_method = create(:payment_method, user: @user)
+    @payment_method = create(:payment_method, :success, user: @user)
     @free = Subscription::Free.new(user: @user, site: @site)
     @pro = Subscription::Pro.new(user: @user, site: @site)
     @enterprise = Subscription::Enterprise.new(user: @user, site: @site)
@@ -211,7 +211,7 @@ describe Subscription do
       expect(@site.site_elements.all?(&:show_branding)).to be_truthy
       expect(@site.site_elements.all?(&:closable)).to be_truthy
 
-      @site.change_subscription(@pro, create(:payment_method))
+      @site.change_subscription(@pro, create(:payment_method, :success))
 
       expect(@site.capabilities(true).remove_branding?).to be_truthy
       expect(@site.capabilities(true).closable?).to be_truthy

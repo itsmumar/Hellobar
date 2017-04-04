@@ -201,7 +201,7 @@ class @ContactListModal extends Modal
         localStorage["stashedEditorModel"] = JSON.stringify(@options.editorModel) if @options.editorModel
         localStorage["stashedContactList"] = JSON.stringify($.extend(@_getFormData(), {id: @options.id}))
 
-        newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider}"
+        newPath = "/sites/#{@options.siteID}/identities/new?provider=#{@_getFormData().provider_token}"
         queryParams = {}
         queryParams["api_key"]  = @_getFormData().data.api_key
         queryParams["username"] = @_getFormData().data.username
@@ -296,10 +296,10 @@ class @ContactListModal extends Modal
 
   _getFormData: ->
     {
-      name         : @$modal.find("form #contact_list_name").val()
-      provider     : @$modal.find("form #contact_list_provider").val()
-      double_optin : if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
-      data         : @_getContactListData()
+      name: @$modal.find("form #contact_list_name").val()
+      provider_token: @$modal.find("form #contact_list_provider").val()
+      double_optin: if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
+      data: @_getContactListData()
     }
 
   _getContactListData: ->
@@ -346,7 +346,7 @@ class @ContactListModal extends Modal
     $.get @options.loadURL, (contactList) =>
       @options.contactList = $.extend(@options.contactList, data: contactList.data,
                                       name: contactList.name, id: contactList.id,
-                                      provider: contactList.provider)
+                                      provider_token: contactList.provider_token)
       @_setFormValues(contactList)
       @_loadRemoteLists(listData: contactList)
 
@@ -369,7 +369,7 @@ class @ContactListModal extends Modal
     option = $(select).find("option:selected")
     label = option.text()
     cycle_day = @options.contactList?.data?.cycle_day
-    originalProvider = @options.contactList?.provider
+    originalProvider = @options.contactList?.provider_token
     cycle_day_enabled = cycle_day != undefined
     hasTags = @options.contactList?.data?.hasOwnProperty('tags')
 
@@ -428,7 +428,7 @@ class @ContactListModal extends Modal
         data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
 
-        if (lists && lists[0].error != undefined) || (tags && data.tags[0].error != undefined)
+        if (lists?.length && lists[0].error != undefined) || (tags?.length && tags[0].error != undefined)
           $('footer a.submit').attr('disabled', 'disabled')
           $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
 
@@ -436,7 +436,8 @@ class @ContactListModal extends Modal
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
         if data.provider == "infusionsoft" or @_showListsAndTags(defaultContext)
-          tagsContext = $.extend(true, {}, defaultContext, {identity: data})
+          noTags = $.isArray(data.tags) && data.tags.length == 0
+          tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: noTags})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
             clonedTags = $.extend(true, [], tagsContext.identity.tags)
             clonedTags.forEach((clonedTag) =>
@@ -453,8 +454,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
 
-        if lists and lists.length > 0
-          selectedList = defaultContext.contactList.data.remote_id or lists[0].id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
@@ -473,7 +473,7 @@ class @ContactListModal extends Modal
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
-    @$modal.find("#contact_list_provider").val(data.provider || "0").trigger('change')
+    @$modal.find("#contact_list_provider").val(data.provider_token || "0").trigger('change')
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id

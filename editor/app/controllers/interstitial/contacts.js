@@ -31,7 +31,7 @@ export default Ember.Controller.extend({
       } else {
         return $.ajax(`/sites/${this.get("model.site.id")}/contact_lists.json`, {
             type: "POST",
-            data: {contact_list: {name: "My Contacts", provider: 0, double_optin: 0}},
+            data: {contact_list: {name: "My Contacts", provider: 0, provider_name: 'Hello Bar', double_optin: 0}},
             success: data => {
               this.set("model.site.contact_lists", [data]);
               return this.set("model.contact_list_id", data.id);

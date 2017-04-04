@@ -69,7 +69,7 @@ describe ContactListsController, type: :controller do
     let(:contact_list_params) do
       {
         name: 'My Contacts',
-        provider: '0',
+        provider_token: '0',
         data: { remote_name: '' },
         double_optin: '0'
       }
@@ -97,7 +97,7 @@ describe ContactListsController, type: :controller do
     context 'when email service provider (esp) uses oauth' do
       let(:contact_list_params) do
         {
-          provider: 'mailchimp',
+          provider_token: 'mailchimp',
           name: 'My contact list',
           data: { remote_id: '1234', remote_name: 'MailChimp Test' }
         }
@@ -136,7 +136,7 @@ describe ContactListsController, type: :controller do
 
         let(:contact_list_params) do
           {
-            provider: 'mailchimp',
+            provider_token: 'mailchimp',
             name: 'My contact list',
             data: { remote_id: '1234', remote_name: 'Campaign Monitor Test' }
           }
@@ -159,7 +159,7 @@ describe ContactListsController, type: :controller do
     context 'when email service provider (esp) requires embed code' do
       let(:contact_list_params) do
         {
-          provider: 'mad_mimi_form',
+          provider_token: 'mad_mimi_form',
           name: 'My embed code contact list',
           data: { embed_code: '<script type="text/javascript"></script>' }
         }

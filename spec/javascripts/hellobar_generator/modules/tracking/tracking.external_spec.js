@@ -6,9 +6,11 @@ describe('Module tracking.external', function () {
   var module;
   var externalTrackings;
   var googleAnalyticsMock;
+  var legacyGoogleAnalyticsMock;
 
   beforeEach(function () {
     hellobar.finalize();
+
     externalTrackings = [{
       site_element_id: 2,
       provider: 'google_analytics',
@@ -18,16 +20,20 @@ describe('Module tracking.external', function () {
       label: 'SiteElement-2'
     }, {
       site_element_id: 2,
-      provider: 'google_analytics',
+      provider: 'legacy_google_analytics',
       type: 'traffic_conversion',
       category: 'HelloBar',
       action: 'Converted',
       label: 'SiteElement-2'
     }];
+
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
+    legacyGoogleAnalyticsMock = jasmine.createSpyObj('LGA', ['send']);
+
     module = hellobar('tracking.external', {
       dependencies: {
-        'tracking.external.googleAnalytics': googleAnalyticsMock
+        'tracking.external.googleAnalytics': googleAnalyticsMock,
+        'tracking.external.legacyGoogleAnalytics': legacyGoogleAnalyticsMock
       },
       configurator: function (configuration) {
         configuration.externalTrackings(externalTrackings);
@@ -41,16 +47,29 @@ describe('Module tracking.external', function () {
   });
 
   it('calls tracking engines on send', function () {
-    module.send('view');
-    module.send('traffic_conversion');
+    module.send('view', 2);
+    module.send('traffic_conversion', 2);
+
     expect(googleAnalyticsMock.send).toHaveBeenCalled();
     expect(googleAnalyticsMock.send.calls.count()).toEqual(2);
+
+    expect(legacyGoogleAnalyticsMock.send).toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send.calls.count()).toEqual(2);
   });
 
   it('does not send anything for unknown tracking type', function () {
-    module.send('unknown_tracking_type');
+    module.send('unknown_tracking_type', 2);
+
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
   });
 
+  it('considers site_element_id while sending', function () {
+    module.send('view', 12345);
+    module.send('traffic_conversion', 54321);
+
+    expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
+  });
 
 });
