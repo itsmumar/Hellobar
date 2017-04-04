@@ -120,7 +120,7 @@ namespace :deploy do
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
   after 'assets:precompile', 'precompile_static_assets'
 
-  after :publishing, :tag_release
+  after :publishing, 'tag_release:github'
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
 
@@ -172,19 +172,6 @@ namespace :deploy do
       execute 'sudo nginx -c /mnt/deploy/current/config/nginx/maintenance.conf'
     end
   end
-
-  task :tag_release do
-    return if dry_run?
-
-    run_locally do
-      stage = fetch :stage
-      current_revision = fetch :current_revision
-
-      strategy.git 'remote update'
-      strategy.git "branch -f #{ stage } #{ current_revision }"
-      strategy.git "push -f origin #{ stage }"
-    end
-  end
 end
 
 namespace :prerequisites do
@@ -229,6 +216,22 @@ namespace :node do
   task :bower_install do
     on roles(:web) do
       execute "cd #{ fetch(:ember_app_path) } && bower install >/dev/null"
+    end
+  end
+end
+
+namespace :tag_release do
+  desc 'Tag release at GitHub.com'
+  task :github do
+    return if dry_run?
+
+    run_locally do
+      stage = fetch :stage
+      current_revision = fetch :current_revision
+
+      strategy.git 'remote update'
+      strategy.git "branch -f #{ stage } #{ current_revision }"
+      strategy.git "push -f origin #{ stage }"
     end
   end
 end
