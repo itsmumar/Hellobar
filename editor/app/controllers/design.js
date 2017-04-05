@@ -150,21 +150,10 @@ export default Ember.Controller.extend({
       }
     } else {
       Ember.run.next(() => {
-        HB.showResponse = null;
+        hellobar('base.preview').setAnswerToDisplay(null);
       });
     }
   }).observes('model.use_question').on('init'),
-
-  setHBCallbacks: ( () =>
-      // Listen for when question answers are pressed and change the question tabs
-      // TODO refactor (use ivy-tabs features)
-    HB.on && HB.on("answerSelected", choice => {
-        this.set('model.paneSelectedIndex', choice);
-        this.set('paneSelection', (this.get('paneSelection') || 0) + 1);
-        return this.send(`showResponse${choice}`);
-      }
-    )
-  ).on("init"),
 
   //-----------  Color Tracking  -----------#
 
@@ -231,19 +220,19 @@ export default Ember.Controller.extend({
     },
 
     showQuestion() {
-      HB.showResponse = null;
+      hellobar('base.preview').setAnswerToDisplay(null);
       this.set('questionTabSelection', 'TabQuestion');
       return this.get('applicationController').renderPreview();
     },
 
-    showResponse1() {
-      HB.showResponse = 1;
+    showAnswer1() {
+      hellobar('base.preview').setAnswerToDisplay(1);
       this.set('questionTabSelection', 'TabAnswer1');
       return this.get('applicationController').renderPreview();
     },
 
-    showResponse2() {
-      HB.showResponse = 2;
+    showAnswer2() {
+      hellobar('base.preview').setAnswerToDisplay(2);
       this.set('questionTabSelection', 'TabAnswer2');
       return this.get('applicationController').renderPreview();
     }
