@@ -61,6 +61,7 @@ export default Ember.Controller.extend({
               let list = iterable[i];
               if (list.id === data.id) {
                 Ember.set(list, 'name', data.name);
+                Ember.set(list, 'provider_name', data.provider_name);
                 break;
               }
             }
