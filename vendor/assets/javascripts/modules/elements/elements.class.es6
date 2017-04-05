@@ -135,6 +135,8 @@ hellobar.defineModule('elements.class',
 
             this.useGoogleFont();
             if (preview.isActive()) {
+              const brandingLink = this.w.contentDocument.querySelector('.js-branding');
+              brandingLink.addEventListener('click', (event) => event.preventDefault());
               this.useFroala();
             }
           }.bind(this), 1);
