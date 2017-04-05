@@ -8,6 +8,15 @@ describe Users::OmniauthCallbacksController do
     request.env['devise.mapping'] = Devise.mappings[:user]
   end
 
+  def stub_omniauth(email: 'test@test.com', uid: 'abc123', credentials: nil)
+    request.env['omniauth.auth'] = {
+      'info' => { 'email' => email },
+      'uid' => uid,
+      'provider' => 'google_oauth2',
+      'credentials' => credentials
+    }
+  end
+
   describe 'POST google_oauth2' do
     let(:send_request) { post :google_oauth2 }
 
@@ -17,12 +26,7 @@ describe Users::OmniauthCallbacksController do
       let(:uid) { 'abc123' }
 
       before do
-        request.env['omniauth.auth'] = {
-          'info' => { 'email' => user.email },
-          'uid' => uid,
-          'provider' => 'google_oauth2',
-          'credentials' => credentials
-        }
+        stub_omniauth email: user.email, uid: uid, credentials: credentials
       end
 
       it 'redirects to new_site_path with a URL param' do
@@ -47,13 +51,12 @@ describe Users::OmniauthCallbacksController do
     end
 
     context 'when user does not exist' do
+      before do
+        stub_omniauth
+      end
+
       context 'when new_site_url session is set' do
         it 'redirects to continue_create_site_path' do
-          request.env['omniauth.auth'] = {
-            'info' => { 'email' => 'test@test.com' },
-            'uid' => 'abc123',
-            'provider' => 'google_oauth2'
-          }
           session[:new_site_url] = 'www.test.com'
 
           send_request
@@ -64,12 +67,6 @@ describe Users::OmniauthCallbacksController do
 
       context 'when new_site_url is not set' do
         it 'redirects to the default path' do
-          request.env['omniauth.auth'] = {
-            'info' => { 'email' => 'test@test.com' },
-            'uid' => 'abc123',
-            'provider' => 'google_oauth2'
-          }
-
           send_request
 
           expect(response).to redirect_to(new_site_path)
@@ -78,11 +75,7 @@ describe Users::OmniauthCallbacksController do
 
       context 'when user has not been saved' do
         before do
-          request.env['omniauth.auth'] = {
-            'info' => { 'email' => '' },
-            'uid' => 'abc123',
-            'provider' => 'google_oauth2'
-          }
+          stub_omniauth email: ''
         end
 
         it 'redirects to root_path' do
@@ -112,14 +105,9 @@ describe Users::OmniauthCallbacksController do
 
         context 'without validation errors' do
           before do
-            request.env['omniauth.auth'] = {
-              'info' => { 'email' => 'test@test.com' },
-              'uid' => 'abc123',
-              'provider' => 'google_oauth2'
-            }
+            stub_omniauth
             user = double(persisted?: false, errors: [])
-            allow(user).to receive(:save!).and_raise(StandardError)
-            allow(User).to receive(:find_for_google_oauth2).and_return(user)
+            allow(User).to receive(:find_for_google_oauth2).and_raise(ActiveRecord::ActiveRecordError)
           end
 
           it 'sets flash[:error]' do
