@@ -231,6 +231,7 @@ class User < ActiveRecord::Base
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
     elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
+      # TODO: deprecated case. use #update_authentication directly
       user.first_name = info['first_name'] if info['first_name'].present?
       user.last_name = info['last_name'] if info['last_name'].present?
 
@@ -264,6 +265,23 @@ class User < ActiveRecord::Base
     end
 
     user
+  end
+
+  def update_authentication(info:, credentials:, uid:, provider:)
+    authentication = authentications.find_by(uid: uid, provider: provider)
+
+    self.first_name = info['first_name'] if info['first_name'].present?
+    self.last_name = info['last_name'] if info['last_name'].present?
+
+    if credentials && persisted?
+      authentication.update(
+        refresh_token: credentials.refresh_token,
+        access_token: credentials.token,
+        expires_at: Time.at(credentials.expires_at)
+      )
+    end
+
+    save!
   end
 
   def self.find_or_invite_by_email(email, _site)
