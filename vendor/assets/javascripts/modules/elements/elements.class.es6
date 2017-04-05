@@ -655,7 +655,7 @@ hellobar.defineModule('elements.class',
       }
 
       handleCtaClick() {
-        if (preview.inActive()) {
+        if (preview.isActive()) {
           return false;
         } else {
           elementsCollecting.submitEmail(this,
