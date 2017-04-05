@@ -23,7 +23,7 @@ class SiteGenerator
       </head>
       <body style="background-color: #FFFFFF;">
       <a onclick="console.log('BUTTON PUSHED')">HERE</a>
-      <div style="height:500px; background-color: yellow;">TOP OF PAGE CONTENT<script id="hb-cu-2">window.onload = function() {HB.showContentUpgrade(1)};</script></div>
+      <div style="height:500px; background-color: yellow;">TOP OF PAGE CONTENT<script id="hb-cu-2">window.onload = function() {hellobar('contentUpgrades').show(1);};</script></div>
       <div style="height:500px;">
         <h1>Autofills testing playground</h1>
         <p>In order to test the autofills you need to:</p>

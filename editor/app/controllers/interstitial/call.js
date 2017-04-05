@@ -27,7 +27,8 @@ export default Ember.Controller.extend({
     'model.phone_country_code'
   ),
 
-  countries: HB.countryCodes,
+  // TODO get rid of this global usage
+  countries: HBEditor.countryCodes,
 
   selectedCountry: function() {
     return _.find(this.get('countries'), (country) => country.code === this.get('model.phone_country_code'))

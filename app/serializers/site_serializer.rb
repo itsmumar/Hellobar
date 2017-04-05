@@ -30,12 +30,10 @@ class SiteSerializer < ActiveModel::Serializer
 
   def contact_lists
     object.contact_lists.map do |list|
-      identity = list.identity_id && Identity.find_by(id: list.identity_id)
-      provider_name = identity && identity.provider.titlecase || 'Hello Bar'
       {
         id: list.id,
         name: list.name,
-        provider: provider_name
+        provider_name: list.provider_name
       }
     end
   end

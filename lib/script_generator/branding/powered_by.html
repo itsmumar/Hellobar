@@ -1,4 +1,4 @@
-<a href="{{siteElement.branding_url}}&hbt=pb2l" target="_parent" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
+<a href="{{siteElement.branding_url}}&hbt=pb2l" target="_parent" style="{{siteElement.shouldShowBranding() ? '' : 'display:none'}}">
   <div class="hb-logo-line">
     Powered By
   </div>
