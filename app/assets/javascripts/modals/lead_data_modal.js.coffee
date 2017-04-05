@@ -1,0 +1,82 @@
+class @LeadDataModal extends Modal
+  canClose: true
+  modalName: 'lead-data'
+
+  constructor: (@options = {}) ->
+    industries = ["Church", "Corporate", "Community", "Custom App", "Event", "eCommerce", "Education", "Entertainment",
+      "Financial", "Gaming Poker", "Hair Salon", "Hotel", "Industrial", "Law Firm", "Medical/Health",
+      "Marketing Services", "Mobile App Developer", "Music Artists", "NPO", "Organizational", "Personal App",
+      "Professional Services", "Practitioner", "Publishing", "Real Estate", "Restaurant", "Small Business",
+      "Sell Products", "Sell Services", "Social", "Spa/Gym", "Speaker", "Sports", "Travel", "Messing Around", "Other"]
+    industries = industries.map (industry) => {name: industry, value: industry.toLowerCase()}
+
+    roles = ["Creative Designer", "Developer", "Marketing", "Management", "Student", "Other"]
+    roles = roles.map (role) => {name: role, value: role.toLowerCase()}
+
+    companySizes = ["Just Me", "1-10", "11-25", "25-50", "50+"]
+    companySizes = companySizes.map (size) => {name: size, value: size.toLowerCase()}
+
+    trafficItems = ["1 000", "10 000", "50 000", "100 000", "100 000+"]
+    trafficItems = trafficItems.map (size) => {name: size, value: size.toLowerCase()}
+
+    challenges = [
+      {name: "Capture More Emails", value: "more_emails"},
+      {name: "Generate More Sales", value: "more_sales"},
+      {name: "Conversion Optimization", "conversion_optimization"}
+    ]
+
+    @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
+    @$modal.appendTo($("body"))
+    @_bind_buttons()
+    @_bind_inputs()
+    super(@$modal)
+
+  close: ->
+    return unless @canClose
+    @_saveData()
+    super
+
+  _saveData: ->
+    data = $('form.screen-1').serializeArray().reduce @_reducer, {}
+    data = $('form.screen-2').serializeArray().reduce @_reducer, data
+
+    $.post('/leads', data)
+
+  _reducer: (result, item) ->
+    result[item.name] = item.value
+    result
+
+  _validateFirstScreen: ->
+    @$modal.find('form.screen-1').get(0).reportValidity()
+
+  _validateSecondScreen: ->
+    @$modal.find('form.screen-2').get(0).reportValidity()
+
+  _bind_inputs: ->
+    @$modal.find('.js-not-interesting').on 'change', =>
+      @canClose = true
+      @close()
+
+    @$modal.find('.js-interesting').on 'change', =>
+      @$modal.find('.js-phone-number').show()
+
+    @$modal.find('input[name="phone_number"]').on 'change', =>
+      @canClose = true
+      @$modal.find('.js-close').show()
+
+  _bind_buttons: ->
+    $('.js-close').on 'click', =>
+      @close()
+
+    $('.js-prev-screen').on 'click', =>
+      @$modal.find('.screen-1').show()
+      @$modal.find('.screen-2').hide()
+      @$modal.find('.js-prev-screen').hide()
+      @$modal.find('.js-next-screen').show()
+
+    $('.js-next-screen').on 'click', =>
+      if @_validateFirstScreen()
+        @$modal.find('.screen-1').hide()
+        @$modal.find('.screen-2').show()
+        @$modal.find('.js-prev-screen').show()
+        @$modal.find('.js-next-screen').hide()
