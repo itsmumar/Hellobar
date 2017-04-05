@@ -39,7 +39,11 @@ describe Admin::AccessController do
 
   describe 'POST process_step1' do
     it 'sends a "validate access code" email to admin if they need one' do
-      allow(Admin).to receive(:find_by).with(email: admin.email).and_return(admin)
+      allow(Admin).to receive(:find_by)
+        .with(hash_excluding(email: admin.email)).and_return nil
+      allow(Admin).to receive(:find_by)
+        .with(email: admin.email).and_return(admin)
+
       allow(admin).to receive(:validated_access_token?).and_return(false)
 
       expect(admin).to receive(:send_validate_access_token_email!)

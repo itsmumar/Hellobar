@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_action :record_tracking_param
   before_action :track_h_visit
+  before_action :set_raven_context
   after_action :store_last_requested_path
 
   rescue_from ::Google::Apis::AuthorizationError do |exception|
@@ -120,6 +121,13 @@ class ApplicationController < ActionController::Base
       end
     end
     Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
+  end
+
+  def set_raven_context
+    Raven.user_context(id: current_user.id, email: current_user.email) if current_user
+
+    # TODO: change to `params.to_unsafe_h` when Rails is upgraded to 4.2+
+    Raven.extra_context params: params.to_h, url: request.url
   end
 
   def load_site
