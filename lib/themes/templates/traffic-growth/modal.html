@@ -36,7 +36,7 @@
         <div class="hb-input-block hb-editable-block hb-editable-block-input builtin-email"
              data-hb-editable-block="f-builtin-email">
           <label for="f-builtin-email">Your email</label>
-          <input id="f-builtin-email" type="text" placeholder="Your email" {{HB.isPreviewMode ? '' : 'required'}} value="" autocomplete="off">
+          <input id="f-builtin-email" type="text" placeholder="Your email" {{hellobar('base.preview').isActive() ? '' : 'required'}} value="" autocomplete="off">
         </div>
 
         <div class="cta" onclick="{{siteElement.me}}.handleCtaClick()">
@@ -57,8 +57,8 @@
         </div>
       </a>
 
-      <div class="hb-logo {{HB.branding_template()}}" style="{{(HB.t(siteElement.show_branding) || !HB.CAP.no_b) ? '' : 'display:none'}}">
-        {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
+      <div class="hb-logo {{siteElement.brandingName()}}" style="{{siteElement.shouldShowBranding() ? '' : 'display:none'}}">
+        {{siteElement.renderBranding()}}
       </div>
     </div>
   </div>

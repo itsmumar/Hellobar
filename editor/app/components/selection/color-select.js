@@ -131,12 +131,13 @@ export default Ember.Component.extend({
   }).observes('isSelecting').on('didInsertElement'),
 
   togglePreview: ( function () {
+    const siteSecret = hellobar('base.site').secret();
     if (this.get('isSelecting')) {
       // Hide the preview frame for Modal and Takeovers so that they can select colors
-      return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeOut();
+      return $(`\#${siteSecret}-container.HB-Takeover, \#${siteSecret}-container.HB-Modal`).fadeOut();
     } else {
       // Show the Modal and Takeover in case it was hidden
-      return $(`\#${window.HB_PS}-container.HB-Takeover, \#${window.HB_PS}-container.HB-Modal`).fadeIn();
+      return $(`\#${siteSecret}-container.HB-Takeover, \#${siteSecret}-container.HB-Modal`).fadeIn();
     }
   }).observes('isSelecting'),
 

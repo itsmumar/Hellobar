@@ -185,13 +185,7 @@
         <input id="f-builtin-email" class="email" placeholder="Email">
 
         <button class="cta"
-                onclick="window.parent.HB.submitEmail(HB.CONTENT_UPGRADES[{{siteElement.id}}],
-                                                        document.getElementById('hb-fields-form'),
-                                                        (document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0]),
-                                                        {{HB.stringLiteral(siteElement.thank_you_text)}},
-                                                        true,
-                                                        '{{siteElement.download_link}}');
-                          return false;">
+                onclick="hellobar('contentUpgrades').submit({{siteElement.id}}); return false;">
           <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
                data-hb-editable-block="action_link"
                data-hb-inline-editor-placeholder="Action">

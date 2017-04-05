@@ -222,7 +222,7 @@ describe Site do
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content(false)
 
-      expect(script).to match(/HB_SITE_ID/)
+      expect(script).to include "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }')"
       expect(script).to include(element.id.to_s)
     end
 
@@ -230,7 +230,7 @@ describe Site do
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content
 
-      expect(script).to match(/HB_SITE_ID/)
+      expect(script).to include ".siteId(#{ site.id }).siteUrl(\"#{ site.url }\")"
       expect(script).to include(element.id.to_s)
     end
   end

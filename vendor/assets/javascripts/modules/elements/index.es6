@@ -1,0 +1,11 @@
+//= require ./elements.class.bar
+//= require ./elements.class
+//= require ./elements.class.slider
+//= require ./elements.collecting
+//= require ./elements.conversion
+//= require ./elements.data
+//= require ./elements
+//= require ./elements.injection
+//= require ./elements.intents
+//= require ./elements.rules
+//= require ./elements.visibility

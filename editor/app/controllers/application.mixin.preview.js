@@ -116,13 +116,11 @@ export default Ember.Mixin.create({
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
-    HB.isPreviewMode = true;
-    HB.preventElementClosing = true;
-    HB.previewMode = this.get('isMobile') ? 'mobile' : 'fullscreen';
-    if (HB.removeAllSiteElements) {
+    const elements = hellobar('elements');
+    if (elements.removeAllSiteElements) {
       this.get('inlineEditing').cleanup();
-      HB.removeAllSiteElements();
-      HB.addToPage(HB.createSiteElement(previewElement));
+      elements.removeAllSiteElements();
+      elements.createAndAddToPage(previewElement);
     }
   }
 

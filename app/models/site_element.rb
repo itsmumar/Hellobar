@@ -260,7 +260,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_script_tag
-    '<script id="hb-cu-' + id.to_s + '">window.onload = function() {HB.showContentUpgrade(' + id.to_s + ')};</script>'
+    '<script id="hb-cu-' + id.to_s + '">window.onload = function() {hellobar("contentUpgrades").show(' + id.to_s + ');};</script>'
   end
 
   def content_upgrade_wp_shortcode
