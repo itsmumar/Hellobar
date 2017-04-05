@@ -86,6 +86,13 @@ hellobar.defineModule('elements.class.bar',
         dom.setClass(domElement, 'multiline', domElement.clientHeight > barBounds);
       }
 
+      onPullDownSet() {
+        // if the pusher exists, unhide it since it should be hidden at this point
+        if (this.pushes_page_down && pusher) {
+          dom.showElement(pusher, '');
+        }
+      }
+
       barSizeCssClass() {
         const size = this.size;
         if (size === 'large' || size === 'regular') {

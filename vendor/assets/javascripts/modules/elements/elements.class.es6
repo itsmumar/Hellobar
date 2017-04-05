@@ -452,10 +452,8 @@ hellobar.defineModule('elements.class',
             // (because the user has asked the bar to be shown again)
             elementsVisibility.expireVisibilityControlCookie('dismiss', this.id);
 
-            // if the pusher exists, unhide it since it should be hidden at this point
-            if (this.pushes_page_down && this.pusher) {
-              dom.showElement(this.pusher, '');
-            }
+            this.onPullDownSet && this.onPullDownSet();
+
           }.bind(this);
 
           var svgArrow = '<svg xmlns="http://www.w3.org/2000/svg" width="11px" height="11px" viewBox="43.6 92.5 315 315"><path d="M49.6 92.5c-3.3 0-6 2.7-6 6v303c0 3.3 2.7 6 6 6h303c3.3 0 6-2.7 6-6v-303c0-3.3-2.7-6-6-6H49.6zM229.6 254.3c-3.3 0-6 2.7-6 6V360c0 3.3-2.7 6-6 6h-33c-3.3 0-6-2.7-6-6v-99.7c0-3.3-2.7-6-6-6H99.2c-3.3 0-4.2-2-2-4.5l99.9-111.4c2.2-2.5 5.8-2.5 8 0l99.9 111.4c2.2 2.5 1.3 4.5-2 4.5H229.6z"/></svg>';
