@@ -79,6 +79,8 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (5.0.1.20140414130214)
     ast (2.3.0)
+    autoprefixer-rails (6.7.7.1)
+      execjs
     avatar (0.2.0)
     aweber (1.6.1)
       json
@@ -100,9 +102,6 @@ GEM
       debug_inspector (>= 0.0.1)
     bootstrap-sass (3.1.1.1)
       sass (~> 3.2)
-    bourbon (3.2.3)
-      sass (~> 3.2)
-      thor
     brakeman (3.4.1)
     builder (3.2.3)
     capistrano (3.6.1)
@@ -118,15 +117,15 @@ GEM
     capistrano-rails (1.2.3)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capybara (2.12.0)
+    capybara (2.13.0)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-webkit (1.12.0)
-      capybara (>= 2.3.0, < 2.13.0)
+    capybara-webkit (1.14.0)
+      capybara (>= 2.3.0, < 2.14.0)
       json
     capybara_discoball (0.0.2)
       capybara (~> 2.7)
@@ -569,13 +568,13 @@ DEPENDENCIES
   active_model_serializers
   activemerchant (~> 1.44.1)
   addressable
+  autoprefixer-rails
   avatar
   aweber
   aws-sdk
   better_errors
   binding_of_caller
   bootstrap-sass (~> 3.1.1)
-  bourbon (~> 3.2.0)
   brakeman
   capistrano
   capistrano-bundler

@@ -67,10 +67,10 @@
         position: absolute
         font-size: 1.25rem
         font-weight: lighter
-        @include transition()
+        transition: all 0.15s ease-out 0s
         @include vertical-align()
         @include use-hb-icon('\f106')
-      
+
       i.hellobar-icon-mail
         color: #666
 
@@ -97,7 +97,7 @@
 
           &::after
             border: 1px solid #666
-          
+
     /*-----------  STATE: Is Selected  -----------*/
 
     &:not(.is-selected)
@@ -133,7 +133,7 @@
 
   .step-link-wrapper
     margin-bottom: -1em
-    @include transition()
+    transition: all 0.15s ease-out 0s
 
     .step-link-block
       opacity: 1
@@ -141,13 +141,13 @@
       position: relative
       max-height: 5.5em
       margin-bottom: 0.67em
-      @include transition(0.67s)
+      transition: 0.67s
       @include clearfix()
 
       i
         float: left
         font-size: 1.75em
-        @include transition()
+        transition: all 0.15s ease-out 0s
 
       h6, p
         width: 82%
@@ -211,10 +211,10 @@
 
     nav
       margin-bottom: 1.75em
-      @include justify-content(space-between)
-      @include align-items(center)
-      @include flex-flow(row nowrap)
-      @include display(flex)
+      justify-content: space-between
+      align-items: center
+      flex-flow: row nowrap
+      display: flex
 
       .button
         padding-top: 0.55em
@@ -225,7 +225,7 @@
         height: 10px
         border-radius: 1em
         background-color: $grayLight
-        @include transition()
+        transition: all 0.15s ease-out 0s
 
         &:hover
           cursor: hover
@@ -415,7 +415,7 @@
         background-color: $white
         box-shadow: inset 0 0 0 2px $white
         @include inline-block()
-        @include transition()
+        transition: all 0.15s ease-out 0s
 
       input
         margin: 0 0.25em !important
@@ -426,7 +426,7 @@
       span
         font-size: 0.85em
         line-height: 100%
-        @include user-select(none)
+        user-select: none
         @include inline-block()
 
         small

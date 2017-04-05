@@ -4,11 +4,11 @@
   .package-block
     margin-bottom: 1.5em
     border-color: $grayLighter
-    @include justify-content(flex-start)
-    @include align-content(center)
-    @include align-items(stretch)
-    @include flex-flow(row nowrap)
-    @include display(flex)
+    justify-content: flex-start
+    align-content: center
+    align-items: stretch
+    flex-flow: row nowrap
+    display: flex
 
     > *
       padding-top: 1.5em
@@ -21,7 +21,7 @@
       color: $white
       border-width: 0
       line-height: 145%
-      @include flex(1 0 16%)
+      flex: 1 0 16%
 
       .package-name
         font-size: 1.1em
@@ -46,11 +46,11 @@
 
     .package-features
       border-width: 1px 1px 1px 0
-      @include justify-content(center)
-      @include align-content(center)
-      @include align-items(center)
-      @include flex-flow(row nowrap)
-      @include display(flex)
+      justify-content: center
+      align-content: center
+      align-items: center
+      flex-flow: row nowrap
+      display: flex
 
       ul
         margin: -1em 0
@@ -79,7 +79,7 @@
       .package-status
         padding-right: 1em
         position: relative
-        @include flex(1 0 25%)
+        flex: 1 0 25%
 
         p
           color: $gray

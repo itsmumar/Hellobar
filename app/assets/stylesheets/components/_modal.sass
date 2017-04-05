@@ -11,7 +11,7 @@
   overflow-x: auto
   overflow-y: scroll
   background-color: rgba(0,0,0,0)
-  @include transition(top 0 $modalSpeed, background-color $modalSpeed)
+  transition: top 0 $modalSpeed, background-color $modalSpeed
 
   .modal-block
     opacity: 0
@@ -23,7 +23,7 @@
     border-radius: $radiusSm
     background-color: $white
     box-shadow: $shadowSubtle
-    @include transition(margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2)
+    transition: margin-top $modalSpeed, opacity $modalSpeed/2 $modalSpeed/2
 
     > .icon-close
       top: 1em
@@ -31,7 +31,7 @@
       cursor: pointer
       color: $grayLight
       position: absolute
-      @include transition()
+      transition: all 0.15s ease-out 0s
 
       &:hover
         color: $orange
@@ -79,9 +79,9 @@
   &.show-modal
     top: 0
     background-color: rgba(0,0,0,0.33)
-    @include transition(top 0, background-color $modalSpeed)
+    transition: top 0, background-color $modalSpeed
 
     .modal-block
       opacity: 1
       margin-top: 0
-      @include transition(margin-top $modalSpeed, opacity $modalSpeed)
+      transition: margin-top $modalSpeed, opacity $modalSpeed
