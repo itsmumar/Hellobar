@@ -41,7 +41,7 @@ class ScriptGenerator < Mustache
   end
   load_templates
 
-  attr_reader :site, :options, :manifest
+  attr_reader :site, :options, :manifest, :timestamp, :version
   delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
@@ -52,6 +52,7 @@ class ScriptGenerator < Mustache
   def generate_script
     # Re-read the template
     self.class.load_templates if Rails.env.development?
+    initialize_version_and_timestamp
 
     if options[:compress]
       uglifier.compress(render)
@@ -458,5 +459,10 @@ class ScriptGenerator < Mustache
 
   def manifest(fresh = false)
     @manifest ||= self.class.manifest(fresh || options[:preview])
+  end
+
+  def initialize_version_and_timestamp
+    @timestamp = Time.current
+    @version = GitUtils.current_commit
   end
 end
