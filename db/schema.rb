@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221212712) do
+ActiveRecord::Schema.define(version: 20170404134709) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -223,6 +223,23 @@ ActiveRecord::Schema.define(version: 20170221212712) do
     t.integer "last_prop_processed",            null: false
     t.integer "last_visitor_user_id_processed", null: false
   end
+
+  create_table "leads", force: true do |t|
+    t.string   "industry"
+    t.string   "job_role"
+    t.string   "company_size"
+    t.string   "estimated_monthly_traffic"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "challenge"
+    t.boolean  "interesting"
+    t.string   "phone_number"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "leads", ["user_id"], name: "index_leads_on_user_id", using: :btree
 
   create_table "payment_method_details", force: true do |t|
     t.integer  "payment_method_id"

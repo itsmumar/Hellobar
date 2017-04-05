@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :authentications, dependent: :destroy
   has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id'
+  has_one :lead
 
   has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: 'UserOnboardingStatus'
   has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
