@@ -276,7 +276,7 @@ describe Site do
       Hellobar::Settings[:store_site_scripts_locally] = true
     end
 
-    it 'generates and uploads the script content for a site' do
+    it 'generates and uploads the script content for a site', freeze: true do
       allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script_content = site.script_content(true)
