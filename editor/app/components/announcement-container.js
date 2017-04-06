@@ -5,7 +5,7 @@ export default Ember.Component.extend({
   announcementTracking: Ember.inject.service(),
   imaging: Ember.inject.service(),
 
-  currentAnnouncementName: 'templates',
+  currentAnnouncementName: null,
   currentAnnouncementWasClosed: false,
 
   buttonsAreVisible: false,
