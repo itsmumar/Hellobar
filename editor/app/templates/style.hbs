@@ -3,9 +3,11 @@
 
   <div class="{{elementTypeListCssClasses}}">
     {{#link-to 'style.bar' class='step-link-block'}}
-      <i class="icon-bar"></i>
-      <h6>Bar</h6>
-      <p>Show a bar at the top of your site</p>
+      <span {{action 'closeDropdown'}}>
+        <i class="icon-bar"></i>
+        <h6>Bar</h6>
+        <p>Show a bar at the top of your site</p>
+      </span>
     {{/link-to}}
 
     {{#if shouldShowBarThemeInfo}}
@@ -15,10 +17,12 @@
     {{#if notOnlyTopBarStyleIsAvailable}}
 
       {{#link-to 'style.modal' class='step-link-block'}}
-        <i class="icon-modal"></i>
-        <h6>Modal</h6>
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-modal"></i>
+          <h6>Modal</h6>
 
-        <p>Pop up a window in the middle of the screen</p>
+          <p>Pop up a window in the middle of the screen</p>
+        </span>
       {{/link-to}}
 
       {{#if shouldShowModalThemeInfo}}
@@ -26,10 +30,12 @@
       {{/if}}
 
       {{#link-to 'style.slider' class='step-link-block'}}
-        <i class="icon-modal"></i>
-        <h6>Slider</h6>
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-modal"></i>
+          <h6>Slider</h6>
 
-        <p>Show a small window on the bottom of your site</p>
+          <p>Show a small window on the bottom of your site</p>
+        </span>
       {{/link-to}}
 
       {{#if shouldShowSliderThemeInfo}}
@@ -37,10 +43,12 @@
       {{/if}}
 
       {{#link-to 'style.takeover' class='step-link-block'}}
-        <i class="icon-modal"></i>
-        <h6>Page Takeover</h6>
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-modal"></i>
+          <h6>Page Takeover</h6>
 
-        <p>Show a window that totally covers your webpage content</p>
+          <p>Show a window that totally covers your webpage content</p>
+        </span>
       {{/link-to}}
 
       {{#if shouldShowTakeoverThemeInfo}}
@@ -51,9 +59,11 @@
 
     {{#if canUseCustomHtml}}
     {{#link-to 'style.custom' class='step-link-block'}}
-      <i class="icon-modal"><></i>
-      <h6>Custom HTML</h6>
-      <p>Custom HTML</p>
+      <span {{action 'closeDropdown'}}>
+        <i class="icon-modal"><></i>
+        <h6>Custom HTML</h6>
+        <p>Custom HTML</p>
+      </span>
     {{/link-to}}
     {{/if}}
 
