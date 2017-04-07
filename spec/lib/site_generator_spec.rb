@@ -46,7 +46,7 @@ describe SiteGenerator do
   end
 
   describe '#generate_html' do
-    it "includes the site's script content", freeze: true do
+    it "includes the site's script content", :freeze do
       allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
       generator = described_class.new(site.id)
 
