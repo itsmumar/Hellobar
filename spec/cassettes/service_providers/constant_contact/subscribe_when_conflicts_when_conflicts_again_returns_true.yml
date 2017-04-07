@@ -1,0 +1,362 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 22:36:28 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-127.mashery.com
+      X-Powered-By:
+      - ''
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:28 GMT
+- request:
+    method: post
+    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: UTF-8
+      string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com"}],"lists":[{"id":"1552534540","name":"General
+        Interest","status":"ACTIVE","contact_count":2}],"first_name":null,"last_name":null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+      Content-Length:
+      - '197'
+  response:
+    status:
+      code: 409
+      message: Conflict
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 07 Apr 2017 22:36:30 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1e-117.mashery.com
+      X-Powered-By:
+      - ''
+      Content-Length:
+      - '126'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAC2MQQrDMAwEv2J0LnpATr30FaEEYautiW0VSQ1NSv5eB3Jbhpkdf8CqotPMKwzwcn+jOfnHkCvlMlFKymYYpT1Kjg6XM6id0pN7dDvEcIqBmktDk036WK5RxUwW1v5QAxVlSmvgbzY3hP3+B6lXgiiBAAAA
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:30 GMT
+- request:
+    method: get
+    uri: https://api.constantcontact.com/v2/contacts?api_key=8pczzkqa8ddphtn4nx7kra6e&email=anton.sozontov@crossover.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 22:36:31 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-109.mashery.com
+      X-Powered-By:
+      - ''
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAHVSXU/bMBT9L35uKttJFpInWOmkPNBuXYfEpsly45vhYftGscuAqv99bmkhRfB2z73nfpxjb4iFIEm1IZ38o50MGl1E2+2I9ODXJnhS/doQrUhFWFpkZUkzzsiI+CDDOhbJxWRZX09jppUPEcZAKhV7Pexaf4+Iw3AMG3St7i3Eaa00HkbEaH+yIs95nmZ5Rt9ZsY0TPK77Bna5r3WkgJXaiOHCwyDZshLYiiZsBSxhDIrkjK54ojIJOS95k7bpuyoOJ4qXymwuJvPZl3pxdbGs5zOxmH77US+ml5GLXRDaidebJnvG5xtxXX+vl/PFK0fJsGNwyoqEZgktlpxXvKzSszGl9OdbKTsFLqAbe3zCGNyfNz16j/fQjxu0eyu6Hlr9IJy08Ox7vNuHAbZaKQODhJEn9b+4EkEHc4Bxbifd44BwixZEd4vugP9hfzfEDRhzgtc+oBWtBqOOL95DVK4+1l8c9VtUOnZ+QE0/VfyF+my4UPHnarN/Pemlj6Zs/wNv7Wc5zwIAAA==
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:32 GMT
+- request:
+    method: put
+    uri: https://api.constantcontact.com/v2/contacts/1374990421?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: UTF-8
+      string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com","id":"af19e1b0-1be1-11e7-80b2-d4ae5292c3f3","status":"ACTIVE","confirm_status":"NO_CONFIRMATION_REQUIRED","opt_in_source":"ACTION_BY_VISITOR","opt_in_date":"2017-04-07T22:29:38.000Z"}],"lists":[{"id":"1552534540","status":"ACTIVE"},{"id":"1552534540","name":"General
+        Interest","status":"ACTIVE","contact_count":2}],"first_name":"","last_name":"","id":"1374990421","status":"ACTIVE","fax":"","addresses":[],"notes":[],"confirmed":false,"source":"API","prefix_name":"","middle_name":"","job_title":"","company_name":"","home_phone":"","work_phone":"","cell_phone":"","custom_fields":[],"source_details":"Aasas"}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+      Content-Length:
+      - '677'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 22:36:33 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-109.mashery.com
+      X-Powered-By:
+      - ''
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAHVR0U7CMBT9lz0z0nabYzyJiMkeBJ1IosY0Zb0L1W5d1oIo4d8tsMkw8HbPPaf33nO6cQR3+g72Qj+KkE+w03G0YWapbXcwnMazke1kbG2hLRjnFWgNln177ziFMk2ZqiITVQ52Wsakho4jhTY7clOvCAISeH7gozMrtnaCVssqhV3vIbYSyJmQtL2wHsQyHAGeIxfPAbsYQ+j20Jy43GcQkIikXuaddVGfSP+Y8YQOJ+O7OLkfTOPJmCajx+c4Gd1arSoNFQU93jTcK25e6Cx+iqeT5KjhzOwUBOHQRb6LwikhfRL1vV4XIfT638rOQWFU0dXqR9lidZ1WSmu1gqqbqnwfRVlBJta0YDkccrd3a9PCueBcQqsh2Qn/oebUCCNraOeWrPhuCRYqB1ouVFHjL1V9tnEKUp7gpTYqp5kAyZsfr8A655f9h43/XHFhX16Qeld9z2ukh8ApB2Mj2/8e00w721+lIUW4qAIAAA==
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:34 GMT
+- request:
+    method: get
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 22:36:35 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1e-117.mashery.com
+      X-Powered-By:
+      - ''
+      Content-Length:
+      - '138'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:36 GMT
+- request:
+    method: post
+    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: UTF-8
+      string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com"}],"lists":[{"id":"1552534540","name":"General
+        Interest","status":"ACTIVE","contact_count":2}],"first_name":null,"last_name":null}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+      Content-Length:
+      - '197'
+  response:
+    status:
+      code: 409
+      message: Conflict
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 07 Apr 2017 22:36:37 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-109.mashery.com
+      X-Powered-By:
+      - ''
+      Content-Length:
+      - '126'
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAC2MQQrDMAwEv2J0LnpATr30FaEEYautiW0VSQ1NSv5eB3Jbhpkdf8CqotPMKwzwcn+jOfnHkCvlMlFKymYYpT1Kjg6XM6id0pN7dDvEcIqBmktDk036WK5RxUwW1v5QAxVlSmvgbzY3hP3+B6lXgiiBAAAA
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:37 GMT
+- request:
+    method: get
+    uri: https://api.constantcontact.com/v2/contacts?api_key=8pczzkqa8ddphtn4nx7kra6e&email=anton.sozontov@crossover.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 22:36:38 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-115.mashery.com
+      X-Powered-By:
+      - ''
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAHVSy27bMBD8F54tg6SkKtIpqesCOtROHCdAWxQELa4atiRXEOm8DP97aMdu5CK57ezOPmbIDbEQJKk2pJO/tZNBo4toux2RHvzaBE+qnxuiFakIS4usLGnGGRkRH2RYxyK5mCzr22nMtPIxwhhIpWKvh13rrxFxGI5hg67VvYU4rZXGw4gY7U9W5DnP0yzP6DsrtnGCx3XfwC53WUcKWKmNGC48DJItK4GtaMJWwBLGoEjO6IonKpOQ85I3aZu+q+JwovhXmc3FZD77Wi++XSzr+Uwsplc39WL6JXKxC0I78XbTZM/4/F3c1tf1cr544ygZdgxOWZHQLKHFkvOKl1V6NqaU/vhfyk6BC+jGHp8xBvfnTY/e4z304wbt3oquh1Y/CictvPoe7/ZhgK1WysAgYeRJ/Q+uRNDBHGCc20n3NCDcoQXR3aE74Afs/w5xA8ac4LUPaEWrwajji/cQlauP9RdH/RaVjp0fUNNPVZoeqa+GCxV/rjb715Ne+mjK9gVYao0kzwIAAA==
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 22:36:39 GMT
+recorded_with: VCR 2.9.0

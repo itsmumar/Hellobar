@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 15319244-a98b-45a2-814b-704a632095e7
+      User-Agent:
+      - AppConnect Ruby SDK v1.1.2 (ruby 2.3.4p301 (2017-03-30 revision 58214) [x86_64-darwin16])
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - private, no-cache, no-store, max-age=0, must-revalidate, no-cache="Set-Cookie"
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 07 Apr 2017 23:04:04 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Mashery-Responder:
+      - prod-j-worker-us-east-1b-112.mashery.com
+      X-Powered-By:
+      - ''
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
+    http_version: 
+  recorded_at: Fri, 07 Apr 2017 23:04:04 GMT
+recorded_with: VCR 2.9.0
