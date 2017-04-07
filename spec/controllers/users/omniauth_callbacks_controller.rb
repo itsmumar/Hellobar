@@ -57,6 +57,7 @@ describe Users::OmniauthCallbacksController do
     context 'when user does not exist' do
       it 'creates a lead' do
         expect { send_request }.to change(Lead, :count).by(1)
+        expect(Lead.last.user).to eql User.find_by(email: 'test@test.com')
       end
 
       before do
