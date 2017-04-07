@@ -26,7 +26,7 @@ class @Modal
     ), 500
 
   _render: (templateId, context = {}) ->
-    template = Handlebars.compile($("##{templateId}").html())
+    template = Handlebars.compile($("#" + templateId).html())
     $(template(context))
 
   _bindCloseEvents: (callback) ->
