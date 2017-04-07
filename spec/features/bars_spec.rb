@@ -41,7 +41,6 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'existing user can create a site element' do
-    allow_any_instance_of(SigninUserService).to receive(:create_lead)
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345')
     site = create(:site, :with_rule, :with_user)
     user = site.owners.last
@@ -197,7 +196,6 @@ feature 'Adding and editing bars', :js do
   scenario 'User can modify the color settings for a bar' do
     color = 'AABBCC'
 
-    allow_any_instance_of(SigninUserService).to receive(:create_lead)
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
     visit root_path
 
