@@ -1,6 +1,6 @@
 describe ServiceProviders::ConstantContact do
   let(:credentials) { { 'token' => '15319244-a98b-45a2-814b-704a632095e7' } }
-  let(:identity) { Identity.new(provider: 'constantcontact', extra: {}, credentials: credentials ) }
+  let(:identity) { Identity.new(provider: 'constantcontact', extra: {}, credentials: credentials) }
   let(:service_provider) { identity.service_provider }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
@@ -64,13 +64,13 @@ describe ServiceProviders::ConstantContact do
         it 'retries with double opt-in' do
           allow(client)
             .to receive(:add_contact)
-                  .with(credentials['token'], instance_of(ConstantContact::Components::Contact), false)
-                  .and_raise bad_request('not be opted in using')
+            .with(credentials['token'], instance_of(ConstantContact::Components::Contact), false)
+            .and_raise bad_request('not be opted in using')
 
           expect(client)
             .to receive(:add_contact)
-                  .with(credentials['token'], instance_of(ConstantContact::Components::Contact), true)
-                  .and_return(true)
+            .with(credentials['token'], instance_of(ConstantContact::Components::Contact), true)
+            .and_return(true)
 
           expect(service_provider.subscribe('1552534540', 'bobloblaw@lawblog.co', '', false)). to be_truthy
         end
