@@ -20,7 +20,7 @@ class @LeadDataModal extends Modal
     super(@$modal)
 
   close: ->
-    return unless @_validateSecondScreen() && @canClose
+    return unless @_validateFirstScreen() && @_validateSecondScreen() && @canClose
     @_saveData()
     super
 
@@ -45,12 +45,12 @@ class @LeadDataModal extends Modal
 
   _bindInputs: ->
     @$modal.find('.js-not-interesting').on 'change', =>
-      @$modal.find('.js-phone-number').attr('required', false)
+      @$modal.find('.js-phone-number').removeAttr('required')
       @canClose = true
       @close()
 
     @$modal.find('.js-interesting').on 'change', =>
-      @$modal.find('.js-phone-number').attr('required', true).show()
+      @$modal.find('.js-phone-number').attr('required', 'required').show()
 
     @$modal.find('input[name="phone_number"]').on 'keyup change', (event) =>
       if $(event.target).val() == ""
