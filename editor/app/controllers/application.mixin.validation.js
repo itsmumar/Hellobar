@@ -5,6 +5,7 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
   validation: Ember.inject.service(),
+  bus: Ember.inject.service(),
 
   initializeValidation() {
     const validationRules = [
@@ -25,7 +26,13 @@ export default Ember.Mixin.create({
         }
       }
     ];
-    this.get('validation').add('main', validationRules);
+    this.get('validation').add('phone_number', validationRules);
+    this.get('bus').subscribe('hellobar.core.validation.failed', (failures) => {
+      this.set('validationMessages', failures.map(failure => failure.error));
+    });
+    this.get('bus').subscribe('hellobar.core.validation.succeeded', () => {
+      this.set('validationMessages', null);
+    });
   }
 
 });
