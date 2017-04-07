@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=constantcontact-app-key
     body:
       encoding: US-ASCII
       string: ''
@@ -48,6 +48,6 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 23:04:02 GMT
 recorded_with: VCR 2.9.0

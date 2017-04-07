@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/lists?api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/lists?api_key=constantcontact-app-key
     body:
       encoding: US-ASCII
       string: ''

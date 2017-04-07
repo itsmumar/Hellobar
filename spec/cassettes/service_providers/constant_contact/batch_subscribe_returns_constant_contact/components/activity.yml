@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.constantcontact.com/v2/activities/addcontacts?api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/activities/addcontacts?api_key=constantcontact-app-key
     body:
       encoding: UTF-8
       string: '{"import_data":[{"first_name":"Anton","last_name":null,"email_addresses":["anton.sozontov@crossover.com"]}],"lists":["1552534540"],"column_names":["E-Mail","First
@@ -53,6 +53,6 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAKtWykxRslKySDJKSjE2N9A1TEo11zU0BBIWSZYpuikmiammRuampuapiUo6SiWVBalA1Y4uLvHO/n4hjs4hwUDR1KKi/KL45PzSvBIlKwMdpeT8vJLE5BKYiGEtADvgpT5lAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 23:11:34 GMT
 recorded_with: VCR 2.9.0

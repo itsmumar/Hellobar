@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=constantcontact-app-key
     body:
       encoding: US-ASCII
       string: ''
@@ -48,11 +48,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:15 GMT
 - request:
     method: post
-    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=constantcontact-app-key
     body:
       encoding: UTF-8
       string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com"}],"lists":[{"id":"1552534540","name":"General
@@ -101,11 +101,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAC2MQQrDMAwEv2J0LnpATr30FaEEYautiW0VSQ1NSv5eB3Jbhpkdf8CqotPMKwzwcn+jOfnHkCvlMlFKymYYpT1Kjg6XM6id0pN7dDvEcIqBmktDk036WK5RxUwW1v5QAxVlSmvgbzY3hP3+B6lXgiiBAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:17 GMT
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/contacts?api_key=8pczzkqa8ddphtn4nx7kra6e&email=anton.sozontov@crossover.com
+    uri: https://api.constantcontact.com/v2/contacts?api_key=constantcontact-app-key&email=anton.sozontov@crossover.com
     body:
       encoding: US-ASCII
       string: ''
@@ -151,11 +151,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAHVSy27bMBD8F54tg6QkKNIpqesCOtROHCdAWxQELa4atnwIIp2X4X/P2rETuUhuO7uzjxlyQyxESaoN6eQf7WTU3iHabkekh7A2MZDq14ZoRSrC0iIrS5pxRkYkRBnXWCQXk2V9O8VMKx8RYiCVwt4Au9bfI+J8PIaNd63uLeC0VpoAI2J0OFmR5zxPszyjH6zY4oTg130Du9xljRSwUhsxXHgYJFtWAlvRhK2AJYxBkZzRFU9UJiHnJW/SNv1QxeFE8VaZzcVkPvtWL75fLOv5TCymVzf1YvoVub6LQjvxftNkz/jyQ9zW1/VyvnjnKBl3DE5ZkdAsocWS84qXVXo2ppT+/F/KToGL3o2Df/YY3J83vQ/B30M/brzdW9H10OpH4aSFV9/x7hAH2GqlDAwSRp7U//qViDqaA8S5nXRPA8KdtyC6O+8O+MH3/4a4AWNO8DpEb0Wrwajji/eAytXn+oujfuuVxs5PqCmv2JtVr4YLhT9Xm/3rySADmrJ9AWSnO8/PAgAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:18 GMT
 - request:
     method: put
-    uri: https://api.constantcontact.com/v2/contacts/1374990421?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/contacts/1374990421?action_by=ACTION_BY_VISITOR&api_key=constantcontact-app-key
     body:
       encoding: UTF-8
       string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com","id":"af19e1b0-1be1-11e7-80b2-d4ae5292c3f3","status":"ACTIVE","confirm_status":"NO_CONFIRMATION_REQUIRED","opt_in_source":"ACTION_BY_VISITOR","opt_in_date":"2017-04-07T22:29:38.000Z"}],"lists":[{"id":"1552534540","status":"ACTIVE"},{"id":"1552534540","name":"General
@@ -204,11 +204,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAHVR0U7CMBT9lz0z0nabYzyJiMkeBJ1IosY0Zb0L1W5d1oIo4d8tsMkw8HbPPaf33nO6cQR3+g72Qj+KkE+w03G0YWapbXcwnMazke1kbG2hLRjnFWgNln177ziFMk2ZqiITVQ52Wsakho4jhTY7clOvCAISeH7gozMrtnaCVssqhV3vIbYSyJmQtL2wHsQyHAGeIxfPAbsYQ+j20Jy43GcQkIikXuaddVGfSP+Y8YQOJ+O7OLkfTOPJmCajx+c4Gd1arSoNFQU93jTcK25e6Cx+iqeT5KjhzOwUBOHQRb6LwikhfRL1vV4XIfT638rOQWFU0dXqR9lidZ1WSmu1gqqbqnwfRVlBJta0YDkccrd3a9PCueBcQqsh2Qn/oebUCCNraOeWrPhuCRYqB1ouVFHjL1V9tnEKUp7gpTYqp5kAyZsfr8A655f9h43/XHFhX16Qeld9ghrpIXDKwdjI9r/HNNPO9heGwdDHqAIAAA==
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:20 GMT
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/lists/1552534540?api_key=constantcontact-app-key
     body:
       encoding: US-ASCII
       string: ''
@@ -254,11 +254,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAI2KQQrCMBBFryKztjJJEwrZiYh0X1y4KSEZIWAnkExX4t07RxA+f/He+0LJEMB4b/3ovEM4A8eNlD2IqcXPaWahRl3UdImyd3XX2zI/70pSoyiU16yv3KKZBnS6BW3AKZjxgogvLbeay7v8labKEpOsqe4sEOzvAGGaodimAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:22 GMT
 - request:
     method: post
-    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=constantcontact-app-key
     body:
       encoding: UTF-8
       string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com"}],"lists":[{"id":"1552534540","name":"General
@@ -307,11 +307,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAC2MQQrDMAwEv2J0LnpATr30FaEEYautiW0VSQ1NSv5eB3Jbhpkdf8CqotPMKwzwcn+jOfnHkCvlMlFKymYYpT1Kjg6XM6id0pN7dDvEcIqBmktDk036WK5RxUwW1v5QAxVlSmvgbzY3hP3+B6lXgiiBAAAA
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:24 GMT
 - request:
     method: get
-    uri: https://api.constantcontact.com/v2/contacts?api_key=8pczzkqa8ddphtn4nx7kra6e&email=anton.sozontov@crossover.com
+    uri: https://api.constantcontact.com/v2/contacts?api_key=constantcontact-app-key&email=anton.sozontov@crossover.com
     body:
       encoding: US-ASCII
       string: ''
@@ -357,11 +357,11 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAHVSy27bMBD8F54tg6SkKtIpqesCOtROHCdAWxQELa4atnwIIp2X4X/P2rEbuUhuO7uzjxlyQyxESaoN6eRv7WTU3iHabkekh7A2MZDq54ZoRSrC0iIrS5pxRkYkRBnXWCQXk2V9O8VMKx8RYiCVwt4Au9ZfI+J8PIaNd63uLeC0VpoAI2J0OFmR5zxPszyj76zY4oTg130Du9xljRSwUhsxXHgYJFtWAlvRhK2AJYxBkZzRFU9UJiHnJW/SNn1XxeFE8a8ym4vJfPa1Xny7WNbzmVhMr27qxfQLcn0XhXbi7abJnvH5u7itr+vlfPHGUTLuGJyyIqFZQosl5xUvq/RsTCn98b+UnQIXvRsH/+wxuD9veh+Cv4d+3Hi7t6LrodWPwkkLr77j3SEOsNVKGRgkjDyp//ErEXU0B4hzO+meBoQ7b0F0d94d8IPv/w5xA8ac4HWI3opWg1HHF+8BlauP9RdH/dYrjZ0fUNNPFadH6qvhQuHP1Wb/ejLIgKZsXwDUgC46zwIAAA==
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:25 GMT
 - request:
     method: put
-    uri: https://api.constantcontact.com/v2/contacts/1374990421?action_by=ACTION_BY_VISITOR&api_key=8pczzkqa8ddphtn4nx7kra6e
+    uri: https://api.constantcontact.com/v2/contacts/1374990421?action_by=ACTION_BY_VISITOR&api_key=constantcontact-app-key
     body:
       encoding: UTF-8
       string: '{"email_addresses":[{"email_address":"anton.sozontov@crossover.com","id":"af19e1b0-1be1-11e7-80b2-d4ae5292c3f3","status":"ACTIVE","confirm_status":"NO_CONFIRMATION_REQUIRED","opt_in_source":"ACTION_BY_VISITOR","opt_in_date":"2017-04-07T22:29:38.000Z"}],"lists":[{"id":"1552534540","status":"ACTIVE"},{"id":"1552534540","name":"General
@@ -410,6 +410,6 @@ http_interactions:
       encoding: ASCII-8BIT
       string: !binary |-
         H4sIAAAAAAAAAHVR0U7CMBT9lz0z0nabYzyJiMkeBJ1IosY0Zb0L1W5d1oKo4d/tYMAw8HbPPaf33nP66wju9B3shX4UIZ9gp+Now8xS2+5gOI1nI9vJ2NpCWzDOK9AaLPv23nEKZfZlqopMVDnYaRmTGjqOFNrU5G+zIghI4PmBj86s2NgJWi2rFOreQ2wlkDMhaXthM4hlOAI8Ry6eA3YxhtDtoTlxuc8gIBFJvcw766I5kR6Y8YQOJ+O7OLkfTOPJmCajx+c4Gd1arSoNFQU93jTcKm5e6Cx+iqeT5KjhzNQKgnDoIt9F4ZSQPon6Xq+LEHr9b6V2UBhVdLX6UbZYXaeV0lqtoOqmKt9GUVaQiTUtWA673O3d2rRwLjiX0GpIdsJ/qDk1wsgG2rklK75bgoXKgZYLVTT4S1WfbZyClCd4qY3KaSZA8v2PV2Cd88v+w73/XHFhX16Qeld9cpDuAqccjI1s+3tMM+1s/gBfMw1HqAIAAA==
-    http_version: 
+    http_version:
   recorded_at: Fri, 07 Apr 2017 22:36:27 GMT
 recorded_with: VCR 2.9.0
