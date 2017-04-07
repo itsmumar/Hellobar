@@ -32,7 +32,7 @@ class @LeadDataModal extends Modal
     super(@$modal)
 
   close: ->
-    return unless @canClose
+    return unless @_validateSecondScreen() && @canClose
     @_saveData()
     super
 
@@ -60,12 +60,20 @@ class @LeadDataModal extends Modal
     @$modal.find('.js-interesting').on 'change', =>
       @$modal.find('.js-phone-number').show()
 
-    @$modal.find('input[name="phone_number"]').on 'change', =>
-      @canClose = true
-      @$modal.find('.js-close').show()
+    @$modal.find('input[name="phone_number"]').on 'keyup change', (event) =>
+      if $(event.target).val() == ""
+        @canClose = false
+        @$modal.find('.js-close').hide()
+      else
+        @canClose = true
+        @$modal.find('.js-close').show()
 
   _bind_buttons: ->
-    $('.js-close').on 'click', =>
+    @$modal.find('.radio-group .btn').on 'click', ->
+      $(this).parent().find('.btn').removeClass('active')
+      $(this).addClass('active')
+
+    @$modal.find('.js-close').on 'click', =>
       @close()
 
     $('.js-prev-screen').on 'click', =>

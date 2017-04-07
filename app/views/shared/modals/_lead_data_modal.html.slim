@@ -42,11 +42,11 @@ script id='lead-data-template' type='text/x-handlebars-template'
             .input-group
               label
                 | First Name
-                input name="first_name" required="" value="{{currentUser.first_name}}"
+                input name="first_name" required="" type="text" value="{{currentUser.first_name}}"
 
               label
                 | Last Name
-                input name="last_name" required="" value="{{currentUser.last_name}}"
+                input name="last_name" required="" type="text" value="{{currentUser.last_name}}"
 
             .radio-group
               .title What is the biggest challenge you are hoping Hello Bar can solve?
@@ -62,18 +62,19 @@ script id='lead-data-template' type='text/x-handlebars-template'
                 span> Our Pro Managed team helps our customers install and execute high converting Hello Bar campaigns for their business.
                 span> Are you interested in us doing this for you?
 
-              label.btn
+              label.btn>
                 input.js-interesting type="radio" required="" name="interesting" value="1" autocomplete="off" Yes
 
-              label.btn
+              label.btn>
                 input.js-not-interesting type="radio" required="" name="interesting" value="0" autocomplete="off" No
 
             .input-group.js-phone-number class="hide"
               label
                 | Phone Number
-                input name="phone_number" required=""
+                input name="phone_number" type="tel" required=""
+
 
         footer
-          = link_to 'Back', 'javascript:void(0)', class: 'button js-prev-screen hide'
-          = link_to 'Close', 'javascript:void(0)', class: 'button js-close hide'
+          = link_to 'Back', 'javascript:void(0)', class: 'button cancel js-prev-screen hide'
+          = link_to 'Save', 'javascript:void(0)', class: 'button save-button js-close hide'
           = link_to 'Next', 'javascript:void(0)', class: 'button js-next-screen'
