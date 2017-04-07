@@ -1,4 +1,5 @@
 class LeadsController < ApplicationController
+  rescue_from ActiveRecord::ActiveRecordError, with: :renders_json_error
   before_action :authenticate_user!
 
   def create
@@ -7,6 +8,11 @@ class LeadsController < ApplicationController
   end
 
   private
+
+  def renders_json_error(invalid)
+    Raven.capture_exception(invalid)
+    render json: invalid.record.errors.to_json, status: :unprocessable_entity
+  end
 
   def lead_params
     params.require(:lead).permit(
