@@ -16,7 +16,7 @@ FactoryGirl.define do
     end
 
     trait :empty do
-      to_create { save(validate: false) }
+      to_create { |instance| instance.save!(validate: false) }
       industry {}
       job_role {}
       company_size {}

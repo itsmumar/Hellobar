@@ -29,6 +29,8 @@ class @LeadDataModal extends Modal
     @$modal.appendTo($("body"))
     @_bind_buttons()
     @_bind_inputs()
+    @firstForm = @$modal.find('form.screen-1')
+    @secondForm = @$modal.find('form.screen-2')
     super(@$modal)
 
   close: ->
@@ -37,8 +39,8 @@ class @LeadDataModal extends Modal
     super
 
   _saveData: ->
-    data = $('form.screen-1').serializeArray().reduce @_reducer, {}
-    data = $('form.screen-2').serializeArray().reduce @_reducer, data
+    data = @firstForm.serializeArray().reduce @_reducer, {}
+    data = @secondForm.serializeArray().reduce @_reducer, data
     $.post('/leads', lead: data)
 
   _reducer: (result, item) ->
@@ -46,10 +48,14 @@ class @LeadDataModal extends Modal
     result
 
   _validateFirstScreen: ->
-    @$modal.find('form.screen-1').get(0).reportValidity()
+    if @firstForm.get(0).reportValidity
+      @firstForm.get(0).reportValidity()
+    @firstForm.get(0).checkValidity()
 
   _validateSecondScreen: ->
-    @$modal.find('form.screen-2').get(0).reportValidity()
+    if @secondForm.get(0).reportValidity
+      @secondForm.get(0).reportValidity()
+    @secondForm.get(0).checkValidity()
 
   _bind_inputs: ->
     @$modal.find('.js-not-interesting').on 'change', =>
@@ -77,14 +83,14 @@ class @LeadDataModal extends Modal
       @close()
 
     $('.js-prev-screen').on 'click', =>
-      @$modal.find('.screen-1').show()
-      @$modal.find('.screen-2').hide()
+      @firstForm.show()
+      @secondForm.hide()
       @$modal.find('.js-prev-screen').hide()
       @$modal.find('.js-next-screen').show()
 
     $('.js-next-screen').on 'click', =>
       if @_validateFirstScreen()
-        @$modal.find('.screen-1').hide()
-        @$modal.find('.screen-2').show()
+        @firstForm.hide()
+        @secondForm.show()
         @$modal.find('.js-prev-screen').show()
         @$modal.find('.js-next-screen').hide()

@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user do
     first_name 'FirstName'
     last_name 'LastName'
-    sequence(:email) { |i| "user#{ i }@hellobar.com" }
+    email { generate(:email) }
     password 'password'
 
     after(:build) do |user|
@@ -50,6 +50,12 @@ FactoryGirl.define do
 
       after(:create) do |user, evaluator|
         create_list :site, evaluator.count, users: [user]
+      end
+    end
+
+    trait :with_lead do
+      after :create do |user|
+        create :lead, :empty, user: user
       end
     end
   end
