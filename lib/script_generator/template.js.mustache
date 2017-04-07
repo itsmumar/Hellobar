@@ -40,6 +40,11 @@
         configuration.previewIsActive({{preview_is_active}});
       });
 
+      configure('base.metainfo', function(configuration) {
+        configuration.version("{{version}}");
+        configuration.timestamp("{{timestamp}}");
+      });
+
       configure('base.capabilities', function(configuration) {
         configuration.capabilities({{{capabilities_json}}});
       });
@@ -118,4 +123,3 @@
     console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }
 })();
-hellobar.info = "version {{version}} was generated at {{timestamp}}"

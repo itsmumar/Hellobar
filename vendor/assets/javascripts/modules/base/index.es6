@@ -15,4 +15,5 @@
 //= require ./base.styling
 //= require ./base.templating
 //= require ./base.timezone
+//= require ./base.metainfo
 
