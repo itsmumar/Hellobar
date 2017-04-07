@@ -15,5 +15,15 @@ FactoryGirl.define do
       interested true
       phone_number '+1123456789'
     end
+
+    trait :empty do
+      industry {}
+      job_role {}
+      company_size {}
+      estimated_monthly_traffic {}
+      first_name {}
+      last_name {}
+      challenge {}
+    end
   end
 end
