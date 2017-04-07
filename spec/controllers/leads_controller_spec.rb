@@ -6,8 +6,18 @@ describe LeadsController do
 
   context 'POST create' do
     context 'with valid data' do
-      context 'with phone' do
+      context 'when interesting' do
         let(:lead_params) { attributes_for :lead, :interesting }
+
+        it 'renders nothing' do
+          post :create, lead: lead_params
+          expect(response.status).to eq(200)
+          expect(response.body).to be_blank
+        end
+      end
+
+      context 'when not interesting' do
+        let(:lead_params) { attributes_for :lead }
 
         it 'renders nothing' do
           post :create, lead: lead_params
