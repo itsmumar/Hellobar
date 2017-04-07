@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Lead data popup', :js do
-  given(:user) { create :user, :with_lead }
+  given(:user) { create :user }
 
   after do
     OmniAuth.config.mock_auth[:google_oauth2] = nil

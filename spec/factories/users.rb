@@ -52,11 +52,5 @@ FactoryGirl.define do
         create_list :site, evaluator.count, users: [user]
       end
     end
-
-    trait :with_lead do
-      after :create do |user|
-        create :lead, :empty, user: user
-      end
-    end
   end
 end
