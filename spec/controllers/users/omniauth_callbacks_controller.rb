@@ -49,7 +49,7 @@ describe Users::OmniauthCallbacksController do
           expect { send_request }
             .to change { authentication.reload.refresh_token }.to(credentials.refresh_token)
             .and change { authentication.reload.access_token }.to(credentials.token)
-            .and change { authentication.reload.expires_at }.to(Time.at(credentials.expires_at))
+            .and change { authentication.reload.expires_at }.to(Time.zone.at(credentials.expires_at))
         end
       end
     end
@@ -114,7 +114,6 @@ describe Users::OmniauthCallbacksController do
         context 'without validation errors' do
           before do
             stub_omniauth
-            user = double(persisted?: false, errors: [])
             allow(User).to receive(:find_for_google_oauth2).and_raise(ActiveRecord::ActiveRecordError)
           end
 

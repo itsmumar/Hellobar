@@ -230,7 +230,7 @@ class User < ActiveRecord::Base
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-      raise ActiveRecord::RecordInvalid.new(user)
+      raise ActiveRecord::RecordInvalid, user
     elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
       # TODO: deprecated case. use #update_authentication directly
       user.first_name = info['first_name'] if info['first_name'].present?
