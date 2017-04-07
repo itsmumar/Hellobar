@@ -39,8 +39,7 @@ class @LeadDataModal extends Modal
   _saveData: ->
     data = $('form.screen-1').serializeArray().reduce @_reducer, {}
     data = $('form.screen-2').serializeArray().reduce @_reducer, data
-
-    $.post('/leads', data)
+    $.post('/leads', lead: data)
 
   _reducer: (result, item) ->
     result[item.name] = item.value
@@ -54,11 +53,12 @@ class @LeadDataModal extends Modal
 
   _bind_inputs: ->
     @$modal.find('.js-not-interesting').on 'change', =>
+      @$modal.find('.js-phone-number').attr('required', false)
       @canClose = true
       @close()
 
     @$modal.find('.js-interesting').on 'change', =>
-      @$modal.find('.js-phone-number').show()
+      @$modal.find('.js-phone-number').attr('required', true).show()
 
     @$modal.find('input[name="phone_number"]').on 'keyup change', (event) =>
       if $(event.target).val() == ""
