@@ -1,6 +1,5 @@
 describe LeadsController do
   let!(:user) { create(:user) }
-  let!(:lead) { create(:lead, :empty, user: user) }
 
   before { stub_current_user user }
 
