@@ -8,7 +8,7 @@ jobs:
         - production
 
     docker:
-      - image: hellobarcom/base:2.3.3
+      - image: hellobarcom/base:2.3.4
         environment:
           DISPLAY: :99
 

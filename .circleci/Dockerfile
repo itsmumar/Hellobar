@@ -1,4 +1,4 @@
-FROM ruby:2.3.3
+FROM ruby:2.3.4
 
 RUN apt-get update && \
     apt-get install -qq -y --no-install-recommends \
