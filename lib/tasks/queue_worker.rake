@@ -8,7 +8,7 @@ namespace :queue_worker do
 
     {
       Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [3, '--skip-old']
+      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''
@@ -45,7 +45,7 @@ namespace :queue_worker do
     processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
     {
       Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [3, '--skip-old']
+      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''

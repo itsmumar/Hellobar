@@ -44,7 +44,7 @@ every 6.hours, roles: [:cron] do
   rake 'backend:adjust_dynamo_db_capacity[all]'
 end
 
-every 30.minutes, roles: [:web, :worker] do
+every 15.minutes, roles: [:web, :worker] do
   rake 'queue_worker:restart'
 end
 
