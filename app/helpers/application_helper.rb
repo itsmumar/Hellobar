@@ -4,7 +4,7 @@ module ApplicationHelper
   include Avatar::View::ActionViewSupport
 
   def needs_filling_questionnaire?
-    current_user && current_user.create_at > Date.parse('2017-04-07') && current_user.lead.blank?
+    current_user && current_user.created_at > Date.parse('2017-04-07') && current_user.lead.blank?
   end
 
   def page_id
