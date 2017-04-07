@@ -18,9 +18,11 @@ describe('Module elements.collecting', function () {
       'tracking.internal': jasmine.createSpyObj('tracking.internal', ['send']),
       'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted'])
     };
+
     dependencies['base.preview'].isActive.and.returnValue(previewIsActive);
     dependencies['base.format'].asBool.and.returnValue(true);
     dependencies['base.site'].siteId.and.returnValue(12345);
+
     return dependencies;
   }
 

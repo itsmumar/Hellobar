@@ -18,8 +18,10 @@ describe('Module visitor', function () {
       'base.site': jasmine.createSpyObj('base.site', ['siteId']),
       'geolocation': jasmine.createSpyObj('geolocation', ['getGeolocationData'])
     };
+
     dependencies['base.serialization'].deserialize.and.returnValue({});
     dependencies['base.environment'].device.and.returnValue('computer');
+
     return dependencies;
   }
 

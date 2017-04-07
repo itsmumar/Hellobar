@@ -23,9 +23,11 @@ describe('Module elements.visibility', function () {
       'base.environment': jasmine.createSpyObj('base.environment', ['isMobileDevice', 'isMobileWidth']),
       'elements.data': jasmine.createSpyObj('base.environment', ['getData'])
     };
+
     dependencies['base.environment'].isMobileDevice.and.returnValue(false);
     dependencies['base.environment'].isMobileWidth.and.returnValue(false);
     dependencies['elements.data'].getData.and.returnValue(10000);
+
     return dependencies;
   }
 

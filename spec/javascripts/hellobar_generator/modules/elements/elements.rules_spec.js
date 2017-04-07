@@ -18,9 +18,11 @@ describe('Module elements.rules', function () {
       'elements.visibility': jasmine.createSpyObj('elements.visibility', ['shouldShowElement']),
       'elements.data': jasmine.createSpyObj('elements.data', ['getData', 'setData'])
     };
+
     dependencies['base.timezone'].nowInTimezone.and.returnValue(new Date());
     dependencies['visitor'].getData.and.returnValue(visitorDataValue);
     dependencies['elements.visibility'].shouldShowElement.and.returnValue(true);
+
     return dependencies;
   }
 
