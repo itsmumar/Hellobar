@@ -1,5 +1,5 @@
 script id='lead-data-template' type='text/x-handlebars-template'
-  - if current_user.lead
+  - if needs_filling_questionnaire?
     .modal-wrapper
       .modal-block
         header

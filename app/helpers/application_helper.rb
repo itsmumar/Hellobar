@@ -3,8 +3,8 @@ require 'avatar/view/action_view_support'
 module ApplicationHelper
   include Avatar::View::ActionViewSupport
 
-  def current_lead
-    current_user.try(:lead)
+  def needs_filling_questionnaire?
+    current_user && current_user.create_at > Date.parse('2017-04-07') && current_user.lead.blank?
   end
 
   def page_id
