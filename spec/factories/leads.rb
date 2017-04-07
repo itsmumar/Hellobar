@@ -17,13 +17,13 @@ FactoryGirl.define do
 
     trait :empty do
       to_create { save(validate: false) }
-      industry { }
-      job_role { }
-      company_size { }
-      estimated_monthly_traffic { }
-      first_name { }
-      last_name { }
-      challenge { }
+      industry {}
+      job_role {}
+      company_size {}
+      estimated_monthly_traffic {}
+      first_name {}
+      last_name {}
+      challenge {}
     end
   end
 end
