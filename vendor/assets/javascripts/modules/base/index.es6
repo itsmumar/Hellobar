@@ -6,6 +6,7 @@
 //= require ./base.dom
 //= require ./base.environment
 //= require ./base.format
+//= require ./base.metainfo
 //= require ./base.preview
 //= require ./base.sanitizing
 //= require ./base.selfcheck
@@ -15,5 +16,4 @@
 //= require ./base.styling
 //= require ./base.templating
 //= require ./base.timezone
-//= require ./base.metainfo
 
