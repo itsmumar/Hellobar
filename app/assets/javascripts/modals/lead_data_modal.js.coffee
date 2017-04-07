@@ -27,10 +27,10 @@ class @LeadDataModal extends Modal
 
     @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
     @$modal.appendTo($("body"))
-    @_bind_buttons()
-    @_bind_inputs()
-    @firstForm = @$modal.find('form.screen-1')
-    @secondForm = @$modal.find('form.screen-2')
+    @_bindButtons()
+    @_bindInputs()
+    @$firstForm = @$modal.find('form.screen-1')
+    @$secondForm = @$modal.find('form.screen-2')
     super(@$modal)
 
   close: ->
@@ -39,8 +39,8 @@ class @LeadDataModal extends Modal
     super
 
   _saveData: ->
-    data = @firstForm.serializeArray().reduce @_reducer, {}
-    data = @secondForm.serializeArray().reduce @_reducer, data
+    data = @$firstForm.serializeArray().reduce @_reducer, {}
+    data = @$secondForm.serializeArray().reduce @_reducer, data
     $.post('/leads', lead: data)
 
   _reducer: (result, item) ->
@@ -48,16 +48,16 @@ class @LeadDataModal extends Modal
     result
 
   _validateFirstScreen: ->
-    if @firstForm.get(0).reportValidity
-      @firstForm.get(0).reportValidity()
-    @firstForm.get(0).checkValidity()
+    if @$firstForm.get(0).reportValidity
+      @$firstForm.get(0).reportValidity()
+    @$firstForm.get(0).checkValidity()
 
   _validateSecondScreen: ->
-    if @secondForm.get(0).reportValidity
-      @secondForm.get(0).reportValidity()
-    @secondForm.get(0).checkValidity()
+    if @$secondForm.get(0).reportValidity
+      @$secondForm.get(0).reportValidity()
+    @$secondForm.get(0).checkValidity()
 
-  _bind_inputs: ->
+  _bindInputs: ->
     @$modal.find('.js-not-interesting').on 'change', =>
       @$modal.find('.js-phone-number').attr('required', false)
       @canClose = true
@@ -74,7 +74,7 @@ class @LeadDataModal extends Modal
         @canClose = true
         @$modal.find('.js-close').show()
 
-  _bind_buttons: ->
+  _bindButtons: ->
     @$modal.find('.radio-group .btn').on 'click', ->
       $(this).parent().find('.btn').removeClass('active')
       $(this).addClass('active')
@@ -83,14 +83,14 @@ class @LeadDataModal extends Modal
       @close()
 
     $('.js-prev-screen').on 'click', =>
-      @firstForm.show()
-      @secondForm.hide()
+      @$firstForm.show()
+      @$secondForm.hide()
       @$modal.find('.js-prev-screen').hide()
       @$modal.find('.js-next-screen').show()
 
     $('.js-next-screen').on 'click', =>
       if @_validateFirstScreen()
-        @firstForm.hide()
-        @secondForm.show()
+        @$firstForm.hide()
+        @$secondForm.show()
         @$modal.find('.js-prev-screen').show()
         @$modal.find('.js-next-screen').hide()
