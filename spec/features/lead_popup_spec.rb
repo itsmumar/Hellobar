@@ -7,6 +7,11 @@ feature 'Lead data popup', :js do
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
 
+  before do
+    allow_any_instance_of(ApplicationController)
+      .to receive(:needs_filling_questionnaire?).and_return(true)
+  end
+
   scenario 'new user must fill out questionnaire' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
 
