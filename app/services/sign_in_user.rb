@@ -1,10 +1,10 @@
-class SigninUserService
+class SignInUser
   # @param [ActionDispatch::Request] request
   def initialize(request)
     @request = request
   end
 
-  def signin
+  def sign_in
     user, redirect_url = find_or_create_user
     user.save!
     cookies.permanent[:login_email] = user.email
@@ -59,13 +59,6 @@ class SigninUserService
   end
 
   def create_user
-    user = User.find_for_google_oauth2(omniauth, cookies[:login_email], track_options)
-    create_lead(user)
-    user
-  end
-
-  def create_lead(user)
-    return unless user
-    user.build_lead(first_name: user.first_name, last_name: user.last_name).save(validate: false)
+    User.find_for_google_oauth2(omniauth, cookies[:login_email], track_options)
   end
 end
