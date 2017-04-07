@@ -1,19 +1,16 @@
 describe Lead do
-  context 'when challenge is "more_emails"' do
-    let(:lead) { build(:lead, challenge: 'more_emails') }
+  it { is_expected.to validate_presence_of :industry }
+  it { is_expected.to validate_presence_of :job_role }
+  it { is_expected.to validate_presence_of :company_size }
+  it { is_expected.to validate_presence_of :estimated_monthly_traffic }
+  it { is_expected.to validate_presence_of :first_name }
+  it { is_expected.to validate_presence_of :last_name }
+  it { is_expected.to validate_presence_of :challenge }
+  it { is_expected.to validate_inclusion_of(:challenge).in_array(%w(more_emails more_sales conversion_optimization)) }
+  it { is_expected.not_to validate_presence_of(:phone_number) }
 
-    specify { expect(lead).to be_valid }
-  end
-
-  context 'when challenge is "more_sales"' do
-    let(:lead) { build(:lead, challenge: 'more_sales') }
-
-    specify { expect(lead).to be_valid }
-  end
-
-  context 'when challenge is "conversion_optimization"' do
-    let(:lead) { build(:lead, challenge: 'conversion_optimization') }
-
-    specify { expect(lead).to be_valid }
+  context 'with interested = true' do
+    subject { build(:lead, :interested) }
+    it { is_expected.to validate_presence_of(:phone_number) }
   end
 end
