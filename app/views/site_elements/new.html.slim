@@ -7,7 +7,6 @@ javascript:
   window.HB_DATA = {
     skipInterstitial: #{not render_interstitial?}
   }
-  window.showLeadPopup = #{current_user.lead.try(:need_to_fill?).to_json}
 
 - unless params[:element_to_copy_id].blank?
   javascript:
