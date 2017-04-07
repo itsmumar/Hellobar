@@ -6,8 +6,8 @@ describe LeadsController do
 
   context 'POST create' do
     context 'with valid data' do
-      context 'when interesting' do
-        let(:lead_params) { attributes_for :lead, :interesting }
+      context 'when interested' do
+        let(:lead_params) { attributes_for :lead, :interested }
 
         it 'renders nothing' do
           post :create, lead: lead_params
@@ -16,7 +16,7 @@ describe LeadsController do
         end
       end
 
-      context 'when not interesting' do
+      context 'when not interested' do
         let(:lead_params) { attributes_for :lead }
 
         it 'renders nothing' do

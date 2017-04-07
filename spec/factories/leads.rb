@@ -9,9 +9,10 @@ FactoryGirl.define do
     first_name { 'FirstName' }
     last_name { 'LastName' }
     challenge { Lead::CHALLENGES.sample }
+    interested false
 
-    trait :interesting do
-      interesting true
+    trait :interested do
+      interested true
       phone_number '+1123456789'
     end
 

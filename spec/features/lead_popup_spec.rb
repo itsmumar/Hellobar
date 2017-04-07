@@ -41,7 +41,7 @@ feature 'Lead data popup', :js do
       first_name: 'FirstName',
       last_name: 'LastName',
       challenge: 'more_sales',
-      interesting: true,
+      interested: true,
       phone_number: '12345678'
     }
     expect(user.lead.reload.attributes).to include(attributes.stringify_keys)

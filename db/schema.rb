@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170404134709) do
+ActiveRecord::Schema.define(version: 20170407192932) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -225,16 +225,16 @@ ActiveRecord::Schema.define(version: 20170404134709) do
   end
 
   create_table "leads", force: true do |t|
-    t.string   "industry"
-    t.string   "job_role"
-    t.string   "company_size"
-    t.string   "estimated_monthly_traffic"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "challenge"
-    t.boolean  "interesting"
+    t.string   "industry",                  null: false
+    t.string   "job_role",                  null: false
+    t.string   "company_size",              null: false
+    t.string   "estimated_monthly_traffic", null: false
+    t.string   "first_name",                null: false
+    t.string   "last_name",                 null: false
+    t.string   "challenge",                 null: false
+    t.boolean  "interested",                null: false
     t.string   "phone_number"
-    t.integer  "user_id"
+    t.integer  "user_id",                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
