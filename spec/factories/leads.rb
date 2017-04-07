@@ -8,7 +8,7 @@ FactoryGirl.define do
     estimated_monthly_traffic { '1000-100000' }
     first_name { 'FirstName' }
     last_name { 'LastName' }
-    challenge { Lead::CHALLENGES.sample }
+    challenge { Lead::CHALLENGES.sample[:value] }
     interested false
 
     trait :interested do

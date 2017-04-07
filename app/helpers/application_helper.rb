@@ -3,10 +3,6 @@ require 'avatar/view/action_view_support'
 module ApplicationHelper
   include Avatar::View::ActionViewSupport
 
-  def needs_filling_questionnaire?
-    current_user && current_user.created_at > Date.parse('2017-04-07') && current_user.lead.blank?
-  end
-
   def page_id
     if controller_name == 'pages' && params[:page]
       [controller_name, params[:page]].join('-')

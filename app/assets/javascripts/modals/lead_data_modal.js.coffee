@@ -1,36 +1,22 @@
+
 class @LeadDataModal extends Modal
   canClose: true
   modalName: 'lead-data'
 
   constructor: (@options = {}) ->
-    industries = ["Church", "Corporate", "Community", "Custom App", "Event", "eCommerce", "Education", "Entertainment",
-      "Financial", "Gaming Poker", "Hair Salon", "Hotel", "Industrial", "Law Firm", "Medical/Health",
-      "Marketing Services", "Mobile App Developer", "Music Artists", "NPO", "Organizational", "Personal App",
-      "Professional Services", "Practitioner", "Publishing", "Real Estate", "Restaurant", "Small Business",
-      "Sell Products", "Sell Services", "Social", "Spa/Gym", "Speaker", "Sports", "Travel", "Messing Around", "Other"]
-    industries = industries.map (industry) => {name: industry, value: industry.toLowerCase()}
-
-    roles = ["Creative Designer", "Developer", "Marketing", "Management", "Student", "Other"]
-    roles = roles.map (role) => {name: role, value: role.toLowerCase()}
-
-    companySizes = ["Just Me", "1-10", "11-25", "25-50", "50+"]
-    companySizes = companySizes.map (size) => {name: size, value: size.toLowerCase()}
-
-    trafficItems = ["1 000", "10 000", "50 000", "100 000", "100 000+"]
-    trafficItems = trafficItems.map (size) => {name: size, value: size.toLowerCase()}
-
-    challenges = [
-      {name: "Capture More Emails", value: "more_emails"},
-      {name: "Generate More Sales", value: "more_sales"},
-      {name: "Conversion Optimization", "conversion_optimization"}
-    ]
+    # *gon* variables are defined here: app/controllers/concerns/gon_variables.rb
+    industries = gon.lead_data_modal.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
+    roles = gon.lead_data_modal.job_roles.map (role) => {name: role, value: role.toLowerCase()}
+    companySizes = gon.lead_data_modal.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
+    trafficItems = gon.lead_data_modal.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
+    challenges = gon.lead_data_modal.challenges
 
     @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
     @$modal.appendTo($("body"))
-    @_bindButtons()
-    @_bindInputs()
     @$firstForm = @$modal.find('form.screen-1')
     @$secondForm = @$modal.find('form.screen-2')
+    @_bindButtons()
+    @_bindInputs()
     super(@$modal)
 
   close: ->
