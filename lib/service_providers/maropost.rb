@@ -78,6 +78,10 @@ module ServiceProviders
       end
     end
 
+    def valid?
+      @identity.api_key =~ /^[A-Za-z0-9]{54}$/
+    end
+
     private
 
     def load_identity(options)
