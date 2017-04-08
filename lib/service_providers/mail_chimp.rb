@@ -123,34 +123,24 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     super message
   end
 
-  # rubocop: disable Lint/EmptyWhen
   def handle_error(error)
-    case error.status_code
-    when 250
-      catch_required_merge_var_error!(error)
-    when 104, 200, 101 # Invalid_ApiKey, Invalid List, Deactivated Account
+    return catch_required_merge_var_error!(error) if error.detail =~ /merge field/
+
+    case error.title
+    when 'APIKeyMissing', 'APIKeyInvalid', 'UserDisabled', 'Forbidden', 'ResourceNotFound'
       identity.destroy_and_notify_user unless identity.nil?
-      raise error
-    when 214
-      # Email already existed in list, don't do anything
-    when -100, -99
-      # Email is invalid
-    else
-      # bubble up to email_synchronizer, which will catch if it is a transient error
-      raise error
+    when 'Member Exists', 'Invalid Resource', 'BadRequest'
+      return # do nothing
     end
+
+    raise error
   end
-  # rubocop: enable Lint/EmptyWhen
 
   def handle_result(result)
     if result['errors']
       result['errors'].each do |error|
-        case error['code'].to_i
-        when 250
-          break catch_required_merge_var_error!(error)
-        else
-          next
-        end
+        break catch_required_merge_var_error!(error) if error['detail'] =~ /merge field/
+        next
       end
     end
 
