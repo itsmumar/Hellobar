@@ -39,13 +39,12 @@ class ApplicationController < ActionController::Base
 
   def current_admin
     return nil if @current_admin == false
-    @current_admin ||= Admin.validate_session(access_token, session[:admin_token]) || false
+    @current_admin ||= Admin.validate_session(session[:admin_token]) || false
   end
 
   def require_admin
     return redirect_to(admin_access_path) unless current_admin
     return unless current_admin.needs_to_set_new_password?
-
     redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
   end
 

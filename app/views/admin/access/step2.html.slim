@@ -3,12 +3,12 @@ div.row
   div.col-md-4
     h1 Enter Password
 
-    = simple_form_for :admin_authenticate, {:url => admin_authenticate_path} do |f|
+    = simple_form_for :admin_authenticate, url: admin_authenticate_path do |f|
       - if @admin.present? && @admin.needs_otp_code?
-        = render partial: "qr_code", locals: { generated_otp: @admin.generate_new_otp! }
+        = render partial: 'qr_code', locals: { generated_otp: @admin.generate_new_otp! }
 
-      = f.input :otp, :input_html => {:name => :otp}
-      = f.input :password, :input_html => {:name => :admin_password}
-      = f.button :submit, "Continue", :class => "btn btn-primary"
+      = f.input :otp, input_html: { name: :otp }
+      = f.input :password, input_html: { name: :admin_password }
+      = f.button :submit, 'Continue', class: 'btn btn-primary'
 
   div.col-md-4
