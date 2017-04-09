@@ -4,7 +4,7 @@ class AdminAuthenticationPolicy
   end
 
   def otp_valid?(otp)
-    totp.verify(otp)
+    totp.verify(otp.delete(' '))
   end
 
   def generate_otp
