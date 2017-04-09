@@ -5,6 +5,7 @@ export default Ember.Route.extend({
 
   api: Ember.inject.service(),
   validation: Ember.inject.service(),
+  bus: Ember.inject.service(),
 
   saveCount: 0,
 
@@ -91,9 +92,9 @@ export default Ember.Route.extend({
         }
       };
 
-      this.get('validation').validate('main', this.currentModel).then(() => {
+      this.get('validation').validate('phone_number', this.currentModel).then(() => {
         // Successful validation
-        this.controller.set('validationMessages', null);
+        this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.toggleProperty('saveSubmitted');
         this.set('saveCount', this.get('saveCount') + 1);
         if (trackEditorFlow) {
@@ -145,7 +146,7 @@ export default Ember.Route.extend({
         });
       }, (failures) => {
         // Validation failed
-        this.controller.set('validationMessages', failures.map(failure => failure.error));
+        this.get('bus').trigger('hellobar.core.validation.failed', failures);
       });
 
     }
