@@ -12,11 +12,11 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   def lists
-    @client.lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
+    @client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    cc_list = @client.list(@token, list_id)
+    cc_list = @client.get_list(@token, list_id)
     cc_contact = ConstantContact::Components::Contact.new
     cc_email = ConstantContact::Components::EmailAddress.new
 
@@ -27,7 +27,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
 
     add_contact(cc_contact, double_optin)
   rescue RestClient::Conflict
-    cc_contact = @client.contact_by_email(@token, email).results[0]
+    cc_contact = @client.get_contact_by_email(@token, email).results[0]
     cc_contact.lists ||= []
     cc_contact.lists << cc_list
 
