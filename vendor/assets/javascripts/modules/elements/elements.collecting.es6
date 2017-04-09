@@ -152,6 +152,7 @@ hellobar.defineModule('elements.collecting',
         trackingInternal.send('c', siteElement.contact_list_id, {e: joinedValues}, function () {
           elementsConversion.converted(this.siteElement, callback);
         }.bind({siteElement: siteElement}));
+        // TODO call external tracking
       }
     }
 
