@@ -13,9 +13,9 @@ describe ServiceProviders::Maropost do
   describe '#valid?' do
     let(:identity) do
       Identity.new site_id: 1,
-        provider: 'maropost',
-        api_key: api_key,
-        credentials: { 'username' => 'a_user_id_actually' }
+                   provider: 'maropost',
+                   api_key: api_key,
+                   credentials: { 'username' => 'a_user_id_actually' }
     end
     let(:maropost) { ServiceProviders::Maropost.new(identity: identity) }
 
