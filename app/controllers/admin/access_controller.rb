@@ -37,10 +37,6 @@ class Admin::AccessController < ApplicationController
 
     session[:admin_access_email] = email
 
-    unless Admin.any_validated_access_token?(access_token) || verify_recaptcha
-      return redirect_to(admin_access_path)
-    end
-
     Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
 
     if (@admin = Admin.find_by(email: email))

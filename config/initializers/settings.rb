@@ -41,8 +41,6 @@ unless defined?(Hellobar::Settings)
     main_queue
     maropost_url
     memcached_server
-    recaptcha_private_key
-    recaptcha_public_key
     rotp_secret_key_base
     s3_bucket
     s3_content_upgrades_bucket
