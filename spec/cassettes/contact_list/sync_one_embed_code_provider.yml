@@ -481,7 +481,7 @@ http_interactions:
         RSkgewogICAgICByZXR1cm4gbWltaUZpZWxkOwogICAgfSBlbHNlIHsKICAg
         ICAgcmV0dXJuIG51bGw7CiAgICB9CiAgfQogfSkoKTsKPC9zY3JpcHQ+Cjwv
         Ym9keT4KPC9odG1sPgo=
-    http_version: 
+    http_version:
   recorded_at: Thu, 28 Aug 2014 20:13:40 GMT
 - request:
     method: post
@@ -804,6 +804,6 @@ http_interactions:
         ICAgICAgIj5Qb3dlcmVkIGJ5IDxlbT5NYWQgTWltaTwvZW0+IMKuPC9hPgo8
         L2Rpdj4KPC9kaXY+CjwvZGl2Pgo8c2NyaXB0PgogICAgCjwvc2NyaXB0Pgo8
         L2JvZHk+CjwvaHRtbD4K
-    http_version: 
+    http_version:
   recorded_at: Thu, 28 Aug 2014 20:16:36 GMT
 recorded_with: VCR 2.9.0

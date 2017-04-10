@@ -7,7 +7,7 @@ describe PaymentMethodDetails do
   end
 end
 
-describe CyberSourceCreditCard do
+describe CyberSourceCreditCard, :vcr do
   VALID_DATA = {
     number: '4111111111111111',
     month: '8',
@@ -83,25 +83,27 @@ describe CyberSourceCreditCard do
     expect(cc.name).to eq('Visa ending in 1111')
   end
 
-  it 'should re-use an existing token if set on the same payment_method' do
-    p = payment_method
-    cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
-    cc1.save!
-    cc1 = CyberSourceCreditCard.find(cc1.id)
-    expect(cc1.data['token']).not_to be_nil
-    expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2016')
-    # Now update the year
-    cc2 = CyberSourceCreditCard.new(data: VALID_DATA.merge('year' => '2017'), payment_method: p)
-    cc2.save!
-    cc2 = CyberSourceCreditCard.find(cc2.id)
-    expect(cc2.data['token']).not_to be_nil
-    # Should have re-used the same token
-    expect(cc2.data['token']).to eq(cc1.data['token'])
-    # Should have updated the name for both credit cards
-    cc1 = CyberSourceCreditCard.find(cc1.id)
-    cc2 = CyberSourceCreditCard.find(cc2.id)
-    expect(cc2.cybersource_profile['cardExpirationYear']).to eq('2017')
-    expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2017')
+  context 'when set on the same payment_method' do
+    it 're-uses an existing token' do
+      p = payment_method
+      cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
+      cc1.save!
+      cc1 = CyberSourceCreditCard.find(cc1.id)
+      expect(cc1.data['token']).not_to be_nil
+      expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2016')
+      # Now update the year
+      cc2 = CyberSourceCreditCard.new(data: VALID_DATA.merge('year' => '2017'), payment_method: p)
+      cc2.save!
+      cc2 = CyberSourceCreditCard.find(cc2.id)
+      expect(cc2.data['token']).not_to be_nil
+      # Should have re-used the same token
+      expect(cc2.data['token']).to eq(cc1.data['token'])
+      # Should have updated the name for both credit cards
+      cc1 = CyberSourceCreditCard.find(cc1.id)
+      cc2 = CyberSourceCreditCard.find(cc2.id)
+      expect(cc2.cybersource_profile['cardExpirationYear']).to eq('2017')
+      expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2017')
+    end
   end
 
   it 'should let you charge the card and return the transaction ID' do
@@ -111,18 +113,20 @@ describe CyberSourceCreditCard do
     expect(response).to match(/^.*?;.*?;.*$/)
   end
 
-  it 'should validate the data' do
-    # Should be valid
-    cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_method)
-    expect(cc.errors.messages).to eq({})
-    expect(cc).to be_valid
+  context 'validation' do
+    it 'validates the data' do
+      # Should be valid
+      cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_method)
+      expect(cc.errors.messages).to eq({})
+      expect(cc).to be_valid
 
-    expect(CyberSourceCreditCard.new(payment_method: payment_method)).not_to be_valid
-    missing = VALID_DATA.merge({})
-    missing.delete(:first_name)
-    expect(CyberSourceCreditCard.new(data: missing, payment_method: payment_method)).not_to be_valid
-    cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_method)
-    expect(cc).not_to be_valid
+      expect(CyberSourceCreditCard.new(payment_method: payment_method)).not_to be_valid
+      missing = VALID_DATA.merge({})
+      missing.delete(:first_name)
+      expect(CyberSourceCreditCard.new(data: missing, payment_method: payment_method)).not_to be_valid
+      cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_method)
+      expect(cc).not_to be_valid
+    end
   end
 
   it 'should not require the state field for foreign addresses' do
