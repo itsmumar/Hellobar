@@ -11,12 +11,15 @@ describe Admin::AccessController do
     context 'with correct parameters' do
       let(:params) { { existing_password: 'password', new_password: 'newpass123', new_password_again: 'newpass123' } }
 
-      it 'redirects to admin_path' do
-        expect(admin).to receive(:reset_password!).with('newpass123')
-        do_reset_password
+      before { expect(Pony).to receive(:mail).with(hash_including(to: admin.email)) }
+
+      it 'resets password' do
+        expect { do_reset_password }
+          .to change { admin.reload.password_hashed }
+          .and change { admin.reload.password_last_reset }
       end
 
-      it 'redirects the admin' do
+      it 'redirects to admin_path' do
         do_reset_password
         expect(response).to redirect_to(admin_path)
       end
