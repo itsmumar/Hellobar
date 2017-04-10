@@ -126,7 +126,7 @@ class Admin < ActiveRecord::Base
 
     update_attributes(
       login_attempts: 0,
-      session_token: Digest::SHA256.hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join('')),
+      session_token: hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join(''))
     )
     session_heartbeat!
   end
@@ -156,7 +156,7 @@ class Admin < ActiveRecord::Base
   end
 
   def encrypt_password(plaintext)
-    Digest::SHA256.hexdigest("#{ SALT }#{ plaintext }#{ email }#{ initial_password }")
+    hexdigest("#{ SALT }#{ plaintext }#{ email }#{ initial_password }")
   end
 
   def decrypted_rotp_secret_base
@@ -170,7 +170,7 @@ class Admin < ActiveRecord::Base
   end
 
   def active_support_encryptor
-    key_to_encrypt = Digest::SHA256.hexdigest("#{ SALT }#{ email }#{ initial_password }")
+    key_to_encrypt = hexdigest("#{ SALT }#{ email }#{ initial_password }")
     @encryptor ||= ActiveSupport::MessageEncryptor.new(key_to_encrypt)
   end
 
@@ -185,5 +185,9 @@ class Admin < ActiveRecord::Base
       save!
     end
     rotp_secret_base
+  end
+
+  def hexdigest(string)
+    Digest::SHA256.hexdigest(string)
   end
 end
