@@ -14,27 +14,7 @@ module ServiceProviders
     end
 
     def lists
-      found_lists = []
-      begin
-        response = @client.get "accounts/#{ @account_id }/lists.json",
-          auth_token: @api_key,
-          no_counts: true
-
-        if response.success?
-          response_hash = JSON.parse response.body
-          found_lists = response_hash.collect { |list| { 'id' => list['id'], 'name' => list['name'] } }
-        else
-          error_message = response.body
-          log "getting lists returned '#{ error_message }' with the code #{ response.status }"
-        end
-
-      rescue Faraday::TimeoutError
-        log 'getting lists timed out'
-      rescue => error
-        log "getting lists raised #{ error }"
-      end
-
-      found_lists
+      fetch_lists || []
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
@@ -78,7 +58,30 @@ module ServiceProviders
       end
     end
 
+    def valid?
+      lists.present?
+    rescue => error
+      log "Getting lists raised #{ error }"
+      false
+    end
+
     private
+
+    def fetch_lists
+      response = @client.get "accounts/#{ @account_id }/lists.json", auth_token: @api_key, no_counts: true
+
+      if response.success?
+        response_hash = JSON.parse response.body
+        response_hash.collect { |list| { 'id' => list['id'], 'name' => list['name'] } }
+      else
+        log "getting lists returned '#{ response.body }' with the code #{ response.status }"
+      end
+
+    rescue Faraday::TimeoutError
+      log 'getting lists timed out'
+    rescue => error
+      log "getting lists raised #{ error }"
+    end
 
     def load_identity(options)
       raise 'Must provide an identity' unless options[:identity] || options[:site]

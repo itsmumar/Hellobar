@@ -79,6 +79,7 @@ class ServiceProvider
     else
       $stdout.puts entry
     end
+    nil
   end
 
   def name
