@@ -91,6 +91,7 @@ class @PaymentModal extends Modal
   _bindInteractions: ->
     @_bindChangePlan()
     @_bindFormSubmission()
+    @_bindDynamicStateLength()
 
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
@@ -135,6 +136,15 @@ class @PaymentModal extends Modal
 
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
+
+  _bindDynamicStateLength: ->
+    @$modal.find('#payment_method_details_country').change (event) =>
+      if event.target.value == 'US'
+        @$modal.find('.cc-state input').attr('maxlength', 2)
+      else
+        @$modal.find('.cc-state input').attr('maxlength', 3)
+
+    @$modal.find('#payment_method_details_country').trigger('change')
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
