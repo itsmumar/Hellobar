@@ -1,12 +1,15 @@
 class ApplicationController < ActionController::Base
+  LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-07')
+
   include Hello::InternalAnalytics
+  include GonVariables
   include ActionView::Helpers::NumberHelper
   serialization_scope :current_user
 
   protect_from_forgery with: :exception
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :ab_variation,
-    :ab_variation_or_nil
+    :ab_variation_or_nil, :needs_filling_questionnaire?
 
   before_action :record_tracking_param
   before_action :track_h_visit
@@ -146,5 +149,9 @@ class ApplicationController < ActionController::Base
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(_resource_or_scope)
     logout_confirmation_path
+  end
+
+  def needs_filling_questionnaire?
+    current_user && current_user.created_at > LEADS_CREATION_STARTING_DATE && current_user.lead.blank?
   end
 end

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get 'profile', to: 'user#edit', as: :profile
   resource :user, controller: :user, only: [:update, :destroy, :create]
+  resources :leads, only: [:create]
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
   resources :sites do
