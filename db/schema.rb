@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221212712) do
+ActiveRecord::Schema.define(version: 20170410125730) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -26,13 +26,11 @@ ActiveRecord::Schema.define(version: 20170221212712) do
     t.string   "initial_password"
     t.string   "password_hashed"
     t.string   "session_token"
-    t.string   "session_access_token"
     t.string   "permissions_json"
     t.datetime "password_last_reset"
     t.datetime "session_last_active"
-    t.integer  "login_attempts",                     default: 0
-    t.string   "valid_access_tokens",  limit: 18000
-    t.boolean  "locked",                             default: false
+    t.integer  "login_attempts",      default: 0
+    t.boolean  "locked",              default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "api_token"
@@ -42,7 +40,7 @@ ActiveRecord::Schema.define(version: 20170221212712) do
 
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
-  add_index "admins", ["session_token", "session_access_token"], name: "index_admins_on_session_token_and_session_access_token", using: :btree
+  add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
 
   create_table "authentications", force: true do |t|
     t.integer  "user_id"

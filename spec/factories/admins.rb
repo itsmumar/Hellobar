@@ -4,7 +4,6 @@ FactoryGirl.define do
     initial_password 'password'
     password_hashed { encrypt_password('password') }
     password_last_reset { Time.current - 5.minutes }
-    session_access_token 'owigjoia'
     session_token 'aisodgjoai'
     session_last_active { Time.current }
 
