@@ -45,7 +45,7 @@ feature 'Lead data popup', :js do
       estimated_monthly_traffic: '10 000',
       first_name: 'FirstName',
       last_name: 'LastName',
-      challenge: 'more_sales',
+      challenge: 'generate more sales',
       interested: true,
       phone_number: '12345678'
     }
