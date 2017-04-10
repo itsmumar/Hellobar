@@ -14,23 +14,19 @@ describe ServiceProviders::Maropost do
     let(:identity) do
       Identity.new site_id: 1,
                    provider: 'maropost',
-                   api_key: api_key,
+                   api_key: 'api_key',
                    credentials: { 'username' => 'a_user_id_actually' }
     end
     let(:maropost) { ServiceProviders::Maropost.new(identity: identity) }
+    let(:client) { maropost.instance_variable_get(:@client) }
 
-    context 'when matches ^[A-Za-z0-9]{54}$' do
-      let(:api_key) { 'TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZg' }
+    context 'when lists present' do
+      before { allow(client).to receive(:get).and_return(double(success?: true, body: '[{"id":1,"name":"name"}]')) }
       specify { expect(maropost).to be_valid }
     end
 
-    context 'when length less than 54 chars' do
-      let(:api_key) { 'TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZ' }
-      specify { expect(maropost).not_to be_valid }
-    end
-
-    context 'when contains not valid symbols' do
-      let(:api_key) { '-TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZ' }
+    context 'when lists does not present' do
+      before { allow(client).to receive(:get).and_return(double(success?: false, body: '', status: 404)) }
       specify { expect(maropost).not_to be_valid }
     end
   end
