@@ -7,5 +7,9 @@ FactoryGirl.define do
     session_access_token 'owigjoia'
     session_token 'aisodgjoai'
     session_last_active { Time.current }
+
+    trait :locked do
+      locked true
+    end
   end
 end

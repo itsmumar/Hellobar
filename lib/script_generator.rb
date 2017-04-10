@@ -437,7 +437,7 @@ class ScriptGenerator < Mustache
     asset = asset(file)
     return asset.toutf8 if asset
     return yield if block_given?
-    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'"
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site.id }"
   rescue Sass::SyntaxError => e
     e.sass_template ||= path.join('/')
     raise e
