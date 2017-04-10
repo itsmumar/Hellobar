@@ -5,11 +5,12 @@ class @LeadDataModal extends Modal
 
   constructor: (@options = {}) ->
     # *gon* variables are defined here: app/controllers/concerns/gon_variables.rb
-    industries = gon.lead_data_modal.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
-    roles = gon.lead_data_modal.job_roles.map (role) => {name: role, value: role.toLowerCase()}
-    companySizes = gon.lead_data_modal.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
-    trafficItems = gon.lead_data_modal.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
-    challenges = gon.lead_data_modal.challenges
+    return unless gon.lead_data
+    industries = gon.lead_data.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
+    roles = gon.lead_data.job_roles.map (role) => {name: role, value: role.toLowerCase()}
+    companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
+    trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
+    challenges = gon.lead_data.challenges
 
     @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
     @$modal.appendTo($("body"))

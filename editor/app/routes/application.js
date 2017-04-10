@@ -71,7 +71,7 @@ export default Ember.Route.extend({
       new ContactListModal($.extend(baseOptions, options)).open();
     }
 
-    if(window.showLeadPopup) {
+    if(window.gon && gon.lead_data) {
       new LeadDataModal().open();
     }
   },

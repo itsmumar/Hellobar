@@ -8,12 +8,12 @@ module GonVariables
   private
 
   def set_gon_variables
-    set_lead_data_popup
+    set_lead_data
   end
 
-  def set_lead_data_popup
+  def set_lead_data
     return unless needs_filling_questionnaire?
-    gon.lead_data_modal = {
+    gon.lead_data = {
       industries: Lead::INDUSTRIES,
       job_roles: Lead::JOB_ROLES,
       challenges: Lead::CHALLENGES,
