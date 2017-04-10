@@ -8,6 +8,6 @@ class Lead < ActiveRecord::Base
   belongs_to :user
 
   validates :industry, :job_role, :company_size, :estimated_monthly_traffic, :first_name, :last_name, :challenge, presence: true
-  validates :challenge, inclusion: { in: CHALLENGES.map { |item| item[:value] } }
+  validates :challenge, inclusion: { in: CHALLENGES.map(&:downcase) }
   validates :phone_number, presence: true, if: :interested
 end

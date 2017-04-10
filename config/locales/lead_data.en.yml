@@ -1,15 +1,9 @@
 en:
   lead:
     challenges:
-      -
-        name: Capture More Emails
-        value: more_emails
-      -
-        name: Generate More Sales
-        value: more_sales
-      -
-        name: Conversion Optimization
-        value: conversion_optimization
+      - Capture More Emails
+      - Generate More Sales
+      - Conversion Optimization
 
     job_roles:
       - Creative

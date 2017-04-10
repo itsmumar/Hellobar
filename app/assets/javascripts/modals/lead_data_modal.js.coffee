@@ -10,7 +10,7 @@ class @LeadDataModal extends Modal
     roles = gon.lead_data.job_roles.map (role) => {name: role, value: role.toLowerCase()}
     companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
     trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
-    challenges = gon.lead_data.challenges
+    challenges = gon.lead_data.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
 
     @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
     @$modal.appendTo($("body"))
