@@ -1,12 +1,20 @@
 describe Admin do
-  let!(:admin) { create :admin, session_last_active: Time.current }
+  let!(:admin) { create :admin }
 
   it 'can create a new record from email and initial password' do
     admin = Admin.make!('newadmin@polymathic.me', '5553211234')
+
     expect(admin).to be_valid
   end
 
-  describe '::validate_session' do
+  describe '#validate_session' do
+    it 'returns nil if token is nil or empty' do
+      create :admin, session_last_active: nil
+
+      expect(Admin.validate_session(nil)).to be_nil
+      expect(Admin.validate_session("")).to be_nil
+    end
+
     it 'returns an admin with valid access token and session token' do
       expect(Admin.validate_session(admin.session_token)).to eq(admin)
     end

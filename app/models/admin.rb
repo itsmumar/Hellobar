@@ -32,7 +32,7 @@ class Admin < ActiveRecord::Base
         return if Time.now - admin.session_last_active > MAX_SESSION_TIME
 
         admin.session_heartbeat!
-        return nil if admin.locked?
+        return if admin.locked?
       end
 
       admin
