@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature 'iContact integration', :js do
+feature 'iContact integration', :js, :vcr do
   let(:provider) { 'icontact' }
   let(:script) { '<script type="text/javascript" src="https://app.icontact.com/icp/core/mycontacts/signup/designer/form/automatic?id=46&cid=1679071&lid=3205"></script>' }
 
