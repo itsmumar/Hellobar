@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-07')
+  LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11')
 
   include Hello::InternalAnalytics
   include GonVariables
@@ -152,6 +152,6 @@ class ApplicationController < ActionController::Base
   end
 
   def needs_filling_questionnaire?
-    current_user && current_user.created_at > LEADS_CREATION_STARTING_DATE && current_user.lead.blank?
+    current_user && current_user.created_at >= LEADS_CREATION_STARTING_DATE && current_user.lead.blank?
   end
 end
