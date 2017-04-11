@@ -157,7 +157,7 @@ describe ServiceProviders::GetResponseApi do
       end
 
       context 'when contact_list.data[cycle_day] present' do
-        let(:contact_list) { build(:contact_list, data: {'cycle_day' => '1'}) }
+        let(:contact_list) { build(:contact_list, data: { 'cycle_day' => '1' }) }
         let(:get_respone_api) { ServiceProviders::GetResponseApi.new(identity: identity, contact_list: contact_list) }
 
         it 'sends dayOfCycle param' do
