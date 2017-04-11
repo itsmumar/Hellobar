@@ -38,7 +38,8 @@ class @ContactListModal extends Modal
       @blocks.iconListing.show()
       @blocks.hellobarOnly.hide()
       @blocks.selectListing.hide()
-    else if listVal == "0"
+
+    if listVal == "0"
       @blocks.iconListing.hide()
       @blocks.hellobarOnly.show()
       @blocks.selectListing.hide()
@@ -103,16 +104,20 @@ class @ContactListModal extends Modal
 
   # A/B Variant - Handles custom event triggers for new UI pieces
   _bindCustomEvents: (object) ->
-    selectList  = object.find('#contact_list_provider')
+    object.on 'provider:connected', =>
+      @_providerSelected()
 
-    object.on 'provider:connected', (evt) =>
-      selectList.parent().addClass('connected')
-      @blocks.selectListing.show()
-      @blocks.hellobarOnly.hide()
-      @blocks.iconListing.hide()
+    object.on 'provider:disconnected', =>
+      @_providerUnselected()
 
-    object.on 'provider:disconnected', (evt) ->
-      selectList.parent().removeClass('connected')
+  _providerUnselected: ->
+    @$modal.find('#contact_list_provider').parent().removeClass('connected')
+
+  _providerSelected: ->
+    @$modal.find('#contact_list_provider').parent().addClass('connected')
+    @blocks.selectListing.show()
+    @blocks.hellobarOnly.hide()
+    @blocks.iconListing.hide()
 
   # A/B Variant - Handles the expanded icon list toggling
   _bindShowExpandedList: (object) ->
