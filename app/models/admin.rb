@@ -28,6 +28,8 @@ class Admin < ActiveRecord::Base
     end
 
     def validate_session(token)
+      return unless token.present?
+
       if (admin = Admin.find_by(session_token: token))
         return if Time.now - admin.session_last_active > MAX_SESSION_TIME
 

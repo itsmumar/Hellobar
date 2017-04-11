@@ -9,7 +9,7 @@ describe Admin do
 
   describe '#validate_session' do
     it 'returns nil if token is nil or empty' do
-      create :admin, session_last_active: nil
+      create :admin, session_token: nil
 
       expect(Admin.validate_session(nil)).to be_nil
       expect(Admin.validate_session("")).to be_nil
