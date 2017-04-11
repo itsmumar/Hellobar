@@ -8,43 +8,43 @@ describe Admin do
 
   describe '::validate_session' do
     it 'returns an admin with valid access token and session token' do
-      expect(Admin.validate_session(admin.session_access_token, admin.session_token)).to eq(admin)
+      expect(Admin.validate_session(admin.session_token)).to eq(admin)
     end
 
     it 'returns nil if admin not found' do
-      expect(Admin.validate_session('gibber', 'ish')).to be_nil
+      expect(Admin.validate_session('ish')).to be_nil
     end
 
     it 'returns nil if the session is too old' do
       expect(admin).to receive(:session_last_active).and_return(Time.current - Admin::MAX_SESSION_TIME - 1.hour)
-      expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
+      expect(Admin).to receive(:find_by).with(session_token: 'bar').and_return(admin)
 
-      result = Admin.validate_session('foo', 'bar')
+      result = Admin.validate_session('bar')
       expect(result).to be_nil
     end
 
     it 'returns nil if the admin is locked' do
       expect(admin).to receive(:locked?).and_return(true)
-      expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
+      expect(Admin).to receive(:find_by).with(session_token: 'bar').and_return(admin)
 
-      result = Admin.validate_session('foo', 'bar')
+      result = Admin.validate_session('bar')
       expect(result).to be_nil
     end
 
     it 'returns nil if session is old AND admin is locked' do
       allow(admin).to receive(:locked?).and_return(true)
       allow(admin).to receive(:session_last_active).and_return(Time.current - Admin::MAX_SESSION_TIME - 1.hour)
-      expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
+      expect(Admin).to receive(:find_by).with(session_token: 'bar').and_return(admin)
 
-      result = Admin.validate_session('foo', 'bar')
+      result = Admin.validate_session('bar')
       expect(result).to be_nil
     end
 
     it 'bumps session_last_active is session is still good' do
       expect(admin).to receive(:session_heartbeat!)
-      expect(Admin).to receive(:find_by).with(session_access_token: 'foo', session_token: 'bar').and_return(admin)
+      expect(Admin).to receive(:find_by).with(session_token: 'bar').and_return(admin)
 
-      Admin.validate_session('foo', 'bar')
+      Admin.validate_session('bar')
     end
   end
 
@@ -66,21 +66,12 @@ describe Admin do
     end
   end
 
-  it 'send_validate_access_token_email! sends an email to the admin with correct URLs' do
-    expect(Pony).to receive(:mail)
-    admin.send_validate_access_token_email!('token')
-  end
-
   describe 'validate_login' do
-    before(:each) do
-      admin.valid_access_tokens = { 'token' => [Time.current.to_i, Time.current.to_i] }
-    end
-
     it 'locks the admin if attempting to log in too many times' do
       admin.update_attribute(:login_attempts, Admin::MAX_LOGIN_ATTEMPTS)
       expect(admin).not_to be_locked
 
-      admin.validate_login('token', 'password', '123')
+      admin.validate_login('password', '123')
 
       expect(admin).to be_locked
       expect(admin.login_attempts).to eq(Admin::MAX_LOGIN_ATTEMPTS + 1)
@@ -88,27 +79,24 @@ describe Admin do
 
     it 'returns false if locked' do
       allow(admin).to receive(:locked?).and_return(true)
-      expect(admin.validate_login('token', 'password', admin.initial_password)).to be_falsey
+      expect(admin.validate_login('password', admin.initial_password)).to be_falsey
     end
 
     it 'returns false if otp is not valid' do
       allow(admin).to receive(:needs_otp_code?).and_return(true)
-      expect(admin.validate_login('token', 'password', 'notthecode')).to be_falsey
+      allow_any_instance_of(AdminAuthenticationPolicy).to receive(:otp_valid?).and_return(false)
+      expect(admin.validate_login('password', 'notthecode')).to be_falsey
     end
 
     it 'returns false if the wrong password is used' do
-      expect(admin.validate_login('token', 'notthepassword', admin.initial_password)).to be_falsey
-    end
-
-    it 'returns false if the access token is invalid' do
-      expect(admin.validate_login('notthetoken', 'password', admin.initial_password)).to be_falsey
+      expect(admin.validate_login('notthepassword', admin.initial_password)).to be_falsey
     end
 
     it 'logs the admin in if all params are valid' do
       allow(admin).to receive(:needs_otp_code?).and_return(true)
       allow(admin).to receive(:valid_authentication_otp?).with('123').and_return(true)
       expect(admin).to receive(:login!)
-      expect(admin.validate_login('token', 'password', '123')).to be_truthy
+      expect(admin.validate_login('password', '123')).to be_truthy
     end
   end
 
@@ -124,21 +112,15 @@ describe Admin do
   end
 
   it 'login! logs the admin in' do
-    admin.update_attributes(
-      login_attempts: 2,
-      session_token: '',
-      session_access_token: ''
-    )
+    admin.update_attributes(login_attempts: 2, session_token: '')
 
-    expect(admin).to receive(:set_valid_access_token)
     expect(admin).to receive(:session_heartbeat!)
 
-    admin.login!('new_token')
+    admin.login!
     admin.reload
 
     expect(admin.login_attempts).to eq(0)
     expect(admin.session_token).not_to be_blank
-    expect(admin.session_access_token).not_to be_blank
     expect(admin.authentication_code).to be_blank
   end
 

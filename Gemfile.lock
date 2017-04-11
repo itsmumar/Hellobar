@@ -408,7 +408,6 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    recaptcha (0.3.6)
     render_anywhere (0.0.9)
       rails (>= 3.0.7)
     representable (2.3.0)
@@ -644,7 +643,6 @@ DEPENDENCIES
   rails-html-sanitizer
   rake (~> 10.3.2)
   rake_running!
-  recaptcha
   render_anywhere
   roadie-rails
   rotp

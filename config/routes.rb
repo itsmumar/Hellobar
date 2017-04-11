@@ -124,7 +124,6 @@ Rails.application.routes.draw do
     end
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
-    get 'validate_access_token/:email/:key/:timestamp', to: 'access#validate_access_token', constraints: { email: /[^\/]+/ }, as: :validate_access_token
     get 'logout', to: 'access#logout_admin', as: :logout
     get 'reset_password', to: 'access#reset_password'
     post 'reset_password', to: 'access#do_reset_password'
