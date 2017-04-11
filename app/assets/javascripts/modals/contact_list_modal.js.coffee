@@ -482,6 +482,7 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id
+    @$modal.find('.flash-block').addClass('error show').append($('.global-wrapper .flash-block.error').hide().text())
 
   _validateRequiredField: (element) ->
     if element.length
