@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature 'Drip Integration', js: true do
+feature 'Drip Integration', :js, :vcr do
   let(:provider) { 'drip' }
 
   before do

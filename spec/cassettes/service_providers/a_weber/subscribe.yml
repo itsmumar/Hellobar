@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.aweber.com/1.0/accounts?oauth_consumer_key=aweber-consumer-key&oauth_nonce=ZWL7eKI1EcPpv6EH9eB6heYkbyK1wuKrfjMhwRuax0&oauth_signature=fMNL%2BJmvlrDBIdmn9JnG/R91mtA=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1487928892&oauth_token=test-token&oauth_version=1.0
+    uri: https://api.aweber.com/1.0/accounts?oauth_consumer_key=aweber-consumer-key&oauth_nonce=6lHwyiBMJr3vCnfbTY9d8Kwph39VK56T8HaQYNS4cc&oauth_signature=Npm%2BV2owY%2BLkeZmCy%2BeVC5Cy5og=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1491854640&oauth_token=test-token&oauth_version=1.0
     body:
       encoding: US-ASCII
       string: ''
@@ -43,7 +43,7 @@ http_interactions:
   recorded_at: Fri, 24 Feb 2017 09:28:03 GMT
 - request:
     method: get
-    uri: https://api.aweber.com/1.0/accounts/1118926/lists?oauth_consumer_key=aweber-consumer-key&oauth_nonce=ZWL7eKI1EcPpv6EH9eB6heYkbyK1wuKrfjMhwRuax0&oauth_signature=fMNL%2BJmvlrDBIdmn9JnG/R91mtA=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1487928892&oauth_token=test-token&oauth_version=1.0
+    uri: https://api.aweber.com/1.0/accounts/1118926/lists?oauth_consumer_key=aweber-consumer-key&oauth_nonce=G8lpI6QklhD5dd7v5uT3QRyQ7JAyfsuIjsxOTQiho&oauth_signature=3ARnarVoaCPAsIF6mExCIY7Ut3E=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1491891208&oauth_token=test-token&oauth_version=1.0
     body:
       encoding: US-ASCII
       string: ''
@@ -92,7 +92,7 @@ http_interactions:
   recorded_at: Fri, 24 Feb 2017 09:28:06 GMT
 - request:
     method: get
-    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=aweber-consumer-key&oauth_nonce=ZWL7eKI1EcPpv6EH9eB6heYkbyK1wuKrfjMhwRuax0&oauth_signature=fMNL%2BJmvlrDBIdmn9JnG/R91mtA=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1487928892&oauth_token=test-token&oauth_version=1.0
+    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=aweber-consumer-key&oauth_nonce=vhdTvXJJdz88s3thx9QSSdcD2PZWBHYMjWIYTw9w&oauth_signature=QIUVZiGbR5pYgVufPGSehKOYFGU=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1491892707&oauth_token=test-token&oauth_version=1.0
     body:
       encoding: US-ASCII
       string: ''
@@ -220,7 +220,7 @@ http_interactions:
   recorded_at: Fri, 24 Feb 2017 09:28:08 GMT
 - request:
     method: post
-    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=aweber-consumer-key&oauth_nonce=ZWL7eKI1EcPpv6EH9eB6heYkbyK1wuKrfjMhwRuax0&oauth_signature=fMNL%2BJmvlrDBIdmn9JnG/R91mtA=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1487928892&oauth_token=test-token&oauth_version=1.0
+    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=aweber-consumer-key&oauth_nonce=e4LejgDYSrzSfA6izQJYknGBNsHDUV1MvYG9DCNnI&oauth_signature=oAfE%2BT%2BKTgKgmGvY1nNNERSIKcg=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1491892747&oauth_token=test-token&oauth_version=1.0
     body:
       encoding: US-ASCII
       string: email=raj.kumar%2B7%40crossover.com&name=&tags=%5B%22test-tag1%22%2C%22test-tag2%22%5D&ws.op=create
@@ -260,7 +260,7 @@ http_interactions:
   recorded_at: Fri, 24 Feb 2017 09:28:11 GMT
 - request:
     method: get
-    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580?oauth_consumer_key=aweber-consumer-key&oauth_nonce=ZWL7eKI1EcPpv6EH9eB6heYkbyK1wuKrfjMhwRuax0&oauth_signature=fMNL%2BJmvlrDBIdmn9JnG/R91mtA=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1487928892&oauth_token=test-token&oauth_version=1.0
+    uri: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580?oauth_consumer_key=aweber-consumer-key&oauth_nonce=PXfJdGkdKGQGv8XGLXpHmcoYvhOa1b8jnovALsD6M&oauth_signature=tQeY803cVY0lBKSDV20aagLpmDQ=&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1491892768&oauth_token=test-token&oauth_version=1.0
     body:
       encoding: US-ASCII
       string: ''

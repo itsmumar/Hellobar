@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.madmimi.com/audience_lists/lists.xml
+    body:
+      encoding: UTF-8
+      string: username=invalid%20user%20name&api_key=invalid_api
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 401 Unauthorized
+      Cache-Control:
+      - no-cache
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Request-Id:
+      - 194773c8-a5dc-421c-9a03-8c14ff1e96fa
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Date:
+      - Mon, 10 Apr 2017 18:01:33 GMT
+      Set-Cookie:
+      - non_eu=true; path=/
+      Server:
+      - Apache
+    body:
+      encoding: UTF-8
+      string: Unable to authenticate
+    http_version: 
+  recorded_at: Mon, 10 Apr 2017 18:01:34 GMT
+recorded_with: VCR 3.0.3

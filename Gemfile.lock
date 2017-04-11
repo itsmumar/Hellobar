@@ -545,7 +545,7 @@ GEM
       unf_ext
     unf_ext (0.0.6)
     unicode-display_width (1.1.3)
-    vcr (2.9.0)
+    vcr (3.0.3)
     verticalresponse (0.1.6)
     warden (1.2.3)
       rack (>= 1.0)

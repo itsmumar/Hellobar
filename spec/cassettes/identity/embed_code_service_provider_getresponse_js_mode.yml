@@ -513,6 +513,6 @@ http_interactions:
         ICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9KTsK
         ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAg
         ICAgICAgICAgICAgICA=
-    http_version: 
+    http_version:
   recorded_at: Fri, 22 Aug 2014 21:25:09 GMT
 recorded_with: VCR 2.9.0
