@@ -32,7 +32,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     if error.status_code == 404
       false
     else
-      handle_error(error)
+      handle_error(error, list_id)
     end
   end
 
@@ -68,7 +68,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
           log result
         end
       rescue Gibbon::MailChimpError => error
-        handle_error(error)
+        handle_error(error, list_id)
       end
     end
   end
@@ -123,7 +123,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     super message
   end
 
-  def handle_error(error)
+  def handle_error(error, list_id = nil)
+    Raven.annotate_exception(error, tags: { debug: true }, extra: { identity_id: @identity.id, list_id: list_id })
+
     return catch_required_merge_var_error!(error) if error.detail =~ /merge field/
 
     case error.title
