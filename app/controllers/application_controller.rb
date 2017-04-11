@@ -91,9 +91,15 @@ class ApplicationController < ActionController::Base
   end
 
   def impersonated_user
-    return unless current_admin && session[:impersonated_user]
+    return unless current_admin && session[:impersonated_user].present?
 
     impersonated_user = User.find_by(id: session[:impersonated_user])
+
+    unless impersonated_user
+      session.delete(:impersonated_user)
+      return
+    end
+
     impersonated_user.is_impersonated = true
     impersonated_user
   end
