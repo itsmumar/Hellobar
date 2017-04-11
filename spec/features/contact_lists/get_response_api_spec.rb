@@ -8,15 +8,18 @@ feature 'GetResponse integration', :js do
   before do
     @fake_data_api_original = Hellobar::Settings[:fake_data_api]
     Hellobar::Settings[:fake_data_api] = true
-    @user = login
+    login(user)
   end
 
   after do
     Hellobar::Settings[:fake_data_api] = @fake_data_api_original
   end
 
+  let(:user) { create(:user) }
+  let(:contact_list) { user.sites.first.contact_lists.first }
+
   scenario 'invalid form details' do
-    open_provider_form(@user, provider)
+    open_provider_form(user, provider)
 
     fill_in 'contact_list[data][api_key]', with: 'invalid-key'
 
@@ -32,6 +35,9 @@ feature 'GetResponse integration', :js do
     list_option = first('#contact_list_remote_list_id option').text
     select list_option, from: 'contact_list_remote_list_id'
 
+    check('contact_list[cycle_day_enabled]')
+    fill_in 'contact_list[cycle_day]', with: '4'
+
     expect(page).to have_content('Apply Tags')
 
     tags_select = first('.contact-list-tag')
@@ -45,7 +51,7 @@ feature 'GetResponse integration', :js do
   private
 
   def connect_to_provider
-    open_provider_form(@user, provider)
+    open_provider_form(user, provider)
 
     fill_in 'contact_list[data][api_key]', with: 'valid-key'
 

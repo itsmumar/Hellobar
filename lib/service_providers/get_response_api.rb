@@ -30,8 +30,7 @@ module ServiceProviders
 
       if contact_list.present?
         tags = contact_list.tags.map { |tag| { tagId: tag } }
-        cycle_day = contact_list.data['cycle_day']
-        cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+        cycle_day = contact_list.data['cycle_day'].presence
       end
 
       begin
