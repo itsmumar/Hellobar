@@ -16,6 +16,7 @@ RSpec.configure do |config|
   config.around(:each, :vcr) do |example|
     description = example.metadata.fetch(:example_group, example.metadata)[:full_description]
     name = description.split(/\s+/, 2).join('/').underscore.strip.gsub(/[^\w\/]+/, '_')
+    name = example.metadata[:vcr].is_a?(String) ? example.metadata[:vcr] : name
 
     VCR.use_cassette(name) do
       example.run
