@@ -17,6 +17,7 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'editor/**/*'
     - 'backend-mock/**/*'
+    - 'lib/legacy_migrator.rb'
 
 #### BEGIN STYLES
 
@@ -138,6 +139,7 @@ Rails/TimeZone:
     - 'lib/hello/suggested_opportunities.rb'
     - 'lib/hello/data_api.rb'
     - 'lib/analytics.rb'
+    - 'app/services/calculate_bill.rb'
 
 # TODO: issue XOHB-1599
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -156,7 +158,7 @@ Rails/Date:
 #### BEGIN METRICS
 
 Metrics/AbcSize:
-  Max: 101 # ideally 16
+  Max: 60 # ideally 16
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
