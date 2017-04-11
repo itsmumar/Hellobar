@@ -1,6 +1,6 @@
 
 class @LeadDataModal extends Modal
-  canClose: true
+  canClose: false
   modalName: 'lead-data'
 
   constructor: (@options = {}) ->
@@ -28,6 +28,7 @@ class @LeadDataModal extends Modal
   _saveData: ->
     data = @$firstForm.serializeArray().reduce @_reducer, {}
     data = @$secondForm.serializeArray().reduce @_reducer, data
+    data.phone_number = cleanPhone(data.phone_number)
     $.post('/leads', lead: data)
 
   _reducer: (result, item) ->
@@ -54,7 +55,9 @@ class @LeadDataModal extends Modal
       @$modal.find('.js-phone-number').attr('required', 'required').show()
 
     @$modal.find('input[name="phone_number"]').on 'keyup change', (event) =>
-      if $(event.target).val() == ""
+      phoneNumber = $(event.target).val()
+
+      if phoneNumber == "" || !isValidNumber(phoneNumber)
         @canClose = false
         @$modal.find('.js-close').hide()
       else
@@ -73,6 +76,7 @@ class @LeadDataModal extends Modal
       @$firstForm.show()
       @$secondForm.hide()
       @$modal.find('.js-prev-screen').hide()
+      @$modal.find('.js-close').hide()
       @$modal.find('.js-next-screen').show()
 
     $('.js-next-screen').on 'click', =>
@@ -80,4 +84,5 @@ class @LeadDataModal extends Modal
         @$firstForm.hide()
         @$secondForm.show()
         @$modal.find('.js-prev-screen').show()
+        @$modal.find('.js-close').show() if @canClose
         @$modal.find('.js-next-screen').hide()
