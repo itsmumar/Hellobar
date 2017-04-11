@@ -12,7 +12,7 @@ describe Admin do
       create :admin, session_token: nil
 
       expect(Admin.validate_session(nil)).to be_nil
-      expect(Admin.validate_session("")).to be_nil
+      expect(Admin.validate_session('')).to be_nil
     end
 
     it 'returns an admin with valid access token and session token' do
