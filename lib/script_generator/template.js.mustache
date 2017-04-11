@@ -40,6 +40,11 @@
         configuration.previewIsActive({{preview_is_active}});
       });
 
+      configure('base.metainfo', function(configuration) {
+        configuration.version("{{version}}");
+        configuration.timestamp("{{timestamp}}");
+      });
+
       configure('base.capabilities', function(configuration) {
         configuration.capabilities({{{capabilities_json}}});
       });

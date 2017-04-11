@@ -222,6 +222,23 @@ ActiveRecord::Schema.define(version: 20170410125730) do
     t.integer "last_visitor_user_id_processed", null: false
   end
 
+  create_table "leads", force: true do |t|
+    t.string   "industry",                  null: false
+    t.string   "job_role",                  null: false
+    t.string   "company_size",              null: false
+    t.string   "estimated_monthly_traffic", null: false
+    t.string   "first_name",                null: false
+    t.string   "last_name",                 null: false
+    t.string   "challenge",                 null: false
+    t.boolean  "interested",                null: false
+    t.string   "phone_number"
+    t.integer  "user_id",                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "leads", ["user_id"], name: "index_leads_on_user_id", using: :btree
+
   create_table "payment_method_details", force: true do |t|
     t.integer  "payment_method_id"
     t.string   "type"

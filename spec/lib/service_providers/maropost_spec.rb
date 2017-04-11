@@ -10,11 +10,32 @@ describe ServiceProviders::Maropost do
       .to raise_error('Identity does not have a stored Maropost API key and AccountID')
   end
 
+  describe '#valid?' do
+    let(:identity) do
+      Identity.new site_id: 1,
+                   provider: 'maropost',
+                   api_key: 'api_key',
+                   credentials: { 'username' => 'a_user_id_actually' }
+    end
+    let(:maropost) { ServiceProviders::Maropost.new(identity: identity) }
+    let(:client) { maropost.instance_variable_get(:@client) }
+
+    context 'when lists present' do
+      before { allow(client).to receive(:get).and_return(double(success?: true, body: '[{"id":1,"name":"name"}]')) }
+      specify { expect(maropost).to be_valid }
+    end
+
+    context 'when lists does not present' do
+      before { allow(client).to receive(:get).and_return(double(success?: false, body: '', status: 404)) }
+      specify { expect(maropost).not_to be_valid }
+    end
+  end
+
   context 'remote requests' do
     let(:identity) do
       Identity.new site_id: 1,
                    provider: 'maropost',
-                   api_key: 'my_cool_api_key',
+                   api_key: 'TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZg',
                    credentials: { 'username' => 'a_user_id_actually' }
     end
 
@@ -39,7 +60,7 @@ describe ServiceProviders::Maropost do
       it 'includes auth_token in api requests' do
         expect(client)
           .to receive(:get)
-          .with(anything, hash_including(auth_token: 'my_cool_api_key'))
+          .with(anything, hash_including(auth_token: 'TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZg'))
           .and_return(success_response)
 
         expect(maropost.lists).to eq([{ 'id' => 1122, 'name' => 'myCoolList' }])
@@ -100,7 +121,7 @@ describe ServiceProviders::Maropost do
 
         expect(double_request)
           .to receive(:body=)
-          .with(hash_including(auth_token: 'my_cool_api_key'))
+          .with(hash_including(auth_token: 'TiqJgU1soKXuvaC3vDzBsRpcwxtyhBFIujI0PDgzcKKOlasZZtrZZg'))
 
         allow(client).to receive(:post).and_yield(double_request)
         maropost.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
