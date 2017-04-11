@@ -1,3 +1,6 @@
+Hellobar::Settings[:identity_providers][:aweber][:consumer_key] = 'aweber-consumer-key'
+Hellobar::Settings[:identity_providers][:aweber][:consumer_secret] = 'aweber-consumer-secret'
+
 describe ServiceProviders::AWeber, :vcr do
   let(:identity) do
     Identity.new(
