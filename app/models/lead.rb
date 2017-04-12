@@ -10,4 +10,12 @@ class Lead < ActiveRecord::Base
   validates :industry, :job_role, :company_size, :estimated_monthly_traffic, :first_name, :last_name, :challenge, presence: true
   validates :challenge, inclusion: { in: CHALLENGES.map(&:downcase) }
   validates :phone_number, presence: true, if: :interested
+
+  after_create :update_user
+
+  private
+
+  def update_user
+    user.update(first_name: first_name, last_name: last_name)
+  end
 end
