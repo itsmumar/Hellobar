@@ -11,7 +11,7 @@ describe('Module tracking.external.googleAnalytics', function () {
     module = hellobar('tracking.external.googleAnalytics', {
       dependencies: {},
       configurator: function (configuration) {
-        configuration.gaProvider(function() {
+        configuration.gaProvider(function () {
           return gaSpy;
         });
       }
@@ -21,6 +21,10 @@ describe('Module tracking.external.googleAnalytics', function () {
   it('sends GA event', function () {
     module.send('view');
     expect(gaSpy).toHaveBeenCalledWith('send', jasmine.any(Object));
+  });
+
+  it('is available if gaProvider is specified', function () {
+    expect(module.introspect().available()).toEqual(true);
   });
 
 });

@@ -36,7 +36,10 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
      */
     send,
     introspect: () => ({
-      ga
+      ga,
+      available() {
+        return typeof ga() === 'function';
+      }
     })
   };
 
