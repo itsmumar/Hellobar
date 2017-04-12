@@ -17,12 +17,14 @@ class ScriptGenerator
         .merge(settings)
         .merge(conversion)
         .select { |_, value| !value.nil? }
+        .symbolize_keys
     end
 
     def settings
       {
         font: site_element.font.value,
         google_font: site_element.font.google_font,
+        image_url: site_element.image_url,
         branding_url: "http://www.hellobar.com?sid=#{ site_element.id }",
         closable: site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false,
         email_redirect: site_element.email_redirect?,
@@ -50,7 +52,7 @@ class ScriptGenerator
         answer1 answer1response answer1caption answer1link_text answer2 answer2response answer2caption
         answer2link_text use_question question
         contact_list_id custom_html custom_css custom_js
-        image_url open_in_new_window phone_number
+        open_in_new_window phone_number
         remains_at_top pushes_page_down settings blocks id
       ).tap do |attrs|
         attrs << 'caption' unless site_element.use_question?
