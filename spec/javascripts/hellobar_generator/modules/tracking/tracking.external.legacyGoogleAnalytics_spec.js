@@ -13,7 +13,7 @@ describe('Module tracking.external.legacyGoogleAnalytics', function () {
     module = hellobar('tracking.external.legacyGoogleAnalytics', {
       dependencies: {},
       configurator: function (configuration) {
-        configuration.gaProvider(function() {
+        configuration.gaProvider(function () {
           return lgaSpy;
         });
       }
@@ -21,10 +21,14 @@ describe('Module tracking.external.legacyGoogleAnalytics', function () {
   });
 
   it('sends legacy GA event', function () {
-    var event = { category: 'Category', action: 'Action', label: 'Label' }
+    var event = {category: 'Category', action: 'Action', label: 'Label'};
 
     module.send(event);
-    expect(lgaSpy.push).toHaveBeenCalledWith([ '_trackEvent', event.category, event.action, event.label]);
+    expect(lgaSpy.push).toHaveBeenCalledWith(['_trackEvent', event.category, event.action, event.label]);
+  });
+
+  it('is available if gaProvider is specified', function () {
+    expect(module.introspect().available()).toEqual(true);
   });
 
 });
