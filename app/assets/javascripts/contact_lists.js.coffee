@@ -5,7 +5,7 @@ $ ->
   siteID = (location.pathname.match(/sites\/(\d+)/) || [])[1]
   contactListID = (location.pathname.match(/contact_lists\/(\d+)/) || [])[1]
 
-  baseOptions =
+  baseOptions = ->
     id: contactListID
     siteID: siteID
     success: (data, modal) ->
@@ -18,7 +18,7 @@ $ ->
       saveURL: "/sites/#{siteID}/contact_lists.json"
       saveMethod: "POST"
 
-    new ContactListModal($.extend(baseOptions, options)).open()
+    new ContactListModal($.extend(baseOptions(), options)).open()
 
   $("#edit-contact-list").click (e) ->
     options =
@@ -26,7 +26,7 @@ $ ->
       saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveMethod: "PUT"
 
-    new ContactListModal($.extend(baseOptions, options)).open()
+    new ContactListModal($.extend(baseOptions(), options)).open()
 
   if localStorage["stashedContactList"]
     contactList = JSON.parse(localStorage["stashedContactList"])
@@ -43,4 +43,4 @@ $ ->
 
     options["contactList"] = contactList
 
-    new ContactListModal($.extend(baseOptions, options)).open()
+    new ContactListModal($.extend(baseOptions(), options)).open()
