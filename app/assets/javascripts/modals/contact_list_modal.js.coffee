@@ -34,12 +34,13 @@ class @ContactListModal extends Modal
   _setBlockVisibilty: (initital = false)->
     listVal = @$modal.find("#contact_list_provider").val()
 
-    if initital
+    if initital and !@options.contactList
       @blocks.iconListing.show()
       @blocks.hellobarOnly.hide()
       @blocks.selectListing.hide()
+      return
 
-    if listVal == "0"
+    if listVal == '0'
       @blocks.iconListing.hide()
       @blocks.hellobarOnly.show()
       @blocks.selectListing.hide()
