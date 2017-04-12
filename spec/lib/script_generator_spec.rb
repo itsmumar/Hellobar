@@ -259,7 +259,7 @@ describe ScriptGenerator do
       allow(site).to receive(:rules).and_return([rule])
 
       generated_site_elements = JSON.parse(generator.rules.first[:site_elements])
-      expect(generated_site_elements.first).to match create(:site_element_for_rule)
+      expect(generated_site_elements.first).to match create(:site_element_for_rule, site_element: bar)
     end
 
     it 'renders all bar json when the render_paused_site_elements is true' do

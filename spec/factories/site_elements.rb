@@ -119,8 +119,12 @@ FactoryGirl.define do
   end
 
   factory :site_element_for_rule, class: Hash do
+    site_element
+
     skip_create
     initialize_with do
+      id = site_element.id
+      contact_list_id = site_element.contact_list_id
       {
         'animated' => true, 'background_color' => 'eb593c', 'border_color' => 'ffffff', 'button_color' => '000000',
         'email_placeholder' => 'Your email', 'headline' => 'Hello, HelloBar!', 'image_placement' => 'bottom',
@@ -128,8 +132,9 @@ FactoryGirl.define do
         'placement' => 'bar-top', 'show_border' => false, 'show_branding' => true, 'size' => 'large', 'text_color' => 'ffffff',
         'texture' => 'none', 'theme_id' => 'classic', 'type' => 'Bar', 'view_condition' => 'immediately', 'wiggle_button' => false,
         'blocks' => [], 'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',
-        'branding_url' => 'http://www.hellobar.com?sid=4', 'closable' => false, 'contact_list_id' => 2, 'email_redirect' => false,
-        'hide_destination' => true, 'id' => 4, 'open_in_new_window' => false, 'primary_color' => 'eb593c', 'pushes_page_down' => true,
+        'branding_url' => "http://www.hellobar.com?sid=#{ id }", 'closable' => false,
+        'contact_list_id' => contact_list_id, 'email_redirect' => false, 'hide_destination' => true, 'id' => id,
+        'open_in_new_window' => false, 'primary_color' => 'eb593c', 'pushes_page_down' => true,
         'remains_at_top' => true, 'secondary_color' => '000000',
         'settings' => { 'fields_to_collect' => [{ 'type' => 'builtin-email', 'is_enabled' => true }] },
         'subtype' => 'email', 'tab_side' => 'right', 'template_name' => 'bar_email',
