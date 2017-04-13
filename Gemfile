@@ -64,7 +64,6 @@ gem 'rails', '~> 4.1.16'
 gem 'rake', '~> 10.3.2'
 
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
-gem 'recaptcha', require: 'recaptcha/rails'
 gem 'render_anywhere'
 gem 'roadie-rails'
 gem 'ruby-hmac'

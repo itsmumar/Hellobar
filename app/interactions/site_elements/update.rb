@@ -5,6 +5,7 @@ class SiteElements::Update < Less::Interaction
   def run
     SiteElement.transaction do
       change_type! if type_should_change?
+      disable_use_question_if_template
       element.update_attributes!(params)
     end
     true
@@ -36,5 +37,11 @@ class SiteElements::Update < Less::Interaction
 
   def type_should_change?
     new_type.present? && new_type != @element.element_subtype
+  end
+
+  def disable_use_question_if_template
+    return unless (theme = Theme.find(params[:theme_id]))
+    return unless theme.type == 'template'
+    params[:use_question] = false
   end
 end

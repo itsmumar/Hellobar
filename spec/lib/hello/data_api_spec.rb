@@ -86,17 +86,13 @@ describe Hello::DataAPI do
     end
   end
 
-  describe '.contacts' do
+  describe '.contacts', vcr: 'contact_list/get_contacts' do
     let(:contact_list) { create :contact_list }
     let(:id) { contact_list.id }
     let(:site_id) { contact_list.site_id }
     let(:read_key) { contact_list.site.read_key }
     let(:limit) { 5 }
-    let(:contacts) do
-      VCR.use_cassette('contact_list/get_contacts') do
-        Hello::DataAPI.contacts(contact_list, limit)
-      end
-    end
+    let(:contacts) { Hello::DataAPI.contacts(contact_list, limit) }
 
     before(:each) do
       allow(Hello::DataAPIHelper::RequestParts).to receive(:contacts)

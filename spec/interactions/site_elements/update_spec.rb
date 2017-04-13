@@ -77,20 +77,19 @@ describe SiteElements::Update do
       expect(interaction.run).to be_falsey
     end
 
-    xit "doesn't regenerate the script" do
+    it 'does not regenerate the script' do
+      expect(element.site).not_to receive(:generate_script)
       run_interaction
-
-      expect(element.site).not_to have_received(:generate_script)
     end
 
     context 'when type is changed' do
       let(:params) { { background_color: '', element_subtype: 'traffic' } }
 
-      it "doesn't create a new element" do
+      it 'does not create a new element' do
         expect { run_interaction }.not_to change { SiteElement.count }
       end
 
-      it "doesn't disable original element" do
+      it 'does not disable original element' do
         run_interaction
 
         expect(element.reload.paused).to be_falsey
@@ -99,12 +98,40 @@ describe SiteElements::Update do
       context 'when update succeeds but disabling fails' do
         let(:params) { valid_params.update(element_subtype: 'traffic') }
 
-        it "doesn't create new element" do
+        it 'does not create new element' do
           allow(element).to receive(:save!).and_raise(ActiveRecord::ActiveRecordError)
           run_interaction
 
           expect(element.reload.paused).to be_falsey
         end
+      end
+    end
+  end
+
+  context 'when use_question has been previously set to true' do
+    context 'and theme is a template' do
+      let!(:element) { create(:site_element, :email, use_question: true) }
+      let(:params) { { use_question: true, theme_id: 'traffic-growth' } }
+
+      it 'returns true' do
+        expect(interaction.run).to be_truthy
+      end
+
+      it 'sets use_question to false' do
+        expect { run_interaction }.to change(element, :use_question).from(true).to(false)
+      end
+    end
+
+    context 'and theme is not a template' do
+      let!(:element) { create(:site_element, :email, use_question: true) }
+      let(:params) { { use_question: true, theme_id: 'autodetect' } }
+
+      it 'returns true' do
+        expect(interaction.run).to be_truthy
+      end
+
+      it 'does not touch use_question' do
+        expect { run_interaction }.not_to change(element, :use_question)
       end
     end
   end

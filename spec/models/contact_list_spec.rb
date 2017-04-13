@@ -126,7 +126,7 @@ describe ContactList do
       end
     end
 
-    context 'embed code provider' do
+    context 'embed code provider', :vcr do
       let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { create(:contact_list, :embed_iframe).tap { |c| c.identity = identity } }
       let(:service_provider) { contact_list.service_provider }
@@ -241,8 +241,12 @@ describe ContactList do
         allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::ConstantContact)
       end
 
+      def rest_response(status, body)
+        RestClient::Response.create body, OpenStruct.new(code: status, body: body), {}
+      end
+
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        response = OpenStruct.new(code: 404, body: '404 Resource Not Found')
+        response = rest_response(404, '404 Resource Not Found')
         expect(contact_list).to receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
         expect(contact_list.identity).to receive :destroy_and_notify_user
       end

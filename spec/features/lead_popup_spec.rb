@@ -34,7 +34,7 @@ feature 'Lead data popup', :js do
     click_on 'Next'
 
     find(:label, 'Yes').click
-    fill_in 'phone_number', with: '12345678'
+    fill_in 'phone_number', with: '+1-234-567-8910'
     click_on 'Save'
     wait_for_ajax
 
@@ -47,7 +47,7 @@ feature 'Lead data popup', :js do
       last_name: 'LastName',
       challenge: 'generate more sales',
       interested: true,
-      phone_number: '12345678'
+      phone_number: '+12345678910'
     }
     expect(user.lead.reload.attributes).to include(attributes.stringify_keys)
   end

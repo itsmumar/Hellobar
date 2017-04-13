@@ -34,11 +34,13 @@ class @ContactListModal extends Modal
   _setBlockVisibilty: (initital = false)->
     listVal = @$modal.find("#contact_list_provider").val()
 
-    if initital
+    if initital and !@options.contactList
       @blocks.iconListing.show()
       @blocks.hellobarOnly.hide()
       @blocks.selectListing.hide()
-    else if listVal == "0"
+      return
+
+    if listVal == '0'
       @blocks.iconListing.hide()
       @blocks.hellobarOnly.show()
       @blocks.selectListing.hide()
@@ -103,16 +105,20 @@ class @ContactListModal extends Modal
 
   # A/B Variant - Handles custom event triggers for new UI pieces
   _bindCustomEvents: (object) ->
-    selectList  = object.find('#contact_list_provider')
+    object.on 'provider:connected', =>
+      @_providerSelected()
 
-    object.on 'provider:connected', (evt) =>
-      selectList.parent().addClass('connected')
-      @blocks.selectListing.show()
-      @blocks.hellobarOnly.hide()
-      @blocks.iconListing.hide()
+    object.on 'provider:disconnected', =>
+      @_providerUnselected()
 
-    object.on 'provider:disconnected', (evt) ->
-      selectList.parent().removeClass('connected')
+  _providerUnselected: ->
+    @$modal.find('#contact_list_provider').parent().removeClass('connected')
+
+  _providerSelected: ->
+    @$modal.find('#contact_list_provider').parent().addClass('connected')
+    @blocks.selectListing.show()
+    @blocks.hellobarOnly.hide()
+    @blocks.iconListing.hide()
 
   # A/B Variant - Handles the expanded icon list toggling
   _bindShowExpandedList: (object) ->
@@ -477,6 +483,9 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id
+
+    if $('.global-wrapper .flash-block.error').length > 0
+      @$modal.find('.flash-block').addClass('error show').append($('.global-wrapper .flash-block.error').remove().text())
 
   _validateRequiredField: (element) ->
     if element.length

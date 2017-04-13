@@ -52,7 +52,7 @@ describe IdentitiesController do
   end
 
   describe 'POST :create' do
-    it 'redirects when identity already exists' do
+    it 'redirects when identity already exists', :vcr do
       api_key = 'my_cool_api_key'
       identity = Identity.create! site_id: site.id, provider: 'get_response_api', api_key: api_key
       allow_any_instance_of(Identity).to receive(:provider_config).and_return(name: 'get_response_api')
@@ -65,7 +65,7 @@ describe IdentitiesController do
         request.env['HTTP_REFERER'] = 'my_cool_referrer'
       end
 
-      it 'saves api key on the identity object' do
+      it 'saves api key on the identity object', :vcr do
         api_key = 'valid-active-campaign-key'
         post :create, site_id: identity.site.id, provider: 'active_campaign',
                       api_key: api_key, app_url: 'crossover.api-us1.com'
