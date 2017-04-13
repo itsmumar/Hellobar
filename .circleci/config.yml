@@ -107,7 +107,9 @@ jobs:
 
       - run:
           name: Run feature tests
-          command: xvfb-run -a bundle exec rspec spec/features -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+          command: |
+            TESTFILES=$(circleci tests glob "spec/features/**/*_spec.rb" | circleci tests split --split-by=timings)
+            xvfb-run -a bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
           key: dependency-cache-tmp-{{ .Branch }}
@@ -119,3 +121,6 @@ jobs:
       - store_artifacts:
           path: /tmp/hellobar_new/tmp/coverage
           destination: coverage
+
+      - store_test_results:
+          path: /tmp/hellobar_new/test-results
