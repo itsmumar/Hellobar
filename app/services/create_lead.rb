@@ -14,7 +14,7 @@ class CreateLead
   private
 
   def create_lead
-    user.create_lead! unless user.lead
+    user.create_lead!(params) unless user.lead
   end
 
   def update_user
