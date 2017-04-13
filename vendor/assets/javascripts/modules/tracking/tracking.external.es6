@@ -11,13 +11,16 @@ hellobar.defineModule('tracking.external',
 
     const trackingEngines = [googleAnalytics, legacyGoogleAnalytics];
 
-    const trackingsByType = (type) => (configuration.externalTrackings() || []).filter((tracking) => tracking.type === type);
+    const trackingsByTypeAndElementId = (type, siteElementId) => {
+      const allTrackings = configuration.externalTrackings() || [];
+      return allTrackings.filter((tracking) => tracking.type === type && tracking.site_element_id === siteElementId);
+    };
 
-    function send(trackingType) {
+    function send(trackingType, siteElementId) {
       const processExternalTracking = (externalTracking) => {
         trackingEngines.forEach((engine) => engine.send(externalTracking));
       };
-      trackingsByType(trackingType).forEach((tracking) => processExternalTracking(tracking));
+      trackingsByTypeAndElementId(trackingType, siteElementId).forEach((tracking) => processExternalTracking(tracking));
     }
 
     /**
@@ -28,8 +31,12 @@ hellobar.defineModule('tracking.external',
       /**
        * Sends information about known tracking specified by trackingType.
        * @param {string} trackingType
+       * @param {number} siteElementId
        */
-      send
+      send,
+      introspect: () => ({
+        available: () => trackingEngines.some((trackingEngine) => trackingEngine.introspect().available())
+      })
     };
 
   });

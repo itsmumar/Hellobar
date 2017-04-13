@@ -15,7 +15,8 @@ describe('Module autofills', function () {
         runOnDocumentReady: function(callback) {
           callback();
         }
-      }
+      },
+      'base.bus': jasmine.createSpyObj('base.bus', ['on', 'trigger'])
     };
     dependencies['base.storage'].getValue.and.returnValue(storedValue);
     return dependencies;

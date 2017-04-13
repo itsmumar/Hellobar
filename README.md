@@ -40,13 +40,12 @@ Let rake setup and migrate your database:
 `rake db:setup`
 
 
-It is advised to run the application locally using the `local.hellobar.com` domain with an additional entry in `/etc/hosts`,
-so that it resolves into `127.0.0.1`.
+It is advised to run the application locally using the `local.hellobar.com` vhost/domain as this domain has been setup to resolve to `127.0.0.1`.
 
 You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
 and add new or use existing Google OAuth credentials to be able to log in.
 
-`google_auth_id` and `google_auth_secret` entrie should be added into `config/settings.yml`.
+`google_auth_id` and `google_auth_secret` entries should be added into `config/settings.yml`.
 
 
 ### Front-end

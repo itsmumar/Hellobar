@@ -9,7 +9,7 @@
         setTimeout(attachTrackingEvents, 100);
       } else {
         twttr.ready(function (twttr) {
-          if (parent.HB) {
+          if (parent.hellobar) {
             twttr.events.bind('click', function(event) {
               {{siteElement.me}}.converted();
             });

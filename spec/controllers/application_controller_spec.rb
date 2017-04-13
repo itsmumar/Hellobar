@@ -175,3 +175,44 @@ describe ApplicationController, 'rescue_from errors' do
     end
   end
 end
+
+describe ApplicationController, 'current_user' do
+  context 'when admin is signed in' do
+    let!(:current_admin) { create :admin }
+
+    before do
+      stub_current_admin(current_admin)
+    end
+
+    context 'when session[:impersonated_user] is blank' do
+      it 'returns nil' do
+        session[:impersonated_user] = ''
+        expect(controller.current_user).to be_nil
+      end
+    end
+
+    context 'when user in session[:impersonated_user] does not exist' do
+      it 'deletes session[:impersonated_user]' do
+        session[:impersonated_user] = '123'
+        controller.current_user
+        expect(session).not_to have_key :impersonated_user
+      end
+
+      it 'returns nil' do
+        expect(controller.current_user).to be_nil
+      end
+    end
+  end
+
+  context 'when user is signed in' do
+    let!(:current_user) { create :user }
+
+    before do
+      stub_current_user(current_user)
+    end
+
+    it 'returns user' do
+      expect(controller.current_user).to eql current_user
+    end
+  end
+end

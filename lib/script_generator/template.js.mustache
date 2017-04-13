@@ -1,20 +1,21 @@
 (function() {
-  if (typeof(window.HB) == "undefined") {
-    HB_BACKEND_HOST = "{{hb_backend_host}}";
+  if (typeof(hellobar) === 'undefined') {
 
-    HB_SITE_ID = {{site_id}};
-    HB_SITE_URL = "{{site_url}}";
-    HB_WK = "{{site_write_key}}"; // The site's write key
-    HB_TZ = "{{site_timezone}}"; // The site's timezone offset in the format "+/-HH:MM"
-    HB_PS = "{{pro_secret}}";
-    HB_GL_URL = "{{geolocation_url}}";
-
-    // HelloBar JS Modules
+    // Load HelloBar JS Core and Modules
     (function() {
       // Loading core for module management
       var hellobar = {{{core_js}}}
 
-      // Loading all modules
+      function defineExternalLibrariesAsModules() {
+        hellobar.defineModule('lib.crypto', [], function () {
+          {{{crypto_js}}}
+          return CryptoJS;
+        });
+      }
+
+      defineExternalLibrariesAsModules();
+
+      // Loading all HelloBar modules
       {{{modules_js}}}
 
       // A few helper functions
@@ -23,100 +24,101 @@
       }
 
       function isPreviewMode() {
-        return hasCapability('preview');
+        return hellobar('base.preview').isActive();
       }
 
-      // Configure modules
+      function scriptIsInstalledProperly() {
+        return hellobar('base.selfcheck').scriptIsInstalledProperly();
+      }
 
-      hellobar('base.capabilities', {
-        configurator: function(configuration) {
-          configuration.capabilities({{{capabilities_json}}});
-        }
+      function configure(moduleName, configurator) {
+        hellobar(moduleName, { configurator: configurator });
+      }
+
+      // Initialize and configure modules
+      configure('base.preview', function(configuration) {
+        configuration.previewIsActive({{preview_is_active}});
       });
 
-      hellobar('base.site', {
-        configurator: function(configuration) {
-          configuration.siteId({{site_id}}).siteUrl('{{site_url}}');
-        }
+      configure('base.metainfo', function(configuration) {
+        configuration.version("{{version}}");
+        configuration.timestamp("{{timestamp}}");
       });
 
-      hellobar('geolocation', {
-        configurator: function(configuration) {
-          configuration.geolocationUrl('{{geolocation_url}}');
-        }
+      configure('base.capabilities', function(configuration) {
+        configuration.capabilities({{{capabilities_json}}});
       });
 
-      !isPreviewMode() && hasCapability('geolocation_injection') && hellobar('geolocation.injection', {
-        configurator: function(configuration) {
-          configuration.autoRun(true);
-        }
+      configure('base.site', function(configuration) {
+        configuration.siteId({{site_id}}).siteUrl('{{site_url}}').secret('{{pro_secret}}');
       });
 
-      !isPreviewMode() && hasCapability('external_tracking') && hellobar('tracking.external', {
-        configurator: function(configuration) {
-          var externalTrackings = {{{external_tracking_json}}};
-          configuration.externalTrackings(externalTrackings);
-        }
-      });
+      function initializeProtectedModules() {
 
-      // Loading bar modules
-      // TODO
+        configure('base.timezone', function(configuration) {
+          configuration.defaultTimezone('{{site_timezone}}');
+        });
 
-      !isPreviewMode() && hasCapability('autofills') && hellobar('autofills', {
-        configurator: function(configuration) {
-          var autofills = {{{autofills_json}}};
-          configuration.autofills(autofills).autoRun(true);
-        }
-      });
-    })();
+        configure('base.styling', function(configuration) {
+          configuration.externalCSS({{{hellobar_container_css}}});
+        });
 
-    {{{libs_js}}}
-
-    (function() {
-
-      HBInit = function () {
-        if (Object.prototype.toString.call( _hbq ) === "[object Array]") {
-          HB.CAP = {{{capabilities_json}}};
-          // Protect capabilities from being modified
-          if ( typeof(Object.defineProperty) != "undefined")
-          {
-            try{Object.defineProperty(HB, 'CAP', {writable:false, configurable: false});}catch(e){};
-            for(var p in HB.CAP)
-            {
-              try{Object.defineProperty(HB.CAP, p, {writable:false, configurable: false})}catch(e){};
-            }
-          }
-
-          HB.CONTENT_UPGRADES  = {{{content_upgrades_json}}}
-          HB.CONTENT_UPGRADES_STYLES  = {{{content_upgrades_styles_json}}}
-
+        configure('base.templating', function(configuration) {
           {{#templates}}
-            HB.setTemplate("{{name}}", {{{markup}}});
+            configuration.addTemplate("{{name}}", {{{markup}}});
           {{/templates}}
 
           {{#branding_templates}}
-            HB.setBrandingTemplate("{{name}}", {{{markup}}});
+            configuration.addTemplate("{{name}}", {{{markup}}});
           {{/branding_templates}}
 
           {{#content_upgrade_template}}
-            HB.setContentUpgradeTemplate("{{name}}", {{{markup}}});
+            configuration.addTemplate("{{name}}", {{{markup}}});
           {{/content_upgrade_template}}
+        });
 
-          HB.addCSS({{{hellobar_element_css}}});
-          HB.extCSS = {{{hellobar_container_css}}};
-        }
+        configure('geolocation', function(configuration) {
+          configuration.geolocationUrl('{{geolocation_url}}');
+        });
+
+        !isPreviewMode() && hasCapability('geolocation_injection') && configure('geolocation.injection', function(configuration) {
+          configuration.autoRun(true);
+        });
+
+        !isPreviewMode() && configure('tracking.internal', function(configuration) {
+          configuration.backendHost('{{hb_backend_host}}').siteWriteKey('{{site_write_key}}');
+        });
+
+        !isPreviewMode() && hasCapability('external_tracking') && configure('tracking.external', function(configuration) {
+          var externalTrackings = {{{external_tracking_json}}};
+          configuration.externalTrackings(externalTrackings);
+        });
+
+        configure('elements.rules', function(configuration) {
+          {{#rules}}
+            configuration.addRule('{{match}}', {{{conditions}}}, {{{site_elements}}});
+          {{/rules}}
+        });
+
+        configure('elements', function(configuration) {
+          configuration.elementCSS({{{hellobar_element_css}}}).autoRun(true);
+        });
+
+        configure('contentUpgrades', function(configuration) {
+          configuration.contentUpgrades({{{content_upgrades_json}}}).styles({{{content_upgrades_styles_json}}});
+        });
+
+        !isPreviewMode() && hasCapability('autofills') && configure('autofills', function(configuration) {
+          var autofills = {{{autofills_json}}};
+          configuration.autofills(autofills).autoRun(true);
+        });
       }
 
-      HBInit();
-
-      {{#rules}}
-        _hbq.push(function(){HB.addRule("{{match}}", {{{conditions}}}, {{{site_elements}}})});
-      {{/rules}}
-
-      if(!HB.isIEXOrLess(8) && {{script_is_installed_properly}}) {
-        _hbq = new HBQ();
+      if(!hellobar('base.environment').isIEXOrLess(8) && {{script_is_installed_properly}}) {
+        initializeProtectedModules();
       }
     })();
+
   } else {
     console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }

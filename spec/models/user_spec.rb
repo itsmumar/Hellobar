@@ -283,9 +283,8 @@ describe User do
 
       context 'when the original_email is not match the OAuth email' do
         it 'returns a user with an error on the email' do
-          user = User.find_for_google_oauth2(token, 'notmy@email.com')
-
-          expect(user.errors[:base]).to include('Please log in with your notmy@email.com Google email')
+          expect { User.find_for_google_oauth2(token, 'notmy@email.com') }
+            .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Please log in with your notmy@email.com Google email')
         end
       end
     end

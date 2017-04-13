@@ -18,7 +18,7 @@ body
 .global-wrapper
   position: relative
   background-color: $grayLightest
-  @include calc(min-height, '100% - #{$headerHeight}')
+  min-height: calc(100% - #{$headerHeight})
   @include clearfix()
 
   .global-sidebar
@@ -32,8 +32,8 @@ body
   .global-content
     float: right
     height: 100%
-    @include calc(min-height, '100vh - #{$headerHeight}')
+    min-height: calc(100vh - #{$headerHeight})
     position: relative
     background-color: $white
     padding: 2.5em 3.5em 5em
-    @include calc(width, '100% - #{$sidebarWidth}')
+    width: calc(100% - #{$sidebarWidth})

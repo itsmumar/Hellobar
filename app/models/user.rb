@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :authentications, dependent: :destroy
   has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id'
+  has_one :lead
 
   has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: 'UserOnboardingStatus'
   has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
@@ -229,7 +230,9 @@ class User < ActiveRecord::Base
     if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
+      raise ActiveRecord::RecordInvalid, user
     elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
+      # TODO: deprecated case. use #update_authentication directly
       user.first_name = info['first_name'] if info['first_name'].present?
       user.last_name = info['last_name'] if info['last_name'].present?
 
@@ -253,6 +256,7 @@ class User < ActiveRecord::Base
       end
     end
 
+    # TODO: deprecated. use #update_authentication directly
     # update the authentication tokens & expires for this provider
     if access_token['credentials'] && user.persisted?
       user.authentications.detect { |x| x.provider == access_token['provider'] }.update(
@@ -263,6 +267,23 @@ class User < ActiveRecord::Base
     end
 
     user
+  end
+
+  def update_authentication(info:, credentials:, uid:, provider:)
+    authentication = authentications.find_by(uid: uid, provider: provider)
+
+    self.first_name = info['first_name'] if info['first_name'].present?
+    self.last_name = info['last_name'] if info['last_name'].present?
+
+    if credentials && persisted?
+      authentication.update(
+        refresh_token: credentials.refresh_token,
+        access_token: credentials.token,
+        expires_at: Time.at(credentials.expires_at)
+      )
+    end
+
+    save!
   end
 
   def self.find_or_invite_by_email(email, _site)

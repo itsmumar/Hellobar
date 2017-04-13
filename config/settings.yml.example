@@ -30,8 +30,6 @@ mailchimp_client_id: mailchimp-client-id
 mailchimp_secret: mailchimp-secret
 main_queue: hellobar3_production
 maropost_url: "http://api.maropost.com/"
-recaptcha_private_key: recaptcha-private-key
-recaptcha_public_key: recaptcha-public-key
 s3_bucket: scripts-test.hellobar.com
 script_cdn_url: scripts-test.hellobar.com
 sendgrid_password: sendgrid-password

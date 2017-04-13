@@ -1,14 +1,14 @@
 /*-----------  Spin  -----------*/
 
-@include keyframes(spin)
+@keyframes spin
   from
-    @include transform(rotate(0deg))
-  to 
-    @include transform(rotate(-360deg))
+    transform: rotate(0deg)
+  to
+    transform: rotate(-360deg)
 
 /*-----------  Barberpole  -----------*/
 
-@include keyframes(barberpole)
+@keyframes barberpole
   from
     background-position: 0 0
   to
@@ -16,116 +16,63 @@
 
 /*-----------  Jingle  -----------*/
 
-@include keyframes(jingle)
+@keyframes jingle
   0%
-    @include transform(rotate(-20deg))
+    transform: rotate(-20deg)
   12.5%
-    @include transform(rotate(20deg))
+    transform: rotate(20deg)
   25%
-    @include transform(rotate(-12deg))
+    transform: rotate(-12deg)
   37.5%
-    @include transform(rotate(12deg))
+    transform: rotate(12deg)
   50%
-    @include transform(rotate(-8deg))
+    transform: rotate(-8deg)
   62.5%
-    @include transform(rotate(8deg))
+    transform: rotate(8deg)
   75%
-    @include transform(rotate(-4deg))
+    transform: rotate(-4deg)
   87.5%
-    @include transform(rotate(4deg))
+    transform: rotate(4deg)
   100%
-    @include transform(rotate(-2deg))
+    transform: rotate(-2deg)
 
 /*-----------  Bounce In  -----------*/
 
-@-webkit-keyframes bounceIn
-  0%, 20%, 40%, 60%, 80%, 100%
-    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1)
-    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1)
-  0%
-    opacity: 0
-    -webkit-transform: scale3d(0.3, 0.3, 0.3)
-    transform: scale3d(0.3, 0.3, 0.3)
-  20%
-    -webkit-transform: scale3d(1.1, 1.1, 1.1)
-    transform: scale3d(1.1, 1.1, 1.1)
-  40%
-    -webkit-transform: scale3d(0.9, 0.9, 0.9)
-    transform: scale3d(0.9, 0.9, 0.9)
-  60%
-    opacity: 1
-    -webkit-transform: scale3d(1.03, 1.03, 1.03)
-    transform: scale3d(1.03, 1.03, 1.03)
-  80%
-    -webkit-transform: scale3d(0.97, 0.97, 0.97)
-    transform: scale3d(0.97, 0.97, 0.97)
-  100%
-    opacity: 1
-    -webkit-transform: scale3d(1, 1, 1)
-    transform: scale3d(1, 1, 1)
-
 @keyframes bounceIn
   0%, 20%, 40%, 60%, 80%, 100%
-    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1)
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1)
   0%
     opacity: 0
-    -webkit-transform: scale3d(0.3, 0.3, 0.3)
     transform: scale3d(0.3, 0.3, 0.3)
   20%
-    -webkit-transform: scale3d(1.1, 1.1, 1.1)
     transform: scale3d(1.1, 1.1, 1.1)
   40%
-    -webkit-transform: scale3d(0.9, 0.9, 0.9)
     transform: scale3d(0.9, 0.9, 0.9)
   60%
     opacity: 1
-    -webkit-transform: scale3d(1.03, 1.03, 1.03)
     transform: scale3d(1.03, 1.03, 1.03)
   80%
-    -webkit-transform: scale3d(0.97, 0.97, 0.97)
     transform: scale3d(0.97, 0.97, 0.97)
   100%
     opacity: 1
-    -webkit-transform: scale3d(1, 1, 1)
     transform: scale3d(1, 1, 1)
 
 .bounceIn
-  -webkit-animation-name: bounceIn
   animation-name: bounceIn
-  -webkit-animation-duration: .75s
   animation-duration: .75s
 
 /*-----------  Bounce Out  -----------*/
 
-@-webkit-keyframes bounceOut
-  20%
-    -webkit-transform: scale3d(0.9, 0.9, 0.9)
-    transform: scale3d(0.9, 0.9, 0.9)
-  50%, 55%
-    opacity: 1
-    -webkit-transform: scale3d(1.1, 1.1, 1.1)
-    transform: scale3d(1.1, 1.1, 1.1)
-  100%
-    opacity: 0
-    -webkit-transform: scale3d(0.3, 0.3, 0.3)
-    transform: scale3d(0.3, 0.3, 0.3)
-
 @keyframes bounceOut
   20%
-    -webkit-transform: scale3d(0.9, 0.9, 0.9)
     transform: scale3d(0.9, 0.9, 0.9)
   50%, 55%
     opacity: 1
-    -webkit-transform: scale3d(1.1, 1.1, 1.1)
     transform: scale3d(1.1, 1.1, 1.1)
   100%
     opacity: 0
-    -webkit-transform: scale3d(0.3, 0.3, 0.3)
     transform: scale3d(0.3, 0.3, 0.3)
 
 .bounceOut
-  -webkit-animation-name: bounceOut
   animation-name: bounceOut
-  -webkit-animation-duration: .75s
   animation-duration: .75s

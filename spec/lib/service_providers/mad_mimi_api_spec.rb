@@ -20,7 +20,7 @@ describe ServiceProviders::MadMimiApi do
     let(:service_provider) { ServiceProviders::MadMimiApi.new(identity: identity) }
 
     describe '#lists' do
-      it 'returns an array of lists' do
+      it 'returns an array of lists', :vcr do
         expect(service_provider.lists).to eq([{
           'id' => '1266012',
           'name' => 'TEST LIST',
@@ -53,15 +53,19 @@ describe ServiceProviders::MadMimiApi do
       end
     end
 
-    describe '#valid?' do
-      it 'returns true if the api call to lists succeeds' do
-        expect(service_provider.valid?).to eq(true)
+    describe '#valid?', :vcr do
+      context 'when lists present' do
+        it 'returns true' do
+          expect(service_provider.valid?).to eq(true)
+        end
       end
 
-      it 'returns false if the api call to lists fails' do
-        identity = Identity.new site_id: 1, provider: 'mad_mimi_api', api_key: 'invalid_api', credentials: { 'username' => 'invalid user name' }
-        service_provider = ServiceProviders::MadMimiApi.new(identity: identity)
-        expect(service_provider.valid?).to eq(false)
+      context 'when lists do not present' do
+        it 'returns false' do
+          identity = Identity.new site_id: 1, provider: 'mad_mimi_api', api_key: 'invalid_api', credentials: { 'username' => 'invalid user name' }
+          service_provider = ServiceProviders::MadMimiApi.new(identity: identity)
+          expect(service_provider.valid?).to eq(false)
+        end
       end
     end
   end

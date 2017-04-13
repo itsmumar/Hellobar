@@ -35,7 +35,7 @@ add_action( 'wp_footer',  'add_hellobar_script');
 function add_content_upgrade_script( $atts )
 {
     $id = $atts['id'];
-    echo "<p><script id=\"hb-cu-${id}\">window.onload = function() {HB.showContentUpgrade(${id})};</script></p>";
+    echo "<p><script id=\"hb-cu-${id}\">window.onload = function() {hellobar('contentUpgrades').show(${id});};</script></p>";
 }
 
 add_shortcode('hellobar_content_upgrade', 'add_content_upgrade_script');

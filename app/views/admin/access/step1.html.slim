@@ -3,15 +3,8 @@ div.row
   div.col-md-4
     h1 Admin
 
-    = simple_form_for :new_admin, {:url => "/admin/access"} do |f|
-      = f.input :login_email, :label => "Email address", :input_html => {:name => :login_email}
-
-      - unless Admin.any_validated_access_token?(access_token)
-        div= recaptcha_tags
-        p
-          br
-          small If you have Disconnect extension for Chrome or Firefox, please disable it and reload to log in.
-
-      = f.button :submit, "Continue", :class => "btn btn-primary"
+    = simple_form_for :new_admin, url: '/admin/access' do |f|
+      = f.input :login_email, label: 'Email address', input_html: { name: :login_email }
+      = f.button :submit, 'Continue', class: 'btn btn-primary'
 
   div.col-md-4

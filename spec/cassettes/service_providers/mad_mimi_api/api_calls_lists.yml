@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.madmimi.com/audience_lists/lists.xml
+    body:
+      encoding: UTF-8
+      string: username=tj%2Bmadmimitest%40polymathic.me&api_key=12225410b3e4b656e09ce7760bfaa240
+    headers: {}
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 04 Feb 2016 16:11:30 GMT
+      Content-Type:
+      - application/xml; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dd93a212652ad542bccc5275162bd6a591454602290; expires=Fri, 03-Feb-17
+        16:11:30 GMT; path=/; domain=.madmimi.com; HttpOnly
+      - non_eu=true; path=/
+      Status:
+      - 200 OK
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - '"1bc673c1218064c38559bf7b79d266bd"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 0d55ba149a8fb57a91a6f86829a9d117
+      X-Rack-Cache:
+      - miss
+      Server:
+      - cloudflare-nginx
+      Cf-Ray:
+      - 26f7a6d9365f10d5-ORD
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <lists>
+          <list id="1266012" name="TEST LIST" subscriber_count="1" display_name=""/>
+        </lists>
+    http_version:
+  recorded_at: Thu, 04 Feb 2016 16:11:35 GMT
+recorded_with: VCR 2.9.0

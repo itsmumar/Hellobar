@@ -17,9 +17,9 @@ input[type=checkbox] + label
   padding-left: 1em
   font-size: 0.85em
   font-weight: $fontWeightNormal
-  @include user-select(none)
+  user-select: none
   @include inline-block()
-  @include transition()
+  transition: all 0.15s ease-out 0s
 
   small
     color: $gray
@@ -38,7 +38,7 @@ input[type=checkbox] + label
 //     position: absolute
 //     background-color: $white
 //     border: 1px solid $brownLight
-//     @include transition()
+//     transition: all 0.15s ease-out 0s
 
 //   &:first-of-type
 //     margin-top: 0
@@ -83,4 +83,4 @@ input[type=checkbox] + label
 //     font-size: 0.6em
 //     position: absolute
 //     font-family: 'twigtale'
-//     @include transition()
+//     transition: all 0.15s ease-out 0s

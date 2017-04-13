@@ -29,6 +29,9 @@ class GoogleAnalytics
 
       urls.include?(self.class.normalize_url(url))
     end
+  rescue Google::Apis::TransmissionError => error
+    Raven.capture_exception(error)
+    return
   rescue Google::Apis::ClientError => error
     return if error.to_s =~ /insufficientPermissions/
     raise error

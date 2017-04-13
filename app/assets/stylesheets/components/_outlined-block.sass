@@ -11,10 +11,10 @@
   padding: 0.5em 0.67em
   border-radius: $radiusLg
   border-color: rgba($gray, 0.5)
-  @include justify-content(space-between)
-  @include align-items(center)
-  @include display(flex)
-  @include transition()
+  justify-content: space-between
+  align-items: center
+  display: flex
+  transition: all 0.15s ease-out 0s
 
   &:hover
     opacity: 1
@@ -29,8 +29,8 @@
     font-style: normal
     font-weight: lighter
     margin-right: 0.5rem
-    @include flex(0 0 2rem)
+    flex: 0 0 2rem
 
   > div
     font-size: 0.8rem
-    @include flex(1 1 auto)
+    flex: 1 1 auto

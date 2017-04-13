@@ -9,7 +9,7 @@ class ScriptGenerator < Mustache
   class << self
     def compile
       FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
-      manifest(true).compile('*.js', '*.css', '*.html')
+      manifest(true).compile('*.js', '*.es6', '*.css', '*.html')
     end
 
     def load_templates
@@ -21,7 +21,6 @@ class ScriptGenerator < Mustache
       @assets ||= Sprockets::Environment.new(Rails.root) do |env|
         env.append_path 'vendor/assets/javascripts/modules'
         env.append_path 'vendor/assets/javascripts/hellobar_script'
-        env.append_path 'vendor/assets/javascripts/site_elements'
 
         env.append_path 'vendor/assets/stylesheets/site_elements'
         env.append_path 'lib/themes/templates'
@@ -42,7 +41,7 @@ class ScriptGenerator < Mustache
   end
   load_templates
 
-  attr_reader :site, :options, :manifest
+  attr_reader :site, :options, :manifest, :timestamp, :version
   delegate :id, :url, :write_key, to: :site, prefix: true
 
   def initialize(site, options = {})
@@ -53,17 +52,21 @@ class ScriptGenerator < Mustache
   def generate_script
     # Re-read the template
     self.class.load_templates if Rails.env.development?
+    initialize_version_and_timestamp
 
     if options[:compress]
       uglifier.compress(render)
     else
       render
     end
+  rescue => e
+    Rails.logger.error e
+    raise e
   end
 
   def script_is_installed_properly
     return true if Rails.env.test?
-    'HB.scriptIsInstalledProperly()'
+    'scriptIsInstalledProperly()'
   end
 
   # returns the sites tz offset as "+/-HH:MM"
@@ -97,6 +100,10 @@ class ScriptGenerator < Mustache
   def branding_variation
     # Options are ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]
     'animated'
+  end
+
+  def preview_is_active
+    @options[:preview]
   end
 
   def capabilities_json
@@ -138,10 +145,6 @@ class ScriptGenerator < Mustache
     render_asset('site_elements.js')
   end
 
-  def libs_js
-    render_asset('libs.js')
-  end
-
   def autofills_json
     site.autofills.to_json
   end
@@ -163,6 +166,17 @@ class ScriptGenerator < Mustache
 
   def core_js
     render_asset('core.js')
+  end
+
+  def crypto_js
+    files = [
+      'crypto.core.js',
+      'crypto.x64-core.js',
+      'crypto.hmac.js',
+      'crypto.sha1.js',
+      'crypto.sha512.js'
+    ]
+    files.map { |file| render_asset('lib/crypto', file) }.join("\n")
   end
 
   def hellobar_container_css
@@ -191,7 +205,7 @@ class ScriptGenerator < Mustache
       Dir.glob(base.join('branding', '*.html')).map do |f|
         path = Pathname.new(f)
         content = render_asset(path.relative_path_from(base)).to_json
-        { name: path.basename.sub_ext('').to_s, markup: content }
+        { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
       end
     end
   end
@@ -424,7 +438,7 @@ class ScriptGenerator < Mustache
     asset = asset(file)
     return asset.toutf8 if asset
     return yield if block_given?
-    raise Sprockets::FileNotFound, "couldn't find file '#{ file }'"
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site.id }"
   rescue Sass::SyntaxError => e
     e.sass_template ||= path.join('/')
     raise e
@@ -445,5 +459,10 @@ class ScriptGenerator < Mustache
 
   def manifest(fresh = false)
     @manifest ||= self.class.manifest(fresh || options[:preview])
+  end
+
+  def initialize_version_and_timestamp
+    @timestamp = Time.current
+    @version = GitUtils.current_commit
   end
 end

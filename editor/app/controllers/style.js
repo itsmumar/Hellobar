@@ -202,6 +202,10 @@ export default Ember.Controller.extend({
 
   actions: {
 
+    closeDropdown() {
+      this.set('elementTypeSelectionInProgress', false);
+    },
+
     changeStyle() {
       this.set('elementTypeSelectionInProgress', true);
       return false;

@@ -5,7 +5,7 @@
     </div>
 
   </div>
-  <div class="hb-logo-wrapper {{HB.branding_template()}}" >
-    {{HB.renderTemplate(HB.getBrandingTemplate(HB.branding_template()), siteElement)}}
+  <div class="hb-logo-wrapper {{siteElement.brandingName()}}" >
+    {{siteElement.renderBranding()}}
   </div>
 </div>

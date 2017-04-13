@@ -84,6 +84,10 @@ export default Ember.Controller.extend({
   }).property('goalSelectionInProgress'),
 
   actions: {
+    closeDropdown() {
+      this.set('goalSelectionInProgress', false);
+    },
+
     changeSettings() {
       this.set('goalSelectionInProgress', true);
       return false;

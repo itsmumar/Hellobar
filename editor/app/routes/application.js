@@ -5,6 +5,7 @@ export default Ember.Route.extend({
 
   api: Ember.inject.service(),
   validation: Ember.inject.service(),
+  bus: Ember.inject.service(),
 
   saveCount: 0,
 
@@ -45,6 +46,7 @@ export default Ember.Route.extend({
           resolvedModel.site.contact_lists.forEach((list) => {
             if (list.id === data.id) {
               Ember.set(list, 'name', data.name);
+              Ember.set(list, 'provider_name', data.provider_name);
             }
           });
           modal.close();
@@ -54,7 +56,7 @@ export default Ember.Route.extend({
         saveMethod: 'POST',
         success: (data, modal) => {
           let lists = resolvedModel.site.contact_lists.slice(0);
-          lists.push({id: data.id, name: data.name});
+          lists.push({id: data.id, name: data.name, provider_name: data.provider_name});
           this.controller.set('model.site.contact_lists', lists);
           setTimeout((() => {
               this.controller.set('model.contact_list_id', data.id);
@@ -68,8 +70,12 @@ export default Ember.Route.extend({
       };
       new ContactListModal($.extend(baseOptions, options)).open();
     }
+
+    if(window.gon && gon.lead_data) {
+      new LeadDataModal().open();
+    }
   },
-  
+
   //-----------  Actions  -----------#
 
   // Actions bubble up the routers from most specific to least specific.
@@ -86,9 +92,9 @@ export default Ember.Route.extend({
         }
       };
 
-      this.get('validation').validate('main', this.currentModel).then(() => {
+      this.get('validation').validate('phone_number', this.currentModel).then(() => {
         // Successful validation
-        this.controller.set('validationMessages', null);
+        this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.toggleProperty('saveSubmitted');
         this.set('saveCount', this.get('saveCount') + 1);
         if (trackEditorFlow) {
@@ -140,7 +146,7 @@ export default Ember.Route.extend({
         });
       }, (failures) => {
         // Validation failed
-        this.controller.set('validationMessages', failures.map(failure => failure.error));
+        this.get('bus').trigger('hellobar.core.validation.failed', failures);
       });
 
     }

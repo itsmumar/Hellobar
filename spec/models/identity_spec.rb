@@ -70,14 +70,14 @@ describe Identity do
     end
   end
 
-  describe 'embed code service provider' do
+  describe 'embed code service provider', :vcr do
     let(:contact_list) { create(:contact_list, :embed_code, identity: nil) }
     let(:file) {}
     let(:provider) {}
     let(:file_name) { file || provider }
 
     let(:service_provider) do
-      contact_list.provider = provider
+      contact_list.provider_token = provider
       contact_list.data['embed_code'] = embed_code_file_for(file_name)
       contact_list.send(:set_identity)
       contact_list.service_provider
@@ -107,7 +107,7 @@ describe Identity do
       end
     end
 
-    context 'getresponse JS mode' do
+    context 'getresponse JS mode', :vcr do
       let(:provider) { 'get_response' }
       let(:file) { 'get_response_js' }
       it 'works' do
@@ -182,12 +182,14 @@ describe Identity do
       let(:provider) { 'my_emma' }
 
       %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
-        let(:file) { file }
-        it "works with My Emma #{ file }".strip do
-          expect(service_provider.list_url).to eq('https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a')
-          expect(service_provider.action_url).to eq(service_provider.list_url) # same for my emma
-          expect(service_provider.email_param).to eq('email')
-          expect(service_provider.required_params.keys).to include 'prev_member_email'
+        context file do
+          let(:file) { file }
+          it "works with My Emma #{ file }".strip do
+            expect(service_provider.list_url).to eq('https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a')
+            expect(service_provider.action_url).to eq(service_provider.list_url) # same for my emma
+            expect(service_provider.email_param).to eq('email')
+            expect(service_provider.required_params.keys).to include 'prev_member_email'
+          end
         end
       end
     end

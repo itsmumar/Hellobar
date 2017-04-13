@@ -222,7 +222,7 @@ describe Site do
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content(false)
 
-      expect(script).to match(/HB_SITE_ID/)
+      expect(script).to include "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }')"
       expect(script).to include(element.id.to_s)
     end
 
@@ -230,7 +230,7 @@ describe Site do
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script = site.script_content
 
-      expect(script).to match(/HB_SITE_ID/)
+      expect(script).to include ".siteId(#{ site.id }).siteUrl(\"#{ site.url }\")"
       expect(script).to include(element.id.to_s)
     end
   end
@@ -276,7 +276,7 @@ describe Site do
       Hellobar::Settings[:store_site_scripts_locally] = true
     end
 
-    it 'generates and uploads the script content for a site' do
+    it 'generates and uploads the script content for a site', :freeze do
       allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       script_content = site.script_content(true)

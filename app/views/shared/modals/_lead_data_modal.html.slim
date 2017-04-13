@@ -1,0 +1,81 @@
+script id='lead-data-template' type='text/x-handlebars-template'
+  .modal-wrapper
+    .modal-block
+      header
+        h5 We have a few questions to know you better
+
+      div.modal-content
+        form.screen-1
+          .select-wrapper
+            select name="industry" required=""
+              | <option value="">Industry</option>
+              | {{#each industries}}
+              |   <option value="{{value}}">{{name}}</option>
+              | {{/each}}
+
+          .select-wrapper
+            select name="job_role" required=""
+              | <option value="">Job Role</option>
+              | {{#each roles}}
+              |   <option value="{{value}}">{{name}}</option>
+              | {{/each}}
+
+          .radio-group data-toggle="buttons"
+            .title Company Size
+
+            | {{#each companySizes}}
+            |   <label class="btn">
+            |     <input type="radio" required="" name="company_size" value="{{value}}" autocomplete="off"> {{name}}
+            |   </label>
+            | {{/each}}
+
+          .radio-group data-toggle="buttons"
+            .title Estimated Monthly Traffic
+
+            | {{#each trafficItems}}
+            |   <label class="btn">
+            |     <input type="radio" required="" name="estimated_monthly_traffic" value="{{value}}" autocomplete="off"> {{name}}
+            |   </label>
+            | {{/each}}
+
+          .input-group
+            label
+              | First Name
+              input name="first_name" required="" type="text" value="{{currentUser.first_name}}"
+
+            label
+              | Last Name
+              input name="last_name" required="" type="text" value="{{currentUser.last_name}}"
+
+          .radio-group
+            .title What is the biggest challenge you are hoping Hello Bar can solve?
+            | {{#each challenges}}
+            |   <label class="btn wide">
+            |     <input type="radio" required="" name="challenge" value="{{value}}" autocomplete="off"> {{name}}
+            |   </label>
+            | {{/each}}
+
+        form.screen-2.hide
+          .radio-group
+            .title
+              span> Our Pro Managed team helps our customers install and execute high converting Hello Bar campaigns for their business.
+              span> Are you interested in us doing this for you?
+
+            label.btn>
+              input.js-interesting type="radio" required="" name="interested" value="1" autocomplete="off"
+              | Yes
+
+            label.btn>
+              input.js-not-interesting type="radio" required="" name="interested" value="0" autocomplete="off"
+              | No
+
+          .input-group.js-phone-number class="hide"
+            label
+              | Phone Number
+              input name="phone_number" placeholder="e.g. +1-234-567-8910" type="tel"
+
+
+      footer
+        = link_to 'Back', 'javascript:void(0)', class: 'button cancel-button js-prev-screen hide'
+        = link_to 'Save', 'javascript:void(0)', class: 'button save-button js-close hide'
+        = link_to 'Next', 'javascript:void(0)', class: 'button js-next-screen'

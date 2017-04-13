@@ -30,6 +30,14 @@ describe('Module tracking.external', function () {
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
     legacyGoogleAnalyticsMock = jasmine.createSpyObj('LGA', ['send']);
 
+    googleAnalyticsMock.introspect = function () {
+      return {
+        available: function () {
+          return true;
+        }
+      };
+    };
+
     module = hellobar('tracking.external', {
       dependencies: {
         'tracking.external.googleAnalytics': googleAnalyticsMock,
@@ -47,8 +55,8 @@ describe('Module tracking.external', function () {
   });
 
   it('calls tracking engines on send', function () {
-    module.send('view');
-    module.send('traffic_conversion');
+    module.send('view', 2);
+    module.send('traffic_conversion', 2);
 
     expect(googleAnalyticsMock.send).toHaveBeenCalled();
     expect(googleAnalyticsMock.send.calls.count()).toEqual(2);
@@ -58,9 +66,23 @@ describe('Module tracking.external', function () {
   });
 
   it('does not send anything for unknown tracking type', function () {
-    module.send('unknown_tracking_type');
+    module.send('unknown_tracking_type', 2);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
     expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
   });
+
+  it('considers site_element_id while sending', function () {
+    module.send('view', 12345);
+    module.send('traffic_conversion', 54321);
+
+    expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
+  });
+
+  it('is considered available if at least one of the tracking engine is available', function () {
+    expect(module.introspect().available()).toEqual(true);
+  });
+
+
 });

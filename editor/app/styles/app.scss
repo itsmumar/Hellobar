@@ -1,4 +1,3 @@
-@import 'bourbon';
 @import 'normalize';
 // TODO add minicolors styles
 //@import 'jquery_minicolors';
@@ -57,6 +56,7 @@
 @import 'components/theming/_theme-tile.css.sass';
 @import 'components/validation/_validation-message.sass';
 @import 'components/validation/_validation-summary.sass';
+@import 'components/text';
 
 @import 'layouts/_common.sass';
 @import 'layouts/_document.sass';
@@ -82,4 +82,5 @@
 @import 'layouts/modals/_upgrade.sass';
 @import 'layouts/modals/_user-campaign.sass';
 @import 'layouts/modals/_welcome_back.sass';
+@import 'layouts/modals/_lead_data.sass';
 

@@ -27,7 +27,7 @@
   margin-top: 1.5em
   line-height: 133%
   color: $grayDarker
-  @include transition()
+  transition: all 0.15s ease-out 0s
 
 .tag-select-block
   .select-wrapper
@@ -109,7 +109,7 @@
     padding-top: 0.58em
     padding-bottom: 0.58em
 
-    @include placeholder
+    ::placeholder
       color: $grayLighter
       font-weight: $fontWeightLight
 
@@ -127,7 +127,7 @@
     margin-bottom: 0
     font-family: monospace
 
-    @include placeholder
+    ::placeholder
       color: $grayLighter
 
   input[type='checkbox']
@@ -281,11 +281,11 @@
 
 .contact-list-radio-wrapper
   margin-bottom: 1rem
-  @include display(flex)
-  @include flex-wrap(wrap)
-  @include justify-content(flex-start)
-  @include align-content(flex-start)
-  @include align-items(flex-start)
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  align-content: flex-start
+  align-items: flex-start
 
   .contact-list-radio-block
     height: 7em
@@ -296,7 +296,7 @@
     margin-top: 0.67rem
     margin-right: 0.67rem
     border-radius: $radiusSm
-    @include transition(color 0.25s ease-in, border 0.25s ease-in)
+    transition: color 0.25s ease-in, border 0.25s ease-in
 
     input[type="radio"]
       display: none
@@ -328,7 +328,7 @@
           font-size: 0.8rem
           font-weight: normal
           @include ellipsis()
-          @include transition()
+          transition: all 0.15s ease-out 0s
 
     &:hover
       cursor: pointer
@@ -339,23 +339,23 @@
 
     &.mailchimp-provider
       display: block
-      @include order(1)
-      @include flex(0 0 8.75rem)
+      order: 1
+      flex: 0 0 8.75rem
 
     &.aweber-provider
       display: block
-      @include order(2)
-      @include flex(0 0 8.75rem)
+      order: 2
+      flex: 0 0 8.75rem
 
     &.get_response_api-provider
       display: block
-      @include order(3)
-      @include flex(0 0 8.75rem)
+      order: 3
+      flex: 0 0 8.75rem
 
     &:last-child
       display: block
-      @include order(4)
-      @include flex(0 0 8.75rem)
+      order: 4
+      flex: 0 0 8.75rem
 
   /*-----------  STATE: Expanded  -----------*/
 
@@ -364,8 +364,8 @@
     .contact-list-radio-block
       height: 5.67em
       display: block
-      @include order(unset)
-      @include flex(0 0 6.67rem)
+      order: unset
+      flex: 0 0 6.67rem
 
       label
         font-size: 85%

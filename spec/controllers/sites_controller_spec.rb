@@ -224,7 +224,7 @@ describe SitesController do
       expect(response).to be_success
 
       SiteElement.all_templates.each do |template|
-        expect(response.body).to include("HB.setTemplate(\"#{ template }\"")
+        expect(response.body).to include("configuration.addTemplate(\"#{ template }\"")
       end
     end
   end

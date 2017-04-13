@@ -33,7 +33,7 @@ describe ContactList do
   describe 'associated identity' do
     it 'should use #provider on creation to find the correct identity' do
       identity = create(:identity)
-      list = build(:contact_list, site: identity.site, provider: 'mailchimp')
+      list = build(:contact_list, site: identity.site, provider_token: 'mailchimp')
 
       expect { list.valid? }.to change { list.identity }.from(nil).to(identity)
     end
@@ -41,14 +41,14 @@ describe ContactList do
     it 'should use #provider on edit to find the correct identity' do
       constantcontact = create(:identity, :constantcontact)
       list = create(:contact_list, :mailchimp, site: constantcontact.site)
-      list.provider = 'constantcontact'
+      list.provider_token = 'constantcontact'
       list.save
       expect(list.identity).to eql constantcontact
     end
 
     it 'should not be valid if #provider does not match an existing identity' do
       list = create(:contact_list)
-      list.provider = 'notanesp'
+      list.provider_token = 'notanesp'
       list.identity = nil
 
       expect(list).not_to be_valid
@@ -59,7 +59,7 @@ describe ContactList do
       list = create(:contact_list, :mailchimp)
       expect(list.identity).not_to be_blank
 
-      list.update_attributes(provider: '0')
+      list.update_attributes(provider_token: '0')
       expect(list.identity).to be_blank
     end
 
@@ -126,7 +126,7 @@ describe ContactList do
       end
     end
 
-    context 'embed code provider' do
+    context 'embed code provider', :vcr do
       let(:provider) { 'mad_mimi_form' }
       let(:contact_list) { create(:contact_list, :embed_iframe).tap { |c| c.identity = identity } }
       let(:service_provider) { contact_list.service_provider }
@@ -241,10 +241,13 @@ describe ContactList do
         allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::ConstantContact)
       end
 
+      def rest_response(status, body)
+        RestClient::Response.create body, OpenStruct.new(code: status, body: body), nil, nil
+      end
+
       it 'if someone has an invalid list stored, delete the identity and notify them' do
-        exception = RestClient::ResourceNotFound.new
-        allow(exception).to receive(:message).and_return('404 Resource Not Found')
-        expect(contact_list).to receive(:batch_subscribe).and_raise(exception)
+        response = rest_response(404, '404 Resource Not Found')
+        expect(contact_list).to receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
         expect(contact_list.identity).to receive :destroy_and_notify_user
       end
     end

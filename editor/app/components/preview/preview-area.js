@@ -11,7 +11,7 @@ export default Ember.Component.extend({
   isMobile: null,
 
   didInsertElement() {
-    HB.addPreviewInjectionListener(container => {
+    HBEditor.addPreviewInjectionListener(container => {
         this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
       }
     );

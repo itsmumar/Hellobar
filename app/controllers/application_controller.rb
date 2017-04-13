@@ -1,15 +1,19 @@
 class ApplicationController < ActionController::Base
+  LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11')
+
   include Hello::InternalAnalytics
+  include GonVariables
   include ActionView::Helpers::NumberHelper
   serialization_scope :current_user
 
   protect_from_forgery with: :exception
 
   helper_method :access_token, :current_admin, :impersonated_user, :current_site, :visitor_id, :ab_variation,
-    :ab_variation_or_nil
+    :ab_variation_or_nil, :needs_filling_questionnaire?
 
   before_action :record_tracking_param
   before_action :track_h_visit
+  before_action :set_raven_context
   after_action :store_last_requested_path
 
   rescue_from ::Google::Apis::AuthorizationError do |exception|
@@ -38,13 +42,12 @@ class ApplicationController < ActionController::Base
 
   def current_admin
     return nil if @current_admin == false
-    @current_admin ||= Admin.validate_session(access_token, session[:admin_token]) || false
+    @current_admin ||= Admin.validate_session(session[:admin_token]) || false
   end
 
   def require_admin
     return redirect_to(admin_access_path) unless current_admin
     return unless current_admin.needs_to_set_new_password?
-
     redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
   end
 
@@ -87,9 +90,15 @@ class ApplicationController < ActionController::Base
   end
 
   def impersonated_user
-    return unless current_admin && session[:impersonated_user]
+    return unless current_admin && session[:impersonated_user].present?
 
     impersonated_user = User.find_by(id: session[:impersonated_user])
+
+    unless impersonated_user
+      session.delete(:impersonated_user)
+      return
+    end
+
     impersonated_user.is_impersonated = true
     impersonated_user
   end
@@ -122,6 +131,13 @@ class ApplicationController < ActionController::Base
     Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
   end
 
+  def set_raven_context
+    Raven.user_context(id: current_user.id, email: current_user.email) if current_user
+
+    # TODO: change to `params.to_unsafe_h` when Rails is upgraded to 4.2+
+    Raven.extra_context params: params.to_h, url: request.url
+  end
+
   def load_site
     @site ||= current_user.sites.find(params[:site_id]) if current_user && params[:site_id]
   end
@@ -138,5 +154,9 @@ class ApplicationController < ActionController::Base
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(_resource_or_scope)
     logout_confirmation_path
+  end
+
+  def needs_filling_questionnaire?
+    current_user && current_user.created_at >= LEADS_CREATION_STARTING_DATE && current_user.lead.blank?
   end
 end

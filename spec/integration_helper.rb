@@ -33,4 +33,9 @@ RSpec.configure do |config|
       DatabaseCleaner.clean
     end
   end
+
+  config.before(:each) do
+    allow_any_instance_of(ApplicationController)
+      .to receive(:needs_filling_questionnaire?).and_return(false)
+  end
 end
