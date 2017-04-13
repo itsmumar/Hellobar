@@ -64,6 +64,7 @@ gem 'rack-ssl-enforcer'
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
 
+gem 'rails-html-sanitizer'
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'render_anywhere'
 gem 'roadie-rails'
@@ -82,7 +83,6 @@ gem 'uglifier'
 gem 'unf'
 gem 'verticalresponse'
 gem 'whenever'
-gem 'rails-html-sanitizer'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 gem 'rotp'
