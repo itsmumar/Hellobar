@@ -33,7 +33,7 @@ hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], f
     introspect: () => ({
       ga,
       available() {
-        return typeof ga() === 'object';
+        return typeof ga().I === 'object';
       }
     })
   };

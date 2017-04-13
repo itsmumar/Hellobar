@@ -9,6 +9,7 @@ describe('Module tracking.external.legacyGoogleAnalytics', function () {
     hellobar.finalize();
 
     lgaSpy = jasmine.createSpyObj('lgaSpy', ['push']);
+    lgaSpy['I'] = {};
 
     module = hellobar('tracking.external.legacyGoogleAnalytics', {
       dependencies: {},
@@ -30,5 +31,4 @@ describe('Module tracking.external.legacyGoogleAnalytics', function () {
   it('is available if gaProvider is specified', function () {
     expect(module.introspect().available()).toEqual(true);
   });
-
 });
