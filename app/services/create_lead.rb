@@ -1,21 +1,21 @@
 class CreateLead
-  def self.call(user, lead_params)
-    new(user).create_lead(lead_params)
-  end
+  attr_reader :user, :params
 
-  attr_reader :user
-
-  def initialize(user)
-    raise ArgumentError unless user.present?
+  def initialize(user, params)
     @user = user
+    @params = params
   end
 
-  def create_lead(params)
-    user.create_lead!(params) unless user.lead
+  def call
+    create_lead
     update_user
   end
 
   private
+
+  def create_lead
+    user.create_lead! unless user.lead
+  end
 
   def update_user
     return unless user.lead
