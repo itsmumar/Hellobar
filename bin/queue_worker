@@ -69,9 +69,16 @@ class QueueWorker
   def initialize(config)
     @config = config
     raise "Need a queue name: #{config.inspect}" unless @config[:queue]
+
     # Connect to SQS and make sure the queue exists
-    @sqs = AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
+    @sqs = AWS::SQS.new(
+      access_key_id: Hellobar::Settings[:aws_access_key_id],
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
+    )
+
     @queue = @sqs.queues.named(config[:queue])
+
     raise "Queue does not exist: #{config.inspect}" unless @queue.exists?
   end
 

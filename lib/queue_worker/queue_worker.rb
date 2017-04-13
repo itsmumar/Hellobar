@@ -23,7 +23,11 @@ class QueueWorker
   end
 
   def self.queue_attributes(queue_name_filter = nil)
-    sqs = AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
+    sqs = AWS::SQS.new(
+      access_key_id: Hellobar::Settings[:aws_access_key_id],
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
+    )
 
     queue_name_filter ||= Hellobar::Settings[:main_queue]
     queues = filtered_queues(sqs, queue_name_filter)
@@ -49,7 +53,12 @@ class QueueWorker
     raise ArgumentError, 'Message must be defined' unless message && !message.empty?
     raise ArgumentError, 'Queue name must be defined' unless queue_name
 
-    @sqs ||= AWS::SQS.new(access_key_id: Hellobar::Settings[:aws_access_key_id], secret_access_key: Hellobar::Settings[:aws_secret_access_key])
+    @sqs ||= AWS::SQS.new(
+      access_key_id: Hellobar::Settings[:aws_access_key_id],
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
+    )
+
     @queue ||= @sqs.queues.find do |q|
       q.url.split('/').last == queue_name
     end
