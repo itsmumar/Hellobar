@@ -89,11 +89,11 @@ jobs:
 
       - run:
           name: Run Brakeman
-          command: bundle exec brakeman
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec brakeman; else echo "skip"; fi
 
       - run:
           name: Run Rubocop
-          command: bundle exec rubocop
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
           name: Run unit tests
@@ -103,7 +103,7 @@ jobs:
 
       - run:
           name: Run teaspoon tests
-          command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
