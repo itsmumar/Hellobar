@@ -33,7 +33,10 @@ hellobar.defineModule('tracking.external',
        * @param {string} trackingType
        * @param {number} siteElementId
        */
-      send
+      send,
+      introspect: () => ({
+        available: () => trackingEngines.some((trackingEngine) => trackingEngine.introspect().available())
+      })
     };
 
   });

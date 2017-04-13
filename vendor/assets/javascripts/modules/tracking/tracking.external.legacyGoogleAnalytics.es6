@@ -11,7 +11,7 @@ hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], f
 
     const ga = window['_gaq'];
 
-    return typeof ga === 'object' ? ga : { push: () => null };
+    return typeof ga === 'object' ? ga : {push: () => null};
   };
 
   function send(externalTracking) {
@@ -29,7 +29,13 @@ hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], f
      * Sends event data to Legacy Google Analytics
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
-    send
+    send,
+    introspect: () => ({
+      ga,
+      available() {
+        return typeof ga().I === 'object';
+      }
+    })
   };
 
 });

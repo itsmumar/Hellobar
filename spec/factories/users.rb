@@ -43,6 +43,13 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_email_bar do
+      after(:create) do |user|
+        site = create :site, :with_rule, users: [user]
+        create :site_element, :email, site: site
+      end
+    end
+
     trait :with_sites do
       transient do
         count 1

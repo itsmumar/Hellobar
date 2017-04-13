@@ -34,12 +34,13 @@ class @ContactListModal extends Modal
   _setBlockVisibilty: (initital = false)->
     listVal = @$modal.find("#contact_list_provider").val()
 
-    if initital
+    if initital and !@options.contactList
       @blocks.iconListing.show()
       @blocks.hellobarOnly.hide()
       @blocks.selectListing.hide()
+      return
 
-    if listVal == "0"
+    if listVal == '0'
       @blocks.iconListing.hide()
       @blocks.hellobarOnly.show()
       @blocks.selectListing.hide()
@@ -482,7 +483,9 @@ class @ContactListModal extends Modal
     @$modal.find("#contact_list_double_optin").prop("checked", true) if data.double_optin
     @$modal.find("#contact_list_site_elements_count").val(data.site_elements_count || 0)
     @$modal.find("a.delete-confirm").removeClass('hidden') if @options.canDelete && @options.id
-    @$modal.find('.flash-block').addClass('error show').append($('.global-wrapper .flash-block.error').hide().text())
+
+    if $('.global-wrapper .flash-block.error').length > 0
+      @$modal.find('.flash-block').addClass('error show').append($('.global-wrapper .flash-block.error').remove().text())
 
   _validateRequiredField: (element) ->
     if element.length
