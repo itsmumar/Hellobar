@@ -99,7 +99,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'brakeman', require: false
-  gem 'hound-tools', require: false
   gem 'rubocop', require: false
 
   # Remove when we upgrade to sprockets-rails 3.1+ (and add `config.assets.quiet = true`)

@@ -249,9 +249,6 @@ GEM
       tilt (>= 1.2)
     hashie (2.1.2)
     hitimes (1.2.4)
-    hound-tools (0.0.6)
-      rubocop (~> 0.25)
-      thor
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.0)
@@ -608,7 +605,6 @@ DEPENDENCIES
   google-api-client
   handlebars_assets
   hashie
-  hound-tools
   infusionsoft
   jquery-rails
   jwt
