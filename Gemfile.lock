@@ -638,7 +638,7 @@ DEPENDENCIES
   public_suffix
   quiet_assets
   rack-ssl-enforcer
-  rails (~> 4.1.16)
+  rails (= 4.1.16)
   rails-html-sanitizer
   rake (~> 10.3.2)
   rake_running!
@@ -669,7 +669,6 @@ DEPENDENCIES
   thin (~> 1.6.4)
   thread
   timecop
-  tzinfo-data
   uglifier
   unf
   vcr

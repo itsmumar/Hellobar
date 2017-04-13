@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'rails', '4.1.16'
+
 gem 'abanalyzer'
 gem 'activemerchant', '~> 1.44.1'
 gem 'active_campaign', '~> 0.1.14'
@@ -57,7 +59,6 @@ gem 'pony'
 gem 'psych'
 gem 'public_suffix'
 gem 'rack-ssl-enforcer'
-gem 'rails', '~> 4.1.16'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
@@ -81,9 +82,7 @@ gem 'uglifier'
 gem 'unf'
 gem 'verticalresponse'
 gem 'whenever'
-# gem "yui-compressor"
 gem 'rails-html-sanitizer'
-gem 'tzinfo-data', platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 gem 'rotp'
