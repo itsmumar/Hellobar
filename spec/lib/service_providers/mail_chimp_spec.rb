@@ -1,4 +1,4 @@
-describe ServiceProviders::MailChimp do
+describe ServiceProviders::MailChimp, :vcr do
   let(:credentials) { { 'token' => 'b5b4381641823db514e26a4709b1c202-us14' } }
   let(:extra) { { 'metadata' => { 'api_endpoint' => 'https://us14.api.mailchimp.com' } } }
   let(:site) { create :site }
@@ -7,17 +7,21 @@ describe ServiceProviders::MailChimp do
   let(:client) { service_provider.instance_variable_get(:@client) }
 
   describe 'subscribe' do
-    it 'catches Invalid Resource error' do
-      expect {
-        service_provider.subscribe('0503e0a88a', 'abc')
-      }.not_to raise_error
+    context 'when Invalid Resource error' do
+      it 'catches it' do
+        expect {
+          service_provider.subscribe('0503e0a88a', 'abc')
+        }.not_to raise_error
+      end
     end
 
-    it 'catches Member Exists error' do
-      service_provider.subscribe('0503e0a88a', 'anton.sozontov@crossover.com')
-      expect {
+    context 'when Member Exists error' do
+      it 'catches it' do
         service_provider.subscribe('0503e0a88a', 'anton.sozontov@crossover.com')
-      }.not_to raise_error
+        expect {
+          service_provider.subscribe('0503e0a88a', 'anton.sozontov@crossover.com')
+        }.not_to raise_error
+      end
     end
   end
 
