@@ -58,8 +58,8 @@ script id='lead-data-template' type='text/x-handlebars-template'
         form.screen-2.hide
           .radio-group
             .title
-              span> Our Pro Managed team helps our customers install and execute high converting Hello Bar campaigns for their business.
-              span> Are you interested in us doing this for you?
+              p> Our Pro Managed team helps our customers install and execute high converting Hello Bar campaigns for their business.
+              p> Are you interested in us doing this for you?
 
             label.btn>
               input.js-interesting type="radio" required="" name="interested" value="1" autocomplete="off"
@@ -70,12 +70,12 @@ script id='lead-data-template' type='text/x-handlebars-template'
               | No
 
           .input-group.js-phone-number class="hide"
-            label
-              | Phone Number
+            label.wide
+              | What is the best number to contact you?
               input name="phone_number" placeholder="e.g. +1-234-567-8910" type="tel"
 
 
       footer
         = link_to 'Back', 'javascript:void(0)', class: 'button cancel-button js-prev-screen hide'
-        = link_to 'Save', 'javascript:void(0)', class: 'button save-button js-close hide'
+        = link_to 'Submit', 'javascript:void(0)', class: 'button save-button js-close hide'
         = link_to 'Next', 'javascript:void(0)', class: 'button js-next-screen'

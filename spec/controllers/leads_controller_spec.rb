@@ -1,10 +1,12 @@
 describe LeadsController do
-  let!(:user) { create(:user) }
+  let!(:user) { create :user, first_name: 'Foo', last_name: 'Bar' }
 
   before { stub_current_user user }
 
   context 'POST create' do
     context 'with valid data' do
+      let(:lead_params) { attributes_for :lead, first_name: 'F', last_name: 'L' }
+
       context 'when interested' do
         let(:lead_params) { attributes_for :lead, :interested }
 
@@ -23,6 +25,12 @@ describe LeadsController do
           expect(response.status).to eq(200)
           expect(response.body).to be_blank
         end
+      end
+
+      it 'update user first_name and last_name' do
+        expect { post :create, lead: lead_params }
+          .to change { user.reload.first_name }.to('F')
+          .and change { user.reload.last_name }.to('L')
       end
     end
 
