@@ -3,7 +3,7 @@ class LeadsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    current_user.create_lead!(lead_params) unless current_user.lead
+    CreateLead.new(current_user, lead_params).call
     render nothing: true
   end
 

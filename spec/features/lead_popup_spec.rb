@@ -35,7 +35,7 @@ feature 'Lead data popup', :js do
 
     find(:label, 'Yes').click
     fill_in 'phone_number', with: '+1-234-567-8910'
-    click_on 'Save'
+    click_on 'Submit'
     wait_for_ajax
 
     attributes = {

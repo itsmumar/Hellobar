@@ -29,7 +29,11 @@ class @LeadDataModal extends Modal
     data = @$firstForm.serializeArray().reduce @_reducer, {}
     data = @$secondForm.serializeArray().reduce @_reducer, data
     data.phone_number = cleanPhone(data.phone_number)
-    $.post('/leads', lead: data)
+    $.post('/leads', lead: data).then ->
+      message = $('<div class="flash-block error">Your submission was successful. A representative from our team will contact you soon.</div>')
+      $('body').prepend(message)
+      setTimeout (-> message.addClass('show')), 500
+      setTimeout (-> message.removeClass('show')), 10000
 
   _reducer: (result, item) ->
     result[item.name] = item.value
