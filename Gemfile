@@ -59,10 +59,6 @@ gem 'psych'
 gem 'public_suffix'
 gem 'rack-ssl-enforcer'
 
-# Loggly
-gem 'syslogger'
-gem 'lograge'
-
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
@@ -148,4 +144,8 @@ end
 group :production do
   # Real-time error reporting
   gem 'sentry-raven'
+
+  # Loggly
+  gem 'lograge'
+  gem 'syslogger'
 end
