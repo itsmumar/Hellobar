@@ -74,7 +74,6 @@ gem 'roadie-rails'
 gem 'ruby-hmac'
 gem 'rubyzip'
 gem 'sassc-rails'
-gem 'sentry-raven'
 gem 'signet'
 gem 'simple_form'
 gem 'slim-rails'
@@ -144,4 +143,9 @@ group :test do
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
+end
+
+group :production do
+  # Real-time error reporting
+  gem 'sentry-raven'
 end
