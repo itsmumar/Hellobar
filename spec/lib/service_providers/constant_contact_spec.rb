@@ -15,7 +15,7 @@ describe ServiceProviders::ConstantContact do
 
   def bad_request(message)
     net_http_res = OpenStruct.new(body: message, code: 400)
-    response = RestClient::Response.create(message, net_http_res, nil)
+    response = RestClient::Response.create(message, net_http_res, nil, nil)
     RestClient::BadRequest.new(response)
   end
 
