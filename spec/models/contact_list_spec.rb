@@ -242,7 +242,7 @@ describe ContactList do
       end
 
       def rest_response(status, body)
-        RestClient::Response.create body, OpenStruct.new(code: status, body: body), {}
+        RestClient::Response.create body, OpenStruct.new(code: status, body: body), nil, nil
       end
 
       it 'if someone has an invalid list stored, delete the identity and notify them' do
