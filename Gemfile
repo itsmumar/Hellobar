@@ -36,7 +36,6 @@ gem 'jquery-rails'
 gem 'jwt'
 gem 'kaminari'
 gem 'less_interactions'
-gem 'logglier'
 gem 'madmimi'
 gem 'mini_racer'
 gem 'mustache'
@@ -59,6 +58,10 @@ gem 'pony'
 gem 'psych'
 gem 'public_suffix'
 gem 'rack-ssl-enforcer'
+
+# Loggly
+gem 'syslogger'
+gem 'lograge'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
