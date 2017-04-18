@@ -266,7 +266,8 @@ describe ScriptGenerator do
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
       generator = ScriptGenerator.new(site, options)
-      allow(generator).to receive(:site_element_settings).and_return(id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' })
+      allow(generator)
+        .to receive(:render_site_elements).and_return([id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }].to_json)
 
       allow(site).to receive(:rules).and_return([rule])
 
@@ -283,7 +284,8 @@ describe ScriptGenerator do
       SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
-      allow(generator).to receive(:site_element_settings).and_return(id: active_bar.id, template_name: active_bar.element_subtype)
+      allow(generator)
+        .to receive(:render_site_elements).and_return([id: active_bar.id, template_name: active_bar.element_subtype].to_json)
 
       allow(site).to receive(:rules).and_return([rule])
 

@@ -5,6 +5,11 @@ require 'hmac-sha2'
 class ScriptGenerator < Mustache
   self.raise_on_context_miss = true
   cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+  cattr_reader(:jbuilder) do
+    ActionController::Base.new.view_context.tap do |context|
+      context.formats = [:json]
+    end
+  end
 
   class << self
     def compile
@@ -257,7 +262,7 @@ class ScriptGenerator < Mustache
     {
       match: rule.match,
       conditions: conditions_for_rule(rule).to_json,
-      site_elements: site_elements_for_rule(rule).to_json
+      site_elements: render_site_elements(site_elements_for_rule(rule))
     }
   end
 
@@ -317,25 +322,22 @@ class ScriptGenerator < Mustache
     render_asset(element_class, 'footer.html')
   end
 
-  def site_element_settings(site_element)
-    SiteElementSettingsFactory.make(site_element)
+  def render_site_elements(site_elements)
+    jbuilder.render 'site_elements/site_elements', site_elements: site_elements
   end
 
-  def site_elements_for_rule(rule, hashify = true)
-    site_elements =
-      if options[:bar_id]
-        [rule.site_elements.find(options[:bar_id])]
-      elsif options[:render_paused_site_elements]
-        rule.site_elements
-      else
-        rule.site_elements.active
-      end
-
-    hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements
+  def site_elements_for_rule(rule)
+    if options[:bar_id]
+      [rule.site_elements.find(options[:bar_id])]
+    elsif options[:render_paused_site_elements]
+      rule.site_elements
+    else
+      rule.site_elements.active
+    end
   end
 
   def all_site_elements
-    site.rules.map { |rule| site_elements_for_rule(rule, false) }.flatten
+    site.rules.map { |rule| site_elements_for_rule(rule) }.flatten
   end
 
   def element_classes
