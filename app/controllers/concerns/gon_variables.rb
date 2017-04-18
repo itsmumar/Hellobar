@@ -9,6 +9,7 @@ module GonVariables
 
   def set_gon_variables
     set_lead_data
+    set_country_codes
   end
 
   def set_lead_data
@@ -20,5 +21,9 @@ module GonVariables
       company_sizes: Lead::COMPANY_SIZES,
       traffic_items: Lead::TRAFFIC_ITEMS
     }
+  end
+
+  def set_country_codes
+    gon.countryCodes = I18n.t('country_codes')
   end
 end

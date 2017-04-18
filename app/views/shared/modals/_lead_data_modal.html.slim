@@ -70,9 +70,16 @@ script id='lead-data-template' type='text/x-handlebars-template'
               | No
 
           .input-group.js-phone-number class="hide"
+            .input-wrapper
+              .select-wrapper
+                select name="country" required=""
+                  | {{#each countryCodes}}
+                  |   <option value="{{code}}">{{name}}</option>
+                  | {{/each}}
+
             label.wide
               | What is the best number to contact you?
-              input name="phone_number" placeholder="e.g. +1-234-567-8910" type="tel"
+              input name="phone_number" placeholder="e.g. (234) 567-8910" type="tel"
 
 
       footer
