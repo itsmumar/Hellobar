@@ -1,6 +1,7 @@
 class ErrorsController < ApplicationController
   layout 'error'
 
+  # required for handling not-found GET *.js requests
   skip_before_action :verify_authenticity_token
 
   respond_to :html, :js, :css, :json, :text
