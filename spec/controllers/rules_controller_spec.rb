@@ -151,7 +151,7 @@ describe RulesController do
           put :update, site_id: site, id: rule, rule: {
             name: 'new rule name',
             conditions_attributes: {
-              :"0" => condition_hash(:date_between)
+              '0' => condition_hash(:date_between)
             }
           }
         }.to change { Condition.count }.by(1)
@@ -190,7 +190,7 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            :"0" => condition_hash(:url_includes)
+            '0' => condition_hash(:url_includes)
           }
         }
 
@@ -214,8 +214,8 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            :"0" => condition_hash(:url_includes),
-            :"1" => condition_hash(:date_before)
+            '0' => condition_hash(:url_includes),
+            '1' => condition_hash(:date_before)
           }
         }
 
@@ -235,7 +235,7 @@ describe RulesController do
         # remove it
         put :update, site_id: site, id: rule, rule: {
           conditions_attributes: {
-            :"0" => { id: condition.id, _destroy: 1 }
+            '0' => { id: condition.id, _destroy: 1 }
           }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound

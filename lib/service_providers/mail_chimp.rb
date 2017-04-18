@@ -130,7 +130,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     case error.title
     when 'APIKeyMissing', 'APIKeyInvalid', 'UserDisabled', 'Forbidden', 'ResourceNotFound'
-      identity.destroy_and_notify_user unless identity.nil?
+      identity&.destroy_and_notify_user
     when 'Member Exists', 'Invalid Resource', 'BadRequest'
       return # do nothing
     end
@@ -139,11 +139,9 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
   end
 
   def handle_result(result)
-    if result['errors']
-      result['errors'].each do |error|
-        break catch_required_merge_var_error!(error) if error['detail'] =~ /merge field/
-        next
-      end
+    result['errors']&.each do |error|
+      break catch_required_merge_var_error!(error) if error['detail'] =~ /merge field/
+      next
     end
 
     result

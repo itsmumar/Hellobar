@@ -15,7 +15,7 @@ class SiteGenerator
   end
 
   def generate_html
-    str = <<~EOS.strip
+    <<~EOS
       <!DOCTYPE html>
       <html>
       <head>
@@ -54,13 +54,7 @@ class SiteGenerator
           </p>
         </div>
 
-        <script>
-    EOS
-
-    str += @site.script_content(@compress)
-
-    str += <<~EOS.strip
-        </script>
+        <script>#{ @site.script_content(@compress) }</script>
 
         <p>Generated on #{ Time.current }</p>
       </body>
