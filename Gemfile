@@ -30,6 +30,7 @@ gem 'gon'
 gem 'google-api-client'
 gem 'hashie'
 gem 'infusionsoft'
+gem 'jbuilder'
 gem 'jquery-rails'
 gem 'jwt'
 gem 'kaminari'
@@ -58,7 +59,6 @@ gem 'psych'
 gem 'public_suffix'
 gem 'rack-ssl-enforcer'
 gem 'rails', '~> 4.1.16'
-gem 'jbuilder'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
