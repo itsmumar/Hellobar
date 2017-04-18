@@ -4,7 +4,7 @@ class SignInUser
     @request = request
   end
 
-  def sign_in
+  def call
     user, redirect_url = find_or_create_user
     user.save!
     cookies.permanent[:login_email] = user.email

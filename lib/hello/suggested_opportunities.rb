@@ -152,60 +152,84 @@ module Hello
 
     class << self
       def generate(_site, site_elements)
-        # Get all the segments for the last 60 days for all the site
-        # elements
-        end_date = Time.now
-        start_date = end_date - 60 * 24 * 60 * 60
-        # Get the segments by week
-        segments_as_hash = Hello::DynamoDB.segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
-        segments = []
-        # Convert to array
-        segments_as_hash.each do |segment, data|
-          segments << [segment, data[0], data[1]]
-        end
-        # We return 10 values or 25% of the items, whichever is smaller
-        num_values_to_return = [10, (segments.length.to_f / 4).round].min
-        # Sort the segment-values by total visits desc (most visits is at top)
-        segments.sort! { |a, b| b[1] <=> a[1] }
+        new(site_elements).generate
+      end
+    end
 
-        # Take the top 25% of segments if less than 80 item take top 50%
-        top_segments =
-          if segments.length < 80
-            # Top 50%
-            segments[0...segments.length / 2]
-          else
-            # Top 25%
-            segments[0...segments.length / 4]
-          end
+    attr_reader :site_elements
 
-        # Bottom 50%
-        bottom_segments = segments[segments.length / 2..-1]
+    def initialize(site_elements)
+      @site_elements = site_elements
+    end
 
-        # Define sort methods
-        sort_by_conversion = lambda do |a, b|
-          if b[2] == a[2]
-            conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]
-            conv_b = b[1] == 0 ? 0 : b[2].to_f / b[1]
-            conv_b <=> conv_a
-          else
-            b[2] <=> a[2]
-          end
-        end
-        # Sort by conversion rate desc
-        top_segments.sort!(&sort_by_conversion)
-        results = {}
+    def generate
+      # return 10 values or 25% of the items, whichever is smaller
+      num_values_to_return = [10, (segments.length.to_f / 4).round].min
+
+      {
         # Find top X - these are your "high traffic, high conversion". Sort by highest conversions desc
-        results['high traffic, high conversion'] = top_segments[0...num_values_to_return].sort(&sort_by_conversion)
+        'high traffic, high conversion' => top_segments[0...num_values_to_return].sort(&method(:sort_by_conversion)),
+
         # Find bottom X - these are your "high traffic, low conversion". Sort by lowest conversions
-        results['high traffic, low conversion'] = top_segments[-num_values_to_return..-1].sort(&sort_by_conversion).reverse
+        'high traffic, low conversion' => top_segments[-num_values_to_return..-1].sort(&method(:sort_by_conversion)).reverse,
+
         # Take the top of the bottom segments - these are your "low traffic, high conversion". Sort by highest conversions desc
-        results['low traffic, high conversion'] = bottom_segments[0...num_values_to_return].sort(&sort_by_conversion)
-        # Return the results
-        results
+        'low traffic, high conversion' => bottom_segments[0...num_values_to_return].sort(&method(:sort_by_conversion))
+      }
+    end
+
+    def end_date
+      @end_date ||= Time.now
+    end
+
+    # 60 days ago
+    def start_date
+      @start_date ||= end_date - 60 * 24 * 60 * 60
+    end
+
+    def segments
+      @segments ||=
+        begin
+          # Get the segments by week
+          segments_as_hash = Hello::DynamoDB.segments_by_week(site_elements.collect(&:id), start_date, end_date, SUGGESTION_SEGMENT_KEYS)
+
+          # Convert to array
+          segments_as_hash
+            .inject([]) { |segments, segment, data| segments << [segment, data[0], data[1]] }
+            .sort { |a, b| b[1] <=> a[1] }
+        end
+    end
+
+    # Take the top 25% of segments if less than 80 item take top 50%
+    def top_segments
+      @top_segments ||=
+        if segments.length < 80
+          # Top 50%
+          segments[0...segments.length / 2].sort(&method(:sort_by_conversion))
+        else
+          # Top 25%
+          segments[0...segments.length / 4].sort(&method(:sort_by_conversion))
+        end
+    end
+
+    # Bottom 50%
+    def bottom_segments
+      @bottom_segments ||= segments[segments.length / 2..-1]
+    end
+
+    # Sort by conversion rate desc
+    def sort_by_conversion(a, b)
+      if b[2] == a[2]
+        conv_a = a[1] == 0 ? 0 : a[2].to_f / a[1]
+        conv_b = b[1] == 0 ? 0 : b[2].to_f / b[1]
+        conv_b <=> conv_a
+      else
+        b[2] <=> a[2]
       end
     end
   end
 end
+
 begin
   Hello::DynamoDB.setup
 rescue => e
