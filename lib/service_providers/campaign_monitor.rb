@@ -44,10 +44,10 @@ class ServiceProviders::CampaignMonitor < ServiceProviders::Email
       identity.save
       retry unless (retries -= 1).zero?
     end
-    identity.destroy_and_notify_user unless identity.nil?
+    identity&.destroy_and_notify_user
     raise e
   rescue CreateSend::RevokedOAuthToken => e
-    identity.destroy_and_notify_user unless identity.nil?
+    identity&.destroy_and_notify_user
     raise e
   end
 

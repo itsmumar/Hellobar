@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'rails', '4.1.16'
+
 gem 'abanalyzer'
 gem 'activemerchant', '~> 1.44.1'
 gem 'active_campaign', '~> 0.1.14'
@@ -35,7 +37,6 @@ gem 'jquery-rails'
 gem 'jwt'
 gem 'kaminari'
 gem 'less_interactions'
-gem 'logglier'
 gem 'madmimi'
 gem 'mini_racer'
 gem 'mustache'
@@ -58,12 +59,12 @@ gem 'pony'
 gem 'psych'
 gem 'public_suffix'
 gem 'rack-ssl-enforcer'
-gem 'rails', '~> 4.1.16'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
 
+gem 'rails-html-sanitizer'
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'render_anywhere'
 gem 'roadie-rails'
@@ -82,9 +83,6 @@ gem 'uglifier'
 gem 'unf'
 gem 'verticalresponse'
 gem 'whenever'
-# gem "yui-compressor"
-gem 'rails-html-sanitizer'
-gem 'tzinfo-data', platforms: [:mingw, :mswin] # fixing tzinfo-related bug on Windows platform
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 gem 'rotp'
@@ -100,8 +98,10 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'brakeman', require: false
-  gem 'hound-tools', require: false
   gem 'rubocop', require: false
+
+  # Remove when we upgrade to sprockets-rails 3.1+ (and add `config.assets.quiet = true`)
+  gem 'quiet_assets'
 
   # Deployment
   gem 'capistrano'
@@ -141,4 +141,10 @@ group :test do
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
+end
+
+group :production do
+  # Loggly
+  gem 'lograge'
+  gem 'syslogger'
 end

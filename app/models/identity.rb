@@ -43,8 +43,9 @@ class Identity < ActiveRecord::Base
   alias provider_config provider_settings
 
   def as_json(options = nil)
-    extra['raw_info'].select! { |k, _| %w(user_id username).include? k } if extra['raw_info']
+    extra['raw_info']&.select! { |k, _| %w(user_id username).include? k }
     extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, _| %w(id web_id name).include? k } }
+
     super
   end
 

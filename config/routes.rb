@@ -13,7 +13,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
-
     get '/users/forgot_email', to: 'users/forgot_emails#new', as: :new_forgot_email
     post '/users/forgot_email', to: 'users/forgot_emails#create', as: :forgot_email
   end
@@ -155,12 +154,15 @@ Rails.application.routes.draw do
   post '/start_migration', to: 'user_migration#start', as: :start_user_migration
   post '/user_migration', to: 'user_migration#create', as: :user_migration
 
+  get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
+
+  get '/email-signup', to: 'welcome#email_quickstart'
+
   %w(404 422 500).each do |code|
     get code, to: 'errors#show', code: code
   end
 
-  get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
-
-  get '/email-signup', to: 'welcome#email_quickstart'
   root 'welcome#index'
+
+  get '*unmatched_route', to: 'errors#show', code: 404
 end

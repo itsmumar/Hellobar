@@ -18,7 +18,8 @@ class TrackingController < ApplicationController
     current_user.onboarding_status_setter.selected_goal! if current_user
 
     site = Site.find_by(id: params[:site_id])
-    site.update_attributes(selected_goal_clicked_at: Time.zone.now) if site
+    site&.update_attributes(selected_goal_clicked_at: Time.zone.now)
+
     render nothing: true
   end
 
