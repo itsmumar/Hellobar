@@ -16,6 +16,9 @@ class ApplicationController < ActionController::Base
   before_action :set_raven_context
   after_action :store_last_requested_path
 
+  delegate :remote_ip, to: :request
+  delegate :user_agent, to: :request
+
   rescue_from ::Google::Apis::AuthorizationError do |exception|
     raise exception if impersonated_user # we can't authenticate for impersonated users
     return unless exception.to_s =~ /Unauthorized/
@@ -35,10 +38,6 @@ class ApplicationController < ActionController::Base
       httponly: true
     }
   end
-
-  delegate :user_agent, to: :request
-
-  delegate :remote_ip, to: :request
 
   def current_admin
     return nil if @current_admin == false
