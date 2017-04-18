@@ -112,7 +112,7 @@ module Hello
         # We use both the "friendly" interface (@dynamo_db) and the
         # direct interface (@client)
         @dynamo_db = AWS::DynamoDB.new
-        @client = AWS::DynamoDB::Client.new(api_version: '2012-08-10')
+        @client = AWS::DynamoDB::Client.new(api_version: '2012-08-10', logger: nil)
       end
 
       def load_tables

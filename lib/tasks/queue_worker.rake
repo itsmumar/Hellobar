@@ -133,10 +133,13 @@ namespace :queue_worker do
       metric_data: metrics
     }
     pp data
+
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
     )
+
     response = cloudwatch.put_metric_data(data)
     pp response
   end

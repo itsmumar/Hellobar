@@ -39,12 +39,14 @@ namespace :cloudwatch_metrics do
     # Send the data to Cloudwatch
     require Rails.root.join('config', 'initializers', 'settings.rb')
     stage = Hellobar::Settings[:env_name]
+
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
     )
-    cloudwatch.put_metric_data(namespace: "HB/#{ stage }",
-                               metric_data: metrics)
+
+    cloudwatch.put_metric_data(namespace: "HB/#{ stage }", metric_data: metrics)
   end
 
   desc 'Creates alarms for disk space and memory'
@@ -58,7 +60,8 @@ namespace :cloudwatch_metrics do
 
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
     )
 
     ########################################
