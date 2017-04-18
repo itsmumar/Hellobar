@@ -5,6 +5,11 @@ require 'hmac-sha2'
 class ScriptGenerator < Mustache
   self.raise_on_context_miss = true
   cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+  cattr_reader(:jbuilder) do
+    ActionController::Base.new.view_context.tap do |context|
+      context.formats = [:json]
+    end
+  end
 
   class << self
     def compile
@@ -169,14 +174,7 @@ class ScriptGenerator < Mustache
   end
 
   def crypto_js
-    files = [
-      'crypto.core.js',
-      'crypto.x64-core.js',
-      'crypto.hmac.js',
-      'crypto.sha1.js',
-      'crypto.sha512.js'
-    ]
-    files.map { |file| render_asset('lib/crypto', file) }.join("\n")
+    render_asset('lib/crypto.js')
   end
 
   def hellobar_container_css
@@ -257,7 +255,7 @@ class ScriptGenerator < Mustache
     {
       match: rule.match,
       conditions: conditions_for_rule(rule).to_json,
-      site_elements: site_elements_for_rule(rule).to_json
+      site_elements: render_site_elements(site_elements_for_rule(rule))
     }
   end
 
@@ -317,109 +315,22 @@ class ScriptGenerator < Mustache
     render_asset(element_class, 'footer.html')
   end
 
-  def site_element_settings(site_element)
-    settings = %w(
-      animated
-      background_color
-      border_color
-      button_color
-      email_placeholder
-      headline
-      image_placement
-      link_color
-      link_style
-      link_text
-      name_placeholder
-      phone_number
-      placement
-      show_border
-      show_branding
-      size
-      target
-      text_color
-      texture
-      theme_id
-      type
-      view_condition
-      wiggle_button
-      wordpress_bar_id
-      blocks
-    )
-    settings << 'caption' unless site_element.use_question?
-
-    lifetime_totals = @site.lifetime_totals
-    conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
-    views = conversions = conversion_rate = 0
-
-    if conversion_data && conversion_data[0]
-      views = conversion_data[0][0]
-      conversions = conversion_data[0][1]
-      if views > 0
-        conversion_rate = ((conversions.to_f / views) * 1000).floor.to_f / 1000
-      end
-    end
-
-    site_element.attributes.select { |key, _| settings.include?(key) }.merge(
-      answer1: site_element.answer1,
-      answer1response: site_element.answer1response,
-      answer1caption: site_element.answer1caption,
-      answer1link_text: site_element.answer1link_text,
-      answer2: site_element.answer2,
-      answer2response: site_element.answer2response,
-      answer2caption: site_element.answer2caption,
-      answer2link_text: site_element.answer2link_text,
-      use_question: site_element.use_question,
-      question: site_element.question,
-      font: site_element.font.value,
-      google_font: site_element.font.google_font,
-      branding_url: "http://www.hellobar.com?sid=#{ site_element.id }",
-      closable: site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false,
-      contact_list_id: site_element.contact_list_id,
-      conversion_rate: conversion_rate,
-      conversions: conversions,
-      custom_html: site_element.custom_html,
-      custom_css: site_element.custom_css,
-      custom_js: site_element.custom_js,
-      email_redirect: site_element.email_redirect?,
-      hide_destination: true,
-      id: site_element.id,
-      image_url: site_element.image_url,
-      open_in_new_window: site_element.open_in_new_window,
-      phone_number: site_element.phone_number,
-      primary_color: site_element.primary_color,
-      pushes_page_down: site_element.pushes_page_down,
-      remains_at_top: site_element.remains_at_top,
-      secondary_color: site_element.secondary_color,
-      settings: site_element.settings,
-      subtype: site_element.short_subtype,
-      tab_side: 'right',
-      target: site_element.target_segment,
-      template_name: "#{ site_element.class.name.downcase }_#{ site_element.element_subtype }",
-      thank_you_text: SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;'),
-      views: views,
-      updated_at: site_element.updated_at.to_f * 1000,
-      use_free_email_default_msg: site_element.show_default_email_message? && site_element.site.free?,
-      wiggle_wait: 0,
-      blocks: site_element.blocks,
-      theme: site_element.theme.attributes
-    ).select { |_, value| !value.nil? }
+  def render_site_elements(site_elements)
+    jbuilder.render 'site_elements/site_elements', site_elements: site_elements
   end
 
-  def site_elements_for_rule(rule, hashify = true)
-    site_elements =
-      if options[:bar_id]
-        [rule.site_elements.find(options[:bar_id])]
-      elsif options[:render_paused_site_elements]
-        rule.site_elements
-      else
-        rule.site_elements.active
-      end
-
-    hashify ? site_elements.map { |element| site_element_settings(element) } : site_elements
+  def site_elements_for_rule(rule)
+    if options[:bar_id]
+      [rule.site_elements.find(options[:bar_id])]
+    elsif options[:render_paused_site_elements]
+      rule.site_elements
+    else
+      rule.site_elements.active
+    end
   end
 
   def all_site_elements
-    site.rules.map { |rule| site_elements_for_rule(rule, false) }.flatten
+    site.rules.map { |rule| site_elements_for_rule(rule) }.flatten
   end
 
   def element_classes
