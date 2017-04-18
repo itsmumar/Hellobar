@@ -70,6 +70,7 @@ gem 'roadie-rails'
 gem 'ruby-hmac'
 gem 'rubyzip'
 gem 'sassc-rails'
+gem 'sentry-raven'
 gem 'signet'
 gem 'simple_form'
 gem 'slim-rails'
@@ -142,9 +143,6 @@ group :test do
 end
 
 group :production do
-  # Real-time error reporting
-  gem 'sentry-raven'
-
   # Loggly
   gem 'lograge'
   gem 'syslogger'

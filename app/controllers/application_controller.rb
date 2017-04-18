@@ -132,8 +132,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_raven_context
-    return unless defined? Raven
-
     Raven.user_context(id: current_user.id, email: current_user.email) if current_user
 
     # TODO: change to `params.to_unsafe_h` when Rails is upgraded to 4.2+
