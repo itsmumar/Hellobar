@@ -89,23 +89,27 @@ jobs:
 
       - run:
           name: Run Brakeman
-          command: bundle exec brakeman
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec brakeman; else echo "skip"; fi
 
       - run:
           name: Run Rubocop
-          command: bundle exec rubocop
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
           name: Run unit tests
-          command: bundle exec rspec --tag ~@type:feature -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+          command: |
+            TESTFILES=$(circleci tests glob "spec/{models,requests,serializers,lib,interactions,helpers,controllers,bin}/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
           name: Run teaspoon tests
-          command: RAILS_ENV=test SUITE=default bundle exec rake teaspoon
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then RAILS_ENV=test SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
-          command: xvfb-run -a bundle exec rspec spec/features -r rspec_junit_formatter --format progress --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/junit.xml
+          command: |
+            TESTFILES=$(circleci tests glob "spec/features/**/*_spec.rb" | circleci tests split --split-by=timings)
+            xvfb-run -a bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
           key: dependency-cache-tmp-{{ .Branch }}
@@ -117,3 +121,6 @@ jobs:
       - store_artifacts:
           path: /tmp/hellobar_new/tmp/coverage
           destination: coverage
+
+      - store_test_results:
+          path: /tmp/hellobar_new/test-results
