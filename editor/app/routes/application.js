@@ -72,7 +72,7 @@ export default Ember.Route.extend({
     }
 
     if(window.gon && gon.lead_data) {
-      new LeadDataModal().open();
+      new LeadDataModal().checkCountryAndOpen();
     }
   },
 

@@ -2,6 +2,7 @@
 class @LeadDataModal extends Modal
   canClose: false
   modalName: 'lead-data'
+  allowedCountries: ['US', 'AU', 'GB', 'CA']
 
   constructor: (@options = {}) ->
     # *gon* variables are defined here: app/controllers/concerns/gon_variables.rb
@@ -12,7 +13,7 @@ class @LeadDataModal extends Modal
     data.companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
     data.trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
     data.challenges = gon.lead_data.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
-    data.countryCodes = gon.countryCodes.filter((country) => ['US', 'AU', 'GB', 'CA'].indexOf(country.code) != -1)
+    data.countryCodes = gon.countryCodes.filter((country) => @allowedCountries.indexOf(country.code) != -1)
     data.currentUser = window.currentUser
 
     @$modal = @_render('lead-data-template', data)
@@ -23,10 +24,27 @@ class @LeadDataModal extends Modal
     @_bindInputs()
     super(@$modal)
 
+  checkCountryAndOpen: ->
+    return unless gon.lead_data
+    @_getCountryCode().then (response) =>
+      if (@allowedCountries.indexOf(response.countryCode) != -1)
+        @open()
+
   close: ->
     return unless @_validateFirstScreen() && @_validateSecondScreen() && @canClose
     @_saveData()
     super
+
+  _getCountryCode: ->
+    if (countryCode = localStorage.getItem('countryCode'))
+      return $.when({countryCode})
+
+    $.ajax
+      url: gon.settings.geolocation_url
+      crossDomain: true
+      dataType: 'json'
+    .done (response) ->
+      localStorage.setItem('countryCode', response.countryCode)
 
   _saveData: ->
     data = @$firstForm.serializeArray().reduce @_reducer, {}
