@@ -6,19 +6,20 @@ script id='lead-data-template' type='text/x-handlebars-template'
 
       div.modal-content
         form.screen-1
-          .select-wrapper
-            select name="industry" required=""
-              | <option value="">Industry</option>
-              | {{#each industries}}
-              |   <option value="{{value}}">{{name}}</option>
-              | {{/each}}
+          .input-group
+            .select-wrapper
+              select name="industry" required=""
+                | <option value="">Industry</option>
+                | {{#each industries}}
+                |   <option value="{{value}}">{{name}}</option>
+                | {{/each}}
 
-          .select-wrapper
-            select name="job_role" required=""
-              | <option value="">Job Role</option>
-              | {{#each roles}}
-              |   <option value="{{value}}">{{name}}</option>
-              | {{/each}}
+            .select-wrapper
+              select name="job_role" required=""
+                | <option value="">Job Role</option>
+                | {{#each roles}}
+                |   <option value="{{value}}">{{name}}</option>
+                | {{/each}}
 
           .radio-group data-toggle="buttons"
             .title Company Size
