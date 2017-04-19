@@ -125,6 +125,13 @@ group :development do
   # Remove when we upgrade to sprockets-rails 3.1+ (and add `config.assets.quiet = true`)
   gem 'quiet_assets'
 
+  # Guards
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-rubocop'
+  gem 'guard-shell'
+  gem 'guard-teaspoon'
+
   # Deployment
   gem 'capistrano'
   gem 'capistrano-bundler'
