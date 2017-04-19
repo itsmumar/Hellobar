@@ -2,7 +2,7 @@
 // so we just use these few lines of code instead
 
 (function ($) {
-  $.ajaxPrefilter((options, originalOptions, xhr) => {
+  $.ajaxPrefilter(function (options, originalOptions, xhr) {
     if (!options.crossDomain) {
       const token = $('meta[name="csrf-token"]').attr('content');
       xhr.setRequestHeader('X-CSRF-Token', token);
