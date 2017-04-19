@@ -24,7 +24,6 @@ hb_infusionsoft_default_group: default-group-id
 hb_infusionsoft_key: infusionsoft-key
 hb_infusionsoft_url: infusionsoft-url
 host: local.hellobar.com
-loggly_url: https://logs-01.loggly.com/inputs/[your-customer-token]/tag/[your-rails-app]/
 low_priority_queue: hellobar3_production_lowpriority
 mailchimp_client_id: mailchimp-client-id
 mailchimp_secret: mailchimp-secret

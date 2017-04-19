@@ -34,7 +34,6 @@ unless defined?(Hellobar::Settings)
     hb_infusionsoft_key
     hb_infusionsoft_url
     host
-    loggly_url
     low_priority_queue
     mailchimp_client_id
     mailchimp_secret
