@@ -219,7 +219,7 @@ module Hello::DataAPI
         # Ran out of attempts, re-raise the error
         raise
       end
-    rescue JSON::ParserError, SocketError, Timeout::Error, StandardError => e
+    rescue StandardError => e
       now = Time.now
       duration = now.to_f - begin_time
       # Log the error
