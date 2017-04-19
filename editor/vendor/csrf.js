@@ -1,3 +1,6 @@
+// ember-cli-rails-addon appends X-CSRF-Token regardless do we crossDomain request or not
+// so we just use these few lines of code instead
+
 (function ($) {
   $.ajaxPrefilter((options, originalOptions, xhr) => {
     if (!options.crossDomain) {
