@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActionController::UnknownFormat do
-    head :unprocessable_entity
+    head :not_found
   end
 
   def access_token
