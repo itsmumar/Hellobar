@@ -24,7 +24,7 @@ feature 'Lead data popup', :js do
 
     click_on 'Create Site'
 
-    expect(page).to have_content 'WE HAVE A FEW QUESTIONS TO KNOW YOU BETTER'
+    expect(page).to have_content 'WE HAVE JUST A FEW QUESTIONS TO HELP YOU GET THE MOST OUT OF HELLO BAR'
 
     select 'eCommerce', from: 'industry'
     select 'Marketing', from: 'job_role'
