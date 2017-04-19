@@ -546,6 +546,9 @@ GEM
     spring (1.7.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
+    spring-watcher-listen (2.0.1)
+      listen (>= 2.7, < 4.0)
+      spring (>= 1.2, < 3.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -567,6 +570,7 @@ GEM
     teaspoon-jasmine (2.3.4)
       teaspoon (>= 1.0.0)
     temple (0.7.7)
+    terminal-notifier-guard (1.7.0)
     thin (1.6.4)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -711,10 +715,12 @@ DEPENDENCIES
   slim-rails
   spring
   spring-commands-rspec
+  spring-watcher-listen
   sprockets
   sprockets-es6
   syslogger
   teaspoon-jasmine
+  terminal-notifier-guard
   thin (~> 1.6.4)
   thread
   timecop

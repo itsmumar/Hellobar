@@ -131,7 +131,8 @@ group :development do
   gem 'guard-rubocop'
   gem 'guard-shell'
   gem 'guard-teaspoon'
-
+  gem 'terminal-notifier-guard'
+  #
   # Deployment
   gem 'capistrano'
   gem 'capistrano-bundler'
@@ -155,6 +156,7 @@ group :development, :test do
   # Spring preloader
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen'
 end
 
 group :test do
