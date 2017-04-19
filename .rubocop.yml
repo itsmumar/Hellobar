@@ -92,6 +92,9 @@ Style/WordArray:
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
 #### END STYLES
 
 #### BEGIN RAILS
