@@ -671,6 +671,7 @@ DEPENDENCIES
   nokogiri
   oj
   oj_mimic_json
+  omniauth (~> 1.0)
   omniauth-aweber (~> 1.0)
   omniauth-constantcontact2 (~> 1.0)
   omniauth-createsend (~> 1.0)

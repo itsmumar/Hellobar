@@ -9,6 +9,7 @@ gem 'fog-aws'
 # Authentication / authorization
 gem 'devise'
 gem 'google-api-client'
+gem 'omniauth', '~> 1.0'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
