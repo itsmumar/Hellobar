@@ -27,6 +27,10 @@ class ApplicationController < ActionController::Base
     redirect_to '/auth/google_oauth2' # log in again to refresh token
   end
 
+  rescue_from ActionController::UnknownFormat do
+    head :not_found
+  end
+
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(['hellobar', remote_ip, user_agent, access_cookie, 'a776b'].join)
   end
