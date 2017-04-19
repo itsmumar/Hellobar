@@ -136,6 +136,7 @@ group :test do
   gem 'rspec_junit_formatter'
 
   gem 'database_cleaner'
+  gem 'launchy'
   gem 'rspec-retry'
   gem 'shoulda-matchers'
   gem 'timecop'

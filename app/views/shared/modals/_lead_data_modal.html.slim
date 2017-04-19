@@ -2,23 +2,24 @@ script id='lead-data-template' type='text/x-handlebars-template'
   .modal-wrapper
     .modal-block
       header
-        h5 We have a few questions to know you better
+        h5 We have just a few questions to help you get <br> the most out of Hello Bar
 
       div.modal-content
         form.screen-1
-          .select-wrapper
-            select name="industry" required=""
-              | <option value="">Industry</option>
-              | {{#each industries}}
-              |   <option value="{{value}}">{{name}}</option>
-              | {{/each}}
+          .input-group
+            .select-wrapper
+              select name="industry" required=""
+                | <option value="">Industry</option>
+                | {{#each industries}}
+                |   <option value="{{value}}">{{name}}</option>
+                | {{/each}}
 
-          .select-wrapper
-            select name="job_role" required=""
-              | <option value="">Job Role</option>
-              | {{#each roles}}
-              |   <option value="{{value}}">{{name}}</option>
-              | {{/each}}
+            .select-wrapper
+              select name="job_role" required=""
+                | <option value="">Job Role</option>
+                | {{#each roles}}
+                |   <option value="{{value}}">{{name}}</option>
+                | {{/each}}
 
           .radio-group data-toggle="buttons"
             .title Company Size
@@ -70,9 +71,16 @@ script id='lead-data-template' type='text/x-handlebars-template'
               | No
 
           .input-group.js-phone-number class="hide"
+            .input-wrapper
+              .select-wrapper
+                select name="country" required=""
+                  | {{#each countryCodes}}
+                  |   <option value="{{code}}">{{name}}</option>
+                  | {{/each}}
+
             label.wide
               | What is the best number to contact you?
-              input name="phone_number" placeholder="e.g. +1-234-567-8910" type="tel"
+              input name="phone_number" placeholder="e.g. (234) 567-8910" type="tel"
 
 
       footer

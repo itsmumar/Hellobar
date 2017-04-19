@@ -13,7 +13,7 @@ RSpec.configure do |config|
       html_path = "#{ path }.html"
 
       # Save PNG screenshot
-      page.save_screenshot png_path, full: true
+      page.save_screenshot png_path, width: 1000, height: 800
 
       # Save corresponding HTML
       File.open(html_path, 'w') { |file| file.write(page.body) }

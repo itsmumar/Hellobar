@@ -2,17 +2,21 @@
 class @LeadDataModal extends Modal
   canClose: false
   modalName: 'lead-data'
+  allowedCountries: ['US', 'AU', 'GB', 'CA']
 
   constructor: (@options = {}) ->
     # *gon* variables are defined here: app/controllers/concerns/gon_variables.rb
     return unless gon.lead_data
-    industries = gon.lead_data.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
-    roles = gon.lead_data.job_roles.map (role) => {name: role, value: role.toLowerCase()}
-    companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
-    trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
-    challenges = gon.lead_data.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
+    data = {}
+    data.industries = gon.lead_data.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
+    data.roles = gon.lead_data.job_roles.map (role) => {name: role, value: role.toLowerCase()}
+    data.companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
+    data.trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
+    data.challenges = gon.lead_data.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
+    data.countryCodes = gon.countryCodes.filter((country) => @allowedCountries.indexOf(country.code) != -1)
+    data.currentUser = window.currentUser
 
-    @$modal = @_render('lead-data-template', {industries, roles, companySizes, trafficItems, challenges, currentUser})
+    @$modal = @_render('lead-data-template', data)
     @$modal.appendTo($("body"))
     @$firstForm = @$modal.find('form.screen-1')
     @$secondForm = @$modal.find('form.screen-2')
@@ -20,15 +24,33 @@ class @LeadDataModal extends Modal
     @_bindInputs()
     super(@$modal)
 
+  checkCountryAndOpen: ->
+    return unless gon.lead_data
+    @_getCountryCode().then (response) =>
+      if (@allowedCountries.indexOf(response.countryCode) != -1)
+        @open()
+
   close: ->
     return unless @_validateFirstScreen() && @_validateSecondScreen() && @canClose
     @_saveData()
     super
 
+  _getCountryCode: ->
+    if (countryCode = localStorage.getItem('countryCode'))
+      return $.when({countryCode})
+
+    $.ajax
+      url: gon.settings.geolocation_url
+      crossDomain: true
+      dataType: 'json'
+    .done (response) ->
+      localStorage.setItem('countryCode', response.countryCode)
+
   _saveData: ->
     data = @$firstForm.serializeArray().reduce @_reducer, {}
     data = @$secondForm.serializeArray().reduce @_reducer, data
-    data.phone_number = cleanPhone(data.phone_number)
+    data.phone_number = formatE164(data.country, data.phone_number)
+
     $.post('/leads', lead: data).then ->
       message = $('<div class="flash-block error">Your submission was successful. A representative from our team will contact you soon.</div>')
       $('body').prepend(message)
@@ -58,10 +80,17 @@ class @LeadDataModal extends Modal
     @$modal.find('.js-interesting').on 'change', =>
       @$modal.find('.js-phone-number').attr('required', 'required').show()
 
+    @$modal.find('select[name="country"]').on 'change', (event) =>
+      countryCode = $(event.target).val()
+      example = formatLocal(countryCode, exampleMobileNumber(countryCode))
+      placeholder = "e.g. #{example}"
+      @$modal.find('input[name="phone_number"]').val('').attr('placeholder', placeholder)
+
     @$modal.find('input[name="phone_number"]').on 'keyup change', (event) =>
       phoneNumber = $(event.target).val()
+      countryCode = $('.js-phone-number [name="country"]').val()
 
-      if phoneNumber == "" || !isValidNumber(phoneNumber)
+      if phoneNumber == "" || !isValidNumber(phoneNumber, countryCode)
         @canClose = false
         @$modal.find('.js-close').hide()
       else
