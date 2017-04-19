@@ -87,7 +87,6 @@ module EmailSynchronizer
       Rails.logger.warn "Removing identity #{ identity.try(:id) }\n#{ e.message }"
       identity.try(:destroy_and_notify_user)
     end
-
   rescue => e
     log_entry&.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
     raise e

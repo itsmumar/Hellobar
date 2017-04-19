@@ -6,7 +6,7 @@ describe ScriptGenerator do
   end
 
   describe '#render' do
-    let(:site) { create(:site, :with_user, :pro, elements: %i(traffic email facebook twitter)) }
+    let(:site) { create(:site, :with_user, :pro, elements: %i[traffic email facebook twitter]) }
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do

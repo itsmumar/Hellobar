@@ -181,7 +181,7 @@ describe ContactList do
 
   describe 'email syncing errors' do
     before do
-      allow(Hello::DataAPI).to receive(:contacts).and_return([:foo, :bar])
+      allow(Hello::DataAPI).to receive(:contacts).and_return(%i[foo bar])
       allow(contact_list).to receive(:syncable?).and_return(true)
       allow(contact_list).to receive(:oauth?).and_return(true)
     end
@@ -424,8 +424,8 @@ describe ContactList, '#tags' do
   end
 
   it 'returns the tags that have been already saved' do
-    contact_list = ContactList.new data: { 'tags' => %w(1 2 3) }
+    contact_list = ContactList.new data: { 'tags' => %w[1 2 3] }
 
-    expect(contact_list.tags).to eql(%w(1 2 3))
+    expect(contact_list.tags).to eql(%w[1 2 3])
   end
 end

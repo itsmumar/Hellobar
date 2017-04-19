@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
   def should_send_to_new_site_element_path?
     return false unless current_onboarding_status
 
-    [:new, :selected_goal].include?(current_onboarding_status.status_name) &&
+    %i[new selected_goal].include?(current_onboarding_status.status_name) &&
       sites.script_not_installed_db.any?
   end
 

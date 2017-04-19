@@ -401,7 +401,7 @@ describe SiteElement do
         allow(capabilities).to receive(:external_tracking?).and_return true
       end
 
-      %w(google_analytics legacy_google_analytics).each do |provider|
+      %w[google_analytics legacy_google_analytics].each do |provider|
         it "is an array of external `#{ provider }` events" do
           expect(external_tracking).to be_an Array
           expect(external_tracking.count).to be > 1

@@ -13,7 +13,7 @@ if defined? Lograge
 
     # Log request params
     config.lograge.custom_options = lambda do |event|
-      exceptions = %w(controller action format id)
+      exceptions = %w[controller action format id]
       Hash[params: event.payload[:params].except(*exceptions)]
     end
 

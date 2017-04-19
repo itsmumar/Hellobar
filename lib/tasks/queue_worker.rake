@@ -21,7 +21,7 @@ namespace :queue_worker do
 
   desc 'Stops all the queue workers'
   task :stop do
-    processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
     puts "Stopping #{ processes.length } queue workers..."
     processes.each do |process|
       pid = process.split(/\s+/)[1].to_i
@@ -42,7 +42,7 @@ namespace :queue_worker do
     root = Rails.root
     require Rails.root.join('config', 'initializers', 'settings.rb')
 
-    processes = `ps aux`.split("\n").reject { |l| l !~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
     {
       Hellobar::Settings[:main_queue] => [2],
       Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']

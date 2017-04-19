@@ -2,7 +2,7 @@ class AutofillsController < ApplicationController
   before_action :authenticate_user!
   before_action :require_pro_managed_subscription
   before_action :load_site
-  before_action :load_autofill, only: [:edit, :update, :destroy]
+  before_action :load_autofill, only: %i[edit update destroy]
 
   def index
     @autofills = Autofill.where(site_id: @site.id).order name: :asc

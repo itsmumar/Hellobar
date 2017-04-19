@@ -5,7 +5,7 @@ module TargetedSegmentsHelper
     segment, value = targeted_segment.split(':', 2)
     segment = Condition::SEGMENTS.find { |s| s[1] == segment }
 
-    return '' unless segment.present? # the API returned a segment key which we don't implement
+    return '' if segment.blank? # the API returned a segment key which we don't implement
 
     segment = segment[1]
     existing_rule = rule_for_segment_and_value(site, segment, value)

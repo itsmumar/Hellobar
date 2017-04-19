@@ -3,7 +3,7 @@ class Referral < ActiveRecord::Base
 
   FOLLOWUP_INTERVAL = 5.days
 
-  enum state: [:sent, :signed_up, :installed]
+  enum state: %i[sent signed_up installed]
 
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }

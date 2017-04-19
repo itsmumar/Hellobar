@@ -181,7 +181,7 @@ describe Identity do
     context 'my emma' do
       let(:provider) { 'my_emma' }
 
-      %w(my_emma my_emma_js my_emma_iframe my_emma_popup).each do |file|
+      %w[my_emma my_emma_js my_emma_iframe my_emma_popup].each do |file|
         context file do
           let(:file) { file }
           it "works with My Emma #{ file }".strip do

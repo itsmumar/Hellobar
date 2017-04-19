@@ -34,7 +34,7 @@ describe ServiceProviders::Webhook do
       end
 
       context 'with custom fields' do
-        let(:custom_fields) { %w(phone email name empty gender) }
+        let(:custom_fields) { %w[phone email name empty gender] }
         let(:body) { { email: 'email@email.com', phone: '+1000000000', name: 'Name', empty: '', gender: 'Male' } }
         let!(:site_element) { create(:site_element, :with_custom_fields, contact_list: contact_list, fields: custom_fields) }
 
@@ -44,7 +44,7 @@ describe ServiceProviders::Webhook do
         end
 
         context 'when fields mismatch settings' do
-          let(:custom_fields) { %w(phone email name) }
+          let(:custom_fields) { %w[phone email name] }
           let(:body) { { email: 'email@email.com' } }
 
           it 'sends only email' do
@@ -74,7 +74,7 @@ describe ServiceProviders::Webhook do
       end
 
       context 'with custom fields' do
-        let(:custom_fields) { %w(phone email name Empty Gẹndêr Two\ words) }
+        let(:custom_fields) { %w[phone email name Empty Gẹndêr Two\ words] }
         let(:params) { { email: 'email@email.com', phone: '+1000000000', name: 'Name', empty: '', g_nder: 'Male', two_words: '1' } }
         let!(:site_element) { create(:site_element, :with_custom_fields, contact_list: contact_list, fields: custom_fields) }
 
@@ -84,7 +84,7 @@ describe ServiceProviders::Webhook do
         end
 
         context 'when fields mismatch settings' do
-          let(:custom_fields) { %w(phone email name) }
+          let(:custom_fields) { %w[phone email name] }
           let(:params) { { email: 'email@email.com' } }
 
           it 'sends only email' do

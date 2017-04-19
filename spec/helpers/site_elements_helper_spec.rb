@@ -286,7 +286,7 @@ describe SiteElementsHelper do
   end
 
   describe 'elements_grouped_by_type' do
-    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+    let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
 
     it 'should group elements by type' do
       grouped_elements = helper.elements_grouped_by_type(site.site_elements)
@@ -298,7 +298,7 @@ describe SiteElementsHelper do
   end
 
   describe 'elements_grouped_by_subtype' do
-    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+    let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
 
     it 'should group elements by subtype' do
       create(:site_element, :call, site: site)
@@ -313,7 +313,7 @@ describe SiteElementsHelper do
   end
 
   describe '#render_headline' do
-    let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+    let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
 
     context 'when use_question' do
       let(:slider_element) { create(:site_element, site: site, use_question: true, question: '<b>Questions?</b>') }
@@ -331,7 +331,7 @@ describe SiteElementsHelper do
     end
 
     context 'when blocks are present' do
-      let(:site) { create(:site, elements: %i(traffic email twitter facebook)) }
+      let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
       let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
       let(:slider_element) { create(:site_element, :slider, site: site) }
 

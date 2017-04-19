@@ -95,7 +95,7 @@ FactoryGirl.define do
 
     trait :with_custom_fields do
       transient do
-        fields %w(email phone name)
+        fields %w[email phone name]
       end
 
       settings do
@@ -142,8 +142,8 @@ FactoryGirl.define do
         'updated_at' => 1491936487000.0, 'use_free_email_default_msg' => true, 'wiggle_wait' => 0,
         'theme' => {
           'name' => 'Hello Bar Classic', 'type' => 'generic', 'id' => 'classic', 'default_theme' => true,
-          'fonts' => %w(open_sans source_pro helvetica arial georgia),
-          'element_types' => %w(Bar Modal Slider Takeover),
+          'fonts' => %w[open_sans source_pro helvetica arial georgia],
+          'element_types' => %w[Bar Modal Slider Takeover],
           'defaults' => {
             'Bar' => {
               'background_color' => 'E8562A', 'text_color' => 'FFFFFF', 'button_color' => '000000',
