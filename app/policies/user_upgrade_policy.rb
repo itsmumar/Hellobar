@@ -1,5 +1,7 @@
 class UserUpgradePolicy
-  MAX_RECURRING_TIME = 30.days.ago # only show once every 30 days
+  def self.max_recurring_time
+    30.days.ago
+  end # only show once every 30 days
   MAX_VIEW_IN_MONTH = 1000
 
   def initialize(resource, has_paying_subscription)

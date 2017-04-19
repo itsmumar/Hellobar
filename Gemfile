@@ -3,11 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '4.1.16'
 
 gem 'abanalyzer'
-gem 'activemerchant', '~> 1.44.1'
 gem 'active_campaign', '~> 0.1.14'
 gem 'active_hash'
 gem 'active_link_to'
 gem 'active_model_serializers'
+gem 'activemerchant', '~> 1.44.1'
 gem 'autoprefixer-rails'
 
 gem 'addressable', require: 'addressable/uri'

@@ -16,7 +16,7 @@ class HbTestSite
   end
 
   def self.generate(site_id, full_path)
-    raise 'site id is empty' unless site_id.present?
+    raise 'site id is empty' if site_id.blank?
     generator = SiteGenerator.new(site_id, full_path: full_path)
     generator.generate_file
   end
@@ -33,7 +33,7 @@ end
 
 namespace :test_site do
   desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test.html']"
-  task :file, [:site_id, :file_path] => :environment do |_t, args|
+  task :file, %i[site_id file_path] => :environment do |_t, args|
     HbTestSite.generate(args[:site_id], args[:file_path])
   end
 
@@ -54,5 +54,5 @@ namespace :test_site do
   end
 
   desc 'Runs the test site generation and a Sinatra server'
-  task :run_fresh, [:site_id] => [:generate, :run]
+  task :run_fresh, [:site_id] => %i[generate run]
 end

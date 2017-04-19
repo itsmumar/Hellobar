@@ -143,7 +143,7 @@ class Site < ActiveRecord::Base
   # has the script been installed according to the API?
   def script_installed_api?(days = 10)
     data = lifetime_totals(days: days)
-    return false unless data.present?
+    return false if data.blank?
 
     has_new_views = data.values.any? do |values|
       days_with_views = values.select { |v| v[0] > 0 }.count

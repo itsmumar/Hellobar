@@ -3,11 +3,11 @@ class SitesController < ApplicationController
   include Subscribable
 
   before_action :authenticate_user!, except: :create
-  before_action :load_site, except: [:index, :new, :create]
+  before_action :load_site, except: %i[index new create]
   before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
 
-  skip_before_action :verify_authenticity_token, only: [:preview_script, :script]
+  skip_before_action :verify_authenticity_token, only: %i[preview_script script]
 
   layout :determine_layout
 
@@ -91,7 +91,7 @@ class SitesController < ApplicationController
     raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data).try(:[], params[:type].to_sym) || []
     series = raw_data.map { |d| d[params[:type] == 'total' ? 0 : 1] }
     days_limits = [series.size]
-    days_limits << params[:days].to_i unless params[:days].blank?
+    days_limits << params[:days].to_i if params[:days].present?
     days = days_limits.min
 
     series_with_dates = (days - 1).downto(0).map do |i|
@@ -180,7 +180,7 @@ class SitesController < ApplicationController
     @top_performers = {}
     all_elements = @site.site_elements.sort_by { |e| -1 * e.conversion_percentage }
 
-    %w(all social email traffic call).each do |name|
+    %w[all social email traffic call].each do |name|
       elements =
         if name == 'all'
           all_elements

@@ -10,7 +10,7 @@ class Api::UserStateController < ApplicationController
   private
 
   def verify_access
-    return false unless params[:api_token].present?
+    return false if params[:api_token].blank?
 
     Admin.find_by(api_token: params[:api_token]).present? ? nil : head(404)
   end

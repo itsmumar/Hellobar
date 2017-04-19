@@ -22,7 +22,7 @@ describe 'migration of legacy sites' do
   end
 
   it 'leaves the timezone blank if no legacy goal had a timezone' do
-    assert !@legacy_site.goals.any? { |g| g.data_json['dates_timezone'].present? }
+    assert @legacy_site.goals.none? { |g| g.data_json['dates_timezone'].present? }
     assert @site.timezone.nil?
   end
 

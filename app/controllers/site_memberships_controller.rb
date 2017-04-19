@@ -1,7 +1,7 @@
 class SiteMembershipsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_site_membership, only: [:show, :edit, :update, :destroy]
+  before_action :load_site_membership, only: %i[show edit update destroy]
 
   def create
     @site_membership = @site.site_memberships.create(site_membership_params)

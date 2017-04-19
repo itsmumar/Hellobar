@@ -11,7 +11,7 @@ end
 module FeatureHelper
   def login(user = nil)
     user ||= create(:user)
-    unless user.sites.present?
+    if user.sites.blank?
       user.sites.create(url: generate(:random_uniq_url)) # Setup a site so that it goes directly to summary page
     end
 

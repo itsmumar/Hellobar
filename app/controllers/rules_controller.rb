@@ -3,7 +3,7 @@ class RulesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :verify_capability, only: [:create, :update]
+  before_action :verify_capability, only: %i[create update]
 
   def show
     rule = @site.rules.find(params[:id])

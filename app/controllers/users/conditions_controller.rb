@@ -1,7 +1,7 @@
 class ConditionsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site, :load_rule
-  before_action :verify_capability, only: [:create, :update]
+  before_action :verify_capability, only: %i[create update]
 
   def show
     condition = @rule.conditions.find(params[:id])

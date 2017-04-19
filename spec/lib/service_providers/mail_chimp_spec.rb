@@ -27,7 +27,7 @@ describe ServiceProviders::MailChimp, :vcr do
 
   describe 'lists' do
     it 'returns available lists' do
-      expect(service_provider.lists.map { |list| list['id'] }).to match_array %w(0503e0a88a 68e477ba92 96341e9476)
+      expect(service_provider.lists.map { |list| list['id'] }).to match_array %w[0503e0a88a 68e477ba92 96341e9476]
     end
   end
 

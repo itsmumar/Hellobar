@@ -4,7 +4,7 @@ class Font < ActiveHash::Base
   class << self
     # @param [String] font_names; e.g. "Helvetica,sans-serif"
     def guess(font_names)
-      return unless font_names.present?
+      return if font_names.blank?
       font_names = font_names.to_s.split(',')
       all_fonts = Font.all
 

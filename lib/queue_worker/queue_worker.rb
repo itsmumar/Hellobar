@@ -1,6 +1,6 @@
 class QueueWorker
-  STAGES = %w(edge staging production designqa).freeze
-  VIEW_ATTRIBUTES = %w(ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds).freeze
+  STAGES = %w[edge staging production designqa].freeze
+  VIEW_ATTRIBUTES = %w[ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds].freeze
   LOG_FILE = Rails.root.join('log', 'queue_worker.log')
 
   module Delay
@@ -50,7 +50,7 @@ class QueueWorker
     stage ||= Hellobar::Settings[:env_name]
 
     raise ArgumentError, "Stage is required to be one of #{ STAGES }" unless STAGES.include?(stage)
-    raise ArgumentError, 'Message must be defined' unless message && !message.empty?
+    raise ArgumentError, 'Message must be defined' if message.blank?
     raise ArgumentError, 'Queue name must be defined' unless queue_name
 
     @sqs ||= AWS::SQS.new(

@@ -13,8 +13,8 @@ class SiteElement < ActiveRecord::Base
     2 => :redirect
   }.freeze
 
-  WHITELISTED_TAGS = %w(p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote).freeze
-  WHITELISTED_ATTRS = %w(style class href target alt src data-hb-geolocation).freeze
+  WHITELISTED_TAGS = %w[p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote].freeze
+  WHITELISTED_ATTRS = %w[style class href target alt src data-hb-geolocation].freeze
 
   # valid bar types and their conversion units
   BAR_TYPES = {
@@ -37,8 +37,8 @@ class SiteElement < ActiveRecord::Base
     'traffic_growth'                  => 'Emails'
   }.freeze
 
-  TEMPLATE_NAMES = %w(traffic_growth).freeze
-  SHORT_SUBTYPES = %w(traffic email call social announcement).freeze
+  TEMPLATE_NAMES = %w[traffic_growth].freeze
+  SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
@@ -88,13 +88,13 @@ class SiteElement < ActiveRecord::Base
   after_save :remove_unreferenced_images
   after_save :update_s3_content
 
-  NOT_CLONEABLE_ATTRIBUTES = [
-    :element_subtype,
-    :id,
-    :created_at,
-    :updated_at,
-    :deleted_at,
-    :paused
+  NOT_CLONEABLE_ATTRIBUTES = %i[
+    element_subtype
+    id
+    created_at
+    updated_at
+    deleted_at
+    paused
   ].freeze
 
   QUESTION_DEFAULTS = {
@@ -347,7 +347,7 @@ class SiteElement < ActiveRecord::Base
 
     if !site.capabilities.after_submit_redirect?
       errors.add('settings.redirect_url', 'is a pro feature')
-    elsif !settings['redirect_url'].present?
+    elsif settings['redirect_url'].blank?
       errors.add('settings.redirect_url', 'cannot be blank')
     end
   end
