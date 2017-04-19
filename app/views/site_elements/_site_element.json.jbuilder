@@ -71,7 +71,7 @@ json.cache! site_element do
 
   json.branding_url "http://www.hellobar.com?sid=#{ site_element.id }"
 
-  json.closable site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false
+  json.closable(site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false)
 
   json.use_free_email_default_msg site_element.show_default_email_message? && site_element.site.free?
 
