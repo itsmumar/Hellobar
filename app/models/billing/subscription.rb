@@ -12,7 +12,7 @@ class Subscription < ActiveRecord::Base
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
 
-  enum schedule: [:monthly, :yearly]
+  enum schedule: %i[monthly yearly]
 
   class << self
     def active
@@ -55,16 +55,16 @@ class Subscription < ActiveRecord::Base
   end
 
   def pending_bills(reload = false)
-    bills(reload).reject { |b| b.status != :pending }
+    bills(reload).select { |b| b.status == :pending }
   end
 
   def paid_bills(reload = false)
-    bills(reload).reject { |b| b.status != :paid }
+    bills(reload).select { |b| b.status == :paid }
   end
 
   def active_bills(reload = false, date = nil)
     date ||= Time.now
-    bills(reload).reject { |b| !b.active_during(date) }
+    bills(reload).select { |b| b.active_during(date) }
   end
 
   def active_until

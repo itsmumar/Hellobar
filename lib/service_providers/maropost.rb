@@ -45,7 +45,6 @@ module ServiceProviders
         error_message = response.body
         log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
       end
-
     rescue Faraday::TimeoutError
       log 'sync timed out'
     rescue => error
@@ -76,7 +75,6 @@ module ServiceProviders
       else
         log "getting lists returned '#{ response.body }' with the code #{ response.status }"
       end
-
     rescue Faraday::TimeoutError
       log 'getting lists timed out'
     rescue => error

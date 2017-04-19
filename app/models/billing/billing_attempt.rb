@@ -4,7 +4,7 @@ class BillingAttempt < ActiveRecord::Base
   class InvalidRefund < RuntimeError; end
   belongs_to :bill
   belongs_to :payment_method_details
-  enum status: [:success, :failed]
+  enum status: %i[success failed]
   include BillingAuditTrail
   delegate :subscription, to: :bill
   delegate :subscription_id, to: :bill

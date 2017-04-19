@@ -1,7 +1,7 @@
 class UserController < ApplicationController
-  layout 'static', only: [:new, :create]
-  before_action :authenticate_user!, except: [:new, :create]
-  before_action :load_user, only: [:edit, :update, :destroy]
+  layout 'static', only: %i[new create]
+  before_action :authenticate_user!, except: %i[new create]
+  before_action :load_user, only: %i[edit update destroy]
 
   def new
     load_user_from_invitation

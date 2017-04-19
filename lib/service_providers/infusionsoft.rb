@@ -21,7 +21,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
 
   def tags
     Infusionsoft
-      .data_query('ContactGroup', 1_000, 0, {}, %w(GroupName Id))
+      .data_query('ContactGroup', 1_000, 0, {}, %w[GroupName Id])
       .map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }
       .sort_by { |result| result['name'] }
   end

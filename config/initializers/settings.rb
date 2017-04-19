@@ -3,7 +3,7 @@ unless defined?(Hellobar::Settings)
   yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
   config = {}
 
-  keys = %w(
+  keys = %w[
     analytics_log_file
     aweber_app_id
     aweber_consumer_key
@@ -53,7 +53,7 @@ unless defined?(Hellobar::Settings)
     tracking_host
     vr_client_id
     vr_secret
-  )
+  ]
 
   keys.each do |key|
     config[key.to_sym] = yaml[key] || ENV[key.upcase]
@@ -191,7 +191,7 @@ unless defined?(Hellobar::Settings)
   config[:analytics_log_file] ||= Rails.root.join('log', 'analytics.log')
 
   config[:permissions] = {
-    'owner' => [:billing, :edit_owner]
+    'owner' => %i[billing edit_owner]
   }
 
   Hellobar::Settings = config

@@ -101,7 +101,7 @@ namespace :billing do
     ensure
       stage = Hellobar::Settings[:env_name]
       if Rails.env.production? && (stage == 'production')
-        emails = %w(mailmanager@hellobar.com)
+        emails = %w[mailmanager@hellobar.com]
         Pony.mail(
           to: emails.join(', '),
           subject: "#{ now.strftime('%Y-%m-%d') } - #{ num_bills } bills processed for #{ number_to_currency(amount_successful) } with #{ num_failed } failures",

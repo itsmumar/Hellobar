@@ -81,7 +81,7 @@ class ContactList < ActiveRecord::Base
   def subscriber_statuses(subscribers, force = false)
     return @statuses if @statuses && !force
     @statuses = begin
-      if !subscribers.blank? && service_provider.respond_to?(:subscriber_statuses)
+      if subscribers.present? && service_provider.respond_to?(:subscriber_statuses)
         service_provider.subscriber_statuses(self, subscribers.map { |x| x[:email] })
       else
         {}
@@ -101,7 +101,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def set_identity
-    return unless provider_token.present?
+    return if provider_token.blank?
 
     self.identity =
       if !provider_set? || service_provider_class.nil?
@@ -182,7 +182,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_exists?
-    errors.add(:base, 'Embed code cannot be blank') unless data['embed_code'].present?
+    errors.add(:base, 'Embed code cannot be blank') if data['embed_code'].blank?
   end
 
   def embed_code_valid?
@@ -201,7 +201,7 @@ class ContactList < ActiveRecord::Base
   def webhook_url_valid?
     uri = Addressable::URI.parse(data['webhook_url'])
 
-    return unless !%w(http https).include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
+    return unless !%w[http https].include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
     errors.add(:base, 'webhook URL is invalid')
   end
 end

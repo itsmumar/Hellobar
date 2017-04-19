@@ -19,8 +19,8 @@ describe PaymentMethod do
     p = PaymentMethod.create
     p.details << PaymentMethodDetails.new(data: { 'foo' => 'bar1' })
     p.details << PaymentMethodDetails.new(data: { 'foo' => 'bar2' })
-    expect(p.details.collect { |d| d.data['foo'] }).to eq(%w(bar1 bar2))
+    expect(p.details.collect { |d| d.data['foo'] }).to eq(%w[bar1 bar2])
     p = PaymentMethod.find(p.id)
-    expect(p.details.collect { |d| d.data['foo'] }).to eq(%w(bar1 bar2))
+    expect(p.details.collect { |d| d.data['foo'] }).to eq(%w[bar1 bar2])
   end
 end

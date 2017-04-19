@@ -2338,10 +2338,6 @@ ember-cli-qunit@^3.0.1:
     resolve "^1.1.6"
     silent-error "^1.0.0"
 
-ember-cli-rails-addon@0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/ember-cli-rails-addon/-/ember-cli-rails-addon-0.7.1.tgz#6832b9b7e52762811c833916fe72fa83b27d5cb5"
-
 ember-cli-release@^0.2.9:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/ember-cli-release/-/ember-cli-release-0.2.9.tgz#5e8de3d034c65597933748023058470ec1231adb"

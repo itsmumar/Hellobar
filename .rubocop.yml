@@ -72,6 +72,7 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
   Exclude:
     - spec/teaspoon_env.rb
+    - Guardfile
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
@@ -91,6 +92,13 @@ Style/WordArray:
 
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
+
+Style/FileName:
+  Exclude:
+    - Guardfile
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
 
 #### END STYLES
 

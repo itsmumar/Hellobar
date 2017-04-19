@@ -47,7 +47,7 @@ describe ServiceProviders::ConvertKit do
       end
 
       it 'with tags' do
-        tags = { 'tags' => %w(1 2 3) }
+        tags = { 'tags' => %w[1 2 3] }
         contact_list.data = tags
         service_provider.instance_variable_set(:@contact_list, contact_list)
         @data[:tags] = '1,2,3'

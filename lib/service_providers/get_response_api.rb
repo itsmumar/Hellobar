@@ -69,7 +69,6 @@ module ServiceProviders
         error_message = JSON.parse(response.body)['codeDescription']
         log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
       end
-
     rescue Faraday::TimeoutError
       log 'sync timed out'
     rescue => error

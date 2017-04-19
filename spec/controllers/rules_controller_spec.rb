@@ -28,7 +28,7 @@ describe RulesController do
       expect(response).to be_success
 
       json = JSON.parse(response.body)
-      expect(json.keys).to match_array %w(id site_id name priority match conditions description editable)
+      expect(json.keys).to match_array %w[id site_id name priority match conditions description editable]
     end
   end
 
@@ -221,7 +221,7 @@ describe RulesController do
 
         JSON.parse(response.body).tap do |rule_obj|
           segments = rule_obj['conditions'].collect { |c| c['segment'] }
-          expect(segments).to match_array %w(DateCondition UrlCondition)
+          expect(segments).to match_array %w[DateCondition UrlCondition]
         end
       end
 

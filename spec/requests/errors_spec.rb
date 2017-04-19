@@ -1,10 +1,22 @@
 describe 'Error requests' do
-  context 'Not Found errors' do
-    %i(html js css json text).each do |format|
-      describe "GET #{ format }" do
-        it 'does not raise and returns 404 error' do
+  context 'NotFound errors' do
+    %i[html js json txt].each do |format|
+      describe "GET *.#{ format } (handled format)" do
+        it 'does not raise and returns 404 error code' do
           expect {
-            get "/nonexisting-page.#{ format }"
+            get "/nonexisting.#{ format }"
+          }.not_to raise_exception
+
+          expect(response.code).to eq '404'
+        end
+      end
+    end
+
+    %i[php png css].each do |format|
+      describe "GET *.#{ format } (unhandled format)" do
+        it 'does not raise and returns 404 error code' do
+          expect {
+            get "/nonexisting.#{ format }"
           }.not_to raise_exception
 
           expect(response.code).to eq '404'

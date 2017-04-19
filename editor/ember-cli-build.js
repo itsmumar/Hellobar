@@ -57,6 +57,7 @@ module.exports = function (defaults) {
   app.import('bower_components/imagesloaded/imagesloaded.pkgd.js');
   app.import('bower_components/color-thief/dist/color-thief.min.js');
   app.import('vendor/dropper_trios.js');
+  app.import('vendor/csrf.js');
 
   app.import('bower_components/froala-wysiwyg-editor/js/froala_editor.min.js');
   app.import('bower_components/froala-wysiwyg-editor/js/plugins/align.min.js');

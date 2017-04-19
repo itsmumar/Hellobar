@@ -81,7 +81,7 @@ module Hello::DataAPI
       ids = {}
 
       # collect the ids of each subtype
-      [:traffic, :email, :social, :call].each do |key|
+      %i[traffic email social call].each do |key|
         ids[key] = elements.select { |e| e.short_subtype == key.to_s }.map { |e| e.id.to_s }
       end
 
@@ -101,7 +101,7 @@ module Hello::DataAPI
         end
 
         # do the same for each subset of data, grouped by element subtype
-        [:email, :traffic, :social, :call].each do |key|
+        %i[email traffic social call].each do |key|
           type_data = data.select { |k, _| ids[key].include?(k) }
           totals[key] << type_data.inject([0, 0]) do |sum, data_row|
             day_i_data = data_row[1][i]
@@ -112,7 +112,7 @@ module Hello::DataAPI
 
       # remove any zero-padding values that made it through summation
       totals.each do |key, value|
-        totals[key] = Performance.new(value.select { |v| v != [0, 0] })
+        totals[key] = Performance.new(value.reject { |v| v == [0, 0] })
       end
 
       totals
@@ -219,7 +219,7 @@ module Hello::DataAPI
         # Ran out of attempts, re-raise the error
         raise
       end
-    rescue JSON::ParserError, SocketError, Timeout::Error, StandardError => e
+    rescue StandardError => e
       now = Time.now
       duration = now.to_f - begin_time
       # Log the error

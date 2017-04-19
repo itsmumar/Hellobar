@@ -104,7 +104,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
       result = message
       error_count = 0
       if result['errors']
-        non_already_subscribed_errors = result['errors'].select { |e| e['code'] != 214 }
+        non_already_subscribed_errors = result['errors'].reject { |e| e['code'] == 214 }
         error_count = non_already_subscribed_errors.count
         message = "Added #{ result['add_count'] } emails, updated #{ result['update_count'] } emails. " \
                   "#{ error_count } errors that weren't just existing subscribers."
@@ -173,21 +173,21 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     contact_list_url = Router.new.site_contact_list_url(site, @contact_list, host: Hellobar::Settings[:host])
 
-    html = <<EOS
-<p>Hi there,</p>
+    html = <<~EOS
+      <p>Hi there,</p>
 
-<p>It looks like you have required fields in MailChimp, which Hellobar doesn’t support. We've paused your email synchronization to give you a chance to change your MailChimp settings. </p>
+      <p>It looks like you have required fields in MailChimp, which Hellobar doesn’t support. We've paused your email synchronization to give you a chance to change your MailChimp settings. </p>
 
-<p>To fix this, please follow these two steps:</p>
+      <p>To fix this, please follow these two steps:</p>
 
-<p>1. Log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.</p>
-<p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{ contact_list_url }">#{ contact_list_url }</a></p>
+      <p>1. Log into your MailChimp account, select your list, then choose Settings > List fields and Merge tags. Once there, deselect "required" for all fields. Alternately, you may choose a different list to sync with Hellobar.</p>
+      <p>2. Follow this link to resume syncing your Hello Bar contacts to Mailchimp: <a href="#{ contact_list_url }">#{ contact_list_url }</a></p>
 
-<p>We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. </p>
+      <p>We understand why you might want to require fields on some forms. In such cases, please consider using a separate MailChimp list for those forms. </p>
 
-<p>Thanks!</p>
+      <p>Thanks!</p>
 
-<p>Hello Bar</p>
+      <p>Hello Bar</p>
 EOS
 
     MailerGateway.send_email('Custom', user.email,

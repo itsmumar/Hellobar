@@ -1,5 +1,5 @@
 class ContactSubmissionsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
+  before_action :authenticate_user!, except: %i[new create]
 
   include SitesHelper
 
@@ -47,7 +47,7 @@ class ContactSubmissionsController < ApplicationController
   end
 
   def create
-    raise ActionController::RoutingError, 'Not Found' unless params[:blank].blank? # Spam catcher
+    raise ActionController::RoutingError, 'Not Found' if params[:blank].present? # Spam catcher
 
     email_params = params.require(:contact_submission).permit(:name, :email, :message)
 
