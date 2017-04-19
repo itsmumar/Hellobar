@@ -14,8 +14,8 @@ feature 'Lead data popup', :js do
 
   scenario 'new user must fill out questionnaire' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
-
     visit root_path
+    page.execute_script 'localStorage.setItem("countryCode", "US")'
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
