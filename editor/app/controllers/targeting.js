@@ -299,22 +299,6 @@ export default Ember.Controller.extend({
 
       this.ruleModal = new RuleModal(this.rulePopUpOptions(ruleData, isNewRule));
       this.ruleModal.open();
-    },
-
-    // TODO: remove?
-    openUpgradeModalOriginal(ruleData = {}) {
-      const controller = this;
-      controller.send('resetRuleDropdown', ruleData);
-
-      const options = {
-        site: controller.get('model.site'),
-        successCallback() {
-          controller.set('model.site.capabilities', this.site.capabilities);
-          controller.send('trackUpgrade');
-        },
-        upgradeBenefit: 'create custom-targeted rules'
-      };
-      new UpgradeAccountModal(options).open();
     }
   }
 });
