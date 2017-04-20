@@ -309,6 +309,7 @@ describe Subscription do
         expect(capabilities.autofills?).to be_falsey
         expect(capabilities.geolocation_injection?).to be_falsey
         expect(capabilities.external_tracking?).to be_falsey
+        expect(capabilities.alert_bars?).to be_falsey
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -320,6 +321,7 @@ describe Subscription do
         expect(capabilities.autofills?).to be_truthy
         expect(capabilities.geolocation_injection?).to be_truthy
         expect(capabilities.external_tracking?).to be_truthy
+        expect(capabilities.alert_bars?).to be_truthy
       end
     end
 

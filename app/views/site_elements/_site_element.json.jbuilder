@@ -54,7 +54,12 @@ json.cache! site_element do
     :view_condition,
     :wiggle_button,
     :wordpress_bar_id,
-    :blocks
+    :blocks,
+
+    # alert bar
+    :sound,
+    :notification_delay,
+    :trigger_color
 
   json.font site_element.font.value
   json.theme site_element.theme.attributes

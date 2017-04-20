@@ -3,7 +3,7 @@ require 'fog/aws'
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade].freeze
+  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].freeze
 
   DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze

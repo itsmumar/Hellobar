@@ -191,6 +191,10 @@ class Subscription < ActiveRecord::Base
       false
     end
 
+    def alert_bars?
+      false
+    end
+
     protected
 
     def parent_class
@@ -403,6 +407,10 @@ class Subscription < ActiveRecord::Base
       end
 
       def external_tracking?
+        true
+      end
+
+      def alert_bars?
         true
       end
     end

@@ -171,7 +171,8 @@ FactoryGirl.define do
         },
         'views' => 0,
         'conversions' => 0,
-        'conversion_rate' => 0
+        'conversion_rate' => 0,
+        'notification_delay' => 10
       }
     end
   end

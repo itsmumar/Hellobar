@@ -168,6 +168,9 @@ class SiteElementsController < ApplicationController
       :custom_html,
       :custom_css,
       :custom_js,
+      :sound,
+      :notification_delay,
+      :trigger_color,
       { settings: settings_keys },
       blocks: blocks_keys
     )
