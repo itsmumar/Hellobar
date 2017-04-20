@@ -69,7 +69,7 @@ export default Ember.Controller.extend({
 
   popNewRuleModal: function () {
     if (!this.get('targetingUiVariant') && !this.get('model.rule_id')) {
-      this.send('openRuleModalOriginal', {});
+      this.send('openRuleModal', {});
     }
   }.observes('model.rule_id'),
 
@@ -170,6 +170,7 @@ export default Ember.Controller.extend({
           break;
         case 'targeting.custom':
           this.associateRuleToModel(null);
+          this.send('openRuleModal');
           break;
         case 'targeting.saved':
           this.set('model.preset_rule_name', 'Saved');
@@ -225,6 +226,39 @@ export default Ember.Controller.extend({
 
   isTopBarStyle: Ember.computed.alias('applicationController.isTopBarStyle'),
 
+  rulePopUpOptions: function(ruleData, isNewRule) {
+    const controller = this;
+
+    const options = {
+      ruleData,
+      successCallback() {
+        controller.ruleModal = null;
+        ruleData = this;
+        let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
+
+        if (updatedRule) {
+          Ember.set(updatedRule, 'conditions', ruleData.conditions);
+          Ember.set(updatedRule, 'description', ruleData.description);
+          Ember.set(updatedRule, 'name', ruleData.name);
+          Ember.set(updatedRule, 'match', ruleData.match);
+          Ember.set(updatedRule, 'priority', ruleData.priority);
+        } else { // we created a new rule
+          controller.get('model.site.rules').push(ruleData);
+        }
+
+        controller.associateRuleToModel(ruleData);
+        controller.notifyPropertyChange('model.site.rules');
+      },
+      close() {
+        controller.ruleModal = null;
+        controller.transitionToRoute('targeting.index', { queryParams: { showDropdown: 'true' } });
+        isNewRule && controller.send('resetRuleDropdown', ruleData);
+      }
+    };
+
+    return options;
+  },
+
   //-----------  Actions  -----------#
 
   actions: {
@@ -235,8 +269,7 @@ export default Ember.Controller.extend({
 
     resetRuleDropdown(ruleData = {}) {
       this.set('targetingSelectionInProgress', true);
-      if (ruleData.id === undefined) {
-      } else {
+      if (ruleData.id !== undefined) {
         this.associateRuleToModel(ruleData);
         this.navigateRoute('targeting.saved');
       }
@@ -259,98 +292,22 @@ export default Ember.Controller.extend({
     },
 
     openRuleModal(ruleData = {}) {
+      if (this.ruleModal) return;
+
       const isNewRule = _.isEmpty(ruleData);
       ruleData.siteID = window.siteID;
-      const controller = this;
 
-      const options = {
-        ruleData,
-        successCallback() {
-          ruleData = this;
-          let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
-
-          if (updatedRule) {
-            Ember.set(updatedRule, 'conditions', ruleData.conditions);
-            Ember.set(updatedRule, 'description', ruleData.description);
-            Ember.set(updatedRule, 'name', ruleData.name);
-            Ember.set(updatedRule, 'match', ruleData.match);
-            Ember.set(updatedRule, 'priority', ruleData.priority);
-          } else { // we created a new rule
-            controller.get('model.site.rules').push(ruleData);
-          }
-
-          controller.associateRuleToModel(ruleData);
-          controller.notifyPropertyChange('model.site.rules');
-        },
-        close() {
-          controller.transitionToRoute('targeting.index', { queryParams: { showDropdown: 'true' } });
-          isNewRule && controller.send('resetRuleDropdown', ruleData);
-        }
-      };
-
-      new RuleModal(options).open();
+      this.ruleModal = new RuleModal(this.rulePopUpOptions(ruleData, isNewRule));
+      this.ruleModal.open();
     },
 
     // remove resetRuleDropdownOriginal, openRuleModalOriginal and openUpgradeModalOriginal
     // if/when conclude the a/b test "Targeting UI Variation 2016-06-13" with 'variant'
     // revert this controller to the previous version if we conclude with 'original'
 
-    resetRuleDropdownOriginal(ruleData = {}) {
-      if (ruleData.id === undefined) {
-        let firstRule = this.get('model.site.rules')[0];
-        if (!firstRule) {
-          firstRule = {id: null};
-        }
-        this.set('model.rule_id', firstRule.id);
-      }
-    },
-
-    openRuleModalOriginal(ruleData) {
-      if (trackEditorFlow) {
-        InternalTracking.track_current_person('Editor Flow', {
-          step: 'Edit Targeting',
-          goal: this.get('model.element_subtype'),
-          style: this.get('model.type')
-        });
-      }
-      if (!this.get('canUseRuleModal')) {
-        this.send('openUpgradeModalOriginal', ruleData);
-      }
-
-      ruleData.siteID = window.siteID;
-      const controller = this;
-
-      const options = {
-        ruleData,
-        successCallback() {
-          ruleData = this;
-          let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
-
-          if (updatedRule) {
-            Ember.set(updatedRule, 'conditions', ruleData.conditions);
-            Ember.set(updatedRule, 'description', ruleData.description);
-            Ember.set(updatedRule, 'name', ruleData.name);
-            Ember.set(updatedRule, 'match', ruleData.match);
-            Ember.set(updatedRule, 'priority', ruleData.priority);
-          } else {
-            // we created a new rule
-            controller.get('model.site.rules').push(ruleData);
-          }
-
-          controller.set('model.rule_id', ruleData.id);
-          controller.notifyPropertyChange('model.site.rules');
-        },
-        close() {
-          controller.send('resetRuleDropdownOriginal', ruleData);
-        }
-      };
-
-      new RuleModal(options).open();
-    },
-
     openUpgradeModalOriginal(ruleData = {}) {
       const controller = this;
-      controller.send('resetRuleDropdownOriginal', ruleData);
+      controller.send('resetRuleDropdown', ruleData);
 
       const options = {
         site: controller.get('model.site'),
