@@ -170,7 +170,6 @@ export default Ember.Controller.extend({
           break;
         case 'targeting.custom':
           this.associateRuleToModel(null);
-          this.send('openRuleModal');
           break;
         case 'targeting.saved':
           this.set('model.preset_rule_name', 'Saved');
