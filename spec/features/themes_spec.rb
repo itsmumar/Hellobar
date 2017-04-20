@@ -73,12 +73,8 @@ feature 'Users can select a design theme for SiteElements', :js do
 
         page.has_xpath?('.//div[@id = "hellobar-preview-container"]/iframe') # force capybara to wait until iframe is loaded
 
-        frame_id = first('#hellobar-preview-container iframe')[:id]
-        expect(frame_id).to be_present
-
-        within_frame frame_id do
-          expect(find('.uploaded-image')[:src]).to eql ImageUpload.last.url
-        end
+        switch_to_frame first('#hellobar-preview-container iframe')
+        expect(find('.uploaded-image')[:src]).to eql ImageUpload.last.url
       end
     end
   end
