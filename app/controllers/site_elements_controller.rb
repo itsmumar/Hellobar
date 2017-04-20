@@ -170,7 +170,7 @@ class SiteElementsController < ApplicationController
       :custom_js,
       :sound,
       :notification_delay,
-      :circle_color,
+      :trigger_color,
       { settings: settings_keys },
       blocks: blocks_keys
     )

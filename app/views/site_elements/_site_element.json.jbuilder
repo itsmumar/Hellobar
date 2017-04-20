@@ -59,7 +59,7 @@ json.cache! site_element do
     # alert bar
     :sound,
     :notification_delay,
-    :circle_color
+    :trigger_color
 
   json.font site_element.font.value
   json.theme site_element.theme.attributes

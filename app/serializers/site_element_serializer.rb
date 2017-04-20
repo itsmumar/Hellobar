@@ -27,7 +27,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :custom_html, :custom_css, :custom_js,
 
     # alert type
-    :circle_color, :notification_delay, :sound,
+    :trigger_color, :notification_delay, :sound,
 
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
