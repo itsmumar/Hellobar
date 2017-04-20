@@ -15,7 +15,7 @@ feature 'Targeting. Custom rule dialog', :js do
     Hellobar::Settings[:fake_data_api] = fake_data_api_original
   end
 
-  scenario 'cancel button should close dialog. #XOHB-1551' do
+  scenario 'cancel button should close dialog' do
     visit new_site_site_element_path(site)
 
     within '.goal-block.contacts' do
