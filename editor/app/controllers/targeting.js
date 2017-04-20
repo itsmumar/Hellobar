@@ -301,10 +301,7 @@ export default Ember.Controller.extend({
       this.ruleModal.open();
     },
 
-    // remove resetRuleDropdownOriginal, openRuleModalOriginal and openUpgradeModalOriginal
-    // if/when conclude the a/b test "Targeting UI Variation 2016-06-13" with 'variant'
-    // revert this controller to the previous version if we conclude with 'original'
-
+    // TODO: remove?
     openUpgradeModalOriginal(ruleData = {}) {
       const controller = this;
       controller.send('resetRuleDropdown', ruleData);
