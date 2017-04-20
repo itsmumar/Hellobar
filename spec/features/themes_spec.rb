@@ -34,7 +34,7 @@ feature 'Users can select a design theme for SiteElements', :js do
     expect(first('.color-select-block input').value).to match(/#{ background_color }/i)
   end
 
-  context 'for Bar type' do
+  context 'with Bar type' do
     given(:subtype) { 'Bar' }
     given(:site) { create(:site, user: user, elements: [:bar]) }
 
@@ -53,6 +53,31 @@ feature 'Users can select a design theme for SiteElements', :js do
       scenario 'does not override existing value for "Pushes page down"' do
         visit url
         expect(first('.toggle-pushing-page-down')).not_to have_selector '.toggle-switch.is-selected'
+      end
+    end
+  end
+
+  context 'with Modal type' do
+    context 'with autodetect theme' do
+      given(:url) { new_site_site_element_path(site) + '/#/settings/emails' }
+
+      scenario 'displays image in preview' do
+        visit url
+        click_on 'Next'
+        click_on 'Modal'
+        first('.autodetection-button').click
+        click_on 'Next'
+        click_on 'Image'
+        execute_script('$(".dz-hidden-input").attr("id", "dz-image").removeAttr("style")') # make the input visible
+        attach_file 'dz-image', generate(:image)
+
+        page.has_xpath?('.//iframe') # force capybara to wait until iframe is loaded
+
+        expect(first('iframe')).to be_present
+
+        within_frame first('iframe')[:id] do
+          expect(find('.uploaded-image')[:src]).to eql ImageUpload.last.url
+        end
       end
     end
   end
