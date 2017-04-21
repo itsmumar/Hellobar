@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+bundle exec rake db:create db:schema:load db:migrate --trace
+bundle exec thin start
