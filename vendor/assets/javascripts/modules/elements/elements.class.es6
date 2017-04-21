@@ -114,7 +114,7 @@ hellobar.defineModule('elements.class',
         var html = generateHtml();
         if (this.type === 'Custom') {
           var customJs = this.custom_js || '';
-          html = html + '<script>var hbElement=hellobar(\'elements\').findById(' + this.id + '); ' + customJs + '<\/script>'
+          html = html + '<script>var hbElement=parent.hellobar(\'elements\').findById(' + this.id + '); ' + customJs + '<\/script>'
         }
         // Once the dom is ready we inject the html returned from renderTemplate
         dom.runOnDocumentReady(function () {
