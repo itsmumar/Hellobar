@@ -316,7 +316,7 @@ class ScriptGenerator < Mustache
   end
 
   def render_site_elements(site_elements)
-    jbuilder.render 'site_elements/site_elements', site_elements: site_elements
+    jbuilder.render('site_elements/site_elements', site_elements: site_elements).gsub('</script>', '<\/script>')
   end
 
   def site_elements_for_rule(rule)
