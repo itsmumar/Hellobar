@@ -127,7 +127,7 @@ describe Site do
     context 'when Pro subscription has a refund' do
       it 'returns Free subscription', :freeze do
         change_subscription(Subscription::Free)
-        success, bill = change_subscription(Subscription::Pro)
+        _, bill = change_subscription(Subscription::Pro)
         bill.refund!
 
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)

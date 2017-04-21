@@ -14,7 +14,7 @@ class Subscription < ActiveRecord::Base
 
   enum schedule: %i[monthly yearly]
 
-  scope :paid, -> {
+  scope :paid, lambda {
     joins(:bills).merge(Bill.paid).where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.now)
   }
 
