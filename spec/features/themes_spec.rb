@@ -76,7 +76,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         attach_file 'dz-image', generate(:image)
 
         page.has_xpath?('.//iframe[@id="random-container"]') # force capybara to wait until iframe is loaded
-
+        sleep 2
         within_frame 'random-container-0' do
           expect(find('.uploaded-image')[:src]).to eql ImageUpload.last.url
         end
