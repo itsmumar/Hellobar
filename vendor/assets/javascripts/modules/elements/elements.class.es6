@@ -114,7 +114,7 @@ hellobar.defineModule('elements.class',
         var html = generateHtml();
         if (this.type === 'Custom') {
           var customJs = this.custom_js || '';
-          html = html + '<script>var hbElement=parent.hellobar(\'elements\').findById(' + this.id + '); ' + customJs + '<\/script>'
+          html = html + '<script>var hbElement=hellobar(\'elements\').findById(' + this.id + '); ' + customJs + '<\/script>'
         }
         // Once the dom is ready we inject the html returned from renderTemplate
         dom.runOnDocumentReady(function () {
@@ -174,15 +174,16 @@ hellobar.defineModule('elements.class',
 
         // Inject the container into the DOM
         elementsInjection.inject(this.w);
+
+        // Make HelloBar JS Core accessible to inner (iframe) document event handlers
+        this.w.contentWindow.hellobar = hellobar;
+
         // Render the siteElement in the container.
         var d = this.w.contentWindow.document;
         d.open();
         d.write('<html><head>' + prepareStyle() + '</head><body>' + html + '</body></html>');
         d.close();
         d.body.className = this.type;
-
-        // Make HelloBar JS Core accessible to inner (iframe) document event handlers
-        this.w.contentWindow.hellobar = hellobar;
 
         if (this.theme.id) {
           dom.addClass(d.body, this.theme.id);
