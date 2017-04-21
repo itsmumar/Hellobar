@@ -85,6 +85,8 @@ export default Ember.Controller.extend({
   applyRoute (routeName) {
     const routeByElementType = (elementType, elementId) => {
       switch (elementType) {
+        case 'Alert':
+          return 'style.alert';
         case 'Custom':
           return 'style.custom';
         case 'Takeover':
@@ -115,6 +117,9 @@ export default Ember.Controller.extend({
           break;
         case 'style.custom':
           this.set('model.type', 'Custom');
+          break;
+        case 'style.alert':
+          this.set('model.type', 'Alert');
           break;
         case 'style.slider':
           this.set('model.type', 'Slider');

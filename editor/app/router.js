@@ -55,16 +55,17 @@ Router.map(function () {
       this.route('click');
       this.route('call');
       this.route('feedback');
-      return this.route('announcement');
+      this.route('announcement');
     }
   );
 
   this.route('style', function () {
+      this.route('alert');
       this.route('bar');
       this.route('modal');
       this.route('slider');
       this.route('custom');
-      return this.route('takeover');
+      this.route('takeover');
     }
   );
 
