@@ -67,13 +67,19 @@
     {{/link-to}}
     {{/if}}
 
-    {{#link-to 'style.alert' class='step-link-block'}}
-      <span {{action 'closeDropdown'}}>
-        <i class="icon-modal"><></i>
-        <h6>Alert</h6>
-        <p>Custom bell with slider window</p>
-      </span>
-    {{/link-to}}
+    {{#if canUseAlertElementType}}
+      {{#link-to 'style.alert' class='step-link-block'}}
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-modal"><></i>
+          <h6>Alert</h6>
+          <p>Custom bell with slider window</p>
+        </span>
+      {{/link-to}}
+      {{#if shouldShowAlertThemeInfo}}
+        {{theming/theme-info theme=currentTheme onChangeTheme=(action "changeTheme")}}
+      {{/if}}
+    {{/if}}
+
 
     {{#if notOnlyTopBarStyleIsAvailable}}
       <a {{action 'changeStyle'}} class="change-selection">

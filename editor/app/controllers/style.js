@@ -54,6 +54,7 @@ export default Ember.Controller.extend({
   },
 
   canUseCustomHtml: Ember.computed.alias('model.site.capabilities.custom_html'),
+  canUseAlertElementType: Ember.computed.alias('model.site.capabilities.alert_bars'),
 
   shouldShowBarThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Bar');
@@ -69,6 +70,10 @@ export default Ember.Controller.extend({
 
   shouldShowTakeoverThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Takeover');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
+
+  shouldShowAlertThemeInfo: function() {
+    return this._shouldShowThemeInfoForElementType('Alert');
   }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
   shouldShowCustomThemeInfo: function() {
