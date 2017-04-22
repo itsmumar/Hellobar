@@ -5,16 +5,19 @@ class User < ActiveRecord::Base
   include UserValidator
   include ReferralTokenizable
   include QueueWorker::Delay
-  after_initialize  :check_if_temporary
-  before_save       :clear_invite_token
-  after_save        :disconnect_oauth, if: :oauth_user?
-  after_save        :track_temporary_status_change
+
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable
+  # devise :omniauthable, :omniauth_providers => [:google_oauth2]
+
+  after_initialize :check_if_temporary
+  before_save :clear_invite_token
+  after_save :disconnect_oauth, if: :oauth_user?
+  after_save :track_temporary_status_change
 
   after_create :add_to_onboarding_campaign
   after_create :add_to_infusionsoft_in_background
 
   before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
-  # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
@@ -26,7 +29,6 @@ class User < ActiveRecord::Base
   has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id'
   has_one :lead
-
   has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: 'UserOnboardingStatus'
   has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
 
@@ -46,13 +48,11 @@ class User < ActiveRecord::Base
 
   acts_as_paranoid
 
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable
-  # devise :omniauthable, :omniauth_providers => [:google_oauth2]
-  delegate :url_helpers, to: 'Rails.application.routes'
-
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :oauth_user?
+
+  delegate :url_helpers, to: 'Rails.application.routes'
 
   attr_accessor :legacy_migration, :timezone, :is_impersonated
 
@@ -119,7 +119,7 @@ class User < ActiveRecord::Base
   def should_send_to_new_site_element_path?
     return false unless current_onboarding_status
 
-    [:new, :selected_goal].include?(current_onboarding_status.status_name) &&
+    %i[new selected_goal].include?(current_onboarding_status.status_name) &&
       sites.script_not_installed_db.any?
   end
 

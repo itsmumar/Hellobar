@@ -44,15 +44,15 @@ every 6.hours, roles: [:cron] do
   rake 'backend:adjust_dynamo_db_capacity[all]'
 end
 
-every 10.minutes, roles: [:web, :worker] do
+every 10.minutes, roles: %i[web worker] do
   rake 'queue_worker:restart'
 end
 
-every 2.minutes, roles: [:web, :worker] do
+every 2.minutes, roles: %i[web worker] do
   rake 'queue_worker:resurrect'
 end
 
-every 5.minutes, roles: [:web, :worker] do
+every 5.minutes, roles: %i[web worker] do
   rake 'queue_worker:metrics'
   rake 'cloudwatch_metrics:send'
 end

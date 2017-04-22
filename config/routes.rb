@@ -13,7 +13,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
-
     get '/users/forgot_email', to: 'users/forgot_emails#new', as: :new_forgot_email
     post '/users/forgot_email', to: 'users/forgot_emails#create', as: :forgot_email
   end
@@ -24,7 +23,7 @@ Rails.application.routes.draw do
   get '/auth/:action/callback', to: 'users/omniauth_callbacks', constraints: { action: /google_oauth2/ }
 
   get 'profile', to: 'user#edit', as: :profile
-  resource :user, controller: :user, only: [:update, :destroy, :create]
+  resource :user, controller: :user, only: %i[update destroy create]
   resources :leads, only: [:create]
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
@@ -51,7 +50,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :autofills, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :autofills, only: %i[index new create edit update destroy]
 
     resources :image_uploads, only: [:create]
 
@@ -74,7 +73,7 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :payment_methods, only: [:index, :create, :update]
+  resources :payment_methods, only: %i[index create update]
   resources :bills, only: :show
 
   get 'continue_create_site', to: 'sites#create', as: :continue_create_site
@@ -90,7 +89,7 @@ Rails.application.routes.draw do
   resources :contact_submissions, only: [:create]
   get '/contact', to: 'contact_submissions#new', as: :new_contact_submission
 
-  %w(email_developer generic_message).each do |sub|
+  %w[email_developer generic_message].each do |sub|
     post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
   end
 
@@ -108,7 +107,7 @@ Rails.application.routes.draw do
 
     resources :payment_method_details, only: [:destroy]
 
-    resources :users, only: [:index, :show, :destroy] do
+    resources :users, only: %i[index show destroy] do
       resources :sites, only: [:update] do
         member do
           post :regenerate
@@ -155,12 +154,15 @@ Rails.application.routes.draw do
   post '/start_migration', to: 'user_migration#start', as: :start_user_migration
   post '/user_migration', to: 'user_migration#create', as: :user_migration
 
-  %w(404 422 500).each do |code|
-    get code, to: 'errors#show', code: code
-  end
-
   get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
 
   get '/email-signup', to: 'welcome#email_quickstart'
+
+  %w[404 422 500].each do |code|
+    get code, to: 'errors#show', code: code
+  end
+
   root 'welcome#index'
+
+  get '*unmatched_route', to: 'errors#show', code: 404
 end

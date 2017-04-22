@@ -28,7 +28,7 @@ describe RulesController do
       expect(response).to be_success
 
       json = JSON.parse(response.body)
-      expect(json.keys).to match_array %w(id site_id name priority match conditions description editable)
+      expect(json.keys).to match_array %w[id site_id name priority match conditions description editable]
     end
   end
 
@@ -151,7 +151,7 @@ describe RulesController do
           put :update, site_id: site, id: rule, rule: {
             name: 'new rule name',
             conditions_attributes: {
-              :"0" => condition_hash(:date_between)
+              '0' => condition_hash(:date_between)
             }
           }
         }.to change { Condition.count }.by(1)
@@ -190,7 +190,7 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            :"0" => condition_hash(:url_includes)
+            '0' => condition_hash(:url_includes)
           }
         }
 
@@ -214,14 +214,14 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            :"0" => condition_hash(:url_includes),
-            :"1" => condition_hash(:date_before)
+            '0' => condition_hash(:url_includes),
+            '1' => condition_hash(:date_before)
           }
         }
 
         JSON.parse(response.body).tap do |rule_obj|
           segments = rule_obj['conditions'].collect { |c| c['segment'] }
-          expect(segments).to match_array %w(DateCondition UrlCondition)
+          expect(segments).to match_array %w[DateCondition UrlCondition]
         end
       end
 
@@ -235,7 +235,7 @@ describe RulesController do
         # remove it
         put :update, site_id: site, id: rule, rule: {
           conditions_attributes: {
-            :"0" => { id: condition.id, _destroy: 1 }
+            '0' => { id: condition.id, _destroy: 1 }
           }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound

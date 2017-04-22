@@ -6,4 +6,7 @@ Raven.configure do |config|
 
   # enable only on `production` environment
   config.environments = ['production']
+
+  # don't log readiness
+  config.silence_ready = true
 end

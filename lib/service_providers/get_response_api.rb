@@ -30,53 +30,49 @@ module ServiceProviders
 
       if contact_list.present?
         tags = contact_list.tags.map { |tag| { tagId: tag } }
-        cycle_day = contact_list.data['cycle_day']
-        cycle_day = cycle_day.present? ? cycle_day.to_i : nil
+        cycle_day = contact_list.data['cycle_day'].presence
       end
 
-      begin
-        request_body = {
-          name: name,
-          email: email,
-          campaign: {
-            campaignId: list_id
-          }
+      request_body = {
+        name: name,
+        email: email,
+        campaign: {
+          campaignId: list_id
         }
+      }
 
-        request_body.merge(dayOfCycle: cycle_day) if cycle_day
+      request_body.update(dayOfCycle: cycle_day) if cycle_day
 
-        response = client.post 'contacts', request_body
+      response = client.post 'contacts', request_body
 
-        if response.success?
-          if tags.any?
-            # In GetResponse you cannot assign tags to contacts sent via API,
-            # however you can assign tags to existing contacts in the list, so
-            # we will tag the two most recently added contacts (we could tag
-            # only the most recent one, but there could be some race conditions)
-            # This is a little bit of a hack, but it should give us 95% of what
-            # is required when it comes to tagging.
-            # We add tags only to contacts which are also stored at HelloBar,
-            # so that unknown origin contacts at GR won't get tagged by us
-            # https://crossover.atlassian.net/browse/XOHB-1397
-            contacts = fetch_latest_contacts(20)
-            subscribers = @contact_list.subscribers(10)
+      if response.success?
+        if tags.any?
+          # In GetResponse you cannot assign tags to contacts sent via API,
+          # however you can assign tags to existing contacts in the list, so
+          # we will tag the two most recently added contacts (we could tag
+          # only the most recent one, but there could be some race conditions)
+          # This is a little bit of a hack, but it should give us 95% of what
+          # is required when it comes to tagging.
+          # We add tags only to contacts which are also stored at HelloBar,
+          # so that unknown origin contacts at GR won't get tagged by us
+          # https://crossover.atlassian.net/browse/XOHB-1397
+          contacts = fetch_latest_contacts(20)
+          subscribers = @contact_list.subscribers(10)
 
-            find_union(contacts, subscribers, 2).each do |contact|
-              assign_tags contact_id: contact['contactId'], tags: tags
-            end
-          else
-            response
+          find_union(contacts, subscribers, 2).each do |contact|
+            assign_tags contact_id: contact['contactId'], tags: tags
           end
         else
-          error_message = JSON.parse(response.body)['codeDescription']
-          log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
+          response
         end
-
-      rescue Faraday::TimeoutError
-        log 'sync timed out'
-      rescue => error
-        log "sync raised #{ error }"
+      else
+        error_message = JSON.parse(response.body)['codeDescription']
+        log "sync error #{ email } sync returned '#{ error_message }' with the code #{ response.status }"
       end
+    rescue Faraday::TimeoutError
+      log 'sync timed out'
+    rescue => error
+      log "sync raised #{ error }"
     end
 
     def batch_subscribe(list_id, subscribers, _double_optin = true)

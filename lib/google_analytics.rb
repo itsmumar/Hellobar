@@ -50,7 +50,7 @@ class GoogleAnalytics
 
     # what if you have multiple profiles?
     profile = account.web_properties.find { |property|
-      next unless property.website_url.present?
+      next if property.website_url.blank?
 
       self.class.normalize_url(property.website_url) == self.class.normalize_url(url)
     }.profiles.first

@@ -14,7 +14,7 @@ feature 'Site with a modal', :js do
     # force capybara to wait until iframe is loaded
     expect(page).to have_selector '#random-container'
 
-    page.driver.browser.frame_focus('random-container-0')
+    page.driver.switch_to_frame('random-container-0')
 
     page.has_selector?('a.icon-close')
     find('a.icon-close').click

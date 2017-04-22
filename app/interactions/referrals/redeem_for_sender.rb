@@ -15,7 +15,7 @@ class Referrals::RedeemForSender < Less::Interaction
   expects :site
 
   def run
-    return unless subscription.present?
+    return if subscription.blank?
     raise Referrals::NoAvailableReferrals unless available_referrals?
 
     if subscription.is_a?(Subscription::Free)

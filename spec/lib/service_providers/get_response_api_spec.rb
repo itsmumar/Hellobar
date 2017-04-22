@@ -10,7 +10,7 @@ describe ServiceProviders::GetResponseApi do
       .to raise_error 'Identity does not have a stored GetResponse API key'
   end
 
-  context 'remote requests', :skip do
+  context 'remote requests' do
     let(:campaign_id) { 1122 }
     let(:contact_id) { 'contactId' }
     let(:name) { 'Bob' }
@@ -154,6 +154,22 @@ describe ServiceProviders::GetResponseApi do
           .with('sync timed out')
 
         get_respone_api.subscribe(campaign_id, email)
+      end
+
+      context 'when contact_list.data[cycle_day] present' do
+        let(:contact_list) { build(:contact_list, data: { 'cycle_day' => '1' }) }
+        let(:get_respone_api) { ServiceProviders::GetResponseApi.new(identity: identity, contact_list: contact_list) }
+
+        it 'sends dayOfCycle param' do
+          request_body = {
+            name: 'bobloblaw@lawblog.com',
+            email: 'bobloblaw@lawblog.com',
+            campaign: { campaignId: 1122 },
+            dayOfCycle: '1'
+          }
+          expect(client).to receive(:post).with('contacts', request_body)
+          get_respone_api.subscribe(campaign_id, email)
+        end
       end
     end
   end

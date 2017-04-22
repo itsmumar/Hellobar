@@ -22,7 +22,7 @@ class Bill < ActiveRecord::Base
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  enum status: [:pending, :paid, :voided]
+  enum status: %i[pending paid voided]
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?

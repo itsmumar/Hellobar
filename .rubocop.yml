@@ -2,7 +2,7 @@ Rails:
   Enabled: true
 
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
   Include:
     - Rakefile
@@ -17,6 +17,7 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'editor/**/*'
     - 'backend-mock/**/*'
+    - 'lib/legacy_migrator.rb'
 
 #### BEGIN STYLES
 
@@ -71,6 +72,7 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
   Exclude:
     - spec/teaspoon_env.rb
+    - Guardfile
 
 Style/EmptyMethod:
   EnforcedStyle: expanded
@@ -90,6 +92,13 @@ Style/WordArray:
 
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: space
+
+Style/FileName:
+  Exclude:
+    - Guardfile
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
 
 #### END STYLES
 
@@ -138,6 +147,7 @@ Rails/TimeZone:
     - 'lib/hello/suggested_opportunities.rb'
     - 'lib/hello/data_api.rb'
     - 'lib/analytics.rb'
+    - 'app/services/calculate_bill.rb'
 
 # TODO: issue XOHB-1599
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -156,7 +166,10 @@ Rails/Date:
 #### BEGIN METRICS
 
 Metrics/AbcSize:
-  Max: 101 # ideally 16
+  Max: 60 # ideally 16
+  Exclude:
+    - 'app/services/calculate_bill.rb'
+    - 'lib/cybersource.rb'
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
@@ -164,7 +177,7 @@ Metrics/BlockLength:
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 185 # ideally 100
+  Max: 188 # ideally 100
   Exclude:
     - 'app/models/site.rb'
     - 'app/models/site_element.rb'

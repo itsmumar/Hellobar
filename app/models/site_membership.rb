@@ -4,7 +4,7 @@ class SiteMembership < ActiveRecord::Base
   acts_as_paranoid
 
   validate :user, :site, presence: true
-  validates :role, inclusion: { in: %w(owner admin) }
+  validates :role, inclusion: { in: %w[owner admin] }
   validate :user_site_uniqueness
   validate :at_least_one_owner_per_site
   validate :updater_permission

@@ -95,7 +95,7 @@ FactoryGirl.define do
 
     trait :with_custom_fields do
       transient do
-        fields %w(email phone name)
+        fields %w[email phone name]
       end
 
       settings do
@@ -115,6 +115,67 @@ FactoryGirl.define do
 
     after :create do |element, evaluator|
       element.update! rule: evaluator.site.rules.first! if evaluator.site
+    end
+  end
+
+  factory :site_element_for_rule, class: Hash do
+    site_element
+
+    skip_create
+    initialize_with do
+      id = site_element.id
+      contact_list_id = site_element.contact_list_id
+      {
+        'animated' => true, 'background_color' => 'eb593c', 'border_color' => 'ffffff', 'button_color' => '000000',
+        'email_placeholder' => 'Your email', 'headline' => 'Hello, HelloBar!', 'image_placement' => 'bottom',
+        'link_color' => 'ffffff', 'link_style' => 'button', 'link_text' => 'Click Here', 'name_placeholder' => 'Your name',
+        'placement' => 'bar-top', 'show_border' => false, 'show_branding' => true, 'size' => 'large', 'text_color' => 'ffffff',
+        'texture' => 'none', 'theme_id' => 'classic', 'type' => 'Bar', 'view_condition' => 'immediately', 'wiggle_button' => false,
+        'blocks' => [], 'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',
+        'branding_url' => "http://www.hellobar.com?sid=#{ id }", 'closable' => false,
+        'contact_list_id' => contact_list_id, 'email_redirect' => false, 'hide_destination' => true, 'id' => id,
+        'open_in_new_window' => false, 'primary_color' => 'eb593c', 'pushes_page_down' => true,
+        'remains_at_top' => true, 'secondary_color' => '000000',
+        'settings' => { 'fields_to_collect' => [{ 'type' => 'builtin-email', 'is_enabled' => true }] },
+        'subtype' => 'email', 'tab_side' => 'right', 'template_name' => 'bar_email',
+        'thank_you_text' => "'Thank you for signing up! If you would like this sort of bar on your site...'",
+        'updated_at' => 1491936487000.0, 'use_free_email_default_msg' => true, 'wiggle_wait' => 0,
+        'theme' => {
+          'name' => 'Hello Bar Classic', 'type' => 'generic', 'id' => 'classic', 'default_theme' => true,
+          'fonts' => %w[open_sans source_pro helvetica arial georgia],
+          'element_types' => %w[Bar Modal Slider Takeover],
+          'defaults' => {
+            'Bar' => {
+              'background_color' => 'E8562A', 'text_color' => 'FFFFFF', 'button_color' => '000000',
+              'link_color' => 'FFFFFF', 'font_id' => 'open_sans'
+            },
+            'Slider' => {
+              'background_color' => 'FFFFFF',
+              'text_color' => '5c5e60', 'button_color' => 'E8562A', 'link_color' => 'FFFFFF', 'font_id' => 'open_sans'
+            },
+            'Modal' => {
+              'background_color' => 'FFFFFF', 'text_color' => '5c5e60', 'button_color' => 'E8562A',
+              'link_color' => 'FFFFFF', 'font_id' => 'open_sans'
+            },
+            'Takeover' => {
+              'background_color' => 'FFFFFF', 'text_color' => '5c5e60', 'button_color' => 'E8562A',
+              'link_color' => 'FFFFFF', 'font_id' => 'open_sans'
+            }
+          },
+          'image' => {
+            'upload_copy' => 'Recommended minimum is 750 x 900',
+            'position_default' => 'left',
+            'position_selectable' => true
+          },
+          'directory' => 'lib/themes/hellobar-classic'
+        },
+        'views' => 0,
+        'conversions' => 0,
+        'conversion_rate' => 0,
+        'notification_delay' => 10,
+        'sound' => 'none',
+        'trigger_color' => '31b5ff'
+      }
     end
   end
 end

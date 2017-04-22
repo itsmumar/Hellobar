@@ -19,8 +19,8 @@ describe Subscription do
 
   describe '#significance' do
     specify 'each subscription type has significance' do
-      %i(Free FreePlus ProblemWithPayment Pro ProComped
-         Enterprise ProManaged).each do |type|
+      %i[Free FreePlus ProblemWithPayment Pro ProComped
+         Enterprise ProManaged].each do |type|
         klass = "Subscription::#{ type }".constantize
 
         expect(klass.new.significance).to be_an Integer
@@ -249,7 +249,7 @@ describe Subscription do
       # Should still have pro cabalities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       # Should have a pending bill for pro
-      pending = @site.bills(true).reject { |b| !b.pending? }
+      pending = @site.bills(true).select(&:pending?)
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Pro)
 
@@ -260,7 +260,7 @@ describe Subscription do
       # Should still have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       # Should have a pending bill for free
-      pending = @site.bills(true).reject { |b| !b.pending? }
+      pending = @site.bills(true).select(&:pending?)
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
 
@@ -269,7 +269,7 @@ describe Subscription do
       # Should not have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should still have a pending bill for free
-      pending = @site.bills(true).reject { |b| !b.pending? }
+      pending = @site.bills(true).select(&:pending?)
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
     end
@@ -309,6 +309,7 @@ describe Subscription do
         expect(capabilities.autofills?).to be_falsey
         expect(capabilities.geolocation_injection?).to be_falsey
         expect(capabilities.external_tracking?).to be_falsey
+        expect(capabilities.alert_bars?).to be_falsey
       end
 
       specify 'ProManaged plan has certain custom capabilities' do
@@ -320,6 +321,7 @@ describe Subscription do
         expect(capabilities.autofills?).to be_truthy
         expect(capabilities.geolocation_injection?).to be_truthy
         expect(capabilities.external_tracking?).to be_truthy
+        expect(capabilities.alert_bars?).to be_truthy
       end
     end
 

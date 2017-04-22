@@ -6,7 +6,7 @@ describe ScriptGenerator do
   end
 
   describe '#render' do
-    let(:site) { create(:site, :with_user, :pro, elements: %i(traffic email facebook twitter)) }
+    let(:site) { create(:site, :with_user, :pro, elements: %i[traffic email facebook twitter]) }
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do
@@ -183,6 +183,17 @@ describe ScriptGenerator do
 
         expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
       end
+
+      context 'with custom html/js' do
+        it 'escapes </script>' do
+          custom_html = '<script></script>'
+          site_element = build(:site_element, :bar, custom_html: custom_html)
+          allow(site).to receive(:rules).and_return([rule])
+          allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+
+          expect(generator.rules.first[:site_elements]).to include '<script><\/script>'
+        end
+      end
     end
 
     context 'site element has a theme' do
@@ -252,29 +263,22 @@ describe ScriptGenerator do
       expect(generator.rules).to eq([expected_hash])
     end
 
-    it 'returns the proper hash when a single bar_id is passed as an option' do
-      bar = SiteElement.create! element_subtype: 'email', rule: rule, contact_list: contact_list
-      options = { bar_id: bar.id }
-
-      generator = ScriptGenerator.new(site, options)
-      allow(generator).to receive(:site_element_settings).and_return(id: bar.id, template_name: bar.element_subtype)
+    it 'returns the proper hash when a single bar_id is passed as an option', freeze: 1491936487 do
+      bar = create(:site_element, :email, rule: rule, contact_list: contact_list)
+      generator = ScriptGenerator.new(site, bar_id: bar.id)
 
       allow(site).to receive(:rules).and_return([rule])
 
-      expected_hash = {
-        match: nil,
-        conditions: [].to_json,
-        site_elements: [{ id: bar.id, template_name: bar.element_subtype }].to_json
-      }
-
-      expect(generator.rules).to eq([expected_hash])
+      generated_site_elements = JSON.parse(generator.rules.first[:site_elements])
+      expect(generated_site_elements.first).to match create(:site_element_for_rule, site_element: bar)
     end
 
     it 'renders all bar json when the render_paused_site_elements is true' do
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
       generator = ScriptGenerator.new(site, options)
-      allow(generator).to receive(:site_element_settings).and_return(id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' })
+      allow(generator)
+        .to receive(:render_site_elements).and_return([id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }].to_json)
 
       allow(site).to receive(:rules).and_return([rule])
 
@@ -291,7 +295,8 @@ describe ScriptGenerator do
       SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
       generator = ScriptGenerator.new(site)
-      allow(generator).to receive(:site_element_settings).and_return(id: active_bar.id, template_name: active_bar.element_subtype)
+      allow(generator)
+        .to receive(:render_site_elements).and_return([id: active_bar.id, template_name: active_bar.element_subtype].to_json)
 
       allow(site).to receive(:rules).and_return([rule])
 

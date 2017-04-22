@@ -49,7 +49,7 @@ module BillingAuditTrail
         Rails.logger.debug log.message
         Rails.logger.debug '-' * 80
         log.attribute_names.sort.each do |n|
-          unless [:message, :source_file, :created_at, :id].include?(n.to_sym)
+          unless %i[message source_file created_at id].include?(n.to_sym)
             Rails.logger.debug "\t#{ n } => #{ log.send(n) }"
           end
         end

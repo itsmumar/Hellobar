@@ -1,8 +1,8 @@
 class SiteElementsController < ApplicationController
   before_action :authenticate_user!
-  before_action :force_trailing_slash, only: [:new, :edit]
+  before_action :force_trailing_slash, only: %i[new edit]
   before_action :load_site
-  before_action :load_site_element, only: [:show, :edit, :update, :destroy, :toggle_paused]
+  before_action :load_site_element, only: %i[show edit update destroy toggle_paused]
 
   layout :determine_layout
 
@@ -14,7 +14,7 @@ class SiteElementsController < ApplicationController
     # force cache miss if user is refreshing the page to check if their script is installed and working
     @site.lifetime_totals(force: true) if page_refresh?
 
-    @rules = @site.rules.includes([:site_elements, :conditions])
+    @rules = @site.rules.includes(%i[site_elements conditions])
   end
 
   def new
@@ -168,6 +168,9 @@ class SiteElementsController < ApplicationController
       :custom_html,
       :custom_css,
       :custom_js,
+      :sound,
+      :notification_delay,
+      :trigger_color,
       { settings: settings_keys },
       blocks: blocks_keys
     )
@@ -176,11 +179,11 @@ class SiteElementsController < ApplicationController
   def blocks_keys
     [
       :id,
-      { content: [:text, :href] },
+      { content: %i[text href] },
       themes: [
         :id,
         :css_classes,
-        { styles: [:background_color, :border_color] }
+        { styles: %i[background_color border_color] }
       ]
     ]
   end
@@ -190,8 +193,8 @@ class SiteElementsController < ApplicationController
       :after_email_submit_action,
       :buffer_message,
       :buffer_url,
-      { fields_to_collect: [:id, :type, :label, :is_enabled] },
-      { cookie_settings: [:duration, :success_duration] },
+      { fields_to_collect: %i[id type label is_enabled] },
+      { cookie_settings: %i[duration success_duration] },
       :display_when_delay,
       :display_when_delay_units,
       :display_when_scroll_element,

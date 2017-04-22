@@ -2,14 +2,19 @@ namespace :backend do
   desc 'Automatically adjusts DynamoDB tables as needed'
   task :adjust_dynamo_db_capacity, [:type] => :environment do |_t, args|
     require Rails.root.join('config', 'initializers', 'settings.rb')
+
     cloudwatch = AWS::CloudWatch::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
     )
+
     dynamo_db = AWS::DynamoDB::Client.new(
       access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key]
+      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      logger: nil
     )
+
     NUM_DAYS_TO_ANALYZE = 3
     TIME_PERIOD = 60
     MIN_UNITS = 1
@@ -171,7 +176,7 @@ namespace :backend do
     email_message << "Total: #{ fm grand_total_diff }"
     puts email_message.join("\n")
     unless ENV['noop']
-      emails = %w(mailmanager@hellobar.com)
+      emails = %w[mailmanager@hellobar.com]
       if grand_total_diff != 0
         Pony.mail(to: emails.join(', '),
                   subject: "#{ Time.now.strftime('%Y-%m-%d') } #{ args[:type].inspect } DynamoDB: #{ fm grand_total_diff }",

@@ -186,6 +186,14 @@ script id="contact-list-variant-modal-remote-list-select-template" type="text/x-
   |     {{/each}}
   |   </select>
   | </div>
+  | {{#if identity.supports_cycle_day}}
+  |   <label for="contact_list_cycle_day_enabled">
+  |     <input type="checkbox" name="contact_list[cycle_day_enabled]" id="contact_list_cycle_day_enabled" value="1" {{#if cycleDayEnabled}}checked{{/if}}> Use cycle day?
+  |   </label>
+  |   <label for="contact_list_cycle_day_value">
+  |     <input type="number" name="contact_list[cycle_day]" id="contact_list_cycle_day" value="{{cycleDay}}">
+  |   </label>
+  | {{/if}}
 
 script id="contact-list-variant-modal-tag-select-template" type="text/x-handlebars-template"
 

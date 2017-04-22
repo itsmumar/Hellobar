@@ -7,7 +7,7 @@ Made with love.
 
 ## Installation
 
-HelloBar runs on Ruby version 2.1.9, so it is recommended to install the exact same version locally.
+HelloBar runs on Ruby version 2.3.4, so it is recommended to install the exact same version locally.
 
 
 ### Back-end

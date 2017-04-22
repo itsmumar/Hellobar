@@ -3,8 +3,8 @@ class ContentUpgradesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :verify_capability, only: [:create, :update]
-  before_action :load_content_upgrade, only: [:show, :edit, :update, :destroy]
+  before_action :verify_capability, only: %i[create update]
+  before_action :load_content_upgrade, only: %i[show edit update destroy]
 
   def index
     @content_upgrades = @site.site_elements.active_content_upgrades

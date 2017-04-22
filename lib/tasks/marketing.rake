@@ -1,7 +1,7 @@
 namespace :marketing do
   desc 'Export users who have logged in recently to a files'
   task export_recent_logins_with_plan: :environment do
-    %w(Free Pro Enterprise).each do |plan|
+    %w[Free Pro Enterprise].each do |plan|
       days = 30
       start = Time.zone.now - days.days
       filename = "user_logins_#{ days }_days_#{ plan.downcase }_#{ Time.now.strftime('%F--%H-%M-%S') }.csv"

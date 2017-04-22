@@ -26,7 +26,7 @@ class Condition < ActiveRecord::Base
     'UrlQuery' => 'pq'
   }.freeze
 
-  MULTIPLE_CHOICE_SEGMENTS = %w(UrlCondition UrlPathCondition LocationCountryCondition).freeze
+  MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
 
   # stored value: displayed value
   OPERANDS = {
@@ -146,22 +146,22 @@ class Condition < ActiveRecord::Base
 
   def operand_is_valid
     @operands ||= {
-      'DateCondition'             => %w(is is_not before after between),
-      'DeviceCondition'           => %w(is is_not),
-      'EveryXSession'             => %w(every),
-      'LastVisitCondition'        => %w(is is_not less_than greater_than between),
-      'LocationCityCondition'     => %w(is is_not),
-      'LocationCountryCondition'  => %w(is is_not),
-      'LocationRegionCondition'   => %w(is is_not),
-      'NumberOfVisitsCondition'   => %w(is is_not less_than greater_than between),
-      'PreviousPageURL'           => %w(includes does_not_include),
-      'ReferrerCondition'         => %w(is is_not includes does_not_include),
-      'ReferrerDomainCondition'   => %w(is is_not includes does_not_include),
-      'SearchTermCondition'       => %w(is is_not includes does_not_include),
-      'TimeCondition'             => %w(before after),
-      'UrlCondition'              => %w(is is_not includes does_not_include),
-      'UrlPathCondition'          => %w(is is_not includes does_not_include),
-      'UtmCondition'              => %w(is is_not includes does_not_include)
+      'DateCondition'             => %w[is is_not before after between],
+      'DeviceCondition'           => %w[is is_not],
+      'EveryXSession'             => %w[every],
+      'LastVisitCondition'        => %w[is is_not less_than greater_than between],
+      'LocationCityCondition'     => %w[is is_not],
+      'LocationCountryCondition'  => %w[is is_not],
+      'LocationRegionCondition'   => %w[is is_not],
+      'NumberOfVisitsCondition'   => %w[is is_not less_than greater_than between],
+      'PreviousPageURL'           => %w[includes does_not_include],
+      'ReferrerCondition'         => %w[is is_not includes does_not_include],
+      'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
+      'SearchTermCondition'       => %w[is is_not includes does_not_include],
+      'TimeCondition'             => %w[before after],
+      'UrlCondition'              => %w[is is_not includes does_not_include],
+      'UrlPathCondition'          => %w[is is_not includes does_not_include],
+      'UtmCondition'              => %w[is is_not includes does_not_include]
     }
 
     return unless @operands[segment] && !@operands[segment].include?(operand)
@@ -169,7 +169,7 @@ class Condition < ActiveRecord::Base
   end
 
   def clear_blank_values
-    self.value = value.select { |v| !v.blank? }.uniq if value.is_a?(Array)
+    self.value = value.reject(&:blank?).uniq if value.is_a?(Array)
   end
 
   def normalize_url_condition

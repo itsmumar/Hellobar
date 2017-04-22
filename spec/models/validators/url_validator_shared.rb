@@ -17,12 +17,12 @@ shared_examples 'an object with a valid url' do
   end
 
   it 'requires a url with a valid format' do
-    urls = %w(
+    urls = %w[
       lololol
       1234
       me@notaurl.com
       ftp://warez.dfnet.org
-    )
+    ]
 
     urls.each do |url|
       test_case = WebClass.new
@@ -34,12 +34,12 @@ shared_examples 'an object with a valid url' do
   end
 
   it 'accepts valid inputs' do
-    urls = %w(
+    urls = %w[
       http://zombo.com
       http://horse.bike
       http://madam-e.ru
       http://ec2-174-129-140-89.compute-1.amazonaws.com
-    )
+    ]
 
     urls.each do |url|
       test_case = WebClass.new

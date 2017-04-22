@@ -22,7 +22,6 @@ class SiteSerializer < ActiveModel::Serializer
         analytics.latest_pageviews(object.url)
       end
     end
-
   rescue Google::Apis::AuthorizationError => error # user has not authenticated with the needed permissions
     return if scope.is_impersonated
     raise error # the error needs to bubble up to the controller to cause the user to re-authenticate
@@ -50,7 +49,8 @@ class SiteSerializer < ActiveModel::Serializer
       content_upgrades: object.capabilities.content_upgrades?,
       autofills: object.capabilities.autofills?,
       geolocation_injection: object.capabilities.geolocation_injection?,
-      external_tracking: object.capabilities.external_tracking?
+      external_tracking: object.capabilities.external_tracking?,
+      alert_bars: object.capabilities.alert_bars?
     }
   end
 

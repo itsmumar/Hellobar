@@ -143,7 +143,7 @@ class Site < ActiveRecord::Base
   # has the script been installed according to the API?
   def script_installed_api?(days = 10)
     data = lifetime_totals(days: days)
-    return false unless data.present?
+    return false if data.blank?
 
     has_new_views = data.values.any? do |values|
       days_with_views = values.select { |v| v[0] > 0 }.count
@@ -415,76 +415,7 @@ class Site < ActiveRecord::Base
   # change_subscription and preview_change_subscription
   def calculate_bill(subscription, actually_change, trial_period = nil)
     raise MissingSubscription unless subscription
-    now = Time.now
-    # First we need to void any pending recurring bills
-    # and keep any active paid bills
-    active_paid_bills = []
-    bills(true).each do |bill|
-      if bill.is_a?(Bill::Recurring)
-        if bill.pending?
-          bill.void! if actually_change
-        elsif bill.paid?
-          active_paid_bills << bill if bill.active_during(now)
-        end
-      end
-    end
-    if actually_change
-      audit << "Changing subscription to #{ subscription.inspect }"
-    end
-    bill = Bill::Recurring.new(subscription: subscription)
-    if active_paid_bills.empty?
-      # Gotta pay full amount now
-      bill.amount = subscription.amount
-      bill.grace_period_allowed = false
-      bill.bill_at = now
-      if actually_change
-        audit << "No active paid bills, charging full amount now: #{ bill.inspect }"
-      end
-    else
-      last_subscription = active_paid_bills.last.subscription
-
-      if Subscription::Comparison.new(last_subscription, subscription).upgrade?
-        # We are upgrading, gotta pay now, but we prorate it
-
-        bill.bill_at = now
-        bill.grace_period_allowed = false
-        # Figure out percentage of their subscription they've used
-        # rounded to the day
-        num_days_used = (now - active_paid_bills.last.start_date) / 1.day
-        total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
-        percentage_used = num_days_used.to_f / total_days_of_last_subcription
-        percentage_unused = 1.0 - percentage_used
-        if actually_change
-          audit << "now: #{ now }, start_date: #{ active_paid_bills.last.start_date }, end_date: #{ active_paid_bills.last.end_date }, total_days_of_last_subscription: #{ total_days_of_last_subcription.inspect }, num_days_used: #{ num_days_used }, percentage_unused: #{ percentage_unused }"
-        end
-
-        unused_paid_amount = last_subscription.amount * percentage_unused
-        # Subtract the unused paid amount from the price and round it
-        bill.amount = (subscription.amount - unused_paid_amount).to_i
-        if actually_change
-          audit << "Upgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, prorating amount now: #{ bill.inspect }"
-        end
-      else
-        # We are downgrading or staying the same, so just set the bill to start
-        # after this bill ends, but make it the full amount
-        bill.bill_at = active_paid_bills.last.end_date
-        bill.amount = subscription.amount
-        bill.grace_period_allowed = true
-        if actually_change
-          audit << "Downgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, charging full amount later: #{ bill.inspect }"
-        end
-      end
-    end
-
-    bill.start_date = bill.bill_at - 1.hour
-    bill.end_date = bill.renewal_date
-
-    if trial_period
-      bill.amount = 0
-      bill.end_date = Time.now + trial_period
-    end
-
-    bill
+    CalculateBill.new(self, subscription, actually_change, trial_period).call
   end
 
   def do_generate_script_and_check_installation(options = {})

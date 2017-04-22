@@ -3,7 +3,7 @@ class ContactListsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, only: [:show, :update, :destroy]
+  before_action :load_contact_list, only: %i[show update destroy]
 
   def index
     @site ||= current_site # Necessary here in case this is a redirect from failed oauth

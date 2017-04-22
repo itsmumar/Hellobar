@@ -75,11 +75,9 @@ module EmailSynchronizer
     # run something immediately before sync
     yield
     # run something immediately after sync
-    log_entry.update(completed: true) if log_entry
+    log_entry&.update(completed: true)
   rescue *ESP_ERROR_CLASSES => e
-    if log_entry
-      log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
-    end
+    log_entry&.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
 
     raise e unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
     Raven.capture_exception(e)
@@ -89,9 +87,8 @@ module EmailSynchronizer
       Rails.logger.warn "Removing identity #{ identity.try(:id) }\n#{ e.message }"
       identity.try(:destroy_and_notify_user)
     end
-
   rescue => e
-    log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n")) if log_entry
+    log_entry&.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
     raise e
   end
 end

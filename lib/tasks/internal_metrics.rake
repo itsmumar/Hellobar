@@ -4,17 +4,17 @@ namespace :internal_metrics do
     last_week = Date.commercial(Date.current.year, Date.current.cweek, 2)
     two_weeks_ago = last_week - 1.week
     sites = Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week).all
-    installed_sites = sites.reject { |s| !s.script_installed? }
+    installed_sites = sites.select(&:script_installed?)
     revenue = Bill.where('created_at >= ? and created_at <= ? and status=1 and amount > 0', two_weeks_ago, last_week)
     sum = revenue.sum(:amount)
-    pro = revenue.reject { |b| b.subscription.type !~ /Pro/ }
-    enterprise = revenue.reject { |b| b.subscription.type !~ /Enterprise/ }
-    pro_monthly = pro.reject { |b| !b.subscription.monthly? }
-    pro_yearly = pro.reject { |b| !b.subscription.yearly? }
-    enterprise_monthly = enterprise.reject { |b| !b.subscription.monthly? }
-    enterprise_yearly = enterprise.reject { |b| !b.subscription.yearly? }
+    pro = revenue.select { |b| b.subscription.type =~ /Pro/ }
+    enterprise = revenue.select { |b| b.subscription.type =~ /Enterprise/ }
+    pro_monthly = pro.select { |b| b.subscription.monthly? }
+    pro_yearly = pro.select { |b| b.subscription.yearly? }
+    enterprise_monthly = enterprise.select { |b| b.subscription.monthly? }
+    enterprise_yearly = enterprise.select { |b| b.subscription.yearly? }
     include ActionView::Helpers::NumberHelper
-    emails = %w(neil@neilpatel.com mike@mikekamo.com mailmanager@hellobar.com)
+    emails = %w[neil@neilpatel.com mike@mikekamo.com mailmanager@hellobar.com]
     Pony.mail(to: emails.join(', '),
               subject: "#{ last_week } | #{ number_with_delimiter(sites.length) } new sites, #{ number_to_percentage((installed_sites.length.to_f / sites.length) * 100, precision: 1) } install rate, #{ number_to_currency(sum) }",
               body: "Report #{ two_weeks_ago } to #{ last_week }
