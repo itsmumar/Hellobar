@@ -15,8 +15,8 @@ These are some instructions about doing your custom templating.
         {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
         {{#if elementTypeIsNotAlert}}
           {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
+          {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
         {{/if}}
-        {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
       {{/tabs.tablist}}
 
       {{#tabs.tabpanel "TabColors"}}
@@ -27,11 +27,11 @@ These are some instructions about doing your custom templating.
         {{#tabs.tabpanel "TabImage"}}
           {{partial "partials/image-pane"}}
         {{/tabs.tabpanel}}
-      {{/if}}
 
-      {{#tabs.tabpanel "TabText"}}
-        {{partial "partials/text-pane"}}
-      {{/tabs.tabpanel}}
+        {{#tabs.tabpanel "TabText"}}
+          {{partial "partials/text-pane"}}
+        {{/tabs.tabpanel}}
+      {{/if}}
     {{/ivy-tabs}}
 
   {{/if}}
