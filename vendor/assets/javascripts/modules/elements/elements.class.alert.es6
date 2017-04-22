@@ -1,9 +1,9 @@
 hellobar.defineModule('elements.class.alert',
-  ['hellobar', 'base.dom', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating', 'base.environment',
-    'base.preview', 'base.coloring',
+  ['hellobar', 'base.dom', 'base.cdn', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating',
+    'base.environment', 'base.preview', 'base.coloring',
     'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion'],
-  function (hellobar, dom, cdnLibraries, site, format, templating, environment,
-            preview, coloring,
+  function (hellobar, dom, cdn, cdnLibraries, site, format, templating,
+            environment, preview, coloring,
             elementsInjection, elementsVisibility, elementsIntents, elementsConversion) {
 
     const geometry = {
@@ -255,6 +255,9 @@ hellobar.defineModule('elements.class.alert',
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
           preview.isActive() && cdnLibraries.useFroala(doc);
+          if (this.model.google_font) {
+            cdn.addCss('https://fonts.googleapis.com/css?family=' + this.model.google_font, this._iframe.contentDocument);
+          }
         };
         const bindEvents = () => {
           const ctaElement = this._iframe.contentDocument.querySelector('.js-cta');
