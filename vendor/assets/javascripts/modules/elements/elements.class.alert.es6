@@ -196,12 +196,12 @@ hellobar.defineModule('elements.class.alert',
       const placement = alertElement.model.placement;
       const forVisible = () => {
         const offset = geometry.offset + 'px';
-        const maxSliderWidth = geometry.maxPopupSize + 'px';
+        const maxPopupWidth = geometry.maxPopupSize + 'px';
         const triggerWidth = geometry.triggerSize + 'px';
         dom.setStyles(iframe, {
           left: placement === 'bottom-right' ? 'auto' : offset,
           right: placement === 'bottom-right' ? offset : 'auto',
-          width: popupIsVisible ? maxSliderWidth : triggerWidth,
+          width: popupIsVisible ? maxPopupWidth : triggerWidth,
           top: 'auto',
           bottom: offset,
           height: popupIsVisible ? window.innerHeight : triggerWidth
