@@ -175,7 +175,6 @@ hellobar.defineModule('elements.class.alert',
       model.animated && dom.addClass(iframe, 'hb-animated');
       if (model.theme && model.theme.id) {
         dom.addClass(iframe, model.theme.id);
-        dom.addClass(iframe.contentDocument.body, model.theme.id);
       }
     }
 
@@ -252,9 +251,6 @@ hellobar.defineModule('elements.class.alert',
         const html = () => {
           const template = templating.getTemplateByName(this.model.template_name);
           return templating.renderTemplate(template, this);
-          // TODO remove
-          //const sliderTemplate = '<div id="hellobar-slider"><div class="slider-content"><div class="hb-content-wrapper"><div class="hb-inner-content"><div class="hb-text-wrapper"><div class="hb-headline-text">Test headline</div><div class="hb-secondary-text">Test caption</div></div></div></div></div></div></div>';
-          //return ``;
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
@@ -279,6 +275,8 @@ hellobar.defineModule('elements.class.alert',
             populateIFrame(this._iframe, this._css, html());
             configureIFrame(this._iframe, this.model);
             this._iframe.contentWindow.hellobar = hellobar;
+            dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
+            this.model.theme && dom.addClass(this._iframe.contentDocument.body, this.model.theme.id);
             addCdnResources(this._iframe.contentDocument);
             this._trigger = new Trigger(this._iframe, this.model);
             this._popup = new Popup(this._iframe, this.model);
