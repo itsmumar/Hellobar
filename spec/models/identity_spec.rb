@@ -97,29 +97,6 @@ describe Identity do
       end
     end
 
-    context 'getresponse html mode' do
-      let(:provider) { 'get_response' }
-      it 'works' do
-        expect(service_provider.list_url).to eq('https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=1324102')
-        expect(service_provider.action_url).to eq('https://app.getresponse.com/add_contact_webform.html?u=G91K') # same for getresponse
-        expect(service_provider.email_param).to eq('email')
-        expect(service_provider.name_param).to eq('name')
-      end
-    end
-
-    context 'getresponse JS mode', :vcr do
-      let(:provider) { 'get_response' }
-      let(:file) { 'get_response_js' }
-      it 'works' do
-        expect(service_provider.class).to eq(ServiceProviders::GetResponse)
-
-        expect(service_provider.list_url).to eq('https://app.getresponse.com/site/colin_240991/webform.html?u=G91K&wid=2350002')
-        expect(service_provider.action_url).to match(/https?:\/\/app\.getresponse\.com\/add_contact_webform\.html\?u=G91K/) # same for getresponse
-        expect(service_provider.email_param).to eq('email')
-        expect(service_provider.name_param).to eq('name')
-      end
-    end
-
     context 'VerticalResponse' do
       let(:provider) { 'vertical_response' }
       it 'works' do

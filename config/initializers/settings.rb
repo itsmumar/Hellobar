@@ -107,12 +107,6 @@ unless defined?(Hellobar::Settings)
       supports_double_optin: true,
       oauth: true
     },
-    get_response: {
-      type: :email,
-      name: 'GetResponse',
-      requires_embed_code: true,
-      hidden: true
-    },
     get_response_api: {
       type: :email,
       name: 'GetResponse',
