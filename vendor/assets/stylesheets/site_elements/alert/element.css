@@ -1,1 +1,29 @@
 /*-----------  Alert Element  -----------*/
+
+#hellobar-alert {
+}
+
+#hellobar-alert #hb-trigger {
+  display: block;
+  position: fixed;
+  padding: 15px;
+  font-size: 30px;
+  color: #ffffff;
+  background-color: #104070;
+  border-radius: 30px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#hellobar-alert #hb-trigger .fa {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+#hellobar-alert #hb-popup-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  z-index: 500;
+}

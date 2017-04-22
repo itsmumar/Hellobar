@@ -1,7 +1,9 @@
 hellobar.defineModule('elements.class.alert',
-  ['hellobar', 'base.dom', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating', 'base.environment', 'base.preview',
+  ['hellobar', 'base.dom', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating', 'base.environment',
+    'base.preview', 'base.coloring',
     'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion'],
-  function (hellobar, dom, cdnLibraries, site, format, templating, environment, preview,
+  function (hellobar, dom, cdnLibraries, site, format, templating, environment,
+            preview, coloring,
             elementsInjection, elementsVisibility, elementsIntents, elementsConversion) {
 
     const geometry = {
@@ -248,14 +250,15 @@ hellobar.defineModule('elements.class.alert',
 
       attach() {
         const html = () => {
-          // TODO uncomment
-          //const template = templating.getTemplateByName('alert');
-          //return templating.renderTemplate(template, this);
-          const sliderTemplate = '<div id="hellobar-slider"><div class="slider-content"><div class="hb-content-wrapper"><div class="hb-inner-content"><div class="hb-text-wrapper"><div class="hb-headline-text">Test headline</div><div class="hb-secondary-text">Test caption</div></div></div></div></div></div></div>';
-          return `<div id="hellobar-alert" class="element"><audio src="https://s3.amazonaws.com/assets.hellobar.com/bell/ring2.mp3"></audio><div id="hb-trigger" class="trigger"><i class="fa fa-bell js-main-icon"></i><i class="fa fa-remove js-close-icon"></i></div><div id="hb-popup-container" style="display:none">${sliderTemplate}</div></div>`;
+          const template = templating.getTemplateByName(this.model.template_name);
+          return templating.renderTemplate(template, this);
+          // TODO remove
+          //const sliderTemplate = '<div id="hellobar-slider"><div class="slider-content"><div class="hb-content-wrapper"><div class="hb-inner-content"><div class="hb-text-wrapper"><div class="hb-headline-text">Test headline</div><div class="hb-secondary-text">Test caption</div></div></div></div></div></div></div>';
+          //return ``;
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
+          preview.isActive() && cdnLibraries.useFroala(doc);
         };
         const bindEvents = () => {
           const ctaElement = this._iframe.contentDocument.querySelector('.js-cta');
@@ -269,33 +272,6 @@ hellobar.defineModule('elements.class.alert',
           }
           this._isPopupVisible = !this._isPopupVisible;
         };
-        // TODO change this to proper CSS usage
-        const applyTemporaryStyling = () => {
-          dom.setStyles(this._trigger._domNode, {
-            display: 'block',
-            position: 'fixed',
-            padding: '15px',
-            fontSize: '30px',
-            color: '#ffffff',
-            backgroundColor: '#104070',
-            borderRadius: '30px',
-            textAlign: 'center',
-            cursor: 'pointer',
-            zIndex: 1000
-          });
-          Array.prototype.forEach.call(this._trigger._domNode.querySelectorAll('.fa'), (iconElement) => {
-            dom.setStyles(iconElement, {
-              minWidth: '30px',
-              minHeight: '30px'
-            });
-          });
-          dom.setStyles(this._popupContainerDomNode(), {
-            position: 'relative',
-            height: '100%',
-            width: '100%',
-            zIndex: 500
-          });
-        };
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
             this._iframe = createIFrame(this.model.type);
@@ -308,13 +284,18 @@ hellobar.defineModule('elements.class.alert',
             this._popup = new Popup(this._iframe, this.model);
             this._audio = new Audio(this._iframe, this.model);
             this._trigger.setClickListener(onTriggerClicked);
-            // TODO remove this line, use CSS instead
-            applyTemporaryStyling();
             this.adjustSize();
             bindEvents();
             elementsIntents.applyViewCondition(this.model.view_condition, () => {
               this.show();
-              this.notify();
+              if (this.model.notification_delay > 0) {
+                setTimeout(() => {
+                  this.notify();
+                }, 1000 * this.model.notification_delay);
+              } else {
+                this.notify();
+              }
+
             }, () => {
               this.show();
             });
@@ -399,7 +380,6 @@ hellobar.defineModule('elements.class.alert',
         this._trigger.animate();
       }
 
-
       remove() {
         const unbindEvents = () => {
           const ctaElement = this._iframe.contentDocument.querySelector('.js-cta');
@@ -410,6 +390,13 @@ hellobar.defineModule('elements.class.alert',
         this._popup && this._popup.remove();
         this._iframe && this._iframe.remove();
         this.onRemove && this.onRemove();
+      }
+
+      cssClasses() {
+        const that = this;
+        return {
+          brightness: () => coloring.colorIsBright(that.model.background_color) ? 'light' : 'dark'
+        };
       }
 
       onInit() {
