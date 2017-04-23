@@ -18,7 +18,9 @@ class Subscription < ActiveRecord::Base
     joins(:bills).merge(Bill.paid).where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.now)
   }
 
-  scope :active, -> { paid.group('subscriptions.id').having('sum(bills.amount) > 0 OR type = "Subscription::Free"') }
+  scope :active, lambda {
+    paid.group('subscriptions.id').having('sum(bills.amount) > 0 OR type in (?)', [Free, ProComped])
+  }
 
   class << self
     def values_for(_site)
