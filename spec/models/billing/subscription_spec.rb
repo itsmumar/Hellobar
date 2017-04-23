@@ -249,7 +249,7 @@ describe Subscription do
       # Should still have pro cabalities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       # Should have a pending bill for pro
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Pro)
 
@@ -257,10 +257,10 @@ describe Subscription do
       success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_truthy
 
-      # Should still have pro capabilities
-      expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
+      # Should not have pro capabilities
+      expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should have a pending bill for free
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
 
@@ -269,7 +269,7 @@ describe Subscription do
       # Should not have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should still have a pending bill for free
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
     end
