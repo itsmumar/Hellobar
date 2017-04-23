@@ -337,9 +337,7 @@ class Site < ActiveRecord::Base
       bills.due_now.each do |bill|
         # Find bills that are due now and we've tried to bill
         # at least once
-        if bill.billing_attempts.present?
-          @bills_with_payment_issues << bill
-        end
+        @bills_with_payment_issues << bill if bill.billing_attempts.present?
       end
     end
     @bills_with_payment_issues
