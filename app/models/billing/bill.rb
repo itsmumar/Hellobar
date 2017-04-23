@@ -24,7 +24,7 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
-  scope :with_amount, -> { where('amount > 0') }
+  scope :with_amount, -> { where('bills.amount > 0') }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.now) }
 
   def during_trial_subscription?
