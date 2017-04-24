@@ -1,9 +1,4 @@
 describe Users::SessionsController do
-  before do
-    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
-    allow(Infusionsoft).to receive(:contact_add_to_group)
-  end
-
   before(:each) do
     request.env['devise.mapping'] = Devise.mappings[:user]
   end
