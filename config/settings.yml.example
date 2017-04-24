@@ -20,9 +20,6 @@ google_auth_id: google-auth-id
 google_auth_secret: google-auth-secret
 grand_central_api_key: grand-central-api-key
 grand_central_api_secret: grand-central-api-secret
-hb_infusionsoft_default_group: default-group-id
-hb_infusionsoft_key: infusionsoft-key
-hb_infusionsoft_url: infusionsoft-url
 host: local.hellobar.com
 low_priority_queue: hellobar3_production_lowpriority
 mailchimp_client_id: mailchimp-client-id

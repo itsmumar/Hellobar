@@ -30,9 +30,6 @@ unless defined?(Hellobar::Settings)
     google_auth_secret
     grand_central_api_key
     grand_central_api_secret
-    hb_infusionsoft_default_group
-    hb_infusionsoft_key
-    hb_infusionsoft_url
     host
     low_priority_queue
     mailchimp_client_id
@@ -106,12 +103,6 @@ unless defined?(Hellobar::Settings)
       secret: config[:drip_secret],
       supports_double_optin: true,
       oauth: true
-    },
-    get_response: {
-      type: :email,
-      name: 'GetResponse',
-      requires_embed_code: true,
-      hidden: true
     },
     get_response_api: {
       type: :email,
