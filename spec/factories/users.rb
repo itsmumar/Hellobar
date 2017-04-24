@@ -5,10 +5,6 @@ FactoryGirl.define do
     email { generate(:email) }
     password 'password'
 
-    after(:build) do |user|
-      user.class.skip_callback(:create, :after, :add_to_infusionsoft_in_background)
-    end
-
     trait :temporary do
       status { User::TEMPORARY_STATUS }
     end

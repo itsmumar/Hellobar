@@ -1,9 +1,4 @@
 describe User do
-  before do
-    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
-    allow(Infusionsoft).to receive(:contact_add_to_group)
-  end
-
   describe 'validations' do
     it 'cannot have the same email as someone in the wordpress database' do
       expect(Hello::WordpressUser).to receive(:email_exists?).with('foo@bar.com').and_return(true)

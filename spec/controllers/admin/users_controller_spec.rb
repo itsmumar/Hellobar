@@ -1,9 +1,4 @@
 describe Admin::UsersController do
-  before do
-    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
-    allow(Infusionsoft).to receive(:contact_add_to_group)
-  end
-
   let!(:admin) { create(:admin) }
   let(:site) { create(:site, :with_user) }
 
