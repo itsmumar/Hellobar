@@ -36,7 +36,6 @@ class Bill < ActiveRecord::Base
     raise InvalidBillingAmount, "Amount was: #{ amount.inspect }" if !amount || amount < 0
   end
 
-  alias void! voided!
   def status=(value)
     value = value.to_sym
     return if status == value
@@ -71,9 +70,8 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  alias orig_status status
   def status
-    orig_status.to_sym
+    super.to_sym
   end
 
   def active_during(date)
@@ -141,79 +139,5 @@ class Bill < ActiveRecord::Base
 
   def estimated_amount
     (base_amount || amount) - calculate_discount
-  end
-
-  class Recurring < Bill
-    class << self
-      def next_month(date)
-        date + 1.month
-      end
-
-      def next_year(date)
-        date + 1.year
-      end
-    end
-
-    def renewal_date
-      raise 'can not calculate renewal date without start_date' unless start_date
-      subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
-    end
-
-    def on_paid
-      super
-      # Create the next bill
-      next_method = subscription.monthly? ? :next_month : :next_year
-      new_start_date = end_date
-      new_bill = Bill::Recurring.new(
-        subscription: subscription,
-        amount: subscription.amount,
-        description: "#{ subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
-        grace_period_allowed: true,
-        bill_at: end_date,
-        start_date: new_start_date,
-        end_date: Bill::Recurring.send(next_method, new_start_date)
-      )
-      audit << "Paid recurring bill, created new bill for #{ subscription.amount } that starts at #{ new_start_date }. #{ new_bill.inspect }"
-      new_bill.save!
-      new_bill
-    end
-  end
-
-  class Overage < Bill
-  end
-
-  class Refund < Bill
-    # Refunds must be a negative amount
-    def check_amount
-      raise InvalidBillingAmount, "Amount must be negative. It was #{ amount.to_f }" if amount > 0
-    end
-
-    # Refunds are never considered "active"
-    def active_during(_date)
-      false
-    end
-
-    def refunded_billing_attempt
-      unless @refunded_billing_attempt
-        if refunded_billing_attempt_id
-          @refunded_billing_attempt = BillingAttempt.find(refunded_billing_attempt_id)
-        end
-      end
-      @refunded_billing_attempt
-    end
-
-    def refunded_billing_attempt_id
-      return metadata['refunded_billing_attempt_id'] if metadata
-    end
-
-    def refunded_billing_attempt=(billing_attempt)
-      self.refunded_billing_attempt_id = billing_attempt.id
-    end
-
-    def refunded_billing_attempt_id=(id)
-      self.metadata = {} unless metadata
-      metadata['refunded_billing_attempt_id'] = id
-      @refunded_billing_attempt = nil
-    end
   end
 end

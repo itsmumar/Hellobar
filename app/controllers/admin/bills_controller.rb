@@ -12,7 +12,7 @@ class Admin::BillsController < ApplicationController
 
   def void
     bill = Bill.find(params[:bill_id])
-    bill.void!
+    bill.voided!
     flash[:success] = "Voided bill due on #{ bill.due_at.strftime('%D') } for #{ bill.amount }."
     redirect_to admin_user_path(params[:user_id])
   end

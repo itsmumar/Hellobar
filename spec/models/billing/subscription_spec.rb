@@ -265,7 +265,7 @@ describe Subscription do
       expect(pending.first.subscription).to be_a(Subscription::Free)
 
       # Void the paid bill
-      pro_bill.void!
+      pro_bill.voided!
       # Should not have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should still have a pending bill for free
@@ -504,7 +504,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Void the pro bill
-      pro_bill.void!
+      pro_bill.voided!
 
       # Switch to enterprise
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)
