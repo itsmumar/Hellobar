@@ -2,38 +2,44 @@
 
   <h5 class="step-title">Goals</h5>
   <div class="{{goalListCssClasses}}">
-    {{#link-to 'settings.emails' class='step-link-block'}}
-      <span {{action 'closeDropdown'}}>
-        <i class="icon-contacts"></i>
-        <h6>Collect Email</h6>
-        <p>Use your Hello Bar to collect visitors' email addresses</p>
-        {{#if hasSideArrows}}
-        <span class="button step-arrow">→</span>
-        {{/if}}
-      </span>
-    {{/link-to}}
+    {{#if canUseEmailGoal}}
+      {{#link-to 'settings.emails' class='step-link-block'}}
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-contacts"></i>
+          <h6>Collect Email</h6>
+          <p>Use your Hello Bar to collect visitors' email addresses</p>
+          {{#if hasSideArrows}}
+          <span class="button step-arrow">→</span>
+          {{/if}}
+        </span>
+      {{/link-to}}
+    {{/if}}
 
-    {{#link-to 'settings.call' class='step-link-block'}}
-      <span {{action 'closeDropdown'}}>
-        <i class="icon-call"></i>
-        <h6>Talk to Visitors</h6>
-        <p>Let mobile visitors call you with a click</p>
-        {{#if hasSideArrows}}
-        <span class="button step-arrow">→</span>
-        {{/if}}
-      </span>
-    {{/link-to}}
+    {{#if canUseCallGoal}}
+      {{#link-to 'settings.call' class='step-link-block'}}
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-call"></i>
+          <h6>Talk to Visitors</h6>
+          <p>Let mobile visitors call you with a click</p>
+          {{#if hasSideArrows}}
+          <span class="button step-arrow">→</span>
+          {{/if}}
+        </span>
+      {{/link-to}}
+    {{/if}}
 
-    {{#link-to 'settings.social' class='step-link-block'}}
-      <span {{action 'closeDropdown'}}>
-        <i class="icon-social"></i>
-        <h6>Social</h6>
-        <p>Point visitors to your social media channels</p>
-        {{#if hasSideArrows}}
-        <span class="button step-arrow">→</span>
-        {{/if}}
-      </span>
-    {{/link-to}}
+    {{#if canUseSocialGoal}}
+      {{#link-to 'settings.social' class='step-link-block'}}
+        <span {{action 'closeDropdown'}}>
+          <i class="icon-social"></i>
+          <h6>Social</h6>
+          <p>Point visitors to your social media channels</p>
+          {{#if hasSideArrows}}
+          <span class="button step-arrow">→</span>
+          {{/if}}
+        </span>
+      {{/link-to}}
+    {{/if}}
 
     {{#link-to 'settings.click' class='step-link-block'}}
       <span {{action 'closeDropdown'}}>
