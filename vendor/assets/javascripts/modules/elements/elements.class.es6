@@ -633,6 +633,10 @@ hellobar.defineModule('elements.class',
         // TODO initially it was HB.t(siteElement.show_branding) || !HB.CAP.no_b
       }
 
+      model() {
+        return this;
+      }
+
     }
 
     return SiteElement;

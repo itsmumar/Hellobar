@@ -1,13 +1,13 @@
-<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.link_style}} {{siteElement.wiggle}}"
-   href="tel:{{siteElement.phone_number}}"
-   onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.open_in_new_window ? 'true' : 'false'}} };"
-   style="color: #{{siteElement.link_color}}; background-color: #{{siteElement.secondary_color}}; border-color: #{{siteElement.secondary_color}}">
+<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-{{siteElement.model().link_style}} {{siteElement.model().wiggle}}"
+   href="tel:{{siteElement.model().phone_number}}"
+   onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.model().open_in_new_window ? 'true' : 'false'}} };"
+   style="color: #{{siteElement.model().link_color}}; background-color: #{{siteElement.model().secondary_color}}; border-color: #{{siteElement.model().secondary_color}}">
   <img class="icon-phone"
-    src="{{hellobar('base.coloring').colorIsBright(siteElement.secondary_color) ? 'https://s3.amazonaws.com/assets.hellobar.com/dark-phone.png' : 'https://s3.amazonaws.com/assets.hellobar.com/white-phone.png'}}"
+    src="{{hellobar('base.coloring').colorIsBright(siteElement.model().secondary_color) ? 'https://s3.amazonaws.com/assets.hellobar.com/dark-phone.png' : 'https://s3.amazonaws.com/assets.hellobar.com/white-phone.png'}}"
   />
-  <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+  <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown && siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
        data-hb-editable-block="action_link"
        data-hb-inline-editor-placeholder="Action">
-    {{siteElement.link_text}}
+    {{siteElement.model().link_text}}
   </div>
 </{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}>

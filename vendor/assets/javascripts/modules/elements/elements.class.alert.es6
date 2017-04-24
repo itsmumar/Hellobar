@@ -202,7 +202,7 @@ hellobar.defineModule('elements.class.alert',
     function adjustIFrameForSite(iframe, alertElement) {
       const elementIsVisible = alertElement.isVisible();
       const popupIsVisible = alertElement.isPopupVisible();
-      const placement = alertElement.model.placement;
+      const placement = alertElement._model.placement;
       const forVisible = () => {
         const offset = geometry.offset + 'px';
         const maxPopupWidth = geometry.maxPopupSize + 'px';
@@ -250,7 +250,7 @@ hellobar.defineModule('elements.class.alert',
 
     class AlertElement {
       constructor(model) {
-        this.model = model;
+        this._model = model;
         this._isPopupVisible = false;
         this._isVisible = false;
         this._onCtaClicked = (evt) => {
@@ -260,16 +260,20 @@ hellobar.defineModule('elements.class.alert',
         };
       }
 
+      model() {
+        return this._model;
+      }
+
       attach() {
         const html = () => {
-          const template = templating.getTemplateByName(this.model.template_name);
+          const template = templating.getTemplateByName(this._model.template_name);
           return templating.renderTemplate(template, this);
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
           preview.isActive() && cdnLibraries.useFroala(doc);
-          if (this.model.google_font) {
-            cdn.addCss('https://fonts.googleapis.com/css?family=' + this.model.google_font, this._iframe.contentDocument);
+          if (this._model.google_font) {
+            cdn.addCss('https://fonts.googleapis.com/css?family=' + this._model.google_font, this._iframe.contentDocument);
           }
         };
         const bindEvents = () => {
@@ -285,26 +289,26 @@ hellobar.defineModule('elements.class.alert',
         };
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
-            this._iframe = createIFrame(this.model.type);
+            this._iframe = createIFrame(this._model.type);
             elementsInjection.inject(this._iframe);
             populateIFrame(this._iframe, this._css, html());
-            configureIFrame(this._iframe, this.model);
+            configureIFrame(this._iframe, this._model);
             this._iframe.contentWindow.hellobar = hellobar;
             preview.isActive() && dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
-            this.model.theme && dom.addClass(this._iframe.contentDocument.body, this.model.theme.id);
+            this._model.theme && dom.addClass(this._iframe.contentDocument.body, this._model.theme.id);
             addCdnResources(this._iframe.contentDocument);
-            this._trigger = new Trigger(this._iframe, this.model);
-            this._popup = new Popup(this._iframe, this.model);
-            this._audio = new Audio(this._iframe, this.model);
+            this._trigger = new Trigger(this._iframe, this._model);
+            this._popup = new Popup(this._iframe, this._model);
+            this._audio = new Audio(this._iframe, this._model);
             this._trigger.setClickListener(onTriggerClicked);
             this.adjustSize();
             bindEvents();
-            elementsIntents.applyViewCondition(this.model.view_condition, () => {
+            elementsIntents.applyViewCondition(this._model.view_condition, () => {
               this.show();
-              if (this.model.notification_delay > 0) {
+              if (this._model.notification_delay > 0) {
                 setTimeout(() => {
                   this.notify();
-                }, 1000 * this.model.notification_delay);
+                }, 1000 * this._model.notification_delay);
               } else {
                 this.notify();
               }
@@ -410,7 +414,7 @@ hellobar.defineModule('elements.class.alert',
       cssClasses() {
         const that = this;
         return {
-          brightness: () => coloring.colorIsBright(that.model.background_color) ? 'light' : 'dark'
+          brightness: () => coloring.colorIsBright(that._model.background_color) ? 'light' : 'dark'
         };
       }
 
