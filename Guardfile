@@ -1,3 +1,4 @@
+ignore /editor/, /public/
 # Only watch a subset of directories
 directories %w[app config lib spec]
 
