@@ -42,4 +42,20 @@ describe RefundBill do
       expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
     end
   end
+
+  context 'when refund amount is 0' do
+    let(:amount) { 0 }
+
+    it 'raises InvalidRefund' do
+      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Refund amount cannot be 0'
+    end
+  end
+
+  context 'when payment method is missing' do
+    before { allow(bill.subscription).to receive(:payment_method).and_return(nil) }
+
+    it 'raises MissingPaymentMethod' do
+      expect { service.call }.to raise_error RefundBill::MissingPaymentMethod, 'Could not find payment method'
+    end
+  end
 end
