@@ -399,6 +399,7 @@ hellobar.defineModule('elements.class.alert',
           // No notification for preview mode
           return;
         }
+        elementsConversion.viewed(this);
         this._audio.play();
         this._trigger.animate();
       }
