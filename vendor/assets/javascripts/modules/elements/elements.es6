@@ -169,14 +169,13 @@ hellobar.defineModule('elements',
           createAndAddToPage(siteElements[i]);
         }
       };
-      var siteElements = [];
       // If a specific element has already been set, use it
       // Otherwise use the tradition apply rules method
       var siteElement = elementsRules.getFixedSiteElement();
       if (siteElement) {
         processSiteElements([siteElement]);
       } else {
-        siteElements = elementsRules.applyRules().then((siteElements) => processSiteElements(siteElements));
+        elementsRules.applyRules().then((siteElements) => processSiteElements(siteElements));
       }
 
     }

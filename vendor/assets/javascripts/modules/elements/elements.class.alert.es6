@@ -56,7 +56,7 @@ hellobar.defineModule('elements.class.alert',
 
       adjustSize() {
         const applyPlacement = () => {
-          const offset = geometry.offset + 'px';
+          const offset = preview.isActive() ? (geometry.offset + 'px') : 0;
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
               left: offset,
@@ -75,7 +75,14 @@ hellobar.defineModule('elements.class.alert',
           };
           (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
         };
+        const applyBorder = () => {
+          const border = (this._model.trigger_color && (this._model.trigger_color.toLowerCase() === 'ffffff')) ?
+            `1px solid #${this._model.text_color}` :
+            'none';
+          dom.setStyles(this._domNode, {border});
+        };
         applyPlacement();
+        applyBorder();
       }
 
       animate() {
@@ -179,15 +186,17 @@ hellobar.defineModule('elements.class.alert',
     }
 
     function adjustIFrameForPreview(iframe) {
-      iframe.style.display = 'block';
-      iframe.style.position = 'absolute';
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.maxHeight = 'none';
-      iframe.style.top = 0;
-      iframe.style.bottom = 0;
-      iframe.style.left = 0;
-      iframe.style.right = 0;
+      dom.setStyles(iframe, {
+        display: 'block',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        maxHeight: 'none',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+      });
     }
 
     function adjustIFrameForSite(iframe, alertElement) {
@@ -197,14 +206,18 @@ hellobar.defineModule('elements.class.alert',
       const forVisible = () => {
         const offset = geometry.offset + 'px';
         const maxPopupWidth = geometry.maxPopupSize + 'px';
-        const triggerWidth = geometry.triggerSize + 'px';
+        // Add border thickness to trigger size
+        const triggerWidth = (geometry.triggerSize + 2) + 'px';
         dom.setStyles(iframe, {
+          display: 'block',
+          position: 'fixed',
           left: placement === 'bottom-right' ? 'auto' : offset,
           right: placement === 'bottom-right' ? offset : 'auto',
           width: popupIsVisible ? maxPopupWidth : triggerWidth,
           top: 'auto',
           bottom: offset,
-          height: popupIsVisible ? window.innerHeight : triggerWidth
+          height: popupIsVisible ? window.innerHeight + 'px' : triggerWidth,
+          border: 'none'
         });
       };
       const forHidden = () => {
@@ -269,7 +282,6 @@ hellobar.defineModule('elements.class.alert',
           } else {
             this.showPopup();
           }
-          this._isPopupVisible = !this._isPopupVisible;
         };
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
@@ -278,7 +290,7 @@ hellobar.defineModule('elements.class.alert',
             populateIFrame(this._iframe, this._css, html());
             configureIFrame(this._iframe, this.model);
             this._iframe.contentWindow.hellobar = hellobar;
-            dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
+            preview.isActive() && dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
             this.model.theme && dom.addClass(this._iframe.contentDocument.body, this.model.theme.id);
             addCdnResources(this._iframe.contentDocument);
             this._trigger = new Trigger(this._iframe, this.model);
@@ -337,6 +349,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       showPopup() {
+        this._isPopupVisible = true;
         this._trigger.showCloseIcon();
         dom.showElement(this._popupContainerDomNode(), 'block');
         this.adjustSize();
@@ -344,6 +357,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       hidePopup() {
+        this._isPopupVisible = false;
         this._trigger.showMainIcon();
         dom.hideElement(this._popupContainerDomNode(), 'block');
         this.adjustSize();
