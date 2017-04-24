@@ -148,6 +148,28 @@ hellobar.defineModule('elements.class.alert',
       }
     }
 
+    class ConversionHelper {
+      constructor(alertElement) {
+        this._element = alertElement;
+        this._wasConverted = false;
+        this._wasViewed = false;
+      }
+      converted() {
+        if (!this._wasConverted) {
+          elementsConversion.converted(this._element);
+          this._wasConverted = true;
+        }
+      }
+      viewed() {
+        if (!this._wasViewed) {
+          elementsConversion.viewed(this._element);
+          this._wasViewed = true;
+        }
+      }
+    }
+
+    // ----- A few iframe-related functions ------------------------
+
     const iframeId = (() => {
       let index = 1;
       return () => site.secret() + '-container' + (index++);
@@ -254,7 +276,7 @@ hellobar.defineModule('elements.class.alert',
         this._isPopupVisible = false;
         this._isVisible = false;
         this._onCtaClicked = (evt) => {
-          elementsConversion.converted(this);
+          this._conversionHelper.converted();
           evt.preventDefault();
           evt.stopPropagation();
         };
@@ -304,6 +326,7 @@ hellobar.defineModule('elements.class.alert',
             this._trigger = new Trigger(this._iframe, this._model);
             this._popup = new Popup(this._iframe, this._model);
             this._audio = new Audio(this._iframe, this._model);
+            this._conversionHelper = new ConversionHelper(this);
             this._trigger.setClickListener(onTriggerClicked);
             this.adjustSize();
             bindEvents();
@@ -361,6 +384,7 @@ hellobar.defineModule('elements.class.alert',
         this._trigger.showCloseIcon();
         dom.showElement(this._popupContainerDomNode(), 'block');
         this.adjustSize();
+        this._conversionHelper.viewed();
         this.onShowPopup && this.onShowPopup();
       }
 
