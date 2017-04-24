@@ -3,10 +3,17 @@ FactoryGirl.define do
     amount 10
     subscription
     bill_at Time.current
+    start_date { 1.week.ago }
+    end_date { 1.week.from_now }
 
     factory :pro_bill do
       amount Subscription::Pro.defaults[:monthly_amount]
       subscription { create :pro_subscription }
+
+      after :create do |bill|
+        create :billing_attempt, :success, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+        bill.reload
+      end
     end
 
     factory :free_bill do
@@ -24,9 +31,13 @@ FactoryGirl.define do
         bill.reload
       end
     end
-  end
 
-  factory :recurring_bill, parent: :bill, class: 'Bill::Recurring' do
+    factory :recurring_bill, class: 'Bill::Recurring' do
+    end
+
+    factory :refund_bill, class: 'Bill::Refund' do
+      amount(-10)
+    end
   end
 
   trait :paid do
@@ -39,5 +50,9 @@ FactoryGirl.define do
 
   trait :voided do
     status :voided
+  end
+
+  trait :pending do
+    status :pending
   end
 end
