@@ -21,9 +21,9 @@ class Admin::BillsController < ApplicationController
     bill = Bill.find(params[:bill_id])
     begin
       amount = params[:bill_recurring][:amount].to_f
-      bill.refund!(nil, amount)
+      RefundBill.new(bill, amount).call
       flash[:success] = "Refund successful: Refunded #{ amount } of #{ bill.amount }."
-    rescue BillingAttempt::InvalidRefund, Bill::InvalidBillingAmount => e
+    rescue RefundBill::InvalidRefund, Bill::InvalidBillingAmount => e
       flash[:error] = "Refund error: #{ e.message }"
     end
 

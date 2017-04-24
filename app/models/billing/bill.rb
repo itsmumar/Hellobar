@@ -119,7 +119,7 @@ class Bill < ActiveRecord::Base
   end
 
   def successful_billing_attempt
-    billing_attempts.find(&:success?)
+    billing_attempts.success.first
   end
 
   # Can optionally specify a partial amount or description
