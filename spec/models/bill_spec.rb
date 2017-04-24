@@ -99,7 +99,7 @@ describe Bill do
 
   describe Bill::Recurring do
     it 'should create the next bill once paid' do
-      subscription = create(:pro_subscription)
+      subscription = create(:subscription, :pro)
       Bill.destroy_all
       expect(subscription.bills(true).length).to eq(0)
       expect(subscription).to be_monthly
@@ -126,7 +126,7 @@ describe Bill do
     end
 
     it 'should not be affected by a refund' do
-      subscription = create(:pro_subscription)
+      subscription = create(:subscription, :pro)
       Bill.destroy_all
       expect(subscription.bills(true).length).to eq(0)
       expect(subscription).to be_monthly
@@ -233,16 +233,15 @@ describe Bill do
 
     it 'discounts to the appropriate tier' do
       user = create(:user)
-      bills = []
-
-      35.times do
-        bill = create(:pro_bill, status: :paid)
-        bill.site.users << user
-        user.reload
-        bill.subscription.payment_method.update(user: user)
-        bill.update(discount: bill.calculate_discount)
-        bills << bill
-      end
+      bills =
+        Array.new(350) do
+          bill = create(:pro_bill, status: :paid)
+          bill.site.users << user
+          user.reload
+          bill.subscription.payment_method.update(user: user)
+          bill.update(discount: bill.calculate_discount)
+          bill
+        end
 
       expected = []
       5.times { expected << 0 }

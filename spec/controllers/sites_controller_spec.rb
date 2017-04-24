@@ -262,7 +262,7 @@ describe SitesController do
 
     it 'downgrades a site to free' do
       stub_current_user(user)
-      create(:pro_subscription, site: site)
+      create(:subscription, :pro, site: site)
 
       put :downgrade, id: site.id
 
