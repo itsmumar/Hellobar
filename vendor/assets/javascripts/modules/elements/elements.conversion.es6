@@ -6,7 +6,7 @@ hellobar.defineModule('elements.conversion',
 
     // Called when a conversion happens (e.g. link clicked, email form filled out)
     function converted(siteElement, callback) {
-      const siteElementModel = siteElement.model ? siteElement.model : siteElement;
+      const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
       const id = siteElementModel.id;
       const gaEventType = () => siteElementModel.subtype + '_conversion';
       var conversionKey = getConversionKey(siteElementModel);
@@ -38,7 +38,7 @@ hellobar.defineModule('elements.conversion',
 
     // Called when the siteElement is viewed
     function viewed(siteElement) {
-      const siteElementModel = siteElement.model ? siteElement.model : siteElement;
+      const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
       const id = siteElementModel.id;
       // Track number of views if not yet converted for this site element
       if (!didConvert(siteElementModel)) {
