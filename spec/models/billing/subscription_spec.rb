@@ -243,7 +243,7 @@ describe Subscription do
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
       # Should still have pro cabalities
@@ -461,7 +461,7 @@ describe Site do
       success, bill1 = @site.change_subscription(@pro, @payment_method)
       expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@pro)
-      bill1.refund!
+      RefundBill.new(bill1).call
       success, bill2 = @site.change_subscription(@enterprise, @payment_method)
       expect(success).to be_truthy
       expect(bill2).to be_paid
@@ -475,7 +475,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
 
@@ -495,7 +495,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
 

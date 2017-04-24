@@ -4,7 +4,7 @@ class RefundBill
 
   # @param [Bill::Recurring] bill
   # @param [Float] amount, default bill.amount
-  def initialize(bill, amount = bill.amount)
+  def initialize(bill, amount: bill.amount)
     @bill = bill
     @amount = amount.abs * -1 # Refunds are always negative
   end

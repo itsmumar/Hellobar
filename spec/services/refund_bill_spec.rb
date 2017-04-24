@@ -1,8 +1,9 @@
 describe RefundBill do
   let(:amount) { bill.amount }
   let(:bill) { create :pro_bill }
-  let!(:service) { described_class.new(bill, amount) }
+  let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
+  let(:latest_billing_attempt) { BillingAttempt.last }
 
   it 'returns array of Bill::Refund and BillingAttempt' do
     expect(service.call).to match_array [instance_of(Bill::Refund), instance_of(BillingAttempt)]
@@ -25,6 +26,18 @@ describe RefundBill do
 
   it 'creates BillingAttempt' do
     expect { service.call }.to change(BillingAttempt, :count).by(1)
+
+    expect(latest_billing_attempt.bill).to eql latest_refund
+    expect(latest_billing_attempt.payment_method_details).to eql bill.successful_billing_attempt.payment_method_details
+    expect(latest_billing_attempt.status).to eql :success
+    expect(latest_billing_attempt.response).to include 'fake-refund-id-'
+  end
+
+  it 'calls refund on payment_methods_details' do
+    expect_any_instance_of(AlwaysSuccessfulPaymentMethodDetails)
+      .to receive(:refund).with(amount, bill.successful_billing_attempt.response).and_return([true, 'response'])
+
+    service.call
   end
 
   context 'without successful billing attempt' do
@@ -48,6 +61,15 @@ describe RefundBill do
 
     it 'raises InvalidRefund' do
       expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Refund amount cannot be 0'
+    end
+  end
+
+  context 'when refund amount is less than bill amount' do
+    let(:amount) { bill.amount / 2 }
+
+    it 'refunds successfully' do
+      service.call
+      expect(latest_refund.amount).to eql(-amount)
     end
   end
 

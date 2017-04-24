@@ -128,7 +128,7 @@ describe Site do
       it 'returns Free subscription', :freeze do
         change_subscription(Subscription::Free)
         _, bill = change_subscription(Subscription::Pro)
-        bill.refund!
+        RefundBill.new(bill).call
 
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end
