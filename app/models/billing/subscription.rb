@@ -14,13 +14,8 @@ class Subscription < ActiveRecord::Base
 
   enum schedule: %i[monthly yearly]
 
-  scope :paid, lambda {
-    joins(:bills).merge(Bill.paid).where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.now)
-  }
-
-  scope :active, lambda {
-    paid.group('subscriptions.id').having('sum(bills.amount) > 0 OR type in (?)', [Free, ProComped])
-  }
+  scope :paid, -> { joins(:bills).merge(Bill.active) }
+  scope :active, -> { paid.merge(Bill.without_refunds) }
 
   class << self
     def values_for(_site)

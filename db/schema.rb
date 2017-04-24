@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170421104922) do
+ActiveRecord::Schema.define(version: 20170424104821) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -115,8 +115,10 @@ ActiveRecord::Schema.define(version: 20170421104922) do
     t.datetime "created_at"
     t.decimal  "discount",             precision: 10, scale: 0, default: 0
     t.decimal  "base_amount",          precision: 10, scale: 0
+    t.integer  "refund_id"
   end
 
+  add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree

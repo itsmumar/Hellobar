@@ -2,6 +2,8 @@ require 'billing_log'
 
 class Bill
   class Refund < self
+    has_one :refunded_bill, class_name: 'Bill'
+
     # Refunds must be a negative amount
     def check_amount
       raise InvalidBillingAmount, "Amount must be negative. It was #{ amount.to_f }" if amount > 0

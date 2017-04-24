@@ -12,6 +12,7 @@ class Bill < ActiveRecord::Base
   serialize :metadata, JSON
 
   belongs_to :subscription, inverse_of: :bills
+  belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
 
@@ -23,6 +24,9 @@ class Bill < ActiveRecord::Base
   before_validation :set_base_amount, :check_amount
 
   enum status: %i[pending paid voided]
+
+  scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.now) }
+  scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
@@ -89,6 +93,10 @@ class Bill < ActiveRecord::Base
     bill_at
   end
 
+  def refunded?
+    refund.paid?
+  end
+
   def past_due?(payment_method = nil)
     Time.now > due_at(payment_method)
   end
@@ -118,11 +126,6 @@ class Bill < ActiveRecord::Base
 
   def successful_billing_attempt
     billing_attempts.success.first
-  end
-
-  # Can optionally specify a partial amount or description
-  def refund!(description = nil, amount = nil)
-    successful_billing_attempt.refund!(description, amount)
   end
 
   def calculate_discount

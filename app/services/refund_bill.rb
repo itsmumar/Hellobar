@@ -52,7 +52,8 @@ class RefundBill
       bill_at: Time.current,
       start_date: Time.current,
       end_date: bill.end_date,
-      refunded_billing_attempt: successful_billing_attempt
+      refunded_billing_attempt: successful_billing_attempt,
+      refunded_bill: bill
     )
   end
 
