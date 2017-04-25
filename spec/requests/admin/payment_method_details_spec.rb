@@ -21,7 +21,7 @@ describe 'PaymentMethodDetails requests' do
       allow_any_instance_of(ApplicationController).to receive(:require_admin).and_return admin
     end
 
-    describe 'DELETE :destroy' do
+    describe 'DELETE :destroy', :freeze do
       it 'deletes payment method and the token associated with the details' do
         expect(payment_method_details.data['token']).to be_present
 
@@ -31,7 +31,7 @@ describe 'PaymentMethodDetails requests' do
         expect(response.redirect_url).to include admin_users_path
 
         expect(payment_method_details.reload.data['token']).to be_nil
-        expect(payment_method.reload.deleted_at).to be_within(1.second).of Time.current
+        expect(payment_method.reload.deleted_at).to eql Time.current
       end
     end
   end
