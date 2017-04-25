@@ -22,16 +22,17 @@ Teaspoon.configure do |config|
     suite.helper = 'spec_helper'
     suite.boot_partial = 'boot'
     suite.body_partial = 'body'
+    suite.matcher = 'spec/javascripts/hellobar_generator/**/*_spec.{js,es6}'
   end
 
   # Generator suite includes everything related to generated hellobar used by end-users
   config.suite :generator do |suite|
-    suite.matcher = 'spec/javascripts/hellobar_generator/**/*_spec.{js,js.coffee,coffee}'
+    suite.matcher = 'spec/javascripts/hellobar_generator/**/*_spec.{js,js.coffee,coffee,es6}'
   end
 
   # Project suite includes everything related to hellobar.com project, except for scripts generation
   config.suite :project do |suite|
-    suite.matcher = 'spec/javascripts/hellobar_project/**/*_spec.{js,js.coffee,coffee}'
+    suite.matcher = 'spec/javascripts/hellobar_project/**/*_spec.{js,js.coffee,coffee,es6}'
   end
 
   # CONSOLE RUNNER SPECIFIC
