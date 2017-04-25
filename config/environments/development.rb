@@ -1,6 +1,4 @@
 Rails.application.configure do
-  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -37,7 +35,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # paperclip configuration for s3
+  # Paperclip configuration (S3)
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
@@ -51,6 +49,7 @@ Rails.application.configure do
     }
   end
 
+  # Pony emailing configuration
   Pony.options = {
     from: 'Localhost: Hello Bar Support <support@localhost.com>',
     via: :smtp,
@@ -61,4 +60,7 @@ Rails.application.configure do
       domain: 'localhost'
     }
   }
+
+  # Roadie emails
+  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
 end

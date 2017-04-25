@@ -1,8 +1,6 @@
 require './config/initializers/settings'
 
 Rails.application.configure do
-  config.roadie.url_options = { host: 'www.hellobar.com', scheme: 'https' }
-
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -87,8 +85,10 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # Enforce SSL
   config.middleware.use Rack::SslEnforcer, only_hosts: ['alpha.hellobar.com', 'www.hellobar.com']
 
+  # Paperclip configuration (S3)
   settings = YAML.load_file('config/settings.yml')
   if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
     config.paperclip_defaults = {
@@ -101,4 +101,7 @@ Rails.application.configure do
       }
     }
   end
+
+  # Roadie emails
+  config.roadie.url_options = { host: 'www.hellobar.com', scheme: 'https' }
 end
