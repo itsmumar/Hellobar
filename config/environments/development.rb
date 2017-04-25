@@ -35,20 +35,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # Paperclip configuration (S3)
-  settings = YAML.load_file('config/settings.yml')
-  if settings['s3_bucket'] && settings['aws_access_key_id'] && settings['aws_secret_access_key']
-    config.paperclip_defaults = {
-      storage: :s3,
-      s3_protocol: :https,
-      s3_credentials: {
-        bucket: settings['s3_bucket'],
-        access_key_id: settings['aws_access_key_id'],
-        secret_access_key: settings['aws_secret_access_key']
-      }
-    }
-  end
-
   # Pony emailing configuration
   Pony.options = {
     from: 'Localhost: Hello Bar Support <support@localhost.com>',
