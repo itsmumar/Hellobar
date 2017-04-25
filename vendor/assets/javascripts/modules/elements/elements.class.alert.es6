@@ -1,9 +1,9 @@
 hellobar.defineModule('elements.class.alert',
   ['hellobar', 'base.dom', 'base.cdn', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating',
-    'base.environment', 'base.preview', 'base.coloring',
+    'base.preview', 'base.coloring',
     'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion'],
   function (hellobar, dom, cdn, cdnLibraries, site, format, templating,
-            environment, preview, coloring,
+            preview, coloring,
             elementsInjection, elementsVisibility, elementsIntents, elementsConversion) {
 
     const geometry = {
@@ -434,8 +434,10 @@ hellobar.defineModule('elements.class.alert',
 
       remove() {
         const unbindEvents = () => {
-          const ctaElement = this._iframe.contentDocument.querySelector('.js-cta');
-          ctaElement && ctaElement.removeEventListener('click', this._onCtaClicked);
+          if (this._iframe) {
+            const ctaElement = this._iframe.contentDocument.querySelector('.js-cta');
+            ctaElement && ctaElement.removeEventListener('click', this._onCtaClicked);
+          }
         };
         unbindEvents();
         this._trigger && this._trigger.remove();

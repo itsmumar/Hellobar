@@ -25,7 +25,8 @@ describe('Module elements', function () {
         'elements.rules': true,
         'elements.class': ElementClass,
         'elements.class.bar': ElementClass,
-        'elements.class.slider': ElementClass
+        'elements.class.slider': ElementClass,
+        'elements.class.alert': ElementClass
       }
     });
   });
