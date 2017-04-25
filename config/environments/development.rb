@@ -34,7 +34,4 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-
-  # Roadie emails
-  config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
 end

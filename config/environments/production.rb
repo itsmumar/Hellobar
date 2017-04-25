@@ -86,9 +86,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enforce SSL
-  config.middleware.use Rack::SslEnforcer, only_hosts: ['alpha.hellobar.com', 'www.hellobar.com']
-
-
-  # Roadie emails
-  config.roadie.url_options = { host: 'www.hellobar.com', scheme: 'https' }
+  config.middleware.use Rack::SslEnforcer, only_hosts: [Hellobar::Settings[:host]]
 end
