@@ -28,7 +28,6 @@ hellobar.defineModule('base.metainfo',
     return {
       configuration: () => configuration,
       info: () => {
-        console.clear()
         const info = getInfo();
         console.info(`version ${info.version} was generated at ${info.timestamp} for site#${info.siteId} ${info.siteUrl}`);
 
