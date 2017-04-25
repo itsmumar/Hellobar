@@ -1,5 +1,8 @@
 # Read more about Teaspoon configuration: https://github.com/modeset/teaspoon/wiki/Teaspoon-Configuration
 
+require 'teaspoon/jasmine/framework'
+Teaspoon::Jasmine::Framework.register_version '2.6', 'jasmine/2.6.js', dependencies: ['teaspoon-jasmine2.js']
+
 Teaspoon.configure do |config|
   config.mount_at = '/teaspoon'
   config.root = nil
@@ -15,7 +18,7 @@ Teaspoon.configure do |config|
 
   # Default suite
   config.suite do |suite|
-    suite.use_framework :jasmine
+    suite.use_framework :jasmine, '2.6'
     suite.helper = 'spec_helper'
     suite.boot_partial = 'boot'
     suite.body_partial = 'body'
