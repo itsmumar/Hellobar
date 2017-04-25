@@ -35,6 +35,13 @@ FactoryGirl.define do
       initialize_with { Subscription::ProblemWithPayment.new }
     end
 
+    trait :with_bill do
+      after :create do |subscription|
+        create(:recurring_bill, :paid, subscription: subscription)
+        subscription.reload
+      end
+    end
+
     trait :with_bills do
       after :create do |subscription|
         create_list :bill, 2, subscription: subscription
