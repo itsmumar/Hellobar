@@ -637,6 +637,10 @@ hellobar.defineModule('elements.class',
         return this;
       }
 
+      contentDocument() {
+        return this.w.contentDocument;
+      }
+
     }
 
     return SiteElement;

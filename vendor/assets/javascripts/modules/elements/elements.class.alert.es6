@@ -290,6 +290,10 @@ hellobar.defineModule('elements.class.alert',
         return this._model.id;
       }
 
+      contentDocument() {
+        return this._iframe.contentDocument;
+      }
+
       attach() {
         const html = () => {
           const template = templating.getTemplateByName(this._model.template_name);

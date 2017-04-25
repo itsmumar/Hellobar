@@ -80,8 +80,6 @@ export default Ember.Controller.extend({
   elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
   canUseCallGoal: Ember.computed.not('elementTypeIsAlert'),
   canUseSocialGoal: Ember.computed.not('elementTypeIsAlert'),
-  // TODO this is temporary, until email collecting is implemented for alert elements
-  canUseEmailGoal: Ember.computed.not('elementTypeIsAlert'),
 
   goalListCssClasses: (function () {
     let classes = ['step-link-wrapper'];
