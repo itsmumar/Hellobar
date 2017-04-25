@@ -190,7 +190,7 @@ hellobar.defineModule('elements',
         }
       },
       introspect: () => ({
-        allElements: () => siteElementsOnPage
+        elementsOnPage: () => siteElementsOnPage
       }),
       createAndAddToPage,
       removeAllSiteElements,
