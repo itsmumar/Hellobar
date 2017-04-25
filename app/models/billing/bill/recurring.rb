@@ -9,7 +9,7 @@ class Bill
     end
 
     def renewal_date
-      raise 'can not calculate renewal date without start_date' unless start_date
+      raise 'cannot calculate renewal date without start_date' unless start_date
       subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
     end
 
