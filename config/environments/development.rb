@@ -35,18 +35,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # Pony emailing configuration
-  Pony.options = {
-    from: 'Localhost: Hello Bar Support <support@localhost.com>',
-    via: :smtp,
-    via_options: {
-      address: '127.0.0.1',
-      port: 1025,
-      authentication: :plain,
-      domain: 'localhost'
-    }
-  }
-
   # Roadie emails
   config.roadie.url_options = { host: 'localhost', scheme: 'http', port: '3000' }
 end
