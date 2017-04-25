@@ -234,7 +234,7 @@ describe Bill do
     it 'discounts to the appropriate tier' do
       user = create(:user)
       bills =
-        Array.new(350) do
+        Array.new(35) do
           bill = create(:pro_bill, status: :paid)
           bill.site.users << user
           user.reload
