@@ -9,6 +9,11 @@ require 'sinatra'
 # app from the internet
 set :bind, '0.0.0.0'
 
+# Explicitly set Sintatra's public folder so that image uploads are served
+# and displayed in bars
+set :public_folder, 'public/'
+
+# Route all traffic to test_site.html
 get '*' do
   File.read('public/test_site.html')
 end
