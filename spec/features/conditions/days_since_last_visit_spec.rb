@@ -5,7 +5,7 @@ feature 'Days since last visit condition', js: true do
     page.execute_script("
       var d = new Date();
       d.setDate(d.getDate() - (#{ days }));
-      hellobar('visitor').introspect().setData('lv', (d.getTime())/1000);
+      hellobar('visitor').inspect().setData('lv', (d.getTime())/1000);
     ")
   end
 
