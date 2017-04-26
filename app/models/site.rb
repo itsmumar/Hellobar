@@ -406,7 +406,7 @@ class Site < ActiveRecord::Base
   # change_subscription
   def calculate_bill(subscription, trial_period = nil)
     raise MissingSubscription unless subscription
-    CalculateBill.new(self, subscription, trial_period).call
+    CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
   end
 
   def do_generate_script_and_check_installation(options = {})
