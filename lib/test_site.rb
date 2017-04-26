@@ -10,5 +10,5 @@ require 'sinatra'
 set :bind, '0.0.0.0'
 
 get '*' do
-  File.read('test_site/public/test.html')
+  File.read('public/test_site.html')
 end
