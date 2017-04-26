@@ -442,7 +442,7 @@ hellobar.defineModule('elements.rules',
 
     return {
       configuration: () => configuration,
-      introspect: () => ({
+      inspect: () => ({
         allRules: () => rules,
         allElements: () => {
           return rules.map((rule) => rule.siteElements).reduce((result, elements) => result.concat(elements), []);

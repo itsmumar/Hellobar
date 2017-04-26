@@ -24,7 +24,7 @@ describe('Module tracking.external.googleAnalytics', function () {
   });
 
   it('is available if gaProvider is specified', function () {
-    expect(module.introspect().available()).toEqual(true);
+    expect(module.inspect().available()).toEqual(true);
   });
 
 });

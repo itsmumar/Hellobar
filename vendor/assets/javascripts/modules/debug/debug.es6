@@ -1,9 +1,9 @@
 hellobar.defineModule('debug',
   ['hellobar', 'elements', 'elements.rules', 'base.site', 'base.metainfo'],
   function (hellobar, elements, rules, site, metainfo) {
-    const elementsOnPage = () => elements.introspect().elementsOnPage();
-    const allElements = () => rules.introspect().allElements();
-    const allRules = () => rules.introspect().allRules();
+    const elementsOnPage = () => elements.inspect().elementsOnPage();
+    const allElements = () => rules.inspect().allElements();
+    const allRules = () => rules.inspect().allRules();
     const elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement', 'closable', 'show_branding',
       'background_color', 'link_color', 'text_color', 'button_color', 'primary_color', 'trigger_color'

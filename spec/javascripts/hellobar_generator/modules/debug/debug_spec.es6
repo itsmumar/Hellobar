@@ -17,10 +17,10 @@ describe('Module debug', () => {
     module = hellobar('debug', {
       dependencies: {
         elements: {
-          introspect: () => jasmine.createSpyObj('elements', { elementsOnPage: elementsOnPage })
+          inspect: () => jasmine.createSpyObj('elements', { elementsOnPage: elementsOnPage })
         },
         'elements.rules': {
-          introspect: () => jasmine.createSpyObj('elements.rules', { allElements: allElements, allRules: allRules })
+          inspect: () => jasmine.createSpyObj('elements.rules', { allElements: allElements, allRules: allRules })
         },
         'base.site': jasmine.createSpyObj('base.site', { siteId: 999, siteUrl: 'http://example.com' }),
         'base.metainfo': jasmine.createSpyObj('base.metainfo', {

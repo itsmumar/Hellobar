@@ -35,7 +35,7 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
     send,
-    introspect: () => ({
+    inspect: () => ({
       ga,
       available() {
         return typeof ga() === 'function';
