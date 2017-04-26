@@ -168,16 +168,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   def save_to_cybersource
     user = nil
     user = payment_method.user if payment_method && payment_method.user
-    # See if there is a previous token
-    previous_token = nil
-    if payment_method
-      payment_method.details(true).each do |details|
-        if details.is_a?(CyberSourceCreditCard)
-          previous_token = details.data['token'] if details.data['token']
-        end
-      end
-    end
-    response = nil
+
     # Note: we don't want to give CyberSource our customer's email addresses,
     # which is why we use the generic userXXX@hellobar.com format
     email = "user#{ user ? user.id : 'NA' }@hellobar.com"
@@ -190,32 +181,55 @@ class CyberSourceCreditCard < PaymentMethodDetails
     sanitized_data.delete('number')
     sanitized_data.delete('verification_value')
 
-    begin
-      if previous_token
-        # Update the profile
-        response = HB::CyberSource.gateway.update(format_token(previous_token), card, params)
-        audit << "Updated previous_token: #{ previous_token.inspect } with #{ sanitized_data.inspect } response: #{ response.inspect }"
-      else
-        # Create a new profile
-        response = HB::CyberSource.gateway.store(card, params)
-        audit << "Create new token with #{ sanitized_data.inspect } response: #{ response.inspect }"
-      end
-      unless response.success?
-        if (field = response.params['invalidField'])
-          raise 'Invalid credit card' if field == 'c:cardType'
+    token = create_or_update_card(params, sanitized_data)
 
-          raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
-        end
-        raise response.message
-      end
-    rescue => e
-      audit << "Error tokenizing with #{ sanitized_data.inspect } response: #{ response.inspect } error: #{ e.message }"
-      raise
-    end
     data['number'] = data.delete('sanitized_number')
     data.delete('verification_value')
-    data['token'] = response.params['subscriptionID']
+    data['token'] = token
     # Clear the card attribute so it clears the cache of the number
     @card = nil
+  end
+
+  def previous_token
+    return unless payment_method
+
+    @token ||=
+      begin
+        token = nil
+        payment_method.details(true).each do |details|
+          if details.is_a?(CyberSourceCreditCard)
+            token = details.data['token'] if details.data['token']
+          end
+        end
+        token
+      end
+  end
+
+  def create_or_update_card(params, sanitized_data)
+    response = store_or_update_request(params, sanitized_data)
+    return response.params['subscriptionID'] if response.success?
+
+    if (field = response.params['invalidField'])
+      raise 'Invalid credit card' if field == 'c:cardType'
+      raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
+    end
+    raise response.message
+  rescue => e
+    audit << "Error tokenizing with #{ sanitized_data.inspect } response: #{ response.inspect } error: #{ e.message }"
+    raise
+  end
+
+  def store_or_update_request(params, sanitized_data)
+    if previous_token
+      # Update the profile
+      HB::CyberSource.gateway.update(format_token(previous_token), card, params).tap do |response|
+        audit << "Updated previous_token: #{ previous_token.inspect } with #{ sanitized_data.inspect } response: #{ response.inspect }"
+      end
+    else
+      # Create a new profile
+      HB::CyberSource.gateway.store(card, params).tap do |response|
+        audit << "Create new token with #{ sanitized_data.inspect } response: #{ response.inspect }"
+      end
+    end
   end
 end
