@@ -23,7 +23,7 @@ hellobar.defineModule('inspect',
 
     return {
       printAll: () => {
-        let info = getInfo();
+        const info = getInfo();
 
         console.info(`${metainfo.info()} for site#${info.siteId} ${info.siteUrl}`);
 
