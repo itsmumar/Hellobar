@@ -42,6 +42,12 @@ FactoryGirl.define do
       end
     end
 
+    trait :enterprise do
+      after(:create) do |site|
+        create(:enterprise_subscription, site: site, user: site.users.first)
+      end
+    end
+
     trait :pro_managed do
       after(:create) do |site|
         create(:subscription, :pro_managed, site: site, user: site.users.first)
