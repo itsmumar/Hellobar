@@ -2,7 +2,7 @@ require 'billing_log'
 
 class Bill
   class Refund < self
-    has_one :refunded_bill, class_name: 'Bill'
+    has_one :refunded_bill, class_name: 'Bill', dependent: :restrict_with_exception
 
     # Refunds must be a negative amount
     def check_amount
