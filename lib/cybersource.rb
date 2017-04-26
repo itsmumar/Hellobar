@@ -86,16 +86,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
     write_attribute(:data, sanitized_data)
   end
 
-  # Shouldn't really need to get this directly
-  def cybersource_profile
-    unless @cybersource_profile
-      response = HB::CyberSource.gateway.retrieve(formatted_token, order_id: order_id)
-      raise response.message unless response.success?
-      @cybersource_profile = response.params
-    end
-    @cybersource_profile
-  end
-
   def charge(amount_in_dollars)
     raise 'Can not charge money until saved' unless persisted? && token
     return true, 'Amount was zero' if amount_in_dollars == 0
