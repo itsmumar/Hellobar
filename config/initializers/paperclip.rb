@@ -1,7 +1,6 @@
 require './config/initializers/settings'
 
-# Paperclip configuration (S3)
-if !Rails.env.test? && Hellobar::Settings[:s3_bucket] && Hellobar::Settings[:aws_access_key_id] && Hellobar::Settings[:aws_secret_access_key]
+if Rails.env.production? || Rails.env.staging? || Rails.env.edge?
   Paperclip::Attachment.default_options[:storage] = :s3
   Paperclip::Attachment.default_options[:s3_protocol] = :https
   Paperclip::Attachment.default_options[:s3_credentials] = {
@@ -9,7 +8,9 @@ if !Rails.env.test? && Hellobar::Settings[:s3_bucket] && Hellobar::Settings[:aws
     access_key_id: Hellobar::Settings[:aws_access_key_id],
     secret_access_key: Hellobar::Settings[:aws_secret_access_key]
   }
-else
-  # Tests
-  Paperclip::Attachment.default_options[:path] = ':rails_root/tmp/uploads/:class/:id_partition/:style.:extension'
+elsif Rails.env.development?
+  Paperclip::Attachment.default_options[:path] = ':rails_root/public/:class/:id_partition/:style.:extension'
+  Paperclip::Attachment.default_options[:url] = '/:class/:id_partition/:style.:extension'
+else # Test
+  Paperclip::Attachment.default_options[:path] = ':rails_root/tmp/:class/:id_partition/:style.:extension'
 end
