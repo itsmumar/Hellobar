@@ -8,7 +8,7 @@ class HbTestSite
   end
 
   def self.default_site_id
-    Site.last.id
+    Site.order(updated_at: :desc).first.id
   end
 
   def self.default_path
