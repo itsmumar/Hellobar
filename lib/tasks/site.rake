@@ -31,6 +31,18 @@ namespace :site do
     end
   end
 
+  desc 'Generate static assets for :site_id immediately'
+  task :generate_static_assets, [:site_id] => :environment do |_t, args|
+    Site.preload_for_script.find(args[:site_id]).generate_script(immediately: true)
+  end
+
+  desc 'Generate static assets for :site_id and check installation immediately'
+  task :do_generate_script_and_check_installation, [:site_id] => :environment do |_t, args|
+    site = Site.preload_for_script.find(args[:site_id])
+    site.generate_script(immediately: true)
+    site.script_installed?
+  end
+
   namespace :rules do
     desc 'Make sure all sites have all of the default rule presets'
     task add_presets: :environment do |_t, _args|
