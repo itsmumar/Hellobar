@@ -167,8 +167,6 @@ Rails/Date:
 
 Metrics/AbcSize:
   Max: 60 # ideally 16
-  Exclude:
-    - 'lib/cybersource.rb'
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
