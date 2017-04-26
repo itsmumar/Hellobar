@@ -8,6 +8,7 @@ class Site < ActiveRecord::Base
 
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
+  has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :owners, -> { where(role: 'owner') }, through: :site_memberships
   has_many :users, through: :site_memberships
@@ -16,11 +17,18 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
 
-  has_many :bills, -> { order 'id' }, through: :subscriptions
+  has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
   acts_as_paranoid
+
+  scope :preload_for_script, lambda {
+    preload(
+      :site_elements, :active_site_elements,
+      rules: [{site: :bills}, :conditions, :active_site_elements, :site_elements]
+    )
+  }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -428,13 +436,10 @@ class Site < ActiveRecord::Base
     else
       Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
 
-      site_elements.each do |site_element|
-        next unless site_element.wordpress_bar_id
-        users.each do |user|
-          if user.wordpress_user_id
-            name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-            Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-          end
+      site_elements.wordpress_bars.each do |site_element|
+        users.wordpress_users.each do |user|
+          name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
+          Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
         end
       end
     end
