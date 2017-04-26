@@ -96,7 +96,7 @@ class ScriptGenerator < Mustache
     # 1) Get rid of no_b, b_variation, preview
     # 2) Don't use SiteSerializer here, the code should be moved to model
     {
-      no_b: @site.capabilities.remove_branding? || @options[:preview],
+      no_b: site.capabilities.remove_branding? || @options[:preview],
       b_variation: branding_variation,
       preview: @options[:preview]
     }.merge(SiteSerializer.new(@site).capabilities)
@@ -156,7 +156,7 @@ class ScriptGenerator < Mustache
 
   def external_tracking_json
     external_tracking_events =
-      site.site_elements.active.each_with_object([]) do |site_element, memo|
+      site.active_site_elements.each_with_object([]) do |site_element, memo|
         site_element.external_tracking.each do |event|
           memo << event
         end
@@ -246,7 +246,7 @@ class ScriptGenerator < Mustache
   end
 
   def rules
-    options[:rules] || site.rules.map { |rule| hash_for_rule(rule) }
+    options[:rules] || site_rules.map { |rule| hash_for_rule(rule) }
   end
 
   private
@@ -325,12 +325,12 @@ class ScriptGenerator < Mustache
     elsif options[:render_paused_site_elements]
       rule.site_elements
     else
-      rule.site_elements.active
+      rule.active_site_elements
     end
   end
 
   def all_site_elements
-    site.rules.map { |rule| site_elements_for_rule(rule) }.flatten
+    site_rules.map { |rule| site_elements_for_rule(rule) }.flatten
   end
 
   def element_classes
@@ -339,6 +339,10 @@ class ScriptGenerator < Mustache
 
   def element_themes
     @options[:preview] ? Theme.all : all_site_elements.map(&:theme).compact.uniq
+  end
+
+  def site_rules
+    @site_rules ||= site.rules
   end
 
   # try to render asset from app's assets

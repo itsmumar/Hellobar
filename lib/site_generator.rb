@@ -2,7 +2,7 @@ class SiteGenerator
   attr_reader :full_path, :site
 
   def initialize(site_id, opts = {})
-    @site = Site.find(site_id)
+    @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
     @compress = opts.fetch(:compress, false)
     ScriptGenerator.compile
