@@ -7,4 +7,4 @@
 //= require ./geolocation
 //= require ./tracking
 //= require ./visitor
-//= require ./debug
+//= require ./inspect
