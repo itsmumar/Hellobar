@@ -1,8 +1,8 @@
-hellobar.defineModule('debug',
+hellobar.defineModule('inspect',
   ['hellobar', 'elements', 'elements.rules', 'base.site', 'base.metainfo'],
   function (hellobar, elements, rules, site, metainfo) {
     const elementsOnPage = () => elements.inspect().elementsOnPage();
-    const allElements = () => rules.inspect().allElements();
+    const allElementModels = () => rules.inspect().allElementModels();
     const allRules = () => rules.inspect().allRules();
     const elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement', 'closable', 'show_branding',
@@ -15,20 +15,20 @@ hellobar.defineModule('debug',
         timestamp: metainfo.timestamp(),
         siteId: site.siteId(),
         siteUrl: site.siteUrl(),
-        allElements: allElements(),
+        elements: allElementModels(),
         elementsOnPage: elementsOnPage(),
-        allRules: allRules()
+        rules: allRules()
       }
     };
 
     return {
-      print: () => {
+      printAll: () => {
         let info = getInfo();
 
         console.info(`${metainfo.info()} for site#${info.siteId} ${info.siteUrl}`);
 
-        console.groupCollapsed('allElements:');
-        console.table(allElements(), elementColumns);
+        console.groupCollapsed('allElementModels:');
+        console.table(allElementModels(), elementColumns);
         console.groupEnd();
 
         console.groupCollapsed('elementsOnPage:');
@@ -39,6 +39,6 @@ hellobar.defineModule('debug',
         console.table(allRules());
         console.groupEnd();
       },
-      info: () => getInfo()
+      all: () => getInfo()
     };
   });
