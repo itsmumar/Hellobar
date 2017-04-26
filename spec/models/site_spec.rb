@@ -467,7 +467,7 @@ describe Site do
     let(:subscription) { create(:subscription) }
 
     def bill(trial: nil)
-      subscription.site.send(:calculate_bill, subscription, true, trial)
+      subscription.site.send(:calculate_bill, subscription, trial)
     end
 
     context 'trial_period is specified' do

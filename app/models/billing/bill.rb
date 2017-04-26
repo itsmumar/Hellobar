@@ -24,6 +24,8 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
+  scope :recurring, -> { where(type: Recurring) }
+
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
