@@ -1,4 +1,4 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

@@ -1,4 +1,4 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 
 if defined? Lograge
   Rails.application.configure do

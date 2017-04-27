@@ -1,4 +1,4 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 
 if Rails.env.production? || Rails.env.staging? || Rails.env.edge?
   Paperclip::Attachment.default_options[:storage] = :s3

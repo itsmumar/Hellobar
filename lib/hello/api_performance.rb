@@ -1,4 +1,4 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 require './lib/hello/data_api_helper'
 
 module Hello::DataAPI
