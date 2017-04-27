@@ -37,7 +37,6 @@ unless defined?(Hellobar::Settings)
     main_queue
     maropost_url
     memcached_server
-    rotp_secret_key_base
     s3_bucket
     s3_content_upgrades_bucket
     script_cdn_url

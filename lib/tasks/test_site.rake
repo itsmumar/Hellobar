@@ -1,14 +1,13 @@
 class HbTestSite
-  ROOT = 'test_site'.freeze
-  DEFAULT_FILE = 'public/test.html'.freeze
-  SINATRA_FILE = 'test_site.rb'.freeze
+  DEFAULT_FILE = 'public/test_site.html'.freeze
+  SINATRA_FILE = 'lib/test_site.rb'.freeze
 
   def self.path(relative_path = '')
-    Rails.root.join(ROOT, relative_path)
+    Rails.root.join(relative_path)
   end
 
   def self.default_site_id
-    Site.last.id
+    Site.order(updated_at: :desc).first.id
   end
 
   def self.default_path
@@ -27,17 +26,17 @@ class HbTestSite
   end
 
   def self.run_file
-    path(SINATRA_FILE).to_s
+    path(SINATRA_FILE)
   end
 end
 
 namespace :test_site do
-  desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test.html']"
+  desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test_site.html']"
   task :file, %i[site_id file_path] => :environment do |_t, args|
     HbTestSite.generate(args[:site_id], args[:file_path])
   end
 
-  desc "Creates a test.html file in the test_site sinatra folder\n rake test_site:generate[95]\nDefaults to last site if not passed"
+  desc "Creates a test_site.html file in the public folder\n rake test_site:generate[95]\nDefaults to most recently updated Site if id is not passed"
   task :generate, [:site_id] => :environment do |_t, args|
     puts "Generating #{ HbTestSite.default_path } for site ##{ args[:site_id] }..."
     HbTestSite.generate_default(args[:site_id])
@@ -53,6 +52,6 @@ namespace :test_site do
     end
   end
 
-  desc 'Runs the test site generation and a Sinatra server'
+  desc 'Runs the test site generation and Sinatra server'
   task :run_fresh, [:site_id] => %i[generate run]
 end
