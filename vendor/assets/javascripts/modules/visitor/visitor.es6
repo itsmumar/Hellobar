@@ -198,7 +198,7 @@ hellobar.defineModule('visitor',
         loadVisitorData();
         setDefaultSegments();
       },
-      introspect: () => ({
+      inspect: () => ({
         setData: (key, value, skipEmptyValue) => setVisitorData(key, value, skipEmptyValue)
       }),
       setConverted,

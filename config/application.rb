@@ -8,36 +8,38 @@ Bundler.require(*Rails.groups)
 
 module Hellobar
   class Application < Rails::Application
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration should go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded.
+
+    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
+    # config.time_zone = 'Central Time (US & Canada)'
+
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
+    # config.i18n.default_locale = :de
+
     # Require Hellobar::Settings so that we can use them in this config file
     require Rails.root.join('config', 'initializers', 'settings.rb')
 
     # We'll handle our own errors
     config.exceptions_app = routes
 
-    config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
-    config.autoload_paths += %W[#{ config.root }/lib/queue_worker/]
     # We'd prefer to use initializers to load the files from the /lib
     # directory that we need. This way we have more control over load
     # order and have a convenient place to put other initialization
     # code (config, etc.)
-    # config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
+    config.autoload_paths += %W[#{ config.root }/lib/queue_worker/]
 
+    # Action Mailer
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
-
-    config.sass.preferred_syntax = :sass
     config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }
 
-    config.assets.precompile += ['editor.css', 'static.css', 'admin.css', 'editor/vendor.js', 'editor/application.js', 'ember.js', '*.css.erb', '*.css.sass.erb']
-    config.assets.paths << Rails.root.join('vendor', 'assets')
-    config.assets.paths << Rails.root.join('lib', 'themes')
-    config.assets.paths << Rails.root.join('lib', 'script_generator')
-
+    # Devise
     config.to_prepare do
       Devise::SessionsController.layout proc { |_| action_name == 'new' ? 'static' : 'application' }
-    end
-
-    config.generators do |g|
-      g.factory_girl false
     end
   end
 end

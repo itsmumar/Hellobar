@@ -442,8 +442,11 @@ hellobar.defineModule('elements.rules',
 
     return {
       configuration: () => configuration,
-      introspect: () => ({
-        allRules: () => rules
+      inspect: () => ({
+        allRules: () => rules,
+        allElementModels: () => {
+          return rules.map((rule) => rule.siteElements).reduce((result, elements) => result.concat(elements), []);
+        }
       }),
       applyRules,
       getFixedSiteElement

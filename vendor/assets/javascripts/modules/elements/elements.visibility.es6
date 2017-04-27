@@ -120,14 +120,14 @@ hellobar.defineModule('elements.visibility',
       setVisibilityControlCookie,
       expireVisibilityControlCookie,
       shouldShowElement,
-      introspect: () => ({
+      inspect: () => ({
         allCookies() {
-          let introspectionResult = {};
+          let inspectResult = {};
           for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            key.indexOf('HB-visibilityControl-') === 0 && (introspectionResult[key] = localStorage.getItem(key));
+            key.indexOf('HB-visibilityControl-') === 0 && (inspectResult[key] = localStorage.getItem(key));
           }
-          return introspectionResult;
+          return inspectResult;
         }
       })
     };
