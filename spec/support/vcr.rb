@@ -25,7 +25,7 @@ RSpec.configure do |config|
 
   config.around(:each, :new_vcr) do |example|
     name = example.example_group.name.demodulize.underscore
-    path = example.file_path.split('/').last.sub('_spec.rb','')
+    path = example.file_path.split('/').last.sub('_spec.rb', '')
 
     VCR.use_cassette([path, name].join('/')) do
       example.run
