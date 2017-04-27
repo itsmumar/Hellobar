@@ -1,5 +1,5 @@
 describe PaymentMethodDetails do
-  it 'should be read-only' do
+  it 'is read-only' do
     d = PaymentMethodDetails.create
     d.data = { foo: 'bar' }
     expect { d.save }.to raise_error(ActiveRecord::ReadOnlyRecord)
@@ -7,92 +7,119 @@ describe PaymentMethodDetails do
   end
 end
 
-describe CyberSourceCreditCard, :vcr do
-  VALID_DATA = {
-    number: '4111111111111111',
-    month: '8',
-    year: '2016',
-    first_name: 'Tobias',
-    last_name: 'Luetke',
-    verification_value: '123',
-    city: 'Eugene',
-    state: 'OR',
-    zip: '97408',
-    address1: '123 Some St',
-    country: 'USA'
-  }.freeze
-  INVALID_DATA = VALID_DATA.clone.merge(number: '123412341234')
-  FOREIGN_DATA = {
-    number: '4111111111111111',
-    month: '8',
-    year: '2016',
-    first_name: 'Tobias',
-    last_name: 'Luetke',
-    verification_value: '123',
-    city: 'London',
-    zip: 'W10 6TH',
-    address1: '149 Freston Rd',
-    country: 'United Kingdom'
-  }.freeze
+describe CyberSourceCreditCard, :new_vcr do
+  let(:year) { 2.years.from_now.year.to_s }
+
+  let(:valid_data) do
+    {
+      number: '4111111111111111',
+      month: '8',
+      year: year,
+      first_name: 'Tobias',
+      last_name: 'Luetke',
+      verification_value: '123',
+      city: 'Eugene',
+      state: 'OR',
+      zip: '97408',
+      address1: '123 Some St',
+      country: 'USA'
+    }
+  end
+
+  let(:invalid_data) { valid_data.merge(number: '123412341234') }
+
+  let(:foreign_data) do
+    {
+      number: '4242424242424242',
+      month: '8',
+      year: year,
+      first_name: 'Tobias',
+      last_name: 'Luetke',
+      verification_value: '123',
+      city: 'London',
+      zip: 'W10 6TH',
+      address1: '149 Freston Rd',
+      country: 'United Kingdom'
+    }
+  end
 
   let(:payment_method) { create(:payment_method, :success) }
 
-  it 'should remove all non-standard fields from data' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_method)
+  describe '#save' do
+    context 'validation' do
+      it 'validates the data' do
+        cc = CyberSourceCreditCard.new(data: valid_data, payment_method: payment_method)
+        expect(cc.errors.messages).to eq({})
+        expect(cc).to be_valid
 
-    cc.data = VALID_DATA.merge('foo' => 'bar')
-    cc.save!
-    cc = CyberSourceCreditCard.find(cc.id)
-    expect(cc.data['foo']).to be_nil
+        expect(CyberSourceCreditCard.new(payment_method: payment_method)).not_to be_valid
+        missing = valid_data.merge({})
+        missing.delete(:first_name)
+        expect(CyberSourceCreditCard.new(data: missing, payment_method: payment_method)).not_to be_valid
+        cc = CyberSourceCreditCard.new(data: invalid_data, payment_method: payment_method)
+        expect(cc).not_to be_valid
+      end
+    end
+
+    it 'removes all non-standard fields from data' do
+      cc = CyberSourceCreditCard.new(payment_method: payment_method)
+
+      cc.data = valid_data.merge('foo' => 'bar')
+      cc.save!
+      cc = CyberSourceCreditCard.find(cc.id)
+      expect(cc.data['foo']).to be_nil
+    end
+
+    it 'does not store the full credit card number' do
+      cc = CyberSourceCreditCard.new(payment_method: payment_method)
+      cc.data = valid_data
+      cc.save!
+      expect(cc.data['number']).to eq('XXXX-XXXX-XXXX-1111')
+      cc = CyberSourceCreditCard.find(cc.id)
+      expect(cc.data['number']).to eq('XXXX-XXXX-XXXX-1111')
+    end
+
+    it 'does not store the cvv' do
+      cc = CyberSourceCreditCard.new(payment_method: payment_method)
+      cc.data = valid_data
+      cc.save!
+      expect(cc.data['verification_value']).to be_nil
+      cc = CyberSourceCreditCard.find(cc.id)
+      expect(cc.data['verification_value']).to be_nil
+    end
+
+    it 'stores the cybersource_token' do
+      cc = CyberSourceCreditCard.new(payment_method: payment_method)
+      cc.data = valid_data
+      expect(cc.data['token']).to be_nil
+      cc.save!
+      expect(cc.data['token']).not_to be_nil
+      cc = CyberSourceCreditCard.find(cc.id)
+      expect(cc.data['token']).not_to be_nil
+    end
   end
 
-  it 'should not store the full credit card number' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_method)
-    cc.data = VALID_DATA
-    cc.save!
-    expect(cc.data['number']).to eq('XXXX-XXXX-XXXX-1111')
-    cc = CyberSourceCreditCard.find(cc.id)
-    expect(cc.data['number']).to eq('XXXX-XXXX-XXXX-1111')
-  end
-
-  it 'should not store the cvv' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_method)
-    cc.data = VALID_DATA
-    cc.save!
-    expect(cc.data['verification_value']).to be_nil
-    cc = CyberSourceCreditCard.find(cc.id)
-    expect(cc.data['verification_value']).to be_nil
-  end
-
-  it 'should store the cybersource_token' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_method)
-    cc.data = VALID_DATA
-    expect(cc.data['token']).to be_nil
-    cc.save!
-    expect(cc.data['token']).not_to be_nil
-    cc = CyberSourceCreditCard.find(cc.id)
-    expect(cc.data['token']).not_to be_nil
-  end
-
-  it 'should provide a good name' do
-    cc = CyberSourceCreditCard.new(payment_method: payment_method)
-    cc.data = VALID_DATA
-    expect(cc.name).to eq('Visa ending in 1111')
-    cc.save!
-    cc = CyberSourceCreditCard.find(cc.id)
-    expect(cc.name).to eq('Visa ending in 1111')
+  describe '#name' do
+    it 'provides a good name' do
+      cc = CyberSourceCreditCard.new(payment_method: payment_method)
+      cc.data = valid_data
+      expect(cc.name).to eq('Visa ending in 1111')
+      cc.save!
+      cc = CyberSourceCreditCard.find(cc.id)
+      expect(cc.name).to eq('Visa ending in 1111')
+    end
   end
 
   context 'when set on the same payment_method' do
     it 're-uses an existing token' do
       p = payment_method
-      cc1 = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: p)
+      cc1 = CyberSourceCreditCard.new(data: valid_data, payment_method: p)
       cc1.save!
       cc1 = CyberSourceCreditCard.find(cc1.id)
       expect(cc1.data['token']).not_to be_nil
-      expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2016')
+      expect(cc1.cybersource_profile['cardExpirationYear']).to eq(year)
       # Now update the year
-      cc2 = CyberSourceCreditCard.new(data: VALID_DATA.merge('year' => '2017'), payment_method: p)
+      cc2 = CyberSourceCreditCard.new(data: valid_data.merge('year' => year), payment_method: p)
       cc2.save!
       cc2 = CyberSourceCreditCard.find(cc2.id)
       expect(cc2.data['token']).not_to be_nil
@@ -101,49 +128,38 @@ describe CyberSourceCreditCard, :vcr do
       # Should have updated the name for both credit cards
       cc1 = CyberSourceCreditCard.find(cc1.id)
       cc2 = CyberSourceCreditCard.find(cc2.id)
-      expect(cc2.cybersource_profile['cardExpirationYear']).to eq('2017')
-      expect(cc1.cybersource_profile['cardExpirationYear']).to eq('2017')
+      expect(cc2.cybersource_profile['cardExpirationYear']).to eq(year)
+      expect(cc1.cybersource_profile['cardExpirationYear']).to eq(year)
     end
   end
 
-  it 'should let you charge the card and return the transaction ID' do
-    success, response = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method).charge(100)
-    expect(success).to be_truthy
-    expect(response).not_to be_nil
-    expect(response).to match(/^.*?;.*?;.*$/)
+  describe '#charge' do
+    it 'returns the transaction ID' do
+      success, response = CyberSourceCreditCard.create!(data: valid_data, payment_method: payment_method).charge(100)
+      expect(success).to be_truthy
+      expect(response).not_to be_nil
+      expect(response).to match(/^.*?;.*?;.*$/)
+    end
   end
 
-  context 'validation' do
-    it 'validates the data' do
-      # Should be valid
-      cc = CyberSourceCreditCard.new(data: VALID_DATA, payment_method: payment_method)
+  context 'with foreign card' do
+    it 'does not require state for foreign addresses' do
+      cc = CyberSourceCreditCard.new(data: foreign_data, payment_method: payment_method)
       expect(cc.errors.messages).to eq({})
       expect(cc).to be_valid
-
-      expect(CyberSourceCreditCard.new(payment_method: payment_method)).not_to be_valid
-      missing = VALID_DATA.merge({})
-      missing.delete(:first_name)
-      expect(CyberSourceCreditCard.new(data: missing, payment_method: payment_method)).not_to be_valid
-      cc = CyberSourceCreditCard.new(data: INVALID_DATA, payment_method: payment_method)
-      expect(cc).not_to be_valid
     end
   end
 
-  it 'should not require the state field for foreign addresses' do
-    # Should be valid
-    cc = CyberSourceCreditCard.new(data: FOREIGN_DATA, payment_method: payment_method)
-    expect(cc.errors.messages).to eq({})
-    expect(cc).to be_valid
-  end
-
-  it 'should let you refund a payment' do
-    credit_card = CyberSourceCreditCard.create!(data: VALID_DATA, payment_method: payment_method)
-    charge_success, charge_response = credit_card.charge(100)
-    expect(charge_success).to be_truthy
-    expect(charge_response).not_to be_nil
-    refund_success, refund_response = credit_card.refund(50, charge_response)
-    expect(refund_success).to be_truthy
-    expect(refund_response).not_to be_nil
-    expect(refund_response).not_to eq(charge_response)
+  describe '#refund' do
+    it 'refunds a payment' do
+      credit_card = CyberSourceCreditCard.create!(data: valid_data, payment_method: payment_method)
+      charge_success, charge_response = credit_card.charge(100)
+      expect(charge_success).to be_truthy
+      expect(charge_response).not_to be_nil
+      refund_success, refund_response = credit_card.refund(50, charge_response)
+      expect(refund_success).to be_truthy
+      expect(refund_response).not_to be_nil
+      expect(refund_response).not_to eq(charge_response)
+    end
   end
 end
