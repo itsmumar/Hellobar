@@ -166,7 +166,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     # Set the brand
     data['brand'] = card.brand
 
-    data['sanitized_number'] = 'XXXX-XXXX-XXXX-' + data['number'][-4..-1]
+    data['sanitized_number'] = "XXXX-XXXX-XXXX-#{ data.fetch('number', '')[-4..-1] }"
     sanitized_data = data.clone
     sanitized_data.delete('number')
     sanitized_data.delete('verification_value')

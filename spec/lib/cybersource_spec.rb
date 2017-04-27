@@ -56,12 +56,20 @@ describe CyberSourceCreditCard do
   context 'validation', :freeze do
     let(:data) { { 'token' => 'my_cool_token', number: '4242424242424242' } }
     let(:credit_card) { CyberSourceCreditCard.new payment_method: payment_method, data: data }
+    before do
+      allow(HB::CyberSource.gateway)
+        .to receive(:store).and_return(double(success?: true, params: { 'subscriptionID' => '1' }))
+    end
 
     context 'without brand' do
-      let(:data) { { token: 'my_cool_token', state: 'CA' } }
+      let(:data) { { token: 'my_cool_token', state: 'CA', number: '' } }
 
       it 'is invalid' do
         expect(credit_card).to be_invalid
+      end
+
+      it 'does not raise exceptions' do
+        expect(credit_card.errors[:base]).to eql []
       end
     end
 
