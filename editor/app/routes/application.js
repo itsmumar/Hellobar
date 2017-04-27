@@ -71,9 +71,14 @@ export default Ember.Route.extend({
       new ContactListModal($.extend(baseOptions, options)).open();
     }
 
-    if(window.gon && gon.lead_data) {
-      new LeadDataModal().checkCountryAndOpen();
-    }
+    Ember.$.getJSON('/api/settings').then((applicationSettings) => {
+      this.set('applicationSettings', applicationSettings);
+      this.set('leadData', applicationSettings.lead_data)
+
+      if (applicationSettings.lead_data) {
+        new LeadDataModal(applicationSettings).checkCountryAndOpen();
+      }
+    });
   },
 
   //-----------  Actions  -----------#

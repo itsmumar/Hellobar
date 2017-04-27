@@ -19,10 +19,7 @@ html
     = csrf_meta_tags
 
   body#hb-editor.loading
-    - if ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
-      = render "shared/modals/contact_list"
-    - else
-      = render "shared/modals/contact_list"
+    = render "shared/modals/contact_list"
 
     = render "shared/modals/contact_list"
     = render "shared/modals/confirm"
@@ -38,10 +35,7 @@ html
     = render "shared/modals/lead_data_modal"
 
     javascript:
-      HB_DNT = 1;
-      HB_ONBOARDING_EMAIL_VOLUME = "#{ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
-
-      var currentUser = #{{UserSerializer.new(current_user).to_json}};
+      //var currentUser = #{{UserSerializer.new(current_user).to_json}};
       var trackEditorFlow = #{{new_user?}};
       var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
       var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};

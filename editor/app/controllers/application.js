@@ -44,7 +44,12 @@ export default Ember.Controller.extend(
 
     //-----------  User  -----------#
 
-    currentUser: ( () => window.currentUser).property(),
+    applicationSettings: {},
+
+    currentUser: function() {
+      return this.get('applicationSettings').current_user;
+    }.property('applicationSettings'),
+
     isTemporaryUser: function () {
       return this.get('currentUser') && this.get('currentUser').status === 'temporary';
     }.property('currentUser'),
