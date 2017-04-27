@@ -160,6 +160,10 @@ FactoryGirl.define do
             'Takeover' => {
               'background_color' => 'FFFFFF', 'text_color' => '5c5e60', 'button_color' => 'E8562A',
               'link_color' => 'FFFFFF', 'font_id' => 'open_sans'
+            },
+            'Alert' => {
+              'background_color' => 'ffffff', 'triger_color' => 'ffffff', 'text_color' => '5c5e60',
+              'button_color' => 'e8562a', 'link_color' => 'ffffff', 'font_id' => 'open_sans'
             }
           },
           'image' => {
