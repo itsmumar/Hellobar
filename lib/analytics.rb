@@ -7,9 +7,9 @@ class Analytics
     def track(target_type, target_id, event_name, props = {})
       props = {} unless props
       # Default :at to now
-      props[:at] ||= Time.now
+      props[:at] ||= Time.current
       # If :at is a timestamp convert to a Time object
-      props[:at] = Time.at(props[:at]) if props[:at].is_a?(Numeric)
+      props[:at] = Time.zone.at(props[:at]) if props[:at].is_a?(Numeric)
       # Format :at
       props[:at] = props[:at].to_s
 

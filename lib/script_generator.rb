@@ -86,7 +86,7 @@ class ScriptGenerator < Mustache
   def pro_secret
     @pro_secret ||= begin
       random_string = ('a'..'z').to_a[rand(26)]
-      random_string << Digest::SHA1.hexdigest("#{ rand(1_000_000) }#{ site.url.to_s.upcase }#{ site.id }#{ Time.now.to_f }#{ rand(1_000_000) }")
+      random_string << Digest::SHA1.hexdigest("#{ rand(1_000_000) }#{ site.url.to_s.upcase }#{ site.id }#{ Time.current.to_f }#{ rand(1_000_000) }")
       random_string
     end
   end

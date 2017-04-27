@@ -46,7 +46,7 @@ class Bill < ActiveRecord::Base
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
     self[:status] = status_value
-    self.status_set_at = Time.now
+    self.status_set_at = Time.current
 
     if status == :paid
       on_paid
@@ -58,7 +58,7 @@ class Bill < ActiveRecord::Base
   def attempt_billing!(allow_early = false)
     set_final_amount!
 
-    now = Time.now
+    now = Time.current
     raise BillingEarly, "Attempted to bill on #{ now } but bill[#{ id }] has a bill_at date of #{ bill_at }" if !allow_early && now < bill_at
     if amount == 0 # Note: less than 0 is a valid value for refunds
       audit << 'Marking bill as paid because no payment required'
@@ -92,11 +92,11 @@ class Bill < ActiveRecord::Base
   end
 
   def past_due?(payment_method = nil)
-    Time.now > due_at(payment_method)
+    Time.current > due_at(payment_method)
   end
 
   def should_bill?
-    pending? && Time.now >= bill_at
+    pending? && Time.current >= bill_at
   end
 
   def problem_with_payment?(payment_method = nil)

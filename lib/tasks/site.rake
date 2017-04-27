@@ -25,7 +25,7 @@ namespace :site do
       end
 
       # See if anyone who uninstalled has installed
-      Site.where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at AND (script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at)', Time.now - 30.days).each do |site|
+      Site.where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at AND (script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at)', Time.current - 30.days).each do |site|
         site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end

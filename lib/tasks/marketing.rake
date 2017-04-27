@@ -4,7 +4,7 @@ namespace :marketing do
     %w[Free Pro Enterprise].each do |plan|
       days = 30
       start = Time.zone.now - days.days
-      filename = "user_logins_#{ days }_days_#{ plan.downcase }_#{ Time.now.strftime('%F--%H-%M-%S') }.csv"
+      filename = "user_logins_#{ days }_days_#{ plan.downcase }_#{ Time.current.strftime('%F--%H-%M-%S') }.csv"
       users = User.joins(:subscriptions)
                   .where("subscriptions.type = 'Subscription::#{ plan }'")
                   .where(current_sign_in_at: start..Time.zone.now)
@@ -24,7 +24,7 @@ namespace :marketing do
     days = 30
     start = Time.zone.now - days.days
 
-    filename = "user_signups_#{ days }_days_no_installed_script_#{ Time.now.strftime('%F--%H-%M-%S') }.csv"
+    filename = "user_signups_#{ days }_days_no_installed_script_#{ Time.current.strftime('%F--%H-%M-%S') }.csv"
     users = User.joins('LEFT OUTER JOIN site_memberships ON site_memberships.user_id = users.id')
                 .joins('LEFT OUTER JOIN sites ON sites.id = site_memberships.site_id AND sites.script_installed_at IS NOT NULL')
                 .where('sites.id IS NULL')
@@ -38,7 +38,7 @@ namespace :marketing do
     users.push nil
     File.write(filename, users.join("\n"))
 
-    filename = "user_signups_#{ days }_days_1_or_more_installed_scripts_#{ Time.now.strftime('%F--%H-%M-%S') }.csv"
+    filename = "user_signups_#{ days }_days_1_or_more_installed_scripts_#{ Time.current.strftime('%F--%H-%M-%S') }.csv"
     users = User.joins(:sites)
                 .where('sites.script_installed_at IS NOT NULL')
                 .where(created_at: start..Time.zone.now)

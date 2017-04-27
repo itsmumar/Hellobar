@@ -1,10 +1,10 @@
 class AlwaysSuccessfulPaymentMethodDetails < PaymentMethodDetails
   def charge(_amount_in_dollars)
-    [true, "fake-txn-id-#{ Time.now.to_i }"]
+    [true, "fake-txn-id-#{ Time.current.to_i }"]
   end
 
   def refund(_amount_in_dollars, original_transaction_id)
-    [true, "fake-refund-id-#{ Time.now.to_i } (original: #{ original_transaction_id }"]
+    [true, "fake-refund-id-#{ Time.current.to_i } (original: #{ original_transaction_id }"]
   end
 
   def data

@@ -70,8 +70,8 @@ namespace :backend do
               dimensions: [
                 { name: 'TableName', value: table_name }
               ],
-              start_time: (Time.now - (i + 1) * 24 * 60 * 60).iso8601,
-              end_time: (Time.now - i * 24 * 60 * 60).iso8601,
+              start_time: (Time.current - (i + 1) * 24 * 60 * 60).iso8601,
+              end_time: (Time.current - i * 24 * 60 * 60).iso8601,
               period: TIME_PERIOD,
               statistics: ['Sum'],
               unit: 'Count'
@@ -98,8 +98,8 @@ namespace :backend do
           dimensions: [
             { name: 'TableName', value: table_name }
           ],
-          start_time: (Time.now - check_hours * 60 * 60).iso8601,
-          end_time: Time.now.iso8601,
+          start_time: (Time.current - check_hours * 60 * 60).iso8601,
+          end_time: Time.current.iso8601,
           period: time_period,
           statistics: ['Sum'],
           unit: 'Count'
@@ -127,7 +127,7 @@ namespace :backend do
         end
 
         is_current_segment_table = false
-        date = Time.now
+        date = Time.current
         # Check today
         is_current_segment_table = true if table_name.to_s == "segments_#{ date.year }_#{ date.month }"
         # Check tomorrow too
@@ -179,7 +179,7 @@ namespace :backend do
       emails = %w[mailmanager@hellobar.com]
       if grand_total_diff != 0
         Pony.mail(to: emails.join(', '),
-                  subject: "#{ Time.now.strftime('%Y-%m-%d') } #{ args[:type].inspect } DynamoDB: #{ fm grand_total_diff }",
+                  subject: "#{ Time.current.strftime('%Y-%m-%d') } #{ args[:type].inspect } DynamoDB: #{ fm grand_total_diff }",
                   body: email_message.join("\n\r"))
       end
     end

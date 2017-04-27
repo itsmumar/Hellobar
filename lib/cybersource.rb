@@ -162,7 +162,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def order_id
     # The order_id is fairly irrelevant
-    "#{ payment_method ? payment_method.id : 'NA' }-#{ Time.now.to_i }"
+    "#{ payment_method ? payment_method.id : 'NA' }-#{ Time.current.to_i }"
   end
 
   def save_to_cybersource

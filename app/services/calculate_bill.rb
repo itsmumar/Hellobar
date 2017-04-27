@@ -11,7 +11,7 @@ class CalculateBill
   end
 
   def call
-    now = Time.now
+    now = Time.current
     # First we need to void any pending recurring bills
     # and keep any active paid bills
     active_paid_bills = []
@@ -77,7 +77,7 @@ class CalculateBill
 
     if trial_period
       bill.amount = 0
-      bill.end_date = Time.now + trial_period
+      bill.end_date = Time.current + trial_period
     end
 
     bill

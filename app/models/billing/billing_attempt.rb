@@ -30,7 +30,7 @@ class BillingAttempt < ActiveRecord::Base
     raise InvalidRefund, 'Cannot refund more than than the amount paid' if bill.amount + (amount + previous_refunds) < 0
 
     description ||= 'Refund due to customer service request'
-    now = Time.now
+    now = Time.current
     refund_bill = Bill::Refund.new(
       subscription: bill.subscription,
       amount: amount,

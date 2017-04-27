@@ -89,7 +89,7 @@ module Hello
 
         def sign_path_and_params(path, params, read_key)
           # Required params
-          params['t'] = Time.now.to_i
+          params['t'] = Time.current.to_i
           params['s'] = Hello::DataAPIHelper.generate_signature(read_key, path, params)
           [path, params]
         end

@@ -63,7 +63,7 @@ class QueueWorker
       q.url.split('/').last == queue_name
     end
 
-    Rails.logger.info "[#{ Time.now }] Sending #{ message } to #{ @queue.url }"
+    Rails.logger.info "[#{ Time.current }] Sending #{ message } to #{ @queue.url }"
     receipt = @queue.send_message(message)
     Rails.logger.info receipt.to_s
   end

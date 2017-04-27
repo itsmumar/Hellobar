@@ -5,7 +5,7 @@ namespace :billing do
 
     MIN_RETRY_TIME = 3.days
     MAX_RETRY_TIME = 30.days
-    now = Time.now
+    now = Time.current
     amount_successful = 0
     amount_failed = 0
     num_failed = 0
@@ -37,11 +37,11 @@ namespace :billing do
       lock_file_pid = File.read(lock_file_path).to_i
       raise "Expected #{ Process.pid } but was #{ lock_file_pid.inspect }, so exiting" unless lock_file_pid == Process.pid
       billing_report 'PID matched'
-      billing_report Time.now.to_s
+      billing_report Time.current.to_s
       billing_report '-' * 80
       billing_report 'Finding pending bills...'
       # Find all pending bills less than 30 days old
-      pending_bills = Bill.where('? >= bill_at AND bill_at > ? AND status = ?', Time.now, now - MAX_RETRY_TIME, Bill.statuses[:pending])
+      pending_bills = Bill.where('? >= bill_at AND bill_at > ? AND status = ?', Time.current, now - MAX_RETRY_TIME, Bill.statuses[:pending])
       num_bills = pending_bills.length
       billing_report "Found #{ num_bills } pending bills..."
       i = 0

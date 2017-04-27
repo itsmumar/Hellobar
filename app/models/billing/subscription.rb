@@ -19,7 +19,7 @@ class Subscription < ActiveRecord::Base
       joins(:bills)
         .where(
           'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
-          Bill.statuses['paid'], Time.now, Time.now
+          Bill.statuses['paid'], Time.current, Time.current
         )
         .where('bills.type != ?', Bill::Refund.to_s)
     end
@@ -63,7 +63,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def active_bills(reload = false, date = nil)
-    date ||= Time.now
+    date ||= Time.current
     bills(reload).select { |b| b.active_during(date) }
   end
 
