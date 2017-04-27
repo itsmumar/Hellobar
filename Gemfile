@@ -176,7 +176,7 @@ group :test do
   gem 'webmock'
 end
 
-group :production do
+group :production, :staging, :edge do
   # Loggly
   gem 'lograge'
   gem 'syslogger'

@@ -12,7 +12,9 @@ end
 
 require File.expand_path('../../config/environment', __FILE__)
 
-abort('The Rails environment is running in production mode!') if Rails.env.production?
+# Prevent database truncation if the environment is production/staging/edge
+abort("The Rails environment is running in #{ Rails.env } mode!") if Rails.env.production? || Rails.env.staging? || Rails.env.edge?
+
 require 'spec_helper'
 require 'rspec/rails'
 require 'paperclip/matchers'

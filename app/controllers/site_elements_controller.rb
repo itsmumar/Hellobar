@@ -106,7 +106,7 @@ class SiteElementsController < ApplicationController
   end
 
   def force_trailing_slash
-    url = if Rails.env.production?
+    url = if Rails.env.production? || Rails.env.staging? || Rails.env.edge?
             request.original_url.gsub(/\Ahttp:/, 'https:')
           else
             request.original_url
