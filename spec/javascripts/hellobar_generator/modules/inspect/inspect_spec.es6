@@ -42,35 +42,35 @@ describe('Module inspect', () => {
         elements: allElementModels,
         elementsOnPage: elementsOnPage,
         rules: rules
-      }
+      };
       expect(module.all()).toEqual(expected);
     });
   });
 
   describe('printAll()', () => {
     it('prints info to console', () => {
-      const spy = spyOn(console, 'info')
-      module.printAll()
+      const spy = spyOn(console, 'info');
+      module.printAll();
       expect(spy).toHaveBeenCalledWith(
         'version 9ca6c58b392a4cb879753e097667205a32e516ec was generated at 2017-04-07 13:05:33 UTC for site#999 http://example.com'
       );
     });
 
     it('prints allElementModels to console', () => {
-      const spy = spyOn(console, 'table')
-      module.printAll()
+      const spy = spyOn(console, 'table');
+      module.printAll();
       expect(spy).toHaveBeenCalledWith(allElementModels, elementColumns);
     });
 
     it('prints elementsOnPage to console', () => {
-      const spy = spyOn(console, 'table')
-      module.printAll()
+      const spy = spyOn(console, 'table');
+      module.printAll();
       expect(spy).toHaveBeenCalledWith(elementsOnPage, elementColumns);
     });
 
     it('prints elementsOnPage to console', () => {
-      const spy = spyOn(console, 'table')
-      module.printAll()
+      const spy = spyOn(console, 'table');
+      module.printAll();
       expect(spy).toHaveBeenCalledWith(rules);
     });
   });
