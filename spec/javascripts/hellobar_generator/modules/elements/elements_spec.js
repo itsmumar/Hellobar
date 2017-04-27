@@ -36,13 +36,13 @@ describe('Module elements', function () {
       headline: 'Test'
     };
     module.createAndAddToPage(siteElementModel);
-    expect(module.introspect().allElements().length).toEqual(1);
+    expect(module.inspect().elementsOnPage().length).toEqual(1);
 
     expect(typeof module.findById(123456)).toEqual('object');
     expect(module.findById(123456).id).toEqual(123456);
 
     module.removeAllSiteElements();
-    expect(module.introspect().allElements().length).toEqual(0);
+    expect(module.inspect().elementsOnPage().length).toEqual(0);
   });
 
 });
