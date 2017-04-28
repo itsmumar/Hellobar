@@ -1,11 +1,11 @@
 module StubsHelper
   def stub_current_admin(admin)
-    allow(controller).to receive(:current_admin).and_return(admin)
+    allow_any_instance_of(ApplicationController).to receive(:current_admin).and_return(admin)
   end
 
   def stub_current_user(user)
     allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-    allow(controller).to receive(:current_user).and_return(user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
     user
   end

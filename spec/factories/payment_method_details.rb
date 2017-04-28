@@ -1,5 +1,12 @@
 FactoryGirl.define do
   factory :payment_method_details do
+    data do
+      {
+        'first_name' => 'John',
+        'last_name' => 'Doe'
+      }
+    end
+
     factory :always_successful_billing_details, class: 'AlwaysSuccessfulPaymentMethodDetails' do
     end
 
