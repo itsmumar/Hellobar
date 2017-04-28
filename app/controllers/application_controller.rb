@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 
   def access_cookie
     cookies[:adxs] ||= {
-      value: Digest::SHA256.hexdigest(['a', rand(10_000), Time.now.to_f, user_agent, 'd753d'].collect(&:to_s).join),
+      value: Digest::SHA256.hexdigest(['a', rand(10_000), Time.current.to_f, user_agent, 'd753d'].collect(&:to_s).join),
       expires: 90.days.from_now,
       httponly: true
     }

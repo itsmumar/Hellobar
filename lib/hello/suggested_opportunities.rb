@@ -179,7 +179,7 @@ module Hello
     end
 
     def end_date
-      @end_date ||= Time.now
+      @end_date ||= Time.current
     end
 
     # 60 days ago

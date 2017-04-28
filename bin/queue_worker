@@ -35,7 +35,7 @@ class QueueWorker
       # We log failed jobs to a file that is specific for the day. This
       # makes retrying failed jobs easier
       # Re-open the file handle every time. Slightly slower, but simpler.
-      File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.now.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
+      File.open(File.join(Rails.root,"log", "failed_jobs.#{Time.current.strftime("%Y-%m-%d")}.log"), "a"){|f| f.puts(job)}
     end
 
     # We log messages to a file (QueueWorker::LOG_FILE) or to stdout when just running one
@@ -52,7 +52,7 @@ class QueueWorker
         msg = "#{msg.class}: #{msg.message}\n  #{msg.backtrace.join("\n  ")}"
       end
       # Add in the timestamp and current process name
-      line = "[#{type}] #{Time.now.utc.strftime("%Y-%m-%d %T %Z")} #{Process.current_name} => #{msg}"
+      line = "[#{type}] #{Time.current.utc.strftime("%Y-%m-%d %T %Z")} #{Process.current_name} => #{msg}"
       if $queue_worker_logger == :stdout
         puts line
       else
@@ -106,7 +106,7 @@ class QueueWorker
       messages.each do |message|
         begin
           QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
-          now = Time.now
+          now = Time.current
           puts message.sent_at
           if @config[:skip_old] and now-message.sent_at > 24.hours
             QueueWorker.log("Skipped message[#{message.id}]: #{message.body.inspect} (#{(now-message.sent_at).to_i/(60*60)} hours old)")
@@ -147,14 +147,14 @@ class QueueWorker
               end
             end
 
-            QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.now.to_f-start_time}s")
+            QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.current.to_f-start_time}s")
           end
         rescue => e
           # Let's see if this is a MySQL connection issue
           if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
             QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
             # Let's try reconnecting for up to 60 seconds
-            start_time = Time.now
+            start_time = Time.current
             sleep_time = 1
             successful_reconnect = false
             loop do
@@ -167,7 +167,7 @@ class QueueWorker
                 # still broken
               end
               break if successful_reconnect
-              break if Time.now-start_time > 60 # get out of here if we've been trying for a minute
+              break if Time.current-start_time > 60 # get out of here if we've been trying for a minute
               sleep sleep_time # sleep a little so we don't hammer the DB
               # Increase sleep time up to a max time
               sleep_time += 1 if sleep_time < 10

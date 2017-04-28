@@ -178,7 +178,7 @@ module Hello
       return unless defined?(cookies)
 
       unless cookies[VISITOR_ID_COOKIE]
-        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{ Time.now.to_f }_#{ request.remote_ip }_#{ request.env['HTTP_USER_AGENT'] }_#{ rand(1000) }_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
+        cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{ Time.current.to_f }_#{ request.remote_ip }_#{ request.env['HTTP_USER_AGENT'] }_#{ rand(1000) }_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
         Analytics.track(*current_person_type_and_id, 'First Visit', ip: request.remote_ip)
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash

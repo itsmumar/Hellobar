@@ -87,7 +87,7 @@ class Site < ActiveRecord::Base
   # to collect more data so that hopefully I can find the source of the
   # problem and then implement an appropriate fix.
   def debug_install(type)
-    lines = ["[#{ Time.now }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
+    lines = ["[#{ Time.current }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
     caller[0..4].each do |line|
       lines << "\t#{ line }"
     end
@@ -302,7 +302,7 @@ class Site < ActiveRecord::Base
       bill.save!
       subscription.save!
 
-      if bill.due_at(payment_method) <= Time.now
+      if bill.due_at(payment_method) <= Time.current
         audit << "Change plan, bill is due now: #{ bill.inspect }"
         result = bill.attempt_billing!
         if result.is_a?(BillingAttempt)
@@ -416,7 +416,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_static_assets(options = {})
-    update_column(:script_attempted_to_generate_at, Time.now)
+    update_column(:script_attempted_to_generate_at, Time.current)
 
     store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
     compress_script = !store_site_scripts_locally
@@ -439,7 +439,7 @@ class Site < ActiveRecord::Base
       end
     end
 
-    update_column(:script_generated_at, Time.now)
+    update_column(:script_generated_at, Time.current)
   end
 
   def generate_blank_static_assets
