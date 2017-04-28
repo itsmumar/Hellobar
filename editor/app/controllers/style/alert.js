@@ -13,7 +13,7 @@ export default Ember.Controller.extend(HasPlacement, HasTriggerOptions, {
 
   soundOptions: [
     {value: 'bell', label: 'Bell'},
-    {value: 'no-sound', label: 'No sound'}
+    {value: 'none', label: 'No sound'}
   ],
 
   selectedSoundOption: (function () {

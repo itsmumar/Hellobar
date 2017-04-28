@@ -144,7 +144,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       play() {
-        (this._model.sound !== 'no-sound') && this._domNode.play();
+        (this._model.sound !== 'none') && this._domNode.play();
       }
     }
 
