@@ -441,18 +441,6 @@ describe Site do
       expect(@site.capabilities.class).to eq(Subscription::Pro::Capabilities)
     end
 
-    it 'should let you preview a subscription without actually changing anything' do
-      bill = @site.preview_change_subscription(@pro)
-      expect(bill).not_to be_paid
-      expect(bill).not_to be_persisted
-      expect(bill.amount).to eq(@pro.amount)
-      expect(bill.bill_at).to be <= Time.current
-      expect { bill.save! }.to raise_error(ActiveRecord::ReadOnlyRecord)
-      expect(bill).not_to be_persisted
-      expect(@site.current_subscription).not_to eq(@pro)
-      expect(@site.capabilities.class).to eq(Subscription::Free::Capabilities)
-    end
-
     it 'should charge full amount if you were on a Free plan' do
       success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_truthy

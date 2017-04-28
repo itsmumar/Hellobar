@@ -25,6 +25,7 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
+  scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
@@ -95,10 +96,6 @@ class Bill < ActiveRecord::Base
     end
     # Otherwise it is due now
     bill_at
-  end
-
-  def refunded?
-    refund.paid?
   end
 
   def past_due?(payment_method = nil)
