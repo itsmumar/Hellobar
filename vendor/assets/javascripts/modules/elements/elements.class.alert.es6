@@ -86,8 +86,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       animate() {
-        // TODO use custom CSS animation
-        //dom.addClass(this._domNode.querySelector('.js-main-icon'), ['animated', 'swing']);
+        dom.addClass(this._domNode.querySelector('.js-main-icon'), 'animated');
       }
 
       remove() {
