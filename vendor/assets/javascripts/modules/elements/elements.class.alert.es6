@@ -86,7 +86,11 @@ hellobar.defineModule('elements.class.alert',
       }
 
       animate() {
-        dom.addClass(this._domNode.querySelector('.js-main-icon'), 'animated');
+        const iconDomElement = this._domNode.querySelector('.js-main-icon');
+        dom.removeClass(iconDomElement, 'animated');
+        setTimeout(() => {
+          dom.addClass(iconDomElement, 'animated');
+        });
       }
 
       remove() {
