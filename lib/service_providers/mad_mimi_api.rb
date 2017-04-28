@@ -36,7 +36,7 @@ module ServiceProviders
 
     def valid?
       lists.present?
-    rescue MadMini::MadMimiError => e
+    rescue MadMimi::MadMimiError, Net::HTTPServerException => e
       Raven.capture_exception(e)
       false
     end
