@@ -34,8 +34,8 @@ hellobar.defineModule('tracking.external',
        * @param {number} siteElementId
        */
       send,
-      introspect: () => ({
-        available: () => trackingEngines.some((trackingEngine) => trackingEngine.introspect().available())
+      inspect: () => ({
+        available: () => trackingEngines.some((trackingEngine) => trackingEngine.inspect().available())
       })
     };
 

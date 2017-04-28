@@ -4,4 +4,6 @@ FactoryGirl.define do
   end
 
   sequence(:email) { |i| "user#{ i }@hellobar.com" }
+
+  sequence(:image) { Rails.root.join('spec', 'fixtures', 'images', 'coupon.png').to_s }
 end

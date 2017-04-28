@@ -1,6 +1,6 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 
-if Rails.env.production?
+unless Rails.env.test?
   Pony.options = {
     from: 'Hello Bar Support <support@hellobar.com>',
     via: :smtp,

@@ -4,7 +4,7 @@ module SitesHelper
   end
 
   def payment_issue_amount(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sum(:amount) : 0
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sum(&:amount) : 0
   end
 
   def payment_issue_date(site)

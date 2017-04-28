@@ -6,4 +6,3 @@
 # These values are available at ENV['SECRET_KEY_BASE'], for example.
 production:
   secret_key_base: something far more secure than this
-  sentry_dsn: http://my-sentry-dsn.com

@@ -32,13 +32,13 @@ FactoryGirl.define do
 
     trait :free_subscription do
       after(:create) do |site|
-        create(:free_subscription, site: site, user: site.users.first)
+        create(:subscription, :free, site: site, user: site.users.first)
       end
     end
 
     trait :pro do
       after(:create) do |site|
-        create(:pro_subscription, site: site, user: site.users.first)
+        create(:subscription, :pro, site: site, user: site.users.first)
       end
     end
 
@@ -56,7 +56,7 @@ FactoryGirl.define do
 
     trait :past_due_site do
       after(:create) do |site|
-        subscription = create(:pro_subscription, site: site, user: site.users.first)
+        subscription = create(:subscription, :pro, site: site, user: site.users.first)
         create(:past_due_bill, subscription: subscription)
       end
     end

@@ -189,8 +189,8 @@ hellobar.defineModule('elements',
           showSiteElements();
         }
       },
-      introspect: () => ({
-        allElements: () => siteElementsOnPage
+      inspect: () => ({
+        elementsOnPage: () => siteElementsOnPage
       }),
       createAndAddToPage,
       removeAllSiteElements,
