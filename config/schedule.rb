@@ -7,7 +7,7 @@ env :PATH, ENV['PATH']
 
 settings_file = 'config/settings.yml'
 settings_yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
-env = settings_yaml['env_name'] || 'edge'
+env = settings_yaml['env_name']
 
 if env == 'production'
   every :friday, at: '2:00pm', roles: [:cron] do

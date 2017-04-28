@@ -4,8 +4,8 @@ Raven.configure do |config|
   # filter sensitive data
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 
-  # enable only on `production` environment
-  config.environments = ['production']
+  # enable only on production/staging/edge environments
+  config.environments = %w[production staging edge]
 
   # don't log readiness
   config.silence_ready = true

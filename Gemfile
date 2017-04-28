@@ -90,7 +90,6 @@ gem 'addressable', require: 'addressable/uri'
 gem 'avatar'
 gem 'dalli'
 gem 'elif'
-gem 'figaro'
 gem 'hashie'
 gem 'less_interactions'
 gem 'nokogiri'
@@ -176,7 +175,7 @@ group :test do
   gem 'webmock'
 end
 
-group :production do
+group :production, :staging, :edge do
   # Loggly
   gem 'lograge'
   gem 'syslogger'

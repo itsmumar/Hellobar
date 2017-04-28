@@ -1,7 +1,7 @@
 require 'integration_helper'
 require 'service_provider_integration_helper'
 
-feature 'GetResponse integration', :js, :vcr do
+feature 'GetResponseApi integration', :js, :vcr do
   let(:provider) { 'get_response_api' }
   let(:tag) { 'new_lead' }
 
