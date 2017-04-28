@@ -14,15 +14,9 @@ hellobar.defineModule('base.cdn.libraries', ['base.cdn'], function (cdn) {
     cdn.addCss(`//cdnjs.cloudflare.com/ajax/libs/froala-editor/${version}/css/plugins/image.min.css`, doc);
   }
 
-  function useAnimateCss(doc) {
-    const version = '3.5.2';
-    cdn.addCss(`//cdnjs.cloudflare.com/ajax/libs/animate.css/${version}/animate.min.css`, doc);
-  }
-
   return {
     useFontAwesome,
-    useFroala,
-    useAnimateCss
+    useFroala
   };
 
 });

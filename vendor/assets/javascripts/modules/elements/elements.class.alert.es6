@@ -86,7 +86,8 @@ hellobar.defineModule('elements.class.alert',
       }
 
       animate() {
-        dom.addClass(this._domNode.querySelector('.js-main-icon'), ['animated', 'swing']);
+        // TODO use custom CSS animation
+        //dom.addClass(this._domNode.querySelector('.js-main-icon'), ['animated', 'swing']);
       }
 
       remove() {
@@ -281,7 +282,6 @@ hellobar.defineModule('elements.class.alert',
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
-          cdnLibraries.useAnimateCss(doc);
           preview.isActive() && cdnLibraries.useFroala(doc);
           if (this._model.google_font) {
             cdn.addCss('https://fonts.googleapis.com/css?family=' + this._model.google_font, this._iframe.contentDocument);
