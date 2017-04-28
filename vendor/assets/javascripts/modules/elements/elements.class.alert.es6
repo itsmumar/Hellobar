@@ -12,6 +12,10 @@ hellobar.defineModule('elements.class.alert',
       maxPopupSize: 380
     };
 
+    /**
+     * @class Trigger
+     * Trigger part (a bell or whatever) of Alert element type.
+     */
     class Trigger {
       constructor(iframe, model) {
         this._domNode = iframe.contentDocument.getElementById('hb-trigger');
@@ -98,6 +102,10 @@ hellobar.defineModule('elements.class.alert',
       }
     }
 
+    /**
+     * @class Popup
+     * Popup (collapsible slider) part of Alert element type.
+     */
     class Popup {
       constructor(iframe, model) {
         this._domNode = iframe.contentDocument.getElementById('hellobar-slider');
@@ -141,6 +149,9 @@ hellobar.defineModule('elements.class.alert',
       }
     }
 
+    /**
+     * A class for managing audio element inside the Alert.
+     */
     class Audio {
       constructor(iframe, model) {
         this._domNode = iframe.contentDocument.getElementsByTagName('audio')[0];
@@ -254,6 +265,11 @@ hellobar.defineModule('elements.class.alert',
       elementIsVisible ? forVisible() : forHidden();
     }
 
+    /**
+     * @class AlertElement
+     * JavaScript API for Alert site element type.
+     * @module
+     */
     class AlertElement {
       constructor(model) {
         this._model = model;
