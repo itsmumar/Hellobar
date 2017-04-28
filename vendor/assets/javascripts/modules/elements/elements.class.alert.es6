@@ -159,7 +159,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       play() {
-        this._domNode && (this._model.sound !== 'none') && this._domNode.play();
+        (this._model.sound !== 'none') && this._domNode.play();
       }
     }
 
@@ -169,12 +169,14 @@ hellobar.defineModule('elements.class.alert',
         this._wasConverted = false;
         this._wasViewed = false;
       }
+
       converted() {
         if (!this._wasConverted) {
           elementsConversion.converted(this._element);
           this._wasConverted = true;
         }
       }
+
       viewed() {
         if (!this._wasViewed) {
           elementsConversion.viewed(this._element);

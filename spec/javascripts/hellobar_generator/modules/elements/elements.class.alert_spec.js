@@ -115,6 +115,8 @@ describe('Module elements.class.alert', function () {
     doWithElement(function (element, dependencies) {
       element.attach();
       setTimeout(function () {
+        element.contentDocument().querySelector('audio').play = function () {
+        };
         element.notify();
         expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalled();
         element.remove();

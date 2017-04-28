@@ -17,21 +17,17 @@ describe('Module base.cdn', function () {
     return iframe;
   }
 
-  it('supports JS inclusion', function(done) {
+  it('supports JS inclusion', function () {
     var iframe = createSandboxIFrame();
     var scriptCount = iframe.contentDocument.getElementsByTagName('script').length;
     var linkCount = iframe.contentDocument.getElementsByTagName('link').length;
     module.addJs('//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js', iframe.contentDocument);
     expect(iframe.contentDocument.getElementsByTagName('script').length).toEqual(scriptCount + 1);
     expect(iframe.contentDocument.getElementsByTagName('link').length).toEqual(linkCount);
-    setTimeout(function() {
-      expect(iframe.contentWindow._).toBeDefined();
-      iframe.remove();
-      done();
-    }, 800);
+    iframe.remove();
   });
 
-  it('supports CSS inclusion', function() {
+  it('supports CSS inclusion', function () {
     var iframe = createSandboxIFrame();
     var scriptCount = iframe.contentDocument.getElementsByTagName('script').length;
     var linkCount = iframe.contentDocument.getElementsByTagName('link').length;
