@@ -36,9 +36,6 @@ module ServiceProviders
 
     def valid?
       lists.present?
-    rescue => error
-      log "Getting lists raised #{ error }"
-      false
     end
   end
 end
