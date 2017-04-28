@@ -53,7 +53,7 @@ namespace :billing do
           bill.paid!
         elsif !bill.subscription || !bill.subscription.site
           billing_report "Voiding bill #{ bill.id } because subscription or site not found"
-          bill.void!
+          bill.voided!
         else
           # Try to bill the person if they haven't been within the last MIN_RETRY_TIME
           last_billing_attempt = bill.billing_attempts.last

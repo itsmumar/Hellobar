@@ -298,7 +298,7 @@ class Site < ActiveRecord::Base
       subscription.site = self
       subscription.payment_method = payment_method
       success = true
-      bill = calculate_bill(subscription, true, trial_period)
+      bill = calculate_bill(subscription, trial_period)
       bill.save!
       subscription.save!
 
@@ -322,25 +322,13 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def preview_change_subscription(subscription)
-    bill = calculate_bill(subscription, false)
-    # Make the bill read-only
-    def bill.readonly?
-      true
-    end
-    bill
-  end
-
   def bills_with_payment_issues(clear_cache = false)
     if clear_cache || !@bills_with_payment_issues
-      now = Time.current
       @bills_with_payment_issues = []
-      bills(true).each do |bill|
+      bills.due_now.each do |bill|
         # Find bills that are due now and we've tried to bill
         # at least once
-        if bill.pending? && bill.amount > 0 && (now >= bill.bill_at) && !bill.billing_attempts.empty?
-          @bills_with_payment_issues << bill
-        end
+        @bills_with_payment_issues << bill if bill.billing_attempts.present?
       end
     end
     @bills_with_payment_issues
@@ -412,10 +400,10 @@ class Site < ActiveRecord::Base
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
-  # change_subscription and preview_change_subscription
-  def calculate_bill(subscription, actually_change, trial_period = nil)
+  # change_subscription
+  def calculate_bill(subscription, trial_period = nil)
     raise MissingSubscription unless subscription
-    CalculateBill.new(self, subscription, actually_change, trial_period).call
+    CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
   end
 
   def do_generate_script_and_check_installation(options = {})

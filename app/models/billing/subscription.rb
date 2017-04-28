@@ -14,16 +14,10 @@ class Subscription < ActiveRecord::Base
 
   enum schedule: %i[monthly yearly]
 
-  class << self
-    def active
-      joins(:bills)
-        .where(
-          'bills.status = ? AND bills.start_date < ? AND bills.end_date > ?',
-          Bill.statuses['paid'], Time.current, Time.current
-        )
-        .where('bills.type != ?', Bill::Refund.to_s)
-    end
+  scope :paid, -> { joins(:bills).merge(Bill.active) }
+  scope :active, -> { paid.merge(Bill.without_refunds) }
 
+  class << self
     def values_for(_site)
       # Just return the defaults for now, in the future we can
       # offer per-site discounts, etc

@@ -99,7 +99,7 @@ describe Bill do
 
   describe Bill::Recurring do
     it 'should create the next bill once paid' do
-      subscription = create(:pro_subscription)
+      subscription = create(:subscription, :pro)
       Bill.destroy_all
       expect(subscription.bills(true).length).to eq(0)
       expect(subscription).to be_monthly
@@ -126,14 +126,14 @@ describe Bill do
     end
 
     it 'should not be affected by a refund' do
-      subscription = create(:pro_subscription)
+      subscription = create(:subscription, :pro)
       Bill.destroy_all
       expect(subscription.bills(true).length).to eq(0)
       expect(subscription).to be_monthly
       bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
       expect(subscription.bills(true).length).to eq(1)
       bill.attempt_billing!
-      bill.refund!
+      RefundBill.new(bill).call
       expect(subscription.bills(true).length).to eq(3)
       initial_bill = subscription.bills[0]
       recurring_bill = subscription.bills[1]
@@ -233,16 +233,15 @@ describe Bill do
 
     it 'discounts to the appropriate tier' do
       user = create(:user)
-      bills = []
-
-      35.times do
-        bill = create(:pro_bill, status: :paid)
-        bill.site.users << user
-        user.reload
-        bill.subscription.payment_method.update(user: user)
-        bill.update(discount: bill.calculate_discount)
-        bills << bill
-      end
+      bills =
+        Array.new(35) do
+          bill = create(:pro_bill, status: :paid)
+          bill.site.users << user
+          user.reload
+          bill.subscription.payment_method.update(user: user)
+          bill.update(discount: bill.calculate_discount)
+          bill
+        end
 
       expected = []
       5.times { expected << 0 }
@@ -389,53 +388,6 @@ describe PaymentMethod do
 
     it 'should raise an error if no payment_method_details' do
       expect { PaymentMethod.new.pay(create(:bill)) }.to raise_error(PaymentMethod::MissingPaymentDetails)
-    end
-  end
-
-  describe 'refund' do
-    it 'should successfully refund the billing attempt' do
-      subscription = create(:pro_subscription)
-      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10)
-      billing_attempt = subscription.payment_method.pay(bill)
-      # AlwaysSuccessfulPaymentMethodDetails.any_instance.should_receive(:refund).with(bill.amount, billing_attempt.response) -- enabling this will cause a later method to fail - not sure why
-      refund_bill, refund_attempt = billing_attempt.refund!
-      expect(refund_bill.amount).to eq(-10)
-      expect(refund_bill.refunded_billing_attempt).to eq(billing_attempt)
-      expect(refund_bill).not_to be_nil
-      expect(refund_bill.subscription).to eq(subscription)
-      expect(refund_bill.start_date).to be_within(5).of(Time.current)
-      expect(refund_bill.bill_at).to be_within(5).of(Time.current)
-      expect(refund_bill.end_date).to eq(july)
-      expect(refund_attempt).to be_successful
-      expect(refund_attempt.bill).to eq(refund_bill)
-      expect(refund_attempt.payment_method_details).to eq(subscription.payment_method.current_details)
-    end
-
-    it 'should let you do a partial refund' do
-      subscription = create(:pro_subscription)
-      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, _refund_attempt = billing_attempt.refund!(nil, -5)
-      expect(refund_bill.amount).to eq(-5)
-    end
-
-    it 'should allow a positive number and treat it as negative' do
-      subscription = create(:pro_subscription)
-      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, _refund_attempt = billing_attempt.refund!(nil, 5)
-      expect(refund_bill.amount).to eq(-5)
-    end
-
-    it 'should let you specify description' do
-      subscription = create(:pro_subscription)
-      billing_attempt = subscription.payment_method.pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      refund_bill, _refund_attempt = billing_attempt.refund!('custom description')
-      expect(refund_bill.description).to eq('custom description')
-    end
-
-    it 'should not let you refund an unsuccessful billing attempt' do
-      subscription = create(:subscription)
-      billing_attempt = create(:payment_method, :fails).pay(Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 10))
-      expect { billing_attempt.refund! }.to raise_error(BillingAttempt::InvalidRefund)
     end
   end
 end

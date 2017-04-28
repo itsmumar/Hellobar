@@ -1,85 +1,104 @@
 class CalculateBill
   include BillingAuditTrail
 
-  attr_reader :site, :subscription, :actually_change, :trial_period
-
-  def initialize(site, subscription, actually_change, trial_period)
-    @site = site
+  # @param [Bill::ActiveRecord_Relation] bills
+  # @param [Subscription] subscription
+  # @param [Boolean] trial_period
+  def initialize(subscription, bills:, trial_period: nil)
     @subscription = subscription
-    @actually_change = actually_change
+    @bills = bills
     @trial_period = trial_period
   end
 
   def call
-    now = Time.current
-    # First we need to void any pending recurring bills
-    # and keep any active paid bills
-    active_paid_bills = []
-    site.bills(true).each do |bill|
-      if bill.is_a?(Bill::Recurring)
-        if bill.pending?
-          bill.void! if actually_change
-        elsif bill.paid?
-          active_paid_bills << bill if bill.active_during(now)
-        end
-      end
-    end
-    if actually_change
-      audit << "Changing subscription to #{ subscription.inspect }"
-    end
-    bill = Bill::Recurring.new(subscription: subscription)
+    void_pending_bills!
+
+    audit << "Changing subscription to #{ subscription.inspect }"
+
     if active_paid_bills.empty?
-      # Gotta pay full amount now
+      make_bill_to_full_amount
+    elsif upgrading?
+      make_bill_for_upgrading
+    else
+      make_bill_for_downgrading
+    end
+  end
+
+  private
+
+  attr_reader :bills, :subscription, :trial_period
+
+  def void_pending_bills!
+    bills.pending.each(&:voided!)
+  end
+
+  def active_paid_bills
+    @active_paid_bills ||= bills.paid.order('id').select { |bill| bill.active_during(Time.current) }
+  end
+
+  def last_subscription
+    @last_subscription ||= active_paid_bills.last.subscription
+  end
+
+  def make_bill_to_full_amount
+    make_bill do |bill|
+      audit << "No active paid bills, charging full amount now: #{ bill.inspect }"
+    end
+  end
+
+  def make_bill_for_upgrading
+    make_bill do |bill|
+      bill.amount = calculate_reduced_amount
+      audit << "Upgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, prorating amount now: #{ bill.inspect }"
+    end
+  end
+
+  # We are downgrading or staying the same,
+  # so just set the bill to start after this bill ends,
+  # but make it the full amount
+  def make_bill_for_downgrading
+    make_bill do |bill|
+      bill.amount = subscription.amount
+      bill.grace_period_allowed = true
+      bill.bill_at = active_paid_bills.last.end_date
+      bill.start_date = bill.bill_at - 1.hour
+      audit << "Downgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, charging full amount later: #{ bill.inspect }"
+    end
+  end
+
+  # Subtract the unused paid amount from the price and round it
+  def calculate_reduced_amount
+    num_days_used = (Time.current - active_paid_bills.last.start_date) / 1.day
+    total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
+    percentage_unused = 1.0 - (num_days_used.to_f / total_days_of_last_subcription)
+    audit << "now: #{ Time.current }, start_date: #{ active_paid_bills.last.start_date }, end_date: #{ active_paid_bills.last.end_date }, total_days_of_last_subscription: #{ total_days_of_last_subcription.inspect }, num_days_used: #{ num_days_used }, percentage_unused: #{ percentage_unused }"
+
+    unused_paid_amount = last_subscription.amount * percentage_unused
+    (subscription.amount - unused_paid_amount).to_i
+  end
+
+  def make_bill(&block)
+    Bill::Recurring.new(subscription: subscription) do |bill|
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
-      bill.bill_at = now
-      if actually_change
-        audit << "No active paid bills, charging full amount now: #{ bill.inspect }"
-      end
-    else
-      last_subscription = active_paid_bills.last.subscription
+      bill.bill_at = Time.current
+      bill.start_date = 1.hour.ago
 
-      if Subscription::Comparison.new(last_subscription, subscription).upgrade?
-        # We are upgrading, gotta pay now, but we prorate it
+      block&.call bill
 
-        bill.bill_at = now
-        bill.grace_period_allowed = false
-        # Figure out percentage of their subscription they've used
-        # rounded to the day
-        num_days_used = (now - active_paid_bills.last.start_date) / 1.day
-        total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
-        percentage_used = num_days_used.to_f / total_days_of_last_subcription
-        percentage_unused = 1.0 - percentage_used
-        if actually_change
-          audit << "now: #{ now }, start_date: #{ active_paid_bills.last.start_date }, end_date: #{ active_paid_bills.last.end_date }, total_days_of_last_subscription: #{ total_days_of_last_subcription.inspect }, num_days_used: #{ num_days_used }, percentage_unused: #{ percentage_unused }"
-        end
-
-        unused_paid_amount = last_subscription.amount * percentage_unused
-        # Subtract the unused paid amount from the price and round it
-        bill.amount = (subscription.amount - unused_paid_amount).to_i
-        if actually_change
-          audit << "Upgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, prorating amount now: #{ bill.inspect }"
-        end
-      else
-        # We are downgrading or staying the same, so just set the bill to start
-        # after this bill ends, but make it the full amount
-        bill.bill_at = active_paid_bills.last.end_date
-        bill.amount = subscription.amount
-        bill.grace_period_allowed = true
-        if actually_change
-          audit << "Downgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, charging full amount later: #{ bill.inspect }"
-        end
-      end
+      bill.end_date = bill.renewal_date
+      use_trial_period bill
     end
+  end
 
-    bill.start_date = bill.bill_at - 1.hour
-    bill.end_date = bill.renewal_date
+  def use_trial_period(bill)
+    return unless trial_period
 
-    if trial_period
-      bill.amount = 0
-      bill.end_date = Time.current + trial_period
-    end
+    bill.amount = 0
+    bill.end_date = Time.current + trial_period
+  end
 
-    bill
+  def upgrading?
+    Subscription::Comparison.new(active_paid_bills.last.subscription, subscription).upgrade?
   end
 end
