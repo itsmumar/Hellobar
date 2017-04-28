@@ -29,7 +29,7 @@ class CalculateBill
   attr_reader :bills, :subscription, :trial_period
 
   def void_pending_bills!
-    bills.pending.each(&:void!)
+    bills.pending.each(&:voided!)
   end
 
   def active_paid_bills
