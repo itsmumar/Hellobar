@@ -19,6 +19,8 @@
 #hellobar-alert #hb-trigger .fa {
   min-width: 30px;
   min-height: 30px;
+  animation-duration: 0.75s;
+  -webkit-animation-duration: 0.75s;
 }
 
 #hellobar-alert #hb-popup-container {

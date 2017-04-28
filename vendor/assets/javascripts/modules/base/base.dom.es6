@@ -33,14 +33,21 @@ hellobar.defineModule('base.dom', [], function () {
   }
 
   /**
-   * Adds the CSS class to the target element
+   * Adds the CSS class (or classes) to the target element
    * @param element {Element}
-   * @param className {string}
+   * @param classOrClasses {string|array} Single or multiple CSS classes
    */
-  function addClass(element, className) {
+  function addClass(element, classOrClasses) {
     element = $(element);
-    if (element.className.indexOf(className) < 0) {
-      element.className += ' ' + className;
+    const addSingleClass = (className) => {
+      if (element.className.indexOf(className) < 0) {
+        element.className += ' ' + className;
+      }
+    };
+    if (typeof classOrClasses === 'string') {
+      addSingleClass(classOrClasses);
+    } else {
+      classOrClasses.forEach((cls) => addSingleClass(cls));
     }
   }
 

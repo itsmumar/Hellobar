@@ -86,7 +86,7 @@ hellobar.defineModule('elements.class.alert',
       }
 
       animate() {
-        animateWithSwinging(this._domNode);
+        dom.addClass(this._domNode.querySelector('.js-main-icon'), ['animated', 'swing']);
       }
 
       remove() {
@@ -250,26 +250,6 @@ hellobar.defineModule('elements.class.alert',
       elementIsVisible ? forVisible() : forHidden();
     }
 
-    function animateWithSwinging(element) {
-      const iterationLimit = 30;
-      let iteration = 0;
-      const originalTransform = element.style.transform;
-
-      function iterate() {
-        const rotationDegrees = Math.cos(iteration) * 30;
-        element.style.transform = `rotate(${rotationDegrees}deg)`;
-        iteration++;
-        if (iteration < iterationLimit) {
-          setTimeout(iterate, 80);
-        } else {
-          element.style.transform = originalTransform;
-        }
-      }
-
-      iterate();
-    }
-
-
     class AlertElement {
       constructor(model) {
         this._model = model;
@@ -301,6 +281,7 @@ hellobar.defineModule('elements.class.alert',
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
+          cdnLibraries.useAnimateCss(doc);
           preview.isActive() && cdnLibraries.useFroala(doc);
           if (this._model.google_font) {
             cdn.addCss('https://fonts.googleapis.com/css?family=' + this._model.google_font, this._iframe.contentDocument);
