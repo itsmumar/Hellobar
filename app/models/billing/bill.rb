@@ -58,6 +58,8 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  # TODO: This method needs to be refactored or even removed; it *no longer* is
+  # used for refunds, but was left without changes
   def attempt_billing!(allow_early = false)
     set_final_amount!
 
