@@ -333,14 +333,11 @@ class Site < ActiveRecord::Base
 
   def bills_with_payment_issues(clear_cache = false)
     if clear_cache || !@bills_with_payment_issues
-      now = Time.now
       @bills_with_payment_issues = []
-      bills(true).each do |bill|
+      bills.due_now.each do |bill|
         # Find bills that are due now and we've tried to bill
         # at least once
-        if bill.pending? && bill.amount > 0 && (now >= bill.bill_at) && !bill.billing_attempts.empty?
-          @bills_with_payment_issues << bill
-        end
+        @bills_with_payment_issues << bill if bill.billing_attempts.present?
       end
     end
     @bills_with_payment_issues

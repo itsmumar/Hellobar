@@ -25,6 +25,8 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
+  scope :with_amount, -> { where('bills.amount > 0') }
+  scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
 
