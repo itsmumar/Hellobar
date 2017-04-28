@@ -25,7 +25,7 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
-  scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.now) }
+  scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
 
   def during_trial_subscription?
