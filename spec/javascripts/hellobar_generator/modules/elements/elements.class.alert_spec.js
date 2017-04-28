@@ -11,7 +11,7 @@ describe('Module elements.class.alert', function () {
 
   function createDependencies(previewIsActive) {
     var dependencies = {
-      'base.dom': jasmine.createSpyObj('base.dom', ['addClass', 'hideElement', 'showElement', 'setStyles']),
+      'base.dom': jasmine.createSpyObj('base.dom', ['addClass', 'removeClass', 'hideElement', 'showElement', 'setStyles']),
       'base.cdn': jasmine.createSpyObj('base.cdn', ['addCss']),
       'base.cdn.libraries': jasmine.createSpyObj('base.cdn.libraries', ['useFroala', 'useFontAwesome']),
       'base.site': jasmine.createSpyObj('base.site', ['secret']),
