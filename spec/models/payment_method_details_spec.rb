@@ -124,9 +124,6 @@ describe CyberSourceCreditCard, :new_vcr do
       expect(cc2.data['token']).not_to be_nil
       # Should have re-used the same token
       expect(cc2.data['token']).to eq(cc1.data['token'])
-      # Should have updated the name for both credit cards
-      cc1 = CyberSourceCreditCard.find(cc1.id)
-      cc2 = CyberSourceCreditCard.find(cc2.id)
     end
   end
 
