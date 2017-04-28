@@ -301,37 +301,40 @@ hellobar.defineModule('elements.class.alert',
             this.showPopup();
           }
         };
+        const mainInitializationCycle = () => {
+          this._iframe = createIFrame(this._model.type);
+          elementsInjection.inject(this._iframe);
+          populateIFrame(this._iframe, this._css, html());
+          configureIFrame(this._iframe, this._model);
+          this._iframe.contentWindow.hellobar = hellobar;
+          preview.isActive() && dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
+          this._model.theme && dom.addClass(this._iframe.contentDocument.body, this._model.theme.id);
+          addCdnResources(this._iframe.contentDocument);
+          this._trigger = new Trigger(this._iframe, this._model);
+          this._popup = new Popup(this._iframe, this._model);
+          this._audio = new Audio(this._iframe, this._model);
+          this._conversionHelper = new ConversionHelper(this);
+          this._trigger.setClickListener(onTriggerClicked);
+          this.adjustSize();
+          bindEvents();
+          elementsIntents.applyViewCondition(this._model.view_condition, () => {
+            this.show();
+            if (this._model.notification_delay > 0) {
+              setTimeout(() => {
+                this.notify();
+              }, 1000 * this._model.notification_delay);
+            } else {
+              this.notify();
+            }
+
+          }, () => {
+            this.show();
+          });
+          this.onInit && this.onInit();
+        };
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
-            this._iframe = createIFrame(this._model.type);
-            elementsInjection.inject(this._iframe);
-            populateIFrame(this._iframe, this._css, html());
-            configureIFrame(this._iframe, this._model);
-            this._iframe.contentWindow.hellobar = hellobar;
-            preview.isActive() && dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
-            this._model.theme && dom.addClass(this._iframe.contentDocument.body, this._model.theme.id);
-            addCdnResources(this._iframe.contentDocument);
-            this._trigger = new Trigger(this._iframe, this._model);
-            this._popup = new Popup(this._iframe, this._model);
-            this._audio = new Audio(this._iframe, this._model);
-            this._conversionHelper = new ConversionHelper(this);
-            this._trigger.setClickListener(onTriggerClicked);
-            this.adjustSize();
-            bindEvents();
-            elementsIntents.applyViewCondition(this._model.view_condition, () => {
-              this.show();
-              if (this._model.notification_delay > 0) {
-                setTimeout(() => {
-                  this.notify();
-                }, 1000 * this._model.notification_delay);
-              } else {
-                this.notify();
-              }
-
-            }, () => {
-              this.show();
-            });
-            this.onInit && this.onInit();
+            mainInitializationCycle();
           }, 1);
         });
       }
