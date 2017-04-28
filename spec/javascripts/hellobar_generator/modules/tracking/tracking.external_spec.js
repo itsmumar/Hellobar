@@ -30,7 +30,7 @@ describe('Module tracking.external', function () {
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
     legacyGoogleAnalyticsMock = jasmine.createSpyObj('LGA', ['send']);
 
-    googleAnalyticsMock.introspect = function () {
+    googleAnalyticsMock.inspect = function () {
       return {
         available: function () {
           return true;
@@ -81,7 +81,7 @@ describe('Module tracking.external', function () {
   });
 
   it('is considered available if at least one of the tracking engine is available', function () {
-    expect(module.introspect().available()).toEqual(true);
+    expect(module.inspect().available()).toEqual(true);
   });
 
 

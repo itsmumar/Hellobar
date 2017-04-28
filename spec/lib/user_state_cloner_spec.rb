@@ -1,10 +1,6 @@
 describe UserStateCloner, '#save' do
   let(:json) { Rails.root.join('spec', 'fixtures', 'user_state.json').read }
 
-  before(:each) do
-    allow_any_instance_of(User).to receive(:add_to_infusionsoft)
-  end
-
   it 'creates the user' do
     cloner = UserStateCloner.new(json)
 

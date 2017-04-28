@@ -18,7 +18,7 @@ class CalculateBill
     site.bills(true).each do |bill|
       if bill.is_a?(Bill::Recurring)
         if bill.pending?
-          bill.void! if actually_change
+          bill.voided! if actually_change
         elsif bill.paid?
           active_paid_bills << bill if bill.active_during(now)
         end

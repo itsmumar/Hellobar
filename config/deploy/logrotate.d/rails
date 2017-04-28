@@ -1,4 +1,4 @@
-/mnt/deploy/current/log/production.log {
+/mnt/deploy/current/log/production.log /mnt/deploy/current/log/staging.log /mnt/deploy/current/log/edge.log {
     missingok
     notifempty
     compress

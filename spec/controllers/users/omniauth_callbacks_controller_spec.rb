@@ -1,9 +1,4 @@
 describe Users::OmniauthCallbacksController do
-  before do
-    allow(Infusionsoft).to receive(:contact_add_with_dup_check)
-    allow(Infusionsoft).to receive(:contact_add_to_group)
-  end
-
   before(:each) do
     request.env['devise.mapping'] = Devise.mappings[:user]
   end
@@ -37,10 +32,6 @@ describe Users::OmniauthCallbacksController do
         expect(response).to redirect_to(new_site_path(url: session[:new_site_url]))
       end
 
-      it 'does not create a lead' do
-        expect { send_request }.not_to change(Lead, :count)
-      end
-
       context 'and has authentications' do
         let!(:authentication) { create(:authentication, user: user, uid: uid) }
         let(:credentials) { double(refresh_token: 'refresh_token', token: 'token', expires_at: Time.current.to_i) }
@@ -55,11 +46,6 @@ describe Users::OmniauthCallbacksController do
     end
 
     context 'when user does not exist' do
-      it 'creates a lead' do
-        expect { send_request }.to change(Lead, :count).by(1)
-        expect(Lead.last.user).to eql User.find_by(email: 'test@test.com')
-      end
-
       before do
         stub_omniauth
       end

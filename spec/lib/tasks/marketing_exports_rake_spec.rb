@@ -7,13 +7,13 @@ describe 'marketing:export_recent_logins_with_plan' do
 
   before do
     @user_free_plan = create(:site_membership).user
-    create(:free_subscription, user: @user_free_plan, site: @user_free_plan.sites.first)
+    create(:subscription, :free, user: @user_free_plan, site: @user_free_plan.sites.first)
 
     @user_pro_plan = create(:site_membership).user
-    create(:pro_subscription, user: @user_pro_plan, site: @user_pro_plan.sites.first)
+    create(:subscription, :pro, user: @user_pro_plan, site: @user_pro_plan.sites.first)
 
     @user_enterprise_plan = create(:site_membership).user
-    create(:enterprise_subscription, user: @user_enterprise_plan, site: @user_enterprise_plan.sites.first)
+    create(:subscription, :enterprise, user: @user_enterprise_plan, site: @user_enterprise_plan.sites.first)
 
     files.values.each { |user| user.update_attribute(:current_sign_in_at, Time.zone.now - 10.days) }
 

@@ -48,22 +48,63 @@ describe Subscription do
     end
   end
 
+  describe '.paid scope' do
+    let!(:paid_subscription) { create(:subscription, :pro) }
+    let!(:unpaid_subscription) { create(:subscription, :pro) }
+
+    before do
+      create(:recurring_bill, :pending, subscription: unpaid_subscription)
+    end
+
+    context 'when today is between bill start and end date' do
+      it 'returns paid subscriptions with paid bills' do
+        create(:recurring_bill, :paid, subscription: paid_subscription)
+        expect(Subscription.paid).to match_array [paid_subscription]
+      end
+    end
+
+    context 'when bill is outdated' do
+      it 'returns no subscriptions' do
+        create(:recurring_bill, :paid, subscription: paid_subscription, start_date: 1.month.ago, end_date: 1.day.ago)
+        expect(Subscription.paid).to be_empty
+      end
+    end
+  end
+
   describe '.active scope' do
-    let(:pro_subscription) { create(:pro_subscription) }
+    context 'with paid bill' do
+      let(:pro) { create(:subscription, :pro, :with_bill) }
+      let(:free) { create(:subscription, :free, :with_bill) }
+      let(:free_plus) { create(:subscription, :free_plus, :with_bill) }
+      let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
+      let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
+      let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
+      let(:problem_with_payment) { create(:subscription, :problem_with_payment, :with_bill) }
 
-    it 'includes subscriptions with paid bills at the current time' do
-      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 1.week.ago, end_date: 1.week.from_now, status: :paid)
-      expect(Subscription.active).to include(bill.subscription)
+      let!(:active_subscriptions) do
+        [pro, free, free_plus, problem_with_payment, enterprise, pro_managed, pro_comped]
+      end
+
+      it 'returns subscriptions' do
+        expect(Subscription.active).to match_array active_subscriptions
+      end
+
+      context 'and refunded bill' do
+        before { Bill.active.each { |bill| RefundBill.new(bill).call } }
+
+        it 'returns no subscriptions' do
+          expect(Subscription.active).to match_array []
+        end
+      end
     end
 
-    it 'does not include unpaid bills' do
-      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 1.week.ago, end_date: 1.week.from_now, status: :pending)
-      expect(Subscription.active).to_not include(bill.subscription)
-    end
+    context 'with pending bill' do
+      let!(:active_subscription) { create(:subscription, :pro) }
+      before { create(:recurring_bill, :pending, subscription: active_subscription) }
 
-    it 'does not include bills in a different period' do
-      bill = create(:recurring_bill, subscription: pro_subscription, start_date: 2.weeks.ago, end_date: 1.week.ago, status: :pending)
-      expect(Subscription.active).to_not include(bill.subscription)
+      it 'returns no subscriptions' do
+        expect(Subscription.active).to match_array []
+      end
     end
   end
 
@@ -243,13 +284,13 @@ describe Subscription do
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
       # Should still have pro cabalities
       expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
       # Should have a pending bill for pro
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Pro)
 
@@ -257,19 +298,19 @@ describe Subscription do
       success, _bill = @site.change_subscription(@free, @payment_method)
       expect(success).to be_truthy
 
-      # Should still have pro capabilities
-      expect(@site.capabilities(true).class).to eq(Subscription::Pro::Capabilities)
+      # Should not have pro capabilities
+      expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should have a pending bill for free
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
 
       # Void the paid bill
-      pro_bill.void!
+      pro_bill.voided!
       # Should not have pro capabilities
       expect(@site.capabilities(true).class).to eq(Subscription::Free::Capabilities)
       # Should still have a pending bill for free
-      pending = @site.bills(true).select(&:pending?)
+      pending = @site.bills.pending
       expect(pending.size).to eq(1)
       expect(pending.first.subscription).to be_a(Subscription::Free)
     end
@@ -461,7 +502,7 @@ describe Site do
       success, bill1 = @site.change_subscription(@pro, @payment_method)
       expect(success).to be_truthy
       expect(@site.current_subscription).to eq(@pro)
-      bill1.refund!
+      RefundBill.new(bill1).call
       success, bill2 = @site.change_subscription(@enterprise, @payment_method)
       expect(success).to be_truthy
       expect(bill2).to be_paid
@@ -475,7 +516,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
 
@@ -495,7 +536,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Refund
-      refund_bill, refund_attempt = pro_bill.refund!
+      refund_bill, refund_attempt = RefundBill.new(pro_bill).call
       expect(refund_bill).to be_paid
       expect(refund_attempt).to be_successful
 
@@ -504,7 +545,7 @@ describe Site do
       expect(success).to be_truthy
 
       # Void the pro bill
-      pro_bill.void!
+      pro_bill.voided!
 
       # Switch to enterprise
       success, enterprise_bill = @site.change_subscription(@enterprise, @payment_method)

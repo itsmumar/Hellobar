@@ -39,13 +39,13 @@ describe 'service providers' do
     end
   end
 
-  describe ServiceProviders::GetResponse do
+  describe ServiceProviders::GetResponseApi do
     describe '#name' do
       specify { expect(service_provider.name).to eql 'GetResponse' }
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :get_response }
+      specify { expect(service_provider.key).to eql :get_response_api }
     end
   end
 

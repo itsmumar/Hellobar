@@ -183,6 +183,17 @@ describe ScriptGenerator do
 
         expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
       end
+
+      context 'with custom html/js' do
+        it 'escapes </script>' do
+          custom_html = '<script></script>'
+          site_element = build(:site_element, :bar, custom_html: custom_html)
+          allow(site).to receive(:rules).and_return([rule])
+          allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+
+          expect(generator.rules.first[:site_elements]).to include '<script><\/script>'
+        end
+      end
     end
 
     context 'site element has a theme' do

@@ -31,11 +31,6 @@ describe SitesController do
     end
 
     context 'when no user is logged-in' do
-      before do
-        allow(Infusionsoft).to receive(:contact_add_with_dup_check)
-        allow(Infusionsoft).to receive(:contact_add_to_group)
-      end
-
       it 'creates a new temporary user and logs them in' do
         expect {
           post :create, site: { url: 'temporary-site.com' }
@@ -262,7 +257,7 @@ describe SitesController do
 
     it 'downgrades a site to free' do
       stub_current_user(user)
-      create(:pro_subscription, site: site)
+      create(:subscription, :pro, site: site)
 
       put :downgrade, id: site.id
 

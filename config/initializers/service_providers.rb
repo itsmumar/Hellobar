@@ -1,4 +1,4 @@
-require './config/initializers/settings'
+require Rails.root.join('config', 'initializers', 'settings.rb')
 
 require './lib/service_provider'
 require './lib/service_providers/email'

@@ -254,13 +254,11 @@ There is a sinatra app in `test_site`.
 
 #### Defaults
 
-Run `rake test_site:generate` to generate `test_site/public/test.html`
-using the last site created.
+Run `rake test_site:generate` to generate `public/test_site.html`
+using the most recently updated `Site`.
 
 Run `rake test_site:run` to start the Sinatra server and navigate to
-`http://localhost:4567`
-
-By default this will use the last site created to generate the js.
+`http://localhost:4567` to views a test page with the bars for this site.
 
 You can explicitly pass a site id as well:
 
