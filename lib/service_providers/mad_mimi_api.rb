@@ -19,7 +19,7 @@ module ServiceProviders
     end
 
     def lists
-      client.lists['lists']['list']
+      client.lists.dig('lists', 'list')
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
