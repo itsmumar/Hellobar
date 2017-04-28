@@ -7,11 +7,11 @@ namespace :convert_v1 do
     puts 'Getting users...'
     users = Hello::WordpressUser.all
     total = users.length
-    start_time = Time.now.to_i
+    start_time = Time.current.to_i
     puts "Found #{ total } users"
     users.each do |user|
       t += 1
-      puts "Processed #{ t }/#{ total } users in #{ Time.now.to_i - start_time }s. Converted #{ c } users" if t % 100 == 0
+      puts "Processed #{ t }/#{ total } users in #{ Time.current.to_i - start_time }s. Converted #{ c } users" if t % 100 == 0
       print "#{ user.email }..."
       if user.converted?
         puts 'already converted'
