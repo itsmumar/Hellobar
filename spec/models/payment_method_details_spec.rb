@@ -117,7 +117,6 @@ describe CyberSourceCreditCard, :new_vcr do
       cc1.save!
       cc1 = CyberSourceCreditCard.find(cc1.id)
       expect(cc1.data['token']).not_to be_nil
-      expect(cc1.cybersource_profile['cardExpirationYear']).to eq(year)
       # Now update the year
       cc2 = CyberSourceCreditCard.new(data: valid_data.merge('year' => year), payment_method: p)
       cc2.save!
@@ -128,8 +127,6 @@ describe CyberSourceCreditCard, :new_vcr do
       # Should have updated the name for both credit cards
       cc1 = CyberSourceCreditCard.find(cc1.id)
       cc2 = CyberSourceCreditCard.find(cc2.id)
-      expect(cc2.cybersource_profile['cardExpirationYear']).to eq(year)
-      expect(cc1.cybersource_profile['cardExpirationYear']).to eq(year)
     end
   end
 
