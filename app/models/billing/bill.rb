@@ -6,7 +6,15 @@ class Bill < ActiveRecord::Base
   class StatusAlreadySet < StandardError; end
   class InvalidStatus < StandardError; end
   class BillingEarly < StandardError; end
-  class InvalidBillingAmount < StandardError; end
+  class InvalidBillingAmount < StandardError
+    attr_reader :amount
+
+    def initialize(amount)
+      @amount = amount.to_f
+      super("Amount was: #{ amount.to_f.inspect }")
+    end
+  end
+
   class MissingPaymentMethod < StandardError; end
 
   serialize :metadata, JSON
@@ -40,7 +48,7 @@ class Bill < ActiveRecord::Base
   end
 
   def check_amount
-    raise InvalidBillingAmount, "Amount was: #{ amount.to_f.inspect }" if !amount || amount < 0
+    raise InvalidBillingAmount, amount if !amount || amount < 0
   end
 
   def status=(value)

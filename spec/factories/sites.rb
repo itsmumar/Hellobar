@@ -3,6 +3,7 @@ FactoryGirl.define do
     transient do
       elements []
       user nil
+      schedule :monthly
     end
 
     url { generate(:random_uniq_url) }
@@ -31,26 +32,26 @@ FactoryGirl.define do
     end
 
     trait :free_subscription do
-      after(:create) do |site|
-        create(:subscription, :free, site: site, user: site.users.first)
+      after(:create) do |site, evaluator|
+        create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
       end
     end
 
     trait :pro do
-      after(:create) do |site|
-        create(:subscription, :pro, site: site, user: site.users.first)
+      after(:create) do |site, evaluator|
+        create(:subscription, :pro, site: site, user: site.users.first, schedule: evaluator.schedule)
       end
     end
 
     trait :enterprise do
-      after(:create) do |site|
-        create(:enterprise_subscription, site: site, user: site.users.first)
+      after(:create) do |site, evaluator|
+        create(:enterprise_subscription, site: site, user: site.users.first, schedule: evaluator.schedule)
       end
     end
 
     trait :pro_managed do
-      after(:create) do |site|
-        create(:subscription, :pro_managed, site: site, user: site.users.first)
+      after(:create) do |site, evaluator|
+        create(:subscription, :pro_managed, site: site, user: site.users.first, schedule: evaluator.schedule)
       end
     end
 

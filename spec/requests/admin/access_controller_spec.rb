@@ -227,7 +227,7 @@ describe Admin::AccessController do
     let!(:admins) { create_list :admin, 2 }
     let(:email) { admin.email }
     let(:key) { Admin.lockdown_key(email, timestamp) }
-    let(:lockdown) { get admin_lockdown_path(email: email, key: key, timestamp: timestamp ) }
+    let(:lockdown) { get admin_lockdown_path(email: email, key: key, timestamp: timestamp) }
 
     context 'with correct key and timestamp' do
       it 'locks all admins' do
