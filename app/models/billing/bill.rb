@@ -40,7 +40,7 @@ class Bill < ActiveRecord::Base
   end
 
   def check_amount
-    raise InvalidBillingAmount, "Amount was: #{ amount.inspect }" if !amount || amount < 0
+    raise InvalidBillingAmount, "Amount was: #{ amount.to_f.inspect }" if !amount || amount < 0
   end
 
   def status=(value)
