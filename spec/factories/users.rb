@@ -6,7 +6,7 @@ FactoryGirl.define do
     password 'password'
 
     trait :deleted do
-      after(:create) { |user| user.destroy }
+      after(:create, &:destroy)
     end
 
     trait :temporary do

@@ -51,12 +51,12 @@ describe Admin::SitesController do
         let(:site) { create(:site, :with_user, :free_subscription) }
 
         %w[ProManaged ProComped FreePlus].each do |to_subscription|
-          context "to #{to_subscription}" do
+          context "to #{ to_subscription }" do
             let(:params) { { subscription: { plan: to_subscription, schedule: 'monthly' } } }
 
             it 'upgrades successfully' do
               update
-              expect(site.reload.current_subscription).to be_a Subscription::const_get(to_subscription)
+              expect(site.reload.current_subscription).to be_a Subscription.const_get(to_subscription)
             end
           end
         end
