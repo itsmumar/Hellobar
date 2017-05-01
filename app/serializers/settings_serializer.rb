@@ -1,7 +1,15 @@
 class SettingsSerializer < ActiveModel::Serializer
   LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11').freeze
 
-  attributes :current_user, :lead_data, :geolocation_url, :track_editor_flow
+  attributes :current_user, :lead_data, :geolocation_url, :track_editor_flow, :available_themes, :available_fonts
+
+  def available_themes
+    ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
+  end
+
+  def available_fonts
+    ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).as_json
+  end
 
   def current_user
     {

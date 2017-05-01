@@ -34,11 +34,6 @@ html
     = render "shared/crazy_egg"
     = render "shared/modals/lead_data_modal"
 
-    javascript:
-      var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
-      var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};
-      window.emberRootURL = window.location.pathname;
-
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
 
