@@ -12,9 +12,5 @@ export default Ember.Service.extend({
         new LeadDataModal(applicationSettings).checkCountryAndOpen();
       }
     });
-  },
-
-  settings() {
-    return this.get('settings')
   }
 });

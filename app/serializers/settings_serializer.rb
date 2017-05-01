@@ -12,7 +12,7 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def current_user
-    UserSerializer.new(current_user).as_json
+    UserSerializer.new(user).as_json
   end
 
   def lead_data
@@ -33,7 +33,7 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def track_editor_flow
-    current_user && current_user.sites.count == 1 && current_user.site_elements.count == 0
+    user && user.sites.count == 1 && user.site_elements.count == 0
   end
 
   private
