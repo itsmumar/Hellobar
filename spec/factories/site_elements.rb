@@ -33,6 +33,10 @@ FactoryGirl.define do
         City: <span data-hb-geolocation="city"></span></p>'
     end
 
+    trait :alert do
+      type 'Alert'
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil
