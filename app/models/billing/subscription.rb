@@ -3,6 +3,7 @@ require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
   include BillingAuditTrail
+  ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
   belongs_to :payment_method
   belongs_to :site, touch: true

@@ -2,7 +2,7 @@ describe Admin::AccessController do
   let!(:admin) { create(:admin) }
 
   describe 'POST do_reset_password' do
-    let(:do_reset_password) { post :do_reset_password, params }
+    let(:do_reset_password) { post admin_reset_password_path, params }
 
     before do
       stub_current_admin(admin)
@@ -72,28 +72,44 @@ describe Admin::AccessController do
   end
 
   describe 'GET logout' do
+    let(:logout_admin) { get admin_logout_path }
+
     it 'logs the admin out' do
       stub_current_admin(admin)
-      expect(admin).to receive(:logout!)
 
-      get :logout_admin
+      logout_admin
 
       expect(response).to redirect_to(admin_access_path)
+      expect(flash['success']).to eql 'You are now logged out.'
     end
 
     it 'redirects if no admin is logged-in' do
-      get :logout_admin
+      logout_admin
       expect(response).to redirect_to(admin_access_path)
+      expect(flash['alert']).to eql 'Access denied'
     end
   end
 
   describe 'POST process_step1' do
     let(:email) { admin.email }
-    let(:process_step1) { post :process_step1, login_email: email }
+    let(:process_step1) { post admin_access_path, login_email: email }
 
-    it 'records login attepmt' do
-      expect(Admin).to receive(:record_login_attempt)
-      process_step1
+    shared_examples 'auditable' do
+      let(:last_login_attempt) { AdminLoginAttempt.last }
+
+      it 'records login attempt' do
+        expect { process_step1 }.to change(AdminLoginAttempt, :count).by(1)
+        expect(last_login_attempt.email).to eql email
+        expect(last_login_attempt.ip_address).to eql request.remote_ip
+      end
+    end
+
+    shared_examples 'renders step 2' do
+      it 'renders step2' do
+        process_step1
+        expect(response).to be_success
+        expect(response.body).to include 'Enter Password'
+      end
     end
 
     it 'stores admin_access_email in session' do
@@ -101,25 +117,9 @@ describe Admin::AccessController do
       expect(session[:admin_access_email]).to eql admin.email
     end
 
-    context 'with blank email' do
-      let(:email) { '' }
-
-      it 'redirects to admin_access_path' do
-        process_step1
-        expect(response).to redirect_to admin_access_path
-      end
-    end
-
     context 'when email exists' do
-      it 'renders step2' do
-        process_step1
-        expect(response).to have_rendered :step2
-      end
-
-      it 'assigns @admin' do
-        process_step1
-        expect(assigns(:admin)).to eql admin
-      end
+      it_behaves_like 'auditable'
+      it_behaves_like 'renders step 2'
 
       context 'and admin is locked' do
         let(:admin) { create :admin, :locked }
@@ -134,27 +134,34 @@ describe Admin::AccessController do
     context 'when email does not exist' do
       let(:email) { 'wrong@email.com' }
 
-      it 'renders step2' do
-        process_step1
-        expect(response).to have_rendered :step2
-      end
+      it_behaves_like 'auditable'
+      it_behaves_like 'renders step 2'
+    end
 
-      it 'does not assign @admin' do
+    context 'when blank email' do
+      let(:email) { '' }
+
+      it 'redirects to admin_access_path' do
         process_step1
-        expect(assigns(:admin)).to be_nil
+        expect(response).to redirect_to admin_access_path
+      end
+    end
+
+    context 'when admin is signed in' do
+      before { stub_current_admin(admin) }
+
+      it 'redirects to admin_path' do
+        process_step1
+        expect(response).to redirect_to admin_path
       end
     end
   end
 
   describe 'POST process_step2' do
     let(:email) { admin.email }
-    let(:process_step2) { post :process_step2, admin_password: 'password', otp: '123 456' }
-
-    before { session[:admin_access_email] = email }
+    let(:process_step2) { post admin_authenticate_path, admin_password: 'password', otp: '123 456' }
 
     context 'with blank session[:admin_access_email]' do
-      before { session[:admin_access_email] = '' }
-
       it 'redirects to admin_access_path' do
         process_step2
         expect(response).to redirect_to admin_access_path
@@ -162,6 +169,8 @@ describe Admin::AccessController do
     end
 
     context 'when email exists' do
+      before { post admin_access_path, login_email: email }
+
       context 'and password is correct' do
         it 'redirects to admin_path' do
           process_step2
@@ -184,7 +193,7 @@ describe Admin::AccessController do
       end
 
       context 'and password is not correct' do
-        let(:process_step2) { post :process_step2, admin_password: 'wrong', otp: '123 456' }
+        let(:process_step2) { post admin_authenticate_path, admin_password: 'wrong', otp: '123 456' }
 
         it 'renders error' do
           process_step2
@@ -203,16 +212,45 @@ describe Admin::AccessController do
     end
 
     context 'when email does not exist' do
-      let(:email) { 'wrong@email.com' }
+      before { post admin_access_path, login_email: 'wrong@email.com' }
 
       it 'renders step2' do
         process_step2
-        expect(response).to have_rendered :step2
+        expect(response).to be_success
+        expect(response.body).to include 'Enter Password'
+      end
+    end
+  end
+
+  describe 'POST lockdown', :freeze do
+    let!(:timestamp) { Time.current.to_i }
+    let!(:admins) { create_list :admin, 2 }
+    let(:email) { admin.email }
+    let(:key) { Admin.lockdown_key(email, timestamp) }
+    let(:lockdown) { get admin_lockdown_path(email: email, key: key, timestamp: timestamp) }
+
+    context 'with correct key and timestamp' do
+      it 'locks all admins' do
+        expect { lockdown }.to change(Admin.locked, :count).from(0).to(3)
+        expect(response.body).to eql 'Admins have been successfully locked down'
       end
 
-      it 'does not assign @admin' do
-        process_step2
-        expect(assigns(:admin)).to be_nil
+      context 'and key is expired' do
+        let!(:timestamp) { 2.hours.ago.to_i }
+
+        it 'does not lock admins' do
+          expect { lockdown }.not_to change(Admin.locked, :count)
+          expect(response.body).to eql 'Admins could not be locked down'
+        end
+      end
+    end
+
+    context 'with wrong key' do
+      let!(:key) { 'wrong' }
+
+      it 'does not lock admins' do
+        expect { lockdown }.not_to change(Admin.locked, :count)
+        expect(response.body).to eql 'Admins could not be locked down'
       end
     end
   end

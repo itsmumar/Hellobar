@@ -18,6 +18,8 @@ class Admin < ActiveRecord::Base
 
   serialize :valid_access_tokens, Hash
 
+  scope :locked, -> { where(locked: true) }
+
   class << self
     def make(email, initial_password)
       Admin.new(email: email, initial_password: initial_password)
@@ -143,10 +145,6 @@ class Admin < ActiveRecord::Base
 
   def unlock!
     update_attributes(locked: false, login_attempts: 0)
-  end
-
-  def validated_access_token?(access_token)
-    valid_access_tokens.key?(access_token)
   end
 
   def session_heartbeat!
