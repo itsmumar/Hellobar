@@ -12,11 +12,7 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def current_user
-    {
-      current_user: UserSerializer.new(current_user).as_json,
-      lead_data: lead_data,
-      geolocation_url: Hellobar::Settings[:geolocation_url]
-    }
+    UserSerializer.new(current_user).as_json
   end
 
   def lead_data
@@ -42,11 +38,11 @@ class SettingsSerializer < ActiveModel::Serializer
 
   private
 
-  def current_user
+  def user
     object
   end
 
   def needs_filling_questionnaire?
-    current_user && current_user.created_at >= LEADS_CREATION_STARTING_DATE && current_user.lead.blank?
+    user && user.created_at >= LEADS_CREATION_STARTING_DATE && user.lead.blank?
   end
 end
