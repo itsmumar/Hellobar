@@ -1,7 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require File.expand_path('../support/simplecov', __FILE__) if ENV['COVERAGE'] || ENV['CI']
-
+require File.expand_path('../support/simplecov', __FILE__)
 require File.expand_path('../../config/environment', __FILE__)
 
 # Prevent database truncation if the environment is production/staging/edge
