@@ -4,7 +4,7 @@ class Admin::UsersController < ApplicationController
   before_action :require_admin
 
   def index
-    q = params[:q].strip
+    q = params[:q].to_s.strip
 
     if q.blank?
       @users = User.page(params[:page]).per(24).includes(:authentications)

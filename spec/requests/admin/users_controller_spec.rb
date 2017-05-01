@@ -22,6 +22,12 @@ describe Admin::UsersController do
     it_behaves_like 'success response'
 
     context 'without search string' do
+      let(:q) { nil }
+
+      it_behaves_like 'success response'
+    end
+
+    context 'with empty search string' do
       let(:q) { '' }
 
       it_behaves_like 'success response'
