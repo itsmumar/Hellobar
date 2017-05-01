@@ -163,6 +163,47 @@ hellobar.defineModule('elements.class.alert',
       }
     }
 
+    class PreviewModeTooltip {
+      constructor(iframe, model) {
+        this._domNode = iframe.contentDocument.getElementById('hb-preview-mode-tooltip');
+        this._model = model;
+      }
+
+      adjustSize() {
+        const applyPlacement = () => {
+          const horizontalOffset = geometry.offset + 'px';
+          const verticalOffset = (geometry.offset + geometry.triggerSize + geometry.offset - 15) + 'px';
+          const applyBottomLeftPlacement = () => {
+            dom.setStyles(this._domNode, {
+              left: horizontalOffset,
+              top: 'auto',
+              right: 'auto',
+              bottom: verticalOffset
+            });
+          };
+          const applyBottomRightPlacement = () => {
+            dom.setStyles(this._domNode, {
+              left: 'auto',
+              top: 'auto',
+              right: horizontalOffset,
+              bottom: verticalOffset
+            });
+          };
+          (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
+        };
+        applyPlacement();
+      }
+
+      show() {
+        dom.showElement(this._domNode);
+      }
+
+      hide() {
+        dom.hideElement(this._domNode);
+      }
+
+    }
+
     class ConversionHelper {
       constructor(alertElement) {
         this._element = alertElement;
@@ -316,6 +357,7 @@ hellobar.defineModule('elements.class.alert',
           if (this._isPopupVisible) {
             this.hidePopup();
           } else {
+            this._previewModeTooltip.hide();
             this.showPopup();
           }
         };
@@ -331,7 +373,9 @@ hellobar.defineModule('elements.class.alert',
           this._trigger = new Trigger(this._iframe, this._model);
           this._popup = new Popup(this._iframe, this._model);
           this._audio = new Audio(this._iframe, this._model);
+          this._previewModeTooltip = new PreviewModeTooltip(this._iframe, this._model);
           this._conversionHelper = new ConversionHelper(this);
+          preview.isActive() && this._previewModeTooltip.show();
           this._trigger.setClickListener(onTriggerClicked);
           this.adjustSize();
           bindEvents();
@@ -366,6 +410,7 @@ hellobar.defineModule('elements.class.alert',
 
         this._trigger.adjustSize();
         this._popup.adjustSize();
+        this._previewModeTooltip.adjustSize();
       }
 
       _domNodeById(id) {
