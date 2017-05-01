@@ -23,10 +23,6 @@ module ApplicationHelper
     number_to_currency(cost, precision: 0)
   end
 
-  def new_user?
-    current_user && current_user.sites.count == 1 && current_user.site_elements.count == 0
-  end
-
   def time_zone_options
     filtered_timezone_list.map { |tz| [tz.to_s, tz.tzinfo.identifier] }
   end
