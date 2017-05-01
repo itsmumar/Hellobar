@@ -4,6 +4,7 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   theming: Ember.inject.service(),
 
@@ -164,7 +165,7 @@ export default Ember.Controller.extend({
   showAdditionalColors: Ember.computed.equal('model.type', 'Bar'),
 
   trackColorView: (function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person("Editor Flow", {
         step: "Color Settings",
         goal: this.get("model.element_subtype"),
@@ -176,7 +177,7 @@ export default Ember.Controller.extend({
   //-----------  Analytics  -----------#
 
   trackTextView: (function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person("Editor Flow", {
         step: "Content Settings",
         goal: this.get("model.element_subtype"),

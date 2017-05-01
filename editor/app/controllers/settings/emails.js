@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
   inlineEditing: Ember.inject.service(),
   bus: Ember.inject.service(),
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   init() {
     this.get('bus').subscribe('hellobar.core.fields.changed', (params) => {
@@ -87,7 +88,7 @@ export default Ember.Controller.extend({
 
       } else {
         // New Contact List
-        if (trackEditorFlow) {
+        if (this.get('applicationSettings.track_editor_flow')) {
           InternalTracking.track_current_person('Editor Flow', {
             step: 'Contact List Settings',
             goal: this.get('model.element_subtype')

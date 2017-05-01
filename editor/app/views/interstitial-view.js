@@ -1,8 +1,10 @@
 let CSS_TRANSITION = 750; // when changing please update it in "_interstitial.css.sass" as well
 
 HelloBar.InterstitialView = Ember.View.extend({
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
+
   didInsertElement() {
-    if (trackEditorFlow) {
+    if (this.get('applicationSettings.track_editor_flow')) {
       return InternalTracking.track_current_person("Editor Flow", {step: "Choose Goal"});
     }
   },
