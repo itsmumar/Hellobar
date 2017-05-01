@@ -1,7 +1,10 @@
 class SettingsSerializer < ActiveModel::Serializer
   LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11').freeze
 
-  attributes :current_user, :lead_data, :geolocation_url, :track_editor_flow, :available_themes, :available_fonts
+  attributes \
+    :current_user, :lead_data, :geolocation_url, :track_editor_flow,
+    :available_themes, :available_fonts,
+    :country_codes
 
   def available_themes
     ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
@@ -34,6 +37,10 @@ class SettingsSerializer < ActiveModel::Serializer
 
   def track_editor_flow
     user && user.sites.count == 1 && user.site_elements.count == 0
+  end
+
+  def country_codes
+    I18n.t('country_codes')
   end
 
   private
