@@ -22,7 +22,7 @@ export default Ember.Component.extend({
   }.property('elementType'),
 
   allThemes: function () {
-    return this.get('theming').availableThemes();
+    return this.get('theming.availableThemes');
   }.property(),
 
   genericThemes: function () {

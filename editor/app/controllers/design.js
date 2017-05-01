@@ -7,6 +7,9 @@ export default Ember.Controller.extend({
   applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   theming: Ember.inject.service(),
+  fonts: Ember.inject.service(),
+
+  availableFonts: Ember.computed.alias('fonts.availableFonts'),
 
   //-----------  Step Settings  -----------#
 
@@ -115,9 +118,9 @@ export default Ember.Controller.extend({
       );
 
       if (foundTheme && foundTheme.fonts) {
-        return _.map(foundTheme.fonts, fontId => _.find(availableFonts, font => font.id === fontId));
+        return _.map(foundTheme.fonts, fontId => _.find(this.get('availableFonts'), font => font.id === fontId));
       } else {
-        return availableFonts;
+        return this.get('availableFonts');
       }
     }
   ),

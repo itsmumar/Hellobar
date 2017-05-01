@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
 
   applyCurrentTheme() {
     if (!this.get('model.id') || this.firstAttemptOfThemeApplying) {
-      const allThemes = this.get('theming').availableThemes();
+      const allThemes = this.get('theming.availableThemes');
       const currentThemeId = this.get('model.theme_id');
       if (currentThemeId && currentThemeId !== 'autodetect') {
         const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
@@ -29,9 +29,9 @@ export default Ember.Mixin.create({
   },
 
   currentTheme: (function () {
-    const allThemes = this.get('theming').availableThemes();
+    const allThemes = this.get('theming.availableThemes');
     const currentThemeId = this.get('model.theme_id');
-    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('theming').autodetectedTheme();
+    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('theming.autodetectedTheme');
   }).property('model.theme_id'),
 
 
