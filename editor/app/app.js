@@ -98,9 +98,4 @@ $(function () {
 
 });
 
-//-----------  Phone Data  -----------#
-
-HBEditor.countryCodes = gon.countryCodes;
-
-
 export default App;

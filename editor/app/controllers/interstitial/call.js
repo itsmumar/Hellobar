@@ -28,11 +28,11 @@ export default Ember.Controller.extend({
   ),
 
   // TODO get rid of this global usage
-  countries: HBEditor.countryCodes,
+  countries: Ember.inject.service(),
 
   selectedCountry: function() {
-    return _.find(this.get('countries'), (country) => country.code === this.get('model.phone_country_code'))
-  }.property('countries', 'model.phone_country_code'),
+    return _.find(this.get('countries.countryCodes'), (country) => country.code === this.get('model.phone_country_code'))
+  }.property('model.phone_country_code'),
 
   actions: {
     closeInterstitial() {

@@ -15,7 +15,7 @@
   <div class="input-wrapper">
     {{input value=model.phone_number placeholder="(555) 555-555" maxlength=255}}
     <div class="select-wrapper">
-      {{#power-select options=countries
+      {{#power-select options=countries.countryCodes
         selected=selectedCountry
         searchField="name"
         renderInPlace=true
