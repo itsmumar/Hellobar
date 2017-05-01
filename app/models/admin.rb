@@ -18,6 +18,8 @@ class Admin < ActiveRecord::Base
 
   serialize :valid_access_tokens, Hash
 
+  scope :locked, -> { where(locked: true) }
+
   class << self
     def make(email, initial_password)
       Admin.new(email: email, initial_password: initial_password)
@@ -31,7 +33,7 @@ class Admin < ActiveRecord::Base
       return if token.blank?
 
       if (admin = Admin.find_by(session_token: token))
-        return if Time.now - admin.session_last_active > MAX_SESSION_TIME
+        return if Time.current - admin.session_last_active > MAX_SESSION_TIME
 
         admin.session_heartbeat!
         return if admin.locked?
@@ -104,7 +106,7 @@ class Admin < ActiveRecord::Base
   end
 
   def reset_password!(unencrypted_password)
-    timestamp = Time.now
+    timestamp = Time.current
     self.password_last_reset = timestamp
     self.password = unencrypted_password
     save!
@@ -145,12 +147,8 @@ class Admin < ActiveRecord::Base
     update_attributes(locked: false, login_attempts: 0)
   end
 
-  def validated_access_token?(access_token)
-    valid_access_tokens.key?(access_token)
-  end
-
   def session_heartbeat!
-    update_attribute(:session_last_active, Time.now)
+    update_attribute(:session_last_active, Time.current)
   end
 
   def password=(plaintext)

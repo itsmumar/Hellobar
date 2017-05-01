@@ -1,15 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-if ENV['COVERAGE'] || ENV['CI']
-  require 'simplecov'
-  SimpleCov.command_name 'test:unit'
-  SimpleCov.coverage_dir 'tmp/coverage'
-  SimpleCov.start do
-    # we test seeds in a different way - just by running them
-    add_filter '/lib/seeds/'
-  end
-end
-
+require File.expand_path('../support/simplecov', __FILE__)
 require File.expand_path('../../config/environment', __FILE__)
 
 # Prevent database truncation if the environment is production/staging/edge
@@ -45,4 +36,5 @@ RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ControllerSpecHelper, type: :controller
+  config.include RequestSpecHelper, type: :request
 end

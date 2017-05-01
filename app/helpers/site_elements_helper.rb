@@ -108,7 +108,7 @@ module SiteElementsHelper
 
   # rubocop: disable Rails/OutputSafety
   def site_element_age(site_element)
-    age = Time.now - site_element.created_at
+    age = Time.current - site_element.created_at
     units =
       if age < 1.minute
         [(age / 1.second).to_i, 'second']

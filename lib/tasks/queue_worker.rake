@@ -69,7 +69,7 @@ namespace :queue_worker do
   task :metrics do
     # Note: the cutoff time should match how frequently
     # the metrics are updated
-    cut_off_time = Time.now - 5.minutes
+    cut_off_time = Time.current - 5.minutes
     # Set zero values in case the logs don't have any values
     stats = {
       'Errors' => 0,
@@ -93,7 +93,7 @@ namespace :queue_worker do
         type = Regexp.last_match(1)
         date = Regexp.last_match(2)
         message = Regexp.last_match(3)
-        date = Time.parse(date)
+        date = Time.zone.parse(date)
         # Stop processing once we reach the cut off date
         break unless date > cut_off_time
         if type == 'ERRO'

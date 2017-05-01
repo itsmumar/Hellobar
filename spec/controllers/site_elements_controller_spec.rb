@@ -143,7 +143,7 @@ describe SiteElementsController do
     context 'with pro subscription' do
       it 'defaults branding to false if pro' do
         site = create(:site, :with_user)
-        subscription = create(:pro_subscription, site: site)
+        subscription = create(:subscription, :pro, site: site)
         stub_current_user(site.owners.first)
 
         get :new, site_id: subscription.site.id, format: :json
@@ -154,7 +154,7 @@ describe SiteElementsController do
 
     context 'with free subscription' do
       let(:site) { create(:site, :with_user) }
-      let(:subscription) { create(:free_subscription, site: site) }
+      let(:subscription) { create(:subscription, :free, site: site) }
       before { stub_current_user(site.owners.first) }
 
       it 'defaults branding to true' do

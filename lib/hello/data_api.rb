@@ -204,7 +204,7 @@ module Hello::DataAPI
       timeouts = [3, 3, 5, 5, 8] # Determines the length and number of attempts
       timeout_index = 0
       begin
-        begin_time = Time.now.to_f
+        begin_time = Time.current.to_f
         url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
         Timeout.timeout(timeouts[timeout_index]) do
@@ -220,7 +220,7 @@ module Hello::DataAPI
         raise
       end
     rescue StandardError => e
-      now = Time.now
+      now = Time.current
       duration = now.to_f - begin_time
       # Log the error
       lines = ["[#{ now }] Data API Error::#{ e.class } (#{ duration }s) - #{ e.message.inspect } => #{ url.inspect }"]

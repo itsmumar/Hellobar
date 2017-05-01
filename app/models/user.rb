@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
 
   # returns a user with a random email and password
   def self.generate_temporary_user
-    timestamp = Time.now.to_i
+    timestamp = Time.current.to_i
 
     new_user = User.create email: "hello-#{ timestamp }-#{ rand(timestamp) }@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{ timestamp }-me"), status: TEMPORARY_STATUS
 
@@ -186,7 +186,7 @@ class User < ActiveRecord::Base
   end
 
   def invite_token_expired?
-    invite_token_expire_at && invite_token_expire_at <= Time.now
+    invite_token_expire_at && invite_token_expire_at <= Time.current
   end
 
   # @deprecated unusued?
@@ -245,7 +245,7 @@ class User < ActiveRecord::Base
       user.authentications.detect { |x| x.provider == access_token['provider'] }.update(
         refresh_token: access_token['credentials'].refresh_token,
         access_token: access_token['credentials'].token,
-        expires_at: Time.at(access_token['credentials'].expires_at)
+        expires_at: Time.zone.at(access_token['credentials'].expires_at)
       )
     end
 
@@ -262,7 +262,7 @@ class User < ActiveRecord::Base
       authentication.update(
         refresh_token: credentials.refresh_token,
         access_token: credentials.token,
-        expires_at: Time.at(credentials.expires_at)
+        expires_at: Time.zone.at(credentials.expires_at)
       )
     end
 

@@ -85,38 +85,51 @@ describe Site do
     let(:ownership) { create(:site_membership, user: payment_method.user) }
     let(:site) { ownership.site }
 
+    def change_subscription(klass, schedule = 'monthly')
+      site.change_subscription(klass.new(schedule: schedule, user: payment_method.user), payment_method)
+    end
+
     it 'returns nil when there are no active subscriptions' do
       expect(site.highest_tier_active_subscription).to be(nil)
     end
 
     it 'returns the highest tier active subscription among Free and Pro' do
-      site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: payment_method.user), payment_method)
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      change_subscription(Subscription::Free)
+      change_subscription(Subscription::Pro)
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::Pro)
     end
 
     it 'returns the highest tier active subscription among Pro and Enterprise' do
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
-      site.change_subscription(Subscription::Enterprise.new(schedule: 'monthly', user: payment_method.user), payment_method)
+      change_subscription(Subscription::Pro)
+      change_subscription(Subscription::Enterprise)
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::Enterprise)
     end
 
     it 'returns the highest tier active subscription among Pro and ProManaged' do
-      site.change_subscription(Subscription::Free.new(schedule: 'monthly', user: payment_method.user), payment_method)
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly', user: payment_method.user), payment_method)
-
-      site.subscriptions.first.update type: Subscription::ProManaged
+      change_subscription(Subscription::Free)
+      change_subscription(Subscription::Pro)
+      site.subscriptions.last.update type: Subscription::ProManaged
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::ProManaged)
     end
 
     it 'returns only active subscriptions' do
-      site.change_subscription(Subscription::Free.new(schedule: 'yearly'), payment_method)
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+      change_subscription(Subscription::Free, 'yearly')
+      change_subscription(Subscription::Pro)
 
       travel_to 2.months.from_now do
+        expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
+      end
+    end
+
+    context 'when Pro subscription has a refund' do
+      it 'returns Free subscription', :freeze do
+        change_subscription(Subscription::Free)
+        _, bill = change_subscription(Subscription::Pro)
+        RefundBill.new(bill).call
+
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
       end
     end
@@ -467,7 +480,7 @@ describe Site do
     let(:subscription) { create(:subscription) }
 
     def bill(trial: nil)
-      subscription.site.send(:calculate_bill, subscription, true, trial)
+      subscription.site.send(:calculate_bill, subscription, trial)
     end
 
     context 'trial_period is specified' do
@@ -530,7 +543,7 @@ describe Site do
     let!(:element) { create(:site_element, :traffic, rule: site.rules.first!, show_branding: true) }
 
     context 'when subscription is pro' do
-      let!(:subscription) { create(:pro_subscription, site: site) }
+      let!(:subscription) { create(:subscription, :pro, site: site) }
 
       it 'does not show branding' do
         site.send(:set_branding_on_site_elements)
@@ -539,7 +552,7 @@ describe Site do
     end
 
     context 'when subscription is free' do
-      let!(:subscription) { create(:free_subscription, site: site) }
+      let!(:subscription) { create(:subscription, :free, site: site) }
 
       it 'shows branding' do
         site.send(:set_branding_on_site_elements)

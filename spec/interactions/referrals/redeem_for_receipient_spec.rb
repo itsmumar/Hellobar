@@ -5,7 +5,7 @@ describe Referrals::RedeemForRecipient do
 
   before :each do
     create(:referral_coupon)
-    site.change_subscription(build(:free_subscription))
+    site.change_subscription(build(:subscription, :free))
   end
 
   it 'subscribes to Pro with a 0.00 bill when referred and signed_up' do
@@ -26,7 +26,7 @@ describe Referrals::RedeemForRecipient do
   it 'subscribes the sender to Pro too' do
     sender_ownership = create(:site_membership)
     sender_site = sender_ownership.site
-    sender_site.change_subscription(build(:free_subscription))
+    sender_site.change_subscription(build(:subscription, :free))
 
     create(:referral, recipient: user, state: :signed_up, site: sender_site)
     Referrals::RedeemForRecipient.run(site: site)

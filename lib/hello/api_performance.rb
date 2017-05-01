@@ -32,7 +32,7 @@ module Hello::DataAPI
     end
 
     # Gets change in conversions between two sets of dates
-    # conversion_change_between(2.week.ago, 1.week.ago, 1.week.ago, Time.now)
+    # conversion_change_between(2.week.ago, 1.week.ago, 1.week.ago, Time.current)
     def conversion_change_between(d1, d2, d3, d4)
       n = conversions_between(d3, d4)
       d = conversions_between(d1, d2)

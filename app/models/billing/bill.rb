@@ -6,12 +6,21 @@ class Bill < ActiveRecord::Base
   class StatusAlreadySet < StandardError; end
   class InvalidStatus < StandardError; end
   class BillingEarly < StandardError; end
-  class InvalidBillingAmount < StandardError; end
+  class InvalidBillingAmount < StandardError
+    attr_reader :amount
+
+    def initialize(amount)
+      @amount = amount.to_f
+      super("Amount was: #{ amount.to_f.inspect }")
+    end
+  end
+
   class MissingPaymentMethod < StandardError; end
 
   serialize :metadata, JSON
 
   belongs_to :subscription, inverse_of: :bills
+  belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
 
@@ -24,6 +33,12 @@ class Bill < ActiveRecord::Base
 
   enum status: %i[pending paid voided]
 
+  scope :recurring, -> { where(type: Recurring) }
+  scope :with_amount, -> { where('bills.amount > 0') }
+  scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
+  scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
+  scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
+
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
@@ -33,10 +48,9 @@ class Bill < ActiveRecord::Base
   end
 
   def check_amount
-    raise InvalidBillingAmount, "Amount was: #{ amount.inspect }" if !amount || amount < 0
+    raise InvalidBillingAmount, amount if !amount || amount < 0
   end
 
-  alias void! voided!
   def status=(value)
     value = value.to_sym
     return if status == value
@@ -46,7 +60,7 @@ class Bill < ActiveRecord::Base
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
     self[:status] = status_value
-    self.status_set_at = Time.now
+    self.status_set_at = Time.current
 
     if status == :paid
       on_paid
@@ -55,10 +69,12 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  # TODO: This method needs to be refactored or even removed; it *no longer* is
+  # used for refunds, but was left without changes
   def attempt_billing!(allow_early = false)
     set_final_amount!
 
-    now = Time.now
+    now = Time.current
     raise BillingEarly, "Attempted to bill on #{ now } but bill[#{ id }] has a bill_at date of #{ bill_at }" if !allow_early && now < bill_at
     if amount == 0 # Note: less than 0 is a valid value for refunds
       audit << 'Marking bill as paid because no payment required'
@@ -71,9 +87,8 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  alias orig_status status
   def status
-    orig_status.to_sym
+    super.to_sym
   end
 
   def active_during(date)
@@ -92,11 +107,11 @@ class Bill < ActiveRecord::Base
   end
 
   def past_due?(payment_method = nil)
-    Time.now > due_at(payment_method)
+    Time.current > due_at(payment_method)
   end
 
   def should_bill?
-    pending? && Time.now >= bill_at
+    pending? && Time.current >= bill_at
   end
 
   def problem_with_payment?(payment_method = nil)
@@ -119,12 +134,7 @@ class Bill < ActiveRecord::Base
   end
 
   def successful_billing_attempt
-    billing_attempts.find(&:success?)
-  end
-
-  # Can optionally specify a partial amount or description
-  def refund!(description = nil, amount = nil)
-    successful_billing_attempt.refund!(description, amount)
+    billing_attempts.success.first
   end
 
   def calculate_discount
@@ -141,79 +151,5 @@ class Bill < ActiveRecord::Base
 
   def estimated_amount
     (base_amount || amount) - calculate_discount
-  end
-
-  class Recurring < Bill
-    class << self
-      def next_month(date)
-        date + 1.month
-      end
-
-      def next_year(date)
-        date + 1.year
-      end
-    end
-
-    def renewal_date
-      raise 'can not calculate renewal date without start_date' unless start_date
-      subscription.monthly? ? self.class.next_month(start_date) : self.class.next_year(start_date)
-    end
-
-    def on_paid
-      super
-      # Create the next bill
-      next_method = subscription.monthly? ? :next_month : :next_year
-      new_start_date = end_date
-      new_bill = Bill::Recurring.new(
-        subscription: subscription,
-        amount: subscription.amount,
-        description: "#{ subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
-        grace_period_allowed: true,
-        bill_at: end_date,
-        start_date: new_start_date,
-        end_date: Bill::Recurring.send(next_method, new_start_date)
-      )
-      audit << "Paid recurring bill, created new bill for #{ subscription.amount } that starts at #{ new_start_date }. #{ new_bill.inspect }"
-      new_bill.save!
-      new_bill
-    end
-  end
-
-  class Overage < Bill
-  end
-
-  class Refund < Bill
-    # Refunds must be a negative amount
-    def check_amount
-      raise InvalidBillingAmount, "Amount must be negative. It was #{ amount.to_f }" if amount > 0
-    end
-
-    # Refunds are never considered "active"
-    def active_during(_date)
-      false
-    end
-
-    def refunded_billing_attempt
-      unless @refunded_billing_attempt
-        if refunded_billing_attempt_id
-          @refunded_billing_attempt = BillingAttempt.find(refunded_billing_attempt_id)
-        end
-      end
-      @refunded_billing_attempt
-    end
-
-    def refunded_billing_attempt_id
-      return metadata['refunded_billing_attempt_id'] if metadata
-    end
-
-    def refunded_billing_attempt=(billing_attempt)
-      self.refunded_billing_attempt_id = billing_attempt.id
-    end
-
-    def refunded_billing_attempt_id=(id)
-      self.metadata = {} unless metadata
-      metadata['refunded_billing_attempt_id'] = id
-      @refunded_billing_attempt = nil
-    end
   end
 end

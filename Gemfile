@@ -37,7 +37,7 @@ gem 'verticalresponse'
 gem 'pony'
 
 # Billing
-gem 'activemerchant', '~> 1.44.1'
+gem 'activemerchant', '~> 1.65.0'
 
 # Assets / Frontend
 gem 'active_link_to'

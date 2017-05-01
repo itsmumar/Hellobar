@@ -87,7 +87,7 @@ class Site < ActiveRecord::Base
   # to collect more data so that hopefully I can find the source of the
   # problem and then implement an appropriate fix.
   def debug_install(type)
-    lines = ["[#{ Time.now }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
+    lines = ["[#{ Time.current }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
     caller[0..4].each do |line|
       lines << "\t#{ line }"
     end
@@ -298,11 +298,11 @@ class Site < ActiveRecord::Base
       subscription.site = self
       subscription.payment_method = payment_method
       success = true
-      bill = calculate_bill(subscription, true, trial_period)
+      bill = calculate_bill(subscription, trial_period)
       bill.save!
       subscription.save!
 
-      if bill.due_at(payment_method) <= Time.now
+      if bill.due_at(payment_method) <= Time.current
         audit << "Change plan, bill is due now: #{ bill.inspect }"
         result = bill.attempt_billing!
         if result.is_a?(BillingAttempt)
@@ -322,25 +322,13 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def preview_change_subscription(subscription)
-    bill = calculate_bill(subscription, false)
-    # Make the bill read-only
-    def bill.readonly?
-      true
-    end
-    bill
-  end
-
   def bills_with_payment_issues(clear_cache = false)
     if clear_cache || !@bills_with_payment_issues
-      now = Time.now
       @bills_with_payment_issues = []
-      bills(true).each do |bill|
+      bills.due_now.each do |bill|
         # Find bills that are due now and we've tried to bill
         # at least once
-        if bill.pending? && bill.amount > 0 && (now >= bill.bill_at) && !bill.billing_attempts.empty?
-          @bills_with_payment_issues << bill
-        end
+        @bills_with_payment_issues << bill if bill.billing_attempts.present?
       end
     end
     @bills_with_payment_issues
@@ -412,10 +400,10 @@ class Site < ActiveRecord::Base
   private
 
   # Calculates a bill, but does not save or pay the bill. Used by
-  # change_subscription and preview_change_subscription
-  def calculate_bill(subscription, actually_change, trial_period = nil)
+  # change_subscription
+  def calculate_bill(subscription, trial_period = nil)
     raise MissingSubscription unless subscription
-    CalculateBill.new(self, subscription, actually_change, trial_period).call
+    CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
   end
 
   def do_generate_script_and_check_installation(options = {})
@@ -428,7 +416,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_static_assets(options = {})
-    update_column(:script_attempted_to_generate_at, Time.now)
+    update_column(:script_attempted_to_generate_at, Time.current)
 
     store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
     compress_script = !store_site_scripts_locally
@@ -451,7 +439,7 @@ class Site < ActiveRecord::Base
       end
     end
 
-    update_column(:script_generated_at, Time.now)
+    update_column(:script_generated_at, Time.current)
   end
 
   def generate_blank_static_assets

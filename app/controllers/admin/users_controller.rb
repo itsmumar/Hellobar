@@ -4,20 +4,22 @@ class Admin::UsersController < ApplicationController
   before_action :require_admin
 
   def index
-    if params[:q].blank?
+    q = params[:q].to_s.strip
+
+    if q.blank?
       @users = User.page(params[:page]).per(24).includes(:authentications)
     else
-      users = User.search_by_username(params[:q].strip).includes(:authentications)
+      users = User.search_by_username(q).includes(:authentications)
 
-      if params[:q] =~ /\.js$/
-        site = Site.find_by_script(params[:q])
+      if q =~ /\.js$/
+        site = Site.find_by_script(q)
         users += site.owners if site
       else
-        users += User.search_by_url(params[:q].strip).includes(:authentications)
+        users += User.search_by_url(q).includes(:authentications)
       end
 
-      if params[:q].strip =~ /\d{4}/
-        users += PaymentMethodDetails.where('data like ?', "%-#{ params[:q].strip }%").map(&:user).compact
+      if q =~ /\d{4}/
+        users += PaymentMethodDetails.where('data like ?', "%-#{ q }%").map(&:user).compact
       end
 
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)

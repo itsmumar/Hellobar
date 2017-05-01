@@ -29,7 +29,7 @@ feature 'Payment modal interaction', :js do
       allow_any_instance_of(PaymentMethod).to receive(:pay).and_return(true)
 
       create :rule, site: site
-      create(:free_subscription, site: site, payment_method: payment_method)
+      create(:subscription, :free, site: site, payment_method: payment_method)
 
       allow_any_instance_of(SiteElementSerializer)
         .to receive(:proxied_url2png).and_return('')
