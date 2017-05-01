@@ -5,6 +5,10 @@ FactoryGirl.define do
     email { generate(:email) }
     password 'password'
 
+    trait :deleted do
+      after(:create) { |user| user.destroy }
+    end
+
     trait :temporary do
       status { User::TEMPORARY_STATUS }
     end
