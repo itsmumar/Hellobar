@@ -16,7 +16,7 @@ module Admin::UsersHelper
   end
 
   def subscriptions
-    ObjectSpace.each_object(Class).select { |klass| klass < Subscription }
+    Subscription::ALL
   end
 
   def bill_duration(bill)
