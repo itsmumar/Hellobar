@@ -2,7 +2,7 @@ class Admin::AccessController < ApplicationController
   layout 'admin'
 
   before_action :require_admin, only: %i[reset_password do_reset_password logout_admin]
-  before_action :redirect_admin, only: :step1
+  before_action :redirect_admin, only: :process_step1
 
   def do_reset_password
     error =

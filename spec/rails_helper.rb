@@ -1,14 +1,6 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-if ENV['COVERAGE'] || ENV['CI']
-  require 'simplecov'
-  SimpleCov.command_name 'test:unit'
-  SimpleCov.coverage_dir 'tmp/coverage'
-  SimpleCov.start do
-    # we test seeds in a different way - just by running them
-    add_filter '/lib/seeds/'
-  end
-end
+require File.expand_path('../support/simplecov', __FILE__) if ENV['COVERAGE'] || ENV['CI']
 
 require File.expand_path('../../config/environment', __FILE__)
 
