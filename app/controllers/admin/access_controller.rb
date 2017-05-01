@@ -2,7 +2,6 @@ class Admin::AccessController < ApplicationController
   layout 'admin'
 
   before_action :require_admin, only: %i[reset_password do_reset_password logout_admin]
-  before_action :redirect_admin, only: :process_step1
 
   def do_reset_password
     error =
@@ -34,6 +33,7 @@ class Admin::AccessController < ApplicationController
   end
 
   def process_step1
+    return redirect_to(admin_path) if current_admin
     return redirect_to(admin_access_path) if params[:login_email].blank?
     email = params[:login_email]
 
@@ -82,9 +82,5 @@ class Admin::AccessController < ApplicationController
     return redirect_to admin_locked_path if admin.locked?
     @admin = admin
     render :step2
-  end
-
-  def redirect_admin
-    redirect_to(admin_path) if current_admin
   end
 end
