@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include Hello::InternalAnalytics
-  include GonVariables
   include ActionView::Helpers::NumberHelper
   serialization_scope :current_user
 

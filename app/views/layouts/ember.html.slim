@@ -5,7 +5,6 @@ html
 
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
-    = include_gon
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)
 
