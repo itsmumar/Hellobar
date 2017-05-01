@@ -35,7 +35,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    allow_any_instance_of(ApplicationController)
+    allow_any_instance_of(SettingsSerializer)
       .to receive(:needs_filling_questionnaire?).and_return(false)
   end
 end
