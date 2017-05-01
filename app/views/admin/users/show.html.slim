@@ -30,13 +30,13 @@ div#user_profile
               td
                 - subscriptions.each do |sub|
                   div
-                    = sf.label "#{sub.defaults[:name]}: "
                     = sf.radio_button 'plan', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
+                    = sf.label "#{sub.defaults[:name]}"
               td
                 - Subscription.schedules.each do |name, val|
                   div
-                    = sf.label "#{name.capitalize}: "
                     = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
+                    = sf.label "#{name.capitalize}"
                 div= sf.label "Trial period in days.  Leave blank for no trial."
                 div= sf.number_field 'trial_period'
                 = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
