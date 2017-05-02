@@ -114,7 +114,7 @@ hellobar.defineModule('elements.class',
           const customScript = () => {
             const customJs = this.custom_js || '';
             const allJs = `var hbElement=hellobar('elements').findById(${this.id}); ${customJs}`;
-            return `<script>setTimeout(function () { ${allJs} }, 1)<\/script>`;
+            return `<script>setTimeout(function () { ${allJs} }, 1)` + '<\/script>';
           };
           return generateHtml() + customScript();
         };
