@@ -115,14 +115,20 @@ class Site < ActiveRecord::Base
     RenderStaticScript.new(self, compress: compress).call
   end
 
+  # basically it calls rake site:generate_static_assets
+  # @see lib/tasks/site.rake
   def generate_script(options = {})
     delay :generate_static_assets, options
   end
 
+  # basically it calls rake site:do_generate_script_and_check_installation
+  # @see lib/tasks/site.rake
   def generate_script_and_check_installation(options = {})
     delay :do_generate_script_and_check_installation, options
   end
 
+  # basically it calls rake site:do_check_installation
+  # @see lib/tasks/site.rake
   def check_installation(options = {})
     delay :do_check_installation, options
   end
@@ -330,21 +336,8 @@ class Site < ActiveRecord::Base
     CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
   end
 
-  def do_generate_script_and_check_installation(options = {})
-    generate_static_assets(options)
-    CheckStaticScriptInstallation.new(self).call
-  end
-
-  def do_check_installation(_options = {})
-    CheckStaticScriptInstallation.new(self).call
-  end
-
-  def generate_static_assets(options = {})
-    GenerateAndStoreStaticScript.new(self, options).call
-  end
-
   def generate_blank_static_assets
-    generate_static_assets(script_content: '')
+    GenerateAndStoreStaticScript.new(self, script_content: '').call
   end
 
   def standardize_url

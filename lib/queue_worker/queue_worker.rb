@@ -12,9 +12,13 @@ class QueueWorker
         begin
           # Ensure private methods are called.
           method(task_name).call
-        rescue NoMethodError => e
-          raise e unless e.message.include?("undefined method `#{ task_name }'")
-          raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
+        rescue NameError, NoMethodError => e
+          if e.message.include?("undefined method `#{ task_name }'")
+            Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].reenable
+            Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].invoke(id)
+          else
+            raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
+          end
         end
       else
         QueueWorker.send_sqs_message(body, nil, queue)

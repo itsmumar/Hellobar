@@ -6,14 +6,14 @@ namespace :site do
     end
 
     desc 'Schedule a re-generation of ALL site scripts'
-    task regenerate_all: :environment do |_t, _args|
+    task regenerate_all: :environment do
       Site.find_each do |site|
         site.generate_script(queue_name: Hellobar::Settings[:low_priority_queue])
       end
     end
 
     desc 'Schedule a re-generation of all active site scripts'
-    task regenerate_all_active: :environment do |_t, _args|
+    task regenerate_all_active: :environment do
       Site.script_installed_db.find_each do |site|
         script_generated_at = site.script_generated_at
 
@@ -36,9 +36,17 @@ namespace :site do
     GenerateAndStoreStaticScript.for(site_id: args[:site_id])
   end
 
+  desc 'Check installation immediately'
+  task :do_check_installation, [:site_id] => :environment do |_t, args|
+    CheckStaticScriptInstallation.for(site_id: args[:site_id])
+  end
+
   desc 'Generate static assets for :site_id and check installation immediately'
-  task :do_generate_script_and_check_installation, [:site_id] => :generate_static_assets do |_t, args|
-    CheckStaticScriptInstallation.for(args[:site_id])
+  task :do_generate_script_and_check_installation, [:site_id] => :environment do |_t, args|
+    site = Site.preload_for_script.find(args[:site_id])
+    puts site.id
+    GenerateAndStoreStaticScript.new(site).call
+    CheckStaticScriptInstallation.new(site).call
   end
 
   namespace :rules do
