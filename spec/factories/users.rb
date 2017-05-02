@@ -10,9 +10,7 @@ FactoryGirl.define do
     password 'password'
 
     after :create do |user, evaluator|
-      if evaluator.site
-        user.sites << evaluator.site
-      end
+      user.sites << evaluator.site if evaluator.site
     end
 
     trait :deleted do

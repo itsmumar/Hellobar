@@ -26,7 +26,7 @@ class Site < ActiveRecord::Base
   scope :preload_for_script, lambda {
     preload(
       :site_elements, :active_site_elements,
-      rules: [{site: :bills}, :conditions, :active_site_elements, :site_elements]
+      rules: [:conditions, :active_site_elements, :site_elements, site: :bills]
     )
   }
 
@@ -116,11 +116,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_script(options = {})
-    if options[:immediately]
-      generate_static_assets(options)
-    else
-      delay :generate_static_assets, options
-    end
+    delay :generate_static_assets, options
   end
 
   def generate_script_and_check_installation(options = {})

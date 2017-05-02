@@ -14,6 +14,10 @@ module Hello::DataAPI
     #
     # lifetime_totals(site, [site_element], 2)
     # => {"123" => [[10, 3], [15, 4]]}
+    # legend:
+    #   site_element_id => [2 days ago, yesterday, today]}
+    # where 2 days ago, yesterday and today is an array:
+    #   [views_number, conversions_number]
     #
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
       return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
