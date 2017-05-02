@@ -13,7 +13,7 @@ export default Ember.Controller.extend({
 
   selectedCountry: (function() {
     const countryCode = this.get('model.phone_country_code');
-    return _.find(this.get('countries.countryCodes'), (country) => country.code === countryCode);
+    return _.find(this.get('countries.all'), (country) => country.code === countryCode);
   }).property('model.phone_country_code'),
 
 

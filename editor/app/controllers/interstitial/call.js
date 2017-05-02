@@ -31,8 +31,8 @@ export default Ember.Controller.extend({
   countries: Ember.inject.service(),
 
   selectedCountry: function() {
-    return _.find(this.get('countries.countryCodes'), (country) => country.code === this.get('model.phone_country_code'))
-  }.property('countries.countryCodes', 'model.phone_country_code'),
+    return _.find(this.get('countries.all'), (country) => country.code === this.get('model.phone_country_code'))
+  }.property('countries.all', 'model.phone_country_code'),
 
   actions: {
     closeInterstitial() {
