@@ -14,7 +14,6 @@ unless defined?(Hellobar::Settings)
     constantcontact_app_secret
     createsend_client_id
     createsend_secret
-    cybersource_environment
     cybersource_login
     cybersource_password
     data_api_url

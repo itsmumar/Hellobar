@@ -7,7 +7,6 @@ constantcontact_app_key: constantcontact-app-key
 constantcontact_app_secret: contantcontact-app-secret
 createsend_client_id: createsend-client-id
 createsend_secret: createsend-secret
-cybersource_environment: "test"
 cybersource_login: cybersource-login
 cybersource_password: cybersource-password
 deliver_email_digests: false
