@@ -33,7 +33,7 @@ namespace :site do
 
   desc 'Generate static assets for :site_id immediately'
   task :generate_static_assets, [:site_id] => :environment do |_t, args|
-    Site.preload_for_script.find(args[:site_id]).generate_script(immediately: true)
+    GenerateAndStoreStaticScript.for(site_id: args[:site_id])
   end
 
   desc 'Generate static assets for :site_id and check installation immediately'

@@ -1,4 +1,8 @@
 class GenerateAndStoreStaticScript
+  def self.for(site_id:)
+    new(Site.preload_for_script.find(site_id)).call
+  end
+
   # @param [Site] site
   def initialize(site, options = {})
     @site = site
