@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import ENV from 'editor/config/environment';
 
 export default Ember.Service.extend({
   settings: {},
