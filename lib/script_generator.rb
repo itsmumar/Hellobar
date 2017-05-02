@@ -146,23 +146,12 @@ class ScriptGenerator < Mustache
     Hellobar::Settings[:geolocation_url]
   end
 
-  def site_element_classes_js
-    render_asset('site_elements.js')
-  end
-
   def autofills_json
     site.autofills.to_json
   end
 
   def external_tracking_json
-    external_tracking_events =
-      site.active_site_elements.each_with_object([]) do |site_element, memo|
-        site_element.external_tracking.each do |event|
-          memo << event
-        end
-      end
-
-    external_tracking_events.to_json
+    site.active_site_elements.map(&:external_tracking).flatten.to_json
   end
 
   def modules_js
@@ -361,9 +350,9 @@ class ScriptGenerator < Mustache
 
   def without_escaping_html_in_json
     ActiveSupport.escape_html_entities_in_json = false
-    result = yield
+    yield
+  ensure
     ActiveSupport.escape_html_entities_in_json = true
-    result
   end
 
   def asset(file)

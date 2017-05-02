@@ -5,8 +5,14 @@ describe ScriptGenerator do
     allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
   end
 
+  describe '.compile' do
+    it 'precompiles assets for static script' do
+      expect { described_class.compile }.not_to raise_error
+    end
+  end
+
   describe '#render' do
-    let(:site) { create(:site, :with_user, :pro, elements: %i[traffic email facebook twitter]) }
+    let(:site) { create(:site, :with_user, :pro_managed, elements: %i[traffic email facebook twitter]) }
     let(:generator) { ScriptGenerator.new(site) }
 
     it 'renders the site id variable' do
@@ -169,7 +175,7 @@ describe ScriptGenerator do
       it 'does NOT include nil values' do
         site_element = build(:site_element, :bar, custom_js: '', custom_css: nil)
         allow(site).to receive(:rules).and_return([rule])
-        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+        allow(rule).to receive(:active_site_elements).and_return([site_element])
 
         expect(generator.rules.first[:site_elements]).to include 'custom_js'
         expect(generator.rules.first[:site_elements]).not_to include 'custom_css'
@@ -178,7 +184,7 @@ describe ScriptGenerator do
       it 'includes false values' do
         site_element = build(:site_element, :bar)
         allow(site).to receive(:rules).and_return([rule])
-        allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+        allow(rule).to receive(:active_site_elements).and_return([site_element])
         allow(site_element).to receive(:email_redirect?).and_return(false)
 
         expect(generator.rules.first[:site_elements]).to include '"email_redirect":false'
@@ -189,7 +195,7 @@ describe ScriptGenerator do
           custom_html = '<script></script>'
           site_element = build(:site_element, :bar, custom_html: custom_html)
           allow(site).to receive(:rules).and_return([rule])
-          allow(rule).to receive_message_chain(:site_elements, :active).and_return([site_element])
+          allow(rule).to receive(:active_site_elements).and_return([site_element])
 
           expect(generator.rules.first[:site_elements]).to include '<script><\/script>'
         end
