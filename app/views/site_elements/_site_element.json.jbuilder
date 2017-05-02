@@ -61,9 +61,9 @@ json.cache! site_element do
     :notification_delay,
     :trigger_color
 
-  json.font site_element.font.value
+  json.font site_element.font.try(:value)
   json.theme site_element.theme.attributes
-  json.google_font site_element.font.google_font
+  json.google_font site_element.font.try(:google_font)
   json.subtype site_element.short_subtype
   json.hide_destination true
   json.wiggle_wait 0
