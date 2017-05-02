@@ -54,7 +54,7 @@ class SiteGenerator
           </p>
         </div>
 
-        <script>#{ @site.script_content(@compress) }</script>
+        <script>#{ script_content }</script>
 
         <p>Generated on #{ Time.current }</p>
       </body>
@@ -63,6 +63,10 @@ class SiteGenerator
   end
 
   private
+
+  def script_content
+    ScriptGenerator.new(@site, compress: @compress).generate_script
+  end
 
   def generate_full_path(opts)
     directory = opts[:directory]

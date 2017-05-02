@@ -46,13 +46,14 @@ describe SiteGenerator do
   end
 
   describe '#generate_html' do
+    before { allow_any_instance_of(ScriptGenerator).to receive(:generate_script).and_return('script content') }
+
     it "includes the site's script content", :freeze do
-      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
       generator = described_class.new(site.id)
 
       html = generator.generate_html
 
-      expect(html).to include(site.script_content(false))
+      expect(html).to include('script content')
     end
   end
 
