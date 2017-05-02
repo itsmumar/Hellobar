@@ -1,10 +1,10 @@
 hellobar.defineModule('elements',
   ['hellobar', 'base.sanitizing', 'base.preview',
     'elements.rules',
-    'elements.class', 'elements.class.bar', 'elements.class.slider'],
+    'elements.class', 'elements.class.bar', 'elements.class.slider', 'elements.class.alert'],
   function (hellobar, sanitizing, preview,
             elementsRules,
-            SiteElement, BarElement, SliderElement) {
+            SiteElement, BarElement, SliderElement, AlertElement) {
 
     const configuration = hellobar.createModuleConfiguration({
       elementCSS: 'string',
@@ -14,7 +14,8 @@ hellobar.defineModule('elements',
     const elementClasses = {
       SiteElement,
       BarElement,
-      SliderElement
+      SliderElement,
+      AlertElement
     };
 
     let siteElementsOnPage = [];
@@ -168,14 +169,13 @@ hellobar.defineModule('elements',
           createAndAddToPage(siteElements[i]);
         }
       };
-      var siteElements = [];
       // If a specific element has already been set, use it
       // Otherwise use the tradition apply rules method
       var siteElement = elementsRules.getFixedSiteElement();
       if (siteElement) {
         processSiteElements([siteElement]);
       } else {
-        siteElements = elementsRules.applyRules().then((siteElements) => processSiteElements(siteElements));
+        elementsRules.applyRules().then((siteElements) => processSiteElements(siteElements));
       }
 
     }

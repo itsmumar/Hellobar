@@ -32,6 +32,8 @@ export default Ember.Controller.extend({
 
   isABar: Ember.computed.equal('model.type', 'Bar'),
   isCustom: Ember.computed.equal('model.type', 'Custom'),
+  elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
+  elementTypeIsNotAlert: Ember.computed.not('elementTypeIsAlert'),
 
   allowImages: Ember.computed('model.type', function () {
       return this.get('model.type') !== "Bar";

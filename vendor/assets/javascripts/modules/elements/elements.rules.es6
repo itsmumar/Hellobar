@@ -70,7 +70,7 @@ hellobar.defineModule('elements.rules',
         var siteElementResults = [];
         // We need to specify the order that elements appear in. Whichever is first
         // in the array is on top
-        var visibilityOrder = ['Custom', 'Modal/Takeover', 'Slider', 'Bar'];
+        var visibilityOrder = ['Custom', 'Modal/Takeover', 'Alert', 'Slider', 'Bar'];
         for (i = 0; i < visibilityOrder.length; i++) {
           var visibleElements = visibilityGroups[visibilityOrder[i]];
           if (visibleElements) {

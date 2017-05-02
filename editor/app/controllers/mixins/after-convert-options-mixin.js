@@ -1,5 +1,6 @@
 import Ember from 'ember';
 
+// TODO this mixin isn't used, we should delete it and all references to it
 export default Ember.Mixin.create({
 
   showAfterConvertOptions: [

@@ -1,1 +1,141 @@
 /*-----------  Alert Element  -----------*/
+
+#hellobar-alert {
+}
+
+#hellobar-alert #hb-trigger {
+  display: block;
+  position: fixed;
+  padding: 15px;
+  font-size: 30px;
+  color: #ffffff;
+  background-color: #104070;
+  border-radius: 30px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#hellobar-alert #hb-trigger .fa {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+#hellobar-alert #hb-popup-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  z-index: 500;
+}
+
+#hellobar-alert #hellobar-slider {
+  display: block;
+  position: absolute;
+}
+
+#hellobar-alert #hb-preview-mode-tooltip {
+  display: block;
+  position: absolute;
+  padding: 10px;
+  border: 1px solid #c3c3c3;
+  color: #565656;
+  background: white;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+/* ---- Alarm animation ---- */
+@keyframes alarm-swing {
+  10% {
+    transform: rotate3d(0, 0, 1, 30deg);
+  }
+
+  20% {
+    transform: rotate3d(0, 0, 1, -30deg);
+  }
+
+  30% {
+    transform: rotate3d(0, 0, 1, 30deg);
+  }
+
+  40% {
+    transform: rotate3d(0, 0, 1, -25deg);
+  }
+
+  50% {
+    transform: rotate3d(0, 0, 1, -20deg);
+  }
+
+  60% {
+    transform: rotate3d(0, 0, 1, 15deg);
+  }
+
+  70% {
+    transform: rotate3d(0, 0, 1, -10deg);
+  }
+
+  80% {
+    transform: rotate3d(0, 0, 1, 5deg);
+  }
+
+  90% {
+    transform: rotate3d(0, 0, 1, -5deg);
+  }
+
+  to {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+}
+
+@-webkit-keyframes alarm-swing {
+  10% {
+    transform: rotate3d(0, 0, 1, 30deg);
+  }
+
+  20% {
+    transform: rotate3d(0, 0, 1, -30deg);
+  }
+
+  30% {
+    transform: rotate3d(0, 0, 1, 30deg);
+  }
+
+  40% {
+    transform: rotate3d(0, 0, 1, -25deg);
+  }
+
+  50% {
+    transform: rotate3d(0, 0, 1, -20deg);
+  }
+
+  60% {
+    transform: rotate3d(0, 0, 1, 15deg);
+  }
+
+  70% {
+    transform: rotate3d(0, 0, 1, -10deg);
+  }
+
+  80% {
+    transform: rotate3d(0, 0, 1, 5deg);
+  }
+
+  90% {
+    transform: rotate3d(0, 0, 1, -5deg);
+  }
+
+  to {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+}
+
+#hellobar-alert #hb-trigger .fa.animated {
+  -webkit-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-animation-name: alarm-swing;
+  animation-name: alarm-swing;
+  -webkit-animation-duration: 1.2s;
+  animation-duration: 1.2s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}

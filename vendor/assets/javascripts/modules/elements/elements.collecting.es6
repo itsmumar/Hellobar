@@ -4,19 +4,22 @@ hellobar.defineModule('elements.collecting',
 
     /**
      * Creates a field for collecting information
-     * @param field
+     * @param field {object}
+     * @param siteElement {object}
      */
     function createInputFieldHtml(field, siteElement) {
-      function fieldAttrs() {
+      const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
+
+      function fieldAttributes() {
         var label = '';
         var type = 'text';
 
         switch (field.type) {
           case 'builtin-name':
-            label = field.label || siteElement.name_placeholder || 'Name';
+            label = field.label || siteElementModel.name_placeholder || 'Name';
             break;
           case 'builtin-email':
-            label = field.label || siteElement.email_placeholder || 'Email';
+            label = field.label || siteElementModel.email_placeholder || 'Email';
             type = preview.isActive() ? 'text' : 'email';
             break;
           case 'builtin-phone':
@@ -43,7 +46,7 @@ hellobar.defineModule('elements.collecting',
         return field.type === 'builtin-email' ? 'f-builtin-email' : 'f-' + field.id;
       }
 
-      var fieldAttrs = fieldAttrs();
+      var fieldAttrs = fieldAttributes();
 
       var html = '<div class="hb-input-block hb-editable-block hb-editable-block-input ' +
         additionalCssClasses() + '" ' +
@@ -63,22 +66,20 @@ hellobar.defineModule('elements.collecting',
     // email and then sets the message in the siteElement to "Thank you". If invalid it
     // shakes the email field
     function submitEmail(siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl, thankYouCssClass) {
-      var emailField = formElement ? formElement.querySelector('#f-builtin-email') : null;
+      const siteElementModel = siteElement.model();
+      const emailField = formElement ? formElement.querySelector('#f-builtin-email') : null;
       validateEmail(emailField ? emailField.value : '', function () {
-          var doRedirect = format.asBool(redirect);
-          var removeElements;
-          if (siteElement.type === 'ContentUpgrade') {
-            var siteElementDoc = document.getElementById('hb-cu-modal-' + siteElement.id);
-          } else {
-            var siteElementDoc = siteElement.w.contentDocument;
-          }
-
+          const doRedirect = format.asBool(redirect);
+          let removeElements;
+          let siteElementContainer = (siteElementModel.type === 'ContentUpgrade') ?
+            document.getElementById('hb-cu-modal-' + siteElement.id) :
+            siteElement.contentDocument();
 
           if (!doRedirect) {
             if ((targetSiteElement != null) && thankYouText) {
-              if (siteElement.use_free_email_default_msg) {
+              if (siteElementModel.use_free_email_default_msg) {
                 // Hijack the submit button and turn it into a link
-                var btnElement = siteElementDoc.getElementsByClassName('hb-cta')[0];
+                var btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
                 var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=' + site.siteId();
                 btnElement.textContent = 'Click Here';
                 btnElement.href = linkUrl;
@@ -86,10 +87,10 @@ hellobar.defineModule('elements.collecting',
                 btnElement.onclick = null;
 
                 // Remove all the fields
-                removeElements = siteElementDoc.querySelectorAll('.hb-input-block, .hb-secondary-text');
+                removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
               } else {
                 // Remove the entire email input wrapper including the button
-                removeElements = siteElementDoc.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
+                removeElements = siteElementContainer.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
               }
               targetSiteElement.innerHTML = '<span>' + thankYouText + '</span>';
             }
@@ -97,7 +98,7 @@ hellobar.defineModule('elements.collecting',
               dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
             }
 
-            if (removeElements != null) {
+            if (removeElements) {
               for (var i = 0; i < removeElements.length; i++) {
                 dom.hideElement(removeElements[i]);
               }
@@ -105,7 +106,7 @@ hellobar.defineModule('elements.collecting',
           }
           var values = [];
           values.push(emailField.value);
-          var inputs = siteElementDoc.querySelectorAll('input:not(#f-builtin-email)');
+          var inputs = siteElementContainer.querySelectorAll('input:not(#f-builtin-email)');
           if (inputs) {
             for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
               var input = inputs[inputIndex];
@@ -148,10 +149,10 @@ hellobar.defineModule('elements.collecting',
         });
         var joinedValues = sanitizedValues.join(',');
 
-        // Record the email address to the cnact list and then track that the rule was performed
-        trackingInternal.send('c', siteElement.contact_list_id, {e: joinedValues}, function () {
-          elementsConversion.converted(this.siteElement, callback);
-        }.bind({siteElement: siteElement}));
+        // Record the email address to the contact list and then track that the rule was performed
+        trackingInternal.send('c', siteElement.model().contact_list_id, {e: joinedValues}, function () {
+          elementsConversion.converted(siteElement, callback);
+        });
         // TODO call external tracking
       }
     }

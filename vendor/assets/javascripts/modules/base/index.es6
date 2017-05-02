@@ -1,6 +1,8 @@
 //= require ./base.ajax
 //= require ./base.bus
 //= require ./base.capabilities
+//= require ./base.cdn
+//= require ./base.cdn.libraries
 //= require ./base.coloring
 //= require ./base.deferred
 //= require ./base.dom

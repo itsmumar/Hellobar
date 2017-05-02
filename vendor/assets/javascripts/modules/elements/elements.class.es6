@@ -1,9 +1,9 @@
 hellobar.defineModule('elements.class',
   ['hellobar',
-    'base.templating', 'base.dom', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
+    'base.templating', 'base.dom', 'base.cdn', 'base.cdn.libraries', 'base.site', 'base.environment', 'base.preview', 'base.coloring', 'base.format', 'base.capabilities', 'base.bus',
     'elements.visibility', 'elements.collecting', 'elements.intents', 'elements.injection', 'elements.conversion'],
   function (hellobar,
-            templating, dom, site, environment, preview, coloring, format, capabilities, bus,
+            templating, dom, cdn, cdnLibraries, site, environment, preview, coloring, format, capabilities, bus,
             elementsVisibility, elementsCollecting, elementsIntents, elementsInjection, elementsConversion) {
 
     const maxSliderSize = 380;
@@ -142,7 +142,7 @@ hellobar.defineModule('elements.class',
             if (preview.isActive()) {
               const brandingLink = this.w.contentDocument.querySelector('.js-branding');
               brandingLink.addEventListener('click', (event) => event.preventDefault());
-              this.useFroala();
+              cdnLibraries.useFroala(this.w.contentDocument);
             }
           }.bind(this), 1);
         }.bind(this));
@@ -291,87 +291,49 @@ hellobar.defineModule('elements.class',
       // if viewCondition is missing or badly formed, siteElement displays immediately by default
 
       checkForDisplaySetting() {
-        var viewCondition = this.view_condition;
-        var originalDisplay = this.w.style.display;
+        const viewCondition = preview.isActive() ? 'preview' : this.view_condition;
 
-        if (document.getElementById('hellobar-preview-container') !== null)
-          viewCondition = 'preview';
+        const show = () => {
+          const doShow = () => {
+            clearInterval(this.displayCheckInterval);
 
-        var show = function () {
-          clearInterval(this.displayCheckInterval);
-          dom.showElement(this.w);
+            dom.showElement(this.w);
 
-          // Track the view
-          if (!this.dontRecordView) {
-            elementsConversion.viewed(this);
-          }
+            // Track the view
+            if (!this.dontRecordView) {
+              elementsConversion.viewed(this);
+            }
 
-          // Next line is a Safari hack.  Couldn't find out why but sometimes safari
-          // wouldn't display the contents of the iframe, but toggling the display style fixes this
-          // UPDATE:  1/25/16 - DP
-          // runnig this hack on all browsers since we had issues with desktop Safari and Chrome
-          var siteElementNode = this.getSiteElementDomNode();
-          if (siteElementNode) {
-            siteElementNode.style.display = 'none';
-            setTimeout(function () {
-              siteElementNode.style.display = '';
-            }, 10);
-          }
+            // Next line is a Safari hack.  Couldn't find out why but sometimes safari
+            // wouldn't display the contents of the iframe, but toggling the display style fixes this
+            // UPDATE:  1/25/16 - DP
+            // runnig this hack on all browsers since we had issues with desktop Safari and Chrome
+            var siteElementNode = this.getSiteElementDomNode();
+            if (siteElementNode) {
+              siteElementNode.style.display = 'none';
+              setTimeout(function () {
+                siteElementNode.style.display = '';
+              }, 10);
+            }
 
+            if (this.w.className.indexOf("hb-animated") > -1) {
+              dom.animateIn(this.w)
+            }
+          };
           if (this.w.className.indexOf("hb-animated") > -1) {
-            dom.animateIn(this.w)
+            // No view condition so show immediately (very small delay for animated elements)
+            setTimeout(doShow, 500);
+          } else {
+            doShow();
           }
+        };
 
-        }.bind(this);
-
-        var showMinimizedBar = function () {
+        const showMinimized = () => {
           dom.hideElement(this.w);
           this.pullDown && dom.animateIn(this.pullDown);
-        }.bind(this);
+        };
 
-        if (viewCondition === 'wait-5') {
-          setTimeout(show, 5000);
-        }
-        else if (viewCondition === 'wait-10') {
-          setTimeout(show, 10000);
-        }
-        else if (viewCondition === 'wait-30') {
-          setTimeout(show, 30000);
-        }
-        else if (viewCondition === 'wait-60') {
-          setTimeout(show, 60000);
-        }
-        else if (viewCondition === 'scroll-some') {
-          // scroll-some is defined here as "visitor scrolls 300 pixels"
-          this.displayCheckInterval = setInterval(function () {
-            elementsIntents.scrollTargetCheck(300, show);
-          }, 500);
-        }
-        else if (viewCondition === 'scroll-middle') {
-          this.displayCheckInterval = setInterval(function () {
-            elementsIntents.scrollTargetCheck("middle", show);
-          }, 500);
-        }
-        else if (viewCondition === 'scroll-to-bottom') {
-          this.displayCheckInterval = setInterval(function () {
-            elementsIntents.scrollTargetCheck("bottom", show);
-          }, 500);
-        }
-        else if (viewCondition === 'exit-intent') {
-          this.displayCheckInterval = setInterval(function () {
-            elementsIntents.intentCheck("exit", show);
-          }, 100);
-        }
-        else if (viewCondition == 'stay-hidden') {
-          setTimeout(showMinimizedBar, 500);
-        }
-        else {
-          // No view condition so show immediately (very small delay for animated elements)
-          if (this.w.className.indexOf("hb-animated") > -1)
-            setTimeout(show, 500);
-          else
-            show();
-        }
+        this.displayCheckInterval = elementsIntents.applyViewCondition(viewCondition, show, showMinimized);
       }
 
       hideOnZoom() {
@@ -545,8 +507,6 @@ hellobar.defineModule('elements.class',
           hbModal.style.transform = "";
           hbModal.style.width = "";
         } else {
-          var modalMaxHeight = hbModal.getElementsByClassName('hb-text-wrapper')[0].clientHeight;
-
           if (this.type == 'Slider') {
             element.w.style.position = "fixed";
           } else {
@@ -588,14 +548,7 @@ hellobar.defineModule('elements.class',
 
       useGoogleFont() {
         if (!this.google_font) return;
-        var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
-
-        var link = this.w.contentWindow.document.createElement("LINK");
-        link.href = 'https://fonts.googleapis.com/css?family=' + this.google_font;
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-
-        head.appendChild(link);
+        cdn.addCss('https://fonts.googleapis.com/css?family=' + this.google_font, this.w.contentDocument);
 
         // if is mobile safari, prevent from zooming
         if (environment.isMobileSafari()) {
@@ -604,33 +557,6 @@ hellobar.defineModule('elements.class',
           meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
           head.appendChild(meta);
         }
-      }
-
-      addCss(href) {
-        var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
-        var link = this.w.contentWindow.document.createElement("LINK");
-        link.href = href;
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        head.appendChild(link);
-      }
-
-      addJs(href) {
-        var head = this.w.contentWindow.document.getElementsByTagName('head')[0];
-        var script = this.w.contentWindow.document.createElement("SCRIPT");
-        script.src = href;
-        script.type = 'text/javascript';
-        head.appendChild(script);
-      }
-
-      useFroala() {
-        this.addCss('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css');
-        this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_editor.min.css');
-        //removeing this and cherry picking styles in common.css
-        //this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_style.css');
-        this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/colors.min.css');
-        this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/emoticons.css');
-        this.addCss('//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/plugins/image.min.css');
       }
 
       brightnessClass() {
@@ -710,6 +636,14 @@ hellobar.defineModule('elements.class',
       shouldShowBranding() {
         return this.show_branding;
         // TODO initially it was HB.t(siteElement.show_branding) || !HB.CAP.no_b
+      }
+
+      model() {
+        return this;
+      }
+
+      contentDocument() {
+        return this.w.contentDocument;
       }
 
     }

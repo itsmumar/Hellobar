@@ -101,10 +101,59 @@ hellobar.defineModule('elements.intents', ['base.environment'], function (enviro
     });
   }
 
+  /**
+   *
+   * @param viewCondition {string}
+   * @param show {function}
+   * @param showMinimized {function}
+   */
+  function applyViewCondition(viewCondition, show, showMinimized) {
+    let displayCheckInterval = null;
+    if (viewCondition === 'wait-5') {
+      setTimeout(show, 5000);
+    }
+    else if (viewCondition === 'wait-10') {
+      setTimeout(show, 10000);
+    }
+    else if (viewCondition === 'wait-30') {
+      setTimeout(show, 30000);
+    }
+    else if (viewCondition === 'wait-60') {
+      setTimeout(show, 60000);
+    }
+    else if (viewCondition === 'scroll-some') {
+      // scroll-some is defined here as "visitor scrolls 300 pixels"
+      displayCheckInterval = setInterval(function () {
+        scrollTargetCheck(300, show);
+      }, 500);
+    }
+    else if (viewCondition === 'scroll-middle') {
+      displayCheckInterval = setInterval(function () {
+        scrollTargetCheck("middle", show);
+      }, 500);
+    }
+    else if (viewCondition === 'scroll-to-bottom') {
+      displayCheckInterval = setInterval(function () {
+        scrollTargetCheck("bottom", show);
+      }, 500);
+    }
+    else if (viewCondition === 'exit-intent') {
+      displayCheckInterval = setInterval(function () {
+        intentCheck("exit", show);
+      }, 100);
+    }
+    else if (viewCondition == 'stay-hidden') {
+      setTimeout(showMinimized, 500);
+    }
+    else {
+      show();
+    }
+    return displayCheckInterval;
+  }
+
   const module = {
-    intentCheck,
-    scrollTargetCheck,
-    initializeIntentListeners
+    initializeIntentListeners,
+    applyViewCondition
   };
 
   return module;
