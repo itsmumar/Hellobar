@@ -424,27 +424,7 @@ class Site < ActiveRecord::Base
   end
 
   def generate_static_assets(options = {})
-    update_column(:script_attempted_to_generate_at, Time.current)
-
-    store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
-    compress_script = !store_site_scripts_locally
-
-    generated_script_content = options[:script_content] || script_content(compress_script)
-
-    if store_site_scripts_locally
-      File.open(Rails.root.join('public', 'generated_scripts', script_name), 'w') { |f| f.puts(generated_script_content) }
-    else
-      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
-
-      site_elements.wordpress_bars.each do |site_element|
-        users.wordpress_users.each do |user|
-          name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-          Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-        end
-      end
-    end
-
-    update_column(:script_generated_at, Time.current)
+    GenerateAndStoreStaticScript.new(self, options).call
   end
 
   def generate_blank_static_assets

@@ -1,9 +1,19 @@
 FactoryGirl.define do
   factory :user do
+    transient do
+      site nil
+    end
+
     first_name 'FirstName'
     last_name 'LastName'
     email { generate(:email) }
     password 'password'
+
+    after :create do |user, evaluator|
+      if evaluator.site
+        user.sites << evaluator.site
+      end
+    end
 
     trait :deleted do
       after(:create, &:destroy)
