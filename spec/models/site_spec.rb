@@ -228,26 +228,6 @@ describe Site do
     end
   end
 
-  describe '#script_content' do
-    let!(:element) { create(:site_element, site: site) }
-
-    it 'generates the contents of the script for a site' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script = site.script_content(false)
-
-      expect(script).to include "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }')"
-      expect(script).to include(element.id.to_s)
-    end
-
-    it 'generates the compressed contents of the script for a site' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script = site.script_content
-
-      expect(script).to include ".siteId(#{ site.id }).siteUrl(\"#{ site.url }\")"
-      expect(script).to include(element.id.to_s)
-    end
-  end
-
   describe 'url_uniqueness' do
     let(:membership) { create(:site_membership) }
 
@@ -277,68 +257,26 @@ describe Site do
     end
   end
 
-  describe '#generate_static_assets' do
-    before do
+  describe '#destroy' do
+    around do |ex|
       Hellobar::Settings[:store_site_scripts_locally] = false
-
-      @mock_storage = double('asset_storage')
-      allow(Hello::AssetStorage).to receive(:new).and_return(@mock_storage)
-    end
-
-    after do
+      ex.call
       Hellobar::Settings[:store_site_scripts_locally] = true
     end
 
-    it 'generates and uploads the script content for a site', :freeze do
-      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script_content = site.script_content(true)
-      script_name = site.script_name
+    let(:mock_storage) { double('asset_storage') }
 
-      mock_storage = double('asset_storage')
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
+    before do
       allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-
-      site.generate_script
-    end
-
-    it 'generates scripts for each wordpress bar' do
-      site_element = create(:site_element, wordpress_bar_id: 123)
-      user = create(:user, wordpress_user_id: 456)
-      site_element.site.users << user
-
-      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      site = site_element.site.reload
-
-      # First, generate for site, then for the site element
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with(anything, anything).ordered
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js", anything).ordered
-      site.send(:generate_static_assets)
-    end
-
-    it 'does not compress a locally stored script' do
-      Hellobar::Settings[:store_site_scripts_locally] = true
-
-      script_generator = ScriptGenerator.new(site)
-
-      allow(script_generator).to receive(:render).and_return('')
-      expect(ScriptGenerator).to receive(:new).and_return script_generator
-      expect(ScriptGenerator.uglifier).not_to receive(:compile)
-
-      site.generate_script
+      allow(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
     end
 
     it 'blanks-out the site script when destroyed' do
-      mock_storage = double('asset_storage')
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
-      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-
       site.destroy
+      expect(mock_storage).to have_received(:create_or_update_file_with_contents).with(site.script_name, '')
     end
 
-    it 'should soft-delete' do
-      allow(site).to receive(:generate_static_assets)
+    it 'soft-deletes record' do
       site.destroy
       expect(Site.only_deleted).to include(site)
     end
