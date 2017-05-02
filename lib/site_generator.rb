@@ -5,7 +5,7 @@ class SiteGenerator
     @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
     @compress = opts.fetch(:compress, false)
-    ScriptGenerator.compile
+    RenderStaticScript.precompile
   end
 
   def generate_file
@@ -65,7 +65,7 @@ class SiteGenerator
   private
 
   def script_content
-    ScriptGenerator.new(@site, compress: @compress).generate_script
+    RenderStaticScript.new(@site, compress: @compress).call
   end
 
   def generate_full_path(opts)

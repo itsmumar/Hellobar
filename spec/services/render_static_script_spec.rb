@@ -1,19 +1,19 @@
-describe ScriptGenerator do
+describe RenderStaticScript do
   extend ThemeMacros
 
   before do
     allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
   end
 
-  describe '.compile' do
+  describe '.precompile' do
     it 'precompiles assets for static script' do
-      expect { described_class.compile }.not_to raise_error
+      expect { described_class.precompile }.not_to raise_error
     end
   end
 
   describe '#render' do
     let(:site) { create(:site, :with_user, :pro_managed, elements: %i[traffic email facebook twitter]) }
-    let(:generator) { ScriptGenerator.new(site) }
+    let(:generator) { described_class.new(site) }
 
     it 'renders the site id variable' do
       allow(generator).to receive(:pro_secret).and_return('pro_secret')
@@ -41,8 +41,8 @@ describe ScriptGenerator do
 
     it 'includes the minified hellobar css' do
       allow(generator).to receive :hellobar_container_css
-      hellobar_css = ScriptGenerator.assets['common.css'].to_s
-      element_css = ScriptGenerator.assets['bar/element.css'].to_s
+      hellobar_css = described_class.assets['common.css'].to_s
+      element_css = described_class.assets['bar/element.css'].to_s
 
       result = generator.render
 
@@ -55,9 +55,9 @@ describe ScriptGenerator do
     it 'includes the hellobar container css' do
       allow(generator).to receive :hellobar_element_css
       allow(generator).to receive(:pro_secret) { 'random' }
-      container_css = ScriptGenerator.assets['container_common.css'].to_s
+      container_css = described_class.assets['container_common.css'].to_s
       container_css.gsub!('hellobar-container', 'random-container')
-      element_container_css = ScriptGenerator.assets['bar/container.css'].to_s
+      element_container_css = described_class.assets['bar/container.css'].to_s
       element_container_css.gsub!('hellobar-container', 'random-container')
 
       result = generator.render
@@ -84,7 +84,7 @@ describe ScriptGenerator do
         bar = Bar.new(element_subtype: 'traffic', theme_id: 'classic')
         allow(site).to receive(:site_elements).and_return(double('site_elements', active: [bar, bar], active_content_upgrades: [], none?: true))
 
-        generator = ScriptGenerator.new site
+        generator = described_class.new site
         expect(generator.render.scan('configuration.addTemplate("bar_traffic",').size).to eq(1)
       end
 
@@ -93,7 +93,7 @@ describe ScriptGenerator do
         email_bar = Bar.new(element_subtype: 'email', theme_id: 'classic')
         allow(site).to receive(:site_elements).and_return(double('site_elements', active: [traffic_bar, email_bar], active_content_upgrades: [], none?: true))
 
-        generator = ScriptGenerator.new site
+        generator = described_class.new site
 
         expect(generator.render.scan('configuration.addTemplate("bar_traffic",').size).to eq(1)
         expect(generator.render.scan('configuration.addTemplate("bar_email",').size).to eq(1)
@@ -252,7 +252,7 @@ describe ScriptGenerator do
   describe '#rules' do
     let(:site) { create(:site, :with_user, :pro) }
     let(:contact_list) { create(:contact_list, site: site) }
-    let(:generator) { ScriptGenerator.new(site) }
+    let(:generator) { described_class.new(site) }
     let(:rule) { create(:rule, match: nil) }
 
     it 'returns the proper array of hashes for a sites rules' do
@@ -271,7 +271,7 @@ describe ScriptGenerator do
 
     it 'returns the proper hash when a single bar_id is passed as an option', freeze: 1491936487 do
       bar = create(:site_element, :email, rule: rule, contact_list: contact_list)
-      generator = ScriptGenerator.new(site, bar_id: bar.id)
+      generator = described_class.new(site, bar_id: bar.id)
 
       allow(site).to receive(:rules).and_return([rule])
 
@@ -282,7 +282,7 @@ describe ScriptGenerator do
     it 'renders all bar json when the render_paused_site_elements is true' do
       bar = SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       options = { render_paused_site_elements: true }
-      generator = ScriptGenerator.new(site, options)
+      generator = described_class.new(site, options)
       allow(generator)
         .to receive(:render_site_elements).and_return([id: bar.id, template_name: bar.element_subtype, settings: { buffer_url: 'url' }].to_json)
 
@@ -300,7 +300,7 @@ describe ScriptGenerator do
     it 'renders only active bar json by default' do
       SiteElement.create! element_subtype: 'email', rule: rule, paused: true, contact_list: contact_list
       active_bar = SiteElement.create! element_subtype: 'traffic', rule: rule, paused: false
-      generator = ScriptGenerator.new(site)
+      generator = described_class.new(site)
       allow(generator)
         .to receive(:render_site_elements).and_return([id: active_bar.id, template_name: active_bar.element_subtype].to_json)
 
@@ -317,36 +317,36 @@ describe ScriptGenerator do
 
     describe '#pro_secret' do
       it 'returns a random string (not hellobar)' do
-        generator = ScriptGenerator.new(create(:site))
+        generator = described_class.new(create(:site))
         expect(generator.pro_secret).to_not eq('hellobar')
       end
     end
 
     describe '#generate_script' do
       it 'does not compress the template if the compress option is not set' do
-        generator = ScriptGenerator.new('site')
+        generator = described_class.new('site')
         allow(generator).to receive(:render).and_return('template')
 
         expect(Uglifier).not_to receive(:new)
         expect(generator).to receive(:render)
 
-        generator.generate_script
+        generator.call
       end
 
       it 'compresses the template when the compress option is true' do
-        generator = ScriptGenerator.new('site', compress: true)
+        generator = described_class.new('site', compress: true)
         allow(generator).to receive(:render).and_return('template')
 
-        expect(ScriptGenerator.uglifier).to receive(:compress).with('template')
+        expect(described_class.uglifier).to receive(:compress).with('template')
 
-        generator.generate_script
+        generator.call
       end
     end
   end
 
   describe '#condition_settings' do
     let(:condition) { create(:condition) }
-    let(:generator) { ScriptGenerator.new(condition.rule.site) }
+    let(:generator) { described_class.new(condition.rule.site) }
 
     it 'turns a condition into a hash' do
       expect(generator.send(:condition_settings, condition))

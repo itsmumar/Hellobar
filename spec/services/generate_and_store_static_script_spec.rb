@@ -13,7 +13,7 @@ describe GenerateAndStoreStaticScript do
 
   before do
     allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-    allow_any_instance_of(ScriptGenerator).to receive(:generate_script).and_return(script_content)
+    allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
   end
 
   it 'generates and uploads the script content for a site' do
@@ -37,7 +37,7 @@ describe GenerateAndStoreStaticScript do
     before { Hellobar::Settings[:store_site_scripts_locally] = true }
 
     it 'does not compress script' do
-      expect(ScriptGenerator.uglifier).not_to receive(:compile)
+      expect(RenderStaticScript.uglifier).not_to receive(:compile)
       service.call
     end
   end

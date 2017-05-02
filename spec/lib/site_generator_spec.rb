@@ -46,7 +46,7 @@ describe SiteGenerator do
   end
 
   describe '#generate_html' do
-    before { allow_any_instance_of(ScriptGenerator).to receive(:generate_script).and_return('script content') }
+    before { allow_any_instance_of(RenderStaticScript).to receive(:call).and_return('script content') }
 
     it "includes the site's script content", :freeze do
       generator = described_class.new(site.id)

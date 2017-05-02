@@ -112,7 +112,7 @@ class Site < ActiveRecord::Base
   end
 
   def script_content(compress = true)
-    ScriptGenerator.new(self, compress: compress).generate_script
+    RenderStaticScript.new(self, compress: compress).call
   end
 
   def generate_script(options = {})

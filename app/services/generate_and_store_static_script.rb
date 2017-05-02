@@ -26,7 +26,7 @@ class GenerateAndStoreStaticScript
   attr_reader :site, :options
 
   def script_content
-    @script_content ||= options[:script_content] || ScriptGenerator.new(site, compress: compress_script?).generate_script
+    @script_content ||= options[:script_content] || RenderStaticScript.new(site, compress: compress_script?).call
   end
 
   def store_locally

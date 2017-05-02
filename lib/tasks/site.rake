@@ -2,7 +2,7 @@ namespace :site do
   namespace :scripts do
     desc 'Precompile assets (js, css, html) which are used in site script'
     task precompile_static_assets: :environment do
-      ScriptGenerator.compile
+      RenderStaticScript.precompile
     end
 
     desc 'Schedule a re-generation of ALL site scripts'

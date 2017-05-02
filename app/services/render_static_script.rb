@@ -2,7 +2,7 @@ require 'digest/sha1'
 require 'hmac-sha1'
 require 'hmac-sha2'
 
-class ScriptGenerator < Mustache
+class RenderStaticScript < Mustache
   self.raise_on_context_miss = true
   cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
   cattr_reader(:jbuilder) do
@@ -12,7 +12,7 @@ class ScriptGenerator < Mustache
   end
 
   class << self
-    def compile
+    def precompile
       FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
       manifest(true).compile('*.js', '*.es6', '*.css', '*.html')
     end
@@ -54,7 +54,7 @@ class ScriptGenerator < Mustache
     @options = options
   end
 
-  def generate_script
+  def call
     # Re-read the template
     self.class.load_templates if Rails.env.development?
     initialize_version_and_timestamp
