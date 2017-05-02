@@ -14,7 +14,7 @@ export default Ember.Controller.extend({
     if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       InternalTracking.track_current_person('Editor Flow', {step: 'Targeting Step'});
     }
-  }.observes('model').on('init'),
+  }.observes('applicationSettings', 'model').on('init'),
 
   //-------------- Helpers ----------------#
 

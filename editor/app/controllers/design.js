@@ -175,7 +175,7 @@ export default Ember.Controller.extend({
         style: this.get("model.type")
       });
     }
-  }).observes('model').on('init'),
+  }).observes('applicationSettings', 'model').on('init'),
 
   //-----------  Analytics  -----------#
 
@@ -187,7 +187,7 @@ export default Ember.Controller.extend({
         style: this.get("model.type")
       });
     }
-  }).observes('model').on('init'),
+  }).observes('applicationSettings', 'model').on('init'),
 
   //--------- Thank you editor support -----
   shouldShowThankYouEditor: Ember.computed.equal('model.element_subtype', 'email'),

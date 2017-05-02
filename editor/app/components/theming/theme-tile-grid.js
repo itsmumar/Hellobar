@@ -23,7 +23,7 @@ export default Ember.Component.extend({
 
   allThemes: function () {
     return this.get('theming.availableThemes');
-  }.property(),
+  }.property('theming.availableThemes'),
 
   genericThemes: function () {
     return _.filter(this.get('allThemes'), (theme) => theme.type === 'generic' && theme.id !== 'autodetect');

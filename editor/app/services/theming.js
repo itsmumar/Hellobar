@@ -6,7 +6,7 @@ export default Ember.Service.extend({
   applicationSettings: Ember.inject.service(),
 
   defaultGenericTheme() {
-    return _.find(this.availableThemes, (theme) => theme.type === 'generic');
+    return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
   },
 
   autodetectedTheme() {
