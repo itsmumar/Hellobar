@@ -99,15 +99,18 @@ namespace :billing do
       billing_report "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| "  #{ l }" }.join("\n  ") }"
       exit
     ensure
-      stage = Hellobar::Settings[:env_name]
-      if Rails.env.production? && (stage == 'production')
-        emails = %w[mailmanager@hellobar.com]
-        Pony.mail(
-          to: emails.join(', '),
-          subject: "#{ now.strftime('%Y-%m-%d') } - #{ num_bills } bills processed for #{ number_to_currency(amount_successful) } with #{ num_failed } failures",
-          body: @billing_report_log.collect { |l| "  #{ l }" }.join("\n")
-        )
-      end
+      emails =
+        if Rails.env.production?
+          %w[mailmanager@hellobar.com]
+        else
+          %w[dev@hellobar.com]
+        end
+
+      Pony.mail(
+        to: emails.join(', '),
+        subject: "#{ now.strftime('%Y-%m-%d') } - #{ num_bills } bills processed for #{ number_to_currency(amount_successful) } with #{ num_failed } failures",
+        body: @billing_report_log.collect { |l| "  #{ l }" }.join("\n")
+      )
     end
   end
 end

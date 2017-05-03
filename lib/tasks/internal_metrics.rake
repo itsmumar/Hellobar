@@ -14,7 +14,14 @@ namespace :internal_metrics do
     enterprise_monthly = enterprise.select { |b| b.subscription.monthly? }
     enterprise_yearly = enterprise.select { |b| b.subscription.yearly? }
     include ActionView::Helpers::NumberHelper
-    emails = %w[neil@neilpatel.com mike@mikekamo.com mailmanager@hellobar.com]
+
+    emails =
+      if Rails.env.production?
+        %w[neil@neilpatel.com mike@mikekamo.com mailmanager@hellobar.com]
+      else
+        %w[dev@hellobar.com]
+      end
+
     Pony.mail(to: emails.join(', '),
               subject: "#{ last_week } | #{ number_with_delimiter(sites.length) } new sites, #{ number_to_percentage((installed_sites.length.to_f / sites.length) * 100, precision: 1) } install rate, #{ number_to_currency(sum) }",
               body: "Report #{ two_weeks_ago } to #{ last_week }

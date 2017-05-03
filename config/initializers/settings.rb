@@ -21,7 +21,6 @@ unless defined?(Hellobar::Settings)
     deliver_emails
     drip_client_id
     drip_secret
-    env_name
     fake_data_api
     geolocation_url
     get_response_api_url

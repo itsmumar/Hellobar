@@ -5,20 +5,15 @@ set :output, standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log'
 
 env :PATH, ENV['PATH']
 
-settings_file = 'config/settings.yml'
-settings_yaml = File.exist?(settings_file) ? YAML.load_file(settings_file) : {}
-env = settings_yaml['env_name']
-
-if env == 'production'
-  every :friday, at: '2:00pm', roles: [:cron] do
-    rake 'internal_metrics:email_weekly'
-  end
-  every :day, at: '1:00pm', roles: [:cron] do
-    rake 'billing:run'
-  end
+# All times are in UTC
+every :friday, at: '2:00pm', roles: [:cron] do
+  rake 'internal_metrics:email_weekly'
 end
 
-# Note: time is UTC
+every :day, at: '1:00pm', roles: [:cron] do
+  rake 'billing:run'
+end
+
 every :monday, at: '3:00pm', roles: [:cron] do
   rake 'email_digest:deliver'
 end

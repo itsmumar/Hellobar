@@ -11,7 +11,6 @@ cybersource_login: cybersource-login
 cybersource_password: cybersource-password
 deliver_email_digests: false
 deliver_emails: false
-env_name: development
 fake_data_api: true
 geolocation_url: geolocation-url
 get_response_api_url: https://api.getresponse.com/v3

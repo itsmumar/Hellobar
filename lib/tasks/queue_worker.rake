@@ -127,11 +127,12 @@ namespace :queue_worker do
 
     # Send the data to Cloudwatch
     require Rails.root.join('config', 'initializers', 'settings.rb')
-    stage = Hellobar::Settings[:env_name]
+
     data = {
-      namespace: "HB/#{ stage }",
+      namespace: "HB/#{ Rails.env }",
       metric_data: metrics
     }
+
     pp data
 
     cloudwatch = AWS::CloudWatch::Client.new(
@@ -141,6 +142,7 @@ namespace :queue_worker do
     )
 
     response = cloudwatch.put_metric_data(data)
+
     pp response
   end
 end
