@@ -5,40 +5,32 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-# Ignore all logfiles and tempfiles.
-/log/*.log
-/tmp
-/public/generated_scripts/*.js
-
-*.sublime-*
-npm-debug.log
-.idea
-.tm_properties
-
-config/settings.yml
-config/database.yml
-
-# Ignore personal TODO lists
-TODO
-
 # Ignore any SQL dumpfiles
 db/*_dump.sql
 
-# Ignore scratch files
-*_scratch.rb
-*.swp
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
 
-# Ignore application configuration
-/config/application.yml
-/config/thin/www+application.yml
-
-# Ignore .DS_Store
-.DS_Store
-
+# Ignore generated scripts
+/public/generated_scripts/*.js
 public/*bar_test.html
 public/integration
 public/image_uploads
 public/test_site.html
+
+# Ignore tmp/scratch/editor files
+*.sublime-*
+npm-debug.log
+.idea
+.tm_properties
+*_scratch.rb
+*.swp
+.DS_Store
+
+# Settings
+config/settings.yml
+config/database.yml
 
 # Assets
 /public/assets
@@ -55,4 +47,6 @@ out
 .ruby-version
 .ruby-gemset
 .rbenv-gemsets
+
+# RSpec local run summary
 spec/examples.txt
