@@ -4,7 +4,6 @@ unless defined?(Hellobar::Settings)
   config = {}
 
   keys = %w[
-    analytics_log_file
     aweber_app_id
     aweber_consumer_key
     aweber_consumer_secret
@@ -174,7 +173,6 @@ unless defined?(Hellobar::Settings)
       hidden: true
     }
   }
-  config[:analytics_log_file] ||= Rails.root.join('log', 'analytics.log')
 
   config[:permissions] = {
     'owner' => %i[billing edit_owner]
