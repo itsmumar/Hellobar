@@ -9,7 +9,6 @@ createsend_client_id: createsend-client-id
 createsend_secret: createsend-secret
 cybersource_login: cybersource-login
 cybersource_password: cybersource-password
-deliver_email_digests: false
 deliver_emails: false
 fake_data_api: true
 geolocation_url: geolocation-url

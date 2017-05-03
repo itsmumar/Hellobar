@@ -17,7 +17,6 @@ unless defined?(Hellobar::Settings)
     cybersource_login
     cybersource_password
     data_api_url
-    deliver_email_digests
     deliver_emails
     drip_client_id
     drip_secret
