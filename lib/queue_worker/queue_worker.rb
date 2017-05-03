@@ -1,5 +1,4 @@
 class QueueWorker
-  STAGES = %w[edge staging production designqa].freeze
   VIEW_ATTRIBUTES = %w[ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds].freeze
   LOG_FILE = Rails.root.join('log', 'queue_worker.log')
 
@@ -17,7 +16,7 @@ class QueueWorker
           raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
         end
       else
-        QueueWorker.send_sqs_message(body, nil, queue)
+        QueueWorker.send_sqs_message(body, queue)
       end
     end
   end
@@ -45,11 +44,9 @@ class QueueWorker
     end
   end
 
-  def self.send_sqs_message(message, stage = nil, queue_name = nil)
+  def self.send_sqs_message(message, queue_name = nil)
     queue_name ||= Hellobar::Settings[:main_queue] || 'test_queue'
-    stage ||= Hellobar::Settings[:env_name]
 
-    raise ArgumentError, "Stage is required to be one of #{ STAGES }" unless STAGES.include?(stage)
     raise ArgumentError, 'Message must be defined' if message.blank?
     raise ArgumentError, 'Queue name must be defined' unless queue_name
 
