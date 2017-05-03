@@ -50,8 +50,6 @@ unless defined?(Hellobar::Settings)
     config[key.to_sym] = yaml[key] || ENV[key.upcase]
   end
 
-  config[:data_api_url] ||= 'http://mock-hi.hellobar.com'
-
   config[:identity_providers] = {
     active_campaign: {
       type: :email,
