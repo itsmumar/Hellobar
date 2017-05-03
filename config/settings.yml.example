@@ -28,7 +28,6 @@ script_cdn_url: scripts-test.hellobar.com
 sendgrid_password: sendgrid-password
 sentry_dsn: sentry-dsn-endpoint
 store_site_scripts_locally: true
-support_location: "http://support.hellobar.com/"
 syncable: true
 tracking_host: hi-dev.hellobar.com
 vr_client_id: vertical-response-client-id

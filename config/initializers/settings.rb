@@ -40,7 +40,6 @@ unless defined?(Hellobar::Settings)
     sendgrid_password
     sentry_dsn
     store_site_scripts_locally
-    support_location
     syncable
     test_cloning
     tracking_host
