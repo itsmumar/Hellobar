@@ -118,13 +118,9 @@ class QueueWorker
             if task =~ /^(.+?)\[.+?\]/
               task_name = $1
             end
-            begin
-              # We need to re-enable the Rake task so it can be called
-              # more than once
-              Rake::Task[task_name].reenable
-            rescue => _
-              # Ignore failed attempts to reenable
-            end
+            # We need to re-enable the Rake task so it can be called more than once
+            Rake::Task[task_name].reenable
+
             # Invoke the task
             begin
               Rake.application.invoke_task(task)
