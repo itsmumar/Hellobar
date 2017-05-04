@@ -27,10 +27,13 @@ export default Ember.Component.extend({
     this.debouncedSetHex = _.debounce(() => {
       this.setHex();
     }, 150);
+    this.debouncedUpdateRecent = _.debounce(() => {
+      this.updateRecent();
+    }, 100);
     this.setRGB();
   },
 
-  rgbObserver: function() {
+  rgbObserver: function () {
     this.throttledSetRGB && this.throttledSetRGB();
   }.observes('color'),
 
@@ -113,17 +116,20 @@ export default Ember.Component.extend({
 
   //-----------  Push 'Recent' Changes to Controller  -----------#
 
-  updateRecent: Ember.debouncedObserver('color', 75, function () {
-      let color = this.get('color');
-      let recent = this.get('recentColors');
+  updateRecent() {
+    let color = this.get('color');
+    let recent = this.get('recentColors');
 
-      if (recent.indexOf(color) <= -1) {
-        recent.shiftObject();
-        recent.pushObject(this.get('color'));
-        return this.set('recentColors', recent);
-      }
+    if (recent.indexOf(color) <= -1) {
+      recent.shiftObject();
+      recent.pushObject(this.get('color'));
+      this.set('recentColors', recent);
     }
-  ),
+  },
+
+  recentObserver: function () {
+    this.debouncedUpdateRecent && this.debouncedUpdateRecent();
+  }.observes('color'),
 
   //-----------  Screenshot Eye-Dropper  -----------#
 
