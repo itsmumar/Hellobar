@@ -37,7 +37,7 @@ describe GenerateAndStoreStaticScript do
     before { Hellobar::Settings[:store_site_scripts_locally] = true }
 
     it 'does not compress script' do
-      expect(RenderStaticScript.uglifier).not_to receive(:compile)
+      expect(StaticScriptAssets).not_to receive(:compress)
       service.call
     end
   end

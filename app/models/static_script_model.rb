@@ -31,6 +31,10 @@ class StaticScriptModel
     }.merge(SiteSerializer.new(site).capabilities)
   end
 
+  def capabilities_json
+    capabilities.to_json
+  end
+
   def pro_secret
     @pro_secret ||=
       begin
@@ -147,8 +151,20 @@ class StaticScriptModel
     }.inject({}, &:update)
   end
 
+  def content_upgrades_json
+    content_upgrades.to_json
+  end
+
   def content_upgrades_styles
     site.content_upgrade_styles
+  end
+
+  def content_upgrades_styles_json
+    content_upgrades_styles.to_json
+  end
+
+  def autofills_json
+    autofills.to_json
   end
 
   def script_is_installed_properly

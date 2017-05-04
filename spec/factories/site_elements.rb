@@ -41,6 +41,10 @@ FactoryGirl.define do
       type 'ContentUpgrade'
     end
 
+    trait :custom do
+      type 'Custom'
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil

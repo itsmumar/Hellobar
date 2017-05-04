@@ -289,6 +289,15 @@ describe StaticScriptModel do
         expect(model.rules).to match_array []
       end
     end
+
+    context 'with custom html/js' do
+      let(:custom_html) { '<script>alert(1)</script>' }
+      let!(:site_element) { create(:site_element, :custom, custom_html: custom_html, site: site) }
+
+      it 'escapes </script>' do
+        expect(model.rules.first[:site_elements]).to include '<script>alert(1)<\/script>'
+      end
+    end
   end
 
   describe '#hellobar_element_css' do
