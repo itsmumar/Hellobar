@@ -7,7 +7,6 @@ FactoryGirl.define do
     end
 
     url { generate(:random_uniq_url) }
-    timezone { 'Asia/Jakarta' }
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?

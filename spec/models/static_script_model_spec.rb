@@ -67,6 +67,7 @@ describe StaticScriptModel do
 
   describe '#site_timezone' do
     it 'returns formatted zone offest' do
+      site.timezone = 'Asia/Jakarta'
       expect(model.site_timezone).to eql Time.find_zone!(site.timezone).formatted_offset
     end
 
