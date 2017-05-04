@@ -1,6 +1,8 @@
+require 'static_script_assets'
+
 module ThemeMacros
   def use_theme_fixtures
-    RenderStaticScript.assets.append_path 'spec/fixtures/themes'
+    StaticScriptAssets.env.append_path 'spec/fixtures/themes'
 
     before(:each) do
       @current_data = Theme.data

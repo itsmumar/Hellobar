@@ -5,12 +5,6 @@ describe RenderStaticScript do
     allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
   end
 
-  describe '.precompile' do
-    it 'precompiles assets for static script' do
-      expect { described_class.precompile }.not_to raise_error
-    end
-  end
-
   describe '#render' do
     let(:site) { create(:site, :with_user, :pro_managed, elements: %i[traffic email facebook twitter]) }
     let(:generator) { described_class.new(site) }
@@ -41,8 +35,8 @@ describe RenderStaticScript do
 
     it 'includes the minified hellobar css' do
       allow(generator).to receive :hellobar_container_css
-      hellobar_css = described_class.assets['common.css'].to_s
-      element_css = described_class.assets['bar/element.css'].to_s
+      hellobar_css = StaticScriptAssets.env['common.css'].to_s
+      element_css = StaticScriptAssets.env['bar/element.css'].to_s
 
       result = generator.render
 
@@ -55,9 +49,9 @@ describe RenderStaticScript do
     it 'includes the hellobar container css' do
       allow(generator).to receive :hellobar_element_css
       allow(generator).to receive(:pro_secret) { 'random' }
-      container_css = described_class.assets['container_common.css'].to_s
+      container_css = StaticScriptAssets.env['container_common.css'].to_s
       container_css.gsub!('hellobar-container', 'random-container')
-      element_container_css = described_class.assets['bar/container.css'].to_s
+      element_container_css = StaticScriptAssets.env['bar/container.css'].to_s
       element_container_css.gsub!('hellobar-container', 'random-container')
 
       result = generator.render
@@ -337,7 +331,7 @@ describe RenderStaticScript do
         generator = described_class.new('site', compress: true)
         allow(generator).to receive(:render).and_return('template')
 
-        expect(described_class.uglifier).to receive(:compress).with('template')
+        expect(StaticScriptAssets.uglifier).to receive(:compress).with('template')
 
         generator.call
       end

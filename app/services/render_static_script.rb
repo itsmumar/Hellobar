@@ -4,45 +4,10 @@ require 'hmac-sha2'
 
 class RenderStaticScript < Mustache
   self.raise_on_context_miss = true
-  cattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
-  cattr_reader(:jbuilder) do
-    ActionController::Base.new.view_context.tap do |context|
-      context.formats = [:json]
-    end
-  end
 
-  class << self
-    def precompile
-      FileUtils.rm_r Rails.root.join('tmp', 'script'), force: true
-      manifest(true).compile('*.js', '*.es6', '*.css', '*.html')
-    end
-
-    def load_templates
-      self.template_path = Rails.root.join('lib', 'script_generator')
-      self.template_name = 'template.js'
-    end
-
-    def assets
-      @assets ||= Sprockets::Environment.new(Rails.root) do |env|
-        env.append_path 'vendor/assets/javascripts/modules'
-        env.append_path 'vendor/assets/javascripts/hellobar_script'
-
-        env.append_path 'vendor/assets/stylesheets/site_elements'
-        env.append_path 'lib/themes/templates'
-        env.append_path 'lib/themes'
-        env.append_path 'lib/script_generator'
-
-        env.version = '1.0'
-        env.css_compressor = :scss
-        env.js_compressor = nil
-        env.cache = Rails.cache
-      end
-    end
-
-    def manifest(fresh = false)
-      fresh ||= Rails.env.test?
-      Sprockets::Manifest.new(fresh ? assets.index : nil, 'tmp/script')
-    end
+  def self.load_templates
+    self.template_path = Rails.root.join('lib', 'script_generator')
+    self.template_name = 'template.js'
   end
   load_templates
 
@@ -60,7 +25,7 @@ class RenderStaticScript < Mustache
     initialize_version_and_timestamp
 
     if options[:compress]
-      uglifier.compress(render)
+      StaticScriptAssets.compress(render)
     else
       render
     end
@@ -160,10 +125,6 @@ class RenderStaticScript < Mustache
 
   def core_js
     render_asset('core.js')
-  end
-
-  def crypto_js
-    render_asset('lib/crypto.js')
   end
 
   def hellobar_container_css
@@ -288,15 +249,11 @@ class RenderStaticScript < Mustache
     return '' if element_class == 'custom'
 
     if category == :generic
-      render_asset(element_class, "#{ type.tr('/', '_').underscore }.html") do
-        render_asset("#{ type.tr('/', '_').underscore }.html")
-      end
+      render_asset("#{ type.tr('/', '_').underscore }.html")
     else
       path = [type.tr('_', '-')]
 
-      render_asset(*path, "#{ element_class }.html") do
-        render_asset(*path, 'element.html')
-      end
+      render_asset(*path, "#{ element_class }.html")
     end
   end
 
@@ -305,7 +262,7 @@ class RenderStaticScript < Mustache
   end
 
   def render_site_elements(site_elements)
-    jbuilder.render('site_elements/site_elements', site_elements: site_elements).gsub('</script>', '<\/script>')
+    StaticScriptAssets.render_json('site_elements/site_elements', site_elements: site_elements).gsub('</script>', '<\/script>')
   end
 
   def site_elements_for_rule(rule)
@@ -334,18 +291,8 @@ class RenderStaticScript < Mustache
     @site_rules ||= site.rules
   end
 
-  # try to render asset from app's assets
-  # if an asset is not found either
-  # calls given block or raises StandardError
   def render_asset(*path)
-    file = File.join(*path)
-    asset = asset(file)
-    return asset.toutf8 if asset
-    return yield if block_given?
-    raise Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site.id }"
-  rescue Sass::SyntaxError => e
-    e.sass_template ||= path.join('/')
-    raise e
+    StaticScriptAssets.render(*path, site_id: site_id)
   end
 
   def without_escaping_html_in_json
@@ -353,16 +300,6 @@ class RenderStaticScript < Mustache
     yield
   ensure
     ActiveSupport.escape_html_entities_in_json = true
-  end
-
-  def asset(file)
-    manifest.find_sources(file).first
-  rescue TypeError
-    nil
-  end
-
-  def manifest(fresh = false)
-    @manifest ||= self.class.manifest(fresh || options[:preview])
   end
 
   def initialize_version_and_timestamp
