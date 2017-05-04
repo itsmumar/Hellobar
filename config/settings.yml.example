@@ -10,7 +10,6 @@ createsend_secret: createsend-secret
 cybersource_login: cybersource-login
 cybersource_password: cybersource-password
 data_api_url: 'http://mock-hi.hellobar.com'
-deliver_emails: false
 fake_data_api: true
 geolocation_url: geolocation-url
 get_response_api_url: https://api.getresponse.com/v3
