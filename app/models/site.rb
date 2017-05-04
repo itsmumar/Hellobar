@@ -379,7 +379,7 @@ class Site < ActiveRecord::Base
   end
 
   def settings
-    return {} unless self[:settings].present?
+    return {} if self[:settings].blank?
     JSON.parse(self[:settings])
   rescue JSON::ParserError
     {}
