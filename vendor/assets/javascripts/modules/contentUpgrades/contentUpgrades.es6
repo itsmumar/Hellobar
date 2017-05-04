@@ -13,7 +13,7 @@ hellobar.defineModule('contentUpgrades',
         const siteElement = contentUpgrades[contentUpgradeId];
         elementsConversion.viewed(siteElement);
         const siteStyles = configuration.styles() || {};
-        var tpl = templating.getTemplateByName['contentupgrade'];
+        var tpl = templating.getTemplateByName('contentupgrade');
         const content1 = templating.renderTemplate(tpl, siteElement);
         const content2 = templating.renderTemplate(content1, siteStyles);
         document.getElementById('hb-cu-' + contentUpgradeId).outerHTML = content2;
