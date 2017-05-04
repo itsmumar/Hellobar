@@ -423,29 +423,6 @@ describe Site do
     end
   end
 
-  describe '#script_installed_on_homepage?' do
-    it 'returns true when the script is installed at the url' do
-      site_element = create(:site_element)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='#{ site_element.site.script_url }'></html>")
-      expect(site.script_installed_on_homepage?).to be(true)
-    end
-
-    it 'returns true when the site had wordpress bars and has the old script' do
-      site_element = create(:site_element, wordpress_bar_id: 123)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='hellobar.js'></html>")
-      expect(site.script_installed_on_homepage?).to be(true)
-    end
-
-    it 'returns false when the site does not have the script' do
-      site_element = create(:site_element)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='foobar.js'></html>")
-      expect(site.script_installed_on_homepage?).to be(false)
-    end
-  end
-
   describe 'after_touch' do
     context 'not destroyed' do
       it 'sets needs_script_regeneration? to true' do
@@ -463,6 +440,16 @@ describe Site do
         site.touch
         expect(site.needs_script_regeneration?).to be(false)
       end
+    end
+  end
+
+  describe '#update_content_upgrade_styles!' do
+    let(:site) { create :site }
+    let(:content_upgrade_styles) { generate :content_upgrade_styles }
+
+    it 'updates settings' do
+      expect { site.update_content_upgrade_styles! content_upgrade_styles }
+        .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
     end
   end
 end
