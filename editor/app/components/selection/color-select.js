@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
@@ -20,27 +21,36 @@ export default Ember.Component.extend({
   //-----------  RGB Observer  -----------#
 
   didInsertElement() {
-    return this.setRGB();
+    this.throttledSetRGB = _.throttle(() => {
+      this.setRGB();
+    }, 100);
+    this.debouncedSetHex = _.debounce(() => {
+      this.setHex();
+    }, 150);
+    this.setRGB();
   },
 
-  setRGB: Ember.throttledObserver('color', 75, function () {
-      // Only work with full colors, also, strip out any hash marks pasted in
-      let hex = this.get('color');
-      if (hex.length < 6) {
-        return;
-      } else if (hex.length > 6) {
-        hex = hex.replace('#', '');
-        hex = hex.substring(0, 6);
-        this.set('color', hex);
-      }
+  rgbObserver: function() {
+    this.throttledSetRGB && this.throttledSetRGB();
+  }.observes('color'),
 
-      let rgb = this.getRGB();
-
-      this.set('rVal', parseInt(rgb[1], 16));
-      this.set('gVal', parseInt(rgb[2], 16));
-      return this.set('bVal', parseInt(rgb[3], 16));
+  setRGB() {
+    // Only work with full colors, also, strip out any hash marks pasted in
+    let hex = this.get('color');
+    if (hex.length < 6) {
+      return;
+    } else if (hex.length > 6) {
+      hex = hex.replace('#', '');
+      hex = hex.substring(0, 6);
+      this.set('color', hex);
     }
-  ),
+
+    let rgb = this.getRGB();
+
+    this.set('rVal', parseInt(rgb[1], 16));
+    this.set('gVal', parseInt(rgb[2], 16));
+    this.set('bVal', parseInt(rgb[3], 16));
+  },
 
   //-----------  Hex/RGB Conversion  -----------#
 
@@ -53,20 +63,23 @@ export default Ember.Component.extend({
     return result || ['ffffff', 'ff', 'ff', 'ff'];
   },
 
-  setHex: Ember.debouncedObserver('rVal', 'gVal', 'bVal', 'hexVal', 150, function () {
-      let r = parseInt(this.get('rVal'));
-      let g = parseInt(this.get('gVal'));
-      let b = parseInt(this.get('bVal'));
+  hexObserver: function () {
+    this.debouncedSetHex && this.debouncedSetHex();
+  }.observes('rVal', 'gVal', 'bVal', 'hexVal'),
 
-      let gradRGB = this.get('rgb');
-      let inputRGB = {r, g, b};
+  setHex() {
+    let r = parseInt(this.get('rVal'));
+    let g = parseInt(this.get('gVal'));
+    let b = parseInt(this.get('bVal'));
 
-      if (JSON.stringify(gradRGB) !== JSON.stringify(inputRGB)) {
-        let hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-        return this.gradient.setHex(`#${hex}`);
-      }
+    let gradRGB = this.get('rgb');
+    let inputRGB = {r, g, b};
+
+    if (JSON.stringify(gradRGB) !== JSON.stringify(inputRGB)) {
+      let hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+      this.gradient.setHex(`#${hex}`);
     }
-  ),
+  },
 
   //-----------  Wrap Color Gradient  -----------#
 
