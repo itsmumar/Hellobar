@@ -39,6 +39,7 @@ group :red_green_refactor, halt_on_fail: true do
     # Capybara features specs
     watch(rails.view_dirs)     { |m| rspec.spec.call("features/#{ m[1] }") }
     watch(rails.layouts)       { |m| rspec.spec.call("features/#{ m[1] }") }
+    watch(%r{spec/factories/.+\.rb$}) { 'spec/models/font_spec.rb' } # touch any spec so that FactoryGirl.lint runs
   end
 
   guard :rubocop, all_on_start: false do
