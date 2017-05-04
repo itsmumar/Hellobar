@@ -1,0 +1,30 @@
+<div class="reveal-wrapper {{if activated 'activated'}}">
+
+  <div {{action 'onToggle'}}>
+    <div class="reveal-title">
+      I need help!
+    </div>
+    <p>
+      Still not sure what to do? Let us help!
+    </p>
+  </div>
+
+  <div class="reveal-block no-pad help-reveal">
+    <p>
+      How can we help?
+    </p>
+    <p>
+      Just fill out the form below and we'll get back to you as soon as we can.
+    </p>
+
+    <form action="/contact_submissions/generic_message" method="post">
+      <input name="authenticity_token" type="hidden" value="{{unbound csrfToken}}"/>
+      <input name="site_id" type="hidden" value="{{unbound global.siteID}}"/>
+      <input name="return_to" type="hidden" value="/sites/{{unbound global.siteID}}/site_elements/new"/>
+      <textarea name="message" required="required"></textarea>
+      <button type="button" class="button cancel" {{action 'onCancel'}}>Cancel</button>
+      <input type="submit" name="commit" class="button send" data-disable-with="Sending..." value="Send"/>
+    </form>
+
+  </div>
+</div>
