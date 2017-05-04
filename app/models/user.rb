@@ -189,12 +189,6 @@ class User < ActiveRecord::Base
     invite_token_expire_at && invite_token_expire_at <= Time.current
   end
 
-  # @deprecated unusued?
-  def permission_for?(feature, site)
-    role = site.membership_for_user(self).try(:role)
-    role && Hellobar::Settings[:permissions][role].try(:include?, feature)
-  end
-
   def name
     first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
   end

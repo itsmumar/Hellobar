@@ -172,9 +172,5 @@ unless defined?(Hellobar::Settings)
     }
   }
 
-  config[:permissions] = {
-    'owner' => %i[billing edit_owner]
-  }
-
   Hellobar::Settings = config
 end
