@@ -99,7 +99,8 @@ unless defined?(Hellobar::Settings)
       type: :email,
       name: 'GetResponse',
       service_provider_class: 'GetResponseApi',
-      requires_api_key: true
+      requires_api_key: true,
+      url: config[:get_response_api_url]
     },
     icontact: {
       type: :email,
