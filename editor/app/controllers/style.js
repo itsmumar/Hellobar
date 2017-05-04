@@ -7,6 +7,7 @@ export default Ember.Controller.extend({
   inlineEditing: Ember.inject.service(),
 
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   //-----------  Step Settings  -----------#
 
@@ -137,7 +138,7 @@ export default Ember.Controller.extend({
       }
       this.set('elementTypeSelectionInProgress', false);
       this.set('userSelectedElementTypeExplicitly', true);
-      if (trackEditorFlow) {
+      if (this.get('applicationSettings.track_editor_flow')) {
         return InternalTracking.track_current_person('Editor Flow', {
           step: 'Style Settings',
           goal: this.get('model.element_subtype')
@@ -147,13 +148,13 @@ export default Ember.Controller.extend({
   },
 
   trackStyleView: (function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person('Editor Flow', {
         step: 'Choose Style',
         goal: this.get('model.element_subtype')
       });
     }
-  }).observes('model').on('init'),
+  }).observes('model', 'applicationSettings').on('init'),
 
   onElementTypeChanged: (function () {
     let elementType = this.get('model.type');

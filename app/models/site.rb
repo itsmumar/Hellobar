@@ -379,9 +379,10 @@ class Site < ActiveRecord::Base
   end
 
   def settings
+    return {} if self[:settings].blank?
     JSON.parse(self[:settings])
-  rescue
-    return {}
+  rescue JSON::ParserError
+    {}
   end
 
   def update_content_upgrade_styles!(style_params)
@@ -392,9 +393,7 @@ class Site < ActiveRecord::Base
   end
 
   def content_upgrade_styles
-    return JSON.parse(settings)['content_upgrade']
-  rescue
-    return {}
+    settings.fetch('content_upgrade', {})
   end
 
   private

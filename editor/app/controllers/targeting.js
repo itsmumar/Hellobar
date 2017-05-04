@@ -6,14 +6,15 @@ export default Ember.Controller.extend({
   showDropdown: false,
 
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   targetingUiVariant: (() => window.targetingUiVariant).property('model'),
 
   trackTargetingView: function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       InternalTracking.track_current_person('Editor Flow', {step: 'Targeting Step'});
     }
-  }.observes('model').on('init'),
+  }.observes('applicationSettings', 'model').on('init'),
 
   //-------------- Helpers ----------------#
 
@@ -54,7 +55,7 @@ export default Ember.Controller.extend({
   // revert this controller to the previous version if we conclude with 'original'
 
   trackUpgrade() {
-    if (trackEditorFlow) {
+    if (this.get('applicationSettings.track_editor_flow')) {
       InternalTracking.track_current_person('Editor Flow', {
         step: 'Choose Targeting Type - Converted to Pro',
         ui: this.get('targetingUiVariant') ? 'variant' : 'original'
@@ -180,7 +181,7 @@ export default Ember.Controller.extend({
       }
       this.set('targetingSelectionInProgress', this.get('showDropdown'));
 
-      if (trackEditorFlow) {
+      if (this.get('applicationSettings.track_editor_flow')) {
         InternalTracking.track_current_person('Editor Flow', {
           step: 'Choose Targeting Type',
           targeting: this.get(routeName)
@@ -193,7 +194,7 @@ export default Ember.Controller.extend({
     if (newRoute === 'targeting.index' || newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get('canTarget')) {
       return false;
     } else {
-      if (trackEditorFlow) {
+      if (this.get('applicationSettings.track_editor_flow')) {
         InternalTracking.track_current_person('Editor Flow', {
           step: 'Choose Targeting Type - Upgrade Modal',
           targeting: newRoute
