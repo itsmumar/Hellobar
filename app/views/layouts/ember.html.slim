@@ -5,7 +5,6 @@ html
 
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
-    = include_gon
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)
 
@@ -19,10 +18,7 @@ html
     = csrf_meta_tags
 
   body#hb-editor.loading
-    - if ab_variation('Email Integration UI 2016-06-22', current_user) == 'original'
-      = render "shared/modals/contact_list"
-    - else
-      = render "shared/modals/contact_list"
+    = render "shared/modals/contact_list"
 
     = render "shared/modals/contact_list"
     = render "shared/modals/confirm"
@@ -37,16 +33,6 @@ html
     = render "shared/crazy_egg"
     = render "shared/modals/lead_data_modal"
 
-    javascript:
-      HB_DNT = 1;
-      HB_ONBOARDING_EMAIL_VOLUME = "#{ab_variation('Onboarding Email Volume 2016-06-28', current_user)}";
-
-      var currentUser = #{{UserSerializer.new(current_user).to_json}};
-      var trackEditorFlow = #{{new_user?}};
-      var availableThemes = #{{ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).to_json}};
-      var availableFonts = #{{ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).to_json}};
-      window.emberRootURL = window.location.pathname;
-
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'
 
@@ -56,6 +42,3 @@ html
     #popup-container
 
     = yield
-
-    javascript:
-      var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};

@@ -4,17 +4,17 @@ class @LeadDataModal extends Modal
   modalName: 'lead-data'
   allowedCountries: ['US', 'AU', 'GB', 'CA']
 
-  constructor: (@options = {}) ->
-    # *gon* variables are defined here: app/controllers/concerns/gon_variables.rb
-    return unless gon.lead_data
+  constructor: (@applicationSettings, @options = {}) ->
+    return unless @applicationSettings.lead_data
+    leadData = @applicationSettings.lead_data
     data = {}
-    data.industries = gon.lead_data.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
-    data.roles = gon.lead_data.job_roles.map (role) => {name: role, value: role.toLowerCase()}
-    data.companySizes = gon.lead_data.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
-    data.trafficItems = gon.lead_data.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
-    data.challenges = gon.lead_data.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
-    data.countryCodes = gon.countryCodes.filter((country) => @allowedCountries.indexOf(country.code) != -1)
-    data.currentUser = window.currentUser
+    data.industries = leadData.industries.map (industry) => {name: industry, value: industry.toLowerCase()}
+    data.roles = leadData.job_roles.map (role) => {name: role, value: role.toLowerCase()}
+    data.companySizes = leadData.company_sizes.map (size) => {name: size, value: size.toLowerCase()}
+    data.trafficItems = leadData.traffic_items.map (size) => {name: size, value: size.toLowerCase()}
+    data.challenges = leadData.challenges.map (challenge) => {name: challenge, value: challenge.toLowerCase()}
+    data.countryCodes = leadData.country_codes.filter((country) => @allowedCountries.indexOf(country.code) != -1)
+    data.currentUser = @applicationSettings.current_user
 
     @$modal = @_render('lead-data-template', data)
     @$modal.appendTo($("body"))
@@ -25,7 +25,7 @@ class @LeadDataModal extends Modal
     super(@$modal)
 
   checkCountryAndOpen: ->
-    return unless gon.lead_data
+    return unless @applicationSettings.lead_data
     @_getCountryCode().then (response) =>
       if (@allowedCountries.indexOf(response.countryCode) != -1)
         @open()
@@ -40,7 +40,7 @@ class @LeadDataModal extends Modal
       return $.when({countryCode})
 
     $.ajax
-      url: gon.settings.geolocation_url
+      url: @applicationSettings.geolocation_url
       crossDomain: true
       dataType: 'json'
     .done (response) ->

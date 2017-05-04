@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
   //-----------  Step Settings  -----------#
 
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   cannotContinue: ( function () {
     return this.set('applicationController.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
@@ -66,7 +67,7 @@ export default Ember.Controller.extend({
           break;
       }
       this.set('goalSelectionInProgress', false);
-      if (trackEditorFlow) {
+      if (this.get('applicationSettings.track_editor_flow')) {
         return InternalTracking.track_current_person('Editor Flow', {
           step: 'Goal Settings',
           goal: this.get('model.element_subtype')

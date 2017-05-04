@@ -20,6 +20,7 @@ export default Ember.Controller.extend(
 
     inlineEditing: Ember.inject.service(),
     bus: Ember.inject.service(),
+    applicationSettings: Ember.inject.service(),
 
     init() {
       this.initializeValidation();
@@ -44,7 +45,8 @@ export default Ember.Controller.extend(
 
     //-----------  User  -----------#
 
-    currentUser: ( () => window.currentUser).property(),
+    currentUser: Ember.computed.alias('applicationSettings.settings.current_user'),
+
     isTemporaryUser: function () {
       return this.get('currentUser') && this.get('currentUser').status === 'temporary';
     }.property('currentUser'),

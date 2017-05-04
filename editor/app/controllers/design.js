@@ -4,8 +4,12 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   applicationController: Ember.inject.controller('application'),
+  applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
   theming: Ember.inject.service(),
+  fonts: Ember.inject.service(),
+
+  availableFonts: Ember.computed.alias('fonts.availableFonts'),
 
   //-----------  Step Settings  -----------#
 
@@ -116,9 +120,9 @@ export default Ember.Controller.extend({
       );
 
       if (foundTheme && foundTheme.fonts) {
-        return _.map(foundTheme.fonts, fontId => _.find(availableFonts, font => font.id === fontId));
+        return _.map(foundTheme.fonts, fontId => _.find(this.get('availableFonts'), font => font.id === fontId));
       } else {
-        return availableFonts;
+        return this.get('availableFonts');
       }
     }
   ),
@@ -166,26 +170,26 @@ export default Ember.Controller.extend({
   showAdditionalColors: Ember.computed.equal('model.type', 'Bar'),
 
   trackColorView: (function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person("Editor Flow", {
         step: "Color Settings",
         goal: this.get("model.element_subtype"),
         style: this.get("model.type")
       });
     }
-  }).observes('model').on('init'),
+  }).observes('applicationSettings', 'model').on('init'),
 
   //-----------  Analytics  -----------#
 
   trackTextView: (function () {
-    if (trackEditorFlow && !Ember.isEmpty(this.get('model'))) {
+    if (this.get('applicationSettings.track_editor_flow') && !Ember.isEmpty(this.get('model'))) {
       return InternalTracking.track_current_person("Editor Flow", {
         step: "Content Settings",
         goal: this.get("model.element_subtype"),
         style: this.get("model.type")
       });
     }
-  }).observes('model').on('init'),
+  }).observes('applicationSettings', 'model').on('init'),
 
   //--------- Thank you editor support -----
   shouldShowThankYouEditor: Ember.computed.equal('model.element_subtype', 'email'),

@@ -4,7 +4,7 @@ import _ from 'lodash/lodash';
 export default Ember.Controller.extend({
 
   // TODO get rid of this global usage
-  countries: HBEditor.countryCodes,
+  countries: Ember.inject.service(),
 
   applicationController: Ember.inject.controller('application'),
 
@@ -13,7 +13,7 @@ export default Ember.Controller.extend({
 
   selectedCountry: (function() {
     const countryCode = this.get('model.phone_country_code');
-    return _.find(this.countries, (country) => country.code === countryCode);
+    return _.find(this.get('countries.all'), (country) => country.code === countryCode);
   }).property('model.phone_country_code'),
 
 
