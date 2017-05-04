@@ -309,22 +309,18 @@ class Site < ActiveRecord::Base
   end
 
   def settings
+    return {} if self[:settings].blank?
     JSON.parse(self[:settings])
   rescue
     return {}
   end
 
   def update_content_upgrade_styles!(style_params)
-    site_settings = settings
-    site_settings['content_upgrade'] = style_params
-
-    update_attribute(:settings, site_settings.to_json)
+    update_attribute(:settings, settings.merge('content_upgrade' => style_params).to_json)
   end
 
   def content_upgrade_styles
-    return JSON.parse(settings)['content_upgrade']
-  rescue
-    return {}
+    settings.fetch('content_upgrade', {})
   end
 
   private
