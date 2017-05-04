@@ -6,10 +6,15 @@ export default Ember.Route.extend({
   api: Ember.inject.service(),
   validation: Ember.inject.service(),
   bus: Ember.inject.service(),
+  applicationSettings: Ember.inject.service(),
 
   saveCount: 0,
 
   // TODO check other API calls and move them to api service
+
+  beforeModel() {
+    this.get('applicationSettings').load()
+  },
 
   model() {
     if (localStorage['stashedEditorModel']) {
@@ -70,10 +75,6 @@ export default Ember.Route.extend({
       };
       new ContactListModal($.extend(baseOptions, options)).open();
     }
-
-    if(window.gon && gon.lead_data) {
-      new LeadDataModal().checkCountryAndOpen();
-    }
   },
 
   //-----------  Actions  -----------#
@@ -97,7 +98,7 @@ export default Ember.Route.extend({
         this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.toggleProperty('saveSubmitted');
         this.set('saveCount', this.get('saveCount') + 1);
-        if (trackEditorFlow) {
+        if (this.controller.get('applicationSettings.track_editor_flow')) {
           InternalTracking.track_current_person('Editor Flow', {
             step: 'Save Bar',
             goal: this.currentModel.element_subtype,
@@ -123,7 +124,7 @@ export default Ember.Route.extend({
           data: JSON.stringify(this.currentModel),
 
           success: () => {
-            if (trackEditorFlow) {
+            if (this.controller.get('applicationSettings.track_editor_flow')) {
               InternalTracking.track_current_person('Editor Flow', {
                 step: 'Completed',
                 goal: this.currentModel.element_subtype,

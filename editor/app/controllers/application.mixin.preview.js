@@ -3,6 +3,9 @@ import _ from 'lodash/lodash';
 
 export default Ember.Mixin.create({
 
+  fonts: Ember.inject.service(),
+  availableFonts: Ember.computed.alias('fonts.availableFonts'),
+
   shouldSkipPreviewUpdate: false,
 
   requestPreviewUpdateSkipping() {
@@ -90,7 +93,7 @@ export default Ember.Mixin.create({
   doRenderPreview(withAnimations = false) {
     const getFont = () => {
       const fontId = this.get('model.font_id');
-      return _.find(availableFonts, font => font.id === fontId);
+      return _.find(this.get('availableFonts'), font => font.id === fontId);
     };
     const font = getFont();
     const currentTheme = this.get('currentTheme');

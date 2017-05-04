@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
   bus: Ember.inject.service('bus'),
 
   location: config.locationType,
-  rootURL: window.emberRootURL,
+  rootURL: window.location.pathname,
   onTransition: function() {
     const owner = Ember.getOwner(this);
     const routeName = this.currentRouteName;

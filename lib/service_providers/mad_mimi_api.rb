@@ -19,7 +19,7 @@ module ServiceProviders
     end
 
     def lists
-      client.lists['lists']['list']
+      client.lists.dig('lists', 'list')
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
@@ -36,8 +36,8 @@ module ServiceProviders
 
     def valid?
       lists.present?
-    rescue => error
-      log "Getting lists raised #{ error }"
+    rescue MadMimi::MadMimiError, Net::HTTPServerException => e
+      Raven.capture_exception(e)
       false
     end
   end

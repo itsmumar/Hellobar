@@ -25,23 +25,4 @@ describe ApplicationHelper, type: :helper do
       expect(helper.subscription_cost(Subscription::Pro, :monthly)).to eq('$1')
     end
   end
-
-  describe '#new_user?' do
-    it 'returns true if a user only has one site and no site elements' do
-      create(:site_membership, user: @user)
-      expect(helper.new_user?).to eq(true)
-    end
-
-    it 'returns false if a user has more than one site' do
-      create(:site_membership, user: @user)
-      create(:site_membership, user: @user)
-      expect(helper.new_user?).to eq(false)
-    end
-
-    it 'returns false if a user has a site element already' do
-      site = create(:site_membership, user: @user).site
-      create(:site_element, rule: create(:rule, site: site))
-      expect(helper.new_user?).to eq(false)
-    end
-  end
 end
