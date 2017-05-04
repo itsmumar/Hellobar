@@ -1,6 +1,6 @@
 class MailerGateway
   def self.gateway
-    GrandCentralApi.new('http://central.hellobar.com', Hellobar::Settings[:grand_central_api_key], Hellobar::Settings[:grand_central_api_secret])
+    GrandCentralApi.new('http://central.hellobar.com', Settings.grand_central_api_key, Settings.grand_central_api_secret)
   end
 
   def self.send_email(type, recipient = 'support@hellobar.com', params = {})

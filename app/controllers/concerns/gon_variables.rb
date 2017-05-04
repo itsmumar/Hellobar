@@ -30,7 +30,7 @@ module GonVariables
 
   def set_settings
     gon.settings = {
-      geolocation_url: Hellobar::Settings[:geolocation_url]
+      geolocation_url: Settings.geolocation_url
     }
   end
 end

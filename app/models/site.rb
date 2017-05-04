@@ -169,12 +169,12 @@ class Site < ActiveRecord::Base
   end
 
   def script_url
-    if Hellobar::Settings[:store_site_scripts_locally]
+    if Settings.store_site_scripts_locally
       "generated_scripts/#{ script_name }"
-    elsif Hellobar::Settings[:script_cdn_url].present?
-      "#{ Hellobar::Settings[:script_cdn_url] }/#{ script_name }"
+    elsif Settings.script_cdn_url.present?
+      "#{ Settings.script_cdn_url }/#{ script_name }"
     else
-      "#{ Hellobar::Settings[:s3_bucket] }.s3.amazonaws.com/#{ script_name }"
+      "#{ Settings.s3_bucket }.s3.amazonaws.com/#{ script_name }"
     end
   end
 
@@ -418,7 +418,7 @@ class Site < ActiveRecord::Base
   def generate_static_assets(options = {})
     update_column(:script_attempted_to_generate_at, Time.current)
 
-    store_site_scripts_locally = Hellobar::Settings[:store_site_scripts_locally]
+    store_site_scripts_locally = Settings.store_site_scripts_locally
     compress_script = !store_site_scripts_locally
 
     generated_script_content = options[:script_content] || script_content(compress_script)

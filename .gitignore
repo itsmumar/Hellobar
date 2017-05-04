@@ -29,8 +29,8 @@ npm-debug.log
 .DS_Store
 
 # Settings
-config/settings.yml
 config/database.yml
+config/secrets.yml
 
 # Assets
 /public/assets

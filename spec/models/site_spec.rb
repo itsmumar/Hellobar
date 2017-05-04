@@ -279,14 +279,10 @@ describe Site do
 
   describe '#generate_static_assets' do
     before do
-      Hellobar::Settings[:store_site_scripts_locally] = false
+      allow(Settings).to receive(:store_site_scripts_locally).and_return false
 
       @mock_storage = double('asset_storage')
       allow(Hello::AssetStorage).to receive(:new).and_return(@mock_storage)
-    end
-
-    after do
-      Hellobar::Settings[:store_site_scripts_locally] = true
     end
 
     it 'generates and uploads the script content for a site', :freeze do
@@ -318,7 +314,7 @@ describe Site do
     end
 
     it 'does not compress a locally stored script' do
-      Hellobar::Settings[:store_site_scripts_locally] = true
+      expect(Settings).to receive(:store_site_scripts_locally).and_return true
 
       script_generator = ScriptGenerator.new(site)
 

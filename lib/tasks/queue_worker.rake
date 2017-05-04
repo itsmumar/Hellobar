@@ -3,12 +3,11 @@ namespace :queue_worker do
 
   desc 'Starts all the queue workers'
   task :start do
-    require Rails.root.join('config', 'initializers', 'settings.rb')
     root = Rails.root
 
     {
-      Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
+      Settings.main_queue => [2],
+      Settings.low_priority_queue => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''
@@ -40,12 +39,10 @@ namespace :queue_worker do
   desc 'Restarts only workers that are not currently running'
   task :resurrect do
     root = Rails.root
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-
     processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
     {
-      Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
+      Settings.main_queue => [2],
+      Settings.low_priority_queue => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''
@@ -126,8 +123,6 @@ namespace :queue_worker do
     end
 
     # Send the data to Cloudwatch
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-
     data = {
       namespace: "HB/#{ Rails.env }",
       metric_data: metrics
@@ -136,8 +131,8 @@ namespace :queue_worker do
     pp data
 
     cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 

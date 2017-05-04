@@ -1,5 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 require './lib/service_provider'
 require './lib/service_providers/email'
 require './lib/service_providers/embed_code_provider'

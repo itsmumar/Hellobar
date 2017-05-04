@@ -23,12 +23,12 @@ class QueueWorker
 
   def self.queue_attributes(queue_name_filter = nil)
     sqs = AWS::SQS.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 
-    queue_name_filter ||= Hellobar::Settings[:main_queue]
+    queue_name_filter ||= Settings.main_queue
     queues = filtered_queues(sqs, queue_name_filter)
 
     queues.collect do |queue|
@@ -45,14 +45,14 @@ class QueueWorker
   end
 
   def self.send_sqs_message(message, queue_name = nil)
-    queue_name ||= Hellobar::Settings[:main_queue] || 'test_queue'
+    queue_name ||= Settings.main_queue || 'test_queue'
 
     raise ArgumentError, 'Message must be defined' if message.blank?
     raise ArgumentError, 'Queue name must be defined' unless queue_name
 
     @sqs ||= AWS::SQS.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 

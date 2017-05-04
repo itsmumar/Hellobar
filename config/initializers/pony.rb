@@ -1,5 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 unless Rails.env.test?
   Pony.options = {
     from: 'Hello Bar Support <support@hellobar.com>',
@@ -9,7 +7,7 @@ unless Rails.env.test?
       port: 587,
       enable_starttls_auto: true,
       user_name: 'support@crazyegg.com',
-      password: Hellobar::Settings[:sendgrid_password],
+      password: Settings.sendgrid_password,
       authentication: :plain,
       domain: 'crazyegg.com'
     }

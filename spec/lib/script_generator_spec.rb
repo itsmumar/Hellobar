@@ -17,12 +17,9 @@ describe ScriptGenerator do
     end
 
     it 'renders the backend host variable' do
-      original_setting = Hellobar::Settings[:tracking_host]
-      Hellobar::Settings[:tracking_host] = 'hi-there.hellobar.com'
-      expected_string = "configuration.backendHost('hi-there.hellobar.com').siteWriteKey('#{ site.write_key }');"
+      expected_string = "configuration.backendHost('#{ Settings.tracking_host }').siteWriteKey('#{ site.write_key }');"
 
       expect(generator.render).to include(expected_string)
-      Hellobar::Settings[:tracking_host] = original_setting
     end
 
     it 'renders the HB_TZ timezone variable' do

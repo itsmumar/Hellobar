@@ -40,7 +40,7 @@ class Referral < ActiveRecord::Base
 
     Rails.application.routes.url_helpers.accept_referrals_url(
       token: referral_token.token,
-      host: Hellobar::Settings[:host]
+      host: Settings.host
     )
   end
 

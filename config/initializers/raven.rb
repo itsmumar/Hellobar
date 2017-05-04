@@ -1,5 +1,5 @@
 Raven.configure do |config|
-  config.dsn = Hellobar::Settings[:sentry_dsn] if Hellobar::Settings[:sentry_dsn].present?
+  config.dsn = Settings.sentry_dsn if Settings.sentry_dsn.present?
 
   # filter sensitive data
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)

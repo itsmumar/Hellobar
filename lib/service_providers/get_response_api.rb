@@ -102,7 +102,7 @@ module ServiceProviders
 
     def client_settings
       @client_settings ||= {
-        url: Hellobar::Settings[:identity_providers][:get_response_api][:url],
+        url: Settings.identity_providers['get_response_api']['url'],
         headers: {
           'X-Auth-Token' => "api-key #{ api_key }"
         }

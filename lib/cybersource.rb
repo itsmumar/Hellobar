@@ -11,8 +11,8 @@ module HB
       def gateway
         unless @gateway
           mode = Rails.env.production? ? :production : :test
-          login = Hellobar::Settings[:cybersource_login]
-          password = Hellobar::Settings[:cybersource_password]
+          login = Settings.cybersource_login
+          password = Settings.cybersource_password
 
           ActiveMerchant::Billing::Base.mode = mode
 

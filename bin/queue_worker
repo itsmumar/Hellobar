@@ -72,8 +72,8 @@ class QueueWorker
 
     # Connect to SQS and make sure the queue exists
     @sqs = AWS::SQS.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 

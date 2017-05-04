@@ -8,7 +8,7 @@ namespace :site do
     desc 'Schedule a re-generation of ALL site scripts'
     task regenerate_all: :environment do |_t, _args|
       Site.find_each do |site|
-        site.generate_script(queue_name: Hellobar::Settings[:low_priority_queue])
+        site.generate_script(queue_name: Settings.low_priority_queue)
       end
     end
 
@@ -18,15 +18,15 @@ namespace :site do
         script_generated_at = site.script_generated_at
 
         if script_generated_at.present? && script_generated_at > 3.hours.ago
-          site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
+          site.check_installation(queue_name: Settings.low_priority_queue)
         else
-          site.generate_script_and_check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
+          site.generate_script_and_check_installation(queue_name: Settings.low_priority_queue)
         end
       end
 
       # See if anyone who uninstalled has installed
       Site.where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at AND (script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at)', Time.current - 30.days).each do |site|
-        site.check_installation(queue_name: Hellobar::Settings[:low_priority_queue])
+        site.check_installation(queue_name: Settings.low_priority_queue)
       end
     end
   end

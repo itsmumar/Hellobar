@@ -71,7 +71,7 @@ module Hello
     end
 
     def ab_test_cookie_domain
-      Hellobar::Settings[:host] == 'localhost' ? nil : Hellobar::Settings[:host]
+      Settings.host == 'localhost' ? nil : Settings.host
     end
 
     def ab_test_value_index_from_cookie(cookie, index)

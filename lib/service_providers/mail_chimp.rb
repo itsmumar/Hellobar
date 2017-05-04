@@ -171,7 +171,7 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
 
     Rails.logger.info "required_merge_var_error for Contact List #{ @identity.id }. Deleting identity and sending email to #{ user.email }."
 
-    contact_list_url = Router.new.site_contact_list_url(site, @contact_list, host: Hellobar::Settings[:host])
+    contact_list_url = Router.new.site_contact_list_url(site, @contact_list, host: Settings.host)
 
     html = <<~EOS
       <p>Hi there,</p>

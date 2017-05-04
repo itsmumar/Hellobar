@@ -23,7 +23,7 @@ files.each_with_index do |file, i|
 
       line.chomp!
       begin
-        QueueWorker.send_sqs_message(line, Hellobar::Settings[:low_priority_queue])
+        QueueWorker.send_sqs_message(line, Settings.low_priority_queue)
         num_jobs += 1
       rescue => _
         puts "Failed on #{ line.inspect }"
