@@ -38,6 +38,14 @@
       "button_color": "257543",
       "link_color": "FFFFFF",
       "font_id": "sintony"
+    },
+    "Alert": {
+      "background_color": "3aba6f",
+      "trigger_color": "3aba6f",
+      "text_color": "ffffff",
+      "button_color": "257543",
+      "link_color": "ffffff",
+      "font_id": "sintony"
     }
   },
   "image": {

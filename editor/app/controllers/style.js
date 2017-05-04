@@ -55,6 +55,7 @@ export default Ember.Controller.extend({
   },
 
   canUseCustomHtml: Ember.computed.alias('model.site.capabilities.custom_html'),
+  canUseAlertElementType: Ember.computed.alias('model.site.capabilities.alert_bars'),
 
   shouldShowBarThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Bar');
@@ -72,6 +73,10 @@ export default Ember.Controller.extend({
     return this._shouldShowThemeInfoForElementType('Takeover');
   }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
 
+  shouldShowAlertThemeInfo: function() {
+    return this._shouldShowThemeInfoForElementType('Alert');
+  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
+
   shouldShowCustomThemeInfo: function() {
     return this._shouldShowThemeInfoForElementType('Custom');
   }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
@@ -86,6 +91,8 @@ export default Ember.Controller.extend({
   applyRoute (routeName) {
     const routeByElementType = (elementType, elementId) => {
       switch (elementType) {
+        case 'Alert':
+          return 'style.alert';
         case 'Custom':
           return 'style.custom';
         case 'Takeover':
@@ -116,6 +123,9 @@ export default Ember.Controller.extend({
           break;
         case 'style.custom':
           this.set('model.type', 'Custom');
+          break;
+        case 'style.alert':
+          this.set('model.type', 'Alert');
           break;
         case 'style.slider':
           this.set('model.type', 'Slider');

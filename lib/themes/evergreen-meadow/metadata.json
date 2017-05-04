@@ -38,6 +38,14 @@
       "button_color": "FFFFFF",
       "link_color": "067d4d",
       "font_id": "montserrat"
+    },
+    "Alert": {
+      "background_color": "0fcb80",
+      "trigger_color": "0fcb80",
+      "text_color": "ffffff",
+      "button_color": "ffffff",
+      "link_color": "067d4d",
+      "font_id": "montserrat"
     }
   },
   "image": {

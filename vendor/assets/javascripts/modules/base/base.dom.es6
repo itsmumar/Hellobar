@@ -33,14 +33,21 @@ hellobar.defineModule('base.dom', [], function () {
   }
 
   /**
-   * Adds the CSS class to the target element
+   * Adds the CSS class (or classes) to the target element
    * @param element {Element}
-   * @param className {string}
+   * @param classOrClasses {string|array} Single or multiple CSS classes
    */
-  function addClass(element, className) {
+  function addClass(element, classOrClasses) {
     element = $(element);
-    if (element.className.indexOf(className) < 0) {
-      element.className += ' ' + className;
+    const addSingleClass = (className) => {
+      if (element.className.indexOf(className) < 0) {
+        element.className += ' ' + className;
+      }
+    };
+    if (typeof classOrClasses === 'string') {
+      addSingleClass(classOrClasses);
+    } else {
+      classOrClasses.forEach((cls) => addSingleClass(cls));
     }
   }
 
@@ -88,17 +95,19 @@ hellobar.defineModule('base.dom', [], function () {
   // email field when it is invalid.
   function shake(element) {
     (function (element) {
-      var velocity = 0;
-      var acceleration = -0.1;
-      var maxTravel = 1;
+      let velocity = 0;
+      let acceleration = -0.1;
+      let maxTravel = 1;
       // Store the original position
-      var origPosition = element.style.position;
-      var origX = parseInt(element.style.left, 0) || 0;
-      var x = origX;
-      var numShakes = 0;
+      let origPosition = element.style.position;
+      const propertyToChange = (!element.style.left || element.style.left === 'auto') ? 'right' : 'left';
+      let origX = parseInt(element.style[propertyToChange], 0) || 0;
+      let x = origX;
+
+      let numShakes = 0;
       // Set the positioning to relevant
       element.style.position = 'relative';
-      var interval = setInterval(function () {
+      let interval = setInterval(function () {
         velocity += acceleration;
         if (x - origX >= maxTravel && acceleration > 0)
           acceleration *= -1;
@@ -109,10 +118,10 @@ hellobar.defineModule('base.dom', [], function () {
         x += velocity;
         if (numShakes >= 2 && x >= origX) {
           clearInterval(interval);
-          element.style.left = origX + 'px';
+          element.style[propertyToChange] = origX + 'px';
           element.style.position = origPosition;
         }
-        element.style.left = Math.round(x) + 'px';
+        element.style[propertyToChange] = Math.round(x) + 'px';
       }, 5);
     })($(element));
   }
@@ -191,6 +200,23 @@ hellobar.defineModule('base.dom', [], function () {
     }
   }
 
+  function setStyles(domNode, styles) {
+    if (domNode && styles) {
+      const styleObject = domNode.style;
+      for (let styleKey in styles) {
+        if (styles.hasOwnProperty(styleKey)) {
+          styleObject[styleKey] = styles[styleKey];
+        }
+      }
+    }
+  }
+
+  function setVisibility(domNode, visible) {
+    if (domNode) {
+      domNode.style.visibility = visible ? 'visible' : 'hidden';
+    }
+  }
+
 
   /**
    * @module base.dom {object} Performs DOM-related operations (traversing, modifying etc)
@@ -217,7 +243,9 @@ hellobar.defineModule('base.dom', [], function () {
     wiggleEventListeners,
     showElement,
     hideElement,
-    $
+    $,
+    setStyles,
+    setVisibility
   };
 
 });

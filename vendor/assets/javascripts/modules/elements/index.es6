@@ -1,3 +1,4 @@
+//= require ./elements.class.alert
 //= require ./elements.class.bar
 //= require ./elements.class
 //= require ./elements.class.slider

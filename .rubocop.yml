@@ -170,7 +170,7 @@ Metrics/MethodLength:
   CountComments: false
 
 Metrics/ModuleLength:
-  Max: 186 # ideally 10
+  Max: 187 # ideally 10
   CountComments: false
 
 Metrics/ParameterLists:
