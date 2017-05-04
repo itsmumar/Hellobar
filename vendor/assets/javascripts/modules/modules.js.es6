@@ -8,3 +8,4 @@
 //= require ./tracking
 //= require ./visitor
 //= require ./inspect
+//= require ./lib
