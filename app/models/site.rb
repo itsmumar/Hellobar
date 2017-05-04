@@ -380,8 +380,8 @@ class Site < ActiveRecord::Base
 
   def settings
     JSON.parse(self[:settings])
-  rescue
-    return {}
+  rescue JSON::ParserError
+    {}
   end
 
   def update_content_upgrade_styles!(style_params)
