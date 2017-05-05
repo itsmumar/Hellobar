@@ -242,7 +242,7 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#external_tracking_json' do
+  describe '#external_tracking' do
     context 'when site has external tracking capability' do
       let!(:site_elements) { create_list :site_element, 2, site: site }
       let(:external_events) { site_elements.flat_map { |se| create :site_element_external_events, site_element: se } }
@@ -252,7 +252,7 @@ describe StaticScriptModel do
       end
 
       it 'returns array of Google Analytics events' do
-        expect(model.external_tracking_json).to match_array external_events
+        expect(model.external_tracking).to match_array external_events
       end
     end
 
@@ -264,7 +264,7 @@ describe StaticScriptModel do
       end
 
       it 'returns empty array' do
-        expect(model.external_tracking_json).to eql []
+        expect(model.external_tracking).to eql []
       end
     end
   end
@@ -321,16 +321,16 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#content_upgrades_json' do
+  describe '#content_upgrades' do
     let!(:content_upgrades) { create_list :site_element, 2, :content_upgrade, site: site }
-    let!(:content_upgrades_json) do
+    let!(:content_upgrades_hash) do
       content_upgrades.inject({}) do |hash, content_upgrade|
         hash.update create(:static_script_content_upgrade, content_upgrade: content_upgrade)
       end
     end
 
     it 'returns content_upgrades' do
-      expect(model.content_upgrades).to eql content_upgrades_json
+      expect(model.content_upgrades).to eql content_upgrades_hash
     end
   end
 

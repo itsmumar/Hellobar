@@ -233,7 +233,7 @@ class StaticScriptModel
   def hash_for_rule(rule)
     {
       match: rule.match,
-      conditions: conditions_for_rule(rule),
+      conditions: conditions_for_rule(rule).to_json,
       site_elements: render_site_elements(rule.active_site_elements)
     }
   end
