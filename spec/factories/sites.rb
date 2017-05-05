@@ -45,7 +45,7 @@ FactoryGirl.define do
 
     trait :enterprise do
       after(:create) do |site, evaluator|
-        create(:enterprise_subscription, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:subscription, :enterprise, site: site, user: site.users.first, schedule: evaluator.schedule)
       end
     end
 
