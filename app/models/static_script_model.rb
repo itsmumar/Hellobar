@@ -112,8 +112,12 @@ class StaticScriptModel
     Hellobar::Settings[:tracking_host]
   end
 
-  def external_tracking_json
+  def external_tracking
     site.active_site_elements.flat_map(&:external_tracking)
+  end
+
+  def external_tracking_json
+    external_tracking.to_json
   end
 
   def rules
