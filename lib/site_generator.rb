@@ -5,7 +5,6 @@ class SiteGenerator
     @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
     @compress = opts.fetch(:compress, false)
-    StaticScriptAssets.precompile
   end
 
   def generate_file
