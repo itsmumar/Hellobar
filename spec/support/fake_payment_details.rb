@@ -12,7 +12,7 @@ class FakePaymentMethod < PaymentMethodDetails
       begin
         attributes =
           CyberSourceCreditCard::CC_FIELDS.inject({}) do |attrs, field|
-            attr[field.to_sym] = data[field] || data[field.to_sym]
+            attrs.update field.to_sym => data[field] || data[field.to_sym]
           end
         ActiveMerchant::Billing::CreditCard.new(attributes)
       end
@@ -30,6 +30,10 @@ class AlwaysSuccessfulPaymentMethodDetails < FakePaymentMethod
 
   def brand
     'AlwaysSuccessfulPayment'
+  end
+
+  def token
+    data['token']
   end
 end
 
