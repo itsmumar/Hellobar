@@ -93,6 +93,10 @@ Style/FileName:
   Exclude:
     - Guardfile
 
+Style/MethodMissing:
+  Exclude:
+    - app/settings/settings.rb
+
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
