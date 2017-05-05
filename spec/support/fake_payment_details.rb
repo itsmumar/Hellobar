@@ -6,6 +6,17 @@ class FakePaymentMethod < PaymentMethodDetails
   def address
     OpenStruct.new(address1: 'address1', city: 'city', state: 'state', zip: 'zip', country: 'country')
   end
+
+  def card
+    @card ||=
+      begin
+        attributes =
+          CyberSourceCreditCard::CC_FIELDS.inject({}) do |attrs, field|
+            attr[field.to_sym] = data[field] || data[field.to_sym]
+          end
+        ActiveMerchant::Billing::CreditCard.new(attributes)
+      end
+  end
 end
 
 class AlwaysSuccessfulPaymentMethodDetails < FakePaymentMethod
