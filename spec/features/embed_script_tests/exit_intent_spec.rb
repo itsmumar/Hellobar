@@ -4,7 +4,7 @@ feature 'element with exit intent', js: true do
   let(:element) { create(:site_element, view_condition: 'exit-intent') }
 
   before do
-    allow_any_instance_of(RenderStaticScript).to receive(:pro_secret).and_return('random')
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
   end
 
   scenario 'shows when document is blurred' do

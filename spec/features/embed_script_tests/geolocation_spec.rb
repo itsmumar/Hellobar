@@ -8,7 +8,7 @@ feature 'Geolocation', :js do
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
   before do
-    allow_any_instance_of(RenderStaticScript).to receive(:pro_secret).and_return 'random'
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
   end
 
   scenario 'injection functionality' do

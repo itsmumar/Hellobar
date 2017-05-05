@@ -60,7 +60,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   context 'with Modal type' do
     context 'with autodetect theme' do
       before do
-        allow_any_instance_of(RenderStaticScript).to receive(:pro_secret).and_return 'random'
+        allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
       end
 
       given(:url) { new_site_site_element_path(site) + '/#/settings/emails' }
