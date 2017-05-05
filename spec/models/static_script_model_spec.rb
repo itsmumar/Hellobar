@@ -83,7 +83,7 @@ describe StaticScriptModel do
   describe '#hellobar_container_css' do
     before do
       allow(model).to receive(:element_classes).and_return SiteElement::TYPES
-      allow(model).to receive(:element_themes).and_return Theme.all
+      allow(model).to receive(:element_themes).and_return Theme.sorted
     end
 
     it 'returns css for all kind of containers' do
@@ -104,10 +104,10 @@ describe StaticScriptModel do
       expect(model.hellobar_container_css)
         .to eql '"container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n' \
                 'takeover/container.css\ncustom/container.css\ncontentupgrade/container.css\nalert/container.css\n' \
-                'autodetect/container.css\nblue-autumn/container.css\nblue-avalanche/container.css\n' \
-                'classy/container.css\ndark-green-spring/container.css\nevergreen-meadow/container.css\n' \
-                'french-rose/container.css\ngreen-timberline/container.css\nhellobar-classic/container.css\n' \
-                'marigold/container.css\nviolet/container.css\ntraffic-growth/container.css"'
+                'hellobar-classic/container.css\nautodetect/container.css\nblue-autumn/container.css\n' \
+                'blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n' \
+                'evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n' \
+                'marigold/container.css\ntraffic-growth/container.css\nviolet/container.css"'
     end
   end
 
@@ -313,7 +313,7 @@ describe StaticScriptModel do
     context 'with active elements' do
       before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, *path, **_options| path.join('/') } }
       before { allow(model).to receive(:element_classes).and_return [Bar] }
-      before { allow(model).to receive(:element_themes).and_return [Theme.first] }
+      before { allow(model).to receive(:element_themes).and_return [Theme.find('autodetect')] }
 
       it 'returns common.css, element.css for each bar type and element.css for each theme' do
         expect(model.hellobar_element_css).to eql '"common.css\nbar/element.css\nautodetect/element.css"'
