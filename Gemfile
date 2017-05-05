@@ -133,7 +133,7 @@ group :development do
   gem 'terminal-notifier-guard'
   #
   # Deployment
-  gem 'capistrano'
+  gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'slackistrano'
@@ -147,7 +147,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails'
   gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
