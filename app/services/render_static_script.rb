@@ -4,7 +4,7 @@ require 'hmac-sha2'
 
 class RenderStaticScript < Mustache
   self.raise_on_context_miss = true
-  self.template_file = Rails.root.join('lib', 'script_generator', 'template.js.mustache').to_s
+  self.template_file = Rails.root.join('lib', 'script_generator', 'template.js').to_s
 
   attr_reader :model, :options
 
@@ -30,6 +30,10 @@ class RenderStaticScript < Mustache
 
   def modules_js
     render_asset 'modules.js'
+  end
+
+  def data
+    model.to_json
   end
 
   private

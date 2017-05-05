@@ -63,4 +63,8 @@ module StaticScriptAssets
   def render_json(*path, **locals)
     jbuilder.render(path.join('/'), **locals)
   end
+
+  def render_model(model)
+    render_json model.to_partial_path, model: model
+  end
 end

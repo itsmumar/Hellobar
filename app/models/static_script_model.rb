@@ -1,14 +1,20 @@
 require 'static_script_assets'
 
 class StaticScriptModel
+  include ActiveModel::Conversion
+
   attr_reader :site, :options
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
-  delegate :autofills, to: :site
+  delegate :autofills, :cache_key, :persisted?, to: :site
 
   def initialize(site, options = {})
     @site = site
     @options = options
+  end
+
+  def to_json
+    StaticScriptAssets.render_model(self)
   end
 
   def preview_is_active
@@ -32,7 +38,7 @@ class StaticScriptModel
   end
 
   def capabilities_json
-    capabilities.to_json
+    capabilities
   end
 
   def pro_secret
@@ -55,7 +61,7 @@ class StaticScriptModel
       element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
 
-    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container").to_json
+    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container")
   end
 
   def templates
@@ -91,17 +97,15 @@ class StaticScriptModel
 
   def branding_templates
     base = Rails.root.join('lib', 'script_generator')
-    without_escaping_html_in_json do
-      Dir.glob(base.join('branding', '*.html')).map { |f| Pathname.new(f) }.map do |path|
-        content = render_asset(path.relative_path_from(base)).to_json
-        { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
-      end
+
+    Dir.glob(base.join('branding', '*.html')).map { |f| Pathname.new(f) }.map do |path|
+      content = render_asset(path.relative_path_from(base))
+      { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
     end
   end
 
   def content_upgrade_template
-    content = without_escaping_html_in_json { render_asset('contentupgrade/contentupgrade.html').to_json }
-    [{ name: 'contentupgrade', markup: content }]
+    [{ name: 'contentupgrade', markup: render_asset('contentupgrade/contentupgrade.html') }]
   end
 
   def geolocation_url
@@ -117,7 +121,7 @@ class StaticScriptModel
   end
 
   def external_tracking_json
-    external_tracking.to_json
+    external_tracking
   end
 
   def rules
@@ -132,7 +136,7 @@ class StaticScriptModel
       element_themes.map { |theme| render_asset(theme.element_css_path) }
     ]
 
-    css.flatten.join("\n").to_json
+    css.flatten.join("\n")
   end
 
   def content_upgrades
@@ -156,7 +160,7 @@ class StaticScriptModel
   end
 
   def content_upgrades_json
-    content_upgrades.to_json
+    content_upgrades
   end
 
   def content_upgrades_styles
@@ -164,11 +168,11 @@ class StaticScriptModel
   end
 
   def content_upgrades_styles_json
-    content_upgrades_styles.to_json
+    content_upgrades_styles
   end
 
   def autofills_json
-    autofills.to_json
+    autofills
   end
 
   def script_is_installed_properly
@@ -199,14 +203,12 @@ class StaticScriptModel
   end
 
   def content_template(bar_type, type, category = :generic)
-    without_escaping_html_in_json do
-      if category == :generic
-        (content_header(bar_type) +
-          content_markup(bar_type, type, category) +
-          content_footer(bar_type)).to_json
-      else
-        content_markup(bar_type, type, category).to_json
-      end
+    if category == :generic
+      content_header(bar_type) +
+        content_markup(bar_type, type, category) +
+        content_footer(bar_type)
+    else
+      content_markup(bar_type, type, category)
     end
   end
 
@@ -233,7 +235,7 @@ class StaticScriptModel
   def hash_for_rule(rule)
     {
       match: rule.match,
-      conditions: conditions_for_rule(rule).to_json,
+      conditions: conditions_for_rule(rule),
       site_elements: render_site_elements(rule.active_site_elements)
     }
   end
