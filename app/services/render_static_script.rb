@@ -15,7 +15,11 @@ class RenderStaticScript
   private
 
   def render
-    inject_modules inject_data template
+    escape_script_tag inject_modules inject_data template
+  end
+
+  def escape_script_tag(template)
+    template.gsub('</script>', '<\/script>')
   end
 
   def inject_data(template)
