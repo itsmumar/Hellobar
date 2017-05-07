@@ -102,12 +102,12 @@ describe StaticScriptModel do
       end
 
       expect(model.hellobar_container_css)
-        .to eql '"container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n' \
-                'takeover/container.css\ncustom/container.css\ncontentupgrade/container.css\nalert/container.css\n' \
-                'hellobar-classic/container.css\nautodetect/container.css\nblue-autumn/container.css\n' \
-                'blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n' \
-                'evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n' \
-                'marigold/container.css\ntraffic-growth/container.css\nviolet/container.css"'
+        .to eql "container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n" \
+                "takeover/container.css\ncustom/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
+                "hellobar-classic/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
+                "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
+                "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
+                "marigold/container.css\ntraffic-growth/container.css\nviolet/container.css"
     end
   end
 
@@ -203,7 +203,7 @@ describe StaticScriptModel do
                     branding_not_using_hb branding_original branding_powered_by]
 
       expect(names).to match_array expected
-      expect(markups).to match_array expected.map { |s| s.sub('branding_', '').to_json }
+      expect(markups).to match_array expected.map { |s| s.sub('branding_', '') }
     end
   end
 
@@ -213,7 +213,7 @@ describe StaticScriptModel do
     before { allow(StaticScriptAssets).to receive(:render).and_return('') }
 
     it 'returns array of template names and markups' do
-      expect(templates).to match_array [{ name: 'contentupgrade', markup: '""' }]
+      expect(templates).to match_array [{ name: 'contentupgrade', markup: '' }]
       expect(StaticScriptAssets).to have_received(:render).with('contentupgrade/contentupgrade.html', site_id: site.id)
     end
   end
@@ -290,15 +290,6 @@ describe StaticScriptModel do
         expect(model.rules).to match_array []
       end
     end
-
-    context 'with custom html/js' do
-      let(:custom_html) { '<script>alert(1)</script>' }
-      let!(:site_element) { create(:site_element, :custom, custom_html: custom_html, site: site) }
-
-      it 'escapes </script>' do
-        expect(model.rules.first[:site_elements]).to include '<script>alert(1)<\/script>'
-      end
-    end
   end
 
   describe '#hellobar_element_css' do
@@ -306,7 +297,7 @@ describe StaticScriptModel do
       before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, filename| filename } }
 
       it 'returns common.css' do
-        expect(model.hellobar_element_css).to eql '"common.css"'
+        expect(model.hellobar_element_css).to eql 'common.css'
       end
     end
 
@@ -316,7 +307,7 @@ describe StaticScriptModel do
       before { allow(model).to receive(:element_themes).and_return [Theme.find('autodetect')] }
 
       it 'returns common.css, element.css for each bar type and element.css for each theme' do
-        expect(model.hellobar_element_css).to eql '"common.css\nbar/element.css\nautodetect/element.css"'
+        expect(model.hellobar_element_css).to eql "common.css\nbar/element.css\nautodetect/element.css"
       end
     end
   end
@@ -363,6 +354,19 @@ describe StaticScriptModel do
       before { allow(Rails.env).to receive(:test?).and_return(false) }
 
       specify { expect(model.script_is_installed_properly).to eql 'scriptIsInstalledProperly()' }
+    end
+  end
+
+  describe 'to_json' do
+    let(:json) { JSON.parse(model.to_json, symbolize_names: true) }
+
+    it 'renders models partial to json' do
+      expect(json.keys).to match_array %i[
+        preview_is_active version timestamp capabilities site_id site_url pro_secret
+        hellobar_container_css templates branding_templates content_upgrade_template
+        geolocation_url hb_backend_host site_write_key external_tracking hellobar_element_css
+        content_upgrades content_upgrades_styles autofills script_is_installed_properly rules
+      ]
     end
   end
 end

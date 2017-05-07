@@ -34,11 +34,28 @@ describe GenerateAndStoreStaticScript do
   end
 
   context 'when store locally' do
+    let(:file) { double('file') }
     before { Hellobar::Settings[:store_site_scripts_locally] = true }
 
     it 'does not compress script' do
-      expect(StaticScriptAssets).not_to receive(:compress)
+      expect(StaticScriptAssets).not_to receive(:with_js_compressor)
       service.call
+    end
+
+    it 'creates file in public/generated_scripts' do
+      expect(file).to receive(:puts).with(script_content)
+      expect(File).to receive(:open).and_yield(file)
+      service.call
+    end
+  end
+
+  describe '.for' do
+    let(:call) { described_class.for(site_id: site.id) }
+
+    it 'calls service with site_id' do
+      expect(described_class).to receive_message_chain(:new, :call)
+      expect(Site).to receive_message_chain(:preload_for_script, :find).with(site.id)
+      call
     end
   end
 end

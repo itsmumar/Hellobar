@@ -28,10 +28,6 @@ class RenderStaticScript
     template
   end
 
-  def escape_script_tag(template)
-    template.gsub('</script>', '<\/script>')
-  end
-
   def template
     render_asset self.class.template
   end

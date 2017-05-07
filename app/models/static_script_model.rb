@@ -37,10 +37,6 @@ class StaticScriptModel
     }.merge(SiteSerializer.new(site).capabilities)
   end
 
-  def capabilities_json
-    capabilities
-  end
-
   def pro_secret
     @pro_secret ||=
       begin
@@ -120,10 +116,6 @@ class StaticScriptModel
     site.active_site_elements.flat_map(&:external_tracking)
   end
 
-  def external_tracking_json
-    external_tracking
-  end
-
   def rules
     return [] if options[:no_rules]
     site_rules.map { |rule| hash_for_rule(rule) }
@@ -159,20 +151,8 @@ class StaticScriptModel
     }.inject({}, &:update)
   end
 
-  def content_upgrades_json
-    content_upgrades
-  end
-
   def content_upgrades_styles
     site.content_upgrade_styles
-  end
-
-  def content_upgrades_styles_json
-    content_upgrades_styles
-  end
-
-  def autofills_json
-    autofills
   end
 
   def script_is_installed_properly
@@ -258,17 +238,6 @@ class StaticScriptModel
     else
       settings
     end
-  end
-
-  def render_site_elements(site_elements)
-    StaticScriptAssets.render_json('site_elements/site_elements', site_elements: site_elements).gsub('</script>', '<\/script>')
-  end
-
-  def without_escaping_html_in_json
-    ActiveSupport.escape_html_entities_in_json = false
-    yield
-  ensure
-    ActiveSupport.escape_html_entities_in_json = true
   end
 
   def render_asset(*path)

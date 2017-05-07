@@ -12,8 +12,8 @@ FactoryGirl.define do
     initialize_with do
       {
         match: rule.match,
-        conditions: rule.conditions.map { |c| create(:static_script_rule_condition, condition: c) }.to_json,
-        site_elements: StaticScriptAssets.render_json('site_elements/site_elements', site_elements: site_elements)
+        conditions: rule.conditions.map { |c| create(:static_script_rule_condition, condition: c) },
+        site_elements: site_elements
       }
     end
   end

@@ -30,7 +30,7 @@ class GenerateAndStoreStaticScript
   end
 
   def store_locally
-    File.open(Rails.root.join('public', 'generated_scripts', site.script_name), 'w') { |f| f.puts(script_content) }
+    File.open(local_path, 'w') { |f| f.puts(script_content) }
   end
 
   def store_remotely
@@ -49,6 +49,10 @@ class GenerateAndStoreStaticScript
 
   def compress_script?
     !store_site_scripts_locally?
+  end
+
+  def local_path
+    Rails.root.join('public', 'generated_scripts', site.script_name)
   end
 
   def store_site_scripts_locally?
