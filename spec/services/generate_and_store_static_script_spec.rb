@@ -5,13 +5,8 @@ describe GenerateAndStoreStaticScript do
 
   let(:service) { described_class.new(site) }
 
-  around do |ex|
-    Hellobar::Settings[:store_site_scripts_locally] = false
-    ex.call
-    Hellobar::Settings[:store_site_scripts_locally] = true
-  end
-
   before do
+    allow(Settings).to receive(:store_site_scripts_locally).and_return false
     allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
     allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
   end
@@ -35,7 +30,7 @@ describe GenerateAndStoreStaticScript do
 
   context 'when store locally' do
     let(:file) { double('file') }
-    before { Hellobar::Settings[:store_site_scripts_locally] = true }
+    before { allow(Settings).to receive(:store_site_scripts_locally).and_return true }
 
     it 'does not compress script' do
       expect(StaticScriptAssets).not_to receive(:with_js_compressor)

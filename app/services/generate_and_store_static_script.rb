@@ -56,6 +56,6 @@ class GenerateAndStoreStaticScript
   end
 
   def store_site_scripts_locally?
-    Hellobar::Settings[:store_site_scripts_locally]
+    Settings.store_site_scripts_locally
   end
 end

@@ -105,11 +105,11 @@ class StaticScriptModel
   end
 
   def geolocation_url
-    Hellobar::Settings[:geolocation_url]
+    Settings.geolocation_url
   end
 
   def hb_backend_host
-    Hellobar::Settings[:tracking_host]
+    Settings.tracking_host
   end
 
   def external_tracking

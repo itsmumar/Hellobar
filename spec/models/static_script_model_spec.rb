@@ -222,7 +222,7 @@ describe StaticScriptModel do
     let(:geolocation_url) { 'geolocation_url' }
 
     before do
-      allow(Hellobar::Settings).to receive(:[]).with(:geolocation_url).and_return geolocation_url
+      allow(Settings).to receive(:geolocation_url).and_return geolocation_url
     end
 
     it 'returns url' do
@@ -234,7 +234,7 @@ describe StaticScriptModel do
     let(:hb_backend_host) { 'hb_backend_host' }
 
     before do
-      allow(Hellobar::Settings).to receive(:[]).with(:tracking_host).and_return hb_backend_host
+      allow(Settings).to receive(:tracking_host).and_return hb_backend_host
     end
 
     it 'returns host' do
