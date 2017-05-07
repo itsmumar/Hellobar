@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/tracking/tracking.external.googleAnalytics
 
 describe('Module tracking.external.googleAnalytics', function () {

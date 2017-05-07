@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/tracking/tracking.external.legacyGoogleAnalytics
 
 describe('Module tracking.external.legacyGoogleAnalytics', function () {

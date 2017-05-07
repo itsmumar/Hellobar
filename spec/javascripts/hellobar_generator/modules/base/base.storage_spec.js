@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.storage
 
 describe('Module base.storage', function () {

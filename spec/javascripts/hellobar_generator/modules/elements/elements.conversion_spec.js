@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/elements/elements.conversion
 
 describe('Module elements.conversion', function () {
