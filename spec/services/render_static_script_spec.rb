@@ -40,7 +40,7 @@ describe RenderStaticScript do
       before { allow(service).to receive(:render_asset).with('modules.js').and_return('MODULES') }
 
       it 'escapes </script>' do
-        expect(service.call).to include "\"custom_html\":\"<script>alert(1)<\\/script>\","
+        expect(service.call).to include '"custom_html":"<script>alert(1)<\/script>",'
       end
     end
   end
