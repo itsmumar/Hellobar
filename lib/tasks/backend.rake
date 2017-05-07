@@ -1,17 +1,15 @@
 namespace :backend do
   desc 'Automatically adjusts DynamoDB tables as needed'
   task :adjust_dynamo_db_capacity, [:type] => :environment do |_t, args|
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-
     cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 
     dynamo_db = AWS::DynamoDB::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
+      access_key_id: Settings.aws_access_key_id,
+      secret_access_key: Settings.aws_secret_access_key,
       logger: nil
     )
 

@@ -10,7 +10,7 @@ feature 'Forgot password', :js do
       @sent_emails << { recipient: recipient, type: type, params: params }
     end
 
-    Hellobar::Settings[:deliver_emails] = true
+    allow(Settings).to receive(:deliver_emails).and_return true
     visit new_user_session_path
     click_on 'Forgot your password?'
     fill_in 'user_email', with: email

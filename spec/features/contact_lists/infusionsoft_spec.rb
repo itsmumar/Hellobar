@@ -5,13 +5,9 @@ feature 'Infusionsoft Integration', :js, :vcr do
   let(:provider) { 'infusionsoft' }
 
   before do
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
-    @user = login
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+    @user = login
   end
 
   context 'when invalid' do

@@ -5,8 +5,8 @@ class GoogleAnalytics
     client = Signet::OAuth2::Client.new(
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
       token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
-      client_id: Hellobar::Settings[:google_auth_id],
-      client_secret: Hellobar::Settings[:google_auth_secret],
+      client_id: Settings.google_auth_id,
+      client_secret: Settings.google_auth_secret,
       scope: 'email profile https://www.googleapis.com/auth/analytics.readonly',
       access_token: access_token
     )

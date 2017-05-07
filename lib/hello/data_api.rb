@@ -1,4 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
 require './lib/hello/data_api_helper'
 require './lib/hello/api_performance'
 require 'thread/pool'
@@ -20,7 +19,7 @@ module Hello::DataAPI
     #   [views_number, conversions_number]
     #
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
-      return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
+      return fake_lifetime_totals(site, site_elements, num_days) if Settings.fake_data_api
 
       site_element_ids = site_elements.map(&:id).sort
 
@@ -128,7 +127,7 @@ module Hello::DataAPI
     # => {"1" => 141, "2" => 951}
     #
     def contact_list_totals(site, contact_lists, cache_options = {})
-      return fake_contact_list_totals(contact_lists) if Hellobar::Settings[:fake_data_api]
+      return fake_contact_list_totals(contact_lists) if Settings.fake_data_api
       return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
@@ -164,7 +163,7 @@ module Hello::DataAPI
     #    }
     #
     def suggested_opportunities(site, site_elements, cache_options = {})
-      return fake_suggested_opportunities(site, site_elements) if Hellobar::Settings[:fake_data_api]
+      return fake_suggested_opportunities(site, site_elements) if Settings.fake_data_api
 
       site_element_ids = site_elements.map(&:id).sort
 
@@ -190,7 +189,7 @@ module Hello::DataAPI
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
     def contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
-      return fake_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
+      return fake_contacts(contact_list) if Settings.fake_data_api
       cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
       cache_options[:expires_in] = 10.minutes
 
@@ -209,7 +208,7 @@ module Hello::DataAPI
       timeout_index = 0
       begin
         begin_time = Time.current.to_f
-        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+        url = URI.join(Settings.data_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
         Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))

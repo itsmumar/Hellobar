@@ -11,13 +11,9 @@ feature 'New contact list screen', :js do
       .with('Upgrade Pop-up for Active Users 2016-08')
       .and_return('original')
 
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
-    login user
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+    login user
   end
 
   scenario 'displays favorite providers' do

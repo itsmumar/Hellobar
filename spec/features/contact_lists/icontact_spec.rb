@@ -6,13 +6,9 @@ feature 'iContact integration', :js, :vcr do
   let(:script) { '<script type="text/javascript" src="https://app.icontact.com/icp/core/mycontacts/signup/designer/form/automatic?id=46&cid=1679071&lid=3205"></script>' }
 
   before do
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
-    @user = login
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+    @user = login
   end
 
   scenario 'connecting to iContact' do

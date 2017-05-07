@@ -97,12 +97,12 @@ class Site < ActiveRecord::Base
   end
 
   def script_url
-    if Hellobar::Settings[:store_site_scripts_locally]
+    if Settings.store_site_scripts_locally
       "generated_scripts/#{ script_name }"
-    elsif Hellobar::Settings[:script_cdn_url].present?
-      "#{ Hellobar::Settings[:script_cdn_url] }/#{ script_name }"
+    elsif Settings.script_cdn_url.present?
+      "#{ Settings.script_cdn_url }/#{ script_name }"
     else
-      "#{ Hellobar::Settings[:s3_bucket] }.s3.amazonaws.com/#{ script_name }"
+      "#{ Settings.s3_bucket }.s3.amazonaws.com/#{ script_name }"
     end
   end
 

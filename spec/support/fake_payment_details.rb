@@ -3,6 +3,10 @@ class FakePaymentMethod < PaymentMethodDetails
     super || {}
   end
 
+  def brand
+    data['brand']
+  end
+
   def address
     OpenStruct.new(address1: 'address1', city: 'city', state: 'state', zip: 'zip', country: 'country')
   end

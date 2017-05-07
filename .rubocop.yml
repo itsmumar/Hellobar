@@ -80,10 +80,6 @@ Style/EmptyMethod:
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 
-Style/ConstantName:
-  Exclude:
-    - 'config/initializers/settings.rb'
-
 Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
   # smaller than a certain size.  The rule is only applied to arrays
@@ -96,6 +92,10 @@ Style/SpaceInsideStringInterpolation:
 Style/FileName:
   Exclude:
     - Guardfile
+
+Style/MethodMissing:
+  Exclude:
+    - app/settings/settings.rb
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false

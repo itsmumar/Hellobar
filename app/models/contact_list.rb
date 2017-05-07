@@ -35,7 +35,7 @@ class ContactList < ActiveRecord::Base
   delegate :count, to: :site_elements, prefix: true
 
   def syncable?
-    return false unless identity && data && Hellobar::Settings[:syncable]
+    return false unless identity && data && Settings.syncable
 
     if oauth?
       data['remote_name'] && data['remote_id']
@@ -194,7 +194,7 @@ class ContactList < ActiveRecord::Base
     if identity
       identity.service_provider_class
     elsif provider_set?
-      ServiceProvider[provider_token.to_sym]
+      ServiceProvider[provider_token]
     end
   end
 

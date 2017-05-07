@@ -1,10 +1,8 @@
 class SettingsSerializer < ActiveModel::Serializer
   LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11').freeze
 
-  attributes \
-    :current_user, :lead_data, :geolocation_url, :track_editor_flow,
-    :available_themes, :available_fonts,
-    :country_codes
+  attributes :current_user, :lead_data, :geolocation_url, :track_editor_flow,
+    :available_themes, :available_fonts, :country_codes
 
   def available_themes
     ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
@@ -32,7 +30,7 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def geolocation_url
-    Hellobar::Settings[:geolocation_url]
+    Settings.geolocation_url
   end
 
   def track_editor_flow

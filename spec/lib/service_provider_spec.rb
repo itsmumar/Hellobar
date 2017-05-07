@@ -8,7 +8,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :aweber }
+      specify { expect(service_provider.key).to eql 'aweber' }
     end
   end
 
@@ -21,7 +21,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :createsend }
+      specify { expect(service_provider.key).to eql 'createsend' }
     end
   end
 
@@ -35,7 +35,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :constantcontact }
+      specify { expect(service_provider.key).to eql 'constantcontact' }
     end
   end
 
@@ -45,7 +45,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :get_response_api }
+      specify { expect(service_provider.key).to eql 'get_response_api' }
     end
   end
 
@@ -55,7 +55,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :icontact }
+      specify { expect(service_provider.key).to eql 'icontact' }
     end
   end
 
@@ -65,7 +65,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :mad_mimi_form }
+      specify { expect(service_provider.key).to eql 'mad_mimi_form' }
     end
   end
 
@@ -75,7 +75,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :mailchimp }
+      specify { expect(service_provider.key).to eql 'mailchimp' }
     end
   end
 
@@ -85,7 +85,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :my_emma }
+      specify { expect(service_provider.key).to eql 'my_emma' }
     end
   end
 
@@ -95,7 +95,7 @@ describe 'service providers' do
     end
 
     describe '#key' do
-      specify { expect(service_provider.key).to eql :vertical_response }
+      specify { expect(service_provider.key).to eql 'vertical_response' }
     end
   end
 end

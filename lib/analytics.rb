@@ -1,7 +1,7 @@
 require 'json'
 
 class Analytics
-  LOG_FILE = Hellobar::Settings[:analytics_log_file]
+  LOG_FILE = Rails.root.join 'log', 'analytics.log'
 
   class << self
     def track(target_type, target_id, event_name, props = {})

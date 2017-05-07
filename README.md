@@ -18,6 +18,7 @@ If you are running Bundler 1.* it is required to configure https sources for the
 echo 'BUNDLE_GITHUB__HTTPS: "true"' >> ~/.bundle/config
 ```
 
+
 Install all the gems:
 
 `bundle install`
@@ -28,16 +29,14 @@ Setup your `database.yml` file:
 `cp config/database.yml.example config/database.yml`
 
 
-Setup the `settings.yml` file:
-
-`cp config/settings.yml.example config/settings.yml`
-
-(ask another developer to send you the settings.yml file with appropriate keys set)
-
-
-Let rake setup and migrate your database:
+Setup your local database:
 
 `rake db:setup`
+
+
+Setup the `secrets.yml` file:
+
+`cp config/secrets.yml.example config/secrets.yml`
 
 
 It is advised to run the application locally using the `local.hellobar.com` vhost/domain as this domain has been setup to resolve to `127.0.0.1`.
@@ -45,7 +44,16 @@ It is advised to run the application locally using the `local.hellobar.com` vhos
 You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
 and add new or use existing Google OAuth credentials to be able to log in.
 
-`google_auth_id` and `google_auth_secret` entries should be added into `config/settings.yml`.
+`google_auth_id` and `google_auth_secret` entries should be added into `config/secrets.yml`.
+
+
+Here's the list of additional settings in `secrets.yml`, which might need to be set in your local development environment:
+* `aws_access_key_id`
+* `aws_secret_access_key`
+* `deliver_emails`
+* `geolocation_url`
+* `host`
+* `sendgrid_password`
 
 
 ### Front-end
@@ -336,7 +344,7 @@ default: &default
 
 ### 2. Build and start the containers
 
-Once your `database.yml` and `settings.yml` files are how you like them, run the following commands in a `Docker Quickstart Terminal`:
+Once your `database.yml` and `secrets.yml` files are how you like them, run the following commands in a `Docker Quickstart Terminal`:
 
 ```
 docker-compose build

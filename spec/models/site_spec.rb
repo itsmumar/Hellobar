@@ -253,15 +253,10 @@ describe Site do
   end
 
   describe '#destroy' do
-    around do |ex|
-      Hellobar::Settings[:store_site_scripts_locally] = false
-      ex.call
-      Hellobar::Settings[:store_site_scripts_locally] = true
-    end
-
     let(:mock_storage) { double('asset_storage') }
 
     before do
+      allow(Settings).to receive(:store_site_scripts_locally).and_return false
       allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
       allow(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
     end

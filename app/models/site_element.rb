@@ -255,7 +255,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_download_link
-    "https://s3.amazonaws.com/#{ Hellobar::Settings[:s3_content_upgrades_bucket] }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
+    "https://s3.amazonaws.com/#{ Settings.s3_content_upgrades_bucket }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
   end
 
   def content_upgrade_script_tag
@@ -302,12 +302,12 @@ class SiteElement < ActiveRecord::Base
     # create a connection
     connection = Fog::Storage.new(
       provider: 'AWS',
-      aws_access_key_id: Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
-      aws_secret_access_key: Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
+      aws_access_key_id: Settings.aws_access_key_id,
+      aws_secret_access_key: Settings.aws_secret_access_key,
       path_style: true
     )
 
-    directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
+    directory = connection.directories.get(Settings.s3_content_upgrades_bucket)
 
     file = directory.files.create(
       key: content_upgrade_key,

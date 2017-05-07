@@ -15,7 +15,7 @@ feature 'Geolocation', :js do
     # Spin up the Rack app
     Capybara::Discoball.spin(FakeIPApi) do |server|
       # update the geolocation_url to the Sinatra server
-      Hellobar::Settings[:geolocation_url] = server.url
+      allow(Settings).to receive(:geolocation_url).and_return server.url
 
       visit site_path
 

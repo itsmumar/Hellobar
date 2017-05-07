@@ -93,4 +93,7 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  # Fail if no examples have been run (helps with setting up CI)
+  config.fail_if_no_examples = true
 end
