@@ -1,5 +1,5 @@
 class HbTestSite
-  DEFAULT_FILE = 'public/generated_scripts/test_site.js'.freeze
+  DEFAULT_FILE = 'public/test_site.html'.freeze
   SINATRA_FILE = 'lib/test_site.rb'.freeze
 
   def self.path(relative_path = '')
@@ -16,7 +16,8 @@ class HbTestSite
 
   def self.generate(site_id, full_path)
     raise 'site id is empty' if site_id.blank?
-    GenerateAndStoreStaticScript.for(site_id: site_id, store_to: full_path)
+    generator = SiteGenerator.new(site_id, full_path: full_path)
+    generator.generate_file
   end
 
   def self.generate_default(site_id = nil)
@@ -30,7 +31,12 @@ class HbTestSite
 end
 
 namespace :test_site do
-  desc "Creates a public/generated_script/test_site.js\n rake test_site:generate[95]\nDefaults to most recently updated Site if id is not passed"
+  desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test_site.html']"
+  task :file, %i[site_id file_path] => :environment do |_t, args|
+    HbTestSite.generate(args[:site_id], args[:file_path])
+  end
+
+  desc "Creates a test_site.html file in the public folder\n rake test_site:generate[95]\nDefaults to most recently updated Site if id is not passed"
   task :generate, [:site_id] => :environment do |_t, args|
     puts "Generating #{ HbTestSite.default_path } for site ##{ args[:site_id] }..."
     HbTestSite.generate_default(args[:site_id])

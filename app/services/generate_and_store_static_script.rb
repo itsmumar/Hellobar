@@ -1,6 +1,6 @@
 class GenerateAndStoreStaticScript
-  def self.for(site_id:, store_to: nil)
-    new(Site.preload_for_script.find(site_id), store_to: store_to).call
+  def self.for(site_id:)
+    new(Site.preload_for_script.find(site_id)).call
   end
 
   # @param [Site] site
@@ -52,7 +52,7 @@ class GenerateAndStoreStaticScript
   end
 
   def local_path
-    options[:store_to] || Rails.root.join('public', 'generated_scripts', site.script_name)
+    Rails.root.join('public', 'generated_scripts', site.script_name)
   end
 
   def store_site_scripts_locally?
