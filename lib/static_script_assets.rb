@@ -55,7 +55,7 @@ module StaticScriptAssets
   end
 
   def render_compressed(*args)
-    with_js_compressor { render *args }
+    with_js_compressor { render(*args) }
   end
 
   def render_model(model)
