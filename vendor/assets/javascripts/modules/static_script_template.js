@@ -1,17 +1,15 @@
+// = require core
+
+function initializeModules(hellobar) { $INJECT_MODULES };
+
 (function() {
-  if (typeof(hellobar) === 'undefined') {
+  if (typeof(window.hellobar) === 'undefined') {
+    // Initialize core for module management
+    var hellobar = window.hellobar = Hellobar();
 
-    // Load HelloBar JS Core and Modules
-    (function() {
-      // Data
-      var data = {{{data}}};
+    initializeModules(hellobar);
 
-      // Loading core for module management
-      var hellobar = {{{core_js}}}
-
-      // Loading all HelloBar modules
-      {{{modules_js}}}
-
+    (function(hellobar, data) {
       // A few helper functions
       function hasCapability(capability) {
         return hellobar('base.capabilities').has(capability);
@@ -27,6 +25,12 @@
 
       function configure(moduleName, configurator) {
         hellobar(moduleName, { configurator: configurator });
+      }
+
+      function each(array, callback) {
+        for (var i = 0; i < array.length; i++) {
+          callback(array[i])
+        }
       }
 
       // Initialize and configure modules
@@ -49,7 +53,7 @@
 
       function initializeProtectedModules() {
 
-        configure('base.timezone', function(configuration) {
+        configure('base.timezone', function (configuration) {
           configuration.defaultTimezone(data.site_timezone);
         });
 
@@ -58,17 +62,17 @@
         });
 
         configure('base.templating', function(configuration) {
-          for (var template in data.templates) {
+          each(data.templates, function(template) {
             configuration.addTemplate(template.name, template.markup);
-          }
+          });
 
-          for (var template in data.branding_templates) {
+          each(data.branding_templates, function(template) {
             configuration.addTemplate(template.name, template.markup);
-          }
+          });
 
-          for (var template in data.content_upgrade_template) {
+          each(data.content_upgrade_template, function(template) {
             configuration.addTemplate(template.name, template.markup);
-          }
+          });
         });
 
         configure('geolocation', function(configuration) {
@@ -88,9 +92,9 @@
         });
 
         configure('elements.rules', function(configuration) {
-          for (var rule in data.rules) {
+          each(data.rules, function(rule) {
             configuration.addRule(rule.match, rule.conditions, rule.site_elements);
-          }
+          });
         });
 
         configure('elements', function(configuration) {
@@ -109,8 +113,7 @@
       if(!hellobar('base.environment').isIEXOrLess(8) && data.script_is_installed_properly) {
         initializeProtectedModules();
       }
-    })();
-
+    })(hellobar, $INJECT_DATA);
   } else {
     console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }

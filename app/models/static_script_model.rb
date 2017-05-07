@@ -236,7 +236,7 @@ class StaticScriptModel
     {
       match: rule.match,
       conditions: conditions_for_rule(rule),
-      site_elements: render_site_elements(rule.active_site_elements)
+      site_elements: rule.active_site_elements
     }
   end
 

@@ -17,10 +17,17 @@ json.cache! model do
     :hb_backend_host,
     :site_write_key,
     :external_tracking,
-    :rules,
     :hellobar_element_css,
     :content_upgrades,
     :content_upgrades_styles,
     :autofills,
     :script_is_installed_properly
+
+  json.rules model.rules do |rule|
+    json.match rule[:match]
+    json.conditions rule[:conditions]
+    json.site_elements do
+      json.array! rule[:site_elements], partial: 'site_elements/site_element', as: :site_element
+    end
+  end
 end

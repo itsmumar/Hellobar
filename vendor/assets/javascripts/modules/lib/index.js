@@ -5,4 +5,4 @@
   hellobar.defineModule('lib.crypto', [], function () {
     return CryptoJS;
   });
-}());
+})();

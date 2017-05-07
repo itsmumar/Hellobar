@@ -1,13 +1,11 @@
 module StaticScriptAssets
-  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
-  private :uglifier
+  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }, mangle: { except: %w[$super core data]}) }
 
   mattr_reader(:jbuilder) do
     ActionController::Base.new.view_context.tap do |context|
       context.formats = [:json]
     end
   end
-  private :jbuilder
 
   mattr_reader(:env) do
     Sprockets::Environment.new(Rails.root) do |env|
@@ -20,6 +18,7 @@ module StaticScriptAssets
       env.append_path 'lib/script_generator'
 
       env.version = '1.0'
+      env.gzip = false
       env.css_compressor = :scss
       env.js_compressor = nil
       env.cache = Rails.cache
@@ -40,9 +39,16 @@ module StaticScriptAssets
     Sprockets::Manifest.new(precompiled ? nil : env.index, 'tmp/script')
   end
 
-  # try to render asset from app's assets
-  # if an asset is not found either
-  # calls given block or raises StandardError
+  def with_uglifier
+    env.js_compressor = uglifier
+    yield
+  ensure
+    env.js_compressor = nil
+  end
+
+  # @param [Array[String]] *path
+  # @option [Integer] site_id:
+  # @raises Sprockets::FileNotFound
   def render(*path, site_id: nil)
     file = File.join(*path)
     asset = asset(file)
@@ -51,6 +57,10 @@ module StaticScriptAssets
   rescue Sass::SyntaxError => e
     e.sass_template ||= path.join('/')
     raise e
+  end
+
+  def render_compressed(*args)
+    with_uglifier { render *args }
   end
 
   def asset(file, precompiled: false)
