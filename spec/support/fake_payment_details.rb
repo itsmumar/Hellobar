@@ -17,6 +17,10 @@ class FakePaymentMethod < PaymentMethodDetails
         ActiveMerchant::Billing::CreditCard.new(attributes)
       end
   end
+
+  def token
+    data['token']
+  end
 end
 
 class AlwaysSuccessfulPaymentMethodDetails < FakePaymentMethod
@@ -30,10 +34,6 @@ class AlwaysSuccessfulPaymentMethodDetails < FakePaymentMethod
 
   def brand
     'AlwaysSuccessfulPayment'
-  end
-
-  def token
-    data['token']
   end
 end
 
