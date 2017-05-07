@@ -1,5 +1,5 @@
 module StaticScriptAssets
-  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }, mangle: { except: %w[$super core data]}) }
+  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
 
   mattr_reader(:jbuilder) do
     ActionController::Base.new.view_context.tap do |context|
@@ -25,14 +25,11 @@ module StaticScriptAssets
     end
   end
 
-  delegate :compress, to: :uglifier
-  module_function :compress
-
   module_function
 
   def precompile
     manifest(precompiled: false).clobber
-    manifest(precompiled: false).compile('*.js', '*.es6', '*.css', '*.html')
+    with_uglifier { manifest(precompiled: false).compile('*.js', '*.es6', '*.css', '*.html') }
   end
 
   def manifest(precompiled: false)
