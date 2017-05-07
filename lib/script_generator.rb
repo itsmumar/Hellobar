@@ -139,11 +139,11 @@ class ScriptGenerator < Mustache
   end
 
   def hb_backend_host
-    Hellobar::Settings[:tracking_host]
+    Settings.tracking_host
   end
 
   def geolocation_url
-    Hellobar::Settings[:geolocation_url]
+    Settings.geolocation_url
   end
 
   def site_element_classes_js

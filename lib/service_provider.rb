@@ -7,14 +7,14 @@ class ServiceProvider
 
   class << self
     def [](name)
-      provider_config = all_providers[name.to_sym]
+      provider_config = all_providers[name]
       return nil unless provider_config # invalid provider
-      const_name = provider_config[:service_provider_class] || provider_config[:name]
+      const_name = provider_config['service_provider_class'] || provider_config['name']
       ServiceProviders.const_get(const_name, false)
     end
 
     def all_providers
-      Hellobar::Settings[:identity_providers]
+      Settings.identity_providers
     end
 
     def settings
@@ -26,32 +26,34 @@ class ServiceProvider
     end
 
     def embed_code?
-      settings[:requires_embed_code] == true
+      settings['requires_embed_code'] == true
     end
 
     def api_key?
-      settings[:requires_api_key] == true
+      settings['requires_api_key'] == true
     end
 
     def app_url?
-      settings[:requires_app_url] == true
+      settings['requires_app_url'] == true
     end
 
     def oauth?
-      settings[:oauth] == true
+      settings['oauth'] == true
     end
 
     private
 
     def config
       key, value = all_providers.find(&method(:current_provider?))
+
       { key: key, settings: value }
     end
 
     def current_provider?(array)
       _key, value = *array
       klass = name.demodulize
-      value[:service_provider_class] == klass || value[:name] == klass
+
+      value['service_provider_class'] == klass || value['name'] == klass
     end
   end
 
@@ -83,7 +85,7 @@ class ServiceProvider
   end
 
   def name
-    settings[:name]
+    settings['name']
   end
 
   delegate :settings, to: :class

@@ -1,6 +1,5 @@
 describe Referrals::Create do
   let(:user) { create(:user) }
-  let(:hellobar_host) { Hellobar::Settings[:host] }
 
   it 'gets created with a site id selected if the user has one site' do
     ownership = create(:site_membership)
@@ -18,7 +17,7 @@ describe Referrals::Create do
     expect(MailerGateway).to receive :send_email do |name, email, params|
       expect(name).to eq 'Referral Invite Initial'
       expect(email).to eq 'tj@hellobar.com'
-      expect(params[:referral_link]).to match Regexp.new("http://#{ hellobar_host }/referrals/accept")
+      expect(params[:referral_link]).to match Regexp.new("http://#{ Settings.host }/referrals/accept")
       expect(params[:referral_sender]).to eq user.name
       expect(params[:referral_body]).to eq 'test body'
     end

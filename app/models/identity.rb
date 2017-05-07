@@ -11,12 +11,12 @@ class Identity < ActiveRecord::Base
 
   validates :provider, presence: true,
                        uniqueness: { scope: :site_id },
-                       inclusion: { in: Hellobar::Settings[:identity_providers].keys.map(&:to_s) }
+                       inclusion: { in: Settings.identity_providers.keys.map(&:to_s) }
 
   validates :site, association_exists: true
   validate :service_provider_valid
 
-  scope :by_type, ->(type) { where(provider: Hellobar::Settings[:identity_providers].select { |_, v| v[:type] == type }.map { |k, _| k.to_s }) }
+  scope :by_type, ->(type) { where(provider: Settings.identity_providers.select { |_, v| v['type'] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
   # When an activity is active, it is saved, credentials are present, and it is being used.
@@ -34,13 +34,12 @@ class Identity < ActiveRecord::Base
   end
 
   def type
-    provider_settings[:type]
+    provider_config['type']
   end
 
-  def provider_settings
+  def provider_config
     service_provider_class.settings
   end
-  alias provider_config provider_settings
 
   def as_json(options = nil)
     extra['raw_info']&.select! { |k, _| %w[user_id username].include? k }
@@ -61,12 +60,12 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider_class
-    ServiceProvider[provider.to_sym]
+    ServiceProvider[provider]
   end
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_settings[:name], link: site_contact_lists_url(site, host: Hellobar::Settings[:host]))
+      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_config['name'], link: site_contact_lists_url(site, host: Settings.host))
     end
 
     destroy

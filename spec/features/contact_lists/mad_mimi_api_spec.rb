@@ -5,13 +5,9 @@ feature 'MadMimi Integration', js: true do
   let(:provider) { 'mad_mimi_api' }
 
   before do
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
-    @user = login
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+    @user = login
   end
 
   scenario 'invalid form details', :vcr do

@@ -6,7 +6,7 @@ module ServiceProviders
       @identity = load_identity(options)
       @account_id, @api_key = load_credentials_from_identity
 
-      @client = Faraday.new(url: Hellobar::Settings[:maropost_url]) do |faraday|
+      @client = Faraday.new(url: Settings.identity_providers['maropost']['url']) do |faraday|
         faraday.request :json
         faraday.response :logger unless Rails.env.test?
         faraday.adapter Faraday.default_adapter

@@ -1,5 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -53,7 +51,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :dalli_store, Hellobar::Settings[:memcached_server], { namespace: 'hb_', compress: true }
+  config.cache_store = :dalli_store, Settings.memcached_server, { namespace: 'hb_', compress: true }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
@@ -79,5 +77,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enforce SSL
-  config.middleware.use Rack::SslEnforcer, only_hosts: [Hellobar::Settings[:host]]
+  config.middleware.use Rack::SslEnforcer, only_hosts: [Settings.host]
 end

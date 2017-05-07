@@ -1,5 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 require './lib/hello/internal_analytics'
 require './lib/hello/asset_storage'
 require './lib/hello/data_api'

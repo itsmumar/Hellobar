@@ -1,17 +1,17 @@
 module ContactListsHelper
   def options_for_provider_select
-    providers = Hellobar::Settings[:identity_providers].reject { |_, v| v[:hidden] == true }
+    providers = Settings.identity_providers.reject { |_, v| v['hidden'] == true }
     providers_array = providers.map do |provider_name, provider_attributes|
       [
-        provider_attributes[:name],
+        provider_attributes['name'],
         provider_name,
-        requires_app_url:     provider_attributes[:requires_app_url].present?,
-        requires_embed_code:  provider_attributes[:requires_embed_code].present?,
-        requires_account_id:  provider_attributes[:requires_account_id].present?,
-        requires_api_key:     provider_attributes[:requires_api_key].present?,
-        requires_username:    provider_attributes[:requires_username].present?,
-        requires_webhook_url: provider_attributes[:requires_webhook_url].present?,
-        oauth:                provider_attributes[:oauth].present?
+        requires_app_url:     provider_attributes['requires_app_url'].present?,
+        requires_embed_code:  provider_attributes['requires_embed_code'].present?,
+        requires_account_id:  provider_attributes['requires_account_id'].present?,
+        requires_api_key:     provider_attributes['requires_api_key'].present?,
+        requires_username:    provider_attributes['requires_username'].present?,
+        requires_webhook_url: provider_attributes['requires_webhook_url'].present?,
+        oauth:                provider_attributes['oauth'].present?
       ]
     end
 

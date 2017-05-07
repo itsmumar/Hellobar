@@ -6,13 +6,9 @@ feature 'GetResponseApi integration', :js, :vcr do
   let(:tag) { 'new_lead' }
 
   before do
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
-    login(user)
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
+    login(user)
   end
 
   let(:user) { create(:user) }

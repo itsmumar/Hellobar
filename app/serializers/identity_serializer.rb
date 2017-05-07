@@ -17,7 +17,7 @@ class IdentitySerializer < ActiveModel::Serializer
   end
 
   def supports_double_optin
-    service_provider.class.settings[:supports_double_optin]
+    service_provider.class.settings['supports_double_optin']
   end
 
   def supports_cycle_day

@@ -1,5 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 if defined? Lograge
   Rails.application.configure do
     # Enable Lograge styling of logs
