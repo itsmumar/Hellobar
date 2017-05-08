@@ -24,6 +24,13 @@ describe('Module base.storage', function () {
     expect(module.getValue('object-value')).toEqual(object);
   });
 
+  it('sets and removes a complex object', function () {
+    var object = {name: 'HelloBar'};
+    module.setValue('object-value', object);
+    module.removeValue('object-value');
+    expect(module.getValue('object-value')).toBeUndefined();
+  });
+
   it('supports expiration with explicitly specified Date', function () {
     var pastDate = new Date('2016-01-01');
     module.setValue('expired-value', 'I am expired', pastDate);

@@ -14,7 +14,7 @@ hellobar.defineModule('elements.visibility',
 
     function expireVisibilityControlCookie(cookieType, siteElementId) {
       var cookieName = visibilityControlCookieName(cookieType, siteElementId);
-      storage.setValue(cookieName, JSON.stringify({}), new Date().toString());
+      storage.removeValue(cookieName);
     }
 
     /**
@@ -132,5 +132,5 @@ hellobar.defineModule('elements.visibility',
       })
     };
 
-  });
-
+  }
+);
