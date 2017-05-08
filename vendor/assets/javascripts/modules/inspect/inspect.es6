@@ -5,8 +5,10 @@ hellobar.defineModule('inspect',
     const allElementModels = () => rules.inspect().allElementModels();
     const allRules = () => rules.inspect().allRules();
     const elementColumns = [
-      'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement', 'closable', 'show_branding',
-      'background_color', 'link_color', 'text_color', 'button_color', 'primary_color', 'trigger_color'
+      'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
+      'notification_delay', 'closable', 'show_branding', 'background_color',
+      'link_color', 'text_color', 'button_color', 'primary_color',
+      'trigger_color'
     ];
 
     const getInfo = () => {
@@ -36,7 +38,40 @@ hellobar.defineModule('inspect',
         console.groupEnd();
 
         console.groupCollapsed('allRules:');
-        console.table(allRules());
+
+        allRules().forEach((rule, index) => {
+          console.log(`Rule ${index}, matchType: ${rule.matchType}`);
+
+          rule.conditions.forEach((condition, index) => {
+            console.log(`* Condition ${index}:`);
+            console.log(`  - operand: "${condition.operand}"`);
+            console.log(`  - segment: "${condition.segment}"`);
+
+            if (Array.isArray(condition.value)) {
+              console.log('  - values: "' + condition.value.join('", "') + '"');
+            } else {
+              console.log(`  - value: "${condition.value}"`);
+            }
+          });
+
+          if (Array.isArray(rule.siteElements) && rule.siteElements.length > 0) {
+            console.log('Site Elements:');
+            console.table(rule.siteElements, elementColumns);
+
+            elementsOnPage().forEach((elementOnPage, index) => {
+              rule.siteElements.forEach((siteElement, index) => {
+                if (elementOnPage.id === siteElement.id) {
+                  console.log(`*********** siteElement ${siteElement.id} is ACTIVE on this page ***********`);
+                }
+              });
+            });
+          } else {
+            console.log('No siteElements.');
+          }
+
+          console.log('---------------------------------------------------------------');
+        });
+
         console.groupEnd();
       },
       all: () => getInfo()
