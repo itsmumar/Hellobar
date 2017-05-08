@@ -420,7 +420,7 @@ hellobar.defineModule('elements.class',
 
             // delete the VisibilityControl cookie
             // (because the user has asked the bar to be shown again)
-            elementsVisibility.expireVisibilityControlCookie('dismiss', this.id);
+            elementsVisibility.removeVisibilityControlCookie('dismiss', this.id);
 
             this.onPullDownSet && this.onPullDownSet();
 

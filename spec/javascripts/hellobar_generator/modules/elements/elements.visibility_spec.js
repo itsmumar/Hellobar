@@ -57,7 +57,7 @@ describe('Module elements.visibility', function () {
     module.setVisibilityControlCookie('success', siteElement);
     expect(dependencies['base.storage'].setValue).toHaveBeenCalled();
 
-    module.expireVisibilityControlCookie('success', siteElement.id);
+    module.removeVisibilityControlCookie('success', siteElement.id);
     expect(dependencies['base.storage'].removeValue).toHaveBeenCalled();
   });
 
