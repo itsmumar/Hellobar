@@ -8,6 +8,7 @@ export default Ember.Controller.extend({
   applicationController: Ember.inject.controller('application'),
   applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
+  // TODO
   cannotContinue: ( function () {
     return this.set('applicationController.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
   }).observes('model.element_subtype'),
@@ -17,7 +18,7 @@ export default Ember.Controller.extend({
   nextStep: 'style',
   hasSideArrows: ( () => false).property(),
 
-  goalSelectionInProgress: false,
+
 
   applyRoute (routeName) {
     const routeByElementSubtype = (elementSubtype) => {
@@ -76,26 +77,6 @@ export default Ember.Controller.extend({
     }
   },
 
-  currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric'),
+  currentThemeIsGeneric: Ember.computed.alias('applicationController.currentThemeIsGeneric')
 
-  elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
-  canUseCallGoal: Ember.computed.not('elementTypeIsAlert'),
-  canUseSocialGoal: Ember.computed.not('elementTypeIsAlert'),
-
-  goalListCssClasses: (function () {
-    let classes = ['step-link-wrapper'];
-    !this.get('goalSelectionInProgress') && (classes.push('is-selected'));
-    return classes.join(' ');
-  }).property('goalSelectionInProgress'),
-
-  actions: {
-    closeDropdown() {
-      this.set('goalSelectionInProgress', false);
-    },
-
-    changeSettings() {
-      this.set('goalSelectionInProgress', true);
-      return false;
-    }
-  }
 });

@@ -21,7 +21,7 @@ export default Ember.Component.extend({
   actions: {
 
     saveSiteElement() {
-      return this.sendAction('action');
+      this.sendAction('action');
     }
   }
 });

@@ -49,13 +49,12 @@ const Router = Ember.Router.extend({
 Router.map(function () {
   this.route('home', {path: '/'});
 
-  this.route('settings', function () {
-      this.route('emails');
+  this.route('goals', function () {
+      this.route('click'); // TODO rename to traffic?
+      this.route('email');
       this.route('social');
-      this.route('click');
-      this.route('call');
-      this.route('feedback');
       this.route('announcement');
+      this.route('call');
     }
   );
 
@@ -78,7 +77,7 @@ Router.map(function () {
       this.route('mobile');
       this.route('homepage');
       this.route('custom');
-      return this.route('saved');
+      this.route('saved');
     }
   );
 
@@ -86,7 +85,7 @@ Router.map(function () {
       this.route('call');
       this.route('money', {path: 'promote'});
       this.route('contacts');
-      return this.route('facebook');
+      this.route('facebook');
     }
   );
 });
