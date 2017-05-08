@@ -6,10 +6,6 @@ export default Ember.Service.extend({
   load() {
     Ember.$.getJSON('/api/settings').then((applicationSettings) => {
       this.set('settings', applicationSettings);
-
-      if (applicationSettings.lead_data) {
-        new LeadDataModal(applicationSettings).checkCountryAndOpen();
-      }
     });
   }
 });
