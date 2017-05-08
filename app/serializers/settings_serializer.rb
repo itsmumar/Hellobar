@@ -1,5 +1,4 @@
 class SettingsSerializer < ActiveModel::Serializer
-
   attributes :current_user, :geolocation_url, :track_editor_flow,
     :available_themes, :available_fonts, :country_codes
 
