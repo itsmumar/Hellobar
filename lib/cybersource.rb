@@ -36,6 +36,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     def validate(record)
       REQUIRED_FIELDS.each do |field|
         if !record.data || record.data[field].blank?
+          next if field == 'state' && record.data['country'] != 'US'
           record.errors[field.to_sym] = 'can not be blank'
         end
       end
@@ -44,6 +45,10 @@ class CyberSourceCreditCard < PaymentMethodDetails
   validates_with CyberSourceCreditCardValidator
 
   def save
+    valid? && save_to_cybersource && super(validate: false)
+  end
+
+  def save!
     valid? && save_to_cybersource && super(validate: false)
   end
 

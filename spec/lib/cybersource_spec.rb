@@ -19,7 +19,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#delete_token' do
-    let!(:credit_card) { create :cyber_source_credit_card }
+    let!(:credit_card) { create :cyber_source_credit_card, token: 'token' }
 
     it 'deletes token when it is present' do
       expect { credit_card.delete_token }.to change(credit_card, :token).to(nil)
@@ -71,6 +71,16 @@ describe CyberSourceCreditCard do
 
         it 'does not raise exceptions' do
           expect(credit_card.errors[:base]).to eql []
+        end
+      end
+    end
+
+    context 'with foreign card' do
+      context 'without state' do
+        let(:data) { create :payment_data, :foreign, state: '' }
+
+        it 'is valid' do
+          expect(credit_card).to be_valid
         end
       end
     end
@@ -129,7 +139,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#charge', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card }
+    let(:credit_card) { create :cyber_source_credit_card, :saved }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
@@ -141,7 +151,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#refund', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card }
+    let(:credit_card) { create :cyber_source_credit_card, :saved }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
