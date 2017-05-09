@@ -55,15 +55,15 @@
   }
 
   30% {
-    transform: rotate3d(0, 0, 1, 30deg);
+    transform: rotate3d(0, 0, 1, 20deg);
   }
 
   40% {
-    transform: rotate3d(0, 0, 1, -25deg);
+    transform: rotate3d(0, 0, 1, -20deg);
   }
 
   50% {
-    transform: rotate3d(0, 0, 1, -20deg);
+    transform: rotate3d(0, 0, 1, -15deg);
   }
 
   60% {
@@ -97,15 +97,15 @@
   }
 
   30% {
-    transform: rotate3d(0, 0, 1, 30deg);
+    transform: rotate3d(0, 0, 1, 20deg);
   }
 
   40% {
-    transform: rotate3d(0, 0, 1, -25deg);
+    transform: rotate3d(0, 0, 1, -20deg);
   }
 
   50% {
-    transform: rotate3d(0, 0, 1, -20deg);
+    transform: rotate3d(0, 0, 1, -15deg);
   }
 
   60% {
@@ -132,10 +132,6 @@
 #hellobar-alert #hb-trigger .fa.animated {
   -webkit-transform-origin: top center;
   transform-origin: top center;
-  -webkit-animation-name: alarm-swing;
-  animation-name: alarm-swing;
-  -webkit-animation-duration: 1.2s;
-  animation-duration: 1.2s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+  -webkit-animation: alarm-swing 1.2s both;
+  animation: alarm-swing 1.2s both;
 }
