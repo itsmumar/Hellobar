@@ -62,7 +62,7 @@ describe CyberSourceCreditCard do
     end
 
     %w[number month year first_name last_name verification_value city state zip address1 country].each do |field|
-      context "without #{field}" do
+      context "without #{ field }" do
         let(:data) { create :payment_data, field => '' }
 
         it 'is invalid' do
@@ -81,7 +81,7 @@ describe CyberSourceCreditCard do
         {
           order_id: "#{ payment_method.id }-#{ Time.current.to_i }",
           email: "user#{ payment_method.user_id }@hellobar.com",
-          address: data.slice(*%w[city state zip address1 country]).symbolize_keys
+          address: data.slice('city', 'state', 'zip', 'address1', 'country').symbolize_keys
         }
       end
 
@@ -98,7 +98,7 @@ describe CyberSourceCreditCard do
         {
           order_id: "#{ payment_method.id }-#{ Time.current.to_i }",
           email: "user#{ payment_method.user_id }@hellobar.com",
-          address: data.slice(*%w[city state zip address1 country]).symbolize_keys
+          address: data.slice('city', 'state', 'zip', 'address1', 'country').symbolize_keys
         }
       end
 
