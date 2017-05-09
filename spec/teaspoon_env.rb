@@ -9,6 +9,12 @@ Teaspoon.configure do |config|
   config.asset_paths = ['spec/javascripts', 'spec/javascripts/stylesheets']
   config.fixture_paths = ['spec/javascripts/fixtures']
 
+  config.driver = :capybara_webkit
+
+  Capybara::Webkit.configure do |config|
+    config.block_unknown_urls
+  end
+
   # SUITES
   #
   # To run a specific suite
