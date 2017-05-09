@@ -211,16 +211,20 @@ describe SitesController do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
-    it 'returns a version of the site script for use in the editor live preview' do
+    it 'renders static script' do
       stub_current_user(user)
+
+      expect(StaticScriptAssets)
+        .to receive(:render_model).with(instance_of(StaticScriptModel)).and_return('__DATA__')
+      expect(StaticScriptAssets)
+        .to receive(:render).with('modules.js', site_id: site.id).and_return('__MODULES__')
+      expect(StaticScriptAssets)
+        .to receive(:render).with('static_script_template.js', site_id: site.id).and_return('$INJECT_MODULES; $INJECT_DATA')
 
       get :preview_script, id: site
 
       expect(response).to be_success
-
-      SiteElement.all_templates.each do |template|
-        expect(response.body).to include("configuration.addTemplate(\"#{ template }\"")
-      end
+      expect(response.body).to eql '__MODULES__; __DATA__'
     end
   end
 

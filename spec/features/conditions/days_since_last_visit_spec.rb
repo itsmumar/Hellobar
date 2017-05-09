@@ -11,7 +11,7 @@ feature 'Days since last visit condition', js: true do
 
   before(:each) do
     @element = create(:site_element)
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
 
     @test_doesnt_exist = proc do |day|
       visit site_path_to_url(@path)

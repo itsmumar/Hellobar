@@ -8,6 +8,7 @@ class Site < ActiveRecord::Base
 
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
+  has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :owners, -> { where(role: 'owner') }, through: :site_memberships
   has_many :users, through: :site_memberships
@@ -16,11 +17,18 @@ class Site < ActiveRecord::Base
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
 
-  has_many :bills, -> { order 'id' }, through: :subscriptions
+  has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
   acts_as_paranoid
+
+  scope :preload_for_script, lambda {
+    preload(
+      :site_elements, :active_site_elements,
+      rules: [:conditions, :active_site_elements, :site_elements, site: :bills]
+    )
+  }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -81,91 +89,11 @@ class Site < ActiveRecord::Base
     @needs_script_regeneration = true unless destroyed?
   end
 
-  # We are getting bad analytics data regarding installs and uninstalls
-  # When I analyzed the data the samples were 90-99% inaccurate. Looking
-  # at the code I can not see any obvious error. I'm adding this logging
-  # to collect more data so that hopefully I can find the source of the
-  # problem and then implement an appropriate fix.
-  def debug_install(type)
-    lines = ["[#{ Time.current }] #{ type } - Site[#{ id }] script_installed_at: #{ script_installed_at.inspect }, script_uninstalled_at: #{ script_uninstalled_at.inspect }, lifetime_totals: #{ @lifetime_totals.inspect }"]
-    caller[0..4].each do |line|
-      lines << "\t#{ line }"
-    end
-
-    File.open(Rails.root.join('log', 'debug_install.log'), 'a') do |file|
-      file.puts(lines.join("\n"))
-    end
-  end
-
-  # check and report whether script is installed, recording timestamp and tracking event if status has changed
   def script_installed?
-    if !script_installed_db? && (script_installed_api? || script_installed_on_homepage?)
-      store_script_installation!
-    elsif script_installed_db? && !(script_installed_api? || script_installed_on_homepage?)
-      store_script_uninstallation!
-    end
+    CheckStaticScriptInstallation.new(self).call
 
-    script_installed_db?
-  end
-
-  def store_script_installation!
-    debug_install('INSTALLED')
-    update(script_installed_at: Time.current)
-    Referrals::RedeemForRecipient.run(site: self)
-    Analytics.track(:site, id, 'Installed')
-    onboarding_track_script_installation!
-  end
-
-  def onboarding_track_script_installation!
-    owners.each do |user|
-      user.onboarding_status_setter.installed_script!
-    end
-  end
-
-  def store_script_uninstallation!
-    debug_install('UNINSTALLED')
-    update(script_uninstalled_at: Time.current)
-    Analytics.track(:site, id, 'Uninstalled')
-    onboarding_track_script_uninstallation!
-  end
-
-  def onboarding_track_script_uninstallation!
-    owners.each do |user|
-      user.onboarding_status_setter.uninstalled_script!
-    end
-  end
-
-  # is the site's script installed according to the db timestamps?
-  def script_installed_db?
-    script_installed_at.present? && (script_uninstalled_at.blank? || script_installed_at > script_uninstalled_at)
-  end
-
-  # has the script been installed according to the API?
-  def script_installed_api?(days = 10)
-    data = lifetime_totals(days: days)
-    return false if data.blank?
-
-    has_new_views = data.values.any? do |values|
-      days_with_views = values.select { |v| v[0] > 0 }.count
-
-      (days_with_views < days && days_with_views > 0) ||            # site element was installed in the last n days
-        (values.count >= days && values[-days][0] < values.last[0]) # site element received views in the last n days
-    end
-
-    has_new_views
-  end
-
-  def script_installed_on_homepage?
-    response = HTTParty.get(url, timeout: 5)
-    if response =~ /#{script_name}/
-      true
-    elsif had_wordpress_bars? && response =~ /hellobar.js/
-      true
-    else
-      false
-    end
-  rescue
-    return false
+    script_installed_at.present? &&
+      (script_uninstalled_at.blank? || script_installed_at > script_uninstalled_at)
   end
 
   def script_url
@@ -184,21 +112,23 @@ class Site < ActiveRecord::Base
   end
 
   def script_content(compress = true)
-    ScriptGenerator.new(self, compress: compress).generate_script
+    RenderStaticScript.new(self, compress: compress).call
   end
 
+  # basically it calls rake site:generate_static_assets
+  # @see lib/tasks/site.rake
   def generate_script(options = {})
-    if options[:immediately]
-      generate_static_assets(options)
-    else
-      delay :generate_static_assets, options
-    end
+    delay :generate_static_assets, options
   end
 
+  # basically it calls rake site:do_generate_script_and_check_installation
+  # @see lib/tasks/site.rake
   def generate_script_and_check_installation(options = {})
     delay :do_generate_script_and_check_installation, options
   end
 
+  # basically it calls rake site:do_check_installation
+  # @see lib/tasks/site.rake
   def check_installation(options = {})
     delay :do_check_installation, options
   end
@@ -386,10 +316,7 @@ class Site < ActiveRecord::Base
   end
 
   def update_content_upgrade_styles!(style_params)
-    site_settings = settings
-    site_settings['content_upgrade'] = style_params
-
-    update_attribute(:settings, site_settings.to_json)
+    update_attribute(:settings, settings.merge('content_upgrade' => style_params).to_json)
   end
 
   def content_upgrade_styles
@@ -405,44 +332,8 @@ class Site < ActiveRecord::Base
     CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
   end
 
-  def do_generate_script_and_check_installation(options = {})
-    generate_static_assets(options)
-    script_installed?
-  end
-
-  def do_check_installation(_options = {})
-    script_installed?
-  end
-
-  def generate_static_assets(options = {})
-    update_column(:script_attempted_to_generate_at, Time.current)
-
-    store_site_scripts_locally = Settings.store_site_scripts_locally
-    compress_script = !store_site_scripts_locally
-
-    generated_script_content = options[:script_content] || script_content(compress_script)
-
-    if store_site_scripts_locally
-      File.open(Rails.root.join('public', 'generated_scripts', script_name), 'w') { |f| f.puts(generated_script_content) }
-    else
-      Hello::AssetStorage.new.create_or_update_file_with_contents(script_name, generated_script_content)
-
-      site_elements.each do |site_element|
-        next unless site_element.wordpress_bar_id
-        users.each do |user|
-          if user.wordpress_user_id
-            name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-            Hello::AssetStorage.new.create_or_update_file_with_contents(name, generated_script_content)
-          end
-        end
-      end
-    end
-
-    update_column(:script_generated_at, Time.current)
-  end
-
   def generate_blank_static_assets
-    generate_static_assets(script_content: '')
+    GenerateAndStoreStaticScript.new(self, script_content: '').call
   end
 
   def standardize_url

@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.selfcheck
 
 describe('Module base.selfcheck', function () {

@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/tracking/tracking.external
 
 describe('Module tracking.external', function () {

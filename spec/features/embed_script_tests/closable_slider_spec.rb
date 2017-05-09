@@ -5,7 +5,7 @@ feature 'Site with a closable slider', :js do
   given(:path) { generate_file_and_return_path(site_element.site.id) }
 
   before do
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
   end
 
   scenario 'shows headline and allows the bar to be hidden and shown again' do

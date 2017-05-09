@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.templating
 
 describe('Module base.templating', function () {
