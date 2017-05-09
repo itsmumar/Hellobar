@@ -228,17 +228,13 @@ hellobar.defineModule('elements.class.alert',
 
     // ----- A few iframe-related functions ------------------------
 
-    const frameName = (() => {
-      return site.secret() + '-container-' + this.pageIndex;
-    })();
-
     function createIFrame() {
       const iframe = document.createElement('iframe');
 
       iframe.src = 'about:blank';
       iframe.id = site.secret() + '-container';
       iframe.className = 'HB-Alert';
-      iframe.name = this.frameName;
+      iframe.name = iframe.id;
 
       dom.hideElement(iframe);
 
