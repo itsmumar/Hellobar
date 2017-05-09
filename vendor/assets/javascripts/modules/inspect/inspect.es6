@@ -27,7 +27,7 @@ hellobar.defineModule('inspect',
     };
 
     const printRule = (info, rule, index) => {
-      let label = info.activeRules.find((activeRule) => activeRule == rule) ? 'ACTIVE' : 'INACTIVE'
+      let label = info.activeRules.filter((activeRule) => activeRule == rule).length > 0 ? 'ACTIVE' : 'INACTIVE'
 
       console.log(`[${label}] Rule ${index}, matchType: ${rule.matchType}`);
 
