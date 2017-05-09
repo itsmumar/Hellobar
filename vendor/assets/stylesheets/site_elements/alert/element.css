@@ -1,8 +1,5 @@
 /*-----------  Alert Element  -----------*/
 
-#hellobar-alert {
-}
-
 #hellobar-alert #hb-trigger {
   display: block;
   position: fixed;
