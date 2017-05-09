@@ -127,8 +127,12 @@ describe('Module elements.class.alert', function () {
     doWithElement(function (element, dependencies) {
       element.attach();
       setTimeout(function () {
+        spyOn(element._trigger, 'animate');
+        spyOn(element._audio, 'play');
         element.notify();
         expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalled();
+        expect(element._trigger.animate).toHaveBeenCalled();
+        expect(element._audio.play).toHaveBeenCalled();
         element.remove();
         done();
       }, 100);
