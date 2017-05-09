@@ -55,23 +55,23 @@ hellobar.defineModule('elements.class',
       }
 
       imageFor(location, options) {
-        var that = this;
+        var model = this.model();
         options = options || {};
         function imageSrc() {
-          return that.image_url ? that.image_url : options.defaultImgSrc;
+          return model.image_url ? model.image_url : options.defaultImgSrc;
         }
 
-        var locationIndex = location.indexOf(this.image_placement);
-        if (!options.defaultImgSrc && (!this.image_url || locationIndex === undefined || locationIndex === -1)) {
+        var locationIndex = location.indexOf(model.image_placement);
+        if (!options.defaultImgSrc && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
           return '';
         }
-        else if (this.image_placement == 'background') {
-          return '<div class="hb-image-wrapper ' + this.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
+        else if (model.image_placement == 'background') {
+          return '<div class="hb-image-wrapper ' + model.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
         } else {
           var imgClasses = [];
           (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
           (options.classes) && imgClasses.push(options.classes);
-          return '<div class="hb-image-wrapper ' + this.image_placement
+          return '<div class="hb-image-wrapper ' + model.image_placement
             + '"><div class="hb-image-holder hb-editable-block hb-editable-block-image"><img class="'
             + imgClasses.join(' ')
             + '" src="' + imageSrc() + '" /></div></div>';
