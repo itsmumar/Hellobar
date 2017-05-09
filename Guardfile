@@ -43,7 +43,7 @@ group :red_green_refactor, halt_on_fail: true do
       [
         "spec/models/#{ m[1].singularize }_spec.rb",
         "spec/controllers/#{ m[1] }_controller_spec.rb",
-        "spec/requests/#{ m[1] }_spec.rb"
+        "spec/requests/#{ m[1] }_controller_spec.rb"
       ]
     end
   end
