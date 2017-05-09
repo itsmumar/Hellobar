@@ -1,5 +1,5 @@
 json.ignore_nil!
-json.cache! model do
+json.cache_if! !model.preview_is_active, model do
   json.extract! model,
     :preview_is_active,
     :version,
