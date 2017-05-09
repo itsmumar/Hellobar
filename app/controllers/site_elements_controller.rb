@@ -171,6 +171,7 @@ class SiteElementsController < ApplicationController
       :sound,
       :notification_delay,
       :trigger_color,
+      :trigger_icon_color,
       { settings: settings_keys },
       blocks: blocks_keys
     )

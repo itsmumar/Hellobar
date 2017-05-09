@@ -182,7 +182,8 @@ FactoryGirl.define do
         'conversion_rate' => 0,
         'notification_delay' => 10,
         'sound' => 'none',
-        'trigger_color' => '31b5ff'
+        'trigger_color' => '31b5ff',
+        'trigger_icon_color' => 'ffffff'
       }
     end
   end

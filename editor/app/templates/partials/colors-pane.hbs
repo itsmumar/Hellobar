@@ -11,7 +11,9 @@
   {{#if elementTypeIsAlert}}
     <label>Alert Color</label>
     {{selection/color-select color=model.trigger_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
-  {{/if}}
 
+    <label>Alert Icon Color</label>
+    {{selection/color-select color=model.trigger_icon_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+  {{/if}}
   <br/>
 </div>
