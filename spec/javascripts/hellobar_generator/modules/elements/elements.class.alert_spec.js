@@ -54,7 +54,6 @@ describe('Module elements.class.alert', function () {
 
   beforeEach(function () {
     hellobar.finalize();
-
   });
 
   it('provides AlertElement class and is capable of creating instances', function (done) {
@@ -125,12 +124,16 @@ describe('Module elements.class.alert', function () {
     });
   });
 
-  it('does not notify in the preview mode', function (done) {
+  it('notifies in the preview mode', function (done) {
     doWithElement(function (element, dependencies) {
       element.attach();
       setTimeout(function () {
+        spyOn(element._trigger, 'animate');
+        spyOn(element._audio, 'play');
         element.notify();
-        expect(dependencies['elements.visibility'].setVisibilityControlCookie).not.toHaveBeenCalled();
+        expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalled();
+        expect(element._trigger.animate).toHaveBeenCalled();
+        expect(element._audio.play).toHaveBeenCalled();
         element.remove();
         done();
       }, 100);
