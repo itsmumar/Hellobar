@@ -26,7 +26,8 @@ describe('Module elements.class.alert', function () {
       },
       'elements.visibility': jasmine.createSpyObj('elements.visibility', ['setVisibilityControlCookie']),
       'elements.intents': jasmine.createSpyObj('elements.intents', ['applyViewCondition']),
-      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted', 'viewed'])
+      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted', 'viewed']),
+      'elements.class': function SiteElement(){}
     };
     dependencies['base.preview'].isActive.and.returnValue(previewIsActive);
     dependencies['base.format'].asBool.and.returnValue(true);
