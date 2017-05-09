@@ -84,7 +84,7 @@ describe PaymentForm do
       city: 'Chicago',
       state: 'IL',
       zip: '60647',
-      address1: '2423 W. North Ave',
+      address: '2423 W. North Ave',
       country: 'USA'
     )
   end
