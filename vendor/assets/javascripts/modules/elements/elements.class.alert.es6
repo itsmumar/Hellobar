@@ -94,6 +94,7 @@ hellobar.defineModule('elements.class.alert',
         dom.removeClass(iconDomElement, 'animated');
         setTimeout(() => {
           dom.addClass(iconDomElement, 'animated');
+          iconDomElement.addEventListener("animationend", () => dom.removeClass(iconDomElement, 'animated'), false);
         });
       }
 
@@ -318,6 +319,7 @@ hellobar.defineModule('elements.class.alert',
         this._model = model;
         this._isPopupVisible = false;
         this._isVisible = false;
+        this._isNotified = false;
         this._onCtaClicked = (evt) => {
           this._conversionHelper.converted();
           evt.preventDefault();
@@ -354,6 +356,7 @@ hellobar.defineModule('elements.class.alert',
           ctaElement && ctaElement.addEventListener('click', this._onCtaClicked);
         };
         const onTriggerClicked = () => {
+          this._isNotified = true;
           if (this._isPopupVisible) {
             this.hidePopup();
           } else {
@@ -473,10 +476,11 @@ hellobar.defineModule('elements.class.alert',
       }
 
       notify() {
-        if (preview.isActive()) {
-          // No notification for preview mode
+        if (this._isNotified) {
           return;
         }
+        this._isNotified = true;
+
         elementsVisibility.setVisibilityControlCookie('dismiss', this);
         this._audio.play();
         this._trigger.animate();
