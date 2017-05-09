@@ -9,11 +9,11 @@ class QueueWorker
       body = "#{ namespace.underscore.downcase }:#{ task_name }[#{ id }]".gsub(/^:/, '')
       if Rails.env.development? || Rails.env.test?
         begin
+          Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].reenable
+          Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].invoke(id)
+        rescue RuntimeError => e
           # Ensure private methods are called.
-          method(task_name).call
-        rescue NoMethodError => e
-          raise e unless e.message.include?("undefined method `#{ task_name }'")
-          raise "Not sure how to queue task '#{ body }' because there is no method #{ self.class }##{ task_name }: #{ $ERROR_INFO }"
+          method(task_name).call if e.message.include?("Don't know how to build task")
         end
       else
         QueueWorker.send_sqs_message(body, queue)

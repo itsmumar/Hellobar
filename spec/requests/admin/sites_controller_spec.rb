@@ -99,8 +99,8 @@ describe Admin::SitesController do
       context 'when regenerating script fails' do
         before do
           generator = double('ScriptGenerator')
-          allow(generator).to receive(:generate_script).and_raise(RuntimeError)
-          allow(ScriptGenerator).to receive(:new).with(site, compress: false).and_return(generator)
+          allow(generator).to receive(:call).and_raise(RuntimeError)
+          allow(RenderStaticScript).to receive(:new).with(site, compress: false).and_return(generator)
         end
 
         it 'returns error message' do

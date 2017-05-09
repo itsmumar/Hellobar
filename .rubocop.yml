@@ -152,8 +152,7 @@ Metrics/ClassLength:
   Exclude:
     - 'app/models/site.rb'
     - 'app/models/site_element.rb'
-    - 'lib/legacy_migrator.rb'
-    - 'lib/script_generator.rb'
+    - 'app/models/static_script_model.rb'
     - 'app/models/user.rb'
 
 Metrics/CyclomaticComplexity:

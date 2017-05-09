@@ -1,7 +1,7 @@
 describe Admin::UsersController do
   let!(:admin) { create(:admin) }
-  let!(:site) { create(:site, :with_user) }
-  let(:user) { site.owners.last }
+  let!(:site) { user.sites.last }
+  let(:user) { create :user, :with_site, :with_payment_method }
 
   describe 'GET admin_users_path' do
     before(:each) { stub_current_admin(admin) }
