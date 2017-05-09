@@ -13,7 +13,7 @@
   border-radius: 30px;
   text-align: center;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 2;
 }
 
 #hellobar-alert #hb-trigger .fa {
@@ -25,7 +25,7 @@
   position: relative;
   height: 100%;
   width: 100%;
-  z-index: 500;
+  z-index: 1;
 }
 
 #hellobar-alert #hellobar-slider {
