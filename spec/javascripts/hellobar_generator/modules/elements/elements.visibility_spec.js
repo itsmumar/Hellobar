@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/elements/elements.visibility
 
 describe('Module elements.visibility', function () {

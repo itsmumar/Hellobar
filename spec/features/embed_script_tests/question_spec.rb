@@ -14,7 +14,7 @@ feature 'Site with a question modal', :js do
       answer2caption: 'Incorrect Caption!',
       answer2link_text: 'Boo!')
 
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
     @path = generate_file_and_return_path(@element.site.id)
   end
 

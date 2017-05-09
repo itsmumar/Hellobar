@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/inspect
 
 describe('Module inspect', () => {

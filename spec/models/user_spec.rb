@@ -184,7 +184,7 @@ describe User do
     let(:site_member) { create(:site_membership) }
 
     before do
-      allow_any_instance_of(Site).to receive(:generate_static_assets)
+      allow_any_instance_of(GenerateAndStoreStaticScript).to receive(:call)
     end
 
     it 'destroying a user should destroy their sites' do

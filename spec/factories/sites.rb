@@ -62,4 +62,34 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :site_capabilities, class: OpenStruct do
+    skip_create
+
+    remove_branding? { [true, false].sample }
+    closable? { [true, false].sample }
+    custom_targeted_bars? { [true, false].sample }
+    at_site_element_limit? { [true, false].sample }
+    custom_thank_you_text? { [true, false].sample }
+    after_submit_redirect? { [true, false].sample }
+    custom_html? { [true, false].sample }
+    content_upgrades? { [true, false].sample }
+    autofills? { [true, false].sample }
+    geolocation_injection? { [true, false].sample }
+    external_tracking? { [true, false].sample }
+    alert_bars? { [true, false].sample }
+  end
+
+  sequence :content_upgrade_styles do
+    {
+      'offer_bg_color' => '#ffffb6',
+      'offer_text_color' => '#000000',
+      'offer_link_color' => '#1285dd',
+      'offer_border_color' => '#000000',
+      'offer_border_width' => '0px',
+      'offer_border_style' => 'solid',
+      'offer_border_radius' => '0px',
+      'modal_button_color' => '#1285dd'
+    }
+  end
 end

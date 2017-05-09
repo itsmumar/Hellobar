@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.deferred
 //= require modules/elements/elements.rules
 

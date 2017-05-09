@@ -1,15 +1,12 @@
 class Theme < ActiveHash::Base
   include ActiveModel::Serialization
 
-  CONTAINER_CSS_FILENAME = 'container'.freeze
-  ELEMENT_CSS_FILENAME   = 'element'.freeze
-
   def container_css_path
-    base_directory.join("#{ CONTAINER_CSS_FILENAME }.css").to_s
+    base_directory.join('container.css').to_s
   end
 
   def element_css_path
-    base_directory.join("#{ ELEMENT_CSS_FILENAME }.css").to_s
+    base_directory.join('element.css').to_s
   end
 
   def with_image?

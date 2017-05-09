@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/elements/elements.class.alert
 
 describe('Module elements.class.alert', function () {
