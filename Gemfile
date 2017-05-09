@@ -143,7 +143,6 @@ group :development, :test do
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
-  gem 'phantomjs'
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
