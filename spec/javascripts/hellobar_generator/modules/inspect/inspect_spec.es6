@@ -2,14 +2,20 @@
 //= require modules/inspect
 
 describe('Module inspect', () => {
-  let module, elementColumns, allElementModels, elementsOnPage, rules;
+  let module, elementColumns, allElementModels, elementsOnPage,
+    rules, activeRules, rulesWithElements, rulesWithoutElements;
 
   beforeEach(() => {
     hellobar.finalize();
     allElementModels = [{id: 1}, {id: 2}];
-    siteElement = {id: 1, notification_delay: 10};
+    rule = {id: 4, matchType: 'all', conditions: [], siteElements: []};
+    siteElement = {id: 1, notification_delay: 10, rule: rule};
+    rule.siteElements.push(siteElement);
     elementsOnPage = [siteElement];
-    rules = [{id: 3, matchType: 'all', conditions: [], siteElements: [siteElement]}];
+    rulesWithoutElements = [{id: 3, matchType: 'all', conditions: [], siteElements: []}];
+    rulesWithElements = [rule];
+    rules = rulesWithElements.concat(rulesWithoutElements);
+    activeRules = [rule];
     elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
       'notification_delay', 'closable', 'show_branding', 'background_color',
@@ -44,9 +50,11 @@ describe('Module inspect', () => {
         siteUrl: 'http://example.com',
         elements: allElementModels,
         elementsOnPage: elementsOnPage,
-        rules: rules
+        rules: rules,
+        activeRules: activeRules,
+        rulesWithElements: rulesWithElements,
+        rulesWithoutElements: rulesWithoutElements,
       };
-
       expect(module.all()).toEqual(expected);
     });
   });
