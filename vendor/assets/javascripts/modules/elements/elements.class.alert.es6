@@ -8,8 +8,8 @@ hellobar.defineModule('elements.class.alert',
 
     const geometry = {
       offset: 10,
-      triggerSize: 60,
-      maxPopupSize: 380
+      triggerWidth: 60,
+      maxPopupWidth: 380
     };
 
     /**
@@ -61,6 +61,7 @@ hellobar.defineModule('elements.class.alert',
       adjustSize() {
         const applyPlacement = () => {
           const offset = preview.isActive() ? (geometry.offset + 'px') : 0;
+
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
               left: offset,
@@ -69,6 +70,7 @@ hellobar.defineModule('elements.class.alert',
               right: 'auto'
             });
           };
+
           const applyBottomRightPlacement = () => {
             dom.setStyles(this._domNode, {
               left: 'auto',
@@ -77,6 +79,7 @@ hellobar.defineModule('elements.class.alert',
               right: offset
             });
           };
+
           (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
         };
         const applyBorder = () => {
@@ -115,26 +118,31 @@ hellobar.defineModule('elements.class.alert',
 
       adjustSize() {
         const applyPlacement = () => {
-          const horizontalOffset = geometry.offset + 'px';
-          const verticalOffset = (geometry.offset + geometry.triggerSize + geometry.offset) + 'px';
+          const horizontalOffset = (preview.isActive() ? geometry.offset : 0) + 3 + 'px';
+          const verticalOffset = (preview.isActive() ? 10 : 0) + (geometry.offset + geometry.triggerWidth + geometry.offset) + 'px';
+          const maxWidth = (geometry.maxPopupWidth - 6) + 'px'; // 6px for shadows
+
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
-              left: horizontalOffset,
               top: 'auto',
-              right: 'auto',
-              bottom: verticalOffset
+              left: horizontalOffset,
+              bottom: verticalOffset,
+              maxWidth: maxWidth
             });
           };
+
           const applyBottomRightPlacement = () => {
             dom.setStyles(this._domNode, {
-              left: 'auto',
-              top: 'auto',
               right: horizontalOffset,
-              bottom: verticalOffset
+              top: 'auto',
+              bottom: verticalOffset,
+              maxWidth: maxWidth
             });
           };
+
           (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
         };
+
         applyPlacement();
       }
 
@@ -173,7 +181,7 @@ hellobar.defineModule('elements.class.alert',
       adjustSize() {
         const applyPlacement = () => {
           const horizontalOffset = geometry.offset + 'px';
-          const verticalOffset = (geometry.offset + geometry.triggerSize + geometry.offset - 15) + 'px';
+          const verticalOffset = (geometry.offset + geometry.triggerWidth + geometry.offset - 15) + 'px';
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
               left: horizontalOffset,
@@ -283,18 +291,20 @@ hellobar.defineModule('elements.class.alert',
       const placement = alertElement._model.placement;
       const forVisible = () => {
         const offset = geometry.offset + 'px';
-        const maxPopupWidth = geometry.maxPopupSize + 'px';
+        const maxPopupWidth = geometry.maxPopupWidth;
         // Add border thickness to trigger size
-        const triggerWidth = (geometry.triggerSize + 2) + 'px';
+        const triggerWidth = (geometry.triggerWidth + 2);
+        const alertElementHeight = alertElement.contentDocument().querySelector('#hellobar-slider').clientHeight;
+
         dom.setStyles(iframe, {
           display: 'block',
           position: 'fixed',
           left: placement === 'bottom-right' ? 'auto' : offset,
           right: placement === 'bottom-right' ? offset : 'auto',
-          width: popupIsVisible ? maxPopupWidth : triggerWidth,
+          width: (popupIsVisible ? maxPopupWidth : triggerWidth) + 'px',
           top: 'auto',
           bottom: offset,
-          height: popupIsVisible ? window.innerHeight + 'px' : triggerWidth,
+          height: (popupIsVisible ? alertElementHeight + 124 : triggerWidth) + 'px',
           border: 'none'
         });
       };
