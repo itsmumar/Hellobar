@@ -94,7 +94,7 @@ hellobar.defineModule('elements.class.alert',
         dom.removeClass(iconDomElement, 'animated');
         setTimeout(() => {
           dom.addClass(iconDomElement, 'animated');
-          iconDomElement.addEventListener("animationend", () => dom.removeClass(iconDomElement, 'animated'), false);
+          iconDomElement && iconDomElement.addEventListener("animationend", () => dom.removeClass(iconDomElement, 'animated'), false);
         });
       }
 
