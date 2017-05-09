@@ -2,10 +2,9 @@ class SiteGenerator
   attr_reader :full_path, :site
 
   def initialize(site_id, opts = {})
-    @site = Site.find(site_id)
+    @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
     @compress = opts.fetch(:compress, false)
-    ScriptGenerator.compile
   end
 
   def generate_file
@@ -54,7 +53,7 @@ class SiteGenerator
           </p>
         </div>
 
-        <script>#{ @site.script_content(@compress) }</script>
+        <script>#{ script_content }</script>
 
         <p>Generated on #{ Time.current }</p>
       </body>
@@ -63,6 +62,10 @@ class SiteGenerator
   end
 
   private
+
+  def script_content
+    RenderStaticScript.new(@site, compress: @compress).call
+  end
 
   def generate_full_path(opts)
     directory = opts[:directory]

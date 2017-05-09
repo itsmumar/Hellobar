@@ -228,26 +228,6 @@ describe Site do
     end
   end
 
-  describe '#script_content' do
-    let!(:element) { create(:site_element, site: site) }
-
-    it 'generates the contents of the script for a site' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script = site.script_content(false)
-
-      expect(script).to include "configuration.siteId(#{ site.id }).siteUrl('#{ site.url }')"
-      expect(script).to include(element.id.to_s)
-    end
-
-    it 'generates the compressed contents of the script for a site' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script = site.script_content
-
-      expect(script).to include ".siteId(#{ site.id }).siteUrl(\"#{ site.url }\")"
-      expect(script).to include(element.id.to_s)
-    end
-  end
-
   describe 'url_uniqueness' do
     let(:membership) { create(:site_membership) }
 
@@ -270,205 +250,25 @@ describe Site do
       expect(site).to receive(:delay).with(:generate_static_assets, anything)
       site.generate_script
     end
-
-    it 'calls generate_static_assets if immediately option is specified' do
-      expect(site).to receive(:generate_static_assets)
-      site.generate_script(immediately: true)
-    end
   end
 
-  describe '#generate_static_assets' do
+  describe '#destroy' do
+    let(:mock_storage) { double('asset_storage') }
+
     before do
       allow(Settings).to receive(:store_site_scripts_locally).and_return false
-
-      @mock_storage = double('asset_storage')
-      allow(Hello::AssetStorage).to receive(:new).and_return(@mock_storage)
-    end
-
-    it 'generates and uploads the script content for a site', :freeze do
-      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      script_content = site.script_content(true)
-      script_name = site.script_name
-
-      mock_storage = double('asset_storage')
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(script_name, script_content)
       allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-
-      site.generate_script
-    end
-
-    it 'generates scripts for each wordpress bar' do
-      site_element = create(:site_element, wordpress_bar_id: 123)
-      user = create(:user, wordpress_user_id: 456)
-      site_element.site.users << user
-
-      allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('asdf')
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      site = site_element.site.reload
-
-      # First, generate for site, then for the site element
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with(anything, anything).ordered
-      expect(@mock_storage).to receive(:create_or_update_file_with_contents).with("#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js", anything).ordered
-      site.send(:generate_static_assets)
-    end
-
-    it 'does not compress a locally stored script' do
-      expect(Settings).to receive(:store_site_scripts_locally).and_return true
-
-      script_generator = ScriptGenerator.new(site)
-
-      allow(script_generator).to receive(:render).and_return('')
-      expect(ScriptGenerator).to receive(:new).and_return script_generator
-      expect(ScriptGenerator.uglifier).not_to receive(:compile)
-
-      site.generate_script
+      allow(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
     end
 
     it 'blanks-out the site script when destroyed' do
-      mock_storage = double('asset_storage')
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
-      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-
       site.destroy
+      expect(mock_storage).to have_received(:create_or_update_file_with_contents).with(site.script_name, '')
     end
 
-    it 'should soft-delete' do
-      allow(site).to receive(:generate_static_assets)
+    it 'soft-deletes record' do
       site.destroy
       expect(Site.only_deleted).to include(site)
-    end
-  end
-
-  describe '#script_installed?' do
-    context 'when installed' do
-      it 'updates the script_installed_at' do
-        allow(site).to receive(:script_installed_db?) { false }
-        allow(site).to receive(:script_installed_api?) { true }
-
-        expect {
-          site.script_installed?
-        }.to change(site, :script_installed_at)
-      end
-
-      it 'redeems referrals' do
-        allow(site).to receive(:script_installed_db?) { false }
-        allow(site).to receive(:script_installed_api?) { true }
-
-        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
-
-        site.script_installed?
-      end
-
-      it 'tracks the install event' do
-        allow(site).to receive(:script_installed_db?) { false }
-        allow(site).to receive(:script_installed_api?) { true }
-
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
-
-        site.script_installed?
-      end
-    end
-
-    context 'when uninstalled' do
-      it 'updates the script_uninstalled_at' do
-        allow(site).to receive(:script_installed_db?) { true }
-        allow(site).to receive(:script_installed_api?) { false }
-
-        expect {
-          site.script_installed?
-        }.to change(site, :script_uninstalled_at)
-      end
-
-      it 'tracks the uninstall event' do
-        allow(site).to receive(:script_installed_db?) { true }
-        allow(site).to receive(:script_installed_api?) { false }
-
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
-
-        site.script_installed?
-      end
-    end
-  end
-
-  describe '#script_installed_api?' do
-    it 'is true if there is only one day of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
-      expect(site.script_installed_api?).to be_truthy
-    end
-
-    it 'is true if there are multiple days of data' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return('1' => [[1, 0], [2, 0]])
-      expect(site.script_installed_api?).to be_truthy
-    end
-
-    it 'is false if the api returns nil' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
-      expect(site.script_installed_api?).to be_falsey
-    end
-
-    it 'is false if the api returns an empty hash' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect(site.script_installed_api?).to be_falsey
-    end
-
-    it 'is true if one element has views but others do not' do
-      expect(Hello::DataAPI)
-        .to receive(:lifetime_totals)
-        .and_return(
-          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-          '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
-        )
-
-      expect(site.script_installed_api?).to be_truthy
-    end
-
-    it 'is true if any of the elements have been installed in the last 7 days' do
-      expect(Hello::DataAPI)
-        .to receive(:lifetime_totals)
-        .and_return(
-          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-          '2' => [[1, 0], [1, 0]]
-        )
-
-      expect(site.script_installed_api?).to be_truthy
-    end
-
-    it 'is false if there have been no views in the last 10 days' do
-      expect(Hello::DataAPI)
-        .to receive(:lifetime_totals)
-        .and_return(
-          '1' => [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0], [1, 0]],
-          '2' => [[0, 0]]
-        )
-
-      expect(site.script_installed_api?).to be_falsey
-    end
-  end
-
-  describe '#script_installed_db?' do
-    before do
-      site.script_installed_at = nil
-      site.script_uninstalled_at = nil
-    end
-
-    it 'is true if installed_at is set' do
-      site.script_installed_at = 1.week.ago
-      expect(site.script_installed_db?).to be_truthy
-    end
-
-    it 'is true if installed_at is more recent than uninstalled_at' do
-      site.script_installed_at = 1.day.ago
-      site.script_uninstalled_at = 1.week.ago
-
-      expect(site.script_installed_db?).to be_truthy
-    end
-
-    it 'is false if uninstalled_at is more recent than installed_at' do
-      site.script_installed_at = 1.week.ago
-      site.script_uninstalled_at = 1.day.ago
-
-      expect(site.script_installed_db?).to be_falsey
     end
   end
 
@@ -618,29 +418,6 @@ describe Site do
     end
   end
 
-  describe '#script_installed_on_homepage?' do
-    it 'returns true when the script is installed at the url' do
-      site_element = create(:site_element)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='#{ site_element.site.script_url }'></html>")
-      expect(site.script_installed_on_homepage?).to be(true)
-    end
-
-    it 'returns true when the site had wordpress bars and has the old script' do
-      site_element = create(:site_element, wordpress_bar_id: 123)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='hellobar.js'></html>")
-      expect(site.script_installed_on_homepage?).to be(true)
-    end
-
-    it 'returns false when the site does not have the script' do
-      site_element = create(:site_element)
-      site = site_element.site
-      allow(HTTParty).to receive(:get).and_return("<html><script src='foobar.js'></html>")
-      expect(site.script_installed_on_homepage?).to be(false)
-    end
-  end
-
   describe 'after_touch' do
     context 'not destroyed' do
       it 'sets needs_script_regeneration? to true' do
@@ -658,6 +435,16 @@ describe Site do
         site.touch
         expect(site.needs_script_regeneration?).to be(false)
       end
+    end
+  end
+
+  describe '#update_content_upgrade_styles!' do
+    let(:site) { create :site }
+    let(:content_upgrade_styles) { generate :content_upgrade_styles }
+
+    it 'updates settings' do
+      expect { site.update_content_upgrade_styles! content_upgrade_styles }
+        .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
     end
   end
 end

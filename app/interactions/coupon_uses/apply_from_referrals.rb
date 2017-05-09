@@ -5,7 +5,7 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
     return if bill.is_a?(Bill::Refund)
     return unless bill.amount > 0
 
-    Referral.redeemable_for_site(bill.site).take_while do |referral|
+    Referral.redeemable_for_site(site).take_while do |referral|
       apply_referral_coupon
       use_up(referral)
 
@@ -15,8 +15,12 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
 
   private
 
+  def site
+    bill.site || bill.subscription.site
+  end
+
   def recipient
-    bill.site.owners.first
+    site.owners.first
   end
 
   def apply_referral_coupon

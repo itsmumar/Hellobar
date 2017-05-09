@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.cdn
 
 describe('Module base.cdn', function () {

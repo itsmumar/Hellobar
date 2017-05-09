@@ -23,7 +23,6 @@ describe 'site:rules:add_presets' do
   end
 
   it 'should not regenerate site scripts' do
-    expect_any_instance_of(Site).not_to receive(:generate_static_assets)
     expect_any_instance_of(Site).not_to receive(:delay).with(:generate_static_assets, anything)
     perform!
   end

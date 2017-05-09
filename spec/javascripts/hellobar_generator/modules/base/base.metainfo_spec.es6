@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.metainfo
 
 describe('Module base.metainfo', () => {

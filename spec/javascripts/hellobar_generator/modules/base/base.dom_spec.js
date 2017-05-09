@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.dom
 
 describe('Module base.dom', function () {

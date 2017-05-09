@@ -23,9 +23,9 @@ class Bill < ActiveRecord::Base
   belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
+  has_one :site, through: :subscription, inverse_of: :bills
 
   validates :subscription, presence: true
-  delegate :site, to: :subscription
   delegate :site_id, to: :subscription
 
   before_save :check_amount

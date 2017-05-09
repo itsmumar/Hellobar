@@ -1,6 +1,5 @@
-//= require modules/core
-
 describe('HelloBar Core', function () {
+  var hellobar = Hellobar();
 
   it('supports module definition', function () {
     hellobar.defineModule('useless', [], function () {
