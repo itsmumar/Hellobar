@@ -33,6 +33,14 @@
   position: absolute;
 }
 
+#hellobar-slider .slider-content {
+  padding: 18px 25px 20px;
+}
+
+#hellobar-slider .hb-headline-text {
+  font-size: 100%;
+}
+
 #hellobar-alert #hb-preview-mode-tooltip {
   display: block;
   position: absolute;
@@ -42,6 +50,32 @@
   background: white;
   border-radius: 8px;
   font-style: italic;
+}
+
+#hellobar-slider .hb-content-wrapper {
+  text-align: left;
+}
+
+#hellobar-slider .hb-headline-text {
+  font-size: 100%;
+}
+
+#hellobar-slider .hb-secondary-text {
+  font-size: 0.85em;
+}
+
+/*-----------  Call to Acton Button  -----------*/
+
+#hellobar-slider .hb-cta-style-button {
+  margin: 12px 0 0 0;
+  display: inline-block;
+  padding: 0;
+  font-size: 0.95em;
+}
+
+#hellobar-slider .hb-cta-style-button .hb-text-holder {
+  border-radius: inherit;
+  padding: 6px 20px;
 }
 
 /* ---- Alarm animation ---- */
