@@ -11,9 +11,7 @@ Teaspoon.configure do |config|
 
   config.driver = :capybara_webkit
 
-  Capybara::Webkit.configure do |config|
-    config.block_unknown_urls
-  end
+  Capybara::Webkit.configure(&:block_unknown_urls)
 
   # SUITES
   #
