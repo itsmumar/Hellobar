@@ -1,5 +1,3 @@
-require 'static_script_assets'
-
 class StaticScriptModel
   include ActiveModel::Conversion
 

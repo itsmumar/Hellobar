@@ -1,5 +1,3 @@
-require 'static_script_assets'
-
 FactoryGirl.define do
   factory :static_script_rule, class: Hash do
     skip_create

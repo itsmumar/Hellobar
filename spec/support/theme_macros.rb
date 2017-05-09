@@ -1,5 +1,3 @@
-require 'static_script_assets'
-
 module ThemeMacros
   def use_theme_fixtures
     StaticScriptAssets.env.append_path 'spec/fixtures/themes'
