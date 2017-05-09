@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
   applicationController: Ember.inject.controller('application'),
   applicationSettings: Ember.computed.alias('applicationController.applicationSettings.settings'),
 
-  // TODO
+  // TODO REFACTOR
   cannotContinue: ( function () {
     return this.set('applicationController.cannotContinue', Ember.isEmpty(this.get('model.element_subtype')));
   }).observes('model.element_subtype'),
@@ -16,9 +16,6 @@ export default Ember.Controller.extend({
   step: 1,
   prevStep: false,
   nextStep: 'style',
-  hasSideArrows: ( () => false).property(),
-
-
 
   applyRoute (routeName) {
     const routeByElementSubtype = (elementSubtype) => {

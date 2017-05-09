@@ -12,13 +12,13 @@ export default Ember.Mixin.create({
     this.shouldSkipPreviewUpdate = true;
   },
 
-  renderPreview: ( function () {
+  renderPreview: function () {
     if (this.shouldSkipPreviewUpdate) {
       this.shouldSkipPreviewUpdate = false;
     } else {
       return Ember.run.debounce(this, this.doRenderPreview, 500);
     }
-  }).observes(
+  }.observes(
     'model.answer1',
     'model.answer1caption',
     'model.answer1link_text',
@@ -86,9 +86,9 @@ export default Ember.Mixin.create({
 
   ).on('init'),
 
-  renderPreviewWithAnimations: ( function () {
+  renderPreviewWithAnimations: function () {
     return Ember.run.debounce(this, this.doRenderPreview, true, 500);
-  }).observes('model.animated').on('init'),
+  }.observes('model.animated').on('init'),
 
   doRenderPreview(withAnimations = false) {
     const getFont = () => {
@@ -128,6 +128,10 @@ export default Ember.Mixin.create({
       elements.removeAllSiteElements();
       elements.createAndAddToPage(previewElement);
     }
-  }
+  },
+
+  onHtmlChanged: function () {
+    this.renderPreview()
+  }.observes('model.settings.url')
 
 });

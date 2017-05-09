@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
@@ -9,11 +8,11 @@ export default Ember.Component.extend({
   canUseCallGoal: Ember.computed.not('elementTypeIsAlert'),
   canUseSocialGoal: Ember.computed.not('elementTypeIsAlert'),
 
-  goalListCssClasses: (function () {
+  goalListCssClasses: function () {
     let classes = ['step-link-wrapper'];
     !this.get('goalSelectionInProgress') && (classes.push('is-selected'));
     return classes.join(' ');
-  }).property('goalSelectionInProgress'),
+  }.property('goalSelectionInProgress'),
 
   actions: {
     closeDropdown() {

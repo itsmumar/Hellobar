@@ -58,7 +58,7 @@ Router.map(function () {
     }
   );
 
-  this.route('style', function () {
+  this.route('styles', function () {
       this.route('alert');
       this.route('bar');
       this.route('modal');

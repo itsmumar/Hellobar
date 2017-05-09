@@ -68,7 +68,7 @@ export default Ember.Controller.extend({
 
   actions: {
     closeInterstitial() {
-      return this.transitionToRoute("settings.emails");
+      return this.transitionToRoute("goals.email");
     }
   }
 });

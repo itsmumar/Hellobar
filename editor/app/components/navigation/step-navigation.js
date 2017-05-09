@@ -1,17 +1,16 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
   classNames: ['step-navigation'],
 
-  layoutName: ( () => 'components/navigation/step-navigation1').property(),
-
   //-----------  Routing  -----------#
 
-  routes: ['settings', 'style', 'design', 'targeting'],
+  routes: ['goals', 'styles', 'design', 'targeting'],
 
   routeLinks: (function () {
-    return $.map(this.get('routes'), (route, i) => {
+    return _.map(this.get('routes'), (route, i) => {
       return {route, past: (i + 1 < this.get('current'))};
     });
   }).property('current'),
