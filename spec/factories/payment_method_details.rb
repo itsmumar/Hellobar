@@ -28,7 +28,7 @@ FactoryGirl.define do
     year { Date.current.year + 1 }
     first_name 'John'
     last_name 'Doe'
-    address1 'Sunset Blv 205'
+    address 'Sunset Blv 205'
     city 'San Francisco'
     state 'CA'
     zip '94016'
@@ -44,7 +44,8 @@ FactoryGirl.define do
         'year' => year,
         'first_name' => first_name,
         'last_name' => last_name,
-        'address1' => address1,
+        'address' => address,
+        'address1' => address,
         'city' => city,
         'state' => state,
         'zip' => zip,

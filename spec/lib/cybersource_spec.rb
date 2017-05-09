@@ -61,7 +61,7 @@ describe CyberSourceCreditCard do
         .to receive(:store).and_return(double(success?: true, params: { 'subscriptionID' => '1' }))
     end
 
-    %w[number month year first_name last_name verification_value city state zip address1 country].each do |field|
+    %w[number month year first_name last_name verification_value city state zip address country].each do |field|
       context "without #{ field }" do
         let(:data) { create :payment_data, field => '' }
 

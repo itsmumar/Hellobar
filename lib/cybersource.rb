@@ -26,7 +26,7 @@ end
 
 class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w[number month year first_name last_name brand verification_value].freeze
-  ADDRESS_FIELDS = %w[city state zip address1 country].freeze
+  ADDRESS_FIELDS = %w[city state zip address country].freeze
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
@@ -76,6 +76,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       ADDRESS_FIELDS.each do |f|
         attributes[f.to_sym] = data[f] || data[f.to_sym]
       end
+      attributes[:address1] = attributes.delete(:address)
       @address = HB::CyberSource::BillingAddress.new(attributes)
     end
     @address
