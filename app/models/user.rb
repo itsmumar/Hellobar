@@ -42,6 +42,8 @@ class User < ActiveRecord::Base
            user_onboarding_statuses.sequence_delivered_last IS NULL")
   }
 
+  scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
+
   acts_as_paranoid
 
   validate :email_does_not_exist_in_wordpress, on: :create

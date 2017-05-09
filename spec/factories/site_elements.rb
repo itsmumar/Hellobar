@@ -37,6 +37,14 @@ FactoryGirl.define do
       type 'Alert'
     end
 
+    trait :content_upgrade do
+      type 'ContentUpgrade'
+    end
+
+    trait :custom do
+      type 'Custom'
+    end
+
     factory :modal_element do
       type 'Modal'
       placement nil
@@ -184,6 +192,29 @@ FactoryGirl.define do
         'sound' => 'none',
         'trigger_color' => '31b5ff'
       }
+    end
+  end
+
+  factory :site_element_external_events, class: Array do
+    skip_create
+
+    site_element
+    category 'Hello Bar'
+    label { "SiteElement-#{ site_element.id }" }
+    providers { %w[google_analytics legacy_google_analytics] }
+    types { %w[view email_conversion social_conversion traffic_conversion] }
+
+    initialize_with do
+      providers.product(types).flat_map do |provider, type|
+        {
+          site_element_id: site_element.id,
+          category: category,
+          label: label,
+          provider: provider,
+          type: type,
+          action: type == 'view' ? 'View' : 'Conversion'
+        }
+      end
     end
   end
 end

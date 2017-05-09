@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/elements/elements.collecting
 
 describe('Module elements.collecting', function () {

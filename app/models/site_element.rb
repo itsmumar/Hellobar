@@ -72,9 +72,8 @@ class SiteElement < ActiveRecord::Base
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
   scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
-  scope :matching_content, lambda { |*query|
-    matching(:content, *query)
-  }
+  scope :matching_content, ->(*query) { matching(:content, *query) }
+  scope :wordpress_bars, -> { where.not(wordpress_bar_id: nil) }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
