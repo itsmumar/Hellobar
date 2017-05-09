@@ -1,10 +1,10 @@
 hellobar.defineModule('elements.class.alert',
   ['hellobar', 'base.dom', 'base.cdn', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating',
     'base.preview', 'base.coloring',
-    'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion'],
+    'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion', 'elements.class'],
   function (hellobar, dom, cdn, cdnLibraries, site, format, templating,
             preview, coloring,
-            elementsInjection, elementsVisibility, elementsIntents, elementsConversion) {
+            elementsInjection, elementsVisibility, elementsIntents, elementsConversion, SiteElement) {
 
     const geometry = {
       offset: 10,
@@ -313,8 +313,9 @@ hellobar.defineModule('elements.class.alert',
      * JavaScript API for Alert site element type.
      * @module
      */
-    class AlertElement {
+    class AlertElement extends SiteElement {
       constructor(model) {
+        super();
         this._model = model;
         this._isPopupVisible = false;
         this._isVisible = false;
@@ -397,6 +398,7 @@ hellobar.defineModule('elements.class.alert',
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
             mainInitializationCycle();
+            preview.isActive() && this.showPopup();
           }, 1);
         });
       }
