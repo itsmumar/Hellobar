@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508123225) do
+ActiveRecord::Schema.define(version: 20170509150022) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -347,6 +347,7 @@ ActiveRecord::Schema.define(version: 20170508123225) do
     t.string   "sound",                               default: "none",        null: false
     t.integer  "notification_delay",                  default: 10,            null: false
     t.string   "trigger_color",                       default: "31b5ff",      null: false
+    t.string   "trigger_icon_color",                  default: "ffffff",      null: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

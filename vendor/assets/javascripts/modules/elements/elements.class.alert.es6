@@ -81,7 +81,7 @@ hellobar.defineModule('elements.class.alert',
         };
         const applyBorder = () => {
           const border = (this._model.trigger_color && (this._model.trigger_color.toLowerCase() === 'ffffff')) ?
-            `1px solid #${this._model.text_color}` :
+            `1px solid #${this._model.trigger_icon_color}` :
             'none';
           dom.setStyles(this._domNode, {border});
         };

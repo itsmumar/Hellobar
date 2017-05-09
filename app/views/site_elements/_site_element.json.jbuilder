@@ -59,7 +59,8 @@ json.cache! site_element do
     # alert bar
     :sound,
     :notification_delay,
-    :trigger_color
+    :trigger_color,
+    :trigger_icon_color
 
   json.font site_element.font.try(:value)
   json.theme site_element.theme.attributes
