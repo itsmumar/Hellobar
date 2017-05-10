@@ -16,11 +16,10 @@ class SiteElements::Update < Less::Interaction
   private
 
   def change_type!
-    existing_element = element
+    existing_element = @element
     new_element = element_with_new_type
 
-    existing_element.paused = true
-    existing_element.save!
+    existing_element.update! paused: true
 
     @element = new_element
   end
