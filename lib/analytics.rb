@@ -9,7 +9,7 @@ class Analytics
     end
 
     def alias(visitor_id, user_id)
-      track_internal :visitor, visitor_id, :user_id, value: user.id
+      track_internal :visitor, visitor_id, :user_id, value: user_id
       segment.alias(previous_id: visitor_id, user_id: user_id)
     end
 
