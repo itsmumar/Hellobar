@@ -51,7 +51,7 @@ class StaticScriptModel
   def hellobar_container_css
     css = [
       render_asset('container_common.css'),
-      element_classes.map { |klass| render_asset(klass.name.downcase, 'container.css') },
+      element_types.map { |type| render_asset(type.downcase, 'container.css') },
       element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
 
@@ -122,7 +122,7 @@ class StaticScriptModel
   def hellobar_element_css
     css = [
       render_asset('common.css'),
-      element_classes.map { |klass| render_asset(klass.name.downcase, 'element.css') },
+      element_types.map { |type| render_asset(type.downcase, 'element.css') },
       element_themes.map { |theme| render_asset(theme.element_css_path) }
     ]
 
@@ -168,8 +168,8 @@ class StaticScriptModel
     options[:preview].present?
   end
 
-  def element_classes
-    preview? ? SiteElement::TYPES : all_site_elements.map(&:class).uniq
+  def element_types
+    preview? ? SiteElement.types : all_site_elements.map(&:class).map(&:name).uniq
   end
 
   def element_themes

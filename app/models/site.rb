@@ -55,6 +55,8 @@ class Site < ActiveRecord::Base
 
   validate :url_is_unique?
 
+  store :settings, coder: JSON
+
   def self.protocol_ignored_url(url)
     host = normalize_url(url).normalized_host if url.include?('http')
     where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
@@ -308,15 +310,8 @@ class Site < ActiveRecord::Base
     url
   end
 
-  def settings
-    return {} if self[:settings].blank?
-    JSON.parse(self[:settings])
-  rescue JSON::ParserError
-    {}
-  end
-
   def update_content_upgrade_styles!(style_params)
-    update_attribute(:settings, settings.merge('content_upgrade' => style_params).to_json)
+    update_attribute(:settings, settings.merge('content_upgrade' => style_params))
   end
 
   def content_upgrade_styles

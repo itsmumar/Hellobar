@@ -137,7 +137,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   def delete_token
     edited_data = data
     edited_data['token'] = nil
-    update_columns data: edited_data.to_json
+    update_columns data: edited_data
   end
 
   def token

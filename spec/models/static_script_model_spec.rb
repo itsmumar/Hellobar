@@ -82,7 +82,7 @@ describe StaticScriptModel do
 
   describe '#hellobar_container_css' do
     before do
-      allow(model).to receive(:element_classes).and_return SiteElement::TYPES
+      allow(model).to receive(:element_types).and_return SiteElement.types
       allow(model).to receive(:element_themes).and_return Theme.sorted
     end
 
@@ -90,8 +90,8 @@ describe StaticScriptModel do
       expect(StaticScriptAssets)
         .to receive(:render).with('container_common.css', site_id: site.id).and_return('container_common.css')
 
-      SiteElement::TYPES.each do |klass|
-        type = klass.name.downcase
+      SiteElement.types.each do |type|
+        type = type.downcase
         expect(StaticScriptAssets)
           .to receive(:render).with(type, 'container.css', site_id: site.id).and_return("#{ type }/container.css")
       end
@@ -303,7 +303,7 @@ describe StaticScriptModel do
 
     context 'with active elements' do
       before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, *path, **_options| path.join('/') } }
-      before { allow(model).to receive(:element_classes).and_return [Bar] }
+      before { allow(model).to receive(:element_types).and_return ['Bar'] }
       before { allow(model).to receive(:element_themes).and_return [Theme.find('autodetect')] }
 
       it 'returns common.css, element.css for each bar type and element.css for each theme' do

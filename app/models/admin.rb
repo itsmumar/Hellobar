@@ -16,8 +16,6 @@ class Admin < ActiveRecord::Base
 
   after_create :generate_rotp_secret_base!
 
-  serialize :valid_access_tokens, Hash
-
   scope :locked, -> { where(locked: true) }
 
   class << self

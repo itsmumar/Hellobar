@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.16'
+gem 'rails', '~> 4.2'
 
 # AWS
 gem 'aws-sdk'
@@ -61,7 +61,7 @@ gem 'sprockets-es6'
 
 # ActiveRecord / Database
 gem 'kaminari'
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
 
 # File uploads
 gem 'paperclip'
@@ -137,6 +137,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'slackistrano'
+  gem 'web-console', '~> 2.0'
 end
 
 group :development, :test do
