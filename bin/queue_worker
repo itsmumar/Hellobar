@@ -118,11 +118,11 @@ class QueueWorker
             if task =~ /^(.+?)\[.+?\]/
               task_name = $1
             end
-            # We need to re-enable the Rake task so it can be called more than once
-            Rake::Task[task_name].reenable
 
             # Invoke the task
             begin
+              # We need to re-enable the Rake task so it can be called more than once
+              Rake::Task[task_name].reenable
               Rake.application.invoke_task(task)
               processed_at_least_one_job_successfully = true
             rescue RuntimeError => error
