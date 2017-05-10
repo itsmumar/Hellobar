@@ -18,7 +18,7 @@ describe('Module elements.visibility', function () {
 
   function createDependencies() {
     var dependencies = {
-      'base.storage': jasmine.createSpyObj('base.storage', ['getValue', 'setValue']),
+      'base.storage': jasmine.createSpyObj('base.storage', ['getValue', 'setValue', 'removeValue']),
       'base.environment': jasmine.createSpyObj('base.environment', ['isMobileDevice', 'isMobileWidth']),
       'elements.data': jasmine.createSpyObj('base.environment', ['getData'])
     };
@@ -52,11 +52,12 @@ describe('Module elements.visibility', function () {
 
   it('supports cookie expiring', function () {
     var siteElement = fakeSiteElement();
+
     module.setVisibilityControlCookie('success', siteElement);
     expect(dependencies['base.storage'].setValue).toHaveBeenCalled();
-    expect(dependencies['base.storage'].setValue.calls.count()).toEqual(1);
-    module.expireVisibilityControlCookie('success', siteElement.id);
-    expect(dependencies['base.storage'].setValue.calls.count()).toEqual(2);
+
+    module.removeVisibilityControlCookie('success', siteElement.id);
+    expect(dependencies['base.storage'].removeValue).toHaveBeenCalled();
   });
 
 });
