@@ -1,8 +1,5 @@
 CY_MAD_MIMI_EMBED_CODE = '<html><body><iframe><form>Here I am</form></iframe></body></html>'.freeze
 
-require 'rake'
-load 'lib/tasks/contact_list.rake'
-
 describe 'contact_list:sync_one' do
   include_context 'rake'
 
@@ -15,30 +12,33 @@ describe 'contact_list:sync_one' do
     end
   end
 
+  before { allow(ContactList).to receive(:find).with(contact_list.id).and_return(contact_list) }
+
   it 'calls sync_one!' do
-    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', 'Test Testerson')
+    expect(contact_list).to receive(:sync_one!).with('test.testerson@example.com', 'Test Testerson')
     perform!
   end
 
   it 'requires an email' do
-    expect_any_instance_of(ContactList).not_to receive(:sync_one!)
+    expect(contact_list).not_to receive(:sync_one!)
     user[:email] = nil
     expect { perform! }.to raise_error 'Cannot sync without email present'
   end
 
   it 'requires a contact_list_id' do
-    expect_any_instance_of(ContactList).not_to receive(:sync_one!)
+    allow(ContactList).to receive(:find).with(nil).and_call_original
+    expect(contact_list).not_to receive(:sync_one!)
     expect { perform!(nil) }.to raise_error ActiveRecord::RecordNotFound, "Couldn't find ContactList without an ID"
   end
 
   it 'does not require a name' do
-    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', nil)
+    expect(contact_list).to receive(:sync_one!).with('test.testerson@example.com', nil)
     user[:name] = nil
     perform!
   end
 
   it 'accepts custom fields' do
-    expect_any_instance_of(ContactList).to receive(:sync_one!).with('test.testerson@example.com', 'Name,phone,gender')
+    expect(contact_list).to receive(:sync_one!).with('test.testerson@example.com', 'Name,phone,gender')
     user[:name] = 'Name,phone,gender'
     perform!
   end
@@ -46,13 +46,15 @@ describe 'contact_list:sync_one' do
   private
 
   def perform!(contact_list_id = contact_list.id, email = user[:email], name = user[:name])
-    subject.invoke(contact_list_id, email, name)
+    task.invoke(contact_list_id, email, name)
     contact_list.reload
   end
 end
 
 describe 'contact_list:sync_all!' do
   include_context 'rake'
+
+  before { allow(ContactList).to receive(:find).with(contact_list.id).and_return(contact_list) }
 
   let(:embed_code) { CY_MAD_MIMI_EMBED_CODE }
   let(:contact_list) do
@@ -63,12 +65,12 @@ describe 'contact_list:sync_all!' do
   end
 
   it 'should call sync_all!' do
-    expect_any_instance_of(ContactList).to receive(:sync_all!)
+    expect(contact_list).to receive(:sync_all!)
     perform!
   end
 
   def perform!(contact_list_id = contact_list.id)
-    subject.invoke(contact_list_id)
+    task.invoke(contact_list_id)
     contact_list.reload
   end
 end
