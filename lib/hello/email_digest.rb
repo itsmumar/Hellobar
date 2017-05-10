@@ -23,12 +23,12 @@ module Hello::EmailDigest
     def mailer_for_site(site, user)
       return nil if site.site_elements.active.count == 0
 
-      return DigestMailer.weekly_digest(site, user) if site.script_installed?
+      return DigestMailer.weekly_digest(site, user).deliver_now if site.script_installed?
 
       has_element = site.site_elements.where('site_elements.created_at > ?', 10.days.ago).count > 0
       script_has_not_been_installed = site.script_installed_at.nil?
 
-      DigestMailer.not_installed(site, user) if has_element && script_has_not_been_installed
+      DigestMailer.not_installed(site, user).deliver_now if has_element && script_has_not_been_installed
     end
   end
 end
