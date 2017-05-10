@@ -109,6 +109,8 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
+gem 'analytics-ruby', require: 'segment/analytics'
+
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'

@@ -4,7 +4,21 @@ class Analytics
   LOG_FILE = Rails.root.join 'log', 'analytics.log'
 
   class << self
+    def segment
+      @segment ||= Segment::Analytics.new(write_key: Settings.segment_key)
+    end
+
+    def alias(visitor_id, user_id)
+      track_internal :visitor, visitor_id, :user_id, value: user.id
+      segment.alias(previous_id: visitor_id, user_id: user_id)
+    end
+
     def track(target_type, target_id, event_name, props = {})
+      track_internal target_type, target_id, event_name, props
+      track_segment target_type, target_id, event_name, props
+    end
+
+    def track_internal(target_type, target_id, event_name, props = {})
       props = {} unless props
       # Default :at to now
       props[:at] ||= Time.current
@@ -34,6 +48,15 @@ class Analytics
         tried_creating_missing_file = true
         retry
       end
+    end
+
+    def track_segment(target_type, target_id, event_name, props)
+      attributes = { event: event_name, properties: props }
+      attributes.merge(user_id: target_id) if target_type == :user
+      attributes.merge(anonymous_id: target_id) if target_type == :visitor
+      attributes.merge(site_id: target_id) if target_type == :site
+
+      segment.track attributes
     end
   end
 end

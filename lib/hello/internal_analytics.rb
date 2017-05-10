@@ -199,7 +199,7 @@ module Hello
         # See if a we have an unassociated visitor ID
         if user_id_from_cookie == USER_ID_NOT_SET_YET
           # Associate it with the visitor
-          Analytics.track(:visitor, visitor_id, :user_id, value: user.id)
+          Analytics.alias(visitor_id, user.id)
           # Mark it as associated
           cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH] + user.id.to_s
         end
