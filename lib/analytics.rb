@@ -5,7 +5,7 @@ class Analytics
 
   class << self
     def segment
-      @segment ||= Segment::Analytics.new(write_key: Settings.segment_key)
+      @segment ||= Segment::Analytics.new(write_key: Settings.segment_key, stub: Rails.env.test?)
     end
 
     def alias(visitor_id, user_id)
@@ -52,9 +52,9 @@ class Analytics
 
     def track_segment(target_type, target_id, event_name, props)
       attributes = { event: event_name, properties: props }
-      attributes.merge(user_id: target_id) if target_type == :user
-      attributes.merge(anonymous_id: target_id) if target_type == :visitor
-      attributes.merge(site_id: target_id) if target_type == :site
+      attributes.merge!(user_id: target_id) if target_type == :user
+      attributes.merge!(anonymous_id: target_id) if target_type == :visitor
+      attributes.merge!(site_id: target_id, anonymous_id: "anonymous site #{target_id}") if target_type == :site
 
       segment.track attributes
     end
