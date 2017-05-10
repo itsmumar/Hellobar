@@ -52,9 +52,12 @@ class Analytics
 
     def track_segment(target_type, target_id, event_name, props)
       attributes = { event: event_name, properties: props }
-      attributes.merge!(user_id: target_id) if target_type == :user
-      attributes.merge!(anonymous_id: target_id) if target_type == :visitor
-      attributes.merge!(site_id: target_id, anonymous_id: "anonymous site #{target_id}") if target_type == :site
+      attributes[:user_id] = target_id if target_type == :user
+      attributes[:anonymous_id] = target_id if target_type == :visitor
+
+      if target_type == :site
+        attributes = attributes.merge(site_id: target_id, anonymous_id: "anonymous site #{ target_id }")
+      end
 
       segment.track attributes
     end
