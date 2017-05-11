@@ -9,6 +9,10 @@ describe Analytics do
     allow(analytics.log_file).to receive(:open).with(File::WRONLY | File::APPEND).and_yield(file)
   end
 
+  after do
+    Analytics.instance_variable_set(:@segment, nil)
+  end
+
   describe '#alias' do
     let(:visitor_id) { 'visitor id' }
     let(:user_id) { 999 }
