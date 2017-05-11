@@ -15,8 +15,12 @@ FactoryGirl.define do
     end
 
     trait :cyber_source_credit_card do
-      after(:create) do |payment_method|
-        create(:cyber_source_credit_card, payment_method: payment_method)
+      transient do
+        token nil
+      end
+
+      after(:create) do |payment_method, evaluator|
+        create(:cyber_source_credit_card, payment_method: payment_method, token: evaluator.token)
       end
     end
   end

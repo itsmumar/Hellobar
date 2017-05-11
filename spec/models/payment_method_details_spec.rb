@@ -10,57 +10,15 @@ end
 describe CyberSourceCreditCard, :new_vcr do
   let(:year) { 2.years.from_now.year.to_s }
 
-  let(:valid_data) do
-    {
-      number: '4111111111111111',
-      month: '8',
-      year: year,
-      first_name: 'Tobias',
-      last_name: 'Luetke',
-      verification_value: '123',
-      city: 'Eugene',
-      state: 'OR',
-      zip: '97408',
-      address1: '123 Some St',
-      country: 'USA'
-    }
-  end
+  let(:valid_data) { create :payment_data }
 
   let(:invalid_data) { valid_data.merge(number: '123412341234') }
 
-  let(:foreign_data) do
-    {
-      number: '4242424242424242',
-      month: '8',
-      year: year,
-      first_name: 'Tobias',
-      last_name: 'Luetke',
-      verification_value: '123',
-      city: 'London',
-      zip: 'W10 6TH',
-      address1: '149 Freston Rd',
-      country: 'United Kingdom'
-    }
-  end
+  let(:foreign_data) { create :payment_data, :foreign }
 
   let(:payment_method) { create(:payment_method, :success) }
 
   describe '#save' do
-    context 'validation' do
-      it 'validates the data' do
-        cc = CyberSourceCreditCard.new(data: valid_data, payment_method: payment_method)
-        expect(cc.errors.messages).to eq({})
-        expect(cc).to be_valid
-
-        expect(CyberSourceCreditCard.new(payment_method: payment_method)).not_to be_valid
-        missing = valid_data.merge({})
-        missing.delete(:first_name)
-        expect(CyberSourceCreditCard.new(data: missing, payment_method: payment_method)).not_to be_valid
-        cc = CyberSourceCreditCard.new(data: invalid_data, payment_method: payment_method)
-        expect(cc).not_to be_valid
-      end
-    end
-
     it 'removes all non-standard fields from data' do
       cc = CyberSourceCreditCard.new(payment_method: payment_method)
 

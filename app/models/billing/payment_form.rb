@@ -50,7 +50,7 @@ class PaymentForm
       city: data[:city],
       state: data[:state],
       zip: data[:zip],
-      address1: data[:address],
+      address: data[:address],
       country: data[:country]
     }
   end

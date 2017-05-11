@@ -1,6 +1,6 @@
 describe CyberSourceCreditCard do
   let(:payment_method) { create :payment_method }
-  let(:data) { { 'token' => 'my_cool_token', number: '4242424242424242' } }
+  let(:data) { create :payment_data }
   let(:credit_card) { CyberSourceCreditCard.new data: data }
 
   describe '#token_present?' do
@@ -19,11 +19,10 @@ describe CyberSourceCreditCard do
   end
 
   describe '#delete_token' do
+    let!(:credit_card) { create :cyber_source_credit_card, token: 'token' }
+
     it 'deletes token when it is present' do
-      cscc = CyberSourceCreditCard.new data: { 'token' => 'my_cool_token' }
-      cscc.save(validate: false)
-      cscc.reload.delete_token
-      expect(cscc.reload.token).to be_nil
+      expect { credit_card.delete_token }.to change(credit_card, :token).to(nil)
     end
   end
 
@@ -54,38 +53,35 @@ describe CyberSourceCreditCard do
   end
 
   context 'validation', :freeze do
-    let(:data) { { 'token' => 'my_cool_token', number: '4242424242424242' } }
+    let(:data) { create :payment_data }
     let(:credit_card) { CyberSourceCreditCard.new payment_method: payment_method, data: data }
+
     before do
       allow(HB::CyberSource.gateway)
         .to receive(:store).and_return(double(success?: true, params: { 'subscriptionID' => '1' }))
     end
 
-    context 'without brand' do
-      let(:data) { { token: 'my_cool_token', state: 'CA', number: '' } }
+    %w[number month year first_name last_name verification_value city state zip address country].each do |field|
+      context "without #{ field }" do
+        let(:data) { create :payment_data, field => '' }
 
-      it 'is invalid' do
-        expect(credit_card).to be_invalid
-      end
+        it 'is invalid' do
+          expect(credit_card).to be_invalid
+        end
 
-      it 'does not raise exceptions' do
-        expect(credit_card.errors[:base]).to eql []
-      end
-    end
-
-    context 'without token' do
-      let(:data) { { brand: 'visa', state: 'CA' } }
-
-      it 'is invalid' do
-        expect(credit_card).to be_invalid
+        it 'does not raise exceptions' do
+          expect(credit_card.errors[:base]).to eql []
+        end
       end
     end
 
-    context 'without state' do
-      let(:data) { { token: 'my_cool_token', brand: 'visa' } }
+    context 'with foreign card' do
+      context 'without state' do
+        let(:data) { create :payment_data, :foreign, state: '' }
 
-      it 'is invalid' do
-        expect(credit_card).to be_invalid
+        it 'is valid' do
+          expect(credit_card).to be_valid
+        end
       end
     end
 
@@ -95,7 +91,7 @@ describe CyberSourceCreditCard do
         {
           order_id: "#{ payment_method.id }-#{ Time.current.to_i }",
           email: "user#{ payment_method.user_id }@hellobar.com",
-          address: { city: nil, state: nil, zip: nil, address1: nil, country: nil }
+          address: data.slice('city', 'state', 'zip', 'address1', 'country').symbolize_keys
         }
       end
 
@@ -108,12 +104,11 @@ describe CyberSourceCreditCard do
 
     context 'with previous token' do
       let(:response) { double(success?: true, params: { 'subscriptionID' => '1' }) }
-      # let(:credit_card) { CyberSourceCreditCard.new data: { 'token' => 'my_cool_token', number: '4242424242424242' } }
       let(:params) do
         {
           order_id: "#{ payment_method.id }-#{ Time.current.to_i }",
           email: "user#{ payment_method.user_id }@hellobar.com",
-          address: { city: nil, state: nil, zip: nil, address1: nil, country: nil }
+          address: data.slice('city', 'state', 'zip', 'address1', 'country').symbolize_keys
         }
       end
 
@@ -144,7 +139,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#charge', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card }
+    let(:credit_card) { create :cyber_source_credit_card, :saved }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
@@ -156,7 +151,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#refund', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card }
+    let(:credit_card) { create :cyber_source_credit_card, :saved }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
