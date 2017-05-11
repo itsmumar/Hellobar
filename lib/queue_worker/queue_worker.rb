@@ -1,3 +1,6 @@
+# load rake tasks for QueueWorker
+Rails.application.load_tasks if Rails.env.development? || Rails.env.test?
+
 class QueueWorker
   VIEW_ATTRIBUTES = %w[ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds].freeze
   LOG_FILE = Rails.root.join('log', 'queue_worker.log')

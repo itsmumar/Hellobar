@@ -695,7 +695,7 @@ DEPENDENCIES
   public_suffix
   quiet_assets
   rack-ssl-enforcer
-  rails (~> 4.2)
+  rails (= 4.2.8)
   rails-html-sanitizer
   rake (~> 10.3.2)
   rake_running!
