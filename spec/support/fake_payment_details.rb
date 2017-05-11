@@ -57,5 +57,6 @@ end
 
 class FakeCyberSourceCreditCard < CyberSourceCreditCard
   def save_to_cybersource
+    true
   end
 end

@@ -76,7 +76,7 @@ class @Modal
     return unless errors.length > 0
     $('.modal-wrapper').animate({ scrollTop: 0 })
     errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
-    @$modal.find('.modal-block .flash-block').prepend(errorText).addClass('alert show')
+    @$modal.find('.modal-block .flash-block').append(errorText).addClass('alert show')
 
   _clearErrors: ->
     @$modal.find('.modal-block .flash-block').html('<i class="icon-close"></i>').removeClass('alert show')
