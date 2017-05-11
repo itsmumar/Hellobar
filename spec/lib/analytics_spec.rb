@@ -5,7 +5,7 @@ describe Analytics do
 
   before do
     Analytics.instance_variable_set(:@segment, nil)
-    allow(Segment::Analytics).to receive(:new).with(write_key: 'key', stub: true).and_return(segment)
+    allow(Segment::Analytics).to receive(:new).with(write_key: Settings.segment_key, stub: true).and_return(segment)
     allow(analytics.log_file).to receive(:open).with(File::WRONLY | File::APPEND).and_yield(file)
   end
 
