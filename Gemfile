@@ -109,6 +109,7 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
+# Sending analytics data to Segment.com
 gem 'analytics-ruby', require: 'segment/analytics'
 
 # Be very careful with upgrading rake as version 11 changes the way passing

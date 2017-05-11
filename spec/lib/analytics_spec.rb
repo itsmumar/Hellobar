@@ -73,9 +73,17 @@ describe Analytics do
   def segment_attributes(target_type, target_id, event_name, props)
     case target_type
     when :user
-      { event: event_name, properties: props.merge(at: Time.current.to_s, id: target_id), user_id: target_id }
+      {
+        event: event_name,
+        properties: props.merge(at: Time.current.to_s, id: target_id),
+        user_id: target_id
+      }
     when :visitor
-      { event: event_name, properties: props.merge(at: Time.current.to_s, id: target_id), anonymous_id: target_id }
+      {
+        event: event_name,
+        properties: props.merge(at: Time.current.to_s, id: target_id),
+        anonymous_id: target_id
+      }
     when :site
       {
         event: event_name,
