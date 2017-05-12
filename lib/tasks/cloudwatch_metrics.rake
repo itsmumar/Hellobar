@@ -1,6 +1,8 @@
 namespace :cloudwatch_metrics do
   # Send the data to Cloudwatch
-  cloudwatch = Aws::CloudWatch::Client.new(logger: nil)
+  def cloudwatch
+    Aws::CloudWatch::Client.new(logger: nil)
+  end
 
   desc 'Reports memory and disk space stats to AWS CloudWatch'
   task :send do
