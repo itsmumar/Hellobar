@@ -71,13 +71,8 @@ class QueueWorker
     raise "Need a queue name: #{config.inspect}" unless @config[:queue]
 
     # Connect to SQS and make sure the queue exists
-    @sqs = AWS::SQS.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
-
-    @queue = @sqs.queues.named(config[:queue])
+    sqs = Aws::SQS::Resource.new(logger: nil)
+    @queue = sqs.get_queue_by_name(queue_name: config[:queue])
 
     raise "Queue does not exist: #{config.inspect}" unless @queue.exists?
   end
@@ -97,19 +92,16 @@ class QueueWorker
     processed_at_least_one_job_successfully = false
     begin
       # Get the messages
-      messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attributes: [:sent_at])
-      if messages == nil
-        messages = []
-      elsif !messages.is_a?(Array)
-        messages = [messages]
-      end
+      messages = @queue.receive_messages(max_number_of_messages: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attribute_names: ['SentTimestamp'])
       messages.each do |message|
         begin
           QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
           now = Time.current
-          puts message.sent_at
-          if @config[:skip_old] and now-message.sent_at > 24.hours
-            QueueWorker.log("Skipped message[#{message.id}]: #{message.body.inspect} (#{(now-message.sent_at).to_i/(60*60)} hours old)")
+          sent_at = Time.at(mes.attributes['SentTimestamp'].to_i / 1000)
+          puts sent_at
+
+          if @config[:skip_old] and now - sent_at > 24.hours
+            QueueWorker.log("Skipped message[#{message.message_id}]: #{message.body.inspect} (#{(now - sent_at).to_i/(60*60)} hours old)")
           else
             start_time = now.to_f
             task = message.body
