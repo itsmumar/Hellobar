@@ -1,0 +1,2 @@
+describe CheckScriptStatusJob do
+end

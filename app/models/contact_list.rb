@@ -57,12 +57,10 @@ class ContactList < ActiveRecord::Base
   def sync(options = {})
     return false unless syncable?
 
-    options.reverse_merge! immediate: false
-
     if options[:immediate]
-      sync_all!
+      SyncContactListJob.perform_now self
     else
-      delay :sync_all!
+      SyncContactListJob.perform_later self
     end
   end
 

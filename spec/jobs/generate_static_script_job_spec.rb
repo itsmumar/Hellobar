@@ -1,0 +1,2 @@
+describe GenerateStaticScriptJob do
+end

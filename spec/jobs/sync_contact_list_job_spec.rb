@@ -1,0 +1,2 @@
+describe SyncContactListJob do
+end

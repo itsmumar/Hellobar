@@ -43,5 +43,6 @@ module Hellobar
     end
 
     config.active_record.raise_in_transactional_callbacks = true
+    config.active_job.queue_adapter = :shoryuken
   end
 end

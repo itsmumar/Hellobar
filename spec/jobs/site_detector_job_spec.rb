@@ -1,0 +1,2 @@
+describe SiteDetectorJob do
+end

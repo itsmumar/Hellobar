@@ -8,64 +8,31 @@ namespace :site do
     desc 'Schedule a re-generation of ALL site scripts'
     task regenerate_all: :environment do
       Site.find_each do |site|
-        site.generate_script(queue_name: Settings.low_priority_queue)
+        GenerateStaticScriptJob.perform_later site
       end
     end
 
     desc 'Schedule a re-generation of all active site scripts'
     task regenerate_all_active: :environment do
       Site.script_installed_db.find_each do |site|
-        script_generated_at = site.script_generated_at
-
-        if script_generated_at.present? && script_generated_at > 3.hours.ago
-          site.check_installation(queue_name: Settings.low_priority_queue)
-        else
-          site.generate_script_and_check_installation(queue_name: Settings.low_priority_queue)
-        end
+        GenerateStaticScriptJob.perform_later site
       end
 
       # See if anyone who uninstalled has installed
-      Site.where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at AND (script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at)', Time.current - 30.days).each do |site|
-        site.check_installation(queue_name: Settings.low_priority_queue)
+      Site.script_was_installed_again.each do |site|
+        CheckScriptStatusJob.perform_later site
       end
     end
-  end
-
-  desc 'Generate static assets for :site_id immediately'
-  task :generate_static_assets, [:site_id] => :environment do |_t, args|
-    GenerateAndStoreStaticScript.for(site_id: args[:site_id])
-  end
-
-  desc 'Check installation immediately'
-  task :do_check_installation, [:site_id] => :environment do |_t, args|
-    CheckStaticScriptInstallation.for(site_id: args[:site_id])
-  end
-
-  desc 'Generate static assets for :site_id and check installation immediately'
-  task :do_generate_script_and_check_installation, [:site_id] => :environment do |_t, args|
-    site = Site.preload_for_script.find(args[:site_id])
-    puts site.id
-    GenerateAndStoreStaticScript.new(site).call
-    CheckStaticScriptInstallation.new(site).call
   end
 
   namespace :rules do
     desc 'Make sure all sites have all of the default rule presets'
     task add_presets: :environment do |_t, _args|
-      # disable script generation while adding rule presets to sites
-      # removing the method from site instances does not work, saving rules must be instantiating new Site objects
-      class Site
-        def do_not_generate_script(_options = {})
-          'skipping script generation'
-        end
-        alias original_generate_script generate_script
-        alias generate_script do_not_generate_script
-      end
-
       sites_without_mobile_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Mobile Visitors'")
                                       .where('rules.id IS NULL')
 
       sites_without_mobile_rule.find_each do |site|
+        site.skip_generate_script = true
         mobile_rule = site.rules.defaults[1]
         finder_params = { name: mobile_rule.name, editable: false }
         mobile_rule.save! unless site.rules.find_by(finder_params)
@@ -75,15 +42,10 @@ namespace :site do
                                         .where('rules.id IS NULL')
 
       sites_without_homepage_rule.find_each do |site|
+        site.skip_generate_script = true
         homepage_rule = site.rules.defaults[2]
         finder_params = { name: homepage_rule.name, editable: false }
         homepage_rule.save! unless site.rules.find_by(finder_params)
-      end
-
-      # Enable script generateion again
-      # Class objects are not reloaded between spec runs
-      class Site
-        alias generate_script original_generate_script
       end
     end
 

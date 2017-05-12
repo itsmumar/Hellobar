@@ -1,0 +1,7 @@
+concurrency: 25
+delay: 10
+queues:
+#  - [high_priority, 6]
+#  - [normal_priority, 2]
+#  - [low_priority, 1]
+  - [hellobar_test, 1]
