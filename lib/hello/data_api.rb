@@ -153,36 +153,6 @@ module Hello::DataAPI
       end
     end
 
-    # Returns groups of segments and their view/conversion data, grouped by opportunity
-    #
-    # suggested_opportunities(site, site.site_elements)
-    # => {
-    #      "high traffic, low conversion" =>  [["co:USA", 100, 10], ["dv:Mobile", 200, 20]],
-    #      "low traffic, high conversion" =>  [["co:USA", 100, 10], ["dv:Mobile", 200, 20]],
-    #      "high traffic, high conversion" => [["co:USA", 100, 10], ["dv:Mobile", 200, 20]]
-    #    }
-    #
-    def suggested_opportunities(site, site_elements, cache_options = {})
-      return fake_suggested_opportunities(site, site_elements) if Settings.fake_data_api
-
-      site_element_ids = site_elements.map(&:id).sort
-
-      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:suggested_opportunities"
-      cache_options[:expires_in] = 10.minutes
-
-      Rails.cache.fetch cache_key, cache_options do
-        Hello::SuggestedOpportunities.generate(site, site_elements)
-      end
-    end
-
-    def fake_suggested_opportunities(_site, _site_elements)
-      {
-        'high traffic, low conversion' =>  [['co:USA', 100, 1], ['dv:Mobile', 200, 2], ['rf:http://zombo.com', 130, 4]],
-        'low traffic, high conversion' =>  [['co:Russia', 10, 9], ['dv:Desktop', 22, 20], ['pu:http://zombo.com/signup', 5, 4]],
-        'high traffic, high conversion' => [['co:China', 100, 30], ['ad_so:Google AdWords', 200, 55], ['co:Canada', 430, 120]]
-      }
-    end
-
     # Return name, email and timestamp of subscribers for a contact list
     #
     # contacts(contact_list)
