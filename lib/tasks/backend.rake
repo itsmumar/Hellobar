@@ -1,17 +1,8 @@
 namespace :backend do
   desc 'Automatically adjusts DynamoDB tables as needed'
   task :adjust_dynamo_db_capacity, [:type] => :environment do |_t, args|
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
-
-    dynamo_db = AWS::DynamoDB::Client.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
+    cloudwatch = Aws::CloudWatch::Client.new(logger: nil)
+    dynamo_db = Aws::DynamoDB::Client.new(logger: nil)
 
     NUM_DAYS_TO_ANALYZE = 3
     TIME_PERIOD = 60
@@ -31,8 +22,8 @@ namespace :backend do
     MIN_WRITE_CAPACITY_CURRENT_MONTH = 5
     MIN_READ_CAPACITY_CURRENT_MONTH = 5
 
-    tables = Hash.new { |h, k| h[k] = Hash.new { |h2, k2| h2[k2] = 0 } }
-    table_names = dynamo_db.list_tables['TableNames']
+    tables = Hash.new(Hash.new(0))
+    table_names = dynamo_db.list_tables.table_names
 
     def fn(num)
       num = num.to_i
@@ -53,8 +44,8 @@ namespace :backend do
       output = []
       output << "\t#{ table_name }..."
       results = dynamo_db.describe_table(table_name: table_name)
-      tables[table_name][:provisioned_read] = results['Table']['ProvisionedThroughput']['ReadCapacityUnits']
-      tables[table_name][:provisioned_write] = results['Table']['ProvisionedThroughput']['WriteCapacityUnits']
+      tables[table_name][:provisioned_read] = results.table.provisioned_throughput.read_capacity_units
+      tables[table_name][:provisioned_write] = results.table.provisioned_throughput.write_capacity_units
 
       unless args[:type] == 'recent_throttled_only'
         {
@@ -74,7 +65,7 @@ namespace :backend do
               statistics: ['Sum'],
               unit: 'Count'
             )
-            tables[table_name][key] = [tables[table_name][key], results[:datapoints].collect { |d| d[:sum] / TIME_PERIOD }.max || 0].max.to_i
+            tables[table_name][key] = [tables[table_name][key], results.datapoints.collect { |d| d[:sum] / TIME_PERIOD }.max || 0].max.to_i
           end
         end
       end
@@ -102,7 +93,7 @@ namespace :backend do
           statistics: ['Sum'],
           unit: 'Count'
         )
-        tables[table_name][key] = [tables[table_name][key], results[:datapoints].collect { |d| d[:sum] / time_period }.max || 0].max.to_i
+        tables[table_name][key] = [tables[table_name][key], results.datapoints.collect { |d| d[:sum] / time_period }.max || 0].max.to_i
       end
       table = tables[table_name]
       next unless (args[:type] != 'throttled_only') || table[:recent_throttled_write].to_i > 50 || table[:recent_throttled_read].to_i > 50
