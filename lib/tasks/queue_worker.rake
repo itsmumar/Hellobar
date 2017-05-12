@@ -130,7 +130,7 @@ namespace :queue_worker do
 
     pp data
 
-    cloudwatch = Aws::CloudWatch::Client.new(logger: nil)
+    cloudwatch = Aws::CloudWatch::Client.new
     response = cloudwatch.put_metric_data(data)
     pp response
   end

@@ -34,6 +34,6 @@ class QueueWorker
   end
 
   def self.sqs
-    @sqs ||= Aws::SQS::Resource.new(logger: nil)
+    @sqs ||= Aws::SQS::Resource.new
   end
 end

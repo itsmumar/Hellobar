@@ -71,7 +71,7 @@ class QueueWorker
     raise "Need a queue name: #{config.inspect}" unless @config[:queue]
 
     # Connect to SQS and make sure the queue exists
-    sqs = Aws::SQS::Resource.new(logger: nil)
+    sqs = Aws::SQS::Resource.new
     @queue = sqs.get_queue_by_name(queue_name: config[:queue])
 
     raise "Queue does not exist: #{config.inspect}" unless @queue.exists?

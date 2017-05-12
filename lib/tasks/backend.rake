@@ -1,8 +1,8 @@
 namespace :backend do
   desc 'Automatically adjusts DynamoDB tables as needed'
   task :adjust_dynamo_db_capacity, [:type] => :environment do |_t, args|
-    cloudwatch = Aws::CloudWatch::Client.new(logger: nil)
-    dynamo_db = Aws::DynamoDB::Client.new(logger: nil)
+    cloudwatch = Aws::CloudWatch::Client.new
+    dynamo_db = Aws::DynamoDB::Client.new
 
     NUM_DAYS_TO_ANALYZE = 3
     TIME_PERIOD = 60
