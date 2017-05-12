@@ -130,14 +130,8 @@ namespace :queue_worker do
 
     pp data
 
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
-
+    cloudwatch = Aws::CloudWatch::Client.new(logger: nil)
     response = cloudwatch.put_metric_data(data)
-
     pp response
   end
 end
