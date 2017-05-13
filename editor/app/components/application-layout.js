@@ -6,6 +6,7 @@ export default Ember.Component.extend({
   classNameBindings: ['isMobile', 'isFullscreen', 'isCallType'],
 
   bus: Ember.inject.service(),
+  palette: Ember.inject.service(),
 
   didRender() {
     Ember.run.next(() => this.get('bus').trigger('hellobar.core.application.initialized'));
@@ -19,7 +20,7 @@ export default Ember.Component.extend({
 
     // TODO REFACTOR move this to service
     if (!isCanvas && !isColorSelect) {
-      this.set('applicationController.focusedColor', null);
+      this.set('palette.focusedColor', null);
     }
   }
 

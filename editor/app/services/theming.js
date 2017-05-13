@@ -29,6 +29,9 @@ export default Ember.Service.extend({
       }
     };
 
-  }
+  },
+
+  // TODO REFACTOR implement
+  currentThemeIsGeneric: true
 
 });

@@ -1,7 +1,7 @@
 <h5 class="step-title">Design &amp; Content</h5>
 
 {{#if isCustom}}
-These are some instructions about doing your custom templating.
+  These are some instructions about doing your custom templating.
 {{else}}
 
   {{#if shouldShowThankYouEditor}}
@@ -20,16 +20,16 @@ These are some instructions about doing your custom templating.
       {{/tabs.tablist}}
 
       {{#tabs.tabpanel "TabColors"}}
-        {{partial "partials/colors-pane"}}
+        {{design/colors-pane model=model siteColors=null recentColors=null focusedColor=null}}
       {{/tabs.tabpanel}}
 
       {{#if elementTypeIsNotAlert}}
         {{#tabs.tabpanel "TabImage"}}
-          {{partial "partials/image-pane"}}
+          {{design/image-pane}}
         {{/tabs.tabpanel}}
 
         {{#tabs.tabpanel "TabText"}}
-          {{partial "partials/text-pane"}}
+          {{design/text-pane model=model}}
         {{/tabs.tabpanel}}
       {{/if}}
     {{/ivy-tabs}}

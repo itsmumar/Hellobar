@@ -72,23 +72,23 @@ export default Ember.Component.extend({
   }.observes('rVal', 'gVal', 'bVal', 'hexVal'),
 
   setHex() {
-    let r = parseInt(this.get('rVal'));
-    let g = parseInt(this.get('gVal'));
-    let b = parseInt(this.get('bVal'));
+    const r = parseInt(this.get('rVal'));
+    const g = parseInt(this.get('gVal'));
+    const b = parseInt(this.get('bVal'));
 
-    let gradRGB = this.get('rgb');
-    let inputRGB = {r, g, b};
+    const gradRGB = this.get('rgb');
+    const inputRGB = {r, g, b};
 
     if (JSON.stringify(gradRGB) !== JSON.stringify(inputRGB)) {
-      let hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+      const hex = ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
       this.gradient.setHex(`#${hex}`);
     }
   },
 
   //-----------  Wrap Color Gradient  -----------#
 
-  setupGradient: ( function () {
-    let obj = this;
+  setupGradient: function () {
+    const obj = this;
 
     ColorPicker.fixIndicators(
       obj.$('.slider-indicator')[0],
@@ -113,7 +113,7 @@ export default Ember.Component.extend({
     );
 
     return this.gradient.setHex(`#${this.get('color')}`);
-  }).on('didInsertElement'),
+  }.on('didInsertElement'),
 
   //-----------  Push 'Recent' Changes to Controller  -----------#
 

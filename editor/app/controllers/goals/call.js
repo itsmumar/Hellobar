@@ -3,7 +3,6 @@ import _ from 'lodash/lodash';
 
 export default Ember.Controller.extend({
 
-  // TODO get rid of this global usage
   countries: Ember.inject.service(),
 
   applicationController: Ember.inject.controller('application'),
