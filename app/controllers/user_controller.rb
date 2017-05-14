@@ -27,7 +27,7 @@ class UserController < ApplicationController
     active_before_update = @user.active?
 
     if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
-      sign_in @user, bypass: true
+      bypass_sign_in @user
 
       update_timezones_on_sites(@user)
 

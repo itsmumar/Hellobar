@@ -173,12 +173,6 @@ describe ContactList do
     end
   end
 
-  it 'should handle invalid JSON correctly' do
-    contact_list.update_column :data, '{"url":"http://yoursite.com/goal",does_not_include":[",'
-
-    expect { contact_list.reload.data }.to raise_error(JSON::ParserError)
-  end
-
   describe 'email syncing errors' do
     before do
       allow(Hello::DataAPI).to receive(:contacts).and_return(%i[foo bar])

@@ -1,7 +1,4 @@
 class HbTestSite
-  DEFAULT_FILE = 'public/test_site.html'.freeze
-  SINATRA_FILE = 'lib/test_site.rb'.freeze
-
   def self.path(relative_path = '')
     Rails.root.join(relative_path)
   end
@@ -11,7 +8,7 @@ class HbTestSite
   end
 
   def self.default_path
-    path(DEFAULT_FILE)
+    path('public/test_site.html')
   end
 
   def self.generate(site_id, full_path)
@@ -26,7 +23,7 @@ class HbTestSite
   end
 
   def self.run_file
-    path(SINATRA_FILE)
+    path('lib/test_site.rb')
   end
 end
 

@@ -34,7 +34,7 @@ describe 'marketing:export_recent_logins_with_plan' do
       @output[plan_name] << content
     end
 
-    subject.invoke
+    task.invoke
 
     files.each do |plan, user|
       other_emails = (files.values - [user] + [@user_too_old]).collect(&:email)
@@ -73,7 +73,7 @@ describe 'marketing:export_recent_signups_with_script_install_data' do
       end
     end
 
-    subject.invoke
+    task.invoke
 
     expect(@output[:no_script]).not_to include(@user_with_installed_script.email, @user_too_old.email)
     expect(@output[:no_script]).to include(@user_without_installed_script.email)

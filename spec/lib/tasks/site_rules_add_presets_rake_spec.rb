@@ -30,7 +30,7 @@ describe 'site:rules:add_presets' do
   private
 
   def perform!
-    subject.invoke
+    task.invoke
     site_with_presets.reload
     site_without_presets.reload
   end

@@ -1,5 +1,5 @@
 namespace :queue_worker do
-  WORKER_PATTERN = /queue_worker\s*\[(.*?)\]/
+  worker_pattern = /queue_worker\s*\[(.*?)\]/
 
   desc 'Starts all the queue workers'
   task :start do
@@ -20,7 +20,7 @@ namespace :queue_worker do
 
   desc 'Stops all the queue workers'
   task :stop do
-    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ worker_pattern }
     puts "Stopping #{ processes.length } queue workers..."
     processes.each do |process|
       pid = process.split(/\s+/)[1].to_i
@@ -39,7 +39,7 @@ namespace :queue_worker do
   desc 'Restarts only workers that are not currently running'
   task :resurrect do
     root = Rails.root
-    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ worker_pattern }
     {
       Settings.main_queue => [2],
       Settings.low_priority_queue => [2, '--skip-old']
@@ -49,7 +49,7 @@ namespace :queue_worker do
       puts "Expecting #{ num_workers } workers for #{ queue.inspect }"
       num_workers_found = 0
       processes.each do |process|
-        if process =~ WORKER_PATTERN
+        if process =~ worker_pattern
           num_workers_found += 1 if Regexp.last_match(1) == queue.to_s
         end
       end

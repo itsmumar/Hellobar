@@ -1,3 +1,6 @@
+# load rake tasks for QueueWorker
+Rails.application.load_tasks if Rails.env.development? || Rails.env.test?
+
 class QueueWorker
   VIEW_ATTRIBUTES = %w[ApproximateNumberOfMessages ApproximateNumberOfMessagesDelayed DelaySeconds].freeze
   LOG_FILE = Rails.root.join('log', 'queue_worker.log')
@@ -6,17 +9,18 @@ class QueueWorker
     def delay(task_name, options = {})
       queue = options.delete(:queue_name)
       namespace = options.delete(:namespace) || self.class.name
-      body = "#{ namespace.underscore.downcase }:#{ task_name }[#{ id }]".gsub(/^:/, '')
-      if Rails.env.development? || Rails.env.test?
-        begin
-          Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].reenable
-          Rake::Task["#{ namespace.underscore.downcase }:#{ task_name }"].invoke(id)
-        rescue RuntimeError => e
-          # Ensure private methods are called.
-          method(task_name).call if e.message.include?("Don't know how to build task")
-        end
+      task = "#{ namespace.underscore.downcase }:#{ task_name }".gsub(/^:/, '')
+      body = "#{ task }[#{ id }]".gsub(/^:/, '')
+
+      return QueueWorker.send_sqs_message(body, queue) unless Rails.env.development? || Rails.env.test?
+
+      if Rake::Task.task_defined?(task)
+        Rake::Task[task].reenable
+        Rake::Task[task].invoke(id)
+      elsif respond_to?(task_name, true)
+        send(task_name)
       else
-        QueueWorker.send_sqs_message(body, queue)
+        raise "couldn't find task #{ task }"
       end
     end
   end

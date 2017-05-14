@@ -3,8 +3,6 @@ require 'fog/aws'
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].freeze
-
   DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
@@ -80,7 +78,7 @@ class SiteElement < ActiveRecord::Base
   delegate :url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
 
-  serialize :settings, Hash
+  store :settings, coder: Hash
   serialize :blocks, Array
 
   after_create :track_creation
@@ -110,6 +108,10 @@ class SiteElement < ActiveRecord::Base
     define_method attr_name do
       self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
+  end
+
+  def self.types
+    [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].map(&:name)
   end
 
   def caption=(c_value)
@@ -195,15 +197,15 @@ class SiteElement < ActiveRecord::Base
 
   def self.all_templates
     [].tap do |templates|
-      TYPES.each do |type|
+      types.each do |type|
         BAR_TYPES.keys.each do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            if types.include?(type.to_s)
-              templates << "#{ type.name.downcase }_#{ subtype }"
+            if types.include?(type)
+              templates << "#{ type.downcase }_#{ subtype }"
             end
           else
-            templates << "#{ type.name.downcase }_#{ subtype }"
+            templates << "#{ type.downcase }_#{ subtype }"
           end
         end
       end

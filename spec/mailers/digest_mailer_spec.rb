@@ -30,7 +30,8 @@ describe DigestMailer do
       end
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(data)
       allow(Hello::DataAPI).to receive(:lifetime_totals_by_type).and_return(total: Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1]]))
-      expect(mail.class).to eq(ActionMailer::Base::NullMail)
+      expect { mail.deliver_now }.not_to raise_error
+      expect(ActionMailer::Base.deliveries).to be_empty
     end
   end
 end

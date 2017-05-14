@@ -41,5 +41,7 @@ module Hellobar
     config.to_prepare do
       Devise::SessionsController.layout proc { |_| action_name == 'new' ? 'static' : 'application' }
     end
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
