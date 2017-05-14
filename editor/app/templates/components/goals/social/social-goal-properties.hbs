@@ -1,7 +1,7 @@
 <div class="substep social">
 
   <label>Would you like your visitors to...</label>
-  {{selection/social-select options=socialOptions selection=selectedSocialSubtype}}
+  {{goals/social/selection/social-select options=socialOptions selection=selectedSocialSubtype}}
 
   {{#if selectedSocialSubtype}}
     {{partial selectedSocialSubtype}}
