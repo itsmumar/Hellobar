@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
+// TODO REFACTOR remove this controller
 export default Ember.Controller.extend({
 
   //-----------  Step Settings  -----------#

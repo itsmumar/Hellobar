@@ -32,6 +32,7 @@ export default Ember.Service.extend({
   },
 
   // TODO REFACTOR implement
-  currentThemeIsGeneric: true
+  currentThemeIsGeneric: true,
+  currentThemeIsTemplate: false
 
 });
