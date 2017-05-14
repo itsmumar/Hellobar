@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
-export default Ember.Component.extends({
+export default Ember.Component.extend({
 
   /**
    * @property {object} Application model

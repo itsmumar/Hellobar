@@ -3,10 +3,16 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   goal: Ember.computed.alias('model.element_subtype'),
-  shouldShowEmailProperties: Ember.computed.equal('goal', 'email'),
+  /*shouldShowEmailProperties: Ember.computed.equal('goal', 'email'),
   shouldShowCallProperties: Ember.computed.equal('goal', 'call'),
   shouldShowTrafficProperties: Ember.computed.equal('goal', 'traffic'),
   shouldShowSocialProperties: Ember.computed.equal('goal', 'social'),
-  shouldShowAnnouncementProperties: Ember.computed.equal('goal', 'announcement')
+  shouldShowAnnouncementProperties: Ember.computed.equal('goal', 'announcement')*/
+
+  propertiesComponentName: function() {
+    const goal = this.get('goal');
+    console.log('+++ propsComponentName', `goals/${goal}/${goal}-goal-properties`);
+    return `goals/${goal}/${goal}-goal-properties`;
+  }.property('goal')
 
 });

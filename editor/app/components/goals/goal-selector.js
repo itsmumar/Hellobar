@@ -7,6 +7,8 @@ export default Ember.Component.extend({
    */
   model: null,
 
+  theming: Ember.inject.service(),
+
   init() {
     this.set('selectionInProgress', !this.get('goal'));
   },
@@ -36,6 +38,10 @@ export default Ember.Component.extend({
   shouldShowAnnouncement: function () {
     return this.get('goal') === 'announcement' || this.get('selectionInProgress');
   }.property('goal', 'selectionInProgress'),
+
+  shouldShowInitiateSelection: function () {
+    return !this.get('selectionInProgress') && this.get('theming.currentThemeIsGeneric');
+  }.property('selectionInProgress', 'theming.currentThemeIsGeneric'),
 
   actions: {
     select(goal) {

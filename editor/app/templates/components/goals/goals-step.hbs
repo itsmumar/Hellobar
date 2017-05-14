@@ -1,10 +1,6 @@
 {{goals/goal-selector model=model}}
 
-{{#if shouldShowEmailProperties}}
-  {{goals/email/email-goal-properties model=model}}
-{{/if}}
-
-{{#if shouldShowCallProperties}}
-  {{goals/call/call-goal-properties model=model}}
+{{#if goal}}
+  {{component propertiesComponentName model=model}}
 {{/if}}
 
