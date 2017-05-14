@@ -1,7 +1,7 @@
 {{#if allowImages}}
   {{#if themeWithImage}}
     <label class="default-image">
-      {{toggle-switch switch=model.use_default_image}}
+      {{common/checkboxes/toggle-switch switch=model.use_default_image}}
       Use default image
     </label>
   {{/if}}

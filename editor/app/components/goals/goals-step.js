@@ -11,7 +11,6 @@ export default Ember.Component.extend({
 
   propertiesComponentName: function() {
     const goal = this.get('goal');
-    console.log('+++ propsComponentName', `goals/${goal}/${goal}-goal-properties`);
     return `goals/${goal}/${goal}-goal-properties`;
   }.property('goal')
 

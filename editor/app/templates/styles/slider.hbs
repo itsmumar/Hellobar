@@ -1,17 +1,17 @@
 <div class="substep slider">
   <label class="toggle-showing-branding"
       title="Your slider will contain Hello Bar branding. By turning it off you will receive more clicks and conversions.">
-    {{toggle-switch switch=model.show_branding}}
+    {{common/checkboxes/toggle-switch switch=model.show_branding}}
     Hello Bar branding
   </label>
 
   <label class="toggle-animation">
-    {{toggle-switch switch=model.animated}}
+    {{common/checkboxes/toggle-switch switch=model.animated}}
     Animations
   </label>
 
   <label class="toggle-hiding">
-    {{toggle-switch switch=model.closable}}
+    {{common/checkboxes/toggle-switch switch=model.closable}}
     Allow to hide a slider
   </label>
 

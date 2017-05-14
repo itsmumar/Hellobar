@@ -27,9 +27,11 @@ export default Ember.Component.extend({
 
   socialSubtypeComponentName: function () {
     const subtype = this.get('selectedSocialSubtype');
-    if (subtype) {
+    if (subtype && subtype.indexOf('/') >= 0) {
       const shortSubtype = subtype.replace(/^(social\/)/, '');
-      return 'goals/social/subtypes/' + shortSubtype;
+      const componentShortName = shortSubtype.replace(/_/g, '-');
+      console.log('+++ social component name', 'goals/social/subtypes/' + componentShortName);
+      return 'goals/social/subtypes/' + componentShortName;
     } else {
       return null;
     }
