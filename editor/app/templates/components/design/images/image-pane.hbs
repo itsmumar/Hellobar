@@ -9,13 +9,13 @@
   {{#unless useThemeImage}}
     <label>Upload an image</label>
     <div class="image-upload">
-      {{image-uploading/image-upload
-      setImageProps="setImageProps"
-      hasUserChosenImage=hasUserChosenImage
-      existingURL=model.image_url
-      existingFileName=model.image_file_name
-      imageUploadCopy=imageUploadCopy
-      useThemeImage=useThemeImage
+      {{design/images/uploading/image-upload
+        setImageProps="setImageProps"
+        hasUserChosenImage=hasUserChosenImage
+        existingURL=model.image_url
+        existingFileName=model.image_file_name
+        imageUploadCopy=imageUploadCopy
+        useThemeImage=useThemeImage
       }}
     </div>
 
