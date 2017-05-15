@@ -1,6 +1,5 @@
 require 'uri'
 require 'billing_log'
-require 'site_detector'
 
 class Site < ActiveRecord::Base
   attr_accessor :skip_script_generation
@@ -121,9 +120,7 @@ class Site < ActiveRecord::Base
     RenderStaticScript.new(self, compress: compress).call
   end
 
-  # basically it calls rake site:generate_static_assets
-  # @see lib/tasks/site.rake
-  def generate_script(options = {})
+  def generate_script
     GenerateStaticScriptJob.perform_later self
   end
 

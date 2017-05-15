@@ -1,5 +1,4 @@
 class ContactList < ActiveRecord::Base
-  include QueueWorker::Delay
   include EmailSynchronizer
 
   EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze

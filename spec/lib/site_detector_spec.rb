@@ -1,37 +1,34 @@
 require 'spec_helper'
-require 'site_detector'
 
-describe SiteDetector do
-  it 'should detect a weebly install', :vcr do
-    s = SiteDetector.new('http://www.a-weebly-example-site.com/')
-    expect(s.site_type).to eq(:weebly)
+describe DetectSiteType do
+  def service(url)
+    described_class.new(url)
   end
 
-  it 'should detect a wordpress install', :vcr do
-    s = SiteDetector.new('http://www.wordpress-example-site.io/')
-    expect(s.site_type).to eq(:wordpress)
+  it 'detects a weebly install', :vcr do
+    expect(service('http://www.a-weebly-example-site.com/').call).to be :weebly
   end
 
-  it 'should detect a shopify install', :vcr do
-    s = SiteDetector.new('http://www.calmtheham.com/')
-    expect(s.site_type).to eq(:shopify)
+  it 'detects a wordpress install', :vcr do
+    expect(service('http://www.wordpress-example-site.io/').call).to be :wordpress
   end
 
-  it 'should detect a squarespace install', :vcr do
-    s = SiteDetector.new('http://blog.lyft.com/')
-    expect(s.site_type).to eq(:squarespace)
+  it 'detects a shopify install', :vcr do
+    expect(service('http://www.calmtheham.com/').call).to be :shopify
   end
 
-  it 'should detect a squarespace install', :vcr do
-    s = SiteDetector.new('http://skipjacksnauticalliving.blogspot.com/')
-    expect(s.site_type).to eq(:blogspot)
+  it 'detects a squarespace install', :vcr do
+    expect(service('http://blog.lyft.com/').call).to be :squarespace
   end
 
-  context "can't connect to their site" do
+  it 'detects a squarespace install', :vcr do
+    expect(service('http://skipjacksnauticalliving.blogspot.com/').call).to be :blogspot
+  end
+
+  context 'when cannot connect to their site' do
     it 'returns nil' do
       allow(HTTParty).to receive(:get).and_raise(SocketError)
-      s = SiteDetector.new('http://abc.123.com/')
-      expect(s.site_type).to be_nil
+      expect(service('http://abc.123.com/').call).to be_nil
     end
   end
 end

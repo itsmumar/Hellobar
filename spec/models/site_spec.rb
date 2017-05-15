@@ -461,6 +461,7 @@ describe Site do
 
     context 'when not skip_script_generation' do
       before { site.skip_script_generation = false }
+      before { site.touch }
 
       it 'generates script' do
         expect { commit }.to have_enqueued_job GenerateStaticScriptJob
