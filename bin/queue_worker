@@ -92,7 +92,7 @@ class QueueWorker
       messages = @queue.receive_messages(max_number_of_messages: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attribute_names: ['SentTimestamp'])
       messages.each do |message|
         begin
-          QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
+          QueueWorker.log("Received message[#{message.message_id}]: #{message.body.inspect}")
           now = Time.current
           sent_at = Time.at(mes.attributes['SentTimestamp'].to_i / 1000)
           puts sent_at
@@ -132,12 +132,12 @@ class QueueWorker
               end
             end
 
-            QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.current.to_f-start_time}s")
+            QueueWorker.log("Processed message[#{message.message_id}]: #{message.body.inspect} in #{Time.current.to_f-start_time}s")
           end
         rescue => e
           # Let's see if this is a MySQL connection issue
           if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
-            QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
+            QueueWorker.log("MySQL error processing message[#{message.message_id}]: #{message.body.inspect} (#{e.message})", "ERRO")
             # Let's try reconnecting for up to 60 seconds
             start_time = Time.current
             sleep_time = 1
