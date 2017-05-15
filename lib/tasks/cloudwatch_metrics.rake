@@ -1,4 +1,9 @@
 namespace :cloudwatch_metrics do
+  # Send the data to Cloudwatch
+  def cloudwatch
+    Aws::CloudWatch::Client.new
+  end
+
   desc 'Reports memory and disk space stats to AWS CloudWatch'
   task :send do
     instance_id = `ec2metadata --instance-id`
@@ -36,13 +41,6 @@ namespace :cloudwatch_metrics do
       metric[:unit] = 'Kilobytes'
     end
 
-    # Send the data to Cloudwatch
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
-
     cloudwatch.put_metric_data(namespace: "HB/#{ Rails.env }", metric_data: metrics)
   end
 
@@ -51,12 +49,6 @@ namespace :cloudwatch_metrics do
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!
     namespace = "HB/#{ Rails.env }"
-
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Settings.aws_access_key_id,
-      secret_access_key: Settings.aws_secret_access_key,
-      logger: nil
-    )
 
     ########################################
     #### DISK SPACE Alarm Creation
