@@ -1,5 +1,4 @@
-class SiteDetector
-  attr_reader :url
+class DetectSiteType
   # Spoof the user agent because many sites (like square space ones) send a
   # 403 forbidden when using the httparty default user agent
   USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36'.freeze
@@ -8,9 +7,8 @@ class SiteDetector
     @url = url
   end
 
-  def site_type
-    @response ||= HTTParty.get(url, timeout: 10, headers: { 'User-Agent' => USER_AGENT })
-    case @response
+  def call
+    case response
     when /static.squarespace.com/
       :squarespace
     when /cdn.shopify.com/
@@ -24,5 +22,13 @@ class SiteDetector
     end
   rescue
     nil # Couldn't connect to their site, so assume nil
+  end
+
+  private
+
+  attr_reader :url
+
+  def response
+    HTTParty.get(url, timeout: 10, headers: { 'User-Agent' => USER_AGENT })
   end
 end

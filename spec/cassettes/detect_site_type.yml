@@ -1,0 +1,588 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://www.calmtheham.com/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/43.0.2357.130 Safari/537.36
+  response:
+    status:
+      code: 301
+      message: Moved Permanently
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 15 May 2017 17:20:19 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Shopid:
+      - '1793637'
+      X-Shardid:
+      - '18'
+      Content-Language:
+      - en
+      Location:
+      - https://www.calmtheham.com/
+      X-Request-Id:
+      - 762a785e-a02b-472d-8c85-4f44739e1ae9
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Xss-Protection:
+      - 1; mode=block; report=/xss-report?source%5Baction%5D=index&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=762a785e-a02b-472d-8c85-4f44739e1ae9
+      P3p:
+      - CP="NOI DSP COR NID ADMa OPTa OUR NOR"
+      X-Dc:
+      - ash
+    body:
+      encoding: UTF-8
+      string: <html><body>You are being <a href="https://www.calmtheham.com/">redirected</a>.</body></html>
+    http_version: 
+  recorded_at: Mon, 15 May 2017 17:20:20 GMT
+- request:
+    method: get
+    uri: https://www.calmtheham.com/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/43.0.2357.130 Safari/537.36
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 15 May 2017 17:20:21 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Accept-Encoding
+      - Accept-Encoding
+      X-Shopid:
+      - '1793637'
+      X-Shardid:
+      - '18'
+      Content-Language:
+      - en
+      Etag:
+      - cacheable:23798b070878654a4fdb2fb5b8ac6214
+      X-Alternate-Cache-Key:
+      - cacheable:876d295c5f800ab05bb1c3c9739525e3
+      X-Cache:
+      - hit, server
+      Set-Cookie:
+      - _landing_page=%2F; Expires=Mon, 29-May-17 17:20:21 GMT; Path=/; HttpOnly
+      - _orig_referrer=; Expires=Mon, 29-May-17 17:20:21 GMT; Path=/; HttpOnly
+      - cart_sig=; path=/; expires=Mon, 29 May 2017 17:20:21 -0000; HttpOnly
+      - secure_customer_sig=; path=/; expires=Fri, 15 May 2037 17:20:21 -0000; secure;
+        HttpOnly
+      Content-Security-Policy:
+      - block-all-mixed-content; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=index&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=c09733d2-cfc9-4373-8252-0ca550f680d8
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Xss-Protection:
+      - 1; mode=block; report=/xss-report?source%5Baction%5D=index&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=c09733d2-cfc9-4373-8252-0ca550f680d8
+      P3p:
+      - CP="NOI DSP COR NID ADMa OPTa OUR NOR"
+      X-Dc:
+      - chi2,ash
+      X-Request-Id:
+      - c09733d2-cfc9-4373-8252-0ca550f680d8
+    body:
+      encoding: UTF-8
+      string: "<!DOCTYPE html>\n<!--[if lt IE 7 ]><html class=\"ie ie6\" lang=\"en\">
+        <![endif]-->\n<!--[if IE 7 ]><html class=\"ie ie7\" lang=\"en\"> <![endif]-->\n<!--[if
+        IE 8 ]><html class=\"ie ie8\" lang=\"en\"> <![endif]-->\n<!--[if IE 9 ]><html
+        class=\"ie ie9\" lang=\"en\"> <![endif]-->\n<!--[if (gte IE 10)|!(IE)]><!--><html
+        lang=\"en\"> <!--<![endif]-->\n  <head>\n    \n    <!-- Begin Inspectlet Embed
+        Code -->\n<script type=\"text/javascript\" id=\"inspectletjs\">\nwindow.__insp
+        = window.__insp || [];\n__insp.push(['wid', 1435721799]);\n(function() {\nfunction
+        __ldinsp(){var insp = document.createElement('script'); insp.type = 'text/javascript';
+        insp.async = true; insp.id = \"inspsync\"; insp.src = ('https:' == document.location.protocol
+        ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(insp, x); }\nif (window.attachEvent) window.attachEvent('onload',
+        __ldinsp);\nelse window.addEventListener('load', __ldinsp, false);\n})();\n</script>\n<!--
+        End Inspectlet Embed Code -->\n    <script type=\"text/javascript\">\n(function
+        e(){var e=document.createElement(\"script\");e.type=\"text/javascript\",e.async=true,e.src=\"//staticw2.yotpo.com/u5n6Sg12ABhGFQOTZ2VnptKUmtkseBXYiWUc96Zj/widget.js\";var
+        t=document.getElementsByTagName(\"script\")[0];t.parentNode.insertBefore(e,t)})();\n</script>\n
+        \           \n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"cleartype\"
+        content=\"on\">\n    <meta name=\"robots\" content=\"index,follow\">\n    \n
+        \          \n    <title>Calm The Ham | Contemporary Artwork | Watches | Cityscapes</title>\n
+        \   \n    \n      <meta name=\"description\" content=\"Urban inspired pop
+        art; stunning infographics, premium archival prints, stylish apparel and more.\"
+        />\n    \n\n    \n\n<meta name=\"author\" content=\"Calm The Ham\">\n<meta
+        property=\"og:url\" content=\"https://www.calmtheham.com/\">\n<meta property=\"og:site_name\"
+        content=\"Calm The Ham\">\n\n\n  <meta property=\"og:type\" content=\"website\">\n
+        \ <meta property=\"og:title\" content=\"Calm The Ham | Contemporary Artwork
+        | Watches | Cityscapes\">\n  \n  <meta property=\"og:image\" content=\"http://cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\">\n
+        \ <meta property=\"og:image:secure_url\" content=\"https://cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\">\n
+        \ \n\n\n  <meta property=\"og:description\" content=\"Urban inspired pop art;
+        stunning infographics, premium archival prints, stylish apparel and more.\">\n\n\n\n\n\n
+        \ <meta name=\"twitter:site\" content=\"@calmham\">\n\n\n\n    \n    \n\n
+        \   <!-- Mobile Specific Metas -->\n    <meta name=\"HandheldFriendly\" content=\"True\">\n
+        \   <meta name=\"MobileOptimized\" content=\"320\">\n    <meta name=\"viewport\"
+        content=\"width=device-width, initial-scale=1, maximum-scale=1\"> \n\n    <!--
+        Stylesheets -->\n    <link href=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/styles.scss.css?3445365807428516373\"
+        rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n    <link href=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/jquery.fancybox.css?3445365807428516373\"
+        rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n\n    <!-- Icons -->\n
+        \   <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/favicon.png?3445365807428516373\">\n
+        \   <link rel=\"canonical\" href=\"https://www.calmtheham.com/\" />\n\n    <!--
+        Typekit Fonts -->\n    <script src=\"//use.typekit.net/jzo6vmd.js\"></script>\n
+        \   <script>try{Typekit.load();}catch(e){}</script>    \n    \n    <!-- Custom
+        Fonts -->\n    <link href=\"//fonts.googleapis.com/css?family=.|Roboto:light,normal,bold|Unica
+        One:light,normal,bold|Montserrat:light,normal,bold|Arvo:light,normal,bold\"
+        rel=\"stylesheet\" type=\"text/css\" />\n    \n    \n\n    <!-- jQuery and
+        jQuery fallback -->\n    <script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js\"></script>\n
+        \   <script>window.jQuery || document.write(\"<script src='//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/jquery.min.js?3445365807428516373'>\\x3C/script>\")</script>\n
+        \   <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/app.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n    <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/cloudzoom.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n    <script src=\"//cdn.shopify.com/s/assets/themes_support/option_selection-f3dd7ba25bddfb6b0fe9addc0cae11dc709eeb6a469ec7f66f49e3abc4ce8c81.js\"
+        type=\"text/javascript\"></script>        \n\n\n    \n    \n    \n    <!--[if
+        lte IE 8]>\n      <link href=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/ie.css?3445365807428516373\"
+        rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n      <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/skrollr.ie.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n    <![endif]-->\n    \n    <!-- FancyBox
+        -->\n    <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/jquery.fancybox.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n\n    <script type=\"text/javascript\">\n//<![CDATA[\n
+        \     var Shopify = Shopify || {};\n      Shopify.shop = \"calm-the-ham-2.myshopify.com\";\n
+        \     Shopify.theme = {\"name\":\"Arif parallax\",\"id\":16213121,\"theme_store_id\":null,\"role\":\"main\"};\n
+        \     Shopify.theme.handle = \"null\";\n      Shopify.theme.style = {\"id\":null,\"handle\":null};\n\n//]]>\n</script><script
+        type=\"text/javascript\">\n//<![CDATA[\n    (function() {\n      function
+        asyncLoad() {\n        var urls = [\"\\/\\/productreviews.shopifycdn.com\\/assets\\/v4\\/spr.js?shop=calm-the-ham-2.myshopify.com\",\"\\/\\/d1w86dhf197kq6.cloudfront.net\\/powr.js?powr-token=calm-the-ham-2.myshopify.com\\u0026external-type=shopify\\u0026shop=calm-the-ham-2.myshopify.com\",\"https:\\/\\/cdn.refersion.com\\/pixel.js?shop=calm-the-ham-2.myshopify.com\\u0026client_id=2590\\u0026pk=pub_03d17a3ab6f7873d4cea\\u0026shop=calm-the-ham-2.myshopify.com\",\"https:\\/\\/soundest.net\\/inShop\\/Embed\\/shopify.js?shop=calm-the-ham-2.myshopify.com\",\"https:\\/\\/hurrifyme.com\\/shopify\\/app\\/counter\\/counter_app.js?shop=calm-the-ham-2.myshopify.com\"];\n
+        \       for (var i = 0; i < urls.length; i++) {\n          var s = document.createElement('script');\n
+        \         s.type = 'text/javascript';\n          s.async = true;\n          s.src
+        = urls[i];\n          var x = document.getElementsByTagName('script')[0];\n
+        \         x.parentNode.insertBefore(s, x);\n        }\n      };\n      if(window.attachEvent)
+        {\n        window.attachEvent('onload', asyncLoad);\n      } else {\n        window.addEventListener('load',
+        asyncLoad, false);\n      }\n    })();\n\n//]]>\n</script><script id=\"__st\">\n//<![CDATA[\nvar
+        __st={\"a\":1793637,\"offset\":-14400,\"reqid\":\"9f848b57-a9f3-4b3e-a8c4-700cabd6d5d4\",\"pageurl\":\"www.calmtheham.com\\/\",\"u\":\"1d443ee0eff6\",\"p\":\"home\"};\n//]]>\n</script><script
+        src=\"https://cdn.shopify.com/s/javascripts/shopify_stats.js?v=6\" type=\"text/javascript\"
+        async=\"async\"></script>\n<meta id=\"shopify-digital-wallet\" name=\"shopify-digital-wallet\"
+        content=\"/1793637/digital_wallets/dialog\" />\n<script src=\"//cdn.shopify.com/s/assets/themes_support/ga_urchin_forms-668547562549a84f5dfa01ef82607987f85ecbe1c8301faf25059becfa208199.js\"
+        defer=\"defer\"></script>\n      <script type=\"text/javascript\">\n        \n
+        \     window.ShopifyAnalytics = window.ShopifyAnalytics || {};\n      window.ShopifyAnalytics.meta
+        = window.ShopifyAnalytics.meta || {};\n      window.ShopifyAnalytics.meta.currency
+        = 'USD';\n      var meta = {\"page\":{\"pageType\":\"home\"}};\n      for
+        (var attr in meta) {\n        window.ShopifyAnalytics.meta[attr] = meta[attr];\n
+        \     }\n    \n      </script>\n\n      <script type=\"text/javascript\">\n
+        \       window.ShopifyAnalytics.merchantGoogleAnalytics = function() {\n          \n
+        \       };\n      </script>\n\n      <script type=\"text/javascript\" class=\"analytics\">\n
+        \       (window.gaDevIds=window.gaDevIds||[]).push('BwiEti');\n        \n\n
+        \       (function () {\n          var customDocumentWrite = function(content)
+        {\n            var jquery = null;\n\n            if (window.jQuery) {\n              jquery
+        = window.jQuery;\n            } else if (window.Checkout && window.Checkout.$)
+        {\n              jquery = window.Checkout.$;\n            }\n\n            if
+        (jquery) {\n              jquery('body').append(content);\n            }\n
+        \         };\n\n          var trekkie = window.ShopifyAnalytics.lib = window.trekkie
+        = window.trekkie || [];\n          if (trekkie.integrations) {\n            return;\n
+        \         }\n          trekkie.methods = [\n            'identify',\n            'page',\n
+        \           'ready',\n            'track',\n            'trackForm',\n            'trackLink'\n
+        \         ];\n          trekkie.factory = function(method) {\n            return
+        function() {\n              var args = Array.prototype.slice.call(arguments);\n
+        \             args.unshift(method);\n              trekkie.push(args);\n              return
+        trekkie;\n            };\n          };\n          for (var i = 0; i < trekkie.methods.length;
+        i++) {\n            var key = trekkie.methods[i];\n            trekkie[key]
+        = trekkie.factory(key);\n          }\n          trekkie.load = function(config)
+        {\n            trekkie.config = config;\n            var script = document.createElement('script');\n
+        \           script.type = 'text/javascript';\n            script.onerror =
+        function(e) {\n              (new Image()).src = '//v.shopify.com/internal_errors/track?error=trekkie_load';\n
+        \           };\n            script.async = true;\n            script.src =
+        'https://cdn.shopify.com/s/javascripts/tricorder/trekkie.storefront.min.js?v=2017.03.29.1';\n
+        \           var first = document.getElementsByTagName('script')[0];\n            first.parentNode.insertBefore(script,
+        first);\n          };\n          trekkie.load(\n            {\"Trekkie\":{\"appName\":\"storefront\",\"development\":false,\"defaultAttributes\":{\"shopId\":1793637,\"isMerchantRequest\":null,\"themeId\":16213121,\"themeCityHash\":8682546441808091057}},\"Performance\":{\"navigationTimingApiMeasurementsEnabled\":true,\"navigationTimingApiMeasurementsSampleRate\":0.1},\"Google
+        Analytics\":{\"trackingId\":\"UA-33595068-1\",\"domain\":\"auto\",\"siteSpeedSampleRate\":\"10\",\"enhancedEcommerce\":true,\"doubleClick\":true,\"includeSearch\":true},\"Facebook
+        Pixel\":{\"pixelIds\":[\"1096783753710212\"],\"agent\":\"plshopify1.2\"},\"Pinterest
+        Pixel\":{\"pixelId\":\"2618269348770\"},\"Session Attribution\":{}}\n          );\n\n
+        \         var loaded = false;\n          trekkie.ready(function() {\n            if
+        (loaded) return;\n            loaded = true;\n\n            window.ShopifyAnalytics.lib
+        = window.trekkie;\n            \n      ga('require', 'linker');\n      function
+        addListener(element, type, callback) {\n        if (element.addEventListener)
+        {\n          element.addEventListener(type, callback);\n        }\n        else
+        if (element.attachEvent) {\n          element.attachEvent('on' + type, callback);\n
+        \       }\n      }\n      function decorate(event) {\n        event = event
+        || window.event;\n        var target = event.target || event.srcElement;\n
+        \       if (target && (target.getAttribute('action') || target.getAttribute('href')))
+        {\n          ga(function (tracker) {\n            var linkerParam = tracker.get('linkerParam');\n
+        \           document.cookie = '_shopify_ga=' + linkerParam + '; ' + 'path=/';\n
+        \         });\n        }\n      }\n      addListener(window, 'load', function(){\n
+        \       for (var i=0; i < document.forms.length; i++) {\n          var action
+        = document.forms[i].getAttribute('action');\n          if(action && action.indexOf('/cart')
+        >= 0) {\n            addListener(document.forms[i], 'submit', decorate);\n
+        \         }\n        }\n        for (var i=0; i < document.links.length; i++)
+        {\n          var href = document.links[i].getAttribute('href');\n          if(href
+        && href.indexOf('/checkout') >= 0) {\n            addListener(document.links[i],
+        'click', decorate);\n          }\n        }\n      });\n    \n\n            var
+        originalDocumentWrite = document.write;\n            document.write = customDocumentWrite;\n
+        \           try { window.ShopifyAnalytics.merchantGoogleAnalytics.call(this);
+        } catch(error) {};\n            document.write = originalDocumentWrite;\n\n
+        \           \n        window.ShopifyAnalytics.lib.page(\n          null,\n
+        \         {\"pageType\":\"home\"}\n        );\n      \n            \n          });\n\n
+        \         \n      var eventsListenerScript = document.createElement('script');\n
+        \     eventsListenerScript.async = true;\n      eventsListenerScript.src =
+        \"//cdn.shopify.com/s/assets/shop_events_listener-9410288c486c406bc38edb97003bb123d375112c2b7e037d65afabae7c905e02.js\";\n
+        \     document.getElementsByTagName('head')[0].appendChild(eventsListenerScript);\n
+        \   \n        })();\n      </script>\n    \n<script id=\"apple-pay-shop-capabilities\"
+        type=\"application/json\">{\"shopId\":1793637,\"countryCode\":\"US\",\"currencyCode\":\"USD\",\"merchantCapabilities\":[\"supports3DS\"],\"merchantId\":\"gid:\\/\\/shopify\\/Shop\\/1793637\",\"merchantName\":\"Calm
+        The Ham\",\"requiredBillingContactFields\":[\"postalAddress\",\"email\",\"phone\"],\"requiredShippingContactFields\":[\"postalAddress\",\"email\",\"phone\"],\"shippingType\":\"shipping\",\"supportedNetworks\":[\"visa\",\"masterCard\",\"amex\",\"discover\"]}</script>\n<script
+        src=\"//cdn.shopify.com/s/assets/storefront/express_buttons-c7ad9a40b2c53c5f2494d95fcfd2d8b601ee45761bb6468c255f6f1d4dfc1331.js\"
+        defer=\"defer\" crossorigin=\"anonymous\" integrity=\"sha256-x62aQLLFPF8klNlfz9LYtgHuRXYbtkaMJV9vHU38EzE=\"></script><script>\n//<![CDATA[\n
+        \     window.Shopify = window.Shopify || {};\n      window.Shopify.Checkout
+        = window.Shopify.Checkout || {};\n      window.Shopify.Checkout.rememberMeHost
+        = \"remember-me.shopifycloud.com\";\n      window.Shopify.Checkout.rememberMeAccessToken
+        = \"S0x4V2d6aEhtVmExeHBMNTV2NFk0RFZIVWZyWUQ5WlRyRkdtSmxZQlk0S0JtZmZtZzhEMjgzV2RicW9CTmdnNS0tcS81bVFsV29wZ0dra1ovYUFYdlR3Zz09--066256bcf24d9e7dca1ed43834516613c2a370a7\";\n\n//]]>\n</script>\n\n<meta
+        name=\"shopify-checkout-api-token\" content=\"67b81cebe35703eda5ad3e2dad885261\"
+        />\n\n<link rel=\"stylesheet\" media=\"all\" href=\"//cdn.shopify.com/s/assets/storefront/additional-checkout-buttons-808913e66bb8ca34c54570ae143ad72de7405d257db279c632b910e1babef726.css\"
+        /> \n  </head>\n  \n  <body class=\"index feature_image\">\n    <div id=\"content_wrapper\">\n
+        \     \n        <div class=\"promo_banner\">\n          FREE SHIPPING ON ALL
+        ORDERS!\n        </div>\n      \n      <div>\n        <div id=\"header\" class=\"mm-fixed-top\">\n
+        \         <a href=\"#nav\" class=\"icon-menu\"><span>Menu</span></a>\n          <a
+        href=\"https://www.calmtheham.com\" title=\"Calm The Ham\" class=\"mobile_logo
+        logo\">\n            \n              <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\"
+        alt=\"Calm The Ham\" data-src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\"
+        />\n            \n          </a>\n          <a href=\"#cart\" class=\"icon-cart
+        right\"><span>0</span></a>\n        </div>\n        \n        <div class=\"hidden\">\n
+        \         <div id=\"nav\">\n            <ul>\n              \n                \n
+        \                 <li ><a href=\"/collections\" title=\"Collections\">Collections</a>\n
+        \                   <ul>\n                      \n                        \n
+        \                         <li ><a href=\"/collections/contemporary-cityscapes\"
+        title=\"Cityscapes\">Cityscapes</a></li>\n                        \n                      \n
+        \                       \n                          <li ><a href=\"/collections/filmography\"
+        title=\"Filmography Series\">Filmography Series</a></li>\n                        \n
+        \                     \n                        \n                          <li
+        ><a href=\"/collections/ahistoryoftime\" title=\"History of Time\">History
+        of Time</a></li>\n                        \n                      \n                        \n
+        \                         <li ><a href=\"/collections/pop-culture\" title=\"Pop
+        Culture\">Pop Culture</a></li>\n                        \n                      \n
+        \                   </ul>\n                  </li>\n                \n              \n
+        \               \n                  <li ><a href=\"/collections/all\" title=\"Products\">Products</a></li>\n
+        \               \n              \n                \n                  <li
+        ><a href=\"/pages/story\" title=\"Our Story\">Our Story</a></li>\n                \n
+        \             \n                \n                  <li ><a href=\"/pages/faq-1\"
+        title=\"FAQ\">FAQ</a>\n                    <ul>\n                      \n
+        \                       \n                          <li ><a href=\"/pages/shop-policy\"
+        title=\"Shop Policy\">Shop Policy</a></li>\n                        \n                      \n
+        \                       \n                          <li ><a href=\"/pages/returns\"
+        title=\"Returns\">Returns</a></li>\n                        \n                      \n
+        \                       \n                          <li ><a href=\"/pages/commissions\"
+        title=\"Commissions\">Commissions</a></li>\n                        \n                      \n
+        \                       \n                          <li ><a href=\"/pages/wholesale\"
+        title=\"Wholesale\">Wholesale</a></li>\n                        \n                      \n
+        \                   </ul>\n                  </li>\n                \n              \n
+        \               \n                  <li ><a href=\"/blogs/happenings\" title=\"Blog\">Blog</a></li>\n
+        \               \n              \n              \n                \n                  <li>\n
+        \                   <a href=\"/account/login\" id=\"customer_login_link\">Sign
+        in</a>\n                  </li>\n                \n              \n            </ul>\n
+        \         </div> \n            \n          <form action=\"/checkout\" method=\"post\"
+        id=\"cart\">\n            <ul data-money-format=\"<span style=display>${{amount}}
+        </span>\" data-shop-currency=\"USD\" data-shop-name=\"Calm The Ham\">\n              <li
+        class=\"mm-subtitle\"><a class=\"continue ss-icon\" href=\"#cart\">&#x2421;</a></li>\n\n
+        \             \n                <li class=\"empty_cart\">Your Cart is Empty</li>\n
+        \             \n            </ul>\n          </form>\n        </div>\n\n        <div
+        class=\"header mm-fixed-top is-absolute animated fadeIn header_bar\">\n          <div
+        class=\"container\"> \n            <div class=\"three columns logo\">\n              <a
+        href=\"https://www.calmtheham.com\" title=\"Calm The Ham\">\n                \n
+        \                 <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\"
+        alt=\"Calm The Ham\" data-src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/logo.png?3445365807428516373\"
+        \ />\n                \n              </a>\n            </div>\n\n            <div
+        class=\"thirteen columns nav mobile_hidden\">\n              <ul class=\"menu
+        right\">\n                \n                  <li>\n                    <a
+        href=\"/account\" title=\"My Account \">Sign in</a>\n                  </li>\n
+        \               \n                \n                  <li class=\"search\">\n
+        \                   <a href=\"/search\" title=\"Search\" class=\"icon-search\"
+        id=\"search-toggle\"></a>\n                  </li>\n                \n                <li
+        class=\"cart\">\n                  <a href=\"#cart\" class=\"icon-cart cart-button\"><span>0</span></a>\n
+        \               </li>\n                \n              </ul>\n\n              <ul
+        class=\"menu center\">\n                \n                  \n\n                    \n
+        \                   \n                    \n                    \n\n                    <li><a
+        href=\"/collections\" title=\"Collections\" class=\"sub-menu  \">Collections
+        \                    \n                      &nbsp;<span class=\"icon-down-arrow\"></span></a>
+        \n                      <div class=\"dropdown animated fadeIn \">\n                        <div
+        class=\"dropdown_links clearfix\">\n                          <ul>\n                            \n
+        \                           \n                            \n                              \n
+        \                             <li><a href=\"/collections/contemporary-cityscapes\"
+        title=\"Cityscapes\">Cityscapes</a></li>\n                              \n\n
+        \                             \n                            \n                              \n
+        \                             <li><a href=\"/collections/filmography\" title=\"Filmography
+        Series\">Filmography Series</a></li>\n                              \n\n                              \n
+        \                           \n                              \n                              <li><a
+        href=\"/collections/ahistoryoftime\" title=\"History of Time\">History of
+        Time</a></li>\n                              \n\n                              \n
+        \                           \n                              \n                              <li><a
+        href=\"/collections/pop-culture\" title=\"Pop Culture\">Pop Culture</a></li>\n
+        \                             \n\n                              \n                            \n
+        \                         </ul>\n                        </div>\n                      </div>\n
+        \                   </li>\n                  \n                \n                  \n
+        \                   <li><a href=\"/collections/all\" title=\"Products\" class=\"top-link
+        \">Products</a></li>\n                  \n                \n                  \n
+        \                   <li><a href=\"/pages/story\" title=\"Our Story\" class=\"top-link
+        \">Our Story</a></li>\n                  \n                \n                  \n\n
+        \                   \n                    \n                    \n                    \n\n
+        \                   <li><a href=\"/pages/faq-1\" title=\"FAQ\" class=\"sub-menu
+        \ \">FAQ                     \n                      &nbsp;<span class=\"icon-down-arrow\"></span></a>
+        \n                      <div class=\"dropdown animated fadeIn \">\n                        <div
+        class=\"dropdown_links clearfix\">\n                          <ul>\n                            \n
+        \                           \n                            \n                              \n
+        \                             <li><a href=\"/pages/shop-policy\" title=\"Shop
+        Policy\">Shop Policy</a></li>\n                              \n\n                              \n
+        \                           \n                              \n                              <li><a
+        href=\"/pages/returns\" title=\"Returns\">Returns</a></li>\n                              \n\n
+        \                             \n                            \n                              \n
+        \                             <li><a href=\"/pages/commissions\" title=\"Commissions\">Commissions</a></li>\n
+        \                             \n\n                              \n                            \n
+        \                             \n                              <li><a href=\"/pages/wholesale\"
+        title=\"Wholesale\">Wholesale</a></li>\n                              \n\n
+        \                             \n                            \n                          </ul>\n
+        \                       </div>\n                      </div>\n                    </li>\n
+        \                 \n                \n                  \n                    <li><a
+        href=\"/blogs/happenings\" title=\"Blog\" class=\"top-link \">Blog</a></li>\n
+        \                 \n                \n              </ul>\n            </div>\n
+        \         </div>\n        </div>\n\n\n        \n\n        \n          \n\n<style>\n.flex-control-nav\n
+        \ {\n  display:none;\n  }\n\n</style>\n<!-- Begin slider -->\n<div class=\"home-slide\">\n
+        \ <div class=\"flexslider-container\">\n    <div class=\"flexslider\" id=\"slider\">\n
+        \     <ul class=\"slides\">\n        \n          \n          \n          \n
+        \         \n        \n          \n          \n          \n          \n        \n
+        \         \n        \n          \n          \n          \n          \n        \n
+        \         \n          \n          \n          \n        \n          \n          <li>\n
+        \           <a href=\"http://calmtheham.com/collections/contemporary-cityscapes\">\n
+        \             <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/slide_2.gif?3445365807428516373\"
+        alt=\"Contemporary Cityscapes\" />\n            \n            </a>\n        </li>\n
+        \         \n        \n          \n          \n          \n          \n        \n
+        \         \n          \n          \n          \n        \n          \n          <li>\n
+        \           <a href=\"https://www.calmtheham.com/collections/pop-culture\">\n
+        \             <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/slide_3.gif?3445365807428516373\"
+        alt=\"Pop Culture\" />\n            \n            </a>\n        </li>\n          \n
+        \       \n          \n          \n          \n          \n        \n          \n
+        \         \n          \n          \n        \n          \n          <li>\n
+        \           <a href=\"http://calmtheham.com/collections/ahistoryoftime\">\n
+        \             <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/slide_4.gif?3445365807428516373\"
+        alt=\"A History of Time\" />\n            \n            </a>\n        </li>\n
+        \         \n        \n          \n          \n          \n          \n        \n
+        \         \n          \n          \n          \n        \n          \n        \n
+        \         \n          \n          \n          \n        \n          \n          \n
+        \         \n          \n        \n          \n        \n          \n          \n
+        \         \n          \n        \n          \n          \n          \n          \n
+        \       \n          \n        \n          \n          \n          \n          \n
+        \       \n          \n          \n          \n          \n        \n          \n
+        \       \n          \n          \n          \n          \n        \n          \n
+        \         \n          \n          \n        \n          \n        \n          \n
+        \         \n          \n          \n        \n          \n          \n          \n
+        \         \n        \n          \n        \n      </ul>\n      <div class=\"flex-controls\"></div>\n
+        \   </div>\n  </div>\n</div>\n<!-- End slider -->\n\n\n\n\n<a name=\"pagecontent\"
+        id=\"pagecontent\"></a>\n\n\n  \n    \n    <div class=\"container content
+        mobilehide\" style=\"padding-top:0\">\n      <div class=\"sixteen columns\"
+        id=\"featured_links\">\n        <div class=\"section clearfix\" id=\"feature\">\n
+        \         <div class=\"one-third column alpha delay-025s center\">\n            \n
+        \             <a href=\"https://www.calmtheham.com/collections/all?sort_by=best-selling\">\n
+        \           \n            \n            <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/feature1.jpg?3445365807428516373\"
+        alt=\"Best Sellers\" />\n            \n            \n              <h2>Best
+        Sellers</h2>\n              <!--<div class=\"feature_divider\"></div>-->\n
+        \           \n            \n              </a>\n            \n\n            \n
+        \         </div>\n\n          <div class=\"one-third column delay-05s center\">\n
+        \           \n              <a href=\"https://www.calmtheham.com/collections\">\n
+        \           \n\n            <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/feature2.jpg?3445365807428516373\"
+        alt=\"Collections\" />\n            \n            \n              <h2>Collections</h2>\n
+        \             <!--<div class=\"feature_divider\"></div>-->\n            \n
+        \           \n              </a>\n            \n\n            \n          </div>\n\n
+        \         \n            <div class=\"one-third column omega delay-075s center\">\n
+        \             \n                <a href=\"https://www.calmtheham.com/pages/inspiration\">\n
+        \             \n\n              <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/feature3.jpg?3445365807428516373\"
+        alt=\"Showcase\" />\n              \n              \n                <h2>Showcase</h2>\n
+        \             <!--<div class=\"feature_divider\"></div>-->\n              \n
+        \             \n                </a>\n              \n\n              \n            </div>\n
+        \         \n\n                 \n        </div>\n      </div>\n    </div>\n\t\n\n<div
+        class=\"press_icons mobilehide\">\n    <div class=\"media-title mobilehide\"><div>As
+        seen in</div></div>\n    <img src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/partners-logo-set.jpg?3445365807428516373\"
+        style=\"max-width:100%;\" class=\"mobilehide\" title=\"Press Icons\" alt=\"press
+        icons\">\n  </div>\n\n  \n\n  \n    <div id=\"slide-2\" class=\"home-collection-parallax\">\n
+        \       <div class=\"bcg\"\n            data-bottom-top=\"background-position:
+        50% 200px;\"\n            data-top-bottom=\"background-position: 50% -200px;\"\n
+        \           data-anchor-target=\"#slide-2\">\n            <div class=\"hsContainer\">\n
+        \               <div class=\"hsContent center\">\n                  <div>\n
+        \                   <p class=\"headline\" style=\"color:#ffffff\"></p>\n                    <p
+        class=\"subtitle\" style=\"color:#ffffff\"></p>\n                    \n                      <a
+        href=\"/collections\" class=\"action_button\">\n                        Collections\n
+        \                     </a>\n                    \n                  </div>\n
+        \               </div>\n            </div>\n        </div>\n    </div>\n  \n\n
+        \ \n    <div class=\"container mobilehide\" style=\"display:none;\">\n      \n
+        \       <div class=\"sixteen columns center homepage_content\">\n      \n\n
+        \       \n        \n        \n        \n        \n        \n\n\n\n\n\n      </div>\n
+        \   </div>\n  \n\n  \n    <div id=\"slide-3\" class=\"buy-a-print\">\n        <div
+        class=\"bcg\"\n            data-bottom-top=\"background-position: 50% 200px;\"\n
+        \           data-top-bottom=\"background-position: 50% -200px;\"\n            data-anchor-target=\"#slide-3\">\n
+        \           <div class=\"hsContainer\">\n                <div class=\"hsContent
+        left\">\n                  <div>\n                    <p class=\"headline\"
+        style=\"color:#ffffff\">BUY A PRINT, <br>BUILD A SCHOOL</p>\n                    <p
+        class=\"subtitle\" style=\"color:#ffffff\"></p>\n                    \n                      <a
+        href=\"/pages/buy-a-print-build-a-school\" class=\"action_button\">\n                        Learn
+        More\n                      </a>\n                    \n                  </div>\n
+        \               </div>\n            </div>\n        </div>\n    </div>\n  \n\n
+        \ \n\n  \n\n  \n\n  \n\n  \n\n  \n\n  \n\n  \n\n  \n    \n      <div class=\"container\">\n
+        \       <div class=\"section clearfix\">\n          <div class=\"sixteen columns\"><h1
+        class=\"center\">THE DAILY LIFE AND TIMES&hellip;</h1></div>\n          \n
+        \         \n            <div class=\"eight columns\">\n              <h4 class=\"title\">\n
+        \               \n                  <a href=\"http://instagram.com/calmtheham\"
+        target=\"_blank\">\n                \n                Instagram\n                \n
+        \                 </a>\n                \n              </h4>\n\n              <div
+        id=\"instafeed\"></div>\n            </div>\n          \n\n          \n            <div
+        class=\"eight columns\">\n            <h4 class=\"title\"><a href=\"https://twitter.com/calmham\"
+        target=\"_blank\">Tweets</a></h4>\n            <a class=\"twitter-timeline\"
+        href=\"https://twitter.com/calmham\" data-widget-id=\"319998048782647298\"
+        data-tweet-limit=\"4\" data-screen-name=\"calmham\" data-chrome=\"noheader
+        nofooter noborders transparent\" data-link-color=\"#419ec1\" data-heading-style=\"color:#419ec1;font-size:14px;font-family:
+        Arvo;\"></a>\n            <script defer>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=\"//platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>\n
+        \         \n        </div>\n      </div>\n    \n  \n\n  \n\n\n        \n  \n\n\n
+        \       </div>\n        <div class=\"footer\">\n          <div class=\"container\">\n\n
+        \           <div class=\"four columns\">\n              \n                <h4>Studio
+        + shop</h4>\n                <ul class=\"footer_menu\">\n                  \n
+        \                   <li><a href=\"/pages/wholesale\" title=\"Wholesale\">Wholesale</a></li>\n
+        \                 \n                    <li><a href=\"http://calm-the-ham.tumblr.com\"
+        title=\"Blog\">Blog</a></li>\n                  \n                    <li><a
+        href=\"/pages/shop-policy\" title=\"Shop Policy\">Shop Policy</a></li>\n                  \n
+        \                   <li><a href=\"/pages/commissions\" title=\"Commissions\">Commissions</a></li>\n
+        \                 \n                    <li><a href=\"/pages/affiliate-marketing-agreement\"
+        title=\"Affiliates\">Affiliates</a></li>\n                  \n                    <li><a
+        href=\"/pages/faq\" title=\"FAQ\">FAQ</a></li>\n                  \n                </ul>\n
+        \             \n            </div>\n            <div class=\"four columns\">\n
+        \             \n                <h4>Support</h4>\n                <ul class=\"footer_menu\">\n
+        \                 \n                    <li><a href=\"/pages/faq-1\" title=\"FAQ\">FAQ</a></li>\n
+        \                 \n                    <li><a href=\"/pages/shop-policy\"
+        title=\"Shop Policy\">Shop Policy</a></li>\n                  \n                    <li><a
+        href=\"/pages/contact\" title=\"Contact\">Contact</a></li>\n                  \n
+        \                   <li><a href=\"/pages/feedback\" title=\"Feedback\">Feedback</a></li>\n
+        \                 \n                    <li><a href=\"/pages/returns\" title=\"Returns\">Returns</a></li>\n
+        \                 \n                </ul>\n              \n            </div>\n\n
+        \           <div class=\"eight columns\">\n\n              \n                \n
+        \                 <h3>STAY RELEVANT</h3>\n                  <p>Get notified
+        on new products, exclusive sales, and <br/>more right to your inbox!</p>\n
+        \               \n\n                <div class=\"newsletter \">\n  <p class=\"message\"></p>\n
+        \ \n   \n   <!--######## Rare.io form #########-->\n  \n    <form class=\"ck_subscribe_form\"
+        action=\"https://api4.rarelogic.com/shop/calm-the-ham-2/subscribe\" method=\"post\">\n\n
+        \     <input type=\"email\" name=\"email\" class=\"ck_email_address contact_email\"
+        placeholder=\"Email Address\" required>\n\n      <input type=\"submit\" class=\"action_button
+        sign_up\" value=\"I'M IN!\"/>\n    </form>\n  \n <!-- % endform %  -->\n  \n</div>\n\n\n\n\n
+        \             \n              \n              \n              <div class=\"footer-social\">\n
+        \               \n                  <a href=\"http://twitter.com/calmham\"
+        title=\"Calm The Ham on Twitter\" class=\"ss-icon\" rel=\"me\" target=\"_blank\">\n
+        \                   &#xF611;\n                  </a>              \n                \n\n
+        \               \n                  <a href=\"http://facebook.com/calmtheham\"
+        title=\"Calm The Ham on Facebook\" class=\"ss-icon\" rel=\"me\" target=\"_blank\">\n
+        \                   &#xF610;\n                  </a>              \n                \n\n
+        \               \n\n                \n\n                \n\n                \n
+        \                 <a href=\"http://pinterest.com/calmtheham\" title=\"Calm
+        The Ham on Pinterest\" class=\"ss-icon\" rel=\"me\" target=\"_blank\">\n                    &#xF650;\n
+        \                 </a>              \n                \n\n                \n\n
+        \               \n                  <a href=\"http://instagram.com/calmtheham\"
+        title=\"Calm The Ham on Instagram\" class=\"ss-icon\" rel=\"me\" target=\"_blank\">
+        \n                    &#xF641;\n                  </a>              \n                \n\n
+        \               \n\n                \n\n                \n              </div>\n
+        \             \n              \n\n              \n\n              <p class=\"mobile_only\">\n
+        \               \n              </p>\n\n              <div class=\"payment_methods
+        \">\n                \n                \n                \n                \n
+        \               \n                \n                \n                \n                \n
+        \               \n              </div>\n            </div>\n            <div
+        class=\"clearfix\"></div>\n            \n            <div class=\"footer-bottom
+        clearfix\">\n              <div class=\"six columns\">\n                &copy;
+        2017 Calm The Ham.\n                \n              </div>\n              <div
+        class=\"ten columns align_right\">\n                <ul class=\"footer-bottom-links\">\n
+        \                 <li>hello@Calm The Ham.com</li>\n                  <li>9174262256</li>\n
+        \                 <li><a href=\"/pages/shop-policy\">Terms &amp; Policy</a></li>\n
+        \                 \n                </ul>\n              </div>\n            </div>\n
+        \         </div>\n        </div> \n      \n        <div id=\"search\" class=\"animated\">\n
+        \         <div class=\"container\">\n            <div class=\"ten columns
+        offset-by-three center\">\n              \n              <form action=\"/search\">\n
+        \               \n                  <input type=\"hidden\" name=\"type\" value=\"product\"
+        />\n                \n                <div class=\"search-close ss-icon\">&#x2421;</div>\n
+        \               <span class=\"icon-search search-submit\"></span>\n                <input
+        type=\"text\" name=\"q\" placeholder=\"Search Calm The Ham...\" value=\"\"
+        autocapitalize=\"off\" autocomplete=\"off\" autocorrect=\"off\" />\n              </form>\n
+        \           </div>\n          </div>\n        </div>\n      </div>\n    </div>\n
+        \ \n   <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/instafeed.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n   \n   <script type=\"text/javascript\">\n
+        \   var feed = new Instafeed({\n        get: 'user',\n        userId: '586108532',\n
+        \       clientId: 'f3a1cd21804c4634a3539ea798be2bce',\n        accessToken:
+        '586108532.1677ed0.2ea0be3dafbe459c88fdd4c9caaa7d79',\n        limit: '12',\n
+        \       template: '<a href=\"{{link}}\" class=\"insta-link\" target=\"_blank\"><img
+        class=\"insta-img\" src=\"{{image}}\" /></a>'\n    });\n    feed.run();\n</script>\n
+        \ \n  <style>\n      .insta-link {\n        width: 33.33333%;\n        margin:
+        0 auto;\n        display: inline-flex;\n        align-items: center;\n        justify-content:
+        center;\n      }\n\n</style>\n   \n    \n    \n    \n      <script src=\"//cdn.shopify.com/s/files/1/0179/3637/t/33/assets/jquery.flexslider-min.js?3445365807428516373\"
+        type=\"text/javascript\"></script>\n    \n    \n    \n    <script>\n      jQuery(window).ready(function(){\n\n
+        \   \n    \n /*   $('#carousel').flexslider({\n    animation: \"slide\",\n
+        \   controlNav: true,\n    animationLoop: true,\n    slideshow: false,\n    itemWidth:
+        90,\n    itemMargin: 10,\n    minItems: 2,\n    maxItems: 4,\n    asNavFor:
+        '#slider'\n\t});\n   */     \n        \n    $('#slider').flexslider({\n          slideshow:
+        true,\n          animationDuration: 700,\n          slideshowSpeed: 8000,\n
+        \         animation: \"fade\",\n          controlNav: true,\n          controlsContainer:
+        $(\".custom-controls-container\"),\n          directionNav: false,\n          keyboardNav:
+        true\n   });\n        \n        \n    \n        \n        \n        \n        \n
+        \       \n        \n        \n      });\n      \n      \n      jQuery(document).ready(function()
+        {\n        $('.fancybox-showcase').fancybox();\n      });\n      \n    </script>\n
+        \   \n  \n  <script type=\"text/javascript\" src=\"//www.klaviyo.com/media/js/public/klaviyo_subscribe.js\"></script>
+        \n  <script type=\"text/javascript\">   \n    KlaviyoSubscribe.attachToForms('#k_id_embedded_subscription_form',
+        {  hide_form_on_success: true  }); \n  </script>\n  \n  \n \n\n<script type=\"text/javascript\">\nKlaviyoSubscribe.attachToForms('#newletter',
+        {\n\thide_form_on_success: true,\n\tsuccess: function ($form) {\n\t\t// Show
+        success message.\n\t\t//$('.label-top-form1').text('Got it, Your on the list!')\n
+        \     $('.success_message').css(\"display\",\"visible\")\n\t}\n});\n</script>\n
+        \   \n    \n    \n\n<style type=\"text/css\">\n.klaviyo_flyout .klaviyo_inner
+        {\n\twidth: 370px;\n}\n</style>\n  \n<script>\n  var _learnq = _learnq ||
+        [];\n  _learnq.push(['account', 'btNfqY']);\n  (function () {\n    var b =
+        document.createElement('script'); b.type = 'text/javascript'; b.async = true;\n
+        \   b.src = ('https:' == document.location.protocol ? 'https://' : 'http://')
+        + 'a.klaviyo.com/media/js/analytics/analytics.js';\n    var a = document.getElementsByTagName('script')[0];
+        a.parentNode.insertBefore(b, a);\n  })();\n</script>\n\n<script>\n  var _learnq
+        = _learnq || [];\n  \n</script>\n\n \n<script>\n  \n  \n  jQuery('.footer
+        .four h4').click(function(){\n  if($(document).width() < 767)\n  {\n  jQuery(this).next().slideToggle();\n
+        \ }\n  });\n  \n  \n  $(\".ratings\").click(function() {\n    $('html, body').animate({\n
+        \       scrollTop: $(\"#shopify-product-reviews\").offset().top -100\n    },
+        1000);\n});\n  \n  \n  $(document).on('click','.linked-arrow', function(event)
+        {\n      event.preventDefault();\n      var target = \"#pagecontent\";\n      $('html,
+        body').animate({\n          scrollTop: $(target).offset().top - 45\n      },
+        1000);\n  });  \n</script>\n    \n    <script type=\"text/javascript\">\n
+        \ var _learnq = _learnq || [];\n\n  _learnq.push(['account', 'EZTxiz']);\n\n
+        \ (function () {\n  var b = document.createElement('script'); b.type = 'text/javascript';
+        b.async = true;\n  b.src = ('https:' == document.location.protocol ? 'https://'
+        : 'http://') + 'a.klaviyo.com/media/js/analytics/analytics.js';\n  var a =
+        document.getElementsByTagName('script')[0]; a.parentNode.insertBefore(b, a);\n
+        \ })();\n</script>\n    \n    <!-- Google Code for Remarketing Tag -->\n<!--------------------------------------------------\nRemarketing
+        tags may not be associated with personally identifiable information or placed
+        on pages related to sensitive categories. See more information and instructions
+        on how to setup the tag on: http://google.com/ads/remarketingsetup\n--------------------------------------------------->\n<script
+        type=\"text/javascript\">\n/* <![CDATA[ */\nvar google_conversion_id = 991626271;\nvar
+        google_custom_params = window.google_tag_params;\nvar google_remarketing_only
+        = true;\n/* ]]> */\n</script>\n<div style=\"display:none\">\n<script type=\"text/javascript\"
+        src=\"//www.googleadservices.com/pagead/conversion.js\">\n</script>\n</div>\n<noscript>\n<div
+        style=\"display:inline;\">\n<img height=\"1\" width=\"1\" style=\"border-style:none;\"
+        alt=\"\" src=\"//googleads.g.doubleclick.net/pagead/viewthroughconversion/991626271/?guid=ON&amp;script=0\"/>\n</div>\n</noscript>\n\n
+        \   \n  </body>\n</html>"
+    http_version: 
+  recorded_at: Mon, 15 May 2017 17:20:21 GMT
+recorded_with: VCR 3.0.3
