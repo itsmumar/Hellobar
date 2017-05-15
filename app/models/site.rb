@@ -1,7 +1,6 @@
 require 'uri'
 require 'billing_log'
 require 'site_detector'
-require 'queue_worker/queue_worker'
 
 class Site < ActiveRecord::Base
   attr_accessor :skip_script_generation
