@@ -202,30 +202,30 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_for_google_oauth2(access_token, original_email = nil, track_options = {})
-    info = access_token['info']
+  def self.find_for_google_oauth2(omniauth_hash, original_email = nil, track_options = {})
+    info = omniauth_hash.info
 
-    if original_email.present? && info['email'] != original_email # the user is trying to login with a different Google account
+    if original_email.present? && info.email != original_email # the user is trying to login with a different Google account
       user = User.new
       user.errors.add(:base, "Please log in with your #{ original_email } Google email")
       raise ActiveRecord::RecordInvalid, user
-    elsif (user = User.joins(:authentications).find_by(authentications: { uid: access_token['uid'], provider: access_token['provider'] }))
+    elsif (user = User.joins(:authentications).find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider }))
       # TODO: deprecated case. use #update_authentication directly
-      user.first_name = info['first_name'] if info['first_name'].present?
-      user.last_name = info['last_name'] if info['last_name'].present?
+      user.first_name = info.first_name if info.first_name.present?
+      user.last_name = info.last_name if info.last_name.present?
 
       user.save
     else # create a new user
-      user = User.find_by(email: info['email'], status: TEMPORARY_STATUS) || User.new(email: info['email'])
+      user = User.find_by(email: info.email, status: TEMPORARY_STATUS) || User.new(email: info.email)
 
       password = Devise.friendly_token[9, 20]
       user.password = password
       user.password_confirmation = password
 
-      user.first_name = info['first_name']
-      user.last_name = info['last_name']
+      user.first_name = info.first_name
+      user.last_name = info.last_name
 
-      user.authentications.build(provider: access_token['provider'], uid: access_token['uid'])
+      user.authentications.build(provider: omniauth_hash.provider, uid: omniauth_hash.uid)
       user.status = ACTIVE_STATUS
 
       if user.save
@@ -236,28 +236,28 @@ class User < ActiveRecord::Base
 
     # TODO: deprecated. use #update_authentication directly
     # update the authentication tokens & expires for this provider
-    if access_token['credentials'] && user.persisted?
-      user.authentications.detect { |x| x.provider == access_token['provider'] }.update(
-        refresh_token: access_token['credentials'].refresh_token,
-        access_token: access_token['credentials'].token,
-        expires_at: Time.zone.at(access_token['credentials'].expires_at)
+    if omniauth_hash.credentials && user.persisted?
+      user.authentications.detect { |x| x.provider == omniauth_hash.provider }.update(
+        refresh_token: omniauth_hash.credentials.refresh_token,
+        access_token: omniauth_hash.credentials.token,
+        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
       )
     end
 
     user
   end
 
-  def update_authentication(info:, credentials:, uid:, provider:)
-    authentication = authentications.find_by(uid: uid, provider: provider)
+  def update_authentication(omniauth_hash)
+    authentication = authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
 
-    self.first_name = info['first_name'] if info['first_name'].present?
-    self.last_name = info['last_name'] if info['last_name'].present?
+    self.first_name = omniauth_hash.info.first_name if omniauth_hash.info.first_name.present?
+    self.last_name = omniauth_hash.info.last_name if omniauth_hash.info.last_name.present?
 
-    if credentials && persisted?
+    if omniauth_hash.credentials && persisted?
       authentication.update(
-        refresh_token: credentials.refresh_token,
-        access_token: credentials.token,
-        expires_at: Time.zone.at(credentials.expires_at)
+        refresh_token: omniauth_hash.credentials.refresh_token,
+        access_token: omniauth_hash.credentials.token,
+        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
       )
     end
 
