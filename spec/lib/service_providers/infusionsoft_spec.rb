@@ -61,7 +61,7 @@ describe ServiceProviders::Infusionsoft do
     it 'does NOT tag the user when no tags are present' do
       service_provider.instance_variable_set(:@contact_list, contact_list)
 
-      expect(Infusionsoft).to_not receive(:contact_add_to_group)
+      expect(Infusionsoft).not_to receive(:contact_add_to_group)
 
       service_provider.subscribe(nil, email)
     end

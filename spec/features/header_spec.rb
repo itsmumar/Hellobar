@@ -11,18 +11,18 @@ feature 'Header Navigation', js: true do
   xscenario 'can dismiss site nav via click of element' do
     find('.header-nav-wrapper').click
     find('.header-nav-wrapper').click
-    expect(page).to_not have_content('Site Settings')
+    expect(page).not_to have_content('Site Settings')
   end
 
   xscenario 'can dismiss site nav via click outside element' do
     find('.header-nav-wrapper').click
     find('.installation-page').click
-    expect(page).to_not have_content('Site Settings')
+    expect(page).not_to have_content('Site Settings')
   end
 
   xscenario 'does not reveal on :hover due to .no-hover' do
     find('.header-nav-wrapper').hover
-    expect(page).to_not have_content('Site Settings')
+    expect(page).not_to have_content('Site Settings')
   end
 
   xscenario 'reveals on :hover if .no-hover is missing' do

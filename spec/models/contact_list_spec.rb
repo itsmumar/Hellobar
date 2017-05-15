@@ -160,7 +160,7 @@ describe ContactList do
       allow(contact_list).to receive(:oauth?) { true }
       allow(service_provider).to receive(:subscribe).and_raise('this error')
       expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error('this error')
-      expect(contact_list.contact_list_logs.last.stacktrace).to_not be_blank
+      expect(contact_list.contact_list_logs.last.stacktrace).not_to be_blank
     end
 
     it 'marks a log entry as completed' do

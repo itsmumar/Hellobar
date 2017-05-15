@@ -35,7 +35,7 @@ describe GoogleAnalytics, '#find_account_by_url' do
     analytics = double('analytics', list_account_summaries: response)
     allow(service).to receive(:analytics) { analytics }
 
-    expect { service.find_account_by_url('www.site.com') }.to_not raise_error
+    expect { service.find_account_by_url('www.site.com') }.not_to raise_error
   end
 
   it "returns nil if the user doesn't have a Google Analytics account" do
@@ -93,7 +93,7 @@ describe GoogleAnalytics, '#latest_pageviews' do
     allow(service).to receive(:find_account_by_url) { account }
     allow(service).to receive(:analytics) { analytics }
 
-    expect { service.latest_pageviews('http://www.site.com') }.to_not raise_error
+    expect { service.latest_pageviews('http://www.site.com') }.not_to raise_error
   end
 
   it 'does not raise an error if google analytics returns nil rows' do
@@ -107,6 +107,6 @@ describe GoogleAnalytics, '#latest_pageviews' do
     allow(service).to receive(:find_account_by_url) { account }
     allow(service).to receive(:analytics) { analytics }
 
-    expect { service.latest_pageviews('http://www.site.com') }.to_not raise_error
+    expect { service.latest_pageviews('http://www.site.com') }.not_to raise_error
   end
 end
