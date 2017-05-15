@@ -39,4 +39,18 @@ export default Ember.Service.extend({
     }
   }.observes('model.type')
 
+  // TODO REFACTOR adopt (this is from style controller) (what is isEditing?)
+  /*onElementTypeChanged: (function () {
+    let elementType = this.get('model.type');
+    if (elementType == 'Custom' || this.get('isEditing')) {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    } else {
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'preview/containers/theming/theme-tile-grid',
+        componentOptions: { elementType }
+      });
+    }
+    this.get('inlineEditing').initializeInlineEditing(elementType);
+  }).observes('model.type'),*/
+
 });

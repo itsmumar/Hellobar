@@ -6,9 +6,9 @@ export default Ember.Service.extend({
   applicationSettings: Ember.inject.service(),
   availableThemes: Ember.computed.alias('applicationSettings.settings.available_themes'),
 
-  defaultGenericTheme() {
+  defaultGenericTheme: function() {
     return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
-  },
+  }.property('availableThemes'),
 
   autodetectedTheme() {
     return {
@@ -35,6 +35,24 @@ export default Ember.Service.extend({
   // TODO REFACTOR implement
   currentThemeIsGeneric: true,
   currentThemeIsTemplate: false,
-  currentTheme: Ember.computed.alias('defaultGenericTheme')
+  currentTheme: Ember.computed.alias('defaultGenericTheme'),
+
+  currentThemeName: (function () {
+    const theme = this.get('currentTheme');
+    return theme ? theme.name : '';
+  }).property('currentTheme')
+
+
+  // TODO REFACTOR adopt (move to modelLogic?)
+  /*themeChanged: Ember.observer('currentThemeName', function () {
+      return Ember.run.next(this, function () {
+          return this.setProperties({
+            'model.image_placement': this.getImagePlacement()
+          });
+        }
+        //'model.use_default_image' : false
+      );
+    }
+  )*/
 
 });

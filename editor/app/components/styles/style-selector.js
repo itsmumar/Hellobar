@@ -1,13 +1,45 @@
 import Ember from 'ember';
 
+const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Custom', 'Alert'];
+
 export default Ember.Component.extend({
 
+  /**
+   * @property {object} Application model
+   */
+  model: null,
+
+  theming: Ember.inject.service(),
   bus: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
 
   themeSelectionInProgress: false,
 
+  style: Ember.computed.alias('model.type'),
+
+  isCustom: Ember.computed.equal('style', 'Custom'),
+  currentTheme: Ember.computed.alias('theming.currentTheme'),
+  currentThemeName: Ember.computed.alias('theming.currentThemeName'),
+  isEditing: Ember.computed.bool('model.id'),
+
   init() {
+    this._super();
+    this.set('selectionInProgress', !this.get('style'));
+    this.set('themeSelectionInProgress', true);
+    allStyles.forEach((style) => {
+      this[`shouldShow${style}ThemeInfo`] = Ember.computed('themeSelectionInProgress',
+        'selectionInProgress',
+        'style',
+        function () {
+          return this.get(`canUse${style}Style`) !== false &&
+            this.get('style') === style && !this.get('themeSelectionInProgress') && !this.get('selectionInProgress');
+        });
+      this[`shouldShow${style}`] = Ember.computed('selectionInProgress', 'style', function () {
+        return this.get(`canUse${style}Style`) !== false &&
+          (this.get('style') === style || this.get('selectionInProgress'));
+      });
+
+    });
     this.get('bus').subscribe('hellobar.core.bar.themeChanged', params => {
         this.set('model.theme_id', params.themeId);
         if (!this.get('model.type')) {
@@ -20,7 +52,7 @@ export default Ember.Component.extend({
       }
     );
     this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
-        if (params.componentName === 'theming/theme-tile-grid') {
+        if (params.componentName === 'preview/containers/theming/theme-tile-grid') {
           this.set('themeSelectionInProgress', true);
         }
       }
@@ -31,64 +63,31 @@ export default Ember.Component.extend({
     );
   },
 
-  isCustom: Ember.computed.equal('model.type', 'Custom'),
-  currentTheme: Ember.computed.alias('applicationController.currentTheme'),
-  currentThemeName: Ember.computed.alias('applicationController.currentThemeName'),
-  isEditing: Ember.computed.bool('model.id'),
-
-  _shouldShowThemeInfoForElementType(elementType) {
-    return this.get('model.type') === elementType
-      && !this.get('themeSelectionInProgress')
-      && !this.get('elementTypeSelectionInProgress');
-  },
-
-  canUseCustomHtml: Ember.computed.alias('model.site.capabilities.custom_html'),
-  canUseAlertElementType: Ember.computed.alias('model.site.capabilities.alert_bars'),
-
-  shouldShowBarThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Bar');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
-
-  shouldShowModalThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Modal');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
-
-  shouldShowSliderThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Slider');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
-
-  shouldShowTakeoverThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Takeover');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
-
-  shouldShowAlertThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Alert');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
-
-  shouldShowCustomThemeInfo: function() {
-    return this._shouldShowThemeInfoForElementType('Custom');
-  }.property('themeSelectionInProgress', 'elementTypeSelectionInProgress', 'model.type'),
+  canUseCustomStyle: Ember.computed.alias('model.site.capabilities.custom_html'),
+  canUseAlertStyle: Ember.computed.alias('model.site.capabilities.alert_bars'),
 
   onlyTopBarStyleIsAvailable: Ember.computed.equal('model.element_subtype', 'call'),
   notOnlyTopBarStyleIsAvailable: Ember.computed.not('onlyTopBarStyleIsAvailable'),
 
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
-  seeingElementFirstTime: true,
 
   actions: {
 
-    closeDropdown() {
-      this.set('elementTypeSelectionInProgress', false);
+    select(style) {
+      if (!this.get('selectionInProgress')) {
+        return;
+      }
+      this.set('style', style);
+      this.set('selectionInProgress', false);
     },
 
-    changeStyle() {
-      this.set('elementTypeSelectionInProgress', true);
-      return false;
+    initiateSelection() {
+      this.set('selectionInProgress', true);
     },
 
     changeTheme() {
-      const controller = this;
+      const that = this;
       let confirmModal = null;
       const modalOptions = {
         title: 'Are you sure you want to change the theme?',
@@ -98,10 +97,10 @@ export default Ember.Component.extend({
         showCloseIcon: true,
         confirm() {
           confirmModal.close();
-          controller.get('bus').trigger('hellobar.core.rightPane.show', {
-            componentName: 'theming/theme-tile-grid',
+          that.get('bus').trigger('hellobar.core.rightPane.show', {
+            componentName: 'preview/containers/theming/theme-tile-grid',
             componentOptions: {
-              elementType: controller.get('model.type')
+              elementType: that.get('model.type')
             }
           });
         }

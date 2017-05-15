@@ -43,12 +43,26 @@ export default Ember.Component.extend({
     }
   ),
 
-  getImagePlacement() {
+  // TODO REFACTOR cleanup
+  /*getImagePlacement() {
     const positionIsSelectable = this.get('currentTheme.image.position_selectable');
     const imageIsBackground = (this.get('model.image_placement') === 'background');
     const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
 
     if (!positionIsSelectable || imageIsBackground || positionIsEmpty) {
+      return this.get('currentTheme.image.position_default');
+    } else {
+      return this.get('model.image_placement');
+    }
+  },*/
+
+  getImagePlacement() {
+    const positionIsSelectable = this.get('currentTheme.image.position_selectable');
+    const imageIsBackground = (this.get('model.image_placement') === 'background');
+    const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
+    if (!positionIsSelectable) {
+      return this.get('currentTheme.image.position_default');
+    } else if (imageIsBackground || positionIsEmpty) {
       return this.get('currentTheme.image.position_default');
     } else {
       return this.get('model.image_placement');

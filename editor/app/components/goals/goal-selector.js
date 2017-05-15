@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   theming: Ember.inject.service(),
 
   init() {
+    this._super();
     this.set('selectionInProgress', !this.get('goal'));
   },
 

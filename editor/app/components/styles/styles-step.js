@@ -7,11 +7,11 @@ export default Ember.Component.extend({
    */
   model: null,
 
-  goal: Ember.computed.alias('model.element_subtype'),
+  style: Ember.computed.alias('model.type'),
 
   propertiesComponentName: function() {
-    const goal = this.get('goal');
-    return `goals/${goal}/${goal}-goal-properties`;
-  }.property('goal')
+    const style = this.get('style');
+    return `styles/${style}/${style}-style-properties`;
+  }.property('style')
 
 });
