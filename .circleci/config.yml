@@ -98,7 +98,7 @@ jobs:
       - run:
           name: Run unit tests
           command: |
-            TESTFILES=$(circleci tests glob "spec/{bin,controllers,helpers,interactions,lib,mailers,models,requests,serializers,services,settings}/**/*_spec.rb" | circleci tests split --split-by=timings)
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
@@ -108,7 +108,7 @@ jobs:
       - run:
           name: Run feature tests
           command: |
-            TESTFILES=$(circleci tests glob "spec/features/**/*_spec.rb" | circleci tests split --split-by=timings)
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
             xvfb-run -a bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
