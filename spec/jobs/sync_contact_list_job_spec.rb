@@ -6,7 +6,7 @@ describe SyncContactListJob do
     let(:perform) { job.new.perform(contact_list) }
 
     it 'calls on contact_list.sync_all!' do
-      expect(contact_list).to receive(:sync_all!)
+      expect(SyncAllContactList).to receive_service_call.with(contact_list)
       perform
     end
   end
