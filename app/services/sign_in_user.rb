@@ -20,7 +20,7 @@ class SignInUser
 
   def find_or_create_user
     user = find_user
-    user.update_authentication(omniauth) if should_update_authentication?(user)
+    user.update_authentication(omniauth_hash) if should_update_authentication?(user)
 
     [user || create_user, redirect_url_for(user)]
   end
@@ -41,7 +41,7 @@ class SignInUser
     request.cookie_jar
   end
 
-  def omniauth
+  def omniauth_hash
     request.env['omniauth.auth']
   end
 
@@ -50,11 +50,11 @@ class SignInUser
   end
 
   def find_user
-    return unless omniauth && omniauth['info'].present?
-    User.find_by(email: omniauth['info']['email'])
+    return unless omniauth_hash && omniauth_hash.info.present?
+    User.find_by(email: omniauth_hash.info.email)
   end
 
   def create_user
-    User.find_for_google_oauth2(omniauth, cookies[:login_email], track_options)
+    User.find_for_google_oauth2(omniauth_hash, cookies[:login_email], track_options)
   end
 end
