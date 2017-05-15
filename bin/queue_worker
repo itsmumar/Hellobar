@@ -94,7 +94,7 @@ class QueueWorker
         begin
           QueueWorker.log("Received message[#{message.message_id}]: #{message.body.inspect}")
           now = Time.current
-          sent_at = Time.at(mes.attributes['SentTimestamp'].to_i / 1000)
+          sent_at = Time.at(message.attributes['SentTimestamp'].to_i / 1000)
           puts sent_at
 
           if @config[:skip_old] and now - sent_at > 24.hours
