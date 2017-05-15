@@ -27,24 +27,6 @@ module Hello
           sign_path_and_params(generate_path('t', site_id, site_element_ids), { 'd' => number_of_days.to_i }.merge(additional_params), read_key)
         end
 
-        # Generates the path and params for getting the suggested improvements
-        # for the site elements provided. The results will be merged and sorted
-        # for all site elements and only the top 10 in each category.
-        #
-        # Response format:
-        #
-        # {"high traffic, low conversion": [
-        #   [segment_name, views_per_week, conversions_per_week],
-        #   [segment_name, views_per_week, conversions_per_week],
-        #   ...
-        # ],
-        # "low traffic, high conversion": [...],
-        # "high traffic, high conversion": [...]}
-        #
-        def suggested_opportunities(site_id, site_element_ids, read_key, additional_params = {})
-          sign_path_and_params(generate_path('i', site_id, site_element_ids), additional_params, read_key)
-        end
-
         # Generates the path and params for getting the contact list totals
         # for the contact lists provided.
         #

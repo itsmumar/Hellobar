@@ -24,8 +24,8 @@ feature 'Payment modal interaction', :js do
 
   context 'free subscription' do
     before do
-      allow_any_instance_of(CyberSourceCreditCard::CyberSourceCreditCardValidator)
-        .to receive(:validate).and_return(true)
+      allow_any_instance_of(CyberSourceCreditCard).to receive(:valid?).and_return(true)
+      allow_any_instance_of(CyberSourceCreditCard).to receive(:save_to_cybersource).and_return(true)
       allow_any_instance_of(PaymentMethod).to receive(:pay).and_return(true)
 
       create :rule, site: site
