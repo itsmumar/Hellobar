@@ -247,17 +247,17 @@ class User < ActiveRecord::Base
     user
   end
 
-  def update_authentication(info:, credentials:, uid:, provider:)
-    authentication = authentications.find_by(uid: uid, provider: provider)
+  def update_authentication(omniauth)
+    authentication = authentications.find_by(uid: omniauth.uid, provider: omniauth.provider)
 
-    self.first_name = info['first_name'] if info['first_name'].present?
-    self.last_name = info['last_name'] if info['last_name'].present?
+    self.first_name = omniauth.info['first_name'] if omniauth.info['first_name'].present?
+    self.last_name = omniauth.info['last_name'] if omniauth.info['last_name'].present?
 
-    if credentials && persisted?
+    if omniauth.credentials && persisted?
       authentication.update(
-        refresh_token: credentials.refresh_token,
-        access_token: credentials.token,
-        expires_at: Time.zone.at(credentials.expires_at)
+        refresh_token: omniauth.credentials.refresh_token,
+        access_token: omniauth.credentials.token,
+        expires_at: Time.zone.at(omniauth.credentials.expires_at)
       )
     end
 
