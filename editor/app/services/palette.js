@@ -14,7 +14,7 @@ export default Ember.Service.extend({
   /**
    * TODO
    */
-  recentColors: null,
+  recentColors: ['ffffff', 'ffffff', 'ffffff', 'ffffff'],
 
   /**
    * TODO

@@ -3,8 +3,31 @@ import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
+  /**
+   * @property
+   */
+  color: null,
+
+  /**
+   * @property
+   */
+  siteColors: null,
+
+  /**
+   * @property
+   */
+  recentColors: null,
+
+  /**
+   * @property
+   */
+  focusedColor: null,
+
   classNames: ['color-select'],
   classNameBindings: ['inFocus', 'isSelecting'],
+
+  //palette: Ember.inject.service(),
+
 
   inFocus: false,
   isSelecting: false,
@@ -22,6 +45,13 @@ export default Ember.Component.extend({
   //-----------  RGB Observer  -----------#
 
   didInsertElement() {
+
+    const defaultColor = 'ffffff';
+    const color = this.get('color');
+    if (!color) {
+      this.set('color', defaultColor);
+    }
+
     this.throttledSetRGB = _.throttle(() => {
       this.setRGB();
     }, 100);
