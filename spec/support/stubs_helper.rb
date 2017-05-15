@@ -28,4 +28,11 @@ module StubsHelper
       .with(variation_matcher)
       .and_return(yield)
   end
+
+  def stub_service(klass)
+    service = double(klass.to_s)
+    allow(klass).to receive(:new).and_return(service)
+    allow(service).to receive(:call)
+    service
+  end
 end
