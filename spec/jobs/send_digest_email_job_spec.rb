@@ -3,13 +3,11 @@ describe SendDigestEmailJob do
   let(:site) { create :site }
 
   describe '#perform' do
-    let!(:service) { stub_service SendEmailDigest }
     let(:perform) { job.new.perform(site) }
 
-    before { perform }
-
     it 'calls on the SendEmailDigest' do
-      expect(service).to have_received :call
+      expect(SendEmailDigest).to receive_service_call.with(site)
+      perform
     end
   end
 

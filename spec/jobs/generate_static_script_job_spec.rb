@@ -3,30 +3,28 @@ describe GenerateStaticScriptJob do
   let(:site) { create :site }
 
   describe '#perform' do
-    let!(:service) { stub_service CheckStaticScriptInstallation }
     let(:perform) { job.new.perform(site) }
 
-    before { perform }
-
     it 'calls on the CheckStaticScriptInstallation' do
-      expect(service).to have_received :call
+      expect(CheckStaticScriptInstallation).to receive_service_call.with(site)
+      perform
     end
 
     context 'when script_generated_at is blank' do
       let(:site) { create :site, script_generated_at: nil }
-      let!(:service) { stub_service GenerateAndStoreStaticScript }
 
       it 'does not call on the GenerateAndStoreStaticScript' do
-        expect(service).not_to have_received :call
+        expect(GenerateAndStoreStaticScript).not_to receive_service_call
+        perform
       end
     end
 
     context 'when script has been generated more than 3 hours ago', :freeze do
       let(:site) { create :site, script_generated_at: 4.hours.ago }
-      let!(:service) { stub_service GenerateAndStoreStaticScript }
 
       it 'calls on the GenerateAndStoreStaticScript' do
-        expect(service).to have_received :call
+        expect(GenerateAndStoreStaticScript).to receive_service_call.with(site)
+        perform
       end
     end
   end

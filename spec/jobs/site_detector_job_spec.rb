@@ -4,9 +4,9 @@ describe SiteDetectorJob do
 
   describe '#perform' do
     let(:perform) { job.new.perform(site) }
-    let!(:service) { stub_service DetectSiteType, 'install type' }
 
     it 'calls on the DetectSiteType' do
+      expect(DetectSiteType).to receive_service_call.with(site.url).and_return('install type')
       expect { perform }.to change { site.reload.install_type }.from(nil).to('install type')
     end
   end
