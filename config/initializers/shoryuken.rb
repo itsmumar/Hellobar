@@ -8,3 +8,14 @@ Shoryuken.configure_server do |config|
   Rails.logger = Shoryuken::Logging.logger
   Rails.logger.level = Rails.application.config.log_level
 end
+
+# this is needed to avoid parsing errors
+# will be removed when we refactor hellobar_backend
+class CustomWorkerRegistry < Shoryuken::DefaultWorkerRegistry
+  def fetch_worker(queue, message)
+    return SyncOneContactListWorker.new if SyncOneContactListWorker.parse(message.body)
+    super
+  end
+end
+
+Shoryuken.worker_registry = CustomWorkerRegistry.new

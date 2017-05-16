@@ -11,6 +11,8 @@ RSpec::Matchers.define :receive_service_call do
 
     if @return_value
       expect(@service_double).to receive(:call).exactly(@times).times.and_return(@return_value)
+    elsif @error
+      expect(@service_double).to receive(:call).exactly(@times).times.and_raise(@error)
     else
       expect(@service_double).to receive(:call).exactly(@times).times
     end
@@ -32,6 +34,10 @@ RSpec::Matchers.define :receive_service_call do
 
   chain :and_return do |return_value|
     @return_value = return_value
+  end
+
+  chain :and_raise do |error|
+    @error = error
   end
 
   chain :exactly do |times|

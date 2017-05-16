@@ -1,9 +1,8 @@
 class SyncOneContactList < SyncAllContactList
-  def initialize(contact_list, email, name)
-    super(contact_list)
-    @email = email
-    @name = name
-    clean_up_params!
+  def initialize(contact)
+    super(contact.contact_list)
+    @email = contact.email
+    @name = contact.fields
   end
 
   def call
@@ -23,16 +22,6 @@ class SyncOneContactList < SyncAllContactList
   private
 
   attr_reader :contact_list, :email, :name
-
-  def clean_up_params!
-    # Ensure rake-task quotes are removed
-    start_end_quotes = /^"|"$/
-    @name = name.gsub(start_end_quotes, '')
-    @email = email.gsub(start_end_quotes, '')
-
-    # Remove name if rake interpreted is as "nil"
-    @name = nil if name == 'nil'
-  end
 
   def subscribe
     contact_list.service_provider.subscribe(list_id, email, name, double_optin)
