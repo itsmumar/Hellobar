@@ -7,7 +7,7 @@ class SyncOneContactList < SyncAllContactList
   end
 
   def call
-    log_entry = contact_list_logs.create!(email: email, name: name)
+    log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
 
     return unless contact_list.syncable?
 
@@ -15,7 +15,7 @@ class SyncOneContactList < SyncAllContactList
       if api_call?
         subscribe
       else
-        HTTParty.post(action_url, body: subscribe_params)
+        make_simple_request subscribe_params
       end
     end
   end
@@ -46,14 +46,19 @@ class SyncOneContactList < SyncAllContactList
     yield
     log_entry.update(completed: true)
   rescue *ESP_ERROR_CLASSES => e
-    log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
+    handle_error e, log_entry
+  rescue => e
+    Raven.capture_exception(e)
+    log_entry.update(completed: false, error: e.to_s)
+    raise e
+  end
+
+  def handle_error(e, log_entry)
+    Raven.capture_exception(e)
+    log_entry.update(completed: false, error: e.to_s)
 
     raise e unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
-    Raven.capture_exception(e)
 
     clear_identity_on_failure(e)
-  rescue => e
-    log_entry.update(completed: false, error: e.to_s, stacktrace: caller.join("\n"))
-    raise e
   end
 end

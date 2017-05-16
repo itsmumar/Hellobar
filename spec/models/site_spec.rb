@@ -246,7 +246,7 @@ describe Site do
   end
 
   describe '#generate_script' do
-    it 'delegates :generate_static_assets to delay' do
+    it 'enqueues GenerateStaticScriptJob' do
       expect { site.generate_script }.to have_enqueued_job GenerateStaticScriptJob
     end
   end

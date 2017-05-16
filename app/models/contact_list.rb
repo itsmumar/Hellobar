@@ -126,7 +126,7 @@ class ContactList < ActiveRecord::Base
 
     if syncable? && !oauth? && !api_key?
       begin
-        subscribe_params('emailfor@user.com', 'Name namerson', true)
+        service_provider.subscribe_params('emailfor@user.com', 'Name namerson', true)
         false
       rescue
         true

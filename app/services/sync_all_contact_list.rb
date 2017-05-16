@@ -35,8 +35,7 @@ class SyncAllContactList
           subscribe(group)
         else
           group.each do |g|
-            params = subscribe_params(g[0], g[1])
-            HTTParty.post(action_url, body: params)
+            make_simple_request subscribe_params(g[0], g[1])
           end
         end
       end
@@ -66,6 +65,10 @@ class SyncAllContactList
   def perform_sync
     yield
   rescue *ESP_ERROR_CLASSES => e
+    handle_error e
+  end
+
+  def handle_error(e)
     Raven.capture_exception(e)
     raise e unless ESP_NONTRANSIENT_ERRORS.any? { |message| e.to_s.include?(message) }
 
@@ -77,5 +80,9 @@ class SyncAllContactList
 
     Rails.logger.warn "Removing identity #{ contact_list.identity.try(:id) }\n#{ e.message }"
     contact_list.identity.try(:destroy_and_notify_user)
+  end
+
+  def make_simple_request(params)
+    HTTParty.post(action_url, body: params)
   end
 end
