@@ -64,7 +64,7 @@ gem 'kaminari'
 gem 'mysql2'
 
 # File uploads
-gem 'paperclip'
+gem 'paperclip', '~> 5.1'
 
 # JSON
 gem 'active_model_serializers'

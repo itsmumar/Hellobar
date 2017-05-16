@@ -1,6 +1,7 @@
 if Rails.env.production? || Rails.env.staging? || Rails.env.edge?
   Paperclip::Attachment.default_options[:storage] = :s3
   Paperclip::Attachment.default_options[:s3_protocol] = :https
+  Paperclip::Attachment.default_options[:s3_region] = Settings.aws_region
   Paperclip::Attachment.default_options[:s3_credentials] = {
     bucket: Settings.s3_bucket,
     access_key_id: Settings.aws_access_key_id,
