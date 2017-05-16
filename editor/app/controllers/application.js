@@ -3,7 +3,6 @@ import _ from 'lodash/lodash';
 
 import ValidationMixin from './application.mixin.validation';
 import ColorsMixin from './application.mixin.colors';
-import PreviewMixin from './application.mixin.preview';
 import PhoneMixin from './application.mixin.phone';
 import ThemingMixin from './application.mixin.theming';
 import TypeAndSubtypeMixin from './application.mixin.type-and-subtype';
@@ -12,7 +11,6 @@ import UpgradingMixin from './application.mixin.upgrading';
 export default Ember.Controller.extend(
   ValidationMixin,
   ColorsMixin,
-  PreviewMixin,
   PhoneMixin,
   ThemingMixin,
   TypeAndSubtypeMixin,

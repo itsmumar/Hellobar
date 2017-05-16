@@ -13,7 +13,7 @@ export default Ember.Service.extend({
   },
 
   _initializeInjectionPolicy() {
-    hellobar('elements.injection').overrideInjectionPolicy(function (element) {
+    hellobar('elements.injection').overrideInjectionPolicy((element) => {
       const dom = hellobar('base.dom');
       const container = dom.$("#hellobar-preview-container");
       if (container.children[0]) {
