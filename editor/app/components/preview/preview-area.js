@@ -15,6 +15,7 @@ export default Ember.Component.extend({
 
   classNames: ['preview-area'],
 
+  bus: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
   imaging: Ember.inject.service(),
   preview: Ember.inject.service(),
@@ -27,6 +28,9 @@ export default Ember.Component.extend({
   didInsertElement() {
     this.get('preview').addPreviewInjectionListener(() => {
       this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
+    });
+    this.get('bus').subscribe('hellobar.core.preview.render', () => {
+      this.renderPreview();
     });
   },
 

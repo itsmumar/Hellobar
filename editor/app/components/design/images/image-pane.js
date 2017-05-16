@@ -43,32 +43,6 @@ export default Ember.Component.extend({
     }
   ),
 
-  // TODO REFACTOR cleanup
-  /*getImagePlacement() {
-    const positionIsSelectable = this.get('currentTheme.image.position_selectable');
-    const imageIsBackground = (this.get('model.image_placement') === 'background');
-    const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
-
-    if (!positionIsSelectable || imageIsBackground || positionIsEmpty) {
-      return this.get('currentTheme.image.position_default');
-    } else {
-      return this.get('model.image_placement');
-    }
-  },*/
-
-  getImagePlacement() {
-    const positionIsSelectable = this.get('currentTheme.image.position_selectable');
-    const imageIsBackground = (this.get('model.image_placement') === 'background');
-    const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
-    if (!positionIsSelectable) {
-      return this.get('currentTheme.image.position_default');
-    } else if (imageIsBackground || positionIsEmpty) {
-      return this.get('currentTheme.image.position_default');
-    } else {
-      return this.get('model.image_placement');
-    }
-  },
-
   actions: {
     selectImagePlacement(imagePlacement) {
       this.set('model.image_placement', imagePlacement.value);
@@ -77,7 +51,7 @@ export default Ember.Component.extend({
     setImageProps(imageID, imageUrl, imageType = null) {
       return this.setProperties({
         'model.active_image_id': imageID,
-        'model.image_placement': this.getImagePlacement(),
+        'model.image_placement': this.get('theming').getImagePlacement(),
         'model.image_url': imageUrl,
         'model.image_type': imageType
       });

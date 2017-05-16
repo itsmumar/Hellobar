@@ -37,7 +37,27 @@ export default Ember.Service.extend({
       });
       this.set('model.settings.fields_to_collect', fields);
     }
-  }.observes('model.type')
+  }.observes('model.type'),
+
+  afterModel: function () {
+    let cookieSettings = this.get('model.settings.cookie_settings');
+    if (_.isEmpty(cookieSettings)) {
+      const elementType = this.get('model.type');
+      if (elementType === 'Modal' || elementType === 'Takeover') {
+        cookieSettings = {
+          duration: 0,
+          success_duration: 0
+        };
+      } else {
+        cookieSettings = {
+          duration: 0,
+          success_duration: 0
+        };
+      }
+
+      this.set('model.settings.cookie_settings', cookieSettings);
+    }
+  }.observes('model')
 
   // TODO REFACTOR adopt (this is from style controller) (what is isEditing?)
   /*onElementTypeChanged: (function () {

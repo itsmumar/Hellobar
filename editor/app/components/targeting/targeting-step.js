@@ -87,27 +87,6 @@ export default Ember.Component.extend({
     }
   },
 
-  // TODO REFACTOR -> modelLogic or targeting route
-  afterModel: function () {
-    let cookieSettings = this.get('model.settings.cookie_settings');
-    if (_.isEmpty(cookieSettings)) {
-      const elementType = this.get('model.type');
-      if (elementType === 'Modal' || elementType === 'Takeover') {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      } else {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      }
-
-      this.set('model.settings.cookie_settings', cookieSettings);
-    }
-  }.observes('model'),
-
   isTopBarStyle: Ember.computed.equal('model.type', 'Bar'),
 
   rulePopUpOptions: function (ruleData, isNewRule) {

@@ -13,26 +13,12 @@ const Router = Ember.Router.extend({
 
 Router.map(function () {
   this.route('home', {path: '/'});
-
   this.route('goals');
-
   this.route('styles');
-
   this.route('design');
-
   this.route('text');
-
-  // TODO REFACTOR cleanup
-  this.route('targeting'/*, function () {
-      this.route('everyone');
-      this.route('mobile');
-      this.route('homepage');
-      this.route('custom');
-      this.route('saved');
-    }
-  */);
-
-  return this.route('interstitial', function () {
+  this.route('targeting');
+  this.route('interstitial', function () {
       this.route('call');
       this.route('money', {path: 'promote'});
       this.route('contacts');

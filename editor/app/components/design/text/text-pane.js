@@ -7,6 +7,8 @@ export default Ember.Component.extend({
    */
   model: null,
 
+  preview: Ember.inject.service(),
+
   hideLinkText: Ember.computed.match('model.element_subtype', /social|announcement/),
 
   isABar: Ember.computed.equal('model.type', 'Bar'),
@@ -47,22 +49,19 @@ export default Ember.Component.extend({
     showQuestion() {
       hellobar('base.preview').setAnswerToDisplay(null);
       this.set('questionTabSelection', 'TabQuestion');
-      // TODO REFACTOR: adopt this
-      //this.get('applicationController').renderPreview();
+      this.get('preview').renderPreview();
     },
 
     showAnswer1() {
       hellobar('base.preview').setAnswerToDisplay(1);
       this.set('questionTabSelection', 'TabAnswer1');
-      // TODO REFACTOR: adopt this
-      //this.get('applicationController').renderPreview();
+      this.get('preview').renderPreview();
     },
 
     showAnswer2() {
       hellobar('base.preview').setAnswerToDisplay(2);
       this.set('questionTabSelection', 'TabAnswer2');
-      // TODO REFACTOR: adopt this
-      //this.get('applicationController').renderPreview();
+      this.get('preview').renderPreview();
     }
   }
 

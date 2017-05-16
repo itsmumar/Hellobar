@@ -6,6 +6,8 @@ import Ember from 'ember';
  */
 export default Ember.Service.extend({
 
+  bus: Ember.inject.service(),
+
   _previewInjectionListeners: [],
 
   init() {
@@ -31,6 +33,10 @@ export default Ember.Service.extend({
 
   notifyPreviewInjectionListeners() {
     this._previewInjectionListeners.forEach((listener) => listener());
+  },
+
+  renderPreview() {
+    this.get('bus').trigger('hellobar.core.preview.render');
   }
 
 });

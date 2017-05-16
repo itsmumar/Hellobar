@@ -18,7 +18,6 @@ export default Ember.Component.extend({
     const isCanvas = obj.target.localName === 'canvas';
     const isColorSelect = $(obj.target).closest('.color-select-wrapper').length;
 
-    // TODO REFACTOR move this to service
     if (!isCanvas && !isColorSelect) {
       this.set('palette.focusedColor', null);
     }

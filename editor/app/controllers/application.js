@@ -18,6 +18,9 @@ export default Ember.Controller.extend(
     bus: Ember.inject.service(),
     applicationSettings: Ember.inject.service(),
 
+    goal: Ember.computed.alias('model.element_subtype'),
+    style: Ember.computed.alias('model.type'),
+
     init() {
       this.initializeValidation();
       this._initializeInlineEditing();

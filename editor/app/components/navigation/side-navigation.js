@@ -2,14 +2,29 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
-  // TODO REFACTOR init these properties
-  isMobile: null,
-  isFullscreen: null,
-  shouldShowMobileDesktopSwitch: null,
+  /**
+   * @property {boolean}
+   */
+  isMobile: false,
 
-  /*shouldShowMobileDesktopSwitch: function() {
-    return this.get('isTopBarStyle') && !this.get('isCallType');
-  }.property('isTopBarStyle', 'isCallType')*/
+  /**
+   * @property {boolean}
+   */
+  isFullscreen: false,
+
+  /**
+   * @property {string}
+   */
+  goal: true,
+
+  /**
+   * @property {string}
+   */
+  style: true,
+
+  shouldShowMobileDesktopSwitch: function() {
+    return this.get('style') === 'Bar' && this.get('goal') !== 'call';
+  }.property('goal', 'style'),
 
   tagName: 'nav',
 

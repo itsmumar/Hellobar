@@ -14,19 +14,6 @@ export default Ember.Component.extend({
   elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
   elementTypeIsNotAlert: Ember.computed.not('elementTypeIsAlert'),
 
-
-  // TODO REFACTOR -> theming or modelLogic
-  // Site Element Theme Properties
-  themeChanged: Ember.observer('currentTheme', function () {
-      Ember.run.next(this, function () {
-          this.setProperties({
-            'model.image_placement': this.getImagePlacement()
-          });
-        }
-      );
-    }
-  ),
-
   shouldShowThankYouEditor: Ember.computed.equal('model.element_subtype', 'email')
 
 });

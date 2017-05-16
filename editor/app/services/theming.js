@@ -39,19 +39,6 @@ export default Ember.Service.extend({
 
   }.property(),
 
-
-  // TODO REFACTOR adopt (move to modelLogic?)
-  /*themeChanged: Ember.observer('currentThemeName', function () {
-   return Ember.run.next(this, function () {
-   return this.setProperties({
-   'model.image_placement': this.getImagePlacement()
-   });
-   }
-   //'model.use_default_image' : false
-   );
-   }
-   )*/
-
   _firstAttemptOfThemeApplying: false,
 
   applyCurrentTheme() {
@@ -76,6 +63,19 @@ export default Ember.Service.extend({
     this._firstAttemptOfThemeApplying = true;
   },
 
+  getImagePlacement() {
+    const positionIsSelectable = this.get('currentTheme.image.position_selectable');
+    const imageIsBackground = (this.get('model.image_placement') === 'background');
+    const positionIsEmpty = Ember.isEmpty(this.get('model.image_placement'));
+    if (!positionIsSelectable) {
+      return this.get('currentTheme.image.position_default');
+    } else if (imageIsBackground || positionIsEmpty) {
+      return this.get('currentTheme.image.position_default');
+    } else {
+      return this.get('model.image_placement');
+    }
+  },
+
   currentTheme: function () {
     const allThemes = this.get('availableThemes');
     const currentThemeId = this.get('model.theme_id');
@@ -96,7 +96,11 @@ export default Ember.Service.extend({
       this.get('inlineEditing').initializeBlocks(this.get('model'), this.get('model.theme_id'));
     }
     this.applyCurrentTheme();
+    Ember.run.next(() => {
+      this.setProperties({
+        'model.image_placement': this.getImagePlacement()
+      });
+    });
   }).observes('model.theme_id')
-
 
 });
