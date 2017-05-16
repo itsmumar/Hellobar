@@ -14,7 +14,7 @@ describe SyncContactListJob do
   describe '.perform_later' do
     it 'adds the job to the queue Settings.main_queue' do
       job.perform_later(contact_list)
-      expect(enqueued_jobs.last[:queue]).to eq 'hellobar_test'
+      expect(enqueued_jobs.last[:queue]).to eq 'hb3_test'
     end
   end
 end
