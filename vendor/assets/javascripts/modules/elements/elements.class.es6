@@ -49,6 +49,9 @@ hellobar.defineModule('elements.class',
       imagePlacementClass() {
         if (!!this.image_url) {
           return 'image-' + this.image_placement;
+        } else if (typeof this.model === 'function' && this.model().image_url) {
+          // support for Alert bar style
+          return 'image-' + this.model().image_placement;
         } else {
           return '';
         }
@@ -289,7 +292,6 @@ hellobar.defineModule('elements.class',
 
       // Reads the site element's view_condition setting and calls hide/show per selected behavior
       // if viewCondition is missing or badly formed, siteElement displays immediately by default
-
       checkForDisplaySetting() {
         const viewCondition = preview.isActive() ? 'preview' : this.view_condition;
 
@@ -317,7 +319,7 @@ hellobar.defineModule('elements.class',
             }
 
             if (this.w.className.indexOf("hb-animated") > -1) {
-              dom.animateIn(this.w)
+              dom.animateIn(this.w);
             }
           };
           if (this.w.className.indexOf("hb-animated") > -1) {
