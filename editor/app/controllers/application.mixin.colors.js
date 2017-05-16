@@ -2,6 +2,7 @@ import Ember from 'ember';
 
 // GLOBALS: one object (https://github.com/One-com/one-color), ColorThief
 
+// TODO REFACTOR -> palette service
 export default Ember.Mixin.create({
 
   coloring: Ember.inject.service(),

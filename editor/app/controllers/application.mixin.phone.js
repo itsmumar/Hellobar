@@ -2,12 +2,14 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
+  // TODO REFACTOR -> modelLogic
   setPhoneDefaults: (function () {
     if (this.get('model.element_subtype') === 'call') {
       this.set('isMobile', true);
     }
   }).observes('model.element_subtype').on('init'),
 
+  // TODO REFACTOR -> modelLogic
   formatPhoneNumber: function () {
     const phoneNumber = this.get('model.phone_number');
     const countryCode = this.get('model.phone_country_code');

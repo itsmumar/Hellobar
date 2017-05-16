@@ -3,7 +3,7 @@ import _ from 'lodash/lodash';
 
 export default Ember.Mixin.create({
 
-  selectedPlacementOption: (function() {
+  selectedPlacementOption: function () {
     const placement = this.get('model.placement');
     const options = this.get('placementOptions');
     const selectedOption = _.find(options, (option) => option.value === placement);
@@ -14,7 +14,7 @@ export default Ember.Mixin.create({
       Ember.run.next(() => this.set('model.placement', defaultOption.value));
       return defaultOption;
     }
-  }).property('model.placement'),
+  }.property('model.placement'),
 
   actions: {
     selectPlacement(placementOption) {

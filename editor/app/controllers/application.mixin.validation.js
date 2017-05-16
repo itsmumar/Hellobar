@@ -2,6 +2,8 @@ import Ember from 'ember';
 
 // GLOBALS: isValidNumber function
 
+
+// TODO REFACTOR -> modelValidation service
 export default Ember.Mixin.create({
 
   validation: Ember.inject.service(),

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
+// TODO REFACTOR -> preview service
 export default Ember.Mixin.create({
 
   fonts: Ember.inject.service(),

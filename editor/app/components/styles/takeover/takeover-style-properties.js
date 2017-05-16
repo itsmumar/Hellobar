@@ -1,5 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Component.extend({
+import HasTriggerOptions from '../../../mixins/has-trigger-options-mixin';
 
+export default Ember.Component.extend(HasTriggerOptions, {
 });

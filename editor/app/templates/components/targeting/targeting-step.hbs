@@ -1,0 +1,94 @@
+<div class="ember-view targeting">
+  <h5 class="step-title">Targeting</h5>
+
+  <div class="{{targetingListCssClasses}}">
+    {{#link-to 'targeting.everyone' (query-params showDropdown=false) class='step-link-block'}}
+        <i class="hellobar-icon hellobar-icon-people"></i>
+        <h6>Everyone</h6>
+
+        <p>Show your Hello Bar to everyone on every page of your site.</p>
+    {{/link-to}}
+
+    {{#if isTopBarStyle}}
+      {{#link-to 'targeting.mobile' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
+        <span {{action 'closeDropdown'}}>
+          <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+          <h6>
+            Mobile Visitors
+            <span class="button paid">PAID</span>
+          </h6>
+
+          <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+        </span>
+      {{/link-to}}
+    {{/if}}
+
+    {{#link-to 'targeting.homepage' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
+        <i class="hellobar-icon hellobar-icon-house"></i>
+        <h6>
+          Homepage Visitors
+          <span class="button paid">PAID</span>
+        </h6>
+
+        <p>Show your Hello Bar on your site's homepage only.</p>
+    {{/link-to}}
+
+    {{#link-to 'targeting.custom' (query-params showDropdown=false) classBinding="canTarget:can-target" class='step-link-block'}}
+        <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
+        <h6>
+          Custom Rule
+          <span class="button paid">PAID</span>
+        </h6>
+
+        <p>Show your Hello Bar to a custom audience of your choice.</p>
+    {{/link-to}}
+
+    {{#if hasCustomRules}}
+      {{#link-to 'targeting.saved' classBinding="canTarget:can-target" class='step-link-block saved-rule'}}
+          <i class="hellobar-icon hellobar-icon-saved-segment"></i>
+          <h6 class="left-condense">
+            <span class="left">Show to a saved targeting rule</span>
+            <span class="button paid">PAID</span>
+          </h6>
+
+          <p>Show your Hello Bar to a custom targeting rule that you've saved before.</p>
+      {{/link-to}}
+    {{/if}}
+
+    {{outlet}}
+
+    <a {{action 'resetRuleDropdown'}} class="change-selection">
+      <i class="icon-back1"></i>
+      Change Target Audience
+    </a>
+  </div>
+
+  <label>
+    <span>Cookie Duration</span>
+    {{#hints/popup-hint-trigger}}
+      <p>The number of days before the optin will display <br>
+        again once the user exits your campaign. <br>
+        <strong>Change to 0 to prevent cookies from being set.</strong></p>
+    {{/hints/popup-hint-trigger}}
+  </label>
+  {{input value=model.settings.cookie_settings.duration
+  placeholder="Cookie Duration"
+  maxlength=5
+  type="number"
+  }}
+
+  <label>
+    <span>Success Cookie Duration</span>
+    {{#hints/popup-hint-trigger}}
+      <p>The number of days before the optin will display <br>
+        again once the user successfully opts in to your <br>
+        campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
+    {{/hints/popup-hint-trigger}}
+  </label>
+  {{input value=model.settings.cookie_settings.success_duration
+  placeholder="Success Cookie Duration"
+  maxlength=5
+  type="number"
+  }}
+
+</div>

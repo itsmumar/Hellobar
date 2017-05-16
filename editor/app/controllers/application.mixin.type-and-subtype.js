@@ -1,5 +1,6 @@
 import Ember from 'ember';
 
+// TODO REFACTOR -> modelLogic
 export default Ember.Mixin.create({
 
   isTopBarStyle: function() {

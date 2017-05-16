@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
+// TODO REFACTOR -> theming service
 export default Ember.Mixin.create({
 
   theming: Ember.inject.service(),

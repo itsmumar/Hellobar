@@ -1,1 +1,59 @@
-Alert
+<div class="substep slider">
+
+  <label class="toggle-animation">
+    {{common/checkboxes/toggle-switch switch=model.animated}}
+    Animations
+  </label>
+
+  <label>Placement</label>
+
+  <div class="select-wrapper">
+    {{#power-select options=placementOptions
+    selected=selectedPlacementOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectPlacement") as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+
+  <label>When does it display?
+    <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small>
+  </label>
+
+  <div class="select-wrapper">
+    {{#power-select options=triggerOptions
+    selected=selectedTriggerOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectTrigger") as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+
+  <label>Sound</label>
+
+  <div class="select-wrapper">
+    {{#power-select options=soundOptions
+    selected=selectedSoundOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectSound") as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+
+  <label>
+    <span>Notification delay</span>
+    {{#hints/popup-hint-trigger}}
+      <p>The number of seconds before <br>
+        the alert starts ringing</p>
+    {{/hints/popup-hint-trigger}}
+  </label>
+  {{input value=model.notification_delay
+  placeholder="Notification delay (seconds)"
+  maxlength=5
+  type="number"
+  }}
+
+</div>
