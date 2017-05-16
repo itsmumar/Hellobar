@@ -155,3 +155,19 @@
   -webkit-animation: alarm-swing 1.2s both;
   animation: alarm-swing 1.2s both;
 }
+
+/*-----------  Uploaded Image  -----------*/
+
+#hellobar-slider .uploaded-image {
+  max-height: 200px;
+}
+
+#hellobar-slider.image-left .hb-image-wrapper, #hellobar-slider.image-right .hb-image-wrapper {
+  text-align: center;
+}
+
+#hellobar-slider.image-left .image-clear-fix, #hellobar-slider.image-right .image-clear-fix {
+  display: block;
+  clear: both;
+  content: '';
+}
