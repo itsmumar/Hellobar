@@ -31,7 +31,6 @@ module Hellobar
     # order and have a convenient place to put other initialization
     # code (config, etc.)
     config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
-    config.autoload_paths += %W[#{ config.root }/lib/queue_worker/]
 
     # Action Mailer
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')

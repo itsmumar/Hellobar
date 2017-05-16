@@ -9,8 +9,4 @@ namespace :contact_list do
       list.sync_one! args[:email], fields.presence
     end
   end
-
-  task :sync_all!, [:contact_list_id] => :environment do |_t, args|
-    ContactList.find(args[:contact_list_id]).tap(&:sync_all!)
-  end
 end
