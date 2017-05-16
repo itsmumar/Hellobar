@@ -25,7 +25,7 @@ namespace :deploy do
       invoke 'deploy:reload_nginx_config'
       invoke 'deploy:restart_thin'
       invoke 'deploy:restart_monit'
-      invoke 'deploy:restart_queue_workers'
+      invoke 'shoryuken:restart'
     end
   end
 
@@ -52,30 +52,6 @@ namespace :deploy do
       as :hellobar do
         execute 'mkdir -p /mnt/deploy/shared/sockets'
         execute "cd #{ release_path } && bundle exec thin restart -e #{ fetch :stage } -C config/thin/www.yml"
-      end
-    end
-  end
-
-  task :start_queue_workers do
-    on roles(:web) do
-      as :hellobar do
-        execute "cd #{ release_path } && RAILS_ENV=#{ fetch :stage } bundle exec rake queue_worker:start"
-      end
-    end
-  end
-
-  task :stop_queue_workers do
-    on roles(:web) do
-      as :hellobar do
-        execute "cd #{ release_path } && RAILS_ENV=#{ fetch :stage } bundle exec rake queue_worker:stop"
-      end
-    end
-  end
-
-  task :restart_queue_workers do
-    on roles(:web) do
-      as :hellobar do
-        execute "cd #{ release_path } && RAILS_ENV=#{ fetch :stage } bundle exec rake queue_worker:restart"
       end
     end
   end
@@ -125,7 +101,7 @@ namespace :deploy do
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_maintenance'
       invoke 'deploy:stop_thin'
-      invoke 'deploy:stop_queue_workers'
+      invoke 'shoryuken:stop'
     end
   end
 
@@ -135,7 +111,7 @@ namespace :deploy do
       invoke 'deploy:start_thin'
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_web'
-      invoke 'deploy:start_queue_workers'
+      invoke 'shoryuken:start'
     end
   end
 
