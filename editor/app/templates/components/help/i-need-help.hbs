@@ -20,7 +20,7 @@
     <form action="/contact_submissions/generic_message" method="post">
       {{input name="authenticity_token" type="hidden" value=csrfToken}}
       {{input name="site_id" type="hidden" value=siteID}}
-      {{input name="return_to" type="hidden" value="/sites/{{unbound global.siteID}}/site_elements/new"}}
+      {{input name="return_to" type="hidden" value=returnTo}}
       {{textarea name="message" required="required"}}
       <button type="button" class="button cancel" {{action 'onCancel'}}>Cancel</button>
       {{input type="submit" name="commit" class="button send" data-disable-with="Sending..." value="Send"}}
