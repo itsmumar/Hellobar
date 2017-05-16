@@ -38,17 +38,6 @@
   font-size: 100%;
 }
 
-#hellobar-alert #hb-preview-mode-tooltip {
-  display: block;
-  position: absolute;
-  padding: 10px;
-  border: 1px solid #c3c3c3;
-  color: #565656;
-  background: white;
-  border-radius: 8px;
-  font-style: italic;
-}
-
 #hellobar-slider .hb-content-wrapper {
   text-align: left;
 }

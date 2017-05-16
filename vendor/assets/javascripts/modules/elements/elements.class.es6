@@ -289,7 +289,6 @@ hellobar.defineModule('elements.class',
 
       // Reads the site element's view_condition setting and calls hide/show per selected behavior
       // if viewCondition is missing or badly formed, siteElement displays immediately by default
-
       checkForDisplaySetting() {
         const viewCondition = preview.isActive() ? 'preview' : this.view_condition;
 
@@ -317,7 +316,7 @@ hellobar.defineModule('elements.class',
             }
 
             if (this.w.className.indexOf("hb-animated") > -1) {
-              dom.animateIn(this.w)
+              dom.animateIn(this.w);
             }
           };
           if (this.w.className.indexOf("hb-animated") > -1) {
