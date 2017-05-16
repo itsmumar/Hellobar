@@ -49,6 +49,9 @@ hellobar.defineModule('elements.class',
       imagePlacementClass() {
         if (!!this.image_url) {
           return 'image-' + this.image_placement;
+        } else if (typeof this.model === 'function' && this.model().image_url) {
+          // support for Alert bar style
+          return 'image-' + this.model().image_placement;
         } else {
           return '';
         }
