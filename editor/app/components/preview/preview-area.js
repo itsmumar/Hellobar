@@ -146,13 +146,9 @@ export default Ember.Component.extend({
     'isMobile'
   ),
 
-  renderPreviewWithAnimations: function () {
+  onAnimatedChanged: function () {
     this.renderPreview();
   }.observes('model.animated'),
-
-  onHtmlChanged: function () {
-    this.renderPreview();
-  }.observes('model.settings.url'),
 
   // ----- Skipping update
 
