@@ -8,6 +8,7 @@ export default Ember.Route.extend({
   bus: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
   modelLogic: Ember.inject.service(),
+  theming: Ember.inject.service(),
 
   saveCount: 0,
 
@@ -35,6 +36,7 @@ export default Ember.Route.extend({
 
   afterModel(resolvedModel) {
     this.get('modelLogic').setModel(resolvedModel);
+    this.get('theming').setModel(resolvedModel);
     if (localStorage['stashedContactList']) {
       const contactList = JSON.parse(localStorage['stashedContactList']);
       localStorage.removeItem('stashedContactList');

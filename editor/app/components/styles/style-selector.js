@@ -25,12 +25,14 @@ export default Ember.Component.extend({
   init() {
     this._super();
     this.set('selectionInProgress', !this.get('style'));
-    this.set('themeSelectionInProgress', true);
+    this.set('themeSelectionInProgress', false);
     allStyles.forEach((style) => {
       this[`shouldShow${style}ThemeInfo`] = Ember.computed('themeSelectionInProgress',
         'selectionInProgress',
         'style',
         function () {
+          console.log('+++ TEST', this.get(`canUse${style}Style`),
+            this.get('style'), this.get('themeSelectionInProgress'), this.get('selectionInProgress')); // TODO remove
           return this.get(`canUse${style}Style`) !== false &&
             this.get('style') === style && !this.get('themeSelectionInProgress') && !this.get('selectionInProgress');
         });
@@ -40,24 +42,20 @@ export default Ember.Component.extend({
       });
 
     });
-    this.get('bus').subscribe('hellobar.core.bar.themeChanged', params => {
+    this.get('bus').subscribe('hellobar.core.bar.themeChanged', (params) => {
         this.set('model.theme_id', params.themeId);
         if (!this.get('model.type')) {
           this.set('model.type', params.elementType);
         }
-        this.set('userSelectedElementTypeExplicitly', true);
-        Ember.run.next(() => {
-          this.applyRoute('style.index');
-        });
       }
     );
-    this.get('bus').subscribe('hellobar.core.rightPane.show', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.show', (params) => {
         if (params.componentName === 'preview/containers/theming/theme-tile-grid') {
           this.set('themeSelectionInProgress', true);
         }
       }
     );
-    this.get('bus').subscribe('hellobar.core.rightPane.hide', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.hide', (params) => {
         this.set('themeSelectionInProgress', false);
       }
     );

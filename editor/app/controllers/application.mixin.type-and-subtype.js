@@ -3,17 +3,11 @@ import Ember from 'ember';
 // TODO REFACTOR -> modelLogic
 export default Ember.Mixin.create({
 
-  isTopBarStyle: function() {
-    return this.get('model.type') === 'Bar';
-  }.property('model.type'),
-
-  isNotTopBarStyle: function() {
-    return this.get('model.type') !== 'Bar';
-  }.property('model.type'),
+  theming: Ember.inject.service(),
 
   _checkMobileProperty() {
     const elementType = this.get('model.type');
-    const currentTheme = this.get('currentTheme');
+    const currentTheme = this.get('theming.currentTheme');
     const elementSubtype = this.get('model.element_subtype');
     const isMobile = this.get('isMobile');
     if (elementType !== 'Bar' && currentTheme.type === 'generic' && elementSubtype !== 'call' && isMobile) {
@@ -28,12 +22,11 @@ export default Ember.Mixin.create({
 
   onElementTypeChanged: function () {
     const elementType = this.get('model.type');
-    const currentTheme = this.get('currentTheme');
+    const currentTheme = this.get('theming.currentTheme');
     const previousElementType = this.get('previousElementType');
     if (elementType && previousElementType && elementType !== previousElementType) {
       if (currentTheme && (currentTheme.type === 'template')) {
-        // TODO set to null?
-        this.set('model.theme_id', this.get('theming.defaultGenericTheme.id'));
+        this.set('model.theme_id', this.get('autodetected'));
       }
     }
     this.set('previousElementType', elementType);
@@ -49,10 +42,7 @@ export default Ember.Mixin.create({
     }
   }.observes('model.element_subtype'),
 
-  isCallType: Ember.computed.equal('model.element_subtype', 'call'),
+  isCallType: Ember.computed.equal('model.element_subtype', 'call')
 
-  shouldShowMobileDesktopSwitch: function() {
-    return this.get('isTopBarStyle') && !this.get('isCallType');
-  }.property('isTopBarStyle', 'isCallType')
 
 });
