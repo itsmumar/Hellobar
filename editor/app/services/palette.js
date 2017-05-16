@@ -6,6 +6,7 @@ import Ember from 'ember';
  */
 export default Ember.Service.extend({
 
+  // TODO REFACTOR define these properties while moving code from application controller
   /**
    * TODO description
    */
