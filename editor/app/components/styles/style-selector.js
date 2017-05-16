@@ -31,8 +31,6 @@ export default Ember.Component.extend({
         'selectionInProgress',
         'style',
         function () {
-          console.log('+++ TEST', this.get(`canUse${style}Style`),
-            this.get('style'), this.get('themeSelectionInProgress'), this.get('selectionInProgress')); // TODO remove
           return this.get(`canUse${style}Style`) !== false &&
             this.get('style') === style && !this.get('themeSelectionInProgress') && !this.get('selectionInProgress');
         });

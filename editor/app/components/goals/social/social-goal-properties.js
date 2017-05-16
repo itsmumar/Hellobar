@@ -30,7 +30,6 @@ export default Ember.Component.extend({
     if (subtype && subtype.indexOf('/') >= 0) {
       const shortSubtype = subtype.replace(/^(social\/)/, '');
       const componentShortName = shortSubtype.replace(/_/g, '-');
-      console.log('+++ social component name', 'goals/social/subtypes/' + componentShortName);
       return 'goals/social/subtypes/' + componentShortName;
     } else {
       return null;
