@@ -5,8 +5,10 @@ describe SyncOneContactList do
   let(:email) { 'email@contact.com' }
   let(:name) { 'FirstName LastName' }
   let(:params) { { 'signup[email]' => email, 'signup[name]' => name } }
-  let(:service) { described_class.new(contact_list, email, name) }
+  let(:contact) { SyncOneContactListWorker::Contact.new(contact_list.id, email, name) }
+  let(:service) { described_class.new(contact) }
 
+  before { allow(contact).to receive(:contact_list).and_return(contact_list) }
   before { allow(contact_list).to receive(:syncable?).and_return(true) }
 
   context 'base behaviour' do
@@ -159,33 +161,6 @@ describe SyncOneContactList do
     it 'does nothing' do
       expect(contact_list.service_provider).to be_nil
       expect(service.call).to be_nil
-    end
-  end
-
-  context 'when email and/or name contain quotes' do
-    let(:email) { '"email@contact.com"' }
-    let(:name) { '"FirstName LastName"' }
-
-    let(:clean_email) { 'email@contact.com' }
-    let(:clean_name) { 'FirstName LastName' }
-
-    before { allow(service).to receive(:api_call?).and_return(true) }
-
-    it 'clean up extra quotes' do
-      expect(contact_list.service_provider).to receive(:subscribe).with(list_id, clean_email, clean_name, double_optin)
-      service.call
-    end
-  end
-
-  context 'when name is "nil"' do
-    let(:email) { 'email@contact.com' }
-    let(:name) { '"nil"' }
-
-    before { allow(service).to receive(:api_call?).and_return(true) }
-
-    it 'sends name as nil' do
-      expect(contact_list.service_provider).to receive(:subscribe).with(list_id, email, nil, double_optin)
-      service.call
     end
   end
 end
