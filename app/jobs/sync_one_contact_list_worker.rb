@@ -1,19 +1,24 @@
 class SyncOneContactListWorker
   include Shoryuken::Worker
 
-  shoryuken_options queue: 'hellobar_test', auto_delete: true, body_parser: self
+  shoryuken_options queue: -> { Rails.env.edge? ? 'hellobar_edge' : "hb3_#{ Rails.env }" }
+  shoryuken_options auto_delete: true, body_parser: self
 
   Contact = Struct.new(:id, :email, :fields) do
     def email
-      self[:email].strip == 'nil' ? nil : self[:email].presence&.strip
+      cleanup(self[:email])
     end
 
     def fields
-      self[:fields].strip == 'nil' ? nil : self[:fields].presence&.strip
+      cleanup(self[:fields])
     end
 
     def contact_list
       @contact_list ||= ContactList.find(id)
+    end
+
+    def cleanup(value)
+      value.strip == 'nil' ? nil : value.presence&.strip
     end
   end
 

@@ -32,7 +32,7 @@ describe GenerateStaticScriptJob do
   describe '.perform_later' do
     it 'adds the job to the queue Settings.low_priority_queue' do
       job.perform_later(site)
-      expect(enqueued_jobs.last[:queue]).to eq Settings.low_priority_queue
+      expect(enqueued_jobs.last[:queue]).to eq 'hb3_test_low_priority'
     end
   end
 end
