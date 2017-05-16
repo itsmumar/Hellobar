@@ -31,6 +31,10 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_invoice_information do
+      invoice_information "1 Melrose Place\n90210 Hollywood Blv, Ca"
+    end
+
     trait :free_subscription do
       after(:create) do |site, evaluator|
         create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)

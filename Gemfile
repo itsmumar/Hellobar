@@ -127,9 +127,6 @@ group :development do
   gem 'brakeman', require: false
   gem 'rubocop', require: false
 
-  # Remove when we upgrade to sprockets-rails 3.1+ (and add `config.assets.quiet = true`)
-  gem 'quiet_assets'
-
   # Guards
   gem 'guard'
   gem 'guard-rspec'
