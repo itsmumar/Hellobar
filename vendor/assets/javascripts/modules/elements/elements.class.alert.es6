@@ -307,6 +307,8 @@ hellobar.defineModule('elements.class.alert',
           height: (popupIsVisible ? alertElementHeight + 124 : triggerWidth) + 'px',
           border: 'none'
         });
+
+        dom.addClass(iframe, 'hb-animateIn');
       };
       const forHidden = () => {
         dom.setStyles(iframe, {
@@ -392,13 +394,17 @@ hellobar.defineModule('elements.class.alert',
           bindEvents();
           elementsIntents.applyViewCondition(this._model.view_condition, () => {
             this.show();
+
+            // initial ringing delay (to let animation finish) [ms]
+            let delay = 1500;
+
             if (this._model.notification_delay > 0) {
-              setTimeout(() => {
-                this.notify();
-              }, 1000 * this._model.notification_delay);
-            } else {
-              this.notify();
+              delay += this._model.notification_delay * 1000;
             }
+
+            setTimeout(() => {
+              this.notify();
+            }, delay);
 
           }, () => {
             this.show();
