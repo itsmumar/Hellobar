@@ -165,3 +165,14 @@
     }
   }
 }
+
+.alert.marigold {
+  .image-background .hb-image-wrapper.background {
+    width: 50%;
+
+    & ~ .slider-content,
+    & ~ .hb-content-wrapper {
+      margin-left: 50%;
+    }
+  }
+}
