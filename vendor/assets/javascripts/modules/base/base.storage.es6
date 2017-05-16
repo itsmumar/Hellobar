@@ -45,12 +45,15 @@ hellobar.defineModule('base.storage', [], function () {
         if (storedObject.expiration > currentTimestamp()) {
           return storedObject.value;
         } else {
-          localStorage.removeItem(key);
+          this.removeValue(key);
         }
       }
       return undefined;
     };
 
+    this.removeValue = function (key) {
+      return localStorage.removeItem(key);
+    };
   }
 
   var valueStorage = new ValueStorage();
@@ -60,7 +63,7 @@ hellobar.defineModule('base.storage', [], function () {
    */
   return {
     /**
-     * Stores data in client-side storage
+     * Stores data in the client-side storage
      * @param key {string} Unique key
      * @param value {object|string|number|boolean} Value to store
      * @param expiration {number|Date} Expiration period, can be specified with explicit time moment (Date instance)
@@ -71,12 +74,21 @@ hellobar.defineModule('base.storage', [], function () {
     },
 
     /**
-     * Gets data from client-side storage
+     * Gets data from the client-side storage
      * @param key {string} Unique key to get value by
      * @returns {object|string|number|boolean}
      */
     getValue: function (key) {
       return valueStorage.getValue(key);
+    },
+
+    /**
+     * Removes data from the client-side storage
+     * @param key {string} Unique key to remove
+     * @returns {undefined}
+     */
+    removeValue: function (key) {
+      return valueStorage.removeValue(key);
     }
   };
 

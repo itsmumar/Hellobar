@@ -1,0 +1,19 @@
+<div id="" class="tab-content">
+  <label>Background Color</label>
+  {{selection/color-select color=model.background_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
+
+  <label>Default Text Color</label>
+  {{selection/color-select color=model.text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+
+  <label>Button</label>
+  {{selection/color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+
+  {{#if elementTypeIsAlert}}
+    <label>Alert Color</label>
+    {{selection/color-select color=model.trigger_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+
+    <label>Alert Icon Color</label>
+    {{selection/color-select color=model.trigger_icon_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor}}
+  {{/if}}
+  <br/>
+</div>

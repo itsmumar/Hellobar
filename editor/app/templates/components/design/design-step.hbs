@@ -13,8 +13,9 @@
     {{#ivy-tabs selection=selection as |tabs|}}
       {{#tabs.tablist as |tablist|}}
         {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
+        {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
+
         {{#if elementTypeIsNotAlert}}
-          {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
           {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
         {{/if}}
       {{/tabs.tablist}}
@@ -23,11 +24,12 @@
         {{design/colors/colors-pane model=model siteColors=null recentColors=null focusedColor=null}}
       {{/tabs.tabpanel}}
 
-      {{#if elementTypeIsNotAlert}}
-        {{#tabs.tabpanel "TabImage"}}
-          {{design/images/image-pane model=model}}
-        {{/tabs.tabpanel}}
 
+      {{#tabs.tabpanel "TabImage"}}
+        {{design/images/image-pane model=model}}
+      {{/tabs.tabpanel}}
+
+      {{#if elementTypeIsNotAlert}}
         {{#tabs.tabpanel "TabText"}}
           {{design/text/text-pane model=model}}
         {{/tabs.tabpanel}}

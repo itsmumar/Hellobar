@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.environment
 
 describe('Module base.environment', function () {

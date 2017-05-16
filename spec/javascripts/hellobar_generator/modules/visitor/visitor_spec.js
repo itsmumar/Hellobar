@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/visitor/visitor
 
 describe('Module visitor', function () {

@@ -139,6 +139,7 @@ export default Ember.Component.extend({
     'model.text_color',
     'model.theme_id',
     'model.trigger_color',
+    'model.trigger_icon_color',
     'model.type',
     'model.use_question',
     'model.view_condition',

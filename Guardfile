@@ -1,7 +1,7 @@
 # Only watch a subset of directories
 directories %w[app config lib spec]
 
-# And explicitly ignore directories watched by Ember
+# Explicitly ignore directories watched by Ember
 ignore(/editor/, /public/)
 
 # This group allows to skip running RuboCop when RSpec failed
@@ -28,7 +28,7 @@ group :red_green_refactor, halt_on_fail: true do
     watch(rails.controllers) do |m|
       [
         rspec.spec.call("controllers/#{ m[1] }_controller"),
-        rspec.spec.call("features/#{ m[1] }")
+        rspec.spec.call("requests/#{ m[1] }_controller")
       ]
     end
 
@@ -39,6 +39,13 @@ group :red_green_refactor, halt_on_fail: true do
     # Capybara features specs
     watch(rails.view_dirs)     { |m| rspec.spec.call("features/#{ m[1] }") }
     watch(rails.layouts)       { |m| rspec.spec.call("features/#{ m[1] }") }
+    watch(%r{^spec/factories/(.+)\.rb$}) do |m|
+      [
+        "spec/models/#{ m[1].singularize }_spec.rb",
+        "spec/controllers/#{ m[1] }_controller_spec.rb",
+        "spec/requests/#{ m[1] }_controller_spec.rb"
+      ]
+    end
   end
 
   guard :rubocop, all_on_start: false do
@@ -51,7 +58,6 @@ guard :shell do
   # Restart local webserver
   watch(%r{^lib/.*})                          { `touch tmp/restart.txt` }
   watch('config/environments/development.rb') { `touch tmp/restart.txt` }
-  watch('config/application.yml')             { `touch tmp/restart.txt` }
   watch('config/secrets.yml')                 { `touch tmp/restart.txt` }
   watch(%r{^config/initializers/.+\.rb$})     { `touch tmp/restart.txt` }
 end

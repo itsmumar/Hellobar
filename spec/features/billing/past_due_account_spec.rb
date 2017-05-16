@@ -5,15 +5,10 @@ feature 'Billing. Past due account', :js do
   given(:site) { create(:site, :with_rule, :pro, user: user) }
   given!(:bill) { create(:past_due_bill, subscription: site.current_subscription) }
 
-  given!(:fake_data_api_original) { Hellobar::Settings[:fake_data_api] }
-
   before do
-    Hellobar::Settings[:fake_data_api] = true
-    login user
-  end
+    allow(Settings).to receive(:fake_data_api).and_return true
 
-  after do
-    Hellobar::Settings[:fake_data_api] = fake_data_api_original
+    login user
   end
 
   scenario 'displays notification about outstanding bill' do

@@ -1,8 +1,0 @@
-# Add ENV configuration values here, as shown below.
-#
-# These are distinct from secrets.yml (they're env vars)
-# and settings.yml (they're not for configuration.)
-#
-# These values are available at ENV['SECRET_KEY_BASE'], for example.
-production:
-  secret_key_base: something far more secure than this

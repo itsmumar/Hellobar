@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.sanitizing
 
 describe('Module base.sanitizing', function () {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425084623) do
+ActiveRecord::Schema.define(version: 20170509150022) do
 
   create_table "admin_login_attempts", force: true do |t|
     t.string   "email"
@@ -224,23 +224,6 @@ ActiveRecord::Schema.define(version: 20170425084623) do
     t.integer "last_visitor_user_id_processed", null: false
   end
 
-  create_table "leads", force: true do |t|
-    t.string   "industry",                  null: false
-    t.string   "job_role",                  null: false
-    t.string   "company_size",              null: false
-    t.string   "estimated_monthly_traffic", null: false
-    t.string   "first_name",                null: false
-    t.string   "last_name",                 null: false
-    t.string   "challenge",                 null: false
-    t.boolean  "interested",                null: false
-    t.string   "phone_number"
-    t.integer  "user_id",                   null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "leads", ["user_id"], name: "index_leads_on_user_id", using: :btree
-
   create_table "payment_method_details", force: true do |t|
     t.integer  "payment_method_id"
     t.string   "type"
@@ -364,6 +347,7 @@ ActiveRecord::Schema.define(version: 20170425084623) do
     t.string   "sound",                               default: "none",        null: false
     t.integer  "notification_delay",                  default: 10,            null: false
     t.string   "trigger_color",                       default: "31b5ff",      null: false
+    t.string   "trigger_icon_color",                  default: "ffffff",      null: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

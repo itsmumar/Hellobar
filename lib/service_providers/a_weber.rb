@@ -7,7 +7,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
       raise 'Site does not have a stored AWeber identity' unless identity
     end
 
-    oauth = ::AWeber::OAuth.new(Hellobar::Settings[:identity_providers][:aweber][:consumer_key], Hellobar::Settings[:identity_providers][:aweber][:consumer_secret])
+    oauth = ::AWeber::OAuth.new(Settings.identity_providers['aweber']['consumer_key'], Settings.identity_providers['aweber']['consumer_secret'])
     oauth.authorize_with_access(identity.credentials['token'], identity.credentials['secret'])
 
     @contact_list = opts[:contact_list]

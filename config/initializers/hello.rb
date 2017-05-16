@@ -1,10 +1,7 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
-
 require './lib/hello/internal_analytics'
 require './lib/hello/asset_storage'
 require './lib/hello/data_api'
 require './lib/hello/data_api_helper'
-require './lib/hello/suggested_opportunities'
 require './lib/hello/email_digest'
 require './lib/hello/email_drip'
 require './lib/hello/segments'

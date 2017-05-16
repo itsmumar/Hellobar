@@ -10,8 +10,13 @@ module HB
       @gateway = nil
       def gateway
         unless @gateway
-          ActiveMerchant::Billing::Base.mode = Hellobar::Settings[:cybersource_environment].try(:to_sym) || :test
-          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(login: Hellobar::Settings[:cybersource_login], password: Hellobar::Settings[:cybersource_password], ignore_avs: true)
+          mode = Rails.env.production? ? :production : :test
+          login = Settings.cybersource_login
+          password = Settings.cybersource_password
+
+          ActiveMerchant::Billing::Base.mode = mode
+
+          @gateway = ActiveMerchant::Billing::CyberSourceGateway.new(login: login, password: password, ignore_avs: true)
         end
         @gateway
       end
@@ -21,27 +26,31 @@ end
 
 class CyberSourceCreditCard < PaymentMethodDetails
   CC_FIELDS = %w[number month year first_name last_name brand verification_value].freeze
-  ADDRESS_FIELDS = %w[city state zip address1 country].freeze
+  ADDRESS_FIELDS = %w[city state zip address country].freeze
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
   # These are the required fields to be set
-  REQUIRED_FIELDS = FIELDS - %w[brand token state]
+  REQUIRED_FIELDS = FIELDS - %w[brand token]
 
   class CyberSourceCreditCardValidator < ActiveModel::Validator
     def validate(record)
       REQUIRED_FIELDS.each do |field|
         if !record.data || record.data[field].blank?
+          next if field == 'state' && record.data['country'] != 'US'
           record.errors[field.to_sym] = 'can not be blank'
         end
-      end
-      begin
-        record.send(:save_to_cybersource)
-      rescue => e
-        record.errors[:base] = e.message
       end
     end
   end
   validates_with CyberSourceCreditCardValidator
+
+  def save
+    valid? && save_to_cybersource && super(validate: false)
+  end
+
+  def save!
+    valid? && save_to_cybersource && super(validate: false)
+  end
 
   def name
     "#{ brand ? brand.capitalize : 'Credit Card' } ending in #{ card.number ? card.number[-4..-1] : '???' }"
@@ -72,6 +81,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
       ADDRESS_FIELDS.each do |f|
         attributes[f.to_sym] = data[f] || data[f.to_sym]
       end
+      attributes[:address1] = attributes.delete(:address)
       @address = HB::CyberSource::BillingAddress.new(attributes)
     end
     @address
@@ -132,7 +142,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   def delete_token
     edited_data = data
     edited_data['token'] = nil
-    update_columns data: edited_data.to_json
+    update_columns data: edited_data
   end
 
   def token
@@ -178,6 +188,10 @@ class CyberSourceCreditCard < PaymentMethodDetails
     data['token'] = token
     # Clear the card attribute so it clears the cache of the number
     @card = nil
+    true
+  rescue => e
+    errors[:base] = e.message
+    false
   end
 
   def previous_token

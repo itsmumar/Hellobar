@@ -1,14 +1,13 @@
 namespace :queue_worker do
-  WORKER_PATTERN = /queue_worker\s*\[(.*?)\]/
+  worker_pattern = /queue_worker\s*\[(.*?)\]/
 
   desc 'Starts all the queue workers'
   task :start do
-    require Rails.root.join('config', 'initializers', 'settings.rb')
     root = Rails.root
 
     {
-      Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
+      Settings.main_queue => [2],
+      Settings.low_priority_queue => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''
@@ -21,7 +20,7 @@ namespace :queue_worker do
 
   desc 'Stops all the queue workers'
   task :stop do
-    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ worker_pattern }
     puts "Stopping #{ processes.length } queue workers..."
     processes.each do |process|
       pid = process.split(/\s+/)[1].to_i
@@ -40,19 +39,17 @@ namespace :queue_worker do
   desc 'Restarts only workers that are not currently running'
   task :resurrect do
     root = Rails.root
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-
-    processes = `ps aux`.split("\n").select { |l| l =~ WORKER_PATTERN }
+    processes = `ps aux`.split("\n").select { |l| l =~ worker_pattern }
     {
-      Hellobar::Settings[:main_queue] => [2],
-      Hellobar::Settings[:low_priority_queue] => [2, '--skip-old']
+      Settings.main_queue => [2],
+      Settings.low_priority_queue => [2, '--skip-old']
     }.each do |queue, options|
       num_workers = options[0]
       additional_options = options[1] || ''
       puts "Expecting #{ num_workers } workers for #{ queue.inspect }"
       num_workers_found = 0
       processes.each do |process|
-        if process =~ WORKER_PATTERN
+        if process =~ worker_pattern
           num_workers_found += 1 if Regexp.last_match(1) == queue.to_s
         end
       end
@@ -126,20 +123,14 @@ namespace :queue_worker do
     end
 
     # Send the data to Cloudwatch
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-    stage = Hellobar::Settings[:env_name]
     data = {
-      namespace: "HB/#{ stage }",
+      namespace: "HB/#{ Rails.env }",
       metric_data: metrics
     }
+
     pp data
 
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
-      logger: nil
-    )
-
+    cloudwatch = Aws::CloudWatch::Client.new
     response = cloudwatch.put_metric_data(data)
     pp response
   end

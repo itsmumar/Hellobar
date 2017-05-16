@@ -3,8 +3,6 @@ require 'fog/aws'
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  TYPES = [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].freeze
-
   DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
@@ -72,16 +70,15 @@ class SiteElement < ActiveRecord::Base
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
   scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
-  scope :matching_content, lambda { |*query|
-    matching(:content, *query)
-  }
+  scope :matching_content, ->(*query) { matching(:content, *query) }
+  scope :wordpress_bars, -> { where.not(wordpress_bar_id: nil) }
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
   delegate :url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
 
-  serialize :settings, Hash
+  store :settings, coder: Hash
   serialize :blocks, Array
 
   after_create :track_creation
@@ -111,6 +108,10 @@ class SiteElement < ActiveRecord::Base
     define_method attr_name do
       self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
+  end
+
+  def self.types
+    [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].map(&:name)
   end
 
   def caption=(c_value)
@@ -196,15 +197,15 @@ class SiteElement < ActiveRecord::Base
 
   def self.all_templates
     [].tap do |templates|
-      TYPES.each do |type|
+      types.each do |type|
         BAR_TYPES.keys.each do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            if types.include?(type.to_s)
-              templates << "#{ type.name.downcase }_#{ subtype }"
+            if types.include?(type)
+              templates << "#{ type.downcase }_#{ subtype }"
             end
           else
-            templates << "#{ type.name.downcase }_#{ subtype }"
+            templates << "#{ type.downcase }_#{ subtype }"
           end
         end
       end
@@ -256,7 +257,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def content_upgrade_download_link
-    "https://s3.amazonaws.com/#{ Hellobar::Settings[:s3_content_upgrades_bucket] }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
+    "https://s3.amazonaws.com/#{ Settings.s3_content_upgrades_bucket }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
   end
 
   def content_upgrade_script_tag
@@ -303,12 +304,12 @@ class SiteElement < ActiveRecord::Base
     # create a connection
     connection = Fog::Storage.new(
       provider: 'AWS',
-      aws_access_key_id: Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
-      aws_secret_access_key: Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
+      aws_access_key_id: Settings.aws_access_key_id,
+      aws_secret_access_key: Settings.aws_secret_access_key,
       path_style: true
     )
 
-    directory = connection.directories.get(Hellobar::Settings[:s3_content_upgrades_bucket])
+    directory = connection.directories.get(Settings.s3_content_upgrades_bucket)
 
     file = directory.files.create(
       key: content_upgrade_key,

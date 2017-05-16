@@ -1,10 +1,30 @@
 require 'json'
 
 class Analytics
-  LOG_FILE = Hellobar::Settings[:analytics_log_file]
+  LOG_FILE = Rails.root.join 'log', 'analytics.log'
 
   class << self
+    def log_file
+      LOG_FILE
+    end
+
+    def alias(visitor_id, user_id)
+      track_internal :visitor, visitor_id, :user_id, value: user_id
+      segment.alias(previous_id: visitor_id, user_id: user_id)
+    end
+
     def track(target_type, target_id, event_name, props = {})
+      track_internal target_type, target_id, event_name, props
+      track_segment target_type, target_id, event_name, props
+    end
+
+    private
+
+    def segment
+      @segment ||= Segment::Analytics.new(write_key: Settings.segment_key, stub: !Rails.env.production?)
+    end
+
+    def track_internal(target_type, target_id, event_name, props = {})
       props = {} unless props
       # Default :at to now
       props[:at] ||= Time.current
@@ -21,19 +41,30 @@ class Analytics
       # Set the table name
       table_name = (target_type.to_s + ' ' + event_name.to_s.underscore).downcase.gsub(/[^a-z0-9]+/, ' ').strip.gsub(/\s/, '_')
 
-      # Set the data
-      data = { table_name => props }
+      write_data table_name => props
+    end
 
-      tried_creating_missing_file = false
-      begin
-        File.open(LOG_FILE, (File::WRONLY | File::APPEND)) { |fp| fp.puts(data.to_json) }
-      rescue Errno::ENOENT
-        raise if tried_creating_missing_file
-        FileUtils.mkdir_p(File.dirname(LOG_FILE))
-        FileUtils.touch(LOG_FILE)
-        tried_creating_missing_file = true
-        retry
+    def track_segment(target_type, target_id, event_name, props)
+      attributes = { event: event_name, properties: props }
+      attributes[:user_id] = target_id if target_type == :user
+      attributes[:anonymous_id] = target_id if target_type == :visitor
+
+      if target_type == :site
+        attributes = attributes.merge(site_id: target_id, anonymous_id: "anonymous site #{ target_id }")
       end
+
+      segment.track attributes
+    end
+
+    def write_data(data)
+      make_sure_file_exist
+      log_file.open(File::WRONLY | File::APPEND) { |f| f.puts data.to_json }
+    end
+
+    def make_sure_file_exist
+      return if log_file.exist?
+      log_file.dirname.mkpath
+      log_file.binwrite ''
     end
   end
 end

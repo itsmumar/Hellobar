@@ -184,7 +184,7 @@ describe User do
     let(:site_member) { create(:site_membership) }
 
     before do
-      allow_any_instance_of(Site).to receive(:generate_static_assets)
+      allow_any_instance_of(GenerateAndStoreStaticScript).to receive(:call)
     end
 
     it 'destroying a user should destroy their sites' do
@@ -225,13 +225,13 @@ describe User do
     let(:uuid) { SecureRandom.uuid }
 
     let(:token) do
-      {
+      OmniAuth::AuthHash.new(
         'info' => {
           'email' => email
         },
         'uid' => uuid,
         'provider' => 'google_oauth2'
-      }
+      )
     end
 
     context 'when user does not exist' do
@@ -259,8 +259,8 @@ describe User do
         let(:last_name) { 'Doe' }
 
         before do
-          token['info']['first_name'] = first_name
-          token['info']['last_name'] = last_name
+          token.info.first_name = first_name
+          token.info.last_name = last_name
         end
 
         it 'set the first name' do

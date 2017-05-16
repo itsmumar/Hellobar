@@ -16,7 +16,7 @@ describe CalculateBill do
     context 'when upgrading' do
       let(:site) { create :site, :pro }
       let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }
-      let(:subscription) { create :enterprise_subscription }
+      let(:subscription) { create :subscription, :enterprise }
       let(:bill) { service.call }
       let!(:reduced_amount) { subscription.amount - site.current_subscription.amount }
 
@@ -33,7 +33,7 @@ describe CalculateBill do
     context 'when downgrading' do
       let(:site) { create :site, :enterprise }
       let!(:active_bill) { create :bill, :paid, end_date: 2.days.from_now, subscription: site.current_subscription }
-      let(:subscription) { create :pro_subscription }
+      let(:subscription) { create :subscription, :pro }
       let(:bill) { service.call }
 
       it 'returns bill with full amount' do
@@ -49,7 +49,7 @@ describe CalculateBill do
 
   context 'without active paid bills', :freeze do
     let(:site) { create :site, :pro }
-    let(:subscription) { create :enterprise_subscription }
+    let(:subscription) { create :subscription, :enterprise }
     let(:bill) { service.call }
 
     it 'returns bill with full amount' do
@@ -64,7 +64,7 @@ describe CalculateBill do
 
   context 'with trial period', :freeze do
     let(:site) { create :site, :pro }
-    let(:subscription) { create :enterprise_subscription }
+    let(:subscription) { create :subscription, :enterprise }
     let(:service) { described_class.new(subscription, bills: site.bills, trial_period: 100.days) }
     let(:bill) { service.call }
 

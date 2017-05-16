@@ -1,4 +1,9 @@
 namespace :cloudwatch_metrics do
+  # Send the data to Cloudwatch
+  def cloudwatch
+    Aws::CloudWatch::Client.new
+  end
+
   desc 'Reports memory and disk space stats to AWS CloudWatch'
   task :send do
     instance_id = `ec2metadata --instance-id`
@@ -36,33 +41,14 @@ namespace :cloudwatch_metrics do
       metric[:unit] = 'Kilobytes'
     end
 
-    # Send the data to Cloudwatch
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-    stage = Hellobar::Settings[:env_name]
-
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
-      logger: nil
-    )
-
-    cloudwatch.put_metric_data(namespace: "HB/#{ stage }", metric_data: metrics)
+    cloudwatch.put_metric_data(namespace: "HB/#{ Rails.env }", metric_data: metrics)
   end
 
   desc 'Creates alarms for disk space and memory'
   task :create_alarms do
-    require Rails.root.join('config', 'initializers', 'settings.rb')
-
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!
-    stage = Hellobar::Settings[:env_name]
-    namespace = "HB/#{ stage }"
-
-    cloudwatch = AWS::CloudWatch::Client.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
-      logger: nil
-    )
+    namespace = "HB/#{ Rails.env }"
 
     ########################################
     #### DISK SPACE Alarm Creation

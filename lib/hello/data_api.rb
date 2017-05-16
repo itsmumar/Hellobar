@@ -1,4 +1,3 @@
-require Rails.root.join('config', 'initializers', 'settings.rb')
 require './lib/hello/data_api_helper'
 require './lib/hello/api_performance'
 require 'thread/pool'
@@ -14,9 +13,13 @@ module Hello::DataAPI
     #
     # lifetime_totals(site, [site_element], 2)
     # => {"123" => [[10, 3], [15, 4]]}
+    # legend:
+    #   site_element_id => [2 days ago, yesterday, today]}
+    # where 2 days ago, yesterday and today is an array:
+    #   [views_number, conversions_number]
     #
     def lifetime_totals(site, site_elements, num_days = 1, cache_options = {})
-      return fake_lifetime_totals(site, site_elements, num_days) if Hellobar::Settings[:fake_data_api]
+      return fake_lifetime_totals(site, site_elements, num_days) if Settings.fake_data_api
 
       site_element_ids = site_elements.map(&:id).sort
 
@@ -124,7 +127,7 @@ module Hello::DataAPI
     # => {"1" => 141, "2" => 951}
     #
     def contact_list_totals(site, contact_lists, cache_options = {})
-      return fake_contact_list_totals(contact_lists) if Hellobar::Settings[:fake_data_api]
+      return fake_contact_list_totals(contact_lists) if Settings.fake_data_api
       return {} if contact_lists.empty?
       contact_list_ids = contact_lists.map(&:id).sort
 
@@ -150,43 +153,13 @@ module Hello::DataAPI
       end
     end
 
-    # Returns groups of segments and their view/conversion data, grouped by opportunity
-    #
-    # suggested_opportunities(site, site.site_elements)
-    # => {
-    #      "high traffic, low conversion" =>  [["co:USA", 100, 10], ["dv:Mobile", 200, 20]],
-    #      "low traffic, high conversion" =>  [["co:USA", 100, 10], ["dv:Mobile", 200, 20]],
-    #      "high traffic, high conversion" => [["co:USA", 100, 10], ["dv:Mobile", 200, 20]]
-    #    }
-    #
-    def suggested_opportunities(site, site_elements, cache_options = {})
-      return fake_suggested_opportunities(site, site_elements) if Hellobar::Settings[:fake_data_api]
-
-      site_element_ids = site_elements.map(&:id).sort
-
-      cache_key = "hello:data-api:#{ site.id }:#{ site_element_ids.sort.join('-') }:suggested_opportunities"
-      cache_options[:expires_in] = 10.minutes
-
-      Rails.cache.fetch cache_key, cache_options do
-        Hello::SuggestedOpportunities.generate(site, site_elements)
-      end
-    end
-
-    def fake_suggested_opportunities(_site, _site_elements)
-      {
-        'high traffic, low conversion' =>  [['co:USA', 100, 1], ['dv:Mobile', 200, 2], ['rf:http://zombo.com', 130, 4]],
-        'low traffic, high conversion' =>  [['co:Russia', 10, 9], ['dv:Desktop', 22, 20], ['pu:http://zombo.com/signup', 5, 4]],
-        'high traffic, high conversion' => [['co:China', 100, 30], ['ad_so:Google AdWords', 200, 55], ['co:Canada', 430, 120]]
-      }
-    end
-
     # Return name, email and timestamp of subscribers for a contact list
     #
     # contacts(contact_list)
     # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
     #
     def contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
-      return fake_contacts(contact_list) if Hellobar::Settings[:fake_data_api]
+      return fake_contacts(contact_list) if Settings.fake_data_api
       cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
       cache_options[:expires_in] = 10.minutes
 
@@ -205,7 +178,7 @@ module Hello::DataAPI
       timeout_index = 0
       begin
         begin_time = Time.current.to_f
-        url = URI.join(Hellobar::Settings[:data_api_url], Hello::DataAPIHelper.url_for(path, params)).to_s
+        url = URI.join(Settings.data_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
         Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))

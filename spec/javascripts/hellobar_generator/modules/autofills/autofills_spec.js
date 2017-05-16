@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/autofills/autofills
 
 describe('Module autofills', function () {

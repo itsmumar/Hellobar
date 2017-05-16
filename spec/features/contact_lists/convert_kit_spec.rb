@@ -5,13 +5,8 @@ feature 'ConvertKit integration', :js, :vcr do
   let(:provider) { 'convert_kit' }
 
   before do
-    @fake_data_api_original = Hellobar::Settings[:fake_data_api]
-    Hellobar::Settings[:fake_data_api] = true
+    allow(Settings).to receive(:fake_data_api).and_return true
     @user = login
-  end
-
-  after do
-    Hellobar::Settings[:fake_data_api] = @fake_data_api_original
   end
 
   context 'when invalid' do

@@ -1,15 +1,15 @@
 hellobar.defineModule('elements.class.alert',
   ['hellobar', 'base.dom', 'base.cdn', 'base.cdn.libraries', 'base.site', 'base.format', 'base.templating',
     'base.preview', 'base.coloring',
-    'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion'],
+    'elements.injection', 'elements.visibility', 'elements.intents', 'elements.conversion', 'elements.class'],
   function (hellobar, dom, cdn, cdnLibraries, site, format, templating,
             preview, coloring,
-            elementsInjection, elementsVisibility, elementsIntents, elementsConversion) {
+            elementsInjection, elementsVisibility, elementsIntents, elementsConversion, SiteElement) {
 
     const geometry = {
       offset: 10,
-      triggerSize: 60,
-      maxPopupSize: 380
+      triggerWidth: 60,
+      maxPopupWidth: 380
     };
 
     /**
@@ -61,6 +61,7 @@ hellobar.defineModule('elements.class.alert',
       adjustSize() {
         const applyPlacement = () => {
           const offset = preview.isActive() ? (geometry.offset + 'px') : 0;
+
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
               left: offset,
@@ -69,6 +70,7 @@ hellobar.defineModule('elements.class.alert',
               right: 'auto'
             });
           };
+
           const applyBottomRightPlacement = () => {
             dom.setStyles(this._domNode, {
               left: 'auto',
@@ -77,11 +79,12 @@ hellobar.defineModule('elements.class.alert',
               right: offset
             });
           };
+
           (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
         };
         const applyBorder = () => {
           const border = (this._model.trigger_color && (this._model.trigger_color.toLowerCase() === 'ffffff')) ?
-            `1px solid #${this._model.text_color}` :
+            `1px solid #${this._model.trigger_icon_color}` :
             'none';
           dom.setStyles(this._domNode, {border});
         };
@@ -94,6 +97,7 @@ hellobar.defineModule('elements.class.alert',
         dom.removeClass(iconDomElement, 'animated');
         setTimeout(() => {
           dom.addClass(iconDomElement, 'animated');
+          iconDomElement && iconDomElement.addEventListener("animationend", () => dom.removeClass(iconDomElement, 'animated'), false);
         });
       }
 
@@ -114,26 +118,31 @@ hellobar.defineModule('elements.class.alert',
 
       adjustSize() {
         const applyPlacement = () => {
-          const horizontalOffset = geometry.offset + 'px';
-          const verticalOffset = (geometry.offset + geometry.triggerSize + geometry.offset) + 'px';
+          const horizontalOffset = (preview.isActive() ? geometry.offset : 0) + 3 + 'px';
+          const verticalOffset = (preview.isActive() ? 10 : 0) + (geometry.offset + geometry.triggerWidth + geometry.offset) + 'px';
+          const maxWidth = (geometry.maxPopupWidth - 6) + 'px'; // 6px for shadows
+
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
-              left: horizontalOffset,
               top: 'auto',
-              right: 'auto',
-              bottom: verticalOffset
+              left: horizontalOffset,
+              bottom: verticalOffset,
+              maxWidth: maxWidth
             });
           };
+
           const applyBottomRightPlacement = () => {
             dom.setStyles(this._domNode, {
-              left: 'auto',
-              top: 'auto',
               right: horizontalOffset,
-              bottom: verticalOffset
+              top: 'auto',
+              bottom: verticalOffset,
+              maxWidth: maxWidth
             });
           };
+
           (this._model.placement === 'bottom-right') ? applyBottomRightPlacement() : applyBottomLeftPlacement();
         };
+
         applyPlacement();
       }
 
@@ -172,7 +181,7 @@ hellobar.defineModule('elements.class.alert',
       adjustSize() {
         const applyPlacement = () => {
           const horizontalOffset = geometry.offset + 'px';
-          const verticalOffset = (geometry.offset + geometry.triggerSize + geometry.offset - 15) + 'px';
+          const verticalOffset = (geometry.offset + geometry.triggerWidth + geometry.offset - 15) + 'px';
           const applyBottomLeftPlacement = () => {
             dom.setStyles(this._domNode, {
               left: horizontalOffset,
@@ -228,19 +237,16 @@ hellobar.defineModule('elements.class.alert',
 
     // ----- A few iframe-related functions ------------------------
 
-    const iframeId = (() => {
-      let index = 1;
-      return () => site.secret() + '-container' + (index++);
-    })();
-
     function createIFrame() {
-      const id = iframeId();
       const iframe = document.createElement('iframe');
+
       iframe.src = 'about:blank';
-      iframe.id = id;
-      iframe.className = 'HB-alert';
-      iframe.name = id;
+      iframe.id = site.secret() + '-container';
+      iframe.className = 'HB-Alert';
+      iframe.name = iframe.id;
+
       dom.hideElement(iframe);
+
       return iframe;
     }
 
@@ -285,18 +291,20 @@ hellobar.defineModule('elements.class.alert',
       const placement = alertElement._model.placement;
       const forVisible = () => {
         const offset = geometry.offset + 'px';
-        const maxPopupWidth = geometry.maxPopupSize + 'px';
+        const maxPopupWidth = geometry.maxPopupWidth;
         // Add border thickness to trigger size
-        const triggerWidth = (geometry.triggerSize + 2) + 'px';
+        const triggerWidth = (geometry.triggerWidth + 2);
+        const alertElementHeight = alertElement.contentDocument().querySelector('#hellobar-slider').clientHeight;
+
         dom.setStyles(iframe, {
           display: 'block',
           position: 'fixed',
           left: placement === 'bottom-right' ? 'auto' : offset,
           right: placement === 'bottom-right' ? offset : 'auto',
-          width: popupIsVisible ? maxPopupWidth : triggerWidth,
+          width: (popupIsVisible ? maxPopupWidth : triggerWidth) + 'px',
           top: 'auto',
           bottom: offset,
-          height: popupIsVisible ? window.innerHeight + 'px' : triggerWidth,
+          height: (popupIsVisible ? alertElementHeight + 124 : triggerWidth) + 'px',
           border: 'none'
         });
       };
@@ -313,11 +321,13 @@ hellobar.defineModule('elements.class.alert',
      * JavaScript API for Alert site element type.
      * @module
      */
-    class AlertElement {
+    class AlertElement extends SiteElement {
       constructor(model) {
+        super();
         this._model = model;
         this._isPopupVisible = false;
         this._isVisible = false;
+        this._isNotified = false;
         this._onCtaClicked = (evt) => {
           this._conversionHelper.converted();
           evt.preventDefault();
@@ -354,6 +364,7 @@ hellobar.defineModule('elements.class.alert',
           ctaElement && ctaElement.addEventListener('click', this._onCtaClicked);
         };
         const onTriggerClicked = () => {
+          this._isNotified = true;
           if (this._isPopupVisible) {
             this.hidePopup();
           } else {
@@ -397,6 +408,7 @@ hellobar.defineModule('elements.class.alert',
         dom.runOnDocumentReady(() => {
           setTimeout(() => {
             mainInitializationCycle();
+            preview.isActive() && this.showPopup();
           }, 1);
         });
       }
@@ -473,10 +485,11 @@ hellobar.defineModule('elements.class.alert',
       }
 
       notify() {
-        if (preview.isActive()) {
-          // No notification for preview mode
+        if (this._isNotified) {
           return;
         }
+        this._isNotified = true;
+
         elementsVisibility.setVisibilityControlCookie('dismiss', this);
         this._audio.play();
         this._trigger.animate();

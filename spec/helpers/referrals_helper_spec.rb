@@ -13,7 +13,7 @@ describe ReferralsHelper do
     img = helper.icon_for_referral(ref)
 
     expect(img).to match('img')
-    expect(img).to match('sent.svg')
+    expect(img).to match(/sent-\w+.svg/)
   end
 
   it 'Returns an empty string for a referral with an empty state' do

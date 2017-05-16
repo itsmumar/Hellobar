@@ -14,8 +14,9 @@ html
     = csrf_meta_tags
 
   body#hb-application
-    = render "shared/google_analytics"
-    = render "shared/crazy_egg"
+    = render 'shared/crazy_egg'
+    = render 'shared/google_analytics'
+    = render 'shared/segment'
 
     header.global-header
       = render "shared/header"

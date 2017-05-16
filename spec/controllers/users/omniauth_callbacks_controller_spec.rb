@@ -4,12 +4,12 @@ describe Users::OmniauthCallbacksController do
   end
 
   def stub_omniauth(email: 'test@test.com', uid: 'abc123', credentials: nil)
-    request.env['omniauth.auth'] = {
+    request.env['omniauth.auth'] = OmniAuth::AuthHash.new(
       'info' => { 'email' => email },
       'uid' => uid,
       'provider' => 'google_oauth2',
       'credentials' => credentials
-    }
+    )
   end
 
   describe 'POST google_oauth2' do

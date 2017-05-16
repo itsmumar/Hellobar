@@ -139,6 +139,9 @@ form {
 #hellobar-takeover.dark .icon-close {
   color: #ffffff;
   opacity: 0.8;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  -moz-text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  -webkit-text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /*-----------  Main Content  -----------*/

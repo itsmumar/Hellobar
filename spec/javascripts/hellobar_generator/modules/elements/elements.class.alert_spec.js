@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/elements/elements.class.alert
 
 describe('Module elements.class.alert', function () {
@@ -26,7 +25,8 @@ describe('Module elements.class.alert', function () {
       },
       'elements.visibility': jasmine.createSpyObj('elements.visibility', ['setVisibilityControlCookie']),
       'elements.intents': jasmine.createSpyObj('elements.intents', ['applyViewCondition']),
-      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted', 'viewed'])
+      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted', 'viewed']),
+      'elements.class': function SiteElement(){}
     };
     dependencies['base.preview'].isActive.and.returnValue(previewIsActive);
     dependencies['base.format'].asBool.and.returnValue(true);
@@ -54,7 +54,6 @@ describe('Module elements.class.alert', function () {
 
   beforeEach(function () {
     hellobar.finalize();
-
   });
 
   it('provides AlertElement class and is capable of creating instances', function (done) {
@@ -125,12 +124,16 @@ describe('Module elements.class.alert', function () {
     });
   });
 
-  it('does not notify in the preview mode', function (done) {
+  it('notifies in the preview mode', function (done) {
     doWithElement(function (element, dependencies) {
       element.attach();
       setTimeout(function () {
+        spyOn(element._trigger, 'animate');
+        spyOn(element._audio, 'play');
         element.notify();
-        expect(dependencies['elements.visibility'].setVisibilityControlCookie).not.toHaveBeenCalled();
+        expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalled();
+        expect(element._trigger.animate).toHaveBeenCalled();
+        expect(element._audio.play).toHaveBeenCalled();
         element.remove();
         done();
       }, 100);

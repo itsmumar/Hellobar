@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/geolocation/geolocation
 
 describe('Module geolocation', function () {

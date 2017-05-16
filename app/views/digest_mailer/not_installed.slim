@@ -28,14 +28,14 @@ tr.lightGrey
           ul
             li.install_item
               | Using WordPress?&nbsp;
-              = link_to "Click here", site_install_path(@site)
+              = link_to "Click here", site_install_url(@site)
               |  to download our WordPress plugin. It's already configured for your site. Just install it and you're done.
             li.install_item
               | Know HTML?&nbsp;
-              = link_to "Click here", site_install_path(@site)
+              = link_to "Click here", site_install_url(@site)
               |  for instructions to install Hello Bar yourself.
             li.install_item
               | You can also&nbsp;
-              = link_to "email your web", site_install_path(@site)
+              = link_to "email your web", site_install_url(@site)
               |  developer with instructions for installing Hello Bar
   td

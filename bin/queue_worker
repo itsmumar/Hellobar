@@ -70,16 +70,8 @@ class QueueWorker
     @config = config
     raise "Need a queue name: #{config.inspect}" unless @config[:queue]
 
-    # Connect to SQS and make sure the queue exists
-    @sqs = AWS::SQS.new(
-      access_key_id: Hellobar::Settings[:aws_access_key_id],
-      secret_access_key: Hellobar::Settings[:aws_secret_access_key],
-      logger: nil
-    )
-
-    @queue = @sqs.queues.named(config[:queue])
-
-    raise "Queue does not exist: #{config.inspect}" unless @queue.exists?
+    sqs = Aws::SQS::Resource.new
+    @queue = sqs.get_queue_by_name(queue_name: config[:queue])
   end
 
   def start
@@ -97,19 +89,16 @@ class QueueWorker
     processed_at_least_one_job_successfully = false
     begin
       # Get the messages
-      messages = @queue.receive_message(limit: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attributes: [:sent_at])
-      if messages == nil
-        messages = []
-      elsif !messages.is_a?(Array)
-        messages = [messages]
-      end
+      messages = @queue.receive_messages(max_number_of_messages: @config[:run_once] ? 1 : 10, wait_time_seconds: 3, attribute_names: ['SentTimestamp'])
       messages.each do |message|
         begin
-          QueueWorker.log("Received message[#{message.id}]: #{message.body.inspect}")
+          QueueWorker.log("Received message[#{message.message_id}]: #{message.body.inspect}")
           now = Time.current
-          puts message.sent_at
-          if @config[:skip_old] and now-message.sent_at > 24.hours
-            QueueWorker.log("Skipped message[#{message.id}]: #{message.body.inspect} (#{(now-message.sent_at).to_i/(60*60)} hours old)")
+          sent_at = Time.at(message.attributes['SentTimestamp'].to_i / 1000)
+          puts sent_at
+
+          if @config[:skip_old] and now - sent_at > 24.hours
+            QueueWorker.log("Skipped message[#{message.message_id}]: #{message.body.inspect} (#{(now - sent_at).to_i/(60*60)} hours old)")
           else
             start_time = now.to_f
             task = message.body
@@ -118,15 +107,11 @@ class QueueWorker
             if task =~ /^(.+?)\[.+?\]/
               task_name = $1
             end
-            begin
-              # We need to re-enable the Rake task so it can be called
-              # more than once
-              Rake::Task[task_name].reenable
-            rescue => _
-              # Ignore failed attempts to reenable
-            end
+
             # Invoke the task
             begin
+              # We need to re-enable the Rake task so it can be called more than once
+              Rake::Task[task_name].reenable
               Rake.application.invoke_task(task)
               processed_at_least_one_job_successfully = true
             rescue RuntimeError => error
@@ -147,12 +132,12 @@ class QueueWorker
               end
             end
 
-            QueueWorker.log("Processed message[#{message.id}]: #{message.body.inspect} in #{Time.current.to_f-start_time}s")
+            QueueWorker.log("Processed message[#{message.message_id}]: #{message.body.inspect} in #{Time.current.to_f-start_time}s")
           end
         rescue => e
           # Let's see if this is a MySQL connection issue
           if e.message =~ /closed MySQL connection|Lost connection|MySQL server has gone away/
-            QueueWorker.log("MySQL error processing message[#{message.id}]: #{message.body.inspect} (#{e.message})", "ERRO")
+            QueueWorker.log("MySQL error processing message[#{message.message_id}]: #{message.body.inspect} (#{e.message})", "ERRO")
             # Let's try reconnecting for up to 60 seconds
             start_time = Time.current
             sleep_time = 1

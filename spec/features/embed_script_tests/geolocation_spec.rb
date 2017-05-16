@@ -8,14 +8,14 @@ feature 'Geolocation', :js do
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
   before do
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return 'random'
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
   end
 
   scenario 'injection functionality' do
     # Spin up the Rack app
     Capybara::Discoball.spin(FakeIPApi) do |server|
       # update the geolocation_url to the Sinatra server
-      Hellobar::Settings[:geolocation_url] = server.url
+      allow(Settings).to receive(:geolocation_url).and_return server.url
 
       visit site_path
 

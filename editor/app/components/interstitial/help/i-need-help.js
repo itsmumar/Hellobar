@@ -6,6 +6,10 @@ export default Ember.Component.extend({
 
   activated: false,
 
+  csrfToken: ( () => $('meta[name=csrf-token]').attr('content')).property(),
+
+  siteID: Ember.computed.alias('model.site.id'),
+
   actions: {
     onToggle() {
       this.toggleProperty('activated');

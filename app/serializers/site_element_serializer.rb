@@ -27,7 +27,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :custom_html, :custom_css, :custom_js,
 
     # alert type
-    :trigger_color, :notification_delay, :sound,
+    :trigger_color, :trigger_icon_color, :notification_delay, :sound,
 
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
@@ -87,7 +87,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def url2png(params)
-    css_url = "http://#{ Hellobar::Settings[:host] }/stylesheets/hide_bar.css"
+    css_url = "http://#{ Settings.host }/stylesheets/hide_bar.css"
     # Include CSS to hide any Hello Bar already there
     params += "&custom_css_url=#{ ERB::Util.url_encode(css_url) }"
     # Cache for 7 days

@@ -253,8 +253,8 @@ html
                       td colspan="3"
     div.footerText
       | You are receiving weekly updates. You can turn off or change your settings by visiting your&nbsp;
-      = link_to "email settings page", profile_path
+      = link_to "email settings page", profile_url
       | &nbsp;or&nbsp;
-      = link_to "hellobar.com", root_path
+      = link_to "hellobar.com", root_url
       | .
-      img src=tracking_pixel_path(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))
+      img src=tracking_pixel_url(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))

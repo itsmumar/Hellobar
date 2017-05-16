@@ -37,6 +37,12 @@ FactoryGirl.define do
       value { Date.yesterday.strftime('%Y-%m-%d') }
     end
 
+    trait :time_before do
+      segment 'TimeCondition'
+      operand 'before'
+      value { %w[09 00 America/Los_Angeles] }
+    end
+
     trait :mobile do
       segment 'DeviceCondition'
       operand 'is'

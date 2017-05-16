@@ -1,4 +1,3 @@
-//= require modules/core
 //= require modules/base/base.format
 
 describe('Module base.format', function () {

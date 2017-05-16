@@ -1,15 +1,16 @@
 require 'integration_helper'
 
 feature 'Connect to api ESP', :js, :vcr do
-  before { @user = login }
+  before do
+    allow(Settings).to receive(:fake_data_api).and_return true
+
+    @user = login
+  end
 
   #----------  MadMimi - Original  ----------#
 
   context 'original email integration UI' do
     scenario 'connect to MadMimi' do
-      fake_data_api_original = Hellobar::Settings[:fake_data_api]
-      Hellobar::Settings[:fake_data_api] = true
-
       site = @user.sites.create(url: generate(:random_uniq_url))
       contact_list = create(:contact_list, site: site)
 
@@ -30,8 +31,6 @@ feature 'Connect to api ESP', :js, :vcr do
 
       find('#edit-contact-list').click
       find('.button.unlink').click
-
-      Hellobar::Settings[:fake_data_api] = fake_data_api_original
     end
   end
 
@@ -40,9 +39,6 @@ feature 'Connect to api ESP', :js, :vcr do
   context 'variant email integration UI' do
     scenario 'connect to MadMimi' do
       stub_out_ab_variations('Email Integration UI 2016-06-22') { 'variant' }
-
-      fake_data_api_original = Hellobar::Settings[:fake_data_api]
-      Hellobar::Settings[:fake_data_api] = true
 
       site = @user.sites.create(url: generate(:random_uniq_url))
       contact_list = create(:contact_list, site: site)
@@ -64,8 +60,6 @@ feature 'Connect to api ESP', :js, :vcr do
 
       find('#edit-contact-list').click
       find('.button.unlink').click
-
-      Hellobar::Settings[:fake_data_api] = fake_data_api_original
     end
   end
 
@@ -73,9 +67,6 @@ feature 'Connect to api ESP', :js, :vcr do
 
   context 'with webhooks' do
     scenario 'setting up a new contact list' do
-      fake_data_api_original = Hellobar::Settings[:fake_data_api]
-      Hellobar::Settings[:fake_data_api] = true
-
       site = @user.sites.create(url: generate(:random_uniq_url))
       contact_list = create(:contact_list, site: site)
 
@@ -96,17 +87,12 @@ feature 'Connect to api ESP', :js, :vcr do
       expect(page).to have_content('POST request')
       expect(find('#contact_list_webhook_url').value).to eq 'http://google.com'
       expect(find('#contact_list_provider').value).to eq 'webhooks'
-
-      Hellobar::Settings[:fake_data_api] = fake_data_api_original
     end
 
     #----------  Webhooks - Variant  ----------#
 
     scenario 'updating an existing contact list to be a webhook' do
       stub_out_ab_variations('Email Integration UI 2016-06-22') { 'variant' }
-
-      fake_data_api_original = Hellobar::Settings[:fake_data_api]
-      Hellobar::Settings[:fake_data_api] = true
 
       site = @user.sites.create(url: generate(:random_uniq_url))
       contact_list = create(:contact_list, site: site)
@@ -125,8 +111,6 @@ feature 'Connect to api ESP', :js, :vcr do
       expect(page).to have_content('Webhook URL')
       expect(find('#contact_list_webhook_url').value).to eq 'http://google.com'
       expect(find('#contact_list_provider').value).to eq 'webhooks'
-
-      Hellobar::Settings[:fake_data_api] = fake_data_api_original
     end
   end
 end

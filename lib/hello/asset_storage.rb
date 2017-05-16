@@ -9,9 +9,9 @@ module Hello
     cattr_accessor :connection
 
     self.connection = Fog::Storage.new(
-      provider:               'AWS',
-      aws_access_key_id:      Hellobar::Settings[:aws_access_key_id] || 'fake_access_key_id',
-      aws_secret_access_key:  Hellobar::Settings[:aws_secret_access_key] || 'fake_secret_access_key',
+      provider: 'AWS',
+      aws_access_key_id: Settings.aws_access_key_id,
+      aws_secret_access_key: Settings.aws_secret_access_key,
       path_style: true
     )
 
@@ -22,7 +22,7 @@ module Hello
         directory = self.class.connection.directories.get(directory)
       end
 
-      @directory = directory || self.class.connection.directories.get(Hellobar::Settings[:s3_bucket])
+      @directory = directory || self.class.connection.directories.get(Settings.s3_bucket)
 
       @directory ||= connection.directories.create(key: 'test')
     end

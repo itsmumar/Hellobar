@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.16'
+gem 'rails', '4.2.8'
 
 # AWS
 gem 'aws-sdk'
@@ -61,10 +61,10 @@ gem 'sprockets-es6'
 
 # ActiveRecord / Database
 gem 'kaminari'
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
 
 # File uploads
-gem 'paperclip'
+gem 'paperclip', '~> 5.1'
 
 # JSON
 gem 'active_model_serializers'
@@ -109,6 +109,9 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
+# Sending analytics data to Segment.com
+gem 'analytics-ruby', require: 'segment/analytics'
+
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
@@ -121,9 +124,6 @@ group :development do
   gem 'brakeman', require: false
   gem 'rubocop', require: false
 
-  # Remove when we upgrade to sprockets-rails 3.1+ (and add `config.assets.quiet = true`)
-  gem 'quiet_assets'
-
   # Guards
   gem 'guard'
   gem 'guard-rspec'
@@ -133,21 +133,21 @@ group :development do
   gem 'terminal-notifier-guard'
   #
   # Deployment
-  gem 'capistrano'
+  gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'slackistrano'
+  gem 'web-console', '~> 2.0'
 end
 
 group :development, :test do
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
-  gem 'phantomjs'
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails'
   gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'

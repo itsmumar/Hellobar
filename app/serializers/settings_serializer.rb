@@ -1,10 +1,6 @@
 class SettingsSerializer < ActiveModel::Serializer
-  LEADS_CREATION_STARTING_DATE = Date.parse('2017-04-11').freeze
-
-  attributes \
-    :current_user, :lead_data, :geolocation_url, :track_editor_flow,
-    :available_themes, :available_fonts,
-    :country_codes
+  attributes :current_user, :geolocation_url, :track_editor_flow,
+    :available_themes, :available_fonts, :country_codes
 
   def available_themes
     ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
@@ -18,21 +14,8 @@ class SettingsSerializer < ActiveModel::Serializer
     UserSerializer.new(user).as_json
   end
 
-  def lead_data
-    return unless needs_filling_questionnaire?
-
-    {
-      industries: Lead::INDUSTRIES,
-      job_roles: Lead::JOB_ROLES,
-      challenges: Lead::CHALLENGES,
-      company_sizes: Lead::COMPANY_SIZES,
-      traffic_items: Lead::TRAFFIC_ITEMS,
-      country_codes: I18n.t('country_codes')
-    }
-  end
-
   def geolocation_url
-    Hellobar::Settings[:geolocation_url]
+    Settings.geolocation_url
   end
 
   def track_editor_flow
@@ -47,9 +30,5 @@ class SettingsSerializer < ActiveModel::Serializer
 
   def user
     object
-  end
-
-  def needs_filling_questionnaire?
-    user && user.created_at >= LEADS_CREATION_STARTING_DATE && user.lead.blank?
   end
 end

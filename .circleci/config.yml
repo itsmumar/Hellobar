@@ -51,8 +51,8 @@ jobs:
       - run:
           name: Copy configs
           command: |
-            cp config/settings.yml.example config/settings.yml
             cp .circleci/database.yml config/database.yml
+            cp config/secrets.yml.example config/secrets.yml
 
       - run:
           name: Yarn install
@@ -98,12 +98,12 @@ jobs:
       - run:
           name: Run unit tests
           command: |
-            TESTFILES=$(circleci tests glob "spec/{models,requests,serializers,lib,interactions,helpers,controllers,bin}/**/*_spec.rb" | circleci tests split --split-by=timings)
+            TESTFILES=$(circleci tests glob "spec/{bin,controllers,helpers,interactions,lib,mailers,models,requests,serializers,services,settings}/**/*_spec.rb" | circleci tests split --split-by=timings)
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
           name: Run teaspoon tests
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then RAILS_ENV=test SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
@@ -114,7 +114,6 @@ jobs:
       - save_cache:
           key: dependency-cache-tmp-{{ .Branch }}
           paths:
-            - /root/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
             - /tmp/hellobar_new/tmp/cache
             - /tmp/hellobar_new/tmp/script
 

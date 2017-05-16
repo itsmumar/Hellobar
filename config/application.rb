@@ -20,8 +20,8 @@ module Hellobar
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Require Hellobar::Settings so that we can use them in this config file
-    require Rails.root.join('config', 'initializers', 'settings.rb')
+    # Require Settings early on in the boot process
+    require Rails.root.join('app', 'settings', 'settings')
 
     # We'll handle our own errors
     config.exceptions_app = routes
@@ -35,11 +35,13 @@ module Hellobar
 
     # Action Mailer
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
-    config.action_mailer.default_url_options = { host: Hellobar::Settings[:host] }
+    config.action_mailer.default_url_options = { host: Settings.host }
 
     # Devise
     config.to_prepare do
       Devise::SessionsController.layout proc { |_| action_name == 'new' ? 'static' : 'application' }
     end
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end

@@ -9,13 +9,13 @@ feature 'Alert bar injection', :js do
   given(:last_alert) { Alert.last }
 
   before do
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return 'random'
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
   end
 
   scenario 'injection functionality' do
     visit site_path
 
-    within_frame(find('#random-container1')) do
+    within_frame(find('#random-container')) do
       expect(page).to have_selector '#hellobar-alert.element'
       within '#hellobar-alert.element' do
         expect(page).to have_selector 'audio[src="https://s3.amazonaws.com/assets.hellobar.com/bell/ring2.mp3"]'

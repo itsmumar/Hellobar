@@ -15,8 +15,9 @@ html
     = csrf_meta_tags
 
   body#hb-static
-    = render "shared/google_analytics"
-    = render "shared/crazy_egg"
+    = render 'shared/crazy_egg'
+    = render 'shared/google_analytics'
+    = render 'shared/segment'
 
     main.global-content id=page_id
       .bounds-wrapper

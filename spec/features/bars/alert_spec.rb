@@ -6,7 +6,7 @@ feature 'Adding Alert bar', :js do
   given(:user) { site.owners.last }
 
   before do
-    allow_any_instance_of(ScriptGenerator).to receive(:pro_secret).and_return('random')
+    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
     login user
   end

@@ -12,9 +12,9 @@ hellobar.defineModule('elements.visibility',
       return 'HB-visibilityControl-' + cookieType + '-' + siteElementId;
     }
 
-    function expireVisibilityControlCookie(cookieType, siteElementId) {
+    function removeVisibilityControlCookie(cookieType, siteElementId) {
       var cookieName = visibilityControlCookieName(cookieType, siteElementId);
-      storage.setValue(cookieName, JSON.stringify({}), new Date().toString());
+      storage.removeValue(cookieName);
     }
 
     /**
@@ -118,7 +118,7 @@ hellobar.defineModule('elements.visibility',
 
     return {
       setVisibilityControlCookie,
-      expireVisibilityControlCookie,
+      removeVisibilityControlCookie,
       shouldShowElement,
       inspect: () => ({
         allCookies() {
@@ -132,5 +132,5 @@ hellobar.defineModule('elements.visibility',
       })
     };
 
-  });
-
+  }
+);

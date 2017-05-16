@@ -16,8 +16,6 @@ class Admin < ActiveRecord::Base
 
   after_create :generate_rotp_secret_base!
 
-  serialize :valid_access_tokens, Hash
-
   scope :locked, -> { where(locked: true) }
 
   class << self
@@ -111,7 +109,7 @@ class Admin < ActiveRecord::Base
     self.password = unencrypted_password
     save!
 
-    lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Hellobar::Settings[:host])
+    lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Settings.host)
 
     Pony.mail(
       to: email,

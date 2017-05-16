@@ -8,7 +8,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     end
 
     @token = identity.credentials['token']
-    @client = ConstantContact::Api.new(Hellobar::Settings[:identity_providers][:constantcontact][:app_key])
+    @client = ConstantContact::Api.new(Settings.identity_providers['constantcontact']['app_key'])
   end
 
   def lists

@@ -2,7 +2,6 @@ require 'queue_worker/queue_worker'
 
 class ContactList < ActiveRecord::Base
   include QueueWorker::Delay
-  include DeserializeWithErrors
   include EmailSynchronizer
 
   EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
@@ -15,7 +14,7 @@ class ContactList < ActiveRecord::Base
   has_many :site_elements, dependent: :destroy
   has_many :contact_list_logs
 
-  serialize :data, Hash
+  store :data, coder: Hash
 
   acts_as_paranoid
 
@@ -35,7 +34,7 @@ class ContactList < ActiveRecord::Base
   delegate :count, to: :site_elements, prefix: true
 
   def syncable?
-    return false unless identity && data && Hellobar::Settings[:syncable]
+    return false unless identity && data && Settings.syncable
 
     if oauth?
       data['remote_name'] && data['remote_id']
@@ -194,7 +193,7 @@ class ContactList < ActiveRecord::Base
     if identity
       identity.service_provider_class
     elsif provider_set?
-      ServiceProvider[provider_token.to_sym]
+      ServiceProvider[provider_token]
     end
   end
 

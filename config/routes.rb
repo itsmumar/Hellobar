@@ -21,11 +21,10 @@ Rails.application.routes.draw do
   post '/users/:user_id/update_exit_intent', to: 'user_campaign#update_exit_intent', as: :update_user_exit_intent
   post '/users/:user_id/update_upgrade_suggest', to: 'user_campaign#update_upgrade_suggest', as: :update_user_upgrade_suggest
 
-  get '/auth/:action/callback', to: 'users/omniauth_callbacks', constraints: { action: /google_oauth2/ }
+  get '/auth/:action/callback', controller: 'users/omniauth_callbacks', constraints: { action: /google_oauth2/ }
 
   get 'profile', to: 'user#edit', as: :profile
   resource :user, controller: :user, only: %i[update destroy create]
-  resources :leads, only: [:create]
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
   resources :sites do
