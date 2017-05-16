@@ -32,7 +32,7 @@ namespace :site do
                                       .where('rules.id IS NULL')
 
       sites_without_mobile_rule.find_each do |site|
-        site.skip_generate_script = true
+        site.skip_script_generation = true
         mobile_rule = site.rules.defaults[1]
         finder_params = { name: mobile_rule.name, editable: false }
         mobile_rule.save! unless site.rules.find_by(finder_params)
@@ -42,7 +42,7 @@ namespace :site do
                                         .where('rules.id IS NULL')
 
       sites_without_homepage_rule.find_each do |site|
-        site.skip_generate_script = true
+        site.skip_script_generation = true
         homepage_rule = site.rules.defaults[2]
         finder_params = { name: homepage_rule.name, editable: false }
         homepage_rule.save! unless site.rules.find_by(finder_params)
