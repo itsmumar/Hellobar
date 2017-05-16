@@ -27,7 +27,6 @@ export default Ember.Controller.extend({
     'model.phone_country_code'
   ),
 
-  // TODO get rid of this global usage
   countries: Ember.inject.service(),
 
   selectedCountry: function() {

@@ -1,4 +1,7 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
+
+const presetRuleNames = ['Everyone', 'Mobile', 'Homepage Visitors', 'Custom', 'Saved'];
 
 export default Ember.Component.extend({
 
@@ -9,11 +12,18 @@ export default Ember.Component.extend({
 
   applicationSettings: Ember.inject.service(),
 
-  // TODO REFACTOR remove
-  //targetingUiVariant: (() => window.targetingUiVariant).property('model'),
+  selectionInProgress: null,
 
-
-  //-------------- Helpers ----------------#
+  init() {
+    this._super();
+    this.set('selectionInProgress', true);
+    presetRuleNames.forEach((presetRuleName) => {
+      const preparedName = presetRuleName.replace(/\s/g, '');
+      this[`shouldShow${preparedName}Preset`] = Ember.computed('model.preset_rule_name', 'selectionInProgress', function () {
+        return this.get('selectionInProgress') || this.get('model.preset_rule_name') === presetRuleName;
+      });
+    });
+  },
 
   defaultRules: function () {
     const rules = this.get('model.site.rules').filter(rule => rule.editable === false);
@@ -36,21 +46,6 @@ export default Ember.Component.extend({
     this.set('model.rule', rule);
   },
 
-  navigateRoute(newRoute) {
-    this.transitionToRoute(newRoute);
-  },
-
-  targetingListCssClasses: function() {
-    let classes = ['step-link-wrapper'];
-    !this.get('targetingSelectionInProgress') && (classes.push('is-selected'));
-    return classes.join(' ');
-  }.property('targetingSelectionInProgress'),
-
-  //-----------  Original UI Support  -----------#
-  // remove these functions and all code paths where targetingUiVariant == false and/or fucntion names match *Original
-  // if/when conclude the a/b test "Targeting UI Variation 2016-06-13" with 'variant'
-  // revert this controller to the previous version if we conclude with 'original'
-
   trackUpgrade() {
     if (this.get('applicationSettings.settings.track_editor_flow')) {
       InternalTracking.track_current_person('Editor Flow', {
@@ -60,51 +55,22 @@ export default Ember.Component.extend({
     }
   },
 
-
-  canUseRuleModal: function () {
-    return this.get('model.site.capabilities.custom_targeted_bars');
-  }.property('model.site.capabilities.custom_targeted_bars'),
-
-  popNewRuleModal: function () {
-    if (!this.get('targetingUiVariant') && !this.get('model.rule_id')) {
-      this.send('openRuleModal', {});
-    }
-  }.observes('model.rule_id'),
-
-
-  //-----------  New/Edit Rule Modal  -----------#
-
   canTarget: function () {
     return this.get('model.site.capabilities.custom_targeted_bars');
   }.property('model.site.capabilities.custom_targeted_bars'),
 
   ruleOptions: function () {
     let rules = this.get('model.site.rules').slice().filter(rule => rule.editable === true);
-    rules.unshift({name: 'Choose a saved rule...', description: '?', editable: true});
-    return rules;
-  }.property('model.site.rules'),
-
-  ruleOptionsOriginal: function () {
-    let rules = this.get('model.site.rules').slice();
-    rules = rules.filter(rule => rule.name !== 'Mobile Visitors' && rule.name !== 'Homepage Visitors');
-    rules.push({name: 'Other...', description: '?', editable: true});
-    return rules;
+    rules.unshift({name: 'Choose a saved rule...', description: '', editable: false});
+    return rules || [];
   }.property('model.site.rules'),
 
   selectedRule: function () {
-    let selectedRuleId;
-    if (!(selectedRuleId = this.get('model.rule_id'))) {
-      return null;
-    }
-    return this.get('ruleOptions').find(rule => rule.id === selectedRuleId);
-  }.property('model.rule_id', 'model.site.rules'),
-
-  selectedRuleOriginal: function () {
-    let selectedRuleId = this.get('model.rule_id');
-    return this.get('ruleOptionsOriginal').find(rule => rule.id === selectedRuleId);
-  }.property('model.rule_id', 'model.site.rules'),
-
-  targetingSelectionInProgress: false,
+    const ruleId = this.get('model.rule_id');
+    const options = this.get('ruleOptions');
+    const selectedOption = _.find(options, (option) => option.id === ruleId);
+    return selectedOption || options[0];
+  }.property('model.rule_id', 'ruleOptions'),
 
   showUpgradeModal(newRoute) {
     if (newRoute === 'targeting.index' || newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get('canTarget')) {
@@ -142,17 +108,17 @@ export default Ember.Component.extend({
     }
   }.observes('model'),
 
-  isTopBarStyle: Ember.computed.alias('applicationController.isTopBarStyle'),
+  isTopBarStyle: Ember.computed.equal('model.type', 'Bar'),
 
-  rulePopUpOptions: function(ruleData, isNewRule) {
-    const controller = this;
+  rulePopUpOptions: function (ruleData, isNewRule) {
+    const that = this;
 
     const options = {
       ruleData,
       successCallback() {
-        controller.ruleModal = null;
+        that.ruleModal = null;
         ruleData = this;
-        let updatedRule = controller.get('model.site.rules').find(rule => rule.id === ruleData.id);
+        let updatedRule = that.get('model.site.rules').find(rule => rule.id === ruleData.id);
 
         if (updatedRule) {
           Ember.set(updatedRule, 'conditions', ruleData.conditions);
@@ -161,48 +127,56 @@ export default Ember.Component.extend({
           Ember.set(updatedRule, 'match', ruleData.match);
           Ember.set(updatedRule, 'priority', ruleData.priority);
         } else { // we created a new rule
-          controller.get('model.site.rules').push(ruleData);
+          that.get('model.site.rules').push(ruleData);
         }
 
-        controller.associateRuleToModel(ruleData);
-        controller.notifyPropertyChange('model.site.rules');
+        that.associateRuleToModel(ruleData);
+        that.notifyPropertyChange('model.site.rules');
       },
       close() {
-        controller.ruleModal = null;
-        controller.transitionToRoute('targeting.index', { queryParams: { showDropdown: 'true' } });
-        isNewRule && controller.send('resetRuleDropdown', ruleData);
+        that.ruleModal = null;
+        isNewRule && that.send('initiateSelection', ruleData);
       }
     };
 
     return options;
   },
 
-  //-----------  Actions  -----------#
-
   actions: {
 
-    closeDropdown() {
-      this.set('targetingSelectionInProgress', false);
+    select(presetRuleName) {
+      if (!this.get('selectionInProgress')) {
+        return;
+      }
+      if (presetRuleName) {
+        const defaultRules = this.get('defaultRules');
+        this.associateRuleToModel(defaultRules[presetRuleName]);
+        this.set('model.preset_rule_name', presetRuleName);
+      } else {
+        this.associateRuleToModel(null);
+        this.set('model.preset_rule_name', null);
+        this.send('openRuleModal', {});
+      }
+
+      this.set('selectionInProgress', false);
     },
 
-    resetRuleDropdown(ruleData = {}) {
-      this.set('targetingSelectionInProgress', true);
+    initiateSelection(ruleData = {}) {
+      this.set('selectionInProgress', true);
       if (ruleData.id !== undefined) {
         this.associateRuleToModel(ruleData);
-        this.navigateRoute('targeting.saved');
       }
     },
 
     openUpgradeModal(successRoute = 'targeting') {
-      const controller = this;
-      controller.send('resetRuleDropdown');
+      const that = this;
+      that.send('initiateSelection');
 
       const options = {
-        site: controller.get('model.site'),
+        site: that.get('model.site'),
         successCallback() {
-          controller.set('model.site.capabilities', this.site.capabilities);
-          controller.send('trackUpgrade');
-          controller.send('navigateRoute', successRoute);
+          that.set('model.site.capabilities', this.site.capabilities);
+          that.send('trackUpgrade');
         },
         upgradeBenefit: 'create custom-targeted rules'
       };
@@ -217,6 +191,10 @@ export default Ember.Component.extend({
 
       this.ruleModal = new RuleModal(this.rulePopUpOptions(ruleData, isNewRule));
       this.ruleModal.open();
+    },
+
+    selectTargetingRule(rule) {
+      this.set('model.rule_id', rule.id);
     }
   }
 

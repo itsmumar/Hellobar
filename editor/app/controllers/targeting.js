@@ -3,8 +3,6 @@ import _ from 'lodash/lodash';
 
 // TODO REFACTOR remove controller
 export default Ember.Controller.extend({
-  queryParams: ['showDropdown'],
-  showDropdown: false
 
   /*applyRoute(routeName) {
    const routeByTargeting = (presetRuleName) => {

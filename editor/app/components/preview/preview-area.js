@@ -6,15 +6,15 @@ export default Ember.Component.extend({
 
   inlineEditing: Ember.inject.service(),
   imaging: Ember.inject.service(),
+  preview: Ember.inject.service(),
 
   model: null,
   isMobile: null,
 
   didInsertElement() {
-    HBEditor.addPreviewInjectionListener(container => {
-        this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
-      }
-    );
+    this.get('preview').addPreviewInjectionListener(() => {
+      this.get('inlineEditing').initializeInlineEditing(this.get('model.type'));
+    });
   },
 
   //-----------  Template Properties  -----------#
