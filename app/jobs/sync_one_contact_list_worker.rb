@@ -34,7 +34,7 @@ class SyncOneContactListWorker
   def perform(sqs_msg, contact)
     raise 'Cannot sync without email present' if contact.email.blank?
 
-    SyncOneContactList.new(contact).call
+    SubscribeContact.new(contact).call
   rescue => e
     Raven.capture_exception(e)
     sqs_msg.delete

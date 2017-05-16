@@ -1,4 +1,4 @@
-describe SyncAllContactList do
+describe SubscribeAllContacts do
   let(:contact_list) { create :contact_list, :mailchimp }
   let(:list_id) { contact_list.data['remote_id'] }
   let(:double_optin) { contact_list.double_optin }

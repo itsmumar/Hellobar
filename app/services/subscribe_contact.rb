@@ -1,4 +1,4 @@
-class SyncOneContactList < SyncAllContactList
+class SubscribeContact < SubscribeAllContacts
   def initialize(contact)
     super(contact.contact_list)
     @email = contact.email
@@ -14,7 +14,7 @@ class SyncOneContactList < SyncAllContactList
       if api_call?
         subscribe
       else
-        make_simple_request subscribe_params
+        make_request subscribe_params
       end
     end
   end

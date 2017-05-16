@@ -55,7 +55,7 @@ describe SyncOneContactListWorker do
     let(:perform) { job.new.perform(sqs_msg, contact) }
 
     it 'calls on SyncOneContactList' do
-      expect(SyncOneContactList).to receive_service_call.with(contact)
+      expect(SubscribeContact).to receive_service_call.with(contact)
       perform
     end
 
@@ -64,13 +64,13 @@ describe SyncOneContactListWorker do
 
       it 'raises "Cannot sync without email present"' do
         expect(sqs_msg).to receive(:delete)
-        expect(SyncOneContactList).not_to receive_service_call
+        expect(SubscribeContact).not_to receive_service_call
         perform
       end
     end
 
     context 'when error is raised' do
-      before { expect(SyncOneContactList).to receive_service_call.with(contact).and_raise(StandardError) }
+      before { expect(SubscribeContact).to receive_service_call.with(contact).and_raise(StandardError) }
 
       it 'deletes sqs_msg' do
         expect(sqs_msg).to receive(:delete)

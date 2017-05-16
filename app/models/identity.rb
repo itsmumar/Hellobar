@@ -51,7 +51,7 @@ class Identity < ActiveRecord::Base
   def service_provider(options = {})
     return nil if service_provider_class.nil?
     @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
-  rescue *SyncAllContactList::ESP_ERROR_CLASSES => e
+  rescue *SubscribeAllContacts::ESP_ERROR_CLASSES => e
     if service_provider_class.oauth?
       Rails.logger.warn "Removing identity #{ id }\n#{ e.message }"
       destroy_and_notify_user

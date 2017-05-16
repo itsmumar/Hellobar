@@ -1,4 +1,4 @@
-class SyncAllContactList
+class SubscribeAllContacts
   ESP_ERROR_CLASSES = [
     Gibbon::MailChimpError,
     CreateSend::RevokedOAuthToken,
@@ -35,7 +35,7 @@ class SyncAllContactList
           subscribe(group)
         else
           group.each do |g|
-            make_simple_request subscribe_params(g[0], g[1])
+            make_request subscribe_params(g[0], g[1])
           end
         end
       end
@@ -82,7 +82,7 @@ class SyncAllContactList
     contact_list.identity.try(:destroy_and_notify_user)
   end
 
-  def make_simple_request(params)
+  def make_request(params)
     HTTParty.post(action_url, body: params)
   end
 end

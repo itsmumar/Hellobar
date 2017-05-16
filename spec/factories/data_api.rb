@@ -10,7 +10,7 @@ FactoryGirl.define do
       [
         email,
         'FirstName LastName',
-        Time.now.to_i
+        Time.current.to_i
       ]
     end
   end
