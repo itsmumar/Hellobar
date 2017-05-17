@@ -107,7 +107,7 @@ hellobar.defineModule('elements.class',
               return templating.getTemplateByName(this.template_name);
             }
           };
-          return templating.renderTemplate(template(), this);
+          return templating.renderTemplate(template(), {siteElement: this});
         };
 
         const generateCustomHtml = () => {
@@ -625,7 +625,7 @@ hellobar.defineModule('elements.class',
 
       renderBranding() {
         const template = templating.getTemplateByName('branding_animated');
-        return templating.renderTemplate(template, this);
+        return templating.renderTemplate(template, {siteElement: this});
       }
 
       brandingName() {
