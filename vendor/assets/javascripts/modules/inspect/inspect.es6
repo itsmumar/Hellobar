@@ -1,9 +1,10 @@
 hellobar.defineModule('inspect',
-  ['hellobar', 'elements', 'elements.rules', 'base.site', 'base.metainfo'],
-  function (hellobar, elements, rules, site, metainfo) {
+  ['hellobar', 'elements', 'elements.rules', 'base.site', 'base.metainfo', 'contentUpgrades'],
+  function (hellobar, elements, rules, site, metainfo, contentUpgrades) {
     const elementsOnPage = () => elements.inspect().elementsOnPage();
     const allElementModels = () => rules.inspect().allElementModels();
     const allRules = () => rules.inspect().allRules();
+    const allContentUpgrades = () => contentUpgrades.configuration().contentUpgrades();
     const elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
       'notification_delay', 'closable', 'show_branding', 'background_color',
@@ -22,7 +23,8 @@ hellobar.defineModule('inspect',
         rules: allRules(),
         activeRules: elementsOnPage().map((element) => element.rule),
         rulesWithElements: allRules().filter((rule) => rule.siteElements.length > 0),
-        rulesWithoutElements: allRules().filter((rule) => rule.siteElements.length == 0)
+        rulesWithoutElements: allRules().filter((rule) => rule.siteElements.length == 0),
+        contentUpgrades: allContentUpgrades()
       }
     };
 
