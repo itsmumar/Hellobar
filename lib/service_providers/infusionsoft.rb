@@ -21,7 +21,7 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
 
   def tags
     Infusionsoft
-      .data_query('ContactGroup', 1_000, 0, {}, %w[GroupName Id])
+      .data_query('ContactGroup', 1000, 0, {}, %w[GroupName Id])
       .map { |result| { 'name' => result['GroupName'], 'id' => result['Id'] } }
       .sort_by { |result| result['name'] }
   end
@@ -29,11 +29,10 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
   def subscribe(_, email, name = nil, _double_optin = false)
     data = { Email: email }
 
-    if name
-      fname, lname = name.split
-      data[:FirstName] = fname
-      data[:LastName] = lname
-    end
+    split_name = name.to_s.split(/\s+/)
+
+    data[:FirstName] = split_name[0..-2].join(' ') || ''
+    data[:LastName] = split_name[-1] || ''
 
     infusionsoft_user_id = Infusionsoft.contact_add_with_dup_check(data, :Email)
 
@@ -54,8 +53,4 @@ class ServiceProviders::Infusionsoft < ServiceProviders::Email
     log "Getting lists raised #{ error }"
     false
   end
-end
-
-class Router
-  include Rails.application.routes.url_helpers
 end
