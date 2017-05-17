@@ -14,6 +14,16 @@ set :keep_releases, 15
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, -> { "#{ release_path }/editor" }
 
+# do not hook into the default deployment recipe. invoke 'shoryuken:restart' manually
+set :shoryuken_default_hooks, false
+set :shoryuken_role, :worker
+
+# proper name for the main_queue on the Edge server is `hb3_edge`, however
+# hellobar_backend servers are configured to send SQS messages into `hellobar_edge`,
+# so we need to use this name until we are able to reconfigure it at hellobar_backend.
+set :queue_prefix, -> { fetch(:stage) == 'edge' ? 'hellobar' : 'hb3' }
+set :shoryuken_options, -> { "--rails --queues #{ fetch(:queue_prefix) }_#{ fetch(:stage) } hb3_#{ fetch(:stage) }_lowpriority" }
+
 set :slackistrano,
   channel: '#deploys',
   webhook: 'https://hooks.slack.com/services/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'
