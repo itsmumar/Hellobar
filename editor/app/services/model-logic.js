@@ -3,6 +3,7 @@ import _ from 'lodash/lodash';
 
 /**
  * @class ModelLogic
+ * Contains observers bound to the application model.
  */
 export default Ember.Service.extend({
 
@@ -57,20 +58,14 @@ export default Ember.Service.extend({
 
       this.set('model.settings.cookie_settings', cookieSettings);
     }
-  }.observes('model')
+  }.observes('model'),
 
-  // TODO REFACTOR adopt (this is from style controller) (what is isEditing?)
-  /*onElementTypeChanged: (function () {
-    let elementType = this.get('model.type');
-    if (elementType == 'Custom' || this.get('isEditing')) {
-      this.get('bus').trigger('hellobar.core.rightPane.hide');
-    } else {
-      this.get('bus').trigger('hellobar.core.rightPane.show', {
-        componentName: 'preview/containers/theming/theme-tile-grid',
-        componentOptions: { elementType }
-      });
+  formatPhoneNumber: function () {
+    const phoneNumber = this.get('model.phone_number');
+    const countryCode = this.get('model.phone_country_code');
+    if (countryCode !== 'XX' && isValidNumber(phoneNumber, countryCode)) {
+      this.set('model.phone_number', formatLocal(countryCode, phoneNumber));
     }
-    this.get('inlineEditing').initializeInlineEditing(elementType);
-  }).observes('model.type'),*/
+  }.observes('model.phone_number', 'model.phone_country_code')
 
 });

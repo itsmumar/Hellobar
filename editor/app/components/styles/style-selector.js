@@ -68,6 +68,20 @@ export default Ember.Component.extend({
   elementTypeSelectionInProgress: false,
   userSelectedElementTypeExplicitly: false,
 
+  manageRightPaneOnElementTypeChanged: function () {
+    let elementType = this.get('model.type');
+    if (elementType == 'Custom' || this.get('isEditing')) {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
+    } else {
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'preview/containers/theming/theme-tile-grid',
+        componentOptions: {elementType}
+      });
+    }
+    this.get('inlineEditing').initializeInlineEditing(elementType);
+  }.observes('model.type'),
+
+
   actions: {
 
     select(style) {
