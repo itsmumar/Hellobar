@@ -80,10 +80,7 @@ export default Ember.Controller.extend(
 
     actions: {
 
-      toggleFullscreen() {
-        this.toggleProperty('isFullscreen');
-        return false;
-      },
+
 
       toggleModal() {
         this.set('modal', null);

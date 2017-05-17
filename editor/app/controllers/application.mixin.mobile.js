@@ -21,13 +21,6 @@ export default Ember.Mixin.create({
     if (elementSubtype === 'call' && !isMobile) {
       this.toggleProperty('isMobile');
     }
-  }.observes('model.element_subtype', 'model.type'),
-
-  actions: {
-    toggleMobile() {
-      this.toggleProperty('isMobile');
-      return false;
-    }
-  }
+  }.observes('model.element_subtype', 'model.type')
 
 });

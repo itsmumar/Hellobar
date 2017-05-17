@@ -28,6 +28,20 @@ export default Ember.Component.extend({
 
   tagName: 'nav',
 
-  classNames: ['step-navigation', 'links-wrapper']
+  classNames: ['step-navigation', 'links-wrapper'],
+
+  actions: {
+    toggleMobile() {
+      this.toggleProperty('isMobile');
+    },
+
+    toggleFullscreen() {
+      this.toggleProperty('isFullscreen');
+    },
+
+    closeEditor() {
+      this.sendAction('closeEditor');
+    }
+  }
 
 });
