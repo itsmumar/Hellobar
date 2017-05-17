@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   classNames: ['editor-wrapper'],
-  classNameBindings: ['isMobile', 'isFullscreen', 'isCallType'],
+  classNameBindings: ['isMobile', 'isFullscreen', 'isCallGoal'],
 
   bus: Ember.inject.service(),
   palette: Ember.inject.service(),

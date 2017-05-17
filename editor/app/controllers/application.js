@@ -2,17 +2,16 @@ import Ember from 'ember';
 import _ from 'lodash/lodash';
 
 import MobileMixin from './application.mixin.mobile';
-import TypeAndSubtypeMixin from './application.mixin.type-and-subtype';
 import UpgradingMixin from './application.mixin.upgrading';
 
 export default Ember.Controller.extend(
   MobileMixin,
-  TypeAndSubtypeMixin,
   UpgradingMixin, {
 
     bus: Ember.inject.service(),
     inlineEditing: Ember.inject.service(),
     palette: Ember.inject.service(),
+    theming: Ember.inject.service(),
     modelValidation: Ember.inject.service(),
     applicationSettings: Ember.inject.service(),
 
@@ -67,7 +66,7 @@ export default Ember.Controller.extend(
     modelIsDirty: false,
     rule_id: null,
 
-    doneButtonText: (() => 'Save & Publish').property(),
+    isCallGoal: Ember.computed.equal('model.element_subtype', 'call'),
 
     setRuleID: (function () {
       const ruleId = parseInt(this.get('rule_id'));

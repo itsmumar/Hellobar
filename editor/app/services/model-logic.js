@@ -12,11 +12,19 @@ const formatLocal = window.formatLocal;
 export default Ember.Service.extend({
 
   bus: Ember.inject.service(),
+  theming: Ember.inject.service(),
 
   /**
    * @property {object}
    */
   model: null,
+
+  setModel(model) {
+    this.set('model', model);
+  },
+
+
+  // ------ Initialization, subscribing to events
 
   init() {
     this._trackFieldChanges();
@@ -28,11 +36,10 @@ export default Ember.Service.extend({
     });
   },
 
-  setModel(model) {
-    this.set('model', model);
-  },
 
-  onElementTypeChange: function () {
+  // ------ Fields handling
+
+  updateFieldsOnElementTypeChange: function () {
     if (this.get('model.type') === 'Bar') {
       const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
       _.each(fields, (field) => {
@@ -44,7 +51,27 @@ export default Ember.Service.extend({
     }
   }.observes('model.type'),
 
-  afterModel: function () {
+
+  // ------ Template handling
+
+  _previousElementType: null,
+
+  unsetTemplateOnElementTypeChanged: function () {
+    const elementType = this.get('model.type');
+    const currentTheme = this.get('theming.currentTheme');
+    const previousElementType = this.get('_previousElementType');
+    if (elementType && previousElementType && elementType !== previousElementType) {
+      if (currentTheme && (currentTheme.type === 'template')) {
+        this.set('model.theme_id', 'autodetected');
+      }
+    }
+    this.set('_previousElementType', elementType);
+  }.observes('model.type'),
+
+
+  // ------ Cookie settings
+
+  initializeCookieSettings: function () {
     let cookieSettings = this.get('model.settings.cookie_settings');
     if (_.isEmpty(cookieSettings)) {
       const elementType = this.get('model.type');
@@ -64,12 +91,24 @@ export default Ember.Service.extend({
     }
   }.observes('model'),
 
+
+  // ------ Phone number formatting
+
   formatPhoneNumber: function () {
     const phoneNumber = this.get('model.phone_number');
     const countryCode = this.get('model.phone_country_code');
     if (countryCode !== 'XX' && isValidNumber(phoneNumber, countryCode)) {
       this.set('model.phone_number', formatLocal(countryCode, phoneNumber));
     }
-  }.observes('model.phone_number', 'model.phone_country_code')
+  }.observes('model.phone_number', 'model.phone_country_code'),
+
+
+  // ------ Force bar usage for calls
+
+  forceMobileModeForCall: function () {
+    if (this.get('model.element_subtype') === 'call') {
+      this.set('model.type', 'Bar');
+    }
+  }.observes('model.element_subtype')
 
 });
