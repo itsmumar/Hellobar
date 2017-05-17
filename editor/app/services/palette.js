@@ -12,9 +12,8 @@ export default Ember.Service.extend({
 
   coloring: Ember.inject.service(),
 
-  // TODO REFACTOR define these properties while moving code from application controller
   /**
-   * TODO description
+   * Focused color (used in color selection)
    */
   focusedColor: null,
 
