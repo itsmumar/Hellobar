@@ -57,7 +57,7 @@ feature 'Manage Bars', js: true do
     it 'shouldnt show update to new users' do
       @user.update_attributes(wordpress_user_id: nil)
       visit site_site_elements_path(@site)
-      expect(page).to_not have_content('Where did all my views and conversions go')
+      expect(page).not_to have_content('Where did all my views and conversions go')
     end
   end
 end

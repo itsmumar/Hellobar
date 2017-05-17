@@ -8,7 +8,7 @@ describe SitesController do
     it 'sets the site instance variable' do
       get :new
 
-      expect(assigns[:site]).to_not be_nil
+      expect(assigns[:site]).not_to be_nil
     end
 
     it 'sets the url if present from the params' do

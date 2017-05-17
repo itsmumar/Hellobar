@@ -21,6 +21,6 @@ feature 'Site with a modal', :js do
 
     # force capybara to wait until iframe is removed
     page.has_no_selector?('#random-container')
-    expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
+    expect(page).not_to have_xpath('.//iframe[@id="random-container"]')
   end
 end
