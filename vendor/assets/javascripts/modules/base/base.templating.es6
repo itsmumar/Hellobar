@@ -22,7 +22,7 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
 
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
   function parseTemplateVar(value, context) {
-    const siteElement = context.siteElement; // this variable is used in templates when `eval` is called
+    let siteElement = context && context.siteElement ? context.siteElement : context; // this variable is used in templates when `eval` is called
 
     try {
       value = eval(value);
