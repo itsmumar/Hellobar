@@ -15,6 +15,8 @@ set :keep_releases, 15
 set :ember_app_path, -> { "#{ release_path }/editor" }
 
 # do not hook into the default deployment recipe. invoke 'shoryuken:restart' manually
+# to use these hooks we need to follow capistrano conventions
+# we should use such base hooks: deploy:updated, deploy:reverted, deploy:published
 set :shoryuken_default_hooks, false
 set :shoryuken_role, :worker
 
