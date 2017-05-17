@@ -1,9 +1,0 @@
-/mnt/deploy/current/log/queue_worker.log {
-    missingok
-    notifempty
-    compress
-    delaycompress
-    dateext
-    daily
-    rotate 50
-}
