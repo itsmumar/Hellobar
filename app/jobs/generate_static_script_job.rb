@@ -1,5 +1,6 @@
 class GenerateStaticScriptJob < ApplicationJob
   def perform(site)
+    site = Site.preload_for_script.find(site.id) # preload relations for better performance
     generate_script_if_needed(site)
     check_installation(site)
   end
