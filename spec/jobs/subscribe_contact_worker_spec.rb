@@ -51,7 +51,7 @@ describe SubscribeContactWorker do
   end
 
   describe '#perform' do
-    let(:sqs_msg) { double('sqs_msg') }
+    let(:sqs_msg) { double('sqs_msg', delete: true) }
     let(:perform) { job.new.perform(sqs_msg, contact) }
 
     it 'calls on SyncOneContactList' do
@@ -74,6 +74,11 @@ describe SubscribeContactWorker do
 
       it 'deletes sqs_msg' do
         expect(sqs_msg).to receive(:delete)
+        perform
+      end
+
+      it 'sends exception to Raven' do
+        expect(Raven).to receive(:capture_exception).with(instance_of(StandardError))
         perform
       end
     end
