@@ -1,4 +1,4 @@
-describe SyncContactListJob do
+describe SubscribeAllContactsJob do
   let(:job) { described_class }
   let(:contact_list) { create :contact_list }
 

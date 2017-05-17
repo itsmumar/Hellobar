@@ -53,9 +53,9 @@ class ContactList < ActiveRecord::Base
     return false unless syncable?
 
     if options[:immediate]
-      SyncContactListJob.perform_now self
+      SubscribeAllContactsJob.perform_now self
     else
-      SyncContactListJob.perform_later self
+      SubscribeAllContactsJob.perform_later self
     end
   end
 

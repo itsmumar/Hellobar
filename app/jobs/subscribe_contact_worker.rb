@@ -1,4 +1,4 @@
-class SyncOneContactListWorker
+class SubscribeContactWorker
   include Shoryuken::Worker
 
   # proper name for the main_queue on the Edge server is `hb3_edge`, however

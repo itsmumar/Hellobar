@@ -1,9 +1,9 @@
-describe SyncOneContactListWorker do
+describe SubscribeContactWorker do
   let(:job) { described_class }
   let(:contact) { described_class::Contact.new(1, 'email@example.com', 'firstname, lastname') }
 
   def make_contact(id, email, fields)
-    SyncOneContactListWorker::Contact.new(id, email, fields)
+    SubscribeContactWorker::Contact.new(id, email, fields)
   end
 
   describe '.parse' do
@@ -79,7 +79,7 @@ describe SyncOneContactListWorker do
     end
   end
 
-  describe SyncOneContactListWorker::Contact do
+  describe SubscribeContactWorker::Contact do
     describe '.fields' do
       let(:contact) { make_contact('1', 'email@example.com', ' firstname, lastname ') }
 

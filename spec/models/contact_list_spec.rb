@@ -91,7 +91,7 @@ describe ContactList do
 
   describe '.sync!' do
     it 'runs SyncContactListJob' do
-      expect(SyncContactListJob).to receive(:perform_now)
+      expect(SubscribeAllContactsJob).to receive(:perform_now)
       contact_list.sync!
     end
   end

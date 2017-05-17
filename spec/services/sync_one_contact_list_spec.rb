@@ -5,7 +5,7 @@ describe SubscribeContact do
   let(:email) { 'email@contact.com' }
   let(:name) { 'FirstName LastName' }
   let(:params) { { 'signup[email]' => email, 'signup[name]' => name } }
-  let(:contact) { SyncOneContactListWorker::Contact.new(contact_list.id, email, name) }
+  let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
 
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }

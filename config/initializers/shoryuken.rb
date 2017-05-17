@@ -13,7 +13,7 @@ end
 # will be removed when we refactor hellobar_backend
 class CustomWorkerRegistry < Shoryuken::DefaultWorkerRegistry
   def fetch_worker(queue, message)
-    return SyncOneContactListWorker.new if SyncOneContactListWorker.parse(message.body)
+    return SubscribeContactWorker.new if SubscribeContactWorker.parse(message.body)
     super
   end
 end
