@@ -3,14 +3,14 @@ import _ from 'lodash/lodash';
 
 import ValidationMixin from './application.mixin.validation';
 import ColorsMixin from './application.mixin.colors';
-import PhoneMixin from './application.mixin.phone';
+import MobileMixin from './application.mixin.mobile';
 import TypeAndSubtypeMixin from './application.mixin.type-and-subtype';
 import UpgradingMixin from './application.mixin.upgrading';
 
 export default Ember.Controller.extend(
   ValidationMixin,
   ColorsMixin,
-  PhoneMixin,
+  MobileMixin,
   TypeAndSubtypeMixin,
   UpgradingMixin, {
 
@@ -63,7 +63,7 @@ export default Ember.Controller.extend(
     //-----------  State Default  -----------#
 
     queryParams: ['rule_id'],
-    isMobile: false,
+
     isFullscreen: false,
     saveSubmitted: false,
     modelIsDirty: false,
@@ -85,11 +85,6 @@ export default Ember.Controller.extend(
 
       toggleFullscreen() {
         this.toggleProperty('isFullscreen');
-        return false;
-      },
-
-      toggleMobile() {
-        this.toggleProperty('isMobile');
         return false;
       },
 
