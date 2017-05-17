@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe DetectSiteType do
   def service(url)
     described_class.new(url)

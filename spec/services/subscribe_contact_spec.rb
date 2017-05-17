@@ -36,26 +36,27 @@ describe SubscribeContact do
         allow(contact_list).to receive(:oauth?).and_return(true)
       end
 
-      after { service.call }
-
       describe 'for mailchimp' do
         before do
           allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::MailChimp)
         end
 
-        it 'if someone has an invalid list stored, delete the identity and notify them' do
+        specify 'if someone has an invalid list stored, delete the identity and notify them' do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid MailChimp List ID'))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
 
-        it "if someone's token is no longer valid, delete the identity and notify them" do
+        specify "if someone's token is no longer valid, delete the identity and notify them" do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid Mailchimp API Key'))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
 
-        it 'if someone has deleted their account, delete the identity and notify them' do
+        specify 'if someone has deleted their account, delete the identity and notify them' do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: This account has been deactivated'))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
       end
 
@@ -64,9 +65,10 @@ describe SubscribeContact do
           allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::CampaignMonitor)
         end
 
-        it 'if someone has revoked our access, delete the identity and notify them' do
+        specify 'if someone has revoked our access, delete the identity and notify them' do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(Code: 122, Message: 'Revoked OAuth Token')))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
       end
 
@@ -75,14 +77,16 @@ describe SubscribeContact do
           allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::AWeber)
         end
 
-        it 'if someone has an invalid list stored, delete the identity and notify them' do
+        specify 'if someone has an invalid list stored, delete the identity and notify them' do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(URI::InvalidURIError.new('404 Resource Not Found'))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
 
-        it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
+        specify "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(ArgumentError.new('This account has been deactivated'))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
       end
 
@@ -99,6 +103,7 @@ describe SubscribeContact do
           response = rest_response(404, '404 Resource Not Found')
           expect(contact_list.service_provider).to receive(:subscribe).and_raise(RestClient::ResourceNotFound.new(response))
           expect(contact_list.identity).to receive :destroy_and_notify_user
+          service.call
         end
       end
     end
@@ -106,11 +111,7 @@ describe SubscribeContact do
     context 'when StandardError is raised' do
       before { allow(contact_list.service_provider).to receive(:subscribe).and_raise StandardError }
 
-      it 'raises error' do
-        expect { service.call }.to raise_error StandardError
-      end
-
-      it 'does not mark contact list log as completed' do
+      it 'does not mark contact list log as completed and raises error' do
         expect { service.call }.to raise_error StandardError
         expect(log_entry).not_to be_completed
       end
