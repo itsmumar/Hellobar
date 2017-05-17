@@ -1,13 +1,11 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
-import ValidationMixin from './application.mixin.validation';
 import MobileMixin from './application.mixin.mobile';
 import TypeAndSubtypeMixin from './application.mixin.type-and-subtype';
 import UpgradingMixin from './application.mixin.upgrading';
 
 export default Ember.Controller.extend(
-  ValidationMixin,
   MobileMixin,
   TypeAndSubtypeMixin,
   UpgradingMixin, {
@@ -15,13 +13,14 @@ export default Ember.Controller.extend(
     bus: Ember.inject.service(),
     inlineEditing: Ember.inject.service(),
     palette: Ember.inject.service(),
+    modelValidation: Ember.inject.service(),
     applicationSettings: Ember.inject.service(),
 
     goal: Ember.computed.alias('model.element_subtype'),
     style: Ember.computed.alias('model.type'),
 
     init() {
-      this.initializeValidation();
+      this.get('modelValidation').initializeValidation();
       this._initializeInlineEditing();
       this._subscribeToBusEvents();
     },

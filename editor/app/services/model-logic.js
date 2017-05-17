@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
+// GLOBALS: isValidNumber, formatLocal functions
 const isValidNumber = window.isValidNumber;
 const formatLocal = window.formatLocal;
 

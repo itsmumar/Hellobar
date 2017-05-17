@@ -1,11 +1,14 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 // GLOBALS: isValidNumber function
+const isValidNumber = window.isValidNumber;
 
-
-// TODO REFACTOR -> modelValidation service
-export default Ember.Mixin.create({
-
+/**
+ * @class ModelValidation
+ * Provides logic to initialize model validation rules
+ */
+export default Ember.Service.extend({
   validation: Ember.inject.service(),
   bus: Ember.inject.service(),
 
@@ -29,12 +32,7 @@ export default Ember.Mixin.create({
       }
     ];
     this.get('validation').add('phone_number', validationRules);
-    this.get('bus').subscribe('hellobar.core.validation.failed', (failures) => {
-      this.set('validationMessages', failures.map(failure => failure.error));
-    });
-    this.get('bus').subscribe('hellobar.core.validation.succeeded', () => {
-      this.set('validationMessages', null);
-    });
-  }
 
+  }
 });
+
