@@ -2,7 +2,7 @@
 
 describe('Module inspect', () => {
   let module, elementColumns, allElementModels, elementsOnPage,
-    rules, activeRules, rulesWithElements, rulesWithoutElements;
+    rules, activeRules, rulesWithElements, rulesWithoutElements, contentUpgrades;
 
   beforeEach(() => {
     hellobar.finalize();
@@ -15,6 +15,7 @@ describe('Module inspect', () => {
     rulesWithElements = [rule];
     rules = rulesWithElements.concat(rulesWithoutElements);
     activeRules = [rule];
+    contentUpgrades = [{id: 5}];
     elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
       'notification_delay', 'closable', 'show_branding', 'background_color',
@@ -35,7 +36,10 @@ describe('Module inspect', () => {
           version: '9ca6c58b392a4cb879753e097667205a32e516ec',
           timestamp: '2017-04-07 13:05:33 UTC',
           info: 'version 9ca6c58b392a4cb879753e097667205a32e516ec was generated at 2017-04-07 13:05:33 UTC'
-        })
+        }),
+        contentUpgrades: {
+          configuration: () => { return { contentUpgrades: () => contentUpgrades } }
+        },
       }
     });
   });
@@ -53,6 +57,7 @@ describe('Module inspect', () => {
         activeRules: activeRules,
         rulesWithElements: rulesWithElements,
         rulesWithoutElements: rulesWithoutElements,
+        contentUpgrades: contentUpgrades
       };
       expect(module.all()).toEqual(expected);
     });
