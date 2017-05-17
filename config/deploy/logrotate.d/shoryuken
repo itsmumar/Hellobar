@@ -1,0 +1,10 @@
+/mnt/deploy/current/log/shoryuken.log {
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+    dateext
+    daily
+    rotate 50
+}
