@@ -1,6 +1,6 @@
 describe SubscribeContactWorker do
   let(:job) { described_class }
-  let(:contact) { described_class::Contact.new(1, 'email@example.com', 'firstname, lastname') }
+  let(:contact) { described_class::Contact.new(1, 'email@example.com', 'firstname,lastname') }
 
   def make_contact(id, email, fields)
     SubscribeContactWorker::Contact.new(id, email, fields)
@@ -18,10 +18,10 @@ describe SubscribeContactWorker do
     end
 
     context 'with id, email and few fields' do
-      let(:message) { 'contact_list:sync_one[1,"email@example.com", "firstname, lastname, gender"]' }
+      let(:message) { 'contact_list:sync_one[1,"email@example.com", "firstname,lastname,gender"]' }
 
       it 'returns instance of Contact' do
-        expect(contact).to eql make_contact('1', 'email@example.com', 'firstname, lastname, gender')
+        expect(contact).to eql make_contact('1', 'email@example.com', 'firstname,lastname,gender')
       end
     end
 
@@ -60,7 +60,7 @@ describe SubscribeContactWorker do
     end
 
     context 'when email is blank' do
-      let(:contact) { described_class::Contact.new(1, ' ', 'firstname, lastname') }
+      let(:contact) { described_class::Contact.new(1, ' ', 'firstname,lastname') }
 
       it 'raises "Cannot sync without email present"' do
         expect(sqs_msg).to receive(:delete)
@@ -81,10 +81,10 @@ describe SubscribeContactWorker do
 
   describe SubscribeContactWorker::Contact do
     describe '.fields' do
-      let(:contact) { make_contact('1', 'email@example.com', ' firstname, lastname ') }
+      let(:contact) { make_contact('1', 'email@example.com', ' firstname,lastname ') }
 
       it 'returns striped fields' do
-        expect(contact.fields).to eql 'firstname, lastname'
+        expect(contact.fields).to eql 'firstname,lastname'
       end
 
       context 'when fields is "nil"' do
