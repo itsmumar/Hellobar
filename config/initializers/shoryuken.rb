@@ -5,12 +5,8 @@ end
 Shoryuken.configure_server do |config|
   config.sqs_client = Aws::SQS::Client.new
 
-  if Rails.application.config.respond_to? :lograge
-    Shoryuken::Logging.logger = Rails.application.config.lograge.logger
-    Rails.logger = Rails.application.config.lograge.logger
-  else
-    Rails.logger = Shoryuken::Logging.logger
-  end
+  Rails.logger = Shoryuken::Logging.logger
+  Rails.logger.level = Rails.application.config.log_level
 end
 
 # this is needed to avoid parsing errors
