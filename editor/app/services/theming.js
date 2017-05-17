@@ -5,6 +5,8 @@ export default Ember.Service.extend({
 
   inlineEditing: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
+  palette: Ember.inject.service(),
+
   availableThemes: Ember.computed.alias('applicationSettings.settings.available_themes'),
 
   model: null,
@@ -56,8 +58,7 @@ export default Ember.Service.extend({
           );
         }
       } else {
-        // TODO REFACTOR adopt
-        //this.setSiteColors();
+        this.get('palette').setSiteColors(this);
       }
     }
     this._firstAttemptOfThemeApplying = true;

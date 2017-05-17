@@ -2,20 +2,19 @@ import Ember from 'ember';
 import _ from 'lodash/lodash';
 
 import ValidationMixin from './application.mixin.validation';
-import ColorsMixin from './application.mixin.colors';
 import MobileMixin from './application.mixin.mobile';
 import TypeAndSubtypeMixin from './application.mixin.type-and-subtype';
 import UpgradingMixin from './application.mixin.upgrading';
 
 export default Ember.Controller.extend(
   ValidationMixin,
-  ColorsMixin,
   MobileMixin,
   TypeAndSubtypeMixin,
   UpgradingMixin, {
 
-    inlineEditing: Ember.inject.service(),
     bus: Ember.inject.service(),
+    inlineEditing: Ember.inject.service(),
+    palette: Ember.inject.service(),
     applicationSettings: Ember.inject.service(),
 
     goal: Ember.computed.alias('model.element_subtype'),
@@ -37,7 +36,7 @@ export default Ember.Controller.extend(
     _subscribeToBusEvents() {
       this.get('bus').subscribe('hellobar.core.application.initialized', params => {
         $('body').removeClass('loading');
-        Ember.run.next(() => this.detectColorPalette());
+        Ember.run.next(() => this.get('palette').detectColorPalette(this));
       });
     },
 

@@ -1,6 +1,9 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
+const isValidNumber = window.isValidNumber;
+const formatLocal = window.formatLocal;
+
 /**
  * @class ModelLogic
  * Contains observers bound to the application model.
