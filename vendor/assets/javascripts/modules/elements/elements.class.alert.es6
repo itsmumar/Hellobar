@@ -311,7 +311,7 @@ hellobar.defineModule('elements.class.alert',
       attach() {
         const html = () => {
           const template = templating.getTemplateByName(this._model.template_name);
-          return templating.renderTemplate(template, this);
+          return templating.renderTemplate(template, {siteElement: this});
         };
         const addCdnResources = (doc) => {
           cdnLibraries.useFontAwesome(doc);
