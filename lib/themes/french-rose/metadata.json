@@ -9,7 +9,7 @@
     "arial",
     "georgia"
   ],
-  "element_types": ["Bar", "Modal", "Slider", "Takeover"],
+  "element_types": ["Bar", "Modal", "Slider", "Takeover", "Alert"],
   "defaults": {
     "Bar": {
       "background_color": "4D8589",
@@ -42,6 +42,7 @@
     "Alert": {
       "background_color": "4d8589",
       "trigger_color": "4d8589",
+      "trigger_icon_color": "ffffff",
       "text_color": "ffffff",
       "button_color": "ff5288",
       "link_color": "ffffff",
