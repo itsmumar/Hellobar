@@ -18,7 +18,7 @@ feature 'Every x number of sessions condition', js: true do
       set_ns_cookie(page, day)
       visit site_path_to_url(@path) # Reload the page
       sleep(1) # Give time for JS to execute
-      expect(page).to_not have_xpath('.//iframe[@id="random-container"]')
+      expect(page).not_to have_xpath('.//iframe[@id="random-container"]')
     end
 
     @test_does_exist = proc do |day|
