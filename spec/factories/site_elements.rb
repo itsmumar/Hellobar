@@ -37,8 +37,8 @@ FactoryGirl.define do
       type 'Alert'
     end
 
-    trait :content_upgrade do
-      type 'ContentUpgrade'
+    factory :content_upgrade, class: 'ContentUpgrade' do
+      content_upgrade_pdf { File.new(Rails.root.join('spec', 'fixtures', 'content_upgrade.pdf')) }
     end
 
     trait :custom do
