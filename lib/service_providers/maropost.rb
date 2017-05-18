@@ -18,24 +18,24 @@ module ServiceProviders
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
+      contact = {
+        email: email,
+        subscribe: true,
+        remove_from_dnm: true
+      }
+
       if name
         first_name = name.split(' ')[0]
         last_name = name.split(' ')[1..-1].join(' ')
-      else
-        first_name = email
       end
+
+      contact.update(first_name: first_name, last_name: last_name) if name.present?
 
       response = @client.post do |request|
         request.url "accounts/#{ @account_id }/lists/#{ list_id }/contacts.json"
         request.body = {
           auth_token: @api_key,
-          contact: {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-            subscribe: true,
-            remove_from_dnm: true
-          }
+          contact: contact
         }
       end
 
