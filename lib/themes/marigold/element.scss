@@ -175,4 +175,10 @@
       margin-left: 45%;
     }
   }
+
+  #hellobar-slider {
+    .hb-image-wrapper.background ~ .slider-content {
+      padding: 16px 13px 18px 16px;
+    }
+  }
 }
