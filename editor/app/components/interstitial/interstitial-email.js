@@ -3,32 +3,32 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   showEmailVolume: false,
 
-  monthlyPageviews: ( function () {
+  monthlyPageviews: function () {
     return this.get('model.site.monthly_pageviews') || 0;
-  }).property(),
+  }.property(),
 
-  formattedMonthlyPageviews: ( function () {
+  formattedMonthlyPageviews: function () {
     return this.get('monthlyPageviews').toLocaleString();
-  }).property(),
+  }.property(),
 
-  hasEnoughSubscribers: ( function () {
+  hasEnoughSubscribers: function () {
     return this.get('monthlyPageviews') > 1000;
-  }).property(),
+  }.property(),
 
-  calculatedSubscribers: ( function () {
+  calculatedSubscribers: function () {
     return Math.round(this.get('monthlyPageviews') * 0.005);
-  }).property(),
+  }.property(),
 
-  formattedCalculatedSubscribers: ( function () {
+  formattedCalculatedSubscribers: function () {
     return this.get('calculatedSubscribers').toLocaleString();
-  }).property(),
+  }.property(),
 
-  inputIsInvalid: ( function () {
+  inputIsInvalid: function () {
     return !!(
       Ember.isEmpty(this.get('model.headline')) ||
       Ember.isEmpty(this.get('model.link_text'))
     );
-  }).property(
+  }.property(
     'model.link_text',
     'model.headline'
   ),
