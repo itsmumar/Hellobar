@@ -35,7 +35,7 @@ export default Ember.Component.extend({
 
   actions: {
     closeInterstitial() {
-      return this.transitionToRoute('goals.email');
+      this.get('router').transitionTo('styles');
     }
   }
 });
