@@ -23,7 +23,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     cc_email.email_address = email
     cc_contact.email_addresses = [cc_email]
     cc_contact.lists = [cc_list]
-    cc_contact.first_name, cc_contact.last_name = (name || '').split(' ')
+    cc_contact.first_name, cc_contact.last_name = name.split(' ') if name.present?
 
     add_contact(cc_contact, double_optin)
   rescue RestClient::Conflict

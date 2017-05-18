@@ -24,12 +24,11 @@ module ServiceProviders
         remove_from_dnm: true
       }
 
-      if name
+      if name.present?
         first_name = name.split(' ')[0]
         last_name = name.split(' ')[1..-1].join(' ')
+        contact.update(first_name: first_name, last_name: last_name)
       end
-
-      contact.update(first_name: first_name, last_name: last_name) if name.present?
 
       response = @client.post do |request|
         request.url "accounts/#{ @account_id }/lists/#{ list_id }/contacts.json"

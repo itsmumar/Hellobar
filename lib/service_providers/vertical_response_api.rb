@@ -19,13 +19,15 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
   end
 
   def subscribe(list_id, email, name = nil, _double_optin = true)
-    first_name, last_name = split_name(name)
+    options = { email: email }
+
+    if name.present?
+      first_name, last_name = split_name(name)
+      options.update(first_name: first_name, last_name: last_name)
+    end
+
     handle_errors do
-      @client.find_list(list_id).create_contact(
-        email: email,
-        first_name: first_name,
-        last_name: last_name
-      )
+      @client.find_list(list_id).create_contact(options)
     end
   end
 
