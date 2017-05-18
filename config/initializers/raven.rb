@@ -10,5 +10,5 @@ Raven.configure do |config|
   # don't log readiness
   config.silence_ready = true
 
-  config.async = lambda { |event| Thread.new { Raven.send_event(event) } }
+  config.async = ->(event) { Thread.new { Raven.send_event(event) } }
 end

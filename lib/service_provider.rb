@@ -98,7 +98,7 @@ class ServiceProvider
 
   def raven_log(message)
     options = {
-      extra: { contact_list_id: @contact_list&.id  },
+      extra: { contact_list_id: @contact_list&.id },
       tags: { type: 'service_provider', service_provider: self.class.name },
       backtrace: caller
     }
