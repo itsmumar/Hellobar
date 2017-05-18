@@ -38,6 +38,7 @@ FactoryGirl.define do
     end
 
     factory :content_upgrade, class: 'ContentUpgrade' do
+      type 'ContentUpgrade'
       content_upgrade_pdf { File.new(Rails.root.join('spec', 'fixtures', 'content_upgrade.pdf')) }
     end
 
