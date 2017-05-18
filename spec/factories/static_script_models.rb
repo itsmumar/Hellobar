@@ -38,7 +38,7 @@ FactoryGirl.define do
     skip_create
 
     transient do
-      content_upgrade { create :site_element, :content_upgrade }
+      content_upgrade { create :content_upgrade }
     end
 
     initialize_with do
