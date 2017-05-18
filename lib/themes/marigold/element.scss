@@ -168,11 +168,21 @@
 
 .alert.marigold {
   .image-background .hb-image-wrapper.background {
-    width: 50%;
+    width: 45%;
 
     & ~ .slider-content,
     & ~ .hb-content-wrapper {
-      margin-left: 50%;
+      margin-left: 45%;
+    }
+  }
+
+  #hellobar-slider {
+    .hb-image-wrapper.background ~ .slider-content {
+      padding: 16px 13px 18px 16px;
+    }
+
+    .hb-text-wrapper {
+      padding: 0;
     }
   }
 }
