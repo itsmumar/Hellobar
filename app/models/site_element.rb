@@ -252,22 +252,6 @@ class SiteElement < ActiveRecord::Base
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  def content_upgrade_key
-    "#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
-  end
-
-  def content_upgrade_download_link
-    "https://s3.amazonaws.com/#{ Settings.s3_content_upgrades_bucket }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
-  end
-
-  def content_upgrade_script_tag
-    '<script id="hb-cu-' + id.to_s + '">window.onload = function() {hellobar("contentUpgrades").show(' + id.to_s + ');};</script>'
-  end
-
-  def content_upgrade_wp_shortcode
-    '[hellobar_content_upgrade id="' + id.to_s + '"]'
-  end
-
   # Hardcoded array of external events for Google Analytics
   # In the future we will consider providing a customizable UI for this
   def external_tracking

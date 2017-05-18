@@ -1,100 +1,70 @@
-<script type="text/javascript">
+<div class="content-upgrade-form">
 
-  $(function () {
-
-    function initializeFroala() {
-      var froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
-      $('#content-edit').froalaEditor({
-        key: froalaKey,
-        heightMin: 400,
-        width: 800,
-      });
-    }
-
-    initializeFroala();
-
-  });
-</script>
-
-<!-- TODO Discuss if we can apply better approach to include Froala (Gems or something like that) -->
-<style>
-@import url("//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css");
-@import url("//cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css");
-@import url("//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_style.min.css");
-@import url("//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/css/froala_editor.pkgd.min.css");
-</style>
-<script src="//cdnjs.cloudflare.com/ajax/libs/froala-editor/2.4.0/js/froala_editor.pkgd.min.js" type="text/javascript"></script>
-
-  <div class="content-upgrade-form">
-
-    <div class="columns">
-      <div class="form-column">
-
-
-        <div class="field-wrapper">
-          <label for="offer-headline">Offer Headline - Links should look like {{link text}}</label>
-          <textarea name="offer_headline" id="input-offer-headline" ><%= @content_upgrade.offer_headline %></textarea>
-        </div>
-        <div class="field-wrapper">
-          <label for="caption">Caption Text</label>
-          <textarea name="caption" id="input-caption" style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
-        </div>
-
-        <div class="field-wrapper">
-          <label for="headline">Headline Text</label>
-          <textarea name="headline" id="input-headline"  style="min-height:50px; height: 50px"><%= @content_upgrade.headline %></textarea>
-        </div>
-
-        <div class="field-wrapper">
-          <label for="name-placeholder">Name Placeholder</label>
-          <input name="name_placeholder"  id="input-name-placeholder" type="text"   value="<%= @content_upgrade.name_placeholder %>">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="email-placeholder">Email Placeholder</label>
-          <input name="email_placeholder"  id="input-email-placeholder" type="text"   value="<%= @content_upgrade.email_placeholder %>">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="cta">Button Text</label>
-          <input name="link_text"  id="input-button-text" type="text"value="<%= @content_upgrade.link_text %>">
-        </div>
-
-        <div class="field-wrapper">
-          <label for="spam-disclaimer">Spam Disclaimer</label>
-          <input name="disclaimer"  id="input-spam-disclaimer" type="text"  value="<%= @content_upgrade.disclaimer %>">
-        </div>
-
+  <div class="columns">
+    <div class="form-column">
+      <div class="field-wrapper">
+        <label for="offer-headline">Offer Headline - Links should look like {{link text}}</label>
+        <textarea name="offer_headline" id="input-offer-headline"><%= @content_upgrade.offer_headline %></textarea>
+      </div>
+      <div class="field-wrapper">
+        <label for="caption">Caption Text</label>
+        <textarea name="caption" id="input-caption" style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
       </div>
 
-      <div class="preview-column">
-        <%= render :partial => 'preview' %>
+      <div class="field-wrapper">
+        <label for="headline">Headline Text</label>
+        <textarea name="headline" id="input-headline" style="min-height:50px; height: 50px"><%= @content_upgrade.headline %></textarea>
+      </div>
+
+      <div class="field-wrapper">
+        <label for="name-placeholder">Name Placeholder</label>
+        <input name="name_placeholder" id="input-name-placeholder" type="text" value="<%= @content_upgrade.name_placeholder %>">
+      </div>
+
+      <div class="field-wrapper">
+        <label for="email-placeholder">Email Placeholder</label>
+        <input name="email_placeholder" id="input-email-placeholder" type="text" value="<%= @content_upgrade.email_placeholder %>">
+      </div>
+
+      <div class="field-wrapper">
+        <label for="cta">Button Text</label>
+        <input name="link_text" id="input-button-text" type="text" value="<%= @content_upgrade.link_text %>">
+      </div>
+
+      <div class="field-wrapper">
+        <label for="spam-disclaimer">Spam Disclaimer</label>
+        <input name="disclaimer" id="input-spam-disclaimer" type="text" value="<%= @content_upgrade.disclaimer %>">
+      </div>
 
     </div>
 
-    <hr />
+    <div class="preview-column">
+      <%= render :partial => 'preview' %>
+    </div>
+
+    <hr/>
 
     <h3>Choose Contact List</h3>
 
     <div class="select-wrapper">
       <select id="contact-list" name="contact_list_id">
-        <%= @site.contact_lists.each do |list|%>
-        <option value="<%= list.id %>" <% if @content_upgrade.contact_list_id == list.id %>selected="selected"<% end %>><%= list.name %></option>
+        <%= @site.contact_lists.each do |list| %>
+            <option value="<%= list.id %>"
+                    <% if @content_upgrade.contact_list_id == list.id %>selected="selected"
+            <% end %>><%= list.name %></option>
         <% end %>
       </select>
     </div>
 
     <h3>PDF Download Content</h3>
-    <div class="js-froala-editor-container">
-      <textarea id="content-edit" name="content"><%= @content_upgrade.content %></textarea>
+    <div class="field-wrapper">
+      <label for="offer-headline">Upload PDF download content file</label>
+      <%= form.file_field :content_upgrade_pdf %>
     </div>
-
-
-
 
     <div class="buttons">
       <input type="submit" class="save" value="Save">
       <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
     </div>
-
   </div>
+</div>
