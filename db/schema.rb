@@ -208,6 +208,15 @@ ActiveRecord::Schema.define(version: 20170518113225) do
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
   add_index "image_uploads", ["theme_id"], name: "index_image_uploads_on_theme_id", unique: true, using: :btree
 
+  create_table "improve_suggestions", force: :cascade do |t|
+    t.integer  "site_id",    limit: 4
+    t.string   "name",       limit: 255
+    t.text     "data",       limit: 65535
+    t.datetime "updated_at"
+  end
+
+  add_index "improve_suggestions", ["site_id", "name", "updated_at"], name: "index_improve_suggestions_on_site_id_and_name_and_updated_at", using: :btree
+
   create_table "internal_processing", id: false, force: :cascade do |t|
     t.integer "last_updated_at",                limit: 4, null: false
     t.integer "last_event_processed",           limit: 4, null: false
@@ -299,10 +308,10 @@ ActiveRecord::Schema.define(version: 20170518113225) do
     t.string   "thank_you_text",                   limit: 255
     t.boolean  "pushes_page_down",                                  default: true
     t.boolean  "remains_at_top",                                    default: true
+    t.integer  "wordpress_bar_id",                 limit: 4
     t.boolean  "open_in_new_window",                                default: false
     t.boolean  "animated",                                          default: true
     t.boolean  "wiggle_button",                                     default: false
-    t.integer  "wordpress_bar_id",                 limit: 4
     t.string   "type",                             limit: 255,      default: "Bar"
     t.text     "caption",                          limit: 16777215
     t.string   "placement",                        limit: 255
@@ -322,7 +331,7 @@ ActiveRecord::Schema.define(version: 20170518113225) do
     t.string   "answer2link_text",                 limit: 255
     t.string   "answer1caption",                   limit: 255
     t.string   "answer2caption",                   limit: 255
-    t.boolean  "use_question"
+    t.boolean  "use_question",                                      default: false
     t.string   "phone_number",                     limit: 255
     t.string   "phone_country_code",               limit: 255,      default: "US"
     t.string   "theme_id",                         limit: 255
