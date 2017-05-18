@@ -27,12 +27,6 @@ class ContentUpgradesController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: "content_upgrade_#{ id }" # Excluding ".pdf" extension.
-      end
-    end
   end
 
   def create

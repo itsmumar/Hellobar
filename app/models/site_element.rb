@@ -83,7 +83,6 @@ class SiteElement < ActiveRecord::Base
 
   after_create :track_creation
   after_save :remove_unreferenced_images
-  after_save :update_s3_content
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
     element_subtype
@@ -276,33 +275,6 @@ class SiteElement < ActiveRecord::Base
   end
 
   private
-
-  def update_s3_content
-    # don't do this unless you need to
-    return if type != 'ContentUpgrade'
-    return if content.blank?
-    return unless content_changed?
-
-    pdf = WickedPdf.new.pdf_from_string(content)
-
-    # create a connection
-    connection = Fog::Storage.new(
-      provider: 'AWS',
-      aws_access_key_id: Settings.aws_access_key_id,
-      aws_secret_access_key: Settings.aws_secret_access_key,
-      path_style: true
-    )
-
-    directory = connection.directories.get(Settings.s3_content_upgrades_bucket)
-
-    file = directory.files.create(
-      key: content_upgrade_key,
-      body: pdf,
-      public: true
-    )
-
-    file.save
-  end
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date

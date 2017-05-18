@@ -72,10 +72,6 @@ gem 'jbuilder'
 gem 'oj'
 gem 'oj_mimic_json'
 
-# PDFs
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
-
 # Real-time error reporting
 gem 'sentry-raven'
 
