@@ -75,6 +75,7 @@ class ServiceProvider
 
   def log(message)
     entry = "#{ Time.current } [#{ self.class.name }] #{ message }"
+    raven_log(message)
 
     if defined? Rails
       Rails.logger.warn entry
@@ -92,6 +93,18 @@ class ServiceProvider
   delegate :key, to: :class
   delegate :embed_code?, to: :class
   delegate :oauth?, to: :class
+
+  private
+
+  def raven_log(message)
+    options = {
+      extra: { contact_list_id: @contact_list&.id },
+      tags: { type: 'service_provider', service_provider: self.class.name },
+      backtrace: caller
+    }
+
+    Raven.capture_message message, options
+  end
 end
 
 module ServiceProviders

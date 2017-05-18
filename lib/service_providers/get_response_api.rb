@@ -25,7 +25,6 @@ module ServiceProviders
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
-      name ||= email
       tags = []
 
       if contact_list.present?
@@ -34,12 +33,12 @@ module ServiceProviders
       end
 
       request_body = {
-        name: name,
         email: email,
         campaign: {
           campaignId: list_id
         }
       }
+      request_body[:name] = name if name.present?
 
       request_body.update(dayOfCycle: cycle_day) if cycle_day
 

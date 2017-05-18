@@ -23,9 +23,10 @@ module ServiceProviders
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
-      name ||= email
+      options = {}
+      options[:name] = name if name.present?
 
-      @client.add_to_list(email, list_id, name: name)
+      @client.add_to_list(email, list_id, options)
     end
 
     def batch_subscribe(list_id, subscribers, _double_optin = true)
