@@ -14,9 +14,9 @@
     <div class="select-wrapper">
 
       {{#power-select options=facebookLikeOptions selected=selectedFacebookLikeOption
-        renderInPlace=true
-        searchEnabled=false
-        onchange=(action "selectFacebookLikeOption") as |option|}}
+      renderInPlace=true
+      searchEnabled=false
+      onchange=(action "selectFacebookLikeOption") as |option|}}
         {{option.label}}
       {{/power-select}}
 
@@ -32,4 +32,5 @@
   </div>
 </div>
 
-{{partial "partials/interstitial-footer"}}
+{{interstitial/helpers/interstitial-footer}}
+

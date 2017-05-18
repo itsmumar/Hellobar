@@ -20,9 +20,9 @@ Router.map(function () {
   this.route('targeting');
   this.route('interstitial', function () {
       this.route('call');
-      this.route('money', {path: 'promote'});
-      this.route('contacts');
-      this.route('facebook');
+      this.route('traffic');
+      this.route('email');
+      this.route('social');
     }
   );
 });

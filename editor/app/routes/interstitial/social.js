@@ -5,9 +5,8 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
   afterModel(model) {
     Ember.setProperties(model, {
-      'headline': 'Talk to us to find out more',
-      'link_text': 'Call Now',
-      'element_subtype': 'call'
+      'headline': 'Like us on Facebook!',
+      'element_subtype': 'social/like_on_facebook'
     });
   }
 

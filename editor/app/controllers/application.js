@@ -77,11 +77,6 @@ export default Ember.Controller.extend(MobileMixin, {
 
   actions: {
 
-    toggleModal() {
-      this.set('modal', null);
-      return false;
-    },
-
     closeEditor() {
       if (this.get('isTemporaryUser')) {
         new TempUserUnsavedChangesModal().open();

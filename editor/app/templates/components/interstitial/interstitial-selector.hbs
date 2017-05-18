@@ -1,0 +1,61 @@
+<header>
+  <h5>Select Your Goal</h5>
+</header>
+
+<div class="goal-wrapper">
+  <div class="goal-block money" data-route="traffic">
+    <i class="large-icon icon-money"></i>
+    <h6>Promote a Sale/Discount</h6>
+
+    <p>Point visitors to your latest deal, bargain, or giveaway.</p>
+    {{#link-to "interstitial.traffic" classNames="button"}}Select This Goal{{/link-to}}
+  </div>
+
+  <div class="goal-block call" data-route="call">
+    <i class="large-icon icon-call"></i>
+    <h6>Talk to Your Visitors</h6>
+
+    <p>Encourage mobile visitors to give you a ring.</p>
+    {{#link-to "interstitial.call" classNames="button"}}Select This Goal{{/link-to}}
+  </div>
+
+  <div class="goal-block contacts" data-route="email">
+    <i class="large-icon icon-contacts"></i>
+    <h6>Grow Your Mailing List</h6>
+
+    <p>Convert one-time visits into lasting connections.</p>
+    {{#link-to "interstitial.email" classNames="button"}}Select This Goal{{/link-to}}
+  </div>
+
+  <div class="goal-block facebook" data-route="social">
+    <i class="large-icon icon-thumbsup"></i>
+    <h6>Get Facebook Likes</h6>
+
+    <p>Expand your social reach to maximize word of mouth.</p>
+    {{#link-to "interstitial.social" classNames="button"}}Select This Goal{{/link-to}}
+  </div>
+
+  <div class="goal-block other" data-route="other">
+    <i class="large-icon icon-other"></i>
+    <h6>Other</h6>
+
+    <p>Don't see your goal? Customize Hello Bar to fit your needs.</p>
+    {{#link-to "goals" classNames="button"}}Select This Goal{{/link-to}}
+  </div>
+</div>
+
+<footer>
+  <p>Select one of the goals above. You can always change this later.</p>
+
+  <div>
+    <a href="/">I'll create it later - take me back</a>
+  </div>
+
+  {{interstitial/helpers/i-need-help model=model}}
+
+  <p>
+    <small>
+      <a href="/users/sign_out" data-method="delete" class="deemphasize">Sign Out</a>
+    </small>
+  </p>
+</footer>

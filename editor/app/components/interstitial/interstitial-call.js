@@ -1,19 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
-export default Ember.Controller.extend({
-
-  applicationController: Ember.inject.controller('application'),
-
-  setDefaults() {
-    if (!this.get('model')) {
-      return false;
-    }
-
-    this.set('model.headline', 'Talk to us to find out more');
-    this.set('model.link_text', 'Call Now');
-    return this.set('model.element_subtype', 'call');
-  },
+export default Ember.Component.extend({
 
   inputIsInvalid: function () {
     return !!(
@@ -35,7 +23,7 @@ export default Ember.Controller.extend({
 
   actions: {
     closeInterstitial() {
-      return this.transitionToRoute('style');
+      this.transitionToRoute('style');
     },
     selectCountry(country) {
       this.set('model.phone_country_code', country.code);
