@@ -32,6 +32,9 @@ export default Ember.Component.extend({
     this.get('bus').subscribe('hellobar.core.preview.render', () => {
       this.renderPreview();
     });
+    this.get('model.id') && Ember.run.next(() => {
+      this.renderPreview();
+    });
   },
 
   //-----------  Template Properties  -----------#
@@ -84,6 +87,7 @@ export default Ember.Component.extend({
   onModelUpdated: function () {
     this.renderPreview();
   }.observes(
+    'model',
     'model.answer1',
     'model.answer1caption',
     'model.answer1link_text',
