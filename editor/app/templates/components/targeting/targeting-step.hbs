@@ -64,26 +64,28 @@
       {{/if}}
     {{/if}}
 
-    <div class="saved-rule-list">
-      <div class="select-wrapper">
-        {{#power-select options=ruleOptions
-        selected=selectedRule
-        renderInPlace=true
-        searchEnabled=false
-        onchange=(action "selectTargetingRule") as |option|}}
-          {{option.name}}
-        {{/power-select}}
-      </div>
+    {{#if shouldShowSavedRuleList}}
+      <div class="saved-rule-list">
+        <div class="select-wrapper">
+          {{#power-select options=ruleOptions
+          selected=selectedRule
+          renderInPlace=true
+          searchEnabled=false
+          onchange=(action "selectTargetingRule") as |option|}}
+            {{option.name}}
+          {{/power-select}}
+        </div>
 
-      {{#if selectedRule.description}}
-        <p>
-          {{selectedRule.description}}.
-          {{#if selectedRule.editable}}
-            <a class="edit-rule" {{action 'openRuleModal' selectedRule}}>Edit.</a>
-          {{/if}}
-        </p>
-      {{/if}}
-    </div>
+        {{#if selectedRule.description}}
+          <p>
+            {{selectedRule.description}}.
+            {{#if selectedRule.editable}}
+              <a class="edit-rule" {{action 'openRuleModal' selectedRule}}>Edit.</a>
+            {{/if}}
+          </p>
+        {{/if}}
+      </div>
+    {{/if}}
 
     <a {{action 'initiateSelection'}} class="change-selection">
       <i class="icon-back1"></i>

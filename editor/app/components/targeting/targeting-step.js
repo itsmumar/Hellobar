@@ -121,6 +121,10 @@ export default Ember.Component.extend({
     return options;
   },
 
+  shouldShowSavedRuleList: function() {
+    return !this.get('selectionInProgress') && this.get('model.preset_rule_name') === 'Saved';
+  }.property('model.preset_rule_name', 'selectionInProgress'),
+
   actions: {
 
     select(presetRuleName) {
