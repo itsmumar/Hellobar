@@ -100,7 +100,7 @@ export default Ember.Route.extend({
       this.get('validation').validate('phone_number', this.currentModel).then(() => {
         // Successful validation
         this.get('bus').trigger('hellobar.core.validation.succeeded');
-        this.controller.toggleProperty('saveSubmitted');
+        this.controller.set('saveSubmitted', true);
         this.set('saveCount', this.get('saveCount') + 1);
         if (this.controller.get('applicationSettings.track_editor_flow')) {
           InternalTracking.track_current_person('Editor Flow', {
@@ -144,7 +144,7 @@ export default Ember.Route.extend({
           },
 
           error: data => {
-            this.controller.toggleProperty('saveSubmitted');
+            this.controller.set('saveSubmitted', false);
             this.controller.set('model.errors', data.responseJSON.errors);
             new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
           }
