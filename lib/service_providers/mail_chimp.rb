@@ -108,19 +108,16 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
         error_count = non_already_subscribed_errors.count
         message = "Added #{ result['add_count'] } emails, updated #{ result['update_count'] } emails. " \
                   "#{ error_count } errors that weren't just existing subscribers."
+        super message
       end
 
       if error_count > 0
         message += "\nA sample of those errors:\n#{ non_already_subscribed_errors[0...20].join("\n") }"
-        Rails.logger.error("#{ site.url } - #{ message }")
+        super "#{ site.url } - #{ message }"
       else
         Rails.logger.info("#{ site.url } - #{ message }")
       end
-
-      return super message.inspect
     end
-
-    super message
   end
 
   def handle_error(error, list_id = nil)

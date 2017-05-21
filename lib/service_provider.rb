@@ -97,8 +97,9 @@ class ServiceProvider
   private
 
   def raven_log(message)
+    site_url = respond_to?(:site) ? site&.url : nil
     options = {
-      extra: { contact_list_id: @contact_list&.id },
+      extra: { contact_list_id: @contact_list&.id, site_url: site_url },
       tags: { type: 'service_provider', service_provider: self.class.name },
       backtrace: caller
     }
