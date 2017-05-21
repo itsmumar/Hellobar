@@ -10,6 +10,7 @@ module ServiceProviders
         raise 'Must provide an identity through the arguments'
       end
 
+      @identity = identity
       @contact_list = opts[:contact_list]
 
       @api_key = identity.api_key
