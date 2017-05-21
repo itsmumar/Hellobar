@@ -1,22 +1,11 @@
 class GenerateStaticScriptJob < ApplicationJob
+  # proper name for the main_queue on the Edge server is `hb3_edge`, however
+  # hellobar_backend servers are configured to send SQS messages into `hellobar_edge`,
+  # so we need to use this name until we are able to reconfigure it at hellobar_backend.
+  queue_as { Rails.env.edge? ? 'hellobar_edge' : "hb3_#{ Rails.env }" }
+
   def perform(site)
-    site = Site.preload_for_script.find(site.id) # preload relations for better performance
-    generate_script_if_needed(site)
-    check_installation(site)
-  end
-
-  private
-
-  def generate_script_if_needed(site)
-    return if skip_generate?(site)
-    GenerateAndStoreStaticScript.new(site).call
-  end
-
-  def skip_generate?(site)
-    site.script_generated_at.blank? || 3.hours.ago < site.script_generated_at
-  end
-
-  def check_installation(site)
-    CheckStaticScriptInstallation.new(site).call
+    # preload relations for better performance
+    GenerateAndStoreStaticScript.new(Site.preload_for_script.find(site.id)).call
   end
 end

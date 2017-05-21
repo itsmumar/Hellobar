@@ -8,14 +8,15 @@ namespace :site do
     desc 'Schedule a re-generation of ALL site scripts'
     task regenerate_all: :environment do
       Site.find_each do |site|
-        GenerateStaticScriptJob.perform_later site
+        GenerateDailyStaticScriptJob.perform_later site
       end
     end
 
     desc 'Schedule a re-generation of all active site scripts'
     task regenerate_all_active: :environment do
       Site.script_installed_db.find_each do |site|
-        GenerateStaticScriptJob.perform_later site
+        GenerateDailyStaticScriptJob.perform_later site
+        CheckScriptStatusJob.perform_later site
       end
 
       # See if anyone who uninstalled has installed
