@@ -2,10 +2,14 @@ describe SendEmailDigest, :freeze do
   let(:service) { described_class.new(site) }
   let(:site) { create(:site, :with_user, elements: [:email]) }
   let(:recipient) { site.owners.first }
+  let(:start_date) { Time.current.beginning_of_week }
+  let(:end_date) { start_date.end_of_week }
   let(:options) do
+    end_date_format = end_date.month == start_date.month ? '%-d, %Y' : '%b %-d, %Y'
+
     hash_including(
       site_url: site.url,
-      date: 'May 8 - 14, 2017',
+      date: "#{ start_date.strftime('%b %-d') } - #{ end_date.strftime(end_date_format) }",
       text: mailer.text_part.body.raw_source,
       content: mailer.html_part.body.raw_source
     )
