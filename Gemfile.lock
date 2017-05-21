@@ -157,6 +157,7 @@ GEM
     commander (4.4.3)
       highline (~> 1.7.2)
     concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     constantcontact (1.1.2)
       json (~> 1.8, >= 1.8.1)
       mime-types (~> 1.25, >= 1.25.1)
@@ -656,6 +657,7 @@ DEPENDENCIES
   capybara-webkit
   capybara_discoball
   coffee-rails
+  connection_pool
   constantcontact
   countries
   country_select!
