@@ -10,6 +10,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
     oauth = ::AWeber::OAuth.new(Settings.identity_providers['aweber']['consumer_key'], Settings.identity_providers['aweber']['consumer_secret'])
     oauth.authorize_with_access(identity.credentials['token'], identity.credentials['secret'])
 
+    @identity = identity
     @contact_list = opts[:contact_list]
     @client = ::AWeber::Base.new(oauth)
   end

@@ -10,6 +10,7 @@ module ServiceProviders
         raise 'Must provide an identity through the arguments'
       end
 
+      @identity = identity
       api_email = identity.credentials['username']
       api_key = identity.api_key
       raise 'Identity does not have a stored MadMimi email' unless api_email

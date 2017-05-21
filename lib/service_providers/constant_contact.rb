@@ -6,7 +6,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
       identity = opts[:site].identities.where(provider: 'constant_contact').first
       raise 'Site does not have a stored Constant Contact identity' unless identity
     end
-
+    @identity = identity
     @token = identity.credentials['token']
     @client = ConstantContact::Api.new(Settings.identity_providers['constantcontact']['app_key'])
   end

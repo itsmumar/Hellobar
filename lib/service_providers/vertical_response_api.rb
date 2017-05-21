@@ -7,6 +7,7 @@ class ServiceProviders::VerticalResponseApi < ServiceProviders::Email
       raise 'Site does not have a stored Vertical Response identity' unless identity
     end
 
+    @identity = identity
     @client = VerticalResponse::API::OAuth.new identity.credentials['token']
   end
 

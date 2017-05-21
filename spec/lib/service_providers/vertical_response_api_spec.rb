@@ -1,5 +1,5 @@
 describe ServiceProviders::VerticalResponseApi do
-  let(:identity) { Identity.new(provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {}) }
+  let(:identity) { create :identity, provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {} }
   let(:service_provider) { identity.service_provider }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
