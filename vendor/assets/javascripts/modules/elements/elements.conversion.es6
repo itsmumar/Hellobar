@@ -33,7 +33,6 @@ hellobar.defineModule('elements.conversion',
       } else if (typeof(callback) === typeof(Function)) {
         callback();
       }
-
     }
 
     // Called when the siteElement is viewed
@@ -81,6 +80,10 @@ hellobar.defineModule('elements.conversion',
     // Returns the conversion key used in the cookies to determine if this
     // conversion has already happened or not
     function getConversionKey(siteElementModel) {
+      if (siteElementModel.type == 'ContentUpgrade') {
+        return 'ec';
+      }
+
       switch (siteElementModel.subtype) {
         case 'email':
           return 'ec';
