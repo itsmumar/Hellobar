@@ -2,8 +2,8 @@ describe SendEmailDigest, :freeze do
   let(:service) { described_class.new(site) }
   let(:site) { create(:site, :with_user, elements: [:email]) }
   let(:recipient) { site.owners.first }
-  let(:start_date) { Time.current.beginning_of_week }
-  let(:end_date) { start_date.end_of_week }
+  let(:start_date) { end_date - 6.days }
+  let(:end_date) { EmailDigestHelper.date_of_previous('Sunday') }
   let(:options) do
     end_date_format = end_date.month == start_date.month ? '%-d, %Y' : '%b %-d, %Y'
 
