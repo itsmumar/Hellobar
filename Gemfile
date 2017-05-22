@@ -4,7 +4,6 @@ gem 'rails', '4.2.8'
 
 # AWS
 gem 'aws-sdk'
-gem 'fog-aws'
 
 # Authentication / authorization
 gem 'devise'

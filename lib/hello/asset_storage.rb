@@ -6,25 +6,10 @@ module Hello
     MAXAGE = 2.minutes
     S_MAXAGE = 5.seconds
 
-    cattr_accessor :connection
+    attr_accessor :bucket
 
-    self.connection = Fog::Storage.new(
-      provider: 'AWS',
-      aws_access_key_id: Settings.aws_access_key_id,
-      aws_secret_access_key: Settings.aws_secret_access_key,
-      path_style: true
-    )
-
-    attr_accessor :directory
-
-    def initialize(directory = nil)
-      if directory.is_a?(String)
-        directory = self.class.connection.directories.get(directory)
-      end
-
-      @directory = directory || self.class.connection.directories.get(Settings.s3_bucket)
-
-      @directory ||= connection.directories.create(key: 'test')
+    def initialize(bucket = nil)
+      @bucket = bucket || Settings.s3_bucket
     end
 
     def create_or_update_file_with_contents(filename, contents)
@@ -34,31 +19,24 @@ module Hello
       gz.close
       contents = compressed.string
 
-      file = directory.files.get(filename)
-
-      if file
-        file.body = contents
-        file.public = true
-        file.content_type = 'text/javascript'
-        file.content_encoding = 'gzip'
-        file.metadata = cache_header
-      else
-        file = directory.files.new(
-          key: filename,
-          body: contents,
-          public: true,
-          content_type: 'text/javascript',
-          content_encoding: 'gzip',
-          metadata: cache_header
-        )
-      end
-
-      file.save
-      file
+      s3_bucket.put_object(
+        key: filename,
+        body: contents,
+        acl: 'public-read',
+        content_type: 'text/javascript',
+        content_encoding: 'gzip',
+        metadata: cache_header
+      )
     end
 
     def cache_header
       { 'Cache-Control' => "max-age=#{ MAXAGE },s-maxage=#{ S_MAXAGE }" }
+    end
+
+    private
+
+    def s3_bucket
+      @s3_bucket ||= Aws::S3::Bucket.new(@bucket)
     end
   end
 end
