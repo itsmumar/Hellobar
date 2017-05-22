@@ -34,6 +34,9 @@ class ContentUpgradesController < ApplicationController
 
     flash[:success] = 'Your content upgrade has been saved.'
     redirect_to site_content_upgrades_path(@site.id)
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = e.record.errors.full_messages
+    redirect_to site_content_upgrades_path(@site.id)
   end
 
   def update
