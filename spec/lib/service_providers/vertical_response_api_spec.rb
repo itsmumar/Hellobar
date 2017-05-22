@@ -1,5 +1,5 @@
 describe ServiceProviders::VerticalResponseApi do
-  let(:identity) { Identity.new(provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {}) }
+  let(:identity) { create :identity, provider: 'verticalresponse', extra: { 'metadata' => {} }, credentials: {} }
   let(:service_provider) { identity.service_provider }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
@@ -37,7 +37,7 @@ describe ServiceProviders::VerticalResponseApi do
       mock_list = double :list
       allow(client).to receive(:find_list).and_return(mock_list)
       expect(mock_list).to receive(:create_contact)
-        .with(email: 'bobloblaw@lawblog.co', first_name: '', last_name: '')
+        .with(email: 'bobloblaw@lawblog.co')
       service_provider.subscribe('123', 'bobloblaw@lawblog.co')
     end
   end

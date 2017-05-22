@@ -5,22 +5,22 @@
     padding: 2em;
     font-weight: 600;
     font-size: 16px;
-    color: {{siteStyles.offer_text_color}};
-    background-color: {{siteStyles.offer_bg_color}};
-    border-color: {{siteStyles.offer_border_color}};
-    border-width: {{siteStyles.offer_border_width}};
-    border-style: {{siteStyles.offer_border_style}};
-    border-radius: {{siteStyles.offer_border_radius}};
+    color: {{context.siteStyles.offer_text_color}};
+    background-color: {{context.siteStyles.offer_bg_color}};
+    border-color: {{context.siteStyles.offer_border_color}};
+    border-width: {{context.siteStyles.offer_border_width}};
+    border-style: {{context.siteStyles.offer_border_style}};
+    border-radius: {{context.siteStyles.offer_border_radius}};
   }
 
   body .hb-cu-offer a, html .hb-cu-offer a{
-    color: {{siteStyles.offer_link_color}};
+    color: {{context.siteStyles.offer_link_color}};
     text-decoration: none;
     box-shadow: none;
   }
 
   body .hb-cu-offer a:hover, html .hb-cu-offer a:hover{
-    color: {{siteStyles.offer_link_color}};
+    color: {{context.siteStyles.offer_link_color}};
     text-decoration: underline;
     box-shadow: none;
   }
@@ -104,7 +104,7 @@
   margin-bottom: 15px;
   font-size: 1.2em;
   color: #201D1D;
-  background: {{siteStyles.modal_button_color}};
+  background: {{context.siteStyles.modal_button_color}};
   display: block;
   color: white;
   text-transform: uppercase;
@@ -167,12 +167,12 @@
 </style>
 
 
-<p onclick="document.getElementById('hb-cu-modal-{{siteElement.id}}').style.display = 'inline';" class="hb-cu-offer" style=" ">{{siteElement.offer_headline}}</p>
-<div onclick="" class="hb-cu-modal-container" id="hb-cu-modal-{{siteElement.id}}">
+<p onclick="document.getElementById('hb-cu-modal-{{context.siteElement.id}}').style.display = 'inline';" class="hb-cu-offer" style=" ">{{context.siteElement.offer_headline}}</p>
+<div onclick="" class="hb-cu-modal-container" id="hb-cu-modal-{{context.siteElement.id}}">
 
 <div onclick="" class="hb-cu-modal">
     <div>
-      <a id="hb-cu-close-button" href="">×</a>
+      <a id="hb-cu-close-button" onclick="document.getElementById('hb-cu-modal-{{context.siteElement.id}}').style.display = 'none';" href="javascript:void(0)">×</a>
     </div>
     <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
     <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
@@ -185,11 +185,11 @@
         <input id="f-builtin-email" class="email" placeholder="Email">
 
         <button class="cta"
-                onclick="hellobar('contentUpgrades').submit({{siteElement.id}}); return false;">
-          <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+                onclick="hellobar('contentUpgrades').submit({{context.siteElement.id}}); return false;">
+          <div class="hb-text-holder {{context.siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
                data-hb-editable-block="action_link"
                data-hb-inline-editor-placeholder="Action">
-          {{siteElement.link_text}}
+          {{context.siteElement.link_text}}
           </div>
       </div>
     </div>
@@ -205,7 +205,7 @@
       </svg>
     </div>
     <div class='hb-cu-powered-by'  style="width: 40%; text-align:left; padding-left: 5px; float:left; text-decoration: none; color: #666; line-height: 18px; font-size:12px; font-family: 'Open Sans', Helvetica, Arial, sans-serif;">
-      powered by <span style="color:{{siteStyles.modal_button_color}};">Hello Bar<span>
+      powered by <span style="color:{{context.siteStyles.modal_button_color}};">Hello Bar<span>
     </div>
   <div>
 

@@ -10,6 +10,7 @@ class ServiceProviders::AWeber < ServiceProviders::Email
     oauth = ::AWeber::OAuth.new(Settings.identity_providers['aweber']['consumer_key'], Settings.identity_providers['aweber']['consumer_secret'])
     oauth.authorize_with_access(identity.credentials['token'], identity.credentials['secret'])
 
+    @identity = identity
     @contact_list = opts[:contact_list]
     @client = ::AWeber::Base.new(oauth)
   end
@@ -23,9 +24,13 @@ class ServiceProviders::AWeber < ServiceProviders::Email
   def subscribe(list_id, email, name = nil, _double_optin = true)
     handle_errors do
       # AWeber will always force double-optin: https://help.aweber.com/entries/22883171-Why-Was-a-Confirmation-Message-Sent-When-Confirmation-Was-Disabled-
-      @client.account.lists[list_id.to_i].subscribers.create('name' => name,
-                                                             'email' => email,
-                                                             'tags' => @contact_list.tags.to_json)
+      params = {
+        'email' => email,
+        'tags' => @contact_list.tags.to_json
+      }
+      params['name'] = name if name.present?
+
+      @client.account.lists[list_id.to_i].subscribers.create(params)
     end
   end
 

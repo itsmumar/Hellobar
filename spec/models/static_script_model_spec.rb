@@ -313,7 +313,7 @@ describe StaticScriptModel do
   end
 
   describe '#content_upgrades' do
-    let!(:content_upgrades) { create_list :site_element, 2, :content_upgrade, site: site }
+    let!(:content_upgrades) { create_list :content_upgrade, 2, site: site }
     let!(:content_upgrades_hash) do
       content_upgrades.inject({}) do |hash, content_upgrade|
         hash.update create(:static_script_content_upgrade, content_upgrade: content_upgrade)
