@@ -87,7 +87,6 @@ gem 'abanalyzer'
 gem 'active_hash'
 gem 'addressable', require: 'addressable/uri'
 gem 'avatar'
-gem 'connection_pool'
 gem 'dalli'
 gem 'elif'
 gem 'hashie'
@@ -114,6 +113,7 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 gem 'analytics-ruby', require: 'segment/analytics'
 
 # Queue
+gem 'connection_pool'
 gem 'shoryuken'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
