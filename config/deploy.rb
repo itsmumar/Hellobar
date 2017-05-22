@@ -27,7 +27,9 @@ set :queue_prefix, -> { fetch(:stage) == 'edge' ? 'hellobar' : 'hb3' }
 
 # there is shoryuken_queues but it doesn't work because it produce '--queue foo --queue bar' options
 # which doesn't supported by shoryuken anymore
-set :shoryuken_options, -> { "--rails --queues #{ fetch(:queue_prefix) }_#{ fetch(:stage) } hb3_#{ fetch(:stage) }_lowpriority" }
+# queues: hb3_production,5 and hb3_production_lowpriority,1 where 5 and 1 are weights
+# see https://github.com/phstc/shoryuken/wiki/Polling-strategies
+set :shoryuken_options, -> { "--rails --queues #{ fetch(:queue_prefix) }_#{ fetch(:stage) },5 hb3_#{ fetch(:stage) }_lowpriority,1" }
 
 set :slackistrano,
   channel: '#deploys',
