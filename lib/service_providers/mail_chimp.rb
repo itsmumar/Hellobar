@@ -25,17 +25,6 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     handle_error(error)
   end
 
-  def email_exists?(list_id, email)
-    member_id = Digest::MD5.hexdigest(email)
-    @client.lists(list_id).members(member_id).retrieve.present?
-  rescue Gibbon::MailChimpError => error
-    if error.status_code == 404
-      false
-    else
-      handle_error(error, list_id)
-    end
-  end
-
   # TODO: This method should be moved to concerns once same rule gets
   # applied to all other providers
   def subscriber_statuses(contact_list, emails)

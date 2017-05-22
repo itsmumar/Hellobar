@@ -1,0 +1,15 @@
+{
+  "total_size": 1,
+  "start": 0,
+  "entries": [
+    {
+      "http_etag": "\"a6c6810cb6d06ae63dc91ff953c8225b211b762e-ca5feee2b7fbb6febfca8af5541541ea960aaedb\"",
+      "lists_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists",
+      "self_link": "https://api.aweber.com/1.0/accounts/1118926",
+      "resource_type_link": "https://api.aweber.com/1.0/#account",
+      "id": 1118926,
+      "integrations_collection_link": "https://api.aweber.com/1.0/accounts/1118926/integrations"
+    }
+  ],
+  "resource_type_link": "https://api.aweber.com/1.0/#accounts"
+}

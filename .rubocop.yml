@@ -18,6 +18,8 @@ AllCops:
     - 'editor/**/*'
     - 'backend-mock/**/*'
     - 'lib/legacy_migrator.rb'
+    - 'lib/service_providers/Gemfile'
+    - 'lib/service_providers/Rakefile'
 
 #### BEGIN STYLES
 

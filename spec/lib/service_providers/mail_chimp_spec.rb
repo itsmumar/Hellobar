@@ -31,18 +31,4 @@ describe ServiceProviders::MailChimp, :vcr do
       expect(service_provider.lists.map { |list| list['id'] }).to eq [list_id]
     end
   end
-
-  describe 'email_exists?' do
-    context 'when exists' do
-      it 'returns true' do
-        expect(service_provider.email_exists?(list_id, existing_subscriber)).to be_truthy
-      end
-    end
-
-    context 'when does not exist' do
-      it 'returns true' do
-        expect(service_provider.email_exists?(list_id, 'doesnotexist@email.com')).to be_falsey
-      end
-    end
-  end
 end

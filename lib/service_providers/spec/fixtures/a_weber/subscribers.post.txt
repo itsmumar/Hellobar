@@ -1,0 +1,4 @@
+HTTP/1.1 201 Created
+Location: https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580
+Content-Length: 0
+Content-Type: text/html; charset=UTF-8
