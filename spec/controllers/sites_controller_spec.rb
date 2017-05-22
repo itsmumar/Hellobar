@@ -26,8 +26,8 @@ describe SitesController do
 
   describe 'POST create' do
     before do
-      mock_storage = double('asset_storage', create_or_update_file_with_contents: true)
-      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
+      upload_to_s3 = double(:upload_to_s3, call: true)
+      allow(UploadToS3).to receive(:new).and_return(upload_to_s3)
     end
 
     context 'when no user is logged-in' do
