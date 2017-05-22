@@ -23,7 +23,7 @@ set :shoryuken_role, :worker
 # proper name for the main_queue on the Edge server is `hb3_edge`, however
 # hellobar_backend servers are configured to send SQS messages into `hellobar_edge`,
 # so we need to use this name until we are able to reconfigure it at hellobar_backend.
-set :queue_prefix, -> { fetch(:stage) == 'edge' ? 'hellobar' : 'hb3' }
+set :queue_prefix, -> { fetch(:stage) == :edge ? 'hellobar' : 'hb3' }
 
 # there is shoryuken_queues but it doesn't work because it produce '--queue foo --queue bar' options
 # which doesn't supported by shoryuken anymore
