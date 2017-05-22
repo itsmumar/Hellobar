@@ -14,7 +14,7 @@ describe SiteDetectorJob do
   describe '.perform_later' do
     it 'adds the job to the queue Settings.main_queue' do
       job.perform_later(site)
-      expect(enqueued_jobs.last[:queue]).to eq 'hb3_test'
+      expect(enqueued_jobs.last[:queue]).to eq 'hb3_test_lowpriority'
     end
   end
 end
