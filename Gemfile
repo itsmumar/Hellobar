@@ -108,6 +108,10 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 # Sending analytics data to Segment.com
 gem 'analytics-ruby', require: 'segment/analytics'
 
+# Queue
+gem 'connection_pool'
+gem 'shoryuken'
+
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
@@ -132,6 +136,7 @@ group :development do
   gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
+  gem 'capistrano-shoryuken'
   gem 'slackistrano'
   gem 'web-console', '~> 2.0'
 end

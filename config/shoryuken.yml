@@ -1,0 +1,3 @@
+# don't forget to update cache_store's `pool_size` option and `pool` option in database.yml
+concurrency: 25
+delay: 10

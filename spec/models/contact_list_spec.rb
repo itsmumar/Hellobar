@@ -11,7 +11,6 @@ describe ContactList do
       allow(ServiceProviders::Email).to receive(:settings).and_return(oauth: false)
       allow(contact_list).to receive(:syncable?).and_return(true)
       expect(service_provider).to be_a(ServiceProviders::Email)
-      # allow(service_provider).to receive(:batch_subscribe).and_return(nil)
     end
 
     allow(Hello::DataAPI).to receive(:contacts).and_return([
@@ -90,160 +89,10 @@ describe ContactList do
     end
   end
 
-  describe 'sync_one!' do
-    before do
-      allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
-      contact_list.save!
-      allow(contact_list).to receive(:syncable?).and_return(true)
-    end
-
-    let(:identity) { Identity.new(site: site, provider: provider, api_key: 'api-key') }
-    let(:provider) { 'convert_kit' }
-
-    context 'oauth provider' do
-      let(:provider) { 'mailchimp' }
-      let(:credentials) { { 'token' => 'asdf' } }
-      let(:extra) { { 'metadata' => { 'api_endpoint' => 'asdf' } } }
-
-      before do
-        expect_any_instance_of(Identity).to receive(:credentials).and_return(credentials)
-        expect_any_instance_of(Identity).to receive(:extra).and_return(extra)
-      end
-
-      it 'should not raise error' do
-        expect(service_provider).to be_oauth
-        expect(service_provider).to receive(:subscribe)
-        contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      end
-    end
-
-    context 'webhook' do
-      it 'syncs' do
-        allow(contact_list).to receive(:data) { { 'webhook_url' => 'http://url.com/webhooks' } }
-        expect(service_provider).to receive(:subscribe).with(nil, 'email@email.com', 'Name Mcnamerson', true)
-
-        contact_list.sync_one!('email@email.com', 'Name Mcnamerson')
-      end
-    end
-
-    context 'embed code provider', :vcr do
-      let(:provider) { 'mad_mimi_form' }
-      let(:contact_list) { create(:contact_list, :embed_iframe).tap { |c| c.identity = identity } }
-      let(:service_provider) { contact_list.service_provider }
-      let(:double_optin) { ContactList.new.double_optin }
-
-      it 'should sync' do
-        expect(service_provider).to be_a(ServiceProviders::MadMimiForm)
-        expect(service_provider).to be_embed_code
-        expect(service_provider).to receive(:subscribe_params).with('email@email.com', 'Test Testerson', double_optin)
-        contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      end
-    end
-
-    it 'creates a log entry' do
-      allow(contact_list).to receive(:oauth?) { true }
-      allow(service_provider).to receive(:subscribe)
-
-      expect {
-        contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      }.to change { ContactListLog.count }.by(1)
-    end
-
-    it 'saves the error in a log entry' do
-      allow(contact_list).to receive(:oauth?) { true }
-      allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error('this error')
-      expect(contact_list.contact_list_logs.last.error).to include('this error')
-    end
-
-    it 'saves the stacktrace in a log entry' do
-      allow(contact_list).to receive(:oauth?) { true }
-      allow(service_provider).to receive(:subscribe).and_raise('this error')
-      expect { contact_list.sync_one! 'email@email.com', 'Test Testerson' }.to raise_error('this error')
-      expect(contact_list.contact_list_logs.last.stacktrace).not_to be_blank
-    end
-
-    it 'marks a log entry as completed' do
-      allow(contact_list).to receive(:oauth?) { true }
-      allow(service_provider).to receive(:subscribe)
-
-      expect {
-        contact_list.sync_one! 'email@email.com', 'Test Testerson'
-      }.to change { ContactListLog.where(completed: true).count }.by(1)
-    end
-  end
-
-  describe 'email syncing errors' do
-    before do
-      allow(Hello::DataAPI).to receive(:contacts).and_return(%i[foo bar])
-      allow(contact_list).to receive(:syncable?).and_return(true)
-      allow(contact_list).to receive(:oauth?).and_return(true)
-    end
-
-    after { contact_list.sync! }
-
-    describe 'for mailchimp' do
-      before do
-        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::MailChimp)
-      end
-
-      it 'if someone has an invalid list stored, delete the identity and notify them' do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid MailChimp List ID'))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-
-      it "if someone's token is no longer valid, delete the identity and notify them" do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: Invalid Mailchimp API Key'))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-
-      it 'if someone has deleted their account, delete the identity and notify them' do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(Gibbon::MailChimpError.new('MailChimp API Error: This account has been deactivated'))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-    end
-
-    describe 'for campaign monitor' do
-      before do
-        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::CampaignMonitor)
-      end
-
-      it 'if someone has revoked our access, delete the identity and notify them' do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(CreateSend::RevokedOAuthToken.new(Hashie::Mash.new(Code: 122, Message: 'Revoked OAuth Token')))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-    end
-
-    describe 'for aweber' do
-      before do
-        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::AWeber)
-      end
-
-      it 'if someone has an invalid list stored, delete the identity and notify them' do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(URI::InvalidURIError.new('404 Resource Not Found'))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-
-      it "if someone's token is no longer valid, or they have deleted their account, delete the identity and notify them" do
-        expect(contact_list).to receive(:batch_subscribe).and_raise(ArgumentError.new('This account has been deactivated'))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
-    end
-
-    describe 'for constantcontact' do
-      before do
-        allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::ConstantContact)
-      end
-
-      def rest_response(status, body)
-        RestClient::Response.create body, OpenStruct.new(code: status, body: body), nil, nil
-      end
-
-      it 'if someone has an invalid list stored, delete the identity and notify them' do
-        response = rest_response(404, '404 Resource Not Found')
-        expect(contact_list).to receive(:batch_subscribe).and_raise(RestClient::ResourceNotFound.new(response))
-        expect(contact_list.identity).to receive :destroy_and_notify_user
-      end
+  describe '.sync!' do
+    it 'runs SyncContactListJob' do
+      expect(SubscribeAllContactsJob).to receive(:perform_now)
+      contact_list.sync!
     end
   end
 
@@ -320,7 +169,6 @@ describe ContactList do
     it 'drops nil values in data' do
       contact_list.data = { 'remote_name' => '', 'remote_id' => 1 }
       contact_list.identity = nil
-      allow(contact_list).to receive(:sync_all!).and_return(true)
       contact_list.save
       expect(contact_list.data['remote_name']).to be_nil
     end
@@ -393,18 +241,18 @@ describe ContactList, '#needs_to_reconfigure?' do
     allow(list).to receive(:syncable?) { true }
     allow(list).to receive(:oauth?) { false }
     allow(list).to receive(:api_key?) { false }
-    allow(list).to receive(:subscribe_params) { true }
+    allow(list).to receive_message_chain(:service_provider, :subscribe_params) { true }
 
     expect(list.needs_to_reconfigure?).to eql(false)
   end
 
   it 'returns true when not able to generate subscribe params' do
-    list = ContactList.new
+    list = build :contact_list, :embed_code
 
     allow(list).to receive(:syncable?) { true }
     allow(list).to receive(:oauth?) { false }
     allow(list).to receive(:api_key?) { false }
-    allow(list).to receive(:subscribe_params) { raise('hell') }
+    allow(list).to receive_message_chain(:service_provider, :subscribe_params) { raise('hell') }
 
     expect(list.needs_to_reconfigure?).to eql(true)
   end

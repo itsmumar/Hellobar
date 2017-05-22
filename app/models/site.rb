@@ -1,10 +1,8 @@
 require 'uri'
 require 'billing_log'
-require 'site_detector'
-require 'queue_worker/queue_worker'
 
 class Site < ActiveRecord::Base
-  include QueueWorker::Delay
+  attr_accessor :skip_script_generation
 
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
@@ -36,7 +34,7 @@ class Site < ActiveRecord::Base
   before_destroy :generate_blank_static_assets
 
   after_create do
-    delay :set_install_type
+    SiteDetectorJob.perform_later self
   end
 
   after_update :regenerate_script
@@ -64,27 +62,32 @@ class Site < ActiveRecord::Base
 
   def self.script_installed_db
     where(
-      'script_installed_at IS NOT NULL
-      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+      'script_installed_at IS NOT NULL ' \
+      'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
     )
   end
 
   def self.script_not_installed_db
     where.not(
-      'script_installed_at IS NOT NULL
-      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+      'script_installed_at IS NOT NULL ' \
+      'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
     )
   end
 
   def self.script_uninstalled_db
     where(
-      'script_installed_at IS NOT NULL
-      AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+      'script_installed_at IS NOT NULL ' \
+      'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
     )
   end
 
+  def self.script_was_installed_again
+    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
+      .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
+  end
+
   def needs_script_regeneration?
-    @needs_script_regeneration.present?
+    !skip_script_generation && @needs_script_regeneration.present?
   end
 
   def regenerate_script
@@ -117,30 +120,8 @@ class Site < ActiveRecord::Base
     RenderStaticScript.new(self, compress: compress).call
   end
 
-  # basically it calls rake site:generate_static_assets
-  # @see lib/tasks/site.rake
-  def generate_script(options = {})
-    delay :generate_static_assets, options
-  end
-
-  # basically it calls rake site:do_generate_script_and_check_installation
-  # @see lib/tasks/site.rake
-  def generate_script_and_check_installation(options = {})
-    delay :do_generate_script_and_check_installation, options
-  end
-
-  # basically it calls rake site:do_check_installation
-  # @see lib/tasks/site.rake
-  def check_installation(options = {})
-    delay :do_check_installation, options
-  end
-
-  def queue_digest_email(options = {})
-    delay :send_digest_email, options
-  end
-
-  def send_digest_email(_options = {})
-    Hello::EmailDigest.send(self)
+  def generate_script
+    GenerateStaticScriptJob.perform_later self
   end
 
   def lifetime_totals(opts = {})
@@ -264,10 +245,6 @@ class Site < ActiveRecord::Base
       end
     end
     @bills_with_payment_issues
-  end
-
-  def set_install_type
-    update_attribute(:install_type, SiteDetector.new(url).site_type) unless Rails.env.test?
   end
 
   def self.normalize_url(url)

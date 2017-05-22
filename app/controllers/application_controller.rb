@@ -133,9 +133,7 @@ class ApplicationController < ActionController::Base
 
   def set_raven_context
     Raven.user_context(id: current_user.id, email: current_user.email) if current_user
-
-    # TODO: change to `params.to_unsafe_h` when Rails is upgraded to 4.2+
-    Raven.extra_context params: params.to_h, url: request.url
+    Raven.extra_context params: params.to_unsafe_h, url: request.url
   end
 
   def load_site

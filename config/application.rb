@@ -31,7 +31,6 @@ module Hellobar
     # order and have a convenient place to put other initialization
     # code (config, etc.)
     config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
-    config.autoload_paths += %W[#{ config.root }/lib/queue_worker/]
 
     # Action Mailer
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
@@ -43,5 +42,6 @@ module Hellobar
     end
 
     config.active_record.raise_in_transactional_callbacks = true
+    config.active_job.queue_adapter = :shoryuken
   end
 end
