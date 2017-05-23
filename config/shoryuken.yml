@@ -1,3 +1,11 @@
-# don't forget to update cache_store's `pool_size` option and `pool` option in database.yml
-concurrency: 25
-delay: 10
+# don't forget to update cache_store's `pool_size` option and `pool` option in `database.yml`
+# if you go with the `concurrency` option *above* the value set in `database.yml` and
+# `config/environments/*.rb` (`cache_store` setting)
+
+# `concurrency` setting sets the number of threads Shoryuken will spawn to process SQS jobs
+concurrency: 3
+
+# `delay` setting means how many seconds Shoryuken will wait for querying the SQS queue for
+# jobs (happens when the queue will be empty); Setting it to a higher value makes it more
+# cost effective at AWS as they charge per each query
+delay: 3

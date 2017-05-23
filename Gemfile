@@ -136,7 +136,6 @@ group :development do
   gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
-  gem 'capistrano-shoryuken'
   gem 'slackistrano'
   gem 'web-console', '~> 2.0'
 end
@@ -149,7 +148,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'rspec-rails'
-  gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
 
@@ -165,6 +163,10 @@ group :test do
 
   # Spec formatters
   gem 'rspec_junit_formatter'
+
+  # Code coverage metrics
+  gem 'codecov', require: false
+  gem 'simplecov', require: false
 
   gem 'database_cleaner'
   gem 'launchy'

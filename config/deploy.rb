@@ -14,23 +14,6 @@ set :keep_releases, 15
 # Using `lambda` for lazy assigment. http://stackoverflow.com/a/25850619/1047207
 set :ember_app_path, -> { "#{ release_path }/editor" }
 
-# do not hook into the default deployment recipe. invoke 'shoryuken:restart' manually
-# to use these hooks we need to follow capistrano conventions
-# we should use such base hooks: deploy:updated, deploy:reverted, deploy:published
-set :shoryuken_default_hooks, false
-set :shoryuken_role, :worker
-
-# proper name for the main_queue on the Edge server is `hb3_edge`, however
-# hellobar_backend servers are configured to send SQS messages into `hellobar_edge`,
-# so we need to use this name until we are able to reconfigure it at hellobar_backend.
-set :queue_prefix, -> { fetch(:stage) == :edge ? 'hellobar' : 'hb3' }
-
-# there is shoryuken_queues but it doesn't work because it produce '--queue foo --queue bar' options
-# which doesn't supported by shoryuken anymore
-# queues: hb3_production,5 and hb3_production_lowpriority,1 where 5 and 1 are weights
-# see https://github.com/phstc/shoryuken/wiki/Polling-strategies
-set :shoryuken_options, -> { "--rails --queues #{ fetch(:queue_prefix) }_#{ fetch(:stage) },5 hb3_#{ fetch(:stage) }_lowpriority,1" }
-
 set :slackistrano,
   channel: '#deploys',
   webhook: 'https://hooks.slack.com/services/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'
@@ -42,7 +25,6 @@ namespace :deploy do
       invoke 'deploy:reload_nginx_config'
       invoke 'deploy:restart_thin'
       invoke 'deploy:restart_monit'
-      invoke 'shoryuken:restart'
     end
   end
 
@@ -118,7 +100,7 @@ namespace :deploy do
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_maintenance'
       invoke 'deploy:stop_thin'
-      invoke 'shoryuken:stop'
+      execute 'sudo monit stop shoryuken'
     end
   end
 
@@ -128,7 +110,7 @@ namespace :deploy do
       invoke 'deploy:start_thin'
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_web'
-      invoke 'shoryuken:start'
+      execute 'sudo monit start shoryuken'
     end
   end
 
