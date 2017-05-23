@@ -100,6 +100,7 @@ namespace :deploy do
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_maintenance'
       invoke 'deploy:stop_thin'
+      execute 'sudo monit stop shryuken'
     end
   end
 
@@ -109,6 +110,7 @@ namespace :deploy do
       invoke 'deploy:start_thin'
       invoke 'deploy:stop_nginx'
       invoke 'deploy:start_nginx_web'
+      execute 'sudo monit start shryuken'
     end
   end
 
