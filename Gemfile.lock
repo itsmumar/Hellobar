@@ -146,6 +146,10 @@ GEM
     climate_control (0.2.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
+    codecov (0.1.10)
+      json
+      simplecov
+      url
     coderay (1.1.1)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -606,6 +610,7 @@ GEM
       unf_ext
     unf_ext (0.0.6)
     unicode-display_width (1.2.1)
+    url (0.3.2)
     vcr (3.0.3)
     verticalresponse (0.1.6)
     warden (1.2.7)
@@ -654,6 +659,7 @@ DEPENDENCIES
   capybara
   capybara-webkit
   capybara_discoball
+  codecov
   coffee-rails
   connection_pool
   constantcontact
