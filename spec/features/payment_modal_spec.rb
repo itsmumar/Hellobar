@@ -60,9 +60,10 @@ feature 'Payment modal interaction', :js do
 
       click_button 'Continue'
 
-      click_on 'Style'
+      find('.step-style').click
 
-      click_on 'Bar'
+      find('a', text: 'CHANGE TYPE').click
+      find('h6', text: 'Bar').click
 
       find('.toggle-showing-branding .toggle-off').click
 
@@ -80,9 +81,10 @@ feature 'Payment modal interaction', :js do
 
       click_button 'Continue'
 
-      click_on 'Style'
+      find('.step-style').click
 
-      click_on 'Bar'
+      find('a', text: 'CHANGE TYPE').click
+      find('h6', text: 'Bar').click
 
       find('.toggle-hiding .toggle-on').click
 

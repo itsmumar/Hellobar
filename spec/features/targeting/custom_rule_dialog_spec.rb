@@ -19,7 +19,7 @@ feature 'Targeting. Custom rule dialog', :js do
     click_on 'Continue'
     click_on 'Targeting'
     find('.change-selection').click
-    click_on 'Custom Rule'
+    find('h6', text: 'Custom Rule').click
 
     expect(page.all('.show-modal.rules-modal').count).to be 1
     click_on 'Cancel'

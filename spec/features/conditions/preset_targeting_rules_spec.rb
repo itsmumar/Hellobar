@@ -68,14 +68,14 @@ feature 'Users can use site element targeting rule presets', :js do
       find('a.saved-rule').click
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
-      find('a', text: custom_option).click
+      find('h6', text: custom_option).click
       find('a', text: 'Cancel').click
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
       visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
       find('a', text: 'CHANGE TARGET AUDIENCE').click
-      find('a', text: custom_option).click
+      find('h6', text: custom_option).click
       find('a', text: '+').click
       fill_in 'rule_name', with: 'New Custom Rule'
       find('a', text: 'Save').click
