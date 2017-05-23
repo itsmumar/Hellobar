@@ -125,8 +125,6 @@ GEM
     capistrano-rails (1.2.3)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
-    capistrano-shoryuken (0.1.5)
-      capistrano
     capybara (2.13.0)
       addressable
       mime-types (>= 1.16)
@@ -655,7 +653,6 @@ DEPENDENCIES
   capistrano (~> 3.6.1)
   capistrano-bundler
   capistrano-rails
-  capistrano-shoryuken
   capybara
   capybara-webkit
   capybara_discoball
