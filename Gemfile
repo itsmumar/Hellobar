@@ -149,7 +149,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'rspec-rails'
-  gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
 
@@ -166,7 +165,10 @@ group :test do
   # Spec formatters
   gem 'rspec_junit_formatter'
 
+  # Code coverage metrics
   gem 'codecov', require: false
+  gem 'simplecov', require: false
+
   gem 'database_cleaner'
   gem 'launchy'
   gem 'rspec-retry'
