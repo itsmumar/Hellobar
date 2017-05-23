@@ -1,5 +1,3 @@
-require 'active_campaign'
-
 HTTPI.log = false
 
 module ServiceProviders

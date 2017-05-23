@@ -37,4 +37,5 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
+  config.include ServiceProviderHelper, type: :service_provider
 end

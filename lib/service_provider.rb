@@ -107,6 +107,3 @@ class ServiceProvider
     Raven.capture_message message, options
   end
 end
-
-module ServiceProviders
-end

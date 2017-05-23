@@ -20,7 +20,7 @@ module ServiceProviders
       end
 
       def config
-        ServiceProviders.config
+        ServiceProviders::Provider.config
       end
     end
   end

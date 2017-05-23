@@ -11,7 +11,7 @@ describe ServiceProviders::Adapters::AWeber do
   let(:list_id) { 4567456 }
 
   before do
-    ServiceProviders.configure do |config|
+    ServiceProviders::Provider.configure do |config|
       config.aweber.consumer_key = 'consumer_key'
       config.aweber.consumer_secret = 'consumer_secret'
     end
