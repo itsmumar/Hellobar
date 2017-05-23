@@ -71,9 +71,7 @@ hellobar.defineModule('elements.collecting',
       validateEmail(emailField ? emailField.value : '', function () {
           const doRedirect = format.asBool(redirect);
           let removeElements;
-          let siteElementContainer = (siteElementModel.type === 'ContentUpgrade') ?
-            document.getElementById('hb-cu-modal-' + siteElement.id) :
-            siteElement.contentDocument();
+          let siteElementContainer = siteElement.contentDocument();
 
           if (!doRedirect) {
             if ((targetSiteElement != null) && thankYouText) {
@@ -114,14 +112,12 @@ hellobar.defineModule('elements.collecting',
             }
           }
           recordEmail(siteElement, values, function () {
-            // Successfully saved
+            bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
+
+            if (doRedirect) {
+              window.location.href = redirectUrl;
+            }
           });
-
-          bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
-
-          if (doRedirect) {
-            window.location.href = redirectUrl;
-          }
         },
         function () {
           // Fail
@@ -153,7 +149,6 @@ hellobar.defineModule('elements.collecting',
         trackingInternal.send('c', siteElement.model().contact_list_id, {e: joinedValues}, function () {
           elementsConversion.converted(siteElement, callback);
         });
-        // TODO call external tracking
       }
     }
 

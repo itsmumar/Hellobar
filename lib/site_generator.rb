@@ -21,12 +21,13 @@ class SiteGenerator
         <title>Hello Bar Test Site</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
+        <link rel=icon href="favicon-test-site.png" sizes="16x16" type="image/png /">
       </head>
 
       <body style="background-color: #FFFFFF;">
-        <a onclick="console.log('BUTTON PUSHED')" style="cursor: pointer">CLICK ME</a>
+        <p><a onclick="console.log('BUTTON PUSHED')" style="cursor: pointer">CLICK ME</a></p>
 
-        <div style="height:200px; background-color: yellow;">
+        <div style="height:200px; background-color: #05c802;">
           TOP OF PAGE CONTENT
           <script id="hb-cu-2">
             window.onload = function() {hellobar('contentUpgrades').show(1);};

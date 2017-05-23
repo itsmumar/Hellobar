@@ -8,7 +8,7 @@ describe DigestMailer do
       site.site_elements.each(&:destroy)
       site.reload
       allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-      expect { mail.body }.to_not raise_error
+      expect { mail.body }.not_to raise_error
     end
 
     it 'should display n/a if history is too short' do

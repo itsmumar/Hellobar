@@ -49,13 +49,13 @@ feature 'Update Profile', js: true do
     scenario 'email field is enabled after clicking the reveal password button' do
       visit profile_path
       find('#show-password-form').click
-      expect(page).to_not have_css('#user_email[disabled]')
+      expect(page).not_to have_css('#user_email[disabled]')
     end
 
     scenario 'password fields revealed after clicking the reveal password button' do
       visit profile_path
-      expect(find('#user_password', visible: false)).to_not be_visible
-      expect(find('#user_password_confirmation', visible: false)).to_not be_visible
+      expect(find('#user_password', visible: false)).not_to be_visible
+      expect(find('#user_password_confirmation', visible: false)).not_to be_visible
       find('#show-password-form').click
       expect(find('#user_password')).to be_visible
       expect(find('#user_password_confirmation')).to be_visible

@@ -1,8 +1,9 @@
-/mnt/deploy/current/log/queue_worker.log {
+/mnt/deploy/current/log/shoryuken.log {
     missingok
     notifempty
     compress
     delaycompress
+    copytruncate
     dateext
     daily
     rotate 50

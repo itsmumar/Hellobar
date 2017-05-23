@@ -11,7 +11,7 @@ class ContentUpgradesController < ApplicationController
   end
 
   def new
-    @content_upgrade = SiteElement.new
+    @content_upgrade = ContentUpgrade.new
     @styles = @site.content_upgrade_styles
     # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
@@ -27,18 +27,15 @@ class ContentUpgradesController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: "content_upgrade_#{ id }" # Excluding ".pdf" extension.
-      end
-    end
   end
 
   def create
-    @content_upgrade = SiteElement.create!(content_upgrade_params)
+    @content_upgrade = ContentUpgrade.create!(content_upgrade_params)
 
     flash[:success] = 'Your content upgrade has been saved.'
+    redirect_to site_content_upgrades_path(@site.id)
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = e.record.errors.full_messages
     redirect_to site_content_upgrades_path(@site.id)
   end
 
@@ -91,7 +88,12 @@ class ContentUpgradesController < ApplicationController
       email_placeholder: params[:email_placeholder],
       contact_list_id: params[:contact_list_id],
       rule: @site.rules.first
-    }
+    }.merge(pdf_params)
+  end
+
+  def pdf_params
+    return {} unless params[:content_upgrade]
+    params.require(:content_upgrade).permit(:content_upgrade_pdf)
   end
 
   def load_site

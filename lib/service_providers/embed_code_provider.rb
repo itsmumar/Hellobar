@@ -41,7 +41,7 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def action_url
-    html.css('form').first.try(:attr, 'action') || list_url
+    list_form.try(:attr, 'action') || list_url
   end
 
   def list_form
@@ -63,13 +63,15 @@ class ServiceProviders::EmbedCodeProvider < ServiceProviders::Email
   end
 
   def params
+    return {} unless list_form
+
     list_form.css('input').collect do |input|
       { name: input.attr('name'), value: input.attr('value') }
     end
   end
 
   def email_param
-    params.find { |i| i[:name].include? 'email' }[:name]
+    params.find { |i| i[:name].include? 'email' }.try(:[], :name)
   end
 
   def name_param

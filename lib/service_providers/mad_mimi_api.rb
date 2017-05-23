@@ -10,6 +10,7 @@ module ServiceProviders
         raise 'Must provide an identity through the arguments'
       end
 
+      @identity = identity
       api_email = identity.credentials['username']
       api_key = identity.api_key
       raise 'Identity does not have a stored MadMimi email' unless api_email
@@ -23,9 +24,10 @@ module ServiceProviders
     end
 
     def subscribe(list_id, email, name = nil, _double_optin = true)
-      name ||= email
+      options = {}
+      options[:name] = name if name.present?
 
-      @client.add_to_list(email, list_id, name: name)
+      @client.add_to_list(email, list_id, options)
     end
 
     def batch_subscribe(list_id, subscribers, _double_optin = true)

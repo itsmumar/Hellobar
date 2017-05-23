@@ -424,20 +424,20 @@ describe User do
 
   describe '.search_all_versions_for_email' do
     it 'returns nil when email is blank' do
-      expect(User).to_not receive(:find_and_create_by_referral)
+      expect(User).not_to receive(:find_and_create_by_referral)
 
       expect(User.search_all_versions_for_email('')).to be_nil
     end
 
     it 'first queries by email' do
-      expect(User).to_not receive(:find_and_create_by_referral)
+      expect(User).not_to receive(:find_and_create_by_referral)
       expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
 
       User.search_all_versions_for_email('email@email.com')
     end
 
     it 'returns a new user if a referred user' do
-      expect(Hello::WordpressUser).to_not receive(:find_by_email)
+      expect(Hello::WordpressUser).not_to receive(:find_by_email)
       expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
 
       User.search_all_versions_for_email('email@email.com')

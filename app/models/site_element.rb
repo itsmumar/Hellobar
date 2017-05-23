@@ -83,7 +83,6 @@ class SiteElement < ActiveRecord::Base
 
   after_create :track_creation
   after_save :remove_unreferenced_images
-  after_save :update_s3_content
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
     element_subtype
@@ -252,22 +251,6 @@ class SiteElement < ActiveRecord::Base
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  def content_upgrade_key
-    "#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
-  end
-
-  def content_upgrade_download_link
-    "https://s3.amazonaws.com/#{ Settings.s3_content_upgrades_bucket }/#{ Site.id_to_script_hash(site.id) }/#{ id }.pdf"
-  end
-
-  def content_upgrade_script_tag
-    '<script id="hb-cu-' + id.to_s + '">window.onload = function() {hellobar("contentUpgrades").show(' + id.to_s + ');};</script>'
-  end
-
-  def content_upgrade_wp_shortcode
-    '[hellobar_content_upgrade id="' + id.to_s + '"]'
-  end
-
   # Hardcoded array of external events for Google Analytics
   # In the future we will consider providing a customizable UI for this
   def external_tracking
@@ -292,33 +275,6 @@ class SiteElement < ActiveRecord::Base
   end
 
   private
-
-  def update_s3_content
-    # don't do this unless you need to
-    return if type != 'ContentUpgrade'
-    return if content.blank?
-    return unless content_changed?
-
-    pdf = WickedPdf.new.pdf_from_string(content)
-
-    # create a connection
-    connection = Fog::Storage.new(
-      provider: 'AWS',
-      aws_access_key_id: Settings.aws_access_key_id,
-      aws_secret_access_key: Settings.aws_secret_access_key,
-      path_style: true
-    )
-
-    directory = connection.directories.get(Settings.s3_content_upgrades_bucket)
-
-    file = directory.files.create(
-      key: content_upgrade_key,
-      body: pdf,
-      public: true
-    )
-
-    file.save
-  end
 
   def remove_unreferenced_images
     # Done through SQL to ensure references are up to date

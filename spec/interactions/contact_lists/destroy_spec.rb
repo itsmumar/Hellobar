@@ -50,7 +50,7 @@ describe ContactLists::Destroy do
       destroy(action: :keep)
 
       last_id = ContactList.last.id
-      expect(contact_list_ids).to_not include(last_id)
+      expect(contact_list_ids).not_to include(last_id)
     end
 
     it 'keeps the site elements' do

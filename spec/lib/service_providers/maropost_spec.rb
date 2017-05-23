@@ -127,12 +127,12 @@ describe ServiceProviders::Maropost do
         maropost.subscribe(1122, 'bobloblaw@lawblog.com', 'Bob')
       end
 
-      it 'submits email address as name if name is not present' do
+      it 'does not submit name if name is not present' do
         double_request = double(:request, url: true)
 
         expect(double_request)
           .to receive(:body=) do |body|
-            expect(body[:contact]).to include(first_name: 'bobloblaw@lawblog.com')
+            expect(body[:contact]).not_to include :first_name
           end
 
         allow(client).to receive(:post).and_yield(double_request)

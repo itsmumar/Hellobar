@@ -47,8 +47,8 @@ hellobar.defineModule('elements.class',
       }
 
       imagePlacementClass() {
-        if (!!this.image_url) {
-          return 'image-' + this.image_placement;
+        if (!!this.model().image_url) {
+          return 'image-' + this.model().image_placement;
         } else {
           return '';
         }
@@ -107,7 +107,7 @@ hellobar.defineModule('elements.class',
               return templating.getTemplateByName(this.template_name);
             }
           };
-          return templating.renderTemplate(template(), this);
+          return templating.renderTemplate(template(), {siteElement: this});
         };
 
         const generateCustomHtml = () => {
@@ -289,7 +289,6 @@ hellobar.defineModule('elements.class',
 
       // Reads the site element's view_condition setting and calls hide/show per selected behavior
       // if viewCondition is missing or badly formed, siteElement displays immediately by default
-
       checkForDisplaySetting() {
         const viewCondition = preview.isActive() ? 'preview' : this.view_condition;
 
@@ -317,7 +316,7 @@ hellobar.defineModule('elements.class',
             }
 
             if (this.w.className.indexOf("hb-animated") > -1) {
-              dom.animateIn(this.w)
+              dom.animateIn(this.w);
             }
           };
           if (this.w.className.indexOf("hb-animated") > -1) {
@@ -626,7 +625,7 @@ hellobar.defineModule('elements.class',
 
       renderBranding() {
         const template = templating.getTemplateByName('branding_animated');
-        return templating.renderTemplate(template, this);
+        return templating.renderTemplate(template, {siteElement: this});
       }
 
       brandingName() {

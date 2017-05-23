@@ -10,7 +10,7 @@ describe UserOnboardingCampaign do
     it 'will not deliver email without a being in the campaign sequence' do
       allow(mock_campaign).to receive(:current_campaign_sequence) { nil }
 
-      expect(mock_campaign).to_not receive(:deliver_campaign_email!)
+      expect(mock_campaign).not_to receive(:deliver_campaign_email!)
 
       UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
     end
@@ -26,7 +26,7 @@ describe UserOnboardingCampaign do
 
       it 'will not mark a sequence delivered without delivering the email' do
         allow(mock_campaign).to receive(:deliver_campaign_email!) { false }
-        expect(mock_campaign).to_not receive(:mark_sequence_delivered!)
+        expect(mock_campaign).not_to receive(:mark_sequence_delivered!)
 
         UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
       end

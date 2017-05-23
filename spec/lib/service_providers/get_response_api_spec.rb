@@ -104,8 +104,8 @@ describe ServiceProviders::GetResponseApi do
         get_respone_api.subscribe(campaign_id, email, name)
       end
 
-      it 'submits email address as name if no name is present' do
-        allow(client).to receive(:post).with('contacts', request_body.merge(name: email))
+      it 'does not submit name if no name is present' do
+        expect(client).to receive(:post).with('contacts', request_body.except(:name))
           .and_return successful_response
 
         get_respone_api.subscribe(campaign_id, email)
@@ -162,7 +162,6 @@ describe ServiceProviders::GetResponseApi do
 
         it 'sends dayOfCycle param' do
           request_body = {
-            name: 'bobloblaw@lawblog.com',
             email: 'bobloblaw@lawblog.com',
             campaign: { campaignId: 1122 },
             dayOfCycle: '1'

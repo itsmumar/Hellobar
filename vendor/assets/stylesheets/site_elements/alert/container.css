@@ -3,3 +3,19 @@
 #hellobar-container.HB-Alert {
   z-index: 10000005;
 }
+
+/*-----------  Animations -----------*/
+
+#hellobar-container.HB-Alert.hb-animateIn {
+  animation-duration: 1s;
+  -o-animation-duration: 1s;
+  -ms-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  -webkit-animation-duration: 1s;
+
+  animation-name: hb-bounceInUp;
+  -o-animation-name: hb-bounceInUp;
+  -ms-animation-name: hb-bounceInUp;
+  -moz-animation-name: hb-bounceInUp;
+  -webkit-animation-name: hb-bounceInUp;
+}
