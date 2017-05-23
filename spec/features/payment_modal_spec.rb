@@ -54,7 +54,7 @@ feature 'Payment modal interaction', :js do
 
       click_on 'Create New'
 
-      find('.goal-block[data-route="contacts"]').click_link 'Select This Goal'
+      find('.goal-block.contacts').click_link 'Select This Goal'
 
       expect(page).to have_content 'GROW YOUR MAILING LIST'
 
@@ -74,7 +74,7 @@ feature 'Payment modal interaction', :js do
 
       click_on 'Create New'
 
-      find('.goal-block[data-route="contacts"]').click_link 'Select This Goal'
+      find('.goal-block.contacts').click_link 'Select This Goal'
 
       expect(page).to have_content 'GROW YOUR MAILING LIST'
 

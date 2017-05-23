@@ -93,7 +93,7 @@ feature 'Adding and editing bars', :js do
 
       click_on 'Create New'
 
-      find('.goal-block[data-route="contacts"]').click_link select_goal_label
+      find('.goal-block.contacts').click_link select_goal_label
       click_button 'Continue'
 
       @phone_field = find('.item-block[data-field-type="builtin-phone"]')
@@ -177,7 +177,7 @@ feature 'Adding and editing bars', :js do
 
     click_button('Create New')
 
-    find(".goal-block[data-route='call']").click_link select_goal_label
+    find('.goal-block.call').click_link select_goal_label
 
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')

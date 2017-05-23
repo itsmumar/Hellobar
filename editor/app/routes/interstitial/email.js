@@ -29,7 +29,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
       'link_text': 'Subscribe',
       'element_subtype': 'email'
     });
-    this.createDefaultContactList();
+    this.createDefaultContactList(model);
   }
 
 });
