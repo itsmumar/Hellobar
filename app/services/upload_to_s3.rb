@@ -5,8 +5,6 @@ class UploadToS3
   MAXAGE = 2.minutes
   S_MAXAGE = 5.seconds
 
-  attr_reader :bucket
-
   # @param [String] filename
   # @param [String] contents
   # @param [String] bucket
@@ -27,6 +25,8 @@ class UploadToS3
     )
   end
 
+  private
+
   def compressed_contents
     compressed = StringIO.new('', 'w')
 
@@ -36,8 +36,6 @@ class UploadToS3
 
     compressed.string
   end
-
-  private
 
   def cache_header
     { 'Cache-Control' => "max-age=#{ MAXAGE },s-maxage=#{ S_MAXAGE }" }

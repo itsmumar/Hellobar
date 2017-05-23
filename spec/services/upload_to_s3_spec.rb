@@ -8,40 +8,31 @@ describe UploadToS3 do
 
   let(:service) { described_class.new(filename, contents, bucket) }
 
-  before { allow(service).to receive(:s3_bucket).and_return(s3_double) }
+  before { allow(Aws::S3::Bucket).to receive(:new).and_return(s3_double) }
 
-  subject { service.call }
+  describe '#call' do
+    before { service.call }
 
-  describe '#initialize' do
+    it 'calls put_object' do
+      expect(s3_double).to have_received(:put_object).with(
+        hash_including(
+          key: 'test.js',
+          acl: 'public-read',
+          content_type: 'text/javascript',
+          content_encoding: 'gzip',
+          metadata: {
+            'Cache-Control' => 'max-age=120,s-maxage=5'
+          }
+        )
+      )
+    end
+
     context 'when no bucket is defined' do
       let(:bucket) { nil }
 
       it 'defaults to Settings.s3_bucket' do
-        expect(service.bucket).to eq Settings.s3_bucket
+        expect(Aws::S3::Bucket).to have_received(:new).with(Settings.s3_bucket)
       end
-    end
-
-    context 'when a bucket is defined' do
-      it 'uses the provided bucket' do
-        expect(service.bucket).to eq bucket
-      end
-    end
-  end
-
-  describe '#call' do
-    it 'calls put_object' do
-      subject
-
-      expect(s3_double).to have_received(:put_object).with(
-        key: 'test.js',
-        body: service.compressed_contents,
-        acl: 'public-read',
-        content_type: 'text/javascript',
-        content_encoding: 'gzip',
-        metadata: {
-          'Cache-Control' => 'max-age=120,s-maxage=5'
-        }
-      )
     end
   end
 end
