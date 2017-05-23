@@ -2,6 +2,7 @@
 require 'webmock/rspec'
 require 'support/ab_test_config'
 
+ENV['CODECOV_FLAG'] = 'integration'
 SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 
 # Use Webkit as js driver
