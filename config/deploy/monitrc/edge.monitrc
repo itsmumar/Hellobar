@@ -5,3 +5,9 @@ set httpd port 4000 and
     allow admin:"34v02#2dmvaz21"
 
 set logfile /mnt/deploy/shared/log/monit.log
+
+check process shoryuken
+  with pidfile /mnt/deploy/shared/tmp/pids/shoryuken.pid
+  start program = "/usr/bin/sudo /bin/su - hellobar -c 'cd /mnt/deploy/current && RAILS_ENV=edge bundle exec shoryuken --daemon --pidfile /mnt/deploy/shared/tmp/pids/shoryuken.pid --logfile /mnt/deploy/shared/log/shoryuken.log --config /mnt/deploy/current/config/shoryuken.yml --rails --queues hellobar_edge,5 hb3_edge_lowpriority,1'" with timeout 30 seconds
+  stop program  = "/usr/bin/sudo /bin/su - hellobar -c '/bin/kill -USR1 `/bin/cat /mnt/deploy/shared/tmp/pids/shoryuken.pid`'" with timeout 30 seconds
+  if totalmem > 2 GB for 5 cycles then restart

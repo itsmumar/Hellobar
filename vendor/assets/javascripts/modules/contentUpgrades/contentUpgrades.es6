@@ -19,11 +19,19 @@ hellobar.defineModule('contentUpgrades',
       const siteElement = contentUpgradeById(contentUpgradeId);
 
       if (siteElement) {
-        elementsConversion.viewed(siteElement);
         const siteStyles = configuration.styles() || {};
         var tpl = templating.getTemplateByName('contentupgrade');
         const content = templating.renderTemplate(tpl, {siteElement: siteElement.model(), siteStyles: siteStyles});
         document.getElementById('hb-cu-' + contentUpgradeId).outerHTML = content;
+      }
+    }
+
+    function view(contentUpgradeId) {
+      const siteElement = contentUpgradeById(contentUpgradeId);
+
+      if (siteElement) {
+        elementsConversion.viewed(siteElement);
+        document.getElementById(`hb-cu-modal-${siteElement.model().id}`).style.display = 'inline';
       }
     }
 
@@ -43,6 +51,7 @@ hellobar.defineModule('contentUpgrades',
     return {
       configuration: () => configuration,
       show,
+      view,
       submit
     };
 

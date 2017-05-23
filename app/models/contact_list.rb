@@ -1,9 +1,4 @@
-require 'queue_worker/queue_worker'
-
 class ContactList < ActiveRecord::Base
-  include QueueWorker::Delay
-  include EmailSynchronizer
-
   EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
 
   attr_accessor :provider_token
@@ -57,12 +52,10 @@ class ContactList < ActiveRecord::Base
   def sync(options = {})
     return false unless syncable?
 
-    options.reverse_merge! immediate: false
-
     if options[:immediate]
-      sync_all!
+      SubscribeAllContactsJob.perform_now self
     else
-      delay :sync_all!
+      SubscribeAllContactsJob.perform_later self
     end
   end
 
@@ -133,7 +126,7 @@ class ContactList < ActiveRecord::Base
 
     if syncable? && !oauth? && !api_key?
       begin
-        subscribe_params('emailfor@user.com', 'Name namerson', true)
+        service_provider.subscribe_params('emailfor@user.com', 'Name namerson', true)
         false
       rescue
         true

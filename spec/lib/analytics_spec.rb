@@ -24,7 +24,7 @@ describe Analytics do
       call_alias
     end
 
-    it 'puts data to log/analytics.log' do
+    it 'puts data to log/analytics.log', :freeze do
       call_alias
       expect(file).to have_received(:puts).with analytics_record(*data)
     end

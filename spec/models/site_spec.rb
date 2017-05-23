@@ -246,9 +246,8 @@ describe Site do
   end
 
   describe '#generate_script' do
-    it 'delegates :generate_static_assets to delay' do
-      expect(site).to receive(:delay).with(:generate_static_assets, anything)
-      site.generate_script
+    it 'enqueues GenerateStaticScriptJob' do
+      expect { site.generate_script }.to have_enqueued_job GenerateStaticScriptJob
     end
   end
 
@@ -445,6 +444,28 @@ describe Site do
     it 'updates settings' do
       expect { site.update_content_upgrade_styles! content_upgrade_styles }
         .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
+    end
+  end
+
+  describe 'after_commit callback' do
+    let(:site) { create :site }
+    let(:commit) { site.run_callbacks :commit }
+
+    context 'when skip_script_generation' do
+      before { site.skip_script_generation = true }
+
+      it 'does not generate script' do
+        expect { commit }.not_to have_enqueued_job GenerateStaticScriptJob
+      end
+    end
+
+    context 'when not skip_script_generation' do
+      before { site.skip_script_generation = false }
+      before { site.touch }
+
+      it 'generates script' do
+        expect { commit }.to have_enqueued_job GenerateStaticScriptJob
+      end
     end
   end
 end

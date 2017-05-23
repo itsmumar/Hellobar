@@ -112,14 +112,12 @@ hellobar.defineModule('elements.collecting',
             }
           }
           recordEmail(siteElement, values, function () {
-            // Successfully saved
+            bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
+
+            if (doRedirect) {
+              window.location.href = redirectUrl;
+            }
           });
-
-          bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
-
-          if (doRedirect) {
-            window.location.href = redirectUrl;
-          }
         },
         function () {
           // Fail
@@ -151,7 +149,6 @@ hellobar.defineModule('elements.collecting',
         trackingInternal.send('c', siteElement.model().contact_list_id, {e: joinedValues}, function () {
           elementsConversion.converted(siteElement, callback);
         });
-        // TODO call external tracking
       }
     }
 

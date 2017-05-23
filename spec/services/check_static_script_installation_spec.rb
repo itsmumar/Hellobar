@@ -131,14 +131,4 @@ describe CheckStaticScriptInstallation do
 
     include_examples 'installed'
   end
-
-  describe '.for' do
-    let(:call) { described_class.for(site_id: site.id) }
-
-    it 'calls service with site_id' do
-      expect(described_class).to receive_message_chain(:new, :call)
-      expect(Site).to receive_message_chain(:preload_for_script, :find).with(site.id)
-      call
-    end
-  end
 end

@@ -108,6 +108,10 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 # Sending analytics data to Segment.com
 gem 'analytics-ruby', require: 'segment/analytics'
 
+# Queue
+gem 'connection_pool'
+gem 'shoryuken'
+
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
 gem 'rake', '~> 10.3.2'
@@ -144,7 +148,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'rspec-rails'
-  gem 'simplecov'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
 
@@ -160,6 +163,10 @@ group :test do
 
   # Spec formatters
   gem 'rspec_junit_formatter'
+
+  # Code coverage metrics
+  gem 'codecov', require: false
+  gem 'simplecov', require: false
 
   gem 'database_cleaner'
   gem 'launchy'

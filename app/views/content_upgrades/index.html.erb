@@ -19,7 +19,7 @@
  <td><input type="text" value="<%= content_upgrade.content_upgrade_script_tag %>"></td>
  <td><%= content_upgrade.total_views %></td>
  <td><%= content_upgrade.total_conversions %></td>
- <td><% if content_upgrade.total_conversions > 0 %><%=(content_upgrade.total_views.to_i/content_upgrade.total_conversions.to_i).to_i %>%<%end%></td>
+ <td><%= conversion_percent_text content_upgrade %></td>
  <td><a href="<%= content_upgrade.content_upgrade_download_link %>" target="_blank">View PDF</a></td>
 </tr>
 <% end %>

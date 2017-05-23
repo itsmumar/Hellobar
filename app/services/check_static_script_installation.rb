@@ -1,10 +1,6 @@
 class CheckStaticScriptInstallation
   LIFETIME_TOTALS_PERIOD_IN_DAYS = 10
 
-  def self.for(site_id:)
-    new(Site.preload_for_script.find(site_id)).call
-  end
-
   # @param [Site] site
   def initialize(site)
     @site = site
