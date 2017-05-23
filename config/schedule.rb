@@ -39,6 +39,10 @@ every 6.hours, roles: [:cron] do
   rake 'backend:adjust_dynamo_db_capacity[all]'
 end
 
+every 1.hour, roles: %i[web worker] do
+  command 'sudo /usr/bin/monit stop shoryuken ; sleep 30; sudo /usr/bin/monit start shoryuken'
+end
+
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
 end
