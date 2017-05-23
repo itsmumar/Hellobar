@@ -166,6 +166,7 @@ group :test do
   # Spec formatters
   gem 'rspec_junit_formatter'
 
+  gem 'codecov', require: false
   gem 'database_cleaner'
   gem 'launchy'
   gem 'rspec-retry'
