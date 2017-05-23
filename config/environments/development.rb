@@ -46,5 +46,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # When enqueueing jobs with the Inline adapter the job will be executed immediately.
   config.active_job.queue_adapter = :inline
 end
