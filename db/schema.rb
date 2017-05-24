@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524175731) do
+ActiveRecord::Schema.define(version: 20170524192939) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -203,7 +203,7 @@ ActiveRecord::Schema.define(version: 20170524175731) do
     t.integer  "site_id",            limit: 4
     t.string   "preuploaded_url",    limit: 255
     t.string   "theme_id",           limit: 255
-    t.integer  "version",            limit: 4,   default: 1
+    t.integer  "version",            limit: 4,   default: 2
   end
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
