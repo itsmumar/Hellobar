@@ -303,11 +303,6 @@ form {
     animation-play-state: paused;
   }
 
-  /*pausing animations in IE11 -- it causes issues with iframe rendering*/
-  .hb-paused-animations-ie .hb-logo-wrapper .animated {
-    animation-play-state: paused;
-  }
-
   @-webkit-keyframes logo-spin {
     90% {
       -webkit-transform: rotate3d(0, 1, 0, 0deg);
@@ -746,4 +741,3 @@ a.barlinkred {
 .paid-account .free-only, .free-account .paid-only {
   display: none !important;
 }
-
