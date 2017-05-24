@@ -1,29 +1,31 @@
 describe GenerateAndStoreStaticScript do
   let(:site) { create(:site, :with_user, :with_rule) }
-  let(:mock_storage) { double('asset_storage') }
+  let(:mock_upload_to_s3) { double(:upload_to_s3, call: true) }
   let(:script_content) { 'script content' }
 
   let(:service) { described_class.new(site) }
 
   before do
     allow(Settings).to receive(:store_site_scripts_locally).and_return false
-    allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
     allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
   end
 
   it 'generates and uploads the script content for a site' do
-    expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, script_content)
+    allow(UploadToS3).to receive(:new).with(site.script_name, script_content).and_return(mock_upload_to_s3)
+
     service.call
   end
 
   context 'with wordpress bar' do
     let(:wordpress_bar) { create(:site_element, site: site, wordpress_bar_id: 123) }
     let(:user) { create(:user, site: site, wordpress_user_id: 456) }
+    let(:mock_wordpress_upload_to_s3) { double(:upload_wordpress_to_s3, call: true) }
     let!(:filename) { "#{ user.wordpress_user_id }_#{ wordpress_bar.wordpress_bar_id }.js" }
 
     it 'generates scripts for each wordpress bar' do
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, script_content).ordered
-      expect(mock_storage).to receive(:create_or_update_file_with_contents).with(filename, script_content).ordered
+      expect(UploadToS3).to receive(:new).with(site.script_name, script_content).and_return(mock_upload_to_s3)
+      expect(UploadToS3).to receive(:new).with(filename, script_content).and_return(mock_wordpress_upload_to_s3)
+
       service.call
     end
   end
