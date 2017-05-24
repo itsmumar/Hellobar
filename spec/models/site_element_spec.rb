@@ -421,4 +421,48 @@ describe SiteElement do
       end
     end
   end
+
+  describe '#image_url' do
+    let(:element) { create(:site_element, :traffic, :with_active_image) }
+
+    subject { element.image_url }
+
+    context 'when the element has no image' do
+      let(:element) { create(:site_element, :traffic) }
+
+      it { expect(subject).to be_nil }
+    end
+
+    context 'when image version is 1' do
+      before { element.active_image.version = 1 }
+
+      it 'returns the "original" style URL' do
+        expect(subject).to include 'original'
+      end
+
+      context 'when element is Takeover' do
+        let(:element) { create(:takeover_element, :with_active_image) }
+
+        it 'returns the "original" style URL' do
+          expect(subject).to include 'original'
+        end
+      end
+    end
+
+    context 'when image version is 2' do
+      before { element.active_image.version = 2 }
+
+      it 'returns the "medium" style URL' do
+        expect(subject).to include 'medium'
+      end
+
+      context 'when element is Takeover' do
+        let(:element) { create(:takeover_element, :with_active_image) }
+
+        it 'returns the "large" style URL' do
+          expect(subject).to include 'large'
+        end
+      end
+    end
+  end
 end
