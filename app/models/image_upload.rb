@@ -1,9 +1,28 @@
+require 'set'
+
 class ImageUpload < ActiveRecord::Base
+  DEFAULT_STYLE = :original
+  DEFAULT_VERSION = 1
+
+  VERSION_STYLES = {
+    1 => Set[:original, :thumb].freeze,
+    2 => Set[:original, :large, :medium, :thumb].freeze
+  }.freeze
+
+  STYLES = {
+    original: '2000x2000>',
+    large: '1000x1000>',
+    medium: '600x360>',
+    thumb: '100x100>'
+  }.freeze
+
   belongs_to :site
 
-  has_attached_file :image, styles: { original: '600x360>', thumb: '100x100>' }
+  has_attached_file :image, styles: STYLES
   validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
   after_validation :better_error_messages, on: [:create]
+
+  validates :version, presence: true, inclusion: { in: VERSION_STYLES.keys }
 
   def better_error_messages
     return unless errors[:image].include?('Paperclip::Errors::NotIdentifiedByImageMagickError')
@@ -12,7 +31,21 @@ class ImageUpload < ActiveRecord::Base
     errors[:image] = 'Invalid image file.'
   end
 
-  def url
-    preuploaded_url || image.url
+  def url(style = :medium)
+    style = safe_style(style)
+
+    preuploaded_url || image.url(style)
+  end
+
+  private
+
+  def safe_style(style)
+    style = DEFAULT_STYLE unless styles.include?(style)
+
+    style
+  end
+
+  def styles
+    VERSION_STYLES[version] || VERSION_STYLES[DEFAULT_VERSION]
   end
 end
