@@ -57,8 +57,12 @@ hellobar.defineModule('elements.class',
       imageFor(location, options) {
         var model = this.model();
         options = options || {};
+
         function imageSrc() {
-          return model.image_url ? model.image_url : options.defaultImgSrc;
+          const imageStyle = model.image_style || 'medium';
+          const imageUrl = model[`image_${imageStyle}_url`] || model.image_url;
+
+          return imageUrl || options.defaultImgSrc;
         }
 
         var locationIndex = location.indexOf(model.image_placement);

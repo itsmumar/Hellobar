@@ -100,7 +100,7 @@ export default Ember.Controller.extend({
   setDefaultImage() {
     const imageID = this.get('currentTheme.image_upload_id');
     const imageUrl = this.get('currentTheme.image.default_url');
-    this.send('setImageProps', imageID, imageUrl, 'default');
+    this.send('setImageProps', { imageID, imageUrl, imageType: 'default' });
   },
 
   //-----------  Text Settings  -----------#
@@ -216,11 +216,13 @@ export default Ember.Controller.extend({
       }).open();
     },
 
-    setImageProps(imageID, imageUrl, imageType = null) {
+    setImageProps({ imageID, imageUrl, imageLargeUrl, imageMediumUrl, imageType = null }) {
       return this.setProperties({
         'model.active_image_id': imageID,
         'model.image_placement': this.getImagePlacement(),
         'model.image_url': imageUrl,
+        'model.image_large_url': imageLargeUrl || imageUrl,
+        'model.image_medium_url': imageMediumUrl || imageUrl,
         'model.image_type': imageType
       });
     },

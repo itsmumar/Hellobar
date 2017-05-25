@@ -37,6 +37,14 @@ class ImageUpload < ActiveRecord::Base
     preuploaded_url || image.url(style)
   end
 
+  def medium_url
+    url(:medium)
+  end
+
+  def large_url
+    url(:large)
+  end
+
   private
 
   def safe_style(style)

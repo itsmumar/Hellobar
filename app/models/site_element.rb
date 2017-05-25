@@ -75,6 +75,7 @@ class SiteElement < ActiveRecord::Base
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
+  delegate :url, :medium_url, :large_url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
 
   store :settings, coder: Hash
@@ -271,14 +272,6 @@ class SiteElement < ActiveRecord::Base
 
   def pushes_page_down
     nil
-  end
-
-  # Version 1 images will default to :original since :medium is not supported. Version 1 images will use :medium by
-  # default. Override image_style in child class to define custom style based on type.
-  def image_url
-    return if active_image.blank?
-
-    active_image.url(image_style)
   end
 
   def image_style
