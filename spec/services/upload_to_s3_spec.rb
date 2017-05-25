@@ -20,9 +20,7 @@ describe UploadToS3 do
           acl: 'public-read',
           content_type: 'text/javascript',
           content_encoding: 'gzip',
-          metadata: {
-            'Cache-Control' => 'max-age=120,s-maxage=5'
-          }
+          cache_control: 'must-revalidate, proxy-revalidate, max-age=86400, s-maxage=10'
         )
       )
     end

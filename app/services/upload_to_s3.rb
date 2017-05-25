@@ -2,8 +2,8 @@ require 'zlib'
 require 'stringio'
 
 class UploadToS3
-  MAXAGE = 2.minutes
-  S_MAXAGE = 5.seconds
+  MAXAGE = 1.day
+  S_MAXAGE = 10.seconds
 
   # @param [String] filename
   # @param [String] contents
@@ -21,7 +21,7 @@ class UploadToS3
       acl: 'public-read',
       content_type: 'text/javascript',
       content_encoding: 'gzip',
-      metadata: cache_header
+      cache_control: cache_header
     )
   end
 
@@ -37,8 +37,14 @@ class UploadToS3
     compressed.string
   end
 
+  # @see https://www.mnot.net/cache_docs/#PROXY
+  # *must-revalidate* - tells caches that they must obey any freshness information you give them about a representation.
+  # *max-age* - specifies the maximum amount of time that a representation will be considered fresh
+  # *s-maxage* - similar to max-age, except that it only applies to shared (e.g., proxy or CloudFront) caches
+  # with this configuration CloudFront will be refreshing cache every 10 seconds
+  # but end user will be getting more often 304 or 200 (cached in CloudFront) version during a day
   def cache_header
-    { 'Cache-Control' => "max-age=#{ MAXAGE },s-maxage=#{ S_MAXAGE }" }
+    "must-revalidate, proxy-revalidate, max-age=#{ MAXAGE }, s-maxage=#{ S_MAXAGE }"
   end
 
   def s3_bucket
