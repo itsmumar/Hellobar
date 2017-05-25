@@ -1,15 +1,13 @@
-require 'drip'
-
 module ServiceProviders
   module Adapters
     class Drip < Base
       register :drip
 
       def initialize(config_source)
-        client = Drip::Client.new do |c|
-          c.access_token = config_source.credentials['token']
-          c.account_id = config_source.extra['account_id']
-        end
+        client = ::Drip::Client.new(
+          access_token: config_source.credentials['token'],
+          account_id: config_source.extra['account_id']
+        )
         super client
       end
 
@@ -22,8 +20,8 @@ module ServiceProviders
         client.tags.body['tags'].map { |tag| { 'id' => tag, 'name' => tag } }
       end
 
-      def subscribe(list_id, params, double_optin = true)
-        body = { new_email: params[:email], tags: @contact_list.tags }
+      def subscribe(list_id, params, double_optin = true, tags: [])
+        body = { new_email: params[:email], tags: tags }
 
         if params[:name].present?
           first_name, last_name = name.split(' ', 2)
