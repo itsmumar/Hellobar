@@ -44,16 +44,6 @@ export default Ember.Controller.extend(MobileMixin, {
     return this.get('currentUser') && this.get('currentUser').status === 'temporary';
   }.property('currentUser'),
 
-  //-----------  Step Tracking  -----------#
-
-  // Tracks global step tracking
-  // (primarily observed by the step-navigation component)
-
-  prevRoute: null,
-  nextRoute: null,
-  currentStep: false,
-  cannotContinue: true,
-
   //-----------  State Default  -----------#
 
   queryParams: ['rule_id'],
