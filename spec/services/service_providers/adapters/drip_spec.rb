@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Drip, :no_vcr do
+describe ServiceProviders::Adapters::Drip do
   define_urls(
     lists: 'https://api.getdrip.com/v2/account_id/campaigns?status=active',
     subscribe: 'https://api.getdrip.com/v2/account_id/campaigns/4567456/subscribers',

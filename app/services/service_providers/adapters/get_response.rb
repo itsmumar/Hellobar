@@ -13,11 +13,12 @@ module ServiceProviders
           }
         }
 
-        client ||= Faraday.new(client_settings) do |faraday|
+        client = Faraday.new(client_settings) do |faraday|
           faraday.request :url_encoded
           faraday.response :logger unless Rails.env.test?
           faraday.adapter Faraday.default_adapter
         end
+        super client
       end
 
       def lists
@@ -30,23 +31,18 @@ module ServiceProviders
         response.map { |tag| { 'id' => tag['tagId'], 'name' => tag['name'] } }
       end
 
-      def subscribe(list_id, params)
-        tags = []
-
-        if contact_list.present?
-          tags = contact_list.tags.map { |tag| { tagId: tag } }
-          cycle_day = contact_list.data['cycle_day'].presence
-        end
+      def subscribe(list_id, params, tags: [], cycle_day: nil)
+        tags = tags.map { |tag| { tagId: tag } } if tags.present?
 
         request_body = {
-          email: email,
+          email: params[:email],
           campaign: {
             campaignId: list_id
           }
         }
-        request_body[:name] = name if name.present?
+        request_body[:name] = params[:name] if params[:name].present?
 
-        request_body.update(dayOfCycle: cycle_day) if cycle_day
+        request_body.update(dayOfCycle: cycle_day) if cycle_day.present?
 
         response = process_response client.post '/contacts', request_body
 
@@ -55,6 +51,12 @@ module ServiceProviders
         log 'sync timed out'
       rescue => error
         log "sync raised #{ error }"
+      end
+
+      def batch_subscribe(list_id, subscribers)
+        subscribers.each do |subscriber|
+          subscribe(list_id, subscriber)
+        end
       end
 
       private
@@ -76,7 +78,7 @@ module ServiceProviders
       # so that unknown origin contacts at GR won't get tagged by us
       # https://crossover.atlassian.net/browse/XOHB-1397
       def assign_tags(response)
-        return unless contact_list.present? || contact_list.tags.present?
+        return #unless contact_list.present? || contact_list.tags.present?
 
         tags = contact_list.tags.map { |tag| { tagId: tag } }
         contacts = fetch_latest_contacts(20)
