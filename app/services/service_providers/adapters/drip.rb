@@ -3,6 +3,8 @@ require 'drip'
 module ServiceProviders
   module Adapters
     class Drip < Base
+      register :drip
+
       def initialize(config_source)
         client = Drip::Client.new do |c|
           c.access_token = config_source.credentials['token']

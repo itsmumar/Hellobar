@@ -1,6 +1,8 @@
 module ServiceProviders
   module Adapters
     class Infusionsoft < Base
+      register :infusionsoft
+
       def initialize(config_source)
         Infusionsoft.configure do |config|
           config.api_url = config_source.extra['app_url']

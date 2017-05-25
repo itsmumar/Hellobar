@@ -1,7 +1,7 @@
 module ServiceProviders
   module Adapters
-    class MadMimi < Base
-      register :mad_mimi
+    class MadMimiForm < Base
+      register :mad_mimi_form
 
       def initialize(config_source)
         super MadMimi.new(config_source.credentials['username'], config_source.api_key, raise_exceptions: true)

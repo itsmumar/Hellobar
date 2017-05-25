@@ -3,6 +3,8 @@ require 'createsend'
 module ServiceProviders
   module Adapters
     class CampaignMonitor < Base
+      register :campaign_monitor
+
       def initialize(config_source)
         auth = {
           access_token: config_source.credentials['token'],

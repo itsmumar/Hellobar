@@ -1,7 +1,11 @@
 module ServiceProviders
   module Adapters
-    class VerticalResponse < Base
-      register :vertical_response
+    class IContactForm < Base
+      register :icontact
+
+      def self.embed_code?
+        true
+      end
 
       def initialize(config_source)
         super VerticalResponse::API::OAuth.new config_source.credentials['token']

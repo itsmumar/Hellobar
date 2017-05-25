@@ -2,6 +2,12 @@ module ServiceProviders
   module Adapters
     class Base
       attr_reader :client
+      cattr_accessor :key
+
+      def self.register(name)
+        Provider.register name, self
+        self.key = name
+      end
 
       def initialize(client)
         @client = client

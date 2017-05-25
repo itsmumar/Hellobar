@@ -1,6 +1,12 @@
 module ServiceProviders
   module Adapters
-    class Mailchimp < Base
+    class MailChimp < Base
+      register :mailchimp
+
+      def self.oauth?
+        true
+      end
+
       def initialize(identity)
         client = Gibbon::Request.new(
           api_key: identity.credentials['token'],

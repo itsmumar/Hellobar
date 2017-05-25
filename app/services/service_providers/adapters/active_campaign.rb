@@ -3,6 +3,8 @@ HTTPI.log = false
 module ServiceProviders
   module Adapters
     class ActiveCampaign < Base
+      register :active_campaign
+
       def initialize(config_source)
         config = {
           api_endpoint: 'https://' + config_source.extra['app_url'] + '/admin/api.php',

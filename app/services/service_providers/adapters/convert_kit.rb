@@ -3,6 +3,8 @@ module ServiceProviders
     class ConvertKit < Base
       class RequestError < StandardError; end
 
+      register :convert_kit
+
       def initialize(config_source)
         client = Faraday.new(url: 'https://api.convertkit.com/v3') do |faraday|
           faraday.request :url_encoded
@@ -24,10 +26,10 @@ module ServiceProviders
         response['tags'].map { |tag| tag.slice('id', 'name') }
       end
 
-      def subscribe(form_id, params)
+      def subscribe(form_id, params, tags: [])
         body = {
           email: params[:email],
-          tags: @contact_list.tags.join(',')
+          tags: tags.join(',')
         }
 
         if params[:name].present?
@@ -41,7 +43,7 @@ module ServiceProviders
 
       def batch_subscribe(form_id, subscribers)
         subscribers.each do |subscriber|
-          subscribe(form_id, subscriber[:email], subscriber[:name])
+          subscribe(form_id, subscriber)
         end
       end
 

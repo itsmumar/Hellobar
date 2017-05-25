@@ -3,6 +3,8 @@ module ServiceProviders
     class GetResponse < Base
       class RequestError < StandardError; end
 
+      register :get_response
+
       def initialize(config_source)
         client_settings = {
           url: 'https://api.getresponse.com/v3',

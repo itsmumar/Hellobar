@@ -3,6 +3,8 @@ module ServiceProviders
     class Maropost < Base
       class RequestError < StandardError; end
 
+      register :maropost
+
       def initialize(config_source)
         @account_id = config_source.credentials['username']
 

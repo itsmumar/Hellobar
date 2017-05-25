@@ -3,6 +3,8 @@ require 'aweber'
 module ServiceProviders
   module Adapters
     class AWeber < Base
+      register :aweber
+
       def initialize(config_source)
         oauth = ::AWeber::OAuth.new(config.aweber.consumer_key, config.aweber.consumer_secret)
         oauth.authorize_with_access(config_source.credentials['token'], config_source.credentials['secret'])
