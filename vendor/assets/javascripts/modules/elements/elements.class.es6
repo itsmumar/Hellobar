@@ -200,6 +200,7 @@ hellobar.defineModule('elements.class',
 
         // Add IE Specific class overrides
         environment.isIEXOrLess(9) && dom.addClass(d.body, 'hb-old-ie');
+        environment.isIE11() && dom.addClass(d.body, 'hb-paused-animations-ie')
 
         var adjustmentHandler = function () {
           that.adjustForCurrentWidth();
