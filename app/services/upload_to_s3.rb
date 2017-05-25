@@ -2,8 +2,8 @@ require 'zlib'
 require 'stringio'
 
 class UploadToS3
-  MAXAGE = 2.minutes
-  S_MAXAGE = 5.seconds
+  MAXAGE = 1.day
+  S_MAXAGE = 10.seconds
 
   # @param [String] filename
   # @param [String] contents
@@ -21,7 +21,7 @@ class UploadToS3
       acl: 'public-read',
       content_type: 'text/javascript',
       content_encoding: 'gzip',
-      metadata: cache_header
+      cache_control: cache_header
     )
   end
 
@@ -38,7 +38,7 @@ class UploadToS3
   end
 
   def cache_header
-    { 'Cache-Control' => "max-age=#{ MAXAGE },s-maxage=#{ S_MAXAGE }" }
+    "must-revalidate, proxy-revalidate, max-age=#{ MAXAGE }, s-maxage=#{ S_MAXAGE }"
   end
 
   def s3_bucket
