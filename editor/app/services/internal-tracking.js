@@ -6,7 +6,7 @@ import Ember from 'ember';
  */
 export default Ember.Service.extend({
 
-  applicationSettings: Ember.service.inject('applicationSettings'),
+  applicationSettings: Ember.inject.service('applicationSettings'),
 
   init() {
     this.tracking = InternalTracking;
@@ -18,3 +18,4 @@ export default Ember.Service.extend({
   }
 
 });
+
