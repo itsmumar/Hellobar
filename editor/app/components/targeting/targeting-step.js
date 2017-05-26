@@ -16,7 +16,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super();
-    this.set('selectionInProgress', true);
+    this.set('selectionInProgress', !this.get('model.preset_rule_name'));
     presetRuleNames.forEach((presetRuleName) => {
       const preparedName = presetRuleName.replace(/\s/g, '');
       this[`shouldShow${preparedName}Preset`] = Ember.computed('model.preset_rule_name', 'selectionInProgress', function () {
