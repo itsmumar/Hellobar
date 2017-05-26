@@ -59,6 +59,8 @@ export default Ember.Component.extend({
     return this.get('model.site.capabilities.custom_targeted_bars');
   }.property('model.site.capabilities.custom_targeted_bars'),
 
+  cannotTarget: Ember.computed.not('canTarget'),
+
   ruleOptions: function () {
     let rules = this.get('model.site.rules').slice().filter(rule => rule.editable === true);
     rules.unshift({name: 'Choose a saved rule...', description: '', editable: false});
@@ -71,21 +73,6 @@ export default Ember.Component.extend({
     const selectedOption = _.find(options, (option) => option.id === ruleId);
     return selectedOption || options[0];
   }.property('model.rule_id', 'ruleOptions'),
-
-  showUpgradeModal(newRoute) {
-    if (newRoute === 'targeting.index' || newRoute === 'targeting' || newRoute === 'targeting.everyone' || this.get('canTarget')) {
-      return false;
-    } else {
-      if (this.get('applicationSettings.settings.track_editor_flow')) {
-        InternalTracking.track_current_person('Editor Flow', {
-          step: 'Choose Targeting Type - Upgrade Modal',
-          targeting: newRoute
-        });
-      }
-      this.send('openUpgradeModal', newRoute);
-      return true;
-    }
-  },
 
   isTopBarStyle: Ember.computed.equal('model.type', 'Bar'),
 
@@ -125,10 +112,29 @@ export default Ember.Component.extend({
     return !this.get('selectionInProgress') && this.get('model.preset_rule_name') === 'Saved';
   }.property('model.preset_rule_name', 'selectionInProgress'),
 
+  openUpgradeModal() {
+    const that = this;
+    that.send('initiateSelection');
+
+    const options = {
+      site: that.get('model.site'),
+      successCallback() {
+        that.set('model.site.capabilities', this.site.capabilities);
+        that.send('trackUpgrade');
+      },
+      upgradeBenefit: 'create custom-targeted rules'
+    };
+    new UpgradeAccountModal(options).open();
+  },
+
   actions: {
 
     select(presetRuleName) {
       if (!this.get('selectionInProgress')) {
+        return;
+      }
+      if (presetRuleName !== 'Everyone' && !this.get('canTarget')) {
+        this.openUpgradeModal();
         return;
       }
       if (presetRuleName) {
@@ -149,21 +155,6 @@ export default Ember.Component.extend({
       if (ruleData.id !== undefined) {
         this.associateRuleToModel(ruleData);
       }
-    },
-
-    openUpgradeModal(successRoute = 'targeting') {
-      const that = this;
-      that.send('initiateSelection');
-
-      const options = {
-        site: that.get('model.site'),
-        successCallback() {
-          that.set('model.site.capabilities', this.site.capabilities);
-          that.send('trackUpgrade');
-        },
-        upgradeBenefit: 'create custom-targeted rules'
-      };
-      new UpgradeAccountModal(options).open();
     },
 
     openRuleModal(ruleData = {}) {

@@ -18,7 +18,7 @@
           <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
           <h6>
             Mobile Visitors
-            {{#if canTarget}}
+            {{#if cannotTarget}}
               <span class="button paid">PAID</span>
             {{/if}}
           </h6>
@@ -33,7 +33,7 @@
         <i class="hellobar-icon hellobar-icon-house"></i>
         <h6>
           Homepage Visitors
-          {{#if canTarget}}
+          {{#if cannotTarget}}
             <span class="button paid">PAID</span>
           {{/if}}
         </h6>
@@ -47,7 +47,7 @@
         <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
         <h6>
           Custom Rule
-          {{#if canTarget}}
+          {{#if cannotTarget}}
             <span class="button paid">PAID</span>
           {{/if}}
         </h6>
@@ -62,7 +62,7 @@
           <i class="hellobar-icon hellobar-icon-saved-segment"></i>
           <h6 class="left-condense">
             <span class="left">Show to a saved targeting rule</span>
-            {{#if canTarget}}
+            {{#if cannotTarget}}
               <span class="button paid">PAID</span>
             {{/if}}
           </h6>
