@@ -24,7 +24,7 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'The user can select free options' do
-      find('a', text: free_options.first).click
+      find('div', text: free_options.first).click
       expect(page).to have_content 'CHANGE TARGET AUDIENCE'
     end
 
@@ -32,7 +32,7 @@ feature 'Users can use site element targeting rule presets', :js do
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
       (paid_options << custom_option).each do |text|
-        find('a', text: text).click
+        find('div', text: text).click
 
         expect(page).to have_content 'MONTHLY BILLING'
 
@@ -58,7 +58,7 @@ feature 'Users can use site element targeting rule presets', :js do
       visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
 
       (free_options + paid_options).each do |text|
-        find('a', text: text).click
+        find('div', text: text).click
         find('a', text: 'CHANGE TARGET AUDIENCE').click
       end
 
