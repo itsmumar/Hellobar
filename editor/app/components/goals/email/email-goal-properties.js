@@ -5,6 +5,7 @@ export default Ember.Component.extend({
 
   theming: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
+  internalTracking: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
 
   currentThemeIsGeneric: Ember.computed.alias('theming.currentThemeIsGeneric'),
