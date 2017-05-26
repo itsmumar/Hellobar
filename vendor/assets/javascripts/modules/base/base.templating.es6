@@ -14,14 +14,16 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
 
   // Renders the html template for the siteElement by calling HB.parseTemplateVar for
   // each {{...}} entry in the template
-  function renderTemplate(html, siteElement) {
+  function renderTemplate(html, context) {
     return html.replace(/\{\{(.*?)\}\}/g, function (match, value) {
-      return parseTemplateVar(value, siteElement);
+      return parseTemplateVar(value, context);
     });
   }
 
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
-  function parseTemplateVar(value, siteElement) {
+  function parseTemplateVar(value, context) {
+    let siteElement = context && context.siteElement ? context.siteElement : context; // this variable is used in templates when `eval` is called
+
     try {
       value = eval(value);
     } catch (e) {

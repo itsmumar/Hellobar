@@ -246,24 +246,23 @@ describe Site do
   end
 
   describe '#generate_script' do
-    it 'delegates :generate_static_assets to delay' do
-      expect(site).to receive(:delay).with(:generate_static_assets, anything)
-      site.generate_script
+    it 'enqueues GenerateStaticScriptJob' do
+      expect { site.generate_script }.to have_enqueued_job GenerateStaticScriptJob
     end
   end
 
   describe '#destroy' do
-    let(:mock_storage) { double('asset_storage') }
+    let(:mock_upload_to_s3) { double(:upload_to_s3) }
 
     before do
       allow(Settings).to receive(:store_site_scripts_locally).and_return false
-      allow(Hello::AssetStorage).to receive(:new).and_return(mock_storage)
-      allow(mock_storage).to receive(:create_or_update_file_with_contents).with(site.script_name, '')
+      allow(UploadToS3).to receive(:new).and_return(mock_upload_to_s3)
+      allow(mock_upload_to_s3).to receive(:call).with(no_args)
     end
 
     it 'blanks-out the site script when destroyed' do
       site.destroy
-      expect(mock_storage).to have_received(:create_or_update_file_with_contents).with(site.script_name, '')
+      expect(UploadToS3).to have_received(:new).with(site.script_name, '')
     end
 
     it 'soft-deletes record' do
@@ -445,6 +444,28 @@ describe Site do
     it 'updates settings' do
       expect { site.update_content_upgrade_styles! content_upgrade_styles }
         .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
+    end
+  end
+
+  describe 'after_commit callback' do
+    let(:site) { create :site }
+    let(:commit) { site.run_callbacks :commit }
+
+    context 'when skip_script_generation' do
+      before { site.skip_script_generation = true }
+
+      it 'does not generate script' do
+        expect { commit }.not_to have_enqueued_job GenerateStaticScriptJob
+      end
+    end
+
+    context 'when not skip_script_generation' do
+      before { site.skip_script_generation = false }
+      before { site.touch }
+
+      it 'generates script' do
+        expect { commit }.to have_enqueued_job GenerateStaticScriptJob
+      end
     end
   end
 end

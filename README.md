@@ -58,11 +58,12 @@ Here's the list of additional settings in `secrets.yml`, which might need to be 
 
 ### Front-end
 
-Install `node.js` together with `yarn`:
+Install `node.js`, `yarn`, and `ImageMagick`:
 
 ```
 brew install node
 brew install yarn
+brew install imagemagick
 ```
 
 Install `bower` and `ember-cli` globally:

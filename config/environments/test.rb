@@ -40,4 +40,6 @@ Rails.application.configure do
   # Configure Rails.cache store for test environment
   # With this cache store, all fetch and read operations will result in a miss.
   config.cache_store = :null_store
+
+  config.active_job.queue_adapter = :test
 end

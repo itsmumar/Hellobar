@@ -69,4 +69,46 @@ describe('Module elements.conversion', function () {
     expect(callbackSpy).not.toHaveBeenCalled();
   });
 
+  describe('ContentUpgrade conversion', function () {
+    function fakeSiteElement() {
+      return {
+        id: 12345,
+        type: 'ContentUpgrade'
+      };
+    }
+
+    beforeEach(function () {
+      hellobar.finalize();
+      dependencies = createDependencies();
+      module = hellobar('elements.conversion', {
+        dependencies: dependencies
+      });
+    });
+
+    it('performs converted call', function () {
+      var siteElement = fakeSiteElement();
+      var callbackSpy = jasmine.createSpy('callback');
+      module.converted(siteElement, callbackSpy);
+      expect(dependencies['visitor'].setConverted).toHaveBeenCalled();
+      expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalledWith('success', siteElement);
+      expect(dependencies['elements.data'].setData).toHaveBeenCalled();
+      expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.converted', siteElement);
+      expect(dependencies['tracking.internal'].send).toHaveBeenCalled();
+      expect(dependencies['tracking.external'].send).toHaveBeenCalled();
+      expect(callbackSpy).not.toHaveBeenCalled();
+    });
+
+    it('performs viewed call', function () {
+      var siteElement = fakeSiteElement();
+      var callbackSpy = jasmine.createSpy('callback');
+      module.viewed(siteElement, callbackSpy);
+      expect(dependencies['visitor'].setConverted).not.toHaveBeenCalled();
+      expect(dependencies['elements.visibility'].setVisibilityControlCookie).not.toHaveBeenCalled();
+      expect(dependencies['elements.data'].setData).toHaveBeenCalled();
+      expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.viewed', siteElement);
+      expect(dependencies['tracking.internal'].send).toHaveBeenCalled();
+      expect(dependencies['tracking.external'].send).toHaveBeenCalled();
+      expect(callbackSpy).not.toHaveBeenCalled();
+    });
+  });
 });

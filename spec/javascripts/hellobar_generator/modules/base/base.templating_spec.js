@@ -38,6 +38,13 @@ describe('Module base.templating', function () {
     expect(getModule({}).renderTemplate('Name={{siteElement.name}}', {name: 'John'})).toEqual('Name=John');
   });
 
+  it('understands context variable in template content', function () {
+    const context = {siteElement: {name: 'John'}, other: {foo: 1}};
+    const template = 'Name={{siteElement.name}}, Name={{context.siteElement.name}}, foo={{context.other.foo}}';
+
+    expect(getModule({}).renderTemplate(template, context)).toEqual('Name=John, Name=John, foo=1');
+  });
+
   it('leaves template unparsed if it contains an error', function () {
     expect(getModule({}).renderTemplate('{{var}} {{for}}')).toEqual('var for');
   });

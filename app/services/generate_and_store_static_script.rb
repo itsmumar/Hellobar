@@ -1,8 +1,4 @@
 class GenerateAndStoreStaticScript
-  def self.for(site_id:)
-    new(Site.preload_for_script.find(site_id)).call
-  end
-
   # @param [Site] site
   def initialize(site, options = {})
     @site = site
@@ -34,7 +30,7 @@ class GenerateAndStoreStaticScript
   end
 
   def store_remotely
-    Hello::AssetStorage.new.create_or_update_file_with_contents(site.script_name, script_content)
+    UploadToS3.new(site.script_name, script_content).call
     store_wordpress_bars
   end
 
@@ -43,7 +39,7 @@ class GenerateAndStoreStaticScript
 
     wordpress_elements_and_users.each do |site_element, user|
       name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"
-      Hello::AssetStorage.new.create_or_update_file_with_contents(name, script_content)
+      UploadToS3.new(name, script_content).call
     end
   end
 
