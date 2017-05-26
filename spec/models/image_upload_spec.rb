@@ -119,4 +119,30 @@ describe ImageUpload do
       end
     end
   end
+
+  described_class::STYLES.keys.each do |style|
+    describe "##{ style }_url" do
+      let(:image_upload) { build(:image_upload, :with_valid_image, version: version) }
+
+      subject { image_upload.send("#{ style }_url") }
+
+      context 'when version is 1' do
+        let(:version) { 1 }
+
+        it "returns the #{ style } URL" do
+          # v1 only supports thumb + original
+          expect(subject).to include(style == :thumb ? style.to_s : 'original')
+        end
+      end
+
+      context 'when version is 2' do
+        let(:version) { 2 }
+
+        it "returns the #{ style } URL" do
+          # v2 supports all styles
+          expect(subject).to include style.to_s
+        end
+      end
+    end
+  end
 end

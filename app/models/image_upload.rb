@@ -39,28 +39,10 @@ class ImageUpload < ActiveRecord::Base
     preuploaded_url || image.url(style)
   end
 
-  def modal_url
-    url(:modal)
-  end
-
-  def thumb_url
-    url(:thumb)
-  end
-
-  def small_url
-    url(:small)
-  end
-
-  def medium_url
-    url(:medium)
-  end
-
-  def large_url
-    url(:large)
-  end
-
-  def original_url
-    url(:original)
+  STYLES.keys.each do |style|
+    define_method "#{ style }_url" do
+      url(style)
+    end
   end
 
   private
