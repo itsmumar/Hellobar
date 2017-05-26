@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
 
@@ -29,7 +30,7 @@ export default Ember.Component.extend({
   }.property('goal', 'selectionInProgress', 'canUseCallGoal'),
 
   shouldShowSocial: function () {
-    return this.get('canUseSocialGoal') && (this.get('goal') === 'social' || this.get('selectionInProgress'));
+    return this.get('canUseSocialGoal') && (_.startsWith(this.get('goal'), 'social') || this.get('selectionInProgress'));
   }.property('goal', 'selectionInProgress', 'canUseCallGoal'),
 
   shouldShowTraffic: function () {
@@ -49,7 +50,7 @@ export default Ember.Component.extend({
       if (!this.get('selectionInProgress')) {
         return;
       }
-      this.set('goal', goal);
+      this.set('goal', goal === 'social' ? 'social/like_on_facebook' : goal);
       this.set('selectionInProgress', false);
     },
 

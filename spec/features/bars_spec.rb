@@ -196,7 +196,7 @@ feature 'Adding and editing bars', :js do
 
     click_button 'Continue'
 
-    expect(page).to have_content 'Themes'
+    expect(page).to have_content 'STYLE'
 
     click_link 'Next'
 
