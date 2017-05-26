@@ -2,8 +2,6 @@ json.ignore_nil!
 json.cache_if! !model.preview_is_active, model do
   json.extract! model,
     :preview_is_active,
-    :version,
-    :timestamp,
     :capabilities,
     :site_id,
     :site_url,
@@ -31,3 +29,7 @@ json.cache_if! !model.preview_is_active, model do
     end
   end
 end
+
+json.extract! model,
+  :version,
+  :timestamp

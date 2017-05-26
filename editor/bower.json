@@ -7,7 +7,7 @@
     "normalize-css": "^5.0.0",
     "jquery-minicolors": "^2.2.4",
     "nouislider": "^9.0.0",
-    "froala-wysiwyg-editor": "^2.4.0",
+    "froala-wysiwyg-editor": "^2.6.0",
     "phoneformat": "phoneformat-js#^1.0.3",
     "color": "^3.0.4",
     "Sortable": "sortablejs#^1.4.2",

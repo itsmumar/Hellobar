@@ -1,5 +1,4 @@
 require './lib/hello/internal_analytics'
-require './lib/hello/asset_storage'
 require './lib/hello/data_api'
 require './lib/hello/data_api_helper'
 require './lib/hello/email_drip'

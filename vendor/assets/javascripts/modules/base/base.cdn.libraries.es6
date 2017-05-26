@@ -7,7 +7,7 @@ hellobar.defineModule('base.cdn.libraries', ['base.cdn'], function (cdn) {
 
   function useFroala(doc) {
     useFontAwesome(doc);
-    const version = '2.4.0';
+    const version = '2.6.0';
     cdn.addCss(`//cdnjs.cloudflare.com/ajax/libs/froala-editor/${version}/css/froala_editor.min.css`, doc);
     cdn.addCss(`//cdnjs.cloudflare.com/ajax/libs/froala-editor/${version}/css/plugins/colors.min.css`, doc);
     cdn.addCss(`//cdnjs.cloudflare.com/ajax/libs/froala-editor/${version}/css/plugins/emoticons.css`, doc);
