@@ -18,8 +18,8 @@ export default Ember.Component.extend({
   }.observes('model.use_default_image').on('init'),
 
   setDefaultImage() {
-    const imageID = this.get('currentTheme.image_upload_id');
-    const imageUrl = this.get('currentTheme.image.default_url');
+    const imageID = this.get('theming.currentTheme.image_upload_id');
+    const imageUrl = this.get('theming.currentTheme.image.default_url');
     this.send('setImageProps', imageID, imageUrl, 'default');
   },
 
@@ -28,8 +28,8 @@ export default Ember.Component.extend({
     }
   ),
 
-  themeWithImage: Ember.computed('currentTheme.image_upload_id', function () {
-      return !!this.get('currentTheme.image_upload_id');
+  themeWithImage: Ember.computed('theming.currentTheme.image_upload_id', function () {
+      return !!this.get('theming.currentTheme.image_upload_id');
     }
   ),
 
