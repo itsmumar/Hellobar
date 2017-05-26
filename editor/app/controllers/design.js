@@ -216,13 +216,15 @@ export default Ember.Controller.extend({
       }).open();
     },
 
-    setImageProps({ imageID, imageUrl, imageLargeUrl, imageMediumUrl, imageType = null }) {
+    setImageProps({ imageID, imageUrl, imageSmallUrl, imageMediumUrl, imageLargeUrl, imageModalUrl, imageType = null }) {
       return this.setProperties({
         'model.active_image_id': imageID,
         'model.image_placement': this.getImagePlacement(),
         'model.image_url': imageUrl,
-        'model.image_large_url': imageLargeUrl || imageUrl,
+        'model.image_small_url': imageSmallUrl || imageUrl,
         'model.image_medium_url': imageMediumUrl || imageUrl,
+        'model.image_large_url': imageLargeUrl || imageUrl,
+        'model.image_modal_url': imageModalUrl || imageUrl,
         'model.image_type': imageType
       });
     },

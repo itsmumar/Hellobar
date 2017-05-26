@@ -70,8 +70,10 @@ export default Ember.Component.extend({
           return this.sendAction('setImageProps', {
             imageID: res.id,
             imageUrl: res.url,
-            imageLargeUrl: res.large_url,
+            imageSmallUrl: res.small_url,
             imageMediumUrl: res.medium_url,
+            imageLargeUrl: res.large_url,
+            imageModalUrl: res.modal_url,
             imageType: 'custom'
           });
         },

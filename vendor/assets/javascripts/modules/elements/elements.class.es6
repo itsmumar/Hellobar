@@ -59,7 +59,7 @@ hellobar.defineModule('elements.class',
         options = options || {};
 
         function imageSrc() {
-          const imageStyle = model.image_style || 'medium';
+          const imageStyle = model.image_style || 'modal';
           const imageUrl = model[`image_${imageStyle}_url`] || model.image_url;
 
           return imageUrl || options.defaultImgSrc;
