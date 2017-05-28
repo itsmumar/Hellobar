@@ -5,7 +5,7 @@ module ServiceProviders
 
       def initialize(config_source)
         @token = config_source.credentials['token']
-        super ::ConstantContact::Api.new(config.constant_contact.app_key)
+        super ::ConstantContact::Api.new(config.app_key)
       end
 
       def lists

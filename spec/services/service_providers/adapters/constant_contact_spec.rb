@@ -12,7 +12,7 @@ describe ServiceProviders::Adapters::ConstantContact, :no_vcr do
 
   before do
     ServiceProviders::Provider.configure do |config|
-      config.constant_contact.app_key = 'app_key'
+      config.constantcontact.app_key = 'app_key'
     end
   end
 

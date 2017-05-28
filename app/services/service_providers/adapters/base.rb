@@ -2,7 +2,11 @@ module ServiceProviders
   module Adapters
     class Base
       attr_reader :client
-      cattr_accessor :key
+      class_attribute :key
+
+      def self.config
+        ServiceProviders::Provider.config.send(key)
+      end
 
       def self.register(name)
         Provider.register name, self
@@ -26,7 +30,7 @@ module ServiceProviders
       end
 
       def config
-        ServiceProviders::Provider.config
+        self.class.config
       end
     end
   end
