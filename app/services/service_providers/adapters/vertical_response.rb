@@ -4,7 +4,7 @@ module ServiceProviders
       register :vertical_response
 
       def initialize(config_source)
-        super VerticalResponse::API::OAuth.new config_source.credentials['token']
+        super ::VerticalResponse::API::OAuth.new config_source.credentials['token']
       end
 
       def lists
@@ -23,21 +23,21 @@ module ServiceProviders
         end
 
         client.find_list(list_id).create_contact(options)
-      rescue VerticalResponse::API::Error => e
+      rescue ::VerticalResponse::API::Error => e
         raise e unless e.message == 'Contact already exists.'
       end
 
       def batch_subscribe(list_id, subscribers)
         contacts = subscribers.map do |subscriber|
-          first_name, last_name = subscriber[:name].split(' ', 2)
-          params = { email: params[:email] }
+          first_name, last_name = subscriber.fetch(:name, '').split(' ', 2)
+          params = { email: subscriber[:email] }
           params[:first_name] = first_name if first_name.present?
           params[:last_name] = last_name if last_name.present?
           params
         end
 
         client.find_list(list_id).create_contacts(contacts)
-      rescue VerticalResponse::API::Error => e
+      rescue ::VerticalResponse::API::Error => e
         raise e unless e.message == 'Contact already exists.'
       end
     end
