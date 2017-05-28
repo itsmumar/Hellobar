@@ -9,13 +9,7 @@ module ServiceProviderHelper
     def allow_request(method, request, body: {})
       before do
         url = url_for_request(request)
-
-        response =
-          if method == :get
-            { body: response_body_for(request), headers: { 'Content-Type': 'application/json' } }
-          else
-            response_for(method, request)
-          end
+        response = response_for(method, request)
 
         if block_given?
           yield stub_request(method, url).with(body: body).to_return(response)
@@ -36,15 +30,30 @@ module ServiceProviderHelper
     adapter.class.name.demodulize.underscore
   end
 
-  def response_body_for(request)
-    File.read Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.json")
+  def response_fixture_for(method, request)
+    txt = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.#{ method }.txt")
+    json = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.json")
+    xml = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.xml")
+    [json, xml, txt].find(&:exist?)
   end
 
   def response_for(method, request)
-    File.new Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.#{ method }.txt")
+    fixture = response_fixture_for(method, request)
+    case fixture.extname
+    when '.txt'
+      fixture.read
+    when '.json'
+      { body: fixture.read, headers: { 'Content-Type': 'application/json' } }
+    when '.xml'
+      { body: fixture.read, headers: { 'Content-Type': 'text/xml' } }
+    end
   end
 
   def url_for_request(request)
     Addressable::Template.new defined_urls.fetch(request)
+  end
+
+  def content_type_for(response)
+    response
   end
 end
