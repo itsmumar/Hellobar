@@ -1,5 +1,3 @@
-require 'aweber'
-
 module ServiceProviders
   module Adapters
     class AWeber < Base

@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::ConvertKit do
+describe ServiceProviders::Adapters::ConvertKit, :no_vcr do
   define_urls(
     lists: 'https://api.convertkit.com/forms?api_secret=api_key',
     subscribe: 'https://api.convertkit.com/forms/4567456/subscribe?api_secret=api_key',

@@ -34,7 +34,8 @@ module ServiceProviderHelper
     txt = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.#{ method }.txt")
     json = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.json")
     xml = Rails.root.join("spec/fixtures/service_providers/#{ adapter_name }/#{ request }.xml")
-    [json, xml, txt].find(&:exist?)
+
+    [txt, json, xml].find(&:exist?) || raise("place a file to spec/fixtures/service_providers/#{ adapter_name }/#{ request }.{json,xml,txt}, method: #{ method }")
   end
 
   def response_for(method, request)

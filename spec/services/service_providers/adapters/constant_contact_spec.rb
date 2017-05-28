@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::ConstantContact do
+describe ServiceProviders::Adapters::ConstantContact, :no_vcr do
   define_urls(
     lists: 'https://api.constantcontact.com/v2/lists?api_key=app_key',
     list: 'https://api.constantcontact.com/v2/lists/4567456?api_key=app_key',
