@@ -18,7 +18,7 @@ module ServiceProviders
       end
 
       def lists
-        response = process_response client.get "lists.json", no_counts: true
+        response = process_response client.get 'lists.json', no_counts: true
         response.map { |list| list.slice('id', 'name') }
       end
 

@@ -20,7 +20,7 @@ module ServiceProviders
 
       def batch_subscribe(list_id, subscribers)
         client.add_users(
-          subscribers.map { |subscriber| subscribers.merge(add_list: list_id) }
+          subscribers.map { |subscriber| subscriber.merge(add_list: list_id) }
         )
       end
     end

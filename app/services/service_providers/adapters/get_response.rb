@@ -45,8 +45,8 @@ module ServiceProviders
         request_body.update(dayOfCycle: cycle_day) if cycle_day.present?
 
         response = process_response client.post '/contacts', request_body
-
-        assign_tags(response)
+        assign_tags(tags)
+        response
       rescue Faraday::TimeoutError
         log 'sync timed out'
       rescue => error
@@ -77,10 +77,9 @@ module ServiceProviders
       # We add tags only to contacts which are also stored at HelloBar,
       # so that unknown origin contacts at GR won't get tagged by us
       # https://crossover.atlassian.net/browse/XOHB-1397
-      def assign_tags(response)
-        return #unless contact_list.present? || contact_list.tags.present?
+      def assign_tags(tags)
+        return if tags.blank?
 
-        tags = contact_list.tags.map { |tag| { tagId: tag } }
         contacts = fetch_latest_contacts(20)
         subscribers = contact_list.subscribers(10)
 
