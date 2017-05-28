@@ -21,6 +21,11 @@ json.cache! site_element do
     :custom_js,
 
     :image_url,
+    :image_small_url,
+    :image_medium_url,
+    :image_large_url,
+    :image_modal_url,
+    :image_style,
     :open_in_new_window,
     :phone_number,
     :primary_color,
