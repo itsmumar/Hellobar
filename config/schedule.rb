@@ -35,9 +35,12 @@ every 1.hour, roles: [:cron] do
   rake 'cloudwatch_metrics:create_alarms'
 end
 
-every 6.hours, roles: [:cron] do
-  rake 'backend:adjust_dynamo_db_capacity[all]'
-end
+# Disabling temporarily for now (due to this code being mostly bollocks and
+# causing unnecessary costs for us) until we optimize it properly and most
+# likely just remove this together with the rake task
+# every 6.hours, roles: [:cron] do
+#   rake 'backend:adjust_dynamo_db_capacity[all]'
+# end
 
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
