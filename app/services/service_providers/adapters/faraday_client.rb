@@ -11,6 +11,15 @@ module ServiceProviders
         end
         super client
       end
+
+      private
+
+      def process_response(response)
+        response_hash = JSON.parse response.body
+        return response_hash if response.success?
+
+        raise RequestError, config.error_path.present? ? response_hash[config.error_path] : response_hash
+      end
     end
   end
 end

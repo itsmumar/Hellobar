@@ -3,6 +3,8 @@ module ServiceProviders
     class ConvertKit < FaradayClient
       register :convert_kit
 
+      config.error_path = 'error'
+
       def initialize(config_source)
         super 'https://api.convertkit.com/v3', params: { api_secret: config_source.api_key }
       end
@@ -30,15 +32,6 @@ module ServiceProviders
         end
 
         process_response client.post "/forms/#{ form_id }/subscribe", body: body
-      end
-
-      private
-
-      def process_response(response)
-        response_hash = JSON.parse response.body
-        return response_hash if response.success?
-
-        raise RequestError, response_hash['error']
       end
     end
   end

@@ -34,15 +34,6 @@ module ServiceProviders
 
         process_response response
       end
-
-      private
-
-      def process_response(response)
-        response_hash = JSON.parse response.body
-        return response_hash if response.success?
-
-        raise RequestError, response_hash
-      end
     end
   end
 end
