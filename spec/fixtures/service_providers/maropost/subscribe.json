@@ -1,0 +1,56 @@
+{
+  "id": 47841638,
+  "account_id": 4,
+  "email": "bhatti123@gmail.com",
+  "first_name": "GauravjeetSingh",
+  "last_name": "bhatti",
+  "phone": null,
+  "fax": null,
+  "created_at": "2017-05-28T14:41:51.009-04:00",
+  "updated_at": "2017-05-28T14:41:51.009-04:00",
+  "custom_field_1": null,
+  "custom_field_2": null,
+  "custom_field_3": null,
+  "subscribed": true,
+  "subscribed_at": "2017-05-28T14:41:51.009-04:00",
+  "status": "Subscribed",
+  "orders": [
+    {
+      "order_id": 145633,
+      "order_date": "2017-05-28T14:41:51.009-04:00",
+      "grand_total": 300,
+      "original_order_id": 123123,
+      "products_purchased": 23
+    }
+  ],
+  "list_subscriptions": [
+    {
+      "list_id": 17,
+      "name": "test list 1",
+      "status": "Subscribed"
+    },
+    {
+      "list_id": 18,
+      "name": "test list 2",
+      "status": "Subscribed"
+    }
+  ],
+  "journeys": [
+    {
+      "id": 65,
+      "name": "Test Workflow",
+      "journey_contact_status": "Finished",
+      "journey_status": "Enabled",
+      "created_at": "2017-05-28T14:41:51.009-04:00",
+      "updated_at": "2017-05-28T14:41:51.009-04:00"
+    },
+    {
+      "id": 65,
+      "name": "Test Workflow",
+      "journey_contact_status": "Active",
+      "journey_status": "Enabled",
+      "created_at": "2017-05-28T14:41:51.009-04:00",
+      "updated_at": "2017-05-28T14:41:51.009-04:00"
+    }
+  ]
+}

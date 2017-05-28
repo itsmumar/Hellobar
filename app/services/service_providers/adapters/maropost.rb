@@ -7,19 +7,18 @@ module ServiceProviders
 
       def initialize(config_source)
         @account_id = config_source.credentials['username']
+        url = "#{ config.maropost.url }/accounts/#{ @account_id }"
 
-        client = Faraday.new(url: config.maropost.url) do |faraday|
+        client = Faraday.new(url: url, params: { auth_token: config_source.api_key }) do |faraday|
           faraday.request :json
-          faraday.response :logger unless Rails.env.test?
           faraday.adapter Faraday.default_adapter
-          faraday.params = { auth_token: config_source.api_key }
         end
 
         super client
       end
 
       def lists
-        response = process_response client.get "/accounts/#{ @account_id }/lists.json", no_counts: true
+        response = process_response client.get "lists.json", no_counts: true
         response.map { |list| list.slice('id', 'name') }
       end
 
@@ -36,11 +35,8 @@ module ServiceProviders
         end
 
         response = client.post do |request|
-          request.url "/accounts/#{ @account_id }/lists/#{ list_id }/contacts.json"
-          request.body = {
-            auth_token: @api_key,
-            contact: contact
-          }
+          request.url "lists/#{ list_id }/contacts.json"
+          request.body = { contact: contact }
         end
 
         process_response response
