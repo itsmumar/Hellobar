@@ -6,8 +6,6 @@ require 'addressable/uri'
 Addressable::URI::CharacterClasses::UNRESERVED << '\\=\\/'
 Addressable::Template.send :remove_const, :UNRESERVED
 Addressable::Template::UNRESERVED =
-  "(?:[#{
-  Addressable::URI::CharacterClasses::UNRESERVED
-  }]|%[a-fA-F0-9][a-fA-F0-9])"
+  "(?:[#{ Addressable::URI::CharacterClasses::UNRESERVED }]|%[a-fA-F0-9][a-fA-F0-9])".freeze
 
 require 'webmock/rspec'
