@@ -26,7 +26,7 @@ describe ImageUpload do
         before { image_upload.version = 3 }
 
         it 'does not accept version 3' do
-          expect(image_upload).to_not be_valid
+          expect(image_upload).to be_invalid
         end
 
         it 'sets an appropriate error message' do

@@ -1,5 +1,3 @@
-require 'set'
-
 class ImageUpload < ActiveRecord::Base
   DEFAULT_STYLE = :original
   DEFAULT_VERSION = 1
@@ -34,9 +32,7 @@ class ImageUpload < ActiveRecord::Base
   end
 
   def url(style = :modal)
-    style = safe_style(style)
-
-    preuploaded_url || image.url(style)
+    preuploaded_url || image.url(safe_style(style))
   end
 
   STYLES.keys.each do |style|
@@ -48,9 +44,7 @@ class ImageUpload < ActiveRecord::Base
   private
 
   def safe_style(style)
-    style = DEFAULT_STYLE unless styles.include?(style)
-
-    style
+    styles.include?(style) ? style : DEFAULT_STYLE
   end
 
   def styles

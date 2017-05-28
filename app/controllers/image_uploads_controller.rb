@@ -6,9 +6,9 @@ class ImageUploadsController < ApplicationController
     image_upload = ImageUpload.new(image: params[:file], site: @site)
 
     if image_upload.save
-      render image_upload, status: 200
+      render json: image_upload, status: 200
     else
-      render json: { error: image_upload.errors.full_messages.join('; ') }, status: 500
+      render json: { error: image_upload.errors.full_messages.join('; ') }, status: 500 # FIXME: should be 422
     end
   end
 end
