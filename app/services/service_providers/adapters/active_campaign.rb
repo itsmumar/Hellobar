@@ -2,7 +2,7 @@ HTTPI.log = false
 
 module ServiceProviders
   module Adapters
-    class ActiveCampaign < Base
+    class ActiveCampaign < Api
       register :active_campaign
 
       def initialize(config_source)
@@ -23,12 +23,6 @@ module ServiceProviders
         base = { "p[#{ list_id }]" => list_id }
         response = client.contact_sync(base.merge(contact))
         raise response['result_message'] unless response['result_code'] == 1
-      end
-
-      def batch_subscribe(list_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe(list_id, subscriber)
-        end
       end
     end
   end

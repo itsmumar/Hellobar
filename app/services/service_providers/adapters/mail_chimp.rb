@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class MailChimp < Base
+    class MailChimp < Api
       register :mailchimp
 
       def initialize(identity)
@@ -18,7 +18,7 @@ module ServiceProviders
         client.lists(list_id).members.create body: prepare_params(params)
       end
 
-      def batch_subscribe(list_id, subscribers, double_optin = true)
+      def batch_subscribe(list_id, subscribers, double_optin: true)
         operations = prepare_batch_request(list_id, subscribers, double_optin)
         client.batches.create(body: { operations: operations })
       end

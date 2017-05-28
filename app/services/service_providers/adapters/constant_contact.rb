@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class ConstantContact < Base
+    class ConstantContact < Api
       register :constantcontact
 
       def initialize(config_source)

@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class VerticalResponse < Base
+    class VerticalResponse < Api
       register :vertical_response
 
       def initialize(config_source)

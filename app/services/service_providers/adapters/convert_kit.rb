@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class ConvertKit < Base
+    class ConvertKit < Api
       class RequestError < StandardError; end
 
       register :convert_kit
@@ -39,12 +39,6 @@ module ServiceProviders
         end
 
         process_response client.post "/forms/#{ form_id }/subscribe", body: body
-      end
-
-      def batch_subscribe(form_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe(form_id, subscriber)
-        end
       end
 
       private

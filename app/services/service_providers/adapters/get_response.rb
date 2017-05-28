@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class GetResponse < Base
+    class GetResponse < Api
       class RequestError < StandardError; end
 
       register :get_response
@@ -51,12 +51,6 @@ module ServiceProviders
         log 'sync timed out'
       rescue => error
         log "sync raised #{ error }"
-      end
-
-      def batch_subscribe(list_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe(list_id, subscriber)
-        end
       end
 
       private

@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class AWeber < Base
+    class AWeber < Api
       register :aweber
 
       def initialize(config_source)
@@ -15,12 +15,6 @@ module ServiceProviders
 
       def subscribe(list_id, params)
         client.account.lists[list_id.to_i].subscribers.create(params.stringify_keys)
-      end
-
-      def batch_subscribe(list_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe list_id, subscriber
-        end
       end
     end
   end

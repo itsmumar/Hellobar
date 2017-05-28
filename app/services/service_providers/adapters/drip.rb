@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class Drip < Base
+    class Drip < Api
       register :drip
 
       def initialize(config_source)
@@ -20,7 +20,7 @@ module ServiceProviders
         client.tags.body['tags'].map { |tag| { 'id' => tag, 'name' => tag } }
       end
 
-      def subscribe(list_id, params, double_optin = true, tags: [])
+      def subscribe(list_id, params, tags: [])
         body = { new_email: params[:email], tags: tags }
 
         if params[:name].present?
@@ -30,18 +30,12 @@ module ServiceProviders
 
         retry_on_timeout do
           if list_id
-            body[:double_optin] = double_optin
+            body[:double_optin] = params[:double_optin]
             client.subscribe(params[:email], list_id, body)
           else
             # Add subscriber to global account list
             client.create_or_update_subscriber(email, body)
           end
-        end
-      end
-
-      def batch_subscribe(list_id, subscribers, double_optin = true)
-        subscribers.each do |subscriber|
-          subscribe(list_id, subscriber, double_optin)
         end
       end
 

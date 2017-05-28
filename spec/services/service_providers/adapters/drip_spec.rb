@@ -32,7 +32,7 @@ describe ServiceProviders::Adapters::Drip, :no_vcr do
     end
 
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      adapter.subscribe(list_id, email: 'example@email.com', double_optin: true)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -41,13 +41,13 @@ describe ServiceProviders::Adapters::Drip, :no_vcr do
     allow_request :post, :batch_subscribe, body: { import_data: [{ email_addresses: ['example1@email.com'] }, { email_addresses: ['example2@email.com'] }], lists: [4567456], column_names: ['E-Mail', 'First Name', 'Last Name'] } do |stub|
       let(:batch_subscribe_request) { stub }
     end
-    let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
+    let(:subscribers) { [{ email: 'example1@email.com', double_optin: false }, { email: 'example2@email.com', double_optin: false }] }
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber, false)
+        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
       end
-      adapter.batch_subscribe 'list_id', subscribers, false
+      adapter.batch_subscribe 'list_id', subscribers, double_optin: false
     end
   end
 end

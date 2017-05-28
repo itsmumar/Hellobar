@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class Infusionsoft < Base
+    class Infusionsoft < Api
       register :infusionsoft
 
       def initialize(config_source)
@@ -30,12 +30,6 @@ module ServiceProviders
 
         tags.each do |tag_id|
           client.contact_add_to_group(infusionsoft_user_id, tag_id)
-        end
-      end
-
-      def batch_subscribe(list_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe(list_id, subscriber)
         end
       end
     end

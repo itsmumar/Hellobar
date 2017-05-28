@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class Maropost < Base
+    class Maropost < Api
       class RequestError < StandardError; end
 
       register :maropost
@@ -40,12 +40,6 @@ module ServiceProviders
         end
 
         process_response response
-      end
-
-      def batch_subscribe(list_id, subscribers)
-        subscribers.each do |subscriber|
-          subscribe(list_id, subscriber)
-        end
       end
 
       private
