@@ -17,7 +17,7 @@ describe ServiceProviders::Adapters::Maropost, :no_vcr do
   describe '#initialize' do
     it 'initializes Faraday::Connection' do
       params = { auth_token: 'api_key' }
-      expect(Faraday).to receive(:new).with(url: 'http://maropost.url/accounts/12345', params: params).and_call_original
+      expect(Faraday).to receive(:new).with(url: 'http://maropost.url/accounts/12345', params: params, headers: {}).and_call_original
       expect(adapter.client).to be_a Faraday::Connection
     end
   end

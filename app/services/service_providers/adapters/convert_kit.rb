@@ -1,19 +1,10 @@
 module ServiceProviders
   module Adapters
-    class ConvertKit < Api
-      class RequestError < StandardError; end
-
+    class ConvertKit < FaradayClient
       register :convert_kit
 
       def initialize(config_source)
-        client = Faraday.new(url: 'https://api.convertkit.com/v3') do |faraday|
-          faraday.request :url_encoded
-          faraday.response :logger unless Rails.env.test?
-          faraday.adapter Faraday.default_adapter
-          faraday.params = { api_secret: config_source.api_key }
-        end
-
-        super client
+        super 'https://api.convertkit.com/v3', params: { api_secret: config_source.api_key }
       end
 
       def lists

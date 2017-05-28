@@ -13,7 +13,7 @@ describe ServiceProviders::Adapters::GetResponse, :no_vcr do
 
     it 'initializes Faraday::Connection' do
       headers = { 'X-Auth-Token' => 'api-key api_key' }
-      expect(Faraday).to receive(:new).with(url: 'https://api.getresponse.com/v3', headers: headers).and_call_original
+      expect(Faraday).to receive(:new).with(url: 'https://api.getresponse.com/v3', headers: headers, params: {}).and_call_original
       expect(adapter.client).to be_a Faraday::Connection
     end
   end

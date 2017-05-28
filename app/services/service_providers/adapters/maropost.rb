@@ -1,20 +1,13 @@
 module ServiceProviders
   module Adapters
-    class Maropost < Api
-      class RequestError < StandardError; end
-
+    class Maropost < FaradayClient
       register :maropost
 
       def initialize(config_source)
-        @account_id = config_source.credentials['username']
-        url = "#{ config.maropost.url }/accounts/#{ @account_id }"
+        account_id = config_source.credentials['username']
+        url = "#{ config.maropost.url }/accounts/#{ account_id }"
 
-        client = Faraday.new(url: url, params: { auth_token: config_source.api_key }) do |faraday|
-          faraday.request :json
-          faraday.adapter Faraday.default_adapter
-        end
-
-        super client
+        super url, request: :json, params: { auth_token: config_source.api_key }
       end
 
       def lists

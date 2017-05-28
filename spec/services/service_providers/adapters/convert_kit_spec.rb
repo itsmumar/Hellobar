@@ -13,7 +13,7 @@ describe ServiceProviders::Adapters::ConvertKit, :no_vcr do
     let(:auth) { { access_token: 'token' } }
 
     it 'initializes ConstantContact::Api' do
-      expect(Faraday).to receive(:new).with(url: 'https://api.convertkit.com/v3').and_call_original
+      expect(Faraday).to receive(:new).with(url: 'https://api.convertkit.com/v3', params: { api_secret: 'api_key' }, headers: {}).and_call_original
       expect(adapter.client).to be_a Faraday::Connection
     end
   end

@@ -1,24 +1,10 @@
 module ServiceProviders
   module Adapters
-    class GetResponse < Api
-      class RequestError < StandardError; end
-
+    class GetResponse < FaradayClient
       register :get_response
 
       def initialize(config_source)
-        client_settings = {
-          url: 'https://api.getresponse.com/v3',
-          headers: {
-            'X-Auth-Token' => "api-key #{ config_source.api_key }"
-          }
-        }
-
-        client = Faraday.new(client_settings) do |faraday|
-          faraday.request :url_encoded
-          faraday.response :logger unless Rails.env.test?
-          faraday.adapter Faraday.default_adapter
-        end
-        super client
+        super 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ config_source.api_key }" }
       end
 
       def lists
