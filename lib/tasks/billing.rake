@@ -97,6 +97,7 @@ namespace :billing do
     rescue => e
       billing_report(msg.to_s + 'ERROR')
       billing_report "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| "  #{ l }" }.join("\n  ") }"
+      Raven.capture_exception(e)
       exit
     ensure
       emails =

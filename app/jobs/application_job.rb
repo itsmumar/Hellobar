@@ -9,4 +9,14 @@ class ApplicationJob < ActiveJob::Base
     Raven.extra_context arguments: job.arguments, job_id: job.job_id, queue_name: job.queue_name
     Raven.tags_context job: job.class.to_s
   end
+
+  after_perfrom do
+    Raven::Context.clear!
+  end
+
+  def self.perform_later(*args)
+    super
+  rescue => e
+    Raven.capture_exception(e, extra: { arguments: args })
+  end
 end
