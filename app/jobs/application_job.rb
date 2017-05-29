@@ -5,12 +5,10 @@ class ApplicationJob < ActiveJob::Base
     Raven.capture_exception exception
   end
 
-  before_perform do |job|
+  around_perform do |job, block|
     Raven.extra_context arguments: job.arguments, job_id: job.job_id, queue_name: job.queue_name
     Raven.tags_context job: job.class.to_s
-  end
-
-  after_perfrom do
+    block.call
     Raven::Context.clear!
   end
 
