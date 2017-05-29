@@ -36,7 +36,7 @@ class SubscribeContactWorker
 
     SubscribeContact.new(contact).call
   rescue => e
-    Raven.capture_exception(e)
+    Raven.capture_exception(e, extra: { arguments: [sqs_msg, contact], queue_name: sqs_msg.queue_name })
     sqs_msg.delete
   end
 end
