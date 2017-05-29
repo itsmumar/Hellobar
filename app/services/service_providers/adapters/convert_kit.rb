@@ -26,7 +26,7 @@ module ServiceProviders
         }
 
         if params[:name].present?
-          first_name, last_name = name.split(' ', 2)
+          first_name, last_name = params[:name].split(' ', 2)
           body[:first_name] = first_name
           body[:fields] = { last_name: last_name } if last_name.present?
         end

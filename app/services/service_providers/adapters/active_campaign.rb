@@ -6,11 +6,10 @@ module ServiceProviders
       register :active_campaign
 
       def initialize(config_source)
-        config = {
+        super ::ActiveCampaign::Client.new(
           api_endpoint: 'https://' + config_source.extra['app_url'] + '/admin/api.php',
           api_key: config_source.api_key
-        }
-        super ::ActiveCampaign::Client.new(config)
+        )
       end
 
       def lists

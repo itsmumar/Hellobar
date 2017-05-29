@@ -6,11 +6,10 @@ module ServiceProviders
       register :campaign_monitor
 
       def initialize(config_source)
-        auth = {
+        super CreateSend::CreateSend.new(
           access_token: config_source.credentials['token'],
           refresh_token: config_source.credentials['refresh_token']
-        }
-        super CreateSend::CreateSend.new(auth)
+        )
       end
 
       def lists

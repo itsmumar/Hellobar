@@ -1,6 +1,8 @@
 module ServiceProviders
   module Adapters
     class ConstantContact < Api
+      EMAIL_REGEXP = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/.freeze
+
       register :constantcontact
 
       def initialize(config_source)
@@ -23,19 +25,22 @@ module ServiceProviders
 
         client.add_create_contacts_activity(@token, activity)
       rescue RestClient::BadRequest => e
-        raise e unless e.inspect =~ /not a valid email/
+        retry_if_invalid_email(e, list_id, subscribers)
+      end
+
+      private
+
+      def retry_if_invalid_email(exception, list_id, subscribers)
+        raise exception unless exception.to_s =~ /not a valid email/
 
         # if any of the emails in a batch is invalid, the request will be rejected, so we try to naively select only valid addresses and try again
-        pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
-        valid_subscribers = subscribers.select { |s| s[:email] =~ pattern }
+        valid_subscribers = subscribers.select { |s| s[:email] =~ EMAIL_REGEXP }
 
         return true unless valid_subscribers.count < subscribers.count
 
         # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
         batch_subscribe(list_id, valid_subscribers)
       end
-
-      private
 
       def make_import(subscribers)
         subscribers.map do |subscriber|
@@ -64,7 +69,7 @@ module ServiceProviders
       rescue RestClient::Conflict
         contact = client.get_contact_by_email(@token, email).results[0]
         contact.add_list(list)
-        update_contact(contact, params[:double_optin])
+        update_contact(contact, double_optin)
       rescue RestClient::BadRequest => e
         # if the email is not valid, CC will raise an exception and we end up here
         # when this happens, just return true and continue
