@@ -40,7 +40,7 @@ export default Ember.Component.extend({
   actions: {
     removeDropzoneImages() {
       this.set('existingFileName', null);
-      this.sendAction('setImageProps', null, '');
+      this.sendAction('setImageProps', { imageID: null, imageUrl: '' });
       let dropzone = this.get('dropzoneInsance');
       if (dropzone) {
         return dropzone.removeAllFiles();
@@ -67,7 +67,15 @@ export default Ember.Component.extend({
         },
         success: (file, res) => {
           this.set('existingFileName', file.name);
-          return this.sendAction('setImageProps', res.id, res.url, 'custom');
+          return this.sendAction('setImageProps', {
+            imageID: res.id,
+            imageUrl: res.url,
+            imageSmallUrl: res.small_url,
+            imageMediumUrl: res.medium_url,
+            imageLargeUrl: res.large_url,
+            imageModalUrl: res.modal_url,
+            imageType: 'custom'
+          });
         },
         sending: (file, xhr, formData) => {
           this.set('existingFileName', 'uploading');

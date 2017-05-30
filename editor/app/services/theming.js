@@ -80,7 +80,7 @@ export default Ember.Service.extend({
   currentTheme: function () {
     const allThemes = this.get('availableThemes');
     const currentThemeId = this.get('model.theme_id');
-    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('autodetectedTheme');
+    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('theming.defaultGenericTheme');
   }.property('availableThemes', 'model.theme_id'),
 
 
@@ -102,6 +102,9 @@ export default Ember.Service.extend({
         'model.image_placement': this.getImagePlacement()
       });
     });
-  }).observes('model.theme_id')
+  }).observes('model.theme_id'),
 
+  defaultGenericTheme() {
+    return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
+  }
 });

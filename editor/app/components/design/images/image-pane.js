@@ -20,7 +20,7 @@ export default Ember.Component.extend({
   setDefaultImage() {
     const imageID = this.get('theming.currentTheme.image_upload_id');
     const imageUrl = this.get('theming.currentTheme.image.default_url');
-    this.send('setImageProps', imageID, imageUrl, 'default');
+    this.send('setImageProps', { imageID, imageUrl, imageType: 'default' });
   },
 
   allowImages: Ember.computed('model.type', function () {
@@ -48,11 +48,15 @@ export default Ember.Component.extend({
       this.set('model.image_placement', imagePlacement.value);
     },
 
-    setImageProps(imageID, imageUrl, imageType = null) {
+    setImageProps({ imageID, imageUrl, imageSmallUrl, imageMediumUrl, imageLargeUrl, imageModalUrl, imageType = null }) {
       return this.setProperties({
         'model.active_image_id': imageID,
-        'model.image_placement': this.get('theming').getImagePlacement(),
+        'model.image_placement': this.getImagePlacement(),
         'model.image_url': imageUrl,
+        'model.image_small_url': imageSmallUrl || imageUrl,
+        'model.image_medium_url': imageMediumUrl || imageUrl,
+        'model.image_large_url': imageLargeUrl || imageUrl,
+        'model.image_modal_url': imageModalUrl || imageUrl,
         'model.image_type': imageType
       });
     }

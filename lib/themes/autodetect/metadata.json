@@ -2,7 +2,15 @@
   "name": "Autodetect",
   "type": "generic",
   "id": "autodetect",
+  "fonts": [
+    "open_sans",
+    "source_pro",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
   "element_types": ["Bar", "Modal", "Slider", "Takeover", "Alert"],
+  "defaults": {},
   "image": {
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "left",

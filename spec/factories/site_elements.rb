@@ -51,7 +51,7 @@ FactoryGirl.define do
       placement nil
     end
 
-    factory :takeover_element do
+    factory :takeover_element, class: Takeover do
       type 'Takeover'
       placement nil
     end
@@ -124,6 +124,10 @@ FactoryGirl.define do
           fields_to_collect: fields_to_collect
         }
       end
+    end
+
+    trait :with_active_image do
+      active_image { create(:image_upload, :with_valid_image, site: site) }
     end
 
     after :create do |element, evaluator|

@@ -51,10 +51,14 @@ export default Ember.Service.extend({
     const black = '000000';
 
     if (this.get('coloring').brightness(primaryColor) < 0.5) {
+      const bright = one.color(primaryColor).hex().replace('#', '');
+
       modelHolder.setProperties({
         'model.text_color': white,
         'model.button_color': white,
-        'model.link_color': one.color(primaryColor).hex().replace('#', '')
+        'model.link_color': bright,
+        'model.trigger_color': bright,
+        'model.trigger_icon_color': white
       });
     } else {
       colorPalette.sort((a, b) => this.get('coloring').brightness(a) - this.get('coloring').brightness(b));
@@ -64,7 +68,9 @@ export default Ember.Service.extend({
       modelHolder.setProperties({
         'model.text_color': darkest,
         'model.button_color': darkest,
-        'model.link_color': white
+        'model.link_color': white,
+        'model.trigger_color': darkest,
+        'model.trigger_icon_color': white
       });
     }
   },

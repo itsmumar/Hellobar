@@ -421,4 +421,116 @@ describe SiteElement do
       end
     end
   end
+
+  describe '#image_modal_url' do
+    let(:element) { create(:site_element, :traffic, :with_active_image) }
+
+    subject { element.image_modal_url }
+
+    context 'when the element has no image' do
+      let(:element) { create(:site_element, :traffic) }
+
+      it { expect(subject).to be_nil }
+    end
+
+    context 'when image version is 1' do
+      before { element.active_image.version = 1 }
+
+      it 'returns the "original" style URL' do
+        expect(subject).to include 'original'
+      end
+    end
+
+    context 'when image version is 2' do
+      before { element.active_image.version = 2 }
+
+      it 'returns the "modal" style URL' do
+        expect(subject).to include 'modal'
+      end
+    end
+  end
+
+  describe '#image_small_url' do
+    let(:element) { create(:site_element, :traffic, :with_active_image) }
+
+    subject { element.image_small_url }
+
+    context 'when the element has no image' do
+      let(:element) { create(:site_element, :traffic) }
+
+      it { expect(subject).to be_nil }
+    end
+
+    context 'when image version is 1' do
+      before { element.active_image.version = 1 }
+
+      it 'returns the "original" style URL' do
+        expect(subject).to include 'original'
+      end
+    end
+
+    context 'when image version is 2' do
+      before { element.active_image.version = 2 }
+
+      it 'returns the "small" style URL' do
+        expect(subject).to include 'small'
+      end
+    end
+  end
+
+  describe '#image_medium_url' do
+    let(:element) { create(:site_element, :traffic, :with_active_image) }
+
+    subject { element.image_medium_url }
+
+    context 'when the element has no image' do
+      let(:element) { create(:site_element, :traffic) }
+
+      it { expect(subject).to be_nil }
+    end
+
+    context 'when image version is 1' do
+      before { element.active_image.version = 1 }
+
+      it 'returns the "original" style URL' do
+        expect(subject).to include 'original'
+      end
+    end
+
+    context 'when image version is 2' do
+      before { element.active_image.version = 2 }
+
+      it 'returns the "medium" style URL' do
+        expect(subject).to include 'medium'
+      end
+    end
+  end
+
+  describe '#image_large_url' do
+    let(:element) { create(:site_element, :traffic, :with_active_image) }
+
+    subject { element.image_large_url }
+
+    context 'when the element has no image' do
+      let(:element) { create(:site_element, :traffic) }
+
+      it { expect(subject).to be_nil }
+    end
+
+    context 'when image version is 1' do
+      before { element.active_image.version = 1 }
+
+      it 'returns the "original" style URL' do
+        expect(subject).to include 'original'
+      end
+    end
+
+    context 'when image version is 2' do
+      before { element.active_image.version = 2 }
+
+      it 'returns the "large" style URL' do
+        expect(subject).to include 'large'
+      end
+    end
+  end
 end
