@@ -61,7 +61,7 @@ table.rules-wrapper
       tr data-rule-id=rule.id
         td.temporary-block.suggestion-block colspan='9'
           = link_to "Create a new Hello Bar",
-                  new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"),
+                  new_site_site_element_path(@site, :anchor => "/goals?rule_id=#{rule.id}"),
                   "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?,
                   "data-upgrade-benefit" => "create more bars",
                   "data-display-when" => "empty"
@@ -75,7 +75,7 @@ table.rules-wrapper
               = link_to "Relax: It's easy! Click here to find out how.", site_install_path(@site)
           - else
             = link_to "A/B test a new bar for this rule to maximize your conversions",
-                    new_site_site_element_path(@site, :anchor => "/settings?rule_id=#{rule.id}"),
+                    new_site_site_element_path(@site, :anchor => "/goals?rule_id=#{rule.id}"),
                     "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?,
                     "data-upgrade-benefit" => "create more bars",
                     "data-display-when" => "any"
