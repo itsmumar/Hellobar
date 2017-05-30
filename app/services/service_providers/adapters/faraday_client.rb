@@ -3,7 +3,7 @@ module ServiceProviders
     class FaradayClient < Api
       class RequestError < StandardError; end
 
-      def initialize(url, request: :url_encoded, params: {}, headers: {}, &block)
+      def initialize(url, request: :url_encoded, params: {}, headers: {})
         client = Faraday.new(url: url, params: params, headers: headers) do |faraday|
           faraday.request request
           faraday.adapter Faraday.default_adapter

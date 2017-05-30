@@ -1,13 +1,7 @@
 module ServiceProviders
   module Adapters
     class Base
-      class TimeoutError < StandardError; end
-
       prepend Rescuable
-
-      rescue_from Net::OpenTimeout do |exception|
-        raise TimeoutError
-      end
 
       attr_reader :client
       class_attribute :key
