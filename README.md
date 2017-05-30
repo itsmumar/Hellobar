@@ -255,11 +255,11 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ```
 
 
-## Testing generated scripts
+## Testing generated site scripts
 
 ### Manually in Development
 
-There is a sinatra app in `test_site`.
+There is a Sinatra app in `lib/test_site.rb`.
 
 #### Defaults
 
@@ -275,6 +275,9 @@ You can explicitly pass a site id as well:
 rake test_site:generate[2]
 ```
 
+Additionaly, when making changes to the bars in the Ember Editor, test site is
+automatically regenerated (this only happens while in development mode).
+
 
 #### Options
 
@@ -284,10 +287,9 @@ To generate a site html file at an arbitrary location:
 rake test_site:file[2, '/Users/hb/index.html']
 ```
 
-The above method is used by the capybara integration tests.
+The above method is used by the capybara integration/feature specs.
 
-All of these rake tasks use the `lib/site_generator.rb` class as well as
-an `HbTestSite` class defined within the rake task itself.
+All of these rake tasks use the `lib/site_generator.rb` class.
 
 
 ## Live testing/QA info

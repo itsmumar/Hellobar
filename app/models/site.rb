@@ -43,6 +43,7 @@ class Site < ActiveRecord::Base
   after_commit do
     if needs_script_regeneration?
       generate_script
+      generate_test_site
       @needs_script_regeneration = false
     end
   end
@@ -122,6 +123,13 @@ class Site < ActiveRecord::Base
 
   def generate_script
     GenerateStaticScriptJob.perform_later self
+  end
+
+  def generate_test_site
+    return unless Rails.env.development?
+
+    Rails.logger.info "[HbTestSite] Generating static test site for Site##{ id }"
+    HbTestSite.generate_default id
   end
 
   def lifetime_totals(opts = {})

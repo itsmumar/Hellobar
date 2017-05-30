@@ -154,6 +154,7 @@ hellobar.defineModule('visitor',
 
     // Gets the visitor attribute specified by the key or returns Promise or returns null
     function getVisitorData(key) {
+      // if executed without the `key`, return the whole dataset
       if (!key) {
         return visitor;
       }
