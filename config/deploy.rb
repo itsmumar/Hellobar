@@ -214,6 +214,11 @@ task :trigger_automated_qa_run do
     next if dry_run?
     next unless fetch(:stage) == :edge
 
-    execute 'curl --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master >/dev/null'
+    execute 'curl ' \
+            '  --data \'{"build_parameters": {"QA_ENV": "edge"}}\'' \
+            '  -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master' \
+            '  --header "Content-Type: application/json"' \
+            '  --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556:' \
+            '  >/dev/null'
   end
 end
