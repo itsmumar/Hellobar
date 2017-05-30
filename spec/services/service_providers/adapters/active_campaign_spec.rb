@@ -4,8 +4,9 @@ describe ServiceProviders::Adapters::ActiveCampaign, :no_vcr do
     subscribe: 'https://example.com/admin/api.php?api_action=contact_sync&api_key=api_key&api_output=json'
   )
 
-  let(:config_source) { double('config_source', api_key: 'api_key', extra: { 'app_url' => 'example.com' }) }
-  let(:adapter) { described_class.new(config_source) }
+  let(:identity) { double('identity', provider: 'active_campaign', api_key: 'api_key', extra: { 'app_url' => 'example.com' }) }
+
+  include_examples 'service provider'
 
   describe '.initialize' do
     let(:config) { { api_endpoint: 'https://example.com/admin/api.php', api_key: 'api_key' } }
@@ -20,18 +21,18 @@ describe ServiceProviders::Adapters::ActiveCampaign, :no_vcr do
     allow_request :get, :lists
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => '1', 'name' => 'List1' }, { 'id' => '2', 'name' => 'List2' }]
+      expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
     end
   end
 
   describe '.subscribe' do
-    allow_request :post, :subscribe, body: 'email=example%40email.com&p%5B1%5D=1' do |stub|
+    body = { email: 'example@email.com', name: 'FirstName LastName', p: ['1'], tags: ['id1', 'id2'] }
+    allow_request :post, :subscribe, body: body do |stub|
       let!(:create_request) { stub }
     end
 
     it 'returns array of id => name' do
-      contact = { email: 'example@email.com' }
-      expect { adapter.subscribe(1, contact) }.not_to raise_error
+      provider.subscribe(1, email: email, name: name)
       expect(create_request).to have_been_made
     end
   end
@@ -41,9 +42,9 @@ describe ServiceProviders::Adapters::ActiveCampaign, :no_vcr do
 
     it 'calls subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
+        expect(adapter).to receive(:subscribe).with('list_id', subscriber.merge(double_optin: true))
       end
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe 'list_id', subscribers
     end
   end
 end

@@ -27,7 +27,7 @@ module ServiceProviders
         raise e unless e.message == 'Contact already exists.'
       end
 
-      def batch_subscribe(list_id, subscribers)
+      def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
         contacts = subscribers.map do |subscriber|
           first_name, last_name = subscriber.fetch(:name, '').split(' ', 2)
           params = { email: subscriber[:email] }

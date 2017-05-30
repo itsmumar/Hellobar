@@ -20,7 +20,7 @@ module ServiceProviders
 
       def subscribe(list_id, contact)
         base = { "p[#{ list_id }]" => list_id }
-        response = client.contact_sync(base.merge(contact))
+        response = client.contact_sync(base.merge(contact.except(:double_optin)))
         raise response['result_message'] unless response['result_code'] == 1
       end
     end

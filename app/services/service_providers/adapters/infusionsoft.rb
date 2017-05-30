@@ -18,7 +18,7 @@ module ServiceProviders
           .sort_by { |result| result['name'] }
       end
 
-      def subscribe(_list_id, params, tags: [])
+      def subscribe(_list_id, params)
         data = { Email: params[:email] }
 
         first_name, last_name = params[:name].split(' ', 2) if params[:name].present?
@@ -26,9 +26,9 @@ module ServiceProviders
         data[:FirstName] = first_name if first_name.present?
         data[:LastName] = last_name if last_name.present?
 
-        infusionsoft_user_id = client.contact_add_with_dup_check(data, :Email)
+        infusionsoft_user_id = client.contact_add_with_dup_check(data, :EmailAndName)
 
-        tags.each do |tag_id|
+        params.fetch(:tags, []).each do |tag_id|
           client.contact_add_to_group(infusionsoft_user_id, tag_id)
         end
       end

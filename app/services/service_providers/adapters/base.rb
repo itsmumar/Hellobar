@@ -27,7 +27,7 @@ module ServiceProviders
         raise NoMethodError, 'to be implemented'
       end
 
-      def batch_subscribe(subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
+      def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
         raise NoMethodError, 'to be implemented'
       end
 

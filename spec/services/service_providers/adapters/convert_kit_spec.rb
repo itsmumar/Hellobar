@@ -5,9 +5,9 @@ describe ServiceProviders::Adapters::ConvertKit, :no_vcr do
     batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
   )
 
-  let(:config_source) { double('config_source', api_key: 'api_key') }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'convert_kit', api_key: 'api_key') }
+
+  include_examples 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }
@@ -22,17 +22,19 @@ describe ServiceProviders::Adapters::ConvertKit, :no_vcr do
     allow_request :get, :lists
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
+      expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
     end
   end
 
   describe '#subscribe' do
-    allow_request :post, :subscribe, body: { body: { email: 'example@email.com', 'tags': '' } } do |stub|
+    body = { body: { email: 'example@email.com', tags: 'id1,id2', fields: { last_name: 'LastName' }, first_name: 'FirstName' } }
+
+    allow_request :post, :subscribe, body: body do |stub|
       let(:subscribe_request) { stub }
     end
 
     it 'sends subscribe request' do
-      expect(adapter.subscribe(list_id, email: 'example@email.com')).to be_a Hash
+      expect(provider.subscribe(list_id, email: 'example@email.com', name: 'FirstName LastName')).to be_a Hash
       expect(subscribe_request).to have_been_made
     end
   end
@@ -45,9 +47,9 @@ describe ServiceProviders::Adapters::ConvertKit, :no_vcr do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
+        expect(adapter).to receive(:subscribe).with('list_id', subscriber.merge(double_optin: true))
       end
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe 'list_id', subscribers
     end
   end
 end

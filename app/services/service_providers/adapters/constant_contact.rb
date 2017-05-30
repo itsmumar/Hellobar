@@ -19,7 +19,7 @@ module ServiceProviders
         add_contact(make_contact(list, params), params[:double_optin])
       end
 
-      def batch_subscribe(list_id, subscribers)
+      def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
         import = make_import(subscribers)
         activity = ::ConstantContact::Components::AddContacts.new(import, [list_id], ['E-Mail', 'First Name', 'Last Name'])
 

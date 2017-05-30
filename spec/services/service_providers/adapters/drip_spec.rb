@@ -5,9 +5,9 @@ describe ServiceProviders::Adapters::Drip, :no_vcr do
     batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
   )
 
-  let(:config_source) { double('config_source', credentials: { 'token' => 'token' }, extra: { 'account_id' => 'account_id' }) }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'drip', credentials: { 'token' => 'token' }, extra: { 'account_id' => 'account_id' }) }
+
+  include_examples 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }
@@ -22,7 +22,7 @@ describe ServiceProviders::Adapters::Drip, :no_vcr do
     allow_request :get, :lists
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
+      expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
     end
   end
 

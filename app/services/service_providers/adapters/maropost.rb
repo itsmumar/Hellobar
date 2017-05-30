@@ -23,7 +23,7 @@ module ServiceProviders
         }
 
         if params[:name].present?
-          first_name, last_name = name.split(' ', 2)
+          first_name, last_name = params[:name].split(' ', 2)
           contact.update(first_name: first_name, last_name: last_name)
         end
 

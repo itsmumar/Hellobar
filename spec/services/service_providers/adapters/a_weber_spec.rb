@@ -6,9 +6,9 @@ describe ServiceProviders::Adapters::AWeber, :no_vcr do
     subscriber: 'https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0'
   )
 
-  let(:config_source) { double('config_source', credentials: { 'token' => 'token', 'secret' => 'secret' }) }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'aweber', credentials: { 'token' => 'token', 'secret' => 'secret' }) }
+
+  include_examples 'service provider'
 
   before do
     ServiceProviders::Provider.configure do |config|
@@ -33,18 +33,20 @@ describe ServiceProviders::Adapters::AWeber, :no_vcr do
     allow_requests :get, :accounts, :lists
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => list_id, 'name' => 'AWeber-List1' }]
+      expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
     end
   end
 
   describe '#subscribe' do
     allow_requests :get, :accounts, :lists, :subscribers, :subscriber
-    allow_request :post, :subscribers, body: { 'email' => 'example@email.com', 'ws.op' => 'create' } do |stub|
+
+    body = { 'name' => 'FirstName LastName', 'tags' => '["id1","id2"]', 'email' => 'example@email.com', 'ws.op' => 'create' }
+    allow_request :post, :subscribers, body: body do |stub|
       let(:create_request) { stub }
     end
 
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      provider.subscribe(list_id, email: email, name: name)
       expect(create_request).to have_been_made
     end
   end

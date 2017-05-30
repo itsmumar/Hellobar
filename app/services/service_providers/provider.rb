@@ -36,7 +36,10 @@ module ServiceProviders
 
     def subscribe(list_id, email:, name:)
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
-      adapter.subscribe(list_id, params)
+
+      adapter.subscribe(list_id, params).tap do
+        adapter.assign_tags(@contact_list) if adapter.key == :get_response
+      end
     end
 
     def batch_subscribe(list_id, params)

@@ -1,12 +1,13 @@
 describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
   define_urls(
     subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
-    optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
+    optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
+    add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
   )
 
-  let(:config_source) { double('config_source', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'infusionsoft', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
+
+  include_examples 'service provider'
 
   describe '#initialize' do
     it 'initializes Infusionsoft' do
@@ -23,7 +24,7 @@ describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
   end
 
   describe '#subscribe' do
-    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addWithDupCheck</methodName><params><param><value><string>api_key</string></value></param><param><value><struct><member><name>Email</name><value><string>example@email.com</string></value></member></struct></value></param><param><value><string>Email</string></value></param></params></methodCall>\n"
+    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addWithDupCheck</methodName><params><param><value><string>api_key</string></value></param><param><value><struct><member><name>Email</name><value><string>example@email.com</string></value></member><member><name>FirstName</name><value><string>FirstName</string></value></member><member><name>LastName</name><value><string>LastName</string></value></member></struct></value></param><param><value><string>EmailAndName</string></value></param></params></methodCall>\n"
 
     allow_request :post, :subscribe, body: body do |stub|
       let(:subscribe_request) { stub }
@@ -32,8 +33,14 @@ describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
     body = "<?xml version=\"1.0\" ?><methodCall><methodName>APIEmailService.optIn</methodName><params><param><value><string>api_key</string></value></param><param><value><string>example@email.com</string></value></param><param><value><string>requested information</string></value></param></params></methodCall>\n"
     allow_request :post, :optin, body: body
 
+    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id1</string></value></param></params></methodCall>\n"
+    allow_request :post, :add_to_group, body: body
+
+    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id2</string></value></param></params></methodCall>\n"
+    allow_request :post, :add_to_group, body: body
+
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      provider.subscribe(list_id, email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -43,9 +50,9 @@ describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe list_id, subscribers
     end
   end
 end

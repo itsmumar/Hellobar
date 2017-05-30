@@ -5,9 +5,9 @@ describe ServiceProviders::Adapters::MadMimi, :no_vcr do
     batch_subscribe: 'http://api.madmimi.com/audience_members'
   )
 
-  let(:config_source) { double('config_source', api_key: 'api_key', credentials: { 'username' => 'username' }) }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'mad_mimi', api_key: 'api_key', credentials: { 'username' => 'username' }) }
+
+  include_examples 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }
@@ -22,17 +22,18 @@ describe ServiceProviders::Adapters::MadMimi, :no_vcr do
     allow_request :get, :lists, body: 'username=username&api_key=api_key'
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
+      expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
     end
   end
 
   describe '#subscribe' do
-    allow_request :post, :subscribe, body: 'username=username&api_key=api_key&email=example%40email.com' do |stub|
+    body = 'username=username&api_key=api_key&name=FirstName%20LastName&email=example%40email.com'
+    allow_request :post, :subscribe, body: body do |stub|
       let(:subscribe_request) { stub }
     end
 
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      provider.subscribe(list_id, email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -45,7 +46,7 @@ describe ServiceProviders::Adapters::MadMimi, :no_vcr do
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 
     it 'sends post request to /audience_members' do
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe 'list_id', subscribers
       expect(batch_subscribe_request).to have_been_made
     end
   end

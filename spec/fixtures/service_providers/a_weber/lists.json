@@ -19,7 +19,7 @@
       "total_subscribers": 4,
       "resource_type_link": "https://api.aweber.com/1.0/#list",
       "web_forms_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/web_forms",
-      "name": "AWeber-List1"
+      "name": "List1"
     }
   ],
   "resource_type_link": "https://api.aweber.com/1.0/#list-page-resource"

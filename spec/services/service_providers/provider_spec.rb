@@ -44,20 +44,21 @@ describe ServiceProviders::Provider do
 
   describe '#subscribe' do
     let(:list_id) { 1 }
-    let(:params) { { email: 'email@example.com', name: 'FirstName LastName' } }
+    let(:params) { { email: 'email@example.com', name: 'FirstName LastName', tags: [], double_optin: false } }
     let(:provider) { described_class.new(identity, create(:contact_list, double_optin: false)) }
 
     it 'calls adapter' do
-      expect(adapter).to receive(:subscribe).with(list_id, params, tags: [], double_optin: false)
-      provider.subscribe(list_id, params)
+      expect(adapter).to receive(:subscribe).with(list_id, params)
+      provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
     end
 
     context 'when contact_list.tags is not empty' do
       let(:provider) { described_class.new(identity, create(:contact_list, :with_tags)) }
+      let(:params) { { email: 'email@example.com', name: 'FirstName LastName', tags: ['id1', 'id2'], double_optin: true } }
 
       it 'passes tags to adapter' do
-        expect(adapter).to receive(:subscribe).with(list_id, params, tags: ['id1', 'id2'], double_optin: true)
-        provider.subscribe(list_id, params)
+        expect(adapter).to receive(:subscribe).with(list_id, params)
+        provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
       end
     end
   end

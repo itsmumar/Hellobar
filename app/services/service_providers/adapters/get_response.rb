@@ -19,9 +19,7 @@ module ServiceProviders
         response.map { |tag| { 'id' => tag['tagId'], 'name' => tag['name'] } }
       end
 
-      def subscribe(list_id, params, tags: [], cycle_day: nil)
-        tags = tags.map { |tag| { tagId: tag } } if tags.present?
-
+      def subscribe(list_id, params, cycle_day: nil)
         request_body = {
           email: params[:email],
           campaign: {
@@ -32,27 +30,20 @@ module ServiceProviders
 
         request_body.update(dayOfCycle: cycle_day) if cycle_day.present?
 
-        response = process_response client.post '/contacts', request_body
-        assign_tags(tags)
-        response
-      rescue Faraday::TimeoutError
-        log 'sync timed out'
-      rescue => error
-        log "sync raised #{ error }"
+        process_response client.post '/contacts', request_body
       end
-
-      private
 
       # In GetResponse you cannot assign tags to contacts sent via API,
       # however you can assign tags to existing contacts in the list, so
-      # we will tag the two most recently added contacts (we could tag
+      # we will tag the twenty most recently added contacts (we could tag
       # only the most recent one, but there could be some race conditions)
       # This is a little bit of a hack, but it should give us 95% of what
       # is required when it comes to tagging.
       # We add tags only to contacts which are also stored at HelloBar,
       # so that unknown origin contacts at GR won't get tagged by us
       # https://crossover.atlassian.net/browse/XOHB-1397
-      def assign_tags(tags)
+      def assign_tags(contact_list)
+        tags = contact_list.tags.map { |tag| { tagId: tag } } if contact_list.tags.present?
         return if tags.blank?
 
         contacts = fetch_latest_contacts(20)
@@ -63,7 +54,9 @@ module ServiceProviders
         end
       end
 
-      def fetch_latest_contacts(count = 2)
+      private
+
+      def fetch_latest_contacts(count = 20)
         query = {
           fields: 'contactId,email',
           sort: {

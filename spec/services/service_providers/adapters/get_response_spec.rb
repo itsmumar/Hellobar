@@ -1,12 +1,14 @@
 describe ServiceProviders::Adapters::GetResponse, :no_vcr do
   define_urls(
     lists: 'https://api.getresponse.com/campaigns?perPage=500',
+    contacts: 'https://api.getresponse.com/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
+    contact: 'https://api.getresponse.com/contacts/1',
     subscribe: 'https://api.getresponse.com/contacts'
   )
 
-  let(:config_source) { double('config_source', api_key: 'api_key') }
-  let(:adapter) { described_class.new(config_source) }
-  let(:list_id) { 4567456 }
+  let(:identity) { double('identity', provider: 'get_response', api_key: 'api_key') }
+
+  include_examples 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }
@@ -27,12 +29,18 @@ describe ServiceProviders::Adapters::GetResponse, :no_vcr do
   end
 
   describe '#subscribe' do
-    allow_request :post, :subscribe, body: { campaign: { campaignId: '4567456' }, email: 'example@email.com' } do |stub|
+    allow_request :get, :contacts
+    allow_request :post, :contact
+
+    body = { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' }
+    allow_request :post, :subscribe, body: body do |stub|
       let(:subscribe_request) { stub }
     end
 
+    before { allow(contact_list).to receive(:subscribers).and_return([email: 'example@email.com']) }
+
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      provider.subscribe(list_id, email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -42,9 +50,9 @@ describe ServiceProviders::Adapters::GetResponse, :no_vcr do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe list_id, subscribers
     end
   end
 end

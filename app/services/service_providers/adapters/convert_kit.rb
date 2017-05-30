@@ -19,10 +19,10 @@ module ServiceProviders
         response['tags'].map { |tag| tag.slice('id', 'name') }
       end
 
-      def subscribe(form_id, params, tags: [])
+      def subscribe(form_id, params)
         body = {
           email: params[:email],
-          tags: tags.join(',')
+          tags: params[:tags].join(',')
         }
 
         if params[:name].present?

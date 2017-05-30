@@ -14,7 +14,10 @@ module ServiceProviders
       end
 
       def subscribe(list_id, params)
-        client.account.lists[list_id.to_i].subscribers.create(params.stringify_keys)
+        params = params.stringify_keys.slice('tags', 'email', 'name')
+        params['tags'] = params['tags'].to_json if params['tags'].present?
+
+        client.account.lists[list_id.to_i].subscribers.create params
       end
     end
   end

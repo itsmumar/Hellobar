@@ -5,8 +5,10 @@ describe ServiceProviders::Adapters::MailChimp, :no_vcr do
     batch_subscribe: 'http://apiendpoint/3.0/batches'
   )
 
-  let(:config_source) { double('config_source', extra: { 'metadata' => { 'api_endpoint' => 'http://apiendpoint' } }, credentials: { 'token' => 'api_key' }) }
-  let(:adapter) { described_class.new(config_source) }
+  let(:identity) { double('identity', provider: 'mailchimp', extra: { 'metadata' => { 'api_endpoint' => 'http://apiendpoint' } }, credentials: { 'token' => 'api_key' }) }
+
+  include_examples 'service provider'
+
   let(:list_id) { '57afe96172' }
 
   describe '#initialize' do
@@ -22,17 +24,17 @@ describe ServiceProviders::Adapters::MailChimp, :no_vcr do
     allow_request :get, :lists
 
     it 'returns array of id => name' do
-      expect(adapter.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
+      expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
     end
   end
 
   describe '#subscribe' do
-    allow_request :post, :subscribe, body: '{"email_address":"example@email.com","status":"pending"}' do |stub|
+    allow_request :post, :subscribe, body: '{"email_address":"example@email.com","status":"pending","merge_fields":{"FNAME":"FirstName","LNAME":"LastName"}}' do |stub|
       let(:subscribe_request) { stub }
     end
 
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com')
+      provider.subscribe(list_id, email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -52,7 +54,7 @@ describe ServiceProviders::Adapters::MailChimp, :no_vcr do
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 
     it 'sends post request to /audience_members' do
-      adapter.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe 'list_id', subscribers
       expect(batch_subscribe_request).to have_been_made
     end
   end

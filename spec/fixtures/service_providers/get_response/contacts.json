@@ -1,0 +1,22 @@
+[
+  {
+    "contactId": "1",
+    "href": "https://api.getresponse.com/v3/contacts/V",
+    "name": "John Smith",
+    "email": "example@email.com",
+    "note": "best contact ever",
+    "dayOfCycle": null,
+    "origin": "iphone",
+    "createdOn": "2014-09-29 12:25:55",
+    "changedOn": "2014-10-29 12:25:55",
+    "campaign": {
+      "campaignId": "V",
+      "name": "Test campaign",
+      "href": "https://api.getresponse.com/v3/campaigns/V"
+    },
+    "timeZone": "America/St_Johns",
+    "ipAddress": "127.0.0.1",
+    "activities": "https://api.getresponse.com/v3/contacts/V/activities",
+    "scoring": 10
+  }
+]

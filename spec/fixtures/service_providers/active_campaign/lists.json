@@ -1,19 +1,11 @@
 {
   "0": {
-    "id": "1",
+    "id": "4567456",
     "name": "List1",
     "cdate": "2017-01-14 16:29:52",
     "private": "0",
     "userid": "1",
     "subscriber_count": 0
-  },
-  "1": {
-    "id": "2",
-    "name": "List2",
-    "cdate": "2017-01-15 16:09:31",
-    "private": "0",
-    "userid": "1",
-    "subscriber_count": 3
   },
   "result_code": 1,
   "result_message": "Success: Something is returned",

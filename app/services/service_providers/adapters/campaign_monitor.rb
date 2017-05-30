@@ -24,7 +24,7 @@ module ServiceProviders
         CreateSend::Subscriber.add(client.auth_details, list_id, email, name, [], true, true)
       end
 
-      def batch_subscribe(list_id, subscribers)
+      def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
         subscribers = subscribers.map { |s| { 'EmailAddress' => s[:email], 'Name' => s[:name] } }
         CreateSend::Subscriber.import(client.auth_details, list_id, subscribers, true, true)
       end
