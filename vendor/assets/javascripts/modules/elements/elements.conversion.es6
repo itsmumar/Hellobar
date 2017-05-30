@@ -39,6 +39,7 @@ hellobar.defineModule('elements.conversion',
     function viewed(siteElement) {
       const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
       const id = siteElementModel.id;
+
       // Track number of views if not yet converted for this site element
       if (!didConvert(siteElementModel)) {
         trackingInternal.send('v', id, {a: getVisitorAttributes()});
@@ -51,12 +52,13 @@ hellobar.defineModule('elements.conversion',
       if (!elementsData.getData(id, 'fv'))
         elementsData.setData(id, 'fv', now);
       elementsData.setData(id, 'lv', now);
+
       // Trigger event
       bus.trigger('hellobar.elements.viewed', siteElementModel);
     }
 
     function getVisitorAttributes() {
-      // Ignore first and last view timestamps and email and social conversions
+      // Ignore first/last view timestamps, email/social conversions, date of visit
       var ignoredAttributes = 'fv lv ec sc dt';
       // Ignore first and last converted timestamps and number of traffic conversions
       var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
@@ -74,7 +76,9 @@ hellobar.defineModule('elements.conversion',
 
     // Returns true if the visitor did this conversion or not
     function didConvert(siteElementModel) {
-      return visitor.getData(getConversionKey(siteElementModel));
+      conversionKey = getConversionKey(siteElementModel);
+
+      return conversionKey && visitor.getData(getConversionKey(siteElementModel));
     }
 
     // Returns the conversion key used in the cookies to determine if this
@@ -138,7 +142,6 @@ hellobar.defineModule('elements.conversion',
         if (domElement.target != '_blank') document.location = url;
       });
     }
-
 
     return {
       converted,
