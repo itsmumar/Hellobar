@@ -1,32 +1,3 @@
-class HbTestSite
-  def self.path(relative_path = '')
-    Rails.root.join(relative_path)
-  end
-
-  def self.default_site_id
-    Site.order(updated_at: :desc).first.id
-  end
-
-  def self.default_path
-    path('public/test_site.html')
-  end
-
-  def self.generate(site_id, full_path)
-    raise 'site id is empty' if site_id.blank?
-    generator = SiteGenerator.new(site_id, full_path: full_path)
-    generator.generate_file
-  end
-
-  def self.generate_default(site_id = nil)
-    site_id ||= default_site_id
-    generate(site_id, default_path)
-  end
-
-  def self.run_file
-    path('lib/test_site.rb')
-  end
-end
-
 namespace :test_site do
   desc "Creates a temp html file with site script at specified location\n rake test_site:file[95,'/Users/polymathic/Desktop/test_site.html']"
   task :file, %i[site_id file_path] => :environment do |_t, args|

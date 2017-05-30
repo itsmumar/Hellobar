@@ -467,5 +467,20 @@ describe Site do
         expect { commit }.to have_enqueued_job GenerateStaticScriptJob
       end
     end
+
+    it 'does not generate test site when not in development mode' do
+      expect(HbTestSite).not_to receive :generate_default
+
+      site.touch
+      commit
+    end
+
+    it 'regenerates test site when in development mode' do
+      expect(Rails.env).to receive(:development?).and_return true
+      expect(HbTestSite).to receive(:generate_default).with site.id
+
+      site.touch
+      commit
+    end
   end
 end
