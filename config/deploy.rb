@@ -81,6 +81,7 @@ namespace :deploy do
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
   after 'assets:precompile', 'precompile_static_assets'
 
+  after :publishing, 'trigger_automated_qa_tests'
   after :publishing, 'tag_release:github'
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
@@ -204,21 +205,20 @@ namespace :tag_release do
   end
 end
 
-after 'deploy:publishing', 'trigger_automated_qa_run'
-
-desc 'Run qa build'
-task :trigger_automated_qa_run do
+desc 'Run automated QA tests after edge and production deployments'
+task :trigger_automated_qa_tests do
   run_locally do
-    info('Run qa build:')
+    stage = fetch :stage
+    info "Run automated QA tests on #{ stage }:"
 
     next if dry_run?
-    next unless fetch(:stage) == :edge
+    next unless %i[edge production].include? stage
 
-    execute 'curl ' \
-            '  --data \'{"build_parameters": {"QA_ENV": "edge"}}\'' \
-            '  -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master' \
-            '  --header "Content-Type: application/json"' \
-            '  --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556:' \
-            '  >/dev/null'
+    execute <<~EOS
+      curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
+           -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
+           --header "Content-Type: application/json" \
+           --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
+    EOS
   end
 end
