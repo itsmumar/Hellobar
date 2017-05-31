@@ -1,5 +1,5 @@
 # Only watch a subset of directories
-directories %w[app config lib spec]
+directories %w[app config lib spec vendor]
 
 # Explicitly ignore directories watched by Ember
 ignore(/editor/, /public/)
@@ -65,6 +65,9 @@ end
 guard :teaspoon, all_on_start: false, all_after_pass: false do
   # Implementation files
   watch(%r{^app/assets/javascripts/(.+).js}) { |m| "#{ m[1] }_spec" }
+
+  # Vendored javascript files
+  watch(%r{^vendor/assets/javascripts/modules/(.*)})
 
   # Specs / Helpers
   watch(%r{^spec/javascripts/(.*)})

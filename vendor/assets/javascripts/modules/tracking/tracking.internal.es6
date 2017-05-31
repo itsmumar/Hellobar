@@ -13,11 +13,13 @@ hellobar.defineModule('tracking.internal',
         callback && callback();
         return;
       }
+
       // Build the URL
       var url = '/' + path + '/' + obfID(site.siteId());
       if (itemID) {
         url += '/' + obfID(itemID);
       }
+
       var now = Math.round(new Date().getTime() / 1000);
 
       params['t'] = now; // Timestamp
@@ -32,6 +34,7 @@ hellobar.defineModule('tracking.internal',
 
       var img = document.createElement('img');
       img.style.display = 'none';
+
       if (callback) {
         // Make sure you only call the callback once
         var issuedCallback = false;
@@ -41,11 +44,13 @@ hellobar.defineModule('tracking.internal',
           }
           issuedCallback = true;
         };
+
         // Call the callback within a set period of time in case the image
         // does not load
         setTimeout(issueCallback, 750);
         img.onload = issueCallback;
       }
+
       img.src = hi(url);
     }
 
@@ -119,7 +124,6 @@ hellobar.defineModule('tracking.internal',
 
     // Signs a given path and params with the provided key
     function signature(key, path, params) {
-
       // NOTE: This is using the unencoded values for the params because
       // we don't want to get different signatures if one library encodes a
       // space as "+" and another as "%20" for example
@@ -132,7 +136,6 @@ hellobar.defineModule('tracking.internal',
       sortedParamPairs.sort();
 
       return crypto.HmacSHA512(path + '?' + sortedParamPairs.join('|'), key).toString();
-
     }
 
     // Returns the visitor's unique ID which should be a random value
@@ -164,6 +167,4 @@ hellobar.defineModule('tracking.internal',
       },
       send
     };
-
   });
-

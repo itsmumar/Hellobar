@@ -18,8 +18,6 @@ Dir[Rails.root.join('spec', 'models', 'validators', '**', '*.rb')].each(&method(
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-Fog.mock!
-
 ActiveMerchant::Billing::Base.mode = :test
 
 RSpec.configure do |config|

@@ -1,6 +1,8 @@
 namespace :backend do
   desc 'Automatically adjusts DynamoDB tables as needed'
   task :adjust_dynamo_db_capacity, [:type] => :environment do |_t, args|
+    puts 'Dry run...' if ENV['noop']
+
     cloudwatch = Aws::CloudWatch::Client.new
     dynamo_db = Aws::DynamoDB::Client.new
 
@@ -22,7 +24,7 @@ namespace :backend do
     MIN_WRITE_CAPACITY_CURRENT_MONTH = 5
     MIN_READ_CAPACITY_CURRENT_MONTH = 5
 
-    tables = Hash.new(Hash.new(0))
+    tables = Hash.new { |hash, key| hash[key] = Hash.new(0) }
     table_names = dynamo_db.list_tables.table_names
 
     def fn(num)
@@ -37,11 +39,14 @@ namespace :backend do
       num > 0 ? "+$#{ num }" : "-$#{ num.abs }"
     end
     email_message = []
-    email_message << "Checking #{ args[:type] == 'recent_throttled_only' ? 'recent throttled ata only' : 'all data' }"
+    email_message << "Checking #{ args[:type] == 'recent_throttled_only' ? 'recent throttled data only' : 'all data' }"
     email_message << "Gathering data for #{ table_names.length } tables..."
+    puts "Gathering data for #{ table_names.length } tables..." if ENV['noop']
+
     grand_total_diff = 0
     table_names.each do |table_name|
       output = []
+      puts "\t#{ table_name }..." if ENV['noop']
       output << "\t#{ table_name }..."
       results = dynamo_db.describe_table(table_name: table_name)
       tables[table_name][:provisioned_read] = results.table.provisioned_throughput.read_capacity_units

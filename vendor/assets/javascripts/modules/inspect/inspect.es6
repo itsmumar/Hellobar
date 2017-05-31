@@ -21,7 +21,7 @@ hellobar.defineModule('inspect',
         elements: allElementModels(),
         elementsOnPage: elementsOnPage(),
         rules: allRules(),
-        activeRules: elementsOnPage().map((element) => element.rule),
+        activeRules: elementsOnPage().map((element) => element.model ? element.model().rule : element.rule),
         rulesWithElements: allRules().filter((rule) => rule.siteElements.length > 0),
         rulesWithoutElements: allRules().filter((rule) => rule.siteElements.length == 0),
         contentUpgrades: allContentUpgrades()

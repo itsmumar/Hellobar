@@ -1,5 +1,3 @@
-require 'fog/aws'
-
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
@@ -75,7 +73,7 @@ class SiteElement < ActiveRecord::Base
 
   delegate :site, :site_id, to: :rule, allow_nil: true
   delegate :image_uploads, to: :site
-  delegate :url, to: :active_image, allow_nil: true, prefix: :image
+  delegate :url, :small_url, :medium_url, :large_url, :modal_url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
 
   store :settings, coder: Hash
@@ -272,6 +270,10 @@ class SiteElement < ActiveRecord::Base
 
   def pushes_page_down
     nil
+  end
+
+  def image_style
+    :modal
   end
 
   private

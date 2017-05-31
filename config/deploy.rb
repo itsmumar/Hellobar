@@ -192,7 +192,7 @@ end
 namespace :tag_release do
   desc 'Tag release at GitHub'
   task :github do
-    return if dry_run?
+    next if dry_run?
 
     run_locally do
       current_revision = fetch :current_revision
@@ -201,5 +201,24 @@ namespace :tag_release do
       strategy.git "branch -f #{ fetch :stage } #{ current_revision }"
       strategy.git "push -f origin #{ fetch :stage }"
     end
+  end
+end
+
+after 'deploy:publishing', 'trigger_automated_qa_run'
+
+desc 'Run qa build'
+task :trigger_automated_qa_run do
+  run_locally do
+    info('Run qa build:')
+
+    next if dry_run?
+    next unless fetch(:stage) == :edge
+
+    execute 'curl ' \
+            '  --data \'{"build_parameters": {"QA_ENV": "edge"}}\'' \
+            '  -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master' \
+            '  --header "Content-Type: application/json"' \
+            '  --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556:' \
+            '  >/dev/null'
   end
 end
