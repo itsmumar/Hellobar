@@ -23,7 +23,7 @@ export default Ember.Component.extend({
 
   actions: {
     closeInterstitial() {
-      this.get('router').transitionTo('styles');
+      this.get('router').transitionTo('goals');
     },
     selectCountry(country) {
       this.set('model.phone_country_code', country.code);
