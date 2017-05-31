@@ -292,7 +292,6 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     less_interactions (0.2.0)
-    libv8 (5.3.332.38.5)
     listen (2.10.1)
       celluloid (~> 0.16.0)
       rb-fsevent (>= 0.9.3)
@@ -319,8 +318,6 @@ GEM
     mime-types (1.25.1)
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
-    mini_racer (0.1.9)
-      libv8 (~> 5.3)
     minitest (5.10.2)
     multi_json (1.12.1)
     multi_xml (0.6.0)
@@ -671,7 +668,6 @@ DEPENDENCIES
   less_interactions
   lograge
   madmimi
-  mini_racer
   mustache
   mysql2
   nokogiri

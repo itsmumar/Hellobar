@@ -49,7 +49,6 @@ gem 'fontcustom'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
 gem 'jwt'
-gem 'mini_racer'
 gem 'mustache'
 gem 'rails-html-sanitizer'
 gem 'sassc-rails'
