@@ -23,7 +23,7 @@ module ServiceProviders
         raise NoMethodError, 'to be implemented'
       end
 
-      def subscribe(list_id, params, tags: []) # rubocop:disable Lint/UnusedMethodArgument
+      def subscribe(list_id, params) # rubocop:disable Lint/UnusedMethodArgument
         raise NoMethodError, 'to be implemented'
       end
 

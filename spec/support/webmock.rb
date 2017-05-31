@@ -9,3 +9,13 @@ Addressable::Template::UNRESERVED =
   "(?:[#{ Addressable::URI::CharacterClasses::UNRESERVED }]|%[a-fA-F0-9][a-fA-F0-9])".freeze
 
 require 'webmock/rspec'
+
+module WebMockHelper
+  def webmock_fixture(path)
+    Rails.root.join('spec/fixtures/webmock/').join(path).read
+  end
+end
+
+RSpec.configure do |config|
+  config.include WebMockHelper
+end
