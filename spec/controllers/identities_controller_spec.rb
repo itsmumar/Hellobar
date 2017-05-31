@@ -105,7 +105,7 @@ describe IdentitiesController do
             .and_return('omniauth.auth' => { 'credentials' => 'my_cool_creds' },
                         'omniauth.params' => { 'redirect_to' => 'http://test.host/sites/483182012/site_elements/12312/new' })
           post :create, site_id: site.id, provider: 'mailchimp'
-          expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'] + '#/settings/emails')
+          expect(response).to redirect_to(controller.env['omniauth.params']['redirect_to'] + '#/goals')
         end
 
         it 'to referrer' do
