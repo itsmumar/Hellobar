@@ -2,7 +2,7 @@
 directories %w[app config lib spec vendor]
 
 # Explicitly ignore directories watched by Ember
-ignore(/editor/, /public/)
+ignore(/editor/, /public/, /app\/assets\/editor\/editor/)
 
 # This group allows to skip running RuboCop when RSpec failed
 group :red_green_refactor, halt_on_fail: true do

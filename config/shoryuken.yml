@@ -3,9 +3,14 @@
 # `config/environments/*.rb` (`cache_store` setting)
 
 # `concurrency` setting sets the number of threads Shoryuken will spawn to process SQS jobs
-concurrency: 3
+concurrency: 2
 
 # `delay` setting means how many seconds Shoryuken will wait for querying the SQS queue for
 # jobs (happens when the queue will be empty); Setting it to a higher value makes it more
 # cost effective at AWS as they charge per each query
 delay: 3
+
+# Our shoryuken process tends to run out of control (100% cpu, leading to OOM errors)
+# when that happens, simple USR1 will not do the job; TERM is better, but it important
+# to give a higher timeout before worker processes are killed (default is 8s)
+timeout: 30

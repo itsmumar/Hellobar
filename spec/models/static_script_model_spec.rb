@@ -358,7 +358,7 @@ describe StaticScriptModel do
   end
 
   describe 'to_json' do
-    let(:json) { JSON.parse(model.to_json, symbolize_names: true) }
+    let(:json) { JSON.parse(model.to_json).deep_symbolize_keys }
 
     it 'renders models partial to json' do
       expect(json.keys).to match_array %i[
