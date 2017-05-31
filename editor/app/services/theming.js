@@ -102,9 +102,5 @@ export default Ember.Service.extend({
         'model.image_placement': this.getImagePlacement()
       });
     });
-  }).observes('model.theme_id'),
-
-  defaultGenericTheme() {
-    return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
-  }
+  }).observes('model.theme_id')
 });
