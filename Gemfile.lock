@@ -499,7 +499,7 @@ GEM
     sentry-raven (2.5.1)
       faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
-    shoryuken (3.0.6)
+    shoryuken (3.0.7)
       aws-sdk-core (~> 2)
       concurrent-ruby
       thor
