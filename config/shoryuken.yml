@@ -3,7 +3,7 @@
 # `config/environments/*.rb` (`cache_store` setting)
 
 # `concurrency` setting sets the number of threads Shoryuken will spawn to process SQS jobs
-concurrency: 3
+concurrency: 2
 
 # `delay` setting means how many seconds Shoryuken will wait for querying the SQS queue for
 # jobs (happens when the queue will be empty); Setting it to a higher value makes it more
