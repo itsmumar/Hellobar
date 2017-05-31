@@ -28,8 +28,8 @@ export default Ember.Component.extend({
     }
   ),
 
-  themeWithImage: Ember.computed('theming.currentTheme.image_upload_id', function () {
-      return !!this.get('theming.currentTheme.image_upload_id');
+  themeWithImage: Ember.computed('theming.currentTheme.image', function () {
+      return !!this.get('theming.currentTheme.image');
     }
   ),
 
@@ -51,7 +51,7 @@ export default Ember.Component.extend({
     setImageProps({ imageID, imageUrl, imageSmallUrl, imageMediumUrl, imageLargeUrl, imageModalUrl, imageType = null }) {
       return this.setProperties({
         'model.active_image_id': imageID,
-        'model.image_placement': this.getImagePlacement(),
+        'model.image_placement': this.get('theming').getImagePlacement(),
         'model.image_url': imageUrl,
         'model.image_small_url': imageSmallUrl || imageUrl,
         'model.image_medium_url': imageMediumUrl || imageUrl,
