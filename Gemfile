@@ -67,7 +67,6 @@ gem 'paperclip', '~> 5.1'
 gem 'active_model_serializers'
 gem 'jbuilder'
 gem 'oj'
-gem 'oj_mimic_json'
 
 # Real-time error reporting
 gem 'sentry-raven'
