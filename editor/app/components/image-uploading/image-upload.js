@@ -57,7 +57,7 @@ export default Ember.Component.extend({
         url: `/sites/${siteID}/image_uploads`,
         clickable: "#dropzone-preview, #dropzone-preview *",
         maxFiles: 2,
-        maxFilesize: 1,
+        maxFilesize: 20,
         addRemoveLinks: false,
         createImageThumbnails: false,
         acceptedFiles: "image/*",
