@@ -62,6 +62,8 @@ export default Ember.Service.extend({
     const previousElementType = this.get('_previousElementType');
     if (elementType && previousElementType && elementType !== previousElementType) {
       if (currentTheme && (currentTheme.type === 'template')) {
+        // FIXME I think we should trigger `themeChanged` event
+        // if not, we should at least update whole `theme` object here
         this.set('model.theme_id', 'autodetected');
       }
     }

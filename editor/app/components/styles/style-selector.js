@@ -41,7 +41,9 @@ export default Ember.Component.extend({
 
     });
     this.get('bus').subscribe('hellobar.core.bar.themeChanged', (params) => {
+        // FIXME here we should actually change `model.theme` object, not just `theme_id`
         this.set('model.theme_id', params.themeId);
+
         if (!this.get('model.type')) {
           this.set('model.type', params.elementType);
         }

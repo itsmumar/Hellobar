@@ -36,8 +36,8 @@ hellobar.defineModule('elements.class',
         if (this.animated)
           dom.addClass(iframe, "hb-animated");
 
-        if (this.theme.id)
-          dom.addClass(iframe, this.theme.id);
+        if (this.theme_id)
+          dom.addClass(iframe, this.theme_id);
 
         // Any view_condition including string 'intent' will run the intent event listeners
         if (this.view_condition.indexOf('intent') !== -1) {
@@ -107,7 +107,7 @@ hellobar.defineModule('elements.class',
         const generateHtml = () => {
           const template = () => {
             if (this.theme && this.theme.type === 'template') {
-              const templateName = this.type.toLowerCase() + '_' + this.theme.id.replace(/\-/g, '_');
+              const templateName = this.type.toLowerCase() + '_' + this.theme_id.replace(/\-/g, '_');
               return templating.getTemplateByName(templateName);
             } else {
               return templating.getTemplateByName(this.template_name);
@@ -196,8 +196,10 @@ hellobar.defineModule('elements.class',
         // Make HelloBar JS Core accessible to inner (iframe) document event handlers
         this.w.contentWindow.hellobar = hellobar;
 
-        if (this.theme.id) {
-          dom.addClass(d.body, this.theme.id);
+        // FIXME when style-selector.js is changed, we should switch to
+        // `this.theme.id` here and remove `theme_id` serialization
+        if (this.theme_id) {
+          dom.addClass(d.body, this.theme_id);
         }
 
         if (preview.isActive()) {
