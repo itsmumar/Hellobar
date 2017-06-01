@@ -1,4 +1,4 @@
-class ExtractFormFromHtml
+class ExtractEmbedForm
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
   Form = Struct.new(:form, :inputs, :action_url)
@@ -7,7 +7,7 @@ class ExtractFormFromHtml
     @embed_code = embed_code
   end
 
-  # @return [ExtractFormFromHtml::Form]
+  # @return [ExtractEmbedForm::Form]
   def call
     Form.new form, inputs, action_url
   end
