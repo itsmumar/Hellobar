@@ -72,7 +72,7 @@ hellobar.defineModule('elements.class',
           return '';
         }
         else if (model.image_placement == 'background') {
-          return '<div class="hb-image-wrapper ' + model.image_placement + '" style="background-image:url(' + imageSrc() + ');></div>';
+          return '<div class="hb-image-wrapper ' + model.image_placement + '" style="background-image: url(' + imageSrc() + ');"></div>';
         } else {
           var imgClasses = [];
           (!options.themeType || options.themeType === 'generic') && imgClasses.push('uploaded-image');
