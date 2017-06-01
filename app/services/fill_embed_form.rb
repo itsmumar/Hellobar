@@ -1,7 +1,7 @@
 class FillEmbedForm
-  def initialize(embed_html, email:, name: '')
-    form = ExtractEmbedForm.new(embed_html).call
-    @params = form.inputs.inject({}) { |hash, input| hash.update input[:name] => input[:value] }
+  def initialize(form, email:, name: '')
+    @form = form
+    @params = @form.inputs
     @email = email
     @name = name
     @first_name, @last_name = name.to_s.split(' ', 2)
@@ -14,6 +14,7 @@ class FillEmbedForm
         result[name_param] = value_for_name_part name_param
       end
     end
+    @form
   end
 
   private

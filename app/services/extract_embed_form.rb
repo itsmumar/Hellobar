@@ -1,15 +1,13 @@
 class ExtractEmbedForm
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
-  Form = Struct.new(:form, :inputs, :action_url)
-
   def initialize(embed_code)
     @embed_code = embed_code
   end
 
-  # @return [ExtractEmbedForm::Form]
+  # @return [EmbedForm]
   def call
-    Form.new form, inputs, action_url
+    EmbedForm.new form, inputs, action_url
   end
 
   private
@@ -21,8 +19,8 @@ class ExtractEmbedForm
   end
 
   def inputs
-    form&.css('input')&.map do |input|
-      { name: input.attr('name'), value: input.attr('value') }
+    form&.css('input')&.inject({}) do |hash, input|
+      hash.update input.attr('name') => input.attr('value')
     end
   end
 

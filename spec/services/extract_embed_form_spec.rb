@@ -1,4 +1,4 @@
-describe ExtractFormFromHtml, :no_vcr do
+describe ExtractEmbedForm, :no_vcr do
   let(:service) { described_class.new(embed_code) }
 
   context 'when embed code is a form' do
@@ -11,7 +11,7 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [{ name: 'signup[email]', value: nil }, { name: nil, value: 'Subscribe' }]
+      expect(form.inputs).to match('signup[email]' => nil, nil => 'Subscribe')
     end
 
     it 'has action_url' do
@@ -35,14 +35,13 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [
-        { name: 'prev_member_email', value: nil },
-        { name: 'source', value: nil },
-        { name: 'prev_member_email', value: '' },
-        { name: 'invalid_signup', value: '' },
-        { name: 'email', value: nil },
-        { name: 'Submit', value: 'Submit' }
-      ]
+      expect(form.inputs).to match(
+        'prev_member_email' => '',
+        'source' => nil,
+        'invalid_signup' => '',
+        'email' => nil,
+        'Submit' => 'Submit'
+      )
     end
 
     it 'has action_url' do
@@ -66,20 +65,20 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [
-        { name: 'redirect', value: 'http://www.hellobar.com/emailsignup/icontact/success' },
-        { name: 'errorredirect', value: 'http://www.hellobar.com/emailsignup/icontact/error' },
-        { name: 'fields_email', value: nil },
-        { name: 'fields_fname', value: nil },
-        { name: 'fields_lname', value: nil },
-        { name: 'listid', value: '10108' },
-        { name: 'specialid:10108', value: 'O2D3' },
-        { name: 'clientid', value: '1450422' },
-        { name: 'formid', value: '564' },
-        { name: 'reallistid', value: '1' },
-        { name: 'doubleopt', value: '0' },
-        { name: 'Submit', value: 'Submit' }
-      ]
+      expect(form.inputs).to match(
+        'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
+        'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
+        'fields_email' => nil,
+        'fields_fname' => nil,
+        'fields_lname' => nil,
+        'listid' => '10108',
+        'specialid:10108' => 'O2D3',
+        'clientid' => '1450422',
+        'formid' => '564',
+        'reallistid' => '1',
+        'doubleopt' => '0',
+        'Submit' => 'Submit'
+      )
     end
 
     it 'has action_url' do
@@ -103,14 +102,13 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [
-        { name: 'prev_member_email', value: nil },
-        { name: 'source', value: nil },
-        { name: 'prev_member_email', value: '' },
-        { name: 'invalid_signup', value: '' },
-        { name: 'email', value: nil },
-        { name: 'Submit', value: 'Submit' }
-      ]
+      expect(form.inputs).to match(
+        'source' => nil,
+        'prev_member_email' => '',
+        'invalid_signup' => '',
+        'email' => nil,
+        'Submit' => 'Submit'
+      )
     end
 
     it 'has action_url' do
@@ -134,14 +132,13 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [
-        { name: 'prev_member_email', value: nil },
-        { name: 'source', value: nil },
-        { name: 'prev_member_email', value: '' },
-        { name: 'invalid_signup', value: '' },
-        { name: 'email', value: nil },
-        { name: 'Submit', value: 'Submit' }
-      ]
+      expect(form.inputs).to match(
+        'source' => nil,
+        'prev_member_email' => '',
+        'invalid_signup' => '',
+        'email' => nil,
+        'Submit' => 'Submit'
+      )
     end
 
     it 'has action_url' do
@@ -165,14 +162,13 @@ describe ExtractFormFromHtml, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to eql [
-        { name: 'prev_member_email', value: nil },
-        { name: 'source', value: nil },
-        { name: 'prev_member_email', value: '' },
-        { name: 'invalid_signup', value: '' },
-        { name: 'email', value: nil },
-        { name: 'Submit', value: 'Submit' }
-      ]
+      expect(form.inputs).to match(
+        'source' => nil,
+        'prev_member_email' =>  '',
+        'invalid_signup' =>  '',
+        'email' => nil,
+        'Submit' => 'Submit'
+      )
     end
 
     it 'has action_url' do

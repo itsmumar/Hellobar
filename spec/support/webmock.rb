@@ -12,7 +12,7 @@ require 'webmock/rspec'
 
 module WebMockHelper
   def webmock_fixture(path)
-    Rails.root.join('spec/fixtures/webmock/').join(path).read
+    Rails.root.join('spec/fixtures/webmock/', path).read
   end
 end
 
