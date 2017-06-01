@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
+describe ServiceProviders::Adapters::Infusionsoft do
   define_urls(
     subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
     optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',

@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::IContact, :no_vcr do
+describe ServiceProviders::Adapters::IContact do
   define_urls(
     form: 'http://app.icontact.com/icp/loadsignup.php/form.js?c=1450422&f=564&l=7290',
     subscribe: 'http://app.icontact.com/icp/signup.php'

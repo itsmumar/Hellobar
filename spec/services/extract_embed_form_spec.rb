@@ -1,4 +1,4 @@
-describe ExtractEmbedForm, :no_vcr do
+describe ExtractEmbedForm do
   let(:service) { described_class.new(embed_code) }
 
   context 'when embed code is a form' do

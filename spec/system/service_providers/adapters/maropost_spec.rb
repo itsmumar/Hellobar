@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Maropost, :no_vcr do
+describe ServiceProviders::Adapters::Maropost do
   define_urls(
     lists: 'http://maropost.url/accounts/12345/lists.json?auth_token=api_key&no_counts=true',
     subscribe: 'http://maropost.url/accounts/12345/lists/4567456/contacts.json?auth_token=api_key'

@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::MailChimp, :no_vcr do
+describe ServiceProviders::Adapters::MailChimp do
   define_urls(
     lists: 'http://apiendpoint/3.0/lists?count=100',
     subscribe: 'http://apiendpoint/3.0/lists/57afe96172/members',

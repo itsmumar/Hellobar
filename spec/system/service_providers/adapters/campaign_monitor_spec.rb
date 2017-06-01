@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::CampaignMonitor, :no_vcr do
+describe ServiceProviders::Adapters::CampaignMonitor do
   define_urls(
     clients: 'https://api.createsend.com/api/v3.1/clients.json',
     lists: 'https://api.createsend.com/api/v3.1/clients/4a397ccaaa55eb4e6aa1221e1e2d7122/lists.json',

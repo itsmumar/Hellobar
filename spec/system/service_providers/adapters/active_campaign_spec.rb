@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::ActiveCampaign, :no_vcr do
+describe ServiceProviders::Adapters::ActiveCampaign do
   define_urls(
     lists: 'https://example.com/admin/api.php?api_action=list_list&api_key=api_key&api_output=json&ids=all',
     subscribe: 'https://example.com/admin/api.php?api_action=contact_sync&api_key=api_key&api_output=json'

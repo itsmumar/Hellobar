@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::VerticalResponse, :no_vcr do
+describe ServiceProviders::Adapters::VerticalResponse do
   define_urls(
     lists: 'https://vrapi.verticalresponse.com/api/v1/lists?access_token=token',
     list: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456?access_token=token',

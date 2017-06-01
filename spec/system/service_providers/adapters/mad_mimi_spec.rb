@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::MadMimi, :no_vcr do
+describe ServiceProviders::Adapters::MadMimi do
   define_urls(
     lists: 'http://api.madmimi.com/audience_lists/lists.xml',
     subscribe: 'http://api.madmimi.com/audience_lists/4567456/add',

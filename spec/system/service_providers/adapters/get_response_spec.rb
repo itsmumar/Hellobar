@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::GetResponse, :no_vcr do
+describe ServiceProviders::Adapters::GetResponse do
   define_urls(
     lists: 'https://api.getresponse.com/campaigns?perPage=500',
     contacts: 'https://api.getresponse.com/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',

@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::MyEmma, :no_vcr do
+describe ServiceProviders::Adapters::MyEmma do
   define_urls(
     form: 'https://madmimi.com/signups/103242/iframe',
     subscribe: 'https://madmimi.com/signups/iframe_subscribe/103242'
