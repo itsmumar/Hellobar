@@ -25,7 +25,7 @@ describe ContentUpgrade do
     subject { model.display_title }
 
     context 'when there is a title set' do
-      let(:model) { build(:content_upgrade, offer_headline: 'offer_headline', title: 'title') }
+      let(:model) { build(:content_upgrade, offer_headline: 'offer_headline', content_upgrade_title: 'title') }
 
       it { expect(subject).to eq 'title' }
     end
