@@ -1,7 +1,0 @@
-set daemon 30
-
-set httpd port 4000 and
-    use address 0.0.0.0
-    allow admin:"34v02#2dmvaz21"
-
-set logfile /mnt/deploy/shared/log/monit.log
