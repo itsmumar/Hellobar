@@ -114,7 +114,7 @@ See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-U
 
 ## Icons
 
-Install all dependencies to support local font compilation:
+If you would like to install or modify any existing icon fonts, you need to install some dependencies, which add support for local font compilation:
 
 `brew install fontforge ttfautohint eot-utils`
 
@@ -123,6 +123,13 @@ To add a new icon to the custom icon font file add the SVG file to `app/assets/i
 ```
 rake icons:compile
 ```
+
+You can also install `fontcustom` which automatically builds the fonts (the configuration for this gem is in `.fontcustom-manifest.json` and `config/fontcustom.yml`):
+
+```
+gem install fontcustom
+```
+
 
 
 ## Running specs

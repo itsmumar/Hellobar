@@ -45,11 +45,9 @@ gem 'bootstrap-sass', '~> 3.1.1'
 gem 'coffee-rails'
 gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
-gem 'fontcustom'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
 gem 'jwt'
-gem 'mini_racer'
 gem 'mustache'
 gem 'rails-html-sanitizer'
 gem 'sassc-rails'
@@ -68,8 +66,6 @@ gem 'paperclip', '~> 5.1'
 # JSON
 gem 'active_model_serializers'
 gem 'jbuilder'
-gem 'oj'
-gem 'oj_mimic_json'
 
 # Real-time error reporting
 gem 'sentry-raven'

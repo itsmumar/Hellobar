@@ -112,7 +112,7 @@ describe StaticScriptAssets do
 
         it 'raises ExecJS::ProgramError' do
           expect { rendered }
-            .to raise_error ExecJS::ProgramError, 'SyntaxError: Unexpected character \'#\''
+            .to raise_error ExecJS::Error, 'SyntaxError: Unexpected character \'#\''
         end
       end
     end

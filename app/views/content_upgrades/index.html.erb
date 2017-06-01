@@ -15,7 +15,13 @@
   </tr>
 <% @content_upgrades.each do |content_upgrade| %>
 <tr>
- <td><%= link_to(content_upgrade.offer_headline, edit_site_content_upgrade_path(@site.id, content_upgrade.id)) %></td>
+ <td>
+    <%= link_to(content_upgrade.display_title, edit_site_content_upgrade_path(@site.id, content_upgrade.id)) %>
+    <% if content_upgrade.content_upgrade_url.present? %>
+      <br/><br/>
+      <%= link_to('Open URL', content_upgrade.content_upgrade_url, target: '_blank') %>
+    <% end %>
+ </td>
  <td><input type="text" value="<%= content_upgrade.content_upgrade_script_tag %>"></td>
  <td><%= content_upgrade.total_views %></td>
  <td><%= content_upgrade.total_conversions %></td>

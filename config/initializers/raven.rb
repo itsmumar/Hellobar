@@ -10,5 +10,7 @@ Raven.configure do |config|
   # don't log readiness
   config.silence_ready = true
 
-  config.async = ->(event) { SentryJob.perform_later(event.to_hash) }
+  # send events ansychronously
+  # (in Thin it won't make a difference but it might in Puma)
+  config.async = ->(event) { Thread.new { Raven.send_event(event) } }
 end
