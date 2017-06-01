@@ -13,11 +13,11 @@ describe ServiceProviders::Rescuable do
         raise StandardError
       end
 
-      def subscribe(*args)
+      def subscribe(*)
         raise FooException
       end
 
-      def batch_subscribe(*args)
+      def batch_subscribe(*)
         raise BarException
       end
 

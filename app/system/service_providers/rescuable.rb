@@ -29,10 +29,7 @@ module ServiceProviders::Rescuable
 
   # return value of the handler
   def rescue_with_handler(method, exception)
-    if handler = handler_for_rescue(exception)
-      handler.arity != 0 ? handler.call(method, exception) : handler.call
-    else
-      raise(exception)
-    end
+    raise(exception) unless (handler = handler_for_rescue(exception))
+    handler.arity != 0 ? handler.call(method, exception) : handler.call
   end
 end
