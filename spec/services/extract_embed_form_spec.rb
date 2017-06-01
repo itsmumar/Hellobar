@@ -2,7 +2,7 @@ describe ExtractEmbedForm, :no_vcr do
   let(:service) { described_class.new(embed_code) }
 
   context 'when embed code is a form' do
-    let(:embed_code) { embed_code_file_for 'mad_mimi_form' }
+    let(:embed_code) { build :embed_code, provider: 'mad_mimi_form' }
     let(:form) { service.call }
 
     it 'has form' do
@@ -11,7 +11,7 @@ describe ExtractEmbedForm, :no_vcr do
     end
 
     it 'has inputs' do
-      expect(form.inputs).to match('signup[email]' => nil, nil => 'Subscribe')
+      expect(form.inputs).to match('signup[email]' => '')
     end
 
     it 'has action_url' do
@@ -37,9 +37,9 @@ describe ExtractEmbedForm, :no_vcr do
     it 'has inputs' do
       expect(form.inputs).to match(
         'prev_member_email' => '',
-        'source' => nil,
+        'source' => '',
         'invalid_signup' => '',
-        'email' => nil,
+        'email' => '',
         'Submit' => 'Submit'
       )
     end
@@ -50,7 +50,7 @@ describe ExtractEmbedForm, :no_vcr do
   end
 
   context 'when embed is a script (icontact)' do
-    let(:embed_code) { embed_code_file_for 'icontact' }
+    let(:embed_code) { build :embed_code, provider: 'icontact' }
     let(:form) { service.call }
 
     before do
@@ -68,9 +68,9 @@ describe ExtractEmbedForm, :no_vcr do
       expect(form.inputs).to match(
         'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
         'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
-        'fields_email' => nil,
-        'fields_fname' => nil,
-        'fields_lname' => nil,
+        'fields_email' => '',
+        'fields_fname' => '',
+        'fields_lname' => '',
         'listid' => '10108',
         'specialid:10108' => 'O2D3',
         'clientid' => '1450422',
@@ -87,7 +87,7 @@ describe ExtractEmbedForm, :no_vcr do
   end
 
   context 'when embed code contains "#load_check a" element (my emma js)' do
-    let(:embed_code) { embed_code_file_for 'my_emma_js' }
+    let(:embed_code) { build :embed_code, provider: 'my_emma_js' }
     let(:form) { service.call }
 
     before do
@@ -103,10 +103,10 @@ describe ExtractEmbedForm, :no_vcr do
 
     it 'has inputs' do
       expect(form.inputs).to match(
-        'source' => nil,
+        'source' => '',
         'prev_member_email' => '',
         'invalid_signup' => '',
-        'email' => nil,
+        'email' => '',
         'Submit' => 'Submit'
       )
     end
@@ -117,7 +117,7 @@ describe ExtractEmbedForm, :no_vcr do
   end
 
   context 'when embed code is a link element (my emma pop up)' do
-    let(:embed_code) { embed_code_file_for 'my_emma_popup' }
+    let(:embed_code) { build :embed_code, provider: 'my_emma_popup' }
     let(:form) { service.call }
 
     before do
@@ -133,10 +133,10 @@ describe ExtractEmbedForm, :no_vcr do
 
     it 'has inputs' do
       expect(form.inputs).to match(
-        'source' => nil,
+        'source' => '',
         'prev_member_email' => '',
         'invalid_signup' => '',
-        'email' => nil,
+        'email' => '',
         'Submit' => 'Submit'
       )
     end
@@ -147,7 +147,7 @@ describe ExtractEmbedForm, :no_vcr do
   end
 
   context 'when embed code is an iframe' do
-    let(:embed_code) { embed_code_file_for 'my_emma_iframe' }
+    let(:embed_code) { build :embed_code, provider: 'my_emma_iframe' }
     let(:form) { service.call }
 
     before do
@@ -163,10 +163,10 @@ describe ExtractEmbedForm, :no_vcr do
 
     it 'has inputs' do
       expect(form.inputs).to match(
-        'source' => nil,
+        'source' => '',
         'prev_member_email' =>  '',
         'invalid_signup' =>  '',
-        'email' => nil,
+        'email' => '',
         'Submit' => 'Submit'
       )
     end

@@ -27,7 +27,7 @@ module ServiceProviderHelper
   end
 
   def adapter_name
-    adapter.class.name.demodulize.underscore
+    described_class.name.demodulize.underscore
   end
 
   def response_fixture_for(method, request)

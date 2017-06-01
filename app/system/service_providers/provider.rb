@@ -23,7 +23,15 @@ module ServiceProviders
     attr_reader :adapter
 
     def initialize(identity, contact_list = nil)
-      @adapter = self.class.adapter(identity.provider).new(identity)
+      adapter_class = self.class.adapter(identity.provider)
+
+      @adapter =
+        if adapter_class < Adapters::EmbedForm
+          adapter_class.new(contact_list)
+        else
+          adapter_class.new(identity)
+        end
+
       @identity = identity
       @contact_list = contact_list
     end
@@ -38,7 +46,7 @@ module ServiceProviders
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
 
       adapter.subscribe(list_id, params).tap do
-        adapter.assign_tags(@contact_list) if adapter.key == :get_response
+        adapter.assign_tags(@contact_list) if adapter.is_a?(Adapters::GetResponse)
       end
     end
 

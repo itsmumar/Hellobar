@@ -18,8 +18,6 @@ AllCops:
     - 'editor/**/*'
     - 'backend-mock/**/*'
     - 'lib/legacy_migrator.rb'
-    - 'lib/service_providers/Gemfile'
-    - 'lib/service_providers/Rakefile'
 
 #### BEGIN STYLES
 
@@ -98,7 +96,7 @@ Style/FileName:
 
 Style/MethodMissing:
   Exclude:
-    - app/settings/settings.rb
+    - app/system/settings.rb
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false

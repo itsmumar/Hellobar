@@ -97,7 +97,7 @@ RSpec.configure do |config|
   # Fail if no examples have been run (helps with setting up CI)
   config.fail_if_no_examples = true
 
-  config.define_derived_metadata(file_path: %r{/spec/services/service_providers/}) do |metadata|
+  config.define_derived_metadata(file_path: %r{/service_providers/}) do |metadata|
     metadata[:type] = :service_provider
   end
 end

@@ -19,9 +19,11 @@ class ExtractEmbedForm
   end
 
   def inputs
-    form&.css('input')&.inject({}) do |hash, input|
-      hash.update input.attr('name') => input.attr('value')
-    end
+    form&.css('input')&.inject({}) { |hash, input|
+      hash.update input.attr('name').to_s => input.attr('value').to_s
+    }.delete_if { |key, value|
+      key.empty?
+    }
   end
 
   def action_url

@@ -1,6 +1,6 @@
 class FillEmbedForm
   def initialize(form, email:, name: '')
-    @form = form
+    @form = form.dup
     @params = @form.inputs
     @email = email
     @name = name
@@ -8,7 +8,7 @@ class FillEmbedForm
   end
 
   def call
-    params.dup.tap do |result|
+    params.tap do |result|
       result[email_param] = email
       name_params.each do |name_param|
         result[name_param] = value_for_name_part name_param
@@ -26,7 +26,7 @@ class FillEmbedForm
   end
 
   def name_params
-    params.keys.select { |param| param.include?('name') }.compact.presence || []
+    params.keys.compact.select { |param| param.include?('name') }.compact.presence || []
   end
 
   def value_for_name_part(field_name)

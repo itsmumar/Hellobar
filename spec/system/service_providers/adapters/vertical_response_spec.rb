@@ -5,7 +5,7 @@ describe ServiceProviders::Adapters::VerticalResponse, :no_vcr do
     subscribe: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456/contacts?access_token=token'
   )
 
-  let(:identity) { double('identity', provider: 'vertical_response', credentials: { 'token' => 'token' }) }
+  let(:identity) { double('identity', provider: 'verticalresponse', credentials: { 'token' => 'token' }) }
 
   include_examples 'service provider'
 

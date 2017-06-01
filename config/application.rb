@@ -21,7 +21,7 @@ module Hellobar
     # config.i18n.default_locale = :de
 
     # Require Settings early on in the boot process
-    require Rails.root.join('app', 'settings', 'settings')
+    require Rails.root.join('app', 'system', 'settings')
 
     # We'll handle our own errors
     config.exceptions_app = routes
