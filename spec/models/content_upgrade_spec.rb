@@ -20,4 +20,20 @@ describe ContentUpgrade do
       expect(model.content_upgrade_script_tag).to eql tag
     end
   end
+
+  describe '#display_title' do
+    subject { model.display_title }
+
+    context 'when there is a title set' do
+      let(:model) { build(:content_upgrade, offer_headline: 'offer_headline', title: 'title') }
+
+      it { expect(subject).to eq 'title' }
+    end
+
+    context 'when there is no title set' do
+      let(:model) { build(:content_upgrade, offer_headline: 'offer_headline') }
+
+      it { expect(subject).to eq 'offer_headline' }
+    end
+  end
 end
