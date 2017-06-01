@@ -1,6 +1,4 @@
 module ServiceProviders::Rescuable
-  extend ActiveSupport::Concern
-
   def self.prepended(base)
     base.include ActiveSupport::Rescuable
   end
@@ -8,18 +6,33 @@ module ServiceProviders::Rescuable
   def lists
     super
   rescue => exception
-    rescue_with_handler(exception) || raise
+    rescue_with_handler(:lists, exception)
   end
 
-  def subscribe(*)
+  def subscribe(*args)
+    @arguments = args
     super
   rescue => exception
-    rescue_with_handler(exception) || raise
+    rescue_with_handler(:subscribe, exception)
   end
 
-  def batch_subscribe(*)
+  def batch_subscribe(*args)
+    @arguments = args
     super
   rescue => exception
-    rescue_with_handler(exception) || raise
+    rescue_with_handler(:batch_subscribe, exception)
+  end
+
+  private
+
+  attr_reader :arguments
+
+  # return value of the handler
+  def rescue_with_handler(method, exception)
+    if handler = handler_for_rescue(exception)
+      handler.arity != 0 ? handler.call(method, exception) : handler.call
+    else
+      raise(exception)
+    end
   end
 end

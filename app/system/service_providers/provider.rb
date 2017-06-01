@@ -1,5 +1,7 @@
 module ServiceProviders
   class Provider
+    prepend RavenLogger
+
     mattr_reader :config do
       ActiveSupport::OrderedOptions.new { |hash, k| hash[k] = ActiveSupport::OrderedOptions.new }
     end
@@ -50,8 +52,8 @@ module ServiceProviders
       end
     end
 
-    def batch_subscribe(list_id, params)
-      adapter.batch_subscribe(list_id, params, double_optin: @contact_list&.double_optin)
+    def batch_subscribe(list_id, subscribers)
+      adapter.batch_subscribe(list_id, subscribers, double_optin: @contact_list&.double_optin)
     end
   end
 end

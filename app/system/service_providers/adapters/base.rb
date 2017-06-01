@@ -1,7 +1,9 @@
 module ServiceProviders
   module Adapters
     class Base
-      prepend Rescuable
+      def self.inherited(base)
+        base.prepend Rescuable
+      end
 
       attr_reader :client
       class_attribute :key
