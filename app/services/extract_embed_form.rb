@@ -7,7 +7,7 @@ class ExtractEmbedForm
 
   # @return [EmbedForm]
   def call
-    EmbedForm.new form, inputs, action_url
+    EmbedForm.new form, params, action_url
   end
 
   private
@@ -18,12 +18,14 @@ class ExtractEmbedForm
     html.css('form').first
   end
 
+  def params
+    inputs.delete_if { |key, _| key.empty? }
+  end
+
   def inputs
-    form&.css('input')&.inject({}) { |hash, input|
+    form&.css('input')&.inject({}) do |hash, input|
       hash.update input.attr('name').to_s => input.attr('value').to_s
-    }.delete_if { |key, value|
-      key.empty?
-    }
+    end
   end
 
   def action_url
