@@ -154,8 +154,6 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
-
-  gem 'rbtrace'
 end
 
 group :test do
