@@ -137,14 +137,15 @@ export default Ember.Component.extend({
         this.openUpgradeModal();
         return;
       }
-      if (presetRuleName) {
+
+      if (presetRuleName === 'Custom') {
+        this.associateRuleToModel(null);
+        this.set('model.preset_rule_name', presetRuleName);
+        this.send('openRuleModal', {});
+      } else if (presetRuleName) {
         const defaultRules = this.get('defaultRules');
         this.associateRuleToModel(defaultRules[presetRuleName]);
         this.set('model.preset_rule_name', presetRuleName);
-      } else {
-        this.associateRuleToModel(null);
-        this.set('model.preset_rule_name', null);
-        this.send('openRuleModal', {});
       }
 
       this.set('selectionInProgress', false);
