@@ -28,7 +28,7 @@ class SubscribeContact < SubscribeAllContacts
   def subscribe_with_new_provider
     return unless contact_list.identity.provider.in?(['convert_kit'])
 
-    ServiceProviders::Provider.new(contact_list).subscribe(list_id, email: email, name: name)
+    ServiceProviders::Provider.new(contact_list.identity, contact_list).subscribe(list_id, email: email, name: name)
     true
   end
 
