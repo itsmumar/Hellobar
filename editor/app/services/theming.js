@@ -88,13 +88,19 @@ export default Ember.Service.extend({
     const imageID = this.get('currentTheme.image_upload_id');
     const imageUrl = this.get('currentTheme.image.default_url');
 
-    this.get('modelLogic').setImageProps({
+    this.setImage({
       imageID,
       imageUrl,
-      imagePlacement: this.getImagePlacement(),
       imageType: 'default'
     });
   }.observes('model.use_default_image', 'currentTheme').on('init'),
+
+  setImage: function (imageProps) {
+    this.get('modelLogic').setImageProps({
+      imagePlacement: this.getImagePlacement(),
+      ...imageProps
+    });
+  },
 
   themeWithImage: function () {
     return !!this.get('currentTheme.image');

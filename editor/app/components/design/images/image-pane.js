@@ -30,7 +30,7 @@ export default Ember.Component.extend({
     },
 
     setImageProps(imageProps) {
-      this.get('modelLogic').setImageProps(imageProps);
+      this.get('theming').setImage(imageProps);
     }
   }
 
