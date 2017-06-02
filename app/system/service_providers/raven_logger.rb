@@ -25,7 +25,6 @@ module ServiceProviders::RavenLogger
   def raven_log(exception, args = [])
     options = {
       extra: {
-        identity_id: @identity&.id,
         contact_list_id: @contact_list&.id,
         arguments: args,
         double_optin: @contact_list&.double_optin,

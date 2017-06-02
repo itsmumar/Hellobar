@@ -24,9 +24,8 @@ module ServiceProviders
 
     attr_reader :adapter
 
-    def initialize(identity, contact_list = nil)
-      @adapter = determine_adapter(identity, contact_list)
-      @identity = identity
+    def initialize(contact_list)
+      @adapter = determine_adapter(contact_list)
       @contact_list = contact_list
     end
 
@@ -50,13 +49,13 @@ module ServiceProviders
 
     private
 
-    def determine_adapter(identity, contact_list)
-      adapter_class = self.class.adapter(identity.provider)
+    def determine_adapter(contact_list)
+      adapter_class = self.class.adapter(contact_list.identity.provider)
 
       if adapter_class < Adapters::EmbedForm || adapter_class == Adapters::Webhook
         adapter_class.new(contact_list)
       else
-        adapter_class.new(identity)
+        adapter_class.new(contact_list.identity)
       end
     end
   end
