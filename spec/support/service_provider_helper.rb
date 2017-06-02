@@ -1,3 +1,5 @@
+Dir[Rails.root.join('app', 'system', 'service_providers', '**', '*.rb')].each(&method(:require))
+
 module ServiceProviderHelper
   extend ActiveSupport::Concern
 

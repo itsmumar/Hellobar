@@ -5,7 +5,7 @@ describe ServiceProviders::Adapters::VerticalResponseForm do
 
   let(:identity) { double('identity', provider: 'vertical_response') }
   include_examples 'service provider'
-  let(:contact_list) { create(:contact_list, :embed_vertical_response) }
+  let(:contact_list) { create(:contact_list, :vertical_response) }
 
   describe '#initialize' do
     it 'initializes Faraday::Connection' do

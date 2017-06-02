@@ -6,7 +6,7 @@ describe ServiceProviders::Adapters::MyEmma do
 
   let(:identity) { double('identity', provider: 'my_emma') }
   include_examples 'service provider'
-  let(:contact_list) { create(:contact_list, :embed_my_emma) }
+  let(:contact_list) { create(:contact_list, :my_emma) }
 
   allow_request :get, :form
 

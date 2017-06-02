@@ -31,5 +31,9 @@ FactoryGirl.define do
     trait :my_emma do
       provider 'my_emma'
     end
+
+    trait :drip do
+      provider 'drip'
+    end
   end
 end

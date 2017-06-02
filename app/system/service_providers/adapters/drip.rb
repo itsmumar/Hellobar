@@ -32,7 +32,7 @@ module ServiceProviders
           client.subscribe(params[:email], list_id, body)
         else
           # Add subscriber to global account list
-          client.create_or_update_subscriber(email, body)
+          client.create_or_update_subscriber(params[:email], body)
         end
       end
     end

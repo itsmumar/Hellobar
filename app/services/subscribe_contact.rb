@@ -1,4 +1,6 @@
 class SubscribeContact < SubscribeAllContacts
+  NEW_IMPLEMENTATION = %w[vertical_response drip my_emma verticalresponse maropost]
+
   def initialize(contact)
     super(contact.contact_list)
     @email = contact.email
@@ -26,7 +28,7 @@ class SubscribeContact < SubscribeAllContacts
   attr_reader :contact_list, :email, :name
 
   def subscribe_with_new_provider
-    return unless contact_list.identity.provider.in?(['convert_kit'])
+    return unless contact_list.identity.provider.in?(NEW_IMPLEMENTATION)
 
     ServiceProviders::Provider.new(contact_list.identity, contact_list).subscribe(list_id, email: email, name: name)
     true
