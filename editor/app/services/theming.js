@@ -102,19 +102,13 @@ export default Ember.Service.extend({
     });
   },
 
-  themeWithImage: function () {
-    return !!this.get('currentTheme.image');
-  }.property('currentTheme.image'),
+  themeHasDefaultImage: function () {
+    return !!this.get('currentTheme.image.default_url');
+  }.property('currentTheme'),
 
   useThemeImage: function () {
-    return this.get('model.use_default_image') && this.get('themeWithImage');
-  }.property('model.use_default_image', 'themeWithImage'),
-
-  defaultImageToggled: function () {
-    if (this.get('useThemeImage')) {
-      this.setDefaultImage();
-    }
-  }.observes('useThemeImage', 'currentTheme.image.default_url'),
+    return this.get('model.use_default_image') && this.get('themeHasDefaultImage');
+  }.property('model.use_default_image', 'themeHasDefaultImage'),
 
   currentThemeName: function () {
     return this.get('currentTheme.name') || '';

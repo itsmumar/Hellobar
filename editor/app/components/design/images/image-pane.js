@@ -11,7 +11,7 @@ export default Ember.Component.extend({
   theming: Ember.inject.service(),
 
   imageUploadCopy: Ember.computed.oneWay('theming.currentTheme.image.upload_copy'),
-  themeWithImage: Ember.computed.oneWay('theming.themeWithImage'),
+  themeHasDefaultImage: Ember.computed.oneWay('theming.themeHasDefaultImage'),
   useThemeImage: Ember.computed.oneWay('theming.useThemeImage'),
 
   allowImages: Ember.computed('model.type', function () {
