@@ -1,0 +1,461 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 20453
+Vary: Accept-Encoding
+Status: 200 OK
+Cache-Control: max-age=0, private, must-revalidate
+Strict-Transport-Security: max-age=31536000
+X-XSS-Protection: 1; mode=block
+X-Request-Id: d2c9acef-76ed-4e57-9521-1267508b1805
+ETag: W/"813986f1e51b13854b9452baa060532b"
+X-Content-Type-Options: nosniff
+Date: Thu, 01 Jun 2017 15:54:37 GMT
+Set-Cookie: non_eu=true; path=/
+Server: Apache
+
+<!DOCTYPE html>
+<!--[if lte IE 9]> <html lang="en" class="no-js old-ie"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js non-ie"> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"1e083e1800","applicationID":"13119952","transactionName":"c1pdRBALVVUDRR5EXFdbRkARS1BfFFZcUg==","queueTime":0,"applicationTime":109,"agent":""}</script>
+<script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(2),u=e(3),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}finally{f.emit("fn-end",[c.now()],t)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now()])}},{}],2:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],3:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],4:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=m(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){v[e]=m(e).concat(n)}function m(e){return v[e]||[]}function w(e){return p[e]=p[e]||o(t)}function g(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var v={},y={},b={on:l,emit:t,get:w,listeners:m,context:n,buffer:g,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(2),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!x++){var e=h.info=NREUM.info,n=d.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+h.offset],null,"api");var t=d.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===d.readyState&&i()}function i(){f("mark",["domContent",a()+h.offset],null,"api")}function a(){return E.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-h.offset}var u=(new Date).getTime(),f=e("handle"),c=e(2),s=e("ee"),p=window,d=p.document,l="addEventListener",m="attachEvent",w=p.XMLHttpRequest,g=w&&w.prototype;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:w,REQ:p.Request,EV:p.Event,PR:p.Promise,MO:p.MutationObserver};var v=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1026.min.js"},b=w&&g&&g[l]&&!/CriOS/.test(navigator.userAgent),h=n.exports={offset:u,now:a,origin:v,features:{},xhrWrappable:b};e(1),d[l]?(d[l]("DOMContentLoaded",i,!1),p[l]("load",r,!1)):(d[m]("onreadystatechange",o),p[m]("onload",r)),f("mark",["firstbyte",u],null,"api");var x=0,E=e(4)},{}]},{},["loader"]);</script>
+    <link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/theme/theme_madmimi-14f3f71344cbde58eba3210179416f1d19d9e7207ac8aa0e5a16d30f01e0cbcd.css" />
+<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/webform-48e18de8da248169148319b098c039dac51eef845cc19a81badcb262cdd54830.css" />
+<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/webform_iframe-ddb7d0f68b1324cab767987e1a8cc56e69b5ab1197b53d24cd366581f964ec89.css" />
+<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/ui.elements-5025e2520bb11b1ee0a053bcb5e1e5ac1e8c8d29fdc2988741ab15291056684e.css" />
+<link rel="stylesheet" media="screen" href="https://d1lggihq2bt4jo.cloudfront.net/assets/ui.forms-f953388171f5eedfaa44145905cdd6eefc49eb1e2031fee5197b0031c239360f.css" />
+  <script src="https://d1lggihq2bt4jo.cloudfront.net/assets/scripts/modernizr.min-da65a6872dcf580912aeba456f271dd299b2f3b779dbbef154538a799690d793.js"></script>
+  <script src="https://d1lggihq2bt4jo.cloudfront.net/assets/scripts/basic_dropdown-75137041ad614166d9af184e62a380f4aaf3503aae3053508f69219823b7bbdf.js"></script>
+  <title>Mad Mimi</title>
+
+</head>
+
+<body class="ema">
+
+<div class="mimi_webform_container">
+  <div class="mimi_webform with_bg">
+
+        <div class="mimi_webform_header mimi_webform_logo ui_light" style='background-color:#EFEFEF; max-width:396px;'>
+            <h1 style="">Polymathic</h1>
+        </div>
+    <form id="ema_signup_form" style="max-width:396px;" action="https://madmimi.com/signups/iframe_subscribe/103242" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="RhtvXkXEbMNc+JIDw16AD6YHSfHjN1Wa75x6rlCybYoRNynWjyGWthSGFATjYnwHSK4dUYIPHj9VpeTqNJ2z8g==" />
+  <fieldset>
+        <div class='mimi_field text' style='max-width:356px;height:65px;'>
+  <label for='signup_name'>Name</label>
+  <input id='signup_name' name='signup[name]' type='text' data-required-field='This field is required'  >
+  <span class='mimi_funk'></span>
+</div>
+
+        <div class='mimi_field text required' style='max-width:356px;height:65px;'>
+  <label for='signup_email'>Email</label>
+  <input id='signup_email' name='signup[email]' type='text' data-required-field='This field is required' placeholder=you@example.com class=required>
+  <span class='mimi_funk'></span>
+</div>
+
+
+      <div style="background: white; font-size:1px; height: 0; overflow: hidden">
+
+        <input type="hidden" name="spinner" value="7c0442e4f7d49abfa03fe6f1bd699939f6f3f4bfc45483705bd50cecf2986d277b6ec32ab9e4172235eb5929ba035fee" />
+        <input type="text" name="d5ae1d9aa05b39486b92cf62fab5a5bd" style="font-size: 1px; width: 1px !important; height:1px !important; border:0 !important; line-height: 1px !important; padding: 0 0; min-height:1px !important;"/>
+        <input class="checkbox" type="checkbox" name="beacon" />
+
+  </div>
+
+    <div class='mimi_field action' style='max-width:356px;height:35px;'>
+  <input type='submit' class='submit' value='Subscribe' id='webform_submit_button' data-default-text='Subscribe' data-submitting-text='Sending...' data-invalid-text='↑ You forgot some required fields' data-choose-list='↑ Choose a list' data-thanks='Thank you!'>
+</div>
+
+  </fieldset>
+</form>
+  </div>
+</div>
+
+<script type="text/javascript">
+(function(global) {
+  function serialize(form){if(!form||form.nodeName!=="FORM"){return }var i,j,q=[];for(i=form.elements.length-1;i>=0;i=i-1){if(form.elements[i].name===""){continue}switch(form.elements[i].nodeName){case"INPUT":switch(form.elements[i].type){case"text":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j=j-1){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")};
+
+
+  function extend(destination, source) {
+    for (var prop in source) {
+      destination[prop] = source[prop];
+    }
+  }
+
+  if (!Mimi) var Mimi = {};
+  if (!Mimi.Signups) Mimi.Signups = {};
+
+  Mimi.Signups.EmbedValidation = function() {
+    this.initialize();
+
+    var _this = this;
+    if (document.addEventListener) {
+      this.form.addEventListener('submit', function(e){
+        _this.onFormSubmit(e);
+      });
+    } else {
+      this.form.attachEvent('onsubmit', function(e){
+        _this.onFormSubmit(e);
+      });
+    }
+  };
+
+  extend(Mimi.Signups.EmbedValidation.prototype, {
+    initialize: function() {
+      this.form         = document.getElementById('ema_signup_form');
+      this.submit       = document.getElementById('webform_submit_button');
+      this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+      this.validEmail   = /.+@.+\..+/
+    },
+
+    onFormSubmit: function(e) {
+      e.preventDefault();
+
+      this.validate();
+      if (this.isValid) {
+        this.submitForm();
+      } else {
+        this.revalidateOnChange();
+      }
+    },
+
+    validate: function() {
+      this.isValid = true;
+      this.emailValidation();
+      this.fieldAndListValidation();
+      this.updateFormAfterValidation();
+    },
+
+    emailValidation: function() {
+      var email = document.getElementById('signup_email');
+
+      if (this.validEmail.test(email.value)) {
+        this.removeTextFieldError(email);
+      } else {
+        this.textFieldError(email);
+        this.isValid = false;
+      }
+    },
+
+    fieldAndListValidation: function() {
+      var fields = this.form.querySelectorAll('.mimi_field.required');
+
+      for (var i = 0; i < fields.length; ++i) {
+        var field = fields[i],
+            type  = this.fieldType(field);
+        if (type === 'checkboxes' || type === 'radio_buttons') {
+          this.checkboxAndRadioValidation(field);
+        } else {
+          this.textAndDropdownValidation(field, type);
+        }
+      }
+    },
+
+    fieldType: function(field) {
+      var type = field.querySelectorAll('.field_type');
+
+      if (type.length) {
+        return type[0].getAttribute('data-field-type');
+      } else if (field.className.indexOf('checkgroup') >= 0) {
+        return 'checkboxes';
+      } else {
+        return 'text_field';
+      }
+    },
+
+    checkboxAndRadioValidation: function(field) {
+      var inputs   = field.getElementsByTagName('input'),
+          selected = false;
+
+      for (var i = 0; i < inputs.length; ++i) {
+        var input = inputs[i];
+        if((input.type === 'checkbox' || input.type === 'radio') && input.checked) {
+          selected = true;
+        }
+      }
+
+      if (selected) {
+        field.className = field.className.replace(/ invalid/g, '');
+      } else {
+        if (field.className.indexOf('invalid') === -1) {
+          field.className += ' invalid';
+        }
+
+        this.isValid = false;
+      }
+    },
+
+    textAndDropdownValidation: function(field, type) {
+      var inputs = field.getElementsByTagName('input');
+
+      for (var i = 0; i < inputs.length; ++i) {
+        var input = inputs[i];
+        if (input.name.indexOf('signup') >= 0) {
+          if (type === 'text_field') {
+            this.textValidation(input);
+          } else {
+            this.dropdownValidation(field, input);
+          }
+        }
+      }
+      this.htmlEmbedDropdownValidation(field);
+    },
+
+    textValidation: function(input) {
+      if (input.id === 'signup_email') return;
+
+      if (input.value) {
+        this.removeTextFieldError(input);
+      } else {
+        this.textFieldError(input);
+        this.isValid = false;
+      }
+    },
+
+    dropdownValidation: function(field, input) {
+      if (input.value) {
+        field.className = field.className.replace(/ invalid/g, '');
+      } else {
+        if (field.className.indexOf('invalid') === -1) field.className += ' invalid';
+        this.onSelectCallback(input);
+        this.isValid = false;
+      }
+    },
+
+    htmlEmbedDropdownValidation: function(field) {
+      var dropdowns = field.querySelectorAll('.mimi_html_dropdown');
+      var _this = this;
+
+      for (var i = 0; i < dropdowns.length; ++i) {
+        var dropdown = dropdowns[i];
+
+        if (dropdown.value) {
+          field.className = field.className.replace(/ invalid/g, '');
+        } else {
+          if (field.className.indexOf('invalid') === -1) field.className += ' invalid';
+          this.isValid = false;
+          dropdown.onchange = (function(){ _this.validate(); });
+        }
+      }
+    },
+
+    textFieldError: function(input) {
+      input.className   = 'required invalid';
+      input.placeholder = input.getAttribute('data-required-field');
+    },
+
+    removeTextFieldError: function(input) {
+      input.className   = 'required';
+      input.placeholder = '';
+    },
+
+    onSelectCallback: function(input) {
+      if (typeof Widget === 'undefined' || !Widget.BasicDropdown) return;
+
+      var dropdownEl = input.parentNode,
+          instances  = Widget.BasicDropdown.instances,
+          _this = this;
+
+      for (var i = 0; i < instances.length; ++i) {
+        var instance = instances[i];
+        if (instance.wrapperEl === dropdownEl) {
+          instance.onSelect = function(){ _this.validate() };
+        }
+      }
+    },
+
+    updateFormAfterValidation: function() {
+      this.form.className   = this.setFormClassName();
+      this.submit.value     = this.submitButtonText();
+      this.submit.disabled  = !this.isValid;
+      this.submit.className = this.isValid ? 'submit' : 'disabled';
+    },
+
+    setFormClassName: function() {
+      var name = this.form.className;
+
+      if (this.isValid) {
+        return name.replace(/\s?mimi_invalid/, '');
+      } else {
+        if (name.indexOf('mimi_invalid') === -1) {
+          return name += ' mimi_invalid';
+        } else {
+          return name;
+        }
+      }
+    },
+
+    submitButtonText: function() {
+      var invalidFields = document.querySelectorAll('.invalid'),
+          text;
+
+      if (this.isValid || !invalidFields) {
+        text = this.submit.getAttribute('data-default-text');
+      } else {
+        if (invalidFields.length || invalidFields[0].className.indexOf('checkgroup') === -1) {
+          text = this.submit.getAttribute('data-invalid-text');
+        } else {
+          text = this.submit.getAttribute('data-choose-list');
+        }
+      }
+      return text;
+    },
+
+    submitForm: function() {
+      this.formSubmitting();
+
+      var _this = this;
+      window[this.callbackName] = function(response) {
+        delete window[this.callbackName];
+        document.body.removeChild(script);
+        _this.onSubmitCallback(response);
+      };
+
+      var script = document.createElement('script');
+      script.src = this.formUrl('json');
+      document.body.appendChild(script);
+    },
+
+    formUrl: function(format) {
+      var action  = this.form.action;
+      if (format === 'json') action += '.json';
+      return action + '?callback=' + this.callbackName + '&' + serialize(this.form);
+    },
+
+    formSubmitting: function() {
+      this.form.className  += ' mimi_submitting';
+      this.submit.value     = this.submit.getAttribute('data-submitting-text');
+      this.submit.disabled  = true;
+      this.submit.className = 'disabled';
+    },
+
+    onSubmitCallback: function(response) {
+      if (response.success) {
+        this.onSubmitSuccess(response.result);
+      } else {
+        top.location.href = this.formUrl('html');
+      }
+    },
+
+    onSubmitSuccess: function(result) {
+      if (result.has_redirect) {
+        top.location.href = result.redirect;
+      } else if(result.single_opt_in || !result.confirmation_html) {
+        this.disableForm();
+        this.updateSubmitButtonText(this.submit.getAttribute('data-thanks'));
+      } else {
+        this.showConfirmationText(result.confirmation_html);
+      }
+    },
+
+    showConfirmationText: function(html) {
+      var fields = this.form.querySelectorAll('.mimi_field');
+
+      for (var i = 0; i < fields.length; ++i) {
+        fields[i].style['display'] = 'none';
+      }
+
+      (this.form.querySelectorAll('fieldset')[0] || this.form).innerHTML = html;
+    },
+
+    disableForm: function() {
+      var elements = this.form.elements;
+      for (var i = 0; i < elements.length; ++i) {
+        elements[i].disabled = true;
+      }
+    },
+
+    updateSubmitButtonText: function(text) {
+      this.submit.value = text;
+    },
+
+    revalidateOnChange: function() {
+      var fields = this.form.querySelectorAll(".mimi_field.required"),
+          _this = this;
+
+      for (var i = 0; i < fields.length; ++i) {
+        var inputs = fields[i].getElementsByTagName('input');
+        for (var j = 0; j < inputs.length; ++j) {
+          if (this.fieldType(fields[i]) === 'text_field') {
+            inputs[j].onkeyup = function() {
+              var input = this;
+              if (input.getAttribute('name') === 'signup[email]') {
+                if (_this.validEmail.test(input.value)) _this.validate();
+              } else {
+                if (input.value.length === 1) _this.validate();
+              }
+            }
+          } else {
+            inputs[j].onchange = function(){ _this.validate() };
+          }
+        }
+      }
+    }
+  });
+
+  if (document.addEventListener) {
+    document.addEventListener("DOMContentLoaded", function() {
+      new Mimi.Signups.EmbedValidation();
+    });
+  }
+  else {
+    window.attachEvent('onload', function() {
+      new Mimi.Signups.EmbedValidation();
+    });
+  }
+})(this);
+</script>
+
+<script type="text/javascript">
+(function() {
+  function getElementsByClassName(node, classname) {
+    var a = [];
+    var re = new RegExp('(^| )'+classname+'( |$)');
+    var els = node.getElementsByTagName("*");
+    for(var i=0,j=els.length; i < j; i++)
+        if(re.test(els[i].className)){
+          a.push(els[i]);
+        }
+    return a;
+  };
+
+	document.onclick = function(e) {
+    if (!e) {
+      e = window.event;
+    }
+
+    var focus = getElementsByClassName(document.body, 'focus');
+
+    if(focus.length > 0) {
+      for(var i = 0; i < focus.length; ++i) {
+        focus[i].className = focus[i].className.replace(/ focus/g, '');
+      }
+    }
+
+    var mimiField = findMimiField(e.target || e.srcElement);
+    if(mimiField) {
+    	if(getElementsByClassName(mimiField, '.combo_input').length == 0) { /* skip if editing options */
+      	mimiField.className += ' focus';
+      }
+    }
+  };
+
+  function findMimiField(elem) {
+    var mimiField = elem.parentNode;
+    while(mimiField && mimiField.className != undefined && mimiField.className.toString().indexOf('mimi_field') == -1) {
+      mimiField = mimiField.parentNode;
+    }
+    if(mimiField.nodeType == 1 /* element */) {
+      return mimiField;
+    } else {
+      return null;
+    }
+  }
+ })();
+</script>
+
+
+
+</body>
+
+</html>

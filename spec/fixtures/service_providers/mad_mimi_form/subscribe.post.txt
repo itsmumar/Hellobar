@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Content-Type: text/javascript; charset=utf-8
+Transfer-Encoding: chunked
+Vary: Accept-Encoding
+Status: 200 OK
+Cache-Control: max-age=0, private, must-revalidate
+Strict-Transport-Security: max-age=31536000
+X-XSS-Protection: 1; mode=block
+X-Request-Id: c1f8384b-758c-4fc1-8a6a-06ccdfb9c592
+ETag: W/"7dc545455eb5f74146114c2a5ea8165e"
+X-Frame-Options: SAMEORIGIN
+X-Content-Type-Options: nosniff
+Date: Thu, 01 Jun 2017 16:11:43 GMT
+Set-Cookie: auth_token=cf7e1ec5df7e236410c6628fa7d420667feb9160; path=/; expires=Thu, 15 Jun 2017 16:11:42 -0000
+Set-Cookie: non_eu=true; path=/
+Set-Cookie: _mad_mimi=dU5ITmR0Y1hVaFZ3VjFBRlpTempsZFNiTjl5aVhuNnA0L3VQNW04V1VLNVFPcnNJSUIzVVdTRTgwWVplOXd1WlpVZHJWYVE3ejNwVFVvNXFLSEdEUDAvblB3MGRYbmdRYkQ1L2UvZ3FHVGhMNWRkaHFOODJRdkJtNDg5b0xKZHBOMm9EM1RxTDlOZWVWZG16REtUaEhpdzZ1U1BpTWxrYnVjdjVYenJpZU9oblU5clE2Z2F6cUR1aTcxdkhkc2FxZHU5T1BMK0NDb3UxR0M5UEl5ZEwxdE9nODhlYXJVazhiV1luTlZsbHY5ZXh6YngzU1BHMkJ2bFR1OUhOWjJHbW1pUEN6UW5YaVFJdVN4eStpVDRYZWZKeUdxakdmWlAzay9hS3Q3QTUvRWs9LS1wMXI2ckhwN2c2Vm4xMDZGeWJKZVVRPT0%3D--b9a8b2282090e9accc2acd9448f181a6f72b1ce0; domain=.madmimi.com; path=/; secure; HttpOnly
+Server: Apache
+Content-Encoding: gzip
+
+/**/jsonp_callback_40640({"success":true,"result":{"has_redirect":false,"redirect":"https://madmimi.com/signups/success","new_member":true,"audience_member":{"id":10010860810,"email":"you@example.com","name":"Name","suppressed":true,"suppression_reason":"Unconfirmed"},"single_opt_in":false,"confirmation_html":"\u003cdiv class=\"mimi_field last\"\u003e\n  \u003ch2\u003eNearly done...\u003c/h2\u003e\n  \u003cp\u003e\n    We need to confirm your email address.\n  \u003c/p\u003e\n  \u003cbr /\u003e\n  \u003cp\u003e\n    To complete your signup process, please click the link in the email we just sent you. \n  \u003c/p\u003e\n\u003c/div\u003e\n"}})

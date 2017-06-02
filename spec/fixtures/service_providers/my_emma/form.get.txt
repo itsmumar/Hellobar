@@ -1,461 +1,87 @@
 HTTP/1.1 200 OK
+Date: Fri, 02 Jun 2017 09:17:30 GMT
+Server: Apache/2.2.22 (Ubuntu)
+Expires: Fri, 02 Jun 2017 09:17:30 GMT
+Vary: Cookie,Accept-Encoding
+Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+Set-Cookie: APPVER=api; Domain=.e2ma.net; httponly; Path=/; secure
+X-Mod-Pagespeed: 1.11.33.4-0
+Cache-Control: max-age=0, no-cache
+Content-Length: 17918
+Connection: close
 Content-Type: text/html; charset=utf-8
-Content-Length: 20453
-Vary: Accept-Encoding
-Status: 200 OK
-Cache-Control: max-age=0, private, must-revalidate
-Strict-Transport-Security: max-age=31536000
-X-XSS-Protection: 1; mode=block
-X-Request-Id: d2c9acef-76ed-4e57-9521-1267508b1805
-ETag: W/"813986f1e51b13854b9452baa060532b"
-X-Content-Type-Options: nosniff
-Date: Thu, 01 Jun 2017 15:54:37 GMT
-Set-Cookie: non_eu=true; path=/
-Server: Apache
 
-<!DOCTYPE html>
-<!--[if lte IE 9]> <html lang="en" class="no-js old-ie"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js non-ie"> <!--<![endif]-->
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"1e083e1800","applicationID":"13119952","transactionName":"c1pdRBALVVUDRR5EXFdbRkARS1BfFFZcUg==","queueTime":0,"applicationTime":109,"agent":""}</script>
-<script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(2),u=e(3),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}finally{f.emit("fn-end",[c.now()],t)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now()])}},{}],2:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],3:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],4:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=m(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){v[e]=m(e).concat(n)}function m(e){return v[e]||[]}function w(e){return p[e]=p[e]||o(t)}function g(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var v={},y={},b={on:l,emit:t,get:w,listeners:m,context:n,buffer:g,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(2),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!x++){var e=h.info=NREUM.info,n=d.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+h.offset],null,"api");var t=d.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===d.readyState&&i()}function i(){f("mark",["domContent",a()+h.offset],null,"api")}function a(){return E.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-h.offset}var u=(new Date).getTime(),f=e("handle"),c=e(2),s=e("ee"),p=window,d=p.document,l="addEventListener",m="attachEvent",w=p.XMLHttpRequest,g=w&&w.prototype;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:w,REQ:p.Request,EV:p.Event,PR:p.Promise,MO:p.MutationObserver};var v=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1026.min.js"},b=w&&g&&g[l]&&!/CriOS/.test(navigator.userAgent),h=n.exports={offset:u,now:a,origin:v,features:{},xhrWrappable:b};e(1),d[l]?(d[l]("DOMContentLoaded",i,!1),p[l]("load",r,!1)):(d[m]("onreadystatechange",o),p[m]("onload",r)),f("mark",["firstbyte",u],null,"api");var x=0,E=e(4)},{}]},{},["loader"]);</script>
-    <link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/theme/theme_madmimi-14f3f71344cbde58eba3210179416f1d19d9e7207ac8aa0e5a16d30f01e0cbcd.css" />
-<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/webform-48e18de8da248169148319b098c039dac51eef845cc19a81badcb262cdd54830.css" />
-<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/webform_iframe-ddb7d0f68b1324cab767987e1a8cc56e69b5ab1197b53d24cd366581f964ec89.css" />
-<link rel="stylesheet" media="screen" href="https://d2vnkn0bfhsarv.cloudfront.net/assets/ui.elements-5025e2520bb11b1ee0a053bcb5e1e5ac1e8c8d29fdc2988741ab15291056684e.css" />
-<link rel="stylesheet" media="screen" href="https://d1lggihq2bt4jo.cloudfront.net/assets/ui.forms-f953388171f5eedfaa44145905cdd6eefc49eb1e2031fee5197b0031c239360f.css" />
-  <script src="https://d1lggihq2bt4jo.cloudfront.net/assets/scripts/modernizr.min-da65a6872dcf580912aeba456f271dd299b2f3b779dbbef154538a799690d793.js"></script>
-  <script src="https://d1lggihq2bt4jo.cloudfront.net/assets/scripts/basic_dropdown-75137041ad614166d9af184e62a380f4aaf3503aae3053508f69219823b7bbdf.js"></script>
-  <title>Mad Mimi</title>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head><script type="text/javascript">(window.NREUM||(NREUM={})).loader_config={xpid:"VgIDVVNSGwEEUVFaAwI="};window.NREUM||(NREUM={}),__nr_require=function(t,n,e){function r(e){if(!n[e]){var o=n[e]={exports:{}};t[e][0].call(o.exports,function(n){var o=t[e][1][n];return r(o||n)},o,o.exports)}return n[e].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<e.length;o++)r(e[o]);return r}({1:[function(t,n,e){function r(t){try{s.console&&console.log(t)}catch(n){}}var o,i=t("ee"),a=t(15),s={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(s.console=!0,o.indexOf("dev")!==-1&&(s.dev=!0),o.indexOf("nr_dev")!==-1&&(s.nrDev=!0))}catch(c){}s.nrDev&&i.on("internal-error",function(t){r(t.stack)}),s.dev&&i.on("fn-err",function(t,n,e){r(e.stack)}),s.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(s,function(t,n){return t}).join(", ")))},{}],2:[function(t,n,e){function r(t,n,e,r,o){try{d?d-=1:i("err",[o||new UncaughtException(t,n,e)])}catch(s){try{i("ierr",[s,c.now(),!0])}catch(u){}}return"function"==typeof f&&f.apply(this,a(arguments))}function UncaughtException(t,n,e){this.message=t||"Uncaught error with no additional information",this.sourceURL=n,this.line=e}function o(t){i("err",[t,c.now()])}var i=t("handle"),a=t(16),s=t("ee"),c=t("loader"),f=window.onerror,u=!1,d=0;c.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(l){"stack"in l&&(t(8),t(7),"addEventListener"in window&&t(5),c.xhrWrappable&&t(9),u=!0)}s.on("fn-start",function(t,n,e){u&&(d+=1)}),s.on("fn-err",function(t,n,e){u&&(this.thrown=!0,o(e))}),s.on("fn-end",function(){u&&!this.thrown&&d>0&&(d-=1)}),s.on("internal-error",function(t){i("ierr",[t,c.now(),!0])})},{}],3:[function(t,n,e){t("loader").features.ins=!0},{}],4:[function(t,n,e){function r(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var o=t("ee"),i=t("handle"),a=t(8),s=t(7),c="learResourceTimings",f="addEventListener",u="resourcetimingbufferfull",d="bstResource",l="resource",p="-start",h="-end",m="fn"+p,w="fn"+h,v="bstTimer",y="pushState",g=t("loader");g.features.stn=!0,t(6);var b=NREUM.o.EV;o.on(m,function(t,n){var e=t[0];e instanceof b&&(this.bstStart=g.now())}),o.on(w,function(t,n){var e=t[0];e instanceof b&&i("bst",[e,n,this.bstStart,g.now()])}),a.on(m,function(t,n,e){this.bstStart=g.now(),this.bstType=e}),a.on(w,function(t,n){i(v,[n,this.bstStart,g.now(),this.bstType])}),s.on(m,function(){this.bstStart=g.now()}),s.on(w,function(t,n){i(v,[n,this.bstStart,g.now(),"requestAnimationFrame"])}),o.on(y+p,function(t){this.time=g.now(),this.startPath=location.pathname+location.hash}),o.on(y+h,function(t){i("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),f in window.performance&&(window.performance["c"+c]?window.performance[f](u,function(t){i(d,[window.performance.getEntriesByType(l)]),window.performance["c"+c]()},!1):window.performance[f]("webkit"+u,function(t){i(d,[window.performance.getEntriesByType(l)]),window.performance["webkitC"+c]()},!1)),document[f]("scroll",r,{passive:!0}),document[f]("keypress",r,!1),document[f]("click",r,!1)}},{}],5:[function(t,n,e){function r(t){for(var n=t;n&&!n.hasOwnProperty(u);)n=Object.getPrototypeOf(n);n&&o(n)}function o(t){s.inPlace(t,[u,d],"-",i)}function i(t,n){return t[1]}var a=t("ee").get("events"),s=t(18)(a,!0),c=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";n.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,n){var e=t[1],r=c(e,"nr@wrapped",function(){function t(){if("function"==typeof e.handleEvent)return e.handleEvent.apply(e,arguments)}var n={object:t,"function":e}[typeof e];return n?s(n,"fn-",null,n.name||"anonymous"):e});this.wrapped=t[1]=r}),a.on(d+"-start",function(t){t[1]=this.wrapped||t[1]})},{}],6:[function(t,n,e){var r=t("ee").get("history"),o=t(18)(r);n.exports=r,o.inPlace(window.history,["pushState","replaceState"],"-")},{}],7:[function(t,n,e){var r=t("ee").get("raf"),o=t(18)(r),i="equestAnimationFrame";n.exports=r,o.inPlace(window,["r"+i,"mozR"+i,"webkitR"+i,"msR"+i],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],8:[function(t,n,e){function r(t,n,e){t[0]=a(t[0],"fn-",null,e)}function o(t,n,e){this.method=e,this.timerDuration="number"==typeof t[1]?t[1]:0,t[0]=a(t[0],"fn-",this,e)}var i=t("ee").get("timer"),a=t(18)(i),s="setTimeout",c="setInterval",f="clearTimeout",u="-start",d="-";n.exports=i,a.inPlace(window,[s,"setImmediate"],s+d),a.inPlace(window,[c],c+d),a.inPlace(window,[f,"clearImmediate"],f+d),i.on(c+u,r),i.on(s+u,o)},{}],9:[function(t,n,e){function r(t,n){d.inPlace(n,["onreadystatechange"],"fn-",s)}function o(){var t=this,n=u.context(t);t.readyState>3&&!n.resolved&&(n.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,w,"fn-",s)}function i(t){v.push(t),h&&(g=-g,b.data=g)}function a(){for(var t=0;t<v.length;t++)r([],v[t]);v.length&&(v=[])}function s(t,n){return n}function c(t,n){for(var e in t)n[e]=t[e];return n}t(5);var f=t("ee"),u=f.get("xhr"),d=t(18)(u),l=NREUM.o,p=l.XHR,h=l.MO,m="readystatechange",w=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],v=[];n.exports=u;var y=window.XMLHttpRequest=function(t){var n=new p(t);try{u.emit("new-xhr",[n],n),n.addEventListener(m,o,!1)}catch(e){try{u.emit("internal-error",[e])}catch(r){}}return n};if(c(p,y),y.prototype=p.prototype,d.inPlace(y.prototype,["open","send"],"-xhr-",s),u.on("send-xhr-start",function(t,n){r(t,n),i(n)}),u.on("open-xhr-start",r),h){var g=1,b=document.createTextNode(g);new h(a).observe(b,{characterData:!0})}else f.on("fn-end",function(t){t[0]&&t[0].type===m||a()})},{}],10:[function(t,n,e){function r(t){var n=this.params,e=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;r<d;r++)t.removeEventListener(u[r],this.listener,!1);if(!n.aborted){if(e.duration=a.now()-this.startTime,4===t.readyState){n.status=t.status;var i=o(t,this.lastSize);if(i&&(e.rxSize=i),this.sameOrigin){var c=t.getResponseHeader("X-NewRelic-App-Data");c&&(n.cat=c.split(", ").pop())}}else n.status=0;e.cbTime=this.cbTime,f.emit("xhr-done",[t],t),s("xhr",[n,e,this.startTime])}}}function o(t,n){var e=t.responseType;if("json"===e&&null!==n)return n;var r="arraybuffer"===e||"blob"===e||"json"===e?t.response:t.responseText;return h(r)}function i(t,n){var e=c(n),r=t.params;r.host=e.hostname+":"+e.port,r.pathname=e.pathname,t.sameOrigin=e.sameOrigin}var a=t("loader");if(a.xhrWrappable){var s=t("handle"),c=t(11),f=t("ee"),u=["load","error","abort","timeout"],d=u.length,l=t("id"),p=t(14),h=t(13),m=window.XMLHttpRequest;a.features.xhr=!0,t(9),f.on("new-xhr",function(t){var n=this;n.totalCbs=0,n.called=0,n.cbTime=0,n.end=r,n.ended=!1,n.xhrGuids={},n.lastSize=null,p&&(p>34||p<10)||window.opera||t.addEventListener("progress",function(t){n.lastSize=t.loaded},!1)}),f.on("open-xhr-start",function(t){this.params={method:t[0]},i(this,t[1]),this.metrics={}}),f.on("open-xhr-end",function(t,n){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&n.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid)}),f.on("send-xhr-start",function(t,n){var e=this.metrics,r=t[0],o=this;if(e&&r){var i=h(r);i&&(e.txSize=i)}this.startTime=a.now(),this.listener=function(t){try{"abort"===t.type&&(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof n.onload))&&o.end(n)}catch(e){try{f.emit("internal-error",[e])}catch(r){}}};for(var s=0;s<d;s++)n.addEventListener(u[s],this.listener,!1)}),f.on("xhr-cb-time",function(t,n,e){this.cbTime+=t,n?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof e.onload||this.end(e)}),f.on("xhr-load-added",function(t,n){var e=""+l(t)+!!n;this.xhrGuids&&!this.xhrGuids[e]&&(this.xhrGuids[e]=!0,this.totalCbs+=1)}),f.on("xhr-load-removed",function(t,n){var e=""+l(t)+!!n;this.xhrGuids&&this.xhrGuids[e]&&(delete this.xhrGuids[e],this.totalCbs-=1)}),f.on("addEventListener-end",function(t,n){n instanceof m&&"load"===t[0]&&f.emit("xhr-load-added",[t[1],t[2]],n)}),f.on("removeEventListener-end",function(t,n){n instanceof m&&"load"===t[0]&&f.emit("xhr-load-removed",[t[1],t[2]],n)}),f.on("fn-start",function(t,n,e){n instanceof m&&("onload"===e&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=a.now()))}),f.on("fn-end",function(t,n){this.xhrCbStart&&f.emit("xhr-cb-time",[a.now()-this.xhrCbStart,this.onload,n],n)})}},{}],11:[function(t,n,e){n.exports=function(t){var n=document.createElement("a"),e=window.location,r={};n.href=t,r.port=n.port;var o=n.href.split("://");!r.port&&o[1]&&(r.port=o[1].split("/")[0].split("@").pop().split(":")[1]),r.port&&"0"!==r.port||(r.port="https"===o[0]?"443":"80"),r.hostname=n.hostname||e.hostname,r.pathname=n.pathname,r.protocol=o[0],"/"!==r.pathname.charAt(0)&&(r.pathname="/"+r.pathname);var i=!n.protocol||":"===n.protocol||n.protocol===e.protocol,a=n.hostname===document.domain&&n.port===e.port;return r.sameOrigin=i&&(!n.hostname||a),r}},{}],12:[function(t,n,e){function r(){}function o(t,n,e){return function(){return i(t,[f.now()].concat(s(arguments)),n?null:this,e),n?void 0:this}}var i=t("handle"),a=t(15),s=t(16),c=t("ee").get("tracer"),f=t("loader"),u=NREUM;"undefined"==typeof window.newrelic&&(newrelic=u);var d=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",p=l+"ixn-";a(d,function(t,n){u[n]=o(l+n,!0,"api")}),u.addPageAction=o(l+"addPageAction",!0),u.setCurrentRouteName=o(l+"routeName",!0),n.exports=newrelic,u.interaction=function(){return(new r).get()};var h=r.prototype={createTracer:function(t,n){var e={},r=this,o="function"==typeof n;return i(p+"tracer",[f.now(),t,e],r),function(){if(c.emit((o?"":"no-")+"fn-start",[f.now(),r,o],e),o)try{return n.apply(this,arguments)}finally{c.emit("fn-end",[f.now()],e)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,n){h[n]=o(p+n)}),newrelic.noticeError=function(t){"string"==typeof t&&(t=new Error(t)),i("err",[t,f.now()])}},{}],13:[function(t,n,e){n.exports=function(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(n){return}}}},{}],14:[function(t,n,e){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),n.exports=r},{}],15:[function(t,n,e){function r(t,n){var e=[],r="",i=0;for(r in t)o.call(t,r)&&(e[i]=n(r,t[r]),i+=1);return e}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],16:[function(t,n,e){function r(t,n,e){n||(n=0),"undefined"==typeof e&&(e=t?t.length:0);for(var r=-1,o=e-n||0,i=Array(o<0?0:o);++r<o;)i[r]=t[n+r];return i}n.exports=r},{}],17:[function(t,n,e){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],18:[function(t,n,e){function r(t){return!(t&&t instanceof Function&&t.apply&&!t[a])}var o=t("ee"),i=t(16),a="nr@original",s=Object.prototype.hasOwnProperty,c=!1;n.exports=function(t,n){function e(t,n,e,o){function nrWrapper(){var r,a,s,c;try{a=this,r=i(arguments),s="function"==typeof e?e(r,a):e||{}}catch(f){l([f,"",[r,a,o],s])}u(n+"start",[r,a,o],s);try{return c=t.apply(a,r)}catch(d){throw u(n+"err",[r,a,d],s),d}finally{u(n+"end",[r,a,c],s)}}return r(t)?t:(n||(n=""),nrWrapper[a]=t,d(t,nrWrapper),nrWrapper)}function f(t,n,o,i){o||(o="");var a,s,c,f="-"===o.charAt(0);for(c=0;c<n.length;c++)s=n[c],a=t[s],r(a)||(t[s]=e(a,f?s+o:o,i,s))}function u(e,r,o){if(!c||n){var i=c;c=!0;try{t.emit(e,r,o,n)}catch(a){l([a,e,r,o])}c=i}}function d(t,n){if(Object.defineProperty&&Object.keys)try{var e=Object.keys(t);return e.forEach(function(e){Object.defineProperty(n,e,{get:function(){return t[e]},set:function(n){return t[e]=n,n}})}),n}catch(r){l([r])}for(var o in t)s.call(t,o)&&(n[o]=t[o]);return n}function l(n){try{t.emit("internal-error",n)}catch(e){}}return t||(t=o),e.inPlace=f,e.flag=a,e}},{}],ee:[function(t,n,e){function r(){}function o(t){function n(t){return t&&t instanceof r?t:t?c(t,s,i):i()}function e(e,r,o,i){if(!l.aborted||i){t&&t(e,r,o);for(var a=n(o),s=h(e),c=s.length,f=0;f<c;f++)s[f].apply(a,r);var d=u[y[e]];return d&&d.push([g,e,r,a]),a}}function p(t,n){v[t]=h(t).concat(n)}function h(t){return v[t]||[]}function m(t){return d[t]=d[t]||o(e)}function w(t,n){f(t,function(t,e){n=n||"feature",y[e]=n,n in u||(u[n]=[])})}var v={},y={},g={on:p,emit:e,get:m,listeners:h,context:n,buffer:w,abort:a,aborted:!1};return g}function i(){return new r}function a(){(u.api||u.feature)&&(l.aborted=!0,u=l.backlog={})}var s="nr@context",c=t("gos"),f=t(15),u={},d={},l=n.exports=o();l.backlog=u},{}],gos:[function(t,n,e){function r(t,n,e){if(o.call(t,n))return t[n];var r=e();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(t,n,e){function r(t,n,e,r){o.buffer([t],r),o.emit(t,n,e)}var o=t("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(t,n,e){function r(t){var n=typeof t;return!t||"object"!==n&&"function"!==n?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");n.exports=r},{}],loader:[function(t,n,e){function r(){if(!x++){var t=b.info=NREUM.info,n=l.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&n))return u.abort();f(y,function(n,e){t[n]||(t[n]=e)}),c("mark",["onload",a()+b.offset],null,"api");var e=l.createElement("script");e.src="https://"+t.agent,n.parentNode.insertBefore(e,n)}}function o(){"complete"===l.readyState&&i()}function i(){c("mark",["domContent",a()+b.offset],null,"api")}function a(){return E.exists&&performance.now?Math.round(performance.now()):(s=Math.max((new Date).getTime(),s))-b.offset}var s=(new Date).getTime(),c=t("handle"),f=t(15),u=t("ee"),d=window,l=d.document,p="addEventListener",h="attachEvent",m=d.XMLHttpRequest,w=m&&m.prototype;NREUM.o={ST:setTimeout,CT:clearTimeout,XHR:m,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var v=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1026.min.js"},g=m&&w&&w[p]&&!/CriOS/.test(navigator.userAgent),b=n.exports={offset:s,now:a,origin:v,features:{},xhrWrappable:g};t(12),l[p]?(l[p]("DOMContentLoaded",i,!1),d[p]("load",r,!1)):(l[h]("onreadystatechange",o),d[h]("onload",r)),c("mark",["firstbyte",s],null,"api");var x=0,E=t(17)},{}]},{},["loader",2,10,4,3]);</script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","queueTime":4,"licenseKey":"b3f36084f2","agent":"","transactionName":"MlFTNxdTW0UEVhdcWQsbdxYLUUFfCltMUFsIVR8CFUJGGARAB1xTC1dUTRNbUEEWDxBcUQtBQTwIU1tXAlA8RUQAUlQRAFxWUxY=","applicationID":"2450843","errorBeacon":"bam.nr-data.net","applicationTime":245}</script>
+    <title>Sign up</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/sign-up-forms.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="https://use.typekit.com/qhw3vfu.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 </head>
+<body class="signup-form">
+    <div id="Manage">
 
-<body class="ema">
+        <div class="form-wrapper">
+            <div class="form-image emmaEditDotBox">
 
-<div class="mimi_webform_container">
-  <div class="mimi_webform with_bg">
+            </div>
+            <div class="form-top-message emmaEditDotBox">
+                To sign up to receive our emails, fill in the following fields and hit submit. Thanks, and welcome!
+            </div>
+            <div class="form-fields">
+                <form method="post" id="signup" name="signup">
 
-        <div class="mimi_webform_header mimi_webform_logo ui_light" style='background-color:#EFEFEF; max-width:396px;'>
-            <h1 style="">Polymathic</h1>
+
+                    <input id="id_prev_member_email" name="prev_member_email" type="hidden"/>
+
+                    <input id="id_source" name="source" type="hidden"/>
+
+
+
+
+                    <input type="hidden" name="prev_member_email" value=""/>
+                    <input title="invalid_signup_element" style="display: none;" name="invalid_signup" value=""/>
+                    <div class="form-fields__fields-wrapper">
+
+
+
+
+
+
+
+                        <div class="field">
+                            <b class="emmaFormLabelBold">Email</b>
+
+                                <span class="emmaFormLabelSmall">*</span>
+
+
+
+                            <div class="field-html ">
+                                <input id="id_email" name="email" type="email"/>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                    <div class="form-required">
+                        <span class="emmaFormLabelSmall">*</span>
+                        <span class="emmaRequiredLabel"> = required field</span>
+                    </div>
+
+                    <div class="form-button">
+                        <input type="submit" name="Submit" value="Submit"/>
+                    </div>
+                </form>
+            </div>
         </div>
-    <form id="ema_signup_form" style="max-width:396px;" action="https://madmimi.com/signups/iframe_subscribe/103242" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="RhtvXkXEbMNc+JIDw16AD6YHSfHjN1Wa75x6rlCybYoRNynWjyGWthSGFATjYnwHSK4dUYIPHj9VpeTqNJ2z8g==" />
-  <fieldset>
-        <div class='mimi_field text' style='max-width:356px;height:65px;'>
-  <label for='signup_name'>Name</label>
-  <input id='signup_name' name='signup[name]' type='text' data-required-field='This field is required'  >
-  <span class='mimi_funk'></span>
-</div>
-
-        <div class='mimi_field text required' style='max-width:356px;height:65px;'>
-  <label for='signup_email'>Email</label>
-  <input id='signup_email' name='signup[email]' type='text' data-required-field='This field is required' placeholder=you@example.com class=required>
-  <span class='mimi_funk'></span>
-</div>
-
-
-      <div style="background: white; font-size:1px; height: 0; overflow: hidden">
-
-        <input type="hidden" name="spinner" value="7c0442e4f7d49abfa03fe6f1bd699939f6f3f4bfc45483705bd50cecf2986d277b6ec32ab9e4172235eb5929ba035fee" />
-        <input type="text" name="d5ae1d9aa05b39486b92cf62fab5a5bd" style="font-size: 1px; width: 1px !important; height:1px !important; border:0 !important; line-height: 1px !important; padding: 0 0; min-height:1px !important;"/>
-        <input class="checkbox" type="checkbox" name="beacon" />
-
-  </div>
-
-    <div class='mimi_field action' style='max-width:356px;height:35px;'>
-  <input type='submit' class='submit' value='Subscribe' id='webform_submit_button' data-default-text='Subscribe' data-submitting-text='Sending...' data-invalid-text='↑ You forgot some required fields' data-choose-list='↑ Choose a list' data-thanks='Thank you!'>
-</div>
-
-  </fieldset>
-</form>
-  </div>
-</div>
-
-<script type="text/javascript">
-(function(global) {
-  function serialize(form){if(!form||form.nodeName!=="FORM"){return }var i,j,q=[];for(i=form.elements.length-1;i>=0;i=i-1){if(form.elements[i].name===""){continue}switch(form.elements[i].nodeName){case"INPUT":switch(form.elements[i].type){case"text":case"hidden":case"password":case"button":case"reset":case"submit":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"checkbox":case"radio":if(form.elements[i].checked){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value))}break;case"file":break}break;case"TEXTAREA":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"SELECT":switch(form.elements[i].type){case"select-one":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break;case"select-multiple":for(j=form.elements[i].options.length-1;j>=0;j=j-1){if(form.elements[i].options[j].selected){q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].options[j].value))}}break}break;case"BUTTON":switch(form.elements[i].type){case"reset":case"submit":case"button":q.push(form.elements[i].name+"="+encodeURIComponent(form.elements[i].value));break}break}}return q.join("&")};
-
-
-  function extend(destination, source) {
-    for (var prop in source) {
-      destination[prop] = source[prop];
-    }
-  }
-
-  if (!Mimi) var Mimi = {};
-  if (!Mimi.Signups) Mimi.Signups = {};
-
-  Mimi.Signups.EmbedValidation = function() {
-    this.initialize();
-
-    var _this = this;
-    if (document.addEventListener) {
-      this.form.addEventListener('submit', function(e){
-        _this.onFormSubmit(e);
-      });
-    } else {
-      this.form.attachEvent('onsubmit', function(e){
-        _this.onFormSubmit(e);
-      });
-    }
-  };
-
-  extend(Mimi.Signups.EmbedValidation.prototype, {
-    initialize: function() {
-      this.form         = document.getElementById('ema_signup_form');
-      this.submit       = document.getElementById('webform_submit_button');
-      this.callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-      this.validEmail   = /.+@.+\..+/
-    },
-
-    onFormSubmit: function(e) {
-      e.preventDefault();
-
-      this.validate();
-      if (this.isValid) {
-        this.submitForm();
-      } else {
-        this.revalidateOnChange();
-      }
-    },
-
-    validate: function() {
-      this.isValid = true;
-      this.emailValidation();
-      this.fieldAndListValidation();
-      this.updateFormAfterValidation();
-    },
-
-    emailValidation: function() {
-      var email = document.getElementById('signup_email');
-
-      if (this.validEmail.test(email.value)) {
-        this.removeTextFieldError(email);
-      } else {
-        this.textFieldError(email);
-        this.isValid = false;
-      }
-    },
-
-    fieldAndListValidation: function() {
-      var fields = this.form.querySelectorAll('.mimi_field.required');
-
-      for (var i = 0; i < fields.length; ++i) {
-        var field = fields[i],
-            type  = this.fieldType(field);
-        if (type === 'checkboxes' || type === 'radio_buttons') {
-          this.checkboxAndRadioValidation(field);
-        } else {
-          this.textAndDropdownValidation(field, type);
-        }
-      }
-    },
-
-    fieldType: function(field) {
-      var type = field.querySelectorAll('.field_type');
-
-      if (type.length) {
-        return type[0].getAttribute('data-field-type');
-      } else if (field.className.indexOf('checkgroup') >= 0) {
-        return 'checkboxes';
-      } else {
-        return 'text_field';
-      }
-    },
-
-    checkboxAndRadioValidation: function(field) {
-      var inputs   = field.getElementsByTagName('input'),
-          selected = false;
-
-      for (var i = 0; i < inputs.length; ++i) {
-        var input = inputs[i];
-        if((input.type === 'checkbox' || input.type === 'radio') && input.checked) {
-          selected = true;
-        }
-      }
-
-      if (selected) {
-        field.className = field.className.replace(/ invalid/g, '');
-      } else {
-        if (field.className.indexOf('invalid') === -1) {
-          field.className += ' invalid';
-        }
-
-        this.isValid = false;
-      }
-    },
-
-    textAndDropdownValidation: function(field, type) {
-      var inputs = field.getElementsByTagName('input');
-
-      for (var i = 0; i < inputs.length; ++i) {
-        var input = inputs[i];
-        if (input.name.indexOf('signup') >= 0) {
-          if (type === 'text_field') {
-            this.textValidation(input);
-          } else {
-            this.dropdownValidation(field, input);
-          }
-        }
-      }
-      this.htmlEmbedDropdownValidation(field);
-    },
-
-    textValidation: function(input) {
-      if (input.id === 'signup_email') return;
-
-      if (input.value) {
-        this.removeTextFieldError(input);
-      } else {
-        this.textFieldError(input);
-        this.isValid = false;
-      }
-    },
-
-    dropdownValidation: function(field, input) {
-      if (input.value) {
-        field.className = field.className.replace(/ invalid/g, '');
-      } else {
-        if (field.className.indexOf('invalid') === -1) field.className += ' invalid';
-        this.onSelectCallback(input);
-        this.isValid = false;
-      }
-    },
-
-    htmlEmbedDropdownValidation: function(field) {
-      var dropdowns = field.querySelectorAll('.mimi_html_dropdown');
-      var _this = this;
-
-      for (var i = 0; i < dropdowns.length; ++i) {
-        var dropdown = dropdowns[i];
-
-        if (dropdown.value) {
-          field.className = field.className.replace(/ invalid/g, '');
-        } else {
-          if (field.className.indexOf('invalid') === -1) field.className += ' invalid';
-          this.isValid = false;
-          dropdown.onchange = (function(){ _this.validate(); });
-        }
-      }
-    },
-
-    textFieldError: function(input) {
-      input.className   = 'required invalid';
-      input.placeholder = input.getAttribute('data-required-field');
-    },
-
-    removeTextFieldError: function(input) {
-      input.className   = 'required';
-      input.placeholder = '';
-    },
-
-    onSelectCallback: function(input) {
-      if (typeof Widget === 'undefined' || !Widget.BasicDropdown) return;
-
-      var dropdownEl = input.parentNode,
-          instances  = Widget.BasicDropdown.instances,
-          _this = this;
-
-      for (var i = 0; i < instances.length; ++i) {
-        var instance = instances[i];
-        if (instance.wrapperEl === dropdownEl) {
-          instance.onSelect = function(){ _this.validate() };
-        }
-      }
-    },
-
-    updateFormAfterValidation: function() {
-      this.form.className   = this.setFormClassName();
-      this.submit.value     = this.submitButtonText();
-      this.submit.disabled  = !this.isValid;
-      this.submit.className = this.isValid ? 'submit' : 'disabled';
-    },
-
-    setFormClassName: function() {
-      var name = this.form.className;
-
-      if (this.isValid) {
-        return name.replace(/\s?mimi_invalid/, '');
-      } else {
-        if (name.indexOf('mimi_invalid') === -1) {
-          return name += ' mimi_invalid';
-        } else {
-          return name;
-        }
-      }
-    },
-
-    submitButtonText: function() {
-      var invalidFields = document.querySelectorAll('.invalid'),
-          text;
-
-      if (this.isValid || !invalidFields) {
-        text = this.submit.getAttribute('data-default-text');
-      } else {
-        if (invalidFields.length || invalidFields[0].className.indexOf('checkgroup') === -1) {
-          text = this.submit.getAttribute('data-invalid-text');
-        } else {
-          text = this.submit.getAttribute('data-choose-list');
-        }
-      }
-      return text;
-    },
-
-    submitForm: function() {
-      this.formSubmitting();
-
-      var _this = this;
-      window[this.callbackName] = function(response) {
-        delete window[this.callbackName];
-        document.body.removeChild(script);
-        _this.onSubmitCallback(response);
-      };
-
-      var script = document.createElement('script');
-      script.src = this.formUrl('json');
-      document.body.appendChild(script);
-    },
-
-    formUrl: function(format) {
-      var action  = this.form.action;
-      if (format === 'json') action += '.json';
-      return action + '?callback=' + this.callbackName + '&' + serialize(this.form);
-    },
-
-    formSubmitting: function() {
-      this.form.className  += ' mimi_submitting';
-      this.submit.value     = this.submit.getAttribute('data-submitting-text');
-      this.submit.disabled  = true;
-      this.submit.className = 'disabled';
-    },
-
-    onSubmitCallback: function(response) {
-      if (response.success) {
-        this.onSubmitSuccess(response.result);
-      } else {
-        top.location.href = this.formUrl('html');
-      }
-    },
-
-    onSubmitSuccess: function(result) {
-      if (result.has_redirect) {
-        top.location.href = result.redirect;
-      } else if(result.single_opt_in || !result.confirmation_html) {
-        this.disableForm();
-        this.updateSubmitButtonText(this.submit.getAttribute('data-thanks'));
-      } else {
-        this.showConfirmationText(result.confirmation_html);
-      }
-    },
-
-    showConfirmationText: function(html) {
-      var fields = this.form.querySelectorAll('.mimi_field');
-
-      for (var i = 0; i < fields.length; ++i) {
-        fields[i].style['display'] = 'none';
-      }
-
-      (this.form.querySelectorAll('fieldset')[0] || this.form).innerHTML = html;
-    },
-
-    disableForm: function() {
-      var elements = this.form.elements;
-      for (var i = 0; i < elements.length; ++i) {
-        elements[i].disabled = true;
-      }
-    },
-
-    updateSubmitButtonText: function(text) {
-      this.submit.value = text;
-    },
-
-    revalidateOnChange: function() {
-      var fields = this.form.querySelectorAll(".mimi_field.required"),
-          _this = this;
-
-      for (var i = 0; i < fields.length; ++i) {
-        var inputs = fields[i].getElementsByTagName('input');
-        for (var j = 0; j < inputs.length; ++j) {
-          if (this.fieldType(fields[i]) === 'text_field') {
-            inputs[j].onkeyup = function() {
-              var input = this;
-              if (input.getAttribute('name') === 'signup[email]') {
-                if (_this.validEmail.test(input.value)) _this.validate();
-              } else {
-                if (input.value.length === 1) _this.validate();
-              }
-            }
-          } else {
-            inputs[j].onchange = function(){ _this.validate() };
-          }
-        }
-      }
-    }
-  });
-
-  if (document.addEventListener) {
-    document.addEventListener("DOMContentLoaded", function() {
-      new Mimi.Signups.EmbedValidation();
-    });
-  }
-  else {
-    window.attachEvent('onload', function() {
-      new Mimi.Signups.EmbedValidation();
-    });
-  }
-})(this);
-</script>
-
-<script type="text/javascript">
-(function() {
-  function getElementsByClassName(node, classname) {
-    var a = [];
-    var re = new RegExp('(^| )'+classname+'( |$)');
-    var els = node.getElementsByTagName("*");
-    for(var i=0,j=els.length; i < j; i++)
-        if(re.test(els[i].className)){
-          a.push(els[i]);
-        }
-    return a;
-  };
-
-	document.onclick = function(e) {
-    if (!e) {
-      e = window.event;
-    }
-
-    var focus = getElementsByClassName(document.body, 'focus');
-
-    if(focus.length > 0) {
-      for(var i = 0; i < focus.length; ++i) {
-        focus[i].className = focus[i].className.replace(/ focus/g, '');
-      }
-    }
-
-    var mimiField = findMimiField(e.target || e.srcElement);
-    if(mimiField) {
-    	if(getElementsByClassName(mimiField, '.combo_input').length == 0) { /* skip if editing options */
-      	mimiField.className += ' focus';
-      }
-    }
-  };
-
-  function findMimiField(elem) {
-    var mimiField = elem.parentNode;
-    while(mimiField && mimiField.className != undefined && mimiField.className.toString().indexOf('mimi_field') == -1) {
-      mimiField = mimiField.parentNode;
-    }
-    if(mimiField.nodeType == 1 /* element */) {
-      return mimiField;
-    } else {
-      return null;
-    }
-  }
- })();
-</script>
-
-
+    </div>
 
 </body>
-
 </html>

@@ -7,8 +7,14 @@ module ServiceProviders
       end
 
       def subscribe(_list_id, params)
-        filled_form = FillEmbedForm.new(@form, params.slice(:email, :name)).call
+        filled_form = fill_form(params)
         client.post filled_form.action_url, filled_form.inputs
+      end
+
+      private
+
+      def fill_form(params)
+        FillEmbedForm.new(@form, params.slice(:email, :name)).call
       end
     end
   end

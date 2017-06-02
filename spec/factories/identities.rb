@@ -27,5 +27,9 @@ FactoryGirl.define do
     trait :vertical_response do
       provider 'vertical_response'
     end
+
+    trait :my_emma do
+      provider 'my_emma'
+    end
   end
 end

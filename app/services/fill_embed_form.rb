@@ -1,10 +1,11 @@
 class FillEmbedForm
-  def initialize(form, email:, name: '')
+  def initialize(form, email:, name: '', ignore: [])
     @form = form.dup
     @params = @form.inputs
     @email = email
     @name = name
     @first_name, @last_name = name.to_s.split(' ', 2)
+    @ignore_params = ignore
   end
 
   def call
@@ -19,14 +20,14 @@ class FillEmbedForm
 
   private
 
-  attr_reader :params, :email, :name, :first_name, :last_name
+  attr_reader :params, :ignore_params, :email, :name, :first_name, :last_name
 
   def email_param
-    params.keys.find { |param| param.include? 'email' }
+    params.keys.find { |param| param.include?('email') && ignore_params.exclude?(param) }
   end
 
   def name_params
-    params.keys.compact.select { |param| param.include?('name') }.compact.presence || []
+    params.keys.select { |param| param.to_s.include?('name') && ignore_params.exclude?(param) }.compact
   end
 
   def value_for_name_part(field_name)

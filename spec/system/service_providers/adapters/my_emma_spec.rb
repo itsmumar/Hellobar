@@ -1,12 +1,12 @@
-describe ServiceProviders::Adapters::MyEmma do
+describe ServiceProviders::Adapters::MyEmma, :no_vcr do
   define_urls(
-    form: 'https://madmimi.com/signups/103242/iframe',
-    subscribe: 'https://madmimi.com/signups/iframe_subscribe/103242'
+    form: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a',
+    subscribe: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
   )
 
   let(:identity) { double('identity', provider: 'my_emma') }
   include_examples 'service provider'
-  let(:contact_list) { create(:contact_list, :embed_iframe) }
+  let(:contact_list) { create(:contact_list, :embed_my_emma) }
 
   allow_request :get, :form
 
@@ -18,12 +18,11 @@ describe ServiceProviders::Adapters::MyEmma do
 
   describe '#subscribe' do
     body = {
-      'authenticity_token' => 'RhtvXkXEbMNc+JIDw16AD6YHSfHjN1Wa75x6rlCybYoRNynWjyGWthSGFATjYnwHSK4dUYIPHj9VpeTqNJ2z8g==',
-      'beacon' => '',
-      'd5ae1d9aa05b39486b92cf62fab5a5bd' => '',
-      'signup' => { 'email' => 'example@email.com', 'name' => 'FirstName LastName' },
-      'spinner' => '7c0442e4f7d49abfa03fe6f1bd699939f6f3f4bfc45483705bd50cecf2986d277b6ec32ab9e4172235eb5929ba035fee',
-      'utf8' => '✓'
+      'Submit' => 'Submit',
+      'email' => 'example@email.com',
+      'invalid_signup' => '',
+      'prev_member_email' => '',
+      'source' => ''
     }
 
     allow_request :post, :subscribe, body: body do |stub|

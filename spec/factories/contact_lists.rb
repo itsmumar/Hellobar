@@ -33,7 +33,7 @@ FactoryGirl.define do
 
     trait :embed_iframe do
       identity { create :identity, :mad_mimi, site: site }
-      data { Hash['embed_code' => '<iframe src="https://madmimi.com/signups/103242/iframe" scrolling="no" frameborder="0" height="405" width="400"></iframe>'] }
+      data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
     end
 
     trait :embed_icontact do
@@ -44,6 +44,16 @@ FactoryGirl.define do
     trait :embed_vertical_response do
       identity { create :identity, :vertical_response, site: site }
       data { Hash['embed_code' => build(:embed_code, provider: 'vertical_response')] }
+    end
+
+    trait :embed_my_emma do
+      identity { create :identity, :my_emma, site: site }
+      data { Hash['embed_code' => build(:embed_code, provider: 'my_emma_iframe')] }
+    end
+
+    trait :embed_mad_mimi do
+      identity { create :identity, :mad_mimi, site: site }
+      data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
     end
   end
 end
