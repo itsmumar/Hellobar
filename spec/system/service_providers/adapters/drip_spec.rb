@@ -30,14 +30,24 @@ describe ServiceProviders::Adapters::Drip do
     let(:body) do
       {
         subscribers: [
-          { new_email: 'example@email.com', tags: [], double_optin: true, email: 'example@email.com' }
+          {
+            new_email: 'example@email.com',
+            tags: ['id1', 'id2'],
+            custom_fields: {
+              name: 'FirstName LastName',
+              fname: 'FirstName',
+              lname: 'LastName'
+            },
+            double_optin: true,
+            email: 'example@email.com'
+          }
         ]
       }.to_json
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
-      adapter.subscribe(list_id, email: 'example@email.com', double_optin: true)
+      provider.subscribe(list_id, email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -48,18 +58,18 @@ describe ServiceProviders::Adapters::Drip do
         import_data: [
           { email_addresses: ['example1@email.com'] }, { email_addresses: ['example2@email.com'] }
         ],
-        lists: [4567456],
+        lists: [list_id],
         column_names: ['E-Mail', 'First Name', 'Last Name']
       }
     end
     let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-    let(:subscribers) { [{ email: 'example1@email.com', double_optin: false }, { email: 'example2@email.com', double_optin: false }] }
+    let(:subscribers) { [{ email: 'example1@email.com', double_optin: true }, { email: 'example2@email.com', double_optin: true }] }
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber)
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber)
       end
-      adapter.batch_subscribe 'list_id', subscribers, double_optin: false
+      provider.batch_subscribe list_id, subscribers
     end
   end
 end

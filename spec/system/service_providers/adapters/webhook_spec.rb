@@ -1,6 +1,7 @@
 describe ServiceProviders::Adapters::Webhook do
   define_urls(
-    subscribe: 'http://webhook.url/subscribe'
+    subscribe: 'http://webhook.url/subscribe',
+    subscribe_get: 'http://webhook.url/subscribe?email=example@email.com&name=FirstName%20LastName'
   )
 
   let(:identity) { double('identity', provider: 'webhook') }
@@ -25,6 +26,19 @@ describe ServiceProviders::Adapters::Webhook do
     it 'sends email and name' do
       provider.subscribe(nil, email: email, name: name)
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'with get request' do
+      let!(:subscribe_request) { allow_request :get, :subscribe_get }
+
+      let(:contact_list) do
+        create(:contact_list, data: { 'webhook_url' => 'http://webhook.url/subscribe', 'webhook_method' => 'GET' })
+      end
+
+      it 'sends email and name' do
+        provider.subscribe(nil, email: email, name: name)
+        expect(subscribe_request).to have_been_made
+      end
     end
 
     context 'with email only' do
