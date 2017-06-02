@@ -25,15 +25,7 @@ module ServiceProviders
     attr_reader :adapter
 
     def initialize(identity, contact_list = nil)
-      adapter_class = self.class.adapter(identity.provider)
-
-      @adapter =
-        if adapter_class < Adapters::EmbedForm
-          adapter_class.new(contact_list)
-        else
-          adapter_class.new(identity)
-        end
-
+      @adapter = determine_adapter(identity, contact_list)
       @identity = identity
       @contact_list = contact_list
     end
@@ -54,6 +46,18 @@ module ServiceProviders
 
     def batch_subscribe(list_id, subscribers)
       adapter.batch_subscribe(list_id, subscribers, double_optin: @contact_list&.double_optin)
+    end
+
+    private
+
+    def determine_adapter(identity, contact_list)
+      adapter_class = self.class.adapter(identity.provider)
+
+      if adapter_class < Adapters::EmbedForm || adapter_class == Adapters::Webhook
+        adapter_class.new(contact_list)
+      else
+        adapter_class.new(identity)
+      end
     end
   end
 end

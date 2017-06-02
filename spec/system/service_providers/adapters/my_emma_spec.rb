@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::MyEmma, :no_vcr do
+describe ServiceProviders::Adapters::MyEmma do
   define_urls(
     form: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a',
     subscribe: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
