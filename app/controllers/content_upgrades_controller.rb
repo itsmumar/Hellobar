@@ -87,6 +87,8 @@ class ContentUpgradesController < ApplicationController
       name_placeholder: params[:name_placeholder],
       email_placeholder: params[:email_placeholder],
       contact_list_id: params[:contact_list_id],
+      content_upgrade_title: params[:content_upgrade_title],
+      content_upgrade_url: params[:content_upgrade_url],
       rule: @site.rules.first
     }.merge(pdf_params)
   end

@@ -11,4 +11,8 @@ class ContentUpgrade < SiteElement
     content = %(window.onload = function() {hellobar("contentUpgrades").show(#{ id });};)
     %(<script id="hb-cu-#{ id }">#{ content }</script>)
   end
+
+  def display_title
+    content_upgrade_title.present? ? content_upgrade_title : offer_headline
+  end
 end
