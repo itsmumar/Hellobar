@@ -7,34 +7,15 @@ export default Ember.Component.extend({
    */
   model: null,
 
+  modelLogic: Ember.inject.service(),
   theming: Ember.inject.service(),
 
   imageUploadCopy: Ember.computed.oneWay('theming.currentTheme.image.upload_copy'),
-
-  defaultImageToggled: function () {
-    if (this.get('useThemeImage')) {
-      this.setDefaultImage();
-    }
-  }.observes('model.use_default_image').on('init'),
-
-  setDefaultImage() {
-    const imageID = this.get('theming.currentTheme.image_upload_id');
-    const imageUrl = this.get('theming.currentTheme.image.default_url');
-    this.send('setImageProps', { imageID, imageUrl, imageType: 'default' });
-  },
+  themeWithImage: Ember.computed.oneWay('theming.themeWithImage'),
+  useThemeImage: Ember.computed.oneWay('theming.useThemeImage'),
 
   allowImages: Ember.computed('model.type', function () {
       return this.get('model.type') !== "Bar";
-    }
-  ),
-
-  themeWithImage: Ember.computed('theming.currentTheme.image', function () {
-      return !!this.get('theming.currentTheme.image');
-    }
-  ),
-
-  useThemeImage: Ember.computed('model.use_default_image', function () {
-      return this.get('model.use_default_image') && this.get('themeWithImage');
     }
   ),
 
@@ -48,17 +29,8 @@ export default Ember.Component.extend({
       this.set('model.image_placement', imagePlacement.value);
     },
 
-    setImageProps({ imageID, imageUrl, imageSmallUrl, imageMediumUrl, imageLargeUrl, imageModalUrl, imageType = null }) {
-      return this.setProperties({
-        'model.active_image_id': imageID,
-        'model.image_placement': this.get('theming').getImagePlacement(),
-        'model.image_url': imageUrl,
-        'model.image_small_url': imageSmallUrl || imageUrl,
-        'model.image_medium_url': imageMediumUrl || imageUrl,
-        'model.image_large_url': imageLargeUrl || imageUrl,
-        'model.image_modal_url': imageModalUrl || imageUrl,
-        'model.image_type': imageType
-      });
+    setImageProps(imageProps) {
+      this.get('modelLogic').setImageProps(imageProps);
     }
   }
 

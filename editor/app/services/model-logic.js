@@ -70,6 +70,31 @@ export default Ember.Service.extend({
     this.set('_previousElementType', elementType);
   }.observes('model.type'),
 
+  // ------ Image
+
+  setImageProps (props) {
+    const {
+      imageID,
+      imagePlacement,
+      imageUrl,
+      imageSmallUrl,
+      imageMediumUrl,
+      imageLargeUrl,
+      imageModalUrl,
+      imageType = null
+    } = props;
+
+    return this.setProperties({
+      'model.active_image_id': imageID,
+      'model.image_placement': imagePlacement,
+      'model.image_url': imageUrl,
+      'model.image_small_url': imageSmallUrl || imageUrl,
+      'model.image_medium_url': imageMediumUrl || imageUrl,
+      'model.image_large_url': imageLargeUrl || imageUrl,
+      'model.image_modal_url': imageModalUrl || imageUrl,
+      'model.image_type': imageType
+    });
+  },
 
   // ------ Cookie settings
 

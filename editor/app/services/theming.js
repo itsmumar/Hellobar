@@ -6,6 +6,7 @@ export default Ember.Service.extend({
   inlineEditing: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
   palette: Ember.inject.service(),
+  modelLogic: Ember.inject.service(),
 
   availableThemes: Ember.computed.alias('applicationSettings.settings.available_themes'),
 
@@ -80,9 +81,34 @@ export default Ember.Service.extend({
   currentTheme: function () {
     const allThemes = this.get('availableThemes');
     const currentThemeId = this.get('model.theme_id');
-    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('theming.defaultGenericTheme');
+    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('defaultGenericTheme');
   }.property('availableThemes', 'model.theme_id'),
 
+  setDefaultImage: function () {
+    const imageID = this.get('currentTheme.image_upload_id');
+    const imageUrl = this.get('currentTheme.image.default_url');
+
+    this.get('modelLogic').setImageProps({
+      imageID,
+      imageUrl,
+      imagePlacement: this.getImagePlacement(),
+      imageType: 'default'
+    });
+  }.observes('model.use_default_image', 'currentTheme').on('init'),
+
+  themeWithImage: function () {
+    return !!this.get('currentTheme.image');
+  }.property('currentTheme.image'),
+
+  useThemeImage: function () {
+    return this.get('model.use_default_image') && this.get('themeWithImage');
+  }.property('model.use_default_image', 'themeWithImage'),
+
+  defaultImageToggled: function () {
+    if (this.get('useThemeImage')) {
+      this.setDefaultImage();
+    }
+  }.observes('useThemeImage', 'currentTheme.image.default_url'),
 
   currentThemeName: function () {
     return this.get('currentTheme.name') || '';
