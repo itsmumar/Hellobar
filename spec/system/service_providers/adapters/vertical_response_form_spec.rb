@@ -14,15 +14,14 @@ describe ServiceProviders::Adapters::VerticalResponseForm do
   end
 
   describe '#subscribe' do
-    body = {
-      'email_address' => 'example@email.com',
-      'first_name' => 'FirstName',
-      'last_name' => 'LastName'
-    }
-
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        'email_address' => 'example@email.com',
+        'first_name' => 'FirstName',
+        'last_name' => 'LastName'
+      }
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)

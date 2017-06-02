@@ -26,10 +26,8 @@ describe ServiceProviders::Adapters::ActiveCampaign do
   end
 
   describe '.subscribe' do
-    body = { email: 'example@email.com', name: 'FirstName LastName', p: ['1'], tags: ['id1', 'id2'] }
-    allow_request :post, :subscribe, body: body do |stub|
-      let!(:create_request) { stub }
-    end
+    let(:body) { { email: 'example@email.com', name: 'FirstName LastName', p: ['1'], tags: ['id1', 'id2'] } }
+    let!(:create_request) { allow_request :post, :subscribe, body: body }
 
     it 'returns array of id => name' do
       provider.subscribe(1, email: email, name: name)

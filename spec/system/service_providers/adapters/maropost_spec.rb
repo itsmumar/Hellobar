@@ -31,10 +31,18 @@ describe ServiceProviders::Adapters::Maropost do
   end
 
   describe '#subscribe' do
-    body = { contact: { email: 'example@email.com', subscribe: true, remove_from_dnm: true, first_name: 'FirstName', last_name: 'LastName' } }.to_json
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        contact: {
+          email: 'example@email.com',
+          subscribe: true,
+          remove_from_dnm: true,
+          first_name: 'FirstName',
+          last_name: 'LastName'
+        }
+      }.to_json
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)

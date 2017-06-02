@@ -24,20 +24,18 @@ describe ServiceProviders::Adapters::Infusionsoft do
   end
 
   describe '#subscribe' do
-    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addWithDupCheck</methodName><params><param><value><string>api_key</string></value></param><param><value><struct><member><name>Email</name><value><string>example@email.com</string></value></member><member><name>FirstName</name><value><string>FirstName</string></value></member><member><name>LastName</name><value><string>LastName</string></value></member></struct></value></param><param><value><string>EmailAndName</string></value></param></params></methodCall>\n"
+    let(:body) { "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addWithDupCheck</methodName><params><param><value><string>api_key</string></value></param><param><value><struct><member><name>Email</name><value><string>example@email.com</string></value></member><member><name>FirstName</name><value><string>FirstName</string></value></member><member><name>LastName</name><value><string>LastName</string></value></member></struct></value></param><param><value><string>EmailAndName</string></value></param></params></methodCall>\n" }
+    let(:optin_body) { "<?xml version=\"1.0\" ?><methodCall><methodName>APIEmailService.optIn</methodName><params><param><value><string>api_key</string></value></param><param><value><string>example@email.com</string></value></param><param><value><string>requested information</string></value></param></params></methodCall>\n" }
+    let(:add_to_group_body_tag1) { "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id1</string></value></param></params></methodCall>\n" }
+    let(:add_to_group_body_tag2) { "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id2</string></value></param></params></methodCall>\n" }
 
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
+
+    before do
+      allow_request :post, :optin, body: optin_body
+      allow_request :post, :add_to_group, body: add_to_group_body_tag1
+      allow_request :post, :add_to_group, body: add_to_group_body_tag2
     end
-
-    body = "<?xml version=\"1.0\" ?><methodCall><methodName>APIEmailService.optIn</methodName><params><param><value><string>api_key</string></value></param><param><value><string>example@email.com</string></value></param><param><value><string>requested information</string></value></param></params></methodCall>\n"
-    allow_request :post, :optin, body: body
-
-    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id1</string></value></param></params></methodCall>\n"
-    allow_request :post, :add_to_group, body: body
-
-    body = "<?xml version=\"1.0\" ?><methodCall><methodName>ContactService.addToGroup</methodName><params><param><value><string>api_key</string></value></param><param><value><i4>1234</i4></value></param><param><value><string>id2</string></value></param></params></methodCall>\n"
-    allow_request :post, :add_to_group, body: body
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)

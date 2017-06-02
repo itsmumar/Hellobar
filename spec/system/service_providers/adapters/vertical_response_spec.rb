@@ -26,9 +26,9 @@ describe ServiceProviders::Adapters::VerticalResponse do
 
   describe '#subscribe' do
     allow_request :get, :list
-    allow_request :post, :subscribe, body: 'email=example%40email.com&first_name=FirstName&last_name=LastName' do |stub|
-      let(:subscribe_request) { stub }
-    end
+
+    let(:body) { 'email=example%40email.com&first_name=FirstName&last_name=LastName' }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)
@@ -38,9 +38,9 @@ describe ServiceProviders::Adapters::VerticalResponse do
 
   describe '#batch_subscribe' do
     allow_request :get, :list
-    allow_request :post, :subscribe, body: 'contacts[][email]=example1%40email.com&contacts[][email]=example2%40email.com' do |stub|
-      let(:subscribe_request) { stub }
-    end
+
+    let(:body) { 'contacts[][email]=example1%40email.com&contacts[][email]=example2%40email.com' }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 

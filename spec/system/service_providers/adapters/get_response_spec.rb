@@ -32,10 +32,8 @@ describe ServiceProviders::Adapters::GetResponse do
     allow_request :get, :contacts
     allow_request :post, :contact
 
-    body = { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' }
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
-    end
+    let(:body) { { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' } }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     before { allow(contact_list).to receive(:subscribers).and_return([email: 'example@email.com']) }
 

@@ -37,10 +37,16 @@ describe ServiceProviders::Adapters::CampaignMonitor do
   end
 
   describe '#subscribe' do
-    body = { EmailAddress: 'example@email.com', Name: 'FirstName LastName', CustomFields: [], Resubscribe: true, RestartSubscriptionBasedAutoresponders: true }
-    allow_request :post, :subscribers, body: body do |stub|
-      let(:create_request) { stub }
+    let(:body) do
+      {
+        EmailAddress: 'example@email.com',
+        Name: 'FirstName LastName',
+        CustomFields: [],
+        Resubscribe: true,
+        RestartSubscriptionBasedAutoresponders: true
+      }
     end
+    let!(:create_request) { allow_request :post, :subscribers, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)
@@ -49,16 +55,19 @@ describe ServiceProviders::Adapters::CampaignMonitor do
   end
 
   describe '#batch_subscribe' do
-    body = {
-      'Subscribers': [
-        { 'EmailAddress': 'example1@email.com', 'Name': 'FirstName LastName' },
-        { 'EmailAddress': 'example2@email.com', 'Name': 'FirstName LastName' }
-      ],
-      'Resubscribe': true, 'QueueSubscriptionBasedAutoresponders': true, 'RestartSubscriptionBasedAutoresponders': false
-    }
-    allow_request :post, :import, body: body do |stub|
-      let(:import_request) { stub }
+    let(:body) do
+      {
+        'Subscribers': [
+          { 'EmailAddress': 'example1@email.com', 'Name': 'FirstName LastName' },
+          { 'EmailAddress': 'example2@email.com', 'Name': 'FirstName LastName' }
+        ],
+        'Resubscribe': true,
+        'QueueSubscriptionBasedAutoresponders': true,
+        'RestartSubscriptionBasedAutoresponders': false
+      }
     end
+    let!(:import_request) { allow_request :post, :import, body: body }
+
     let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
 
     it 'calls #subscribe for each subscriber' do

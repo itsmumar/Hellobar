@@ -40,10 +40,8 @@ describe ServiceProviders::Adapters::AWeber do
   describe '#subscribe' do
     allow_requests :get, :accounts, :lists, :subscribers, :subscriber
 
-    body = { 'name' => 'FirstName LastName', 'tags' => '["id1","id2"]', 'email' => 'example@email.com', 'ws.op' => 'create' }
-    allow_request :post, :subscribers, body: body do |stub|
-      let(:create_request) { stub }
-    end
+    let(:body) { { 'name' => 'FirstName LastName', 'tags' => '["id1","id2"]', 'email' => 'example@email.com', 'ws.op' => 'create' } }
+    let!(:create_request) { allow_request :post, :subscribers, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)

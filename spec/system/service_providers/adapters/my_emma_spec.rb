@@ -17,17 +17,16 @@ describe ServiceProviders::Adapters::MyEmma do
   end
 
   describe '#subscribe' do
-    body = {
-      'Submit' => 'Submit',
-      'email' => 'example@email.com',
-      'invalid_signup' => '',
-      'prev_member_email' => '',
-      'source' => ''
-    }
-
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        'Submit' => 'Submit',
+        'email' => 'example@email.com',
+        'invalid_signup' => '',
+        'prev_member_email' => '',
+        'source' => ''
+      }
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)

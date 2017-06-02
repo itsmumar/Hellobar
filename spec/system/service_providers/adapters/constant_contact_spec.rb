@@ -36,10 +36,15 @@ describe ServiceProviders::Adapters::ConstantContact do
   describe '#subscribe' do
     allow_request :get, :list
 
-    body = { email_addresses: [{ email_address: 'example@email.com' }], first_name: 'FirstName', last_name: 'LastName', lists: [{ id: 4567456, name: 'List1' }] }
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        email_addresses: [{ email_address: 'example@email.com' }],
+        first_name: 'FirstName',
+        last_name: 'LastName',
+        lists: [{ id: 4567456, name: 'List1' }]
+      }
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       expect(provider.subscribe(list_id, email: email, name: name)).to be_a ::ConstantContact::Components::Contact

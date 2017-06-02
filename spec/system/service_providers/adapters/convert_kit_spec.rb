@@ -27,11 +27,16 @@ describe ServiceProviders::Adapters::ConvertKit do
   end
 
   describe '#subscribe' do
-    body = { body: { email: 'example@email.com', tags: 'id1,id2', fields: { last_name: 'LastName' }, first_name: 'FirstName' } }
-
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        body: {
+          email: 'example@email.com',
+          tags: 'id1,id2',
+          fields: { last_name: 'LastName' }, first_name: 'FirstName'
+        }
+      }
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       expect(provider.subscribe(list_id, email: 'example@email.com', name: 'FirstName LastName')).to be_a Hash

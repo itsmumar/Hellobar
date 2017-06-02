@@ -5,7 +5,12 @@ describe ServiceProviders::Adapters::MailChimp do
     batch_subscribe: 'http://apiendpoint/3.0/batches'
   )
 
-  let(:identity) { double('identity', provider: 'mailchimp', extra: { 'metadata' => { 'api_endpoint' => 'http://apiendpoint' } }, credentials: { 'token' => 'api_key' }) }
+  let(:identity) do
+    double('identity',
+      provider: 'mailchimp',
+      extra: { 'metadata' => { 'api_endpoint' => 'http://apiendpoint' } },
+      credentials: { 'token' => 'api_key' })
+  end
 
   include_examples 'service provider'
 
@@ -29,9 +34,14 @@ describe ServiceProviders::Adapters::MailChimp do
   end
 
   describe '#subscribe' do
-    allow_request :post, :subscribe, body: '{"email_address":"example@email.com","status":"pending","merge_fields":{"FNAME":"FirstName","LNAME":"LastName"}}' do |stub|
-      let(:subscribe_request) { stub }
+    let(:body) do
+      {
+        email_address: 'example@email.com',
+        status: 'pending',
+        merge_fields: { FNAME: 'FirstName', LNAME: 'LastName' }
+      }.to_json
     end
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)
@@ -40,21 +50,20 @@ describe ServiceProviders::Adapters::MailChimp do
   end
 
   describe '#batch_subscribe' do
-    body = {
-      operations: [
-        { method: 'POST', path: 'lists/list_id/members', body: '{"email_address":"example1@email.com","status":"pending"}' },
-        { method: 'POST', path: 'lists/list_id/members', body: '{"email_address":"example2@email.com","status":"pending"}' }
-      ]
-    }
-
-    allow_request :post, :batch_subscribe, body: body do |stub|
-      let(:batch_subscribe_request) { stub }
+    let(:body) do
+      {
+        operations: [
+          { method: 'POST', path: "lists/#{ list_id }/members", body: '{"email_address":"example1@email.com","status":"pending"}' },
+          { method: 'POST', path: "lists/#{ list_id }/members", body: '{"email_address":"example2@email.com","status":"pending"}' }
+        ]
+      }
     end
+    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 
     it 'sends post request to /audience_members' do
-      provider.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe list_id, subscribers
       expect(batch_subscribe_request).to have_been_made
     end
   end

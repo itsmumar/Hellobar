@@ -27,10 +27,8 @@ describe ServiceProviders::Adapters::MadMimi do
   end
 
   describe '#subscribe' do
-    body = 'username=username&api_key=api_key&name=FirstName%20LastName&email=example%40email.com'
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
-    end
+    let(:body) { 'username=username&api_key=api_key&name=FirstName%20LastName&email=example%40email.com' }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
       provider.subscribe(list_id, email: email, name: name)
@@ -39,10 +37,10 @@ describe ServiceProviders::Adapters::MadMimi do
   end
 
   describe '#batch_subscribe' do
-    body = 'username=username&api_key=api_key&csv_file=email%2Cadd_list%0Aexample1%40email.com%2Clist_id%0Aexample2%40email.com%2Clist_id%0A'
-    allow_request :post, :batch_subscribe, body: body do |stub|
-      let(:batch_subscribe_request) { stub }
+    let(:body) do
+      'username=username&api_key=api_key&csv_file=email%2Cadd_list%0Aexample1%40email.com%2Clist_id%0Aexample2%40email.com%2Clist_id%0A'
     end
+    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 
     it 'sends post request to /audience_members' do
