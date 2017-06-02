@@ -8,7 +8,21 @@ export default Ember.Component.extend({
   classNameBindings: ['isSelected'],
 
   selection: null,
+  selectionInProgress: false,
 
-  isSelected: Ember.computed.notEmpty('selection')
+  isSelected: function () {
+    return !!this.get('selection') && !this.get('selectionInProgress');
+  }.property('selection', 'selectionInProgress'),
+
+  init() {
+    this._super();
+    this.set('selectionInProgress', !this.get('selection'));
+  },
+
+  actions: {
+    clearSocialSelection () {
+      this.set('selectionInProgress', true);
+    }
+  }
 
 });

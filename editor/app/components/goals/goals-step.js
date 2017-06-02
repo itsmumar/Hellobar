@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   goal: Ember.computed.alias('model.element_subtype'),
 
   propertiesComponentName: function() {
-    const goal = this.get('goal');
+    const [goal] = this.get('goal').split('/');
     return `goals/${goal}/${goal}-goal-properties`;
   }.property('goal')
 
