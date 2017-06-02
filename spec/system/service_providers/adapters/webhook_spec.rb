@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Webhook do
+describe ServiceProviders::Adapters::Webhook, :no_vcr do
   define_urls(
     subscribe: 'http://webhook.url/subscribe'
   )
@@ -18,14 +18,43 @@ describe ServiceProviders::Adapters::Webhook do
   end
 
   describe '#subscribe' do
-    body = { email: 'example@email.com', name: 'FirstName LastName' }
-    allow_request :post, :subscribe, body: body do |stub|
-      let(:subscribe_request) { stub }
-    end
+    let(:body) { { email: 'example@email.com', name: 'FirstName LastName' } }
 
-    it 'sends subscribe request' do
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
+
+    it 'sends email and name' do
       provider.subscribe(nil, email: email, name: name)
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'with email only' do
+      let(:body) { { email: 'example@email.com', name: nil } }
+
+      it 'sends email request' do
+        provider.subscribe(nil, email: email)
+        expect(subscribe_request).to have_been_made
+      end
+    end
+
+    context 'with custom fields' do
+      let(:custom_fields) { %w[phone email name empty gender] }
+      let(:body) { { email: email, phone: '+1000000000', name: 'Name', empty: '', gender: 'Male' } }
+      let!(:site_element) { create(:site_element, :with_custom_fields, contact_list: contact_list, fields: custom_fields) }
+
+      it 'sends email and all other custom fields' do
+        provider.subscribe(nil, email: email, name: '+1000000000,Name,,Male')
+        expect(subscribe_request).to have_been_made
+      end
+
+      context 'when fields mismatch settings' do
+        let(:custom_fields) { %w[phone email name] }
+        let(:body) { { email: email } }
+
+        it 'sends only email' do
+          provider.subscribe(nil, email: email, name: '+1000000000,Name,,Male')
+          expect(subscribe_request).to have_been_made
+        end
+      end
     end
   end
 

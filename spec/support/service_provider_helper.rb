@@ -26,6 +26,23 @@ module ServiceProviderHelper
     end
   end
 
+  def allow_requests(method, *requests)
+    requests.each do |request|
+      allow_request(method, request)
+    end
+  end
+
+  def allow_request(method, request, body: {})
+    url = url_for_request(request)
+    response = response_for(method, request)
+
+    if block_given?
+      yield stub_request(method, url).with(body: body).to_return(response)
+    else
+      stub_request(method, url).with(body: body).to_return(response)
+    end
+  end
+
   def adapter_name
     described_class.name.demodulize.underscore
   end

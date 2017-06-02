@@ -36,7 +36,7 @@ module ServiceProviders
 
     delegate :lists, to: :adapter
 
-    def subscribe(list_id, email:, name:)
+    def subscribe(list_id, email:, name: nil)
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
 
       adapter.subscribe(list_id, params).tap do
