@@ -7,7 +7,6 @@ if ENV['COVERAGE'] || ENV['CI']
   SimpleCov.command_name 'test:unit'
   SimpleCov.coverage_dir 'tmp/coverage'
   SimpleCov.start('rails') do
-    # we test seeds in a different way - just by running them
     add_filter '/lib/legacy_migrator/'
     add_filter '/lib/legacy_migrator.rb'
     add_filter '/lib/test_site.rb'
