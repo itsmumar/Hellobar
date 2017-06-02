@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Webhook, :no_vcr do
+describe ServiceProviders::Adapters::Webhook do
   define_urls(
     subscribe: 'http://webhook.url/subscribe'
   )
