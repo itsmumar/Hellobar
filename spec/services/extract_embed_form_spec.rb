@@ -1,6 +1,15 @@
 describe ExtractEmbedForm do
   let(:service) { described_class.new(embed_code) }
 
+  context 'when error is raised while remote request' do
+    let(:embed_code) { 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a' }
+
+    it 'returns nothing' do
+      allow(HTTParty).to receive(:get).and_raise HTTParty::Error
+      expect { service.call }.to raise_error HTTParty::Error
+    end
+  end
+
   context 'when embed code is a form' do
     let(:embed_code) { build :embed_code, provider: 'mad_mimi_form' }
     let(:form) { service.call }

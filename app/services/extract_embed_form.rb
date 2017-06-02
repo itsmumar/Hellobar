@@ -73,8 +73,6 @@ class ExtractEmbedForm
 
   def request_embed_url
     HTTParty.get(embed_url).to_s
-  rescue => _
-    ''
   end
 
   def extract_html_from_script(remote_html)
