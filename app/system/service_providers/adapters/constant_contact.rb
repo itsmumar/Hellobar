@@ -5,8 +5,8 @@ module ServiceProviders
 
       register :constantcontact
 
-      def initialize(config_source)
-        @token = config_source.credentials['token']
+      def initialize(identity)
+        @token = identity.credentials['token']
         super ::ConstantContact::Api.new(config.app_key)
       end
 

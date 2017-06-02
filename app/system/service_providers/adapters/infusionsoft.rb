@@ -3,10 +3,10 @@ module ServiceProviders
     class Infusionsoft < Api
       register :infusionsoft
 
-      def initialize(config_source)
+      def initialize(identity)
         super ::Infusionsoft::Client.new(
-          api_url: config_source.extra['app_url'],
-          api_key: config_source.api_key,
+          api_url: identity.extra['app_url'],
+          api_key: identity.api_key,
           api_logger: Logger.new(nil)
         )
       end

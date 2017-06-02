@@ -3,8 +3,8 @@ module ServiceProviders
     class VerticalResponse < Api
       register :verticalresponse
 
-      def initialize(config_source)
-        super ::VerticalResponse::API::OAuth.new config_source.credentials['token']
+      def initialize(identity)
+        super ::VerticalResponse::API::OAuth.new identity.credentials['token']
       end
 
       def lists

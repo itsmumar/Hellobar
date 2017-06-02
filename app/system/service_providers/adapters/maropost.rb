@@ -3,11 +3,11 @@ module ServiceProviders
     class Maropost < FaradayClient
       register :maropost
 
-      def initialize(config_source)
-        account_id = config_source.credentials['username']
+      def initialize(identity)
+        account_id = identity.credentials['username']
         url = "#{ config.url }/accounts/#{ account_id }"
 
-        super url, request: :json, params: { auth_token: config_source.api_key }
+        super url, request: :json, params: { auth_token: identity.api_key }
       end
 
       def lists

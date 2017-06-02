@@ -5,8 +5,8 @@ module ServiceProviders
 
       config.error_path = 'codeDescription'
 
-      def initialize(config_source)
-        super 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ config_source.api_key }" }
+      def initialize(identity)
+        super 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ identity.api_key }" }
       end
 
       def lists

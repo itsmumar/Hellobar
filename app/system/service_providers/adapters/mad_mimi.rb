@@ -3,8 +3,8 @@ module ServiceProviders
     class MadMimi < Api
       register :mad_mimi
 
-      def initialize(config_source)
-        super ::MadMimi.new(config_source.credentials['username'], config_source.api_key, raise_exceptions: true)
+      def initialize(identity)
+        super ::MadMimi.new(identity.credentials['username'], identity.api_key, raise_exceptions: true)
       end
 
       def lists

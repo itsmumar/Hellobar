@@ -3,10 +3,10 @@ module ServiceProviders
     class Drip < Api
       register :drip
 
-      def initialize(config_source)
+      def initialize(identity)
         super ::Drip::Client.new(
-          access_token: config_source.credentials['token'],
-          account_id: config_source.extra['account_id']
+          access_token: identity.credentials['token'],
+          account_id: identity.extra['account_id']
         )
       end
 

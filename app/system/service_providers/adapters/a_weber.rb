@@ -3,9 +3,9 @@ module ServiceProviders
     class AWeber < Api
       register :aweber
 
-      def initialize(config_source)
+      def initialize(identity)
         oauth = ::AWeber::OAuth.new(config.consumer_key, config.consumer_secret)
-        oauth.authorize_with_access(config_source.credentials['token'], config_source.credentials['secret'])
+        oauth.authorize_with_access(identity.credentials['token'], identity.credentials['secret'])
         super ::AWeber::Base.new(oauth)
       end
 

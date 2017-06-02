@@ -5,8 +5,8 @@ module ServiceProviders
 
       config.error_path = 'error'
 
-      def initialize(config_source)
-        super 'https://api.convertkit.com/v3', params: { api_secret: config_source.api_key }
+      def initialize(identity)
+        super 'https://api.convertkit.com/v3', params: { api_secret: identity.api_key }
       end
 
       def lists

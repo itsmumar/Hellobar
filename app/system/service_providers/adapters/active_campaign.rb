@@ -5,10 +5,10 @@ module ServiceProviders
     class ActiveCampaign < Api
       register :active_campaign
 
-      def initialize(config_source)
+      def initialize(identity)
         super ::ActiveCampaign::Client.new(
-          api_endpoint: 'https://' + config_source.extra['app_url'] + '/admin/api.php',
-          api_key: config_source.api_key
+          api_endpoint: 'https://' + identity.extra['app_url'] + '/admin/api.php',
+          api_key: identity.api_key
         )
       end
 
