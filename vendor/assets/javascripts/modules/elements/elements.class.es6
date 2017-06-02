@@ -60,15 +60,20 @@ hellobar.defineModule('elements.class',
         var model = this.model();
         options = options || {};
 
+        function defaultImage() {
+          if (model.theme && model.theme.image && location == model.theme.image.position_default)
+            return model.theme.image.default_url;
+        }
+
         function imageSrc() {
           const imageStyle = model.image_style || 'modal';
           const imageUrl = model[`image_${imageStyle}_url`] || model.image_url;
 
-          return imageUrl || options.defaultImgSrc;
+          return imageUrl || defaultImage();
         }
 
         var locationIndex = location.indexOf(model.image_placement);
-        if (!options.defaultImgSrc && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
+        if (!defaultImage() && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
           return '';
         }
         else if (model.image_placement == 'background') {
