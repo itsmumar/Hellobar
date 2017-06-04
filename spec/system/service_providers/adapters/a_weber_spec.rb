@@ -1,10 +1,12 @@
 describe ServiceProviders::Adapters::AWeber do
-  define_urls(
-    accounts: 'https://api.aweber.com/1.0/accounts?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
-    lists: 'https://api.aweber.com/1.0/accounts/1118926/lists?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
-    subscribers: 'https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
-    subscriber: 'https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0'
-  )
+  let(:defined_urls) do
+    {
+      accounts: 'https://api.aweber.com/1.0/accounts?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
+      lists: 'https://api.aweber.com/1.0/accounts/1118926/lists?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
+      subscribers: 'https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
+      subscriber: 'https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63461580?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'aweber', credentials: { 'token' => 'token', 'secret' => 'secret' }) }
 
@@ -30,7 +32,7 @@ describe ServiceProviders::Adapters::AWeber do
   end
 
   describe '#lists' do
-    allow_requests :get, :accounts, :lists
+    before { allow_requests :get, :accounts, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
@@ -38,7 +40,7 @@ describe ServiceProviders::Adapters::AWeber do
   end
 
   describe '#subscribe' do
-    allow_requests :get, :accounts, :lists, :subscribers, :subscriber
+    before { allow_requests :get, :accounts, :lists, :subscribers, :subscriber }
 
     let(:body) { { 'name' => 'FirstName LastName', 'tags' => '["id1","id2"]', 'email' => 'example@email.com', 'ws.op' => 'create' } }
     let!(:create_request) { allow_request :post, :subscribers, body: body }

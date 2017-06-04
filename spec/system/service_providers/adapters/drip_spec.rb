@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::Drip do
-  define_urls(
-    lists: 'https://api.getdrip.com/v2/account_id/campaigns?status=active',
-    subscribe: 'https://api.getdrip.com/v2/account_id/campaigns/4567456/subscribers',
-    batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://api.getdrip.com/v2/account_id/campaigns?status=active',
+      subscribe: 'https://api.getdrip.com/v2/account_id/campaigns/4567456/subscribers',
+      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'drip', credentials: { 'token' => 'token' }, extra: { 'account_id' => 'account_id' }) }
 
@@ -19,7 +21,7 @@ describe ServiceProviders::Adapters::Drip do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]

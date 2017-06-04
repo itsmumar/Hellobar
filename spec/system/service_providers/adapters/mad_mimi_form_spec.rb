@@ -1,14 +1,16 @@
 describe ServiceProviders::Adapters::MadMimiForm do
-  define_urls(
-    form: 'https://madmimi.com/signups/103242/iframe',
-    subscribe: 'https://madmimi.com/signups/iframe_subscribe/103242'
-  )
+  let(:defined_urls) do
+    {
+      form: 'https://madmimi.com/signups/103242/iframe',
+      subscribe: 'https://madmimi.com/signups/iframe_subscribe/103242'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'mad_mimi_form') }
   include_examples 'service provider'
   let(:contact_list) { create(:contact_list, :embed_mad_mimi) }
 
-  allow_request :get, :form
+  before { allow_request :get, :form }
 
   describe '#initialize' do
     it 'initializes Faraday::Connection' do

@@ -97,6 +97,8 @@ RSpec.configure do |config|
   # Fail if no examples have been run (helps with setting up CI)
   config.fail_if_no_examples = true
 
+  # assign :service_provider type tag for files under service_providers path
+  # so that we can include helpers for service providers, see rails_helper.rb
   config.define_derived_metadata(file_path: %r{/service_providers/}) do |metadata|
     metadata[:type] = :service_provider
   end

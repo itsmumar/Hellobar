@@ -1,8 +1,10 @@
 describe ServiceProviders::Adapters::ActiveCampaign do
-  define_urls(
-    lists: 'https://example.com/admin/api.php?api_action=list_list&api_key=api_key&api_output=json&ids=all',
-    subscribe: 'https://example.com/admin/api.php?api_action=contact_sync&api_key=api_key&api_output=json'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://example.com/admin/api.php?api_action=list_list&api_key=api_key&api_output=json&ids=all',
+      subscribe: 'https://example.com/admin/api.php?api_action=contact_sync&api_key=api_key&api_output=json'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'active_campaign', api_key: 'api_key', extra: { 'app_url' => 'example.com' }) }
 
@@ -18,7 +20,7 @@ describe ServiceProviders::Adapters::ActiveCampaign do
   end
 
   describe '.lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]

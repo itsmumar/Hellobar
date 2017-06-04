@@ -1,10 +1,12 @@
 describe ServiceProviders::Adapters::ConstantContact do
-  define_urls(
-    lists: 'https://api.constantcontact.com/v2/lists?api_key=app_key',
-    list: 'https://api.constantcontact.com/v2/lists/4567456?api_key=app_key',
-    subscribe: 'https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=app_key',
-    batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://api.constantcontact.com/v2/lists?api_key=app_key',
+      list: 'https://api.constantcontact.com/v2/lists/4567456?api_key=app_key',
+      subscribe: 'https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=app_key',
+      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'constantcontact', credentials: { 'token' => 'token' }) }
 
@@ -26,7 +28,7 @@ describe ServiceProviders::Adapters::ConstantContact do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
@@ -34,7 +36,7 @@ describe ServiceProviders::Adapters::ConstantContact do
   end
 
   describe '#subscribe' do
-    allow_request :get, :list
+    before { allow_request :get, :list }
 
     let(:body) do
       {
@@ -53,15 +55,15 @@ describe ServiceProviders::Adapters::ConstantContact do
   end
 
   describe '#batch_subscribe' do
-    body = { import_data: [
-      { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example1@email.com'] },
-      { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example2@email.com'] }
-    ], lists: [4567456], column_names: ['E-Mail', 'First Name', 'Last Name'] }
-
-    allow_request :post, :batch_subscribe, body: body do |stub|
-      let(:batch_subscribe_request) { stub }
+    let(:body) do
+      { import_data: [
+        { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example1@email.com'] },
+        { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example2@email.com'] }
+      ], lists: [4567456], column_names: ['E-Mail', 'First Name', 'Last Name'] }
     end
+
     let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
+    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     it 'calls #subscribe for each subscriber' do
       provider.batch_subscribe list_id, subscribers

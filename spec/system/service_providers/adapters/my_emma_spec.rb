@@ -1,14 +1,16 @@
 describe ServiceProviders::Adapters::MyEmma do
-  define_urls(
-    form: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a',
-    subscribe: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
-  )
+  let(:defined_urls) do
+    {
+      form: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a',
+      subscribe: 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'my_emma') }
   include_examples 'service provider'
   let(:contact_list) { create(:contact_list, :my_emma) }
 
-  allow_request :get, :form
+  before { allow_request :get, :form }
 
   describe '#initialize' do
     it 'initializes Faraday::Connection' do

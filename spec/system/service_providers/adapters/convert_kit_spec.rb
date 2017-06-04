@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::ConvertKit do
-  define_urls(
-    lists: 'https://api.convertkit.com/forms?api_secret=api_key',
-    subscribe: 'https://api.convertkit.com/forms/4567456/subscribe?api_secret=api_key',
-    batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://api.convertkit.com/forms?api_secret=api_key',
+      subscribe: 'https://api.convertkit.com/forms/4567456/subscribe?api_secret=api_key',
+      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'convert_kit', api_key: 'api_key') }
 
@@ -19,7 +21,7 @@ describe ServiceProviders::Adapters::ConvertKit do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
@@ -45,10 +47,18 @@ describe ServiceProviders::Adapters::ConvertKit do
   end
 
   describe '#batch_subscribe' do
-    allow_request :post, :batch_subscribe, body: { import_data: [{ email_addresses: ['example1@email.com'] }, { email_addresses: ['example2@email.com'] }], lists: [4567456], column_names: ['E-Mail', 'First Name', 'Last Name'] } do |stub|
-      let(:batch_subscribe_request) { stub }
+    let(:body) do
+      {
+        import_data: [
+          { email_addresses: ['example1@email.com'] },
+          { email_addresses: ['example2@email.com'] }
+        ],
+        lists: [4567456],
+        column_names: ['E-Mail', 'First Name', 'Last Name']
+      }
     end
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
+    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|

@@ -1,10 +1,12 @@
 describe ServiceProviders::Adapters::GetResponse do
-  define_urls(
-    lists: 'https://api.getresponse.com/campaigns?perPage=500',
-    contacts: 'https://api.getresponse.com/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
-    contact: 'https://api.getresponse.com/contacts/1',
-    subscribe: 'https://api.getresponse.com/contacts'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://api.getresponse.com/campaigns?perPage=500',
+      contacts: 'https://api.getresponse.com/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
+      contact: 'https://api.getresponse.com/contacts/1',
+      subscribe: 'https://api.getresponse.com/contacts'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'get_response', api_key: 'api_key') }
 
@@ -21,7 +23,7 @@ describe ServiceProviders::Adapters::GetResponse do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(adapter.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
@@ -29,8 +31,8 @@ describe ServiceProviders::Adapters::GetResponse do
   end
 
   describe '#subscribe' do
-    allow_request :get, :contacts
-    allow_request :post, :contact
+    before { allow_request :get, :contacts }
+    before { allow_request :post, :contact }
 
     let(:body) { { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' } }
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }

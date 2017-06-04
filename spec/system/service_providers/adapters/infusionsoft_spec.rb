@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::Infusionsoft do
-  define_urls(
-    subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
-    optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
-    add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
-  )
+  let(:defined_urls) do
+    {
+      subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
+      optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
+      add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'infusionsoft', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
 

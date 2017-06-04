@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::VerticalResponse do
-  define_urls(
-    lists: 'https://vrapi.verticalresponse.com/api/v1/lists?access_token=token',
-    list: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456?access_token=token',
-    subscribe: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456/contacts?access_token=token'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'https://vrapi.verticalresponse.com/api/v1/lists?access_token=token',
+      list: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456?access_token=token',
+      subscribe: 'https://vrapi.verticalresponse.com/api/v1/lists/4567456/contacts?access_token=token'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'verticalresponse', credentials: { 'token' => 'token' }) }
 
@@ -17,7 +19,7 @@ describe ServiceProviders::Adapters::VerticalResponse do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
@@ -25,7 +27,7 @@ describe ServiceProviders::Adapters::VerticalResponse do
   end
 
   describe '#subscribe' do
-    allow_request :get, :list
+    before { allow_request :get, :list }
 
     let(:body) { 'email=example%40email.com&first_name=FirstName&last_name=LastName' }
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
@@ -37,7 +39,7 @@ describe ServiceProviders::Adapters::VerticalResponse do
   end
 
   describe '#batch_subscribe' do
-    allow_request :get, :list
+    before { allow_request :get, :list }
 
     let(:body) { 'contacts[][email]=example1%40email.com&contacts[][email]=example2%40email.com' }
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }

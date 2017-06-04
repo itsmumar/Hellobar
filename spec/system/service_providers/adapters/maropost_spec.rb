@@ -1,8 +1,10 @@
 describe ServiceProviders::Adapters::Maropost do
-  define_urls(
-    lists: 'http://maropost.url/accounts/12345/lists.json?auth_token=api_key&no_counts=true',
-    subscribe: 'http://maropost.url/accounts/12345/lists/4567456/contacts.json?auth_token=api_key'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'http://maropost.url/accounts/12345/lists.json?auth_token=api_key&no_counts=true',
+      subscribe: 'http://maropost.url/accounts/12345/lists/4567456/contacts.json?auth_token=api_key'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'maropost', api_key: 'api_key', credentials: { 'username' => '12345' }) }
 
@@ -23,7 +25,7 @@ describe ServiceProviders::Adapters::Maropost do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]

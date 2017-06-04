@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::MailChimp do
-  define_urls(
-    lists: 'http://apiendpoint/3.0/lists?count=100',
-    subscribe: 'http://apiendpoint/3.0/lists/57afe96172/members',
-    batch_subscribe: 'http://apiendpoint/3.0/batches'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'http://apiendpoint/3.0/lists?count=100',
+      subscribe: 'http://apiendpoint/3.0/lists/57afe96172/members',
+      batch_subscribe: 'http://apiendpoint/3.0/batches'
+    }
+  end
 
   let(:identity) do
     double('identity',
@@ -26,7 +28,7 @@ describe ServiceProviders::Adapters::MailChimp do
   end
 
   describe '#lists' do
-    allow_request :get, :lists
+    before { allow_request :get, :lists }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]

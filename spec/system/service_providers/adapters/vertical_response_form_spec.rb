@@ -1,7 +1,9 @@
 describe ServiceProviders::Adapters::VerticalResponseForm do
-  define_urls(
-    subscribe: 'http://oi.vresp.com?fid=e831f8d796'
-  )
+  let(:defined_urls) do
+    {
+      subscribe: 'http://oi.vresp.com?fid=e831f8d796'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'vertical_response') }
   include_examples 'service provider'

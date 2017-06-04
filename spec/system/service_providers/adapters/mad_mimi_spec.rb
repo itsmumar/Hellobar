@@ -1,9 +1,11 @@
 describe ServiceProviders::Adapters::MadMimi do
-  define_urls(
-    lists: 'http://api.madmimi.com/audience_lists/lists.xml',
-    subscribe: 'http://api.madmimi.com/audience_lists/4567456/add',
-    batch_subscribe: 'http://api.madmimi.com/audience_members'
-  )
+  let(:defined_urls) do
+    {
+      lists: 'http://api.madmimi.com/audience_lists/lists.xml',
+      subscribe: 'http://api.madmimi.com/audience_lists/4567456/add',
+      batch_subscribe: 'http://api.madmimi.com/audience_members'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'mad_mimi', api_key: 'api_key', credentials: { 'username' => 'username' }) }
 
@@ -19,7 +21,7 @@ describe ServiceProviders::Adapters::MadMimi do
   end
 
   describe '#lists' do
-    allow_request :get, :lists, body: 'username=username&api_key=api_key'
+    before { allow_request :get, :lists, body: 'username=username&api_key=api_key' }
 
     it 'returns array of id => name' do
       expect(provider.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]

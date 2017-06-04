@@ -1,33 +1,6 @@
 Dir[Rails.root.join('app', 'system', 'service_providers', '**', '*.rb')].each(&method(:require))
 
 module ServiceProviderHelper
-  extend ActiveSupport::Concern
-
-  class_methods do
-    def define_urls(urls)
-      let(:defined_urls) { urls }
-    end
-
-    def allow_request(method, request, body: {})
-      before do
-        url = url_for_request(request)
-        response = response_for(method, request)
-
-        if block_given?
-          yield stub_request(method, url).with(body: body).to_return(response)
-        else
-          stub_request(method, url).with(body: body).to_return(response)
-        end
-      end
-    end
-
-    def allow_requests(method, *requests)
-      requests.each do |request|
-        allow_request(method, request)
-      end
-    end
-  end
-
   def allow_requests(method, *requests)
     requests.each do |request|
       allow_request(method, request)

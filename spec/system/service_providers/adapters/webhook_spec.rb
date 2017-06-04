@@ -1,8 +1,10 @@
 describe ServiceProviders::Adapters::Webhook do
-  define_urls(
-    subscribe: 'http://webhook.url/subscribe',
-    subscribe_get: 'http://webhook.url/subscribe?email=example@email.com&name=FirstName%20LastName'
-  )
+  let(:defined_urls) do
+    {
+      subscribe: 'http://webhook.url/subscribe',
+      subscribe_get: 'http://webhook.url/subscribe?email=example@email.com&name=FirstName%20LastName'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'webhook') }
   include_examples 'service provider'

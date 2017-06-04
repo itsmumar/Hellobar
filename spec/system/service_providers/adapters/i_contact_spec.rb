@@ -1,14 +1,16 @@
 describe ServiceProviders::Adapters::IContact do
-  define_urls(
-    form: 'http://app.icontact.com/icp/loadsignup.php/form.js?c=1450422&f=564&l=7290',
-    subscribe: 'http://app.icontact.com/icp/signup.php'
-  )
+  let(:defined_urls) do
+    {
+      form: 'http://app.icontact.com/icp/loadsignup.php/form.js?c=1450422&f=564&l=7290',
+      subscribe: 'http://app.icontact.com/icp/signup.php'
+    }
+  end
 
   let(:identity) { double('identity', provider: 'icontact') }
   include_examples 'service provider'
   let(:contact_list) { create(:contact_list, :embed_icontact) }
 
-  allow_request :get, :form
+  before { allow_request :get, :form }
 
   describe '#initialize' do
     it 'initializes Faraday::Connection' do
