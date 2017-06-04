@@ -12,6 +12,12 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
+  config.around(:each, :no_vcr) do |example|
+    VCR.turned_off do
+      example.run
+    end
+  end
+
   config.around(:each, :vcr) do |example|
     description = example.metadata.fetch(:example_group, example.metadata)[:full_description]
     name = description.split(/\s+/, 2).join('/').underscore.strip.gsub(/[^\w\/]+/, '_')

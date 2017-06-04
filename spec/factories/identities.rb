@@ -19,5 +19,21 @@ FactoryGirl.define do
       provider 'constantcontact'
       credentials { Hash['token' => 'key'] }
     end
+
+    trait :icontact do
+      provider 'icontact'
+    end
+
+    trait :vertical_response do
+      provider 'vertical_response'
+    end
+
+    trait :my_emma do
+      provider 'my_emma'
+    end
+
+    trait :drip do
+      provider 'drip'
+    end
   end
 end

@@ -1,0 +1,26 @@
+{
+  "total_size": 1,
+  "start": 0,
+  "entries": [
+    {
+      "total_unconfirmed_subscribers": 5,
+      "total_subscribers_subscribed_yesterday": 0,
+      "unique_list_id": "awlist4567456",
+      "http_etag": "\"90078029eb91dac69312c7193f2ffa6b83b8b1a3-ca5feee2b7fbb6febfca8af5541541ea960aaedb\"",
+      "web_form_split_tests_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/web_form_split_tests",
+      "subscribers_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers",
+      "total_subscribers_subscribed_today": 0,
+      "id": 4567456,
+      "total_subscribed_subscribers": 4,
+      "total_unsubscribed_subscribers": 0,
+      "campaigns_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/campaigns",
+      "custom_fields_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/custom_fields",
+      "self_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456",
+      "total_subscribers": 4,
+      "resource_type_link": "https://api.aweber.com/1.0/#list",
+      "web_forms_collection_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/web_forms",
+      "name": "List1"
+    }
+  ],
+  "resource_type_link": "https://api.aweber.com/1.0/#list-page-resource"
+}

@@ -11,7 +11,7 @@ class Identity < ActiveRecord::Base
 
   validates :provider, presence: true,
                        uniqueness: { scope: :site_id },
-                       inclusion: { in: Settings.identity_providers.keys.map(&:to_s) }
+                       inclusion: { in: proc { Settings.identity_providers.keys.map(&:to_s) } }
 
   validates :site, association_exists: true
   validate :service_provider_valid

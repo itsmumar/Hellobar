@@ -1,0 +1,23 @@
+{
+  "attributes": {
+    "birthdate": "Birthdate",
+    "city": "City",
+    "company": "Company",
+    "country": "Country",
+    "email": "Email",
+    "extended_address": "Address 2",
+    "fax": "Fax",
+    "first_name": "First Name",
+    "gender": "Gender",
+    "home_phone": "Home",
+    "last_name": "Last Name",
+    "marital_status": "Marital Status",
+    "mobile_phone": "Mobile",
+    "postal_code": "Postal Code",
+    "state": "State (Region)",
+    "street_address": "Address 1",
+    "title": "Title",
+    "website": "Website",
+    "work_phone": "Work"
+  }
+}

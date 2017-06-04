@@ -1,0 +1,38 @@
+{
+  "self_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers?ws.start=0&ws.size=100&account_id=1118926&list_id=4567456",
+  "start": 0,
+  "total_size": 9,
+  "resource_type_link": "https://api.aweber.com/1.0/#subscribers-page-resource",
+  "entries": [
+    {
+      "subscription_url": "https://www.aweber.com/users/leads/add",
+      "postal_code": null,
+      "id": 63434477,
+      "custom_fields": {},
+      "last_followup_sent_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/campaigns/f1001",
+      "city": "Chandigarh",
+      "ad_tracking": "control panel",
+      "dma_code": null,
+      "last_followup_message_number_sent": 1001,
+      "last_followup_sent_at": null,
+      "misc_notes": "",
+      "is_verified": true,
+      "latitude": 30.7343,
+      "resource_type_link": "https://api.aweber.com/1.0/#subscriber",
+      "email": "raj.kumar@crossover.com",
+      "status": "subscribed",
+      "area_code": null,
+      "unsubscribed_at": null,
+      "self_link": "https://api.aweber.com/1.0/accounts/1118926/lists/4567456/subscribers/63434477",
+      "unsubscribe_method": null,
+      "ip_address": "125.62.107.208",
+      "name": "Manual        Subscriber",
+      "subscription_method": "webform",
+      "country": "India",
+      "region": "CH",
+      "longitude": 76.7933,
+      "verified_at": "2017-02-21T14:11:57",
+      "subscribed_at": "2017-02-21T14:10:31-05:00"
+    }
+  ]
+}

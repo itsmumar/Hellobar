@@ -8,6 +8,8 @@ describe SubscribeContact do
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
 
+  before { allow_any_instance_of(ContactList).to receive(:embed_code_valid?).and_return(true) }
+  before { allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true) }
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }
   before { allow(contact_list).to receive(:syncable?).and_return(true) }
 
@@ -162,6 +164,30 @@ describe SubscribeContact do
     it 'does nothing' do
       expect(contact_list.service_provider).to be_nil
       expect(service.call).to be_nil
+    end
+  end
+
+  context 'with new implementation', :no_vcr do
+    SubscribeContact::NEW_IMPLEMENTATION.each do |provider|
+      context "of #{ provider }" do
+        let(:identity) { create :identity, provider: provider }
+        let(:contact_list) { create :contact_list, provider.to_sym, identity: identity }
+        let(:list_id) { contact_list.data['remote_id'] }
+
+        let(:adapter_class) { ServiceProviders::Provider.adapter(identity.provider) }
+        let(:adapter) { double('adapter') }
+
+        it 'calls ServiceProviders::Provider' do
+          if adapter_class < ServiceProviders::Adapters::EmbedForm || adapter_class == ServiceProviders::Adapters::Webhook
+            allow(adapter_class).to receive(:new).with(contact_list).and_return adapter
+          else
+            allow(adapter_class).to receive(:new).with(identity).and_return adapter
+          end
+
+          expect(adapter).to receive(:subscribe).with(list_id, email: email, name: name, tags: [], double_optin: true)
+          service.call
+        end
+      end
     end
   end
 end
