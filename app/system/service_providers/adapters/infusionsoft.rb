@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class Infusionsoft < Api
+    class Infusionsoft < Base
       register :infusionsoft
 
       def initialize(identity)

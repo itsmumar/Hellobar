@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class MadMimi < Api
+    class MadMimi < Base
       register :mad_mimi
 
       def initialize(identity)

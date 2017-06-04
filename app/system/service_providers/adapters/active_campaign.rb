@@ -2,7 +2,7 @@ HTTPI.log = false
 
 module ServiceProviders
   module Adapters
-    class ActiveCampaign < Api
+    class ActiveCampaign < Base
       register :active_campaign
 
       def initialize(identity)

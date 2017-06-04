@@ -2,7 +2,7 @@ require 'createsend'
 
 module ServiceProviders
   module Adapters
-    class CampaignMonitor < Api
+    class CampaignMonitor < Base
       register :campaign_monitor
 
       def initialize(identity)

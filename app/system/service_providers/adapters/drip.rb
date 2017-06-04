@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class Drip < Api
+    class Drip < Base
       register :drip
 
       def initialize(identity)

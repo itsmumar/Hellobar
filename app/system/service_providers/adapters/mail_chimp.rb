@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class MailChimp < Api
+    class MailChimp < Base
       register :mailchimp
 
       def initialize(identity)

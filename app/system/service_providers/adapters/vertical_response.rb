@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class VerticalResponse < Api
+    class VerticalResponse < Base
       register :verticalresponse
 
       def initialize(identity)

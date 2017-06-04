@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class FaradayClient < Api
+    class FaradayClient < Base
       class RequestError < StandardError; end
 
       def initialize(url = nil, request: :url_encoded, params: {}, headers: {})

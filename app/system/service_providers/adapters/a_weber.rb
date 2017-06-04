@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class AWeber < Api
+    class AWeber < Base
       register :aweber
 
       def initialize(identity)

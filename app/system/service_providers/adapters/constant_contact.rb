@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class ConstantContact < Api
+    class ConstantContact < Base
       EMAIL_REGEXP = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
 
       register :constantcontact
