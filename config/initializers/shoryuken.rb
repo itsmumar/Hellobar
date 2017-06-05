@@ -14,6 +14,7 @@ end
 class CustomWorkerRegistry < Shoryuken::DefaultWorkerRegistry
   def fetch_worker(queue, message)
     return SubscribeContactWorker.new if SubscribeContactWorker.parse(message.body)
+    Raven.capture_message('Could not parse sqs message', extra: { message: message.body, sqs_msg: message })
     super
   end
 end
