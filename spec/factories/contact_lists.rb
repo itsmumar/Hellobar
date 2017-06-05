@@ -39,6 +39,27 @@ FactoryGirl.define do
       data { Hash['remote_id' => 1] }
     end
 
+    trait :active_campaign do
+      identity { create :identity, :active_campaign, site: site }
+    end
+
+    trait :infusionsoft do
+      identity { create :identity, :infusionsoft, site: site }
+    end
+
+    trait :convert_kit do
+      identity { create :identity, :convert_kit, site: site }
+    end
+
+    trait :icontact do
+      identity { create :identity, :icontact, site: site }
+      data { Hash['embed_code' => build(:embed_code, provider: 'icontact')] }
+    end
+
+    trait :mad_mimi_api do
+      identity { create :identity, :mad_mimi_api, site: site }
+    end
+
     trait :my_emma do
       identity { create :identity, :my_emma, site: site }
       data { Hash['embed_code' => build(:embed_code, provider: 'my_emma_iframe')] }
@@ -57,11 +78,6 @@ FactoryGirl.define do
     trait :embed_iframe do
       identity { create :identity, :mad_mimi, site: site }
       data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
-    end
-
-    trait :embed_icontact do
-      identity { create :identity, :icontact, site: site }
-      data { Hash['embed_code' => build(:embed_code, provider: 'icontact')] }
     end
 
     trait :embed_mad_mimi do
