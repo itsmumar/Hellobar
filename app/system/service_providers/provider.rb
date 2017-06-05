@@ -6,16 +6,8 @@ module ServiceProviders
       ActiveSupport::OrderedOptions.new { |hash, k| hash[k] = ActiveSupport::OrderedOptions.new }
     end
 
-    mattr_reader :adapters do
-      {}
-    end
-
     def self.adapter(key)
-      adapters.fetch(key.to_sym)
-    end
-
-    def self.register(adapter, klass)
-      adapters.update adapter.to_sym => klass
+      Adapters.fetch(key.to_sym)
     end
 
     def self.configure

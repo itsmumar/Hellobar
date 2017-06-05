@@ -1,7 +1,10 @@
 module ServiceProviders
   module Adapters
     class MadMimi < Base
-      register :mad_mimi
+      configure do |config|
+        config.requires_api_key = true
+        config.requires_username = true
+      end
 
       def initialize(identity)
         super ::MadMimi.new(identity.credentials['username'], identity.api_key, raise_exceptions: true)

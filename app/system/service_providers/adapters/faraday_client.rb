@@ -18,7 +18,7 @@ module ServiceProviders
         response_hash = JSON.parse response.body
         return response_hash if response.success?
 
-        raise RequestError, config.error_path.present? ? response_hash[config.error_path] : response_hash
+        raise RequestError, response_hash.to_json
       end
     end
   end

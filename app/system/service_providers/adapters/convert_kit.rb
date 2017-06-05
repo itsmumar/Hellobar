@@ -1,9 +1,9 @@
 module ServiceProviders
   module Adapters
     class ConvertKit < FaradayClient
-      register :convert_kit
-
-      config.error_path = 'error'
+      configure do |config|
+        config.requires_api_key = true
+      end
 
       def initialize(identity)
         super 'https://api.convertkit.com/v3', params: { api_secret: identity.api_key }

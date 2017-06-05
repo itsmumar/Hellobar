@@ -1,7 +1,9 @@
 module ServiceProviders
   module Adapters
     class Webhook < FaradayClient
-      register :webhook
+      configure do |config|
+        config.requires_webhook_url = true
+      end
 
       def initialize(contact_list)
         @contact_list = contact_list

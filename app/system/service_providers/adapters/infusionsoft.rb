@@ -1,7 +1,10 @@
 module ServiceProviders
   module Adapters
     class Infusionsoft < Base
-      register :infusionsoft
+      configure do |config|
+        config.requires_api_key = true
+        config.requires_app_url = true
+      end
 
       def initialize(identity)
         super ::Infusionsoft::Client.new(

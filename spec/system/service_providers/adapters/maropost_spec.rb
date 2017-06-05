@@ -11,8 +11,8 @@ describe ServiceProviders::Adapters::Maropost do
   include_examples 'service provider'
 
   before do
-    ServiceProviders::Provider.configure do |config|
-      config.maropost.url = 'http://maropost.url'
+    ServiceProviders::Adapters::Maropost.configure do |config|
+      config.url = 'http://maropost.url'
     end
   end
 

@@ -1,9 +1,9 @@
 module ServiceProviders
   module Adapters
     class GetResponse < FaradayClient
-      register :get_response
-
-      config.error_path = 'codeDescription'
+      configure do |config|
+        config.requires_api_key = true
+      end
 
       def initialize(identity)
         super 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ identity.api_key }" }

@@ -6,7 +6,7 @@ describe ServiceProviders::Adapters::Webhook do
     }
   end
 
-  let(:identity) { double('identity', provider: 'webhook') }
+  let(:identity) { double('identity', provider: 'webhooks') }
   include_examples 'service provider'
 
   let(:contact_list) do

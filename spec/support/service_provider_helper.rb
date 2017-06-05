@@ -1,5 +1,3 @@
-Dir[Rails.root.join('app', 'system', 'service_providers', '**', '*.rb')].each(&method(:require))
-
 module ServiceProviderHelper
   def allow_requests(method, *requests)
     requests.each do |request|
