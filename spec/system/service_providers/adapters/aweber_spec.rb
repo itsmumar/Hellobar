@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::AWeber do
+describe ServiceProviders::Adapters::Aweber do
   let(:defined_urls) do
     {
       accounts: 'https://api.aweber.com/1.0/accounts?oauth_consumer_key=consumer_key{&oauth_nonce,oauth_signature,oauth_signature_method,oauth_timestamp}&oauth_token=token&oauth_version=1.0',
@@ -13,9 +13,9 @@ describe ServiceProviders::Adapters::AWeber do
   include_examples 'service provider'
 
   before do
-    ServiceProviders::Provider.configure do |config|
-      config.aweber.consumer_key = 'consumer_key'
-      config.aweber.consumer_secret = 'consumer_secret'
+    ServiceProviders::Adapters::Aweber.configure do |config|
+      config.consumer_key = 'consumer_key'
+      config.consumer_secret = 'consumer_secret'
     end
   end
 
