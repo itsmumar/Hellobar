@@ -36,7 +36,7 @@ export default Ember.Component.extend({
   actions: {
 
     closeInterstitial() {
-      this.get('router').transitionTo('goals');
+      this.get('router').transitionTo('styles');
     },
 
     selectFacebookLikeOption(option) {
