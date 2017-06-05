@@ -11,6 +11,7 @@ export default Ember.Component.extend({
   model: null,
 
   applicationSettings: Ember.inject.service(),
+  modelLogic: Ember.inject.service(),
 
   selectionInProgress: null,
 
@@ -42,8 +43,7 @@ export default Ember.Component.extend({
   }.property('model.site.rules'),
 
   associateRuleToModel(rule) {
-    this.set('model.rule_id', rule && rule.id);
-    this.set('model.rule', rule);
+    this.get('modelLogic').setRule(rule);
   },
 
   trackUpgrade() {
@@ -96,12 +96,18 @@ export default Ember.Component.extend({
           that.get('model.site.rules').push(ruleData);
         }
 
-        that.associateRuleToModel(ruleData);
         that.notifyPropertyChange('model.site.rules');
+
+        that.associateRuleToModel(ruleData);
+        that.set('selectionInProgress', false);
       },
-      close() {
+      close(cancel = true) {
         that.ruleModal = null;
-        isNewRule && that.send('initiateSelection', ruleData);
+
+        // reset to previous rule if we are cancelling
+        if (cancel && isNewRule) {
+          that.send('initiateSelection', ruleData);
+        }
       }
     };
 
@@ -153,6 +159,7 @@ export default Ember.Component.extend({
 
     initiateSelection(ruleData = {}) {
       this.set('selectionInProgress', true);
+
       if (ruleData.id !== undefined) {
         this.associateRuleToModel(ruleData);
       }

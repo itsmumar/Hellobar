@@ -96,6 +96,14 @@ export default Ember.Service.extend({
     });
   },
 
+  // ------ Rule settings
+
+  setRule (rule) {
+    this.set('model.rule_id', rule && rule.id);
+    this.set('model.rule', rule);
+    this.set('model.preset_rule_name', 'Saved');
+  },
+
   // ------ Cookie settings
 
   initializeCookieSettings: function () {

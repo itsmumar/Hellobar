@@ -28,8 +28,10 @@ class @RuleModal extends Modal
     @_bindInteractions()
     super
 
-  close: ->
-    @options.close() if @options.close
+  # cancel and close are two fundamentally different concepts, and yet they've been forced into a single action :'(
+  # rather than refactor modals entirely, passing in a flag of cancel vs. close allows for different behaviour
+  close: (cancel = true) ->
+    @options.close(cancel) if @options.close
     super
 
   _bindInteractions: ->
@@ -254,7 +256,7 @@ class @RuleModal extends Modal
         data: $form.serialize()
         success: (data, status, xhr) ->
           modal.options.successCallback.call(data) if modal.options.successCallback
-          modal.close()
+          modal.close(false)
         error: (xhr, status, error) ->
           $form.find("a.submit").removeClass("cancel")
           console.log "Something went wrong: #{error}"
