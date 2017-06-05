@@ -64,6 +64,9 @@ $ ->
     $("tr[data-rule-id='#{rule.id}']").show()
 
   removeRow = (row) ->
+    if $('.site-element-block:not(.deleting)').length < $('[data-max-site-elements]').data('max-site-elements')
+      $('[data-prompt-upgrade]').data('prompt-upgrade', false)
+
     row.css({height: 0})
        .children('td, th')
        .animate({padding: 0})
