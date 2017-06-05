@@ -7,7 +7,7 @@ describe ServiceProviders::Adapters::MadMimi do
     }
   end
 
-  let(:identity) { double('identity', provider: 'mad_mimi', api_key: 'api_key', credentials: { 'username' => 'username' }) }
+  let(:identity) { double('identity', provider: 'mad_mimi_api', api_key: 'api_key', credentials: { 'username' => 'username' }) }
 
   include_examples 'service provider'
 
