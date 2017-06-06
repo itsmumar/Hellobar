@@ -10,12 +10,12 @@ module ServiceProviders
       end
 
       def lists
-        response = process_response client.get '/campaigns', perPage: 500
+        response = process_response client.get 'campaigns', perPage: 500
         response.map { |list| { 'id' => list['campaignId'], 'name' => list['name'] } }
       end
 
       def tags
-        response = process_response client.get '/tags', perPage: 500
+        response = process_response client.get 'tags', perPage: 500
         response.map { |tag| { 'id' => tag['tagId'], 'name' => tag['name'] } }
       end
 
@@ -30,7 +30,7 @@ module ServiceProviders
 
         request_body.update(dayOfCycle: cycle_day) if cycle_day.present?
 
-        process_response client.post '/contacts', request_body
+        process_response client.post 'contacts', request_body
       end
 
       # In GetResponse you cannot assign tags to contacts sent via API,
@@ -50,7 +50,7 @@ module ServiceProviders
         subscribers = contact_list.subscribers(10)
 
         find_union(contacts, subscribers).each do |contact|
-          process_response client.post "/contacts/#{ contact['contactId'] }", tags: tags
+          process_response client.post "contacts/#{ contact['contactId'] }", tags: tags
         end
       end
 
@@ -66,7 +66,7 @@ module ServiceProviders
           perPage: count
         }
 
-        process_response client.get '/contacts', query
+        process_response client.get 'contacts', query
       end
 
       def find_union(contacts, subscribers, count = 2)
