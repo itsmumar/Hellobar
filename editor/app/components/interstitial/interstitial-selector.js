@@ -26,16 +26,18 @@ export default Ember.Component.extend({
 
   actions: {
     selectGoal (routeName) {
-      const siteID = this.get('model.site.id');
+      const { siteID } = window;
+      const complete = () => this.get('router').transitionTo(routeName);
 
       if (siteID) {
         $.ajax({
           method: 'POST',
-          url: `/sites/${siteID}/track_selected_goal`
+          url: `/sites/${siteID}/track_selected_goal`,
+          complete
         });
+      } else {
+        complete();
       }
-
-      this.get('router').transitionTo(routeName);
     }
   }
 });
