@@ -1,15 +1,16 @@
 class FillEmbedForm
-  def initialize(form, email:, name: '', ignore: [])
+  def initialize(form, email:, name: '', ignore: [], delete: [])
     @form = form.dup
     @params = @form.inputs
     @email = email
     @name = name
     @first_name, @last_name = name.to_s.split(' ', 2)
     @ignore_params = ignore
+    @delete_params = delete
   end
 
   def call
-    params.tap do |result|
+    clean_params.tap do |result|
       result[email_param] = email
       name_params.each do |name_param|
         result[name_param] = value_for_name_part name_param
@@ -21,6 +22,10 @@ class FillEmbedForm
   private
 
   attr_reader :params, :ignore_params, :email, :name, :first_name, :last_name
+
+  def clean_params
+    params.except!(*@delete_params)
+  end
 
   def email_param
     params.keys.find { |param| param.include?('email') && ignore_params.exclude?(param) }

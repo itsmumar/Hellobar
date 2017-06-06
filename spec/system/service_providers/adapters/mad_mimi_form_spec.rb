@@ -22,7 +22,6 @@ describe ServiceProviders::Adapters::MadMimiForm do
     let(:body) do
       {
         'authenticity_token' => 'RhtvXkXEbMNc+JIDw16AD6YHSfHjN1Wa75x6rlCybYoRNynWjyGWthSGFATjYnwHSK4dUYIPHj9VpeTqNJ2z8g==',
-        'beacon' => '',
         'd5ae1d9aa05b39486b92cf62fab5a5bd' => '',
         'signup' => { 'email' => 'example@email.com', 'name' => 'FirstName LastName' },
         'spinner' => '7c0442e4f7d49abfa03fe6f1bd699939f6f3f4bfc45483705bd50cecf2986d277b6ec32ab9e4172235eb5929ba035fee',
