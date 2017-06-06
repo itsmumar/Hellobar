@@ -3,8 +3,9 @@ describe ServiceProviders::Adapters::CampaignMonitor do
     {
       clients: 'https://api.createsend.com/api/v3.1/clients.json',
       lists: 'https://api.createsend.com/api/v3.1/clients/4a397ccaaa55eb4e6aa1221e1e2d7122/lists.json',
-      subscribers: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
-      import: 'https://api.createsend.com/api/v3.1/subscribers/4567456/import.json'
+      subscribe: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
+      unauthorized: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
+      batch_subscribe: 'https://api.createsend.com/api/v3.1/subscribers/4567456/import.json'
     }
   end
 
@@ -48,11 +49,22 @@ describe ServiceProviders::Adapters::CampaignMonitor do
         RestartSubscriptionBasedAutoresponders: true
       }
     end
-    let!(:create_request) { allow_request :post, :subscribers, body: body }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
+
+    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
 
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
-      expect(create_request).to have_been_made
+      subscribe
+      expect(subscribe_request).to have_been_made
+    end
+
+    context 'when CreateSend::Unauthorized is raised' do
+      let!(:subscribe_request) { allow_request :post, :unauthorized, body: body }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+      end
     end
   end
 
@@ -68,13 +80,13 @@ describe ServiceProviders::Adapters::CampaignMonitor do
         'RestartSubscriptionBasedAutoresponders': false
       }
     end
-    let!(:import_request) { allow_request :post, :import, body: body }
+    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
 
     it 'calls #subscribe for each subscriber' do
       provider.batch_subscribe list_id, subscribers
-      expect(import_request).to have_been_made
+      expect(batch_subscribe_request).to have_been_made
     end
   end
 end

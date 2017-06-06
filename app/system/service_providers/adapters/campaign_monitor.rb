@@ -7,7 +7,10 @@ module ServiceProviders
         config.oauth = true
       end
 
+      rescue_from CreateSend::Unauthorized, with: :destroy_identity
+
       def initialize(identity)
+        @identity = identity
         super CreateSend::CreateSend.new(
           access_token: identity.credentials['token'],
           refresh_token: identity.credentials['refresh_token']
@@ -29,6 +32,12 @@ module ServiceProviders
       def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
         subscribers = subscribers.map { |s| { 'EmailAddress' => s[:email], 'Name' => s[:name] } }
         CreateSend::Subscriber.import(client.auth_details, list_id, subscribers, true, true)
+      end
+
+      private
+
+      def destroy_identity_if_needed(exception)
+        @identity.destroy_and_notify_user
       end
     end
   end
