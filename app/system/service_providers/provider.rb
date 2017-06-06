@@ -46,7 +46,7 @@ module ServiceProviders
     def determine_adapter(identity, contact_list)
       adapter_class = self.class.adapter(identity.provider)
 
-      if adapter_class < Adapters::EmbedForm || adapter_class == Adapters::Webhook
+      if adapter_class < Adapters::EmbedCode || adapter_class == Adapters::Webhook
         adapter_class.new(contact_list)
       else
         adapter_class.new(identity)

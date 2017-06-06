@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class MadMimiForm < ServiceProviders::Adapters::EmbedForm
+    class MadMimiForm < EmbedCode
       configure do |config|
         config.requires_embed_code = true
         config.disabled = true

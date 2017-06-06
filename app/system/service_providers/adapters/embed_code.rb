@@ -1,7 +1,7 @@
 module ServiceProviders
   module Adapters
-    class EmbedForm < FaradayClient
-      class EmbedFormError < StandardError; end
+    class EmbedCode < FaradayClient
+      class EmbedCodeError < StandardError; end
 
       def initialize(contact_list)
         @contact_list = contact_list
@@ -16,7 +16,7 @@ module ServiceProviders
       private
 
       def extract_form
-        raise EmbedFormError, 'Embed code must be provided' if @contact_list.blank? || @contact_list.data['embed_code'].blank?
+        raise EmbedCodeError, 'Embed code must be provided' if @contact_list.blank? || @contact_list.data['embed_code'].blank?
 
         ExtractEmbedForm.new(@contact_list.data['embed_code']).call
       end
