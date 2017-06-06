@@ -134,8 +134,8 @@ feature 'Adding and editing bars', :js do
     end
 
     scenario 'custom field' do
-      find('.step-style').click
-      click_on 'CHANGE TYPE'
+      click_link 'Style'
+      find('a.change-selection').click
       find('h6', text: 'Modal').click
       find('.step-settings').click
 
