@@ -6,7 +6,7 @@ module ServiceProviders
 
         def initialize(response)
           @response = response
-          super "[#{ response.headers[:status] }] #{ response.body }"
+          super "[#{ response.status } #{ response.reason_phrase }] #{ response.body }"
         end
       end
 
