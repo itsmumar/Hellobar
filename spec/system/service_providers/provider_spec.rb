@@ -10,6 +10,7 @@ describe ServiceProviders::Provider do
     Settings.identity_providers['foo'] = {}
     allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
   end
+  before { allow(adapter_class).to receive(:name).and_return('Foo') }
   before { allow(adapter_class).to receive(:new).and_return(adapter) }
   before { ServiceProviders::Adapters.register 'foo', adapter_class }
 
@@ -57,6 +58,7 @@ describe ServiceProviders::Provider do
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
       end
+      before { allow(Rails.env).to receive(:test?).and_return(false) }
 
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:lists).and_raise(StandardError)
@@ -102,6 +104,7 @@ describe ServiceProviders::Provider do
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
       end
+      before { allow(Rails.env).to receive(:test?).and_return(false) }
 
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:subscribe).and_raise(StandardError)
@@ -137,6 +140,7 @@ describe ServiceProviders::Provider do
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
       end
+      before { allow(Rails.env).to receive(:test?).and_return(false) }
 
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:batch_subscribe).and_raise(StandardError)

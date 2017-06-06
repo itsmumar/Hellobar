@@ -20,7 +20,7 @@ module ServiceProviders::RavenLogger
   private
 
   def raven_log(exception, args = [])
-    raise exception if Rails.env.development?
+    raise exception if Rails.env.development? || Rails.env.test?
 
     options = {
       extra: {

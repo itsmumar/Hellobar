@@ -1,8 +1,4 @@
 module ServiceProviders::Logger
-  def lists
-    super
-  end
-
   def subscribe(*args)
     log :subscribe, *args
     super
