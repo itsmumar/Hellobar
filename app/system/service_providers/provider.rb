@@ -26,7 +26,7 @@ module ServiceProviders
       adapter.key
     end
 
-    delegate :lists, to: :adapter
+    delegate :lists, :tags, to: :adapter
 
     def subscribe(list_id, email:, name: nil)
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
