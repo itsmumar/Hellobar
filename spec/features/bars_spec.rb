@@ -82,6 +82,8 @@ feature 'Adding and editing bars', :js do
       find('.goal-block.contacts').click_link select_goal_label
       click_button 'Continue'
 
+      click_on 'Goals'
+
       @phone_field = find('.item-block[data-field-type="builtin-phone"]')
       @phone_field.find('.hellobar-icon-check-mark').trigger('click') if @phone_field[:class].include?('is-selected')
 
@@ -133,6 +135,7 @@ feature 'Adding and editing bars', :js do
 
     scenario 'custom field' do
       find('.step-style').click
+      click_on 'CHANGE TYPE'
       find('h6', text: 'Modal').click
       find('.step-settings').click
 
