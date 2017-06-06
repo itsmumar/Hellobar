@@ -22,5 +22,20 @@ export default Ember.Component.extend({
     }
 
     this.setProperties(this.defaults);
+  },
+
+  actions: {
+    selectGoal (routeName) {
+      const siteID = this.get('model.site.id');
+
+      if (siteID) {
+        $.ajax({
+          method: 'POST',
+          url: `/sites/${siteID}/track_selected_goal`
+        });
+      }
+
+      this.get('router').transitionTo(routeName);
+    }
   }
 });
