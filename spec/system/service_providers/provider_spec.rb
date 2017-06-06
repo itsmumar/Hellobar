@@ -6,19 +6,21 @@ describe ServiceProviders::Provider do
   let(:provider) { described_class.new(identity, contact_list) }
 
   # TODO: temporary solution, should be removed after Identity refactoring
-  before { allow(Settings).to receive(:identity_providers).and_return(foo: {}) }
+  before do
+    Settings.identity_providers['foo'] = {}
+    allow_any_instance_of(Identity).to receive(:service_provider_valid).and_return(true)
+  end
   before { allow(adapter_class).to receive(:new).and_return(adapter) }
-  before { adapter_class.register 'foo' }
+  before { ServiceProviders::Adapters.register 'foo', adapter_class }
 
   describe '.configure' do
     before do
-      described_class.configure do |config|
-        config.foo.api_key = 1
+      adapter_class.configure do |config|
+        config.api_key = 1
       end
     end
 
     it 'yields config' do
-      expect(described_class.config.foo.api_key).to eq 1
       expect(adapter_class.config.api_key).to eq 1
     end
   end
@@ -61,7 +63,7 @@ describe ServiceProviders::Provider do
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
         expect {
           provider.lists
-        }.to raise_error(StandardError)
+        }.not_to raise_error
       end
     end
   end
@@ -106,7 +108,7 @@ describe ServiceProviders::Provider do
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
         expect {
           provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
-        }.to raise_error(StandardError)
+        }.not_to raise_error
       end
     end
   end
@@ -141,7 +143,7 @@ describe ServiceProviders::Provider do
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
         expect {
           provider.batch_subscribe(list_id, subscribers)
-        }.to raise_error(StandardError)
+        }.not_to raise_error
       end
     end
   end

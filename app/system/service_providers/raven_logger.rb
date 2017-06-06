@@ -3,21 +3,18 @@ module ServiceProviders::RavenLogger
     super
   rescue => exception
     raven_log(exception)
-    raise exception
   end
 
   def subscribe(*args)
     super
   rescue => exception
     raven_log(exception, args)
-    raise exception
   end
 
   def batch_subscribe(*args)
     super
   rescue => exception
     raven_log(exception, args)
-    raise exception
   end
 
   private
