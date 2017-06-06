@@ -1,7 +1,11 @@
 module ServiceProviders
   module Adapters
     class Maropost < FaradayClient
-      register :maropost
+      configure do |config|
+        config.requires_account_id = true
+        config.requires_api_key = true
+        config.url = Settings.identity_providers['maropost']['url']
+      end
 
       def initialize(identity)
         account_id = identity.credentials['username']

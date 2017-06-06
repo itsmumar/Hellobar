@@ -1,7 +1,12 @@
 module ServiceProviders
   module Adapters
-    class AWeber < Base
-      register :aweber
+    class Aweber < Base
+      configure do |config|
+        config.app_id = Settings.identity_providers['aweber']['app_id']
+        config.consumer_key = Settings.identity_providers['aweber']['consumer_key']
+        config.consumer_secret = Settings.identity_providers['aweber']['consumer_secret']
+        config.oauth = true
+      end
 
       def initialize(identity)
         oauth = ::AWeber::OAuth.new(config.consumer_key, config.consumer_secret)

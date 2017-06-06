@@ -1,7 +1,10 @@
 module ServiceProviders
   module Adapters
     class Drip < Base
-      register :drip
+      configure do |config|
+        config.supports_double_optin = true
+        config.oauth = true
+      end
 
       def initialize(identity)
         super ::Drip::Client.new(

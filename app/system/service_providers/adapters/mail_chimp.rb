@@ -1,7 +1,12 @@
 module ServiceProviders
   module Adapters
     class MailChimp < Base
-      register :mailchimp
+      configure do |config|
+        config.client_id = Settings.identity_providers['mailchimp']['client_id']
+        config.secret = Settings.identity_providers['mailchimp']['secret']
+        config.supports_double_optin = true
+        config.oauth = true
+      end
 
       def initialize(identity)
         super Gibbon::Request.new(

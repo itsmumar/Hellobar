@@ -6,15 +6,15 @@ module ServiceProviders
       end
 
       attr_reader :client
-      class_attribute :key
+      class_attribute :key, :config
 
-      def self.config
-        ServiceProviders::Provider.config.send(key)
+      def self.configure
+        self.config = ActiveSupport::OrderedOptions.new
+        yield config
       end
 
-      def self.register(name)
-        Provider.register name, self
-        self.key = name
+      def self.human_name
+        name.demodulize
       end
 
       def initialize(client)
@@ -33,6 +33,10 @@ module ServiceProviders
         subscribers.each do |subscriber|
           subscribe list_id, double_optin.nil? ? subscriber : subscriber.merge(double_optin: double_optin)
         end
+      end
+
+      def tags
+        []
       end
 
       def config

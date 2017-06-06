@@ -3,7 +3,9 @@ require 'createsend'
 module ServiceProviders
   module Adapters
     class CampaignMonitor < Base
-      register :campaign_monitor
+      configure do |config|
+        config.oauth = true
+      end
 
       def initialize(identity)
         super CreateSend::CreateSend.new(

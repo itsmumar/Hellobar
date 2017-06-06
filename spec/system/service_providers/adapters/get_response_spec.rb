@@ -8,7 +8,7 @@ describe ServiceProviders::Adapters::GetResponse do
     }
   end
 
-  let(:identity) { double('identity', provider: 'get_response', api_key: 'api_key') }
+  let(:identity) { double('identity', provider: 'get_response_api', api_key: 'api_key') }
 
   include_examples 'service provider'
 

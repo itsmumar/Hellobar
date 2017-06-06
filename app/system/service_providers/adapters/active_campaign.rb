@@ -3,7 +3,10 @@ HTTPI.log = false
 module ServiceProviders
   module Adapters
     class ActiveCampaign < Base
-      register :active_campaign
+      configure do |config|
+        config.requires_api_key = true
+        config.requires_app_url = true
+      end
 
       def initialize(identity)
         super ::ActiveCampaign::Client.new(

@@ -9,7 +9,7 @@ describe ServiceProviders::Adapters::CampaignMonitor do
   end
 
   let(:identity) do
-    double('identity', provider: 'campaign_monitor', credentials: { 'token' => 'token', 'refresh_token' => 'refresh_token' })
+    double('identity', provider: 'createsend', credentials: { 'token' => 'token', 'refresh_token' => 'refresh_token' })
   end
 
   include_examples 'service provider'

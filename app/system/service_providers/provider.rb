@@ -1,21 +1,14 @@
 module ServiceProviders
   class Provider
-    prepend RavenLogger
+    prepend ServiceProviders::Logger
+    prepend ServiceProviders::RavenLogger
 
     mattr_reader :config do
       ActiveSupport::OrderedOptions.new { |hash, k| hash[k] = ActiveSupport::OrderedOptions.new }
     end
 
-    mattr_reader :adapters do
-      {}
-    end
-
     def self.adapter(key)
-      adapters.fetch(key.to_sym)
-    end
-
-    def self.register(adapter, klass)
-      adapters.update adapter.to_sym => klass
+      Adapters.fetch(key.to_sym)
     end
 
     def self.configure
@@ -34,7 +27,7 @@ module ServiceProviders
       adapter.key
     end
 
-    delegate :lists, to: :adapter
+    delegate :lists, :tags, to: :adapter
 
     def subscribe(list_id, email:, name: nil)
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }

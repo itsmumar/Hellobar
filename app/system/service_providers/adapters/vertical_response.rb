@@ -1,7 +1,12 @@
 module ServiceProviders
   module Adapters
     class VerticalResponse < Base
-      register :verticalresponse
+      configure do |config|
+        config.client_id = Settings.identity_providers['verticalresponse']['client_id']
+        config.secret = Settings.identity_providers['verticalresponse']['secret']
+        config.supports_double_optin = false
+        config.oauth = true
+      end
 
       def initialize(identity)
         super ::VerticalResponse::API::OAuth.new identity.credentials['token']

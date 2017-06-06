@@ -3,7 +3,11 @@ module ServiceProviders
     class ConstantContact < Base
       EMAIL_REGEXP = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
 
-      register :constantcontact
+      configure do
+        config.app_key = Settings.identity_providers['constantcontact']['app_key']
+        config.app_secret = Settings.identity_providers['constantcontact']['app_secret']
+        config.oauth = true
+      end
 
       def initialize(identity)
         @token = identity.credentials['token']
