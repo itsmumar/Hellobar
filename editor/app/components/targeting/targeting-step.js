@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
-const presetRuleNames = ['Everyone', 'Mobile', 'Homepage Visitors', 'Custom', 'Saved'];
+const presetRuleNames = ['Everyone', 'Mobile Visitors', 'Homepage Visitors', 'Custom', 'Saved'];
 
 export default Ember.Component.extend({
 
