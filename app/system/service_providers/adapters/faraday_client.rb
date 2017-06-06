@@ -1,7 +1,14 @@
 module ServiceProviders
   module Adapters
     class FaradayClient < Base
-      class RequestError < StandardError; end
+      class RequestError < StandardError
+        attr_reader :response
+
+        def initialize(response)
+          @response = response
+          super "[#{ response.headers[:status] }] #{ response.body }"
+        end
+      end
 
       def initialize(url = nil, request: :url_encoded, params: {}, headers: {})
         client = Faraday.new(url: url, params: params, headers: headers) do |faraday|
@@ -18,7 +25,7 @@ module ServiceProviders
         response_hash = JSON.parse response.body
         return response_hash if response.success?
 
-        raise RequestError, response_hash.to_json
+        raise RequestError, response
       end
     end
   end
