@@ -9,7 +9,10 @@ module ServiceProviders
         config.oauth = true
       end
 
+      rescue_from RestClient::Unauthorized, with: :destroy_identity
+
       def initialize(identity)
+        @identity = identity
         @token = identity.credentials['token']
         super ::ConstantContact::Api.new(config.app_key)
       end
@@ -95,6 +98,10 @@ module ServiceProviders
         # if that happens, try adding contact again WITH double opt-in
         raise e unless e.inspect =~ /not be opted in using/
         client.update_contact(@token, contact, true)
+      end
+
+      def destroy_identity
+        @identity.destroy_and_notify_user
       end
     end
   end

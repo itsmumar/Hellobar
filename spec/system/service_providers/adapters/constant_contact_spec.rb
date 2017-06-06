@@ -48,9 +48,21 @@ describe ServiceProviders::Adapters::ConstantContact do
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
+    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
+
     it 'sends subscribe request' do
-      expect(provider.subscribe(list_id, email: email, name: name)).to be_a ::ConstantContact::Components::Contact
+      expect(subscribe).to be_a ::ConstantContact::Components::Contact
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'when Unautorized' do
+      let(:response) { { status: 401 } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+      end
     end
   end
 
