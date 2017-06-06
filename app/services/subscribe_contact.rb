@@ -1,7 +1,8 @@
 class SubscribeContact < SubscribeAllContacts
   NEW_IMPLEMENTATION = %w[
-    vertical_response drip my_emma verticalresponse
-    maropost active_campaign infusionsoft convert_kit icontact mad_mimi_api
+    vertical_response drip my_emma verticalresponse maropost
+    active_campaign infusionsoft convert_kit icontact mad_mimi_api
+    createsend webhooks get_response_api constantcontact mad_mimi_form
   ].freeze
 
   def initialize(contact)
