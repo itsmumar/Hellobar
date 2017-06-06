@@ -13,6 +13,7 @@ describe ServiceProviders::Provider do
   before { allow(adapter_class).to receive(:name).and_return('Foo') }
   before { allow(adapter_class).to receive(:new).and_return(adapter) }
   before { ServiceProviders::Adapters.register 'foo', adapter_class }
+  after { ServiceProviders::Adapters.registry.delete(:foo) }
 
   describe '.configure' do
     before do
