@@ -1,9 +1,8 @@
 describe ServiceProviders::Adapters::ConvertKit do
   let(:defined_urls) do
     {
-      lists: 'https://api.convertkit.com/forms?api_secret=api_key',
-      subscribe: 'https://api.convertkit.com/forms/4567456/subscribe?api_secret=api_key',
-      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
+      lists: 'https://api.convertkit.com/v3/forms?api_secret=api_key',
+      subscribe: 'https://api.convertkit.com/v3/forms/4567456/subscribe?api_secret=api_key'
     }
   end
 
@@ -47,18 +46,7 @@ describe ServiceProviders::Adapters::ConvertKit do
   end
 
   describe '#batch_subscribe' do
-    let(:body) do
-      {
-        import_data: [
-          { email_addresses: ['example1@email.com'] },
-          { email_addresses: ['example2@email.com'] }
-        ],
-        lists: [4567456],
-        column_names: ['E-Mail', 'First Name', 'Last Name']
-      }
-    end
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|

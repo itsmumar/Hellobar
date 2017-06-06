@@ -10,12 +10,12 @@ module ServiceProviders
       end
 
       def lists
-        response = process_response client.get '/forms'
+        response = process_response client.get 'forms'
         response['forms'].map { |form| form.slice('id', 'name') }
       end
 
       def tags
-        response = process_response client.get '/tags'
+        response = process_response client.get 'tags'
         response['tags'].map { |tag| tag.slice('id', 'name') }
       end
 
@@ -31,7 +31,7 @@ module ServiceProviders
           body[:fields] = { last_name: last_name } if last_name.present?
         end
 
-        process_response client.post "/forms/#{ form_id }/subscribe", body: body
+        process_response client.post "forms/#{ form_id }/subscribe", body: body
       end
     end
   end
