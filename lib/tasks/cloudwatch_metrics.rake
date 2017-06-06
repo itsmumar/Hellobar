@@ -5,7 +5,7 @@ namespace :cloudwatch_metrics do
   end
 
   desc 'Reports memory and disk space stats to AWS CloudWatch'
-  task :send do
+  task send: :environment do
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!
 
@@ -45,7 +45,7 @@ namespace :cloudwatch_metrics do
   end
 
   desc 'Creates alarms for disk space and memory'
-  task :create_alarms do
+  task create_alarms: :environment do
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!
     namespace = "HB/#{ Rails.env }"
