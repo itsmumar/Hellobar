@@ -16,7 +16,7 @@ describe ContactListsHelper, type: :helper do
 
     context 'MadMimi' do
       before do
-        contact_list.identity = create(:identity, :mad_mimi)
+        contact_list.identity = create(:identity, :mad_mimi_form)
       end
 
       it 'has valid results' do

@@ -178,7 +178,7 @@ describe SubscribeContact do
         let(:adapter) { double('adapter') }
 
         it 'calls ServiceProviders::Provider' do
-          if adapter_class < ServiceProviders::Adapters::EmbedForm || adapter_class == ServiceProviders::Adapters::Webhook
+          if adapter_class < ServiceProviders::Adapters::EmbedCode || adapter_class == ServiceProviders::Adapters::Webhook
             allow(adapter_class).to receive(:new).with(contact_list).and_return adapter
           else
             allow(adapter_class).to receive(:new).with(identity).and_return adapter
