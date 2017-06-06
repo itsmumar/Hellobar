@@ -45,9 +45,31 @@ describe ServiceProviders::Adapters::MailChimp do
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
+    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
+
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
+      subscribe
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'when API key is invalid' do
+      let(:response) { { status: 401, body: { title: 'API Key Invalid' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+      end
+    end
+
+    context 'when Resource Not Found' do
+      let(:response) { { status: 404, body: { title: 'Resource Not Found' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+      end
     end
   end
 
