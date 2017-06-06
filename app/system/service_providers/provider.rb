@@ -1,6 +1,7 @@
 module ServiceProviders
   class Provider
-    prepend RavenLogger
+    prepend ServiceProviders::Logger
+    prepend ServiceProviders::RavenLogger
 
     mattr_reader :config do
       ActiveSupport::OrderedOptions.new { |hash, k| hash[k] = ActiveSupport::OrderedOptions.new }
