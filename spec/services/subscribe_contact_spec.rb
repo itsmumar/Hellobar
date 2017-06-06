@@ -120,17 +120,6 @@ describe SubscribeContact do
     end
   end
 
-  context 'when service provider is a EmbedCodeProvider' do
-    let(:contact_list) { create :contact_list, :embed_code_form }
-
-    before { allow(contact_list.service_provider).to receive(:action_url).and_return('action_url') }
-
-    it 'sends post request to service_provider.action_url' do
-      expect(HTTParty).to receive(:post).with('action_url', body: params)
-      service.call
-    end
-  end
-
   context 'when contact list has oauth' do
     before { allow(contact_list).to receive(:oauth?).and_return(true) }
 
