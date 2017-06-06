@@ -31,7 +31,7 @@ module ServiceProviders
           body[:fields] = { last_name: last_name } if last_name.present?
         end
 
-        process_response client.post "forms/#{ form_id }/subscribe", body: body
+        process_response client.post "forms/#{ form_id }/subscribe", body
       end
     end
   end

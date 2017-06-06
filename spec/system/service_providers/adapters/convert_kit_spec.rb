@@ -37,7 +37,7 @@ describe ServiceProviders::Adapters::ConvertKit do
         }
       }
     end
-    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body }
 
     it 'sends subscribe request' do
       expect(provider.subscribe(list_id, email: 'example@email.com', name: 'FirstName LastName')).to be_a Hash
