@@ -20,6 +20,8 @@ module ServiceProviders::RavenLogger
   private
 
   def raven_log(exception, args = [])
+    raise exception if Rails.env.development?
+
     options = {
       extra: {
         identity_id: @identity&.id,
