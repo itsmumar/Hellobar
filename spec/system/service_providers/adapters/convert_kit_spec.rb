@@ -40,7 +40,7 @@ describe ServiceProviders::Adapters::ConvertKit do
     let!(:subscribe_request) { allow_request :post, :subscribe, body }
 
     it 'sends subscribe request' do
-      expect(provider.subscribe(list_id, email: 'example@email.com', name: 'FirstName LastName')).to be_a Hash
+      expect(provider.subscribe(email: 'example@email.com', name: 'FirstName LastName')).to be_a Hash
       expect(subscribe_request).to have_been_made
     end
   end
@@ -50,9 +50,9 @@ describe ServiceProviders::Adapters::ConvertKit do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber.merge(double_optin: true))
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      provider.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end

@@ -28,11 +28,11 @@ describe ServiceProviders::Adapters::ActiveCampaign do
   end
 
   describe '.subscribe' do
-    let(:body) { { email: 'example@email.com', name: 'FirstName LastName', p: ['1'], tags: ['id1', 'id2'] } }
+    let(:body) { { email: 'example@email.com', name: 'FirstName LastName', p: [list_id.to_s], tags: ['id1', 'id2'] } }
     let!(:create_request) { allow_request :post, :subscribe, body: body }
 
     it 'returns array of id => name' do
-      provider.subscribe(1, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(create_request).to have_been_made
     end
   end
@@ -42,9 +42,9 @@ describe ServiceProviders::Adapters::ActiveCampaign do
 
     it 'calls subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber.merge(double_optin: true))
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      provider.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end

@@ -47,7 +47,7 @@ describe ServiceProviders::Adapters::Maropost do
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -57,9 +57,9 @@ describe ServiceProviders::Adapters::Maropost do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with('list_id', subscriber.merge(double_optin: true))
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      provider.batch_subscribe 'list_id', subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end

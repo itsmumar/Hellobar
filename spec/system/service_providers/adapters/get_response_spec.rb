@@ -40,7 +40,7 @@ describe ServiceProviders::Adapters::GetResponse do
     before { allow(contact_list).to receive(:subscribers).and_return([email: 'example@email.com']) }
 
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end
@@ -52,7 +52,7 @@ describe ServiceProviders::Adapters::GetResponse do
       subscribers.each do |subscriber|
         expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      provider.batch_subscribe list_id, subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end

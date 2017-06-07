@@ -5,6 +5,8 @@ describe ServiceProviders::Provider do
   let(:contact_list) { create :contact_list, :with_tags }
   let(:provider) { described_class.new(identity, contact_list) }
 
+  let(:list_id) { contact_list.data['remote_id'] }
+
   # TODO: temporary solution, should be removed after Identity refactoring
   before do
     Settings.identity_providers['foo'] = {}
@@ -53,6 +55,7 @@ describe ServiceProviders::Provider do
             identity_id: identity.id,
             contact_list_id: contact_list.id,
             arguments: [],
+            remote_list_id: list_id,
             double_optin: contact_list.double_optin,
             tags: contact_list.tags
           },
@@ -72,23 +75,23 @@ describe ServiceProviders::Provider do
   end
 
   describe '#subscribe' do
-    let(:list_id) { 1 }
     let(:params) { { email: 'email@example.com', name: 'FirstName LastName', tags: [], double_optin: false } }
     let(:contact_list) { create(:contact_list, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
     it 'calls adapter' do
       expect(adapter).to receive(:subscribe).with(list_id, params)
-      provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
+      provider.subscribe(email: 'email@example.com', name: 'FirstName LastName')
     end
 
     context 'when contact_list.tags is not empty' do
-      let(:provider) { described_class.new(identity, create(:contact_list, :with_tags)) }
+      let(:contact_list) { create(:contact_list, :with_tags) }
+      let(:provider) { described_class.new(identity, contact_list) }
       let(:params) { { email: 'email@example.com', name: 'FirstName LastName', tags: ['id1', 'id2'], double_optin: true } }
 
       it 'passes tags to adapter' do
         expect(adapter).to receive(:subscribe).with(list_id, params)
-        provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
+        provider.subscribe(email: 'email@example.com', name: 'FirstName LastName')
       end
     end
 
@@ -98,7 +101,8 @@ describe ServiceProviders::Provider do
           extra: {
             identity_id: identity.id,
             contact_list_id: contact_list.id,
-            arguments: [list_id, email: 'email@example.com', name: 'FirstName LastName'],
+            remote_list_id: list_id,
+            arguments: [email: 'email@example.com', name: 'FirstName LastName'],
             double_optin: contact_list.double_optin,
             tags: contact_list.tags
           },
@@ -110,22 +114,21 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect {
-          provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
-        }.not_to raise_error
+        # expect {
+          provider.subscribe(email: 'email@example.com', name: 'FirstName LastName')
+        # }.not_to raise_error
       end
     end
   end
 
   describe '#batch_subscribe' do
-    let(:list_id) { 1 }
     let(:subscribers) { [email: 'email@example.com', name: 'FirstName LastName'] }
-    let(:contact_list) { create(:contact_list, double_optin: false) }
+    let(:contact_list) { create(:contact_list, :with_tags, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
     it 'calls adapter' do
       expect(adapter).to receive(:batch_subscribe).with(list_id, subscribers, double_optin: false)
-      provider.batch_subscribe(list_id, subscribers)
+      provider.batch_subscribe(subscribers)
     end
 
     context 'when exception is raised' do
@@ -134,7 +137,8 @@ describe ServiceProviders::Provider do
           extra: {
             identity_id: identity.id,
             contact_list_id: contact_list.id,
-            arguments: [list_id, subscribers],
+            arguments: [subscribers],
+            remote_list_id: list_id,
             double_optin: contact_list.double_optin,
             tags: contact_list.tags
           },
@@ -146,9 +150,9 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:batch_subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect {
-          provider.batch_subscribe(list_id, subscribers)
-        }.not_to raise_error
+        # expect {
+          provider.batch_subscribe(subscribers)
+        # }.not_to raise_error
       end
     end
   end

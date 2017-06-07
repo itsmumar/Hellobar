@@ -1,4 +1,5 @@
 class SubscribeContact < SubscribeAllContacts
+  # @return [SubscribeContactWorker::Contact]
   def initialize(contact)
     super(contact.contact_list)
     @email = contact.email
@@ -9,7 +10,7 @@ class SubscribeContact < SubscribeAllContacts
     return unless contact_list.syncable?
 
     with_log_entry do
-      provider.subscribe(list_id, email: email, name: name)
+      provider.subscribe(email: email, name: name)
     end
   end
 

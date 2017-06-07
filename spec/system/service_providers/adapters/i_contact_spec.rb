@@ -38,7 +38,7 @@ describe ServiceProviders::Adapters::IContact do
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
   end

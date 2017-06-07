@@ -16,7 +16,7 @@ describe SubscribeAllContacts do
       before { allow(contact_list).to receive(:syncable?).and_return(true) }
 
       it 'calls #batch_subscribe on provider' do
-        expect(provider).to receive(:batch_subscribe).with(contact_list.data['remote_id'], subscribers)
+        expect(provider).to receive(:batch_subscribe).with(subscribers)
         service.call
       end
     end

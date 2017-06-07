@@ -14,7 +14,7 @@ describe SubscribeContact do
 
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }
   before { allow(contact_list).to receive(:syncable?).and_return(true) }
-  before { allow(provider).to receive(:subscribe).with(contact_list.data['remote_id'], email: email, name: name) }
+  before { allow(provider).to receive(:subscribe).with(email: email, name: name) }
 
   it 'creates contact list logs' do
     expect { service.call }.to change(contact_list.contact_list_logs, :count).to(1)

@@ -43,12 +43,12 @@ describe ServiceProviders::Adapters::ConstantContact do
         email_addresses: [{ email_address: 'example@email.com' }],
         first_name: 'FirstName',
         last_name: 'LastName',
-        lists: [{ id: 4567456, name: 'List1' }]
+        lists: [{ id: list_id, name: 'List1' }]
       }
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
-    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
+    let(:subscribe) { provider.subscribe(email: email, name: name) }
 
     it 'sends subscribe request' do
       expect(subscribe).to be_a ::ConstantContact::Components::Contact
@@ -71,14 +71,14 @@ describe ServiceProviders::Adapters::ConstantContact do
       { import_data: [
         { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example1@email.com'] },
         { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example2@email.com'] }
-      ], lists: [4567456], column_names: ['E-Mail', 'First Name', 'Last Name'] }
+      ], lists: [list_id], column_names: ['E-Mail', 'First Name', 'Last Name'] }
     end
 
     let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
     let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
 
     it 'calls #subscribe for each subscriber' do
-      provider.batch_subscribe list_id, subscribers
+      provider.batch_subscribe subscribers
       expect(batch_subscribe_request).to have_been_made
     end
   end

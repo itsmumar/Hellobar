@@ -26,7 +26,7 @@ describe ServiceProviders::Adapters::Webhook do
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     it 'sends email and name' do
-      provider.subscribe(nil, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
 
@@ -38,7 +38,7 @@ describe ServiceProviders::Adapters::Webhook do
       end
 
       it 'sends email and name' do
-        provider.subscribe(nil, email: email, name: name)
+        provider.subscribe(email: email, name: name)
         expect(subscribe_request).to have_been_made
       end
     end
@@ -47,7 +47,7 @@ describe ServiceProviders::Adapters::Webhook do
       let(:body) { { email: 'example@email.com', name: nil } }
 
       it 'sends email request' do
-        provider.subscribe(nil, email: email)
+        provider.subscribe(email: email)
         expect(subscribe_request).to have_been_made
       end
     end
@@ -58,7 +58,7 @@ describe ServiceProviders::Adapters::Webhook do
       let!(:site_element) { create(:site_element, :with_custom_fields, contact_list: contact_list, fields: custom_fields) }
 
       it 'sends email and all other custom fields' do
-        provider.subscribe(nil, email: email, name: '+1000000000,Name,,Male')
+        provider.subscribe(email: email, name: '+1000000000,Name,,Male')
         expect(subscribe_request).to have_been_made
       end
 
@@ -67,7 +67,7 @@ describe ServiceProviders::Adapters::Webhook do
         let(:body) { { email: email } }
 
         it 'sends only email' do
-          provider.subscribe(nil, email: email, name: '+1000000000,Name,,Male')
+          provider.subscribe(email: email, name: '+1000000000,Name,,Male')
           expect(subscribe_request).to have_been_made
         end
       end
@@ -81,7 +81,7 @@ describe ServiceProviders::Adapters::Webhook do
       subscribers.each do |subscriber|
         expect(adapter).to receive(:subscribe).with(nil, subscriber.merge(double_optin: true))
       end
-      provider.batch_subscribe nil, subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end

@@ -26,6 +26,7 @@ module ServiceProviders::RavenLogger
       extra: {
         identity_id: @identity&.id,
         contact_list_id: @contact_list&.id,
+        remote_list_id: remote_list_id,
         arguments: args,
         double_optin: @contact_list&.double_optin,
         tags: @contact_list&.tags

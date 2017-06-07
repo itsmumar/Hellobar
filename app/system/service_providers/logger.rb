@@ -12,7 +12,7 @@ module ServiceProviders::Logger
   private
 
   def log(method, *args)
-    tags = "[ServiceProviders] [#{ adapter.class.name.demodulize }] [contact_list:#{ @contact_list&.id }]"
+    tags = "[ServiceProviders] [#{ adapter.class.name.demodulize }] [contact_list:#{ @contact_list&.id }:remote:#{ remote_list_id }]"
     msg = "#{ tags } Performing ##{ method } with arguments #{ args.inspect }"
     Rails.logger.info msg
   end

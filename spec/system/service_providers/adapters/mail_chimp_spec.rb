@@ -45,7 +45,7 @@ describe ServiceProviders::Adapters::MailChimp do
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
-    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
+    let(:subscribe) { provider.subscribe(email: email, name: name) }
 
     it 'sends subscribe request' do
       subscribe
@@ -87,7 +87,7 @@ describe ServiceProviders::Adapters::MailChimp do
     let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
 
     it 'sends post request to /audience_members' do
-      provider.batch_subscribe list_id, subscribers
+      provider.batch_subscribe subscribers
       expect(batch_subscribe_request).to have_been_made
     end
   end

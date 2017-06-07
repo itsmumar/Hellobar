@@ -46,7 +46,7 @@ describe ServiceProviders::Adapters::Aweber do
     let!(:create_request) { allow_request :post, :subscribers, body: body }
 
     it 'sends subscribe request' do
-      provider.subscribe(list_id, email: email, name: name)
+      provider.subscribe(email: email, name: name)
       expect(create_request).to have_been_made
     end
   end
@@ -56,9 +56,9 @@ describe ServiceProviders::Adapters::Aweber do
 
     it 'calls #subscribe for each subscriber' do
       subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with(list_id, subscriber)
+        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
       end
-      adapter.batch_subscribe list_id, subscribers
+      provider.batch_subscribe subscribers
     end
   end
 end
