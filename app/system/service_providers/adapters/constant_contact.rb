@@ -13,16 +13,15 @@ module ServiceProviders
 
       def initialize(identity)
         @identity = identity
-        @token = identity.credentials['token']
-        super ::ConstantContact::Api.new(config.app_key)
+        super ::ConstantContact::Api.new(config.app_key, identity.credentials['token'])
       end
 
       def lists
-        client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
+        client.get_lists.map { |l| { 'id' => l.id, 'name' => l.name } }
       end
 
       def subscribe(list_id, params)
-        list = client.get_list(@token, list_id)
+        list = client.get_list(list_id)
         add_contact(make_contact(list, params), params[:double_optin])
       end
 
@@ -30,7 +29,7 @@ module ServiceProviders
         import = make_import(subscribers)
         activity = ::ConstantContact::Components::AddContacts.new(import, [list_id], ['E-Mail', 'First Name', 'Last Name'])
 
-        client.add_create_contacts_activity(@token, activity)
+        client.add_create_contacts_activity(activity)
       rescue RestClient::BadRequest => e
         retry_if_invalid_email(e, list_id, subscribers)
       end
@@ -72,9 +71,9 @@ module ServiceProviders
       end
 
       def add_contact(contact, double_optin)
-        client.add_contact(@token, contact, double_optin)
+        client.add_contact(contact, double_optin)
       rescue RestClient::Conflict
-        contact = client.get_contact_by_email(@token, email).results[0]
+        contact = client.get_contact_by_email(email).results[0]
         contact.add_list(list)
         update_contact(contact, double_optin)
       rescue RestClient::BadRequest => e
@@ -85,11 +84,11 @@ module ServiceProviders
 
         # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
         # if that happens, try adding contact again WITH double opt-in
-        client.add_contact(@token, contact, true)
+        client.add_contact(contact, true)
       end
 
       def update_contact(contact, double_optin = true)
-        client.update_contact(@token, contact, double_optin)
+        client.update_contact(contact, double_optin)
       rescue RestClient::Conflict
         # this can still fail a second time if CC isn't happy with how the data matches. for some reason.
         return true
@@ -97,7 +96,7 @@ module ServiceProviders
         # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
         # if that happens, try adding contact again WITH double opt-in
         raise e unless e.inspect =~ /not be opted in using/
-        client.update_contact(@token, contact, true)
+        client.update_contact(contact, true)
       end
 
       def destroy_identity

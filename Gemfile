@@ -25,12 +25,13 @@ gem 'gibbon' # MailChimp
 gem 'infusionsoft'
 gem 'madmimi'
 gem 'omniauth-aweber', '~> 1.0'
-gem 'omniauth-constantcontact2', '~> 1.0'
-gem 'omniauth-createsend', '~> 1.0'
+gem 'omniauth-constantcontact2'
+gem 'omniauth-createsend'
 gem 'omniauth-google-oauth2', '~> 0.2.6'
 gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
-gem 'omniauth-verticalresponse', '~> 1.0.0'
+gem 'omniauth-verticalresponse'
 gem 'verticalresponse'
+gem 'faraday' # Webhooks adapter
 
 # Mailing
 gem 'pony'

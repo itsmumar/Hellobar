@@ -22,7 +22,7 @@ describe ServiceProviders::Adapters::ConstantContact do
     let(:auth) { { access_token: 'token' } }
 
     it 'initializes ConstantContact::Api' do
-      expect(ConstantContact::Api).to receive(:new).with('app_key').and_call_original
+      expect(ConstantContact::Api).to receive(:new).with('app_key', 'token').and_call_original
       expect(adapter.client).to be_a ConstantContact::Api
     end
   end
