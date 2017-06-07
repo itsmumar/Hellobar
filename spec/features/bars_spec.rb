@@ -28,7 +28,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
@@ -53,7 +53,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
@@ -79,7 +79,7 @@ feature 'Adding and editing bars', :js do
 
       click_on 'Create New'
 
-      find('.goal-block.contacts').click_link select_goal_label
+      find('.goal-block.contacts').click_on(select_goal_label)
       click_button 'Continue'
 
       click_on 'Goals'
@@ -166,7 +166,7 @@ feature 'Adding and editing bars', :js do
 
     click_button('Create New')
 
-    find('.goal-block.call').click_link select_goal_label
+    find('.goal-block.call').click_on(select_goal_label)
 
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')
@@ -193,7 +193,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
