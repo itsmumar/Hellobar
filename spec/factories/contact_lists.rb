@@ -95,7 +95,7 @@ FactoryGirl.define do
       identity { create :identity, :webhooks, site: site }
     end
 
-    trait :embed_code do
+    trait :embed_code_invalid do
       identity { create :identity, :mad_mimi_form, site: site }
       data { Hash['embed_code' => '<html><body><iframe><form>Here I am</form></iframe></body></html>'] }
     end
