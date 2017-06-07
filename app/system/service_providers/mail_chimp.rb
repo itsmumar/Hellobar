@@ -25,29 +25,6 @@ class ServiceProviders::MailChimp < ServiceProviders::Email
     handle_error(error)
   end
 
-  # TODO: This method should be moved to concerns once same rule gets
-  # applied to all other providers
-  def subscriber_statuses(contact_list, emails)
-    result = {}
-
-    conditions = emails.map { |email| "email LIKE '%#{ email }%'" }.join(' OR ')
-    contact_list_logs = contact_list.contact_list_logs.select(:email).where(conditions).pluck(:email)
-
-    emails.each do |email|
-      result[email] =
-        if contact_list_logs.include?(email) || contact_list_logs.include?("\"#{ email }\"")
-          'Sent'
-        else
-          'Not sent'
-        end
-    end
-
-    result
-  rescue => e
-    Rails.logger.warn("#{ contact_list.site.url } - #{ e.message }")
-    {}
-  end
-
   def subscribe(list_id, email, name = nil, double_optin = true)
     opts = hashify_options(email, name, double_optin)
 
