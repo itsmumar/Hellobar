@@ -114,9 +114,9 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        # expect {
+        expect {
           provider.subscribe(email: 'email@example.com', name: 'FirstName LastName')
-        # }.not_to raise_error
+        }.not_to raise_error
       end
     end
   end
@@ -150,9 +150,9 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:batch_subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        # expect {
+        expect {
           provider.batch_subscribe(subscribers)
-        # }.not_to raise_error
+        }.not_to raise_error
       end
     end
   end
