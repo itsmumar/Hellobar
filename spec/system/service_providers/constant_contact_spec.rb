@@ -4,6 +4,8 @@ describe ServiceProviders::ConstantContact do
   let(:service_provider) { identity.service_provider }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
+  before { Settings.identity_providers['constantcontact']['app_key'] = 'constantcontact-app-key' }
+
   describe 'lists' do
     it 'returns available lists', :vcr do
       expect(service_provider.lists).to eql [
