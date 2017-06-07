@@ -8,7 +8,7 @@ gem 'aws-sdk'
 # Authentication / authorization
 gem 'devise'
 gem 'google-api-client'
-gem 'omniauth', '~> 1.0'
+gem 'omniauth'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
@@ -16,20 +16,21 @@ gem 'rqrcode'
 gem 'ruby-hmac'
 
 # Email integrations
-gem 'active_campaign', '~> 0.1.14'
+gem 'active_campaign'
 gem 'aweber'
 gem 'constantcontact'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
+gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
 gem 'infusionsoft'
 gem 'madmimi'
 gem 'omniauth-aweber', '~> 1.0'
-gem 'omniauth-constantcontact2', '~> 1.0'
-gem 'omniauth-createsend', '~> 1.0'
-gem 'omniauth-google-oauth2', '~> 0.2.6'
+gem 'omniauth-constantcontact2'
+gem 'omniauth-createsend'
+gem 'omniauth-google-oauth2'
 gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
-gem 'omniauth-verticalresponse', '~> 1.0.0'
+gem 'omniauth-verticalresponse'
 gem 'verticalresponse'
 
 # Mailing

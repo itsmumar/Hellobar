@@ -22,7 +22,7 @@ describe ServiceProviders::Adapters::ConstantContact do
     let(:auth) { { access_token: 'token' } }
 
     it 'initializes ConstantContact::Api' do
-      expect(ConstantContact::Api).to receive(:new).with('app_key').and_call_original
+      expect(ConstantContact::Api).to receive(:new).with('app_key', 'token').and_call_original
       expect(adapter.client).to be_a ConstantContact::Api
     end
   end
@@ -48,9 +48,21 @@ describe ServiceProviders::Adapters::ConstantContact do
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
+    let(:subscribe) { provider.subscribe(list_id, email: email, name: name) }
+
     it 'sends subscribe request' do
-      expect(provider.subscribe(list_id, email: email, name: name)).to be_a ::ConstantContact::Components::Contact
+      expect(subscribe).to be_a ::ConstantContact::Components::Contact
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'when Unautorized' do
+      let(:response) { { status: 401 } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+      end
     end
   end
 

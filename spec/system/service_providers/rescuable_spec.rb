@@ -5,8 +5,8 @@ describe ServiceProviders::Rescuable do
   let(:adapter_class) do
     Class.new(ServiceProviders::Adapters::Base) do
       rescue_from FooException, with: :retry
-      rescue_from BarException do |method, exception|
-        self.retry(method, exception)
+      rescue_from BarException do |exception|
+        self.retry(exception)
       end
 
       def lists
@@ -21,7 +21,7 @@ describe ServiceProviders::Rescuable do
         raise BarException
       end
 
-      def retry(method, exception)
+      def retry(exception)
       end
     end
   end

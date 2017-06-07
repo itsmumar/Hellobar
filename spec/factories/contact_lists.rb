@@ -16,9 +16,24 @@ FactoryGirl.define do
       data('tags' => ['id1', 'id2'])
     end
 
-    trait :mailchimp do
-      identity { create :identity, :mailchimp, site: site }
-      data { Hash['remote_id' => 1, 'remote_name' => 'test'] }
+    trait :aweber do
+      identity { create :identity, :aweber, site: site }
+    end
+
+    trait :active_campaign do
+      identity { create :identity, :active_campaign, site: site }
+    end
+
+    trait :createsend do
+      identity { create :identity, :createsend, site: site }
+    end
+
+    trait :constantcontact do
+      identity { create :identity, :constantcontact, site: site }
+    end
+
+    trait :convert_kit do
+      identity { create :identity, :convert_kit, site: site }
     end
 
     trait :drip do
@@ -26,29 +41,8 @@ FactoryGirl.define do
       data { Hash['remote_id' => 1] }
     end
 
-    trait :maropost do
-      data { Hash['remote_id' => 1] }
-    end
-
-    trait :vertical_response do
-      identity { create :identity, :vertical_response, site: site }
-      data { Hash['embed_code' => build(:embed_code, provider: 'vertical_response')] }
-    end
-
-    trait :verticalresponse do
-      data { Hash['remote_id' => 1] }
-    end
-
-    trait :active_campaign do
-      identity { create :identity, :active_campaign, site: site }
-    end
-
-    trait :infusionsoft do
-      identity { create :identity, :infusionsoft, site: site }
-    end
-
-    trait :convert_kit do
-      identity { create :identity, :convert_kit, site: site }
+    trait :get_response_api do
+      identity { create :identity, :get_response_api, site: site }
     end
 
     trait :icontact do
@@ -56,8 +50,26 @@ FactoryGirl.define do
       data { Hash['embed_code' => build(:embed_code, provider: 'icontact')] }
     end
 
+    trait :infusionsoft do
+      identity { create :identity, :infusionsoft, site: site }
+    end
+
     trait :mad_mimi_api do
       identity { create :identity, :mad_mimi_api, site: site }
+    end
+
+    trait :mad_mimi_form do
+      identity { create :identity, :mad_mimi_form, site: site }
+      data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
+    end
+
+    trait :mailchimp do
+      identity { create :identity, :mailchimp, site: site }
+      data { Hash['remote_id' => 1, 'remote_name' => 'test'] }
+    end
+
+    trait :maropost do
+      identity { create :identity, :maropost, site: site }
     end
 
     trait :my_emma do
@@ -65,23 +77,31 @@ FactoryGirl.define do
       data { Hash['embed_code' => build(:embed_code, provider: 'my_emma_iframe')] }
     end
 
+    trait :verticalresponse do
+      identity { create :identity, :verticalresponse, site: site }
+    end
+
+    trait :vertical_response do
+      identity { create :identity, :vertical_response, site: site }
+      data { Hash['embed_code' => build(:embed_code, provider: 'vertical_response')] }
+    end
+
+    trait :webhooks do
+      identity { create :identity, :webhooks, site: site }
+    end
+
     trait :embed_code do
-      identity { create :identity, :mad_mimi, site: site }
+      identity { create :identity, :mad_mimi_form, site: site }
       data { Hash['embed_code' => '<html><body><iframe><form>Here I am</form></iframe></body></html>'] }
     end
 
     trait :embed_code_form do
-      identity { create :identity, :mad_mimi, site: site }
-      data { Hash['embed_code' => '<html><body><form id="mad_mimi_signup_form"><input name="signup[name]"/><input name="signup[email]"/></form></body></html>'] }
+      identity { create :identity, :mad_mimi_form, site: site }
+      data { Hash['embed_code' => '<html><body><form action="https://madmimi.com/signups/iframe_subscribe/103242" id="mad_mimi_signup_form"><input name="signup[name]"/><input name="signup[email]"/></form></body></html>'] }
     end
 
     trait :embed_iframe do
-      identity { create :identity, :mad_mimi, site: site }
-      data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
-    end
-
-    trait :embed_mad_mimi do
-      identity { create :identity, :mad_mimi, site: site }
+      identity { create :identity, :mad_mimi_form, site: site }
       data { Hash['embed_code' => build(:embed_code, provider: 'mad_mimi_iframe')] }
     end
   end

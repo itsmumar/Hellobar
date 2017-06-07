@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class IContact < ServiceProviders::Adapters::EmbedForm
+    class IContact < EmbedCode
       configure do |config|
         config.requires_embed_code = true
       end

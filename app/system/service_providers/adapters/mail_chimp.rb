@@ -8,7 +8,10 @@ module ServiceProviders
         config.oauth = true
       end
 
+      rescue_from Gibbon::MailChimpError, with: :destroy_identity_if_needed
+
       def initialize(identity)
+        @identity = identity
         super Gibbon::Request.new(
           api_key: identity.credentials['token'],
           api_endpoint: identity.extra['metadata']['api_endpoint']
@@ -58,6 +61,11 @@ module ServiceProviders
             body[:merge_fields][:LNAME] = last_name if last_name.present?
           end
         end
+      end
+
+      def destroy_identity_if_needed(exception)
+        raise exception unless exception.title.in? ['Resource Not Found', 'API Key Invalid']
+        @identity.destroy_and_notify_user
       end
     end
   end

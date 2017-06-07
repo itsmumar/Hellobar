@@ -1,6 +1,6 @@
 module ServiceProviders
   module Adapters
-    class MyEmma < ServiceProviders::Adapters::EmbedForm
+    class MyEmma < EmbedCode
       configure do |config|
         config.requires_embed_code = true
       end

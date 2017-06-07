@@ -5,9 +5,9 @@ module ServiceProviderHelper
     end
   end
 
-  def allow_request(method, request, body: {})
+  def allow_request(method, request, response: nil, body: {})
     url = url_for_request(request)
-    response = response_for(method, request)
+    response ||= response_for(method, request)
 
     if block_given?
       yield stub_request(method, url).with(body: body).to_return(response)
@@ -42,9 +42,5 @@ module ServiceProviderHelper
 
   def url_for_request(request)
     Addressable::Template.new defined_urls.fetch(request)
-  end
-
-  def content_type_for(response)
-    response
   end
 end

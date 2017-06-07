@@ -120,17 +120,6 @@ describe SubscribeContact do
     end
   end
 
-  context 'when service provider is a EmbedCodeProvider' do
-    let(:contact_list) { create :contact_list, :embed_code_form }
-
-    before { allow(contact_list.service_provider).to receive(:action_url).and_return('action_url') }
-
-    it 'sends post request to service_provider.action_url' do
-      expect(HTTParty).to receive(:post).with('action_url', body: params)
-      service.call
-    end
-  end
-
   context 'when contact list has oauth' do
     before { allow(contact_list).to receive(:oauth?).and_return(true) }
 
@@ -178,7 +167,7 @@ describe SubscribeContact do
         let(:adapter) { double('adapter') }
 
         it 'calls ServiceProviders::Provider' do
-          if adapter_class < ServiceProviders::Adapters::EmbedForm || adapter_class == ServiceProviders::Adapters::Webhook
+          if adapter_class < ServiceProviders::Adapters::EmbedCode || adapter_class == ServiceProviders::Adapters::Webhook
             allow(adapter_class).to receive(:new).with(contact_list).and_return adapter
           else
             allow(adapter_class).to receive(:new).with(identity).and_return adapter
