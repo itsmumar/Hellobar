@@ -1,0 +1,21 @@
+{
+  "links": { },
+  "meta": {
+    "page": 1,
+    "sort": "created_at",
+    "direction": "asc",
+    "count": 5,
+    "total_pages": 1,
+    "total_count": 5,
+    "status": "all"
+  },
+  "campaigns": [
+    {
+      "id": "4567456",
+      "status": "active",
+      "name": "List1",
+      "from_name": "John Doe",
+      "from_email": "john@example.com"
+    }
+  ]
+}

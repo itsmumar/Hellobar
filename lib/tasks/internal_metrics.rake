@@ -37,9 +37,4 @@ Revenue: #{ number_to_currency(sum) }
 - Enterprise (Yearly): #{ number_with_delimiter(enterprise_yearly.length) } (#{ number_to_currency(enterprise_yearly.inject(0) { |s, b| s + b.amount }) })
 ")
   end
-
-  desc 'Queues a worker for the internal stats processor'
-  task process: :environment do |_t, _args|
-    QueueWorker.send_sqs_message('hello::tracking::internal_stats_harvester:process_internal_stats')
-  end
 end

@@ -81,10 +81,10 @@ namespace :deploy do
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
   after 'assets:precompile', 'precompile_static_assets'
 
-  after :publishing, 'trigger_automated_qa_tests'
-  after :publishing, 'tag_release:github'
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
+  after :finished, 'tag_release:github'
+  after :finished, 'trigger_automated_qa_tests'
 
   desc 'Precompile static assets to be used for static site scripts recompilation'
   task :precompile_static_assets do

@@ -164,8 +164,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def clean_embed_code
-    return unless data['embed_code'] && identity
-    data['embed_code'] = service_provider.clean_embed_code(data['embed_code'])
+    return if data['embed_code'].blank? || identity.blank?
+    data['embed_code'] = CleanEmbedCode.new(data['embed_code']).call
   end
 
   def reject_empty_data_values

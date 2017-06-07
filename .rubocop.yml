@@ -72,6 +72,7 @@ Style/RegexpLiteral:
   AllowInnerSlashes: true
   Exclude:
     - spec/teaspoon_env.rb
+    - spec/spec_helper.rb
     - Guardfile
 
 Style/EmptyMethod:
@@ -95,7 +96,7 @@ Style/FileName:
 
 Style/MethodMissing:
   Exclude:
-    - app/settings/settings.rb
+    - app/system/settings.rb
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false

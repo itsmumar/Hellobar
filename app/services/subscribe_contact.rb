@@ -1,4 +1,9 @@
 class SubscribeContact < SubscribeAllContacts
+  NEW_IMPLEMENTATION = %w[
+    vertical_response drip my_emma verticalresponse
+    maropost active_campaign infusionsoft convert_kit icontact mad_mimi_api
+  ].freeze
+
   def initialize(contact)
     super(contact.contact_list)
     @email = contact.email
@@ -9,6 +14,8 @@ class SubscribeContact < SubscribeAllContacts
     log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
 
     return unless contact_list.syncable?
+
+    return if subscribe_with_new_provider
 
     perform_sync(log_entry) do
       if api_call?
@@ -22,6 +29,13 @@ class SubscribeContact < SubscribeAllContacts
   private
 
   attr_reader :contact_list, :email, :name
+
+  def subscribe_with_new_provider
+    return unless contact_list.identity.provider.in?(NEW_IMPLEMENTATION)
+
+    ServiceProviders::Provider.new(contact_list.identity, contact_list).subscribe(list_id, email: email, name: name)
+    true
+  end
 
   def subscribe
     contact_list.service_provider.subscribe(list_id, email, name, double_optin)

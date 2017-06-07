@@ -1,0 +1,65 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+    "contactId": "1",
+    "href": "https://api.getresponse.com/v3/contacts/1",
+    "campaign": {
+        "campaignId": "V",
+        "name": "asdbasdfbsdbsd",
+        "href": "https://api.getresponse.com/v3/campaigns/V"
+    },
+    "name": "John Smith",
+    "email": "jsmith@example.com",
+    "note": null,
+    "origin": "iphone",
+    "dayOfCycle": "175",
+    "createdOn": "2014-09-29 12:25:55",
+    "changedOn": null,
+    "geolocation": {
+        "latitude": "54.3608",
+        "longitude": "18.6583",
+        "continentCode": "EU",
+        "countryCode": "PL",
+        "region": "82",
+        "postalCode": null,
+        "dmaCode": null,
+        "city": "Gdansk"
+    },
+    "timeZone": "America/St_Johns",
+    "ipAddress": "102.170.128.19",
+    "scoring": 10,
+    "tags": [
+        {
+            "tagId": "Xw"
+        },
+        {
+            "tagId": "Nn"
+        }
+    ],
+    "customFieldValues": [
+        {
+            "customFieldId": "V",
+            "href": "https://api.getresponse.com/v3/custom-fields/p",
+            "value": [
+                "84"
+            ]
+        },
+        {
+            "customFieldId": "p",
+            "href": "https://api.getresponse.com/v3/custom-fields/n",
+            "value": [
+                "mercedes"
+            ]
+        },
+        {
+            "customFieldId": "rs",
+            "href": "https://api.getresponse.com/v3/custom-fields/T",
+            "value": [
+                "white",
+                "black"
+            ]
+        }
+    ],
+    "activities": "https://api.getresponse.com/v3/contacts/V/get-activities"
+}

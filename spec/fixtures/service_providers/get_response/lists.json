@@ -1,0 +1,11 @@
+[
+  {
+    "campaignId": "4567456",
+    "name": "List1",
+    "description": "New test campaign",
+    "languageCode": "EN",
+    "isDefault": "true",
+    "createdOn": "2014-10-08 15:03:13Z",
+    "href": "http://api.getresponse.com/v3/campaigns/B"
+  }
+]
