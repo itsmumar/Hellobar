@@ -28,24 +28,7 @@ class ContactList < ActiveRecord::Base
 
   delegate :count, to: :site_elements, prefix: true
 
-  def syncable?
-    return false unless identity && data && Settings.syncable
-
-    if oauth?
-      data['remote_name'] && data['remote_id']
-    elsif embed_code?
-      data['embed_code'].present?
-    elsif api_key? && app_url?
-      identity.api_key? && identity.extra['app_url'].present?
-    elsif api_key?
-      identity.api_key? && data['remote_name'] && data['remote_id']
-    elsif webhook?
-      true
-    end
-  end
-
   def service_provider
-    return nil unless syncable?
     @service_provider ||= identity.service_provider(contact_list: self)
   end
 
@@ -54,17 +37,6 @@ class ContactList < ActiveRecord::Base
 
     data = Hello::DataAPI.contacts(self, limit) || []
     @subscribers = data.map { |d| { email: d[0], name: d[1], subscribed_at: d[2].is_a?(Integer) ? Time.zone.at(d[2]) : nil } }
-  end
-
-  def subscriber_statuses(subscribers, force = false)
-    return @statuses if @statuses && !force
-    @statuses = begin
-      if subscribers.present? && service_provider.respond_to?(:subscriber_statuses)
-        service_provider.subscriber_statuses(self, subscribers.map { |x| x[:email] })
-      else
-        {}
-      end
-    end
   end
 
   def num_subscribers
@@ -79,34 +51,23 @@ class ContactList < ActiveRecord::Base
   end
 
   def oauth?
-    service_provider_class.try(:oauth?).present?
+    return false unless identity
+    ServiceProviders::Adapters.oauth? identity.provider
   end
 
   def embed_code?
-    service_provider_class.try(:embed_code?).present?
+    return false unless identity
+    ServiceProviders::Adapters.embed_code? identity.provider
   end
 
   def api_key?
-    service_provider_class.try(:api_key?).present?
+    return false unless identity
+    ServiceProviders::Adapters.api_key? identity.provider
   end
 
   def app_url?
-    service_provider_class.try(:app_url?).present?
-  end
-
-  def needs_to_reconfigure?
-    return false if webhook?
-
-    if syncable? && !oauth? && !api_key?
-      begin
-        service_provider.subscribe_params('emailfor@user.com', 'Name namerson', true)
-        false
-      rescue
-        true
-      end
-    else
-      false
-    end
+    return false unless identity
+    ServiceProviders::Adapters.app_url? identity.provider
   end
 
   def webhook?
@@ -153,14 +114,6 @@ class ContactList < ActiveRecord::Base
   def embed_code_valid?
     return if ExtractEmbedForm.new(data['embed_code']).call.valid?
     errors.add(:base, 'Embed code is invalid')
-  end
-
-  def service_provider_class
-    if identity
-      identity.service_provider_class
-    elsif provider_set?
-      ServiceProvider[provider_token]
-    end
   end
 
   def webhook_url_valid?

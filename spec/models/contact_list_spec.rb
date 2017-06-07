@@ -1,18 +1,11 @@
 describe ContactList do
   let(:site) { create(:site) }
-  let(:provider) { 'email' }
+  let(:provider) { 'mailchimp' }
   let(:identity) { Identity.new(site: site, provider: provider) }
   let(:contact_list) { create(:contact_list, identity: identity) }
   let(:service_provider) { contact_list.service_provider }
 
   before do
-    if identity.provider == 'email'
-      allow(identity).to receive(:service_provider_class).and_return(ServiceProviders::Email)
-      allow(ServiceProviders::Email).to receive(:settings).and_return(oauth: false)
-      allow(contact_list).to receive(:syncable?).and_return(true)
-      expect(service_provider).to be_a(ServiceProviders::Email)
-    end
-
     allow(Hello::DataAPI).to receive(:contacts).and_return([
       ['test1@hellobar.com', '', 1384807897],
       ['test2@hellobar.com', '', 1384807898]
@@ -120,32 +113,6 @@ describe ContactList do
     end
   end
 
-  describe '#subscriber_statuses' do
-    let(:provider) { 'mailchimp' }
-    let(:credentials) { { 'token' => 'token' } }
-    let(:extra) { { 'metadata' => { 'api_endpoint' => 'api_endpoint' } } }
-    let(:identity) { Identity.new(site: site, provider: provider, credentials: credentials, extra: extra) }
-    let(:service_provider) { identity.service_provider(contact_list: contact_list) }
-
-    before do
-      allow(contact_list).to receive(:syncable?).and_return(true)
-    end
-
-    it 'returns empty hash if service provider does not retreive statuses' do
-      allow(service_provider).to receive(:respond_to?).with(:subscriber_statuses).and_return false
-      expect(contact_list.subscriber_statuses([{ email: 'test' }])).to eq({})
-    end
-
-    it 'returns a hash with the status as returned by the service provider' do
-      subscribers = [{ email: 'test@test.com' }, { email: 'test2@test.com' }]
-      result = { 'test@test.com' => 'pending', 'test2@test.com' => 'subscribed' }
-      expect(service_provider)
-        .to receive(:subscriber_statuses)
-        .with(contact_list, ['test@test.com', 'test2@test.com']).and_return(result)
-      expect(contact_list.subscriber_statuses(subscribers)).to eq(result)
-    end
-  end
-
   describe '#num_subscribers' do
     it 'gets number of subscribers from the data API' do
       allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(contact_list.id.to_s => 5)
@@ -169,85 +136,16 @@ describe ContactList do
 end
 
 describe ContactList, 'embed code' do
-  subject { create(:contact_list, :embed_code_form) }
-
-  before { subject.data['embed_code'] = embed_code }
-
   context 'invalid' do
-    let(:embed_code) { 'asdf' }
-    before { subject.data['embed_code'] = embed_code }
+    subject { build(:contact_list, :embed_code_invalid) }
 
-    describe '#data' do
-      it { expect(subject.data).to eql 'embed_code' => 'asdf' }
-    end
-
-    it { expect(subject.valid?).to be false }
-  end
-
-  context 'invalid' do
-    let(:embed_code) { '<<asdfasdf>>>' }
-    it { expect(subject.valid?).to be false }
-  end
-
-  context 'invalid' do
-    let(:embed_code) { '<from></from>' }
-    it { expect(subject.valid?).to be false }
+    it { expect(subject).to be_invalid }
   end
 
   context 'valid' do
-    let(:embed_code) { '<form></form>' }
-    it { expect(subject.valid?).to be true }
-  end
-end
+    subject { build(:contact_list, :embed_code_form) }
 
-describe ContactList, '#needs_to_reconfigure?' do
-  it 'returns false if not syncable' do
-    list = ContactList.new
-
-    allow(list).to receive(:syncable?) { false }
-
-    expect(list.needs_to_reconfigure?).to eql(false)
-  end
-
-  it 'returns false if syncs with oauth' do
-    list = ContactList.new
-
-    allow(list).to receive(:syncable?) { true }
-    allow(list).to receive(:oauth?) { true }
-
-    expect(list.needs_to_reconfigure?).to eql(false)
-  end
-
-  it 'returns false if syncs with an api_key' do
-    list = ContactList.new
-
-    allow(list).to receive(:syncable?) { true }
-    allow(list).to receive(:oauth?) { false }
-    allow(list).to receive(:api_key?) { true }
-
-    expect(list.needs_to_reconfigure?).to eql(false)
-  end
-
-  it 'returns false when able to generate subscribe params' do
-    list = ContactList.new
-
-    allow(list).to receive(:syncable?) { true }
-    allow(list).to receive(:oauth?) { false }
-    allow(list).to receive(:api_key?) { false }
-    allow(list).to receive_message_chain(:service_provider, :subscribe_params) { true }
-
-    expect(list.needs_to_reconfigure?).to eql(false)
-  end
-
-  it 'returns true when not able to generate subscribe params' do
-    list = build :contact_list, :embed_code
-
-    allow(list).to receive(:syncable?) { true }
-    allow(list).to receive(:oauth?) { false }
-    allow(list).to receive(:api_key?) { false }
-    allow(list).to receive_message_chain(:service_provider, :subscribe_params) { raise('hell') }
-
-    expect(list.needs_to_reconfigure?).to eql(true)
+    it { expect(subject).to be_valid }
   end
 end
 
