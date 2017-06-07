@@ -24,6 +24,10 @@ module ServiceProviders
       @remote_list_id = contact_list.data['remote_id']
     end
 
+    def human_name
+      I18n.t(name, scope: :service_providers)
+    end
+
     def name
       adapter.key
     end
