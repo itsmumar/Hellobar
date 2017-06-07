@@ -529,7 +529,7 @@ GEM
       railties (>= 3.1)
       slim (~> 3.0)
     slop (3.6.0)
-    socksify (1.7.0)
+    socksify (1.7.1)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
@@ -604,7 +604,7 @@ PLATFORMS
 
 DEPENDENCIES
   abanalyzer
-  active_campaign (~> 0.1.14)
+  active_campaign
   active_hash
   active_link_to
   active_model_serializers

@@ -16,11 +16,12 @@ gem 'rqrcode'
 gem 'ruby-hmac'
 
 # Email integrations
-gem 'active_campaign', '~> 0.1.14'
+gem 'active_campaign'
 gem 'aweber'
 gem 'constantcontact'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
+gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
 gem 'infusionsoft'
 gem 'madmimi'
@@ -31,7 +32,6 @@ gem 'omniauth-google-oauth2', '~> 0.2.6'
 gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
 gem 'omniauth-verticalresponse'
 gem 'verticalresponse'
-gem 'faraday' # Webhooks adapter
 
 # Mailing
 gem 'pony'
