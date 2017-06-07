@@ -13,10 +13,10 @@ class ContactList < ActiveRecord::Base
 
   acts_as_paranoid
 
-  before_validation :set_identity, :reject_empty_data_values, :clean_embed_code
+  before_validation :reject_empty_data_values, :clean_embed_code
 
   validates :name, presence: true
-  validates :site, association_exists: true
+  validates :site, presence: true, associated: true
   validate :provider_valid, if: :provider_set?
   validate :provider_credentials_exist, if: :provider_set?
   validate :embed_code_exists?, if: :embed_code?
@@ -76,19 +76,6 @@ class ContactList < ActiveRecord::Base
 
   def provider_set?
     !EMPTY_PROVIDER_VALUES.include?(provider_token)
-  end
-
-  def set_identity
-    return if provider_token.blank?
-
-    self.identity =
-      if !provider_set? || service_provider_class.nil?
-        nil # Don't create an invalid provider
-      elsif embed_code? || (provider_token == 'webhooks')
-        site.identities.find_or_create_by(provider: provider_token)
-      else
-        site.identities.find_by(provider: provider_token)
-      end
   end
 
   def oauth?
