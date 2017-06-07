@@ -164,7 +164,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def embed_code_valid?
-    return unless service_provider && !service_provider.embed_code_valid?
+    return if ExtractEmbedForm.new(data['embed_code']).call.valid?
     errors.add(:base, 'Embed code is invalid')
   end
 
