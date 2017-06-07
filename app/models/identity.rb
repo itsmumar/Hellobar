@@ -11,7 +11,7 @@ class Identity < ActiveRecord::Base
 
   validates :provider, presence: true,
                        uniqueness: { scope: :site_id },
-                       inclusion: { in: proc { Settings.identity_providers.keys.map(&:to_s) } }
+                       inclusion: { in: proc { ServiceProviders::Adapters.keys.map(&:to_s) } }
 
   validates :site, association_exists: true
   validate :service_provider_valid
@@ -29,18 +29,6 @@ class Identity < ActiveRecord::Base
     credentials.present?
   end
 
-  def working?
-    credentials.present? # we later need to know if these credentials actually work/sync
-  end
-
-  def type
-    provider_config['type']
-  end
-
-  def provider_config
-    service_provider_class.settings
-  end
-
   def as_json(options = nil)
     extra['raw_info']&.select! { |k, _| %w[user_id username].include? k }
     extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, _| %w[id web_id name].include? k } }
@@ -48,18 +36,13 @@ class Identity < ActiveRecord::Base
     super
   end
 
-  def service_provider(options = {})
-    return nil if service_provider_class.nil?
-    @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
-  end
-
-  def service_provider_class
-    ServiceProvider[provider]
+  def service_provider(contact_list: nil)
+    ServiceProviders::Provider.new(self, contact_list)
   end
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_config['name'], link: site_contact_lists_url(site, host: Settings.host))
+      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: service_provider.human_name, link: site_contact_lists_url(site, host: Settings.host))
     end
 
     destroy
@@ -78,10 +61,7 @@ class Identity < ActiveRecord::Base
   private
 
   def service_provider_valid
-    cached_provider = @service_provider # Don't cache the results of this
-    if service_provider && !service_provider.valid?
-      errors.add(:provider, 'could not be verified.')
-    end
-    @service_provider = cached_provider
+    return if service_provider&.connected?
+    errors.add(:provider, 'could not be verified.')
   end
 end

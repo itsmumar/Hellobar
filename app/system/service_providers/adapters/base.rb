@@ -22,7 +22,7 @@ module ServiceProviders
       end
 
       def lists
-        raise NoMethodError, 'to be implemented'
+        []
       end
 
       def subscribe(list_id, params) # rubocop:disable Lint/UnusedMethodArgument
@@ -37,6 +37,12 @@ module ServiceProviders
 
       def tags
         []
+      end
+
+      def connected?
+        lists.present?
+      rescue => _
+        false
       end
 
       def config

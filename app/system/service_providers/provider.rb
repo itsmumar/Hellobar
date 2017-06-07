@@ -46,6 +46,10 @@ module ServiceProviders
       adapter.batch_subscribe(remote_list_id, subscribers, double_optin: @contact_list&.double_optin)
     end
 
+    def connected?
+      adapter.connected?
+    end
+
     private
 
     def determine_adapter(identity, contact_list)
