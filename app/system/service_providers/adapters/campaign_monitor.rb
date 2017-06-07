@@ -36,7 +36,7 @@ module ServiceProviders
 
       private
 
-      def destroy_identity_if_needed(exception)
+      def destroy_identity
         @identity.destroy_and_notify_user
       end
     end
