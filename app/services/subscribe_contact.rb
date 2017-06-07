@@ -8,8 +8,6 @@ class SubscribeContact
   end
 
   def call
-    return unless contact_list.syncable?
-
     with_log_entry do
       provider.subscribe(email: email, name: name)
     end

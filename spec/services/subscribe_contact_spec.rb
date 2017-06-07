@@ -13,7 +13,6 @@ describe SubscribeContact do
   end
 
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }
-  before { allow(contact_list).to receive(:syncable?).and_return(true) }
   before { allow(provider).to receive(:subscribe).with(email: email, name: name) }
 
   it 'creates contact list logs' do
@@ -31,15 +30,6 @@ describe SubscribeContact do
     it 'does not mark contact list log as completed and raises error' do
       expect { service.call }.to raise_error StandardError
       expect(last_log_entry).not_to be_completed
-    end
-  end
-
-  context 'with not syncable contact_list' do
-    before { allow(contact_list).to receive(:syncable?).and_return(false) }
-
-    it 'does nothing' do
-      expect(contact_list.service_provider).to be_nil
-      expect(service.call).to be_nil
     end
   end
 end
