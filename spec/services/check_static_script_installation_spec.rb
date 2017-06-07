@@ -55,8 +55,23 @@ describe CheckStaticScriptInstallation do
       end
     end
 
-    context 'and script is not installed on homepage' do
-      before { expect(HTTParty).to receive(:get).with(site.url, timeout: 5).and_return('') }
+    context 'and script is not installed on the homepage' do
+      let(:body) { '<html><body>Text</body></html>' }
+      let(:response) { instance_double HTTParty::Response, body: body }
+
+      before do
+        expect(HTTParty).to receive(:get)
+          .with(site.url, timeout: 5)
+          .and_return response
+      end
+
+      include_examples 'uninstalled'
+    end
+
+    context 'and site is inaccessible' do
+      before do
+        expect(HTTParty).to receive(:get).and_raise HTTParty::ResponseError
+      end
 
       include_examples 'uninstalled'
     end
@@ -106,9 +121,16 @@ describe CheckStaticScriptInstallation do
       end
     end
 
-    context 'and script is installed on homepage' do
-      before { expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({}) }
-      before { expect(HTTParty).to receive(:get).with(site.url, timeout: 5).and_return(site.script_name) }
+    context 'and script is installed on the homepage' do
+      let(:body) { "<script src='//localhost/#{ site.script_name }'></script>" }
+      let(:response) { instance_double HTTParty::Response, body: body }
+
+      before do
+        expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
+        expect(HTTParty).to receive(:get)
+          .with(site.url, timeout: 5)
+          .and_return response
+      end
 
       include_examples 'installed'
     end
