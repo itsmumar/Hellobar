@@ -89,13 +89,6 @@ describe ContactList do
     end
   end
 
-  describe '.sync!' do
-    it 'runs SyncContactListJob' do
-      expect(SubscribeAllContactsJob).to receive(:perform_now)
-      contact_list.sync!
-    end
-  end
-
   describe '#destroy' do
     it 'deletes contact list from default scope' do
       expect {

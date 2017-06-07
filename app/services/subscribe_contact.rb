@@ -1,7 +1,8 @@
-class SubscribeContact < SubscribeAllContacts
+class SubscribeContact
   # @return [SubscribeContactWorker::Contact]
   def initialize(contact)
-    super(contact.contact_list)
+    @contact_list = contact.contact_list
+    @provider = ServiceProviders::Provider.new(contact_list.identity, contact_list)
     @email = contact.email
     @name = contact.fields
   end

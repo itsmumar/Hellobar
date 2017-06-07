@@ -49,20 +49,6 @@ class ContactList < ActiveRecord::Base
     @service_provider ||= identity.service_provider(contact_list: self)
   end
 
-  def sync(options = {})
-    return false unless syncable?
-
-    if options[:immediate]
-      SubscribeAllContactsJob.perform_now self
-    else
-      SubscribeAllContactsJob.perform_later self
-    end
-  end
-
-  def sync!
-    sync(immediate: true)
-  end
-
   def subscribers(limit = nil)
     return @subscribers if @subscribers
 
