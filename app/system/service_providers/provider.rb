@@ -21,7 +21,7 @@ module ServiceProviders
       @adapter = determine_adapter(identity, contact_list)
       @identity = identity
       @contact_list = contact_list
-      @remote_list_id = contact_list.data['remote_id']
+      @remote_list_id = contact_list.data['remote_id'] if contact_list
     end
 
     def human_name
