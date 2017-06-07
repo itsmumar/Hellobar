@@ -16,8 +16,6 @@
       tr
         td
           = link_to list.name, site_contact_list_path(@site, list)
-          - if list.needs_to_reconfigure?
-            |  (Disconnected. Please reconfigure)
         td
           span = contact_list_provider_name(list)
           = image_tag contact_list_image(list)
