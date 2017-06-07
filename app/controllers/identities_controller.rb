@@ -71,9 +71,9 @@ class IdentitiesController < ApplicationController
 
   def add_account_details(identity)
     return unless identity.provider == 'drip'
+    client = Drip::Client.new(access_token: identity.credentials['token'], account_id: identity.extra['account_id'])
+    account = client.accounts.accounts.first
 
-    service_provider = identity.service_provider
-    account = service_provider.accounts.first
     identity.extra['account_id'] = account.id
     identity.extra['account_name'] = account.name
   end
