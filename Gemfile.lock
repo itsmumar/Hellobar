@@ -663,7 +663,7 @@ DEPENDENCIES
   mysql2
   nokogiri
   omniauth
-  omniauth-aweber (~> 1.0)
+  omniauth-aweber
   omniauth-constantcontact2
   omniauth-createsend
   omniauth-google-oauth2

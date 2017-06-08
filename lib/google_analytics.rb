@@ -1,18 +1,21 @@
 class GoogleAnalytics
   attr_reader :analytics
 
-  def initialize(access_token = nil)
-    client = Signet::OAuth2::Client.new(
+  def initialize(access_token = nil, expires_at = 1.hour.from_now)
+    authorization = Signet::OAuth2::Client.new(
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
-      token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
+      token_credential_uri: 'https://www.googleapis.com/oauth2/v4/token',
       client_id: Settings.google_auth_id,
       client_secret: Settings.google_auth_secret,
       scope: 'email profile https://www.googleapis.com/auth/analytics.readonly',
       access_token: access_token
     )
 
+    # Fix signet issue (https://github.com/google/signet/issues/75#issuecomment-231954956)
+    authorization.expires_at = expires_at
+
     @analytics = Google::Apis::AnalyticsV3::AnalyticsService.new
-    @analytics.authorization = client
+    @analytics.authorization = authorization
   end
 
   def self.normalize_url(url)
