@@ -61,7 +61,7 @@ class CheckStaticScriptInstallation
   end
 
   def site_url_content
-    @site_url_content ||= HTTParty.get(site.url, timeout: 5)
+    @site_url_content ||= HTTParty.get(site.url, timeout: 5).body
   end
 
   def script_installed?
