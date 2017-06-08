@@ -8,7 +8,8 @@ gem 'aws-sdk'
 # Authentication / authorization
 gem 'devise'
 gem 'google-api-client'
-gem 'omniauth', '~> 1.0'
+gem 'omniauth'
+gem 'signet'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
@@ -25,7 +26,7 @@ gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
 gem 'infusionsoft'
 gem 'madmimi'
-gem 'omniauth-aweber', '~> 1.0'
+gem 'omniauth-aweber'
 gem 'omniauth-constantcontact2'
 gem 'omniauth-createsend'
 gem 'omniauth-google-oauth2'
@@ -94,7 +95,6 @@ gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc411
 gem 'render_anywhere'
 gem 'roadie-rails'
 gem 'rubyzip'
-gem 'signet'
 gem 'thread'
 gem 'uglifier'
 gem 'unf'

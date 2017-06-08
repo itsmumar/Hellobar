@@ -31,7 +31,7 @@ module ServiceProviders
     delegate :lists, :tags, :connected?, to: :adapter
 
     def subscribe(email:, name: nil)
-      params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
+      params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }
 
       adapter.subscribe(remote_list_id, params).tap do
         adapter.assign_tags(@contact_list) if adapter.is_a?(Adapters::GetResponse)
@@ -52,6 +52,10 @@ module ServiceProviders
       else
         adapter_class.new(identity)
       end
+    end
+
+    def existing_tags
+      (@contact_list&.tags || []).select(&:present?)
     end
   end
 end

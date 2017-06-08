@@ -45,24 +45,59 @@ describe('Module elements.conversion', function () {
       dependencies['visitor'].getData.and.returnValue({nv: 1});
     });
 
-    it('does not perform converted calls (announcements have no way to track conversions)', function () {
+    it('performs viewed call', function () {
       var siteElement = announcementSlider();
+      var callbackSpy = jasmine.createSpy('callback');
+
+      module.viewed(siteElement, callbackSpy);
+
+      expect(dependencies['visitor'].setConverted).not.toHaveBeenCalled();
+      expect(dependencies['elements.visibility'].setVisibilityControlCookie).not.toHaveBeenCalled();
+      expect(dependencies['elements.data'].setData).toHaveBeenCalled();
+      expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.viewed', siteElement);
+      expect(dependencies['tracking.internal'].send).toHaveBeenCalled();
+      expect(dependencies['tracking.external'].send).toHaveBeenCalled();
+
+      expect(callbackSpy).not.toHaveBeenCalled();
+    });
+  })
+
+  describe('Phone Call Bar conversion', function () {
+    function phoneCallBar() {
+      return {
+        id: 12345,
+        type: 'Bar',
+        subtype: 'call',
+        settings: {
+          url: 'http://example.com'
+        }
+      };
+    }
+
+    beforeEach(function () {
+      hellobar.finalize();
+      dependencies = createDependencies();
+      module = hellobar('elements.conversion', { dependencies: dependencies });
+    });
+
+    it('performs converted call', function () {
+      var siteElement = phoneCallBar();
       var callbackSpy = jasmine.createSpy('callback');
 
       module.converted(siteElement, callbackSpy);
 
-      expect(dependencies['visitor'].setConverted).toHaveBeenCalled();
+      expect(dependencies['visitor'].setConverted).toHaveBeenCalledWith('cc');
       expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalledWith('success', siteElement);
       expect(dependencies['elements.data'].setData).toHaveBeenCalled();
       expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.converted', siteElement);
-      expect(dependencies['tracking.internal'].send).not.toHaveBeenCalled();
-      expect(dependencies['tracking.external'].send).not.toHaveBeenCalled();
+      expect(dependencies['tracking.internal'].send).toHaveBeenCalled();
+      expect(dependencies['tracking.external'].send).toHaveBeenCalled();
 
-      expect(callbackSpy).toHaveBeenCalled();
+      expect(callbackSpy).not.toHaveBeenCalled();
     });
 
     it('performs viewed call', function () {
-      var siteElement = announcementSlider();
+      var siteElement = phoneCallBar();
       var callbackSpy = jasmine.createSpy('callback');
 
       module.viewed(siteElement, callbackSpy);
@@ -102,7 +137,7 @@ describe('Module elements.conversion', function () {
 
       module.converted(siteElement, callbackSpy);
 
-      expect(dependencies['visitor'].setConverted).toHaveBeenCalled();
+      expect(dependencies['visitor'].setConverted).toHaveBeenCalledWith('ec');
       expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalledWith('success', siteElement);
       expect(dependencies['elements.data'].setData).toHaveBeenCalled();
       expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.converted', siteElement);
@@ -149,7 +184,7 @@ describe('Module elements.conversion', function () {
 
       module.converted(siteElement, callbackSpy);
 
-      expect(dependencies['visitor'].setConverted).toHaveBeenCalled();
+      expect(dependencies['visitor'].setConverted).toHaveBeenCalledWith('ec');
       expect(dependencies['elements.visibility'].setVisibilityControlCookie).toHaveBeenCalledWith('success', siteElement);
       expect(dependencies['elements.data'].setData).toHaveBeenCalled();
       expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.converted', siteElement);

@@ -31,12 +31,19 @@ class SubscribeContactWorker
     Contact.new(*data.captures) if data
   end
 
-  def perform(sqs_msg, contact)
-    raise 'Cannot sync without email present' if contact.email.blank?
+  def self.perform_now(body)
+    new.subscribe(parse(body))
+  end
 
-    SubscribeContact.new(contact).call
+  def perform(sqs_msg, contact)
+    subscribe(contact)
   rescue => e
     Raven.capture_exception(e, extra: { arguments: [sqs_msg.body, contact], queue_name: sqs_msg.queue_name })
     sqs_msg.delete
+  end
+
+  def subscribe(contact)
+    raise 'Cannot sync without email present' if contact.email.blank?
+    SubscribeContact.new(contact).call
   end
 end

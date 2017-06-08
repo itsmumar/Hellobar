@@ -62,5 +62,20 @@ describe('Module visitor', function () {
     expect(typeof module.getData()).toEqual('object');
   });
 
-});
+  describe('setConverted', function () {
+    describe('cc key (Call goal/bar type)', function () {
+      it('sets visitor data in localStorage', function () {
+        var conversionKey = 'cc';
+        var testStart = Math.round(new Date().getTime() / 1000);
 
+        module.setConverted('cc');
+
+        expect(module.getData('cc')).toEqual(1); // 1 conversion
+
+        // -1 because timestamps can be equal on quick test runs
+        expect(module.getData('cc_f')).toBeGreaterThan(testStart - 1);
+        expect(module.getData('cc_l')).toBeGreaterThan(testStart - 1);
+      });
+    });
+  });
+});
