@@ -15,7 +15,7 @@ class ContactListsController < ApplicationController
   end
 
   def create
-    identity = @site.identities.find params[:identity_id]
+    identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
     contact_list = @site.contact_lists.create(contact_list_params.merge(identity: identity))
     render json: contact_list, status: contact_list.persisted? ? :created : :bad_request
   end

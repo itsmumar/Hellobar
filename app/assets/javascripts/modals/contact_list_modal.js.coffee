@@ -266,7 +266,7 @@ class @ContactListModal extends Modal
 
     $.ajax @options.saveURL,
       type: @options.saveMethod
-      data: {identity_id: @options.identity.id, contact_list: formData}
+      data: {identity_id: @options.identity?.id, contact_list: formData}
       success: (data) =>
         @options.success(data, this)
       error: (response) =>
