@@ -31,12 +31,6 @@ export default Ember.Component.extend({
     }
   ),
 
-  removeDefaultImage: ( function () {
-    if (!this.get('hasUserChosenImage')) {
-      return this.send('removeDropzoneImages');
-    }
-  }).on('init'),
-
   actions: {
     removeDropzoneImages() {
       this.set('existingFileName', null);
@@ -74,7 +68,8 @@ export default Ember.Component.extend({
             imageMediumUrl: res.medium_url,
             imageLargeUrl: res.large_url,
             imageModalUrl: res.modal_url,
-            imageType: 'custom'
+            imageType: 'custom',
+            useDefaultImage: false
           });
         },
         sending: (file, xhr, formData) => {

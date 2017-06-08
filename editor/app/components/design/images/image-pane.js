@@ -19,11 +19,6 @@ export default Ember.Component.extend({
     }
   ),
 
-  hasUserChosenImage: Ember.computed('model.image_url', 'model.image_type', function () {
-      return this.get('model.image_url') && this.get('model.image_type') !== 'default';
-    }
-  ),
-
   actions: {
     selectImagePlacement(imagePlacement) {
       this.set('model.image_placement', imagePlacement.value);

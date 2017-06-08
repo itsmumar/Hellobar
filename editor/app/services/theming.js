@@ -84,16 +84,38 @@ export default Ember.Service.extend({
     return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('defaultGenericTheme');
   }.property('availableThemes', 'model.theme_id'),
 
-  setDefaultImage: function () {
-    const imageID = this.get('currentTheme.image_upload_id');
-    const imageUrl = this.get('currentTheme.image.default_url');
+  defaultImage: function () {
+    const id = this.get('currentTheme.image_upload_id');
+    const imageProps = this.get('currentTheme.image') || {};
 
-    this.setImage({
-      imageID,
-      imageUrl,
-      imageType: 'default'
-    });
-  }.observes('model.use_default_image', 'currentTheme').on('init'),
+    return {
+      id,
+      ...imageProps
+    };
+  }.property('currentTheme'),
+
+  resetUseDefaultImage: function () {
+    const { id } = this.get('defaultImage');
+    const currentImageId = this.get('model.active_image_id');
+
+    if (id && !currentImageId || id === currentImageId) {
+      this.set('model.use_default_image', true);
+    }
+  }.observes('defaultImage'),
+
+  updateImage: function () {
+    const { id, default_url } = this.get('defaultImage');
+    const currentImageId = this.get('model.active_image_id');
+    const useDefaultImage = this.get('model.use_default_image');
+
+    if (useDefaultImage || !currentImageId) {
+      this.setImage({
+        imageID: id,
+        imageUrl: default_url,
+        imageType: 'default'
+      });
+    }
+  }.observes('model.use_default_image', 'defaultImage').on('init'),
 
   setImage: function (imageProps) {
     this.get('modelLogic').setImageProps({

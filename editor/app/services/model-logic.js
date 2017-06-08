@@ -84,7 +84,7 @@ export default Ember.Service.extend({
       imageType = null
     } = props;
 
-    return this.setProperties({
+    const properties = {
       'model.active_image_id': imageID,
       'model.image_placement': imagePlacement,
       'model.image_url': imageUrl,
@@ -93,7 +93,13 @@ export default Ember.Service.extend({
       'model.image_large_url': imageLargeUrl || imageUrl,
       'model.image_modal_url': imageModalUrl || imageUrl,
       'model.image_type': imageType
-    });
+    };
+
+    if ('useDefaultImage' in props) {
+      properties['model.use_default_image'] = props.useDefaultImage;
+    }
+
+    return this.setProperties(properties);
   },
 
   // ------ Rule settings
