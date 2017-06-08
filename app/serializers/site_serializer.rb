@@ -18,7 +18,7 @@ class SiteSerializer < ActiveModel::Serializer
       google = scope.authentications.find { |auth| auth.provider == 'google_oauth2' }
 
       if google
-        analytics = GoogleAnalytics.new(google.access_token, google.expires_at)
+        analytics = GoogleAnalytics.new(google.access_token)
         analytics.latest_pageviews(object.url)
       end
     end

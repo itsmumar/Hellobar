@@ -1,7 +1,7 @@
 class GoogleAnalytics
   attr_reader :analytics
 
-  def initialize(access_token = nil, expires_at = 1.hour.from_now)
+  def initialize(access_token = nil)
     authorization = Signet::OAuth2::Client.new(
       authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
       token_credential_uri: 'https://www.googleapis.com/oauth2/v4/token',
@@ -12,7 +12,7 @@ class GoogleAnalytics
     )
 
     # Fix signet issue (https://github.com/google/signet/issues/75#issuecomment-231954956)
-    authorization.expires_at = expires_at
+    authorization.expires_in = 1.day.to_i
 
     @analytics = Google::Apis::AnalyticsV3::AnalyticsService.new
     @analytics.authorization = authorization
