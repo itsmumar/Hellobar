@@ -23,7 +23,6 @@ class ContactList < ActiveRecord::Base
   validate :embed_code_valid?, if: :embed_code?
   validate :webhook_url_valid?, if: :webhook?
 
-  after_save :notify_identity, if: :identity_id_changed?
   after_destroy :notify_identity
 
   delegate :count, to: :site_elements, prefix: true
@@ -88,11 +87,6 @@ class ContactList < ActiveRecord::Base
   end
 
   private
-
-  def notify_identity
-    old_identity_id = destroyed? ? identity_id : changes[:identity_id].try(:first)
-    Identity.find_by(id: old_identity_id).try(:contact_lists_updated) if old_identity_id
-  end
 
   def provider_valid
     errors.add(:provider, 'is not valid') unless provider_set? && identity.try(:provider)

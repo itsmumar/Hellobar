@@ -77,7 +77,7 @@ module ServiceProviders
 
       def update_contact(contact)
         client.update_contact(contact, true)
-      rescue RestClient::Conflict
+      rescue RestClient::Conflict # rubocop:disable Lint/HandleExceptions
         # do nothing
       end
 

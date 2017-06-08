@@ -34,7 +34,8 @@ class ContactListsController < ApplicationController
   end
 
   def update
-    result = @contact_list.update_attributes(contact_list_params)
+    identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
+    result = UpdateContactList.new(@contact_list, contact_list_params.merge(identity: identity)).call
     status = result ? :ok : :bad_request
     render json: @contact_list, status: status
   end
@@ -55,7 +56,8 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider_token, { data: [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
+    data_params = [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []]
+    params.require(:contact_list).permit(:name, :provider_token, { data: data_params }, :double_optin)
   end
 
   def delete_site_elements_action

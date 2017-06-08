@@ -4,7 +4,7 @@ describe ServiceProviders::Adapters::Infusionsoft do
       subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
       optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
       add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
-      tags: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
+      tags: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
     }
   end
 
@@ -39,7 +39,7 @@ describe ServiceProviders::Adapters::Infusionsoft do
     before { allow_request :post, :tags, body: body }
 
     it 'sends tags request' do
-      expect(provider.tags).to eql [{'name' => 'Tag1', 'id' => 1}]
+      expect(provider.tags).to eql [{ 'name' => 'Tag1', 'id' => 1 }]
     end
   end
 
