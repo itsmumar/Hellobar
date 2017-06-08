@@ -40,7 +40,7 @@ describe Identity do
   end
 
   describe '#destroy_and_notify_user' do
-    it 'should email the user that there was a problem syncing their identity' do
+    it 'emails the user that there was a problem syncing their identity' do
       expect(MailerGateway).to receive(:send_email) do |*args|
         expect(args[0]).to eq('Integration Sync Error')
         expect(args[1]).to eq(identity.site.owners.first.email)
@@ -54,7 +54,7 @@ describe Identity do
 
   describe 'contact lists updated' do
     context 'still has referencing contact lists' do
-      it 'should do nothing' do
+      it 'does nothing' do
         identity = create(:contact_list, :mailchimp).identity
         identity.contact_lists_updated
         expect(identity.destroyed?).to be_falsey
@@ -62,7 +62,7 @@ describe Identity do
     end
 
     context 'has no referencing contact lists' do
-      it 'should do nothing' do
+      it 'does nothing' do
         identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
         identity.contact_lists_updated
         expect(identity.destroyed?).to be_truthy
@@ -71,8 +71,24 @@ describe Identity do
   end
 
   describe '#embed_code=' do
-    it 'should raise error' do
+    it 'raises error' do
       expect { identity.embed_code = 'asdf' }.to raise_error NoMethodError
+    end
+  end
+
+  describe '#provider_icon_path' do
+    let(:identity) { create(:identity, :drip, site: site) }
+
+    it 'returns icon path' do
+      expect(identity.provider_icon_path).to eql 'providers/drip.png'
+    end
+  end
+
+  describe '#provider_name' do
+    let(:identity) { create(:identity, :aweber, site: site) }
+
+    it 'returns icon path' do
+      expect(identity.provider_name).to eql 'AWeber'
     end
   end
 end
