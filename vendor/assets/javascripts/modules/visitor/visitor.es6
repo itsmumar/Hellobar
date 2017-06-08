@@ -183,8 +183,8 @@ hellobar.defineModule('visitor',
     }
 
     function setConverted(conversionKey) {
-      let now = Math.round(new Date().getTime() / 1000);
-      let conversionCount = (getVisitorData(conversionKey) || 0) + 1;
+      const now = Math.round(new Date().getTime() / 1000);
+      const conversionCount = (getVisitorData(conversionKey) || 0) + 1;
 
       // Set the number of conversions for the visitor for this type of conversion
       setVisitorData(conversionKey, conversionCount);

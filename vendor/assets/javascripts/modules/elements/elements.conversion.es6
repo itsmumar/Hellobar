@@ -11,7 +11,7 @@ hellobar.defineModule('elements.conversion',
       const gaEventType = () => siteElementModel.subtype + '_conversion';
       const now = Math.round(new Date().getTime() / 1000);
       const conversionKey = getConversionKey(siteElementModel);
-      let conversionCount = (visitor.getData(conversionKey) || 0) + 1;
+      const conversionCount = (visitor.getData(conversionKey) || 0) + 1;
 
       visitor.setConverted(conversionKey);
 
@@ -59,11 +59,11 @@ hellobar.defineModule('elements.conversion',
 
     function getVisitorAttributes() {
       // Ignore first/last view timestamps, call/email/social conversions, date of visit
-      let ignoredAttributes = 'fv lv cc ec sc dt';
+      const ignoredAttributes = 'fv lv cc ec sc dt';
 
       // Ignore first and last conversion timestamps and the total number of conversions
       // (for call/email/social/traffic goals)
-      let ignoredAttributePattern = /(^cc.*_[fl]$)|(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
+      const ignoredAttributePattern = /(^cc.*_[fl]$)|(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
 
       // Remove ignored attributes
       let attributes = {};
