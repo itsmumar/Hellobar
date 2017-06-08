@@ -16,7 +16,7 @@ class UpdateContactList
   def destroy_identity_if_needed
     return if contact_list.identity.nil? || identity_has_more_lists? || params[:identity] == contact_list.identity
 
-    contact_list.identity.destroy
+    contact_list.identity.destroy!
   end
 
   def identity_has_more_lists?

@@ -15,7 +15,7 @@ class SubscribeContact
 
   private
 
-  attr_reader :email, :name
+  attr_reader :email, :name, :contact_list, :provider
 
   def with_log_entry
     log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
