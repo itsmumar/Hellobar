@@ -6,7 +6,7 @@ hellobar.defineModule('visitor',
     let visitor = {};
 
     // This just sets the default segments/tracking data for the visitor
-    // (such as when the suer visited, referrer, etc)
+    // (such as when the user visited, referrer, etc)
     function setDefaultSegments() {
       var nowDate = new Date();
       var now = Math.round(nowDate.getTime() / 1000);
@@ -183,8 +183,8 @@ hellobar.defineModule('visitor',
     }
 
     function setConverted(conversionKey) {
-      var now = Math.round(new Date().getTime() / 1000);
-      var conversionCount = (getVisitorData(conversionKey) || 0 ) + 1;
+      let now = Math.round(new Date().getTime() / 1000);
+      let conversionCount = (getVisitorData(conversionKey) || 0) + 1;
 
       // Set the number of conversions for the visitor for this type of conversion
       setVisitorData(conversionKey, conversionCount);

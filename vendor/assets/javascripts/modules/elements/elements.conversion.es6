@@ -4,14 +4,14 @@ hellobar.defineModule('elements.conversion',
   function (format, serialization, bus, crypto,
             visitor, elementsData, elementsVisibility, trackingInternal, trackingExternal) {
 
-    // Called when a conversion happens (e.g. link clicked, email form filled out)
+    // Called when a conversion happens (e.g. link clicked, email form filled out, etc.)
     function converted(siteElement, callback) {
       const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
       const id = siteElementModel.id;
       const gaEventType = () => siteElementModel.subtype + '_conversion';
-      var conversionKey = getConversionKey(siteElementModel);
-      var now = Math.round(new Date().getTime() / 1000);
-      var conversionCount = (visitor.getData(conversionKey) || 0 ) + 1;
+      const now = Math.round(new Date().getTime() / 1000);
+      const conversionKey = getConversionKey(siteElementModel);
+      let conversionCount = (visitor.getData(conversionKey) || 0) + 1;
 
       visitor.setConverted(conversionKey);
 
@@ -48,7 +48,7 @@ hellobar.defineModule('elements.conversion',
 
       // Record the number of views, first seen and last seen
       elementsData.setData(id, 'nv', (elementsData.getData(id, 'nv') || 0) + 1);
-      var now = Math.round((new Date()).getTime() / 1000);
+      const now = Math.round((new Date()).getTime() / 1000);
       if (!elementsData.getData(id, 'fv'))
         elementsData.setData(id, 'fv', now);
       elementsData.setData(id, 'lv', now);
@@ -58,27 +58,33 @@ hellobar.defineModule('elements.conversion',
     }
 
     function getVisitorAttributes() {
-      // Ignore first/last view timestamps, email/social conversions, date of visit
-      var ignoredAttributes = 'fv lv ec sc dt';
-      // Ignore first and last converted timestamps and number of traffic conversions
-      var ignoredAttributePattern = /(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
-      var attributes = {};
+      // Ignore first/last view timestamps, call/email/social conversions, date of visit
+      let ignoredAttributes = 'fv lv cc ec sc dt';
+
+      // Ignore first and last conversion timestamps and the total number of conversions
+      // (for call/email/social/traffic goals)
+      let ignoredAttributePattern = /(^cc.*_[fl]$)|(^ec.*_[fl]$)|(^sc.*_[fl]$)|(^l\-.+)/;
+
       // Remove ignored attributes
+      let attributes = {};
       const visitorData = visitor.getData();
-      for (var k in visitorData) {
-        var value = visitorData[k];
+      for (let k in visitorData) {
+        let value = visitorData[k];
         if ((typeof(value) === 'string' || typeof(value) === 'number' || typeof(value) === 'boolean') && ignoredAttributes.indexOf(k) === -1 && !k.match(ignoredAttributePattern)) {
           attributes[k.toLowerCase()] = (visitorData[k] + '').toLowerCase().substr(0, 150);
         }
       }
+
       return serialization.serialize(attributes);
     }
 
     // Returns true if the visitor did this conversion or not
     function didConvert(siteElementModel) {
-      conversionKey = getConversionKey(siteElementModel);
+      const conversionKey = getConversionKey(siteElementModel);
 
-      return conversionKey && visitor.getData(getConversionKey(siteElementModel));
+      // announcement bars don't have conversions, so conversionKey will be
+      // undefined for them; that's why the additional check
+      return conversionKey && visitor.getData(conversionKey);
     }
 
     // Returns the conversion key used in the cookies to determine if this
@@ -89,6 +95,8 @@ hellobar.defineModule('elements.conversion',
       }
 
       switch (siteElementModel.subtype) {
+        case 'call':
+          return 'cc';
         case 'email':
           return 'ec';
         case 'social':
@@ -148,6 +156,4 @@ hellobar.defineModule('elements.conversion',
       viewed,
       trackClick
     };
-
   });
-
