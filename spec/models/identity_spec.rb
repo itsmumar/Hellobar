@@ -26,6 +26,19 @@ describe Identity do
     end
   end
 
+  describe '#destroy' do
+    specify { expect { identity.destroy }.to change(identity, :destroyed?) }
+
+    context 'when identity has contact_lists' do
+      before { create :contact_list, identity: identity }
+
+      it 'returns nothing' do
+        expect(identity.destroy).to be_nil
+        expect(identity).not_to be_destroyed
+      end
+    end
+  end
+
   describe '#destroy_and_notify_user' do
     it 'should email the user that there was a problem syncing their identity' do
       expect(MailerGateway).to receive(:send_email) do |*args|

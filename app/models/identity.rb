@@ -44,6 +44,10 @@ class Identity < ActiveRecord::Base
     "providers/#{ provider }.png"
   end
 
+  def destroy
+    super if contact_lists.empty?
+  end
+
   def service_provider(contact_list: nil)
     ServiceProviders::Provider.new(self, contact_list)
   end

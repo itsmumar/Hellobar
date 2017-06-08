@@ -4,7 +4,7 @@ class ContactList < ActiveRecord::Base
   attr_accessor :provider_token
 
   belongs_to :site
-  belongs_to :identity
+  belongs_to :identity, dependent: :destroy
 
   has_many :site_elements, dependent: :destroy
   has_many :contact_list_logs
@@ -22,8 +22,6 @@ class ContactList < ActiveRecord::Base
   validate :embed_code_exists?, if: :embed_code?
   validate :embed_code_valid?, if: :embed_code?
   validate :webhook_url_valid?, if: :webhook?
-
-  after_destroy :notify_identity
 
   delegate :count, to: :site_elements, prefix: true
 

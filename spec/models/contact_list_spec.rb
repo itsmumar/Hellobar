@@ -1,9 +1,5 @@
 describe ContactList do
-  let(:site) { create(:site) }
-  let(:provider) { 'mailchimp' }
-  let(:identity) { Identity.new(site: site, provider: provider) }
-  let(:contact_list) { create(:contact_list, identity: identity) }
-  let(:service_provider) { contact_list.service_provider }
+  let!(:contact_list) { create(:contact_list, :aweber) }
 
   before do
     allow(Hello::DataAPI).to receive(:contacts).and_return([
@@ -19,57 +15,6 @@ describe ContactList do
       list.valid?
 
       expect(list.errors[:base]).to include('webhook URL is invalid')
-    end
-  end
-
-  describe 'associated identity' do
-    it 'should use #provider on creation to find the correct identity' do
-      identity = create(:identity)
-      list = build(:contact_list, site: identity.site, provider_token: 'mailchimp')
-
-      expect { list.valid? }.to change { list.identity }.from(nil).to(identity)
-    end
-
-    it 'should use #provider on edit to find the correct identity' do
-      constantcontact = create(:identity, :constantcontact)
-      list = create(:contact_list, :mailchimp, site: constantcontact.site)
-      list.provider_token = 'constantcontact'
-      list.save
-      expect(list.identity).to eql constantcontact
-    end
-
-    it 'should not be valid if #provider does not match an existing identity' do
-      list = create(:contact_list)
-      list.provider_token = 'notanesp'
-      list.identity = nil
-
-      expect(list).not_to be_valid
-      expect(list.errors.messages[:provider]).to include('is not valid')
-    end
-
-    it 'should clear the identity if provider is "0"' do
-      list = create(:contact_list, :mailchimp)
-      expect(list.identity).not_to be_blank
-
-      list.update_attributes(provider_token: '0')
-      expect(list.identity).to be_blank
-    end
-
-    it 'should notify the old identity when the identity is updated' do
-      list = create(:contact_list, :mailchimp)
-      old_identity = list.identity
-      expect(old_identity).to receive(:contact_lists_updated)
-      allow(Identity).to receive(:find_by).and_return(old_identity)
-      list.identity = create(:identity, :constantcontact)
-      list.save
-    end
-
-    it 'should message the identity when the contact list is destroyed' do
-      list = create(:contact_list, :mailchimp)
-      old_identity = list.identity
-      expect(old_identity).to receive(:contact_lists_updated)
-      allow(Identity).to receive(:find_by).and_return(old_identity)
-      list.destroy
     end
   end
 
@@ -93,6 +38,12 @@ describe ContactList do
       expect {
         contact_list.destroy
       }.to change { ContactList.only_deleted.count }
+    end
+
+    it 'destroys identity' do
+      expect {
+        contact_list.destroy
+      }.to change { Identity.count }
     end
   end
 
