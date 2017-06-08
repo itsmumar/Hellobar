@@ -1,6 +1,6 @@
 describe CheckStaticScriptInstallation do
   let(:site) { create(:site, :with_user, :with_rule) }
-  let(:service) { described_class.new(site) }
+  let(:service) { CheckStaticScriptInstallation.new(site) }
 
   shared_examples 'uninstalled' do
     it 'updates the script_uninstalled_at' do
@@ -57,12 +57,9 @@ describe CheckStaticScriptInstallation do
 
     context 'and script is not installed on the homepage' do
       let(:body) { '<html><body>Text</body></html>' }
-      let(:response) { instance_double HTTParty::Response, body: body }
 
       before do
-        expect(HTTParty).to receive(:get)
-          .with(site.url, timeout: 5)
-          .and_return response
+        stub_request(:get, site.url).to_return status: 200, body: body
       end
 
       include_examples 'uninstalled'
@@ -70,7 +67,7 @@ describe CheckStaticScriptInstallation do
 
     context 'and site is inaccessible' do
       before do
-        expect(HTTParty).to receive(:get).and_raise HTTParty::ResponseError
+        stub_request(:get, site.url).to_return status: 504
       end
 
       include_examples 'uninstalled'
@@ -123,13 +120,11 @@ describe CheckStaticScriptInstallation do
 
     context 'and script is installed on the homepage' do
       let(:body) { "<script src='//localhost/#{ site.script_name }'></script>" }
-      let(:response) { instance_double HTTParty::Response, body: body }
 
       before do
+        stub_request(:get, site.url).to_return status: 200, body: body
+
         expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
-        expect(HTTParty).to receive(:get)
-          .with(site.url, timeout: 5)
-          .and_return response
       end
 
       include_examples 'installed'
