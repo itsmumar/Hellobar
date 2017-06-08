@@ -5,11 +5,11 @@ describe SubscribeContact do
   let(:name) { 'FirstName LastName' }
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
-  let(:provider) { double('ServiceProviders::Provider') }
+  let(:provider) { double('ServiceProvider') }
   let(:last_log_entry) { contact_list.contact_list_logs.last }
 
   before do
-    allow(ServiceProviders::Provider).to receive(:new).with(contact_list.identity, contact_list).and_return(provider)
+    allow(ServiceProvider).to receive(:new).with(contact_list.identity, contact_list).and_return(provider)
   end
 
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }

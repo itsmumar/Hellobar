@@ -9,7 +9,7 @@ class IdentitySerializer < ActiveModel::Serializer
   end
 
   def supports_cycle_day
-    service_provider.name == :get_response
+    service_provider.config.supports_cycle_day
   end
 
   def embed_code
@@ -22,6 +22,6 @@ class IdentitySerializer < ActiveModel::Serializer
   private
 
   def service_provider
-    @service_provider ||= ServiceProviders::Provider.new(object)
+    @service_provider ||= ServiceProvider.new(object)
   end
 end

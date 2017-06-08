@@ -1,6 +1,6 @@
 module ContactListsHelper
   def options_for_provider_select
-    providers_array = ServiceProviders::Adapters.enabled.map do |adapter|
+    providers_array = ServiceProvider::Adapters.enabled.map do |adapter|
       [
         t(adapter.key, scope: :service_providers),
         adapter.key,

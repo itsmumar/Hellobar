@@ -58,22 +58,22 @@ class ContactList < ActiveRecord::Base
 
   def oauth?
     return false unless identity
-    ServiceProviders::Adapters.oauth? identity.provider
+    ServiceProvider.oauth? identity.provider
   end
 
   def embed_code?
     return false unless identity
-    ServiceProviders::Adapters.embed_code? identity.provider
+    ServiceProvider.embed_code? identity.provider
   end
 
   def api_key?
     return false unless identity
-    ServiceProviders::Adapters.api_key? identity.provider
+    ServiceProvider.api_key? identity.provider
   end
 
   def app_url?
     return false unless identity
-    ServiceProviders::Adapters.app_url? identity.provider
+    ServiceProvider.app_url? identity.provider
   end
 
   def webhook?

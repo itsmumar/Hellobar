@@ -11,7 +11,7 @@ class Identity < ActiveRecord::Base
 
   validates :provider, presence: true,
                        uniqueness: { scope: :site_id },
-                       inclusion: { in: proc { ServiceProviders::Adapters.keys.map(&:to_s) } }
+                       inclusion: { in: proc { ServiceProvider::Adapters.keys.map(&:to_s) } }
 
   validates :site, association_exists: true
   validate :service_provider_valid
@@ -49,7 +49,7 @@ class Identity < ActiveRecord::Base
   end
 
   def service_provider(contact_list: nil)
-    ServiceProviders::Provider.new(self, contact_list)
+    ServiceProvider.new(self, contact_list)
   end
 
   def destroy_and_notify_user
