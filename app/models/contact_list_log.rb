@@ -3,8 +3,16 @@ class ContactListLog < ActiveRecord::Base
 
   scope :completed, -> { where(completed: true) }
 
-  def self.processed(subscribers)
+  def self.statuses(subscribers)
     emails = subscribers.map { |subscriber| subscriber[:email] }
-    select(:email).where(email: emails).completed.pluck(:email)
+    logs = where(email: emails).inject({}) { |hash, contact| hash.update contact.email => contact.status }
+
+    emails.inject({}) do |hash, email|
+      hash.update email => logs.fetch(email, 'Not Synced')
+    end
+  end
+
+  def status
+    completed? ? 'Sent' : 'Error'
   end
 end

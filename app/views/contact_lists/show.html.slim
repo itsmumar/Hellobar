@@ -36,7 +36,7 @@ table.contacts-table
       th #
       th Email
       th Name
-      - if @sent_contacts.any?
+      - if @email_statuses.any?
         th Status
       th Date Subscribed
 
@@ -47,12 +47,8 @@ table.contacts-table
           td= index + 1
           td= subscriber[:email]
           td= subscriber[:name]
-          - if @sent_contacts.any?
-            td
-              - if @sent_contacts.include?(subscriber[:email])
-                | Sent
-              - else
-                | Not Synced
+          - if @email_statuses.any?
+            td= @email_statuses[subscriber[:email]]
           td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
 
     - else
