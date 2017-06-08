@@ -79,7 +79,7 @@ describe ServiceProviders::Provider do
     let(:contact_list) { create(:contact_list, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
-    let(:subscribe) { provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName') }
+    let(:subscribe) { provider.subscribe(email: 'email@example.com', name: 'FirstName LastName') }
 
     it 'calls adapter' do
       expect(adapter).to receive(:subscribe).with(list_id, params)
@@ -135,7 +135,7 @@ describe ServiceProviders::Provider do
     let(:contact_list) { create(:contact_list, :with_tags, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
-    let(:batch_subscribe) { provider.batch_subscribe(list_id, subscribers) }
+    let(:batch_subscribe) { provider.batch_subscribe(subscribers) }
 
     it 'calls adapter' do
       expect(adapter).to receive(:batch_subscribe).with(list_id, subscribers, double_optin: false)
