@@ -1,6 +1,7 @@
 describe ServiceProviders::Adapters::ConvertKit do
   let(:defined_urls) do
     {
+      tags: 'https://api.convertkit.com/v3/tags?api_secret=api_key',
       lists: 'https://api.convertkit.com/v3/forms?api_secret=api_key',
       subscribe: 'https://api.convertkit.com/v3/forms/4567456/subscribe?api_secret=api_key'
     }
@@ -27,6 +28,14 @@ describe ServiceProviders::Adapters::ConvertKit do
     context 'when an error is raised' do
       before { allow(adapter.client).to receive(:get).with('forms').and_raise StandardError }
       specify { expect(adapter).not_to be_connected }
+    end
+  end
+
+  describe '#tags' do
+    before { allow_request :get, :tags }
+
+    it 'returns array of id => name' do
+      expect(provider.tags).to eql [{ 'id' => 1, 'name' => 'Tag1' }]
     end
   end
 

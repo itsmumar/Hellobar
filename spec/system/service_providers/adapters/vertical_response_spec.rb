@@ -36,6 +36,14 @@ describe ServiceProviders::Adapters::VerticalResponse do
       provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
+
+    context 'when Contact already exists. error is raised' do
+      before do
+        allow(adapter.client).to receive(:find_list).and_raise(::VerticalResponse::API::Error, 'Contact already exists.')
+      end
+
+      specify { expect { provider.subscribe(email: email, name: name) }.not_to raise_error }
+    end
   end
 
   describe '#batch_subscribe' do
@@ -49,6 +57,14 @@ describe ServiceProviders::Adapters::VerticalResponse do
     it 'calls #subscribe for each subscriber' do
       provider.batch_subscribe subscribers
       expect(subscribe_request).to have_been_made
+    end
+
+    context 'when Contact already exists. error is raised' do
+      before do
+        allow(adapter.client).to receive(:find_list).and_raise(::VerticalResponse::API::Error, 'Contact already exists.')
+      end
+
+      specify { expect { provider.batch_subscribe subscribers }.not_to raise_error }
     end
   end
 end

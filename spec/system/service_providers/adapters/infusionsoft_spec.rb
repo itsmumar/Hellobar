@@ -1,4 +1,4 @@
-describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
+describe ServiceProviders::Adapters::Infusionsoft do
   let(:defined_urls) do
     {
       subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
@@ -36,11 +36,10 @@ describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
 
   describe '#tags' do
     let(:body) { "<?xml version=\"1.0\" ?><methodCall><methodName>DataService.query</methodName><params><param><value><string>api_key</string></value></param><param><value><string>ContactGroup</string></value></param><param><value><i4>1000</i4></value></param><param><value><i4>0</i4></value></param><param><value><struct/></value></param><param><value><array><data><value><string>GroupName</string></value><value><string>Id</string></value></data></array></value></param></params></methodCall>\n" }
-    let!(:tags_request) { allow_request :post, :tags, body: body }
+    before { allow_request :post, :tags, body: body }
 
     it 'sends tags request' do
       expect(provider.tags).to eql [{'name' => 'Tag1', 'id' => 1}]
-      expect(tags_request).to have_been_made
     end
   end
 

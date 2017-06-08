@@ -22,7 +22,7 @@ module ServiceProviders
 
       def subscribe(list_id, params)
         list = client.get_list(list_id)
-        add_contact(make_contact(list, params), params[:double_optin])
+        add_contact(list, make_contact(list, params), params[:double_optin])
       end
 
       def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
@@ -30,27 +30,15 @@ module ServiceProviders
         activity = ::ConstantContact::Components::AddContacts.new(import, [list_id], ['E-Mail', 'First Name', 'Last Name'])
 
         client.add_create_contacts_activity(activity)
-      rescue RestClient::BadRequest => e
-        retry_if_invalid_email(e, list_id, subscribers)
       end
 
       private
 
-      def retry_if_invalid_email(exception, list_id, subscribers)
-        raise exception unless exception.to_s =~ /not a valid email/
-
-        # if any of the emails in a batch is invalid, the request will be rejected, so we try to naively select only valid addresses and try again
-        valid_subscribers = subscribers.select { |s| s[:email] =~ EMAIL_REGEXP }
-
-        return true unless valid_subscribers.count < subscribers.count
-
-        # to prevent an infinite loop, only retry if we were able to pare the subscribers array down
-        batch_subscribe(list_id, valid_subscribers)
-      end
-
       def make_import(subscribers)
-        subscribers.map do |subscriber|
-          first, last = (subscriber[:name] || '').split(' ')
+        valid_subscribers = subscribers.select { |subscriber| subscriber[:email] =~ EMAIL_REGEXP }
+
+        valid_subscribers.map do |subscriber|
+          first, last = subscriber.fetch(:name, '').split(' ')
 
           ::ConstantContact::Components::AddContactsImportData.new.tap do |data|
             data.first_name = first if first.present?
@@ -70,16 +58,16 @@ module ServiceProviders
         end
       end
 
-      def add_contact(contact, double_optin)
+      def add_contact(list, contact, double_optin)
         client.add_contact(contact, double_optin)
       rescue RestClient::Conflict
-        contact = client.get_contact_by_email(email).results[0]
+        contact = client.get_contact_by_email(contact.email_addresses.last.email_address).results[0]
         contact.add_list(list)
-        update_contact(contact, double_optin)
+        update_contact(contact)
       rescue RestClient::BadRequest => e
         # if the email is not valid, CC will raise an exception and we end up here
         # when this happens, just return true and continue
-        return true if e.inspect =~ /not a valid email address/
+        return if e.inspect =~ /not a valid email address/
         raise e unless e.inspect =~ /not be opted in using/
 
         # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
@@ -87,16 +75,10 @@ module ServiceProviders
         client.add_contact(contact, true)
       end
 
-      def update_contact(contact, double_optin = true)
-        client.update_contact(contact, double_optin)
-      rescue RestClient::Conflict
-        # this can still fail a second time if CC isn't happy with how the data matches. for some reason.
-        return true
-      rescue RestClient::BadRequest => e
-        # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
-        # if that happens, try adding contact again WITH double opt-in
-        raise e unless e.inspect =~ /not be opted in using/
+      def update_contact(contact)
         client.update_contact(contact, true)
+      rescue RestClient::Conflict
+        # do nothing
       end
 
       def destroy_identity

@@ -1,6 +1,7 @@
 describe ServiceProviders::Adapters::GetResponse do
   let(:defined_urls) do
     {
+      tags: 'https://api.getresponse.com/v3/tags?perPage=500',
       lists: 'https://api.getresponse.com/v3/campaigns?perPage=500',
       contacts: 'https://api.getresponse.com/v3/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
       contact: 'https://api.getresponse.com/v3/contacts/1',
@@ -38,6 +39,14 @@ describe ServiceProviders::Adapters::GetResponse do
 
     it 'returns array of id => name' do
       expect(adapter.lists).to eql [{ 'id' => list_id.to_s, 'name' => 'List1' }]
+    end
+  end
+
+  describe '#tags' do
+    before { allow_request :get, :tags }
+
+    it 'returns array of id => name' do
+      expect(adapter.tags).to eql [{ 'id' => '1', 'name' => 'Tag1' }]
     end
   end
 

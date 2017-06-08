@@ -8,6 +8,10 @@ module ServiceProviders
         config.oauth = true
       end
 
+      rescue_from ::VerticalResponse::API::Error do |e|
+        raise e unless e.message == 'Contact already exists.'
+      end
+
       def initialize(identity)
         super ::VerticalResponse::API::OAuth.new identity.credentials['token']
       end
@@ -28,8 +32,6 @@ module ServiceProviders
         end
 
         client.find_list(list_id).create_contact(options)
-      rescue ::VerticalResponse::API::Error => e
-        raise e unless e.message == 'Contact already exists.'
       end
 
       def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
@@ -42,8 +44,6 @@ module ServiceProviders
         end
 
         client.find_list(list_id).create_contacts(contacts)
-      rescue ::VerticalResponse::API::Error => e
-        raise e unless e.message == 'Contact already exists.'
       end
     end
   end

@@ -23,7 +23,7 @@ module ServiceProviders
       end
 
       def subscribe(list_id, params)
-        body = { new_email: params[:email], tags: params[:tags] }
+        body = { new_email: params[:email], tags: params[:tags], double_optin: params[:double_optin] }
 
         if params[:name].present?
           first_name, last_name = params[:name].split(' ', 2)
@@ -31,7 +31,6 @@ module ServiceProviders
         end
 
         if list_id
-          body[:double_optin] = params[:double_optin]
           client.subscribe(params[:email], list_id, body)
         else
           # Add subscriber to global account list

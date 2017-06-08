@@ -4,6 +4,9 @@ describe ServiceProviders::Adapters::ConstantContact do
       lists: 'https://api.constantcontact.com/v2/lists?api_key=app_key',
       list: 'https://api.constantcontact.com/v2/lists/4567456?api_key=app_key',
       subscribe: 'https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=app_key',
+      no_double_optin: 'https://api.constantcontact.com/v2/contacts?api_key=app_key',
+      update: 'https://api.constantcontact.com/v2/contacts/{id}?action_by=ACTION_BY_VISITOR&api_key=app_key',
+      contact: 'https://api.constantcontact.com/v2/contacts?api_key=app_key&email=example@email.com',
       batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
     }
   end
@@ -62,6 +65,57 @@ describe ServiceProviders::Adapters::ConstantContact do
       it 'calls identity.destroy_and_notify_user' do
         expect(identity).to receive(:destroy_and_notify_user)
         subscribe
+      end
+    end
+
+    context 'when RestClient::Conflict' do
+      before { allow_request :post, :subscribe, body: body, response: { status: 409 } }
+      before { allow_request :get, :contact }
+
+      let!(:update_request) { allow_request :put, :update, body: body.merge(id: 1) }
+
+      it 'updates subscriber' do
+        expect(subscribe).to be_a ::ConstantContact::Components::Contact
+        expect(update_request).to have_been_made
+      end
+
+      context 'when again RestClient::Conflict' do
+        before { allow_request :post, :subscribe, body: body, response: { status: 409 } }
+        before { allow_request :get, :contact }
+
+        let!(:update_request) { allow_request :put, :update, body: body.merge(id: 1), response: { status: 409 } }
+
+        it 'returns nothing' do
+          expect(subscribe).to be_nil
+          expect(update_request).to have_been_made
+        end
+      end
+    end
+
+    context 'when RestClient::BadRequest' do
+      let(:error_message) { '' }
+
+      context 'when message is "not a valid email address"' do
+        before { allow_request :post, :subscribe, body: body, response: { status: 400, body: error_message } }
+
+        let(:error_message) { 'not a valid email address' }
+
+        it 'returns nothing' do
+          expect(subscribe).to be_nil
+        end
+      end
+
+      context 'when message is "not be opted in using"' do
+        before { allow(contact_list).to receive(:double_optin).and_return(false) }
+        before { allow_request :post, :no_double_optin, body: body, response: { status: 400, body: error_message } }
+
+        let(:error_message) { 'not be opted in using' }
+        let!(:retry_request) { allow_request :post, :subscribe, body: body }
+
+        it 're-tries with double optin' do
+          expect(subscribe).to be_a ::ConstantContact::Components::Contact
+          expect(retry_request).to have_been_made
+        end
       end
     end
   end

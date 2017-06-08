@@ -61,6 +61,15 @@ describe ServiceProviders::Adapters::Maropost do
       provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
     end
+
+    context 'when request is unsuccessful' do
+      before { stub_request(:post, url_for_request(:subscribe)).and_return(status: 504, body: '{}') }
+
+      it 'sends subscribe request' do
+        expect { provider.subscribe(email: email, name: name) }
+          .to raise_error(ServiceProviders::Adapters::FaradayClient::RequestError)
+      end
+    end
   end
 
   describe '#batch_subscribe' do
