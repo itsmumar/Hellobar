@@ -13,10 +13,6 @@ module ServiceProviders
         yield config
       end
 
-      def self.human_name
-        name.demodulize
-      end
-
       def initialize(client)
         @client = client
       end
@@ -25,7 +21,7 @@ module ServiceProviders
         []
       end
 
-      def subscribe(list_id, params) # rubocop:disable Lint/UnusedMethodArgument
+      def subscribe(params) # rubocop:disable Lint/UnusedMethodArgument
         raise NoMethodError, 'to be implemented'
       end
 
@@ -40,13 +36,19 @@ module ServiceProviders
       end
 
       def connected?
-        lists.present?
+        test_connection
+        true
       rescue => _
         false
       end
 
       def config
         self.class.config
+      end
+
+      private
+
+      def test_connection
       end
     end
   end

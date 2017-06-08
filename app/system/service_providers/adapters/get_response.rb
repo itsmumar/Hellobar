@@ -82,6 +82,10 @@ module ServiceProviders
 
         found_contacts
       end
+
+      def test_connection
+        client.get 'campaigns', perPage: 500
+      end
     end
   end
 end

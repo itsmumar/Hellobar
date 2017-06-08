@@ -1,9 +1,10 @@
-describe ServiceProviders::Adapters::Infusionsoft do
+describe ServiceProviders::Adapters::Infusionsoft, :no_vcr do
   let(:defined_urls) do
     {
       subscribe: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
       optin: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
-      add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc'
+      add_to_group: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
+      tags: 'https://api.infusionsoft.com/crm/rest/v1/{port}/api/xmlrpc',
     }
   end
 
@@ -22,7 +23,25 @@ describe ServiceProviders::Adapters::Infusionsoft do
     end
   end
 
-  describe '#lists', skip: 'infusionsoft does not have lists' do
+  describe '#connected?' do
+    before { allow_request :post, :tags }
+
+    specify { expect(adapter).to be_connected }
+
+    context 'when an error is raised' do
+      before { allow(adapter).to receive(:tags).and_raise StandardError }
+      specify { expect(adapter).not_to be_connected }
+    end
+  end
+
+  describe '#tags' do
+    let(:body) { "<?xml version=\"1.0\" ?><methodCall><methodName>DataService.query</methodName><params><param><value><string>api_key</string></value></param><param><value><string>ContactGroup</string></value></param><param><value><i4>1000</i4></value></param><param><value><i4>0</i4></value></param><param><value><struct/></value></param><param><value><array><data><value><string>GroupName</string></value><value><string>Id</string></value></data></array></value></param></params></methodCall>\n" }
+    let!(:tags_request) { allow_request :post, :tags, body: body }
+
+    it 'sends tags request' do
+      expect(provider.tags).to eql [{'name' => 'Tag1', 'id' => 1}]
+      expect(tags_request).to have_been_made
+    end
   end
 
   describe '#subscribe' do

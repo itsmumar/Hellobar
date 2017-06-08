@@ -35,6 +35,12 @@ module ServiceProviders
           client.contact_add_to_group(infusionsoft_user_id, tag_id)
         end
       end
+
+      private
+
+      def test_connection
+        tags
+      end
     end
   end
 end

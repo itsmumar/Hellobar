@@ -32,7 +32,7 @@ module ServiceProviders
       adapter.key
     end
 
-    delegate :lists, :tags, to: :adapter
+    delegate :lists, :tags, :connected?, to: :adapter
 
     def subscribe(email:, name: nil)
       params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
@@ -44,10 +44,6 @@ module ServiceProviders
 
     def batch_subscribe(subscribers)
       adapter.batch_subscribe(remote_list_id, subscribers, double_optin: @contact_list&.double_optin)
-    end
-
-    def connected?
-      adapter.connected?
     end
 
     private

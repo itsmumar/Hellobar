@@ -33,6 +33,12 @@ module ServiceProviders
 
         process_response client.post "forms/#{ form_id }/subscribe", body
       end
+
+      private
+
+      def test_connection
+        client.get 'forms'
+      end
     end
   end
 end

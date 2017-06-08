@@ -19,6 +19,17 @@ describe ServiceProviders::Adapters::ActiveCampaign do
     end
   end
 
+  describe '#connected?' do
+    before { allow_request :get, :lists }
+
+    specify { expect(adapter).to be_connected }
+
+    context 'when an error is raised' do
+      before { allow(adapter.client).to receive(:list_list).with(ids: 'all').and_raise StandardError }
+      specify { expect(adapter).not_to be_connected }
+    end
+  end
+
   describe '.lists' do
     before { allow_request :get, :lists }
 

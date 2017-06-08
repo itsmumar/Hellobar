@@ -26,6 +26,12 @@ module ServiceProviders
         response = client.contact_sync(base.merge(contact.except(:double_optin)))
         raise response['result_message'] unless response['result_code'] == 1
       end
+
+      private
+
+      def test_connection
+        client.list_list ids: 'all'
+      end
     end
   end
 end

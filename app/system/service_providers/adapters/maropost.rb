@@ -38,6 +38,12 @@ module ServiceProviders
 
         process_response response
       end
+
+      private
+
+      def test_connection
+        client.get 'lists.json', no_counts: true
+      end
     end
   end
 end

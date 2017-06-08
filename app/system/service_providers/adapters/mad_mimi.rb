@@ -26,6 +26,12 @@ module ServiceProviders
           subscribers.map { |subscriber| subscriber.merge(add_list: list_id) }
         )
       end
+
+      private
+
+      def test_connection
+        client.lists
+      end
     end
   end
 end
