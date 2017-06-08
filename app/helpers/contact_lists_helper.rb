@@ -17,27 +17,13 @@ module ContactListsHelper
     [['In Hello Bar only', 0]] + providers_array
   end
 
-  # rubocop: disable Rails/OutputSafety
   def contact_list_sync_details(contact_list)
-    if contact_list.data['remote_name'].present? && contact_list.service_provider.present?
-      "<small>Syncing contacts with</small><span>#{ contact_list.service_provider.name } list \"#{ contact_list.data['remote_name'] }\"</span>".html_safe
-    elsif contact_list.service_provider.present?
-      "<small>Syncing contacts with</small><span>#{ contact_list.service_provider.name }</span>".html_safe
+    if contact_list.data['remote_name'].present?
+      "<small>Syncing contacts with</small><span>#{ contact_list.provider_name } list \"#{ contact_list.data['remote_name'] }\"</span>"
+    elsif contact_list.identity_id.present?
+      "<small>Syncing contacts with</small><span>#{ contact_list.provider_name }</span>"
     else
-      '<small>Storing contacts in</small><span>Hello Bar</span>'.html_safe
+      '<small>Storing contacts in</small><span>Hello Bar</span>'
     end
-  end
-  # rubocop: enable Rails/OutputSafety
-
-  def contact_list_provider_name(contact_list)
-    contact_list.service_provider&.human_name || 'Hello Bar'
-  end
-
-  def contact_list_image(contact_list)
-    "providers/#{ contact_list_image_key(contact_list) }.png"
-  end
-
-  def contact_list_image_key(contact_list)
-    contact_list.service_provider ? contact_list.service_provider.name : 'hellobar'
   end
 end

@@ -15,10 +15,10 @@ nav.tabs-wrapper
 
 .service-block
   .service-icon
-    = image_tag contact_list_image(@contact_list)
+    = image_tag @contact_list.provider_icon_path
 
   .service-description
-    = contact_list_sync_details(@contact_list)
+    == contact_list_sync_details(@contact_list)
 
   .service-actions
     a#edit-contact-list.button Edit

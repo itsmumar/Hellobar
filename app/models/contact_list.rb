@@ -28,7 +28,16 @@ class ContactList < ActiveRecord::Base
 
   delegate :count, to: :site_elements, prefix: true
 
+  def provider_name
+    identity&.provider_name || 'Hello Bar'
+  end
+
+  def provider_icon_path
+    identity&.provider_icon_path || 'providers/hellobar.png'
+  end
+
   def service_provider
+    return unless identity
     @service_provider ||= identity.service_provider(contact_list: self)
   end
 
@@ -76,10 +85,6 @@ class ContactList < ActiveRecord::Base
 
   def tags
     data['tags'] || []
-  end
-
-  def provider_name
-    identity && identity.provider.titlecase || 'Hello Bar'
   end
 
   private

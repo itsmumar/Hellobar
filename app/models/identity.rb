@@ -36,6 +36,14 @@ class Identity < ActiveRecord::Base
     super
   end
 
+  def provider_name
+    I18n.t(provider, scope: :service_providers)
+  end
+
+  def provider_icon_path
+    "providers/#{ provider }.png"
+  end
+
   def service_provider(contact_list: nil)
     ServiceProviders::Provider.new(self, contact_list)
   end
