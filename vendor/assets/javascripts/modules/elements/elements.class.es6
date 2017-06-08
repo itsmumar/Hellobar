@@ -560,6 +560,8 @@ hellobar.defineModule('elements.class',
           var meta = this.w.contentWindow.document.createElement("META");
           meta.name = "viewport";
           meta.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+
+          const head = document.getElementsByTagName('HEAD')[0];
           head.appendChild(meta);
         }
       }
