@@ -1,4 +1,5 @@
 class IdentitiesController < ApplicationController
+  before_action :authenticate_user!
   before_action :load_site
 
   def new
@@ -10,10 +11,7 @@ class IdentitiesController < ApplicationController
   end
 
   def show
-    @identity = @site.identities.where(provider: params[:id]).first
-    # If service provider is not valid, dont render the identity
-    @identity = nil if @identity && @identity.service_provider.nil?
-    render json: @identity
+    render json: @site.identities.find_by!(provider: params[:id])
   end
 
   def create
