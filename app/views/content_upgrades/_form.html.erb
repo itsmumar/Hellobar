@@ -1,82 +1,22 @@
+<%= render :partial => 'preview_styles' %>
+<% tabs = %w(content thank-you extras) %>
+
 <div class="content-upgrade-form">
 
-  <div class="columns">
-    <div class="form-column">
-      <div class="field-wrapper">
-        <label for="offer-headline">Offer Headline - Links should look like {{link text}}</label>
-        <textarea name="offer_headline" id="input-offer-headline"><%= @content_upgrade.offer_headline %></textarea>
-      </div>
-      <div class="field-wrapper">
-        <label for="caption">Caption Text</label>
-        <textarea name="caption" id="input-caption" style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
-      </div>
+  <nav class="tabs-wrapper" style="margin-top: 1em;">
+    <% tabs.each_with_index do |tab, index| %>
+    <a data-tab="<%= tab %>" class="element-filter <%= 'active' if index == 0 %>" href="javascript://" onclick="$('.editor-container').hide(); var tab = $(this).data('tab'); $('#' + tab + '-editor-container').show(); $('.tabs-wrapper .active').removeClass('active'); $('.tabs-wrapper a[data-tab=&quot;' + tab + '&quot;]').addClass('active');"><%= tab.titleize %></a>
+    <% end %>
+  </nav>
 
-      <div class="field-wrapper">
-        <label for="headline">Headline Text</label>
-        <textarea name="headline" id="input-headline" style="min-height:50px; height: 50px"><%= @content_upgrade.headline %></textarea>
-      </div>
-
-      <div class="field-wrapper">
-        <label for="name-placeholder">Name Placeholder</label>
-        <input name="name_placeholder" id="input-name-placeholder" type="text" value="<%= @content_upgrade.name_placeholder %>">
-      </div>
-
-      <div class="field-wrapper">
-        <label for="email-placeholder">Email Placeholder</label>
-        <input name="email_placeholder" id="input-email-placeholder" type="text" value="<%= @content_upgrade.email_placeholder %>">
-      </div>
-
-      <div class="field-wrapper">
-        <label for="cta">Button Text</label>
-        <input name="link_text" id="input-button-text" type="text" value="<%= @content_upgrade.link_text %>">
-      </div>
-
-      <div class="field-wrapper">
-        <label for="spam-disclaimer">Spam Disclaimer</label>
-        <input name="disclaimer" id="input-spam-disclaimer" type="text" value="<%= @content_upgrade.disclaimer %>">
-      </div>
-
+  <% tabs.each_with_index do |tab, index| %>
+    <div id="<%= tab %>-editor-container" class="editor-container" <% unless index.zero? %> style="display: none;"<% end %>>
+      <%= render :partial => "#{tab.underscore}_editor", locals: { form: form } %>
     </div>
+  <% end %>
 
-    <div class="preview-column">
-      <%= render :partial => 'preview' %>
-    </div>
-
-    <hr/>
-
-    <div class="field-wrapper">
-      <label for="content-upgrade-title">Title</label>
-      <input name="content_upgrade_title" id="input-content-upgrade-title" type="text" value="<%= @content_upgrade.content_upgrade_title %>">
-    </div>
-
-    <div class="field-wrapper">
-      <label for="content-upgrade-url">URL</label>
-      <input name="content_upgrade_url" id="input-content-upgrade-url" type="text" value="<%= @content_upgrade.content_upgrade_url %>">
-    </div>
-
-    <hr/>
-
-    <h3>Choose Contact List</h3>
-
-    <div class="select-wrapper">
-      <select id="contact-list" name="contact_list_id">
-        <%= @site.contact_lists.each do |list| %>
-            <option value="<%= list.id %>"
-                    <% if @content_upgrade.contact_list_id == list.id %>selected="selected"
-            <% end %>><%= list.name %></option>
-        <% end %>
-      </select>
-    </div>
-
-    <h3>PDF Download Content</h3>
-    <div class="field-wrapper">
-      <label for="offer-headline">Upload PDF download content file</label>
-      <%= form.file_field :content_upgrade_pdf %>
-    </div>
-
-    <div class="buttons">
-      <input type="submit" class="save" value="Save">
-      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
-    </div>
+  <div class="buttons">
+    <input type="submit" class="save button" value="Save">
+    <%= link_to('Cancel', site_content_upgrades_path(@site.id), :class => "list button") %>
   </div>
 </div>

@@ -1,0 +1,67 @@
+<div class="columns">
+  <div class="form-column">
+    <div class="field-wrapper">
+      <label for="offer-headline">Offer Headline - Links should look like {{link text}}</label>
+      <textarea name="offer_headline" id="input-offer-headline"><%= @content_upgrade.offer_headline %></textarea>
+    </div>
+    <div class="field-wrapper">
+      <label for="caption">Caption Text</label>
+      <textarea name="caption" id="input-caption" style="min-height:50px; height: 50px"><%= @content_upgrade.caption %></textarea>
+    </div>
+
+    <div class="field-wrapper">
+      <label for="headline">Headline Text</label>
+      <textarea name="headline" id="input-headline" style="min-height:50px; height: 50px"><%= @content_upgrade.headline %></textarea>
+    </div>
+
+    <div class="field-wrapper">
+      <label for="name-placeholder">Name Placeholder</label>
+      <input name="name_placeholder" id="input-name-placeholder" type="text" value="<%= @content_upgrade.name_placeholder %>">
+    </div>
+
+    <div class="field-wrapper">
+      <label for="email-placeholder">Email Placeholder</label>
+      <input name="email_placeholder" id="input-email-placeholder" type="text" value="<%= @content_upgrade.email_placeholder %>">
+    </div>
+
+    <div class="field-wrapper">
+      <label for="cta">Button Text</label>
+      <input name="link_text" id="input-button-text" type="text" value="<%= @content_upgrade.link_text %>">
+    </div>
+
+    <div class="field-wrapper">
+      <label for="spam-disclaimer">Spam Disclaimer</label>
+      <input name="disclaimer" id="input-spam-disclaimer" type="text" value="<%= @content_upgrade.disclaimer %>">
+    </div>
+  </div>
+
+  <div id="content-preview" class="preview-column">
+    <%= render :partial => 'preview' %>
+  </div>
+
+  <hr/>
+
+  <div class="form-column">
+    <h3>Choose Contact List</h3>
+
+    <div class="select-wrapper">
+      <select id="contact-list" name="contact_list_id">
+        <%= @site.contact_lists.each do |list| %>
+            <option value="<%= list.id %>"
+                    <% if @content_upgrade.contact_list_id == list.id %>selected="selected"
+            <% end %>><%= list.name %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <h3>PDF Download Content</h3>
+    <div class="field-wrapper">
+      <label for="offer-headline">Upload PDF download content file</label>
+      <%= form.file_field :content_upgrade_pdf %>
+
+      <% if @content_upgrade.content_upgrade_pdf.present? %>
+      <p><%= link_to('View PDF', @content_upgrade.content_upgrade_pdf.url, target: :_blank) %></p>
+      <% end %>
+    </div>
+  </div>
+</div>
