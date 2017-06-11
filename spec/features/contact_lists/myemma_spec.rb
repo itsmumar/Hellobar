@@ -5,12 +5,12 @@ feature 'MyEmma Integration', :js, :contact_list_feature do
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
-  let(:embed_code) { create :embed_code, provider: 'icontact' }
+  let(:embed_code) { create :embed_code, provider: 'my_emma_iframe' }
 
   before do
     sign_in user
     allow_any_instance_of(ExtractEmbedForm)
-      .to receive(:request_embed_url).and_return(create(:embed_code, provider: 'icontact_script'))
+      .to receive(:request_embed_url).and_return(create(:embed_code, provider: 'my_emma_form'))
   end
 
   context 'when invalid' do
