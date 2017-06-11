@@ -34,7 +34,7 @@ feature 'ActiveCampaign Integration', :js, :contact_list_feature do
   private
 
   def connect
-    connect_to_provider(user, provider) do
+    connect_to_provider(site, provider) do
       fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
       fill_in 'contact_list[data][api_key]', with: 'api-key'
     end

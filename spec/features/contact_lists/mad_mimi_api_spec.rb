@@ -35,7 +35,7 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
   private
 
   def connect
-    connect_to_provider(user, provider) do
+    connect_to_provider(site, provider) do
       fill_in 'contact_list[data][username]', with: 'hellobar'
       fill_in 'contact_list[data][api_key]', with: 'api-key'
     end

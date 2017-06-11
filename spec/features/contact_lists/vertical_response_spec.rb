@@ -35,6 +35,6 @@ feature 'Vertical Response Integration', :js, :contact_list_feature do
   private
 
   def connect
-    connect_to_provider(user, provider)
+    connect_to_provider(site, provider)
   end
 end

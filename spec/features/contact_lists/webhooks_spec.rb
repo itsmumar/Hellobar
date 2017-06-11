@@ -38,7 +38,7 @@ feature 'Webhooks Integration', :js, :contact_list_feature do
   private
 
   def connect(url)
-    open_provider_form(user, provider)
+    open_provider_form(site, provider)
     fill_in 'contact_list[data][webhook_url]', with: url
     page.find('.button.submit').click
   end

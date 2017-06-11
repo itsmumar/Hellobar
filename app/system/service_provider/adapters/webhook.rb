@@ -76,8 +76,6 @@ module ServiceProvider::Adapters
       end
     end
 
-    private
-
     def test_connection
       Socket.gethostbyname(client.url_prefix.host)
     end

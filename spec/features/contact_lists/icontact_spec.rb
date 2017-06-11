@@ -32,7 +32,7 @@ feature 'IContact Integration', :js, :contact_list_feature do
   private
 
   def connect
-    open_provider_form(user, provider)
+    open_provider_form(site, provider)
     fill_in 'contact_list[data][embed_code]', with: embed_code
     page.find('.button.submit').click
   end
