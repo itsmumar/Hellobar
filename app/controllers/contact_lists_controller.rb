@@ -15,7 +15,15 @@ class ContactListsController < ApplicationController
   end
 
   def create
-    identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
+    provider_token = contact_list_params[:provider_token]
+
+    identity =
+      if params[:identity_id].present?
+        @site.identities.find params[:identity_id]
+      elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
+        @site.identities.find_or_create_by(provider: provider_token)
+      end
+
     contact_list = @site.contact_lists.create(contact_list_params.merge(identity: identity))
     render json: contact_list, status: contact_list.persisted? ? :created : :bad_request
   end

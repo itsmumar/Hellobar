@@ -12,6 +12,12 @@ module ServiceProvider::Adapters
       client.post filled_form.action_url, filled_form.inputs
     end
 
+    def lists
+    end
+
+    def tags
+    end
+
     private
 
     def extract_form

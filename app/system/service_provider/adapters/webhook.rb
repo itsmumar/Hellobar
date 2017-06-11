@@ -5,9 +5,16 @@ module ServiceProvider::Adapters
     end
 
     def initialize(contact_list)
+      return unless contact_list
       @contact_list = contact_list
-      @method = contact_list.data['webhook_method'].downcase.to_sym
-      super contact_list.data['webhook_url']
+      @method = contact_list.data.fetch('webhook_method', 'GET').downcase.to_sym
+      super contact_list.data.fetch('webhook_url', '')
+    end
+
+    def lists
+    end
+
+    def tags
     end
 
     def subscribe(_list_id, params)
@@ -67,6 +74,12 @@ module ServiceProvider::Adapters
       else
         field['label'].parameterize('_')
       end
+    end
+
+    private
+
+    def test_connection
+      Socket.gethostbyname(client.url_prefix.host)
     end
   end
 end

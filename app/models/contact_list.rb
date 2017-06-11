@@ -77,7 +77,7 @@ class ContactList < ActiveRecord::Base
   end
 
   def webhook?
-    data['webhook_url'].present?
+    identity&.provider == 'webhooks'
   end
 
   def tags
@@ -115,8 +115,8 @@ class ContactList < ActiveRecord::Base
 
   def webhook_url_valid?
     uri = Addressable::URI.parse(data['webhook_url'])
-
-    return unless !%w[http https].include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
-    errors.add(:base, 'webhook URL is invalid')
+    return errors.add(:base, 'webhook URL cannot be blank') unless uri.present?
+    errors.add(:base, 'webhook protocol must be either http or https') unless %w[http https].include?(uri.scheme)
+    errors.add(:base, 'could not connect to the webhook URL') unless service_provider.connected?
   end
 end

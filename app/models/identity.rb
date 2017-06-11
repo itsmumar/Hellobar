@@ -19,16 +19,6 @@ class Identity < ActiveRecord::Base
   scope :by_type, ->(type) { where(provider: Settings.identity_providers.select { |_, v| v['type'] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
-  # When an activity is active, it is saved, credentials are present, and it is being used.
-  # Sites should only allow one active identity at a time for each type.
-  def active?
-    persisted? && filled_out?
-  end
-
-  def filled_out?
-    credentials.present?
-  end
-
   def as_json(options = nil)
     extra['raw_info']&.select! { |k, _| %w[user_id username].include? k }
     extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, _| %w[id web_id name].include? k } }
@@ -58,16 +48,6 @@ class Identity < ActiveRecord::Base
     end
 
     destroy
-  end
-
-  def contact_lists_updated
-    destroy if contact_lists.count == 0
-  end
-
-  # Deprecated
-  # TODO -Remove once the `embed_code` column is removed from Identities
-  def embed_code=(_embed_code)
-    raise NoMethodError
   end
 
   private

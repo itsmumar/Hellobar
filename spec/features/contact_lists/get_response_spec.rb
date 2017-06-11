@@ -1,7 +1,7 @@
 require 'integration_helper'
 
-feature 'MadMimi api Integration', :js, :contact_list_feature do
-  let(:provider) { 'mad_mimi_api' }
+feature 'GetResponse Integration', :js, :contact_list_feature do
+  let(:provider) { 'get_response_api' }
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
@@ -15,14 +15,14 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
 
     scenario 'displays error' do
       connect
-      expect(page).to have_content('There was a problem connecting your MadMimi account')
+      expect(page).to have_content('There was a problem connecting your GetResponse account')
     end
   end
 
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Choose a MadMimi list to sync with')
+    expect(page).to have_content('Choose a GetResponse list to sync with')
 
     page.find('select#contact_list_remote_list_id').select('List 1')
     page.find('.button.submit').click
@@ -36,7 +36,6 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
 
   def connect
     connect_to_provider(user, provider) do
-      fill_in 'contact_list[data][username]', with: 'hellobar'
       fill_in 'contact_list[data][api_key]', with: 'api-key'
     end
   end

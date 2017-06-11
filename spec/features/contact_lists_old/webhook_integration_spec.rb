@@ -6,7 +6,6 @@ feature 'Webhook Integration' do
 
   let(:provider)         { 'webhooks' }
   let(:api_domain)       { 'hellobar.com' }
-  let(:service_provider) { identity.service_provider(contact_list: contact_list) }
 
   context 'GET request webhook' do
     let(:contact_list) { build(:contact_list, data: { 'webhook_url' => url, 'webhook_method' => 'get' }) }

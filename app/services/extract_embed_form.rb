@@ -2,7 +2,7 @@ class ExtractEmbedForm
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
   def initialize(embed_code)
-    @embed_code = embed_code
+    @embed_code = embed_code || ''
   end
 
   # @return [EmbedForm]
@@ -25,7 +25,8 @@ class ExtractEmbedForm
   end
 
   def inputs
-    form&.css('input')&.inject({}) do |hash, input|
+    inputs = form&.css('input') || []
+    inputs.inject({}) do |hash, input|
       hash.update input.attr('name').to_s => input.attr('value').to_s
     end
   end

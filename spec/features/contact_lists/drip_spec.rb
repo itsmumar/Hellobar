@@ -1,39 +1,40 @@
 require 'integration_helper'
-require 'service_provider_integration_helper'
 
-feature 'Drip Integration', :js, :vcr do
+feature 'Drip Integration', :js, :contact_list_feature do
   let(:provider) { 'drip' }
 
+  let!(:user) { create :user }
+  let!(:site) { create :site, :with_bars, user: user }
+
   before do
-    OmniAuth.config.mock_auth[:drip] = OmniAuth::AuthHash.new(
-      provider: 'drip',
-      extra: { account_id: '8056783' },
-      credentials: { token: '....' }
-    )
-
-    allow(Settings).to receive(:fake_data_api).and_return true
-
-    @user = login
+    sign_in user
   end
 
-  scenario 'displays campaigns and tags' do
-    open_provider_form(@user, provider)
-    page.find('.button.ready').click
+  context 'when invalid' do
+    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
+
+    scenario 'displays error' do
+      connect
+      expect(page).to have_content('There was a problem connecting your Drip account')
+    end
+  end
+
+  scenario 'when valid' do
+    connect
 
     expect(page).to have_content('Choose a Drip campaign to sync with')
-    expect(page).to have_content('Apply Tags (Optional)')
-    expect(page).to have_link('+ Add tag')
+
+    page.find('select#contact_list_remote_list_id').select('List 1')
+    page.find('.button.submit').click
+
+    page.find('#edit-contact-list').click
+
+    expect(page).to have_content('List 1')
   end
 
-  context 'when no tags' do
-    scenario 'displays campaigns' do
-      open_provider_form(@user, provider)
-      page.find('.button.ready').click
+  private
 
-      expect(page).to have_content('Choose a Drip campaign to sync with')
-      expect(page).to have_content('Apply Tags (Optional)')
-      expect(page).to have_link('+ Add tag')
-      expect(page).to have_content('You have no tags in your Drip account')
-    end
+  def connect
+    connect_to_provider(user, provider)
   end
 end

@@ -11,7 +11,7 @@ class IdentitiesController < ApplicationController
   end
 
   def show
-    render json: @site.identities.find_by!(provider: params[:id])
+    render json: @site.identities.find_by(provider: params[:id])
   end
 
   def create
@@ -24,8 +24,6 @@ class IdentitiesController < ApplicationController
 
     identity.extra       = extra_from_request
     identity.credentials = credentials_from_request
-
-    add_account_details(identity)
 
     if params[:api_key]
       # TODO: sanitze me?
@@ -65,15 +63,6 @@ class IdentitiesController < ApplicationController
     else
       env['omniauth.auth'] && env['omniauth.auth']['extra']
     end
-  end
-
-  def add_account_details(identity)
-    return unless identity.provider == 'drip'
-    client = Drip::Client.new(access_token: identity.credentials['token'], account_id: identity.extra['account_id'])
-    account = client.accounts.accounts.first
-
-    identity.extra['account_id'] = account.id
-    identity.extra['account_name'] = account.name
   end
 
   def load_site

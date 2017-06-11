@@ -1,17 +1,17 @@
 require 'integration_helper'
 
 feature 'ConvertKit integration', :js, :contact_list_feature do
-  let(:provider) { 'convert_kit' }
+  let(:provider) {'convert_kit'}
 
-  let!(:user) { create :user }
-  let!(:site) { create :site, :with_bars, user: user }
+  let!(:user) {create :user}
+  let!(:site) {create :site, :with_bars, user: user}
 
   before do
     sign_in user
   end
 
   context 'when invalid' do
-    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
+    before {allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: []))}
 
     scenario 'displays error' do
       connect

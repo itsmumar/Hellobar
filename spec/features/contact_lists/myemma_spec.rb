@@ -1,16 +1,16 @@
 require 'integration_helper'
 
-feature 'IContact Integration', :js, :contact_list_feature do
+feature 'MyEmma Integration', :js, :contact_list_feature do
   let(:provider) { 'icontact' }
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
-  let(:embed_code) { create :embed_code, provider: 'myemma_iframe' }
+  let(:embed_code) { create :embed_code, provider: 'icontact' }
 
   before do
     sign_in user
     allow_any_instance_of(ExtractEmbedForm)
-      .to receive(:request_embed_url).and_return(create(:embed_code, provider: 'myemma_form'))
+      .to receive(:request_embed_url).and_return(create(:embed_code, provider: 'icontact_script'))
   end
 
   context 'when invalid' do

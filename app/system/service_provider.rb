@@ -2,17 +2,9 @@ class ServiceProvider
   prepend ServiceProvider::RailsLogger
   prepend ServiceProvider::RavenLogger
 
-  mattr_reader :config do
-    ActiveSupport::OrderedOptions.new { |hash, k| hash[k] = ActiveSupport::OrderedOptions.new }
-  end
-
   class << self
     def adapter(key)
       Adapters.fetch(key.to_sym)
-    end
-
-    def configure
-      yield config
     end
 
     delegate :app_url?, :api_key?, :embed_code?, :oauth?, to: ServiceProvider::Adapters
@@ -31,7 +23,7 @@ class ServiceProvider
     adapter.key
   end
 
-  delegate :lists, :tags, :connected?, to: :adapter
+  delegate :lists, :tags, :config, :connected?, to: :adapter
 
   def subscribe(email:, name: nil)
     params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }

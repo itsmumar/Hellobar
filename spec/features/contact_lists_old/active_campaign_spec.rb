@@ -1,7 +1,7 @@
 require 'integration_helper'
 
-feature 'MadMimi api Integration', :js, :contact_list_feature do
-  let(:provider) { 'mad_mimi_api' }
+feature 'ActiveCampaign Integration', :js, :contact_list_feature do
+  let(:provider) { 'active_campaign' }
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
@@ -15,16 +15,16 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
 
     scenario 'displays error' do
       connect
-      expect(page).to have_content('There was a problem connecting your MadMimi account')
+      expect(page).to have_content('There was a problem connecting your Active Campaign account')
     end
   end
 
   scenario 'when valid' do
     connect
+    expect(page).to have_content('Choose a Active Campaign list to sync with')
+    selector = 'select#contact_list_remote_list_id'
 
-    expect(page).to have_content('Choose a MadMimi list to sync with')
-
-    page.find('select#contact_list_remote_list_id').select('List 1')
+    page.find(selector).select('List 1')
     page.find('.button.submit').click
 
     page.find('#edit-contact-list').click
@@ -36,8 +36,8 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
 
   def connect
     connect_to_provider(user, provider) do
-      fill_in 'contact_list[data][username]', with: 'hellobar'
-      fill_in 'contact_list[data][api_key]', with: 'api-key'
+      fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
+      fill_in 'contact_list[data][api_key]', with: 'valid-active-campaign-key'
     end
   end
 end

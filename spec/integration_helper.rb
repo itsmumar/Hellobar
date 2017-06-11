@@ -33,4 +33,6 @@ RSpec.configure do |config|
       DatabaseCleaner.clean
     end
   end
+
+  config.include ContactListFeatureHelper, :contact_list_feature
 end

@@ -1,7 +1,7 @@
 require 'integration_helper'
 
-feature 'MadMimi api Integration', :js, :contact_list_feature do
-  let(:provider) { 'mad_mimi_api' }
+feature 'AWeber Integration', :js, :contact_list_feature do
+  let(:provider) { 'aweber' }
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
@@ -15,16 +15,17 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
 
     scenario 'displays error' do
       connect
-      expect(page).to have_content('There was a problem connecting your MadMimi account')
+      expect(page).to have_content('There was a problem connecting your AWeber account')
     end
   end
 
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Choose a MadMimi list to sync with')
+    expect(page).to have_content('Choose a AWeber list to sync with')
+    selector = 'select#contact_list_remote_list_id'
 
-    page.find('select#contact_list_remote_list_id').select('List 1')
+    page.find(selector).select('List 1')
     page.find('.button.submit').click
 
     page.find('#edit-contact-list').click
@@ -35,9 +36,6 @@ feature 'MadMimi api Integration', :js, :contact_list_feature do
   private
 
   def connect
-    connect_to_provider(user, provider) do
-      fill_in 'contact_list[data][username]', with: 'hellobar'
-      fill_in 'contact_list[data][api_key]', with: 'api-key'
-    end
+    connect_to_provider(user, provider)
   end
 end
