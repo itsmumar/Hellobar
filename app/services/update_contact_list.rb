@@ -15,7 +15,7 @@ class UpdateContactList
 
   def identity
     if ServiceProvider.embed_code?(params[:provider_token]) || params[:provider_token] == 'webhooks'
-      contact_list.site.identities.find_or_create_by(provider: params[:provider_token])
+      contact_list.site.identities.find_or_create_by!(provider: params[:provider_token])
     else
       params[:identity]
     end

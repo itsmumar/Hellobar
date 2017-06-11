@@ -1,9 +1,16 @@
 describe SubscribeContactWorker do
   let(:job) { described_class }
-  let(:contact) { described_class::Contact.new(1, 'email@example.com', 'firstname,lastname') }
+  let(:contact) { described_class::Contact.new('1', 'email@example.com', 'firstname,lastname') }
 
   def make_contact(id, email, fields)
     SubscribeContactWorker::Contact.new(id, email, fields)
+  end
+
+  describe '.perform_now' do
+    it 'parses message and calls #subscribe' do
+      expect(SubscribeContact).to receive_service_call.with(contact)
+      job.perform_now 'contact_list:sync_one[1,"email@example.com","firstname,lastname"]'
+    end
   end
 
   describe '.parse' do
