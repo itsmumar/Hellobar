@@ -5,21 +5,25 @@ class ServiceProvider
     end
 
     def self.embed_code?(provider)
+      return unless provider
       adapter = fetch(provider)
       adapter.config.requires_embed_code
     end
 
     def self.oauth?(provider)
+      return unless provider
       adapter = fetch(provider)
       adapter.config.oauth
     end
 
     def self.api_key?(provider)
+      return unless provider
       adapter = fetch(provider)
       adapter.config.requires_api_key
     end
 
     def self.app_url?(provider)
+      return unless provider
       adapter = fetch(provider)
       adapter.config.requires_app_url
     end
