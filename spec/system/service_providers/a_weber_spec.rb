@@ -9,6 +9,8 @@ describe ServiceProviders::AWeber, :vcr do
   let(:service_provider) { identity.service_provider(contact_list: contact_list) }
   let(:client) { service_provider.instance_variable_get(:@client) }
 
+  before { Settings.identity_providers['aweber']['consumer_key'] = 'aweber-consumer-key' }
+
   describe 'subscribe' do
     it 'catches AWeber::CreationError errors' do
       allow(client).to receive(:account).and_raise(AWeber::CreationError)

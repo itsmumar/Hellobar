@@ -30,7 +30,7 @@ module ServiceProviders
     delegate :lists, :tags, to: :adapter
 
     def subscribe(list_id, email:, name: nil)
-      params = { email: email, name: name, tags: @contact_list&.tags || [], double_optin: @contact_list&.double_optin }
+      params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }
 
       adapter.subscribe(list_id, params).tap do
         adapter.assign_tags(@contact_list) if adapter.is_a?(Adapters::GetResponse)
@@ -46,11 +46,15 @@ module ServiceProviders
     def determine_adapter(identity, contact_list)
       adapter_class = self.class.adapter(identity.provider)
 
-      if adapter_class < Adapters::EmbedForm || adapter_class == Adapters::Webhook
+      if adapter_class < Adapters::EmbedCode || adapter_class == Adapters::Webhook
         adapter_class.new(contact_list)
       else
         adapter_class.new(identity)
       end
+    end
+
+    def existing_tags
+      (@contact_list&.tags || []).select(&:present?)
     end
   end
 end

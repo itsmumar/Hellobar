@@ -176,7 +176,7 @@ describe ContactList do
 end
 
 describe ContactList, 'embed code' do
-  subject { create(:contact_list, :embed_code) }
+  subject { create(:contact_list, :embed_code_form) }
 
   before { subject.data['embed_code'] = embed_code }
 

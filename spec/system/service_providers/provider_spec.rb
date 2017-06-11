@@ -77,18 +77,30 @@ describe ServiceProviders::Provider do
     let(:contact_list) { create(:contact_list, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
+    let(:subscribe) { provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName') }
+
     it 'calls adapter' do
       expect(adapter).to receive(:subscribe).with(list_id, params)
-      provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
+      subscribe
     end
 
     context 'when contact_list.tags is not empty' do
-      let(:provider) { described_class.new(identity, create(:contact_list, :with_tags)) }
+      let(:contact_list) { create(:contact_list, :with_tags) }
+      let(:provider) { described_class.new(identity, contact_list) }
       let(:params) { { email: 'email@example.com', name: 'FirstName LastName', tags: ['id1', 'id2'], double_optin: true } }
 
       it 'passes tags to adapter' do
         expect(adapter).to receive(:subscribe).with(list_id, params)
-        provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
+        subscribe
+      end
+
+      context 'with empty tag' do
+        before { contact_list.data['tags'] = ['', ' ', 'not empty'] }
+
+        it 'does not send empty tag' do
+          expect(adapter).to receive(:subscribe).with(list_id, hash_including(tags: ['not empty']))
+          subscribe
+        end
       end
     end
 
@@ -110,9 +122,7 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect {
-          provider.subscribe(list_id, email: 'email@example.com', name: 'FirstName LastName')
-        }.not_to raise_error
+        expect { subscribe }.not_to raise_error
       end
     end
   end
@@ -123,9 +133,11 @@ describe ServiceProviders::Provider do
     let(:contact_list) { create(:contact_list, double_optin: false) }
     let(:provider) { described_class.new(identity, contact_list) }
 
+    let(:batch_subscribe) { provider.batch_subscribe(list_id, subscribers) }
+
     it 'calls adapter' do
       expect(adapter).to receive(:batch_subscribe).with(list_id, subscribers, double_optin: false)
-      provider.batch_subscribe(list_id, subscribers)
+      batch_subscribe
     end
 
     context 'when exception is raised' do
@@ -146,9 +158,7 @@ describe ServiceProviders::Provider do
       it 'calls Raven.capture_exception' do
         expect(adapter).to receive(:batch_subscribe).and_raise(StandardError)
         expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect {
-          provider.batch_subscribe(list_id, subscribers)
-        }.not_to raise_error
+        expect { batch_subscribe }.not_to raise_error
       end
     end
   end

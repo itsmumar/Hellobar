@@ -7,16 +7,15 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
       raise 'Site does not have a stored Constant Contact identity' unless identity
     end
     @identity = identity
-    @token = identity.credentials['token']
-    @client = ConstantContact::Api.new(Settings.identity_providers['constantcontact']['app_key'])
+    @client = ConstantContact::Api.new(Settings.identity_providers['constantcontact']['app_key'], identity.credentials['token'])
   end
 
   def lists
-    @client.get_lists(@token).map { |l| { 'id' => l.id, 'name' => l.name } }
+    @client.get_lists.map { |l| { 'id' => l.id, 'name' => l.name } }
   end
 
   def subscribe(list_id, email, name = nil, double_optin = true)
-    cc_list = @client.get_list(@token, list_id)
+    cc_list = @client.get_list(list_id)
     cc_contact = ConstantContact::Components::Contact.new
     cc_email = ConstantContact::Components::EmailAddress.new
 
@@ -27,7 +26,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
 
     add_contact(cc_contact, double_optin)
   rescue RestClient::Conflict
-    cc_contact = @client.get_contact_by_email(@token, email).results[0]
+    cc_contact = @client.get_contact_by_email(email).results[0]
     cc_contact.lists ||= []
     cc_contact.lists << cc_list
 
@@ -35,7 +34,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
   end
 
   def update_contact(contact, double_optin = true)
-    @client.update_contact(@token, contact, double_optin)
+    @client.update_contact(contact, double_optin)
   rescue RestClient::Conflict
     # this can still fail a second time if CC isn't happy with how the data matches. for some reason.
     return true
@@ -44,11 +43,11 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     # if that happens, try adding contact again WITH double opt-in
     raise e unless e.inspect =~ /not be opted in using/
 
-    @client.update_contact(@token, contact, true)
+    @client.update_contact(contact, true)
   end
 
   def add_contact(contact, double_optin)
-    @client.add_contact(@token, contact, double_optin)
+    @client.add_contact(contact, double_optin)
   rescue RestClient::BadRequest => e
     # if the email is not valid, CC will raise an exception and we end up here
     # when this happens, just return true and continue
@@ -57,7 +56,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
 
     # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
     # if that happens, try adding contact again WITH double opt-in
-    @client.add_contact(@token, contact, true)
+    @client.add_contact(contact, true)
   end
 
   # send subscribers in [{:email => '', :name => ''}, {:email => '', :name => ''}] format
@@ -76,7 +75,7 @@ class ServiceProviders::ConstantContact < ServiceProviders::Email
     columns = ['E-Mail', 'First Name', 'Last Name']
     activity = ConstantContact::Components::AddContacts.new(contacts, lists, columns)
 
-    @client.add_create_contacts_activity(@token, activity)
+    @client.add_create_contacts_activity(activity)
   rescue RestClient::BadRequest => e
     raise e unless e.inspect =~ /not a valid email/
 

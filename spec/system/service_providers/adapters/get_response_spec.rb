@@ -1,10 +1,10 @@
 describe ServiceProviders::Adapters::GetResponse do
   let(:defined_urls) do
     {
-      lists: 'https://api.getresponse.com/campaigns?perPage=500',
-      contacts: 'https://api.getresponse.com/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
-      contact: 'https://api.getresponse.com/contacts/1',
-      subscribe: 'https://api.getresponse.com/contacts'
+      lists: 'https://api.getresponse.com/v3/campaigns?perPage=500',
+      contacts: 'https://api.getresponse.com/v3/contacts?fields=contactId,email&page=0&perPage=20&sort%5BcreatedOn%5D=desc',
+      contact: 'https://api.getresponse.com/v3/contacts/1',
+      subscribe: 'https://api.getresponse.com/v3/contacts'
     }
   end
 
