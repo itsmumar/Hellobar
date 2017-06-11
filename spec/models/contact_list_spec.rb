@@ -9,12 +9,35 @@ describe ContactList do
   end
 
   describe 'as a valid object' do
+    let(:identity) { build :identity, provider: 'webhooks' }
+    let(:list) { build :contact_list, identity: identity, data: { 'webhook_url' => 'http://localhost/hook' } }
+
     it 'validates a webhook has a valid URL' do
-      list = build(:contact_list, data: { 'webhook_url' => 'url' })
+      expect(list).to be_valid
+    end
 
-      list.valid?
+    context 'when url is empty' do
+      let(:list) { build(:contact_list, identity: identity, data: { 'webhook_url' => '' }) }
 
-      expect(list.errors[:base]).to include('webhook URL is invalid')
+      it 'is not valid' do
+        expect(list).not_to be_valid
+      end
+    end
+
+    context 'when wrong protocol' do
+      let(:list) { build(:contact_list, identity: identity, data: { 'webhook_url' => 'ftp://localhost' }) }
+
+      it 'is not valid' do
+        expect(list).not_to be_valid
+      end
+    end
+
+    context 'when host does not exist' do
+      let(:list) { build(:contact_list, identity: identity, data: { 'webhook_url' => 'http://foobarbaz' }) }
+
+      it 'is not valid' do
+        expect(list).not_to be_valid
+      end
     end
   end
 

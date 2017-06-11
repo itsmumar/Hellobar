@@ -18,14 +18,6 @@ describe Identity do
     end
   end
 
-  describe '#active?' do
-    context 'when persisted and filled out' do
-      it 'returns true' do
-        expect(identity).to be_active
-      end
-    end
-  end
-
   describe '#destroy' do
     specify { expect { identity.destroy }.to change(identity, :destroyed?) }
 
@@ -49,30 +41,6 @@ describe Identity do
       end
 
       identity.destroy_and_notify_user
-    end
-  end
-
-  describe 'contact lists updated' do
-    context 'still has referencing contact lists' do
-      it 'does nothing' do
-        identity = create(:contact_list, :mailchimp).identity
-        identity.contact_lists_updated
-        expect(identity.destroyed?).to be_falsey
-      end
-    end
-
-    context 'has no referencing contact lists' do
-      it 'does nothing' do
-        identity = Identity.create(provider: 'aweber', credentials: {}, site: site)
-        identity.contact_lists_updated
-        expect(identity.destroyed?).to be_truthy
-      end
-    end
-  end
-
-  describe '#embed_code=' do
-    it 'raises error' do
-      expect { identity.embed_code = 'asdf' }.to raise_error NoMethodError
     end
   end
 

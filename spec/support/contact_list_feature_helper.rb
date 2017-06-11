@@ -15,6 +15,9 @@ module ContactListFeatureHelper
 end
 
 class TestProvider < ServiceProvider::Adapters::Base
+  configure do |config|
+  end
+
   def initialize(identity)
   end
 

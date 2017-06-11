@@ -33,7 +33,7 @@ describe 'Identities requests' do
 
         let(:request) { get new_site_identity_path(site, params), nil, env }
 
-        before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: true)) }
+        before { allow(ServiceProvider).to receive(:adapter).and_return(TestProvider) }
 
         it 'redirects back' do
           request
@@ -70,11 +70,7 @@ describe 'Identities requests' do
     end
 
     describe 'GET :show' do
-      before do
-        config = double(supports_double_optin: true, supports_cycle_day: true)
-        allow(ServiceProvider)
-          .to receive(:new).and_return(double(lists: [], tags: [], config: config))
-      end
+      before { allow(ServiceProvider).to receive(:adapter).and_return(TestProvider) }
 
       it 'responds with success' do
         get site_identity_path(site, id: identity.provider)
@@ -83,11 +79,7 @@ describe 'Identities requests' do
     end
 
     describe 'DELETE :destroy' do
-      before do
-        config = double(supports_double_optin: true, supports_cycle_day: true)
-        allow(ServiceProvider)
-          .to receive(:new).and_return(double(lists: [], tags: [], config: config))
-      end
+      before { allow(ServiceProvider).to receive(:adapter).and_return(TestProvider) }
 
       it 'destroys an existing identity' do
         expect {

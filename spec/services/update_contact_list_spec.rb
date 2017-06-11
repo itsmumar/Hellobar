@@ -11,7 +11,7 @@ describe UpdateContactList do
 
     context 'when identity_id is changed' do
       let!(:new_identity) { create :identity, :aweber }
-      let!(:params) { { identity: new_identity, name: 'Changed' } }
+      let!(:params) { { provider_token: 'aweber', identity: new_identity, name: 'Changed' } }
 
       it 'changes identity' do
         expect { service.call }.to change(contact_list, :identity_id).to(new_identity.id)
