@@ -41,10 +41,7 @@ export default Ember.Component.extend({
 
   actions: {
     autodetectColors() {
-      this.get('bus').trigger('hellobar.core.bar.themeChanged', {
-        themeId: 'autodetect',
-        elementType: this.get('elementType')
-      });
+      this.get('theming').setThemeById('autodetect');
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   }

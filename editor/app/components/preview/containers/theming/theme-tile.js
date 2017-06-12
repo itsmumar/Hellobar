@@ -4,6 +4,7 @@ export default Ember.Component.extend({
 
   bus: Ember.inject.service(),
   imaging: Ember.inject.service(),
+  theming: Ember.inject.service(),
 
   classNames: ['theme-tile'],
 
@@ -35,10 +36,7 @@ export default Ember.Component.extend({
 
   actions: {
     select() {
-      this.get('bus').trigger('hellobar.core.bar.themeChanged', {
-        themeId: this.get('theme.id'),
-        elementType: this.get('elementType')
-      });
+      this.get('theming').setThemeById(this.get('theme.id'));
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   }

@@ -44,6 +44,18 @@ export default Ember.Service.extend({
 
   _firstAttemptOfThemeApplying: false,
 
+  setThemeById: function (themeId) {
+    const allThemes = this.get('availableThemes');
+    const theme = _.find(allThemes, theme => theme.id === themeId);
+
+    if (theme) {
+      this.setProperties({
+        'model.theme': theme,
+        'model.theme_id': themeId
+      });
+    }
+  },
+
   applyCurrentTheme() {
     if (!this.get('model.id') || this._firstAttemptOfThemeApplying) {
       const allThemes = this.get('availableThemes');
