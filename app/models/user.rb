@@ -279,16 +279,9 @@ class User < ActiveRecord::Base
     user
   end
 
-  def self.search_by_url(url)
-    host = Site.normalize_url(url).host
-    if host
-      domain = PublicSuffix.parse(host).domain
-      User.joins(:sites).where('url like ?', "%#{ domain }%")
-    else
-      User.none
-    end
-  rescue Addressable::URI::InvalidURIError
-    User.none
+  def self.search_by_site_url url
+    domain = NormalizeURI[url].domain
+    domain ? User.joins(:sites).where('url LIKE ?', "%#{ domain }%") : User.none
   end
 
   def self.search_by_username(username)
