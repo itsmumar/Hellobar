@@ -101,6 +101,15 @@ describe ServiceProvider do
       end
     end
 
+    context 'with not a valid email' do
+      let(:subscribe) { provider.subscribe(email: 'not@valid@example.com', name: 'FirstName LastName') }
+
+      it 'does not call adapter' do
+        expect(adapter).not_to receive(:subscribe)
+        subscribe
+      end
+    end
+
     context 'when exception is raised' do
       let(:options) do
         {
@@ -135,6 +144,15 @@ describe ServiceProvider do
     it 'calls adapter' do
       expect(adapter).to receive(:batch_subscribe).with(list_id, subscribers, double_optin: false)
       batch_subscribe
+    end
+
+    context 'with not a valid email' do
+      let(:subscribers) { [email: 'not@valid@example.com', name: 'FirstName LastName'] }
+
+      it 'does not call adapter' do
+        expect(adapter).not_to receive(:batch_subscribe)
+        batch_subscribe
+      end
     end
 
     context 'when exception is raised' do
