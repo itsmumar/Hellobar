@@ -17,3 +17,6 @@ Rails.application.config.assets.precompile += %w[hellobar.eot hellobar.woff hell
 Rails.application.config.assets.precompile += %w[hellobar-icons.eot hellobar-icons.woff hellobar-icons.ttf hellobar-icons.svg]
 Rails.application.config.assets.precompile += %w[eyedropper.svg receipt.css site_elements_controller.js team.js]
 Rails.application.config.assets.precompile += %w[editor/editor-require.js editor/editor.js editor/editor.css editor/vendor.js editor/vendor.css editor/vendor/fonts/*]
+
+# Teaspoon
+Rails.application.config.assets.precompile += %w[teaspoon.css teaspoon-*.js]
