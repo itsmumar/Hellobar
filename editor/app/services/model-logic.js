@@ -54,15 +54,25 @@ export default Ember.Service.extend({
     });
   },
 
-
   // ------ Fields handling
 
-  setDefaultFields: function () {
+  _setDefaultEmailValues: function () {
     const elementSubtype = this.get('model.element_subtype');
-    const fieldsToCollect = this.get('model.settings.fields_to_collect');
 
-    if (elementSubtype === 'email' && _.isEmpty(fieldsToCollect)) {
-      this.set('model.settings.fields_to_collect', DEFAULT_FIELDS.slice());
+    if (elementSubtype === 'email') {
+      const fieldsToCollect = this.get('model.settings.fields_to_collect');
+
+      // set default fields to collect
+      if (_.isEmpty(fieldsToCollect)) {
+        this.set('model.settings.fields_to_collect', DEFAULT_FIELDS.slice());
+      }
+
+      // set default contact list if one exists
+      const contactLists = this.get('model.site.contact_lists');
+      const selectedId = this.get('model.contact_list_id')
+      if (!selectedId && !_.isEmpty(contactLists)) {
+        this.set('model.contact_list_id', contactLists[0].id);
+      }
     }
   }.observes('model.element_subtype'),
 

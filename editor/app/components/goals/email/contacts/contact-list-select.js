@@ -23,13 +23,6 @@ export default Ember.Component.extend({
     }
   }.property('selectedOption', 'options'),
 
-  init() {
-    if (this.get('hasContactList') && Ember.isEmpty(this.get('selectedOption'))) {
-      this.sendAction('setList', this.get('options.firstObject.id'));
-    }
-    return this._super();
-  },
-
   actions: {
 
     newList() {
