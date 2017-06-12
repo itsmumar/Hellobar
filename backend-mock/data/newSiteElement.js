@@ -25,17 +25,7 @@ module.exports = {
     "script_installed": true,
     "num_site_elements": 2,
     "view_billing": true,
-    "timezone": null,
-    "monthly_pageviews": null,
-    "rules": [{
-      "id": 7,
-      "site_id": 3,
-      "name": "Everyone",
-      "priority": null,
-      "match": "all",
-      "description": "Show this to everyone",
-      "editable": false,
-      "conditions": []
+    "timezone": null
     }, {
       "id": 8,
       "site_id": 3,
