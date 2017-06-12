@@ -102,7 +102,7 @@ describe ServiceProvider do
       end
     end
 
-    context 'with not a valid email' do
+    context 'with an invalid email' do
       let(:subscribe) { provider.subscribe(email: 'not@valid@example.com', name: 'FirstName LastName') }
 
       it 'does not call adapter' do
@@ -148,7 +148,7 @@ describe ServiceProvider do
       batch_subscribe
     end
 
-    context 'with not a valid email' do
+    context 'with an invalid email' do
       let(:subscribers) { [email: 'not@valid@example.com', name: 'FirstName LastName'] }
 
       it 'does not call adapter' do
