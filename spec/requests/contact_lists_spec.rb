@@ -37,6 +37,25 @@ describe 'ContactList requests' do
         expect(response).to be_successful
       end
 
+      context 'with contact_list_logs' do
+        let(:contact_list_log) { create :contact_list_log, contact_list: contact_list }
+        let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
+
+        before do
+          allow(Hello::DataAPI).to receive(:contacts).and_return([
+            [contact_list_log.email, contact_list_log.name],
+            [completed_contact_list_log.email, completed_contact_list_log.name]
+          ])
+        end
+
+        it 'responds with success' do
+          get site_contact_list_path(site, contact_list)
+          expect(response).to be_successful
+          expect(response.body).to include 'Sent'
+          expect(response.body).to include 'Error'
+        end
+      end
+
       context '.json' do
         it 'responds with success' do
           get site_contact_list_path(site, contact_list, format: :json)
