@@ -2,13 +2,13 @@ module ServiceProvider::Adapters
   class Base
     def self.inherited(base)
       base.prepend ServiceProvider::Rescuable
+      base.config = ActiveSupport::OrderedOptions.new
     end
 
     attr_reader :client
     class_attribute :key, :config
 
     def self.configure
-      self.config = ActiveSupport::OrderedOptions.new
       yield config
     end
 
