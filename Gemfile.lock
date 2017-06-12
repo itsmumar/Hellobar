@@ -76,7 +76,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.4.0)
+    addressable (2.5.1)
+      public_suffix (~> 2.0, >= 2.0.2)
     airbrussh (1.2.0)
       sshkit (>= 1.6.1, != 1.7.0)
     analytics-ruby (2.2.2)
@@ -386,7 +387,7 @@ GEM
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
     psych (2.2.4)
-    public_suffix (1.5.1)
+    public_suffix (2.0.5)
     rack (1.6.8)
     rack-protection (1.5.3)
       rack
@@ -719,7 +720,7 @@ DEPENDENCIES
   unf
   vcr
   verticalresponse
-  web-console (~> 2.0)
+  web-console
   webmock
   whenever
   zip-zip
