@@ -120,7 +120,7 @@ class ContactList < ActiveRecord::Base
 
     begin
       Socket.gethostbyname(uri.host)
-    rescue => _
+    rescue SocketError
       errors.add(:base, 'could not connect to the webhook URL')
     end
   end
