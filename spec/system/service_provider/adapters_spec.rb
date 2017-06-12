@@ -22,27 +22,6 @@ describe ServiceProvider::Adapters do
     }
   end
 
-  describe '.app_url?' do
-    specify do
-      allow(adapters).to receive(:fetch).and_return(double(config: double(requires_app_url: true)))
-      expect(adapters.app_url?(:foo)).to be_truthy
-    end
-  end
-
-  describe '.api_key?' do
-    specify do
-      allow(adapters).to receive(:fetch).and_return(double(config: double(requires_api_key: true)))
-      expect(adapters.api_key?(:foo)).to be_truthy
-    end
-  end
-
-  describe '.oauth?' do
-    specify do
-      allow(adapters).to receive(:fetch).and_return(double(config: double(oauth: true)))
-      expect(adapters.oauth?(:foo)).to be_truthy
-    end
-  end
-
   describe '.embed_code?' do
     specify do
       allow(adapters).to receive(:fetch).and_return(double(config: double(requires_embed_code: true)))

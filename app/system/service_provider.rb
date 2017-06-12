@@ -7,7 +7,7 @@ class ServiceProvider
       Adapters.fetch(key.to_sym)
     end
 
-    delegate :app_url?, :api_key?, :embed_code?, :oauth?, to: ServiceProvider::Adapters
+    delegate :embed_code?, to: ServiceProvider::Adapters
   end
 
   attr_reader :adapter, :remote_list_id

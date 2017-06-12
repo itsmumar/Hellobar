@@ -56,24 +56,9 @@ class ContactList < ActiveRecord::Base
     !EMPTY_PROVIDER_VALUES.include?(provider_token)
   end
 
-  def oauth?
-    return false unless identity
-    ServiceProvider.oauth? identity.provider
-  end
-
   def embed_code?
     return false unless identity
     ServiceProvider.embed_code? identity.provider
-  end
-
-  def api_key?
-    return false unless identity
-    ServiceProvider.api_key? identity.provider
-  end
-
-  def app_url?
-    return false unless identity
-    ServiceProvider.app_url? identity.provider
   end
 
   def webhook?
