@@ -1,25 +1,39 @@
 require 'integration_helper'
-require 'service_provider_integration_helper'
 
-feature 'iContact integration', :js, :vcr do
+feature 'IContact Integration', :js, :contact_list_feature do
   let(:provider) { 'icontact' }
-  let(:script) { '<script type="text/javascript" src="https://app.icontact.com/icp/core/mycontacts/signup/designer/form/automatic?id=46&cid=1679071&lid=3205"></script>' }
+
+  let!(:user) { create :user }
+  let!(:site) { create :site, :with_bars, user: user }
+  let(:embed_code) { create :embed_code, provider: 'icontact' }
 
   before do
-    allow(Settings).to receive(:fake_data_api).and_return true
-
-    @user = login
+    sign_in user
+    allow_any_instance_of(ExtractEmbedForm)
+      .to receive(:request_embed_url).and_return(create(:embed_code, provider: 'icontact_script'))
   end
 
-  scenario 'connecting to iContact' do
-    open_provider_form(@user, provider)
+  context 'when invalid' do
+    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
 
-    expect(page).not_to have_css('.button.ready')
+    let(:embed_code) { 'invalid' }
 
-    fill_in 'contact_list[data][embed_code]', with: script
-    find('.button.submit').click
+    scenario 'displays error' do
+      connect
+      expect(page).to have_content('Embed code is invalid')
+    end
+  end
 
-    find('#edit-contact-list').click
-    expect(find('[name="contact_list[data][embed_code]"]').value).to eql script
+  scenario 'when valid' do
+    connect
+    expect(page.find('#contact_list_embed_code').value).to eql embed_code
+  end
+
+  private
+
+  def connect
+    open_provider_form(site, provider)
+    fill_in 'contact_list[data][embed_code]', with: embed_code
+    page.find('.button.submit').click
   end
 end

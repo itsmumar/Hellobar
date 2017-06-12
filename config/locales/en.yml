@@ -36,3 +36,22 @@ en:
       sent: Sent
       signed_up: Signed up
       installed: Installed
+
+  service_providers:
+    active_campaign: 'Active Campaign'
+    aweber: 'AWeber'
+    constantcontact: 'Constant Contact'
+    convert_kit: 'ConvertKit'
+    createsend: 'Campaign Monitor'
+    drip: 'Drip'
+    get_response_api: 'GetResponse'
+    icontact: 'iContact'
+    infusionsoft: 'Infusionsoft'
+    mad_mimi_api: 'MadMimi'
+    mad_mimi_form: 'MadMimi'
+    mailchimp: 'MailChimp'
+    maropost: 'Maropost'
+    my_emma: 'MyEmma'
+    verticalresponse: 'Vertical Response'
+    vertical_response: 'Vertical Response'
+    webhooks: 'Webhooks'

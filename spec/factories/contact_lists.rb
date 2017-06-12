@@ -9,11 +9,16 @@ FactoryGirl.define do
   end
 
   factory :contact_list do
+    transient do
+      list_id 1
+    end
+
     site
     name 'My List'
+    data { Hash['remote_id' => list_id] }
 
     trait :with_tags do
-      data('tags' => ['id1', 'id2'])
+      data { Hash['tags' => ['id1', 'id2'], 'remote_id' => list_id] }
     end
 
     trait :aweber do
@@ -38,7 +43,7 @@ FactoryGirl.define do
 
     trait :drip do
       identity { create :identity, :drip, site: site }
-      data { Hash['remote_id' => 1] }
+      data { Hash['remote_id' => list_id] }
     end
 
     trait :get_response_api do
@@ -90,7 +95,7 @@ FactoryGirl.define do
       identity { create :identity, :webhooks, site: site }
     end
 
-    trait :embed_code do
+    trait :embed_code_invalid do
       identity { create :identity, :mad_mimi_form, site: site }
       data { Hash['embed_code' => '<html><body><iframe><form>Here I am</form></iframe></body></html>'] }
     end

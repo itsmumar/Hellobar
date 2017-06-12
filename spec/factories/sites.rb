@@ -19,6 +19,10 @@ FactoryGirl.define do
       site.reload
     end
 
+    trait :with_bars do
+      elements %i[bar email]
+    end
+
     trait :with_rule do
       after(:create) do |site|
         create(:rule, site: site)

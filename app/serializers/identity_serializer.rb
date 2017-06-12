@@ -1,47 +1,29 @@
 class IdentitySerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :provider, :lists, :tags, :supports_double_optin, :embed_code, :oauth,
+  attributes :id, :site_id, :provider, :lists, :tags,
+    :supports_double_optin, :embed_code, :oauth,
     :supports_cycle_day
 
-  delegate :service_provider, to: :object
-
-  def lists
-    filter_keys(service_provider.lists) if service_provider.respond_to? :lists
-  rescue => error
-    log_exception(error)
-  end
-
-  def tags
-    filter_keys(service_provider.tags) if service_provider.respond_to? :tags
-  rescue => error
-    log_exception(error)
-  end
+  delegate :lists, :tags, to: :service_provider
 
   def supports_double_optin
-    service_provider.class.settings['supports_double_optin']
+    service_provider.config.supports_double_optin.present?
   end
 
   def supports_cycle_day
-    service_provider.class == ServiceProviders::GetResponseApi
+    service_provider.config.supports_cycle_day.present?
   end
 
   def embed_code
-    service_provider.embed_code?
+    service_provider.config.requires_embed_code.present?
   end
 
   def oauth
-    service_provider.oauth?
+    service_provider.config.oauth.present?
   end
 
   private
 
-  def filter_keys(arr)
-    arr.map { |a| { name: a['name'], id: a['id'] } }
-  end
-
-  def log_exception(error)
-    error_message = error.message
-    service_provider.log(error_message)
-
-    [{ error: error.message }]
+  def service_provider
+    @service_provider ||= ServiceProvider.new(object)
   end
 end
