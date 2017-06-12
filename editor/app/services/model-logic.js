@@ -5,6 +5,24 @@ import _ from 'lodash/lodash';
 const isValidNumber = window.isValidNumber;
 const formatLocal = window.formatLocal;
 
+const DEFAULT_FIELDS = [
+  {
+    id: 'some-long-id-1',
+    type: 'builtin-email',
+    is_enabled: true
+  },
+  {
+    id: 'some-long-id-2',
+    type: "builtin-phone",
+    is_enabled: false
+  },
+  {
+    id: 'some-long-id-3',
+    type: 'builtin-name',
+    is_enabled: false
+  }
+];
+
 /**
  * @class ModelLogic
  * Contains observers bound to the application model.
@@ -39,6 +57,15 @@ export default Ember.Service.extend({
 
   // ------ Fields handling
 
+  setDefaultFields: function () {
+    const elementSubtype = this.get('model.element_subtype');
+    const fieldsToCollect = this.get('model.settings.fields_to_collect');
+
+    if (elementSubtype === 'email' && _.isEmpty(fieldsToCollect)) {
+      this.set('model.settings.fields_to_collect', DEFAULT_FIELDS.slice());
+    }
+  }.observes('model.element_subtype'),
+
   updateFieldsOnElementTypeChange: function () {
     if (this.get('model.type') === 'Bar') {
       const fields = Ember.copy(this.get('model.settings.fields_to_collect'));
@@ -50,7 +77,6 @@ export default Ember.Service.extend({
       this.set('model.settings.fields_to_collect', fields);
     }
   }.observes('model.type'),
-
 
   // ------ Template handling
 

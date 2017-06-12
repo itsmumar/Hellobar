@@ -29,7 +29,7 @@ export default Ember.Component.extend({
         }
       });
     }
-    this._initializeFields();
+
     this._fieldChangeHandler = () => {
       this.notifyPropertyChange('model.settings.fields_to_collect');
     };
@@ -38,29 +38,6 @@ export default Ember.Component.extend({
 
   willDestroyElement() {
     this._fieldChangeHandler && this.get('bus').unsubscribe('hellobar.core.fields.changed', this._fieldChangeHandler);
-  },
-
-  _initializeFields() {
-    if (_.isEmpty(this.get('model.settings.fields_to_collect'))) {
-      const defaultFields = [
-        {
-          id: 'some-long-id-1',
-          type: 'builtin-email',
-          is_enabled: true
-        },
-        {
-          id: 'some-long-id-2',
-          type: "builtin-phone",
-          is_enabled: false
-        },
-        {
-          id: 'some-long-id-3',
-          type: 'builtin-name',
-          is_enabled: false
-        }
-      ];
-      this.set('model.settings.fields_to_collect', defaultFields);
-    }
   },
 
   newFieldToCollect: null,
