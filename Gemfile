@@ -19,7 +19,6 @@ gem 'ruby-hmac'
 # Email integrations
 gem 'active_campaign'
 gem 'aweber'
-gem 'constantcontact'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter

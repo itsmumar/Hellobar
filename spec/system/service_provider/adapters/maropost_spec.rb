@@ -67,7 +67,7 @@ describe ServiceProvider::Adapters::Maropost do
 
       it 'sends subscribe request' do
         expect { provider.subscribe(email: email, name: name) }
-          .to raise_error(ServiceProvider::Adapters::FaradayClient::RequestError)
+          .to raise_error(Faraday::ClientError)
       end
     end
   end

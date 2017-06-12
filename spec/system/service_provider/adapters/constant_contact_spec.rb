@@ -2,7 +2,6 @@ describe ServiceProvider::Adapters::ConstantContact do
   let(:defined_urls) do
     {
       lists: 'https://api.constantcontact.com/v2/lists?api_key=app_key',
-      list: 'https://api.constantcontact.com/v2/lists/4567456?api_key=app_key',
       subscribe: 'https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=app_key',
       no_double_optin: 'https://api.constantcontact.com/v2/contacts?api_key=app_key',
       update: 'https://api.constantcontact.com/v2/contacts/{id}?action_by=ACTION_BY_VISITOR&api_key=app_key',
@@ -24,9 +23,12 @@ describe ServiceProvider::Adapters::ConstantContact do
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }
 
-    it 'initializes ConstantContact::Api' do
-      expect(ConstantContact::Api).to receive(:new).with('app_key', 'token').and_call_original
-      expect(adapter.client).to be_a ConstantContact::Api
+    it 'initializes Faraday::Connection' do
+      headers = { authorization: 'Bearer token' }
+      params = { api_key: 'app_key' }
+      url = 'https://api.constantcontact.com/v2'
+      expect(Faraday).to receive(:new).with(url: url, params: params, headers: headers).and_call_original
+      expect(adapter.client).to be_a Faraday::Connection
     end
   end
 
@@ -39,14 +41,12 @@ describe ServiceProvider::Adapters::ConstantContact do
   end
 
   describe '#subscribe' do
-    before { allow_request :get, :list }
-
     let(:body) do
       {
         email_addresses: [{ email_address: 'example@email.com' }],
         first_name: 'FirstName',
         last_name: 'LastName',
-        lists: [{ id: list_id, name: 'List1' }]
+        lists: [{ id: list_id }]
       }
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
@@ -54,7 +54,7 @@ describe ServiceProvider::Adapters::ConstantContact do
     let(:subscribe) { provider.subscribe(email: email, name: name) }
 
     it 'sends subscribe request' do
-      expect(subscribe).to be_a ::ConstantContact::Components::Contact
+      subscribe
       expect(subscribe_request).to have_been_made
     end
 
@@ -68,18 +68,18 @@ describe ServiceProvider::Adapters::ConstantContact do
       end
     end
 
-    context 'when RestClient::Conflict' do
+    context 'when Faraday::Conflict' do
       before { allow_request :post, :subscribe, body: body, response: { status: 409 } }
       before { allow_request :get, :contact }
 
       let!(:update_request) { allow_request :put, :update, body: body.merge(id: 1) }
 
       it 'updates subscriber' do
-        expect(subscribe).to be_a ::ConstantContact::Components::Contact
+        subscribe
         expect(update_request).to have_been_made
       end
 
-      context 'when again RestClient::Conflict' do
+      context 'when again Faraday::Conflict' do
         before { allow_request :post, :subscribe, body: body, response: { status: 409 } }
         before { allow_request :get, :contact }
 
@@ -92,7 +92,7 @@ describe ServiceProvider::Adapters::ConstantContact do
       end
     end
 
-    context 'when RestClient::BadRequest' do
+    context 'when Faraday::BadRequest' do
       let(:error_message) { '' }
 
       context 'when message is "not a valid email address"' do
@@ -113,7 +113,7 @@ describe ServiceProvider::Adapters::ConstantContact do
         let!(:retry_request) { allow_request :post, :subscribe, body: body }
 
         it 're-tries with double optin' do
-          expect(subscribe).to be_a ::ConstantContact::Components::Contact
+          subscribe
           expect(retry_request).to have_been_made
         end
       end

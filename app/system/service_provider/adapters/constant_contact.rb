@@ -1,67 +1,61 @@
 module ServiceProvider::Adapters
-  class ConstantContact < Base
+  class ConstantContact < FaradayClient
     configure do
       config.app_key = Settings.identity_providers['constantcontact']['app_key']
       config.app_secret = Settings.identity_providers['constantcontact']['app_secret']
       config.oauth = true
     end
 
-    rescue_from RestClient::Unauthorized, with: :destroy_identity
+    rescue_from Faraday::Unauthorized, with: :destroy_identity
 
     def initialize(identity)
       @identity = identity
-      super ::ConstantContact::Api.new(config.app_key, identity.credentials['token'])
+      headers = { authorization: "Bearer #{ identity.credentials['token'] }" }
+      params = { api_key: config.app_key }
+      super 'https://api.constantcontact.com/v2', request: :json, params: params, headers: headers
     end
 
     def lists
-      client.get_lists.map { |l| { 'id' => l.id, 'name' => l.name } }
+      response = process_response client.get('lists')
+      response.map { |list| list.slice('id', 'name') }
     end
 
     def subscribe(list_id, params)
-      list = client.get_list(list_id)
-      add_contact(list, make_contact(list, params), params[:double_optin])
+      data = {
+        email_addresses: [{ email_address: params[:email] }],
+        lists: [{ id: list_id }]
+      }
+      data[:first_name], data[:last_name] = params[:name].split(' ') if params[:name].present?
+
+      add_contact list_id, params, data
     end
 
     def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
-      import = make_import(subscribers)
-      activity = ::ConstantContact::Components::AddContacts.new(import, [list_id], ['E-Mail', 'First Name', 'Last Name'])
-
-      client.add_create_contacts_activity(activity)
+      import = {
+        import_data: import_data(subscribers),
+        lists: [list_id],
+        column_names: ['E-Mail', 'First Name', 'Last Name']
+      }
+      client.post 'activities/addcontacts', import
     end
 
     private
 
-    def make_import(subscribers)
-      valid_subscribers = subscribers.select { |subscriber| subscriber[:email] =~ Devise.email_regexp }
-
-      valid_subscribers.map do |subscriber|
-        first, last = subscriber.fetch(:name, '').split(' ')
-
-        ::ConstantContact::Components::AddContactsImportData.new.tap do |data|
-          data.first_name = first if first.present?
-          data.last_name = last if last.present?
-          data.add_email(subscriber[:email])
-        end
-      end
+    def find_contact(email)
+      response = process_response(client.get('contacts', email: email))
+      response.dig 'results', 0
     end
 
-    def make_contact(list, params)
-      ::ConstantContact::Components::Contact.new.tap do |contact|
-        email = ::ConstantContact::Components::EmailAddress.new(params[:email])
-
-        contact.email_addresses = [email]
-        contact.add_list(list)
-        contact.first_name, contact.last_name = params[:name].split(' ') if params[:name].present?
+    def add_contact(list_id, params, data)
+      client.post 'contacts' do |req|
+        req.params.update action_by: 'ACTION_BY_VISITOR' if params[:double_optin]
+        req.body = data.to_json
       end
-    end
-
-    def add_contact(list, contact, double_optin)
-      client.add_contact(contact, double_optin)
-    rescue RestClient::Conflict
-      contact = client.get_contact_by_email(contact.email_addresses.last.email_address).results[0]
-      contact.add_list(list)
-      update_contact(contact)
-    rescue RestClient::BadRequest => e
+    rescue Faraday::Conflict
+      contact = find_contact(params[:email])
+      contact['lists'] << data[:lists].first
+      update_contact params, contact
+    rescue Faraday::BadRequest => e
       # if the email is not valid, CC will raise an exception and we end up here
       # when this happens, just return true and continue
       return if e.inspect =~ /not a valid email address/
@@ -69,13 +63,27 @@ module ServiceProvider::Adapters
 
       # sometimes constant contact doesn't allow you to skip double opt-in, and lets you know by exploding
       # if that happens, try adding contact again WITH double opt-in
-      client.add_contact(contact, true)
+      subscribe(list_id, params.merge(double_optin: true)) unless params[:double_optin]
     end
 
-    def update_contact(contact)
-      client.update_contact(contact, true)
-    rescue RestClient::Conflict # rubocop:disable Lint/HandleExceptions
+    def update_contact(params, data)
+      client.put "contacts/#{ data['id'] }" do |req|
+        req.params.update action_by: 'ACTION_BY_VISITOR' if params[:double_optin]
+        req.body = data.to_json
+      end
+    rescue Faraday::Conflict # rubocop:disable Lint/HandleExceptions
       # do nothing
+    end
+
+    def import_data(subscribers)
+      subscribers.map do |subscriber|
+        first, last = subscriber.fetch(:name, '').split(' ')
+        {}.tap do |data|
+          data[:first_name] = first if first.present?
+          data[:last_name] = last if last.present?
+          data[:email_addresses] = [subscriber[:email]]
+        end
+      end
     end
 
     def destroy_identity
