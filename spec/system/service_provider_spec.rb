@@ -52,7 +52,8 @@ describe ServiceProvider do
             arguments: [],
             remote_list_id: list_id,
             double_optin: contact_list.double_optin,
-            tags: contact_list.tags
+            tags: contact_list.tags,
+            exception: '#<StandardError: StandardError>'
           },
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
@@ -119,7 +120,8 @@ describe ServiceProvider do
             remote_list_id: list_id,
             arguments: [email: 'email@example.com', name: 'FirstName LastName'],
             double_optin: contact_list.double_optin,
-            tags: contact_list.tags
+            tags: contact_list.tags,
+            exception: '#<StandardError: StandardError>'
           },
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
@@ -164,7 +166,8 @@ describe ServiceProvider do
             arguments: [subscribers],
             remote_list_id: list_id,
             double_optin: contact_list.double_optin,
-            tags: contact_list.tags
+            tags: contact_list.tags,
+            exception: '#<StandardError: StandardError>'
           },
           tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
         }
