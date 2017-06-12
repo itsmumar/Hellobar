@@ -35,4 +35,13 @@ RSpec.configure do |config|
   end
 
   config.include ContactListFeatureHelper, :contact_list_feature
+  config.before contact_list_feature: true do
+    stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
+    allow(Settings).to receive(:fake_data_api).and_return true
+    allow(ServiceProvider).to receive(:adapter).and_wrap_original do |original_method, key|
+      original_provider = original_method.call(key)
+      TestProvider.config = original_provider.config
+      TestProvider
+    end
+  end
 end

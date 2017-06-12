@@ -1,7 +1,5 @@
 module ServiceProvider::Adapters
   class ConstantContact < Base
-    EMAIL_REGEXP = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/
-
     configure do
       config.app_key = Settings.identity_providers['constantcontact']['app_key']
       config.app_secret = Settings.identity_providers['constantcontact']['app_secret']
@@ -34,7 +32,7 @@ module ServiceProvider::Adapters
     private
 
     def make_import(subscribers)
-      valid_subscribers = subscribers.select { |subscriber| subscriber[:email] =~ EMAIL_REGEXP }
+      valid_subscribers = subscribers.select { |subscriber| subscriber[:email] =~ Devise.email_regexp }
 
       valid_subscribers.map do |subscriber|
         first, last = subscriber.fetch(:name, '').split(' ')
