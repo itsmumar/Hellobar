@@ -8,7 +8,7 @@ module ServiceProvider::Adapters
       return unless contact_list
       @contact_list = contact_list
       @method = contact_list.data.fetch('webhook_method', 'GET').downcase.to_sym
-      super contact_list.data.fetch('webhook_url', '')
+      super contact_list.data.fetch('webhook_url')
     end
 
     def lists
@@ -74,10 +74,6 @@ module ServiceProvider::Adapters
       else
         field['label'].parameterize('_')
       end
-    end
-
-    def test_connection
-      Socket.gethostbyname(client.url_prefix.host)
     end
   end
 end

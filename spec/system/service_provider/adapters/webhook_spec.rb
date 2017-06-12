@@ -20,17 +20,6 @@ describe ServiceProvider::Adapters::Webhook do
     end
   end
 
-  describe '#connected?' do
-    before { allow(Socket).to receive(:gethostbyname).and_return true }
-
-    specify { expect(adapter).to be_connected }
-
-    context 'when an error is raised' do
-      before { allow(Socket).to receive(:gethostbyname).and_raise SocketError }
-      specify { expect(adapter).not_to be_connected }
-    end
-  end
-
   describe '#subscribe' do
     let(:body) { { email: 'example@email.com', name: 'FirstName LastName' } }
 

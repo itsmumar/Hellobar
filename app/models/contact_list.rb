@@ -117,6 +117,11 @@ class ContactList < ActiveRecord::Base
     uri = Addressable::URI.parse(data['webhook_url'])
     return errors.add(:base, 'webhook URL cannot be blank') if uri.blank?
     errors.add(:base, 'webhook protocol must be either http or https') unless %w[http https].include?(uri.scheme)
-    errors.add(:base, 'could not connect to the webhook URL') unless service_provider.connected?
+
+    begin
+      Socket.gethostbyname(uri.host)
+    rescue => _
+      errors.add(:base, 'could not connect to the webhook URL')
+    end
   end
 end
