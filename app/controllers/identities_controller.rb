@@ -43,7 +43,7 @@ class IdentitiesController < ApplicationController
 
   def destroy
     @identity = @site.identities.find(params[:id])
-    @identity.destroy
+    @identity.destroy!
     render json: @identity
   end
 
