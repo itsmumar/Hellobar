@@ -44,9 +44,8 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    ServiceProvider.adapter(provider_token)
-  rescue KeyError
-    false
+    return if provider_token.blank?
+    ServiceProvider::Adapters.keys.include?(provider_token.to_sym)
   end
 
   def embed_code?
