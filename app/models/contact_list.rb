@@ -1,6 +1,4 @@
 class ContactList < ActiveRecord::Base
-  EMPTY_PROVIDER_VALUES = [nil, '', 0, '0'].freeze
-
   attr_accessor :provider_token
 
   belongs_to :site
@@ -45,15 +43,10 @@ class ContactList < ActiveRecord::Base
     @subscribers = data.map { |d| { email: d[0], name: d[1], subscribed_at: d[2].is_a?(Integer) ? Time.zone.at(d[2]) : nil } }
   end
 
-  def num_subscribers
-    return @num_subscribers if @num_subscribers
-
-    data = Hello::DataAPI.contact_list_totals(site, [self])
-    @num_subscribers = data ? data[id.to_s] : 0
-  end
-
   def provider_set?
-    !EMPTY_PROVIDER_VALUES.include?(provider_token)
+    ServiceProvider.adapter(provider_token)
+  rescue KeyError
+    false
   end
 
   def embed_code?
@@ -72,11 +65,11 @@ class ContactList < ActiveRecord::Base
   private
 
   def provider_valid
-    errors.add(:provider, 'is not valid') unless provider_set? && identity.try(:provider)
+    errors.add(:provider, 'is not valid') unless provider_set? && identity&.provider
   end
 
   def provider_credentials_exist
-    errors.add(:provider, 'credentials have not been set yet') unless identity && identity.provider == provider_token
+    errors.add(:provider, 'credentials have not been set yet') unless identity&.provider == provider_token
   end
 
   def clean_embed_code

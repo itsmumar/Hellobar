@@ -87,18 +87,6 @@ describe ContactList do
     end
   end
 
-  describe '#num_subscribers' do
-    it 'gets number of subscribers from the data API' do
-      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(contact_list.id.to_s => 5)
-      expect(contact_list.num_subscribers).to eq(5)
-    end
-
-    it 'defaults to 0 if data API returns nil' do
-      allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(nil)
-      expect(contact_list.num_subscribers).to eq(0)
-    end
-  end
-
   describe '#data' do
     it 'drops nil values in data' do
       contact_list.data = { 'remote_name' => '', 'remote_id' => 1 }
