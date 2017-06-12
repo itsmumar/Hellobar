@@ -114,8 +114,11 @@ export default Ember.Service.extend({
         imageUrl: default_url,
         imageType: 'default'
       });
+    } else if (!useDefaultImage && currentImageId === id) {
+      // remove the default image
+      this.setImage({ imageType: 'default' });
     }
-  }.observes('model.use_default_image', 'defaultImage').on('init'),
+  }.observes('model.use_default_image', 'defaultImage'),
 
   setImage: function (imageProps) {
     this.get('modelLogic').setImageProps({
