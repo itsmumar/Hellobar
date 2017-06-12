@@ -1,29 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-
-  showEmailVolume: false,
-
-  monthlyPageviews: ( function () {
-    return this.get("model.site.monthly_pageviews") || 0;
-  }).property(),
-
-  formattedMonthlyPageviews: ( function () {
-    return this.get("monthlyPageviews").toLocaleString();
-  }).property(),
-
-  hasEnoughSubscribers: ( function () {
-    return this.get("monthlyPageviews") > 1000;
-  }).property(),
-
-  calculatedSubscribers: ( function () {
-    return Math.round(this.get("monthlyPageviews") * 0.005);
-  }).property(),
-
-  formattedCalculatedSubscribers: ( function () {
-    return this.get("calculatedSubscribers").toLocaleString();
-  }).property(),
-
   createDefaultContactList() {
     if (this.get("model.site.contact_lists").length === 0 || this.get("model.contact_list_id") === 0) {
       if (this.get("model.site.contact_lists").length > 0) {

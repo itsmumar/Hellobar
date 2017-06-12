@@ -7,9 +7,7 @@ gem 'aws-sdk'
 
 # Authentication / authorization
 gem 'devise'
-gem 'google-api-client'
 gem 'omniauth'
-gem 'signet'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
