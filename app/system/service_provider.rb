@@ -4,6 +4,7 @@ class ServiceProvider
 
   class << self
     def adapter(key)
+      return if key.blank?
       Adapters.fetch(key.to_sym)
     end
 
