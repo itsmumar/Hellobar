@@ -17,8 +17,12 @@ gem 'rqrcode'
 gem 'ruby-hmac'
 
 # Email integrations
+
+# github has new code which has not been pushed as the gem
+# especially it uses StandartError instead of Exception for their exceptions
+gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
+
 gem 'active_campaign'
-gem 'aweber'
 gem 'constantcontact'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'

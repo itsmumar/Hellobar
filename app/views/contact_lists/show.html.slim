@@ -15,10 +15,10 @@ nav.tabs-wrapper
 
 .service-block
   .service-icon
-    = image_tag contact_list_image(@contact_list)
+    = image_tag @contact_list.provider_icon_path
 
   .service-description
-    = contact_list_sync_details(@contact_list)
+    == contact_list_sync_details(@contact_list)
 
   .service-actions
     a#edit-contact-list.button Edit
@@ -36,7 +36,7 @@ table.contacts-table
       th #
       th Email
       th Name
-      - if @statuses.any?
+      - if @email_statuses.any?
         th Status
       th Date Subscribed
 
@@ -47,12 +47,8 @@ table.contacts-table
           td= index + 1
           td= subscriber[:email]
           td= subscriber[:name]
-          - if @statuses.any?
-            td
-              - if @statuses[subscriber[:email]].nil?
-                | Not Synced
-              - else
-                = @statuses[subscriber[:email]].capitalize
+          - if @email_statuses.any?
+            td= @email_statuses[subscriber[:email]]
           td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
 
     - else

@@ -1,4 +1,5 @@
 class IdentitiesController < ApplicationController
+  before_action :authenticate_user!
   before_action :load_site
 
   def new
@@ -10,24 +11,19 @@ class IdentitiesController < ApplicationController
   end
 
   def show
-    @identity = @site.identities.where(provider: params[:id]).first
-    # If service provider is not valid, dont render the identity
-    @identity = nil if @identity && @identity.service_provider.nil?
-    render json: @identity
+    render json: @site.identities.find_by(provider: params[:id])
   end
 
   def create
     identity = Identity.where(site_id: @site.id, provider: params[:provider]).first_or_initialize
 
     if @site && identity.persisted?
-      flash[:error] = "Please disconnect your #{ identity.provider_config['name'] } before adding a new one."
+      flash[:error] = "Please disconnect your #{ t(identity.provider, scope: :service_providers) } before adding a new one."
       return redirect_to site_contact_lists_path(@site)
     end
 
     identity.extra       = extra_from_request
     identity.credentials = credentials_from_request
-
-    add_account_details(identity)
 
     if params[:api_key]
       # TODO: sanitze me?
@@ -37,9 +33,9 @@ class IdentitiesController < ApplicationController
     end
 
     if identity.save
-      flash[:success] = "We've successfully connected your #{ identity.provider_config['name'] } account."
+      flash[:success] = "We've successfully connected your #{ t(identity.provider, scope: :service_providers) } account."
     else
-      flash[:error] = "There was a problem connecting your #{ identity.provider_config['name'] } account. Please try again later."
+      flash[:error] = "There was a problem connecting your #{ t(identity.provider, scope: :service_providers) } account. Please try again later."
     end
 
     redirect_to after_auth_redirect_url
@@ -47,7 +43,7 @@ class IdentitiesController < ApplicationController
 
   def destroy
     @identity = @site.identities.find(params[:id])
-    @identity.destroy
+    @identity.destroy!
     render json: @identity
   end
 
@@ -67,15 +63,6 @@ class IdentitiesController < ApplicationController
     else
       env['omniauth.auth'] && env['omniauth.auth']['extra']
     end
-  end
-
-  def add_account_details(identity)
-    return unless identity.provider == 'drip'
-
-    service_provider = identity.service_provider
-    account = service_provider.accounts.first
-    identity.extra['account_id'] = account.id
-    identity.extra['account_name'] = account.name
   end
 
   def load_site

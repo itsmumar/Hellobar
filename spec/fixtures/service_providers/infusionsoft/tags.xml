@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+        <array>
+          <data>
+            <value>
+              <struct>
+                <member>
+                  <name>GroupName</name>
+                  <value>Tag1</value>
+                </member>
+                <member>
+                  <name>Id</name>
+                  <value>
+                    <i4>1</i4>
+                  </value>
+                </member>
+              </struct>
+            </value>
+          </data>
+        </array>
+      </value>
+    </param>
+  </params>
+</methodResponse>

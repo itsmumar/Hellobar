@@ -11,35 +11,13 @@ class Identity < ActiveRecord::Base
 
   validates :provider, presence: true,
                        uniqueness: { scope: :site_id },
-                       inclusion: { in: proc { Settings.identity_providers.keys.map(&:to_s) } }
+                       inclusion: { in: proc { ServiceProvider::Adapters.keys.map(&:to_s) } }
 
   validates :site, association_exists: true
   validate :service_provider_valid
 
   scope :by_type, ->(type) { where(provider: Settings.identity_providers.select { |_, v| v['type'] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
-
-  # When an activity is active, it is saved, credentials are present, and it is being used.
-  # Sites should only allow one active identity at a time for each type.
-  def active?
-    persisted? && filled_out?
-  end
-
-  def filled_out?
-    credentials.present?
-  end
-
-  def working?
-    credentials.present? # we later need to know if these credentials actually work/sync
-  end
-
-  def type
-    provider_config['type']
-  end
-
-  def provider_config
-    service_provider_class.settings
-  end
 
   def as_json(options = nil)
     extra['raw_info']&.select! { |k, _| %w[user_id username].include? k }
@@ -48,46 +26,34 @@ class Identity < ActiveRecord::Base
     super
   end
 
-  def service_provider(options = {})
-    return nil if service_provider_class.nil?
-    @service_provider ||= service_provider_class.new(identity: self, contact_list: options[:contact_list])
-  rescue *SubscribeAllContacts::ESP_ERROR_CLASSES => e
-    if service_provider_class.oauth?
-      Rails.logger.warn "Removing identity #{ id }\n#{ e.message }"
-      destroy_and_notify_user
-    end
-    nil
+  def provider_name
+    I18n.t(provider, scope: :service_providers)
   end
 
-  def service_provider_class
-    ServiceProvider[provider]
+  def provider_icon_path
+    "providers/#{ provider }.png"
+  end
+
+  def destroy
+    super if contact_lists.empty?
+  end
+
+  def service_provider(contact_list: nil)
+    ServiceProvider.new(self, contact_list)
   end
 
   def destroy_and_notify_user
     site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_config['name'], link: site_contact_lists_url(site, host: Settings.host))
+      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_name, link: site_contact_lists_url(site, host: Settings.host))
     end
 
     destroy
   end
 
-  def contact_lists_updated
-    destroy if contact_lists.count == 0
-  end
-
-  # Deprecated
-  # TODO -Remove once the `embed_code` column is removed from Identities
-  def embed_code=(_embed_code)
-    raise NoMethodError
-  end
-
   private
 
   def service_provider_valid
-    cached_provider = @service_provider # Don't cache the results of this
-    if service_provider && !service_provider.valid?
-      errors.add(:provider, 'could not be verified.')
-    end
-    @service_provider = cached_provider
+    return if service_provider&.connected?
+    errors.add(:provider, 'could not be verified.')
   end
 end

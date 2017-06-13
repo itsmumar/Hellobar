@@ -99,7 +99,7 @@ RSpec.configure do |config|
 
   # assign :service_provider type tag for files under service_providers path
   # so that we can include helpers for service providers, see rails_helper.rb
-  config.define_derived_metadata(file_path: %r{/service_providers/}) do |metadata|
+  config.define_derived_metadata(file_path: %r{/service_provider/}) do |metadata|
     metadata[:type] = :service_provider
   end
 end

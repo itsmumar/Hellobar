@@ -1,56 +1,44 @@
 require 'integration_helper'
-require 'service_provider_integration_helper'
 
-feature 'Infusionsoft Integration', :js, :vcr do
+feature 'Infusionsoft Integration', :js, :contact_list_feature do
   let(:provider) { 'infusionsoft' }
 
-  before do
-    allow(Settings).to receive(:fake_data_api).and_return true
+  let!(:user) { create :user }
+  let!(:site) { create :site, :with_bars, user: user }
+  let(:last_contact_list) { ContactList.last }
 
-    @user = login
+  before do
+    sign_in user
   end
 
   context 'when invalid' do
-    scenario 'invalid form details' do
-      open_provider_form(@user, provider)
-      fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
-      fill_in 'contact_list[data][api_key]', with: 'invalid-key'
+    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
 
-      page.find('.button.ready').click
+    scenario 'displays error' do
+      connect
       expect(page).to have_content('There was a problem connecting your Infusionsoft account')
     end
   end
 
-  context 'when valid' do
-    scenario 'connecting to Infusionsoft' do
-      connect_infusionsoft
+  scenario 'when valid' do
+    connect
 
-      expect(page).to have_content('Apply Tags (Optional)')
-    end
+    expect(page).to have_content('Apply Tags (Optional)')
 
-    scenario 'adding tags' do
-      connect_infusionsoft
-      selector = 'select.contact-list-tag'
+    page.find('select[name="contact_list[remote_list_id]"]').select('Tag 1')
+    page.find('.button.submit').click
 
-      page.find(selector).select('Activist')
-      page.find("a[data-js-action='add-tag']").click
-      page.all(selector).last.select('Extrovert')
-      page.find('.button.submit').click
+    expect(page).to have_content 'Syncing contacts with Infusionsoft'
 
-      page.find('#edit-contact-list').click
-
-      page.assert_selector(selector, count: 2)
-    end
+    expect(last_contact_list.tags).to eql ['tag1']
   end
 
   private
 
-  def connect_infusionsoft
-    open_provider_form(@user, provider)
-
-    fill_in 'contact_list[data][app_url]', with: 'ft319.infusionsoft.com'
-    fill_in 'contact_list[data][api_key]', with: 'valid-infusionsoft-key'
-
-    page.find('.button.ready').click
+  def connect
+    connect_to_provider(site, provider) do
+      fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
+      fill_in 'contact_list[data][api_key]', with: 'api-key'
+    end
   end
 end

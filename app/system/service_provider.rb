@@ -1,105 +1,56 @@
 class ServiceProvider
-  attr_accessor :client
+  prepend ServiceProvider::RailsLogger
+  prepend ServiceProvider::RavenLogger
 
   class << self
-    def [](name)
-      provider_config = all_providers[name]
-      return nil unless provider_config # invalid provider
-      const_name = provider_config['service_provider_class'] || provider_config['name']
-      ServiceProviders.const_get(const_name, false)
+    def adapter(key)
+      return if key.blank?
+      Adapters.fetch(key.to_sym)
     end
 
-    def all_providers
-      Settings.identity_providers
-    end
-
-    def settings
-      config[:settings]
-    end
-
-    def key
-      config[:key]
-    end
-
-    def embed_code?
-      settings['requires_embed_code'] == true
-    end
-
-    def api_key?
-      settings['requires_api_key'] == true
-    end
-
-    def app_url?
-      settings['requires_app_url'] == true
-    end
-
-    def oauth?
-      settings['oauth'] == true
-    end
-
-    private
-
-    def config
-      key, value = all_providers.find(&method(:current_provider?))
-
-      { key: key, settings: value }
-    end
-
-    def current_provider?(array)
-      _key, value = *array
-      klass = name.demodulize
-
-      value['service_provider_class'] == klass || value['name'] == klass
-    end
+    delegate :embed_code?, to: ServiceProvider::Adapters
   end
 
-  def retry_on_timeout(max: 1)
-    original_max = max
-    loop do
-      raise "Timed out too many times (#{ original_max })" if max == 0
-      max -= 1
+  attr_reader :adapter, :remote_list_id
 
-      begin
-        yield(self)
-        break # will not break if exception is raised
-      rescue Net::OpenTimeout => e
-        Rails.logger.error "Caught #{ e }, retrying after 5 seconds"
-        sleep 5
-      end
-    end
-  end
-
-  def log(message)
-    entry = "#{ Time.current } [#{ self.class.name }] #{ message }"
-    raven_log(message)
-
-    if defined? Rails
-      Rails.logger.warn entry
-    else
-      $stdout.puts entry
-    end
-    nil
+  def initialize(identity, contact_list = nil)
+    @adapter = determine_adapter(identity, contact_list)
+    @identity = identity
+    @contact_list = contact_list
+    @remote_list_id = contact_list.data['remote_id'] if contact_list
   end
 
   def name
-    settings['name']
+    adapter.key
   end
 
-  delegate :settings, to: :class
-  delegate :key, to: :class
-  delegate :embed_code?, to: :class
-  delegate :oauth?, to: :class
+  delegate :lists, :tags, :config, :connected?, to: :adapter
+
+  def subscribe(email:, name: nil)
+    params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }
+
+    adapter.subscribe(remote_list_id, params).tap do
+      adapter.assign_tags(@contact_list) if adapter.is_a?(Adapters::GetResponse)
+    end
+  end
+
+  def batch_subscribe(subscribers)
+    adapter.batch_subscribe(remote_list_id, subscribers, double_optin: @contact_list&.double_optin)
+  end
 
   private
 
-  def raven_log(message)
-    site_url = respond_to?(:site) ? site&.url : nil
-    options = {
-      extra: { contact_list_id: @contact_list&.id, site_url: site_url },
-      tags: { type: 'service_provider', service_provider: self.class.name },
-      backtrace: caller
-    }
+  def determine_adapter(identity, contact_list)
+    adapter_class = self.class.adapter(identity.provider)
 
-    Raven.capture_message message, options
+    if adapter_class < Adapters::EmbedCode || adapter_class == Adapters::Webhook
+      adapter_class.new(contact_list)
+    else
+      adapter_class.new(identity)
+    end
+  end
+
+  def existing_tags
+    (@contact_list&.tags || []).select(&:present?)
   end
 end

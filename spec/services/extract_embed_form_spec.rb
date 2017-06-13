@@ -4,9 +4,9 @@ describe ExtractEmbedForm do
   context 'when error is raised while remote request' do
     let(:embed_code) { 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a' }
 
-    it 'returns nothing' do
+    it 'returns invalid EmbedForm' do
       allow(HTTParty).to receive(:get).and_raise HTTParty::Error
-      expect { service.call }.to raise_error HTTParty::Error
+      expect { service.call }.not_to raise_error
     end
   end
 

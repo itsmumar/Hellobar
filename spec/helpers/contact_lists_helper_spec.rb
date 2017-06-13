@@ -1,39 +1,65 @@
 describe ContactListsHelper, type: :helper do
-  let(:site) { create(:site) }
-  let(:contact_list) { create(:contact_list, :mailchimp, site: site) }
+  describe '#options_for_provider_select' do
+    def options(other)
+      {
+        requires_app_url: nil,
+        requires_embed_code: nil,
+        requires_account_id: nil,
+        requires_api_key: nil,
+        requires_username: nil,
+        requires_webhook_url: nil,
+        oauth: nil
+      }.merge(other)
+    end
 
-  context 'MailChimp' do
-    it 'has valid results' do
-      expect(helper.contact_list_provider_name(contact_list)).to eq 'MailChimp'
-      expect(helper.contact_list_image(contact_list)).to eq 'providers/mailchimp.png'
+    it 'returns array of providers with options' do
+      expected = [
+        ['In Hello Bar only', 0],
+        ['AWeber', :aweber, options(oauth: true)],
+        ['Active Campaign', :active_campaign, options(requires_app_url: true, requires_api_key: true)],
+        ['Campaign Monitor', :createsend, options(oauth: true)],
+        ['Constant Contact', :constantcontact, options(oauth: true)],
+        ['ConvertKit', :convert_kit, options(requires_api_key: true)],
+        ['Drip', :drip, options(oauth: true)],
+        ['GetResponse', :get_response_api, options(requires_api_key: true)],
+        ['iContact', :icontact, options(requires_embed_code: true)],
+        ['Infusionsoft', :infusionsoft, options(requires_app_url: true, requires_api_key: true)],
+        ['MadMimi', :mad_mimi_api, options(requires_api_key: true, requires_username: true)],
+        ['MailChimp', :mailchimp, options(oauth: true)],
+        ['Maropost', :maropost, options(requires_account_id: true, requires_api_key: true)],
+        ['MyEmma', :my_emma, options(requires_embed_code: true)],
+        ['Vertical Response', :verticalresponse, options(oauth: true)],
+        ['Webhooks', :webhooks, options(requires_webhook_url: true)]
+      ]
+      expect(helper.options_for_provider_select).to match_array expected
     end
   end
 
-  context 'embed code ESPs' do
-    let(:contact_list) do
-      ContactList.new(name: 'asdf', site: site, data: { 'embed_code' => 'asdf' })
-    end
+  describe '#contact_list_sync_details' do
+    let(:details) { helper.contact_list_sync_details(contact_list) }
 
-    context 'MadMimi' do
-      before do
-        contact_list.identity = create(:identity, :mad_mimi_form)
-      end
+    context 'when remote_name present' do
+      let(:contact_list) { create(:contact_list, :aweber, data: { 'remote_name' => 'Remote List Name' }) }
 
-      it 'has valid results' do
-        expect(helper.contact_list_provider_name(contact_list)).to eq 'MadMimi'
-        expect(helper.contact_list_image(contact_list)).to eq 'providers/mad_mimi_form.png'
+      it 'includes remote list name' do
+        expect(details).to include 'Remote List Name'
       end
     end
-  end
 
-  context 'no ESP' do
-    let(:contact_list) do
-      ContactList.new(site: site)
+    context 'when identity present' do
+      let(:contact_list) { create(:contact_list, :aweber) }
+
+      it 'includes provider name' do
+        expect(details).to include 'AWeber'
+      end
     end
 
-    it 'has valid results' do
-      expect(helper.contact_list_provider_name(contact_list)).to eq 'Hello Bar'
-      expect(helper.contact_list_image(contact_list)).to eq 'providers/hellobar.png'
+    context 'when identity is blank' do
+      let(:contact_list) { create(:contact_list) }
+
+      it 'return Storing contacts in Hello Bar' do
+        expect(details).to eql '<small>Storing contacts in</small><span>Hello Bar</span>'
+      end
     end
   end
 end

@@ -15,15 +15,24 @@ class ContactListsController < ApplicationController
   end
 
   def create
-    @contact_list = @site.contact_lists.create(contact_list_params)
-    render json: @contact_list, status: @contact_list.persisted? ? :created : :bad_request
+    provider_token = contact_list_params[:provider_token]
+
+    identity =
+      if params[:identity_id].present?
+        @site.identities.find params[:identity_id]
+      elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
+        @site.identities.find_or_create_by(provider: provider_token)
+      end
+
+    contact_list = @site.contact_lists.create(contact_list_params.merge(identity: identity))
+    render json: contact_list, status: contact_list.persisted? ? :created : :bad_request
   end
 
   def show
     @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
     @subscribers = @contact_list.subscribers(100)
     @total_subscribers = Hello::DataAPI.contact_list_totals(@site, [@contact_list])[@contact_list.id.to_s]
-    @statuses = @contact_list.subscriber_statuses(@subscribers)
+    @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
 
     respond_to do |format|
       format.html
@@ -33,7 +42,8 @@ class ContactListsController < ApplicationController
   end
 
   def update
-    result = @contact_list.update_attributes(contact_list_params)
+    identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
+    result = UpdateContactList.new(@contact_list, contact_list_params.merge(identity: identity)).call
     status = result ? :ok : :bad_request
     render json: @contact_list, status: status
   end
@@ -54,7 +64,8 @@ class ContactListsController < ApplicationController
   private
 
   def contact_list_params
-    params.require(:contact_list).permit(:name, :provider_token, { data: [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []] }, :double_optin)
+    data_params = [:remote_id, :remote_name, :embed_code, :api_key, :app_url, :webhook_url, :webhook_method, :cycle_day, tags: []]
+    params.require(:contact_list).permit(:name, :provider_token, { data: data_params }, :double_optin)
   end
 
   def delete_site_elements_action
