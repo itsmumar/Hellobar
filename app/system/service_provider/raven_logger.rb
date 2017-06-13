@@ -29,7 +29,8 @@ module ServiceProvider::RavenLogger
         remote_list_id: remote_list_id,
         arguments: args,
         double_optin: @contact_list&.double_optin,
-        tags: @contact_list&.tags
+        tags: @contact_list&.tags,
+        exception: exception.inspect
       },
       tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
     }

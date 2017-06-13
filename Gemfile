@@ -21,7 +21,6 @@ gem 'ruby-hmac'
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
-gem 'constantcontact'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter
