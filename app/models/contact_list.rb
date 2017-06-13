@@ -23,6 +23,11 @@ class ContactList < ActiveRecord::Base
 
   delegate :count, to: :site_elements, prefix: true
 
+  def statuses_for_subscribers(subscribers)
+    return [] unless identity
+    contact_list_logs.statuses(subscribers)
+  end
+
   def provider_name
     identity&.provider_name || 'Hello Bar'
   end
