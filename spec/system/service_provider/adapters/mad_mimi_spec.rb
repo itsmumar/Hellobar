@@ -2,8 +2,7 @@ describe ServiceProvider::Adapters::MadMimi do
   let(:defined_urls) do
     {
       lists: 'http://api.madmimi.com/audience_lists/lists.xml',
-      subscribe: 'http://api.madmimi.com/audience_lists/4567456/add',
-      batch_subscribe: 'http://api.madmimi.com/audience_members'
+      subscribe: 'http://api.madmimi.com/audience_lists/4567456/add'
     }
   end
 
@@ -46,19 +45,6 @@ describe ServiceProvider::Adapters::MadMimi do
     it 'sends subscribe request' do
       provider.subscribe(email: email, name: name)
       expect(subscribe_request).to have_been_made
-    end
-  end
-
-  describe '#batch_subscribe' do
-    let(:body) do
-      "username=username&api_key=api_key&csv_file=email%2Cadd_list%0Aexample1%40email.com%2C#{ list_id }%0Aexample2%40email.com%2C#{ list_id }%0A"
-    end
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-    let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
-
-    it 'sends post request to /audience_members' do
-      provider.batch_subscribe subscribers
-      expect(batch_subscribe_request).to have_been_made
     end
   end
 end

@@ -32,17 +32,5 @@ module ServiceProvider::Adapters
 
       client.find_list(list_id).create_contact(options)
     end
-
-    def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
-      contacts = subscribers.map do |subscriber|
-        first_name, last_name = subscriber.fetch(:name, '').split(' ', 2)
-        params = { email: subscriber[:email] }
-        params[:first_name] = first_name if first_name.present?
-        params[:last_name] = last_name if last_name.present?
-        params
-      end
-
-      client.find_list(list_id).create_contacts(contacts)
-    end
   end
 end

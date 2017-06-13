@@ -11,12 +11,6 @@ module ServiceProvider::RavenLogger
     raven_log(exception, args)
   end
 
-  def batch_subscribe(*args)
-    super
-  rescue => exception
-    raven_log(exception, args)
-  end
-
   private
 
   def raven_log(exception, args = [])

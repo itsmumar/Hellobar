@@ -5,8 +5,7 @@ describe ServiceProvider::Adapters::ConstantContact do
       subscribe: 'https://api.constantcontact.com/v2/contacts?action_by=ACTION_BY_VISITOR&api_key=app_key',
       no_double_optin: 'https://api.constantcontact.com/v2/contacts?api_key=app_key',
       update: 'https://api.constantcontact.com/v2/contacts/{id}?action_by=ACTION_BY_VISITOR&api_key=app_key',
-      contact: 'https://api.constantcontact.com/v2/contacts?api_key=app_key&email=example@email.com',
-      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key'
+      contact: 'https://api.constantcontact.com/v2/contacts?api_key=app_key&email=example@email.com'
     }
   end
 
@@ -117,23 +116,6 @@ describe ServiceProvider::Adapters::ConstantContact do
           expect(retry_request).to have_been_made
         end
       end
-    end
-  end
-
-  describe '#batch_subscribe' do
-    let(:body) do
-      { import_data: [
-        { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example1@email.com'] },
-        { first_name: 'FirstName', last_name: 'LastName', email_addresses: ['example2@email.com'] }
-      ], lists: [list_id], column_names: ['E-Mail', 'First Name', 'Last Name'] }
-    end
-
-    let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-
-    it 'calls #subscribe for each subscriber' do
-      provider.batch_subscribe subscribers
-      expect(batch_subscribe_request).to have_been_made
     end
   end
 end

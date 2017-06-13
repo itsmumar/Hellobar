@@ -4,7 +4,6 @@ describe ServiceProvider::Adapters::Drip do
       tags: 'https://api.getdrip.com/v2/account_id/tags',
       lists: 'https://api.getdrip.com/v2/account_id/campaigns?status=active',
       subscribe: 'https://api.getdrip.com/v2/account_id/campaigns/4567456/subscribers',
-      batch_subscribe: 'https://api.constantcontact.com/v2/activities/addcontacts?api_key=app_key',
       subscribe_without_list: 'https://api.getdrip.com/v2/account_id/subscribers'
     }
   end
@@ -72,27 +71,6 @@ describe ServiceProvider::Adapters::Drip do
         provider.subscribe(email: email, name: name)
         expect(subscribe_request).to have_been_made
       end
-    end
-  end
-
-  describe '#batch_subscribe' do
-    let(:body) do
-      {
-        import_data: [
-          { email_addresses: ['example1@email.com'] }, { email_addresses: ['example2@email.com'] }
-        ],
-        lists: [list_id],
-        column_names: ['E-Mail', 'First Name', 'Last Name']
-      }
-    end
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-    let(:subscribers) { [{ email: 'example1@email.com', double_optin: true }, { email: 'example2@email.com', double_optin: true }] }
-
-    it 'calls #subscribe for each subscriber' do
-      subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with(list_id, subscriber)
-      end
-      provider.batch_subscribe subscribers
     end
   end
 end

@@ -2,8 +2,7 @@ describe ServiceProvider::Adapters::MailChimp do
   let(:defined_urls) do
     {
       lists: 'http://apiendpoint/3.0/lists?count=100',
-      subscribe: 'http://apiendpoint/3.0/lists/57afe96172/members',
-      batch_subscribe: 'http://apiendpoint/3.0/batches'
+      subscribe: 'http://apiendpoint/3.0/lists/57afe96172/members'
     }
   end
 
@@ -70,25 +69,6 @@ describe ServiceProvider::Adapters::MailChimp do
         expect(identity).to receive(:destroy_and_notify_user)
         subscribe
       end
-    end
-  end
-
-  describe '#batch_subscribe' do
-    let(:body) do
-      {
-        operations: [
-          { method: 'POST', path: "lists/#{ list_id }/members", body: '{"email_address":"example1@email.com","status":"pending"}' },
-          { method: 'POST', path: "lists/#{ list_id }/members", body: '{"email_address":"example2@email.com","status":"pending"}' }
-        ]
-      }
-    end
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-
-    let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
-
-    it 'sends post request to /audience_members' do
-      provider.batch_subscribe subscribers
-      expect(batch_subscribe_request).to have_been_made
     end
   end
 end

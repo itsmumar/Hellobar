@@ -25,26 +25,11 @@ module ServiceProvider::Adapters
       client.lists(list_id).members.create body: prepare_params(params)
     end
 
-    def batch_subscribe(list_id, subscribers, double_optin: true)
-      operations = prepare_batch_request(list_id, subscribers, double_optin)
-      client.batches.create(body: { operations: operations })
-    end
-
     private
 
     def raw_lists
       raw_lists = client.lists.retrieve(params: { count: 100 })['lists']
       raw_lists.presence || []
-    end
-
-    def prepare_batch_request(list_id, subscribers, double_optin = true)
-      subscribers.map do |subscriber|
-        {
-          method: 'POST',
-          path: "lists/#{ list_id }/members",
-          body: prepare_params(subscriber, double_optin).to_json
-        }
-      end
     end
 
     def prepare_params(subscriber, double_optin = true)

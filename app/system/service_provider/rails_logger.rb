@@ -4,11 +4,6 @@ module ServiceProvider::RailsLogger
     super
   end
 
-  def batch_subscribe(*args)
-    log :batch_subscribe, *args
-    super
-  end
-
   private
 
   def log(method, *args)

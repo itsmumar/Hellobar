@@ -9,25 +9,26 @@ describe ServiceProvider::Rescuable do
         self.retry(exception)
       end
 
+      def initialize(exception)
+        @exception = exception
+      end
+
       def lists
-        raise StandardError
+        raise @exception
       end
 
       def subscribe(*)
-        raise FooException
-      end
-
-      def batch_subscribe(*)
-        raise BarException
+        raise @exception
       end
 
       def retry(exception)
       end
     end
   end
-  let(:adapter) { adapter_class.new(double('client')) }
 
   context 'when with: :method specified' do
+    let(:adapter) { adapter_class.new(FooException) }
+
     it 'calls rescue handler' do
       expect(adapter).to receive(:retry)
       adapter.subscribe
@@ -35,13 +36,17 @@ describe ServiceProvider::Rescuable do
   end
 
   context 'when block specified' do
+    let(:adapter) { adapter_class.new(BarException) }
+
     it 'calls rescue handler' do
       expect(adapter).to receive(:retry)
-      adapter.batch_subscribe
+      adapter.subscribe
     end
   end
 
   context 'when handler is not specified' do
+    let(:adapter) { adapter_class.new(StandardError) }
+
     it 're-raises exception' do
       expect { adapter.lists }.to raise_error(StandardError)
     end
