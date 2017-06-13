@@ -1,11 +1,6 @@
 require 'integration_helper'
 
 feature 'Update Profile', js: true do
-  before do
-    allow_any_instance_of(SiteSerializer)
-      .to receive(:monthly_pageviews).and_return(nil)
-  end
-
   context 'is not an oauth user' do
     before { @user = login }
 

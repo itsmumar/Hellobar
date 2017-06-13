@@ -7,9 +7,7 @@ gem 'aws-sdk'
 
 # Authentication / authorization
 gem 'devise'
-gem 'google-api-client'
 gem 'omniauth'
-gem 'signet'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
@@ -78,10 +76,13 @@ gem 'sentry-raven'
 # Web server
 gem 'thin', '~> 1.6.4'
 
+# URIs
+gem 'addressable'
+gem 'public_suffix'
+
 # Others
 gem 'abanalyzer'
 gem 'active_hash'
-gem 'addressable', require: 'addressable/uri'
 gem 'avatar'
 gem 'dalli'
 gem 'elif'
@@ -92,7 +93,6 @@ gem 'paranoia'
 gem 'php-serialize', require: 'php_serialize'
 gem 'phpass-ruby', require: 'phpass'
 gem 'psych'
-gem 'public_suffix'
 gem 'rack-ssl-enforcer'
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'render_anywhere'
@@ -130,25 +130,29 @@ group :development do
   gem 'guard-shell'
   gem 'guard-teaspoon'
   gem 'terminal-notifier-guard'
-  #
+
+  # Debugging
+  gem 'web-console'
+
   # Deployment
   gem 'capistrano', '~> 3.6.1'
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'slackistrano'
-  gem 'web-console', '~> 2.0'
 end
 
 group :development, :test do
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
-  gem 'pry'
-  gem 'pry-doc'
-  gem 'pry-nav'
   gem 'rspec-rails'
   gem 'sinatra'
   gem 'teaspoon-jasmine'
+
+  # Debugging
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'pry-nav'
 
   # Spring preloader
   gem 'spring'

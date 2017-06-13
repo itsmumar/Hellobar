@@ -17,18 +17,6 @@
       <button class="button save-editor" {{action 'closeInterstitial'}} disabled={{inputIsInvalid}}>Continue</button>
     </div>
   </div>
-
-  {{#if showEmailVolume}}
-    <aside>
-      {{#if hasEnoughSubscribers}}
-        <small>Hey! Did you know that with your {{formattedMonthlyPageviews}} views per month, Hello Bar can typically get you:</small>
-        <strong>{{formattedCalculatedSubscribers}} new subscribers each month</strong>
-      {{else}}
-        <small>Hey! Did you know that Hello Bar typically converts 0.5% of your views to email subscribers?</small>
-        <strong>That can really add up!</strong>
-      {{/if}}
-    </aside>
-  {{/if}}
 </div>
 
 {{partial "partials/interstitial-footer"}}

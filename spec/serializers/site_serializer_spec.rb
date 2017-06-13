@@ -13,26 +13,4 @@ describe SiteSerializer do
       expect(serializable_hash[:capabilities]).to have_key key
     end
   end
-
-  describe '#to_json' do
-    context 'when raises Google::Apis::AuthorizationError' do
-      before do
-        allow(user).to receive(:authentications).and_return([Authentication.new(provider: 'google_oauth2')])
-        allow_any_instance_of(GoogleAnalytics)
-          .to receive(:latest_pageviews).and_raise(Google::Apis::AuthorizationError, 'Unauthorized')
-      end
-
-      it 're-raises error' do
-        expect { serialized_site.to_json }.to raise_error Google::Apis::AuthorizationError
-      end
-
-      context 'when user is_impersonated' do
-        let(:user) { build_stubbed :user, is_impersonated: true }
-
-        it 'returns nil' do
-          expect(serialized_site.to_json).to include '"monthly_pageviews":null'
-        end
-      end
-    end
-  end
 end

@@ -4,7 +4,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :aweber, Settings.identity_providers['aweber']['consumer_key'], Settings.identity_providers['aweber']['consumer_secret']
   provider :constantcontact, Settings.identity_providers['constantcontact']['app_key'], Settings.identity_providers['constantcontact']['app_secret']
   provider :drip, Settings.identity_providers['drip']['client_id'], Settings.identity_providers['drip']['secret']
-  provider :google_oauth2, Settings.google_auth_id, Settings.google_auth_secret, access_type: 'offline', scope: 'email, profile, analytics.readonly'
+  provider :google_oauth2, Settings.google_auth_id, Settings.google_auth_secret
   provider :verticalresponse, Settings.identity_providers['verticalresponse']['client_id'], Settings.identity_providers['verticalresponse']['secret']
 
   on_failure do |env|
