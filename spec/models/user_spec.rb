@@ -372,37 +372,38 @@ describe User do
     end
   end
 
-  context '.search_by_url' do
-    let(:user) { create :user }
+  describe '.search_by_site_url' do
+    context 'invalid urls' do
+      ['a b c', 'user@email.com', 'site .com'].each do |url|
+        it "returns no results for `#{ url }` url" do
+          expect(User).to receive(:none)
 
-    before do
-      loblaw_url = 'http://www.google.com/'
-      user.sites << create(:site, url: loblaw_url)
-    end
-
-    context 'with invalid host string' do
-      it 'should return empty array when arg is email address' do
-        expect(User.search_by_url('dude@brah.bro'))
-          .to eq([])
-      end
-
-      it 'should return empty array when arg is not url' do
-        expect(User.search_by_url('how can mirrors be real'))
-          .to eq([])
+          User.search_by_site_url url
+        end
       end
     end
 
-    context 'with subdomain' do
-      it 'should search with correct domain' do
-        expect(User.search_by_url('www.google.com'))
-          .to include(user)
-      end
-    end
+    context 'valid urls' do
+      let(:user) { create :user }
 
-    context 'without subdomain' do
-      it 'should search with correct domain' do
-        expect(User.search_by_url('google.com'))
-          .to include(user)
+      %w[http://www.google.com https://google.com].each do |url|
+        context "when site is added as #{ url }" do
+          before do
+            user.sites << create(:site, url: url)
+          end
+
+          it 'finds user when searching by zone apex' do
+            expect(User.search_by_site_url('google.com')).to include user
+          end
+
+          it 'finds user when searching by full domain' do
+            expect(User.search_by_site_url('www.google.com')).to include user
+          end
+
+          it 'finds user when searching by FQDN' do
+            expect(User.search_by_site_url('www.google.com.')).to include user
+          end
+        end
       end
     end
   end

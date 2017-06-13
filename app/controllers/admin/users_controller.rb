@@ -15,7 +15,7 @@ class Admin::UsersController < ApplicationController
         site = Site.find_by_script(q)
         users += site.owners if site
       else
-        users += User.search_by_url(q).includes(:authentications)
+        users += User.search_by_site_url(q).includes(:authentications)
       end
 
       if q =~ /\d{4}/
