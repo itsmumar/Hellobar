@@ -38,6 +38,7 @@ describe 'ContactList requests' do
       end
 
       context 'with contact_list_logs' do
+        let(:contact_list) { create :contact_list, :aweber, site: site }
         let(:contact_list_log) { create :contact_list_log, contact_list: contact_list }
         let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
 
@@ -48,11 +49,22 @@ describe 'ContactList requests' do
           ])
         end
 
-        it 'responds with success' do
+        it 'includes syncing statuses' do
           get site_contact_list_path(site, contact_list)
           expect(response).to be_successful
           expect(response.body).to include 'Sent'
           expect(response.body).to include 'Error'
+        end
+
+        context 'with Hello Bar contact list' do
+          let(:contact_list) { create :contact_list, site: site }
+
+          it 'does not include syncing statuses' do
+            get site_contact_list_path(site, contact_list)
+            expect(response).to be_successful
+            expect(response.body).not_to include 'Sent'
+            expect(response.body).not_to include 'Error'
+          end
         end
       end
 
