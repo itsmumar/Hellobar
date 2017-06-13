@@ -5,13 +5,17 @@ class ServiceProvider
     end
 
     def self.embed_code?(provider)
-      return unless provider
-      adapter = fetch(provider)
-      adapter.config.requires_embed_code
+      return unless exists? provider
+      fetch(provider).config.requires_embed_code
     end
 
     def self.enabled
       all.reject { |a| a.config.disabled }
+    end
+
+    def self.exists?(key)
+      return unless key.present?
+      keys.include?(key.to_sym)
     end
 
     def self.all

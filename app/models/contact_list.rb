@@ -44,13 +44,11 @@ class ContactList < ActiveRecord::Base
   end
 
   def provider_set?
-    return if provider_token.blank?
-    ServiceProvider::Adapters.keys.include?(provider_token.to_sym)
+    ServiceProvider::Adapters.exists? provider_token
   end
 
   def embed_code?
-    return false unless identity
-    ServiceProvider.embed_code? identity.provider
+    ServiceProvider.embed_code? identity&.provider
   end
 
   def webhook?
