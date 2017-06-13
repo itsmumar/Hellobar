@@ -45,9 +45,6 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'through oauth' do
-    allow_any_instance_of(SiteSerializer)
-      .to receive(:monthly_pageviews).and_return(nil)
-
     user = create(:user, :with_site)
     user.authentications.create(provider: 'google_oauth2', uid: '12345')
 

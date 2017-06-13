@@ -16,14 +16,6 @@ class ApplicationController < ActionController::Base
   delegate :remote_ip, to: :request
   delegate :user_agent, to: :request
 
-  rescue_from ::Google::Apis::AuthorizationError do |exception|
-    raise exception if impersonated_user # we can't authenticate for impersonated users
-    return unless exception.to_s =~ /Unauthorized/
-
-    sign_out current_user             # kill cookies
-    redirect_to '/auth/google_oauth2' # log in again to refresh token
-  end
-
   rescue_from ActionController::UnknownFormat do
     head :not_found
   end

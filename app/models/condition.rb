@@ -186,11 +186,14 @@ class Condition < ActiveRecord::Base
 
   def normalize_url(url)
     return url if url.blank?
-    # Don't do anything if it starts with '/' or "http(s)://"
+
+    # Don't do anything if it starts with "http(s)://" or '/'
     return url if url =~ /^(https?:\/\/|\/)/i
-    if PublicSuffix.valid?(url.split('/').first)
+
+    # If user supplied url looks like a valid domain, add scheme
+    if PublicSuffix.valid? NormalizeURI[url]&.domain, default_rule: nil
       "http://#{ url }"
-    else
+    else # otherwise treat as path
       "/#{ url }"
     end
   end
