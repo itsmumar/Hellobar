@@ -48,12 +48,11 @@ describe NormalizeURI do
     end
   end
 
-  it 'returns NullObject on unsuccessful normalization attempts' do
+  it 'returns nil on unsuccessful normalization attempts' do
     link = 'site .com'
 
     uri = NormalizeURI[link]
 
-    expect(uri).to be_a NullObject
-    expect(uri.nonexisting_method).to be_nil
+    expect(uri).to be_nil
   end
 end

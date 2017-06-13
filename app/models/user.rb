@@ -280,7 +280,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search_by_site_url url
-    domain = NormalizeURI[url].domain
+    domain = NormalizeURI[url]&.domain
     domain ? User.joins(:sites).where('url LIKE ?', "%#{ domain }%") : User.none
   end
 

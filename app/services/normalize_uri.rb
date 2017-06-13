@@ -10,7 +10,7 @@ class NormalizeURI
   def call
     Addressable::URI.heuristic_parse url
   rescue Addressable::URI::InvalidURIError, TypeError
-    NullObject.new
+    nil
   end
 
   private

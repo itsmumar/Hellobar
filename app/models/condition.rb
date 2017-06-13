@@ -191,7 +191,7 @@ class Condition < ActiveRecord::Base
     return url if url =~ /^(https?:\/\/|\/)/i
 
     # If user supplied url looks like a valid domain, add scheme
-    if PublicSuffix.valid? NormalizeURI[url].domain, default_rule: nil
+    if PublicSuffix.valid? NormalizeURI[url]&.domain, default_rule: nil
       "http://#{ url }"
     else # otherwise treat as path
       "/#{ url }"
