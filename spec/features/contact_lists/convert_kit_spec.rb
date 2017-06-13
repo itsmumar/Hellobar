@@ -27,6 +27,8 @@ feature 'ConvertKit integration', :js, :contact_list_feature do
     find('select#contact_list_remote_list_id').select('List 1')
     find('.button.submit').click
 
+    expect(page).to have_content 'Syncing contacts with ConvertKit list "List 1"'
+
     find('#edit-contact-list').click
 
     expect(page).to have_content('List 1')

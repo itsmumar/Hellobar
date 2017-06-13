@@ -28,7 +28,7 @@ feature 'Infusionsoft Integration', :js, :contact_list_feature do
     page.find('select[name="contact_list[remote_list_id]"]').select('Tag 1')
     page.find('.button.submit').click
 
-    wait_for_ajax
+    expect(page).to have_content 'Syncing contacts with Infusionsoft'
 
     expect(last_contact_list.tags).to eql ['tag1']
   end
