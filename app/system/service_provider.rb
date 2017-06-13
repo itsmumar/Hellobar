@@ -27,15 +27,18 @@ class ServiceProvider
   delegate :lists, :tags, :config, :connected?, to: :adapter
 
   def subscribe(email:, name: nil)
-    params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }
+    return if email !~ Devise.email_regexp
 
+    params = { email: email, name: name, tags: existing_tags, double_optin: @contact_list&.double_optin }
     adapter.subscribe(remote_list_id, params).tap do
       adapter.assign_tags(@contact_list) if adapter.is_a?(Adapters::GetResponse)
     end
   end
 
   def batch_subscribe(subscribers)
-    adapter.batch_subscribe(remote_list_id, subscribers, double_optin: @contact_list&.double_optin)
+    valid_subscribers = subscribers.select { |subscriber| subscriber[:email] =~ Devise.email_regexp }
+    return if valid_subscribers.blank?
+    adapter.batch_subscribe(remote_list_id, valid_subscribers, double_optin: @contact_list&.double_optin)
   end
 
   private
