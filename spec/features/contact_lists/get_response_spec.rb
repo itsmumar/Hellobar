@@ -27,6 +27,8 @@ feature 'GetResponse Integration', :js, :contact_list_feature do
     page.find('select#contact_list_remote_list_id').select('List 1')
     page.find('.button.submit').click
 
+    expect(page).to have_content 'Syncing contacts with GetResponse list "List 1"'
+
     page.find('#edit-contact-list').click
 
     expect(page).to have_content('List 1')
