@@ -23,13 +23,23 @@ describe UpdateContactList do
       end
     end
 
-    xcontext 'when provider_token is webhooks' do
+    context 'when provider_token is webhooks' do
       let(:params) do
         { provider_token: 'webhooks', name: 'Changed', data: { webhook_url: 'http://localhost' } }
       end
 
       it 'creates identity' do
         expect { service.call }.to change(Identity.where(provider: 'webhooks'), :count).to(1)
+      end
+    end
+
+    context 'when provider_token is 0, i.e. hellobar' do
+      let(:params) do
+        { provider_token: '0', name: 'Changed' }
+      end
+
+      it 'does not create identity' do
+        expect { service.call }.not_to change(Identity, :count)
       end
     end
 

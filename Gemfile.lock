@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/aweber/AWeber-API-Ruby-Library.git
+  revision: d67bdfb09129c988275927fbffc27c59c4e03f29
+  specs:
+    aweber (1.6.1)
+      json
+      oauth
+
+GIT
   remote: https://github.com/colinyoung/rake_running.git
   revision: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
   ref: 12d47fe692ffb8cc4112ec25c6b0a9595123c3c3
@@ -86,9 +94,6 @@ GEM
     autoprefixer-rails (6.7.7.1)
       execjs
     avatar (0.2.0)
-    aweber (1.6.1)
-      json
-      oauth
     aws-sdk (2.9.19)
       aws-sdk-resources (= 2.9.19)
     aws-sdk-core (2.9.19)
@@ -602,7 +607,7 @@ DEPENDENCIES
   analytics-ruby
   autoprefixer-rails
   avatar
-  aweber
+  aweber!
   aws-sdk
   better_errors
   binding_of_caller

@@ -24,6 +24,7 @@ describe ServiceProvider::Adapters do
 
   describe '.embed_code?' do
     specify do
+      allow(adapters).to receive(:exists?).and_return(true)
       allow(adapters).to receive(:fetch).and_return(double(config: double(requires_embed_code: true)))
       expect(adapters.embed_code?(:foo)).to be_truthy
     end
