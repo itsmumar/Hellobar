@@ -14,7 +14,7 @@ class ServiceProvider
     end
 
     def self.exists?(key)
-      return unless key.present?
+      return if key.blank?
       keys.include?(key.to_sym)
     end
 
