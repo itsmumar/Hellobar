@@ -2,6 +2,7 @@ describe ServiceProvider::Adapters do
   let(:adapters) { described_class }
   let(:all) do
     {
+      hellobar: ServiceProvider::Adapters::Hellobar,
       aweber: ServiceProvider::Adapters::Aweber,
       active_campaign: ServiceProvider::Adapters::ActiveCampaign,
       createsend: ServiceProvider::Adapters::CampaignMonitor,
@@ -71,10 +72,16 @@ describe ServiceProvider::Adapters do
   end
 
   describe '.enabled' do
-    let(:disabled) { [ServiceProvider::Adapters::MadMimiForm, ServiceProvider::Adapters::VerticalResponseForm] }
+    let(:hidden) do
+      [
+        ServiceProvider::Adapters::Hellobar,
+        ServiceProvider::Adapters::MadMimiForm,
+        ServiceProvider::Adapters::VerticalResponseForm
+      ]
+    end
 
     it 'returns not hidden adapters' do
-      expect(adapters.enabled).to match_array all.values - disabled
+      expect(adapters.enabled).to match_array all.values - hidden
     end
   end
 end

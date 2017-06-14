@@ -39,7 +39,7 @@ class ServiceProvider
   private
 
   def determine_adapter(identity, contact_list)
-    adapter_class = self.class.adapter(identity.provider)
+    adapter_class = self.class.adapter(identity&.provider || :hellobar)
 
     if adapter_class < Adapters::EmbedCode || adapter_class == Adapters::Webhook
       adapter_class.new(contact_list)

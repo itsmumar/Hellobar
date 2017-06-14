@@ -35,6 +35,7 @@ class ServiceProvider
       klass.key = adapter
     end
 
+    register :hellobar, Adapters::Hellobar
     register :aweber, Adapters::Aweber
     register :active_campaign, Adapters::ActiveCampaign
     register :createsend, Adapters::CampaignMonitor

@@ -28,6 +28,15 @@ describe ServiceProvider do
     it 'instantiates the adapter using provider name' do
       expect(provider.adapter).to be_a adapter_class
     end
+
+    context 'without identity' do
+      let(:identity) { nil }
+      let(:contact_list) { nil }
+
+      it 'uses Hello Bar adapter' do
+        expect(provider.adapter).to be_a ServiceProvider::Adapters::Hellobar
+      end
+    end
   end
 
   describe '#name' do
