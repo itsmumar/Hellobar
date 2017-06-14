@@ -1,9 +1,0 @@
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=UTF-8
-
-{
-  "id": "a07e1il97e1hddalkpk",
-  "type": "ADD_CONTACTS",
-  "error_count": 0,
-  "contact_count": 3
-}

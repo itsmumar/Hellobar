@@ -10,7 +10,7 @@ class ServiceProvider
     end
 
     def self.enabled
-      all.reject { |a| a.config.disabled }
+      all.reject { |a| a.config.hidden }
     end
 
     def self.exists?(key)
@@ -35,6 +35,7 @@ class ServiceProvider
       klass.key = adapter
     end
 
+    register :hellobar, Adapters::Hellobar
     register :aweber, Adapters::Aweber
     register :active_campaign, Adapters::ActiveCampaign
     register :createsend, Adapters::CampaignMonitor

@@ -4,8 +4,7 @@ describe ServiceProvider::Adapters::CampaignMonitor do
       clients: 'https://api.createsend.com/api/v3.1/clients.json',
       lists: 'https://api.createsend.com/api/v3.1/clients/4a397ccaaa55eb4e6aa1221e1e2d7122/lists.json',
       subscribe: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
-      unauthorized: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
-      batch_subscribe: 'https://api.createsend.com/api/v3.1/subscribers/4567456/import.json'
+      unauthorized: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json'
     }
   end
 
@@ -58,28 +57,6 @@ describe ServiceProvider::Adapters::CampaignMonitor do
         expect(identity).to receive(:destroy_and_notify_user)
         subscribe
       end
-    end
-  end
-
-  describe '#batch_subscribe' do
-    let(:body) do
-      {
-        'Subscribers': [
-          { 'EmailAddress': 'example1@email.com', 'Name': 'FirstName LastName' },
-          { 'EmailAddress': 'example2@email.com', 'Name': 'FirstName LastName' }
-        ],
-        'Resubscribe': true,
-        'QueueSubscriptionBasedAutoresponders': true,
-        'RestartSubscriptionBasedAutoresponders': false
-      }
-    end
-    let!(:batch_subscribe_request) { allow_request :post, :batch_subscribe, body: body }
-
-    let(:subscribers) { [{ email: 'example1@email.com', name: name }, { email: 'example2@email.com', name: name }] }
-
-    it 'calls #subscribe for each subscriber' do
-      provider.batch_subscribe subscribers
-      expect(batch_subscribe_request).to have_been_made
     end
   end
 end
