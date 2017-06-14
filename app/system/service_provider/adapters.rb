@@ -10,7 +10,7 @@ class ServiceProvider
     end
 
     def self.enabled
-      all.reject { |a| a.config.disabled }
+      all.reject { |a| a.config.hidden }
     end
 
     def self.exists?(key)
