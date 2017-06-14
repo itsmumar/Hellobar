@@ -1,0 +1,11 @@
+{{#if announcementToShow}}
+
+  <div class="button-container">
+    <a href="javascript:void(0)" class="js-close close-announcement" {{action "closeCurrentAnnouncement"}}>
+      <img src="{{image-path 'close-announcement.png'}}" alt="Close announcement"/>
+    </a>
+  </div>
+  <img src={{announcementImageSrc}} alt="Announcement"  class="announcement"/>
+
+{{/if}}
+

@@ -75,7 +75,7 @@ class IdentitiesController < ApplicationController
 
   def after_auth_redirect_url
     url = env['omniauth.params']['redirect_to']
-    url += '#/settings/emails' if url.include?('/site_elements/')
+    url += '#/goals' if url.include?('/site_elements/')
     url
   end
 end

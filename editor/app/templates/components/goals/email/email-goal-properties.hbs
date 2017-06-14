@@ -1,0 +1,15 @@
+<div class="substep emails">
+
+  {{#if currentThemeIsGeneric}}
+    {{goals/email/fields/field-list model=model}}
+  {{/if}}
+
+  <label>Choose your contact list and integration</label>
+  {{goals/email/contacts/contact-list-select
+    selectedOption=selectedContactList
+    options=model.site.contact_lists
+    setList="setContactList"
+    editList="openEmailListPopup"
+  }}
+
+</div>

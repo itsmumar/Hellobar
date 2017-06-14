@@ -24,7 +24,7 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'The user can select free options' do
-      find('a', text: free_options.first).click
+      find('div.step-link-block', text: free_options.first).click
       expect(page).to have_content 'CHANGE TARGET AUDIENCE'
     end
 
@@ -32,7 +32,7 @@ feature 'Users can use site element targeting rule presets', :js do
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
       (paid_options << custom_option).each do |text|
-        find('a', text: text).click
+        find('div.step-link-block', text: text).click
 
         expect(page).to have_content 'MONTHLY BILLING'
 
@@ -58,24 +58,24 @@ feature 'Users can use site element targeting rule presets', :js do
       visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
 
       (free_options + paid_options).each do |text|
-        find('a', text: text).click
+        find('div.step-link-block', text: text).click
         find('a', text: 'CHANGE TARGET AUDIENCE').click
       end
 
       # wait for the UI to load.
       sleep 0.2
 
-      find('a.saved-rule').click
+      find('div.step-link-block', text: 'Show to a saved targeting rule').click
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
-      find('a', text: custom_option).click
+      find('h6', text: custom_option).click
       find('a', text: 'Cancel').click
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
       visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
       find('a', text: 'CHANGE TARGET AUDIENCE').click
-      find('a', text: custom_option).click
+      find('h6', text: custom_option).click
       find('a', text: '+').click
       fill_in 'rule_name', with: 'New Custom Rule'
       find('a', text: 'Save').click

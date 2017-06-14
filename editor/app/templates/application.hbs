@@ -1,77 +1,6 @@
-{{#application-layout applicationController=this isMobile=isMobile isFullscreen=isFullscreen isCallType=isCallType}}
-  <nav class="links-wrapper">
-    <ul class="step-links">
-      <li class="step-settings">
-        {{#link-to 'settings'}}
-          <i class="hellobar-icon hellobar-icon-trophy"></i>
+{{#application-layout isMobile=isMobile isFullscreen=isFullscreen isCallGoal=isCallGoal}}
 
-          <div class="caption">Goals</div>
-        {{/link-to}}
-      </li>
-      <li class="step-style">
-        {{#link-to 'style'}}
-          <i class="icon-style"></i>
-
-          <div class="caption">Style</div>
-        {{/link-to}}
-      </li>
-      <li class="step-content">
-        {{!-- TODO we should rename route and controllers/components to 'Content' later --}}
-        {{#link-to 'design'}}
-          <i class="icon-content"></i>
-
-          <div class="caption">Content</div>
-        {{/link-to}}
-      </li>
-      <li class="step-targeting">
-        {{#link-to 'targeting'}}
-          <i class="icon-views"></i>
-
-          <div class="caption">Targeting</div>
-        {{/link-to}}
-      </li>
-    </ul>
-
-    <ul class="action-links">
-      <li class="toggle-fullscreen">
-        <a {{action 'toggleFullscreen'}}>
-          <i class="icon-back2"></i>
-          <i class="icon-back2"></i>
-        </a>
-
-        <div class="caption">
-          {{#if isFullscreen}}
-            Show
-          {{else}}
-            Hide
-          {{/if}}
-        </div>
-      </li>
-      {{#if shouldShowMobileDesktopSwitch}}
-        <li class="toggle-mobile">
-          <a {{action 'toggleMobile'}}>
-            <i class="icon-desktop"></i>
-            <i class="icon-mobile"></i>
-          </a>
-
-          <div class="caption">
-            {{#if isMobile}}
-              Desktop
-            {{else}}
-              Mobile
-            {{/if}}
-          </div>
-        </li>
-      {{/if}}
-      <li class="close-editor">
-        <a {{action "closeEditor"}}>
-          <i class="icon-close"></i>
-
-          <div class="caption">Close</div>
-        </a>
-      </li>
-    </ul>
-  </nav>
+  {{navigation/side-navigation isMobile=isMobile isFullscreen=isFullscreen goal=goal style=style closeEditor='closeEditor'}}
 
   <div class="viewport-wrapper">
     <div class="step-wrapper">
@@ -79,13 +8,7 @@
 
       {{navigation/step-navigation
       action='saveSiteElement'
-      current=currentStep
-      prev=prevRoute
-      next=nextRoute
-      saveSubmitted=saveSubmitted
-      doneButtonText=doneButtonText
-      cannotContinue=cannotContinue
-      validationMessages=validationMessages}}
+      saveSubmitted=saveSubmitted}}
     </div>
 
     {{preview/preview-area model=model isMobile=isMobile}}
@@ -94,3 +17,4 @@
   {{outlet 'interstitial'}}
 
 {{/application-layout}}
+

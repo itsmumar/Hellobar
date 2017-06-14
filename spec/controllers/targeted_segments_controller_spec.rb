@@ -21,7 +21,7 @@ describe TargetedSegmentsController do
 
       post :create, site_id: site, targeted_segment: { token: token, segment: segment }
 
-      expect(response).to redirect_to(new_site_site_element_path(site, anchor: "/settings?rule_id=#{ mock_rule.id }"))
+      expect(response).to redirect_to(new_site_site_element_path(site, anchor: "/goals?rule_id=#{ mock_rule.id }"))
     end
 
     it "redirects to sites#improve if the rule couldn't be created for some reason" do

@@ -19,7 +19,8 @@ feature 'Adding Alert bar', :js do
     end
 
     click_on 'Continue'
-    click_on 'Alert'
+    find('a', text: 'CHANGE TYPE').click
+    find('h6', text: 'Alert').click
     first('.autodetection-button').click
     click_button 'Save & Publish'
     click_on 'Manage'

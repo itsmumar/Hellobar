@@ -1,0 +1,25 @@
+{{#if allowImages}}
+  {{#if themeHasDefaultImage}}
+    <label class="default-image">
+      {{common/checkboxes/toggle-switch switch=model.use_default_image}}
+      Use default image
+    </label>
+  {{/if}}
+
+  {{#unless useThemeImage}}
+    <label>Upload an image</label>
+    <div class="image-upload">
+      {{design/images/uploading/image-upload
+        setImageProps="setImageProps"
+        existingURL=model.image_url
+        existingFileName=model.image_file_name
+        imageUploadCopy=imageUploadCopy
+        useThemeImage=useThemeImage
+      }}
+    </div>
+
+  {{/unless}}
+{{else}}
+  <label>Site Bars do not support images.
+    You'll need to use a Modal, Slider, or Page Takeover to upload an image.</label>
+{{/if}}

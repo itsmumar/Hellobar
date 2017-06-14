@@ -7,6 +7,8 @@ export default Ember.Route.extend({
   validation: Ember.inject.service(),
   bus: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
+  modelLogic: Ember.inject.service(),
+  theming: Ember.inject.service(),
 
   saveCount: 0,
 
@@ -33,6 +35,8 @@ export default Ember.Route.extend({
   //-----------  Parse JSON Model  -----------#
 
   afterModel(resolvedModel) {
+    this.get('modelLogic').setModel(resolvedModel);
+    this.get('theming').setModel(resolvedModel);
     if (localStorage['stashedContactList']) {
       const contactList = JSON.parse(localStorage['stashedContactList']);
       localStorage.removeItem('stashedContactList');
@@ -96,7 +100,7 @@ export default Ember.Route.extend({
       this.get('validation').validate('phone_number', this.currentModel).then(() => {
         // Successful validation
         this.get('bus').trigger('hellobar.core.validation.succeeded');
-        this.controller.toggleProperty('saveSubmitted');
+        this.controller.set('saveSubmitted', true);
         this.set('saveCount', this.get('saveCount') + 1);
         if (this.controller.get('applicationSettings.track_editor_flow')) {
           InternalTracking.track_current_person('Editor Flow', {
@@ -140,7 +144,7 @@ export default Ember.Route.extend({
           },
 
           error: data => {
-            this.controller.toggleProperty('saveSubmitted');
+            this.controller.set('saveSubmitted', false);
             this.controller.set('model.errors', data.responseJSON.errors);
             new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
           }
