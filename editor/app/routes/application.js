@@ -15,7 +15,7 @@ export default Ember.Route.extend({
   // TODO check other API calls and move them to api service
 
   beforeModel() {
-    this.get('applicationSettings').load()
+    return this.get('applicationSettings').load();
   },
 
   model() {
