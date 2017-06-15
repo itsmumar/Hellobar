@@ -1,0 +1,62 @@
+.contact-list-select
+
+  .ember-power-select-selected-item
+    margin: 0
+
+  .contact-list-block
+    color: #666666
+    line-height: 120%
+    position: relative
+    padding: 0.5em 0.67em
+    -webkit-box-pack: justify
+    justify-content: space-between
+    align-items: center
+    display: flex
+
+    i
+      color: $grayLight !important
+      line-height: 80%
+      font-size: 1.25rem
+      text-align: center
+      font-style: normal
+      font-weight: lighter
+      margin-right: .5rem
+      -webkit-box-flex: 0
+      -moz-box-flex: 0
+      box-flex: 0
+      flex: 0 0 2rem
+
+    > div
+      color: $grayLight
+      padding-right: $gutter
+      flex: 1 1 auto
+      font-size: .8rem
+
+      .contact-list-title
+        color: $gray
+        line-height: 100%
+        padding-top: 0.1em
+        @include ellipsis()
+
+  .actions
+    a
+      color: #45b4d6
+      opacity: 0.75
+      margin-top: 0.25em
+      margin-right: 0.67em
+      text-decoration: underline
+      display: inline-block
+      vertical-align: middle
+      &:hover
+        opacity: 1
+        cursor: pointer
+
+  &:not(.has-list)
+    .contact-list-block
+      border: 1px solid #e2e2e2
+      i
+        font-size: 1.5em
+      > div
+        color: $blueLight
+        text-decoration: underline
+

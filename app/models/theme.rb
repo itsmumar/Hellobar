@@ -9,8 +9,8 @@ class Theme < ActiveHash::Base
     base_directory.join('element.css').to_s
   end
 
-  def with_image?
-    image['default_url'].present?
+  def default_image?
+    image['default_url'].present? if image.is_a?(Hash)
   end
 
   def self.sorted

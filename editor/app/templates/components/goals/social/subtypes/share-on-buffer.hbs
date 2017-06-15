@@ -1,0 +1,10 @@
+<label>Message</label>
+{{input value=model.settings.buffer_message placeholder="Check out this great site!"}}
+
+<label>
+  {{common/checkboxes/toggle-switch switch=model.settings.use_location_for_url}}
+  Share the URL my visitor is on
+</label>
+
+<label class="{{if model.settings.use_location_for_url 'disabled'}}">URL to share</label>
+{{input value=model.settings.buffer_url placeholder="example.com" disabled=model.settings.use_location_for_url}}

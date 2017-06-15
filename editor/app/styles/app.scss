@@ -35,30 +35,32 @@
 @import 'components/_flash.sass';
 
 // These are editor's components
-@import 'components/_flash-messages.css.sass';
-@import 'components/_announcement-container.css.sass';
-@import 'components/_no-content-parameters.sass';
-@import 'components/_range-slider.css.sass';
-@import 'components/_right-pane.css.sass';
-@import 'components/_tab-view.css.sass';
-@import 'components/_toggle-switch.css.sass';
-@import 'components/custom-html/_custom-html-editor.sass';
-@import 'components/custom-html/_code-editor.sass';
-@import 'components/fields/_field-list.sass';
-@import 'components/help/_i-need-help.sass';
-@import 'components/hints/_popup-hint-trigger.css.sass';
-@import 'components/hints/_popup-hint.css.sass';
-@import 'components/image-uploading/_image-upload.css.sass';
-@import 'components/preview/_preview-area.sass';
-@import 'components/selection/_contact-list-select.sass';
-@import 'components/thank-you/_thank-you-editor.sass';
-@import 'components/theming/_autodetection-button.sass';
-@import 'components/theming/_theme-info.sass';
-@import 'components/theming/_theme-tile-grid.css.sass';
-@import 'components/theming/_theme-tile.css.sass';
-@import 'components/validation/_validation-message.sass';
-@import 'components/validation/_validation-summary.sass';
-@import 'components/text';
+@import 'components/common/flash/flash-messages';
+@import 'components/preview/containers/announcement-container';
+@import 'components/preview/containers/right-pane';
+@import 'components/design/no-content-parameters';
+@import 'components/common/sliders/range-slider';
+
+@import 'components/common/tabs/tab-view';
+@import 'components/common/checkboxes/toggle-switch';
+@import 'components/preview/custom-html/custom-html-editor';
+@import 'components/preview/custom-html/code-editor';
+@import 'components/goals/email/fields/field-list';
+@import 'components/interstitial/helpers/i-need-help';
+@import 'components/interstitial/helpers/interstitial-footer';
+@import 'components/common/hints/popup-hint-trigger';
+@import 'components/common/hints/popup-hint';
+@import 'components/design/images/uploading/image-upload';
+@import 'components/preview/preview-area';
+@import 'components/goals/email/contacts/contact-list-select';
+@import 'components/design/thank-you/thank-you-editor';
+@import 'components/preview/containers/theming/autodetection-button';
+@import 'components/styles/theming/theme-info';
+@import 'components/preview/containers/theming/theme-tile-grid';
+@import 'components/preview/containers/theming/theme-tile';
+@import 'components/common/validation/validation-message';
+@import 'components/common/validation/validation-summary';
+@import 'components/common/text/text';
 
 @import 'layouts/_common.sass';
 @import 'layouts/_document.sass';

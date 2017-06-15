@@ -3,9 +3,10 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 
   classNames: ['editor-wrapper'],
-  classNameBindings: ['isMobile', 'isFullscreen', 'isCallType'],
+  classNameBindings: ['isMobile', 'isFullscreen', 'isCallGoal'],
 
   bus: Ember.inject.service(),
+  palette: Ember.inject.service(),
 
   didRender() {
     Ember.run.next(() => this.get('bus').trigger('hellobar.core.application.initialized'));
@@ -18,7 +19,7 @@ export default Ember.Component.extend({
     const isColorSelect = $(obj.target).closest('.color-select-wrapper').length;
 
     if (!isCanvas && !isColorSelect) {
-      this.set('applicationController.focusedColor', null);
+      this.set('palette.focusedColor', null);
     }
   }
 

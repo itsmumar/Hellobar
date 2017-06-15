@@ -7,7 +7,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   given(:theme_id) { 'blue-autumn' }
   given(:themes) { Theme.where(type: 'generic') }
   given(:theme) { themes.detect { |theme| theme.id == theme_id } }
-  given(:url) { new_site_site_element_path(site) + '/#/style' }
+  given(:url) { new_site_site_element_path(site) + '/#/styles' }
 
   background do
     login user
@@ -15,7 +15,8 @@ feature 'Users can select a design theme for SiteElements', :js do
   end
 
   scenario 'selecting a theme updates the color palette in the UI' do
-    find('a', text: /#{ subtype }/i).click
+    find('a', text: 'CHANGE TYPE').click
+    find('h6', text: /#{ subtype }/i).click
 
     expect(page).to have_content 'Themes'
 
@@ -39,7 +40,8 @@ feature 'Users can select a design theme for SiteElements', :js do
     given(:site) { create(:site, user: user, elements: [:bar]) }
 
     scenario '"Pushes page down" is ON by default' do
-      find('a', text: /#{ subtype }/i).click
+      find('a', text: 'CHANGE TYPE').click
+      find('h6', text: /#{ subtype }/i).click
       expect(first('.toggle-pushing-page-down')).to have_selector '.toggle-switch.is-selected'
     end
 
@@ -63,12 +65,13 @@ feature 'Users can select a design theme for SiteElements', :js do
         allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
       end
 
-      given(:url) { new_site_site_element_path(site) + '/#/settings/emails' }
+      given(:url) { new_site_site_element_path(site) + '/#/goals' }
 
       scenario 'displays image in preview' do
         visit url
         click_on 'Next'
-        click_on 'Modal'
+        find('a', text: 'CHANGE TYPE').click
+        find('h6', text: 'Modal').click
         first('.autodetection-button').click
         click_on 'Next'
         click_on 'Image'

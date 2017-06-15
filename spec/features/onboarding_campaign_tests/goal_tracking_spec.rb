@@ -17,7 +17,7 @@ feature 'User onboarding statuses get updated as they select a goal for their fi
     find('.global-sidebar form').click_button('Create New')
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    within(".goal-block[data-route='money']") do
+    within('.goal-block.money') do
       click_on 'Select This Goal'
     end
   end
