@@ -15,12 +15,6 @@ module ServiceProvider::Rescuable
     rescue_with_handler(exception)
   end
 
-  def batch_subscribe(*args)
-    super
-  rescue => exception
-    rescue_with_handler(exception)
-  end
-
   private
 
   # override ActiveSupport::Rescuable#rescue_with_handler and return value of the handler

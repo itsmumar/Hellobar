@@ -42,9 +42,13 @@ class IdentitiesController < ApplicationController
   end
 
   def destroy
-    @identity = @site.identities.find(params[:id])
-    @identity.destroy!
-    render json: @identity
+    identity = @site.identities.find(params[:id])
+
+    if identity.destroy
+      render json: identity
+    else
+      head :forbidden
+    end
   end
 
   private

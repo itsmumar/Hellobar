@@ -182,6 +182,8 @@ class @ContactListModal extends Modal
     modal = this
     object.find("a.unlink").click (e) ->
       $.ajax "/sites/#{modal.options.siteID}/identities/#{$(this).data('identity-id')}",
+        data:
+          contact_list_id: modal.options.id
         type: "DELETE"
         success: (data) =>
           modal.blocks.instructions.show()
@@ -190,7 +192,21 @@ class @ContactListModal extends Modal
           modal.blocks.tagListSelect.hide()
           modal.$modal.trigger('provider:disconnected')
         error: (response) =>
-          console.log("Could not disconnect identity", response)
+          if response.status == 403
+            delete modal.options.identity
+            modal._chooseHelloBar()
+
+  _chooseHelloBar: () ->
+    select = @$modal.find("#contact_list_provider")
+    select.val(0)
+    @blocks.hellobarOnly.show()
+    @blocks.instructions.hide()
+    @blocks.nevermind.hide()
+    @blocks.syncDetails.hide()
+    @blocks.remoteListSelect.hide()
+    @blocks.selectListing.hide()
+    @blocks.tagListSelect.hide()
+    return
 
   _bindDoThisLater: (object) ->
     object.find("a.do-this-later").click (e) =>
