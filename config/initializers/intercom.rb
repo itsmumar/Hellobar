@@ -9,13 +9,14 @@ IntercomRails.config do |config|
   # == Intercom secret key
   # This is required to enable secure mode, you can find it on your Setup
   # guide in the "Secure Mode" step.
+  # https://docs.intercom.com/configure-intercom-for-your-product-or-site/staying-secure/enable-identity-verification-on-your-web-product
   #
-  # config.api_secret = Settings.intercom_token
+  config.api_secret = Settings.intercom_secret
 
   # == Enabled Environments
   # Which environments is auto inclusion of the Javascript enabled for
   #
-  config.enabled_environments = ['development', 'production']
+  config.enabled_environments = %w[production staging edge]
 
   # == Current user method/variable
   # The method/variable that contains the logged in user in your controllers.
@@ -59,7 +60,7 @@ IntercomRails.config do |config|
     additional_domains: proc { |user| user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', ') },
     contact_lists: proc { |user| user.contact_lists.count },
     total_views: proc { |user| user.sites.map { |site| site.lifetime_totals.values.sum(&:views) }.sum },
-    total_conversions: proc { |user| user.sites.map { |site| site.lifetime_totals.values.sum(&:conversions) }.sum },
+    total_conversions: proc { |user| user.sites.map { |site| site.lifetime_totals.values.sum(&:conversions) }.sum }
   }
 
   # == Current company method/variable
