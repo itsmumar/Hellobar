@@ -1,0 +1,11 @@
+<div class="current-file">
+  <div class="name">{{existingFileName}}</div>
+  <img class="file-action icon-trash" {{action "removeDropzoneImages"}} src="{{image-path 'delete.svg'}}">
+</div>
+<div class="file-upload" id="dropzone-preview">
+  {{design/images/uploading/image-upload-text
+    filename=existingFileName
+    uploading=isUploading
+    imageUploadCopy=imageUploadCopy
+  }}
+</div>

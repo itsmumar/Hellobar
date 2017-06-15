@@ -1,0 +1,13 @@
+<label>
+  {{common/checkboxes/toggle-switch switch=model.settings.use_location_for_url}}
+  Pin the URL my visitor is on
+</label>
+
+<label class="{{if model.settings.use_location_for_url 'disabled'}}">URL to pin</label>
+{{input value=model.settings.pinterest_url placeholder="example.com" disabled=model.settings.use_location_for_url}}
+
+<label>Image URL (optional)</label>
+{{input value=model.settings.pinterest_image_url placeholder="example.com/image.png"}}
+
+<label>Description</label>
+{{input value=model.settings.pinterest_description placeholder="Check out this great site!"}}

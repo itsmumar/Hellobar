@@ -1,0 +1,48 @@
+.popup-hint
+  display: block
+  position: absolute
+  opacity: 0
+  visibility: hidden
+
+  &.visible
+    opacity: 1
+    visibility: visible
+
+
+.popup-hint-content
+  display: none
+  position: fixed
+  z-index: 100000
+  background-color: #4f4f4f
+  border-radius: 3px
+  padding: 8px 12px
+  width: auto
+  min-width: 220px
+  color: white
+  font-size: 14px
+  pointer-events: none
+
+  &:after
+    display: block
+    position: absolute
+    content: ''
+    width: 0
+    height: 0
+    z-index: 10
+    margin: 0 auto
+    left: -8px
+    top: 10px
+    background-color: transparent
+    border-top: 8px solid rgba(255, 255, 255, 0)
+    border-bottom: 8px solid rgba(255, 255, 255, 0)
+    border-right: 8px solid #4f4f4f
+
+
+  p
+    padding: 0 !important
+    color: inherit
+    font-size: inherit
+    margin-bottom: 8px
+    &:last-child
+      margin-bottom: 0
+

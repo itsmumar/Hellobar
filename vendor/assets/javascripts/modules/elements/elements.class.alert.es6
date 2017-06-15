@@ -225,8 +225,8 @@ hellobar.defineModule('elements.class.alert',
 
     function configureIFrame(iframe, model) {
       model.animated && dom.addClass(iframe, 'hb-animated');
-      if (model.theme && model.theme.id) {
-        dom.addClass(iframe, model.theme.id);
+      if (model.theme && model.theme_id) {
+        dom.addClass(iframe, model.theme_id);
       }
     }
 
@@ -339,7 +339,7 @@ hellobar.defineModule('elements.class.alert',
           configureIFrame(this._iframe, this._model);
           this._iframe.contentWindow.hellobar = hellobar;
           preview.isActive() && dom.addClass(this._iframe.contentDocument.body, 'preview-mode');
-          this._model.theme && dom.addClass(this._iframe.contentDocument.body, this._model.theme.id);
+          this._model.theme && dom.addClass(this._iframe.contentDocument.body, this._model.theme_id);
           addCdnResources(this._iframe.contentDocument);
           this._trigger = new Trigger(this._iframe, this._model);
           this._popup = new Popup(this._iframe, this._model);

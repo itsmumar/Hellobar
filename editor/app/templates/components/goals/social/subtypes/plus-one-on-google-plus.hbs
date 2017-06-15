@@ -1,0 +1,7 @@
+<label>
+  {{common/checkboxes/toggle-switch switch=model.settings.use_location_for_url}}
+  +1 the URL my visitor is on
+</label>
+
+<label class="{{if model.settings.use_location_for_url 'disabled'}}">URL to +1</label>
+{{input value=model.settings.url_to_plus_one placeholder="example.com" disabled=model.settings.use_location_for_url}}

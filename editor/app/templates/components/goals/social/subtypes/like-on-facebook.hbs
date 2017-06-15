@@ -1,0 +1,7 @@
+<label>
+  {{common/checkboxes/toggle-switch switch=model.settings.use_location_for_url}}
+  Like the URL my visitor is on
+</label>
+
+<label class="{{if model.settings.use_location_for_url 'hidden'}}">URL to like</label>
+{{input value=model.settings.url_to_like placeholder="example.com" disabled=model.settings.use_location_for_url classBinding="model.settings.use_location_for_url:hidden"}}

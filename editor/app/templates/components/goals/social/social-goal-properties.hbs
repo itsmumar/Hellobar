@@ -1,0 +1,10 @@
+<div class="substep social">
+
+  <label>Would you like your visitors to...</label>
+  {{goals/social/selection/social-select options=socialOptions selection=selectedSocialSubtype}}
+
+  {{#if socialSubtypeComponentName}}
+    {{component socialSubtypeComponentName model=model}}
+  {{/if}}
+
+</div>

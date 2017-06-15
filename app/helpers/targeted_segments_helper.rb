@@ -11,7 +11,7 @@ module TargetedSegmentsHelper
     existing_rule = rule_for_segment_and_value(site, segment, value)
 
     if existing_rule
-      path = new_site_site_element_path(site, anchor: "/settings?rule_id=#{ existing_rule.id }")
+      path = new_site_site_element_path(site, anchor: "/goals?rule_id=#{ existing_rule.id }")
       method = :get
     else
       token = generate_segment_token(targeted_segment)

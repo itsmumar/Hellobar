@@ -21,29 +21,6 @@ App = Ember.Application.extend({
 
 loadInitializers(App, config.modulePrefix);
 
-// TODO cleanup this file, split to submodules
-
-//-----------  Preview Injection  -----------#
-
-// TODO remove this global
-window.HBEditor = {};
-
-// TODO remove  this from global space
-HBEditor._listeners = [];
-
-// TODO remove  this from global space
-HBEditor.addPreviewInjectionListener = listener => HBEditor._listeners.push(listener);
-
-hellobar('elements.injection').overrideInjectionPolicy(function (element) {
-  const dom = hellobar('base.dom');
-  const container = dom.$("#hellobar-preview-container");
-  if (container.children[0]) {
-    container.insertBefore(element, container.children[0]);
-  } else {
-    container.appendChild(element);
-  }
-  HBEditor._listeners.forEach(listener => listener(container));
-});
 
 //-----------  Set Application Height  -----------#
 

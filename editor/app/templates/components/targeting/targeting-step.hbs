@@ -1,0 +1,132 @@
+<div class="ember-view targeting">
+  <h5 class="step-title">Targeting</h5>
+
+  <div class="step-link-wrapper {{if selectionInProgress 'is-not-selected' 'is-selected'}}">
+
+    {{#if shouldShowEveryonePreset}}
+      <div class="step-link-block active" {{action 'select' 'Everyone'}}>
+        <i class="hellobar-icon hellobar-icon-people"></i>
+        <h6>Everyone</h6>
+
+        <p>Show your Hello Bar to everyone on every page of your site.</p>
+      </div>
+    {{/if}}
+
+    {{#if isTopBarStyle}}
+      {{#if shouldShowMobileVisitorsPreset}}
+        <div class="step-link-block active" {{action 'select' 'Mobile Visitors'}}>
+          <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+          <h6>
+            Mobile Visitors
+            {{#if cannotTarget}}
+              <span class="button paid">PAID</span>
+            {{/if}}
+          </h6>
+
+          <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if shouldShowHomepageVisitorsPreset}}
+      <div class="step-link-block active" {{action 'select' 'Homepage Visitors'}}>
+        <i class="hellobar-icon hellobar-icon-house"></i>
+        <h6>
+          Homepage Visitors
+          {{#if cannotTarget}}
+            <span class="button paid">PAID</span>
+          {{/if}}
+        </h6>
+
+        <p>Show your Hello Bar on your site's homepage only.</p>
+      </div>
+    {{/if}}
+
+    {{#if shouldShowCustomPreset}}
+      <div class="step-link-block active" {{action 'select' 'Custom'}}>
+        <i class="hellobar-icon hellobar-icon-settings-knobs"></i>
+        <h6>
+          Custom Rule
+          {{#if cannotTarget}}
+            <span class="button paid">PAID</span>
+          {{/if}}
+        </h6>
+
+        <p>Show your Hello Bar to a custom audience of your choice.</p>
+      </div>
+    {{/if}}
+
+    {{#if hasCustomRules}}
+      {{#if shouldShowSavedPreset}}
+        <div class="step-link-block active" {{action 'select' 'Saved'}}>
+          <i class="hellobar-icon hellobar-icon-saved-segment"></i>
+          <h6 class="left-condense">
+            <span class="left">Show to a saved targeting rule</span>
+            {{#if cannotTarget}}
+              <span class="button paid">PAID</span>
+            {{/if}}
+          </h6>
+
+          <p>Show your Hello Bar to a custom targeting rule that you've saved before.</p>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    {{#if shouldShowSavedRuleList}}
+      <div class="saved-rule-list">
+        <div class="select-wrapper">
+          {{#power-select options=ruleOptions
+          selected=selectedRule
+          renderInPlace=true
+          searchEnabled=false
+          onchange=(action "selectTargetingRule") as |option|}}
+            {{option.name}}
+          {{/power-select}}
+        </div>
+
+        {{#if selectedRule.description}}
+          <p>
+            {{selectedRule.description}}.
+            {{#if selectedRule.editable}}
+              <a class="edit-rule" {{action 'openRuleModal' selectedRule}}>Edit.</a>
+            {{/if}}
+          </p>
+        {{/if}}
+      </div>
+    {{/if}}
+
+    <a {{action 'initiateSelection'}} class="change-selection">
+      <i class="icon-back1"></i>
+      Change Target Audience
+    </a>
+  </div>
+
+  <label>
+    <span>Cookie Duration</span>
+    {{#common/hints/popup-hint-trigger}}
+      <p>The number of days before the optin will display <br>
+        again once the user exits your campaign. <br>
+        <strong>Change to 0 to prevent cookies from being set.</strong></p>
+    {{/common/hints/popup-hint-trigger}}
+  </label>
+  {{input value=model.settings.cookie_settings.duration
+  placeholder="Cookie Duration"
+  maxlength=5
+  type="number"
+  }}
+
+  <label>
+    <span>Success Cookie Duration</span>
+    {{#common/hints/popup-hint-trigger}}
+      <p>The number of days before the optin will display <br>
+        again once the user successfully opts in to your <br>
+        campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
+    {{/common/hints/popup-hint-trigger}}
+  </label>
+  {{input value=model.settings.cookie_settings.success_duration
+  placeholder="Success Cookie Duration"
+  maxlength=5
+  type="number"
+  }}
+
+</div>

@@ -17,6 +17,7 @@ db/*_dump.sql
 public/*bar_test.html
 public/integration
 public/image_uploads
+public/content_upgrades
 public/test_site.html
 
 # Ignore tmp/scratch/editor files

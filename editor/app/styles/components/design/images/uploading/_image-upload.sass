@@ -1,0 +1,98 @@
+.file-upload-container
+  width: 100%
+  margin: 0.5em auto
+  color: $gray
+  font-weight: normal
+  overflow: auto
+
+  a
+    color: #45b4d6
+
+  &.with-errors
+    margin-bottom: 2em
+
+  .default-text
+    pointer-events: none
+    text-align: center
+
+    div
+      margin: 15px 0
+
+  .current-file
+    display: none
+    position: relative
+    font-size: 0.89em
+    height: 32px
+    padding: 8px 0.67em
+
+    .name
+      float: left
+      width: 236px
+      height: 100%s
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+
+    .file-action
+      position: absolute
+      top: 7px
+      right: 7px
+      cursor: pointer
+
+  &.has-file
+    .current-file
+      display: block
+
+    .file-upload
+      border-top: 0
+
+  .file-upload, .current-file
+    float: left
+    width: 100%
+    border: 1px solid $grayLighter
+
+  .file-upload
+    height: 100%
+    padding: 0.45em 0.67em
+    cursor: pointer
+    border-style: dashed
+    font-size: 0.934em
+
+    img
+      margin-top: 20px
+
+  .icon-sync
+    display: block
+    color: $green
+    font-size: 30px
+    margin-top: 30px
+    animation: spin 2s infinite ease-in-out
+    -webkit-transform-origin: 50% 38%
+    -moz-transform-origin: 50% 38%
+    -ms-transform-origin: 50% 38%
+    -o-transform-origin: 50% 38%
+    transform-origin: 50% 38%
+
+  .dz-error-message
+    margin-top: 10px
+    color: $red
+    font-style: italic
+    font-size: 0.9em
+
+
+  .dz-preview
+    pointer-events: none
+
+  .dz-size
+    float: right
+
+  .dz-progress, .dz-details, .dz-success-mark, .dz-error-mark, .dz-image
+    display: none
+
+  .dz-filename, .default-text
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+
+  .dz-filename
+    width: 70%

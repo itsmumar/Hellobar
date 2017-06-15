@@ -1,0 +1,93 @@
+<div class="style ember-view">
+  <h5 class="step-title">Style</h5>
+
+  <div class="step-link-wrapper {{if selectionInProgress 'is-not-selected' 'is-selected'}}">
+
+    {{#if shouldShowBar}}
+      <div class="step-link-block active" {{action 'select' 'Bar'}}>
+        <i class="icon-bar"></i>
+        <h6>Bar</h6>
+
+        <p>Show a bar at the top of your site</p>
+      </div>
+    {{/if}}
+
+    {{#if shouldShowBarThemeInfo}}
+      {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
+    {{/if}}
+
+    {{#if notOnlyTopBarStyleIsAvailable}}
+
+      {{#if shouldShowModal}}
+        <div class="step-link-block active" {{action 'select' 'Modal'}}>
+          <i class="icon-modal"></i>
+          <h6>Modal</h6>
+
+          <p>Pop up a window in the middle of the screen</p>
+        </div>
+      {{/if}}
+
+      {{#if shouldShowModalThemeInfo}}
+        {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
+      {{/if}}
+
+      {{#if shouldShowSlider}}
+        <div class="step-link-block active" {{action 'select' 'Slider'}}>
+          <i class="icon-modal"></i>
+          <h6>Slider</h6>
+
+          <p>Show a small window on the bottom of your site</p>
+        </div>
+      {{/if}}
+
+      {{#if shouldShowSliderThemeInfo}}
+        {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
+      {{/if}}
+
+      {{#if shouldShowTakeover}}
+        <div class="step-link-block active" {{action 'select' 'Takeover'}}>
+          <i class="icon-modal"></i>
+          <h6>Page Takeover</h6>
+
+          <p>Show a window that totally covers your webpage content</p>
+        </div>
+      {{/if}}
+
+      {{#if shouldShowTakeoverThemeInfo}}
+        {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
+      {{/if}}
+
+    {{/if}}
+
+    {{#if canUseCustomHtml}}
+      <div class="step-link-block active" {{action 'select' 'Custom'}}>
+        <i class="icon-modal"></i>
+        <h6>Custom HTML</h6>
+
+        <p>Custom HTML</p>
+      </div>
+    {{/if}}
+
+    {{#if shouldShowAlert}}
+      <div class="step-link-block active" {{action 'select' 'Alert'}}>
+        <i class="icon-modal"></i>
+        <h6>Alert</h6>
+
+        <p>Custom bell with slider window</p>
+      </div>
+    {{/if}}
+    {{#if shouldShowAlertThemeInfo}}
+      {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
+    {{/if}}
+
+
+    {{#if notOnlyTopBarStyleIsAvailable}}
+      <a {{action 'initiateSelection'}} class="change-selection">
+        <i class="icon-back1"></i>
+        Change Type
+      </a>
+    {{/if}}
+
+  </div>
+
+</div>

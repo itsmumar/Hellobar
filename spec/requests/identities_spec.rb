@@ -37,7 +37,7 @@ describe 'Identities requests' do
 
         it 'redirects back' do
           request
-          expect(response).to redirect_to '/site_elements/#/settings/emails'
+          expect(response).to redirect_to '/site_elements/#/goals'
         end
 
         it 'sets success flash message' do

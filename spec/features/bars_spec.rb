@@ -26,7 +26,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
@@ -51,7 +51,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
@@ -61,20 +61,6 @@ feature 'Adding and editing bars', :js do
     expect(page).to have_content('Summary')
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
-  end
-
-  scenario 'A user can create a site element without seeing an interstitial' do
-    user = login(create(:site_membership, :with_site_rule).user)
-    {
-      emails:       'Collect Email',
-      click:        'Click Link',
-      call:         'Talk to Visitors',
-      social:       'Social',
-      announcement: 'Announcement'
-    }.each do |anchor, header|
-      visit new_site_site_element_path(user.sites.first) + "/#/settings/#{ anchor }?skip_interstitial=true"
-      expect(page).to have_content(header)
-    end
   end
 
   context 'Collect Email goal' do
@@ -91,8 +77,10 @@ feature 'Adding and editing bars', :js do
 
       click_on 'Create New'
 
-      find('.goal-block[data-route="contacts"]').click_link select_goal_label
+      find('.goal-block.contacts').click_on(select_goal_label)
       click_button 'Continue'
+
+      click_on 'Goals'
 
       @phone_field = find('.item-block[data-field-type="builtin-phone"]')
       @phone_field.find('.hellobar-icon-check-mark').trigger('click') if @phone_field[:class].include?('is-selected')
@@ -144,7 +132,8 @@ feature 'Adding and editing bars', :js do
     end
 
     scenario 'custom field' do
-      find('.step-style').click
+      click_link 'Style'
+      find('a.change-selection').click
       find('h6', text: 'Modal').click
       find('.step-settings').click
 
@@ -175,7 +164,7 @@ feature 'Adding and editing bars', :js do
 
     click_button('Create New')
 
-    find(".goal-block[data-route='call']").click_link select_goal_label
+    find('.goal-block.call').click_on(select_goal_label)
 
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')
@@ -202,13 +191,13 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content 'SELECT YOUR GOAL'
 
-    first('.goal-block').click_link(select_goal_label)
+    first('.goal-block').click_on(select_goal_label)
 
     expect(page).to have_content 'PROMOTE A SALE'
 
     click_button 'Continue'
 
-    expect(page).to have_content 'Themes'
+    expect(page).to have_content 'STYLE'
 
     click_link 'Next'
 

@@ -1,0 +1,70 @@
+<ul class="step-links">
+  <li class="step-settings">
+    {{#link-to 'goals'}}
+      <i class="hellobar-icon hellobar-icon-trophy"></i>
+
+      <div class="caption">Goals</div>
+    {{/link-to}}
+  </li>
+  <li class="step-style">
+    {{#link-to 'styles'}}
+      <i class="icon-style"></i>
+
+      <div class="caption">Style</div>
+    {{/link-to}}
+  </li>
+  <li class="step-content">
+    {{#link-to 'design'}}
+      <i class="icon-content"></i>
+
+      <div class="caption">Content</div>
+    {{/link-to}}
+  </li>
+  <li class="step-targeting">
+    {{#link-to 'targeting'}}
+      <i class="icon-views"></i>
+
+      <div class="caption">Targeting</div>
+    {{/link-to}}
+  </li>
+</ul>
+
+<ul class="action-links">
+  <li class="toggle-fullscreen">
+    <a {{action 'toggleFullscreen'}}>
+      <i class="icon-back2"></i>
+      <i class="icon-back2"></i>
+    </a>
+
+    <div class="caption">
+      {{#if isFullscreen}}
+        Show
+      {{else}}
+        Hide
+      {{/if}}
+    </div>
+  </li>
+  {{#if shouldShowMobileDesktopSwitch}}
+    <li class="toggle-mobile">
+      <a {{action 'toggleMobile'}}>
+        <i class="icon-desktop"></i>
+        <i class="icon-mobile"></i>
+      </a>
+
+      <div class="caption">
+        {{#if isMobile}}
+          Desktop
+        {{else}}
+          Mobile
+        {{/if}}
+      </div>
+    </li>
+  {{/if}}
+  <li class="close-editor">
+    <a {{action "closeEditor"}}>
+      <i class="icon-close"></i>
+
+      <div class="caption">Close</div>
+    </a>
+  </li>
+</ul>
