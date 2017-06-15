@@ -9,6 +9,8 @@ export default Ember.Component.extend({
 
   palette: Ember.inject.service(),
 
+  elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
+
   recentColors: Ember.computed.alias('palette.recentColors'),
   siteColors: Ember.computed.alias('palette.colorPalette'),
   focusedColor: Ember.computed.alias('palette.focusedColor'),
