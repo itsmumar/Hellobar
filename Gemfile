@@ -104,8 +104,9 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
-# Sending analytics data to Segment.com
-gem 'analytics-ruby', require: 'segment/analytics'
+# Sending analytics data to intercom.com
+gem 'intercom'
+gem 'intercom-rails'
 
 # Queue
 gem 'connection_pool'

@@ -1,16 +1,9 @@
 describe Analytics do
   let(:analytics) { described_class }
   let(:file) { double('log file', puts: true) }
-  let(:segment) { double('segment', alias: true, track: true) }
 
   before do
-    Analytics.instance_variable_set(:@segment, nil)
-    allow(Segment::Analytics).to receive(:new).with(write_key: Settings.segment_key, stub: true).and_return(segment)
     allow(analytics.log_file).to receive(:open).with(File::WRONLY | File::APPEND).and_yield(file)
-  end
-
-  after do
-    Analytics.instance_variable_set(:@segment, nil)
   end
 
   describe '#alias' do
@@ -18,11 +11,6 @@ describe Analytics do
     let(:user_id) { 999 }
     let(:data) { [:visitor, visitor_id, :user_id, value: user_id] }
     let(:call_alias) { analytics.alias(visitor_id, user_id) }
-
-    it 'calls alias on segment' do
-      expect(segment).to receive(:alias).with(previous_id: visitor_id, user_id: user_id)
-      call_alias
-    end
 
     it 'puts data to log/analytics.log', :freeze do
       call_alias
@@ -37,31 +25,6 @@ describe Analytics do
     it 'puts data to log/analytics.log' do
       expect(file).to receive(:puts).with analytics_record(*data)
       track
-    end
-
-    context 'with :user target type' do
-      it 'calls track on segment' do
-        expect(segment).to receive(:track).with segment_attributes(*data)
-        track
-      end
-    end
-
-    context 'with :visitor target type' do
-      let(:data) { [:visitor, 1, 'Event Name', foo: 1, bar: 2] }
-
-      it 'calls track on segment' do
-        expect(segment).to receive(:track).with segment_attributes(*data)
-        track
-      end
-    end
-
-    context 'with :site target type' do
-      let(:data) { [:site, 1, 'Event Name', foo: 1, bar: 2] }
-
-      it 'calls track on segment' do
-        expect(segment).to receive(:track).with segment_attributes(*data)
-        track
-      end
     end
   end
 
