@@ -88,8 +88,6 @@ GEM
       public_suffix (~> 2.0, >= 2.0.2)
     airbrussh (1.2.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    analytics-ruby (2.2.2)
-      commander (~> 4.4)
     arel (6.0.4)
     ast (2.3.0)
     autoprefixer-rails (6.7.7.1)
@@ -160,8 +158,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
-    commander (4.4.3)
-      highline (~> 1.7.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     countries (0.9.3)
@@ -240,7 +236,6 @@ GEM
       tilt (>= 1.2)
     hashdiff (0.3.2)
     hashie (3.5.5)
-    highline (1.7.8)
     httparty (0.15.5)
       multi_xml (>= 0.5.2)
     httpi (2.4.2)
@@ -567,7 +562,6 @@ DEPENDENCIES
   active_model_serializers
   activemerchant (~> 1.65.0)
   addressable
-  analytics-ruby
   autoprefixer-rails
   avatar
   aweber!
