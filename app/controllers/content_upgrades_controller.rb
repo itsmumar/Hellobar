@@ -3,7 +3,7 @@ class ContentUpgradesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :verify_capability, only: %i[create update]
+  before_action :verify_capability, only: %i[index new create update]
   before_action :load_content_upgrade, only: %i[show edit update destroy]
 
   def index
@@ -13,6 +13,7 @@ class ContentUpgradesController < ApplicationController
   def new
     @content_upgrade = ContentUpgrade.new
     @styles = @site.content_upgrade_styles
+
     # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
@@ -30,20 +31,29 @@ class ContentUpgradesController < ApplicationController
   end
 
   def create
-    @content_upgrade = ContentUpgrade.create!(content_upgrade_params)
+    @content_upgrade = ContentUpgrade.new(content_upgrade_params)
 
-    flash[:success] = 'Your content upgrade has been saved.'
-    redirect_to site_content_upgrades_path(@site.id)
-  rescue ActiveRecord::RecordInvalid => e
-    flash[:error] = e.record.errors.full_messages
-    redirect_to site_content_upgrades_path(@site.id)
+    if @content_upgrade.save
+      flash[:success] = 'Your content upgrade has been saved.'
+      redirect_to site_content_upgrades_path(@site.id)
+    else
+      flash.now[:error] = @content_upgrade.errors.full_messages
+      @styles = @site.content_upgrade_styles
+
+      render :new
+    end
   end
 
   def update
-    @content_upgrade.update_attributes!(content_upgrade_params)
+    if @content_upgrade.update(content_upgrade_params)
+      flash[:success] = 'Your content upgrade has been saved.'
+      redirect_to site_content_upgrades_path(@site.id)
+    else
+      flash.now[:error] = @content_upgrade.errors.full_messages
+      @styles = @site.content_upgrade_styles
 
-    flash[:success] = 'Your content upgrade has been saved.'
-    redirect_to site_content_upgrades_path(@site.id)
+      render :edit
+    end
   end
 
   def destroy
@@ -115,13 +125,14 @@ class ContentUpgradesController < ApplicationController
 
   def verify_capability
     return if @site && @site.capabilities.content_upgrades?
-    render json: { error: 'forbidden' }, status: :forbidden
+
+    error_response(:forbidden)
   end
 
   def load_content_upgrade
     @content_upgrade = @site.site_elements.find(params[:id])
     return unless @content_upgrade.rule.site_id != @site.id
 
-    render json: { error: 'forbidden' }, status: :forbidden
+    error_response(:forbidden)
   end
 end

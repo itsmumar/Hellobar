@@ -145,4 +145,11 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(_resource_or_scope)
     logout_confirmation_path
   end
+
+  def error_response(error)
+    respond_to do |format|
+      format.html { render html: error, status: error }
+      format.json { render json: { error: error }, status: error }
+    end
+  end
 end
