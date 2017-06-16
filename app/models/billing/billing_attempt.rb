@@ -27,7 +27,7 @@ class BillingAttempt < ActiveRecord::Base
     else
       # Make sure we use the same payment method details as the refunded attempt
       self.payment_method_details = bill.refunded_billing_attempt.payment_method_details
-      success, response = payment_method_details.refund(-bill.amount, bill.refunded_billing_attempt.response)
+      success, response = payment_method_details.refund(-bill.amount, bill.authorization_code)
     end
     self.status = success ? :success : :failed
     self.response = response
