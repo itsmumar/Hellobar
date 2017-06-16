@@ -56,7 +56,7 @@ IntercomRails.config do |config|
   config.user.custom_data = {
     first_name: proc { |user| user.first_name },
     last_name: proc { |user| user.last_name },
-    primary_domain: proc { |user| NormalizeURI[user.sites.first.url]&.domain },
+    primary_domain: proc { |user| NormalizeURI[user.sites.first&.url]&.domain },
     additional_domains: proc { |user| user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', ') },
     contact_lists: proc { |user| user.contact_lists.count },
     total_views: proc { |user| user.sites.map { |site| site.lifetime_totals.values.sum(&:views) }.sum },
