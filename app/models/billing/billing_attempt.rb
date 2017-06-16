@@ -1,19 +1,22 @@
 require 'billing_log'
 
 class BillingAttempt < ActiveRecord::Base
-  class InvalidRefund < RuntimeError; end
+  include BillingAuditTrail
+
   belongs_to :bill
   belongs_to :payment_method_details
+  has_one :payment_method, through: :payment_method_details
+  has_one :user, through: :payment_method
+  has_one :subscription, through: :bill
+  has_one :site, through: :bill
+
   enum status: %i[success failed]
-  include BillingAuditTrail
-  delegate :subscription, to: :bill
-  delegate :subscription_id, to: :bill
-  delegate :payment_method, to: :payment_method_details
-  delegate :payment_method_id, to: :payment_method_details
-  delegate :user, to: :payment_method_details
-  delegate :user_id, to: :payment_method_details
-  delegate :site, to: :bill
-  delegate :site_id, to: :bill
+
+  delegate :id, to: :subscription, prefix: true
+  delegate :id, to: :payment_method, prefix: true
+  delegate :id, to: :user, prefix: true
+  delegate :id, to: :bill, prefix: true
+  delegate :id, to: :site, prefix: true
 
   def readonly?
     new_record? ? false : true
