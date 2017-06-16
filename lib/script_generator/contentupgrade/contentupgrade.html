@@ -177,14 +177,14 @@
     </div>
     <div class="hb-cu-main-content">
       <div class="progress"><img src="https://s3.amazonaws.com/assets.hellobar.com/status_gray_fifty_percent.gif"></div>
-      <div class="caption">Almost there! Please complete this form and click the button below to gain instant access.</div>
-      <div class="headline">Enter your details to download this how to guide to create content that people will bookmark and remember!</div>
+      <div class="caption">{{context.siteElement.caption}}</div>
+      <div class="headline">{{context.siteElement.headline}}</div>
       <div class="form">
 
 
         <div id="hb-fields-form">
-          <input id="f-builtin-name" class="name" placeholder="First Name">
-          <input id="f-builtin-email" class="email" placeholder="Email">
+          <input id="f-builtin-name" class="name" placeholder="{{context.siteElement.name_placeholder}}">
+          <input id="f-builtin-email" class="email" placeholder="{{context.siteElement.email_placeholder}}">
 
           <button class="cta"
                   onclick="hellobar('contentUpgrades').submit({{context.siteElement.id}}); return false;">
@@ -201,7 +201,7 @@
 
     <div class="hb-cu-thank-you" style="display: none;">
       <div class="headline">{{context.siteElement.thank_you_headline}}</div>
-      <div class="caption">{{context.siteElement.thank_you_subheading}}</div>
+      <div class="subheading">{{context.siteElement.thank_you_subheading}}</div>
 
       <a class="cta" href="{{context.siteElement.thank_you_url}}">
         <div class="hb-text-holder {{context.siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}">
