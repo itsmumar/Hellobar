@@ -27,9 +27,6 @@ class ContentUpgradesController < ApplicationController
     @styles = @site.content_upgrade_styles
   end
 
-  def show
-  end
-
   def create
     @content_upgrade = ContentUpgrade.new(content_upgrade_params)
 
