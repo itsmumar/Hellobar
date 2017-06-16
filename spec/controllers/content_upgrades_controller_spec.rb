@@ -59,6 +59,18 @@ describe ContentUpgradesController do
     it 'returns a successful response' do
       expect(response).to be_redirect
     end
+
+    context 'when params are invalid' do
+      let(:content_upgrade_params) { { site_id: site } }
+
+      it 'returns an error response' do
+        expect(response).to render_template(:new)
+      end
+
+      it 'sets flash error message' do
+        expect(flash[:error]).to be_present
+      end
+    end
   end
 
   describe 'PUT :update' do
@@ -79,6 +91,18 @@ describe ContentUpgradesController do
 
     it 'returns a successful response' do
       expect(response).to be_redirect
+    end
+
+    context 'when params are invalid' do
+      let(:content_upgrade_params) { { id: content_upgrade, site_id: site } }
+
+      it 'returns an error response' do
+        expect(response).to render_template(:edit)
+      end
+
+      it 'sets flash error message' do
+        expect(flash[:error]).to be_present
+      end
     end
   end
 end
