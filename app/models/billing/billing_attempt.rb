@@ -23,6 +23,7 @@ class BillingAttempt < ActiveRecord::Base
     success = response = nil
     if bill.amount >= 0
       success, response = payment_method_details.charge(bill.amount)
+      bill.update_column(:authorization_code, response)
     else
       # Make sure we use the same payment method details as the refunded attempt
       self.payment_method_details = bill.refunded_billing_attempt.payment_method_details
