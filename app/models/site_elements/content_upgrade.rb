@@ -1,5 +1,5 @@
 class ContentUpgrade < SiteElement
-  has_attached_file :content_upgrade_pdf
+  has_attached_file :content_upgrade_pdf, s3_headers: { 'Content-Disposition' => 'attachment' }
 
   validates_attachment :content_upgrade_pdf, presence: true, content_type: { content_type: 'application/pdf' }
   validates :offer_headline, presence: true
