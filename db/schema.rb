@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601064322) do
+ActiveRecord::Schema.define(version: 20170616160119) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20170601064322) do
     t.decimal  "discount",                         precision: 10,           default: 0
     t.decimal  "base_amount",                      precision: 10
     t.integer  "refund_id",            limit: 4
+    t.string   "authorization_code",   limit: 255
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
