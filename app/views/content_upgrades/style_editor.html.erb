@@ -1,4 +1,4 @@
-<%= render :partial => 'preview_styles' %>
+<%= render 'preview_styles' %>
 
 <script type="text/javascript">
 
@@ -106,7 +106,7 @@
 
     <div class="buttons">
       <input type="submit" class="save" value="Save">
-      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
+      <%= link_to('List', site_content_upgrades_path(@site.id), class: "list") %>
     </div>
 
   </div>

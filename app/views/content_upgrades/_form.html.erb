@@ -1,4 +1,4 @@
-<%= render :partial => 'preview_styles' %>
+<%= render 'preview_styles' %>
 <% tabs = %w(content thank-you extras) %>
 
 <div class="content-upgrade-form">
@@ -11,12 +11,12 @@
 
   <% tabs.each_with_index do |tab, index| %>
     <div id="<%= tab %>-editor-container" class="editor-container" <% unless index.zero? %> style="display: none;"<% end %>>
-      <%= render :partial => "#{tab.underscore}_editor", locals: { form: form } %>
+      <%= render partial: "#{tab.underscore}_editor", locals: { form: form } %>
     </div>
   <% end %>
 
   <div class="buttons">
     <input type="submit" class="save button" value="Save">
-    <%= link_to('Cancel', site_content_upgrades_path(@site.id), :class => "list button") %>
+    <%= link_to('Cancel', site_content_upgrades_path(@site.id), class: "list button") %>
   </div>
 </div>
