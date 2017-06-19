@@ -357,6 +357,11 @@ ActiveRecord::Schema.define(version: 20170616160119) do
     t.datetime "content_upgrade_pdf_updated_at"
     t.string   "content_upgrade_title",            limit: 255
     t.text     "content_upgrade_url",              limit: 65535
+    t.boolean  "thank_you_enabled",                                 default: false
+    t.string   "thank_you_headline",               limit: 255
+    t.string   "thank_you_subheading",             limit: 255
+    t.string   "thank_you_cta",                    limit: 255
+    t.text     "thank_you_url",                    limit: 65535
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

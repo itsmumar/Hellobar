@@ -39,7 +39,25 @@ FactoryGirl.define do
 
     factory :content_upgrade, class: 'ContentUpgrade' do
       type 'ContentUpgrade'
+      element_subtype 'email'
+      contact_list
+
       content_upgrade_pdf { File.new(Rails.root.join('spec', 'fixtures', 'content_upgrade.pdf')) }
+
+      offer_headline 'offer_headline'
+      caption 'caption'
+      headline 'headline'
+      name_placeholder 'name_placeholder'
+      email_placeholder 'email_placeholder'
+      link_text 'link_text'
+      disclaimer 'disclaimer'
+
+      # thank you content
+      thank_you_enabled true
+      thank_you_headline 'thank_you_headline'
+      thank_you_subheading 'thank_you_subheading'
+      thank_you_cta 'thank_you_cta'
+      thank_you_url 'http://www.hellobar.com/'
     end
 
     trait :custom do
