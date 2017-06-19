@@ -30,15 +30,6 @@ module ServiceProvider::Adapters
       add_contact list_id, params, data
     end
 
-    def batch_subscribe(list_id, subscribers, double_optin: nil) # rubocop:disable Lint/UnusedMethodArgument
-      import = {
-        import_data: import_data(subscribers),
-        lists: [list_id],
-        column_names: ['E-Mail', 'First Name', 'Last Name']
-      }
-      client.post 'activities/addcontacts', import
-    end
-
     private
 
     def find_contact(email)
@@ -73,17 +64,6 @@ module ServiceProvider::Adapters
       end
     rescue Faraday::Conflict # rubocop:disable Lint/HandleExceptions
       # do nothing
-    end
-
-    def import_data(subscribers)
-      subscribers.map do |subscriber|
-        first, last = subscriber.fetch(:name, '').split(' ')
-        {}.tap do |data|
-          data[:first_name] = first if first.present?
-          data[:last_name] = last if last.present?
-          data[:email_addresses] = [subscriber[:email]]
-        end
-      end
     end
 
     def destroy_identity

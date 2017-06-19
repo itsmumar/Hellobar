@@ -1,8 +1,11 @@
 module ServiceProvider::Adapters
-  class VerticalResponseForm < EmbedCode
+  class Hellobar < Base
     configure do |config|
-      config.requires_embed_code = true
       config.hidden = true
+    end
+
+    def subscribe(_list_id, _params)
+      # do nothing
     end
   end
 end

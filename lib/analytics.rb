@@ -10,19 +10,13 @@ class Analytics
 
     def alias(visitor_id, user_id)
       track_internal :visitor, visitor_id, :user_id, value: user_id
-      segment.alias(previous_id: visitor_id, user_id: user_id)
     end
 
     def track(target_type, target_id, event_name, props = {})
       track_internal target_type, target_id, event_name, props
-      track_segment target_type, target_id, event_name, props
     end
 
     private
-
-    def segment
-      @segment ||= Segment::Analytics.new(write_key: Settings.segment_key, stub: !Rails.env.production?)
-    end
 
     def track_internal(target_type, target_id, event_name, props = {})
       props = {} unless props
@@ -42,18 +36,6 @@ class Analytics
       table_name = (target_type.to_s + ' ' + event_name.to_s.underscore).downcase.gsub(/[^a-z0-9]+/, ' ').strip.gsub(/\s/, '_')
 
       write_data table_name => props
-    end
-
-    def track_segment(target_type, target_id, event_name, props)
-      attributes = { event: event_name, properties: props }
-      attributes[:user_id] = target_id if target_type == :user
-      attributes[:anonymous_id] = target_id if target_type == :visitor
-
-      if target_type == :site
-        attributes = attributes.merge(site_id: target_id, anonymous_id: "anonymous site #{ target_id }")
-      end
-
-      segment.track attributes
     end
 
     def write_data(data)

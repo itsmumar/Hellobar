@@ -50,13 +50,14 @@ export default Ember.Component.extend({
     let dropzone = new Dropzone(this.$('.file-upload')[0], {
         url: `/sites/${siteID}/image_uploads`,
         clickable: '#dropzone-preview, #dropzone-preview *',
-        maxFiles: 2,
+        maxFiles: 1,
         maxFilesize: 20,
         addRemoveLinks: false,
         createImageThumbnails: false,
         parallelUploads: 1, // default is 2; we don't need that
-        timeout: 600000, // 10 minutes; lets wait until backend resizes 7MB animated gifs;
-                        // otherwise Dropzone issues new POST request which breaks things
+        uploadMultiple: false,
+        timeout: 300000, // 5 minutes; lets wait until backend resizes 7MB animated gifs;
+                         // otherwise Dropzone issues new POST request which breaks things
         acceptedFiles: 'image/*',
         dictInvalidFileType: 'You can only upload image files.',
         headers: {

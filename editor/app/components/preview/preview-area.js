@@ -32,7 +32,7 @@ export default Ember.Component.extend({
     this.get('bus').subscribe('hellobar.core.preview.render', () => {
       this.renderPreview();
     });
-    this.get('model.id') && Ember.run.next(() => {
+    this.get('model') && Ember.run.next(() => {
       this.renderPreview();
     });
   },

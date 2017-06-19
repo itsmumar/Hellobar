@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
   has_many :site_elements, through: :sites
+  has_many :contact_lists, through: :sites
   has_many :subscriptions, through: :sites
   has_many :authentications, dependent: :destroy
   has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'

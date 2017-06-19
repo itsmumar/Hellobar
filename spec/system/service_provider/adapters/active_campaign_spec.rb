@@ -47,15 +47,4 @@ describe ServiceProvider::Adapters::ActiveCampaign do
       expect(create_request).to have_been_made
     end
   end
-
-  describe '.batch_subscribe' do
-    let(:subscribers) { [{ email: 'example1@email.com' }, { email: 'example2@email.com' }] }
-
-    it 'calls subscribe for each subscriber' do
-      subscribers.each do |subscriber|
-        expect(adapter).to receive(:subscribe).with(list_id, subscriber.merge(double_optin: true))
-      end
-      provider.batch_subscribe subscribers
-    end
-  end
 end
