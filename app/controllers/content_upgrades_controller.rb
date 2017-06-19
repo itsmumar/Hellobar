@@ -3,7 +3,7 @@ class ContentUpgradesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_site
-  before_action :verify_capability, only: %i[index new create update]
+  before_action :verify_capability
   before_action :load_content_upgrade, only: %i[show edit update destroy]
 
   def index
