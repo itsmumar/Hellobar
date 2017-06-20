@@ -43,7 +43,7 @@ div.row
               ul
                 - user.payment_method_details.uniq.each do |details|
                   li
-                    = "#{details.brand} X#{details.card.display_number[-5,5]}"
+                    = "#{details.brand} X#{details.last_digits}"
                     - if details.token
                       = link_to "remove", admin_payment_method_detail_path(details), method: :delete, data: { confirm: "Are you sure?" }
                     - else

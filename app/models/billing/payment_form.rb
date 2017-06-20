@@ -11,7 +11,7 @@ class PaymentForm
 
   validate do
     errors.add(:number, :invalid) if brand.blank? && number.present?
-    errors.add(:expiration, 'is expired') if card.expired?
+    errors.add(:expiry, 'was exceeded') if expiration.present? && card.expired?
     errors.add(:name, 'must contain first and last names') if name.present? && (first_name.blank? || last_name.blank?)
   end
 

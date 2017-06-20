@@ -34,6 +34,8 @@ describe 'Admin Bills requests' do
     end
 
     describe 'PUT #refund' do
+      before { stub_gateway_methods :refund }
+
       it 'refunds a bill' do
         expect {
           put admin_user_bill_refund_path(user_id: user, bill_id: bill, bill_recurring: { amount: 10 })

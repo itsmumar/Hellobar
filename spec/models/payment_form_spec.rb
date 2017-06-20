@@ -24,6 +24,13 @@ describe PaymentForm do
     specify { is_expected.to validate_presence_of :verification_value }
     specify { is_expected.to validate_presence_of :state }
 
+    context 'when expired' do
+      let(:payment_form) { PaymentForm.new(params.update(expiration: '08/10')) }
+      before { payment_form.valid? }
+
+      specify { expect(payment_form.errors[:expiry]).to eql ['was exceeded'] }
+    end
+
     context 'with 2 numbers year' do
       let(:payment_form) { PaymentForm.new(params.update(expiration: '08/99')) }
 
