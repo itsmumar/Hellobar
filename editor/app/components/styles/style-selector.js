@@ -66,7 +66,7 @@ export default Ember.Component.extend({
 
   manageRightPaneOnElementTypeChanged: function () {
     let elementType = this.get('model.type');
-    if (elementType == 'Custom' || this.get('isEditing')) {
+    if (elementType === 'Custom' || this.get('isEditing')) {
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     } else {
       this.get('bus').trigger('hellobar.core.rightPane.show', {

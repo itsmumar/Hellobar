@@ -31,7 +31,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     const editorContainerElement = this.$('.js-editor-container')[0];
-    this._editorInstance = CodeMirror(editorContainerElement, {
+    this._editorInstance = new CodeMirror(editorContainerElement, {
       lineNumbers: true,
       mode: this.editorMode,
       value: this.value || ''

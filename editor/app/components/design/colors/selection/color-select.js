@@ -131,7 +131,7 @@ export default Ember.Component.extend({
       obj.$('.gradient-indicator')[0]
     );
 
-    this.gradient = ColorPicker(
+    this.gradient = new ColorPicker(
       obj.$('.slider')[0],
       obj.$('.gradient')[0],
 

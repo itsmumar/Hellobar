@@ -168,7 +168,9 @@ export default Ember.Component.extend({
     },
 
     openRuleModal(ruleData = {}) {
-      if (this.ruleModal) return;
+      if (this.ruleModal) {
+        return;
+      }
 
       const isNewRule = _.isEmpty(ruleData);
       ruleData.siteID = window.siteID;
