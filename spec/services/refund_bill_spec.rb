@@ -1,6 +1,8 @@
 describe RefundBill do
   let(:amount) { bill.amount }
-  let(:bill) { create :pro_bill }
+  let(:payment_method) { create :payment_method }
+  let(:subscription) { create :subscription, payment_method: payment_method }
+  let(:bill) { create :pro_bill, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
@@ -11,7 +13,7 @@ describe RefundBill do
     expect(service.call).to match_array [instance_of(Bill::Refund), instance_of(BillingAttempt)]
   end
 
-  it 'creates Bill::Refund', :freeze do
+  it 'creates a new Bill::Refund', :freeze do
     expect { service.call }.to change(Bill::Refund, :count).by(1)
 
     expect(latest_refund.subscription).to eql bill.subscription
@@ -26,16 +28,7 @@ describe RefundBill do
     expect(latest_refund.status).to eql :paid
   end
 
-  it 'creates BillingAttempt' do
-    expect { service.call }.to change(BillingAttempt, :count).by(1)
-
-    expect(latest_billing_attempt.bill).to eql latest_refund
-    expect(latest_billing_attempt.payment_method_details).to eql bill.successful_billing_attempt.payment_method_details
-    expect(latest_billing_attempt.status).to eql :success
-    expect(latest_billing_attempt.response).to eql 'authorization'
-  end
-
-  it 'calls refund on payment_methods_details' do
+  it 'calls gateway.refund' do
     expect { service.call }
       .to make_gateway_call(:refund)
       .with(amount * 100, bill.authorization_code)
@@ -79,6 +72,14 @@ describe RefundBill do
 
     it 'raises MissingPaymentMethod' do
       expect { service.call }.to raise_error RefundBill::MissingPaymentMethod, 'Could not find payment method'
+    end
+  end
+
+  context 'when trying to refund more than paid amount' do
+    before { RefundBill.new(bill, amount: 1).call }
+
+    it 'raises RefundBill::InvalidRefund' do
+      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
     end
   end
 end
