@@ -12,11 +12,11 @@ class BillingAttempt < ActiveRecord::Base
 
   enum status: %i[success failed]
 
-  delegate :id, to: :subscription, prefix: true
-  delegate :id, to: :payment_method, prefix: true
-  delegate :id, to: :user, prefix: true
-  delegate :id, to: :bill, prefix: true
-  delegate :id, to: :site, prefix: true
+  delegate :id, to: :subscription, prefix: true, allow_nil: true
+  delegate :id, to: :payment_method, prefix: true, allow_nil: true
+  delegate :id, to: :user, prefix: true, allow_nil: true
+  delegate :id, to: :bill, prefix: true, allow_nil: true
+  delegate :id, to: :site, prefix: true, allow_nil: true
 
   def readonly?
     new_record? ? false : true

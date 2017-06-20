@@ -24,6 +24,7 @@ class Bill < ActiveRecord::Base
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
   has_one :site, through: :subscription, inverse_of: :bills
+  has_one :payment_method, through: :subscription
 
   validates :subscription, presence: true
   delegate :site_id, to: :subscription
@@ -99,7 +100,7 @@ class Bill < ActiveRecord::Base
   end
 
   def due_at(payment_method = nil)
-    if grace_period_allowed && payment_method && payment_method.current_details && payment_method.current_details.grace_period
+    if grace_period_allowed && payment_method&.current_details&.grace_period
       return bill_at + payment_method.current_details.grace_period
     end
     # Otherwise it is due now

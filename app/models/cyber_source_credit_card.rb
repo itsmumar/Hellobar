@@ -6,8 +6,8 @@ class CyberSourceCreditCard < PaymentMethodDetails
   ADDRESS_FIELDS = %w[city state zip address country].freeze
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
-  # These are the required fields to be set
-  REQUIRED_FIELDS = FIELDS - %w[brand token]
+
+  validates :last_digits, presence: true
 
   def name
     "#{ brand&.capitalize || 'Credit Card' } ending in #{ last_digits.presence || '???' }"

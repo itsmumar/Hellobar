@@ -1,91 +1,79 @@
 describe PaymentForm do
-  let(:data) do
-    {
-      name: 'Bill Middle Namerson',
-      expiration: '08/2016',
-      number: '12345',
-      verification_value: '123',
-      city: 'Chicago',
-      state: 'IL',
-      zip: '60647',
-      address: '2423 W. North Ave',
-      country: 'USA'
-    }
+  let(:params) { create :payment_form_params }
+  let(:payment_form) { PaymentForm.new params }
+
+  describe '#attributes' do
+    let(:params) { create :payment_form_params, number: '4242 4242 4242 4242' }
+
+    it 'returns sanitized attributes' do
+      expect(payment_form.attributes[:number]).to eql 'XXXX-XXXX-XXXX-4242'
+    end
   end
 
-  let(:payment_form) { PaymentForm.new(data) }
+  describe 'validation' do
+    subject { payment_form }
+    specify { expect(payment_form).to be_valid }
 
-  it 'returns the first name' do
-    expect(payment_form.first_name).to eq('Bill')
+    specify { is_expected.to validate_presence_of :number }
+    specify { is_expected.to validate_presence_of :expiration }
+    specify { is_expected.to validate_presence_of :name }
+    specify { is_expected.to validate_presence_of :city }
+    specify { is_expected.to validate_presence_of :zip }
+    specify { is_expected.to validate_presence_of :address }
+    specify { is_expected.to validate_presence_of :country }
+    specify { is_expected.to validate_presence_of :verification_value }
+    specify { is_expected.to validate_presence_of :state }
+
+    context 'with 2 numbers year' do
+      let(:payment_form) { PaymentForm.new(params.update(expiration: '08/99')) }
+
+      specify { expect(payment_form).to be_valid }
+    end
+
+    context 'when outside US and state is blank' do
+      subject { PaymentForm.new(params.update(country: 'UK', state: nil)) }
+
+      specify { is_expected.not_to validate_presence_of :state }
+    end
+
+    context 'when number contains spaces' do
+      let(:payment_form) { PaymentForm.new(params.update(number: '4242 4242 4242 4242')) }
+      specify { expect(payment_form).to be_valid }
+
+      context '.number' do
+        specify { expect(payment_form.number).not_to include ' ' }
+      end
+    end
+
+    context 'when could not split the name to first and last' do
+      let(:payment_form) { PaymentForm.new(params.update(name: 'First')) }
+      before { payment_form.valid? }
+      specify { expect(payment_form).to be_invalid }
+      specify { expect(payment_form.errors[:name]).to eql ['must contain first and last names'] }
+    end
+
+    context 'when expired' do
+      let(:payment_form) { PaymentForm.new(params.update(expiration: '1/2000')) }
+      specify { expect(payment_form).to be_invalid }
+    end
   end
 
-  it 'returns nil for the first name when name is not present' do
-    data[:name] = nil
-
-    expect(payment_form.first_name).to be_nil
+  describe '.card' do
+    it 'returns ActiveMerchant::Billing::CreditCard' do
+      expect(payment_form.card).to be_a ActiveMerchant::Billing::CreditCard
+      expect(payment_form.card.validate).to be_empty
+    end
   end
 
-  it 'returns the last name' do
-    expect(payment_form.last_name).to eq('Middle Namerson')
-  end
-
-  it 'returns nil for the last name when name is not present' do
-    data[:name] = nil
-
-    expect(payment_form.last_name).to be_nil
-  end
-
-  it 'returns a blank string for the last name when only the first name is present' do
-    data[:name] = 'Bob'
-
-    expect(payment_form.last_name).to be_blank
-  end
-
-  it 'returns the month' do
-    expect(payment_form.month).to eq(8)
-  end
-
-  it 'returns the raw epxiration when the month cant be parsed' do
-    data[:expiration] = '1.2'
-
-    expect(payment_form.month).to eq('1.2')
-  end
-
-  it 'returns the year' do
-    expect(payment_form.year).to eq(2016)
-  end
-
-  it 'accepts mm/yy format' do
-    data[:expiration] = '08/16'
-    form = PaymentForm.new(data)
-    expect(form.year).to eq(2016)
-  end
-
-  it 'accepts mm/yyyy format' do
-    data[:expiration] = '08/2016'
-    form = PaymentForm.new(data)
-    expect(form.year).to eq(2016)
-  end
-
-  it 'returns the raw expiration when the year cant be parsed' do
-    data[:expiration] = '1.2'
-
-    expect(payment_form.year).to eq('1.2')
-  end
-
-  it 'returns the proper hash' do
-    expect(payment_form.to_hash).to eq(
-      number: '12345',
-      month: 8,
-      year: 2016,
-      first_name: 'Bill',
-      last_name: 'Middle Namerson',
-      verification_value: '123',
-      city: 'Chicago',
-      state: 'IL',
-      zip: '60647',
-      address: '2423 W. North Ave',
-      country: 'USA'
-    )
+  describe '.address_attributes' do
+    it 'returns OpenStruct' do
+      expect(payment_form.address_attributes).to match(
+        country: payment_form.country,
+        city: payment_form.city,
+        state: payment_form.state,
+        address1: payment_form.address,
+        zip: payment_form.zip
+      )
+    end
   end
 end
