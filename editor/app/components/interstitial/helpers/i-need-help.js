@@ -7,7 +7,7 @@ export default Ember.Component.extend({
   activated: false,
 
   csrfToken: function() {
-    return $('meta[name=csrf-token]').attr('content')
+    return $('meta[name=csrf-token]').attr('content');
   }.property(),
 
   siteID: Ember.computed.alias('model.site.id'),

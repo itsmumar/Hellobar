@@ -71,7 +71,7 @@ export default Ember.Service.extend({
 
       // set default contact list if one exists
       const contactLists = this.get('model.site.contact_lists');
-      const selectedId = this.get('model.contact_list_id')
+      const selectedId = this.get('model.contact_list_id');
       if (!selectedId && !_.isEmpty(contactLists)) {
         this.set('model.contact_list_id', contactLists[0].id);
       }
