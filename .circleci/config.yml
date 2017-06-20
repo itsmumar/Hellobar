@@ -98,7 +98,7 @@ jobs:
 
       - run:
           name: Run JSHint
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then cd editor && ./node_modules/jshint/bin/jshint app/; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/; else echo "skip"; fi
 
       - run:
           name: Run unit tests
