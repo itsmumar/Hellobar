@@ -1,6 +1,6 @@
-import Ember from 'ember';
+/* globals Handlebars */
 
-console.log('Helper: option');
+import Ember from 'ember';
 
 export default Ember.Helper.helper(function (method, value, text) {
   let $option = $('<option>');

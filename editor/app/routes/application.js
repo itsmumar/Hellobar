@@ -1,3 +1,5 @@
+/* globals siteID, ContactListModal, formatE164, InternalTracking, EditorErrorsModal */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 

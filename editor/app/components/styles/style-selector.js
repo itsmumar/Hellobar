@@ -1,3 +1,5 @@
+/* globals ConfirmModal */
+
 import Ember from 'ember';
 
 const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Custom', 'Alert'];

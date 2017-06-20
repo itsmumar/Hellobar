@@ -1,3 +1,5 @@
+/* globals Dropzone, siteID */
+
 import Ember from 'ember';
 
 export default Ember.Component.extend({

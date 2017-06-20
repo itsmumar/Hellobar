@@ -1,3 +1,5 @@
+/* globals html_beautify, siteID */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 import defaultBlocks from './inline-editing.blocks';
