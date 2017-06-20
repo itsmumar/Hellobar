@@ -219,7 +219,7 @@ describe Subscription do
   it 'should return its site-specific values' do
     site = create(:site)
     pro = Subscription::Pro.new site: site
-    expected_values = Subscription::Pro.values_for(site).merge(schedule: 'monthly')
+    expected_values = Subscription::Pro.defaults.merge(schedule: 'monthly')
 
     expect(pro.values).to eq(expected_values)
   end

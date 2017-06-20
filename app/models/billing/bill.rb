@@ -41,7 +41,7 @@ class Bill < ActiveRecord::Base
   scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
 
   def create_next_bill!
-    self.class.create!(
+    Recurring.create!(
       subscription: subscription,
       amount: subscription.amount,
       description: "#{ subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",

@@ -296,22 +296,6 @@ describe Bill do
 end
 
 describe Subscription do
-  it 'should return all pending bills' do
-    subscription = create(:subscription, :with_bills)
-    expect(subscription.bills.count).to eq(2)
-    expect(subscription.pending_bills(true).count).to eq(2)
-    subscription.bills.first.voided!
-    expect(subscription.pending_bills(true).count).to eq(1)
-  end
-
-  it 'should return all paid bills' do
-    subscription = create(:subscription, :with_bills)
-    expect(subscription.bills.count).to eq(2)
-    expect(subscription.paid_bills(true).count).to eq(0)
-    subscription.bills.first.paid!
-    expect(subscription.paid_bills(true).length).to eq(1)
-  end
-
   it 'should return all bills active for time period' do
     now = Time.current
     subscription = create(:subscription, :with_bills)
