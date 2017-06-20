@@ -42,8 +42,8 @@ class SimpleModelAdapter {
 
   purgeHtmlMarkup(htmlFragment) {
     htmlFragment = htmlFragment || '';
-    htmlFragment = htmlFragment.replace(/\<\/p\>/g, '</p> ');
-    htmlFragment = htmlFragment.replace(/\<\/li\>/g, '</li> ');
+    htmlFragment = htmlFragment.replace(/<\/p>/g, '</p> ');
+    htmlFragment = htmlFragment.replace(/<\/li>/g, '</li> ');
     const text = $(`<div>${htmlFragment}</div>`).text();
     if (text) {
       return text.replace(/\s+/g, ' ');
