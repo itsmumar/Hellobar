@@ -26,7 +26,7 @@ describe CalculateBill do
         expect(bill.grace_period_allowed).to be_falsey
         expect(bill.bill_at).to eql Time.current
         expect(bill.start_date).to eql 1.hour.ago
-        expect(bill.end_date).to eql bill.renewal_date
+        expect(bill.end_date).to eql bill.start_date + subscription.period
       end
     end
 
@@ -42,7 +42,7 @@ describe CalculateBill do
         expect(bill.grace_period_allowed).to be_truthy
         expect(bill.bill_at).to eql active_bill.end_date
         expect(bill.start_date).to eql(bill.bill_at - 1.hour)
-        expect(bill.end_date).to eql bill.renewal_date
+        expect(bill.end_date).to eql bill.start_date + subscription.period
       end
     end
   end
@@ -58,7 +58,7 @@ describe CalculateBill do
       expect(bill.grace_period_allowed).to be_falsey
       expect(bill.bill_at).to eql Time.current
       expect(bill.start_date).to eql 1.hour.ago
-      expect(bill.end_date).to eql bill.renewal_date
+      expect(bill.end_date).to eql bill.start_date + subscription.period
     end
   end
 

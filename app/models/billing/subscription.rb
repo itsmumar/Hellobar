@@ -45,6 +45,10 @@ class Subscription < ActiveRecord::Base
     amount != 0 && payment_method.nil? && active_bills.any? { |b| b.amount == 0 && b.paid? }
   end
 
+  def period
+    monthly? ? 1.month : 1.year
+  end
+
   def values
     self.class.values_for(site).merge(schedule: schedule)
   end

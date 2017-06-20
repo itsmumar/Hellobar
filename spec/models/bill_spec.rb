@@ -113,13 +113,6 @@ describe Bill do
       expect(bill2.end_date).to eq(aug)
     end
 
-    it 'should return the correct date for next_month' do
-      expect(Bill::Recurring.next_month(Time.zone.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-01-30')
-      expect(Bill::Recurring.next_month(Time.zone.parse('2015-01-30')).strftime('%Y-%m-%d')).to eq('2015-02-28')
-      expect(Bill::Recurring.next_year(Time.zone.parse('2014-12-30')).strftime('%Y-%m-%d')).to eq('2015-12-30')
-      expect(Bill::Recurring.next_year(Time.zone.parse('2016-02-29')).strftime('%Y-%m-%d')).to eq('2017-02-28')
-    end
-
     it 'should not be affected by a refund' do
       subscription = create(:subscription, :pro)
       Bill.destroy_all

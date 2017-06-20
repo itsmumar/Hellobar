@@ -84,9 +84,9 @@ class CalculateBill
       bill.bill_at = Time.current
       bill.start_date = 1.hour.ago
 
-      block&.call bill
+      block.call bill if block_given?
 
-      bill.end_date = bill.renewal_date
+      bill.end_date = bill.start_date + subscription.period
       use_trial_period bill
     end
   end

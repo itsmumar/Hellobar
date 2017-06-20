@@ -40,6 +40,18 @@ class Bill < ActiveRecord::Base
   scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
 
+  def create_next_bill!
+    self.class.create!(
+      subscription: subscription,
+      amount: subscription.amount,
+      description: "#{ subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
+      grace_period_allowed: true,
+      bill_at: end_date,
+      start_date: end_date,
+      end_date: end_date + subscription.period
+    )
+  end
+
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
