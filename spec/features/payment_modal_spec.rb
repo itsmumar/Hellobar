@@ -44,8 +44,10 @@ feature 'Payment modal interaction', :js do
       pro_plan = page.find('.package-block.pro')
       pro_plan.find('.button').click
 
+      expect(page).to have_content 'Pro SELECT BILLING'
+      expect(page.find('#anually-billing', visible: false)).to be_checked
+
       fill_payment_form
-      page.find('.submit').click
 
       expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE PRO PLAN!"
       expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
@@ -84,6 +86,7 @@ feature 'Payment modal interaction', :js do
 
     def fill_payment_form
       form = create :payment_form
+      select 'New card...', from: 'linked_payment_id'
       fill_in 'payment_method_details[name]', with: form.name
       fill_in 'payment_method_details[number]', with: form.number
       fill_in 'payment_method_details[expiration]', with: form.expiration
@@ -93,6 +96,7 @@ feature 'Payment modal interaction', :js do
       fill_in 'payment_method_details[state]', with: form.state
       fill_in 'payment_method_details[zip]', with: form.zip
       select 'United States of America', match: :first, from: 'payment_method_details[country]'
+      page.find('.submit').click
     end
   end
 end
