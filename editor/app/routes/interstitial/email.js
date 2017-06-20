@@ -15,8 +15,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
               Ember.set(model, 'site.contact_lists', [data]);
               Ember.set(model, 'contact_list_id', data.id);
             },
-            error: response => {
-            }
+            error: (/* response */) => {}
           }
         );
       }

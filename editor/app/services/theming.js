@@ -96,17 +96,17 @@ export default Ember.Service.extend({
     return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('defaultGenericTheme');
   }.property('availableThemes', 'model.theme_id'),
 
+  /* jshint ignore:start */
   defaultImage: function () {
     const id = this.get('currentTheme.image_upload_id');
     const imageProps = this.get('currentTheme.image') || {};
 
-    /* jshint ignore:start */
     return {
       id,
       ...imageProps
     };
-    /* jshint ignore:end */
   }.property('currentTheme'),
+  /* jshint ignore:end */
 
   resetUseDefaultImage: function () {
     const { id } = this.get('defaultImage');
@@ -134,7 +134,7 @@ export default Ember.Service.extend({
     }
   }.observes('model.use_default_image', 'defaultImage'),
 
-  setImage: function (imageProps) {
+  setImage: function (imageProps) { // jshint ignore:line
     /* jshint ignore:start */
     this.get('modelLogic').setImageProps({
       imagePlacement: this.getImagePlacement(),

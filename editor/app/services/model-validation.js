@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 // GLOBALS: isValidNumber function
 const isValidNumber = window.isValidNumber;
@@ -35,4 +34,3 @@ export default Ember.Service.extend({
 
   }
 });
-

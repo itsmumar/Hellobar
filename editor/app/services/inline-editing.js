@@ -327,8 +327,8 @@ export default Ember.Service.extend({
         const $iframeBody = $($iframe[0].contentDocument.body);
         if ($iframeBody.length > 0) {
           return $($iframe[0].contentDocument).ready(() => {
-              const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
               // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
+              // const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
               //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
               this.initializeInputEditing($iframe, $iframeBody);
@@ -415,7 +415,7 @@ export default Ember.Service.extend({
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]
       }, froalaOptions));
-      $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
+      $textFroala.on('froalaEditor.contentChanged', (e /*, editor */) => {
         const $target = $(e.currentTarget);
         const content = $target.froalaEditor('html.get');
         const blockId = $target.attr('data-hb-editable-block');

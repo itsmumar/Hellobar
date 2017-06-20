@@ -51,7 +51,7 @@ export default Ember.Service.extend({
   },
 
   _trackFieldChanges() {
-    this.get('bus').subscribe('hellobar.core.fields.changed', (params) => {
+    this.get('bus').subscribe('hellobar.core.fields.changed', (/* params */) => {
       this.notifyPropertyChange('model.settings.fields_to_collect');
     });
   },

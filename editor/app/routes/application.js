@@ -75,7 +75,7 @@ export default Ember.Route.extend({
           ), 100);
           modal.$modal.remove();
         },
-        close: modal => {
+        close: (/* modal */) => {
           this.controller.set('model.contact_list_id', null);
         }
       };

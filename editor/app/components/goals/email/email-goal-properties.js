@@ -94,7 +94,7 @@ export default Ember.Component.extend({
             modal.$modal.remove();
           },
 
-          close: modal => this.set('model.contact_list_id', null)
+          close: (/* modal */) => this.set('model.contact_list_id', null)
         }).open();
       }
     }

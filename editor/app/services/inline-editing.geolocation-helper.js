@@ -32,7 +32,7 @@ function showDefaultGeolocationEditor($target) {
   $editor.on('click', (evt) => {
     evt.stopPropagation();
   });
-  $editor.on('blur', 'input', (evt) => {
+  $editor.on('blur', 'input', (/* evt */) => {
     syncData();
   });
 
@@ -74,4 +74,3 @@ export default {
     $froalas.off('mouseup', '[data-hb-geolocation]');
   }
 };
-

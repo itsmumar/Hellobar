@@ -101,7 +101,7 @@ export default Ember.Component.extend({
       }
     );
 
-    dropzone.on('error', file => {
+    dropzone.on('error', (/* file */) => {
         return this.set('existingFileName', null);
       }
     );
