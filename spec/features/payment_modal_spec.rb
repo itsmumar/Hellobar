@@ -62,16 +62,8 @@ feature 'Payment modal interaction', :js do
       click_on 'Create New'
 
       find('.goal-block.contacts').click_on('Select This Goal')
-
-      expect(page).to have_content 'GROW YOUR MAILING LIST'
-
       click_button 'Continue'
-
       find('.step-style').click
-
-      find('a', text: 'CHANGE TYPE').click
-      find('h6', text: 'Bar').click
-
       find('.toggle-showing-branding .toggle-off').click
 
       expect(page).to have_content "Upgrade #{ site.normalized_url } to remove branding"
