@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :bill do
     amount 10
     subscription
+    type 'Bill::Recurring'
     bill_at { Time.current }
     start_date { Time.current }
     end_date { 1.month.from_now }

@@ -33,7 +33,7 @@ class CalculateBill
   end
 
   def active_paid_bills
-    @active_paid_bills ||= bills.paid.order('id').select { |bill| bill.active_during(Time.current) }
+    @active_paid_bills ||= bills.paid.without_refunds.order('id').select { |bill| bill.active_during(Time.current) }
   end
 
   def last_subscription
