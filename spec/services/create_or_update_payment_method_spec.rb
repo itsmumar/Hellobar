@@ -39,7 +39,7 @@ describe CreateOrUpdatePaymentMethod do
       end
 
       context 'and blank payment_method_details' do
-        let(:params) { { } }
+        let(:params) { {} }
 
         it 'does not create new CyberSourceCreditCard' do
           expect { service.call }

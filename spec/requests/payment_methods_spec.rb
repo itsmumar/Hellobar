@@ -16,7 +16,6 @@ describe 'PaymentMethods requests' do
   end
 
   context 'when authenticated' do
-
     before do
       login_as user, scope: :user, run_callbacks: false
     end
