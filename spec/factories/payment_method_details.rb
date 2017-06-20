@@ -15,16 +15,12 @@ FactoryGirl.define do
 
     factory :cyber_source_credit_card, class: 'CyberSourceCreditCard' do
       transient do
-        token nil
+        token 'token'
         user nil
       end
       payment_method { user ? create(:payment_method, user: user) : create(:payment_method) }
 
       data { create :payment_data, token: token }
-
-      trait :saved do
-        token 'cc_token'
-      end
     end
   end
 

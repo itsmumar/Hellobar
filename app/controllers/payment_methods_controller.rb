@@ -3,6 +3,8 @@ class PaymentMethodsController < ApplicationController
 
   before_action :authenticate_user!
 
+  rescue_from ActiveRecord::RecordInvalid, with: :render_active_record_error
+
   # returns all of the payment methods for the current user
   def index
     load_site if params[:site_id] # not required for this action
@@ -32,23 +34,13 @@ class PaymentMethodsController < ApplicationController
       return
     end
 
+    payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params).call
+
     old_subscription = @site.current_subscription
-    payment_method = PaymentMethod.new user: current_user
-    payment_method_details = CyberSourceCreditCard.new \
-      payment_method: payment_method,
-      data: PaymentForm.new(params[:payment_method_details]).to_hash
+    changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
 
-    if payment_method_details.save && payment_method.save
-      payment_method.reload # reload so #current_details can be loaded properly
-      changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
-
-      respond_to do |format|
-        format.json { render json: changed_subscription }
-      end
-    else # invalid payment info
-      respond_to do |format|
-        format.json { render json: { errors: payment_method_details.errors.full_messages }, status: :unprocessable_entity }
-      end
+    respond_to do |format|
+      format.json { render json: changed_subscription }
     end
   end
 
@@ -58,27 +50,20 @@ class PaymentMethodsController < ApplicationController
 
     old_subscription = @site.current_subscription
     payment_method = current_user.payment_methods.find params[:id]
-    process_subscription = true
+    payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params, payment_method: payment_method).call
 
-    # they are updating their current payment details
-    if params[:payment_method_details]
-      payment_method_details = CyberSourceCreditCard.new \
-        payment_method: payment_method,
-        data: PaymentForm.new(params[:payment_method_details]).to_hash
-
-      process_subscription = payment_method_details.save
+    respond_to do |format|
+      result = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
+      status = result.delete(:status) || :ok
+      format.json { render json: result, status: status }
     end
+  end
 
-    if process_subscription
-      respond_to do |format|
-        result = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
-        status = result.delete(:status) || :ok
-        format.json { render json: result, status: status }
-      end
-    else # invalid payment info
-      respond_to do |format|
-        format.json { render json: { errors: payment_method_details.errors.full_messages }, status: :unprocessable_entity }
-      end
+  private
+
+  def render_active_record_error(e)
+    respond_to do |format|
+      format.json { render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity }
     end
   end
 end

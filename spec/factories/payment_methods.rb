@@ -3,7 +3,7 @@ FactoryGirl.define do
     user
 
     after(:create) do |payment_method|
-      create(:cyber_source_credit_card, payment_method: payment_method, token: 'token')
+      create(:cyber_source_credit_card, payment_method: payment_method)
     end
 
     trait :success do

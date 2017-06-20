@@ -6,7 +6,7 @@ describe CyberSourceCreditCard do
   let(:last_billing_log) { BillingLog.last }
 
   describe '#delete_token' do
-    let!(:credit_card) { create :cyber_source_credit_card, token: 'token' }
+    let!(:credit_card) { create :cyber_source_credit_card }
 
     it 'deletes token when it is present' do
       expect { credit_card.delete_token }.to change(credit_card, :token).to(nil)
@@ -58,13 +58,13 @@ describe CyberSourceCreditCard do
   end
 
   describe '#charge', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card, :saved }
+    let(:credit_card) { create :cyber_source_credit_card }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
     it 'calls gateway.purchase' do
       expect { credit_card.charge(100) }
-        .to make_gateway_call(:purchase).with(10_000, ';cc_token;', order_id: order_id)
+        .to make_gateway_call(:purchase).with(10_000, credit_card.formatted_token, order_id: order_id)
     end
 
     context 'when invalid amount' do
@@ -86,7 +86,7 @@ describe CyberSourceCreditCard do
   end
 
   describe '#refund', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card, :saved }
+    let(:credit_card) { create :cyber_source_credit_card }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
 
     it 'calls gateway.refund' do

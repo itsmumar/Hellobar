@@ -7,7 +7,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
   # Note: any fields not included here will be stripped out when setting
   FIELDS = CC_FIELDS + ADDRESS_FIELDS + ['token']
 
-  validates :last_digits, presence: true
+  validates :token, :last_digits, presence: true
+
+  store :data, accessors: %i[number token]
 
   def name
     "#{ brand&.capitalize || 'Credit Card' } ending in #{ last_digits.presence || '???' }"
@@ -18,7 +20,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def last_digits
-    ActiveMerchant::Billing::CreditCard.last_digits data['number'].gsub(/[^\d]/, '')
+    ActiveMerchant::Billing::CreditCard.last_digits number.gsub(/[^\d]/, '') if number.present?
   end
 
   def brand
@@ -85,21 +87,17 @@ class CyberSourceCreditCard < PaymentMethodDetails
     update_columns data: data.merge('token' => nil)
   end
 
-  def token
-    data['token']
-  end
-
   def order_id
     # The order_id is fairly irrelevant
     "#{ payment_method&.id || 'NA' }-#{ Time.current.to_i }"
   end
 
-  protected
-
   # ActiveMerchant requires the token in this form
   def formatted_token
     format_token(token)
   end
+
+  protected
 
   def format_token(token)
     ";#{ token };"

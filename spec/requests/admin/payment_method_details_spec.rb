@@ -14,7 +14,7 @@ describe 'PaymentMethodDetails requests' do
 
   context 'when authenticated' do
     let(:admin) { create :admin }
-    let(:payment_method) { create :payment_method, :cyber_source_credit_card, token: 'cc_token' }
+    let(:payment_method) { create :payment_method, :cyber_source_credit_card }
     let(:payment_method_details) { payment_method.details.first }
 
     before do
