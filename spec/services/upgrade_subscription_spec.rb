@@ -25,6 +25,14 @@ describe UpgradeSubscription, :freeze do
       expect(service.call).to be_a(Bill).and be_paid
     end
 
+    context 'with monthly schedule' do
+      let(:params) { { billing: { plan: 'pro', schedule: 'monthly' } } }
+
+      it 'creates a bill for next period' do
+        expect { service.call }.to change(site.bills.where(bill_at: 1.month.from_now - 1.hour), :count).to(1)
+      end
+    end
+
     context 'upgrade to Pro' do
       it 'creates Subscription::Pro' do
         expect { service.call }
@@ -49,11 +57,13 @@ describe UpgradeSubscription, :freeze do
       end
     end
 
-    context 'with monthly schedule' do
-      let(:params) { { billing: { plan: 'pro', schedule: 'monthly' } } }
-
-      it 'creates a bill for next period' do
-        expect { service.call }.to change(site.bills.where(bill_at: 1.month.from_now - 1.hour), :count).to(1)
+    context 'when error is raised during transaction' do
+      it 'does not create neither a subscription nor a bill' do
+        expect(PayBill).to receive_service_call.and_raise(StandardError)
+        expect { service.call }
+          .to raise_error(StandardError)
+          .and change(Subscription, :count).by(0)
+          .and change(Bill, :count).by(0)
       end
     end
   end

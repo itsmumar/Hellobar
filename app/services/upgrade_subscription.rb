@@ -6,9 +6,11 @@ class UpgradeSubscription
   end
 
   def call
-    subscription = create_subscription
-    bill = create_bill(subscription)
-    pay_bill(bill)
+    Subscription.transaction do
+      subscription = create_subscription
+      bill = create_bill(subscription)
+      pay_bill(bill)
+    end
   end
 
   private
