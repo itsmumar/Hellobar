@@ -8,7 +8,7 @@ describe CreateOrUpdatePaymentMethod do
 
   before { stub_gateway_methods :store, :update }
 
-  describe '.call' do
+  describe '#call' do
     it 'creates CyberSourceCreditCard' do
       expect { service.call }.to change(user.payment_method_details, :count).to 1
     end
@@ -104,44 +104,33 @@ describe CreateOrUpdatePaymentMethod do
     end
 
     context 'when error is raised' do
-      it 'raises error and creates BillingLog' do
+      it 'raises error' do
         expect { service.call }
           .to make_gateway_call(:store).and_raise_error('an error')
           .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: an error')
-
-        expect(BillingLog.last.message).to match(/Error tokenizing with/)
       end
     end
 
     context 'with unsuccessful response' do
-      it 'raises error and creates BillingLog' do
+      it 'raises error' do
         expect { service.call }
           .to make_gateway_call(:store).and_fail.with_response(message: 'error', params: {})
           .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: error')
-
-        expect(BillingLog.first.message).to match(/Create new token with/)
-        expect(BillingLog.second.message).to match(/Error tokenizing with/)
       end
 
       context 'when invalid cardType' do
-        it 'raises error and creates BillingLog' do
+        it 'raises error' do
           expect { service.call }
             .to make_gateway_call(:store).and_fail.with_response(params: { 'invalidField' => 'c:cardType' })
             .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Invalid credit card')
-
-          expect(BillingLog.first.message).to match(/Create new token with/)
-          expect(BillingLog.second.message).to match(/Error tokenizing with/)
         end
       end
 
       context 'when invalid field' do
-        it 'raises error and creates BillingLog' do
+        it 'raises error' do
           expect { service.call }
             .to make_gateway_call(:store).and_fail.with_response(params: { 'invalidField' => 'c:number' })
             .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Invalid number')
-
-          expect(BillingLog.first.message).to match(/Create new token with/)
-          expect(BillingLog.second.message).to match(/Error tokenizing with/)
         end
       end
     end
