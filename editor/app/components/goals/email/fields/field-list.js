@@ -39,7 +39,9 @@ export default Ember.Component.extend({
   },
 
   willDestroyElement() {
-    this._fieldChangeHandler && this.get('bus').unsubscribe('hellobar.core.fields.changed', this._fieldChangeHandler);
+    if (this._fieldChangeHandler) {
+      this.get('bus').unsubscribe('hellobar.core.fields.changed', this._fieldChangeHandler);
+    }
   },
 
   newFieldToCollect: null,
@@ -106,7 +108,9 @@ export default Ember.Component.extend({
         });
         Ember.run.next(() => {
           const $newField = this.$('.js-new-field');
-          ($newField && $newField.length > 0) && $newField[0].focus();
+          if ($newField && $newField.length > 0) {
+            $newField[0].focus();
+          }
         });
       }
     },

@@ -67,7 +67,9 @@ export default Ember.Component.extend({
   },
 
   rgbObserver: function () {
-    this.throttledSetRGB && this.throttledSetRGB();
+    if (this.throttledSetRGB) {
+      this.throttledSetRGB();
+    }
   }.observes('color'),
 
   setRGB() {
@@ -100,7 +102,9 @@ export default Ember.Component.extend({
   },
 
   hexObserver: function () {
-    this.debouncedSetHex && this.debouncedSetHex();
+    if (this.debouncedSetHex) {
+      this.debouncedSetHex();
+    }
   }.observes('rVal', 'gVal', 'bVal', 'hexVal'),
 
   setHex() {
@@ -161,7 +165,9 @@ export default Ember.Component.extend({
   },
 
   recentObserver: function () {
-    this.debouncedUpdateRecent && this.debouncedUpdateRecent();
+    if (this.debouncedUpdateRecent) {
+      this.debouncedUpdateRecent();
+    }
   }.observes('color'),
 
   //-----------  Screenshot Eye-Dropper  -----------#

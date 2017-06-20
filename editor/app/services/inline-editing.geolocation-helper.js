@@ -41,7 +41,9 @@ function showDefaultGeolocationEditor($target) {
     $editor.off('click');
     $editor.off('blur', 'input');
     $(window).off('click', windowClickHandler);
-    (window !== iframeWindow) && $(iframeWindow).off('click', windowClickHandler);
+    if (window !== iframeWindow) {
+      $(iframeWindow).off('click', windowClickHandler);
+    }
     $editor.remove();
   }
 
@@ -50,7 +52,9 @@ function showDefaultGeolocationEditor($target) {
   }
 
   $(window).on('click', windowClickHandler);
-  (window !== iframeWindow) && $(iframeWindow).on('click', windowClickHandler);
+  if (window !== iframeWindow) {
+    $(iframeWindow).on('click', windowClickHandler);
+  }
 
   editorClosers.push(close);
 }
