@@ -97,6 +97,10 @@ jobs:
           command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
+          name: Run JSHint
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then cd editor && ./node_modules/jshint/bin/jshint app/; else echo "skip"; fi
+
+      - run:
           name: Run unit tests
           environment:
             CODECOV_FLAG: unit
