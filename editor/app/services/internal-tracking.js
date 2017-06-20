@@ -1,3 +1,5 @@
+/* globals InternalTracking */
+
 import Ember from 'ember';
 
 /**
@@ -14,8 +16,9 @@ export default Ember.Service.extend({
 
   track(eventName, props) {
     const trackingIsEnabled = () => this.get('applicationSettings.settings.track_editor_flow');
-    trackingIsEnabled() && this.tracking.track_current_person(eventName, props);
+    if (trackingIsEnabled()) {
+      this.tracking.track_current_person(eventName, props);
+    }
   }
 
 });
-

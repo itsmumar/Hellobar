@@ -1,8 +1,9 @@
 {
   "predef": [
-    "document",
-    "window",
-    "-Promise"
+    "$",
+    "-Promise",
+    "hellobar",
+    "HB_DATA"
   ],
   "browser": true,
   "boss": true,

@@ -1,3 +1,5 @@
+/* globals UpgradeAccountModal */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
@@ -66,7 +68,7 @@ export default Ember.Component.extend({
           'redirect': 'redirect to a custom url',
           'custom_message': 'customize your thank you text'
         };
-        return map[selection.key] || ''
+        return map[selection.key] || '';
       }
       if (selection.isPro) {
         new UpgradeAccountModal({

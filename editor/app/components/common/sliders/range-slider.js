@@ -1,3 +1,5 @@
+/* globals noUiSlider */
+
 import Ember from 'ember';
 
 export default Ember.Component.extend({
@@ -34,7 +36,7 @@ export default Ember.Component.extend({
     this.set('slider', slider);
     this.sliderEvents.forEach(event => {
         if (!Ember.isEmpty(this.get(event))) {
-          return slider.on(event, (values, handle) => {
+          return slider.on(event, (/* values, handle*/) => {
               let value = this.get('slider').get();
               value = value ? parseInt(value).toString() : '0';
               this.updateHandleValue(value);

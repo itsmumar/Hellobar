@@ -1,3 +1,5 @@
+/* globals imagesLoaded */
+
 import Ember from 'ember';
 
 // GLOBALS: one object (https://github.com/One-com/one-color), ColorThief

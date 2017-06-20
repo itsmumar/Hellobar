@@ -29,7 +29,7 @@ export default Ember.Component.extend({
         });
       }
     );
-    this.get('bus').subscribe('hellobar.core.rightPane.hide', params => {
+    this.get('bus').subscribe('hellobar.core.rightPane.hide', (/* params */) => {
         return this.setProperties({
           componentName: null,
           componentOptions: null

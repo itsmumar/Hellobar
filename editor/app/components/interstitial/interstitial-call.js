@@ -1,3 +1,5 @@
+/* globals isValidNumber */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
@@ -18,7 +20,7 @@ export default Ember.Component.extend({
   countries: Ember.inject.service(),
 
   selectedCountry: function() {
-    return _.find(this.get('countries.all'), (country) => country.code === this.get('model.phone_country_code'))
+    return _.find(this.get('countries.all'), (country) => country.code === this.get('model.phone_country_code'));
   }.property('countries.all', 'model.phone_country_code'),
 
   actions: {

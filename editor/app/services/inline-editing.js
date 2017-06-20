@@ -1,3 +1,5 @@
+/* globals html_beautify, siteID */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 import defaultBlocks from './inline-editing.blocks';
@@ -40,8 +42,8 @@ class SimpleModelAdapter {
 
   purgeHtmlMarkup(htmlFragment) {
     htmlFragment = htmlFragment || '';
-    htmlFragment = htmlFragment.replace(/\<\/p\>/g, '</p> ');
-    htmlFragment = htmlFragment.replace(/\<\/li\>/g, '</li> ');
+    htmlFragment = htmlFragment.replace(/<\/p>/g, '</p> ');
+    htmlFragment = htmlFragment.replace(/<\/li>/g, '</li> ');
     const text = $(`<div>${htmlFragment}</div>`).text();
     if (text) {
       return text.replace(/\s+/g, ' ');
@@ -173,7 +175,9 @@ class CustomHtmlModelAdapter {
 class InlineImageManagementPane {
   constructor($iframe, $iframeBody, hasImage) {
     this.$pane = $('<div></div>').addClass('inline-image-management-pane');
-    hasImage && (this.$pane.addClass('image-loaded'));
+    if (hasImage) {
+      (this.$pane.addClass('image-loaded'));
+    }
     $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(this.$pane);
     $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(this.$pane);
     $('<div class="image-holder hb-editable-block hb-editable-block-image hb-editable-block-image-without-placement"><img class="image" src=""></div>').appendTo(this.$pane);
@@ -318,15 +322,17 @@ export default Ember.Service.extend({
 
   initializeInlineEditing(elementType) {
     this.cleanup();
-    this.simpleModelAdapter && this.simpleModelAdapter.trackElementTypeChange(elementType);
+    if (this.simpleModelAdapter) {
+      this.simpleModelAdapter.trackElementTypeChange(elementType);
+    }
     return setTimeout(() => {
       const $iframe = $('#hellobar-preview-container > iframe');
       if ($iframe.length > 0) {
         const $iframeBody = $($iframe[0].contentDocument.body);
         if ($iframeBody.length > 0) {
           return $($iframe[0].contentDocument).ready(() => {
-              const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
               // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
+              // const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
               //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
               this.initializeInputEditing($iframe, $iframeBody);
@@ -413,7 +419,7 @@ export default Ember.Service.extend({
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]
       }, froalaOptions));
-      $textFroala.on('froalaEditor.contentChanged', (e, editor) => {
+      $textFroala.on('froalaEditor.contentChanged', (e /*, editor */) => {
         const $target = $(e.currentTarget);
         const content = $target.froalaEditor('html.get');
         const blockId = $target.attr('data-hb-editable-block');
@@ -456,7 +462,9 @@ export default Ember.Service.extend({
       }, imageFroalaOptions));
       $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) => {
         const responseObject = JSON.parse(response);
-        this.simpleModelAdapter && this.simpleModelAdapter.handleImageReplaced(responseObject);
+        if (this.simpleModelAdapter) {
+          this.simpleModelAdapter.handleImageReplaced(responseObject);
+        }
         return false;
       });
       return $imageFroala;
@@ -506,7 +514,9 @@ export default Ember.Service.extend({
 
 
   cleanup() {
-    this.inlineImageManagementPane && this.inlineImageManagementPane.destroy();
+    if (this.inlineImageManagementPane) {
+      this.inlineImageManagementPane.destroy();
+    }
     this.cleanupFroala();
     this.cleanupInputs();
   },
@@ -514,11 +524,15 @@ export default Ember.Service.extend({
 
   handleContentChange(blockId, content) {
     if (blockId === 'custom_html') {
-      this.customHtmlModelAdapter && this.customHtmlModelAdapter.handleContentChange(blockId, content);
+      if (this.customHtmlModelAdapter) {
+        this.customHtmlModelAdapter.handleContentChange(blockId, content);
+      }
     } else if (blockId && _.startsWith(blockId, 'blocks.')) {
-      this.blockBasedModelAdapter && this.blockBasedModelAdapter.handleContentChange(blockId, content);
-    } else {
-      this.simpleModelAdapter && this.simpleModelAdapter.handleContentChange(blockId, content);
+      if (this.blockBasedModelAdapter) {
+        this.blockBasedModelAdapter.handleContentChange(blockId, content);
+      }
+    } else if (this.simpleModelAdapter) {
+      this.simpleModelAdapter.handleContentChange(blockId, content);
     }
   },
 
@@ -532,7 +546,9 @@ export default Ember.Service.extend({
       if (!foundModelBlock) {
         model.blocks.push(clonedDefaultBlock);
       } else {
-        foundModelBlock.isDefault && _.extend(foundModelBlock, clonedDefaultBlock);
+        if (foundModelBlock.isDefault) {
+          _.extend(foundModelBlock, clonedDefaultBlock);
+        }
       }
     });
   }

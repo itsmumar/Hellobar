@@ -19,8 +19,7 @@ export default Ember.Service.extend({
   trigger(eventName, params) {
     const callbacks = this._events[eventName];
     _.each(callbacks, callback => {
-      setTimeout(() => callback(params), 0)
+      setTimeout(() => callback(params), 0);
     });
   }
 });
-

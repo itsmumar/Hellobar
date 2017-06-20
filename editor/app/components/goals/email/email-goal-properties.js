@@ -1,3 +1,5 @@
+/* globals ContactListModal */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
@@ -58,7 +60,7 @@ export default Ember.Component.extend({
                 lists.removeObject(list);
 
                 if (lists.length > 0) {
-                  this.set('model.contact_list_id', lists[0].id)
+                  this.set('model.contact_list_id', lists[0].id);
                 }
 
                 break;
@@ -92,7 +94,7 @@ export default Ember.Component.extend({
             modal.$modal.remove();
           },
 
-          close: modal => this.set('model.contact_list_id', null)
+          close: (/* modal */) => this.set('model.contact_list_id', null)
         }).open();
       }
     }
