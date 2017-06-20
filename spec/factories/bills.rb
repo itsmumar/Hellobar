@@ -6,13 +6,17 @@ FactoryGirl.define do
     start_date { Time.current }
     end_date { 1.month.from_now }
     sequence(:authorization_code) { |n| "authorization-#{ n }" }
+    grace_period_allowed true
 
     factory :pro_bill do
       amount Subscription::Pro.defaults[:monthly_amount]
       subscription { create :subscription, :pro }
 
       after :create do |bill|
-        create :billing_attempt, :success, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+        create :billing_attempt, :success,
+          bill: bill, response: 'authorization',
+          payment_method_details: bill.subscription.payment_method.details.first
+
         bill.reload
       end
     end
@@ -38,7 +42,14 @@ FactoryGirl.define do
 
     factory :refund_bill, class: 'Bill::Refund' do
       amount(-10)
+      subscription
+      refunded_bill { create :pro_bill, subscription: subscription }
+      refunded_billing_attempt { refunded_bill.billing_attempts.last }
     end
+  end
+
+  trait :pro do
+    amount { Subscription::Pro.defaults[:monthly_amount] }
   end
 
   trait :paid do
@@ -50,6 +61,10 @@ FactoryGirl.define do
   end
 
   trait :voided do
+    status :voided
+  end
+
+  trait :void do
     status :voided
   end
 
