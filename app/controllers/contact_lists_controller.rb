@@ -1,13 +1,15 @@
 class ContactListsController < ApplicationController
-  include OmniauthErrors
-
   before_action :authenticate_user!
   before_action :load_site
   before_action :load_contact_list, only: %i[show update destroy]
 
   def index
     @site ||= current_site # Necessary here in case this is a redirect from failed oauth
-    flash[:error] = omniauth_error_message if omniauth_error?
+
+    if omniauth_error?
+      flash.now[:error] = omniauth_error_message
+      Rails.logger.warn "[Omniauth] [Error] #{ omniauth_error_message }"
+    end
 
     @contact_lists = @site.contact_lists
     @contact_list_totals =
@@ -80,5 +82,15 @@ class ContactListsController < ApplicationController
     path, params = Hello::DataAPIHelper::RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
     path_with_params = Hello::DataAPIHelper.url_for(path, params)
     URI.join(Settings.data_api_url, path_with_params).to_s
+  end
+
+  def omniauth_error?
+    request.env['omniauth.error'] || request.env['omniauth.error.type']
+  end
+
+  def omniauth_error_message
+    message = request.env['omniauth.error'].try(:message) || request.env['omniauth.error.type']
+    return nil if message.nil?
+    message.to_s.split('|').last.try(:strip) || ''
   end
 end
