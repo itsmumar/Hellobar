@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 import config from './config/environment';
 
 const Router = Ember.Router.extend({

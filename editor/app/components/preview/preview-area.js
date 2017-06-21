@@ -32,9 +32,11 @@ export default Ember.Component.extend({
     this.get('bus').subscribe('hellobar.core.preview.render', () => {
       this.renderPreview();
     });
-    this.get('model.id') && Ember.run.next(() => {
-      this.renderPreview();
-    });
+    if (this.get('model')) {
+      Ember.run.next(() => {
+        this.renderPreview();
+      });
+    }
   },
 
   //-----------  Template Properties  -----------#
@@ -65,8 +67,12 @@ export default Ember.Component.extend({
     classes.push(this.get('barSize'));
     classes.push(this.get('elementType').toLowerCase());
 
-    this.get('isPushed') && classes.push('is-pushed');
-    this.get('isMobile') && classes.push('hellobar-preview-container-mobile');
+    if (this.get('isPushed')) {
+      classes.push('is-pushed');
+    }
+    if (this.get('isMobile')) {
+      classes.push('hellobar-preview-container-mobile');
+    }
 
     return classes.join(' ');
   }.property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),

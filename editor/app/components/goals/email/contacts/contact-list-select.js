@@ -34,7 +34,9 @@ export default Ember.Component.extend({
     },
 
     selectOption(option) {
-      option && option.id && this.sendAction('setList', option.id);
+      if (option && option.id) {
+        this.sendAction('setList', option.id);
+      }
     }
   }
 });

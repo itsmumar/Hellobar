@@ -90,7 +90,11 @@ export default Ember.Service.extend({
       });
     });
     return new Ember.RSVP.Promise((resolve, reject) => {
-      _.isEmpty(failures) ? resolve() : reject(failures);
+      if (_.isEmpty(failures)) {
+        resolve();
+      } else {
+        reject(failures);
+      }
     });
   },
 

@@ -1,8 +1,8 @@
 import Ember from 'ember';
 import CodeMirror from 'npm:codemirror';
-import CodeMirrorModeCss from 'npm:codemirror/mode/css/css.js';
-import CodeMirrorModeHtmlMixed from 'npm:codemirror/mode/htmlmixed/htmlmixed.js';
-import CodeMirrorModeJavascript from 'npm:codemirror/mode/javascript/javascript.js';
+import CodeMirrorModeCss from 'npm:codemirror/mode/css/css.js'; // jshint ignore:line
+import CodeMirrorModeHtmlMixed from 'npm:codemirror/mode/htmlmixed/htmlmixed.js'; // jshint ignore:line
+import CodeMirrorModeJavascript from 'npm:codemirror/mode/javascript/javascript.js'; // jshint ignore:line
 
 /**
  * @class CodeEditor
@@ -31,7 +31,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     const editorContainerElement = this.$('.js-editor-container')[0];
-    this._editorInstance = CodeMirror(editorContainerElement, {
+    this._editorInstance = new CodeMirror(editorContainerElement, {
       lineNumbers: true,
       mode: this.editorMode,
       value: this.value || ''
@@ -46,4 +46,3 @@ export default Ember.Component.extend({
   }
 
 });
-

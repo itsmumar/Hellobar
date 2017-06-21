@@ -1,6 +1,6 @@
 hellobar.defineModule('contentUpgrades',
-  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion', 'contentUpgrades.class'],
-  function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade) {
+  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion', 'contentUpgrades.class', 'base.bus'],
+  function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade, bus) {
 
     const configuration = hellobar.createModuleConfiguration({
       contentUpgrades: 'object',
@@ -40,11 +40,18 @@ hellobar.defineModule('contentUpgrades',
       const formElement = document.getElementById('hb-fields-form');
       const targetSiteElement = (document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0]);
       const redirect = true;
-      const thankYouText = siteElement.model().thank_you_text || 'Thank you!';
-      const downloadLink = siteElement.model().download_link;
+      const model = siteElement.model();
+      const downloadLink = model.download_link;
+      const thankYouEnabled = !!model.thank_you_enabled;
+
+      bus.on('hellobar.elements.emailSubmitted', () => {
+        if (thankYouEnabled) {
+          siteElement.showThankYou();
+        }
+      });
 
       elementsCollecting.submitEmail(
-        siteElement, formElement, targetSiteElement, format.stringLiteral(thankYouText), redirect, downloadLink
+        siteElement, formElement, targetSiteElement, '', redirect, downloadLink
       );
     }
 
