@@ -52,7 +52,7 @@ feature 'Payment modal interaction', :js do
       expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE PRO PLAN!"
       expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
       expect(page).to have_text 'You will be billed $149.00 every year.'
-      expect(page).to have_text 'Your next bill will be on Jun 20th, 2018.'
+      expect(page).to have_text "Your next bill will be on #{ date_format(1.month_from_now) }."
 
       page.find('a', text: 'OK').click
       expect(page).to have_content 'is on the Pro plan'
@@ -82,6 +82,10 @@ feature 'Payment modal interaction', :js do
       find('.toggle-hiding .toggle-on').click
 
       expect(page).to have_content "Upgrade #{ site.normalized_url } to allow hiding a bar"
+    end
+
+    def date_format(date)
+      date.strftime "%b #{date.day.ordinalize}, %Y"
     end
 
     def fill_payment_form
