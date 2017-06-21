@@ -1,21 +1,28 @@
-class UpgradeSubscription
+class ChangeSubscription
   def initialize(site, payment_method, params)
     @site = site
+    @old_subscription = site.current_subscription
     @payment_method = payment_method
-    @billing_params = params.fetch(:billing)
+    @billing_params = params
   end
 
   def call
+    transaction.tap do |bill|
+      track_subscription_change(bill.subscription)
+    end
+  end
+
+  private
+
+  attr_reader :site, :payment_method, :billing_params, :old_subscription
+
+  def transaction
     Subscription.transaction do
       subscription = create_subscription
       bill = create_bill(subscription)
       pay_bill(bill)
     end
   end
-
-  private
-
-  attr_reader :site, :payment_method, :billing_params
 
   def create_subscription
     subscription_class.create!(
@@ -40,5 +47,21 @@ class UpgradeSubscription
   def subscription_class
     plan_constant = billing_params[:plan].parameterize.underscore.camelize
     Subscription.const_get(plan_constant)
+  end
+
+  def track_subscription_change(subscription)
+    return unless subscription.persisted?
+
+    props = {
+      to_plan: subscription.values[:name],
+      to_schedule: subscription.schedule
+    }
+
+    if old_subscription
+      props[:from_plan] = old_subscription.values[:name]
+      props[:from_schedule] = old_subscription.schedule
+    end
+
+    Analytics.track(:site, site.id, :change_sub, props)
   end
 end
