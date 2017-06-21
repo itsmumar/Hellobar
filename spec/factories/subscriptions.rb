@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :subscription do
     site
-    user
+    user nil
     schedule :monthly
-    association :payment_method, factory: %i[payment_method success]
+    association :payment_method, factory: %i[payment_method]
 
     trait :free do
       amount 0.0

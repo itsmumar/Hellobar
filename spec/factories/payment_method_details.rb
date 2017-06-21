@@ -7,12 +7,6 @@ FactoryGirl.define do
       }
     end
 
-    factory :always_successful_billing_details, class: 'AlwaysSuccessfulPaymentMethodDetails' do
-    end
-
-    factory :always_fails_payment_method_details, class: 'AlwaysFailsPaymentMethodDetails' do
-    end
-
     factory :cyber_source_credit_card, class: 'CyberSourceCreditCard' do
       transient do
         token 'token'
