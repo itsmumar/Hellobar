@@ -39,7 +39,7 @@ class PayBill
   def create_billing_attempt(success, response)
     BillingAttempt.create!(
       bill: bill,
-      payment_method: payment_method,
+      payment_method_details: payment_method.current_details,
       status: success ? :success : :failed,
       response: response
     )
