@@ -30,14 +30,14 @@ class CyberSourceCreditCard < PaymentMethodDetails
   def address
     @address ||=
       begin
-        attributes = ADDRESS_FIELDS.inject({}) { |hash, key| hash.update key.to_sym => data[key] }
+        attributes = data.slice(*ADDRESS_FIELDS).symbolize_keys
         attributes[:address1] = attributes.delete(:address)
         BillingAddress.new(attributes)
       end
   end
 
   def data=(new_data)
-    data = new_data.stringify_keys.select { |key| FIELDS.include?(key) }
+    data = new_data.stringify_keys.slice(*FIELDS)
     data['number'] = ActiveMerchant::Billing::CreditCard.mask(data['number'])
     self[:data] = data
   end

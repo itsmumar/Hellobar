@@ -28,7 +28,7 @@ describe PaymentForm do
       let(:payment_form) { PaymentForm.new(params.update(expiration: '08/10')) }
       before { payment_form.valid? }
 
-      specify { expect(payment_form.errors[:expiry]).to eql ['was exceeded'] }
+      specify { expect(payment_form.errors[:base]).to eql ['Card has expired'] }
     end
 
     context 'with 2 numbers year' do

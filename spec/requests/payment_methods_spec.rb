@@ -30,7 +30,7 @@ describe 'PaymentMethods requests' do
     end
 
     describe 'POST :create' do
-      before { stub_gateway_methods :store, :purchase }
+      before { stub_cyber_source :store, :purchase }
 
       let(:payment_method_details) { create :payment_form_params }
       let(:billing_params) { { plan: 'pro', schedule: 'monthly' } }
@@ -92,7 +92,7 @@ describe 'PaymentMethods requests' do
     end
 
     describe 'PUT :update' do
-      before { stub_gateway_methods :update, :purchase }
+      before { stub_cyber_source :update, :purchase }
 
       let!(:payment_method) { create :payment_method, user: user }
 

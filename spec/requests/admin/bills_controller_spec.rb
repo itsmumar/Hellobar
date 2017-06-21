@@ -34,7 +34,7 @@ describe 'Admin Bills requests' do
     end
 
     describe 'PUT #refund' do
-      before { stub_gateway_methods :refund }
+      before { stub_cyber_source :refund }
 
       it 'refunds a bill' do
         expect {

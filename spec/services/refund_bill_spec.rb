@@ -5,7 +5,7 @@ describe RefundBill do
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
 
-  before { stub_gateway_methods :refund }
+  before { stub_cyber_source :refund }
 
   it 'returns array of Bill::Refund and BillingAttempt' do
     expect(service.call).to match_array [instance_of(Bill::Refund), instance_of(BillingAttempt)]

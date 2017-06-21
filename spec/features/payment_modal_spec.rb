@@ -6,7 +6,7 @@ feature 'Payment modal interaction', :js do
   given(:payment_method) { create(:payment_method, user: user) }
 
   context 'pro subscription' do
-    before { stub_gateway_methods :purchase }
+    before { stub_cyber_source :purchase }
 
     scenario "downgrade to free from pro should say when it's active until" do
       site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
@@ -25,7 +25,7 @@ feature 'Payment modal interaction', :js do
   end
 
   context 'free subscription' do
-    before { stub_gateway_methods :update, :purchase }
+    before { stub_cyber_source :update, :purchase }
 
     before do
       create :rule, site: site

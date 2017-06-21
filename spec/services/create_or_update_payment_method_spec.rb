@@ -6,7 +6,7 @@ describe CreateOrUpdatePaymentMethod do
   let(:params) { { payment_method_details: payment_form_params } }
   let(:service) { CreateOrUpdatePaymentMethod.new(site, user, params) }
 
-  before { stub_gateway_methods :store, :update }
+  before { stub_cyber_source :store, :update }
 
   describe '#call' do
     it 'creates CyberSourceCreditCard' do

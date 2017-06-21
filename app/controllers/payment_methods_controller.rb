@@ -3,7 +3,7 @@ class PaymentMethodsController < ApplicationController
 
   before_action :authenticate_user!
 
-  rescue_from ActiveRecord::RecordInvalid, with: :render_active_record_error
+  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
   # returns all of the payment methods for the current user
   def index
@@ -61,7 +61,7 @@ class PaymentMethodsController < ApplicationController
 
   private
 
-  def render_active_record_error(e)
+  def record_invalid(e)
     respond_to do |format|
       format.json { render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity }
     end
