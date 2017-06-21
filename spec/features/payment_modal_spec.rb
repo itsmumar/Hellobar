@@ -85,7 +85,7 @@ feature 'Payment modal interaction', :js do
     end
 
     def date_format(date)
-      date.strftime "%b #{date.day.ordinalize}, %Y"
+      date.strftime "%b #{ date.day.ordinalize }, %Y"
     end
 
     def fill_payment_form
