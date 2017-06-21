@@ -13,8 +13,8 @@ describe 'Autofills requests' do
   end
 
   context 'when authenticated but without ProManaged subscription' do
-    let!(:subscription) { create :subscription, :pro }
-    let(:user) { subscription.user }
+    let(:user) { create :user }
+    let!(:subscription) { create :subscription, :pro, user: user }
     let(:site) { subscription.site }
     let!(:site_membership) { create :site_membership, site: site, user: user }
 
@@ -32,8 +32,8 @@ describe 'Autofills requests' do
   end
 
   context 'when authenticated' do
-    let!(:subscription) { create :subscription, :pro_managed }
-    let(:user) { subscription.user }
+    let(:user) { create :user }
+    let!(:subscription) { create :subscription, :pro_managed, user: user }
     let(:site) { subscription.site }
     let!(:site_membership) { create :site_membership, site: site, user: user }
 
