@@ -144,6 +144,7 @@ hellobar.defineModule('elements.class',
             if (this.wiggle_button.length > 0)
               dom.wiggleEventListeners(this.w);
 
+            this.loadFonts();
             this.useGoogleFont();
             if (preview.isActive()) {
               const brandingLink = this.w.contentDocument.querySelector('.js-branding');
@@ -566,6 +567,12 @@ hellobar.defineModule('elements.class',
           const head = document.getElementsByTagName('HEAD')[0];
           head.appendChild(meta);
         }
+      }
+
+      loadFonts() {
+        this.fonts.forEach(font => {
+          cdn.addCss('https://fonts.googleapis.com/css?family=' + font, this.w.contentDocument);
+        })
       }
 
       brightnessClass() {

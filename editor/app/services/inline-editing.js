@@ -414,7 +414,22 @@ export default Ember.Service.extend({
         enter: $.FroalaEditor.ENTER_P,
         multiLine: mode === 'full',
         initOnClick: false,
-        zIndex: 9888
+        zIndex: 9888,
+        fontFamily: {
+          "Arial,Helvetica,sans-serif": 'Arial',
+          "Georgia,serif": 'Georgia',
+          "Impact, Charcoal, sans-serif": 'Impact',
+          "Tahoma, Geneva, sans-serif": 'Tahoma',
+          "'Times New Roman', Times, serif, -webkit-standard": 'Times New Roman',
+          "Verdana, Geneva, sans-serif": 'Verdana',
+          "Roboto,sans-serif": 'Roboto',
+          "Oswald,sans-serif": 'Oswald',
+          "Montserrat,sans-serif": 'Montserrat',
+          "'Open Sans',sans-serif": 'Open Sans',
+          "'PT Sans',sans-serif": 'PT Sans',
+          "'PT Serif',sans-serif": 'PT Serif',
+          "Lato,sans-serif": 'Lato'
+        }
       };
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]

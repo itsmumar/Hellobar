@@ -205,6 +205,7 @@ export default Ember.Component.extend({
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,
+        fonts: [],
         google_font: font.google_font,
         theme: currentTheme,
         branding_url: 'http://www.hellobar.com?sid=preview'

@@ -369,6 +369,15 @@ describe StaticScriptModel do
       ]
     end
 
+    context 'with custom fonts' do
+      let(:headline) { '<span style="font-family: HeadlineFont, sans-serif;">text</span>' }
+      let!(:element) { create(:site_element, site: site, headline: headline) }
+
+      it 'includes fonts' do
+        expect(json.dig(:rules, 0, :site_elements, 0)).to include fonts: ['HeadlineFont']
+      end
+    end
+
     describe 'image URLs' do
       let(:image) { create(:image_upload, :with_valid_image, site: site, version: version) }
 
