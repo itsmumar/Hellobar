@@ -69,7 +69,7 @@ export default Ember.Component.extend({
       const offsetWidth = clone.get(0).offsetWidth;
       clone.remove();
       return offsetWidth;
-    }
+    };
 
     const $ll = this.$('.js-left-label');
     if ($ll.length > 0) {
