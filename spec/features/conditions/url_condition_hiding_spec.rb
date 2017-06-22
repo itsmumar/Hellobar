@@ -35,8 +35,8 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
 
   scenario 'shows the UrlCondition if the site already has it as a rule' do
     site = @user.sites.first
-    payment_method = create(:payment_method, :success, user: @user)
-    site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+    payment_method = create(:payment_method, user: @user)
+    ChangeSubscription.new(site, { plan: 'pro', schedule: 'monthly' }, payment_method).call
     rule = create(:rule)
     rule.conditions.create segment: 'UrlCondition', operand: 'is', value: ['http://www.whatever.com']
     site.rules << rule
