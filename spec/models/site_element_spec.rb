@@ -545,7 +545,7 @@ describe SiteElement do
 
     it 'does not include system fonts' do
       %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].each do |font|
-        element.headline = %Q(<span style="font-family: #{ font }, sans-serif;">text</span>)
+        element.headline = %(<span style="font-family: #{ font }, sans-serif;">text</span>)
         expect(element.fonts).not_to include font
       end
     end
