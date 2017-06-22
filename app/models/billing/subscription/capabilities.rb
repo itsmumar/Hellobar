@@ -85,6 +85,10 @@ class Subscription
       false
     end
 
+    def opacity?
+      false
+    end
+
     protected
 
     def parent_class

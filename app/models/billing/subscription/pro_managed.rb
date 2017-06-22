@@ -28,6 +28,10 @@ class Subscription
       def alert_bars?
         true
       end
+
+      def opacity?
+        true
+      end
     end
 
     class << self
