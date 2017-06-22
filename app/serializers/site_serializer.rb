@@ -30,7 +30,8 @@ class SiteSerializer < ActiveModel::Serializer
       autofills: object.capabilities.autofills?,
       geolocation_injection: object.capabilities.geolocation_injection?,
       external_tracking: object.capabilities.external_tracking?,
-      alert_bars: object.capabilities.alert_bars?
+      alert_bars: object.capabilities.alert_bars?,
+      opacity: object.capabilities.opacity?
     }
   end
 

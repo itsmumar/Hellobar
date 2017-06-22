@@ -126,7 +126,7 @@ class SiteElementsController < ApplicationController
       :answer2, :answer2caption, :answer2link_text, :answer2response,
       :background_color, :border_color, :button_color,
       :caption, :closable, :contact_list_id, :display_when, :element_subtype,
-      :email_placeholder, :font_id, :headline, :image_placement, :link_color, :link_text,
+      :email_placeholder, :font_id, :headline, :image_placement, :image_opacity, :link_color, :link_text,
       :name_placeholder, :open_in_new_window, :phone_country_code,
       :phone_number, :placement, :pushes_page_down, :question,
       :remains_at_top, :rule_id, :show_branding, :size, :text_color,

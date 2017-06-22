@@ -18,7 +18,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
     # image
     :image_url, :image_small_url, :image_medium_url, :image_large_url, :image_modal_url, :image_style,
-    :image_placement, :active_image_id, :image_file_name, :use_default_image,
+    :image_placement, :active_image_id, :image_file_name, :use_default_image, :image_opacity,
 
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
