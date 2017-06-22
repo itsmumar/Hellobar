@@ -9,7 +9,7 @@ feature 'Payment modal interaction', :js do
     before { stub_cyber_source :purchase }
 
     scenario "downgrade to free from pro should say when it's active until" do
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+      ChangeSubscription.new(site, { plan: 'pro', schedule: 'monthly' }, payment_method).call
 
       end_date = site.current_subscription.active_until
 

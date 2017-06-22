@@ -5,8 +5,7 @@ feature 'Trial User', js: true do
     @user = login
     @site = create(:site)
     @site.users << @user
-    subscription = Subscription::Pro.new(schedule: 'monthly')
-    @site.change_subscription(subscription, nil, 90.days) # 90 day trial subscription
+    ChangeSubscription.new(@site, plan: 'pro', schedule: 'monthly', trial_period: 90).call # 90 day trial subscription
   end
 
   scenario 'shows a button in the header that prompts user to enter payment' do
