@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  include BillingAuditTrail
   include UserValidator
   include ReferralTokenizable
 
