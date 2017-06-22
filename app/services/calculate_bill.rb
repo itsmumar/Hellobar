@@ -77,14 +77,14 @@ class CalculateBill
     (subscription.amount - unused_paid_amount).to_i
   end
 
-  def make_bill(&block)
+  def make_bill
     Bill::Recurring.new(subscription: subscription) do |bill|
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
       bill.bill_at = Time.current
       bill.start_date = 1.hour.ago
 
-      block.call bill if block_given?
+      yield bill if block_given?
 
       bill.end_date = bill.start_date + subscription.period
       use_trial_period bill

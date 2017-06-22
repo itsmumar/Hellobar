@@ -89,7 +89,7 @@ describe Subscription::Capabilities do
     expect(site).to be_capable_of :pro
 
     # Refund
-    refund_bill, refund_attempt = RefundBill.new(pro_bill).call
+    RefundBill.new(pro_bill).call
     expect(site).to be_capable_of :pro
 
     # Should have a pending bill for pro
@@ -131,7 +131,7 @@ describe Subscription::Capabilities do
   it 'stays at pro capabilities until bill period is over' do
     pending 'it was actually always broken...'
 
-    bill = change_subscription('pro', payment_method, 'yearly')
+    change_subscription('pro', payment_method, 'yearly')
     expect(site).to be_capable_of :pro
     travel_to 2.years.from_now do
       expect(site).to be_capable_of :free

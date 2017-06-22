@@ -14,7 +14,7 @@ class PayBill
 
     if bill.amount.zero?
       create_bill_for_next_period
-      bill.tap &:paid!
+      bill.tap(&:paid!)
     else
       charge
     end

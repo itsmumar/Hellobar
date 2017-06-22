@@ -47,7 +47,7 @@ describe CalculateBill do
 
       context 'when subscription has been partially used' do
         let(:current_subscription) { site.current_subscription }
-        
+
         it 'reduces amount based on used period' do
           travel_to 12.days.from_now do
             percentage_unused = 1.0 - 12.0 / 30.0

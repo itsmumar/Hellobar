@@ -46,7 +46,6 @@ class PaymentMethodsController < ApplicationController
   def update
     load_site
 
-    old_subscription = @site.current_subscription
     payment_method = current_user.payment_methods.find params[:id]
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params, payment_method: payment_method).call
 
