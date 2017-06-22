@@ -75,9 +75,15 @@ describe Admin::SitesController do
       before { allow_any_instance_of(CalculateBill).to receive(:call).and_raise(StandardError, 'some error') }
       let(:params) { { subscription: { plan: 'ProComped', schedule: 'monthly' } } }
 
-      it 'shows error' do
-        update
-        expect(flash[:error]).to eql 'There was an error trying to update the subscription: some error'
+      specify { expect { update }.to raise_error 'some error' }
+
+      context 'when not in test env' do
+        before { allow(Rails.env).to receive(:test?).and_return false }
+
+        it 'displays error' do
+          update
+          expect(flash[:error]).to eql 'There was an error trying to update the subscription: some error'
+        end
       end
     end
   end

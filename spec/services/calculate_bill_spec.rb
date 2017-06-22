@@ -21,7 +21,7 @@ describe CalculateBill do
       let(:subscription) { create :subscription, :enterprise }
 
       before do
-        stub_gateway_methods :refund
+        stub_cyber_source :refund
         RefundBill.new(active_bill).call
       end
 
@@ -43,6 +43,17 @@ describe CalculateBill do
         expect(bill.bill_at).to eql Time.current
         expect(bill.start_date).to eql 1.hour.ago
         expect(bill.end_date).to eql bill.start_date + subscription.period
+      end
+
+      context 'when subscription has been partially used' do
+        let(:current_subscription) { site.current_subscription }
+        
+        it 'reduces amount based on used period' do
+          travel_to 12.days.from_now do
+            percentage_unused = 1.0 - 12.0 / 30.0
+            expect(bill.amount).to eql subscription.amount - (current_subscription.amount * percentage_unused)
+          end
+        end
       end
     end
 

@@ -14,12 +14,13 @@ describe 'Admin Bills requests' do
     let!(:admin) { create(:admin) }
     before { stub_current_admin(admin) }
 
+    let!(:user) { create :user }
+    let!(:site) { create :site, user: user }
     let!(:bill) { create :pro_bill, :paid }
-    let!(:user) { bill.subscription.user }
 
     describe 'GET #show' do
       it 'allows admins to see a bill' do
-        get admin_user_bill_path(user_id: user, id: bill)
+        get admin_user_bill_path(user_id: user.id, id: bill)
         expect(response).to be_success
       end
     end

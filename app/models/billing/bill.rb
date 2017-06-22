@@ -120,7 +120,7 @@ class Bill < ActiveRecord::Base
   end
 
   def past_due?(payment_method = nil)
-    Time.current > due_at(payment_method)
+    Time.current >= due_at(payment_method)
   end
 
   def should_bill?
