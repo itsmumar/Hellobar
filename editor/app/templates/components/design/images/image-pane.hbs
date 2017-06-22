@@ -19,6 +19,13 @@
     </div>
 
   {{/unless}}
+
+  {{#if canUseOpacity }}
+    <label>Image opacity</label>
+    <div class="slider-wrapper">
+      {{common/sliders/range-slider min=0 max=100 start=imageOpacity update="setImageOpacity" leftLabel="0%" rightLabel="100%"}}
+    </div>
+  {{/if}}
 {{else}}
   <label>Site Bars do not support images.
     You'll need to use a Modal, Slider, or Page Takeover to upload an image.</label>

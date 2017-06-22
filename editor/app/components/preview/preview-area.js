@@ -112,6 +112,7 @@ export default Ember.Component.extend({
     'model.font_id',
     'model.headline',
     'model.image_placement',
+    'model.image_opacity',
     'model.image_url',
     'model.link_color',
     'model.link_style',
