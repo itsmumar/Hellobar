@@ -35,7 +35,7 @@ describe Site do
     end
 
     it 'is true for sites with a free-plus-level subscriptions' do
-      site.change_subscription(Subscription::FreePlus.new(schedule: 'monthly'))
+      site.subscriptions << Subscription::FreePlus.new(schedule: 'monthly')
       expect(site).to be_free
     end
 
@@ -44,49 +44,20 @@ describe Site do
     end
 
     it 'is false for pro comped sites' do
-      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+      site.subscriptions << Subscription::ProComped.new(schedule: 'monthly')
       expect(site).not_to be_free
     end
   end
 
-  describe '#change_subscription' do
-    it 'runs set_branding_on_site_elements after changing subscription' do
-      expect(site).to receive(:set_branding_on_site_elements)
-      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
-    end
-
-    it 'regenerates the script' do
-      site.update_attribute(:script_generated_at, 1.day.ago)
-      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
-      expect(site.needs_script_regeneration?).to be(true)
-    end
-
-    it 'applies the discount when changing subscription to pro and it belongs to a discount tier' do
-      user = create(:user)
-
-      zero_discount_slots = Subscription::Pro.defaults[:discounts].detect { |x| x.tier == 0 }.slots
-      zero_discount_slots.times do
-        bill = create(:pro_bill, status: :paid)
-        bill.site.users << user
-        user.reload
-        bill.subscription.payment_method.update(user: user)
-        bill.update(discount: bill.calculate_discount)
-      end
-
-      site = user.sites.create(url: generate(:random_uniq_url))
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), user.payment_methods.first)
-
-      expect(site.bills.paid.first.discount > 0).to be(true)
-    end
-  end
-
   describe '#highest_tier_active_subscription' do
-    let(:payment_method) { create(:payment_method, :success) }
+    let(:payment_method) { create(:payment_method) }
     let(:ownership) { create(:site_membership, user: payment_method.user) }
     let(:site) { ownership.site }
 
-    def change_subscription(klass, schedule = 'monthly')
-      site.change_subscription(klass.new(schedule: schedule, user: payment_method.user), payment_method)
+    before { stub_cyber_source :purchase, :refund }
+
+    def change_subscription(plan, schedule = 'monthly')
+      ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
     end
 
     it 'returns nil when there are no active subscriptions' do
@@ -94,30 +65,30 @@ describe Site do
     end
 
     it 'returns the highest tier active subscription among Free and Pro' do
-      change_subscription(Subscription::Free)
-      change_subscription(Subscription::Pro)
+      change_subscription('free')
+      change_subscription('pro')
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::Pro)
     end
 
     it 'returns the highest tier active subscription among Pro and Enterprise' do
-      change_subscription(Subscription::Pro)
-      change_subscription(Subscription::Enterprise)
+      change_subscription('pro')
+      change_subscription('enterprise')
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::Enterprise)
     end
 
     it 'returns the highest tier active subscription among Pro and ProManaged' do
-      change_subscription(Subscription::Free)
-      change_subscription(Subscription::Pro)
+      change_subscription('free')
+      change_subscription('pro')
       site.subscriptions.last.update type: Subscription::ProManaged
 
       expect(site.highest_tier_active_subscription).to be_a(Subscription::ProManaged)
     end
 
     it 'returns only active subscriptions' do
-      change_subscription(Subscription::Free, 'yearly')
-      change_subscription(Subscription::Pro)
+      change_subscription('free', 'yearly')
+      change_subscription('pro')
 
       travel_to 2.months.from_now do
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
@@ -126,8 +97,8 @@ describe Site do
 
     context 'when Pro subscription has a refund' do
       it 'returns Free subscription', :freeze do
-        change_subscription(Subscription::Free)
-        _, bill = change_subscription(Subscription::Pro)
+        change_subscription('free')
+        bill = change_subscription('pro')
         RefundBill.new(bill).call
 
         expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
@@ -268,38 +239,6 @@ describe Site do
     it 'soft-deletes record' do
       site.destroy
       expect(Site.only_deleted).to include(site)
-    end
-  end
-
-  describe 'calculate_bill' do
-    let(:subscription) { create(:subscription) }
-
-    def bill(trial: nil)
-      subscription.site.send(:calculate_bill, subscription, trial)
-    end
-
-    context 'trial_period is specified' do
-      it 'should set the bill amount to 0' do
-        expect(bill(trial: 20.days).amount).to eq(0)
-      end
-
-      it 'should set the end_at of the bill to the current time + the trial period' do
-        travel_to Time.current do
-          expect(bill(trial: 20.days).end_date).to eql(20.days.from_now)
-        end
-      end
-    end
-
-    context 'trial_period is not specified' do
-      it 'should set the bill amount to subscription.amount' do
-        expect(bill.amount).to eql subscription.amount
-      end
-
-      it 'should set the bill end_date to ' do
-        travel_to Time.current do
-          expect(bill.end_date).to eql(Bill::Recurring.next_month(Time.current - 1.hour))
-        end
-      end
     end
   end
 
@@ -481,6 +420,39 @@ describe Site do
 
       site.touch
       commit
+    end
+  end
+
+  describe 'bills_with_payment_issues' do
+    let(:user) { create :user }
+    let(:site) { create :site, user: user }
+    let(:payment_method) { create :payment_method, user: user }
+
+    def change_subscription(plan, schedule = 'monthly')
+      ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+    end
+
+    before { stub_cyber_source :purchase, success: false }
+
+    it 'returns bills that are due' do
+      expect(site.bills_with_payment_issues).to be_empty
+      bill = change_subscription('pro')
+      expect(site.bills_with_payment_issues(true)).to match_array [bill]
+    end
+
+    it 'does not return bills not due' do
+      bill = change_subscription('pro')
+      bill.update! bill_at: 7.days.from_now
+
+      expect(site.bills_with_payment_issues).to be_empty
+    end
+
+    it 'does not return bills that we haven\'t attempted to charge at least once' do
+      expect(site.bills_with_payment_issues).to be_empty
+      bill = change_subscription('pro')
+      expect(bill).to be_pending
+      bill.billing_attempts.delete_all
+      expect(site.bills_with_payment_issues(true)).to be_empty
     end
   end
 end

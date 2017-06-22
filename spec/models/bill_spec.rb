@@ -92,79 +92,6 @@ describe Bill do
     end
   end
 
-  describe Bill::Recurring do
-    it 'should create the next bill once paid' do
-      subscription = create(:subscription, :pro)
-      Bill.destroy_all
-      expect(subscription.bills(true).length).to eq(0)
-      expect(subscription).to be_monthly
-      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
-      expect(subscription.bills(true).length).to eq(1)
-      bill.paid!
-      expect(subscription.bills(true).length).to eq(2)
-      bill1 = subscription.bills[0]
-      expect(bill1).to be_paid
-      expect(bill1.start_date).to eq(june)
-      expect(bill1.end_date).to eq(july)
-      bill2 = subscription.bills[1]
-      expect(bill2).to be_pending
-      expect(bill2.start_date).to eq(july)
-      expect(bill2.bill_at).to eq(july)
-      expect(bill2.end_date).to eq(aug)
-    end
-
-    it 'should not be affected by a refund' do
-      subscription = create(:subscription, :pro)
-      Bill.destroy_all
-      expect(subscription.bills(true).length).to eq(0)
-      expect(subscription).to be_monthly
-      bill = Bill::Recurring.create!(subscription: subscription, start_date: june, end_date: july, bill_at: bill_at, amount: 1)
-      expect(subscription.bills(true).length).to eq(1)
-      bill.attempt_billing!
-      RefundBill.new(bill).call
-      expect(subscription.bills(true).length).to eq(3)
-      initial_bill = subscription.bills[0]
-      recurring_bill = subscription.bills[1]
-      subscription.bills[2]
-      recurring_bill.paid!
-      expect(subscription.bills(true).length).to eq(4)
-      recurring_bill2 = subscription.bills[3]
-      expect(initial_bill).to be_paid
-      expect(initial_bill.start_date).to eq(june)
-      expect(initial_bill.end_date).to eq(july)
-      expect(recurring_bill).to be_paid
-      expect(recurring_bill.start_date).to eq(july)
-      expect(recurring_bill.bill_at).to eq(initial_bill.end_date)
-      expect(recurring_bill.end_date).to eq(aug)
-      # Next recurring bill should be unaffected by refund
-      expect(recurring_bill2).to be_pending
-      expect(recurring_bill2.start_date).to eq(aug)
-      expect(recurring_bill2.bill_at).to eq(recurring_bill.end_date)
-      expect(recurring_bill2.end_date).to eq(recurring_bill2.start_date + 1.month)
-    end
-  end
-
-  describe 'attempt_billing!' do
-    it 'calls set_final_amount' do
-      bill = create(:pro_bill)
-      expect(bill).to receive(:set_final_amount!)
-      bill.attempt_billing!
-    end
-
-    it 'should call payment_method.pay if the bill.amount > 0' do
-      bill = create(:bill)
-      bill.subscription.payment_method = create(:payment_method, :success)
-      expect_any_instance_of(PaymentMethod).to receive(:pay).with(bill)
-      bill.attempt_billing!
-    end
-
-    it 'should mark it as paid if the bill amount is 0' do
-      bill = create(:free_bill)
-      expect_any_instance_of(PaymentMethod).not_to receive(:pay).with(bill)
-      bill.attempt_billing!
-    end
-  end
-
   describe 'set_final_amount' do
     let!(:bill) { create(:pro_bill) }
     let!(:user) { create(:user) }
@@ -279,9 +206,8 @@ describe Bill do
 
     it "should return false if due, but haven't tried billing yet" do
       bill = create(:past_due_bill)
-      pm = create(:payment_method, :success)
-      # Get around destroying read-only records
-      BillingAttempt.connection.execute("DELETE FROM #{ BillingAttempt.table_name }")
+      pm = create(:payment_method)
+      BillingAttempt.delete_all
       expect(bill.should_bill?).to eq(true)
       expect(bill.past_due?).to eq(true)
       expect(bill.problem_with_payment?(pm)).to eq(false)
@@ -313,53 +239,5 @@ describe Subscription do
     # Add an active bill
     Bill.create!(subscription: subscription, start_date: now, end_date: now + 30.days, amount: 1)
     expect(subscription.active_bills(true).length).to eq(1)
-  end
-end
-
-describe PaymentMethod do
-  include BillSpecDates
-
-  describe 'pay' do
-    it 'should attempt to charge the bill with the payment method' do
-      payment_method = create(:payment_method, :success)
-      bill = create(:bill)
-      expect_any_instance_of(AlwaysSuccessfulPaymentMethodDetails).to receive(:charge).with(bill.amount)
-      payment_method.pay(bill)
-    end
-
-    it 'should mark the bill as paid if successul' do
-      bill = create(:bill)
-      expect(create(:payment_method, :success).pay(bill)).to be_success
-      expect(bill).to be_paid
-    end
-
-    it 'should not mark the bill as paid if failed' do
-      bill = create(:bill)
-      payment_method = create(:payment_method, :fails)
-      expect(payment_method.pay(bill)).not_to be_success
-      expect(bill).not_to be_paid
-    end
-
-    it 'should create a BillingAttempt either way' do
-      billing_attempt = create(:payment_method, :success).pay(create(:bill))
-      expect(billing_attempt).not_to be_nil
-      expect(billing_attempt).to be_persisted
-      expect(billing_attempt.payment_method_details).not_to be_nil
-      expect(billing_attempt.bill).not_to be_nil
-      expect(billing_attempt.response).not_to be_nil
-      expect(billing_attempt).to be_success
-      # failure
-      billing_attempt = create(:payment_method, :fails).pay(create(:bill))
-      expect(billing_attempt).not_to be_nil
-      expect(billing_attempt).to be_persisted
-      expect(billing_attempt.payment_method_details).not_to be_nil
-      expect(billing_attempt.bill).not_to be_nil
-      expect(billing_attempt.response).not_to be_nil
-      expect(billing_attempt).not_to be_success
-    end
-
-    it 'should raise an error if no payment_method_details' do
-      expect { PaymentMethod.new.pay(create(:bill)) }.to raise_error(PaymentMethod::MissingPaymentDetails)
-    end
   end
 end
