@@ -3,6 +3,8 @@ require 'integration_helper'
 feature 'Render the country select for the Rule modal', :js do
   extend FeatureHelper
 
+  before { stub_cyber_source :purchase }
+
   before(:each) do
     @user = login
 

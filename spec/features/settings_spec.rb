@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature 'Manage Settings', :js do
+  before { stub_cyber_source :purchase }
+
   before do
     @user = login
     @site = @user.sites.first

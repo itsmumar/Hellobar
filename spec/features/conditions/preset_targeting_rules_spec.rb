@@ -46,6 +46,8 @@ feature 'Users can use site element targeting rule presets', :js do
     given(:first_select_input) { first('select')['id'] }
     given(:default_option)     { 'Choose a saved rule...' }
 
+    before { stub_cyber_source :purchase }
+
     before do
       payment_method = create(:payment_method, user: @user)
       ChangeSubscription.new(site, { plan: 'pro', schedule: 'monthly' }, payment_method).call
