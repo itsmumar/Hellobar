@@ -1,4 +1,7 @@
 class PayBill
+  class Error < StandardError; end
+  class MissingPaymentMethod < Error; end
+
   def initialize(bill)
     @bill = bill
     @payment_method = bill.payment_method
@@ -9,9 +12,12 @@ class PayBill
 
     set_final_amount
 
-    charge unless bill.amount.zero?
-    create_bill_for_next_period
-    bill.tap(&:paid!)
+    if bill.amount.zero?
+      create_bill_for_next_period
+      bill.tap &:paid!
+    else
+      charge
+    end
   end
 
   private
@@ -19,9 +25,18 @@ class PayBill
   attr_reader :bill, :payment_method
 
   def charge
-    raise 'could not pay bill with negative amount' if bill.amount < 0
+    raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
+
     success, response = payment_method.charge(bill.amount)
     create_billing_attempt(success, response)
+
+    if success
+      bill.update authorization_code: response
+      bill.paid!
+      create_bill_for_next_period
+    end
+
+    bill
   end
 
   def set_final_amount
@@ -43,7 +58,6 @@ class PayBill
       status: success ? :success : :failed,
       response: response
     )
-    raise response.inspect unless success
   end
 
   def create_bill_for_next_period

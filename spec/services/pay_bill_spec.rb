@@ -4,7 +4,7 @@ describe PayBill do
   let(:bill) { create :bill, grace_period_allowed: false, subscription: subscription }
   let(:service) { PayBill.new(bill) }
 
-  before { stub_gateway_methods(:purchase) }
+  before { stub_cyber_source(:purchase) }
 
   describe '#call' do
     specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount * 100, any_args) }
@@ -14,6 +14,10 @@ describe PayBill do
 
     it 'returns given bill' do
       expect(service.call).to eql bill
+    end
+
+    it 'stores authorization code' do
+      expect { service.call }.to change(bill, :authorization_code)
     end
 
     shared_examples 'doing nothing' do
@@ -54,6 +58,14 @@ describe PayBill do
       specify { expect { service.call }.to change(bill, :status).to :paid }
       specify { expect { service.call }.not_to make_gateway_call(:purchase).with(bill.amount * 100, any_args) }
       specify { expect { service.call }.not_to change { BillingAttempt.success.count } }
+    end
+
+    context 'without payment_method' do
+      before { bill.payment_method = nil }
+
+      it 'changes subscription and capabilities' do
+        expect { service.call }.to raise_error PayBill::Error, 'could not pay bill without credit card'
+      end
     end
   end
 end
