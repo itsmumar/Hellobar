@@ -7,14 +7,15 @@ class Admin::SitesController < ApplicationController
   def update
     begin
       site.update_attributes(site_params) if params.key?(:site)
-      update_subscription(site, nil, subscription_params) if params.key?(:subscription)
+      ChangeSubscription.new(site, subscription_params).call if params.key?(:subscription)
       flash[:success] = 'Site and/or subscription has been updated.'
-    rescue Bill::MissingPaymentMethod
+    rescue PayBill::MissingPaymentMethod
       flash[:error] = 'You are trying to upgrade subscription but it must be paid by the user'
     rescue Bill::InvalidBillingAmount => e
       flash[:error] = "You are trying to downgrade subscription but difference between subscriptions is #{ e.amount }$. Try to refund this amount first"
     rescue => e
       flash[:error] = "There was an error trying to update the subscription: #{ e.message }"
+      raise if Rails.env.test?
     end
 
     redirect_to admin_user_path(params[:user_id])

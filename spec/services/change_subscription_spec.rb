@@ -3,10 +3,10 @@ describe ChangeSubscription, :freeze do
   let(:site) { create :site, user: user }
   let(:payment_method) { create :payment_method, user: user }
   let(:params) { { plan: 'pro', schedule: 'yearly' } }
-  let(:service) { ChangeSubscription.new(site, payment_method, params) }
+  let(:service) { ChangeSubscription.new(site, params, payment_method) }
   let(:last_subscription) { Subscription.last }
 
-  before { stub_gateway_methods(:purchase) }
+  before { stub_cyber_source :purchase }
   before { create :subscription, :free, payment_method: payment_method, site: site }
 
   describe '.call' do
@@ -38,6 +38,14 @@ describe ChangeSubscription, :freeze do
       service.call
     end
 
+    context 'without payment method' do
+      let(:payment_method) { nil }
+
+      it 'raises PayBill::Error' do
+        expect { service.call }.to raise_error PayBill::Error, 'could not pay bill without credit card'
+      end
+    end
+
     context 'with monthly schedule' do
       let(:params) { { plan: 'pro', schedule: 'monthly' } }
 
@@ -50,7 +58,7 @@ describe ChangeSubscription, :freeze do
       it 'creates Subscription::Pro' do
         expect { service.call }
           .to change(site.subscriptions, :count).by(1)
-          .and change(payment_method.subscriptions, :count).by(1)
+                .and change(payment_method.subscriptions, :count).by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Pro
@@ -63,7 +71,7 @@ describe ChangeSubscription, :freeze do
       it 'creates Subscription::Enterprise' do
         expect { service.call }
           .to change(site.subscriptions, :count).by(1)
-          .and change(payment_method.subscriptions, :count).by(1)
+                .and change(payment_method.subscriptions, :count).by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Enterprise
@@ -75,8 +83,123 @@ describe ChangeSubscription, :freeze do
         expect(PayBill).to receive_service_call.and_raise(StandardError)
         expect { service.call }
           .to raise_error(StandardError)
-          .and change(Subscription, :count).by(0)
-          .and change(Bill, :count).by(0)
+                .and change(Subscription, :count).by(0)
+                       .and change(Bill, :count).by(0)
+      end
+    end
+
+    describe 'upgrading/downgrading' do
+      def change_subscription(plan, schedule = 'monthly')
+        ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+      end
+
+      context 'when starting with Free plan' do
+        it 'changes subscription and capabilities' do
+          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect(site.current_subscription).to be_instance_of Subscription::Free
+          expect(site).to be_capable_of :free
+        end
+      end
+
+      context 'when upgrading to Pro from Free' do
+        it 'changes subscription and capabilities' do
+          expect { change_subscription('pro') }.to change { site.current_subscription }
+          expect(site.current_subscription).to be_instance_of Subscription::Pro
+          expect(site).to be_capable_of :pro
+        end
+
+        context 'and then to Enterprise from Pro' do
+          before { change_subscription('pro') }
+
+          it 'changes subscription and capabilities' do
+            expect { change_subscription('enterprise') }.to change { site.current_subscription }
+            expect(site.current_subscription).to be_instance_of Subscription::Enterprise
+            expect(site).to be_capable_of :enterprise
+          end
+
+          it 'excludes a paid amount from new bill' do
+            expect(change_subscription('enterprise').amount).to eql 99 - 15
+          end
+
+          context 'when a refund has been made' do
+            before { stub_cyber_source :refund, :purchase }
+            before { RefundBill.new(site.current_subscription.bills.paid.last).call }
+
+            it 'charges full amount' do
+              expect(change_subscription('enterprise').amount).to eql 99
+            end
+          end
+        end
+      end
+
+      context 'when downgrading to Free from Pro' do
+        before { change_subscription('pro') }
+
+        it 'changes subscription' do
+          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect(site.current_subscription).to be_instance_of Subscription::Free
+        end
+
+        it 'does not change capabilities' do
+          expect { change_subscription('free') }.not_to change { site.reload.capabilities }
+        end
+
+        context 'when Pro subscription expires' do
+          it 'changes capabilities to Free' do
+            change_subscription('free')
+
+            travel_to 1.month.from_now do
+              expect(site).to be_capable_of :free
+            end
+          end
+        end
+      end
+
+      context 'when downgrading to Free from Enterprise' do
+        before { change_subscription('enterprise') }
+
+        it 'changes subscription' do
+          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect(site.current_subscription).to be_instance_of Subscription::Free
+        end
+
+        it 'does not change capabilities' do
+          expect { change_subscription('free') }.not_to change { site.reload.capabilities }
+        end
+
+        context 'when Pro subscription expires' do
+          it 'changes capabilities to Free' do
+            change_subscription('free')
+
+            travel_to 1.month.from_now do
+              expect(site).to be_capable_of :free
+            end
+          end
+        end
+      end
+
+      context 'when payment fails' do
+        let(:last_bill) { site.current_subscription.bills.last }
+
+        it 'returns pending bill' do
+          expect { change_subscription('pro') }.to make_gateway_call(:purchase).and_fail
+          expect(last_bill).to be_pending
+          expect(site.current_subscription).to be_instance_of Subscription::Pro
+          expect(site).to be_capable_of :problem_with_payment
+        end
+      end
+
+      context 'when switching from yearly to monthly' do
+        it 'does not create a negative bill' do
+          yearly_bill = change_subscription('pro', 'yearly')
+          expect(yearly_bill.amount).to eql Subscription::Pro.defaults[:yearly_amount]
+          expect(yearly_bill).to be_paid
+
+          monthly_bill = change_subscription('pro', 'monthly')
+          expect(monthly_bill.amount).to eql Subscription::Pro.defaults[:monthly_amount]
+          expect(monthly_bill.due_at).to be_within(2.hours).of(yearly_bill.due_at + 1.year)
+          expect(monthly_bill).to be_pending
+        end
       end
     end
   end

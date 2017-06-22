@@ -1,9 +1,9 @@
 class ChangeSubscription
-  def initialize(site, payment_method, params)
+  def initialize(site, params, payment_method = nil)
     @site = site
     @old_subscription = site.current_subscription
     @payment_method = payment_method
-    @billing_params = params
+    @billing_params = params.reverse_merge(schedule: 'monthly')
   end
 
   def call
@@ -45,6 +45,8 @@ class ChangeSubscription
   end
 
   def subscription_class
+    Subscription.const_get(billing_params[:plan])
+  rescue NameError
     plan_constant = billing_params[:plan].parameterize.underscore.camelize
     Subscription.const_get(plan_constant)
   end

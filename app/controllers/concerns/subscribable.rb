@@ -2,7 +2,7 @@ module Subscribable
   # returns object to render and status code
   def subscription_bill_and_status(site, payment_method, billing_params)
     old_subscription = site.current_subscription
-    bill = ChangeSubscription.new(site, payment_method, billing_params).call
+    bill = ChangeSubscription.new(site, billing_params, payment_method).call
 
     is_upgrade =
       if old_subscription
