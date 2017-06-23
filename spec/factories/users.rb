@@ -41,7 +41,7 @@ FactoryGirl.define do
 
     trait :with_payment_method do
       after(:create) do |user|
-        create :payment_method, :success, user: user
+        create :payment_method, user: user
       end
     end
 

@@ -28,4 +28,15 @@ module StubsHelper
       .with(variation_matcher)
       .and_return(yield)
   end
+
+  def stub_cyber_source(*methods)
+    response = double(success?: true, message: 'gateway error', authorization: 'authorization', params: { 'subscriptionID' => '1' })
+    methods = methods.inject({}) { |hash, method| hash.update method => response }
+    @gateway = double('CyberSourceGateway', methods)
+    allow(ActiveMerchant::Billing::CyberSourceGateway).to receive(:new).and_return(gateway)
+  end
+
+  def gateway
+    @gateway ||= double('CyberSourceGateway', methods)
+  end
 end

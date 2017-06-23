@@ -5,6 +5,7 @@ FactoryGirl.define do
     bill_at { Time.current }
     start_date { Time.current }
     end_date { 1.month.from_now }
+    sequence(:authorization_code) { |n| "authorization-#{ n }" }
 
     factory :pro_bill do
       amount Subscription::Pro.defaults[:monthly_amount]

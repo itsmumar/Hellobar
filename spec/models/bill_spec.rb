@@ -78,11 +78,6 @@ describe Bill do
     expect(bill.due_at(payment_method)).to eq(bill.bill_at)
   end
 
-  it 'should return the payment details of the successful billing attempt' do
-    bill = create(:pro_bill, :paid)
-    expect(bill.paid_with_payment_method_detail).to be_a AlwaysSuccessfulPaymentMethodDetails
-  end
-
   describe '#during_trial_subscription?' do
     it 'should not be on trial subscription' do
       bill = create(:pro_bill, :paid)

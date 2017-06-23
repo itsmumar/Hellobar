@@ -5,6 +5,8 @@ describe RefundBill do
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
 
+  before { stub_cyber_source :refund }
+
   it 'returns array of Bill::Refund and BillingAttempt' do
     expect(service.call).to match_array [instance_of(Bill::Refund), instance_of(BillingAttempt)]
   end
@@ -30,14 +32,13 @@ describe RefundBill do
     expect(latest_billing_attempt.bill).to eql latest_refund
     expect(latest_billing_attempt.payment_method_details).to eql bill.successful_billing_attempt.payment_method_details
     expect(latest_billing_attempt.status).to eql :success
-    expect(latest_billing_attempt.response).to include 'fake-refund-id-'
+    expect(latest_billing_attempt.response).to eql 'authorization'
   end
 
   it 'calls refund on payment_methods_details' do
-    expect_any_instance_of(AlwaysSuccessfulPaymentMethodDetails)
-      .to receive(:refund).with(amount, bill.successful_billing_attempt.response).and_return([true, 'response'])
-
-    service.call
+    expect { service.call }
+      .to make_gateway_call(:refund)
+      .with(amount * 100, bill.authorization_code)
   end
 
   context 'without successful billing attempt' do

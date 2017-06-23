@@ -10,12 +10,10 @@ class PaymentMethod < ActiveRecord::Base
 
   acts_as_paranoid
 
+  delegate :name, :charge, :refund, to: :current_details, allow_nil: true
+
   def current_details
     details.last
-  end
-
-  def name
-    current_details ? current_details.name : nil
   end
 
   def pay(bill)

@@ -55,3 +55,8 @@ en:
     verticalresponse: 'Vertical Response'
     vertical_response: 'Vertical Response'
     webhooks: 'Webhooks'
+
+  activemodel:
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"

@@ -8,15 +8,16 @@ end
 
 describe BillingAuditTrail do
   before do
-    BillingLog.connection.execute("DELETE FROM #{ BillingLog.table_name }")
+    BillingLog.delete_all
   end
 
-  let(:user) { create(:user) }
+  let(:bill) { create :pro_bill }
+  let(:user) { create :user }
 
   it 'should allow us to call audit on an object' do
     expect(BillingLog.count).to eq(0)
     message = 'Hello Audit'
-    user.audit << message
+    bill.audit << message
     expect(BillingLog.count).to eq(1)
     log = BillingLog.all.first
     expect(log.message).to eq(message)
@@ -25,20 +26,20 @@ describe BillingAuditTrail do
 
   it 'should allow us to call audit on an object and set the source ID correctly' do
     expect(BillingLog.count).to eq(0)
-    user.audit << 'Hello Audit'
+    bill.audit << 'Hello Audit'
     expect(BillingLog.count).to eq(1)
     log = BillingLog.all.first
-    expect(log.user_id).to eq(user.id)
-    expect(log.user_id).not_to be_nil
+    expect(log.bill_id).to eq(bill.id)
+    expect(log.bill_id).not_to be_nil
   end
 
   it 'should set the source ID correctly' do
     expect(BillingLog.count).to eq(0)
-    user.audit << 'Hello Audit'
+    bill.audit << 'Hello Audit'
     expect(BillingLog.count).to eq(1)
     log = BillingLog.all.first
-    expect(log.user_id).to eq(user.id)
-    expect(log.user_id).not_to be_nil
+    expect(log.bill_id).to eq(bill.id)
+    expect(log.bill_id).not_to be_nil
   end
 
   it 'should set additional lookup ids' do
@@ -50,13 +51,11 @@ describe BillingAuditTrail do
     log = BillingLog.all.first
     expect(log.payment_method_details_id).to eq(payment_method_details.id)
     expect(log.payment_method_id).to eq(payment_method.id)
-    expect(log.user_id).to eq(user.id)
-    expect(log.user_id).not_to be_nil
   end
 
   it 'should include the line number, file and current git revision' do
     expect(BillingLog.count).to eq(0)
-    User.new.audit << 'Test'
+    bill.audit << 'Test'
     expect(BillingLog.count).to eq(1)
     log = BillingLog.all.first
 

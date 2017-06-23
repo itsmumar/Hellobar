@@ -90,6 +90,7 @@ describe Subscription do
       end
 
       context 'and refunded bill' do
+        before { stub_cyber_source :refund }
         before { Bill.active.each { |bill| RefundBill.new(bill).call } }
 
         it 'returns no subscriptions' do

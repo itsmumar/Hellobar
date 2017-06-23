@@ -5,7 +5,7 @@ class Admin::PaymentMethodDetailsController < ApplicationController
     card = CyberSourceCreditCard.find params[:id]
     payment_method = card.payment_method
 
-    card.delete_token if card.token_present?
+    card.delete_token
     payment_method.destroy
 
     redirect_to admin_users_path
