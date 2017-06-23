@@ -44,6 +44,8 @@ class CreateOrUpdatePaymentMethod
 
   def create_or_update_card(params)
     response = store_or_update_request(params)
+    BillingLogger.credit_card(site, response)
+
     return response.params['subscriptionID'] if response.success?
 
     if (field = response.params['invalidField'])

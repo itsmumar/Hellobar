@@ -64,6 +64,8 @@ class ChangeSubscription
       props[:from_schedule] = old_subscription.schedule
     end
 
+    BillingLogger.change_subscription(site, props)
+
     Analytics.track(:site, site.id, :change_sub, props)
   end
 end

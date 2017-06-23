@@ -67,7 +67,7 @@ describe CreateOrUpdatePaymentMethod do
         expect { service.call }
           .to make_gateway_call(:store)
           .and_succeed
-          .with_response(params: { 'subscriptionID' => '999' })
+          .with_response(params: { 'subscriptionID' => '999' }, message: 'ok')
 
         expect(CyberSourceCreditCard.last.token).to eql '999'
       end
@@ -99,7 +99,7 @@ describe CreateOrUpdatePaymentMethod do
           .to make_gateway_call(:update)
           .with(*expected_args)
           .and_succeed
-          .with_response(params: { 'subscriptionID' => '1' })
+          .with_response(params: { 'subscriptionID' => '1' }, message: 'ok')
       end
     end
 

@@ -11,8 +11,6 @@ class CalculateBill
   def call
     void_pending_bills!
 
-    Settings.billing_log.info "Changing subscription to #{ subscription.inspect }"
-
     if active_paid_bills.empty?
       make_bill_to_full_amount
     elsif upgrading?

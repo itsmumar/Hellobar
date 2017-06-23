@@ -30,6 +30,8 @@ class PayBill
     success, response = payment_method.charge(bill.amount)
     create_billing_attempt(success, response)
 
+    BillingLogger.charge(bill, success)
+
     if success
       bill.update authorization_code: response
       bill.paid!

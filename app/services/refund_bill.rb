@@ -61,6 +61,8 @@ class RefundBill
     # Make sure we use the same payment method details as the refunded attempt
     success, response = payment_method_details.refund(-amount, bill.authorization_code)
 
+    BillingLogger.refund(bill, success)
+
     if success
       refund_bill.update authorization_code: response, status: :paid
     else
