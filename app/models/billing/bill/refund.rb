@@ -1,5 +1,3 @@
-require 'billing_log'
-
 class Bill
   class Refund < self
     has_one :refunded_bill, class_name: 'Bill', dependent: :restrict_with_exception

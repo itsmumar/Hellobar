@@ -1,8 +1,4 @@
-require 'billing_log'
-
 class BillingAttempt < ActiveRecord::Base
-  include BillingAuditTrail
-
   belongs_to :bill
   belongs_to :payment_method_details
   has_one :payment_method, through: :payment_method_details
@@ -36,11 +32,8 @@ class BillingAttempt < ActiveRecord::Base
     self.response = response
     save!
     if success?
-      audit << "Attempt was successful, marking Bill[#{ bill.id }] as paid with response #{ response.inspect }"
       bill.paid!
       bill.create_next_bill! unless bill.is_a?(Bill::Refund)
-    else
-      audit << "Attempt was not successful (#{ response.inspect }) - not changing Bill[#{ bill.id }] status"
     end
     self
   end

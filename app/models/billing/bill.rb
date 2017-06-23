@@ -1,8 +1,4 @@
-require 'billing_log'
-
 class Bill < ActiveRecord::Base
-  include BillingAuditTrail
-
   class StatusAlreadySet < StandardError; end
   class InvalidStatus < StandardError; end
   class BillingEarly < StandardError; end
@@ -69,7 +65,6 @@ class Bill < ActiveRecord::Base
     return if status == value
     raise StatusAlreadySet, "Can not change status once set. Was #{ status.inspect } trying to set to #{ value.inspect }" unless status == :pending || value == :voided
 
-    audit << "Changed Bill[#{ id }] status from #{ status.inspect } to #{ value.inspect }"
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
     self[:status] = status_value
@@ -90,8 +85,6 @@ class Bill < ActiveRecord::Base
     now = Time.current
     raise BillingEarly, "Attempted to bill on #{ now } but bill[#{ id }] has a bill_at date of #{ bill_at }" if !allow_early && now < bill_at
     if amount == 0 # Note: less than 0 is a valid value for refunds
-      audit << 'Marking bill as paid because no payment required'
-      # Mark as paid
       paid!
       return true
     else

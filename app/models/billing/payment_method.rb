@@ -1,8 +1,5 @@
-require 'billing_log'
 class PaymentMethod < ActiveRecord::Base
   class MissingPaymentDetails < RuntimeError; end
-
-  include BillingAuditTrail
 
   belongs_to :user
   has_many :details, -> { order 'id' }, class_name: 'PaymentMethodDetails'

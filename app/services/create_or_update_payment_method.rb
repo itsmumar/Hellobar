@@ -1,6 +1,4 @@
 class CreateOrUpdatePaymentMethod
-  include BillingAuditTrail
-
   def initialize(site, user, params, payment_method: nil)
     @site = site
     @user = user
@@ -53,22 +51,15 @@ class CreateOrUpdatePaymentMethod
       raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
     end
     raise response.message
-  rescue => e
-    audit << "Error tokenizing with #{ form.attributes.inspect } response: #{ response.inspect } error: #{ e.message }"
-    raise
   end
 
   def store_or_update_request(params)
     if previous_token
       # Update the profile
-      gateway.update(format_token(previous_token), form.card, params).tap do |response|
-        audit << "Updated previous_token: #{ previous_token.inspect } with #{ form.attributes.inspect } response: #{ response.inspect }"
-      end
+      gateway.update(format_token(previous_token), form.card, params)
     else
       # Create a new profile
-      gateway.store(form.card, params).tap do |response|
-        audit << "Create new token with #{ form.attributes.inspect } response: #{ response.inspect }"
-      end
+      gateway.store(form.card, params)
     end
   end
 

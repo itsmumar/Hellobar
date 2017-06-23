@@ -1,5 +1,4 @@
 require 'uri'
-require 'billing_log'
 
 class Site < ActiveRecord::Base
   DEFAULT_UPGRADE_STYLES = {

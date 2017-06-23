@@ -1,4 +1,3 @@
-require 'billing_log'
 require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base

@@ -1,6 +1,4 @@
 class CalculateBill
-  include BillingAuditTrail
-
   # @param [Bill::ActiveRecord_Relation] bills
   # @param [Subscription] subscription
   # @param [Boolean] trial_period
@@ -13,7 +11,7 @@ class CalculateBill
   def call
     void_pending_bills!
 
-    audit << "Changing subscription to #{ subscription.inspect }"
+    Settings.billing_log.info "Changing subscription to #{ subscription.inspect }"
 
     if active_paid_bills.empty?
       make_bill_to_full_amount
@@ -41,15 +39,12 @@ class CalculateBill
   end
 
   def make_bill_to_full_amount
-    make_bill do |bill|
-      audit << "No active paid bills, charging full amount now: #{ bill.inspect }"
-    end
+    make_bill
   end
 
   def make_bill_for_upgrading
     make_bill do |bill|
       bill.amount = calculate_reduced_amount
-      audit << "Upgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, prorating amount now: #{ bill.inspect }"
     end
   end
 
@@ -62,7 +57,6 @@ class CalculateBill
       bill.grace_period_allowed = true
       bill.bill_at = active_paid_bills.last.end_date
       bill.start_date = bill.bill_at - 1.hour
-      audit << "Downgrade from active bill: #{ active_paid_bills.last.inspect } changing from subscription #{ active_paid_bills.last.subscription.inspect }, charging full amount later: #{ bill.inspect }"
     end
   end
 
@@ -71,7 +65,6 @@ class CalculateBill
     num_days_used = (Time.current - active_paid_bills.last.start_date) / 1.day
     total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
     percentage_unused = 1.0 - (num_days_used.to_f / total_days_of_last_subcription)
-    audit << "now: #{ Time.current }, start_date: #{ active_paid_bills.last.start_date }, end_date: #{ active_paid_bills.last.end_date }, total_days_of_last_subscription: #{ total_days_of_last_subcription.inspect }, num_days_used: #{ num_days_used }, percentage_unused: #{ percentage_unused }"
 
     unused_paid_amount = last_subscription.amount * percentage_unused
     (subscription.amount - unused_paid_amount).to_i
