@@ -58,6 +58,31 @@ class RefundBill
   end
 
   def refund!(refund_bill)
-    subscription.payment_method.pay(refund_bill)
+    # Make sure we use the same payment method details as the refunded attempt
+    success, response = payment_method_details.refund(-amount, bill.authorization_code)
+
+    if success
+      refund_bill.update authorization_code: response, status: :paid
+    else
+      Raven.capture_message 'Unsuccessful refund', extra: {
+        message: response,
+        bill: bill.id,
+        amount: amount
+      }
+    end
+    create_billing_attempt(refund_bill, success, response)
+  end
+
+  def payment_method_details
+    successful_billing_attempt.payment_method_details
+  end
+
+  def create_billing_attempt(refund_bill, success, response)
+    BillingAttempt.create!(
+      bill: refund_bill,
+      payment_method_details: payment_method_details,
+      status: success ? :success : :failed,
+      response: response
+    )
   end
 end

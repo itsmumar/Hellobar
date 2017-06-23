@@ -34,6 +34,12 @@ class PayBill
       bill.update authorization_code: response
       bill.paid!
       create_bill_for_next_period
+    else
+      Raven.capture_message 'Unsuccessful charge', extra: {
+        message: response,
+        bill: bill.id,
+        amount: bill.amount
+      }
     end
 
     bill

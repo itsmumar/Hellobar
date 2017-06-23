@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :bill do
+  factory :bill, class: 'Bill::Recurring' do
     amount 10
     subscription
     type 'Bill::Recurring'

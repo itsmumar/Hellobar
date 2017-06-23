@@ -34,7 +34,39 @@ describe RefundBill do
       .with(amount * 100, bill.authorization_code)
   end
 
-  context 'without successful billing attempt' do
+  it 'stores authorization_code in bill' do
+    expect { service.call }.to make_gateway_call(:refund).and_succeed.with_response(authorization: 'code')
+    expect(latest_refund.authorization_code).to eql 'code'
+  end
+
+  it 'allows partialy refunds' do
+    RefundBill.new(bill, amount: 1).call
+    RefundBill.new(bill, amount: 1).call
+    RefundBill.new(bill, amount: bill.amount - 2).call
+
+    expect { RefundBill.new(bill, amount: 1).call }
+      .to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
+  end
+
+  context 'when cybersource failed' do
+    before { stub_cyber_source(:refund, success: false) }
+
+    it 'creates failed BillingAttempt' do
+      expect { service.call }.to change(BillingAttempt.failed, :count).by 1
+    end
+
+    it 'sends event to Raven' do
+      extra = {
+        message: 'gateway error',
+        bill: bill.id,
+        amount: -bill.amount
+      }
+      expect(Raven).to receive(:capture_message).with('Unsuccessful refund', extra: extra)
+      service.call
+    end
+  end
+
+  context 'with pending bill' do
     let(:bill) { create :past_due_bill }
 
     it 'raises InvalidRefund' do
@@ -72,14 +104,6 @@ describe RefundBill do
 
     it 'raises MissingPaymentMethod' do
       expect { service.call }.to raise_error RefundBill::MissingPaymentMethod, 'Could not find payment method'
-    end
-  end
-
-  context 'when trying to refund more than paid amount' do
-    before { RefundBill.new(bill, amount: 1).call }
-
-    it 'raises RefundBill::InvalidRefund' do
-      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
     end
   end
 end
