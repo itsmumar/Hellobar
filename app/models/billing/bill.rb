@@ -69,12 +69,6 @@ class Bill < ActiveRecord::Base
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
     self[:status] = status_value
     self.status_set_at = Time.current
-
-    if status == :paid
-      on_paid
-    elsif status == :voided
-      on_voided
-    end
   end
 
   # TODO: This method needs to be refactored or even removed; it *no longer* is
@@ -127,12 +121,6 @@ class Bill < ActiveRecord::Base
     return true if past_due?(payment_method) && (payment_method.nil? || !billing_attempts.empty?)
     # False otherwise
     false
-  end
-
-  def on_paid
-  end
-
-  def on_voided
   end
 
   def paid_with_payment_method_detail
