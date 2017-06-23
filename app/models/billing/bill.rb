@@ -71,22 +71,6 @@ class Bill < ActiveRecord::Base
     self.status_set_at = Time.current
   end
 
-  # TODO: This method needs to be refactored or even removed; it *no longer* is
-  # used for refunds, but was left without changes
-  def attempt_billing!(allow_early = false)
-    set_final_amount!
-
-    now = Time.current
-    raise BillingEarly, "Attempted to bill on #{ now } but bill[#{ id }] has a bill_at date of #{ bill_at }" if !allow_early && now < bill_at
-    if amount == 0 # Note: less than 0 is a valid value for refunds
-      paid!
-      return true
-    else
-      raise MissingPaymentMethod unless subscription.payment_method
-      return subscription.payment_method.pay(self)
-    end
-  end
-
   def status
     super.to_sym
   end
