@@ -21,7 +21,7 @@ module BillingLogger
   end
 
   def credit_card(site, response)
-    info ' StoreCard', to_status(response.success?), site.url, "  #{ response.message }"
+    info ' StoreCard', to_status(response.success?), site&.url, "  #{ response.message }"
   end
 
   def change_subscription(site, props)

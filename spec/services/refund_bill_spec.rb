@@ -49,7 +49,7 @@ describe RefundBill do
   end
 
   context 'when cybersource failed' do
-    before { stub_cyber_source(:refund, success: false) }
+    before { stub_cyber_source(:refund, success?: false) }
 
     it 'creates failed BillingAttempt' do
       expect { service.call }.to change(BillingAttempt.failed, :count).by 1

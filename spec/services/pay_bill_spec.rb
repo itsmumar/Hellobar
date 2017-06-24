@@ -22,7 +22,7 @@ describe PayBill do
     end
 
     context 'when cybersource failed' do
-      before { stub_cyber_source(:purchase, success: false) }
+      before { stub_cyber_source(:purchase, success?: false) }
 
       it 'creates failed BillingAttempt' do
         expect { service.call }.to change(BillingAttempt.failed, :count).by 1
