@@ -9,7 +9,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   validates :token, :last_digits, presence: true
 
-  store :data, accessors: %i[number token]
+  store :data, accessors: %i[number token], coder: JSON
 
   def name
     "#{ brand&.capitalize || 'Credit Card' } ending in #{ last_digits.presence || '???' }"
