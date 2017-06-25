@@ -99,6 +99,11 @@ describe ChangeSubscription, :freeze do
           expect(site.current_subscription).to be_instance_of Subscription::Free
           expect(site).to be_capable_of :free
         end
+
+        it 'pays bill' do
+          expect(PayBill).to receive_service_call
+          change_subscription('free')
+        end
       end
 
       context 'when upgrading to Pro from Free' do
@@ -106,6 +111,11 @@ describe ChangeSubscription, :freeze do
           expect { change_subscription('pro') }.to change { site.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Pro
           expect(site).to be_capable_of :pro
+        end
+
+        it 'pays bill' do
+          expect(PayBill).to receive_service_call
+          change_subscription('pro')
         end
 
         context 'and then to Enterprise from Pro' do
@@ -119,6 +129,11 @@ describe ChangeSubscription, :freeze do
 
           it 'excludes a paid amount from new bill' do
             expect(change_subscription('enterprise').amount).to eql 99 - 15
+          end
+
+          it 'pays bill' do
+            expect(PayBill).to receive_service_call
+            change_subscription('enterprise')
           end
 
           context 'when a refund has been made' do
@@ -144,6 +159,11 @@ describe ChangeSubscription, :freeze do
           expect { change_subscription('free') }.not_to change { site.reload.capabilities }
         end
 
+        it 'does not pay bill' do
+          expect(PayBill).not_to receive_service_call
+          change_subscription('free')
+        end
+
         context 'when Pro subscription expires' do
           it 'changes capabilities to Free' do
             change_subscription('free')
@@ -165,6 +185,11 @@ describe ChangeSubscription, :freeze do
 
         it 'does not change capabilities' do
           expect { change_subscription('free') }.not_to change { site.reload.capabilities }
+        end
+
+        it 'does not pay bill' do
+          expect(PayBill).not_to receive_service_call
+          change_subscription('free')
         end
 
         context 'when Pro subscription expires' do

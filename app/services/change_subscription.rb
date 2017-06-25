@@ -33,7 +33,8 @@ class ChangeSubscription
   end
 
   def pay_bill(bill)
-    PayBill.new(bill).call
+    PayBill.new(bill, payment_method).call if bill.due_at(payment_method) <= Time.current
+    bill
   end
 
   def create_bill(subscription)

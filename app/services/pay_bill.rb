@@ -2,13 +2,13 @@ class PayBill
   class Error < StandardError; end
   class MissingPaymentMethod < Error; end
 
-  def initialize(bill)
+  def initialize(bill, payment_method = nil)
     @bill = bill
-    @payment_method = bill.payment_method
+    @payment_method = payment_method || bill.payment_method
   end
 
   def call
-    return bill if !bill.pending? || bill.due_at(payment_method) > Time.current
+    return bill if !bill.pending?
 
     set_final_amount
 

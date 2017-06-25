@@ -59,18 +59,6 @@ describe PayBill do
       it_behaves_like 'doing nothing'
     end
 
-    context 'when bill.due_at in the future' do
-      let(:bill) { create :bill, bill_at: 1.day.from_now, subscription: subscription }
-
-      it_behaves_like 'doing nothing'
-    end
-
-    context 'when grace period allowed and bill_at + grace period >= today' do
-      let(:bill) { create :bill, bill_at: Time.current, grace_period_allowed: true, subscription: subscription }
-
-      it_behaves_like 'doing nothing'
-    end
-
     context 'when final amount is 0' do
       before { allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(bill.amount) }
 
