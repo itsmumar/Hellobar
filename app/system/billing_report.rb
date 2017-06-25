@@ -97,9 +97,9 @@ class BillingReport
   private
 
   def info(msg)
-    self.log << msg
+    log << msg
     BillingLogger.info msg
-    puts msg
+    puts msg # rubocop:disable Rails/Output
   end
 
   def exception(e)

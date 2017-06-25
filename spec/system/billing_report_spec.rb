@@ -142,7 +142,7 @@ describe BillingReport, :freeze do
       specify do
         expect { report.attempt(bill) { raise 'error' } }
           .to log(["#{ attempting_msg } ERROR", anything])
-                .and raise_error('error')
+          .and raise_error('error')
       end
     end
   end

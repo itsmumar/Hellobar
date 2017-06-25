@@ -8,7 +8,7 @@ class PayBill
   end
 
   def call
-    return bill if !bill.pending?
+    return bill unless bill.pending?
 
     set_final_amount
 
