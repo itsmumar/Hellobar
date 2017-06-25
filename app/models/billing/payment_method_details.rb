@@ -19,16 +19,4 @@ class PaymentMethodDetails < ActiveRecord::Base
   def grace_period
     nil
   end
-
-  def name
-    raise NameError, 'must be implemented'
-  end
-
-  def charge(_amount_in_dollars)
-    raise NameError, 'must be implemented'
-  end
-
-  def refund(_amount_in_dollars, _original_transaction_id)
-    raise NameError, 'must be implemented'
-  end
 end

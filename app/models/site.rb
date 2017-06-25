@@ -2,6 +2,17 @@ require 'uri'
 require 'billing_log'
 
 class Site < ActiveRecord::Base
+  DEFAULT_UPGRADE_STYLES = {
+    'offer_bg_color' => '#ffffb6',
+    'offer_text_color' => '#000000',
+    'offer_link_color' => '#1285dd',
+    'offer_border_color' => '#000000',
+    'offer_border_width' => '0px',
+    'offer_border_style' => 'solid',
+    'offer_border_radius' => '0px',
+    'modal_button_color' => '#1285dd'
+  }.freeze
+
   attr_accessor :skip_script_generation
 
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
@@ -267,7 +278,7 @@ class Site < ActiveRecord::Base
   end
 
   def content_upgrade_styles
-    settings.fetch('content_upgrade', {})
+    settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
   end
 
   private

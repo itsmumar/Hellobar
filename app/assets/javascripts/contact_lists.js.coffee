@@ -2,7 +2,8 @@ $ ->
 
   $('.contacts-table').tablesorter() if $('.contacts-table tbody tr').length > 1
 
-  siteID = (location.pathname.match(/sites\/(\d+)/) || [])[1]
+  # handle regular viewing of contact lists and oauth callbacks
+  siteID = (location.pathname.match(/sites\/(\d+)/) || location.search.match(/site_id=(\d+)/) || [])[1]
   contactListID = (location.pathname.match(/contact_lists\/(\d+)/) || [])[1]
 
   baseOptions = ->

@@ -1,0 +1,37 @@
+<p><label><%= check_box_tag(:thank_you_enabled, '1', @content_upgrade.thank_you_enabled?, onchange: '$("#thank_you_container").toggle(this.checked)') %> Enable thank you step</label></p>
+
+<div class="columns" id="thank_you_container" <% unless @content_upgrade.thank_you_enabled? %> style="display: none;"<% end %>>
+  <div class="form-column">
+    <div class="field-wrapper">
+      <label>
+        Thank You Headline
+        <input name="thank_you_headline" type="text" value="<%= @content_upgrade.thank_you_headline %>">
+      </label>
+    </div>
+
+    <div class="field-wrapper">
+      <label>
+        Thank You Subheading
+        <input name="thank_you_subheading" type="text" value="<%= @content_upgrade.thank_you_subheading %>">
+      </label>
+    </div>
+
+    <div class="field-wrapper">
+      <label>
+        Thank You CTA
+        <input name="thank_you_cta" type="text" value="<%= @content_upgrade.thank_you_cta %>">
+      </label>
+    </div>
+
+    <div class="field-wrapper">
+      <label>
+        Thank You URL
+        <input name="thank_you_url" type="text" value="<%= @content_upgrade.thank_you_url %>">
+      </label>
+    </div>
+  </div>
+
+  <div id="thank-you-preview" class="preview-column">
+    <%= render 'thank_you_preview' %>
+  </div>
+</div>

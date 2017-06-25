@@ -1,3 +1,5 @@
+/* globals noUiSlider */
+
 import Ember from 'ember';
 
 export default Ember.Component.extend({
@@ -34,7 +36,7 @@ export default Ember.Component.extend({
     this.set('slider', slider);
     this.sliderEvents.forEach(event => {
         if (!Ember.isEmpty(this.get(event))) {
-          return slider.on(event, (values, handle) => {
+          return slider.on(event, (/* values, handle*/) => {
               let value = this.get('slider').get();
               value = value ? parseInt(value).toString() : '0';
               this.updateHandleValue(value);
@@ -62,13 +64,20 @@ export default Ember.Component.extend({
 
   updateLayout() {
     const $slider = this.$('.js-slider');
+    const offsetWidth = (el) => {
+      const clone = el.clone().appendTo('body');
+      const offsetWidth = clone.get(0).offsetWidth;
+      clone.remove();
+      return offsetWidth;
+    };
+
     const $ll = this.$('.js-left-label');
     if ($ll.length > 0) {
-      $slider.css('margin-left', $ll[0].offsetWidth + 15);
+      $slider.css('margin-left', offsetWidth($ll) + 15);
     }
     const $rl = this.$('.js-right-label');
     if ($rl.length > 0) {
-      $slider.css('margin-right', $rl[0].offsetWidth + 15);
+      $slider.css('margin-right', offsetWidth($rl) + 15);
     }
   },
 

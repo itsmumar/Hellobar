@@ -1,3 +1,5 @@
+<%= render 'preview_styles' %>
+
 <script type="text/javascript">
 
   $(function () {
@@ -97,14 +99,14 @@
       </div>
 
       <div class="preview-column" style="max-width:900px;">
-        <%= render :partial => 'preview' %>
+        <%= render partial: 'preview' %>
       </div>
 
     </div>
 
     <div class="buttons">
       <input type="submit" class="save" value="Save">
-      <%= link_to('List', site_content_upgrades_path(@site.id), :class => "list") %>
+      <%= link_to('List', site_content_upgrades_path(@site.id), class: "list") %>
     </div>
 
   </div>

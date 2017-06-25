@@ -1,5 +1,6 @@
+/* globals TempUserUnsavedChangesModal, UnsavedChangesModal */
+
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 import MobileMixin from './application.mixin.mobile';
 
@@ -29,7 +30,7 @@ export default Ember.Controller.extend(MobileMixin, {
   },
 
   _subscribeToBusEvents() {
-    this.get('bus').subscribe('hellobar.core.application.initialized', params => {
+    this.get('bus').subscribe('hellobar.core.application.initialized', (/* params */) => {
       $('body').removeClass('loading');
       Ember.run.next(() => this.get('palette').detectColorPalette(this));
     });

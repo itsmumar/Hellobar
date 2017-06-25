@@ -13,6 +13,11 @@ export default Ember.Component.extend({
   imageUploadCopy: Ember.computed.oneWay('theming.currentTheme.image.upload_copy'),
   themeHasDefaultImage: Ember.computed.oneWay('theming.themeHasDefaultImage'),
   useThemeImage: Ember.computed.oneWay('theming.useThemeImage'),
+  canUseOpacity: Ember.computed.alias('model.site.capabilities.opacity'),
+
+  imageOpacity: function () {
+    return this.get('model.image_opacity');
+  }.property('model.image_opacity'),
 
   allowImages: Ember.computed('model.type', function () {
       return this.get('model.type') !== "Bar";
@@ -26,6 +31,10 @@ export default Ember.Component.extend({
 
     setImageProps(imageProps) {
       this.get('theming').setImage(imageProps);
+    },
+
+    setImageOpacity(opacity) {
+      this.set('model.image_opacity', parseInt(opacity));
     }
   }
 

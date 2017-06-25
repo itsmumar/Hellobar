@@ -1,3 +1,5 @@
+/* globals siteID, ContactListModal, formatE164, InternalTracking, EditorErrorsModal */
+
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
@@ -73,7 +75,7 @@ export default Ember.Route.extend({
           ), 100);
           modal.$modal.remove();
         },
-        close: modal => {
+        close: (/* modal */) => {
           this.controller.set('model.contact_list_id', null);
         }
       };

@@ -47,7 +47,8 @@ describe StaticScriptModel do
         autofills: site_capabilities.autofills?,
         geolocation_injection: site_capabilities.geolocation_injection?,
         external_tracking: site_capabilities.external_tracking?,
-        alert_bars: site_capabilities.alert_bars?
+        alert_bars: site_capabilities.alert_bars?,
+        opacity: site_capabilities.opacity?
       }
       expect(capabilities).to match expected_capabilities
     end

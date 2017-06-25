@@ -138,7 +138,7 @@ class @PaymentModal extends Modal
             @_displayErrors(xhr.responseJSON.errors)
 
   _bindDynamicStateLength: ->
-    @$modal.find('#payment_method_details_country').change (event) =>
+    @$modal.on 'change', '#payment_method_details_country', (event) =>
       if event.target.value == 'US'
         @$modal.find('.cc-state input').attr('maxlength', 2)
       else

@@ -1,3 +1,5 @@
+/* globals Dropzone, siteID */
+
 import Ember from 'ember';
 
 export default Ember.Component.extend({
@@ -99,7 +101,7 @@ export default Ember.Component.extend({
       }
     );
 
-    dropzone.on('error', file => {
+    dropzone.on('error', (/* file */) => {
         return this.set('existingFileName', null);
       }
     );

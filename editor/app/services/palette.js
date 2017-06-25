@@ -1,3 +1,5 @@
+/* globals imagesLoaded */
+
 import Ember from 'ember';
 
 // GLOBALS: one object (https://github.com/One-com/one-color), ColorThief
@@ -91,7 +93,7 @@ export default Ember.Service.extend({
       this.set('dominantColor', dominantColor);
       this.set('siteColors', colorPalette);
 
-      if (!modelHolder.get('model.id') && !window.elementToCopyID) {
+      if (!modelHolder.get('model.id') && !window.elementToCopyID && modelHolder.get('model.theme_id') === 'autodetect') {
         Ember.run.next(() => this.setSiteColors(modelHolder));
       }
     });

@@ -1,0 +1,54 @@
+<script type="text/javascript">
+
+  $(function () {
+
+    $('#thank_you_container input, #thank_you_container textarea').on('keyup',function(){
+      loadContent();
+        //this helps the link stay good when edited
+        loadStyles();
+      });
+
+
+    function loadContent() {
+      $('#thank-you-preview [data-field="thank_you_headline"]').text($('input[name="thank_you_headline"]').val());
+      $('#thank-you-preview [data-field="thank_you_subheading"]').text($('input[name="thank_you_subheading"]').val());
+      $('#thank-you-preview [data-field="thank_you_cta"]').text($('input[name="thank_you_cta"]').val());
+      $('#thank-you-preview [data-field="thank_you_cta"]').attr('href', $('input[name="thank_you_url"]').val());
+    }
+
+    <% if @content_upgrade && @content_upgrade.thank_you_enabled? %>
+      //go ahead and load default content
+      loadContent();
+    <% end %>
+
+    <% if @styles %>
+      function loadStyles() {
+        $('#thank-you-preview .hb-cu-offer').css('background-color', <%=raw @styles['offer_bg_color'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer').css('color', <%=raw @styles['offer_text_color'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer a').css('color', <%=raw @styles['offer_link_color'].to_json %>);
+        $('#thank-you-preview .hb-cu-modal .cta').css('background-color', <%=raw @styles['modal_button_color'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer').css('border-color', <%=raw @styles['offer_border_color'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer').css('border-style', <%=raw @styles['offer_border_style'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer').css('border-width', <%=raw @styles['offer_border_width'].to_json %>);
+        $('#thank-you-preview .hb-cu-offer').css('border-radius', <%=raw @styles['offer_border_radius'].to_json %>);
+      }
+      loadStyles();
+    <% end %>
+
+    $('#thank-you-preview .hb-cu-modal').show();
+
+  });
+</script>
+
+<div id="hb-cu-offer-preview" style="background-color:#eee; padding:50px;">
+  <div class="hb-cu-modal hb-cu-modal" >
+    <div>
+      <a id="hb-cu-close-button" href="">×</a>
+    </div>
+
+    <div data-field="thank_you_headline" class="headline">Thanks!</div>
+    <div data-field="thank_you_subheading">Check out our website.</div>
+
+    <a href="javascript://" target="_blank" data-field="thank_you_cta" class="cta">CTA</a>
+  </div>
+</div>
