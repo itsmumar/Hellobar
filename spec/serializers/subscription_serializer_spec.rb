@@ -1,6 +1,25 @@
 describe SubscriptionSerializer do
   let(:user) { create(:user) }
 
+  describe '#type' do
+    let(:subscriptions) do
+      {
+        Subscription::Free => 'free',
+        Subscription::FreePlus => 'free_plus',
+        Subscription::ProComped => 'pro_comped',
+        Subscription::ProManaged => 'pro_managed'
+      }
+    end
+
+    it 'serializes subscription as underscore case' do
+      subscriptions.each do |subscription, value|
+        serializer = SubscriptionSerializer.new subscription.new, scope: user
+
+        expect(serializer.type).to eq value
+      end
+    end
+  end
+
   describe 'amounts' do
     let(:serializer) { SubscriptionSerializer.new(Subscription::Pro.new, scope: user) }
 
