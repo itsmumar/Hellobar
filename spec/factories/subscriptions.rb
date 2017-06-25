@@ -4,6 +4,7 @@ FactoryGirl.define do
     user nil
     schedule :monthly
     association :payment_method, factory: %i[payment_method]
+    amount 0.0
 
     trait :free do
       amount 0.0

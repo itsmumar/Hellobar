@@ -72,4 +72,10 @@ FactoryGirl.define do
   trait :pending do
     status :pending
   end
+
+  trait :with_attempt do
+    after :create do |bill|
+      create :billing_attempt, :failed, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+    end
+  end
 end

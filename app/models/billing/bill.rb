@@ -6,8 +6,7 @@ class Bill < ActiveRecord::Base
     attr_reader :amount
 
     def initialize(amount)
-      @amount = amount.to_f
-      super("Amount was: #{ amount.to_f.inspect }")
+      super("Amount was: #{ amount&.to_f.inspect }")
     end
   end
 
