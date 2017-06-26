@@ -1,0 +1,10 @@
+describe ApiSerializer::UserStateSerializer do
+  let(:user) { create :user, :with_payment_method, :with_email_bar }
+  let(:serializer) { ApiSerializer::UserStateSerializer.new(user) }
+
+  it 'serializes user' do
+    expect(serializer.serializable_hash).to include(
+      :user, :sites, :site_memberships, :rules, :site_elements, :payment_methods
+    )
+  end
+end

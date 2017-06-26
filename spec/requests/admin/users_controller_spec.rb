@@ -45,6 +45,12 @@ describe Admin::UsersController do
 
       it_behaves_like 'success response'
     end
+
+    context 'when finding users by credit card' do
+      let(:q) { user.payment_method_details.last.last_digits }
+
+      it_behaves_like 'success response'
+    end
   end
 
   describe 'GET admin_user_path' do
@@ -94,11 +100,23 @@ describe Admin::UsersController do
   describe 'DELETE admin_user_path' do
     let(:user) { create(:user) }
 
+    before { stub_current_admin(admin) }
+
     it 'allows the admin to (soft) destroy a user' do
-      stub_current_admin(admin)
       delete admin_user_path(user)
 
       expect(User.only_deleted).to include(user)
+    end
+
+    context 'when cannot destroy' do
+      let(:user) { instance_double(User, id: 1, sites: [], destroy: false) }
+      before { allow(User).to receive(:find).with(user.id.to_s).and_return(user) }
+
+      it 'shows a deleted users' do
+        delete admin_user_path(user.id)
+
+        expect(response).to redirect_to admin_user_path(user)
+      end
     end
   end
 end
