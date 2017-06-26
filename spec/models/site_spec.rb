@@ -432,7 +432,7 @@ describe Site do
       ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
     end
 
-    before { stub_cyber_source :purchase, success: false }
+    before { stub_cyber_source :purchase, success?: false }
 
     it 'returns bills that are due' do
       expect(site.bills_with_payment_issues).to be_empty
