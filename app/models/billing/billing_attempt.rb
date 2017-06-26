@@ -8,43 +8,15 @@ class BillingAttempt < ActiveRecord::Base
 
   enum status: %i[success failed]
 
-  delegate :id, to: :subscription, prefix: true, allow_nil: true
-  delegate :id, to: :payment_method, prefix: true, allow_nil: true
-  delegate :id, to: :user, prefix: true, allow_nil: true
-  delegate :id, to: :bill, prefix: true, allow_nil: true
-  delegate :id, to: :site, prefix: true, allow_nil: true
-
   def readonly?
     new_record? ? false : true
   end
 
-  def process!
-    success = response = nil
-    if bill.amount >= 0
-      success, response = payment_method_details.charge(bill.amount)
-      bill.update_column(:authorization_code, response)
-    else
-      # Make sure we use the same payment method details as the refunded attempt
-      self.payment_method_details = bill.refunded_billing_attempt.payment_method_details
-      success, response = payment_method_details.refund(-bill.amount, bill.refunded_bill.authorization_code)
-    end
-    self.status = success ? :success : :failed
-    self.response = response
-    save!
-    if success?
-      bill.paid!
-      bill.create_next_bill! unless bill.is_a?(Bill::Refund)
-    end
-    self
-  end
-
-  alias orig_status status
   def status
-    orig_status.to_sym
+    super.to_sym
   end
 
   def success?
     status == :success
   end
-  alias successful? success?
 end

@@ -1,7 +1,6 @@
 class Bill < ActiveRecord::Base
   class StatusAlreadySet < StandardError; end
   class InvalidStatus < StandardError; end
-  class BillingEarly < StandardError; end
   class InvalidBillingAmount < StandardError
     attr_reader :amount
 
@@ -10,8 +9,6 @@ class Bill < ActiveRecord::Base
       super("Amount was: #{ amount&.to_f.inspect }")
     end
   end
-
-  class MissingPaymentMethod < StandardError; end
 
   serialize :metadata, JSON
 
@@ -52,10 +49,6 @@ class Bill < ActiveRecord::Base
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
   end
 
-  def set_base_amount
-    self.base_amount ||= amount
-  end
-
   def check_amount
     raise InvalidBillingAmount, amount if !amount || amount < 0
   end
@@ -94,10 +87,6 @@ class Bill < ActiveRecord::Base
     Time.current >= due_at(payment_method)
   end
 
-  def should_bill?
-    pending? && Time.current >= bill_at
-  end
-
   def problem_with_payment?(payment_method = nil)
     return false if paid? || voided? || amount == 0
     # If pending see if we are past due and we have
@@ -119,15 +108,13 @@ class Bill < ActiveRecord::Base
     DiscountCalculator.new(subscription).current_discount
   end
 
-  def set_final_amount!
-    return if paid? || base_amount.nil?
-
-    self.discount = is_a?(Refund) ? 0 : calculate_discount
-    self.amount = [self.base_amount - discount, 0].max
-    CouponUses::ApplyFromReferrals.run(bill: self)
-  end
-
   def estimated_amount
     (base_amount || amount) - calculate_discount
+  end
+
+  private
+
+  def set_base_amount
+    self.base_amount ||= amount
   end
 end

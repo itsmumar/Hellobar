@@ -181,14 +181,12 @@ describe Bill do
   describe '#set_base_amount' do
     it 'sets the base amount from amount' do
       bill = build(:bill, amount: 10)
-      bill.set_base_amount
-      expect(bill.base_amount).to eq(10)
+      expect { bill.valid? }.to change { bill.base_amount }.to eq(10)
     end
 
     it 'does nothing if base amount already set' do
       bill = build(:bill, amount: 10, base_amount: 12)
-      bill.set_base_amount
-      expect(bill.base_amount).to eq(12)
+      expect { bill.valid? }.not_to change { bill.base_amount }.from(12)
     end
   end
 
@@ -209,14 +207,12 @@ describe Bill do
       let(:bill) { create :free_bill }
 
       specify { expect(bill).not_to be_problem_with_payment }
-      specify { expect(bill).to be_should_bill }
     end
 
     context 'when pending and past due' do
       let(:bill) { create :past_due_bill }
 
       specify { expect(bill).to be_problem_with_payment }
-      specify { expect(bill).to be_should_bill }
       specify { expect(bill).to be_past_due }
     end
 
@@ -226,7 +222,6 @@ describe Bill do
       before { bill.billing_attempts.delete_all }
 
       specify { expect(bill).not_to be_problem_with_payment(payment_method) }
-      specify { expect(bill).to be_should_bill }
       specify { expect(bill).to be_past_due }
     end
 
@@ -236,34 +231,6 @@ describe Bill do
 
       specify { expect(bill).to be_problem_with_payment }
       specify { expect(bill).to be_past_due }
-    end
-  end
-end
-
-describe Subscription do
-  describe '#active_bills' do
-    let!(:subscription) { create(:subscription, :with_bills) }
-
-    before { Bill.delete_all }
-
-    it 'returns all bills active for time period', :freeze do
-      expect(subscription.active_bills(true)).to be_empty
-
-      # Add a bill after
-      create(:bill, subscription: subscription, start_date: 15.days.from_now, end_date: 45.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
-
-      # Add a bill before
-      create(:bill, subscription: subscription, start_date: 45.days.ago, end_date: 15.days.ago, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
-
-      # Add a bill during time, but voided
-      create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, status: :voided, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
-
-      # Add an active bill
-      bill = create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to match_array [bill]
     end
   end
 end
