@@ -1,5 +1,4 @@
 class Admin::SitesController < ApplicationController
-  include Subscribable
   layout 'admin'
 
   before_action :require_admin

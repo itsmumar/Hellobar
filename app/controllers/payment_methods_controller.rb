@@ -1,6 +1,4 @@
 class PaymentMethodsController < ApplicationController
-  include Subscribable
-
   before_action :authenticate_user!
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -35,7 +33,7 @@ class PaymentMethodsController < ApplicationController
     end
 
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params).call
-    changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing])
+    changed_subscription = change_subscription(payment_method)
 
     respond_to do |format|
       format.json { render json: changed_subscription }
@@ -48,11 +46,10 @@ class PaymentMethodsController < ApplicationController
 
     payment_method = current_user.payment_methods.find params[:id]
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params, payment_method: payment_method).call
+    changed_subscription = change_subscription(payment_method)
 
     respond_to do |format|
-      result = subscription_bill_and_status(@site, payment_method, params[:billing])
-      status = result.delete(:status) || :ok
-      format.json { render json: result, status: status }
+      format.json { render json: changed_subscription }
     end
   end
 
@@ -61,6 +58,25 @@ class PaymentMethodsController < ApplicationController
   def record_invalid(e)
     respond_to do |format|
       format.json { render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity }
+    end
+  end
+
+  # TODO: move it to a serializer
+  def change_subscription(payment_method)
+    old_subscription = @site.current_subscription
+    bill = ChangeSubscription.new(@site, params[:billing], payment_method).call
+
+    is_upgrade =
+      if old_subscription
+        Subscription::Comparison.new(old_subscription, bill.subscription).upgrade?
+      else
+        true
+      end
+
+    Analytics.track(*current_person_type_and_id, 'Upgraded') if is_upgrade
+
+    { bill: bill, site: SiteSerializer.new(@site), is_upgrade: is_upgrade }.tap do |response|
+      response[:old_subscription] = SubscriptionSerializer.new(old_subscription) if old_subscription
     end
   end
 end

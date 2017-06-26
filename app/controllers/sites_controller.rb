@@ -1,6 +1,5 @@
 class SitesController < ApplicationController
   include SitesHelper
-  include Subscribable
 
   before_action :authenticate_user!, except: :create
   before_action :load_site, except: %i[index new create]
