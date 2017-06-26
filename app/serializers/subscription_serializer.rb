@@ -1,10 +1,14 @@
 class SubscriptionSerializer < ActiveModel::Serializer
-  attributes :schedule, :type, :yearly_amount, :monthly_amount
+  attributes :schedule, :type, :name, :yearly_amount, :monthly_amount
   attributes :trial, :payment_method_details_id, :payment_method_number
   attributes :payment_valid
 
   def schedule
     object.values[:schedule]
+  end
+
+  def name
+    object.values[:name]
   end
 
   def type
