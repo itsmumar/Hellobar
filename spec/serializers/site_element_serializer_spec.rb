@@ -25,7 +25,6 @@ describe SiteElementSerializer do
       element.contact_list = nil
       element.valid?
 
-
       expect(serializer.as_json[:full_error_messages]).to eq(['You must select a contact list to sync with in the "goals" section'])
     end
   end
