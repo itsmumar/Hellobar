@@ -17,7 +17,7 @@ FactoryGirl.define do
     end
 
     trait :pro do
-      amount { Subscription::Pro.defaults[ schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
+      amount { Subscription::Pro.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Pro.new(schedule: schedule) }
     end
 
@@ -30,7 +30,7 @@ FactoryGirl.define do
     end
 
     trait :enterprise do
-      amount { Subscription::Enterprise.defaults[ schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount]  }
+      amount { Subscription::Enterprise.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Enterprise.new(schedule: schedule) }
     end
 
