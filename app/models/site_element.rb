@@ -1,6 +1,7 @@
 class SiteElement < ActiveRecord::Base
   extend ActiveHash::Associations::ActiveRecordExtensions
 
+  SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
   DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
@@ -128,6 +129,10 @@ class SiteElement < ActiveRecord::Base
     white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
     lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
     self[:link_text] = lt_value
+  end
+
+  def fonts
+    (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS
   end
 
   def conversion_rate
