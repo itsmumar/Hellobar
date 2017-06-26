@@ -8,7 +8,7 @@ class SubscriptionSerializer < ActiveModel::Serializer
   end
 
   def type
-    object.values[:name].gsub(/\s/, '').underscore
+    object.values[:name].delete(' ').underscore
   end
 
   def yearly_amount

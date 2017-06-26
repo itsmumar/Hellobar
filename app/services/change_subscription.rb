@@ -46,10 +46,7 @@ class ChangeSubscription
   end
 
   def subscription_class
-    Subscription.const_get(billing_params[:plan])
-  rescue NameError
-    plan_constant = billing_params[:plan].parameterize.underscore.camelize
-    Subscription.const_get(plan_constant)
+    Subscription.const_get(billing_params[:plan].camelize)
   end
 
   def track_subscription_change(subscription)
