@@ -419,7 +419,7 @@ export default Ember.Service.extend({
           "Arial,Helvetica,sans-serif": 'Arial',
           "Georgia,serif": 'Georgia',
           "Impact, Charcoal, sans-serif": 'Impact',
-          "Lato,sans-serif": 'Lato'
+          "Lato,sans-serif": 'Lato',
           "Montserrat,sans-serif": 'Montserrat',
           "'Open Sans',sans-serif": 'Open Sans',
           "Oswald,sans-serif": 'Oswald',
@@ -429,7 +429,7 @@ export default Ember.Service.extend({
           "Roboto,sans-serif": 'Roboto',
           "Tahoma, Geneva, sans-serif": 'Tahoma',
           "'Times New Roman', Times, serif, -webkit-standard": 'Times New Roman',
-          "Verdana, Geneva, sans-serif": 'Verdana',
+          "Verdana, Geneva, sans-serif": 'Verdana'
         }
       };
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
