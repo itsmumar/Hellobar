@@ -45,7 +45,7 @@ class Site < ActiveRecord::Base
   before_destroy :generate_blank_static_assets
 
   after_create do
-    SiteDetectorJob.perform_later self
+    DetectInstallTypeJob.perform_later id, url
   end
 
   after_update :regenerate_script
