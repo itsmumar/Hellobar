@@ -62,6 +62,8 @@ json.cache! site_element do
     :wordpress_bar_id,
     :blocks,
 
+    :fonts,
+
     # alert bar
     :sound,
     :notification_delay,

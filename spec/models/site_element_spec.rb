@@ -533,4 +533,39 @@ describe SiteElement do
       end
     end
   end
+
+  describe 'fonts' do
+    before do
+      element.update(
+        headline: '<span style="font-family: HeadlineFont, sans-serif;">text</span>',
+        caption: '<span style="font-family: CaptionFont, sans-serif;">text</span>',
+        link_text: '<span style="font-family: LinkTextFont, sans-serif;">text</span>'
+      )
+    end
+
+    it 'does not include system fonts' do
+      %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].each do |font|
+        element.headline = %(<span style="font-family: #{ font }, sans-serif;">text</span>)
+        expect(element.fonts).not_to include font
+      end
+    end
+
+    it 'grabs font from headline, caption and link_text' do
+      expect(element.fonts).to match %w[HeadlineFont CaptionFont LinkTextFont]
+    end
+
+    context 'when no custom fonts are used' do
+      before do
+        element.update(
+          headline: 'Headline',
+          caption: '',
+          link_text: nil
+        )
+      end
+
+      it 'returns empty array' do
+        expect(element.fonts).to eql []
+      end
+    end
+  end
 end

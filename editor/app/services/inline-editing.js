@@ -226,6 +226,7 @@ class InlineImageManagementPane {
 export default Ember.Service.extend({
 
   bus: Ember.inject.service(),
+  froalaFonts: Ember.inject.service(),
 
   modelHandler: null,
   simpleModelAdapter: null,
@@ -414,7 +415,8 @@ export default Ember.Service.extend({
         enter: $.FroalaEditor.ENTER_P,
         multiLine: mode === 'full',
         initOnClick: false,
-        zIndex: 9888
+        zIndex: 9888,
+        fontFamily: this.get('froalaFonts').fontFamily()
       };
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]
