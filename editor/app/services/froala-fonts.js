@@ -30,6 +30,6 @@ export default Ember.Service.extend({
       'PT Serif',
       'Raleway',
       'Roboto'
-    ]
+    ];
   }
 });
