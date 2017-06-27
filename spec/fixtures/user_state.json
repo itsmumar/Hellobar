@@ -28,7 +28,7 @@
          "timezone":null,
          "deleted_at":null,
          "script_uninstalled_at":null,
-         "install_type":null,
+         "install_type":"unknown",
          "invoice_information":null,
          "selected_goal_clicked_at":null
       },
@@ -46,7 +46,7 @@
          "timezone":"America/Denver",
          "deleted_at":null,
          "script_uninstalled_at":null,
-         "install_type":null,
+         "install_type":"unknown",
          "invoice_information":null,
          "selected_goal_clicked_at":"2016-05-25T20:04:41.000Z"
       }
