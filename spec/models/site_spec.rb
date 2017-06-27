@@ -455,4 +455,12 @@ describe Site do
       expect(site.bills_with_payment_issues(true)).to be_empty
     end
   end
+
+  describe '#membership_for_user' do
+    let(:user) { site.owners.last }
+
+    it 'returns membership' do
+      expect(site.membership_for_user(user)).to eql user.site_memberships.first
+    end
+  end
 end

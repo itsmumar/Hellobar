@@ -18,7 +18,8 @@ class Site < ActiveRecord::Base
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
-  has_many :owners, -> { where(role: 'owner') }, through: :site_memberships
+  has_many :owners, -> { where(site_memberships: { role: 'owner' }) }, through: :site_memberships, source: :user
+  has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
@@ -93,6 +94,24 @@ class Site < ActiveRecord::Base
       .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
   end
 
+  def self.id_to_script_hash(id)
+    Digest::SHA1.hexdigest("bar#{ id }cat")
+  end
+
+  def self.find_by_script(script_embed)
+    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
+
+    (Site.maximum(:id) || 1).downto(1) do |i|
+      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
+    end
+
+    nil
+  end
+
+  def self.normalize_url(url)
+    Addressable::URI.heuristic_parse(url)
+  end
+
   def needs_script_regeneration?
     !skip_script_generation && @needs_script_regeneration.present?
   end
@@ -157,7 +176,7 @@ class Site < ActiveRecord::Base
   end
 
   def custom_rules?
-    rules.map(&:editable).any?
+    rules.editable.any?
   end
 
   def current_subscription
@@ -224,38 +243,12 @@ class Site < ActiveRecord::Base
     @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
   end
 
-  def self.normalize_url(url)
-    Addressable::URI.heuristic_parse(url)
-  end
-
   def membership_for_user(user)
-    site_memberships.detect { |x| x.user_id == user.id }
-  end
-
-  def owners
-    users.where(site_memberships: { role: Permissions::OWNER })
-  end
-
-  def owners_and_admins
-    users.where("site_memberships.role = '#{ Permissions::OWNER }' OR site_memberships.role = '#{ Permissions::ADMIN }'")
+    site_memberships.find_by(user_id: user.id)
   end
 
   def had_wordpress_bars?
     site_elements.where.not(wordpress_bar_id: nil).any?
-  end
-
-  def self.id_to_script_hash(id)
-    Digest::SHA1.hexdigest("bar#{ id }cat")
-  end
-
-  def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
-
-    (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
-    end
-
-    nil
   end
 
   def normalized_url

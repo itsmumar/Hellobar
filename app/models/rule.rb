@@ -11,6 +11,8 @@ class Rule < ActiveRecord::Base
 
   acts_as_paranoid
 
+  scope :editable, -> { where(editable: true) }
+
   accepts_nested_attributes_for :conditions, allow_destroy: true
 
   validates :name, presence: true
