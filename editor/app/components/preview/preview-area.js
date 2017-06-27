@@ -20,6 +20,7 @@ export default Ember.Component.extend({
   imaging: Ember.inject.service(),
   preview: Ember.inject.service(),
   fonts: Ember.inject.service(),
+  froalaFonts: Ember.inject.service(),
 
   availableFonts: Ember.computed.alias('fonts.availableFonts'),
 
@@ -206,7 +207,7 @@ export default Ember.Component.extend({
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,
-        fonts: [],
+        fonts: this.get('froalaFonts').googleFonts(),
         google_font: font.google_font,
         theme: currentTheme,
         branding_url: 'http://www.hellobar.com?sid=preview'

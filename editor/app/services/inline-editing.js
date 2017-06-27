@@ -226,6 +226,7 @@ class InlineImageManagementPane {
 export default Ember.Service.extend({
 
   bus: Ember.inject.service(),
+  froalaFonts: Ember.inject.service(),
 
   modelHandler: null,
   simpleModelAdapter: null,
@@ -415,22 +416,7 @@ export default Ember.Service.extend({
         multiLine: mode === 'full',
         initOnClick: false,
         zIndex: 9888,
-        fontFamily: {
-          "Arial,Helvetica,sans-serif": 'Arial',
-          "Georgia,serif": 'Georgia',
-          "Impact, Charcoal, sans-serif": 'Impact',
-          "Lato,sans-serif": 'Lato',
-          "Montserrat,sans-serif": 'Montserrat',
-          "'Open Sans',sans-serif": 'Open Sans',
-          "Oswald,sans-serif": 'Oswald',
-          "'PT Sans',sans-serif": 'PT Sans',
-          "'PT Serif',sans-serif": 'PT Serif',
-          "Raleway, sans-serif": 'Raleway',
-          "Roboto,sans-serif": 'Roboto',
-          "Tahoma, Geneva, sans-serif": 'Tahoma',
-          "'Times New Roman', Times, serif, -webkit-standard": 'Times New Roman',
-          "Verdana, Geneva, sans-serif": 'Verdana'
-        }
+        fontFamily: this.get('froalaFonts').fontFamily()
       };
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]
