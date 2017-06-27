@@ -8,6 +8,12 @@ Rails.application.routes.draw do
   namespace :api do
     resources :user_state, only: :show
     resources :settings, only: :index
+
+    resources :sites, only: [] do
+      member do
+        post :update_install_type
+      end
+    end
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
