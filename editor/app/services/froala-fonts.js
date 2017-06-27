@@ -14,9 +14,6 @@ export default Ember.Service.extend({
       "'PT Serif',sans-serif": 'PT Serif',
       "Raleway, sans-serif": 'Raleway',
       "Roboto,sans-serif": 'Roboto',
-      "Spectral,serif": 'Spectral',
-      "'Bubbler One', sans-serif": 'Bubbler One',
-      "'Lemon', cursive": 'Lemon',
       "Tahoma, Geneva, sans-serif": 'Tahoma',
       "'Times New Roman', Times, serif, -webkit-standard": 'Times New Roman',
       "Verdana, Geneva, sans-serif": 'Verdana'
@@ -25,7 +22,6 @@ export default Ember.Service.extend({
 
   googleFonts() {
     return [
-      'Impact',
       'Lato',
       'Montserrat',
       'Open Sans',
@@ -33,7 +29,7 @@ export default Ember.Service.extend({
       'PT Sans',
       'PT Serif',
       'Raleway',
-      'Roboto',
+      'Roboto'
     ]
   }
 });
