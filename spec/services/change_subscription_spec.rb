@@ -93,6 +93,10 @@ describe ChangeSubscription, :freeze do
         ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
       end
 
+      def refund(bill)
+        RefundBill.new(bill).call
+      end
+
       context 'when starting with Free plan' do
         it 'changes subscription and capabilities' do
           expect { change_subscription('free') }.to change { site.current_subscription }
@@ -199,6 +203,19 @@ describe ChangeSubscription, :freeze do
           expect(monthly_bill.amount).to eql Subscription::Pro.defaults[:monthly_amount]
           expect(monthly_bill.due_at).to be_within(2.hours).of(yearly_bill.due_at + 1.year)
           expect(monthly_bill).to be_pending
+        end
+      end
+
+      context 'accidentally signed up for the annual plan' do
+        before { stub_cyber_source :refund, :purchase }
+
+        it 'sets correct bill_at, start_date and end_date' do
+          yearly_bill = change_subscription('pro', 'yearly')
+          refund(yearly_bill)
+          monthly_bill = change_subscription('pro', 'monthly')
+          expect(monthly_bill.bill_at).to eql Time.current
+          expect(monthly_bill.start_date).to eql 1.hour.ago
+          expect(monthly_bill.end_date).to eql 1.month.since(1.hour.ago)
         end
       end
     end
