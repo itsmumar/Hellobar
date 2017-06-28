@@ -26,7 +26,7 @@ class @PaymentConfirmationModal extends Modal
   _templateOptions: ->
     subscription = @options.data.site.current_subscription
     old_subscription = @options.data.old_subscription
-    bill = @options.data.bill
+    bill = @options.data
 
     chargeDescription = "Your card ending in #{subscription.payment_method_number} "
 

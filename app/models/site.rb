@@ -168,6 +168,10 @@ class Site < ActiveRecord::Base
     subscriptions.last
   end
 
+  def previous_subscription
+    subscriptions.offset(1).last
+  end
+
   def highest_tier_active_subscription
     subscriptions.active.sort_by(&:significance).last
   end
