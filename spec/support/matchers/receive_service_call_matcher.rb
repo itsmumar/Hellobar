@@ -49,7 +49,6 @@ RSpec::Matchers.define :receive_service_call do
   end
 
   description do
-    "#{ @service_name.underscore.humanize.downcase }"
+    @service_name.underscore.humanize.downcase
   end
-
 end

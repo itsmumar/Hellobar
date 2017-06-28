@@ -4,11 +4,11 @@ module SitesHelper
   end
 
   def payment_issue_amount(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sum(&:amount) : 0
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sum(:amount) : 0
   end
 
   def payment_issue_date(site)
-    site_has_payment_issue?(site) ? site.bills_with_payment_issues.sort_by(&:bill_at).first.bill_at : nil
+    site_has_payment_issue?(site) ? site.bills_with_payment_issues.first.bill_at : nil
   end
 
   def show_whats_new_prompt?

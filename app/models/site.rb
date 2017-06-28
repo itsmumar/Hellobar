@@ -27,6 +27,9 @@ class Site < ActiveRecord::Base
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
+  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.problem) },
+    class_name: 'Bill', through: :subscriptions, inverse_of: :site, source: :bills
+
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
@@ -235,12 +238,6 @@ class Site < ActiveRecord::Base
     return false unless current_subscription
     return false if current_subscription.amount == 0
     true
-  end
-
-  # Find bills that are due now and we've tried to bill at least once
-  def bills_with_payment_issues(clear_cache = false)
-    @bills_with_payment_issues = nil if clear_cache
-    @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
   end
 
   def membership_for_user(user)

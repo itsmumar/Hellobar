@@ -1,12 +1,17 @@
 class Bill < ActiveRecord::Base
-  class StatusAlreadySet < StandardError; end
+  class StatusAlreadySet < StandardError
+    def initialize(bill, status)
+      super "Can not change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
+    end
+  end
+
   class InvalidStatus < StandardError; end
   class InvalidBillingAmount < StandardError
     attr_reader :amount
 
     def initialize(amount)
       @amount = amount
-      super("Amount was: #{ amount&.to_f.inspect }")
+      super "Amount was: #{ amount&.to_f.inspect }"
     end
   end
 
@@ -23,10 +28,11 @@ class Bill < ActiveRecord::Base
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  enum status: %i[pending paid voided]
+  enum status: %i[pending paid voided problem]
 
   scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
+  scope :non_free, -> { where.not(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :not_void, -> { where.not(status: statuses[:voided]) }
   scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
@@ -43,7 +49,7 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet, "Can not change status once set. Was #{ status.inspect } trying to set to #{ value.inspect }" unless status == :pending || value == :voided
+    raise StatusAlreadySet, self, status unless status == :pending || status == :problem || value == :voided
 
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value

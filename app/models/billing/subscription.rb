@@ -71,7 +71,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def problem_with_payment?
-    capabilities.instance_of?(Subscription::ProblemWithPayment::Capabilities)
+    bills.problem.any?
   end
 
   def mark_user_onboarding_as_bought_subscription!

@@ -109,6 +109,17 @@ describe PayRecurringBills do
 
       include_examples 'pay bill'
 
+      context 'when bill had payment problem before' do
+        let!(:bill) { create :bill, :problem }
+
+        specify do
+          expect { service.call }
+            .to change { bill.reload.status }.to :paid
+        end
+
+        include_examples 'pay bill'
+      end
+
       context 'when unsuccessful' do
         before { stub_cyber_source :purchase, success?: false }
 
@@ -116,7 +127,7 @@ describe PayRecurringBills do
           expect(report).to receive(:fail)
 
           expect { service.call }
-            .not_to change { bill.reload.status }
+            .to change { bill.reload.status }.to :problem
         end
       end
 
