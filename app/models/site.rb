@@ -219,18 +219,10 @@ class Site < ActiveRecord::Base
     true
   end
 
+  # Find bills that are due now and we've tried to bill at least once
   def bills_with_payment_issues(clear_cache = false)
-    # @bills_with_payment_issues = nil if clear_cache
-    # @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
-    if clear_cache || !@bills_with_payment_issues
-      @bills_with_payment_issues = []
-      bills.due_now.each do |bill|
-        # Find bills that are due now and we've tried to bill
-        # at least once
-        @bills_with_payment_issues << bill if bill.billing_attempts.present?
-      end
-    end
-    @bills_with_payment_issues
+    @bills_with_payment_issues = nil if clear_cache
+    @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
   end
 
   def self.normalize_url(url)

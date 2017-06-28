@@ -45,22 +45,19 @@ class ChangeSubscription
   end
 
   def subscription_class
-    Subscription.const_get(billing_params[:plan])
-  rescue NameError
-    plan_constant = billing_params[:plan].parameterize.underscore.camelize
-    Subscription.const_get(plan_constant)
+    Subscription.const_get(billing_params[:subscription].camelize)
   end
 
   def track_subscription_change(subscription)
     return unless subscription.persisted?
 
     props = {
-      to_plan: subscription.values[:name],
+      to_subscription: subscription.values[:name],
       to_schedule: subscription.schedule
     }
 
     if old_subscription
-      props[:from_plan] = old_subscription.values[:name]
+      props[:from_subscription] = old_subscription.values[:name]
       props[:from_schedule] = old_subscription.schedule
     end
 

@@ -30,7 +30,7 @@ div#user_profile
               td
                 - subscriptions.each do |sub|
                   div
-                    = sf.radio_button 'plan', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
+                    = sf.radio_button 'type', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
                     = sf.label "#{sub.defaults[:name]}"
               td
                 - Subscription.schedules.each do |name, val|

@@ -56,8 +56,8 @@ describe Site do
 
     before { stub_cyber_source :purchase, :refund }
 
-    def change_subscription(plan, schedule = 'monthly')
-      ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+    def change_subscription(subscription, schedule = 'monthly')
+      ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
     end
 
     it 'returns nil when there are no active subscriptions' do
@@ -428,8 +428,8 @@ describe Site do
     let(:site) { create :site, user: user }
     let(:payment_method) { create :payment_method, user: user }
 
-    def change_subscription(plan, schedule = 'monthly')
-      ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+    def change_subscription(subscription, schedule = 'monthly')
+      ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
     end
 
     before { stub_cyber_source :purchase, success: false }

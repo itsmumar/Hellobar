@@ -4,7 +4,7 @@
       <div class="flash-block"><i class="icon-close"></i></div>
 
       <form class="payment-modal" accept-charset="UTF-8">
-        <input type="hidden" name="billing[plan]" value="{{ package.type }}" />
+        <input type="hidden" name="billing[subscription]" value="{{ package.type }}" />
         {{#if isFree}}
           <input type="hidden" name="billing[schedule]" value="monthly" />
           <div class="site-title downgrade-free">Are you sure you want to downgrade {{siteName}} to a free plan?</div>
