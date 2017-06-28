@@ -6,7 +6,6 @@ describe Bill do
     before { stub_cyber_source :refund }
 
     it 'returns bills which have not been refunded' do
-      expect(Bill.without_refunds).to match_array [bill, bill_to_refund]
       RefundBill.new(bill_to_refund).call
       expect(Bill.without_refunds).not_to include bill_to_refund
     end
