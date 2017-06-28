@@ -34,7 +34,7 @@ class PayRecurringBills
   end
 
   def handle(bill)
-    return bill.paid! if bill.amount.zero?
+    return PayBill.new(bill).call if bill.amount.zero?
     return void(bill) if !bill.subscription || !bill.site
     return if skip? bill
 
