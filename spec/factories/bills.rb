@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :bill do
+  factory :bill, class: 'Bill::Recurring' do
     amount 10
     subscription
     type 'Bill::Recurring'
@@ -71,5 +71,11 @@ FactoryGirl.define do
 
   trait :pending do
     status :pending
+  end
+
+  trait :with_attempt do
+    after :create do |bill|
+      create :billing_attempt, :failed, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+    end
   end
 end

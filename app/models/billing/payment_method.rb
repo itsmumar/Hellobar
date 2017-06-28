@@ -1,8 +1,5 @@
-require 'billing_log'
 class PaymentMethod < ActiveRecord::Base
   class MissingPaymentDetails < RuntimeError; end
-
-  include BillingAuditTrail
 
   belongs_to :user
   has_many :details, -> { order 'id' }, class_name: 'PaymentMethodDetails'
@@ -14,13 +11,5 @@ class PaymentMethod < ActiveRecord::Base
 
   def current_details
     details.last
-  end
-
-  def pay(bill)
-    raise MissingPaymentDetails, 'Can not pay bill without payment method details' unless current_details
-    # HACK: ..
-    # setting payment_method_details_id instead of the object to avoid
-    # ActiveRecord::AssociationTypeMismatch error from being raised
-    BillingAttempt.new(bill: bill, payment_method_details_id: current_details.id).process!
   end
 end

@@ -1,7 +1,6 @@
-require 'billing_log'
-
 class Bill
   class Refund < self
+    belongs_to :refunded_billing_attempt, class_name: 'BillingAttempt', inverse_of: :refunds
     has_one :refunded_bill, class_name: 'Bill', dependent: :restrict_with_exception
 
     # Refunds must be a negative amount
@@ -12,27 +11,6 @@ class Bill
     # Refunds are never considered "active"
     def active_during(_date)
       false
-    end
-
-    def refunded_billing_attempt
-      @refunded_billing_attempt ||=
-        if refunded_billing_attempt_id
-          @refunded_billing_attempt = BillingAttempt.find(refunded_billing_attempt_id)
-        end
-    end
-
-    def refunded_billing_attempt_id
-      return metadata['refunded_billing_attempt_id'] if metadata
-    end
-
-    def refunded_billing_attempt=(billing_attempt)
-      self.refunded_billing_attempt_id = billing_attempt.id
-    end
-
-    def refunded_billing_attempt_id=(id)
-      self.metadata = {} unless metadata
-      metadata['refunded_billing_attempt_id'] = id
-      @refunded_billing_attempt = nil
     end
   end
 end

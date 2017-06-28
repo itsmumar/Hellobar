@@ -1,32 +1,15 @@
-require 'spec_helper'
-require 'payment_method_details'
-
-module BillSpecDates
-  def june
-    Time.zone.parse('2014-06-10')
-  end
-
-  def bill_at
-    Time.zone.parse('2014-06-11')
-  end
-
-  def july
-    Time.zone.parse('2014-07-10')
-  end
-
-  def aug
-    Time.zone.parse('2014-08-10')
-  end
-
-  def sep
-    Time.zone.parse('2014-09-10')
-  end
-end
-
 describe Bill do
-  include BillSpecDates
+  describe '.without_refunds' do
+    let!(:bill) { create :bill }
+    let!(:bill_to_refund) { create :bill, :paid }
 
-  set_fixture_class payment_method_details: PaymentMethodDetails # pluralized class screws up naming convention
+    before { stub_cyber_source :refund }
+
+    it 'returns bills which have not been refunded' do
+      RefundBill.new(bill_to_refund).call
+      expect(Bill.without_refunds).not_to include bill_to_refund
+    end
+  end
 
   describe 'callbacks' do
     it 'sets the base amount before saving' do
@@ -93,7 +76,7 @@ describe Bill do
   end
 
   describe 'set_final_amount' do
-    let!(:bill) { create(:pro_bill) }
+    let!(:bill) { create(:pro_bill, bill_at: 15.days.ago) }
     let!(:user) { create(:user) }
     let!(:refs) do
       (1..3).map do
@@ -107,7 +90,7 @@ describe Bill do
 
     it "sets the final amount to 0 if there's a discount for 15.0" do
       allow(bill).to receive(:calculate_discount).and_return(15.0)
-      bill.attempt_billing!
+      PayBill.new(bill).call
       expect(bill.amount).to eq(0.0)
       expect(bill.discount).to eq(15.0)
     end
@@ -117,7 +100,7 @@ describe Bill do
       allow(bill).to receive(:calculate_discount).and_return(2.0)
 
       expect {
-        bill.attempt_billing!
+        PayBill.new(bill).call
       }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
       expect(bill.amount).to eq(0.0)
@@ -129,7 +112,7 @@ describe Bill do
       allow(bill).to receive(:calculate_discount).and_return(0.0)
 
       expect {
-        bill.attempt_billing!
+        PayBill.new(bill).call
       }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
 
       expect(bill.amount).to eq(0.0)
@@ -171,73 +154,56 @@ describe Bill do
   describe '#set_base_amount' do
     it 'sets the base amount from amount' do
       bill = build(:bill, amount: 10)
-      bill.set_base_amount
-      expect(bill.base_amount).to eq(10)
+      expect { bill.valid? }.to change { bill.base_amount }.to eq(10)
     end
 
     it 'does nothing if base amount already set' do
       bill = build(:bill, amount: 10, base_amount: 12)
-      bill.set_base_amount
-      expect(bill.base_amount).to eq(12)
+      expect { bill.valid? }.not_to change { bill.base_amount }.from(12)
     end
   end
 
   describe 'problem_with_payment' do
-    it 'should return false if paid' do
-      expect(create(:pro_bill, :paid).problem_with_payment?).to eq(false)
+    context 'when paid' do
+      let(:bill) { create :pro_bill, :paid }
+
+      specify { expect(bill).not_to be_problem_with_payment }
     end
 
-    it 'should return false if voided' do
-      expect(create(:bill, :voided).problem_with_payment?).to eq(false)
+    context 'when void' do
+      let(:bill) { create :pro_bill, :void }
+
+      specify { expect(bill).not_to be_problem_with_payment }
     end
 
-    it 'should return false if amount is zero' do
-      bill = create(:free_bill)
-      expect(bill.should_bill?).to eq(true)
-      expect(bill.problem_with_payment?).to eq(false)
+    context 'when amount is zero' do
+      let(:bill) { create :free_bill }
+
+      specify { expect(bill).not_to be_problem_with_payment }
     end
 
-    it 'should return true if pending and past due' do
-      bill = create(:past_due_bill)
-      expect(bill.should_bill?).to eq(true)
-      expect(bill.past_due?).to eq(true)
-      expect(bill.problem_with_payment?).to eq(true)
+    context 'when pending and past due' do
+      let(:bill) { create :past_due_bill }
+
+      specify { expect(bill).to be_problem_with_payment }
+      specify { expect(bill).to be_past_due }
     end
 
-    it "should return false if due, but haven't tried billing yet" do
-      bill = create(:past_due_bill)
-      pm = create(:payment_method)
-      BillingAttempt.delete_all
-      expect(bill.should_bill?).to eq(true)
-      expect(bill.past_due?).to eq(true)
-      expect(bill.problem_with_payment?(pm)).to eq(false)
+    context 'when past due but have not tried billing yet' do
+      let(:bill) { create :past_due_bill }
+      let(:payment_method) { create :payment_method }
+      before { bill.billing_attempts.delete_all }
+
+      specify { expect(bill).not_to be_problem_with_payment(payment_method) }
+      specify { expect(bill).to be_past_due }
     end
 
-    it 'should return true if past due and there is no payment method' do
-      bill = create(:past_due_bill)
-      bill.billing_attempts.delete_all
-      expect(bill.problem_with_payment?).to eq(true)
-    end
-  end
-end
+    context 'when past due and there is no payment method' do
+      let(:bill) { create :pro_bill }
+      before { bill.billing_attempts.delete_all }
 
-describe Subscription do
-  it 'should return all bills active for time period' do
-    now = Time.current
-    subscription = create(:subscription, :with_bills)
-    Bill.delete_all
-    expect(subscription.active_bills(true).length).to eq(0)
-    # Add a bill after
-    Bill.create!(subscription: subscription, start_date: now + 15.days, end_date: now + 45.days, amount: 1)
-    expect(subscription.active_bills(true).length).to eq(0)
-    # Add a bill before
-    Bill.create!(subscription: subscription, start_date: now - 45.days, end_date: now - 15.days, amount: 1)
-    expect(subscription.active_bills(true).length).to eq(0)
-    # Add a bill during time, but voided
-    Bill.create!(subscription: subscription, start_date: now, end_date: now + 30.days, status: :voided, amount: 1)
-    expect(subscription.active_bills(true).length).to eq(0)
-    # Add an active bill
-    Bill.create!(subscription: subscription, start_date: now, end_date: now + 30.days, amount: 1)
-    expect(subscription.active_bills(true).length).to eq(1)
+      specify { expect(bill).to be_problem_with_payment }
+      specify { expect(bill).to be_past_due }
+    end
   end
 end

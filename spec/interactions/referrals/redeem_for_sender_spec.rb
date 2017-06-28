@@ -30,7 +30,7 @@ describe Referrals::RedeemForSender do
     end
 
     it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
-      bill = past_due_site.bills.last
+      bill = past_due_site.bills.first
       expect(bill.amount).to eq(0.0)
       expect(bill.discount).to eq([bill.base_amount, Coupon::REFERRAL_AMOUNT].min)
     end

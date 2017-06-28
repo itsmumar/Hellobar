@@ -4,6 +4,7 @@ FactoryGirl.define do
     user nil
     schedule :monthly
     association :payment_method, factory: %i[payment_method]
+    amount 0.0
 
     trait :free do
       amount 0.0
@@ -16,6 +17,7 @@ FactoryGirl.define do
     end
 
     trait :pro do
+      amount { Subscription::Pro.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Pro.new(schedule: schedule) }
     end
 
@@ -28,6 +30,7 @@ FactoryGirl.define do
     end
 
     trait :enterprise do
+      amount { Subscription::Enterprise.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Enterprise.new(schedule: schedule) }
     end
 

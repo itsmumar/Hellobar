@@ -3,7 +3,6 @@ describe CyberSourceCreditCard do
   let(:data) { create :payment_data }
   let(:credit_card) { CyberSourceCreditCard.new data: data }
   let(:gateway) { double('CyberSourceGateway') }
-  let(:last_billing_log) { BillingLog.last }
 
   describe '#delete_token' do
     let!(:credit_card) { create :cyber_source_credit_card }
@@ -73,16 +72,6 @@ describe CyberSourceCreditCard do
         expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: nil')
       end
     end
-
-    context 'when error is raise' do
-      it 'creates BillingLog' do
-        expect { credit_card.charge(100) }
-          .to make_gateway_call(:purchase).and_raise_error('an error')
-          .and raise_error('an error').and change(BillingLog, :count).by 1
-
-        expect(last_billing_log.message).to eql 'Error charging 100: an error'
-      end
-    end
   end
 
   describe '#refund', :freeze do
@@ -98,16 +87,6 @@ describe CyberSourceCreditCard do
       it 'raises ArgumentError' do
         expect { credit_card.refund(-1, 'id') }.to raise_error(ArgumentError, 'Invalid amount: -1')
         expect { credit_card.refund(nil, 'id') }.to raise_error(ArgumentError, 'Invalid amount: nil')
-      end
-    end
-
-    context 'when error is raise' do
-      it 'creates BillingLog' do
-        expect { credit_card.refund(100, 'id') }
-          .to make_gateway_call(:refund).and_raise_error('an error')
-          .and raise_error('an error').and change(BillingLog, :count).by 1
-
-        expect(last_billing_log.message).to eql 'Error refunding 100 to "id": an error'
       end
     end
 

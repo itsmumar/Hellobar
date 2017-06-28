@@ -51,13 +51,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
 
     response = gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
-    audit << "Charging #{ amount_in_dollars.inspect }, got response: #{ response.inspect }"
     return false, response.message unless response.success?
 
     [true, response.authorization]
-  rescue => e
-    audit << "Error charging #{ amount_in_dollars.inspect }: #{ e.message }"
-    raise
   end
 
   def refund(amount_in_dollars, original_transaction_id)
@@ -73,13 +69,9 @@ class CyberSourceCreditCard < PaymentMethodDetails
     end
 
     response = gateway.refund(amount_in_dollars * 100, original_transaction_id)
-    audit << "Refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }, got response: #{ response.inspect }"
     return false, response.message unless response.success?
 
     [true, response.authorization]
-  rescue => e
-    audit << "Error refunding #{ amount_in_dollars.inspect } to #{ original_transaction_id.inspect }: #{ e.message }"
-    raise
   end
 
   def delete_token

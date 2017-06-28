@@ -8,7 +8,7 @@ class PayBill
   end
 
   def call
-    return bill if !bill.pending? || bill.due_at(payment_method) > Time.current
+    return bill unless bill.pending?
 
     set_final_amount
 
@@ -30,10 +30,18 @@ class PayBill
     success, response = payment_method.charge(bill.amount)
     create_billing_attempt(success, response)
 
+    BillingLogger.charge(bill, success)
+
     if success
       bill.update authorization_code: response
       bill.paid!
       create_bill_for_next_period
+    else
+      Raven.capture_message 'Unsuccessful charge', extra: {
+        message: response,
+        bill: bill.id,
+        amount: bill.amount
+      }
     end
 
     bill
@@ -61,6 +69,14 @@ class PayBill
   end
 
   def create_bill_for_next_period
-    bill.create_next_bill!
+    Bill::Recurring.create!(
+      subscription: bill.subscription,
+      amount: bill.subscription.amount,
+      description: "#{ bill.subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
+      grace_period_allowed: true,
+      bill_at: bill.end_date,
+      start_date: bill.end_date,
+      end_date: bill.end_date + bill.subscription.period
+    )
   end
 end

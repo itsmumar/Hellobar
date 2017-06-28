@@ -37,11 +37,7 @@ class RefundBill
   end
 
   def previous_refunds
-    Bill::Refund
-      .where(subscription_id: bill.subscription_id)
-      .select { |previous_bill| previous_bill.refunded_billing_attempt_id == successful_billing_attempt.id }
-      .map(&:amount)
-      .sum
+    successful_billing_attempt.refunds.sum(:amount)
   end
 
   def create_refund_bill!
@@ -58,6 +54,33 @@ class RefundBill
   end
 
   def refund!(refund_bill)
-    subscription.payment_method.pay(refund_bill)
+    # Make sure we use the same payment method details as the refunded attempt
+    success, response = payment_method_details.refund(-amount, bill.authorization_code)
+
+    BillingLogger.refund(bill, success)
+
+    if success
+      refund_bill.update authorization_code: response, status: :paid
+    else
+      Raven.capture_message 'Unsuccessful refund', extra: {
+        message: response,
+        bill: bill.id,
+        amount: amount
+      }
+    end
+    create_billing_attempt(refund_bill, success, response)
+  end
+
+  def payment_method_details
+    successful_billing_attempt.payment_method_details
+  end
+
+  def create_billing_attempt(refund_bill, success, response)
+    BillingAttempt.create!(
+      bill: refund_bill,
+      payment_method_details: payment_method_details,
+      status: success ? :success : :failed,
+      response: response
+    )
   end
 end

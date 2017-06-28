@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170622171552) do
+ActiveRecord::Schema.define(version: 20170628093058) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -101,25 +101,27 @@ ActiveRecord::Schema.define(version: 20170622171552) do
   add_index "billing_logs", ["user_id"], name: "index_billing_logs_on_user_id", using: :btree
 
   create_table "bills", force: :cascade do |t|
-    t.integer  "subscription_id",      limit: 4
-    t.integer  "status",               limit: 4,                            default: 0
-    t.string   "type",                 limit: 255
-    t.decimal  "amount",                           precision: 7,  scale: 2
-    t.string   "description",          limit: 255
-    t.string   "metadata",             limit: 255
-    t.boolean  "grace_period_allowed",                                      default: true
+    t.integer  "subscription_id",             limit: 4
+    t.integer  "status",                      limit: 4,                            default: 0
+    t.string   "type",                        limit: 255
+    t.decimal  "amount",                                  precision: 7,  scale: 2
+    t.string   "description",                 limit: 255
+    t.string   "metadata",                    limit: 255
+    t.boolean  "grace_period_allowed",                                             default: true
     t.datetime "bill_at"
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "status_set_at"
     t.datetime "created_at"
-    t.decimal  "discount",                         precision: 10,           default: 0
-    t.decimal  "base_amount",                      precision: 10
-    t.integer  "refund_id",            limit: 4
-    t.string   "authorization_code",   limit: 255
+    t.decimal  "discount",                                precision: 10,           default: 0
+    t.decimal  "base_amount",                             precision: 10
+    t.integer  "refund_id",                   limit: 4
+    t.string   "authorization_code",          limit: 255
+    t.integer  "refunded_billing_attempt_id", limit: 4
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
+  add_index "bills", ["refunded_billing_attempt_id"], name: "index_bills_on_refunded_billing_attempt_id", using: :btree
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree

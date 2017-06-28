@@ -1,8 +1,4 @@
-require 'billing_log'
-
 class PaymentMethodDetails < ActiveRecord::Base
-  include BillingAuditTrail
-
   belongs_to :payment_method
   has_many :billing_attempts
 

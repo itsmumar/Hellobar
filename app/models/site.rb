@@ -1,5 +1,4 @@
 require 'uri'
-require 'billing_log'
 
 class Site < ActiveRecord::Base
   DEFAULT_UPGRADE_STYLES = {
@@ -167,6 +166,10 @@ class Site < ActiveRecord::Base
 
   def current_subscription
     subscriptions.last
+  end
+
+  def previous_subscription
+    subscriptions.offset(1).last
   end
 
   def highest_tier_active_subscription

@@ -33,7 +33,8 @@ class ChangeSubscription
   end
 
   def pay_bill(bill)
-    PayBill.new(bill).call
+    PayBill.new(bill).call if bill.due_at(payment_method) <= Time.current
+    bill
   end
 
   def create_bill(subscription)
@@ -60,6 +61,8 @@ class ChangeSubscription
       props[:from_subscription] = old_subscription.values[:name]
       props[:from_schedule] = old_subscription.schedule
     end
+
+    BillingLogger.change_subscription(site, props)
 
     Analytics.track(:site, site.id, :change_sub, props)
   end

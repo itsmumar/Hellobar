@@ -16,8 +16,27 @@ describe PayBill do
       expect(service.call).to eql bill
     end
 
-    it 'stores authorization code' do
-      expect { service.call }.to change(bill, :authorization_code)
+    it 'stores authorization_code in bill' do
+      expect { service.call }.to make_gateway_call(:purchase).and_succeed.with_response(authorization: 'code')
+      expect(bill.authorization_code).to eql 'code'
+    end
+
+    context 'when cybersource failed' do
+      before { stub_cyber_source(:purchase, success?: false) }
+
+      it 'creates failed BillingAttempt' do
+        expect { service.call }.to change(BillingAttempt.failed, :count).by 1
+      end
+
+      it 'sends event to Raven' do
+        extra = {
+          message: 'gateway error',
+          bill: bill.id,
+          amount: bill.amount
+        }
+        expect(Raven).to receive(:capture_message).with('Unsuccessful charge', extra: extra)
+        service.call
+      end
     end
 
     shared_examples 'doing nothing' do
@@ -36,18 +55,6 @@ describe PayBill do
 
     context 'when bill.status is :paid' do
       let(:bill) { create :bill, status: :paid, subscription: subscription }
-
-      it_behaves_like 'doing nothing'
-    end
-
-    context 'when bill.due_at in the future' do
-      let(:bill) { create :bill, bill_at: 1.day.from_now, subscription: subscription }
-
-      it_behaves_like 'doing nothing'
-    end
-
-    context 'when grace period allowed and bill_at + grace period >= today' do
-      let(:bill) { create :bill, bill_at: Time.current, grace_period_allowed: true, subscription: subscription }
 
       it_behaves_like 'doing nothing'
     end

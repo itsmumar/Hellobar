@@ -138,6 +138,22 @@ describe 'PaymentMethods requests' do
           expect(site.current_subscription).to be_a Subscription::Pro
         end
       end
+
+      context 'when upgrading' do
+        let!(:previous_subscription) { create :subscription, :free, site: site }
+
+        it 'tracks upgrade event in analytics' do
+          expect(Analytics).to receive(:track).with(
+            :site, site.id, :change_sub,
+            to_subscription: 'Pro', to_schedule: 'monthly',
+            from_subscription: 'Free', from_schedule: 'monthly'
+          )
+          expect(Analytics).to receive(:track).with(:user, user.id, 'Upgraded')
+
+          expect { put payment_method_path(payment_method, params) }
+            .to change { site.current_subscription }
+        end
+      end
     end
   end
 end
