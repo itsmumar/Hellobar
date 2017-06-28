@@ -2,7 +2,7 @@ describe ChangeSubscription, :freeze do
   let(:user) { create :user }
   let(:site) { create :site, user: user }
   let(:payment_method) { create :payment_method, user: user }
-  let(:params) { { plan: 'pro', schedule: 'yearly' } }
+  let(:params) { { subscription: 'pro', schedule: 'yearly' } }
   let(:service) { ChangeSubscription.new(site, params, payment_method) }
   let(:last_subscription) { Subscription.last }
 
@@ -29,9 +29,9 @@ describe ChangeSubscription, :freeze do
 
     it 'sends an event to Analytics' do
       props = {
-        to_plan: 'Pro',
+        to_subscription: 'Pro',
         to_schedule: 'yearly',
-        from_plan: 'Free',
+        from_subscription: 'Free',
         from_schedule: 'monthly'
       }
       expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
@@ -47,7 +47,7 @@ describe ChangeSubscription, :freeze do
     end
 
     context 'with monthly schedule' do
-      let(:params) { { plan: 'pro', schedule: 'monthly' } }
+      let(:params) { { subscription: 'pro', schedule: 'monthly' } }
 
       it 'creates a bill for next period' do
         expect { service.call }.to change(site.bills.where(bill_at: 1.month.from_now - 1.hour), :count).to(1)
@@ -66,7 +66,7 @@ describe ChangeSubscription, :freeze do
     end
 
     context 'upgrade to enterprise' do
-      let(:params) { { plan: 'enterprise', schedule: 'yearly' } }
+      let(:params) { { subscription: 'enterprise', schedule: 'yearly' } }
 
       it 'creates Subscription::Enterprise' do
         expect { service.call }
@@ -89,8 +89,12 @@ describe ChangeSubscription, :freeze do
     end
 
     describe 'upgrading/downgrading' do
-      def change_subscription(plan, schedule = 'monthly')
-        ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+      def change_subscription(subscription, schedule = 'monthly')
+        ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
+      end
+
+      def refund(bill)
+        RefundBill.new(bill).call
       end
 
       context 'when starting with Free plan' do
@@ -224,6 +228,19 @@ describe ChangeSubscription, :freeze do
           expect(monthly_bill.amount).to eql Subscription::Pro.defaults[:monthly_amount]
           expect(monthly_bill.due_at).to be_within(2.hours).of(yearly_bill.due_at + 1.year)
           expect(monthly_bill).to be_pending
+        end
+      end
+
+      context 'accidentally signed up for the annual plan' do
+        before { stub_cyber_source :refund, :purchase }
+
+        it 'sets correct bill_at, start_date and end_date' do
+          yearly_bill = change_subscription('pro', 'yearly')
+          refund(yearly_bill)
+          monthly_bill = change_subscription('pro', 'monthly')
+          expect(monthly_bill.bill_at).to eql Time.current
+          expect(monthly_bill.start_date).to eql 1.hour.ago
+          expect(monthly_bill.end_date).to eql 1.month.since(1.hour.ago)
         end
       end
     end

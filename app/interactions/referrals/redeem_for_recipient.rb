@@ -20,7 +20,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
     raise Referrals::NotSignedUp unless user.received_referral.signed_up?
 
     user.received_referral.update_attributes(state: :installed, available_to_sender: true)
-    ChangeSubscription.new(site, plan: 'pro', schedule: 'monthly').call
+    ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
     redeem_for_sender
     send_success_email_to_sender
   rescue Referrals::NotSignedUp => ex

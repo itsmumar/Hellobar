@@ -18,7 +18,7 @@ class Referrals::RedeemForSender < Less::Interaction
     raise Referrals::NoAvailableReferrals unless available_referrals?
 
     if subscription.is_a?(Subscription::Free)
-      ChangeSubscription.new(site, plan: 'pro', schedule: 'monthly').call
+      ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
     elsif subscription.problem_with_payment?
       PayBill.new(last_failed_bill).call
     end

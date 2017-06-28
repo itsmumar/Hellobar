@@ -38,7 +38,7 @@ class Admin::SitesController < ApplicationController
   private
 
   def subscription_params
-    params.require(:subscription).permit(:plan, :schedule, :trial_period)
+    params.require(:subscription).permit(:subscription, :schedule, :trial_period)
   end
 
   def site_params

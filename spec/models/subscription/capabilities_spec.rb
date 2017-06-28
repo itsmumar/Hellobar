@@ -10,8 +10,8 @@ describe Subscription::Capabilities do
 
   before { stub_cyber_source :purchase, :refund }
 
-  def change_subscription(plan, payment_method, schedule = 'monthly')
-    ChangeSubscription.new(site, { plan: plan, schedule: schedule }, payment_method).call
+  def change_subscription(subscription, payment_method, schedule = 'monthly')
+    ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
   end
 
   it 'returns the latest subscription capabilities' do

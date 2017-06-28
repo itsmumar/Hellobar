@@ -33,7 +33,7 @@ describe 'PaymentMethods requests' do
       before { stub_cyber_source :store, :purchase }
 
       let(:payment_method_details) { create :payment_form_params }
-      let(:billing_params) { { plan: 'pro', schedule: 'monthly' } }
+      let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
@@ -97,7 +97,7 @@ describe 'PaymentMethods requests' do
       let!(:payment_method) { create :payment_method, user: user }
 
       let(:payment_method_details) { create :payment_form_params }
-      let(:billing_params) { { plan: 'pro', schedule: 'monthly' } }
+      let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
