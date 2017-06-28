@@ -7,13 +7,14 @@ class Subscription < ActiveRecord::Base
   belongs_to :site, touch: true
   belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
+  has_many :active_bills, -> { merge(Bill.active) }, class_name: 'Bill', inverse_of: :subscription
 
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
 
   enum schedule: %i[monthly yearly]
 
-  scope :paid, -> { joins(:bills).merge(Bill.active) }
+  scope :paid, -> { joins(:bills).merge(Bill.paid.active) }
   scope :active, -> { paid.merge(Bill.without_refunds) }
 
   validates :schedule, presence: true
@@ -48,32 +49,25 @@ class Subscription < ActiveRecord::Base
     self.class.defaults.merge(schedule: schedule)
   end
 
-  def active_bills(reload = false, date = nil)
-    date ||= Time.current
-    bills(reload).select { |b| b.active_during(date) }
-  end
-
   def active_until
     bills.paid.maximum(:end_date).try(:localtime)
   end
 
   def capabilities(reload = false)
-    if reload || !@capabilities
-      # If we are in good standing we just return our normal
-      # capabilities, otherwise we return the default capabilities
-      active_bills(reload).each do |bill|
-        payment_method = nil
-        if site && site.current_subscription && site.current_subscription.payment_method
-          payment_method = site.current_subscription.payment_method
-        end
-        if bill.problem_with_payment?(payment_method)
-          @capabilities = ProblemWithPayment::Capabilities.new(self, site)
-          return @capabilities
-        end
-      end
-      @capabilities = self.class::Capabilities.new(self, site)
+    return @capabilities if !reload && @capabilities
+
+    # If we are in good standing we just return our normal
+    # capabilities, otherwise we return the default capabilities
+    problem_with_payment = active_bills.any? do |bill|
+      bill.problem_with_payment? site&.current_subscription&.payment_method
     end
-    @capabilities
+
+    @capabilities =
+      if problem_with_payment
+        ProblemWithPayment::Capabilities.new(self, site)
+      else
+        self.class::Capabilities.new(self, site)
+      end
   end
 
   def problem_with_payment?

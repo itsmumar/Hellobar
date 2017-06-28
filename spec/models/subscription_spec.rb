@@ -252,23 +252,23 @@ describe Subscription do
     before { Bill.delete_all }
 
     it 'returns all bills active for time period', :freeze do
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill after
       create(:bill, subscription: subscription, start_date: 15.days.from_now, end_date: 45.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill before
       create(:bill, subscription: subscription, start_date: 45.days.ago, end_date: 15.days.ago, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill during time, but voided
       create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, status: :voided, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add an active bill
       bill = create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to match_array [bill]
+      expect(subscription.reload.active_bills).to match_array [bill]
     end
   end
 end

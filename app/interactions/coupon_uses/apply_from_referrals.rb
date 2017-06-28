@@ -3,7 +3,7 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
 
   def run
     return if bill.is_a?(Bill::Refund)
-    return unless bill.amount > 0
+    return if bill.amount.zero?
 
     Referral.redeemable_for_site(site).take_while do |referral|
       apply_referral_coupon
