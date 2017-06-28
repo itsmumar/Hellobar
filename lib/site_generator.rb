@@ -22,20 +22,16 @@ class SiteGenerator
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charset="utf-8" />
         <link rel=icon href="favicon-test-site.png" sizes="16x16" type="image/png /">
+        <style>
+          body > section {
+            margin-bottom: 60px;
+          }
+        </style>
       </head>
 
-      <body style="background-color: #FFFFFF;">
-        <p><a onclick="console.log('BUTTON PUSHED')" style="cursor: pointer">CLICK ME</a></p>
-
-        <div style="height:200px; background-color: #05c802;">
-          TOP OF PAGE CONTENT
-          <script id="hb-cu-2">
-            window.onload = function() {hellobar('contentUpgrades').show(1);};
-          </script>
-        </div>
-
-        <div style="height:400px;">
-          <h1>Autofills testing playground</h1>
+      <body>
+        <section>
+          <h1>Autofills</h1>
           <p>In order to test the autofills you need to:</p>
 
           <ul>
@@ -52,11 +48,18 @@ class SiteGenerator
           <p>
             Autofill: <input type="email" name="email" class="email" style="font-size: 14px; width: 300px; padding: 5px 6px" />
           </p>
-        </div>
+        </section>
+
+        <section>
+          <h1>Content Upgrades</h1>
+          #{ content_upgrades_script_tags }
+        </section>
 
         <script>#{ script_content }</script>
 
-        <p>Generated on #{ Time.current }</p>
+        <section>
+          <p style="margin-top: 100px;">Generated on #{ Time.current }</p>
+        </section>
       </body>
       </html>
     EOS
@@ -75,5 +78,13 @@ class SiteGenerator
 
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
     @full_path = directory.join("#{ SecureRandom.hex }.html")
+  end
+
+  def content_upgrades
+    @site.site_elements.active_content_upgrades
+  end
+
+  def content_upgrades_script_tags
+    content_upgrades.map(&:content_upgrade_script_tag).join
   end
 end
