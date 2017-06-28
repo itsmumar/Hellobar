@@ -63,12 +63,9 @@ class PaymentMethodsController < ApplicationController
 
   # TODO: move it to a serializer
   def change_subscription(payment_method)
-    old_subscription = @site.current_subscription
     bill = ChangeSubscription.new(@site, params[:billing], payment_method).call
-    serializer = BillSerializer.new(bill)
-
-    Analytics.track(*current_person_type_and_id, 'Upgraded') if serializer.upgrade?
-
-    serializer
+    BillSerializer.new(bill).tap do |serializer|
+      Analytics.track(*current_person_type_and_id, 'Upgraded') if serializer.upgrade?
+    end
   end
 end
