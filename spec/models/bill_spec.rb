@@ -1,39 +1,13 @@
-require 'spec_helper'
-require 'payment_method_details'
-
-module BillSpecDates
-  def june
-    Time.zone.parse('2014-06-10')
-  end
-
-  def bill_at
-    Time.zone.parse('2014-06-11')
-  end
-
-  def july
-    Time.zone.parse('2014-07-10')
-  end
-
-  def aug
-    Time.zone.parse('2014-08-10')
-  end
-
-  def sep
-    Time.zone.parse('2014-09-10')
-  end
-end
-
 describe Bill do
-  include BillSpecDates
-
   describe '.without_refunds' do
     let!(:bill) { create :bill }
-    let!(:refunded_bill) { create :bill, :paid }
+    let!(:bill_to_refund) { create :bill, :paid }
 
     before { stub_cyber_source :refund }
-    before { RefundBill.new(refunded_bill).call }
 
     it 'returns bills which have not been refunded' do
+      expect(Bill.without_refunds).to match_array [bill, bill_to_refund]
+      RefundBill.new(bill_to_refund).call
       expect(Bill.without_refunds).to match_array [bill]
     end
   end

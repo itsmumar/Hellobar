@@ -31,7 +31,7 @@ class Bill < ActiveRecord::Base
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
-  scope :without_refunds, -> { where(bills: { refund_id: nil }).where.not(type: Bill::Refund) }
+  scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
