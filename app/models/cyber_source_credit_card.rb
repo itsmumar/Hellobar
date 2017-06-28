@@ -11,10 +11,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   store :data, accessors: %i[number token], coder: JSON
 
-  def name
-    "#{ brand&.capitalize || 'Credit Card' } ending in #{ last_digits.presence || '???' }"
-  end
-
   def grace_period
     15.days
   end

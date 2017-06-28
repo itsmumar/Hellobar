@@ -32,30 +32,6 @@ describe CyberSourceCreditCard do
     end
   end
 
-  describe '#name' do
-    let(:credit_card) { CyberSourceCreditCard.new data: { number: '4242424242421234' } }
-
-    specify { expect(credit_card.name).to eql 'Credit Card ending in 1234' }
-
-    context 'without number' do
-      let(:credit_card) { CyberSourceCreditCard.new data: { number: '' } }
-
-      specify { expect(credit_card.name).to eql 'Credit Card ending in ???' }
-    end
-
-    context 'with brand' do
-      let(:credit_card) { CyberSourceCreditCard.new data: { brand: 'visa', number: '4242424242421234' } }
-
-      specify { expect(credit_card.name).to eql 'Visa ending in 1234' }
-
-      context 'and without number' do
-        let(:credit_card) { CyberSourceCreditCard.new data: { brand: 'visa', number: '' } }
-
-        specify { expect(credit_card.name).to eql 'Visa ending in ???' }
-      end
-    end
-  end
-
   describe '#charge', :freeze do
     let(:credit_card) { create :cyber_source_credit_card }
     let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
