@@ -13,20 +13,47 @@ describe CalculateBill do
   end
 
   context 'with active paid bills', :freeze do
+    let(:bill) { service.call }
+
+    context 'with any refunds' do
+      let(:site) { create :site, :pro }
+      let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }
+      let(:subscription) { create :subscription, :enterprise }
+
+      before do
+        stub_cyber_source :refund
+        RefundBill.new(active_bill).call
+      end
+
+      it 'does not consider them' do
+        expect(bill.amount).to eql subscription.amount
+      end
+    end
+
     context 'when upgrading' do
       let(:site) { create :site, :pro }
       let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }
       let(:subscription) { create :subscription, :enterprise }
-      let(:bill) { service.call }
       let!(:reduced_amount) { subscription.amount - site.current_subscription.amount }
 
-      it 'returns bill with full amount' do
+      it 'returns bill with reduced amount' do
         expect(bill).to be_a(Bill::Recurring)
         expect(bill.amount).to eql reduced_amount
         expect(bill.grace_period_allowed).to be_falsey
         expect(bill.bill_at).to eql Time.current
         expect(bill.start_date).to eql 1.hour.ago
-        expect(bill.end_date).to eql bill.renewal_date
+        expect(bill.end_date).to eql bill.start_date + subscription.period
+      end
+
+      context 'when subscription has been partially used' do
+        let(:current_subscription) { site.current_subscription }
+
+        it 'reduces amount based on used period' do
+          travel_to 12.days.from_now do
+            percentage_unused = 1.0 - 12.0 / 30.0
+            expect(bill.amount).to eql subscription.amount - (current_subscription.amount * percentage_unused)
+          end
+        end
       end
     end
 
@@ -34,7 +61,6 @@ describe CalculateBill do
       let(:site) { create :site, :enterprise }
       let!(:active_bill) { create :bill, :paid, end_date: 2.days.from_now, subscription: site.current_subscription }
       let(:subscription) { create :subscription, :pro }
-      let(:bill) { service.call }
 
       it 'returns bill with full amount' do
         expect(bill).to be_a(Bill::Recurring)
@@ -42,7 +68,7 @@ describe CalculateBill do
         expect(bill.grace_period_allowed).to be_truthy
         expect(bill.bill_at).to eql active_bill.end_date
         expect(bill.start_date).to eql(bill.bill_at - 1.hour)
-        expect(bill.end_date).to eql bill.renewal_date
+        expect(bill.end_date).to eql bill.start_date + subscription.period
       end
     end
   end
@@ -58,7 +84,7 @@ describe CalculateBill do
       expect(bill.grace_period_allowed).to be_falsey
       expect(bill.bill_at).to eql Time.current
       expect(bill.start_date).to eql 1.hour.ago
-      expect(bill.end_date).to eql bill.renewal_date
+      expect(bill.end_date).to eql bill.start_date + subscription.period
     end
   end
 

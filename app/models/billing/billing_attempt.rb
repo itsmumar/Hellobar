@@ -38,6 +38,7 @@ class BillingAttempt < ActiveRecord::Base
     if success?
       audit << "Attempt was successful, marking Bill[#{ bill.id }] as paid with response #{ response.inspect }"
       bill.paid!
+      bill.create_next_bill! unless bill.is_a?(Bill::Refund)
     else
       audit << "Attempt was not successful (#{ response.inspect }) - not changing Bill[#{ bill.id }] status"
     end

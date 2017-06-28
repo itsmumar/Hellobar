@@ -104,7 +104,7 @@ describe User do
     let!(:site_element) { create(:site_element, rule: site.rules.first) }
 
     it 'returns false if user has paying subscription' do
-      site.change_subscription(Subscription::ProComped.new(schedule: 'monthly'))
+      ChangeSubscription.new(site, subscription: 'ProComped', schedule: 'monthly').call
       expect(user.can_view_exit_intent_modal?).to eq(false)
     end
 

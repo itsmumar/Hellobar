@@ -35,9 +35,7 @@ class PaymentMethodsController < ApplicationController
     end
 
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params).call
-
-    old_subscription = @site.current_subscription
-    changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
+    changed_subscription = subscription_bill_and_status(@site, payment_method, params[:billing])
 
     respond_to do |format|
       format.json { render json: changed_subscription }
@@ -48,12 +46,11 @@ class PaymentMethodsController < ApplicationController
   def update
     load_site
 
-    old_subscription = @site.current_subscription
     payment_method = current_user.payment_methods.find params[:id]
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params, payment_method: payment_method).call
 
     respond_to do |format|
-      result = subscription_bill_and_status(@site, payment_method, params[:billing], old_subscription)
+      result = subscription_bill_and_status(@site, payment_method, params[:billing])
       status = result.delete(:status) || :ok
       format.json { render json: result, status: status }
     end

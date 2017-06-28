@@ -46,9 +46,11 @@ feature 'Users can use site element targeting rule presets', :js do
     given(:first_select_input) { first('select')['id'] }
     given(:default_option)     { 'Choose a saved rule...' }
 
+    before { stub_cyber_source :purchase }
+
     before do
-      payment_method = create(:payment_method, :success, user: @user)
-      site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+      payment_method = create(:payment_method, user: @user)
+      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, payment_method).call
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
       site.rules << custom_rule

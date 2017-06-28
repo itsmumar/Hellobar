@@ -50,15 +50,15 @@ class Subscription
     end
 
     def visit_overage
-      @subscription ? @subscription.visit_overage : parent_class.values_for(@site)[:visit_overage]
+      @subscription ? @subscription.visit_overage : parent_class.defaults[:visit_overage]
     end
 
     def visit_overage_unit
-      @subscription ? @subscription.visit_overage_unit : parent_class.values_for(@site)[:visit_overage_unit]
+      @subscription ? @subscription.visit_overage_unit : parent_class.defaults[:visit_overage_unit]
     end
 
     def visit_overage_amount
-      @subscription ? @subscription.visit_overage_amount : parent_class.values_for(@site)[:visit_overage_amount]
+      @subscription ? @subscription.visit_overage_amount : parent_class.defaults[:visit_overage_amount]
     end
 
     def custom_html?

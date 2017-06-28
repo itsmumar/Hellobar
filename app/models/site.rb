@@ -219,51 +219,10 @@ class Site < ActiveRecord::Base
     true
   end
 
-  include BillingAuditTrail
-
-  class MissingPaymentMethod < StandardError; end
-  class MissingSubscription < StandardError; end
-
-  def change_subscription(subscription, payment_method = nil, trial_period = nil)
-    raise MissingSubscription unless subscription
-    transaction do
-      subscription.site = self
-      subscription.payment_method = payment_method
-      success = true
-      bill = calculate_bill(subscription, trial_period)
-      bill.save!
-      subscription.save!
-
-      if bill.due_at(payment_method) <= Time.current
-        audit << "Change plan, bill is due now: #{ bill.inspect }"
-        result = bill.attempt_billing!
-        if result.is_a?(BillingAttempt)
-          success = result.success?
-        elsif result.is_a?(TrueClass) || result.is_a?(FalseClass)
-          success = result
-        else
-          raise "Unexpected result: #{ result.inspect }"
-        end
-      else
-        audit << "Change plan, bill is due later: #{ bill.inspect }"
-      end
-
-      set_branding_on_site_elements
-
-      return success, bill
-    end
-  end
-
+  # Find bills that are due now and we've tried to bill at least once
   def bills_with_payment_issues(clear_cache = false)
-    if clear_cache || !@bills_with_payment_issues
-      @bills_with_payment_issues = []
-      bills.due_now.each do |bill|
-        # Find bills that are due now and we've tried to bill
-        # at least once
-        @bills_with_payment_issues << bill if bill.billing_attempts.present?
-      end
-    end
-    @bills_with_payment_issues
+    @bills_with_payment_issues = nil if clear_cache
+    @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
   end
 
   def self.normalize_url(url)
@@ -315,13 +274,6 @@ class Site < ActiveRecord::Base
   end
 
   private
-
-  # Calculates a bill, but does not save or pay the bill. Used by
-  # change_subscription
-  def calculate_bill(subscription, trial_period = nil)
-    raise MissingSubscription unless subscription
-    CalculateBill.new(subscription, bills: bills.recurring, trial_period: trial_period).call
-  end
 
   def generate_blank_static_assets
     GenerateAndStoreStaticScript.new(self, script_content: '').call

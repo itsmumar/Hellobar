@@ -11,7 +11,6 @@
 
 class Referrals::NoAvailableReferrals < StandardError; end
 class Referrals::RedeemForSender < Less::Interaction
-  include Referrals::ProSubscription
   expects :site
 
   def run
@@ -19,7 +18,7 @@ class Referrals::RedeemForSender < Less::Interaction
     raise Referrals::NoAvailableReferrals unless available_referrals?
 
     if subscription.is_a?(Subscription::Free)
-      site.change_subscription(new_pro_subscription)
+      ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
     elsif subscription.problem_with_payment?
       last_failed_bill.attempt_billing!
     end

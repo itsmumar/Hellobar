@@ -105,7 +105,7 @@ class SitesController < ApplicationController
   end
 
   def downgrade
-    update_subscription(@site, nil, plan: 'free', schedule: 'monthly')
+    ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
     redirect_to site_path(@site)
   end
 
@@ -145,7 +145,7 @@ class SitesController < ApplicationController
 
       SiteMembership.create!(site: @site, user: current_user)
       Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
-      @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
+      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
 
       @site.create_default_rules
 
@@ -165,7 +165,7 @@ class SitesController < ApplicationController
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(site: @site, user: current_user)
       Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
-      @site.change_subscription(Subscription::Free.new(schedule: 'monthly'))
+      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
 
       @site.create_default_rules
 

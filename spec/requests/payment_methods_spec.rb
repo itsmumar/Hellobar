@@ -33,7 +33,7 @@ describe 'PaymentMethods requests' do
       before { stub_cyber_source :store, :purchase }
 
       let(:payment_method_details) { create :payment_form_params }
-      let(:billing_params) { { plan: 'pro', schedule: 'monthly' } }
+      let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
@@ -97,7 +97,7 @@ describe 'PaymentMethods requests' do
       let!(:payment_method) { create :payment_method, user: user }
 
       let(:payment_method_details) { create :payment_form_params }
-      let(:billing_params) { { plan: 'pro', schedule: 'monthly' } }
+      let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
@@ -107,11 +107,36 @@ describe 'PaymentMethods requests' do
         }
       end
 
-      it 'updates payment method' do
+      it 'creates new credit card' do
         expect { put payment_method_path(payment_method, params) }
           .to change { user.payment_method_details.count }.by(1)
 
         expect(response).to be_successful
+      end
+
+      it 'changes subscription to Pro' do
+        expect { put payment_method_path(payment_method, params) }
+          .to change { site.current_subscription }
+
+        expect(site.current_subscription).to be_a Subscription::Pro
+      end
+
+      context 'without payment_method_details' do
+        let(:payment_method_details) { {} }
+
+        it 'does not create new credit card' do
+          expect { put payment_method_path(payment_method, params) }
+            .not_to change { user.payment_method_details.count }
+
+          expect(response).to be_successful
+        end
+
+        it 'changes subscription to Pro' do
+          expect { put payment_method_path(payment_method, params) }
+            .to change { site.current_subscription }
+
+          expect(site.current_subscription).to be_a Subscription::Pro
+        end
       end
     end
   end

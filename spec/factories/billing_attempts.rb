@@ -2,14 +2,14 @@ FactoryGirl.define do
   factory :billing_attempt do
     status :success
 
-    payment_method_details factory: :always_successful_billing_details
+    payment_method_details factory: :cyber_source_credit_card
 
     trait :success
 
     trait :failed do
       status :failed
 
-      payment_method_details factory: :always_fails_payment_method_details
+      payment_method_details factory: :cyber_source_credit_card
     end
   end
 end

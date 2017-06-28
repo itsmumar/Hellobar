@@ -1,11 +1,9 @@
 require 'integration_helper'
 
 describe 'Content upgrade requests' do
-  let(:subscription) { create :subscription, :pro_managed }
-  let(:user) { subscription.user }
-  let(:site) { subscription.site }
-  let(:rule) { create(:rule, site: site) }
-  let!(:site_membership) { create :site_membership, site: site, user: user }
+  let(:user) { create :user }
+  let(:site) { create :site, :with_rule, user: user }
+  let!(:subscription) { create :subscription, :pro_managed, user: user, site: site }
 
   context 'when unauthenticated' do
     describe 'GET :index' do
@@ -19,7 +17,7 @@ describe 'Content upgrade requests' do
   end
 
   context 'when authenticated' do
-    let!(:content_upgrade) { create(:content_upgrade, rule: rule) }
+    let!(:content_upgrade) { create(:content_upgrade, site: site) }
     let(:pdf_upload) { fixture_file_upload(content_upgrade.content_upgrade_pdf.path) }
     let(:content_upgrade_params) do
       content_upgrade.attributes.deep_symbolize_keys.merge(
@@ -79,7 +77,7 @@ describe 'Content upgrade requests' do
     end
 
     describe 'GET :edit' do
-      let(:content_upgrade) { create :content_upgrade, rule: rule }
+      let(:content_upgrade) { create :content_upgrade, site: site }
 
       it 'responds with success' do
         get edit_site_content_upgrade_path site, content_upgrade
@@ -89,7 +87,7 @@ describe 'Content upgrade requests' do
     end
 
     describe 'PATCH :update' do
-      let(:content_upgrade) { create :content_upgrade, rule: rule }
+      let(:content_upgrade) { create :content_upgrade, site: site }
 
       it 'updates data of an existing content upgrade when params are correct' do
         params = content_upgrade_params.merge(offer_headline: 'new offer_headline')

@@ -15,12 +15,10 @@ class Bill
     end
 
     def refunded_billing_attempt
-      unless @refunded_billing_attempt
+      @refunded_billing_attempt ||=
         if refunded_billing_attempt_id
           @refunded_billing_attempt = BillingAttempt.find(refunded_billing_attempt_id)
         end
-      end
-      @refunded_billing_attempt
     end
 
     def refunded_billing_attempt_id

@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature 'Manage Settings', :js do
+  before { stub_cyber_source :purchase }
+
   before do
     @user = login
     @site = @user.sites.first
@@ -8,8 +10,8 @@ feature 'Manage Settings', :js do
 
     allow_any_instance_of(Site).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
 
-    payment_method = create(:payment_method, :success, user: @user)
-    @site.change_subscription(Subscription::Pro.new(schedule: 'monthly'), payment_method)
+    payment_method = create(:payment_method, user: @user)
+    ChangeSubscription.new(@site, { subscription: 'pro', schedule: 'monthly' }, payment_method).call
 
     visit edit_site_path(@site)
   end
