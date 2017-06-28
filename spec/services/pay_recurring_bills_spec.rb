@@ -12,6 +12,20 @@ describe PayRecurringBills do
       expect(report).to receive(:email)
     end
 
+    shared_context 'pay bill' do
+      specify do
+        expect(PayBill).to receive_service_call.and_return(double(paid?: true))
+        service.call
+      end
+    end
+
+    shared_context 'do not pay bill' do
+      specify do
+        expect(PayBill).not_to receive_service_call
+        service.call
+      end
+    end
+
     context 'with zero amount bill' do
       let!(:zero_amount_bill) { create :free_bill }
 
@@ -19,6 +33,8 @@ describe PayRecurringBills do
         expect { service.call }
           .to change { zero_amount_bill.reload.status }.to(:paid)
       end
+
+      include_examples 'pay bill'
     end
 
     context 'with bill which has no site anymore' do
@@ -31,6 +47,8 @@ describe PayRecurringBills do
         expect { service.call }
           .to change { bill_without_site.reload.status }.to(:voided)
       end
+
+      include_examples 'do not pay bill'
     end
 
     context 'with bill which has been attempted' do
@@ -43,6 +61,8 @@ describe PayRecurringBills do
         expect { service.call }
           .not_to change { bill_with_attempt.reload.status }
       end
+
+      include_examples 'do not pay bill'
     end
 
     context 'with bill which has no payment method' do
@@ -56,6 +76,8 @@ describe PayRecurringBills do
         expect { service.call }
           .not_to change { bill_without_payment_method.reload.status }
       end
+
+      include_examples 'do not pay bill'
     end
 
     context 'with bill which has no payment details' do
@@ -69,6 +91,8 @@ describe PayRecurringBills do
         expect { service.call }
           .not_to change { bill_without_payment_details.reload.status }
       end
+
+      include_examples 'do not pay bill'
     end
 
     context 'with payable bill' do
@@ -82,6 +106,8 @@ describe PayRecurringBills do
         expect { service.call }
           .to change { bill.reload.status }.to :paid
       end
+
+      include_examples 'pay bill'
 
       context 'when unsuccessful' do
         before { stub_cyber_source :purchase, success?: false }
