@@ -1,6 +1,6 @@
 RSpec::Matchers.define :be_capable_of do |plan|
   match do |site|
-    @capabilities = site.capabilities(true)
+    @capabilities = site.capabilities
     expect(@capabilities).to be_an_instance_of capabilities_klass
   end
 

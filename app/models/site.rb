@@ -227,11 +227,10 @@ class Site < ActiveRecord::Base
       Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
-  def capabilities(clear_cache = false)
-    @capabilities = nil if clear_cache
-    @capabilities ||= highest_tier_active_subscription.try(:capabilities)
-    @capabilities ||= subscriptions.last.try(:capabilities)
-    @capabilities ||= Subscription::Free::Capabilities.new(nil, self)
+  def capabilities
+    highest_tier_active_subscription&.capabilities ||
+      subscriptions.last&.capabilities ||
+      Subscription::Free::Capabilities.new(nil, self)
   end
 
   def requires_payment_method?
@@ -282,6 +281,6 @@ class Site < ActiveRecord::Base
   end
 
   def set_branding_on_site_elements
-    site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
+    site_elements.update_all(show_branding: !capabilities.remove_branding?)
   end
 end

@@ -26,7 +26,7 @@ class SiteElementsController < ApplicationController
     @site_element = SiteElement.new(
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
-      show_branding: !@site.capabilities(true).remove_branding?,
+      show_branding: !@site.capabilities.remove_branding?,
       closable: false,
       theme_id: 'autodetect',
       settings: { url: @site.url, url_to_like: @site.url }

@@ -5,7 +5,7 @@ describe Subscription::Capabilities do
   let(:free) { create :subscription, :free, user: user, site: site }
   let(:pro) { create :subscription, :pro, user: user, site: site }
   let(:enterprise) { create :subscription, :enterprise, user: user, site: site }
-  let(:capabilities) { site.capabilities(true) }
+  let(:capabilities) { site.capabilities }
   let(:last_bill) { Bill.last }
 
   before { stub_cyber_source :purchase, :refund }
@@ -44,8 +44,8 @@ describe Subscription::Capabilities do
     before { expect { change_subscription('pro', payment_method) }.to make_gateway_call(:purchase).and_fail }
 
     it 'returns the previous capabilities' do
-      expect(site.capabilities(true).remove_branding?).to be_falsey
-      expect(site.capabilities(true).closable?).to be_falsey
+      expect(site.capabilities.remove_branding?).to be_falsey
+      expect(site.capabilities.closable?).to be_falsey
       expect(site.site_elements.all?(&:show_branding)).to be_truthy
       expect(site.site_elements.all?(&:closable)).to be_truthy
     end
@@ -55,8 +55,8 @@ describe Subscription::Capabilities do
     before { expect { change_subscription('pro', payment_method) }.to make_gateway_call(:purchase).and_succeed }
 
     it 'returns new capabilities' do
-      expect(site.capabilities(true).remove_branding?).to be_truthy
-      expect(site.capabilities(true).closable?).to be_truthy
+      expect(site.capabilities.remove_branding?).to be_truthy
+      expect(site.capabilities.closable?).to be_truthy
       expect(site.site_elements.none?(&:show_branding)).to be_truthy
       expect(site.site_elements.none?(&:closable)).to be_truthy
     end

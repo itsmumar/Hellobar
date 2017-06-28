@@ -53,21 +53,12 @@ class Subscription < ActiveRecord::Base
     bills.paid.maximum(:end_date).try(:localtime)
   end
 
-  def capabilities(reload = false)
-    return @capabilities if !reload && @capabilities
-
-    # If we are in good standing we just return our normal
-    # capabilities, otherwise we return the default capabilities
-    problem_with_payment = active_bills.any? do |bill|
-      bill.problem_with_payment? site&.current_subscription&.payment_method
+  def capabilities
+    if problem_with_payment?
+      Free::Capabilities.new(self, site)
+    else
+      self.class::Capabilities.new(self, site)
     end
-
-    @capabilities =
-      if problem_with_payment
-        ProblemWithPayment::Capabilities.new(self, site)
-      else
-        self.class::Capabilities.new(self, site)
-      end
   end
 
   def problem_with_payment?
