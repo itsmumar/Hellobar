@@ -2,9 +2,9 @@ class PayBill
   class Error < StandardError; end
   class MissingPaymentMethod < Error; end
 
-  def initialize(bill, payment_method = nil)
+  def initialize(bill)
     @bill = bill
-    @payment_method = payment_method || bill.payment_method
+    @payment_method = bill.payment_method
   end
 
   def call
@@ -69,6 +69,14 @@ class PayBill
   end
 
   def create_bill_for_next_period
-    bill.create_next_bill!
+    Bill::Recurring.create!(
+      subscription: bill.subscription,
+      amount: bill.subscription.amount,
+      description: "#{ bill.subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
+      grace_period_allowed: true,
+      bill_at: bill.end_date,
+      start_date: bill.end_date,
+      end_date: bill.end_date + bill.subscription.period
+    )
   end
 end
