@@ -51,6 +51,8 @@ class UserMigrationController < ApplicationController
               bar.convert_to_site_element!(site.rules.first)
             end
           end
+
+          DetectInstallType.new(site).call
         end
       end
 

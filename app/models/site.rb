@@ -43,10 +43,6 @@ class Site < ActiveRecord::Base
 
   before_destroy :generate_blank_static_assets
 
-  after_create do
-    SiteDetectorJob.perform_later self
-  end
-
   after_update :regenerate_script
   after_touch  :regenerate_script
 

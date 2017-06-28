@@ -148,6 +148,8 @@ class SitesController < ApplicationController
 
       @site.create_default_rules
 
+      DetectInstallType.new(@site).call
+
       redirect_to new_site_site_element_path(@site)
     else
       flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
@@ -167,6 +169,8 @@ class SitesController < ApplicationController
       ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
 
       @site.create_default_rules
+
+      DetectInstallType.new(@site).call
 
       redirect_to new_site_site_element_path(@site)
     else

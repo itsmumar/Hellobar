@@ -49,6 +49,7 @@ describe SitesController do
       it 'creates a new site and sets a temporary user as the owner' do
         temp_user = User.new
         allow(User).to receive(:generate_temporary_user).and_return(temp_user)
+        expect(DetectInstallType).to receive_service_call
 
         expect {
           post :create, site: { url: 'temporary-site.com' }
@@ -61,6 +62,7 @@ describe SitesController do
         user = User.new(email: 'temporary@email.com')
         allow(user).to receive(:temporary?).and_return(true)
         allow(User).to receive(:generate_temporary_user).and_return(user)
+        expect(DetectInstallType).to receive_service_call
 
         expect {
           post(
@@ -135,6 +137,8 @@ describe SitesController do
       before { stub_current_user(user) }
 
       it 'can create a new site and is set as the owner' do
+        expect(DetectInstallType).to receive_service_call
+
         expect {
           post :create, site: { url: 'newzombo.com' }
         }.to change(user.sites, :count).by(1)
