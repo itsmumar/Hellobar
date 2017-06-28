@@ -10,6 +10,7 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  # deprecated: it's gonna be removed soon
   serialize :metadata, JSON
 
   belongs_to :subscription, inverse_of: :bills

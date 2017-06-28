@@ -37,11 +37,7 @@ class RefundBill
   end
 
   def previous_refunds
-    Bill::Refund
-      .where(subscription_id: bill.subscription_id)
-      .select { |previous_bill| previous_bill.refunded_billing_attempt_id == successful_billing_attempt.id }
-      .map(&:amount)
-      .sum
+    successful_billing_attempt.refunds.sum(:amount)
   end
 
   def create_refund_bill!
