@@ -8,7 +8,7 @@ describe Admin::SitesController do
     let(:update) { put admin_user_site_path(site, user_id: site.owners.first), params }
 
     context 'when updating subscription' do
-      let(:params) { { subscription: { type: 'ProComped', schedule: 'monthly' } } }
+      let(:params) { { subscription: { subscription: 'ProComped', schedule: 'monthly' } } }
 
       it 'changes the subscription' do
         expect { update }.to change { site.reload.current_subscription }
@@ -17,7 +17,7 @@ describe Admin::SitesController do
       end
 
       context 'when trying to upgrade and it must be paid' do
-        let(:params) { { subscription: { type: 'Enterprise', schedule: 'monthly' } } }
+        let(:params) { { subscription: { subscription: 'Enterprise', schedule: 'monthly' } } }
 
         it 'raises error' do
           update
@@ -27,7 +27,7 @@ describe Admin::SitesController do
 
       context 'when difference between subscription is less than 0' do
         let(:site) { create(:site, :with_user, :pro, schedule: :yearly) }
-        let(:params) { { subscription: { typr: 'Enterprise', schedule: 'monthly' } } }
+        let(:params) { { subscription: { subscription: 'Enterprise', schedule: 'monthly' } } }
 
         before { create(:recurring_bill, :paid, subscription: site.current_subscription) }
 
@@ -39,7 +39,7 @@ describe Admin::SitesController do
 
       context 'when trying to downgrade' do
         let(:site) { create(:site, :with_user, :pro) }
-        let(:params) { { subscription: { type: 'Free', schedule: 'monthly' } } }
+        let(:params) { { subscription: { subscription: 'Free', schedule: 'monthly' } } }
 
         it 'downgrades successfully' do
           update
@@ -52,7 +52,7 @@ describe Admin::SitesController do
 
         %w[ProManaged ProComped FreePlus].each do |to_subscription|
           context "to #{ to_subscription }" do
-            let(:params) { { subscription: { type: to_subscription, schedule: 'monthly' } } }
+            let(:params) { { subscription: { subscription: to_subscription, schedule: 'monthly' } } }
 
             it 'upgrades successfully' do
               update
@@ -73,7 +73,7 @@ describe Admin::SitesController do
 
     context 'when any error occurs' do
       before { allow_any_instance_of(CalculateBill).to receive(:call).and_raise(StandardError, 'some error') }
-      let(:params) { { subscription: { type: 'ProComped', schedule: 'monthly' } } }
+      let(:params) { { subscription: { subscription: 'ProComped', schedule: 'monthly' } } }
 
       specify { expect { update }.to raise_error 'some error' }
 
