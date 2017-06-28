@@ -38,7 +38,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def currently_on_trial?
-    amount != 0 && payment_method.nil? && active_bills.any? { |b| b.amount == 0 && b.paid? }
+    amount != 0 && payment_method.nil? && active_bills.paid.free.any?
   end
 
   def period
@@ -54,7 +54,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def capabilities
-    if problem_with_payment?
+    if problem_with_payment? || over?
       Free::Capabilities.new(self, site)
     else
       self.class::Capabilities.new(self, site)
@@ -63,6 +63,10 @@ class Subscription < ActiveRecord::Base
 
   def problem_with_payment?
     bills.problem.any?
+  end
+
+  def over?
+    last_paid_bill && last_paid_bill.end_date < Time.current
   end
 
   def mark_user_onboarding_as_bought_subscription!
@@ -88,5 +92,9 @@ class Subscription < ActiveRecord::Base
     self.visit_overage ||= values[:visit_overage]
     self.visit_overage_unit ||= values[:visit_overage_unit]
     self.visit_overage_amount ||= values[:visit_overage_amount]
+  end
+
+  def last_paid_bill
+    bills.paid.reorder(:end_date).last
   end
 end

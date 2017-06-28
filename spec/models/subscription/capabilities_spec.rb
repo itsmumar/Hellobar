@@ -35,8 +35,8 @@ describe Subscription::Capabilities do
   context 'when on a paid plan and payment has not been made' do
     before { expect { change_subscription('pro', payment_method) }.to make_gateway_call(:purchase).and_fail }
 
-    it 'returns ProblemWithPayment capabilities' do
-      expect(site).to be_capable_of :problem_with_payment
+    it 'returns Free capabilities' do
+      expect(site).to be_capable_of :free
     end
   end
 
@@ -66,10 +66,8 @@ describe Subscription::Capabilities do
     it 'returns new capabilities' do
       expect { change_subscription('pro', payment_method) }.to make_gateway_call(:purchase).and_fail
 
-      expect(site).to be_capable_of :problem_with_payment
-      # Make the bill not due until later
-      last_bill.bill_at += 10.days
-      last_bill.save!
+      expect(site).to be_capable_of :free
+      last_bill.paid!
       expect(site).to be_capable_of :pro
     end
   end
@@ -129,8 +127,6 @@ describe Subscription::Capabilities do
   end
 
   it 'stays at pro capabilities until bill period is over' do
-    pending 'it was actually always broken...'
-
     change_subscription('pro', payment_method, 'yearly')
     expect(site).to be_capable_of :pro
     travel_to 2.years.from_now do
