@@ -145,8 +145,8 @@ describe 'PaymentMethods requests' do
         it 'tracks upgrade event in analytics' do
           expect(Analytics).to receive(:track).with(
             :site, site.id, :change_sub,
-            to_plan: 'Pro', to_schedule: 'monthly',
-            from_plan: 'Free', from_schedule: 'monthly'
+            to_subscription: 'Pro', to_schedule: 'monthly',
+            from_subscription: 'Free', from_schedule: 'monthly'
           )
           expect(Analytics).to receive(:track).with(:user, user.id, 'Upgraded')
 
