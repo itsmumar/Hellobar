@@ -3,6 +3,7 @@ class PayBill
   class MissingPaymentMethod < Error; end
 
   def initialize(bill)
+    raise Error, 'cannot pay a refund' if bill.is_a?(Bill::Refund)
     @bill = bill
     @payment_method = bill.payment_method
   end
@@ -48,7 +49,7 @@ class PayBill
   end
 
   def set_final_amount
-    return if bill.base_amount.nil?
+    return if bill.base_amount.nil? || bill.amount.zero?
 
     bill.discount = bill.is_a?(Bill::Refund) ? 0 : calculate_discount
     bill.amount = [bill.base_amount - bill.discount, 0].max
