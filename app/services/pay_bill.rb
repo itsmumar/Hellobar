@@ -41,6 +41,7 @@ class PayBill
       bill.update authorization_code: response
       bill.paid!
       create_bill_for_next_period
+      fix_problem_bills
     else
       bill.problem!
       Raven.capture_message 'Unsuccessful charge', extra: {
@@ -84,5 +85,9 @@ class PayBill
       start_date: bill.end_date,
       end_date: bill.end_date + bill.subscription.period
     )
+  end
+
+  def fix_problem_bills
+    bill.site.bills_with_payment_issues.each(&:voided!)
   end
 end

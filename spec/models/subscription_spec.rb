@@ -246,6 +246,26 @@ describe Subscription do
     end
   end
 
+  describe 'over?' do
+    context 'when paid' do
+      let!(:bill) { create(:bill, :paid) }
+
+      specify { expect(bill.subscription).not_to be_over }
+
+      context 'and period has ended' do
+        let!(:bill) { create(:bill, :paid) }
+
+        specify { travel_to(2.month.from_now) { expect(bill.subscription).to be_over } }
+      end
+    end
+
+    context 'when not paid' do
+      let!(:bill) { create(:bill) }
+
+      specify { expect(bill.subscription).not_to be_over }
+    end
+  end
+
   describe '#active_bills' do
     let!(:subscription) { create(:subscription, :with_bills) }
 

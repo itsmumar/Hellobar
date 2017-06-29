@@ -21,6 +21,15 @@ describe PayBill do
       expect(bill.authorization_code).to eql 'code'
     end
 
+    context 'when site had problems with payment' do
+      let!(:problem_bill) { create :bill, :problem, site: bill.site }
+
+      it 'voids problem bills' do
+        expect { service.call }.to change { problem_bill.reload.status }.from(:problem).to(:voided)
+        expect(bill.site.reload.bills_with_payment_issues).to be_empty
+      end
+    end
+
     context 'when cybersource failed' do
       before { stub_cyber_source(:purchase, success?: false) }
 
