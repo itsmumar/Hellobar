@@ -13,7 +13,7 @@ module BillingLogger
   end
 
   def charge(bill, success)
-    info '   PayBill', to_status(success), bill.site.url, "  bill##{ bill.id } $#{ bill.amount }"
+    info 'PayBill', to_status(success), bill.site.url, "  bill##{ bill.id } $#{ bill.amount }"
   end
 
   def refund(bill, success)
@@ -21,14 +21,14 @@ module BillingLogger
   end
 
   def credit_card(site, response)
-    info ' StoreCard', to_status(response.success?), site&.url, "  #{ response.message }"
+    info 'StoreCard', to_status(response.success?), site&.url, "  #{ response.message }"
   end
 
   def change_subscription(site, props)
-    info '    Change', to_status(true), site.url, "  #{ props[:from_plan] }(#{ props[:from_schedule] }) => #{ props[:to_plan] }(#{ props[:to_schedule] })"
+    info 'Change', to_status(true), site.url, "  #{ props[:from_subscription] }(#{ props[:from_schedule] }) => #{ props[:to_subscription] }(#{ props[:to_schedule] })"
   end
 
   def to_status(success)
-    success ? 'success' : '   fail'
+    success ? 'success' : 'fail'
   end
 end
