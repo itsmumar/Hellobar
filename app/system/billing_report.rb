@@ -33,7 +33,7 @@ class BillingReport
   end
 
   def attempt(bill)
-    @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription.site.url } for #{ number_to_currency(bill.amount) }..."
+    @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription&.site&.url || 'NO SITE' } for #{ number_to_currency(bill.amount) }..."
     @bill = bill
     yield
   rescue => e
@@ -90,7 +90,7 @@ class BillingReport
     Pony.mail(
       to: emails.join(', '),
       subject: "#{ Time.current.strftime('%Y-%m-%d') } - #{ @bills_count } bills processed for #{ number_to_currency(@amount_successful) } with #{ @num_failed } failures",
-      body: @log.collect { |l| l.rjust(2) }.join("\n")
+      body: @log.map { |l| "  #{ l }" }.join("\n")
     )
   end
 
@@ -103,7 +103,7 @@ class BillingReport
   end
 
   def exception(e)
-    info @attempt + ' ERROR'
+    info @attempt + ' ERROR' if @attempt.present?
     info "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| l.rjust(2) }.join("\n  ") }"
   end
 end
