@@ -10,9 +10,6 @@ class Bill < ActiveRecord::Base
     end
   end
 
-  # deprecated: it's gonna be removed soon
-  serialize :metadata, JSON
-
   belongs_to :subscription, inverse_of: :bills
   belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
   has_many :billing_attempts, -> { order 'id' }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170628093058) do
+ActiveRecord::Schema.define(version: 20170629152028) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -78,35 +78,12 @@ ActiveRecord::Schema.define(version: 20170628093058) do
   add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
   add_index "billing_attempts", ["payment_method_details_id"], name: "index_billing_attempts_on_payment_method_details_id", using: :btree
 
-  create_table "billing_logs", force: :cascade do |t|
-    t.text     "message",                   limit: 65535
-    t.text     "source_file",               limit: 65535
-    t.datetime "created_at"
-    t.integer  "user_id",                   limit: 4
-    t.integer  "site_id",                   limit: 4
-    t.integer  "subscription_id",           limit: 4
-    t.integer  "payment_method_id",         limit: 4
-    t.integer  "payment_method_details_id", limit: 4
-    t.integer  "bill_id",                   limit: 4
-    t.integer  "billing_attempt_id",        limit: 4
-  end
-
-  add_index "billing_logs", ["bill_id"], name: "index_billing_logs_on_bill_id", using: :btree
-  add_index "billing_logs", ["billing_attempt_id"], name: "index_billing_logs_on_billing_attempt_id", using: :btree
-  add_index "billing_logs", ["created_at"], name: "index_billing_logs_on_created_at", using: :btree
-  add_index "billing_logs", ["payment_method_details_id"], name: "index_billing_logs_on_payment_method_details_id", using: :btree
-  add_index "billing_logs", ["payment_method_id"], name: "index_billing_logs_on_payment_method_id", using: :btree
-  add_index "billing_logs", ["site_id"], name: "index_billing_logs_on_site_id", using: :btree
-  add_index "billing_logs", ["subscription_id"], name: "index_billing_logs_on_subscription_id", using: :btree
-  add_index "billing_logs", ["user_id"], name: "index_billing_logs_on_user_id", using: :btree
-
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id",             limit: 4
     t.integer  "status",                      limit: 4,                            default: 0
     t.string   "type",                        limit: 255
     t.decimal  "amount",                                  precision: 7,  scale: 2
     t.string   "description",                 limit: 255
-    t.string   "metadata",                    limit: 255
     t.boolean  "grace_period_allowed",                                             default: true
     t.datetime "bill_at"
     t.datetime "start_date"

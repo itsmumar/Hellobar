@@ -31,11 +31,11 @@ describe BillingReport, :freeze do
     let(:subject) { "#{ Time.current.strftime('%Y-%m-%d') } - 999 bills processed for $10.00 with 1 failures" }
     let(:body) do
       [
-        Time.current.to_s,
-        '--------------------------------------------------------------------------------',
-        'Found 999 pending bills...',
-        "Attempting to bill #{ bill.id }: #{ bill.site.url } for $10.00... Failed: error",
-        "Attempting to bill #{ bill.id }: #{ bill.site.url } for $10.00... OK"
+        '  ' + Time.current.to_s,
+        '  --------------------------------------------------------------------------------',
+        '  Found 999 pending bills...',
+        "  Attempting to bill #{ bill.id }: #{ bill.site.url } for $10.00... Failed: error",
+        "  Attempting to bill #{ bill.id }: #{ bill.site.url } for $10.00... OK"
       ].join("\n")
     end
 
