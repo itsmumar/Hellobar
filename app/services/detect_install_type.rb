@@ -9,7 +9,7 @@ class DetectInstallType
     sns.publish(
       topic_arn: TOPIC_ARN,
       subject: "#{ Rails.env };#{ site.id };#{ site.url }",
-      message: 'Message'
+      message: "#{ Rails.env };#{ site.id };#{ site.url }"
     )
   end
 

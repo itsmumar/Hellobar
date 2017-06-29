@@ -7,7 +7,7 @@ describe DetectInstallType do
 
       expect(Aws::SNS::Client).to receive(:new).and_return sns
       expect(sns).to receive(:publish)
-        .with(a_hash_including(subject: message))
+        .with(a_hash_including(message: message))
 
       DetectInstallType.new(site).call
     end
