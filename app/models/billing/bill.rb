@@ -38,6 +38,7 @@ class Bill < ActiveRecord::Base
   scope :not_void, -> { where.not(status: statuses[:voided]) }
   scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
+  scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
@@ -92,6 +93,10 @@ class Bill < ActiveRecord::Base
 
   def paid_with_payment_method_detail
     successful_billing_attempt.try(:payment_method_details)
+  end
+
+  def payment_method_detail
+    billing_attempts.first&.payment_method_details
   end
 
   def successful_billing_attempt

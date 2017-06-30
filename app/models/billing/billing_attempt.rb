@@ -16,8 +16,4 @@ class BillingAttempt < ActiveRecord::Base
   def status
     super.to_sym
   end
-
-  def success?
-    status == :success
-  end
 end

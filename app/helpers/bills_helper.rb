@@ -24,4 +24,9 @@ module BillsHelper
        <br>#{ details.address.state } #{ details.address.zip } #{ details.address.country }"
     end
   end
+
+  def credit_card_description(credit_card)
+    return unless credit_card
+    "#{ credit_card.brand.capitalize } ending in #{ credit_card.last_digits }"
+  end
 end
