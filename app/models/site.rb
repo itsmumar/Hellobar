@@ -266,7 +266,7 @@ class Site < ActiveRecord::Base
   end
 
   def active_paid_bill
-    bills.paid.active.without_refunds.reorder(end_date: :desc).first
+    bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
   end
 
   private

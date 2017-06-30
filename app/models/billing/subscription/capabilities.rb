@@ -1,5 +1,7 @@
 class Subscription
   class Capabilities
+    attr_reader :subscription, :site
+
     def initialize(subscription, site)
       @subscription = subscription
       @site = site
@@ -91,6 +93,12 @@ class Subscription
 
     def opacity?
       false
+    end
+
+    def ==(other)
+      self.class == other.class &&
+        subscription == other.subscription &&
+        site == other.site
     end
 
     protected

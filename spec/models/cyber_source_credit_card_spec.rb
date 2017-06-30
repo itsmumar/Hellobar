@@ -34,18 +34,18 @@ describe CyberSourceCreditCard do
 
   describe '#charge', :freeze do
     let(:credit_card) { create :cyber_source_credit_card }
-    let(:order_id) { "#{ credit_card.payment_method.id }-#{ Time.current.to_i }" }
     let(:response) { double(success?: true, authorization: '1') }
 
     it 'calls gateway.purchase' do
       expect { credit_card.charge(100) }
-        .to make_gateway_call(:purchase).with(10_000, credit_card.formatted_token, order_id: order_id)
+        .to make_gateway_call(:purchase).with(10_000, credit_card)
     end
 
     context 'when invalid amount' do
       it 'raises ArgumentError' do
-        expect { credit_card.charge(-1) }.to raise_error(ArgumentError, 'Invalid amount: -1')
-        expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: nil')
+        expect { credit_card.charge(-1) }.to raise_error(ArgumentError, 'Invalid amount: -100')
+        expect { credit_card.charge(0) }.to raise_error(ArgumentError, 'Invalid amount: 0')
+        expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: 0')
       end
     end
   end
@@ -61,8 +61,9 @@ describe CyberSourceCreditCard do
 
     context 'when invalid amount' do
       it 'raises ArgumentError' do
-        expect { credit_card.refund(-1, 'id') }.to raise_error(ArgumentError, 'Invalid amount: -1')
-        expect { credit_card.refund(nil, 'id') }.to raise_error(ArgumentError, 'Invalid amount: nil')
+        expect { credit_card.refund(-1, 'id') }.to raise_error(ArgumentError, 'Invalid amount: -100')
+        expect { credit_card.refund(0, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0')
+        expect { credit_card.refund(nil, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0')
       end
     end
 

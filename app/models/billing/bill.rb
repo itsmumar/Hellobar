@@ -51,7 +51,7 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet, self, status unless status == :pending || status == :problem || value == :voided
+    raise StatusAlreadySet.new(self, status) unless status == :pending || status == :problem || value == :voided
 
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value

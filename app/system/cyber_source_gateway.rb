@@ -12,11 +12,8 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
   end
 
   def purchase(amount, credit_card)
-    return true, 'Amount was zero' if amount == 0
-
-    if amount.blank? || amount < 0
-      raise ArgumentError, "Invalid amount: #{ amount.inspect }"
-    end
+    raise 'credit card token does not exist' if credit_card.token.blank?
+    check_amount!(amount)
 
     if card_declined_test?(credit_card)
       card_declined
@@ -26,11 +23,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
   end
 
   def refund(amount, original_transaction_id)
-    return true, 'Amount was zero' if amount == 0
-
-    if amount.blank? || amount < 0
-      raise ArgumentError, "Invalid amount: #{ amount.inspect }"
-    end
+    check_amount!(amount)
 
     if original_transaction_id.blank?
       raise 'Can not refund without original transaction ID'
@@ -44,6 +37,10 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
 
   private
 
+  def check_amount!(amount)
+    raise ArgumentError, "Invalid amount: #{ amount.inspect }" if amount.blank? || amount <= 0
+  end
+
   ### for testing purpose
 
   def card_declined_test?(credit_card)
@@ -51,11 +48,10 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
   end
 
   def card_declined
-    ActiveMerchant::Billing::Response.new(
-      false,
-      'Decline - Insufficient funds in the account.',
-      {},
-      test: test?
-    )
+    make_response(false, 'Decline - Insufficient funds in the account.')
+  end
+
+  def make_response(success, message)
+    ActiveMerchant::Billing::Response.new(success, message, {}, test: test?)
   end
 end

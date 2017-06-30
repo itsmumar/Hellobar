@@ -163,29 +163,10 @@ describe Bill do
     end
   end
 
-  describe 'problem_with_payment' do
-    context 'when paid' do
-      let(:bill) { create :pro_bill, :paid }
-
-      specify { expect(bill).not_to be_problem_with_payment }
-    end
-
-    context 'when void' do
-      let(:bill) { create :pro_bill, :void }
-
-      specify { expect(bill).not_to be_problem_with_payment }
-    end
-
-    context 'when amount is zero' do
-      let(:bill) { create :free_bill }
-
-      specify { expect(bill).not_to be_problem_with_payment }
-    end
-
+  describe 'past_due' do
     context 'when pending and past due' do
       let(:bill) { create :past_due_bill }
 
-      specify { expect(bill).to be_problem_with_payment }
       specify { expect(bill).to be_past_due }
     end
 
@@ -194,7 +175,6 @@ describe Bill do
       let(:payment_method) { create :payment_method }
       before { bill.billing_attempts.delete_all }
 
-      specify { expect(bill).not_to be_problem_with_payment(payment_method) }
       specify { expect(bill).to be_past_due }
     end
 
@@ -202,7 +182,6 @@ describe Bill do
       let(:bill) { create :pro_bill }
       before { bill.billing_attempts.delete_all }
 
-      specify { expect(bill).to be_problem_with_payment }
       specify { expect(bill).to be_past_due }
     end
   end
