@@ -55,7 +55,7 @@ RSpec::Matchers.define :make_gateway_call do |method_to_be_called|
   end
 
   define_method :allow_gateway_call do
-    allow(ActiveMerchant::Billing::CyberSourceGateway).to receive(:new).and_return(gateway)
+    allow(CyberSourceGateway).to receive(:new).and_return(gateway)
 
     matcher =
       if @fail

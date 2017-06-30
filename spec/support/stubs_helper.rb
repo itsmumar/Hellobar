@@ -39,6 +39,6 @@ module StubsHelper
     )
     methods = methods.inject({}) { |hash, method| hash.update method => response }
     gateway = double('CyberSourceGateway', methods)
-    allow(ActiveMerchant::Billing::CyberSourceGateway).to receive(:new).and_return(gateway)
+    allow(CyberSourceGateway).to receive(:new).and_return(gateway)
   end
 end

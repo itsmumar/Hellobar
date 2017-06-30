@@ -255,7 +255,7 @@ describe Subscription do
       context 'and period has ended' do
         let!(:bill) { create(:bill, :paid) }
 
-        specify { travel_to(2.month.from_now) { expect(bill.subscription).to be_over } }
+        specify { travel_to(2.months.from_now) { expect(bill.subscription).to be_over } }
       end
     end
 

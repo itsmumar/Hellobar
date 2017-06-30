@@ -1,4 +1,7 @@
 class SaveCardToCyberSource
+  # @param [User] user
+  # @param [ActiveMerchant::Billing::CreditCard] credit_card
+  # @param [Hash] params; keys: order_id, email, address
   def initialize(user, credit_card, params)
     @user = user
     @credit_card = credit_card
@@ -34,7 +37,7 @@ class SaveCardToCyberSource
   end
 
   def update_profile
-    gateway.update(format_token(previous_token), credit_card, params)
+    gateway.update(previous_token, credit_card, params)
   end
 
   def create_profile
@@ -42,7 +45,7 @@ class SaveCardToCyberSource
   end
 
   def previous_token
-    @previous_token ||= previous_payment_method_details&.token
+    @previous_token ||= previous_payment_method_details&.formatted_token
   end
 
   def previous_payment_method_details
@@ -51,16 +54,7 @@ class SaveCardToCyberSource
     end
   end
 
-  def format_token(token)
-    ";#{ token };"
-  end
-
   def gateway
-    @gateway ||=
-      ActiveMerchant::Billing::CyberSourceGateway.new(
-        login: Settings.cybersource_login,
-        password: Settings.cybersource_password,
-        ignore_avs: true
-      )
+    @gateway ||= CyberSourceGateway.new
   end
 end
