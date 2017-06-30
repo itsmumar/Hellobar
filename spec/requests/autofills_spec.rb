@@ -14,9 +14,8 @@ describe 'Autofills requests' do
 
   context 'when authenticated but without ProManaged subscription' do
     let(:user) { create :user }
-    let!(:subscription) { create :subscription, :pro, user: user }
-    let(:site) { subscription.site }
-    let!(:site_membership) { create :site_membership, site: site, user: user }
+    let(:site) { create :site, user: user }
+    let!(:subscription) { create :subscription, :pro, site: site }
 
     before do
       login_as user, scope: :user, run_callbacks: false
@@ -33,9 +32,8 @@ describe 'Autofills requests' do
 
   context 'when authenticated' do
     let(:user) { create :user }
-    let!(:subscription) { create :subscription, :pro_managed, user: user }
-    let(:site) { subscription.site }
-    let!(:site_membership) { create :site_membership, site: site, user: user }
+    let(:site) { create :site, user: user }
+    let!(:subscription) { create :subscription, :pro_managed, site: site }
 
     let(:autofill_params) do
       {

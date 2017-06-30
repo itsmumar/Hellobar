@@ -11,8 +11,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   store :data, accessors: %i[number token brand], coder: JSON
 
-  delegate :refund, to: :gateway
-
   def grace_period
     15.days
   end
@@ -36,9 +34,19 @@ class CyberSourceCreditCard < PaymentMethodDetails
     self[:data] = data
   end
 
+  def refund(amount_in_dollars, original_transaction_id)
+    response = gateway.refund(amount_in_dollars * 100, original_transaction_id)
+
+    return false, response.message unless response.success?
+    [true, response.authorization]
+  end
+
   def charge(amount_in_dollars)
     raise 'credit card token does not exist' if token.blank?
-    gateway.charge amount_in_dollars, self
+    response = gateway.purchase(amount_in_dollars * 100, self)
+
+    return false, response.message unless response.success?
+    [true, response.authorization]
   end
 
   def delete_token

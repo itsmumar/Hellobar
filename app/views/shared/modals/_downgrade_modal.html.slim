@@ -6,7 +6,7 @@ script id='downgrade-template' type='text/x-handlebars-template'
           h5 Are you sure you want to downgrade to a free plan?
 
         div
-        - if current_site.capabilities.acts_as_paid_subscription?
+        - if current_site.active_paid_bill
           ' You will still benefit from the #{current_site.capabilities.subscription_name} plan
           ' until #{current_site.current_subscription.active_until.strftime("%-m-%-d-%Y")}.
           ' After that date, all of your Hello Bar elements will have the Hello Bar branding.

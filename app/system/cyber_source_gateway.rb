@@ -11,35 +11,33 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     )
   end
 
-  def charge(amount_in_dollars, credit_card)
-    return true, 'Amount was zero' if amount_in_dollars == 0
+  def purchase(amount, credit_card)
+    return true, 'Amount was zero' if amount == 0
 
-    if amount_in_dollars.blank? || amount_in_dollars < 0
-      raise ArgumentError, "Invalid amount: #{ amount_in_dollars.inspect }"
+    if amount.blank? || amount < 0
+      raise ArgumentError, "Invalid amount: #{ amount.inspect }"
     end
 
     response =
       if card_declined_test?(credit_card)
         card_declined
       else
-        purchase(amount_in_dollars * 100, credit_card.formatted_token, order_id: credit_card.order_id)
+        super(amount, credit_card.formatted_token, order_id: credit_card.order_id)
       end
-
-    [response.success?, response.authorization || response.message]
   end
 
-  def refund(amount_in_dollars, original_transaction_id)
-    return true, 'Amount was zero' if amount_in_dollars == 0
+  def refund(amount, original_transaction_id)
+    return true, 'Amount was zero' if amount == 0
 
-    if amount_in_dollars.blank? || amount_in_dollars < 0
-      raise ArgumentError, "Invalid amount: #{ amount_in_dollars.inspect }"
+    if amount.blank? || amount < 0
+      raise ArgumentError, "Invalid amount: #{ amount.inspect }"
     end
 
     if original_transaction_id.blank?
       raise 'Can not refund without original transaction ID'
     end
 
-    response = gateway.refund(amount_in_dollars * 100, original_transaction_id)
+    response = super(amount, original_transaction_id)
     return false, response.message unless response.success?
 
     [true, response.authorization]
