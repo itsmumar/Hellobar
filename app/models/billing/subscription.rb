@@ -51,7 +51,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def active_until
-    bills.paid.maximum(:end_date).try(:localtime)
+    site.active_paid_bill.end_date
   end
 
   def capabilities

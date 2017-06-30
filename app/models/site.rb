@@ -227,8 +227,10 @@ class Site < ActiveRecord::Base
       Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
+  # in case of downgrade user can have e.g Pro capabilities with Free subscription
+  # when subscription ends up we return Free capabilities
   def capabilities
-    highest_tier_active_subscription&.capabilities ||
+    active_subscription&.capabilities ||
       subscriptions.last&.capabilities ||
       Subscription::Free::Capabilities.new(nil, self)
   end
@@ -259,6 +261,16 @@ class Site < ActiveRecord::Base
 
   def content_upgrade_styles
     settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
+  end
+
+  # when users downgrades we don't refund them
+  # and all features until subscription ends up
+  def active_subscription
+    active_paid_bill&.subscription
+  end
+
+  def active_paid_bill
+    bills.paid.active.without_refunds.reorder(end_date: :desc).first
   end
 
   private

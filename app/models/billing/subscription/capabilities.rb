@@ -5,6 +5,10 @@ class Subscription
       @site = site
     end
 
+    def subscription_name
+      @subscription.values[:name]
+    end
+
     def acts_as_paid_subscription?
       false
     end
