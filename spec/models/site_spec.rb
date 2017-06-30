@@ -377,25 +377,10 @@ describe Site do
 
     before { stub_cyber_source :purchase, success?: false }
 
-    it 'returns bills that are due' do
+    it 'returns bills that are problem' do
       expect(site.bills_with_payment_issues).to be_empty
       bill = change_subscription('pro')
-      expect(site.bills_with_payment_issues(true)).to match_array [bill]
-    end
-
-    it 'does not return bills not due' do
-      bill = change_subscription('pro')
-      bill.update! bill_at: 7.days.from_now
-
-      expect(site.bills_with_payment_issues).to be_empty
-    end
-
-    it 'does not return bills that we haven\'t attempted to charge at least once' do
-      expect(site.bills_with_payment_issues).to be_empty
-      bill = change_subscription('pro')
-      expect(bill).to be_pending
-      bill.billing_attempts.delete_all
-      expect(site.bills_with_payment_issues(true)).to be_empty
+      expect(site.bills_with_payment_issues).to match_array [bill]
     end
   end
 
