@@ -20,15 +20,15 @@ module BillingLogger
   end
 
   def charge(bill, success)
-    info 'PayBill', to_status(success), bill.site.url, "  bill##{ bill.id } $#{ bill.amount }"
+    info 'PayBill', to_status(success), "#{ bill.site.url } bill##{ bill.id } $#{ bill.amount }"
   end
 
   def refund(bill, success)
-    info 'RefundBill', to_status(success), bill.site.url, "  bill##{ bill.id } $#{ bill.amount }"
+    info 'RefundBill', to_status(success), "#{ bill.site.url } bill##{ bill.id } $#{ bill.amount }"
   end
 
   def credit_card(site, response)
-    info 'StoreCard', to_status(response.success?), site&.url, "  #{ response.message }"
+    info 'StoreCard', to_status(response.success?), "#{ site&.url } #{ response.message }"
   end
 
   def change_subscription(site, props)

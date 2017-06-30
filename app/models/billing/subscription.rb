@@ -46,7 +46,6 @@ class Subscription < ActiveRecord::Base
   end
 
   def active_until
-    binding.pry
     site.active_paid_bill&.end_date
   end
 

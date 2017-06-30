@@ -18,12 +18,11 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
       raise ArgumentError, "Invalid amount: #{ amount.inspect }"
     end
 
-    response =
-      if card_declined_test?(credit_card)
-        card_declined
-      else
-        super(amount, credit_card.formatted_token, order_id: credit_card.order_id)
-      end
+    if card_declined_test?(credit_card)
+      card_declined
+    else
+      super(amount, credit_card.formatted_token, order_id: credit_card.order_id)
+    end
   end
 
   def refund(amount, original_transaction_id)
