@@ -250,6 +250,26 @@ describe Site do
     end
   end
 
+  describe '#script_url' do
+    context 'when Settings.store_site_scripts_locally' do
+      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(true) }
+      specify { expect(site.script_url).to eql "generated_scripts/#{ site.script_name }" }
+    end
+
+    context 'when Settings.script_cdn_url' do
+      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(false) }
+      before { allow(Settings).to receive(:script_cdn_url).and_return('http://script_cdn_url') }
+      specify { expect(site.script_url).to eql "http://script_cdn_url/#{ site.script_name }" }
+    end
+
+    context 'otherwise' do
+      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(false) }
+      before { allow(Settings).to receive(:script_cdn_url).and_return(nil) }
+      before { allow(Settings).to receive(:s3_bucket).and_return('s3_bucket') }
+      specify { expect(site.script_url).to eql "s3_bucket.s3.amazonaws.com/#{ site.script_name }" }
+    end
+  end
+
   describe '.normalize_url' do
     it 'should remove www' do
       expect(Site.normalize_url('http://www.cnn.com').host).to eq('www.cnn.com')

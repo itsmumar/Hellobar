@@ -63,13 +63,6 @@ class Bill < ActiveRecord::Base
     super.to_sym
   end
 
-  def active_during(date)
-    return false if voided?
-    return false if start_date && start_date > date
-    return false if end_date && end_date < date
-    true
-  end
-
   def due_at(payment_method = nil)
     if grace_period_allowed && payment_method&.current_details&.grace_period
       return bill_at + payment_method.current_details.grace_period

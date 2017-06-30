@@ -1,12 +1,10 @@
 describe CyberSourceCreditCard do
   let(:payment_method) { create :payment_method }
-  let(:data) { create :payment_data }
-  let(:credit_card) { CyberSourceCreditCard.new data: data }
+  let(:data) { create :payment_data, token: 'token' }
+  let!(:credit_card) { create :cyber_source_credit_card, data: data, token: 'token' }
   let(:gateway) { double('CyberSourceGateway') }
 
   describe '#delete_token' do
-    let!(:credit_card) { create :cyber_source_credit_card }
-
     it 'deletes token when it is present' do
       expect { credit_card.delete_token }.to change(credit_card, :token).to(nil)
     end
@@ -33,7 +31,6 @@ describe CyberSourceCreditCard do
   end
 
   describe '#charge', :freeze do
-    let(:credit_card) { create :cyber_source_credit_card }
     let(:response) { double(success?: true, authorization: '1') }
 
     it 'calls gateway.purchase' do
@@ -46,6 +43,14 @@ describe CyberSourceCreditCard do
         expect { credit_card.charge(-1) }.to raise_error(ArgumentError, 'Invalid amount: -100')
         expect { credit_card.charge(0) }.to raise_error(ArgumentError, 'Invalid amount: 0')
         expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: 0')
+      end
+    end
+
+    context 'when address is "card-declined"' do
+      let(:data) { create :payment_data, token: 'token', address: 'card-declined' }
+
+      it 'returns unsuccessfull response' do
+        expect(credit_card.charge(10)).to match_array [false, 'Decline - Insufficient funds in the account.']
       end
     end
   end

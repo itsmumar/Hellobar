@@ -145,10 +145,6 @@ class Site < ActiveRecord::Base
     "#{ Site.id_to_script_hash(id) }.js"
   end
 
-  def script_content(compress = true)
-    RenderStaticScript.new(self, compress: compress).call
-  end
-
   def generate_script
     GenerateStaticScriptJob.perform_later self
   end
