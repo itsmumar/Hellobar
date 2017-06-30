@@ -82,15 +82,6 @@ class Bill < ActiveRecord::Base
     Time.current >= due_at(payment_method)
   end
 
-  def problem_with_payment?(payment_method = nil)
-    return false if paid? || voided? || amount == 0
-    # If pending see if we are past due and we have
-    # tried billing them at least once
-    return true if past_due?(payment_method) && (payment_method.nil? || !billing_attempts.empty?)
-    # False otherwise
-    false
-  end
-
   def paid_with_payment_method_detail
     successful_billing_attempt.try(:payment_method_details)
   end

@@ -19,7 +19,7 @@ class Referrals::RedeemForSender < Less::Interaction
 
     if subscription.is_a?(Subscription::Free)
       ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
-    elsif subscription.problem_with_payment?
+    elsif last_failed_bill
       PayBill.new(last_failed_bill).call
     end
   end
@@ -31,9 +31,7 @@ class Referrals::RedeemForSender < Less::Interaction
   end
 
   def last_failed_bill
-    @last_failed_bill ||= subscription.active_bills.sort_by(&:id).reverse.detect do |bill|
-      bill.problem_with_payment?(subscription.payment_method)
-    end
+    @last_failed_bill ||= subscription.bills.problem.last
   end
 
   def subscription

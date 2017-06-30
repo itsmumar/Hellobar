@@ -33,10 +33,9 @@ describe Subscription do
       let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
       let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
       let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
-      let(:problem_with_payment) { create(:subscription, :problem_with_payment, :with_bill) }
 
       let!(:active_subscriptions) do
-        [pro, free, free_plus, problem_with_payment, enterprise, pro_managed, pro_comped]
+        [pro, free, free_plus, enterprise, pro_managed, pro_comped]
       end
 
       it 'returns subscriptions' do

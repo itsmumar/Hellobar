@@ -214,7 +214,7 @@ describe ChangeSubscription, :freeze do
           expect { change_subscription('pro') }.to make_gateway_call(:purchase).and_fail
           expect(last_bill).to be_pending
           expect(site.current_subscription).to be_instance_of Subscription::Pro
-          expect(site).to be_capable_of :problem_with_payment
+          expect(site).to be_capable_of :free
         end
       end
 

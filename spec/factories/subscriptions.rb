@@ -34,10 +34,6 @@ FactoryGirl.define do
       initialize_with { Subscription::Enterprise.new(schedule: schedule) }
     end
 
-    trait :problem_with_payment do
-      initialize_with { Subscription::ProblemWithPayment.new(schedule: schedule) }
-    end
-
     trait :with_bill do
       after :create do |subscription|
         create(:recurring_bill, :paid, subscription: subscription)
