@@ -1,14 +1,13 @@
 module BillingLogger
   module Formatter
-    def call(severity, timestamp, progname, msg)
-      "#{Time.current.to_s} #{tags_text}#{msg}\n"
+    def call(*, msg)
+      "#{ Time.current } #{ tags_text }#{ msg }\n"
     end
   end
 
   mattr_reader :logger do
     file = Rails.root.join('log', 'billing.log')
-    logger = ActiveSupport::Logger.new(STDOUT)
-    ActiveSupport::TaggedLogging.new(logger).tap do |logger|
+    ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(file)).tap do |logger|
       logger.formatter.extend Formatter
     end
   end
@@ -33,7 +32,7 @@ module BillingLogger
   end
 
   def change_subscription(site, props)
-    info 'Change', to_status(true), "#{site.url} #{ props[:from_subscription] }(#{ props[:from_schedule] }) => #{ props[:to_subscription] }(#{ props[:to_schedule] })"
+    info 'Change', to_status(true), "#{ site.url } #{ props[:from_subscription] }(#{ props[:from_schedule] }) => #{ props[:to_subscription] }(#{ props[:to_schedule] })"
   end
 
   def to_status(success)
