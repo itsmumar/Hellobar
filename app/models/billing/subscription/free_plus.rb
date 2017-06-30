@@ -1,9 +1,5 @@
 class Subscription
   class FreePlus < Free
-    def significance
-      1
-    end
-
     class Capabilities < Free::Capabilities
       def max_site_elements
         Float::INFINITY

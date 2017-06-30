@@ -1,9 +1,5 @@
 class Subscription
   class ProManaged < Pro
-    def significance
-      100
-    end
-
     class Capabilities < Pro::Capabilities
       def custom_html?
         true

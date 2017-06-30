@@ -93,18 +93,6 @@ describe Subscription do
     end
   end
 
-  describe '#significance' do
-    specify 'each subscription type has significance' do
-      %i[Free FreePlus ProblemWithPayment Pro ProComped
-         Enterprise ProManaged].each do |type|
-        klass = "Subscription::#{ type }".constantize
-
-        expect(klass.new.significance).to be_an Integer
-        expect(klass.new.significance).to be > 0
-      end
-    end
-  end
-
   describe '#period' do
     context 'when monthly' do
       let(:subscription) { build(:subscription, schedule: 'monthly') }

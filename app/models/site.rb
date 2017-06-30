@@ -190,10 +190,6 @@ class Site < ActiveRecord::Base
     subscriptions.offset(1).last
   end
 
-  def highest_tier_active_subscription
-    subscriptions.active.sort_by(&:significance).last
-  end
-
   def pro_managed_subscription?
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end

@@ -1,9 +1,5 @@
 class Subscription
   class Free < Base
-    def significance
-      1
-    end
-
     class Capabilities < Subscription::Capabilities
     end
 

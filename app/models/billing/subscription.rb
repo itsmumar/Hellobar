@@ -33,11 +33,6 @@ class Subscription < ActiveRecord::Base
     end
   end
 
-  # we use significance to sort subscriptions
-  def significance
-    0
-  end
-
   def currently_on_trial?
     amount != 0 && payment_method.nil? && active_bills.paid.free.any?
   end

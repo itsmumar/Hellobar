@@ -3,10 +3,6 @@ class Subscription
   # They are basically the same as Free, but we don't let the subscription
   # override the visit_overage features
   class ProblemWithPayment < Free
-    def significance
-      5
-    end
-
     class Capabilities < Free::Capabilities
       def visit_overage
         parent_class.defaults[:visit_overage]

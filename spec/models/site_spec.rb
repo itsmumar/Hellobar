@@ -49,63 +49,6 @@ describe Site do
     end
   end
 
-  describe '#highest_tier_active_subscription' do
-    let(:payment_method) { create(:payment_method) }
-    let(:ownership) { create(:site_membership, user: payment_method.user) }
-    let(:site) { ownership.site }
-
-    before { stub_cyber_source :purchase, :refund }
-
-    def change_subscription(subscription, schedule = 'monthly')
-      ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
-    end
-
-    it 'returns nil when there are no active subscriptions' do
-      expect(site.highest_tier_active_subscription).to be(nil)
-    end
-
-    it 'returns the highest tier active subscription among Free and Pro' do
-      change_subscription('free')
-      change_subscription('pro')
-
-      expect(site.highest_tier_active_subscription).to be_a(Subscription::Pro)
-    end
-
-    it 'returns the highest tier active subscription among Pro and Enterprise' do
-      change_subscription('pro')
-      change_subscription('enterprise')
-
-      expect(site.highest_tier_active_subscription).to be_a(Subscription::Enterprise)
-    end
-
-    it 'returns the highest tier active subscription among Pro and ProManaged' do
-      change_subscription('free')
-      change_subscription('pro')
-      site.subscriptions.last.update type: Subscription::ProManaged
-
-      expect(site.highest_tier_active_subscription).to be_a(Subscription::ProManaged)
-    end
-
-    it 'returns only active subscriptions' do
-      change_subscription('free', 'yearly')
-      change_subscription('pro')
-
-      travel_to 2.months.from_now do
-        expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
-      end
-    end
-
-    context 'when Pro subscription has a refund' do
-      it 'returns Free subscription', :freeze do
-        change_subscription('free')
-        bill = change_subscription('pro')
-        RefundBill.new(bill).call
-
-        expect(site.highest_tier_active_subscription).to be_a(Subscription::Free)
-      end
-    end
-  end
-
   describe '#pro_managed_subscription?' do
     it 'returns true if the site has a ProManaged subscription' do
       site = build_stubbed :site
