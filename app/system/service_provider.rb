@@ -1,6 +1,7 @@
 class ServiceProvider
   prepend ServiceProvider::RailsLogger
   prepend ServiceProvider::RavenLogger
+  include ServiceProvider::Errors
 
   class << self
     def adapter(key)

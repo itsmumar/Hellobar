@@ -48,8 +48,16 @@ module ServiceProvider::Adapters
     end
 
     def destroy_identity_if_needed(exception)
-      raise exception unless exception.title.in? ['Resource Not Found', 'API Key Invalid']
-      @identity.destroy_and_notify_user
+      case exception.title
+      when 'Member Exists'
+        # ignore...
+      when 'Invalid Resource'
+        raise ServiceProvider::InvalidSubscriberError, exception.detail
+      when 'Resource Not Found', 'API Key Invalid'
+        @identity.destroy_and_notify_user
+      else
+        raise exception
+      end
     end
   end
 end

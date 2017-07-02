@@ -32,4 +32,13 @@ describe SubscribeContact do
       expect(last_log_entry).not_to be_completed
     end
   end
+
+  context 'when ServiceProvider::InvalidSubscriberError is raised' do
+    before { allow(provider).to receive(:subscribe).and_raise ServiceProvider::InvalidSubscriberError }
+
+    it 'does not mark contact list log as completed' do
+      service.call
+      expect(last_log_entry).not_to be_completed
+    end
+  end
 end

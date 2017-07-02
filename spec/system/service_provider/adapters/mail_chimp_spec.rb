@@ -70,5 +70,23 @@ describe ServiceProvider::Adapters::MailChimp do
         subscribe
       end
     end
+
+    context 'when Invalid Resource' do
+      let(:response) { { status: 400, body: { title: 'Invalid Resource' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'raises ServiceProvider::InvalidSubscriberError' do
+        expect { subscribe }.to raise_error(ServiceProvider::InvalidSubscriberError)
+      end
+    end
+
+    context 'when Member Exists' do
+      let(:response) { { status: 400, body: { title: 'Member Exists' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'does not raise error' do
+        expect { subscribe }.not_to raise_error
+      end
+    end
   end
 end
