@@ -18,7 +18,8 @@ class Site < ActiveRecord::Base
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
-  has_many :owners, -> { where(role: 'owner') }, through: :site_memberships
+  has_many :owners, -> { where(site_memberships: { role: 'owner' }) }, through: :site_memberships, source: :user
+  has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
@@ -26,6 +27,9 @@ class Site < ActiveRecord::Base
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
+  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.problem) },
+    class_name: 'Bill', through: :subscriptions, inverse_of: :site, source: :bills
+
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
@@ -93,6 +97,24 @@ class Site < ActiveRecord::Base
       .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
   end
 
+  def self.id_to_script_hash(id)
+    Digest::SHA1.hexdigest("bar#{ id }cat")
+  end
+
+  def self.find_by_script(script_embed)
+    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
+
+    (Site.maximum(:id) || 1).downto(1) do |i|
+      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
+    end
+
+    nil
+  end
+
+  def self.normalize_url(url)
+    Addressable::URI.heuristic_parse(url)
+  end
+
   def needs_script_regeneration?
     !skip_script_generation && @needs_script_regeneration.present?
   end
@@ -121,10 +143,6 @@ class Site < ActiveRecord::Base
   def script_name
     raise 'script_name requires ID' unless persisted?
     "#{ Site.id_to_script_hash(id) }.js"
-  end
-
-  def script_content(compress = true)
-    RenderStaticScript.new(self, compress: compress).call
   end
 
   def generate_script
@@ -157,7 +175,7 @@ class Site < ActiveRecord::Base
   end
 
   def custom_rules?
-    rules.map(&:editable).any?
+    rules.editable.any?
   end
 
   def current_subscription
@@ -166,10 +184,6 @@ class Site < ActiveRecord::Base
 
   def previous_subscription
     subscriptions.offset(1).last
-  end
-
-  def highest_tier_active_subscription
-    subscriptions.active.sort_by(&:significance).last
   end
 
   def pro_managed_subscription?
@@ -205,11 +219,12 @@ class Site < ActiveRecord::Base
       Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
   end
 
-  def capabilities(clear_cache = false)
-    @capabilities = nil if clear_cache
-    @capabilities ||= highest_tier_active_subscription.try(:capabilities)
-    @capabilities ||= subscriptions.last.try(:capabilities)
-    @capabilities ||= Subscription::Free::Capabilities.new(nil, self)
+  # in case of downgrade user can have e.g Pro capabilities with Free subscription
+  # when subscription ends up we return Free capabilities
+  def capabilities
+    active_subscription&.capabilities ||
+      subscriptions.last&.capabilities ||
+      Subscription::Free::Capabilities.new(nil, self)
   end
 
   def requires_payment_method?
@@ -218,44 +233,12 @@ class Site < ActiveRecord::Base
     true
   end
 
-  # Find bills that are due now and we've tried to bill at least once
-  def bills_with_payment_issues(clear_cache = false)
-    @bills_with_payment_issues = nil if clear_cache
-    @bills_with_payment_issues ||= bills.due_now.select { |bill| bill.billing_attempts.present? }
-  end
-
-  def self.normalize_url(url)
-    Addressable::URI.heuristic_parse(url)
-  end
-
   def membership_for_user(user)
-    site_memberships.detect { |x| x.user_id == user.id }
-  end
-
-  def owners
-    users.where(site_memberships: { role: Permissions::OWNER })
-  end
-
-  def owners_and_admins
-    users.where("site_memberships.role = '#{ Permissions::OWNER }' OR site_memberships.role = '#{ Permissions::ADMIN }'")
+    site_memberships.find_by(user_id: user.id)
   end
 
   def had_wordpress_bars?
     site_elements.where.not(wordpress_bar_id: nil).any?
-  end
-
-  def self.id_to_script_hash(id)
-    Digest::SHA1.hexdigest("bar#{ id }cat")
-  end
-
-  def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
-
-    (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
-    end
-
-    nil
   end
 
   def normalized_url
@@ -272,7 +255,15 @@ class Site < ActiveRecord::Base
     settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
   end
 
+  def active_paid_bill
+    bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
+  end
+
   private
+
+  def active_subscription
+    active_paid_bill&.subscription
+  end
 
   def generate_blank_static_assets
     GenerateAndStoreStaticScript.new(self, script_content: '').call
@@ -292,6 +283,6 @@ class Site < ActiveRecord::Base
   end
 
   def set_branding_on_site_elements
-    site_elements.update_all(show_branding: !capabilities(true).remove_branding?)
+    site_elements.update_all(show_branding: !capabilities.remove_branding?)
   end
 end

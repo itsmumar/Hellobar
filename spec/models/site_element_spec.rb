@@ -75,7 +75,7 @@ describe SiteElement do
         let(:element) { create(:site_element, :email) }
 
         it 'requires a the correct capabilities' do
-          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(false)
+          stub_capability(element.site, :after_submit_redirect?, false)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
           element.save
@@ -84,7 +84,7 @@ describe SiteElement do
         end
 
         it 'requires a redirect url if after_email_submit_action is :redirect' do
-          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
+          stub_capability(element.site, :after_submit_redirect?, true)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
           element.save
@@ -93,7 +93,7 @@ describe SiteElement do
         end
 
         it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-          allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
+          stub_capability(element.site, :after_submit_redirect?, true)
           element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
 
           element.save
@@ -142,7 +142,7 @@ describe SiteElement do
 
     context 'when subtype is email' do
       it 'requires a the correct capabilities' do
-        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(false)
+        stub_capability(element.site, :after_submit_redirect?, false)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
         element.save
@@ -151,7 +151,7 @@ describe SiteElement do
       end
 
       it 'requires a redirect url if after_email_submit_action is :redirect' do
-        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
+        stub_capability(element.site, :after_submit_redirect?, true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
 
         element.save
@@ -160,7 +160,7 @@ describe SiteElement do
       end
 
       it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-        allow(element.site.capabilities).to receive(:after_submit_redirect?).and_return(true)
+        stub_capability(element.site, :after_submit_redirect?, true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
 
         element.save
@@ -182,7 +182,7 @@ describe SiteElement do
 
     context 'when subtype is email' do
       it 'requires a the correct capabilities' do
-        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(false)
+        stub_capability(element.site, :custom_thank_you_text?, false)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
 
         element.save
@@ -191,7 +191,7 @@ describe SiteElement do
       end
 
       it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
-        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(true)
+        stub_capability(element.site, :custom_thank_you_text?, true)
         element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
 
         element.save
@@ -200,7 +200,7 @@ describe SiteElement do
       end
 
       it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
-        allow(element.site.capabilities).to receive(:custom_thank_you_text?).and_return(true)
+        stub_capability(element.site, :custom_thank_you_text?, true)
         element.save
         expect(element.errors['custom_thank_you_text']).to be_empty
       end
@@ -567,5 +567,9 @@ describe SiteElement do
         expect(element.fonts).to eql []
       end
     end
+  end
+
+  def stub_capability(site, capability, value = true)
+    allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
   end
 end

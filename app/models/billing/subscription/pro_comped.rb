@@ -1,9 +1,5 @@
 class Subscription
   class ProComped < Pro
-    def significance
-      20
-    end
-
     class << self
       def defaults
         {

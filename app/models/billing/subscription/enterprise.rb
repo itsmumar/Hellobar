@@ -1,9 +1,5 @@
 class Subscription
   class Enterprise < Base
-    def significance
-      50
-    end
-
     class Capabilities < Pro::Capabilities
     end
 

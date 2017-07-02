@@ -9,11 +9,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   validates :token, :last_digits, presence: true
 
-  store :data, accessors: %i[number token], coder: JSON
-
-  def name
-    "#{ brand&.capitalize || 'Credit Card' } ending in #{ last_digits.presence || '???' }"
-  end
+  store :data, accessors: %i[number token brand], coder: JSON
 
   def grace_period
     15.days
@@ -21,10 +17,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
 
   def last_digits
     ActiveMerchant::Billing::CreditCard.last_digits number.gsub(/[^\d]/, '') if number.present?
-  end
-
-  def brand
-    data['brand']
   end
 
   def address
@@ -42,35 +34,17 @@ class CyberSourceCreditCard < PaymentMethodDetails
     self[:data] = data
   end
 
-  def charge(amount_in_dollars)
-    raise 'credit card token does not exist' if token.blank?
-    return true, 'Amount was zero' if amount_in_dollars == 0
+  def refund(amount_in_dollars, original_transaction_id)
+    response = gateway.refund(amount_in_dollars.to_i * 100, original_transaction_id)
 
-    if amount_in_dollars.blank? || amount_in_dollars < 0
-      raise ArgumentError, "Invalid amount: #{ amount_in_dollars.inspect }"
-    end
-
-    response = gateway.purchase(amount_in_dollars * 100, formatted_token, order_id: order_id)
     return false, response.message unless response.success?
-
     [true, response.authorization]
   end
 
-  def refund(amount_in_dollars, original_transaction_id)
-    raise 'Can not refund money until saved' unless persisted? && token
-    return true, 'Amount was zero' if amount_in_dollars == 0
+  def charge(amount_in_dollars)
+    response = gateway.purchase(amount_in_dollars.to_i * 100, self)
 
-    if amount_in_dollars.blank? || amount_in_dollars < 0
-      raise ArgumentError, "Invalid amount: #{ amount_in_dollars.inspect }"
-    end
-
-    if original_transaction_id.blank?
-      raise 'Can not refund without original transaction ID'
-    end
-
-    response = gateway.refund(amount_in_dollars * 100, original_transaction_id)
     return false, response.message unless response.success?
-
     [true, response.authorization]
   end
 
@@ -98,11 +72,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
   private
 
   def gateway
-    @gateway ||=
-      ActiveMerchant::Billing::CyberSourceGateway.new(
-        login: Settings.cybersource_login,
-        password: Settings.cybersource_password,
-        ignore_avs: true
-      )
+    @gateway ||= CyberSourceGateway.new
   end
 end

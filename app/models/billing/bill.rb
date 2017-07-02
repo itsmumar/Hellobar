@@ -1,12 +1,17 @@
 class Bill < ActiveRecord::Base
-  class StatusAlreadySet < StandardError; end
+  class StatusAlreadySet < StandardError
+    def initialize(bill, status)
+      super "Can not change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
+    end
+  end
+
   class InvalidStatus < StandardError; end
   class InvalidBillingAmount < StandardError
     attr_reader :amount
 
     def initialize(amount)
       @amount = amount
-      super("Amount was: #{ amount&.to_f.inspect }")
+      super "Amount was: #{ amount&.to_f.inspect }"
     end
   end
 
@@ -23,13 +28,17 @@ class Bill < ActiveRecord::Base
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  enum status: %i[pending paid voided]
+  enum status: %i[pending paid voided problem]
 
   scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
+  scope :non_free, -> { where.not(amount: 0) }
+  scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :active, -> { paid.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
+  scope :not_void, -> { where.not(status: statuses[:voided]) }
+  scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
+  scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
@@ -42,7 +51,7 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet, "Can not change status once set. Was #{ status.inspect } trying to set to #{ value.inspect }" unless status == :pending || value == :voided
+    raise StatusAlreadySet.new(self, status) unless status == :pending || status == :problem || value == :voided
 
     status_value = Bill.statuses[value.to_sym]
     raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
@@ -52,13 +61,6 @@ class Bill < ActiveRecord::Base
 
   def status
     super.to_sym
-  end
-
-  def active_during(date)
-    return false if voided?
-    return false if start_date && start_date > date
-    return false if end_date && end_date < date
-    true
   end
 
   def due_at(payment_method = nil)
@@ -73,17 +75,12 @@ class Bill < ActiveRecord::Base
     Time.current >= due_at(payment_method)
   end
 
-  def problem_with_payment?(payment_method = nil)
-    return false if paid? || voided? || amount == 0
-    # If pending see if we are past due and we have
-    # tried billing them at least once
-    return true if past_due?(payment_method) && (payment_method.nil? || !billing_attempts.empty?)
-    # False otherwise
-    false
-  end
-
   def paid_with_payment_method_detail
     successful_billing_attempt.try(:payment_method_details)
+  end
+
+  def payment_method_detail
+    billing_attempts.first&.payment_method_details
   end
 
   def successful_billing_attempt

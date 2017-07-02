@@ -1,6 +1,5 @@
-class Admin::ContactListsController < ApplicationController
-  layout 'admin'
-  before_action :require_admin, :load_site
+class Admin::ContactListsController < AdminController
+  before_action :load_site
 
   def index
     @contact_lists = @site.contact_lists.includes(:contact_list_logs)

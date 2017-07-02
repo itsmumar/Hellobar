@@ -7,10 +7,5 @@ class Bill
     def check_amount
       raise InvalidBillingAmount, "Amount must be negative. It was #{ amount.to_f }" if amount > 0
     end
-
-    # Refunds are never considered "active"
-    def active_during(_date)
-      false
-    end
   end
 end

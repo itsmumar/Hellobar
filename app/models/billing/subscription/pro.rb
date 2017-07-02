@@ -1,9 +1,5 @@
 class Subscription
   class Pro < Base
-    def significance
-      20
-    end
-
     class Capabilities < Free::Capabilities
       def acts_as_paid_subscription?
         true

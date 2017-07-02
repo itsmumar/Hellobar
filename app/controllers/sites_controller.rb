@@ -77,13 +77,12 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    generator = RenderStaticScript.new(@site, templates: SiteElement.all_templates, no_rules: true, preview: true, compress: false)
-    render js: generator.call
+    render js: render_script(preview: true)
   end
 
   # Returns the site's script
   def script
-    render js: @site.script_content(params[:compress].to_i == 1)
+    render js: render_script(preview: false)
   end
 
   def chart_data
@@ -196,7 +195,18 @@ class SitesController < ApplicationController
   end
 
   def load_bills
-    @bills = @site.bills.includes(:subscription).select { |bill| bill.status == :paid && bill.amount != 0 }.sort_by(&:bill_at).reverse
-    @next_bill = @site.bills.includes(:subscription).find { |bill| bill.status == :pending }
+    @bills = @site.bills.paid_or_problem.non_free.includes(:subscription).reorder(bill_at: :desc)
+    @next_bill = @site.bills.pending.includes(:subscription).last
+  end
+
+  def render_script(preview:)
+    options =
+      if preview
+        { templates: SiteElement.all_templates, no_rules: true, preview: true, compress: false }
+      else
+        { compress: params[:compress].to_i == 1 }
+      end
+
+    RenderStaticScript.new(@site, **options).call
   end
 end

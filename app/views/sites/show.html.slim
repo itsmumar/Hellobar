@@ -1,6 +1,6 @@
 .statistics-page
 
-  - if @site.current_subscription.try(:problem_with_payment?)
+  - if @site.current_subscription&.problem_with_payment?
     div.info-block
       ' Your subscription has not been renewed!  Act today to keep using
       = @site.current_subscription.values[:name]

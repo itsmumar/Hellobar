@@ -25,12 +25,9 @@ class PayRecurringBills
 
   # Find all pending bills less than 30 days old
   def pending_bills
-    Bill.where(
-      '? >= bill_at AND bill_at > ? AND status = ?',
-      Time.current,
-      Time.current - MAX_RETRY_TIME,
-      Bill.statuses[:pending]
-    )
+    Bill
+      .where(status: Bill.statuses.values_at(:pending, :problem))
+      .where('? >= bill_at AND bill_at > ?', Time.current, Time.current - MAX_RETRY_TIME)
   end
 
   def handle(bill)

@@ -18,7 +18,7 @@ describe 'PaymentMethodDetails requests' do
     let(:payment_method_details) { payment_method.details.first }
 
     before do
-      allow_any_instance_of(ApplicationController).to receive(:require_admin).and_return admin
+      allow_any_instance_of(AdminController).to receive(:require_admin).and_return admin
     end
 
     describe 'DELETE :destroy', :freeze do

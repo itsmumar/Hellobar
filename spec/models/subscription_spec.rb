@@ -33,10 +33,9 @@ describe Subscription do
       let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
       let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
       let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
-      let(:problem_with_payment) { create(:subscription, :problem_with_payment, :with_bill) }
 
       let!(:active_subscriptions) do
-        [pro, free, free_plus, problem_with_payment, enterprise, pro_managed, pro_comped]
+        [pro, free, free_plus, enterprise, pro_managed, pro_comped]
       end
 
       it 'returns subscriptions' do
@@ -89,18 +88,6 @@ describe Subscription do
     context 'without a user' do
       it 'returns the regular price' do
         expect(Subscription.estimated_price(nil, :yearly)).to eql 1
-      end
-    end
-  end
-
-  describe '#significance' do
-    specify 'each subscription type has significance' do
-      %i[Free FreePlus ProblemWithPayment Pro ProComped
-         Enterprise ProManaged].each do |type|
-        klass = "Subscription::#{ type }".constantize
-
-        expect(klass.new.significance).to be_an Integer
-        expect(klass.new.significance).to be > 0
       end
     end
   end
@@ -246,29 +233,49 @@ describe Subscription do
     end
   end
 
+  describe '#expired?' do
+    context 'when paid' do
+      let!(:bill) { create(:bill, :paid) }
+
+      specify { expect(bill.subscription).not_to be_expired }
+
+      context 'and period has ended' do
+        let!(:bill) { create(:bill, :paid) }
+
+        specify { travel_to(2.months.from_now) { expect(bill.subscription).to be_expired } }
+      end
+    end
+
+    context 'when not paid' do
+      let!(:bill) { create(:bill) }
+
+      specify { expect(bill.subscription).not_to be_expired }
+    end
+  end
+
   describe '#active_bills' do
     let!(:subscription) { create(:subscription, :with_bills) }
 
     before { Bill.delete_all }
 
     it 'returns all bills active for time period', :freeze do
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill after
       create(:bill, subscription: subscription, start_date: 15.days.from_now, end_date: 45.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill before
       create(:bill, subscription: subscription, start_date: 45.days.ago, end_date: 15.days.ago, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add a bill during time, but voided
       create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, status: :voided, amount: 1)
-      expect(subscription.active_bills(true)).to be_empty
+      expect(subscription.active_bills).to be_empty
 
       # Add an active bill
       bill = create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
-      expect(subscription.active_bills(true)).to match_array [bill]
+      expect(subscription.reload.active_bills).to match_array [bill]
     end
   end
 end

@@ -232,6 +232,27 @@ describe SitesController do
     end
   end
 
+  describe 'GET script' do
+    let(:user) { create(:user, :with_site) }
+    let(:site) { user.sites.last }
+
+    it 'renders static script' do
+      stub_current_user(user)
+
+      expect(StaticScriptAssets)
+        .to receive(:render_model).with(instance_of(StaticScriptModel)).and_return('__DATA__')
+      expect(StaticScriptAssets)
+        .to receive(:render).with('modules.js', site_id: site.id).and_return('__MODULES__')
+      expect(StaticScriptAssets)
+        .to receive(:render).with('static_script_template.js', site_id: site.id).and_return('$INJECT_MODULES; $INJECT_DATA')
+
+      get :script, id: site
+
+      expect(response).to be_success
+      expect(response.body).to eql '__MODULES__; __DATA__'
+    end
+  end
+
   describe 'GET chart_data' do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }

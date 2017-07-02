@@ -1,8 +1,4 @@
-class Admin::BillsController < ApplicationController
-  layout 'admin'
-
-  before_action :require_admin
-
+class Admin::BillsController < AdminController
   def show
     @bill = Bill.find(params[:id])
     @site = Site.with_deleted.find(@bill.site_id)

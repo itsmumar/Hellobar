@@ -37,12 +37,6 @@ class ApplicationController < ActionController::Base
     @current_admin ||= Admin.validate_session(session[:admin_token]) || false
   end
 
-  def require_admin
-    return redirect_to(admin_access_path, alert: 'Access denied') unless current_admin
-    return unless current_admin.needs_to_set_new_password?
-    redirect_to(admin_reset_password_path) unless URI.parse(url_for).path == admin_reset_password_path
-  end
-
   def require_pro_managed_subscription
     redirect_to root_path unless current_site.pro_managed_subscription?
   end

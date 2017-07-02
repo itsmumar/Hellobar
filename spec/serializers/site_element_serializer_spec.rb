@@ -38,4 +38,20 @@ describe SiteElementSerializer do
       serializer.as_json
     end
   end
+
+  describe '#preset_rule_name' do
+    context 'with an editable rule' do
+      let(:rule) { create :rule, editable: true }
+      let(:element) { create(:site_element, :traffic, rule: rule) }
+
+      specify { expect(serializer.preset_rule_name).to eql 'Saved' }
+    end
+
+    context 'with an non-editable rule' do
+      let(:rule) { create :rule, editable: false }
+      let(:element) { create(:site_element, :traffic, rule: rule) }
+
+      specify { expect(serializer.preset_rule_name).to eql rule.name }
+    end
+  end
 end

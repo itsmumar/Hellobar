@@ -1,8 +1,4 @@
-class Admin::UsersController < ApplicationController
-  layout 'admin'
-
-  before_action :require_admin
-
+class Admin::UsersController < AdminController
   def index
     q = params[:q].to_s.strip
 

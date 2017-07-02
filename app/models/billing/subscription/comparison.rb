@@ -40,7 +40,7 @@ class Subscription
 
     # These need to be in the order of least expensive to most expensive
     def plans
-      [Free, ProblemWithPayment, Pro, Enterprise]
+      [Free, Pro, Enterprise]
     end
   end
 end

@@ -51,22 +51,32 @@ section
       table
         thead
           tr
+            th
             th Date
             th Cost
             th Plan
             th Card
-            th
+            th Receipt
         tbody
           - @bills.each do |bill|
             tr
+              td
+                - if bill.problem?
+                  i.icon-alert
+                - else
+                  i.icon-thumbsup
+
               td= bill.bill_at.strftime("%-m-%-d-%Y")
               td
                 = number_to_currency(bill.amount)
                 - if bill.is_a?(Bill::Refund)
                   |  (Refund)
               td= "Hello Bar #{bill.subscription.values[:name]}"
-              td= bill.paid_with_payment_method_detail ? bill.paid_with_payment_method_detail.data['number'] : 'n/a'
-              td= link_to 'Receipt', bill_path(bill), target: '_blank'
+              td= credit_card_description(bill.payment_method_detail)
+              td
+                - unless bill.problem?
+                  = link_to bill_path(bill), target: '_blank' do
+                    i.icon-export
 
   - if @next_bill
     - if @site.current_subscription.currently_on_trial?

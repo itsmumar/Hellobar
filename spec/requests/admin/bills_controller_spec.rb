@@ -44,6 +44,18 @@ describe 'Admin Bills requests' do
 
         expect(response).to redirect_to admin_user_path(user)
       end
+
+      context 'when failed' do
+        before { bill.payment_method.destroy }
+
+        it 'returns refund error' do
+          expect {
+            put admin_user_bill_refund_path(user_id: user, bill_id: bill, bill_recurring: { amount: 10 })
+          }.not_to change(Bill::Refund, :count)
+
+          expect(response).to redirect_to admin_user_path(user)
+        end
+      end
     end
   end
 end

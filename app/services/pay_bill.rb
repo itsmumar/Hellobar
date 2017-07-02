@@ -9,7 +9,7 @@ class PayBill
   end
 
   def call
-    return bill unless bill.pending?
+    return bill if cannot_pay?
 
     set_final_amount
 
@@ -25,6 +25,10 @@ class PayBill
 
   attr_reader :bill, :payment_method
 
+  def cannot_pay?
+    !bill.pending? && !bill.problem?
+  end
+
   def charge
     raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
 
@@ -37,7 +41,9 @@ class PayBill
       bill.update authorization_code: response
       bill.paid!
       create_bill_for_next_period
+      fix_problem_bills
     else
+      bill.problem!
       Raven.capture_message 'Unsuccessful charge', extra: {
         message: response,
         bill: bill.id,
@@ -79,5 +85,9 @@ class PayBill
       start_date: bill.end_date,
       end_date: bill.end_date + bill.subscription.period
     )
+  end
+
+  def fix_problem_bills
+    bill.site.bills_with_payment_issues.each(&:voided!)
   end
 end

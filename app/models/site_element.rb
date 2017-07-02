@@ -251,7 +251,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def show_default_email_message?
-    !site.capabilities(true).custom_thank_you_text? || (after_email_submit_action == :show_default_message)
+    !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
   # Hardcoded array of external events for Google Analytics

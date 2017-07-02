@@ -25,8 +25,8 @@ class UserStateCloner
     site_elements.each(&:save!)
     payment_methods.each(&:save)
     ActiveRecord::Base.record_timestamps = true # generate timestamps
-  rescue ActiveRecord::RecordNotUnique
-    Rails.logger.info 'Rubocop is annoying and makes me do this.'
+  rescue ActiveRecord::RecordNotUnique => _ # rubocop:disable Lint/HandleExceptions
+    # just ignore
   end
 
   def upgrade_sites_to_pro(sites)

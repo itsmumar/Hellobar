@@ -210,11 +210,11 @@ describe ChangeSubscription, :freeze do
       context 'when payment fails' do
         let(:last_bill) { site.current_subscription.bills.last }
 
-        it 'returns pending bill' do
+        it 'returns problem bill' do
           expect { change_subscription('pro') }.to make_gateway_call(:purchase).and_fail
-          expect(last_bill).to be_pending
+          expect(last_bill).to be_problem
           expect(site.current_subscription).to be_instance_of Subscription::Pro
-          expect(site).to be_capable_of :problem_with_payment
+          expect(site).to be_capable_of :free
         end
       end
 

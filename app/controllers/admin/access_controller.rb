@@ -1,7 +1,5 @@
-class Admin::AccessController < ApplicationController
-  layout 'admin'
-
-  before_action :require_admin, only: %i[reset_password do_reset_password logout_admin]
+class Admin::AccessController < AdminController
+  skip_before_action :require_admin, only: %i[process_step1 process_step2 lockdown]
 
   def do_reset_password
     error =

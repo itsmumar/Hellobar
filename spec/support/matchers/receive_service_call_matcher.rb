@@ -1,5 +1,6 @@
 RSpec::Matchers.define :receive_service_call do
   match do |service_class|
+    @service_name = service_class.name
     @service_double = double service_class.name
     @times ||= 1
 
@@ -45,5 +46,9 @@ RSpec::Matchers.define :receive_service_call do
   end
 
   chain :times do
+  end
+
+  description do
+    @service_name.underscore.humanize.downcase
   end
 end
