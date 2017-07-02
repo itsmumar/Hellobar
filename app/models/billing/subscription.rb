@@ -50,7 +50,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def capabilities
-    if problem_with_payment? || over?
+    if problem_with_payment? || expired?
       Free::Capabilities.new(self, site)
     else
       self.class::Capabilities.new(self, site)
@@ -61,7 +61,7 @@ class Subscription < ActiveRecord::Base
     bills.problem.any?
   end
 
-  def over?
+  def expired?
     last_paid_bill && last_paid_bill.end_date < Time.current
   end
 

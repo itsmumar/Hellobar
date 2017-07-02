@@ -255,17 +255,15 @@ class Site < ActiveRecord::Base
     settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
   end
 
-  # when users downgrades we don't refund them
-  # and all features until subscription ends up
-  def active_subscription
-    active_paid_bill&.subscription
-  end
-
   def active_paid_bill
     bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
   end
 
   private
+
+  def active_subscription
+    active_paid_bill&.subscription
+  end
 
   def generate_blank_static_assets
     GenerateAndStoreStaticScript.new(self, script_content: '').call
