@@ -1,6 +1,4 @@
-class Admin::PaymentMethodDetailsController < ApplicationController
-  before_action :require_admin
-
+class Admin::PaymentMethodDetailsController < AdminController
   def destroy
     card = CyberSourceCreditCard.find params[:id]
     payment_method = card.payment_method

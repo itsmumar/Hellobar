@@ -1,8 +1,4 @@
-class Admin::SitesController < ApplicationController
-  layout 'admin'
-
-  before_action :require_admin
-
+class Admin::SitesController < AdminController
   def update
     begin
       site.update_attributes(site_params) if params.key?(:site)
