@@ -71,11 +71,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def <=> other
-    if other.is_a? Subscription
-      Comparison.new(self, other).direction
-    else
-      super
-    end
+    Comparison.new(self, other).direction
   end
 
   private

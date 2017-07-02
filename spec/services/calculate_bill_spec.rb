@@ -51,7 +51,8 @@ describe CalculateBill do
         it 'reduces amount based on used period' do
           travel_to 12.days.from_now do
             percentage_unused = 1.0 - 12.0 / Time.days_in_month(Time.current.month)
-            expect(bill.amount).to eql (subscription.amount - (current_subscription.amount * percentage_unused)).to_i
+            expected = (subscription.amount - (current_subscription.amount * percentage_unused)).to_i
+            expect(bill.amount).to eql expected
           end
         end
       end

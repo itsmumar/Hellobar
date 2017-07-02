@@ -155,6 +155,21 @@ describe Admin::AccessController do
         expect(response).to redirect_to admin_path
       end
     end
+
+    context 'in production' do
+      before { allow(Rails.env).to receive(:production?).and_return(true) }
+
+      context 'when it needs a new otp code' do
+        before { allow_any_instance_of(Admin).to receive(:needs_otp_code?).and_return(true) }
+        before { allow_any_instance_of(AdminAuthenticationPolicy).to receive(:generate_otp).and_return('new-otp-code') }
+
+        it 'displays new code' do
+          process_step1
+          expect(response).to be_success
+          expect(response.body).to include 'Scan this code using Google Authenticator on your phone'
+        end
+      end
+    end
   end
 
   describe 'POST process_step2' do
