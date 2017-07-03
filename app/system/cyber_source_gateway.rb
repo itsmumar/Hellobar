@@ -11,6 +11,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     )
   end
 
+  # @param [Integer] amount; in cents
   def purchase(amount, credit_card)
     raise 'credit card token does not exist' if credit_card.token.blank?
     check_amount!(amount)
@@ -22,6 +23,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     end
   end
 
+  # @param [Integer] amount; in cents
   def refund(amount, original_transaction_id)
     check_amount!(amount)
 
@@ -29,10 +31,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
       raise 'Can not refund without original transaction ID'
     end
 
-    response = super(amount, original_transaction_id)
-    return false, response.message unless response.success?
-
-    [true, response.authorization]
+    super(amount, original_transaction_id)
   end
 
   private
