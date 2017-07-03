@@ -40,9 +40,9 @@ describe CyberSourceCreditCard do
 
     context 'when invalid amount' do
       it 'raises ArgumentError' do
-        expect { credit_card.charge(-1) }.to raise_error(ArgumentError, 'Invalid amount: -100')
-        expect { credit_card.charge(0) }.to raise_error(ArgumentError, 'Invalid amount: 0')
-        expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: 0')
+        expect { credit_card.charge(-1) }.to raise_error(ArgumentError, 'Invalid amount: -100.0')
+        expect { credit_card.charge(0) }.to raise_error(ArgumentError, 'Invalid amount: 0.0')
+        expect { credit_card.charge(nil) }.to raise_error(ArgumentError, 'Invalid amount: 0.0')
       end
     end
 
@@ -66,9 +66,9 @@ describe CyberSourceCreditCard do
 
     context 'when invalid amount' do
       it 'raises ArgumentError' do
-        expect { credit_card.refund(-1, 'id') }.to raise_error(ArgumentError, 'Invalid amount: -100')
-        expect { credit_card.refund(0, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0')
-        expect { credit_card.refund(nil, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0')
+        expect { credit_card.refund(-1, 'id') }.to raise_error(ArgumentError, 'Invalid amount: -100.0')
+        expect { credit_card.refund(0, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0.0')
+        expect { credit_card.refund(nil, 'id') }.to raise_error(ArgumentError, 'Invalid amount: 0.0')
       end
     end
 
