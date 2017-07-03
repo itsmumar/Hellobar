@@ -1,5 +1,7 @@
 module ServiceProvider::Adapters
   class Base
+    prepend ServiceProvider::Rescuable
+
     def self.inherited(base)
       base.prepend ServiceProvider::Rescuable
       base.config = ActiveSupport::OrderedOptions.new
@@ -7,6 +9,8 @@ module ServiceProvider::Adapters
 
     attr_reader :client
     class_attribute :key, :config
+
+    rescue_from Net::HTTPServerException, Net::ReadTimeout, with: :ignore_error
 
     def self.configure
       yield config

@@ -49,11 +49,13 @@ module ServiceProvider::Adapters
     def handle_exeption(exception)
       case exception.title
       when 'Member Exists'
-        # ignore...
+        ignore_error exception
       when 'Invalid Resource'
         raise ServiceProvider::InvalidSubscriberError, exception.detail
       when 'Resource Not Found', 'API Key Invalid'
         notify_user_about_unauthorized_error
+      when 'Net::ReadTimeout'
+        ignore_error exception
       else
         raise exception
       end

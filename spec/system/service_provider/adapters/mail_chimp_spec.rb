@@ -88,5 +88,14 @@ describe ServiceProvider::Adapters::MailChimp do
         expect { subscribe }.not_to raise_error
       end
     end
+
+    context 'when Net::ReadTimeout' do
+      let(:response) { { status: 400, body: { title: 'Net::ReadTimeout' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'does not raise error' do
+        expect { subscribe }.not_to raise_error
+      end
+    end
   end
 end

@@ -21,9 +21,8 @@ module ServiceProvider::Adapters
       end
     end
 
-    rescue_from Faraday::Conflict, with: :ignore_error
-    rescue_from Faraday::Unauthorized, with: :notify_user_about_unauthorized_error
-    rescue_from Faraday::NotFound, with: :notify_user_about_unauthorized_error
+    rescue_from Faraday::Conflict, Faraday::ConnectionFailed, with: :ignore_error
+    rescue_from Faraday::Unauthorized, Faraday::NotFound, with: :notify_user_about_unauthorized_error
 
     def initialize(identity = nil, url = nil, request: :url_encoded, params: {}, headers: {})
       client = Faraday.new(url: url, params: params, headers: headers) do |faraday|
