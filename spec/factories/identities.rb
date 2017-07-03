@@ -28,6 +28,16 @@ FactoryGirl.define do
 
     trait :drip do
       provider 'drip'
+      credentials { Hash['token' => 'token'] }
+      extra do
+        {
+          'accounts' => [
+            {
+              'id' => '123'
+            }
+          ]
+        }
+      end
     end
 
     trait :get_response_api do

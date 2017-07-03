@@ -47,7 +47,7 @@ describe Subscription do
 
         it 'returns no subscriptions' do
           RefundBill.new(pro.bills.first).call
-          expect(Subscription.active).not_to include pro
+          expect(Subscription.active).not_to include pro.reload
         end
       end
     end
