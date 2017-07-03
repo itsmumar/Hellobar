@@ -9,7 +9,7 @@ module Hello
     end
 
     def self.decode_tracker(tracker)
-      tracker = CGI.unescape(tracker).chomp('/')
+      tracker = CGI.unescape(tracker).chomp('/').delete("\n")
       user_id, event, props, sig = Base64.urlsafe_decode64(tracker).split('///')
 
       digest = Digest::SHA1.hexdigest("#{ user_id }#{ event }#{ props }#{ SALT }")[0, 8]
