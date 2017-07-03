@@ -8,7 +8,7 @@ module ServiceProvider::Adapters
       def on_complete(env)
         case env[:status]
         when 400
-          raise Faraday::BadRequest, response_values(env)
+          raise ServiceProvider::InvalidSubscriberError, response_values(env)
         when 401
           raise Faraday::Unauthorized, response_values(env)
         when 409

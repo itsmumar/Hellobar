@@ -16,7 +16,7 @@ module ServiceProvider::Adapters
 
     def tags
       response = process_response client.get 'tags', perPage: 500
-      response.map { |tag| { 'id' => tag['tagId'], 'name' => tag['name'] } }
+      response.map { |tag| { 'id' => tag['tagId'].to_s, 'name' => tag['name'] } }
     end
 
     def subscribe(list_id, params, cycle_day: nil)
