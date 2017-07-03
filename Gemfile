@@ -75,7 +75,7 @@ gem 'jbuilder'
 gem 'sentry-raven'
 
 # Web server
-gem 'thin', '~> 1.6.4'
+gem 'thin'
 
 # URIs
 gem 'addressable'
