@@ -91,7 +91,7 @@ describe ServiceProvider::Adapters::ConstantContact do
       end
     end
 
-    context 'when Faraday::BadRequest' do
+    context 'when ServiceProvider::InvalidSubscriberError' do
       let(:error_message) { '' }
 
       context 'when message is "not a valid email address"' do

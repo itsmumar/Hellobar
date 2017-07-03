@@ -9,8 +9,7 @@ module ServiceProvider::Adapters
     rescue_from CreateSend::Unauthorized, with: :destroy_identity
 
     def initialize(identity)
-      @identity = identity
-      super CreateSend::CreateSend.new(
+      super identity, CreateSend::CreateSend.new(
         access_token: identity.credentials['token'],
         refresh_token: identity.credentials['refresh_token']
       )

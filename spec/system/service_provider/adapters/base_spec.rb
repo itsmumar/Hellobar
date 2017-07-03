@@ -14,10 +14,6 @@ describe ServiceProvider::Adapters::Base do
     end
   end
 
-  describe '#subscribe' do
-    specify { expect { adapter.subscribe({}) }.to raise_error(NoMethodError) }
-  end
-
   describe '#connected?' do
     specify { expect(adapter).to be_connected }
   end

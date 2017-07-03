@@ -8,7 +8,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super ::ActiveCampaign::Client.new(
+      super identity, ::ActiveCampaign::Client.new(
         api_endpoint: 'https://' + identity.extra['app_url'] + '/admin/api.php',
         api_key: identity.api_key
       )

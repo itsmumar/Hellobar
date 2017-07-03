@@ -6,7 +6,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super ::Infusionsoft::Client.new(
+      super identity, ::Infusionsoft::Client.new(
         api_url: identity.extra['app_url'],
         api_key: identity.api_key,
         api_logger: ::Logger.new(nil)

@@ -10,7 +10,7 @@ module ServiceProvider::Adapters
     def initialize(identity)
       oauth = ::AWeber::OAuth.new(config.consumer_key, config.consumer_secret)
       oauth.authorize_with_access(identity.credentials['token'], identity.credentials['secret'])
-      super ::AWeber::Base.new(oauth)
+      super identity, ::AWeber::Base.new(oauth)
     end
 
     def lists

@@ -6,7 +6,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super ::MadMimi.new(identity.credentials['username'], identity.api_key, raise_exceptions: true)
+      super identity, ::MadMimi.new(identity.credentials['username'], identity.api_key, raise_exceptions: true)
     end
 
     def lists

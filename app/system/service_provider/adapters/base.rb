@@ -12,16 +12,13 @@ module ServiceProvider::Adapters
       yield config
     end
 
-    def initialize(client)
+    def initialize(identity = nil, client = nil)
+      @identity = identity
       @client = client
     end
 
     def lists
       []
-    end
-
-    def subscribe(params) # rubocop:disable Lint/UnusedMethodArgument
-      raise NoMethodError, 'to be implemented'
     end
 
     def tags
@@ -42,6 +39,15 @@ module ServiceProvider::Adapters
     private
 
     def test_connection
+    end
+
+    def notify_user_about_unauthorized_error
+      @identity.destroy_and_notify_user
+    end
+
+    def ignore_error(exception)
+      tags = "[ServiceProvider] [#{ self.class.name.demodulize }]"
+      Rails.logger.info "#{ tags } Exception ignored #{ exception.inspect }"
     end
   end
 end
