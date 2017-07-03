@@ -68,12 +68,7 @@ Style/NumericLiteralPrefix:
 # Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed
 Style/RegexpLiteral:
-  EnforcedStyle: slashes
-  AllowInnerSlashes: true
-  Exclude:
-    - spec/teaspoon_env.rb
-    - spec/spec_helper.rb
-    - Guardfile
+  Enabled: false
 
 Style/EmptyMethod:
   EnforcedStyle: expanded

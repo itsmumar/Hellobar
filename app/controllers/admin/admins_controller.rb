@@ -1,8 +1,6 @@
 class Admin::AdminsController < AdminController
   before_action :load_admin, only: [:unlock]
 
-  before_action :require_admin
-
   def index
     @admins = Admin.all
   end

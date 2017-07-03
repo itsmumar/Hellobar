@@ -2,10 +2,7 @@ class BillSerializer < ActiveModel::Serializer
   attributes :amount, :bill_at, :end_date, :status, :is_upgrade, :old_subscription, :site
 
   def site
-    {
-      current_subscription: site_serializer.current_subscription,
-      display_name: site_serializer.display_name
-    }
+    SiteSerializer.new(object.site)
   end
 
   def upgrade?
@@ -16,11 +13,5 @@ class BillSerializer < ActiveModel::Serializer
 
   def old_subscription
     SubscriptionSerializer.new(object.site.previous_subscription)
-  end
-
-  private
-
-  def site_serializer
-    SiteSerializer.new(object.site)
   end
 end
