@@ -6,6 +6,13 @@ GIT
       omniauth-oauth2 (~> 1.1)
 
 GIT
+  remote: https://github.com/Hello-bar/omniauth-drip.git
+  revision: 97e76d67995cfa12f464347e6ff16660a6a5dcad
+  specs:
+    omniauth-drip (0.0.2)
+      omniauth-oauth2 (~> 1.2)
+
+GIT
   remote: https://github.com/aweber/AWeber-API-Ruby-Library.git
   revision: d67bdfb09129c988275927fbffc27c59c4e03f29
   specs:
@@ -624,6 +631,7 @@ DEPENDENCIES
   omniauth-aweber
   omniauth-constantcontact2
   omniauth-createsend!
+  omniauth-drip!
   omniauth-google-oauth2
   omniauth-mailchimp!
   omniauth-verticalresponse

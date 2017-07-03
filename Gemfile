@@ -16,6 +16,7 @@ gem 'ruby-hmac'
 
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
+gem 'omniauth-drip', github: 'Hello-bar/omniauth-drip'
 gem 'omniauth-constantcontact2'
 gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
 gem 'omniauth-google-oauth2'
