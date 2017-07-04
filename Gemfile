@@ -14,10 +14,19 @@ gem 'rotp'
 gem 'rqrcode'
 gem 'ruby-hmac'
 
+# Omniauth authentication used by email providers
+gem 'omniauth-aweber'
+gem 'omniauth-constantcontact2'
+gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
+gem 'omniauth-drip', github: 'Hello-bar/omniauth-drip'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
+gem 'omniauth-verticalresponse'
+
 # Email integrations
 
 # github has new code which has not been pushed as the gem
-# especially it uses StandartError instead of Exception for their exceptions
+# especially it uses StandardError instead of Exception for their exceptions
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
@@ -27,12 +36,6 @@ gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
 gem 'infusionsoft'
 gem 'madmimi'
-gem 'omniauth-aweber'
-gem 'omniauth-constantcontact2'
-gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
-gem 'omniauth-google-oauth2'
-gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
-gem 'omniauth-verticalresponse'
 gem 'verticalresponse'
 
 # Mailing
@@ -74,7 +77,7 @@ gem 'jbuilder'
 gem 'sentry-raven'
 
 # Web server
-gem 'thin', '~> 1.6.4'
+gem 'thin'
 
 # URIs
 gem 'addressable'
