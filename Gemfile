@@ -16,9 +16,9 @@ gem 'ruby-hmac'
 
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
-gem 'omniauth-drip', github: 'Hello-bar/omniauth-drip'
 gem 'omniauth-constantcontact2'
 gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
+gem 'omniauth-drip', github: 'Hello-bar/omniauth-drip'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
 gem 'omniauth-verticalresponse'
@@ -28,6 +28,7 @@ gem 'omniauth-verticalresponse'
 # github has new code which has not been pushed as the gem
 # especially it uses StandardError instead of Exception for their exceptions
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
+
 gem 'active_campaign'
 gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
