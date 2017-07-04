@@ -44,10 +44,10 @@ describe Subscription do
 
       context 'and refunded bill' do
         before { stub_cyber_source :refund }
-        before { Bill.active.each { |bill| RefundBill.new(bill).call } }
 
         it 'returns no subscriptions' do
-          expect(Subscription.active).to match_array []
+          RefundBill.new(pro.bills.first).call
+          expect(Subscription.active).not_to include pro
         end
       end
     end
