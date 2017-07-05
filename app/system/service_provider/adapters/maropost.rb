@@ -20,7 +20,7 @@ module ServiceProvider::Adapters
 
     def tags
       response = process_response client.get 'tags.json', no_counts: true
-      response.map { |list| list.slice('id', 'name') }
+      response.map { |list| { 'id' => list['name'], 'name' => list['name'] } }
     end
 
     def subscribe(list_id, params)

@@ -48,7 +48,7 @@ describe ServiceProvider::Adapters::Maropost do
     before { allow_request :get, :tags }
 
     it 'returns array of id => name' do
-      expect(provider.tags).to eql [{ 'name' => 'Tag1', 'id' => 1 }]
+      expect(provider.tags).to eql [{ 'name' => 'Tag1', 'id' => 'Tag1' }]
     end
   end
 
