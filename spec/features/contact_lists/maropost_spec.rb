@@ -5,6 +5,7 @@ feature 'Maropost Integration', :js, :contact_list_feature do
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
+  let(:last_contact_list) { ContactList.joins(:identity).where(identities: { provider: provider }).last }
 
   before do
     sign_in user
@@ -20,26 +21,23 @@ feature 'Maropost Integration', :js, :contact_list_feature do
   end
 
   scenario 'when valid' do
-    connect
+    modal = connect
+    modal.list = 'List 1'
+    modal.tags = ['Tag 1']
+    page = modal.done
 
-    expect(page).to have_content('Choose a Maropost list to sync with')
+    expect(page.title).to eql 'Syncing contacts with Maropost list "List 1"'
 
-    page.find('select#contact_list_remote_list_id').select('List 1')
-    page.find('.button.submit').click
+    modal = page.edit_contact_list
 
-    expect(page).to have_content 'Syncing contacts with Maropost list "List 1"'
-
-    page.find('#edit-contact-list').click
-
-    expect(page).to have_content('List 1')
+    expect(modal.selected_list).to eql 'List 1'
+    expect(modal.selected_tags).to match_array ['Tag 1']
+    expect(last_contact_list.tags).to match_array ['tag1', '']
   end
 
   private
 
   def connect
-    connect_to_provider(site, provider) do
-      fill_in 'contact_list[data][username]', with: 'hellobar'
-      fill_in 'contact_list[data][api_key]', with: 'api-key'
-    end
+    ContactListsPage.visit(site).connect_contact_list(provider, username: 'hellobar', api_key: 'api-key')
   end
 end
