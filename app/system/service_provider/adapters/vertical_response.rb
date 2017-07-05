@@ -12,7 +12,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super ::VerticalResponse::API::OAuth.new identity.credentials['token']
+      super identity, ::VerticalResponse::API::OAuth.new(identity.credentials['token'])
     end
 
     def lists

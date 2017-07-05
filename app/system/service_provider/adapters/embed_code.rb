@@ -29,5 +29,9 @@ module ServiceProvider::Adapters
     def fill_form(params)
       FillEmbedForm.new(extract_form, params.slice(:email, :name)).call
     end
+
+    def notify_user_about_unauthorized_error
+      # do nothing
+    end
   end
 end

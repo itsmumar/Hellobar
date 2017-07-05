@@ -91,7 +91,20 @@ describe ServiceProvider::Adapters::ConstantContact do
       end
     end
 
-    context 'when Faraday::BadRequest' do
+    context 'when Faraday::NotFound' do
+      before { allow_request :post, :subscribe, body: body, response: { status: 404 } }
+      before { allow_request :get, :contact }
+
+      let!(:update_request) { allow_request :put, :update, body: body.merge(id: 1) }
+
+      it 'updates subscriber' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        subscribe
+        expect(update_request).not_to have_been_made
+      end
+    end
+
+    context 'when ServiceProvider::InvalidSubscriberError' do
       let(:error_message) { '' }
 
       context 'when message is "not a valid email address"' do

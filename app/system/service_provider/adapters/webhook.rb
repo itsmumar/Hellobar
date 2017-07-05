@@ -8,7 +8,7 @@ module ServiceProvider::Adapters
       return unless contact_list
       @contact_list = contact_list
       @method = contact_list.data.fetch('webhook_method', 'GET').downcase.to_sym
-      super contact_list.data.fetch('webhook_url')
+      super nil, contact_list.data.fetch('webhook_url')
     end
 
     def lists
@@ -74,6 +74,10 @@ module ServiceProvider::Adapters
       else
         field['label'].parameterize('_')
       end
+    end
+
+    def notify_user_about_unauthorized_error
+      # do nothing
     end
   end
 end

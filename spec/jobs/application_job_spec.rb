@@ -22,6 +22,21 @@ describe ApplicationJob do
         job.perform_now
       end
     end
+
+    context 'when Aws::S3::Errors::InternalError is raise' do
+      let(:job) do
+        Class.new(ApplicationJob) do
+          def perform
+            raise Aws::S3::Errors::InternalError.new('foo', 'bar')
+          end
+        end
+      end
+
+      it 'retries the job' do
+        expect_any_instance_of(job).to receive(:retry_job)
+        job.perform_now
+      end
+    end
   end
 
   describe '.perform_later' do

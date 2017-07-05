@@ -6,7 +6,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ identity.api_key }" }
+      super identity, 'https://api.getresponse.com/v3', headers: { 'X-Auth-Token' => "api-key #{ identity.api_key }" }
     end
 
     def lists
@@ -16,7 +16,7 @@ module ServiceProvider::Adapters
 
     def tags
       response = process_response client.get 'tags', perPage: 500
-      response.map { |tag| { 'id' => tag['tagId'], 'name' => tag['name'] } }
+      response.map { |tag| { 'id' => tag['tagId'].to_s, 'name' => tag['name'] } }
     end
 
     def subscribe(list_id, params, cycle_day: nil)

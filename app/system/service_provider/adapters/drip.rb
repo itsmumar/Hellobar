@@ -6,7 +6,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super ::Drip::Client.new(
+      super identity, ::Drip::Client.new(
         access_token: identity.credentials['token'],
         account_id: identity.extra['accounts'].first['id']
       )

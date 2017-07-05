@@ -7,11 +7,10 @@ module ServiceProvider::Adapters
       config.oauth = true
     end
 
-    rescue_from Gibbon::MailChimpError, with: :destroy_identity_if_needed
+    rescue_from Gibbon::MailChimpError, with: :handle_exeption
 
     def initialize(identity)
-      @identity = identity
-      super Gibbon::Request.new(
+      super identity, Gibbon::Request.new(
         api_key: identity.credentials['token'],
         api_endpoint: identity.extra['metadata']['api_endpoint']
       )
@@ -47,9 +46,19 @@ module ServiceProvider::Adapters
       end
     end
 
-    def destroy_identity_if_needed(exception)
-      raise exception unless exception.title.in? ['Resource Not Found', 'API Key Invalid']
-      @identity.destroy_and_notify_user
+    def handle_exeption(exception)
+      case exception.title
+      when 'Member Exists'
+        ignore_error exception
+      when 'Invalid Resource'
+        raise ServiceProvider::InvalidSubscriberError, exception.detail
+      when 'Resource Not Found', 'API Key Invalid'
+        notify_user_about_unauthorized_error
+      when 'Net::ReadTimeout'
+        ignore_error exception
+      else
+        raise exception
+      end
     end
   end
 end

@@ -21,6 +21,8 @@ class SubscribeContact
     log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
     yield
     log_entry.update(completed: true)
+  rescue ServiceProvider::InvalidSubscriberError => e
+    log_entry.update(completed: false, error: e.to_s)
   rescue => e
     log_entry.update(completed: false, error: e.to_s)
     raise e

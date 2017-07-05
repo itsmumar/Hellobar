@@ -6,13 +6,10 @@ module ServiceProvider::Adapters
       config.oauth = true
     end
 
-    rescue_from Faraday::Unauthorized, with: :destroy_identity
-
     def initialize(identity)
-      @identity = identity
       headers = { authorization: "Bearer #{ identity.credentials['token'] }" }
       params = { api_key: config.app_key }
-      super 'https://api.constantcontact.com/v2', request: :json, params: params, headers: headers
+      super identity, 'https://api.constantcontact.com/v2', request: :json, params: params, headers: headers
     end
 
     def lists
@@ -46,7 +43,7 @@ module ServiceProvider::Adapters
       contact = find_contact(params[:email])
       contact['lists'] << data[:lists].first
       update_contact params, contact
-    rescue Faraday::BadRequest => e
+    rescue ServiceProvider::InvalidSubscriberError => e
       # if the email is not valid, CC will raise an exception and we end up here
       # when this happens, just return true and continue
       return if e.inspect =~ /not a valid email address/
@@ -64,10 +61,6 @@ module ServiceProvider::Adapters
       end
     rescue Faraday::Conflict # rubocop:disable Lint/HandleExceptions
       # do nothing
-    end
-
-    def destroy_identity
-      @identity.destroy_and_notify_user
     end
   end
 end

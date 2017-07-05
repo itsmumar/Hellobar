@@ -5,7 +5,7 @@ module ServiceProvider::Adapters
     end
 
     def initialize(identity)
-      super 'https://api.convertkit.com/v3', params: { api_secret: identity.api_key }
+      super identity, 'https://api.convertkit.com/v3', params: { api_secret: identity.api_key }
     end
 
     def lists

@@ -10,7 +10,7 @@ module ServiceProvider::Adapters
       account_id = identity.credentials['username']
       url = "#{ config.url }/accounts/#{ account_id }"
 
-      super url, request: :json, params: { auth_token: identity.api_key }
+      super identity, url, request: :json, params: { auth_token: identity.api_key }
     end
 
     def lists
