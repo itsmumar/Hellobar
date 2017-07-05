@@ -35,14 +35,14 @@ class CyberSourceCreditCard < PaymentMethodDetails
   end
 
   def refund(amount_in_dollars, original_transaction_id)
-    response = gateway.refund(amount_in_dollars.to_i * 100, original_transaction_id)
+    response = gateway.refund(amount_in_dollars.to_f * 100, original_transaction_id)
 
     return false, response.message unless response.success?
     [true, response.authorization]
   end
 
   def charge(amount_in_dollars)
-    response = gateway.purchase(amount_in_dollars.to_i * 100, self)
+    response = gateway.purchase(amount_in_dollars.to_f * 100, self)
 
     return false, response.message unless response.success?
     [true, response.authorization]

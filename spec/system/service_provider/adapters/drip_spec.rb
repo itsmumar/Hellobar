@@ -1,14 +1,16 @@
 describe ServiceProvider::Adapters::Drip do
   let(:defined_urls) do
     {
-      tags: 'https://api.getdrip.com/v2/account_id/tags',
-      lists: 'https://api.getdrip.com/v2/account_id/campaigns?status=active',
-      subscribe: 'https://api.getdrip.com/v2/account_id/campaigns/4567456/subscribers',
-      subscribe_without_list: 'https://api.getdrip.com/v2/account_id/subscribers'
+      tags: "https://api.getdrip.com/v2/#{ account_id }/tags",
+      lists: "https://api.getdrip.com/v2/#{ account_id }/campaigns?status=active",
+      subscribe: "https://api.getdrip.com/v2/#{ account_id }/campaigns/4567456/subscribers",
+      subscribe_without_list: "https://api.getdrip.com/v2/#{ account_id }/subscribers"
     }
   end
 
-  let(:identity) { double('identity', provider: 'drip', credentials: { 'token' => 'token' }, extra: { 'account_id' => 'account_id' }) }
+  let(:identity) { build_stubbed :identity, :drip }
+  let(:token) { identity.credentials['token'] }
+  let(:account_id) { identity.extra['accounts'].first['id'] }
 
   include_examples 'service provider'
 
@@ -16,7 +18,7 @@ describe ServiceProvider::Adapters::Drip do
     let(:auth) { { access_token: 'token' } }
 
     it 'initializes Drip::Client' do
-      expect(Drip::Client).to receive(:new).with(access_token: 'token', account_id: 'account_id').and_call_original
+      expect(Drip::Client).to receive(:new).with(access_token: token, account_id: account_id).and_call_original
       expect(adapter.client).to be_a Drip::Client
     end
   end

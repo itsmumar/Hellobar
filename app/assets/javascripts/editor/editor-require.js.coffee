@@ -1,3 +1,4 @@
+#= require moment
 #= require ./../modal
 #= require_tree ./../modals
 #= require ./../upgrade_modal_initializer

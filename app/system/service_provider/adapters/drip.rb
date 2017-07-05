@@ -8,7 +8,7 @@ module ServiceProvider::Adapters
     def initialize(identity)
       super identity, ::Drip::Client.new(
         access_token: identity.credentials['token'],
-        account_id: identity.extra['account_id']
+        account_id: identity.extra['accounts'].first['id']
       )
     end
 
