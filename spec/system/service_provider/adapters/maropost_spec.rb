@@ -62,12 +62,21 @@ describe ServiceProvider::Adapters::Maropost do
       expect(subscribe_request).to have_been_made
     end
 
-    context 'when request is unsuccessful' do
+    context 'when status is 504' do
       before { stub_request(:post, url_for_request(:subscribe)).and_return(status: 504, body: '{}') }
 
-      it 'sends subscribe request' do
+      it 'raises Faraday::ClientError' do
         expect { provider.subscribe(email: email, name: name) }
           .to raise_error(Faraday::ClientError)
+      end
+    end
+
+    context 'when status is 401' do
+      before { stub_request(:post, url_for_request(:subscribe)).and_return(status: 404, body: '{}') }
+
+      it 'calls identity.destroy_and_notify_user' do
+        expect(identity).to receive(:destroy_and_notify_user)
+        expect { provider.subscribe(email: email, name: name) }.not_to raise_error
       end
     end
   end

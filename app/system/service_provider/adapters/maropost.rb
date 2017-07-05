@@ -6,10 +6,6 @@ module ServiceProvider::Adapters
       config.url = Settings.identity_providers['maropost']['url']
     end
 
-    rescue_from Faraday::Unauthorized do
-      @identity.destroy_and_notify_user
-    end
-
     def initialize(identity)
       account_id = identity.credentials['username']
       url = "#{ config.url }/accounts/#{ account_id }"

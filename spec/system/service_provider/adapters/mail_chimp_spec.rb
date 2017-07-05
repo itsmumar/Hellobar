@@ -97,5 +97,14 @@ describe ServiceProvider::Adapters::MailChimp do
         expect { subscribe }.not_to raise_error
       end
     end
+
+    context 'with another exception' do
+      let(:response) { { status: 400, body: { title: 'Unknown' }.to_json } }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+
+      it 'does not raise error' do
+        expect { subscribe }.to raise_error
+      end
+    end
   end
 end
