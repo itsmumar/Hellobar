@@ -2,6 +2,8 @@ hellobar.defineModule('contentUpgrades',
   ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion', 'contentUpgrades.class', 'base.bus', 'base.dom', 'elements.data'],
   function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade, bus, dom, elementsData) {
 
+    const AB_TEST_FLAG = 'ab';
+
     const configuration = hellobar.createModuleConfiguration({
       contentUpgrades: 'object',
       styles: 'object'
@@ -29,14 +31,17 @@ hellobar.defineModule('contentUpgrades',
       for (let i = 0; i < contentUpgrades.length; i++) {
         const { id } = contentUpgrades[i];
 
-        if (elementsData.getData(id, 'nv')) {
+        if (elementsData.getData(id, AB_TEST_FLAG)) {
           return contentUpgrades[i];
         }
       }
 
       // pick a CU
       const index = Math.floor(Math.random() * contentUpgrades.length);
-      return contentUpgrades[index];
+      const contentUpgrade = contentUpgrades[index];
+      elementsData.setData(contentUpgrade.id, AB_TEST_FLAG, 1);
+
+      return contentUpgrade;
     }
 
     function runABTest(node) {
