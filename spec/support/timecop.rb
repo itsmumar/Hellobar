@@ -6,8 +6,12 @@ RSpec.configure do |config|
     time =
       if time.eql?(true)
         Date.current
+      elsif time.is_a?(Integer)
+        Time.zone.at(time)
+      elsif time.is_a?(String)
+        Time.zone.parse(time)
       else
-        time.is_a?(Integer) ? Time.zone.at(time) : Time.zone.parse(time)
+        time
       end
     Timecop.freeze(time) do
       example.run
