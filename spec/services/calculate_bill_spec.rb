@@ -88,17 +88,4 @@ describe CalculateBill do
       expect(bill.end_date).to eql bill.start_date + subscription.period
     end
   end
-
-  context 'with trial period', :freeze do
-    let(:site) { create :site, :pro }
-    let(:subscription) { create :subscription, :enterprise }
-    let(:service) { described_class.new(subscription, bills: site.bills, trial_period: 100.days) }
-    let(:bill) { service.call }
-
-    it 'returns bill with full amount' do
-      expect(bill).to be_a(Bill::Recurring)
-      expect(bill.amount).to eql 0
-      expect(bill.end_date).to eql Time.current + 100.days
-    end
-  end
 end

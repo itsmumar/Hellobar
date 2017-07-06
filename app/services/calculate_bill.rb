@@ -1,11 +1,9 @@
 class CalculateBill
   # @param [Bill::ActiveRecord_Relation] bills
   # @param [Subscription] subscription
-  # @param [Boolean] trial_period
-  def initialize(subscription, bills:, trial_period: nil)
+  def initialize(subscription, bills:)
     @subscription = subscription
     @bills = bills
-    @trial_period = trial_period
   end
 
   def call
@@ -22,7 +20,7 @@ class CalculateBill
 
   private
 
-  attr_reader :bills, :subscription, :trial_period
+  attr_reader :bills, :subscription
 
   def void_pending_bills!
     bills.pending.each(&:voided!)
@@ -78,15 +76,7 @@ class CalculateBill
       yield bill if block_given?
 
       bill.end_date = bill.start_date + subscription.period
-      use_trial_period bill
     end
-  end
-
-  def use_trial_period(bill)
-    return unless trial_period
-
-    bill.amount = 0
-    bill.end_date = Time.current + trial_period
   end
 
   def upgrading?
