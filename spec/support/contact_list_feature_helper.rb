@@ -1,6 +1,6 @@
 module ContactListFeatureHelper
   def open_provider_form(site, provider)
-    ContactListsPage.visit(site).new_list_modal.tap do |modal|
+    ContactListsPage.visit(site).new_contact_list.tap do |modal|
       modal.view_all_tools
       modal.choose_provider(provider)
     end
