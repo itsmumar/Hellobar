@@ -4,6 +4,8 @@ require 'support/ab_test_config'
 
 SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 
+Dir[Rails.root.join('spec', 'features', 'support', '**', '*.rb')].each(&method(:require))
+
 # Use Webkit as js driver
 Capybara.javascript_driver = :webkit
 Capybara::Webkit.configure do |config|

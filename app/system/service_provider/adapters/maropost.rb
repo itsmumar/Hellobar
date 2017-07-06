@@ -18,11 +18,17 @@ module ServiceProvider::Adapters
       response.map { |list| list.slice('id', 'name') }
     end
 
+    def tags
+      response = process_response client.get 'tags.json', no_counts: true
+      response.map { |list| { 'id' => list['name'], 'name' => list['name'] } }
+    end
+
     def subscribe(list_id, params)
       contact = {
         email: params[:email],
         subscribe: true,
-        remove_from_dnm: true
+        remove_from_dnm: true,
+        add_tags: params.fetch(:tags, [])
       }
 
       if params[:name].present?
