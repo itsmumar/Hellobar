@@ -17,6 +17,7 @@ class Subscription < ActiveRecord::Base
 
   scope :paid, -> { joins(:bills).merge(Bill.paid.active) }
   scope :active, -> { paid.merge(Bill.without_refunds) }
+  scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
 
   validates :schedule, presence: true
   validates :site, presence: true, associated: true

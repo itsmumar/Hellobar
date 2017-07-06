@@ -63,6 +63,16 @@ describe Admin::SitesController do
       end
     end
 
+    context 'when adding trial subscription', :freeze do
+      let(:params) { { subscription: { subscription: 'Pro', trial_period: '10' } } }
+
+      it 'changes the subscription with trial_end_date' do
+        expect { update }.to change { site.reload.current_subscription }
+        expect(site.current_subscription).to be_a Subscription::Pro
+        expect(site.current_subscription.trial_end_date).to eql 10.days.from_now
+      end
+    end
+
     context 'when updating invoice_information' do
       let(:params) { { site: { invoice_information: '12345 Main St' } } }
 
@@ -91,6 +101,8 @@ describe Admin::SitesController do
   describe 'POST regenerate_admin_user_site_path' do
     let(:regenerate) { post regenerate_admin_user_site_path(user_id: user, id: site) }
 
+    before { allow(StaticScriptAssets).to receive(:render).and_return '$INJECT_DATA;$INJECT_MODULES' }
+
     context 'when the site exists' do
       it 'generates the script for the site' do
         regenerate
@@ -103,11 +115,7 @@ describe Admin::SitesController do
       end
 
       context 'when regenerating script fails' do
-        before do
-          generator = double('ScriptGenerator')
-          allow(generator).to receive(:call).and_raise(RuntimeError)
-          allow(RenderStaticScript).to receive(:new).with(site, compress: false).and_return(generator)
-        end
+        before { expect(RenderStaticScript).to receive_service_call.and_raise RuntimeError }
 
         it 'returns error message' do
           regenerate
