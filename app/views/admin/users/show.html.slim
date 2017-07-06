@@ -107,6 +107,6 @@ div#user_profile
           div= "Deleted on #{site.deleted_at.strftime('%D')}"
         - site.subscriptions.reverse.each do |sub|
           div
-            | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')}
+            | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
         div
           | Created on #{site.created_at.strftime('%D')}
