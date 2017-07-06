@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170629152028) do
+ActiveRecord::Schema.define(version: 20170706134611) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 20170629152028) do
     t.decimal  "visit_overage_amount",             precision: 5, scale: 2
     t.datetime "created_at"
     t.integer  "payment_method_id",    limit: 4
+    t.datetime "trial_end_date"
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
