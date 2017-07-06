@@ -7,7 +7,7 @@ RSpec.configure do |config|
       if time.eql?(true)
         Date.current
       else
-        time.is_a?(Integer) ? Time.zone.at(time) : time
+        time.is_a?(Integer) ? Time.zone.at(time) : Time.zone.parse(time)
       end
     Timecop.freeze(time) do
       example.run

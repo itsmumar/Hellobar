@@ -1,4 +1,14 @@
 describe Bill do
+  describe '.next_billing_time', 'on 2017-07-07' do
+    context 'before 14:00', freeze: '2017-07-07 12:00' do
+      specify { expect(Bill.next_billing_time).to match Time.zone.parse('2017-07-07 14:00') }
+    end
+
+    context 'after 14:00', freeze: '2017-07-07 15:00' do
+      specify { expect(Bill.next_billing_time).to match Time.zone.parse('2017-07-08 14:00') }
+    end
+  end
+
   describe '.without_refunds' do
     let!(:bill) { create :bill }
     let!(:bill_to_refund) { create :bill, :paid }
