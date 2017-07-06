@@ -52,6 +52,12 @@ module Admin::UsersHelper
     end
   end
 
+  def site_title(site)
+    trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date.to_s })" if site.current_subscription.trial_end_date
+    subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
+    "#{ site.url } - #{ subscription_name }#{ trial_info }"
+  end
+
   private
 
   def us_short_datetime(datetime)

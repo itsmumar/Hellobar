@@ -9,10 +9,7 @@ div#user_profile
   - @user.sites.with_deleted.each do |site|
     div.site-block
       div.site-title
-        h3
-          | #{site.url} - #{site.deleted? ? "Deleted" : site.current_subscription.values[:name]}
-          - if site.current_subscription.currently_on_trial?
-            |  Trial
+        h3 = site_title(site)
         - unless site.deleted?
           = link_to "Contact Lists", admin_user_site_contact_lists_path(@user, site), target: "_blank"
           a.subscription_link data-siteid=site.id change plan
