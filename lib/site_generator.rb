@@ -50,9 +50,14 @@ class SiteGenerator
           </p>
         </section>
 
-        <section>
+        <section id="content-upgrade-container">
           <h1>Content Upgrades</h1>
           #{ content_upgrades_script_tags }
+        </section>
+
+        <section id="content-upgrade-ab-test-container">
+          <h1>Content Upgrade A/B test</h1>
+          <div data-hb-cu-ab-test="#{ content_upgrade_tests.pluck(:id).join(',') }"></div>
         </section>
 
         <script>#{ script_content }</script>
@@ -84,7 +89,11 @@ class SiteGenerator
     @site.site_elements.active_content_upgrades
   end
 
+  def content_upgrade_tests
+    content_upgrades.where('offer_headline like ?', 'Test %')
+  end
+
   def content_upgrades_script_tags
-    content_upgrades.map(&:content_upgrade_script_tag).join
+    content_upgrades.where.not('offer_headline like ?', 'Test %').first.content_upgrade_script_tag
   end
 end
