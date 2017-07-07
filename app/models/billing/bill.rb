@@ -36,19 +36,9 @@ class Bill < ActiveRecord::Base
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :not_void, -> { where.not(status: statuses[:voided]) }
-  scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: next_billing_time) }
+  scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
   scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
-
-  # use this to determine is a bill active or not
-  # it should be active till billing task is run
-  # we run billing every day at 1:00pm
-  # so here's a gap to let billing task do the job
-  # see schedule.rb
-  def self.next_billing_time
-    day = Time.current.hour > 14 ? 1.day.from_now : Time.current
-    day.change(hour: 14)
-  end
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?

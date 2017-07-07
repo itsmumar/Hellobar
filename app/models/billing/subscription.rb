@@ -63,7 +63,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def expired?
-    last_paid_bill && last_paid_bill.end_date < Bill.next_billing_time
+    last_paid_bill && last_paid_bill.end_date < Time.current
   end
 
   def mark_user_onboarding_as_bought_subscription!
