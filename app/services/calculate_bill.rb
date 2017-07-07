@@ -52,7 +52,7 @@ class CalculateBill
       bill.amount = subscription.amount
       bill.grace_period_allowed = true
       bill.bill_at = active_paid_bills.last.end_date
-      bill.start_date = bill.bill_at - 1.hour
+      bill.start_date = bill.bill_at
     end
   end
 
@@ -71,10 +71,9 @@ class CalculateBill
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
       bill.bill_at = Time.current
-      bill.start_date = 1.hour.ago
 
       yield bill if block_given?
-
+      bill.start_date = bill.bill_at
       bill.end_date = bill.start_date + subscription.period
     end
   end

@@ -3,13 +3,10 @@ describe PayRecurringBills do
     let(:report) { BillingReport.new(1) }
     let(:service) { PayRecurringBills.new }
 
-    before { allow(BillingReport).to receive(:new).with(1).and_return(report) }
+    before { allow(BillingReport).to receive(:new).and_return(report) }
 
     before do
-      expect(report).to receive(:start)
-      expect(report).to receive(:count).exactly(1).times
-      expect(report).to receive(:finish) unless defined? exception
-      expect(report).to receive(:email)
+      allow(report).to receive(:info)
     end
 
     shared_context 'pay bill' do
@@ -24,6 +21,39 @@ describe PayRecurringBills do
         expect(PayBill).not_to receive_service_call
         service.call
       end
+    end
+
+    context 'subscription should not be inactive because of billing' do
+      let(:payment_method) { create :payment_method }
+      let(:site) { create :site, user: payment_method.user }
+
+      before { stub_cyber_source :purchase }
+
+      specify 'tries to charge users 3 days before the subscription ends', freeze: '2017-07-01 11:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'pro' }, payment_method).call
+        expect(site).to be_capable_of :pro
+
+        travel_to '2017-07-28 13:00 UTC' do
+          service.call
+        end
+
+        travel_to '2017-07-31 00:00 UTC' do
+          expect(site).to be_capable_of :pro
+        end
+
+        travel_to '2017-08-01 11:00 UTC' do
+          expect(site).to be_capable_of :pro
+        end
+      end
+    end
+
+    it 'logs results' do
+      create :free_bill
+      expect(report).to receive(:start)
+      expect(report).to receive(:count).exactly(1).times
+      expect(report).to receive(:finish)
+      expect(report).to receive(:email)
+      service.call
     end
 
     context 'with zero amount bill' do

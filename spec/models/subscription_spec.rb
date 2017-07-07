@@ -261,7 +261,7 @@ describe Subscription do
     context 'when not paid' do
       let!(:bill) { create(:bill) }
 
-      specify { expect(bill.subscription).not_to be_expired }
+      specify { expect(bill.subscription).to be_expired }
     end
   end
 

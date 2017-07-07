@@ -51,7 +51,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def capabilities
-    if problem_with_payment? || expired?
+    if expired?
       Free::Capabilities.new(self, site)
     else
       self.class::Capabilities.new(self, site)
@@ -63,7 +63,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def expired?
-    last_paid_bill && last_paid_bill.end_date < Time.current
+    !last_paid_bill || last_paid_bill.end_date < Time.current
   end
 
   def mark_user_onboarding_as_bought_subscription!
