@@ -234,34 +234,30 @@ describe Subscription do
   end
 
   describe '#expired?' do
-    context 'when paid' do
-      let!(:bill) { create(:bill, :paid, end_date: 7.days.from_now.change(hour: 10)) }
+    context 'when pro' do
+      let!(:bill) { create(:pro_bill, :paid) }
 
       specify { expect(bill.subscription).not_to be_expired }
 
       context 'and period has ended' do
-        let!(:bill) { create(:bill, :paid, end_date: 7.days.from_now.change(hour: 10)) }
-
-        specify { travel_to(8.days.from_now) { expect(bill.subscription).to be_expired } }
+        specify { travel_to((1.month + 1.day).from_now) { expect(bill.subscription).to be_expired } }
       end
 
-      context 'period ends just after billing time (13:00)' do
-        let!(:bill) { create(:bill, :paid, end_date: 1.day.from_now.change(hour: 14)) }
+      context 'and not paid' do
+        let!(:bill) { create(:pro_bill, :pro) }
 
-        it 'is active till tomorrow billing time' do
-          expect(bill.subscription).not_to be_expired
-
-          travel_to(1.day.from_now.change(hour: 15)) do
-            expect(bill.subscription).to be_expired
-          end
-        end
+        specify { expect(bill.subscription).to be_expired }
       end
     end
 
-    context 'when not paid' do
+    context 'when free' do
       let!(:bill) { create(:bill) }
 
-      specify { expect(bill.subscription).to be_expired }
+      specify { expect(bill.subscription).not_to be_expired }
+
+      context 'and period has ended' do
+        specify { travel_to(1.year.from_now) { expect(bill.subscription).not_to be_expired } }
+      end
     end
   end
 
