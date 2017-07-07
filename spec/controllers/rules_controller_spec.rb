@@ -11,7 +11,7 @@ describe RulesController do
   let!(:rule) { create(:rule, site: site) }
 
   before { create :subscription, :pro, :paid, site: site }
-  
+
   describe 'GET :show' do
     it 'should fail when not logged in' do
       get :show, site_id: 1, id: rule
