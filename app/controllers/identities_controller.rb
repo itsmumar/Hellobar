@@ -11,7 +11,14 @@ class IdentitiesController < ApplicationController
   end
 
   def show
-    render json: @site.identities.find_by(provider: params[:id])
+    identity = @site.identities.find_by(provider: params[:id])
+    return render json: identity unless identity
+
+    if identity.service_provider.connected?
+      render json: identity
+    else
+      render json: { error: true, lists: [] }
+    end
   end
 
   def create
