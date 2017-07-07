@@ -19,10 +19,6 @@ FactoryGirl.define do
     trait :pro do
       amount { Subscription::Pro.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Pro.new(schedule: schedule) }
-      after(:create) do |subscription|
-        create :pro_bill, :paid, subscription: subscription
-        subscription.reload
-      end
     end
 
     trait :pro_managed do
@@ -48,6 +44,13 @@ FactoryGirl.define do
     trait :with_bills do
       after :create do |subscription|
         create_list :bill, 2, subscription: subscription
+      end
+    end
+
+    trait :paid do
+      after(:create) do |subscription|
+        create :pro_bill, :paid, subscription: subscription
+        subscription.reload
       end
     end
   end

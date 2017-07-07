@@ -7,6 +7,7 @@ describe PayRecurringBills do
 
     before do
       allow(report).to receive(:info)
+      allow(report).to receive(:email)
     end
 
     shared_context 'pay bill' do

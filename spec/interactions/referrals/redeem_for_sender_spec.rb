@@ -2,9 +2,8 @@ describe Referrals::RedeemForSender do
   let(:past_due_site) { create(:site, :past_due_site) }
 
   it 'should raise an error if there are no referrals available' do
-    expect(lambda do
-      Referrals::RedeemForSender.run(site: past_due_site)
-    end).to raise_error(Referrals::NoAvailableReferrals)
+    expect { Referrals::RedeemForSender.run(site: past_due_site) }
+      .to raise_error(Referrals::NoAvailableReferrals)
   end
 
   describe 'redeeming a referral for a site with billing problems' do
@@ -30,7 +29,7 @@ describe Referrals::RedeemForSender do
     end
 
     it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
-      bill = past_due_site.bills.first
+      bill = site.bills.paid.last
       expect(bill.amount).to eq(0.0)
       expect(bill.discount).to eq([bill.base_amount, Coupon::REFERRAL_AMOUNT].min)
     end

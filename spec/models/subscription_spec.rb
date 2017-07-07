@@ -244,7 +244,7 @@ describe Subscription do
       end
 
       context 'and not paid' do
-        let!(:bill) { create(:pro_bill, :pro) }
+        let!(:bill) { create(:pro_bill) }
 
         specify { expect(bill.subscription).to be_expired }
       end
