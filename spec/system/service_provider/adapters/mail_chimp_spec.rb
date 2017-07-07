@@ -103,7 +103,7 @@ describe ServiceProvider::Adapters::MailChimp do
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
 
       it 'does not raise error' do
-        expect { subscribe }.to raise_error
+        expect { subscribe }.to raise_error(Gibbon::MailChimpError)
       end
     end
   end

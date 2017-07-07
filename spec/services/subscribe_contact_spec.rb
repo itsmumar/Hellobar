@@ -26,10 +26,33 @@ describe SubscribeContact do
 
   context 'when error is raised' do
     before { allow(provider).to receive(:subscribe).and_raise StandardError }
+    before { allow(Rails.env).to receive(:test?).and_return(false) }
+    before { allow(provider).to receive(:adapter).and_return(TestProvider.new(nil)) }
+
+    let(:options) do
+      {
+        extra: {
+          identity_id: contact_list.identity.id,
+          contact_list_id: contact_list.id,
+          remote_list_id: contact_list.data['remote_id'],
+          arguments: { email: email, name: name },
+          double_optin: contact_list.double_optin,
+          tags: contact_list.tags,
+          exception: '#<StandardError: StandardError>'
+        },
+        tags: { type: 'service_provider', adapter_key: nil, adapter_class: 'TestProvider' }
+      }
+    end
 
     it 'does not mark contact list log as completed and raises error' do
-      expect { service.call }.to raise_error StandardError
+      service.call
       expect(last_log_entry).not_to be_completed
+    end
+
+    it 'calls Raven.capture_exception' do
+      expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
+      service.call
+      # expect { service.call }.not_to raise_error
     end
   end
 
