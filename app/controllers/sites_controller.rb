@@ -69,6 +69,7 @@ class SitesController < ApplicationController
   end
 
   def destroy
+    @site.bills.pending.map &:voided!
     @site.destroy
     flash[:success] = 'Your site has been successfully deleted'
 
