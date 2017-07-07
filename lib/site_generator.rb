@@ -94,6 +94,6 @@ class SiteGenerator
   end
 
   def content_upgrades_script_tags
-    content_upgrades.where.not('offer_headline like ?', 'Test %').first.content_upgrade_script_tag
+    content_upgrades.where.not('offer_headline like ?', 'Test %').first&.content_upgrade_script_tag
   end
 end
