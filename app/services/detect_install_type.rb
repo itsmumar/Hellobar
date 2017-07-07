@@ -6,10 +6,12 @@ class DetectInstallType
   end
 
   def call
+    # TODO: change `subject` and introduce SendSNSNotification service object
+    # (when new Lambda function parsing the message is deployed)
     sns.publish(
       topic_arn: TOPIC_ARN,
       subject: "#{ Rails.env };#{ site.id };#{ site.url }",
-      message: "#{ Rails.env };#{ site.id };#{ site.url }"
+      message: message
     )
   end
 
@@ -19,5 +21,17 @@ class DetectInstallType
 
   def sns
     Aws::SNS::Client.new
+  end
+
+  def message
+    JSON.generate message_params
+  end
+
+  def message_params
+    {
+      environment: Rails.env,
+      siteId: site.id,
+      siteUrl: site.url
+    }
   end
 end
