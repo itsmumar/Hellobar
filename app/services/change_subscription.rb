@@ -65,5 +65,6 @@ class ChangeSubscription
     BillingLogger.change_subscription(site, props)
 
     Analytics.track(:site, site.id, :change_sub, props)
+    SendEventToIntercomJob.perform_later 'subscription_changed', site: site
   end
 end
