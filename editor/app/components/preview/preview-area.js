@@ -107,6 +107,7 @@ export default Ember.Component.extend({
     'model.border_color',
     'model.button_color',
     'model.caption',
+    'model.content',
     'model.closable',
     'model.element_subtype',
     'model.email_placeholder',
