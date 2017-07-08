@@ -12,7 +12,7 @@ class IdentitiesController < ApplicationController
 
   def show
     identity = @site.identities.find_by(provider: params[:id])
-    return render json: identity unless identity
+    return render json: nil unless identity
 
     if identity.service_provider.connected?
       render json: identity
