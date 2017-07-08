@@ -2,6 +2,7 @@ describe ServiceProvider::Adapters::Maropost do
   let(:defined_urls) do
     {
       lists: 'http://maropost.url/accounts/12345/lists.json?auth_token=api_key&no_counts=true',
+      tags: 'http://maropost.url/accounts/12345/tags.json?auth_token=api_key&no_counts=true',
       subscribe: 'http://maropost.url/accounts/12345/lists/4567456/contacts.json?auth_token=api_key'
     }
   end
@@ -43,6 +44,14 @@ describe ServiceProvider::Adapters::Maropost do
     end
   end
 
+  describe '#tags' do
+    before { allow_request :get, :tags }
+
+    it 'returns array of id => name' do
+      expect(provider.tags).to eql [{ 'name' => 'Tag1', 'id' => 'Tag1' }]
+    end
+  end
+
   describe '#subscribe' do
     let(:body) do
       {
@@ -50,6 +59,7 @@ describe ServiceProvider::Adapters::Maropost do
           email: 'example@email.com',
           subscribe: true,
           remove_from_dnm: true,
+          add_tags: ['id1', 'id2'],
           first_name: 'FirstName',
           last_name: 'LastName'
         }

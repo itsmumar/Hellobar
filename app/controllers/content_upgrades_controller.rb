@@ -89,7 +89,6 @@ class ContentUpgradesController < ApplicationController
       headline: params[:headline],
       caption: params[:caption],
       disclaimer: params[:disclaimer],
-      content: params[:content],
       link_text: params[:link_text],
       thank_you_enabled: params[:thank_you_enabled].present?,
       thank_you_headline: params[:thank_you_headline],

@@ -16,7 +16,7 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: root
 
-    parallelism: 2
+    parallelism: 4
     working_directory: /tmp/hellobar_new
     steps:
       - checkout
