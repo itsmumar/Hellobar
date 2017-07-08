@@ -103,6 +103,8 @@ function initializeModules(hellobar) { $INJECT_MODULES };
 
         configure('contentUpgrades', function(configuration) {
           configuration.contentUpgrades(data.content_upgrades).styles(data.content_upgrades_styles);
+
+          hellobar('contentUpgrades').run();
         });
 
         !isPreviewMode() && hasCapability('autofills') && configure('autofills', function(configuration) {
