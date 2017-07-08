@@ -5,10 +5,12 @@ class IntercomAnalytics
 
   def subscription_changed(site:)
     site.owners.each do |user|
-      track event_name: 'changed-subscription',
+      track(
+        event_name: 'changed-subscription',
         user_id: user.id,
         created_at: Time.current.to_i,
         metadata: { subscription: site.current_subscription.name, schedule: site.current_subscription.schedule }
+      )
     end
     tag_users 'Paid', site.owners unless site.current_subscription.amount.zero?
     tag_users site.current_subscription.name, site.owners
