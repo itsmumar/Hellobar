@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(version: 20170708093718) do
     t.boolean  "wiggle_button",                                     default: false
     t.string   "type",                             limit: 255,      default: "Bar"
     t.text     "caption",                          limit: 16777215
+    t.text     "content",                          limit: 65535
     t.string   "placement",                        limit: 255
     t.datetime "deleted_at"
     t.string   "view_condition",                   limit: 255,      default: "immediately"
@@ -341,7 +342,6 @@ ActiveRecord::Schema.define(version: 20170708093718) do
     t.string   "thank_you_cta",                    limit: 255
     t.text     "thank_you_url",                    limit: 65535
     t.integer  "image_opacity",                    limit: 4,        default: 100
-    t.text     "content",                          limit: 65535
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 20170708093718) do
     t.decimal  "visit_overage_amount",             precision: 5, scale: 2
     t.datetime "created_at"
     t.integer  "payment_method_id",    limit: 4
+    t.datetime "trial_end_date"
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
