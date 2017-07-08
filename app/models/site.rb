@@ -24,7 +24,6 @@ class Site < ActiveRecord::Base
   has_many :identities, dependent: :destroy
   has_many :contact_lists, dependent: :destroy
   has_many :subscriptions, -> { order 'id' }
-
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
@@ -34,11 +33,7 @@ class Site < ActiveRecord::Base
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
 
-  has_one :current_subscription, -> { order id: :desc }, class_name: 'Subscription'
-
   acts_as_paranoid
-
-  default_scope { includes(:current_subscription) }
 
   scope :preload_for_script, lambda {
     preload(
@@ -181,6 +176,10 @@ class Site < ActiveRecord::Base
 
   def custom_rules?
     rules.editable.any?
+  end
+
+  def current_subscription
+    subscriptions.last
   end
 
   def previous_subscription
