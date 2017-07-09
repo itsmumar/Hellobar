@@ -1,6 +1,24 @@
+# Because Events are used for filtering and messaging,
+# and event names are used directly in Intercom by your App's Admins
+# we recommend sending high-level activity about your users that you would like to message on,
+# rather than raw clickstream or user interface actions.
+# For example an order action is a good candidate for an Event,
+# versus all the clicks and actions that were taken to get to that point.
+# We also recommmend sending event names that combine a past tense verb and nouns,
+# such as 'created-bar', 'changed-subscription', etc.
+# https://developers.intercom.com/v2.0/reference#events
 class IntercomAnalytics
   def fire_event(event, **args)
     public_send event, **args
+  end
+
+  def site_element_created(site_element:, user:)
+    track(
+      event_name: 'created-bar',
+      user_id: user.id,
+      created_at: Time.current.to_i,
+      metadata: { bar_type: site_element.type, goal: site_element.element_subtype }
+    )
   end
 
   def subscription_changed(site:)
