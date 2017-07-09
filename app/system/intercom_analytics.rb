@@ -1,19 +1,18 @@
 class IntercomAnalytics
-  def self.event(name, **options)
-    new.public_send(name, **options)
+  def fire_event(event, **args)
+    public_send event, **args
   end
 
   def subscription_changed(site:)
-    site.owners.each do |user|
-      track(
-        event_name: 'changed-subscription',
-        user_id: user.id,
-        created_at: Time.current.to_i,
-        metadata: { subscription: site.current_subscription.name, schedule: site.current_subscription.schedule }
-      )
-    end
-    tag_users 'Paid', site.owners unless site.current_subscription.amount.zero?
-    tag_users site.current_subscription.name, site.owners
+    subscription = site.current_subscription
+    track(
+      event_name: 'changed-subscription',
+      user_id: site.owners.first.id,
+      created_at: Time.current.to_i,
+      metadata: { subscription: subscription.name, schedule: subscription.schedule }
+    )
+    tag_users 'Paid', site.owners unless subscription.amount.zero?
+    tag_users subscription.name, site.owners
   end
 
   private
