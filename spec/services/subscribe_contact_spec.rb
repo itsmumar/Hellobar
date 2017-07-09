@@ -52,7 +52,6 @@ describe SubscribeContact do
     it 'calls Raven.capture_exception' do
       expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
       service.call
-      # expect { service.call }.not_to raise_error
     end
   end
 
