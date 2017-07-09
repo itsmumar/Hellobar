@@ -12,6 +12,15 @@ class IntercomAnalytics
     public_send event, **args
   end
 
+  def member_invited(site:, user:)
+    track(
+      event_name: 'invited-member',
+      user_id: user.id,
+      created_at: Time.current.to_i,
+      metadata: { site_url: site.url }
+    )
+  end
+
   def site_created(site:, user:)
     track(
       event_name: 'created-site',
