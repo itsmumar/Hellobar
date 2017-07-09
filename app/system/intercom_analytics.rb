@@ -30,11 +30,12 @@ class IntercomAnalytics
     )
   end
 
-  def contact_list_created(user:)
+  def contact_list_created(contact_list:, user:)
     track(
       event_name: 'created-contact-list',
       user_id: user.id,
-      created_at: Time.current.to_i
+      created_at: Time.current.to_i,
+      metadata: { site_url: contact_list.site.url }
     )
   end
 

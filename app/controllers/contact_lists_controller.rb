@@ -28,7 +28,7 @@ class ContactListsController < ApplicationController
 
     contact_list = @site.contact_lists.create(contact_list_params.merge(identity: identity))
     if contact_list.persisted?
-      TrackEvent.new(:contact_list_created, user: current_user).call
+      TrackEvent.new(:contact_list_created, contact_list: contact_list, user: current_user).call
       render json: contact_list, status: :created
     else
       render json: contact_list, status: :bad_request
