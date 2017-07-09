@@ -12,6 +12,14 @@ class IntercomAnalytics
     public_send event, **args
   end
 
+  def contact_list_created(user:)
+    track(
+      event_name: 'created-contact-list',
+      user_id: user.id,
+      created_at: Time.current.to_i
+    )
+  end
+
   def site_element_created(site_element:, user:)
     track(
       event_name: 'created-bar',
