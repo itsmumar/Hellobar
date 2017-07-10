@@ -38,11 +38,7 @@ class ChangeSubscription
   end
 
   def create_bill(subscription)
-    CalculateBill.new(subscription, bills: site.bills.recurring, trial_period: trial_period).call.tap(&:save!)
-  end
-
-  def trial_period
-    billing_params[:trial_period].presence&.to_i&.days
+    CalculateBill.new(subscription, bills: site.bills.recurring).call.tap(&:save!)
   end
 
   def subscription_class

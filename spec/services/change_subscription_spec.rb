@@ -15,7 +15,7 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'creates a bill for next period' do
-      expect { service.call }.to change(site.bills.where(bill_at: 1.year.from_now - 1.hour), :count).to(1)
+      expect { service.call }.to change(site.bills.pending, :count).to(1)
     end
 
     it 'pays bill' do
@@ -50,7 +50,7 @@ describe ChangeSubscription, :freeze do
       let(:params) { { subscription: 'pro', schedule: 'monthly' } }
 
       it 'creates a bill for next period' do
-        expect { service.call }.to change(site.bills.where(bill_at: 1.month.from_now - 1.hour), :count).to(1)
+        expect { service.call }.to change(site.bills.pending, :count).to(1)
       end
     end
 
@@ -172,7 +172,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now do
+            travel_to 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -200,7 +200,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now do
+            travel_to 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -226,7 +226,7 @@ describe ChangeSubscription, :freeze do
 
           monthly_bill = change_subscription('pro', 'monthly')
           expect(monthly_bill.amount).to eql Subscription::Pro.defaults[:monthly_amount]
-          expect(monthly_bill.due_at).to be_within(2.hours).of(yearly_bill.due_at + 1.year)
+          expect(monthly_bill.due_at).to eql yearly_bill.due_at + 1.year
           expect(monthly_bill).to be_pending
         end
       end
@@ -239,8 +239,8 @@ describe ChangeSubscription, :freeze do
           refund(yearly_bill)
           monthly_bill = change_subscription('pro', 'monthly')
           expect(monthly_bill.bill_at).to eql Time.current
-          expect(monthly_bill.start_date).to eql 1.hour.ago
-          expect(monthly_bill.end_date).to eql 1.month.since(1.hour.ago)
+          expect(monthly_bill.start_date).to eql Time.current
+          expect(monthly_bill.end_date).to eql 1.month.from_now
         end
       end
     end

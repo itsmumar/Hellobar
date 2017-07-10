@@ -6,9 +6,11 @@ describe RulesController do
   end
 
   let(:user) { create(:user) }
-  let(:site) { create(:site, :pro, :with_user) }
+  let(:site) { create(:site, :with_user) }
   let(:owner) { site.owners.first }
   let!(:rule) { create(:rule, site: site) }
+
+  before { create :subscription, :pro, :paid, site: site }
 
   describe 'GET :show' do
     it 'should fail when not logged in' do

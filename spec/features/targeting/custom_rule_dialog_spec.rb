@@ -2,7 +2,9 @@ require 'integration_helper'
 
 feature 'Targeting. Custom rule dialog', :js do
   given(:user) { create(:user) }
-  given(:site) { create(:site, :with_rule, :pro, user: user) }
+  given(:site) { create(:site, :with_rule, user: user) }
+
+  before { create :subscription, :pro, :paid, site: site }
 
   before do
     allow(Settings).to receive(:fake_data_api).and_return true

@@ -2,7 +2,7 @@ describe DiscountCalculator do
   let(:user) { create(:user) }
 
   before do
-    allow(Subscription::Pro).to receive(:defaults).and_return(discounts: [
+    allow(Subscription::Pro).to receive(:defaults).and_return(monthly_amount: 15.0, discounts: [
       DiscountRange.new(2, 0, 1, 10),
       DiscountRange.new(2, 1, 2, 20),
       DiscountRange.new(nil, 2, 3, 30)

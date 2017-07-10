@@ -20,6 +20,7 @@ RSpec::Matchers.define :receive_service_call do
   end
 
   match_when_negated do |service_class|
+    @service_name = service_class.name
     @service_double = double service_class.name
 
     if @args
