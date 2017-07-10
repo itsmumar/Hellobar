@@ -31,19 +31,6 @@ describe Identity do
     end
   end
 
-  describe '#destroy_and_notify_user' do
-    it 'emails the user that there was a problem syncing their identity' do
-      expect(MailerGateway).to receive(:send_email) do |*args|
-        expect(args[0]).to eq('Integration Sync Error')
-        expect(args[1]).to eq(identity.site.owners.first.email)
-        expect(args[2][:link]).to match(/http\S+sites\S+#{identity.site_id}/)
-        expect(args[2][:integration_name]).to eq('MailChimp')
-      end
-
-      identity.destroy_and_notify_user
-    end
-  end
-
   describe '#provider_icon_path' do
     let(:identity) { create(:identity, :drip, site: site) }
 

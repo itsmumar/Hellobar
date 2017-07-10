@@ -25,6 +25,25 @@ class SubscribeContact
     log_entry.update(completed: false, error: e.to_s)
   rescue => e
     log_entry.update(completed: false, error: e.to_s)
-    raise e
+    raven_log e
+  end
+
+  def raven_log(exception)
+    raise exception if Rails.env.development? || Rails.env.test?
+
+    options = {
+      extra: {
+        identity_id: contact_list.identity&.id,
+        contact_list_id: contact_list.id,
+        remote_list_id: contact_list.data['remote_id'],
+        arguments: { email: email, name: name },
+        double_optin: contact_list.double_optin,
+        tags: contact_list.tags,
+        exception: exception.inspect
+      },
+      tags: { type: 'service_provider', adapter_key: provider.adapter.key, adapter_class: provider.adapter.class.name }
+    }
+
+    Raven.capture_exception(exception, options)
   end
 end

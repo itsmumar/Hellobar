@@ -84,8 +84,8 @@ describe ServiceProvider::Adapters::Maropost do
     context 'when status is 401' do
       before { stub_request(:post, url_for_request(:subscribe)).and_return(status: 404, body: '{}') }
 
-      it 'calls identity.destroy_and_notify_user' do
-        expect(identity).to receive(:destroy_and_notify_user)
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         expect { provider.subscribe(email: email, name: name) }.not_to raise_error
       end
     end

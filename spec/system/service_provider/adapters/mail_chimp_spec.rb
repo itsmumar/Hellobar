@@ -55,8 +55,8 @@ describe ServiceProvider::Adapters::MailChimp do
       let(:response) { { status: 401, body: { title: 'API Key Invalid' }.to_json } }
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
 
-      it 'calls identity.destroy_and_notify_user' do
-        expect(identity).to receive(:destroy_and_notify_user)
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         subscribe
       end
     end
@@ -65,8 +65,8 @@ describe ServiceProvider::Adapters::MailChimp do
       let(:response) { { status: 404, body: { title: 'Resource Not Found' }.to_json } }
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
 
-      it 'calls identity.destroy_and_notify_user' do
-        expect(identity).to receive(:destroy_and_notify_user)
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         subscribe
       end
     end
@@ -103,7 +103,7 @@ describe ServiceProvider::Adapters::MailChimp do
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
 
       it 'does not raise error' do
-        expect { subscribe }.to raise_error
+        expect { subscribe }.to raise_error(Gibbon::MailChimpError)
       end
     end
   end

@@ -51,32 +51,6 @@ describe ServiceProvider do
     it 'returns array of id => name' do
       expect(provider.lists).to eq ['1' => 'List1']
     end
-
-    context 'when exception is raised' do
-      let(:options) do
-        {
-          extra: {
-            identity_id: identity.id,
-            contact_list_id: contact_list.id,
-            arguments: [],
-            remote_list_id: list_id,
-            double_optin: contact_list.double_optin,
-            tags: contact_list.tags,
-            exception: '#<StandardError: StandardError>'
-          },
-          tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
-        }
-      end
-      before { allow(Rails.env).to receive(:test?).and_return(false) }
-
-      it 'calls Raven.capture_exception' do
-        expect(adapter).to receive(:lists).and_raise(StandardError)
-        expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect {
-          provider.lists
-        }.not_to raise_error
-      end
-    end
   end
 
   describe '#subscribe' do
@@ -117,30 +91,6 @@ describe ServiceProvider do
       it 'does not call adapter' do
         expect(adapter).not_to receive(:subscribe)
         subscribe
-      end
-    end
-
-    context 'when exception is raised' do
-      let(:options) do
-        {
-          extra: {
-            identity_id: identity.id,
-            contact_list_id: contact_list.id,
-            remote_list_id: list_id,
-            arguments: [email: 'email@example.com', name: 'FirstName LastName'],
-            double_optin: contact_list.double_optin,
-            tags: contact_list.tags,
-            exception: '#<StandardError: StandardError>'
-          },
-          tags: { type: 'service_provider', adapter_key: adapter.key, adapter_class: adapter.class.name }
-        }
-      end
-      before { allow(Rails.env).to receive(:test?).and_return(false) }
-
-      it 'calls Raven.capture_exception' do
-        expect(adapter).to receive(:subscribe).and_raise(StandardError)
-        expect(Raven).to receive(:capture_exception).with(instance_of(StandardError), options)
-        expect { subscribe }.not_to raise_error
       end
     end
   end
