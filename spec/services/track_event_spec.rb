@@ -10,7 +10,7 @@ describe TrackEvent, :freeze do
   before { allow(Intercom::Client).to receive(:new).and_return(intercom) }
   around { |example| perform_enqueued_jobs(&example) }
 
-  describe '"subscription_changed" event' do
+  describe '"changed_subscription" event' do
     let(:tags) { double('tags') }
 
     it 'sends "changed-subscription" to intercom and tag owners' do
@@ -24,11 +24,11 @@ describe TrackEvent, :freeze do
       expect(tags).to receive(:tag).with(name: 'Paid', users: [user_id: owner.id])
       expect(tags).to receive(:tag).with(name: 'Pro', users: [user_id: owner.id])
 
-      fire_event :subscription_changed, site: site
+      fire_event :changed_subscription, site: site
     end
   end
 
-  describe '"site_element_created" event' do
+  describe '"created_bar" event' do
     let!(:site_element) { create :site_element, site: site }
 
     it 'sends "created-bar" to intercom' do
@@ -38,11 +38,11 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { bar_type: site_element.type, goal: site_element.element_subtype }
       )
-      fire_event :site_element_created, site_element: site_element, user: owner
+      fire_event :created_bar, site_element: site_element, user: owner
     end
   end
 
-  describe '"contact_list_created" event' do
+  describe '"created_contact_list" event' do
     let!(:contact_list) { create :contact_list, site: site }
 
     it 'sends "created-contact-list" to intercom' do
@@ -52,11 +52,11 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { site_url: site.url }
       )
-      fire_event :contact_list_created, contact_list: contact_list, user: owner
+      fire_event :created_contact_list, contact_list: contact_list, user: owner
     end
   end
 
-  describe '"site_created" event' do
+  describe '"created_site" event' do
     it 'sends "created-site" to intercom' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'created-site',
@@ -64,11 +64,11 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { url: site.url }
       )
-      fire_event :site_created, site: site, user: owner
+      fire_event :created_site, site: site, user: owner
     end
   end
 
-  describe '"member_invited" event' do
+  describe '"invited_member" event' do
     it 'sends "invited-member" to intercom' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'invited-member',
@@ -76,7 +76,7 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { site_url: site.url }
       )
-      fire_event :member_invited, site: site, user: owner
+      fire_event :invited_member, site: site, user: owner
     end
   end
 end

@@ -48,7 +48,7 @@ class SiteElementsController < ApplicationController
     if @site_element.valid?
       @site_element.save!
       flash[:success] = message_to_clear_cache
-      TrackEvent.new(:site_element_created, site_element: @site_element, user: current_user).call
+      TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
 
       render json: @site_element, serializer: SiteElementSerializer
     else

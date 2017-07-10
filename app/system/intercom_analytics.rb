@@ -9,10 +9,10 @@
 # https://developers.intercom.com/v2.0/reference#events
 class IntercomAnalytics
   def fire_event(event, **args)
-    public_send event, **args
+    public_send event.underscore.to_sym, **args
   end
 
-  def member_invited(site:, user:)
+  def invited_member(site:, user:)
     track(
       event_name: 'invited-member',
       user_id: user.id,
@@ -21,7 +21,7 @@ class IntercomAnalytics
     )
   end
 
-  def site_created(site:, user:)
+  def created_site(site:, user:)
     track(
       event_name: 'created-site',
       user_id: user.id,
@@ -30,7 +30,7 @@ class IntercomAnalytics
     )
   end
 
-  def contact_list_created(contact_list:, user:)
+  def created_contact_list(contact_list:, user:)
     track(
       event_name: 'created-contact-list',
       user_id: user.id,
@@ -39,7 +39,7 @@ class IntercomAnalytics
     )
   end
 
-  def site_element_created(site_element:, user:)
+  def created_bar(site_element:, user:)
     track(
       event_name: 'created-bar',
       user_id: user.id,
@@ -48,7 +48,7 @@ class IntercomAnalytics
     )
   end
 
-  def subscription_changed(site:)
+  def changed_subscription(site:)
     subscription = site.current_subscription
     track(
       event_name: 'changed-subscription',

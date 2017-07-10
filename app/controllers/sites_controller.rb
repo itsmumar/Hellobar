@@ -170,7 +170,7 @@ class SitesController < ApplicationController
       @site.create_default_rules
 
       DetectInstallType.new(@site).call
-      TrackEvent.new(:site_created, site: @site, user: current_user).call
+      TrackEvent.new(:created_site, site: @site, user: current_user).call
       redirect_to new_site_site_element_path(@site)
     else
       flash.now[:error] = @site.errors.full_messages
