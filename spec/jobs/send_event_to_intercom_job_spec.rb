@@ -2,12 +2,12 @@ describe SendEventToIntercomJob do
   let(:job) { described_class }
 
   describe '#perform' do
-    context 'with "subscription_changed" event' do
+    context 'with "changed_subscription" event' do
       let(:site) { create :site }
-      let(:perform) { job.new.perform('subscription_changed', site: site) }
+      let(:perform) { job.new.perform('changed_subscription', site: site) }
 
       it 'calls on the IntercomAnalytics' do
-        expect_any_instance_of(IntercomAnalytics).to receive(:subscription_changed).with(site: site)
+        expect_any_instance_of(IntercomAnalytics).to receive(:changed_subscription).with(site: site)
         perform
       end
     end
