@@ -47,7 +47,7 @@ class Identity < ActiveRecord::Base
       MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_name, link: site_contact_lists_url(site, host: Settings.host))
     end
 
-    destroy
+    destroy!
   end
 
   private
