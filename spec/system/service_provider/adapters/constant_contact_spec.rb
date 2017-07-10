@@ -61,8 +61,8 @@ describe ServiceProvider::Adapters::ConstantContact do
       let(:response) { { status: 401 } }
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
 
-      it 'calls identity.destroy_and_notify_user' do
-        expect(identity).to receive(:destroy_and_notify_user)
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         subscribe
       end
     end
@@ -98,7 +98,7 @@ describe ServiceProvider::Adapters::ConstantContact do
       let!(:update_request) { allow_request :put, :update, body: body.merge(id: 1) }
 
       it 'updates subscriber' do
-        expect(identity).to receive(:destroy_and_notify_user)
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         subscribe
         expect(update_request).not_to have_been_made
       end

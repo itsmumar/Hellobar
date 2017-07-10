@@ -6,7 +6,7 @@ module ServiceProvider::Adapters
       config.oauth = true
     end
 
-    rescue_from CreateSend::Unauthorized, with: :destroy_identity
+    rescue_from CreateSend::Unauthorized, with: :notify_user_about_unauthorized_error
 
     def initialize(identity)
       super identity, CreateSend::CreateSend.new(
@@ -25,12 +25,6 @@ module ServiceProvider::Adapters
     def subscribe(list_id, params)
       email, name = params.values_at(:email, :name)
       CreateSend::Subscriber.add(client.auth_details, list_id, email, name, [], true, true)
-    end
-
-    private
-
-    def destroy_identity
-      @identity.destroy_and_notify_user
     end
   end
 end

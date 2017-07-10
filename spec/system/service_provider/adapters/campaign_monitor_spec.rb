@@ -53,8 +53,8 @@ describe ServiceProvider::Adapters::CampaignMonitor do
     context 'when CreateSend::Unauthorized is raised' do
       let!(:subscribe_request) { allow_request :post, :unauthorized, body: body }
 
-      it 'calls identity.destroy_and_notify_user' do
-        expect(identity).to receive(:destroy_and_notify_user)
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
         subscribe
       end
     end

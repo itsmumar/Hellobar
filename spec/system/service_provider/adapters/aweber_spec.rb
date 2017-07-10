@@ -62,7 +62,7 @@ describe ServiceProvider::Adapters::Aweber do
         before { allow_any_instance_of(::AWeber::Base).to receive(:account).and_raise(AWeber::CreationError, message) }
 
         it 'destroys identity and notify user' do
-          expect(identity).to receive(:destroy_and_notify_user)
+          expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
           expect { provider.subscribe(email: email, name: name) }.not_to raise_error
         end
       end
