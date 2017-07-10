@@ -49,5 +49,23 @@ describe ServiceProvider::Adapters::Aweber do
       provider.subscribe(email: email, name: name)
       expect(create_request).to have_been_made
     end
+
+    context 'when AWeber::CreationError is raised' do
+      before { allow_any_instance_of(::AWeber::Base).to receive(:account).and_raise(AWeber::CreationError) }
+
+      it 'ignores errors' do
+        expect { provider.subscribe(email: email, name: name) }.not_to raise_error
+      end
+
+      context 'when error message is "Invalid consumer key or access token key"' do
+        let(:message) { 'Invalid consumer key or access token key' }
+        before { allow_any_instance_of(::AWeber::Base).to receive(:account).and_raise(AWeber::CreationError, message) }
+
+        it 'destroys identity and notify user' do
+          expect(identity).to receive(:destroy_and_notify_user)
+          expect { provider.subscribe(email: email, name: name) }.not_to raise_error
+        end
+      end
+    end
   end
 end
