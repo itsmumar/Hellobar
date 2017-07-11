@@ -84,12 +84,22 @@ export default Ember.Component.extend({
       if (!this.get('selectionInProgress')) {
         return;
       }
+      if (this.get('style') != style) this.send('showThemeGrid');
       this.set('style', style);
       this.set('selectionInProgress', false);
     },
 
     initiateSelection() {
       this.set('selectionInProgress', true);
+    },
+
+    showThemeGrid() {
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'preview/containers/theming/theme-tile-grid',
+        componentOptions: {
+          elementType: this.get('model.type')
+        }
+      });
     },
 
     changeTheme() {
@@ -103,12 +113,7 @@ export default Ember.Component.extend({
         showCloseIcon: true,
         confirm() {
           confirmModal.close();
-          that.get('bus').trigger('hellobar.core.rightPane.show', {
-            componentName: 'preview/containers/theming/theme-tile-grid',
-            componentOptions: {
-              elementType: that.get('model.type')
-            }
-          });
+          that.showThemeGrid();
         }
 
       };
