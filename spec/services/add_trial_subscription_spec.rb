@@ -5,7 +5,7 @@ describe AddTrialSubscription, :freeze do
   let(:service) { AddTrialSubscription.new(site, params) }
   let(:last_subscription) { Subscription.last }
 
-  before { create :subscription, :free, site: site }
+  before { ChangeSubscription.new(site, subscription: 'free').call }
 
   describe '.call' do
     it 'returns paid bill with zero amount' do
@@ -19,6 +19,12 @@ describe AddTrialSubscription, :freeze do
         .to change(site.subscriptions, :count).by(1)
 
       expect(site.current_subscription).to be_a Subscription::Pro
+      expect(site).to be_capable_of :pro
+    end
+
+    it 'changes capabilities to pro' do
+      expect { service.call }
+        .to change { site.capabilities }
       expect(site).to be_capable_of :pro
     end
 
