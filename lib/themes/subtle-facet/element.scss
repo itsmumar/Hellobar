@@ -1,0 +1,212 @@
+.subtle-facet {
+  color: '#3A3A49';
+
+  .hb-header {
+    display: none;
+  }
+
+  .image-background .hb-image-wrapper.background {
+    width: 43%;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    background-position: top center;
+  }
+
+  #hellobar-takeover {
+    background: url('//s3.amazonaws.com/assets.hellobar.com/subtle-facet-background.jpg');
+    background-size: cover;
+    background-position: center,center;
+
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      top: 0;
+      left: 0;
+      padding: 0;
+      height: calc(100% - 20px);
+      width: calc(57% - 20px);
+      font-size: 24px;
+      position: fixed;
+      text-align: center;
+      transform: translate(0%, 0%);
+      -o-transform: translate(0%, 0%);
+      -moz-transform: translate(0%, 0%);
+      -webkit-transform: translate(0%, 0%);
+      border: 1px solid #5A5A6A;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      margin: 10px 10px 10px calc(43% + 10px);
+
+      .hb-inner-content {
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        padding: 1em;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+      }
+    }
+
+    .hb-content-wrapper {
+      width: 600px;
+    }
+
+    .hb-text-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .hb-input-wrapper {
+      margin: 20px auto 0;
+    }
+
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-left: 43%;
+      bottom: 2em;
+    }
+
+    .hb-logo-wrapper {
+      opacity: 0.6;
+      svg {
+        fill: white;
+      }
+    }
+
+    .hb-cta-style-button {
+      border-radius: 4px;
+      display: block;
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 1em;
+      max-width: 550px;
+      letter-spacing: 2px;
+      padding: 15px 30px;
+    }
+
+    .hb-input-block {
+      input {
+        padding-left: 50px;
+      }
+
+      ::-webkit-input-placeholder {
+        color: #313842;
+      }
+
+      :-moz-placeholder {
+        color: #313842;
+        opacity: 1;
+      }
+
+      ::-moz-placeholder {
+        color: #313842;
+        opacity: 1;
+      }
+
+      :-ms-input-placeholder {
+        color: #313842;
+      }
+    }
+
+    .hb-headline-text {
+      font-size: 94px;
+      line-height: 84px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .hb-secondary-text {
+      font-size: 24px;
+      font-weight: 400;
+      color: white;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .hb-input-block input {
+      font-size: .7em;
+    }
+
+    .hb-name-input {
+      margin-bottom: 12px;
+    }
+
+    [data-hb-editable-block="caption"] {
+      border: 2px solid;
+      border-left: none;
+      border-right: none;
+      border-color: #4C4B5D;
+      padding: 10px 0;
+      font-size: 41px;
+      margin: 20px auto;
+    }
+
+    .icon-close {
+      font-size: 20px;
+      top: 30px;
+      right: 40px;
+    }
+
+    .builtin-email {
+      input {
+        background-image: url(//s3.amazonaws.com/assets.hellobar.com/envelop.png);
+        background-repeat: no-repeat;
+        background-position: 30px,0;
+        background-size: 25px;
+        padding: 35px 35px 35px 80px;
+        border-radius: 5px;
+      }
+    }
+
+    @media screen and (max-width: 840px) {
+      .hb-image-wrapper { display: none; }
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        top: 0;
+        left: 0;
+        padding: 0;
+        height: calc(100% - 20px);
+        width: calc(100% - 20px);
+        font-size: 24px;
+        position: fixed;
+        text-align: center;
+        transform: translate(0%, 0%);
+        -o-transform: translate(0%, 0%);
+        -moz-transform: translate(0%, 0%);
+        -webkit-transform: translate(0%, 0%);
+        border: 2px solid #5A5A6A;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+        margin: 10px 10px 10px 10px;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0;
+      }
+    }
+
+    @media screen and (max-width: 475px), screen and (max-height: 700px) {
+      .hb-headline-text {
+        font-size: 74px;
+        line-height: 64px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .hb-secondary-text {
+        font-size: 17px;
+        font-weight: 400;
+        color: white;
+      }
+
+      [data-hb-editable-block="caption"] {
+        font-size: 31px;
+      }
+
+      .hb-cta-style-button {
+        font-size: 23px;
+        padding: 15px 20px;
+      }
+    }
+  }
+}
