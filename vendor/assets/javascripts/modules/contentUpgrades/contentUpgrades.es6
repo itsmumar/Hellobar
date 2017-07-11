@@ -39,7 +39,8 @@ hellobar.defineModule('contentUpgrades',
       // pick a CU
       const index = Math.floor(Math.random() * contentUpgrades.length);
       const contentUpgrade = contentUpgrades[index];
-      elementsData.setData(contentUpgrade.id, AB_TEST_FLAG, 1);
+      if (contentUpgrade)
+        elementsData.setData(contentUpgrade.id, AB_TEST_FLAG, 1);
 
       return contentUpgrade;
     }
