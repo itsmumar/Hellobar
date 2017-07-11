@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707152820) do
+ActiveRecord::Schema.define(version: 20170708093718) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -296,6 +296,7 @@ ActiveRecord::Schema.define(version: 20170707152820) do
     t.boolean  "wiggle_button",                                     default: false
     t.string   "type",                             limit: 255,      default: "Bar"
     t.text     "caption",                          limit: 16777215
+    t.text     "content",                          limit: 65535
     t.string   "placement",                        limit: 255
     t.datetime "deleted_at"
     t.string   "view_condition",                   limit: 255,      default: "immediately"

@@ -100,6 +100,8 @@ class SimpleModelAdapter {
           return this.modelHandler.get('model').link_text = content;
         case 'caption':
           return this.modelHandler.get('model').caption = content;
+        case 'content':
+          return this.modelHandler.get('model').content = content;
       }
     }
   }

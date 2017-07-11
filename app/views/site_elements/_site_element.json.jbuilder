@@ -42,6 +42,7 @@ json.cache! site_element do
     :button_color,
     :email_placeholder,
     :headline,
+    :content,
     :image_placement,
     :link_color,
     :link_style,

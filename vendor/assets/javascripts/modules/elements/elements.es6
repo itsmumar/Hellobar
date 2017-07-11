@@ -26,7 +26,7 @@ hellobar.defineModule('elements',
 
     // Returns a SiteElement object from a hash of data
     function create(data) {
-      const whitelistedProperties = ['headline', 'caption', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
+      const whitelistedProperties = ['headline', 'caption', 'content', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
 
       // Sanitize the data
       data = sanitizing.sanitize(data, whitelistedProperties);
