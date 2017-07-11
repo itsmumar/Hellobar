@@ -450,9 +450,12 @@ class @ContactListModal extends Modal
         data.showTagTextfield = defaultContext.showTagTextfield
         @options.identity = data
 
-        if (lists?.length && lists[0].error != undefined) || (tags?.length && tags[0].error != undefined)
+        if data.error
           $('footer a.submit').attr('disabled', 'disabled')
-          $('.flash-block').addClass('error show').text('There was a problem connecting your ' + label + ' account. Please try again later.')
+          $('.flash-block').addClass('error show').html(
+            'There was a problem connecting your ' + label + ' account.' +
+              "<br>Please check your credentials and connect again."
+          )
 
         if data.provider != "infusionsoft"
           @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()

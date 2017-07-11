@@ -76,6 +76,16 @@ describe 'Identities requests' do
         get site_identity_path(site, id: identity.provider)
         expect(response).to be_successful
       end
+
+      context 'when could not connect to provider' do
+        before { allow_any_instance_of(TestProvider).to receive(:connected?).and_return(false) }
+
+        it 'responds with error' do
+          get site_identity_path(site, id: identity.provider)
+          expect(response).to be_successful
+          expect(json).to match error: true, lists: []
+        end
+      end
     end
 
     describe 'DELETE :destroy' do
