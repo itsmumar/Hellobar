@@ -4,7 +4,7 @@ export default Ember.Service.extend({
   settings: {},
 
   load() {
-    return Ember.$.getJSON('/api/settings').then((applicationSettings) => {
+    return Ember.$.getJSON('/api/settings', { site_id: siteID }).then((applicationSettings) => {
       this.set('settings', applicationSettings);
     });
   }
