@@ -34,6 +34,10 @@ class Subscription < ActiveRecord::Base
     end
   end
 
+  def name
+    self.class.defaults[:name]
+  end
+
   def currently_on_trial?
     amount != 0 && payment_method.nil? && active_bills.paid.free.any?
   end

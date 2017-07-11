@@ -6,6 +6,7 @@ class SiteMembershipsController < ApplicationController
   def create
     @site_membership = @site.site_memberships.create(site_membership_params)
     if @site_membership.valid?
+      TrackEvent.new(:invited_member, site: @site, user: current_user).call
       @site_membership.user.send_invitation_email(@site_membership.site)
       render json: @site_membership
     else
