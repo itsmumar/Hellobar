@@ -36,7 +36,7 @@ class SettingsSerializer < ActiveModel::Serializer
     if scope.capabilities.subtle_facet_theme?
       Theme.sorted
     else
-      Theme.sorted.select { |theme| theme.id != 'subtle-facet' }
+      Theme.sorted.reject { |theme| theme.id == 'subtle-facet' }
     end
   end
 end
