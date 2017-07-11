@@ -1,6 +1,10 @@
 class Subscription
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
+      def subtle_facet_theme?
+        true
+      end
+
       def custom_html?
         true
       end
