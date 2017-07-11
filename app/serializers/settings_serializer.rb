@@ -3,7 +3,7 @@ class SettingsSerializer < ActiveModel::Serializer
     :available_themes, :available_fonts, :country_codes
 
   def available_themes
-    ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
+    ActiveModel::ArraySerializer.new(themes_for_site, each_serializer: ThemeSerializer).as_json
   end
 
   def available_fonts
@@ -30,5 +30,13 @@ class SettingsSerializer < ActiveModel::Serializer
 
   def user
     object
+  end
+
+  def themes_for_site
+    if scope.capabilities.subtle_facet_theme?
+      Theme.sorted
+    else
+      Theme.sorted.select { |theme| theme.id != 'subtle-facet' }
+    end
   end
 end
