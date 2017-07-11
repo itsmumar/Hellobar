@@ -17,7 +17,7 @@ describe SettingsSerializer do
       let(:site) { create :site, :pro, user: user }
 
       it 'does not return subtle-facet theme' do
-        themes = Theme.sorted.regect { |theme| theme.id == 'subtle-facet' }
+        themes = Theme.sorted.reject { |theme| theme.id == 'subtle-facet' }
 
         expect(serializer.available_themes)
           .to eql ActiveModel::ArraySerializer.new(themes, each_serializer: ThemeSerializer).as_json

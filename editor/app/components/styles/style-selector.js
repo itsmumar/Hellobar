@@ -84,7 +84,9 @@ export default Ember.Component.extend({
       if (!this.get('selectionInProgress')) {
         return;
       }
-      if (this.get('style') != style) this.send('showThemeGrid');
+      if (this.get('style') !== style) {
+        this.send('showThemeGrid');
+      }
       this.set('style', style);
       this.set('selectionInProgress', false);
     },

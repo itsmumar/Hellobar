@@ -108,7 +108,7 @@ describe StaticScriptModel do
                 "hellobar-classic/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
-                "marigold/container.css\ntraffic-growth/container.css\nviolet/container.css"
+                "marigold/container.css\nsubtle-facet/container.css\ntraffic-growth/container.css\nviolet/container.css"
     end
   end
 
