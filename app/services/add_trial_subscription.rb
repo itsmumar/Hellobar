@@ -7,13 +7,18 @@ class AddTrialSubscription
 
   def call
     raise 'wrong trial period' unless period.in?(1..90)
-
+    void_active_free_bill
     create_trial_subscription
   end
 
   private
 
   attr_reader :site, :subscription, :period
+
+  def void_active_free_bill
+    return unless site.active_paid_bill
+    site.active_paid_bill.voided! if site.active_paid_bill.amount.zero?
+  end
 
   def create_trial_subscription
     Subscription.transaction do
