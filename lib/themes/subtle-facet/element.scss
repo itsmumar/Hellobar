@@ -85,10 +85,6 @@
     }
 
     .hb-input-block {
-      input {
-        padding-left: 50px;
-      }
-
       ::-webkit-input-placeholder {
         color: #313842;
       }
@@ -149,13 +145,18 @@
     }
 
     .builtin-email {
+      background-color: white;
+      background-image: url(https://s3.amazonaws.com/assets.hellobar.com/envelop.png);
+      background-repeat: no-repeat;
+      background-position: 30px,0;
+      background-size: 25px;
+      padding: 20px 35px 20px 90px;
+      border-radius: 5px;
+      
       input {
-        background-image: url(https://s3.amazonaws.com/assets.hellobar.com/envelop.png);
-        background-repeat: no-repeat;
-        background-position: 30px,0;
-        background-size: 25px;
-        padding: 35px 35px 35px 80px;
-        border-radius: 5px;
+        background: transparent;
+        border: none;
+        padding: 0;
       }
     }
 
