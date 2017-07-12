@@ -4,8 +4,8 @@ describe Hello::TrackingParam do
   let(:props) { { 'url' => 'some url' } }
   let(:tracker) { Hello::TrackingParam.encode_tracker(user_id, action, props) }
 
-  it 'deletes \n' do
-    expect(Hello::TrackingParam.decode_tracker(tracker + "\n/")).to eql [user_id, action, props]
+  it 'whitespace characters' do
+    expect(Hello::TrackingParam.decode_tracker(" \n #{ tracker }\n/")).to eql [user_id, action, props]
   end
 
   it 'deletes trailing slash' do
