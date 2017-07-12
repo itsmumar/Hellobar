@@ -17,6 +17,10 @@ class Theme < ActiveHash::Base
     all.sort_by { |t| [t.default_theme ? 0 : 1, t.name] }
   end
 
+  def self.enabled
+    sorted.reject(&:disabled)
+  end
+
   private
 
   def base_directory
