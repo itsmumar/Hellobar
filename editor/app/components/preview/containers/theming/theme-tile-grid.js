@@ -30,7 +30,7 @@ export default Ember.Component.extend({
     return _.filter(this.get('allThemes'), (theme) => {
       return theme.type === 'generic' && theme.id !== 'autodetect' && _.includes(theme.element_types, elementType);
     });
-  }.property('allThemes'),
+  }.property('allThemes', 'elementType'),
 
   templateThemes: function () {
     const elementType = this.get('elementType');

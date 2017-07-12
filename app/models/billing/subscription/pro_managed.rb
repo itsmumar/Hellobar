@@ -1,10 +1,6 @@
 class Subscription
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
-      def subtle_facet_theme?
-        true
-      end
-
       def custom_html?
         true
       end
@@ -30,6 +26,10 @@ class Subscription
       end
 
       def opacity?
+        true
+      end
+
+      def subtle_facet_theme?
         true
       end
     end

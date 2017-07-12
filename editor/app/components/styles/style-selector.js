@@ -115,7 +115,7 @@ export default Ember.Component.extend({
         showCloseIcon: true,
         confirm() {
           confirmModal.close();
-          that.showThemeGrid();
+          that.send('showThemeGrid');
         }
 
       };
