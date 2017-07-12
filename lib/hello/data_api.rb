@@ -178,7 +178,7 @@ module Hello::DataAPI
       timeout_index = 0
       begin
         begin_time = Time.current.to_f
-        url = URI.join(Settings.data_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
+        url = URI.join(Settings.tracking_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
         Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))

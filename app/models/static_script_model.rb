@@ -107,7 +107,7 @@ class StaticScriptModel
   end
 
   def hb_backend_host
-    Settings.tracking_host
+    URI.parse(Settings.tracking_api_url).host
   end
 
   def external_tracking

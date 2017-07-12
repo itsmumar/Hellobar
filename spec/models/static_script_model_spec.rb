@@ -232,14 +232,15 @@ describe StaticScriptModel do
   end
 
   describe '#hb_backend_host' do
-    let(:hb_backend_host) { 'hb_backend_host' }
+    let(:tracking_host) { 'hb_backend_host' }
+    let(:tracking_api_url) { "https://#{ tracking_host }" }
 
     before do
-      allow(Settings).to receive(:tracking_host).and_return hb_backend_host
+      allow(Settings).to receive(:tracking_api_url).and_return tracking_api_url
     end
 
     it 'returns host' do
-      expect(model.hb_backend_host).to eql hb_backend_host
+      expect(model.hb_backend_host).to eql tracking_host
     end
   end
 
