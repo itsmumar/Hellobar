@@ -120,7 +120,12 @@ describe 'ContactList requests' do
       let!(:identity) { create :identity, site: site }
       let(:last_contact_list) { site.contact_lists.last }
 
-      it 'creates contact list' do
+      it 'creates a contact list' do
+        expect(TrackEvent).to receive_service_call.with(
+          :created_contact_list,
+          hash_including(contact_list: anything, user: anything)
+        )
+
         expect {
           post site_contact_lists_path(site, identity_id: identity.id, contact_list: { name: 'Contact List' })
         }.to change { site.contact_lists.count }
@@ -134,7 +139,7 @@ describe 'ContactList requests' do
       let!(:identity) { create :identity, site: site }
       let(:contact_list) { create :contact_list, site: site }
 
-      it 'updates contact list' do
+      it 'updates a contact list' do
         expect {
           put site_contact_list_path(site, contact_list, identity_id: identity.id, contact_list: { name: 'Updated' })
         }.to change { contact_list.reload.identity }.and change { contact_list.reload.name }
