@@ -1,6 +1,7 @@
 /* globals ConfirmModal */
 
 import Ember from 'ember';
+import _ from 'lodash/lodash';
 
 const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Custom', 'Alert'];
 
@@ -84,11 +85,13 @@ export default Ember.Component.extend({
       if (!this.get('selectionInProgress')) {
         return;
       }
-      if (this.get('style') !== style) {
-        this.send('showThemeGrid');
-      }
       this.set('style', style);
       this.set('selectionInProgress', false);
+      if (!_.includes(this.get('model.theme.element_types'), style)) {
+        this.set('model.theme', null);
+        this.set('model.theme_id', null);
+        this.send('showThemeGrid');
+      }
     },
 
     initiateSelection() {
@@ -117,7 +120,6 @@ export default Ember.Component.extend({
           confirmModal.close();
           that.send('showThemeGrid');
         }
-
       };
       confirmModal = new ConfirmModal(modalOptions);
       return confirmModal.open();
