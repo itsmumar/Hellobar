@@ -17,12 +17,12 @@
     background-size: cover;
     background-position: center,center;
 
-    .hb-image-wrapper.background ~ .hb-content-wrapper {
+    .hb-content-wrapper {
       top: 0;
       left: 0;
       padding: 0;
       height: calc(100% - 20px);
-      width: calc(57% - 20px);
+      width: calc(100% - 20px);
       font-size: 24px;
       text-align: center;
       transform: translate(0%, 0%);
@@ -32,9 +32,9 @@
       border: 1px solid #5A5A6A;
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
-      margin: 10px 10px 10px calc(43% + 10px);
+      margin: 10px 10px 10px 10px;
       max-width: none;
-      
+
       .hb-inner-content {
         top: 50%;
         left: 50%;
@@ -48,8 +48,9 @@
       }
     }
 
-    .hb-content-wrapper {
-      width: 600px;
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      width: calc(57% - 20px);
+      margin: 10px 10px 10px calc(43% + 10px);
     }
 
     .hb-text-wrapper {
