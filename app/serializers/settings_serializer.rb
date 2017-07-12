@@ -3,7 +3,7 @@ class SettingsSerializer < ActiveModel::Serializer
     :available_themes, :available_fonts, :country_codes
 
   def available_themes
-    ActiveModel::ArraySerializer.new(Theme.enabled, each_serializer: ThemeSerializer).as_json
+    ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
   end
 
   def available_fonts
