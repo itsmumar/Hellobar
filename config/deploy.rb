@@ -209,16 +209,20 @@ desc 'Run automated QA tests after edge and production deployments'
 task :trigger_automated_qa_tests do
   run_locally do
     stage = fetch :stage
-    info "Run automated QA tests on #{ stage }:"
 
-    next if dry_run?
-    next unless %i[edge production].include? stage
+    if !dry_run? && %i[edge production].include?(stage)
+      info "Trigger automated QA tests on #{ stage }"
 
-    execute <<~EOS
-      curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
-           -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
-           --header "Content-Type: application/json" \
-           --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
-    EOS
+      execute <<~EOS
+        curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
+             -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
+             --header "Content-Type: application/json" \
+             --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
+      EOS
+    else
+      info 'Skipping automated QA tests'
+
+      next
+    end
   end
 end
