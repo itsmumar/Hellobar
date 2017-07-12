@@ -320,7 +320,7 @@ describe SiteElement do
 
     context 'when it is a pro site' do
       before do
-        ChangeSubscription.new(element.site, subscription: 'pro', schedule: 'monthly', trial_period: 90).call
+        AddTrialSubscription.new(element.site, subscription: 'pro', trial_period: 90).call
         element.site.reload
       end
 

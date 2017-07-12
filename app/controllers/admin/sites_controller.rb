@@ -2,7 +2,7 @@ class Admin::SitesController < AdminController
   def update
     begin
       site.update_attributes(site_params) if params.key?(:site)
-      ChangeSubscription.new(site, subscription_params).call if params.key?(:subscription)
+      change_subscription if params.key?(:subscription)
       flash[:success] = 'Site and/or subscription has been updated.'
     rescue PayBill::MissingPaymentMethod
       flash[:error] = 'You are trying to upgrade subscription but it must be paid by the user'
@@ -32,6 +32,14 @@ class Admin::SitesController < AdminController
   end
 
   private
+
+  def change_subscription
+    if subscription_params[:trial_period].present?
+      AddTrialSubscription.new(site, subscription_params).call
+    else
+      ChangeSubscription.new(site, subscription_params).call
+    end
+  end
 
   def subscription_params
     params.require(:subscription).permit(:subscription, :schedule, :trial_period)

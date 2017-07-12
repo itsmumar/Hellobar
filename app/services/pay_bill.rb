@@ -81,7 +81,7 @@ class PayBill
       amount: bill.subscription.amount,
       description: "#{ bill.subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",
       grace_period_allowed: true,
-      bill_at: bill.end_date,
+      bill_at: 3.days.until(bill.end_date),
       start_date: bill.end_date,
       end_date: bill.end_date + bill.subscription.period
     )

@@ -46,7 +46,7 @@ module ServiceProvider::Adapters
     end
 
     def notify_user_about_unauthorized_error
-      @identity.destroy_and_notify_user
+      DestroyIdentity.new(@identity, notify_user: true).call
     end
 
     def ignore_error(exception)

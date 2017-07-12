@@ -143,7 +143,7 @@ describe SiteElementsController do
     context 'with pro subscription' do
       it 'defaults branding to false if pro' do
         site = create(:site, :with_user)
-        subscription = create(:subscription, :pro, site: site)
+        subscription = create(:subscription, :pro, :paid, site: site)
         stub_current_user(site.owners.first)
 
         get :new, site_id: subscription.site.id, format: :json

@@ -31,11 +31,19 @@ class UserStateCloner
 
   def upgrade_sites_to_pro(sites)
     sites.each do |site|
-      Subscription::Pro.create(
+      subscription = Subscription::Pro.create(
         user: user,
         site: site,
         type: 'Subscription::Pro'
       )
+      Bill::Recurring.create(subscription: subscription) do |bill|
+        bill.amount = subscription.amount
+        bill.grace_period_allowed = false
+        bill.bill_at = Time.current
+        bill.start_date = bill.bill_at
+        bill.end_date = bill.start_date + subscription.period
+        bill.status = :paid
+      end
     end
   end
 

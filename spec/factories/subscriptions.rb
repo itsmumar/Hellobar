@@ -46,5 +46,12 @@ FactoryGirl.define do
         create_list :bill, 2, subscription: subscription
       end
     end
+
+    trait :paid do
+      after(:create) do |subscription|
+        create :pro_bill, :paid, subscription: subscription
+        subscription.reload
+      end
+    end
   end
 end

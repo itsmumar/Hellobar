@@ -41,7 +41,7 @@ describe CalculateBill do
         expect(bill.amount).to eql reduced_amount
         expect(bill.grace_period_allowed).to be_falsey
         expect(bill.bill_at).to eql Time.current
-        expect(bill.start_date).to eql 1.hour.ago
+        expect(bill.start_date).to eql Time.current
         expect(bill.end_date).to eql bill.start_date + subscription.period
       end
 
@@ -68,7 +68,7 @@ describe CalculateBill do
         expect(bill.amount).to eql subscription.amount
         expect(bill.grace_period_allowed).to be_truthy
         expect(bill.bill_at).to eql active_bill.end_date
-        expect(bill.start_date).to eql(bill.bill_at - 1.hour)
+        expect(bill.start_date).to eql bill.bill_at
         expect(bill.end_date).to eql bill.start_date + subscription.period
       end
     end
@@ -84,21 +84,8 @@ describe CalculateBill do
       expect(bill.amount).to eql subscription.amount
       expect(bill.grace_period_allowed).to be_falsey
       expect(bill.bill_at).to eql Time.current
-      expect(bill.start_date).to eql 1.hour.ago
+      expect(bill.start_date).to eql Time.current
       expect(bill.end_date).to eql bill.start_date + subscription.period
-    end
-  end
-
-  context 'with trial period', :freeze do
-    let(:site) { create :site, :pro }
-    let(:subscription) { create :subscription, :enterprise }
-    let(:service) { described_class.new(subscription, bills: site.bills, trial_period: 100.days) }
-    let(:bill) { service.call }
-
-    it 'returns bill with full amount' do
-      expect(bill).to be_a(Bill::Recurring)
-      expect(bill.amount).to eql 0
-      expect(bill.end_date).to eql Time.current + 100.days
     end
   end
 end

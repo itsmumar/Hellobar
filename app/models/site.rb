@@ -179,7 +179,7 @@ class Site < ActiveRecord::Base
   end
 
   def current_subscription
-    subscriptions.last
+    subscriptions.exclude_ended_trials.last
   end
 
   def previous_subscription

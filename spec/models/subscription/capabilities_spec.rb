@@ -15,11 +15,10 @@ describe Subscription::Capabilities do
   end
 
   it 'returns the latest subscription capabilities' do
-    site = Site.new
-    site.subscriptions << Subscription::Pro.create
+    change_subscription 'pro', payment_method
     expect(site).to be_capable_of :pro
 
-    site.subscriptions << Subscription::Enterprise.create
+    change_subscription 'enterprise', payment_method
     expect(site).to be_capable_of :enterprise
   end
 

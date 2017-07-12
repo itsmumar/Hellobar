@@ -17,6 +17,7 @@ class Subscription < ActiveRecord::Base
 
   scope :paid, -> { joins(:bills).merge(Bill.paid.active) }
   scope :active, -> { paid.merge(Bill.without_refunds) }
+  scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
 
   validates :schedule, presence: true
   validates :site, presence: true, associated: true
@@ -31,6 +32,10 @@ class Subscription < ActiveRecord::Base
       discount = DiscountCalculator.new(dummy_sub, user).current_discount
       dummy_sub.amount - discount
     end
+  end
+
+  def name
+    self.class.defaults[:name]
   end
 
   def currently_on_trial?
@@ -50,7 +55,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def capabilities
-    if problem_with_payment? || expired?
+    if expired?
       Free::Capabilities.new(self, site)
     else
       self.class::Capabilities.new(self, site)
@@ -62,7 +67,8 @@ class Subscription < ActiveRecord::Base
   end
 
   def expired?
-    last_paid_bill && last_paid_bill.end_date < Time.current
+    return false if amount.zero? # a free subscription never expires
+    !last_paid_bill || last_paid_bill.end_date < Time.current
   end
 
   def mark_user_onboarding_as_bought_subscription!

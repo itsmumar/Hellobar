@@ -220,7 +220,7 @@ describe Site do
     let!(:element) { create(:site_element, :traffic, rule: site.rules.first!, show_branding: true) }
 
     context 'when subscription is pro' do
-      let!(:subscription) { create(:subscription, :pro, site: site) }
+      let!(:subscription) { create(:subscription, :pro, :paid, site: site) }
 
       it 'does not show branding' do
         site.send(:set_branding_on_site_elements)

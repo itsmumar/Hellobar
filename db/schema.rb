@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 20170708093718) do
     t.decimal  "visit_overage_amount",             precision: 5, scale: 2
     t.datetime "created_at"
     t.integer  "payment_method_id",    limit: 4
+    t.datetime "trial_end_date"
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree

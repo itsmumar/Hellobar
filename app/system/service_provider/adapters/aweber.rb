@@ -7,7 +7,7 @@ module ServiceProvider::Adapters
       config.oauth = true
     end
 
-    rescue_from AWeber::CreationError, with: :ignore_error
+    rescue_from AWeber::CreationError, with: :handle_error
 
     def initialize(identity)
       oauth = ::AWeber::OAuth.new(config.consumer_key, config.consumer_secret)
@@ -24,6 +24,13 @@ module ServiceProvider::Adapters
       params['tags'] = params['tags'].to_json if params['tags'].present?
 
       client.account.lists[list_id.to_i].subscribers.create params
+    end
+
+    private
+
+    def handle_error(e)
+      notify_user_about_unauthorized_error if e.message =~ /Invalid consumer key or access token key/
+      ignore_error e
     end
   end
 end

@@ -1,6 +1,4 @@
 class Identity < ActiveRecord::Base
-  include Rails.application.routes.url_helpers
-
   belongs_to :site
 
   has_many :contact_lists
@@ -40,14 +38,6 @@ class Identity < ActiveRecord::Base
 
   def service_provider(contact_list: nil)
     ServiceProvider.new(self, contact_list)
-  end
-
-  def destroy_and_notify_user
-    site.owners.each do |user|
-      MailerGateway.send_email('Integration Sync Error', user.email, integration_name: provider_name, link: site_contact_lists_url(site, host: Settings.host))
-    end
-
-    destroy
   end
 
   private

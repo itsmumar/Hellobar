@@ -234,22 +234,30 @@ describe Subscription do
   end
 
   describe '#expired?' do
-    context 'when paid' do
-      let!(:bill) { create(:bill, :paid) }
+    context 'when pro' do
+      let!(:bill) { create(:pro_bill, :paid) }
 
       specify { expect(bill.subscription).not_to be_expired }
 
       context 'and period has ended' do
-        let!(:bill) { create(:bill, :paid) }
+        specify { travel_to((1.month + 1.day).from_now) { expect(bill.subscription).to be_expired } }
+      end
 
-        specify { travel_to(2.months.from_now) { expect(bill.subscription).to be_expired } }
+      context 'and not paid' do
+        let!(:bill) { create(:pro_bill) }
+
+        specify { expect(bill.subscription).to be_expired }
       end
     end
 
-    context 'when not paid' do
+    context 'when free' do
       let!(:bill) { create(:bill) }
 
       specify { expect(bill.subscription).not_to be_expired }
+
+      context 'and period has ended' do
+        specify { travel_to(1.year.from_now) { expect(bill.subscription).not_to be_expired } }
+      end
     end
   end
 

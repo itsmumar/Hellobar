@@ -10,7 +10,7 @@ class DetectInstallType
     # (when new Lambda function parsing the message is deployed)
     sns.publish(
       topic_arn: TOPIC_ARN,
-      subject: "#{ Rails.env };#{ site.id };#{ site.url }",
+      subject: "detectInstallType() for Site#id #{ site.id }",
       message: message
     )
   end

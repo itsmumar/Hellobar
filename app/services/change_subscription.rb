@@ -38,11 +38,7 @@ class ChangeSubscription
   end
 
   def create_bill(subscription)
-    CalculateBill.new(subscription, bills: site.bills.recurring, trial_period: trial_period).call.tap(&:save!)
-  end
-
-  def trial_period
-    billing_params[:trial_period].presence&.to_i&.days
+    CalculateBill.new(subscription, bills: site.bills.recurring).call.tap(&:save!)
   end
 
   def subscription_class
@@ -65,5 +61,6 @@ class ChangeSubscription
     BillingLogger.change_subscription(site, props)
 
     Analytics.track(:site, site.id, :change_sub, props)
+    TrackEvent.new(:changed_subscription, site: site).call
   end
 end

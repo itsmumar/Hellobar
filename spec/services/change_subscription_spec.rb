@@ -15,7 +15,7 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'creates a bill for next period' do
-      expect { service.call }.to change(site.bills.where(bill_at: 1.year.from_now - 1.hour), :count).to(1)
+      expect { service.call }.to change(site.bills.pending, :count).to(1)
     end
 
     it 'pays bill' do
@@ -38,6 +38,10 @@ describe ChangeSubscription, :freeze do
       service.call
     end
 
+    it 'sends an event to Intercom' do
+      expect { service.call }.to have_enqueued_job(SendEventToIntercomJob).with('changed_subscription', site: site)
+    end
+
     context 'without payment method' do
       let(:payment_method) { nil }
 
@@ -50,7 +54,7 @@ describe ChangeSubscription, :freeze do
       let(:params) { { subscription: 'pro', schedule: 'monthly' } }
 
       it 'creates a bill for next period' do
-        expect { service.call }.to change(site.bills.where(bill_at: 1.month.from_now - 1.hour), :count).to(1)
+        expect { service.call }.to change(site.bills.pending, :count).to(1)
       end
     end
 
@@ -99,7 +103,7 @@ describe ChangeSubscription, :freeze do
 
       context 'when starting with Free plan' do
         it 'changes subscription and capabilities' do
-          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect { change_subscription('free') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Free
           expect(site).to be_capable_of :free
         end
@@ -112,7 +116,7 @@ describe ChangeSubscription, :freeze do
 
       context 'when upgrading to Pro from Free' do
         it 'changes subscription and capabilities' do
-          expect { change_subscription('pro') }.to change { site.current_subscription }
+          expect { change_subscription('pro') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Pro
           expect(site).to be_capable_of :pro
         end
@@ -126,7 +130,7 @@ describe ChangeSubscription, :freeze do
           before { change_subscription('pro') }
 
           it 'changes subscription and capabilities' do
-            expect { change_subscription('enterprise') }.to change { site.current_subscription }
+            expect { change_subscription('enterprise') }.to change { site.reload.current_subscription }
             expect(site.current_subscription).to be_instance_of Subscription::Enterprise
             expect(site).to be_capable_of :enterprise
           end
@@ -142,7 +146,7 @@ describe ChangeSubscription, :freeze do
 
           context 'when a refund has been made' do
             before { stub_cyber_source :refund, :purchase }
-            before { RefundBill.new(site.current_subscription.bills.paid.last).call }
+            before { RefundBill.new(site.reload.current_subscription.bills.paid.last).call }
 
             it 'charges full amount' do
               expect(change_subscription('enterprise').amount).to eql 99
@@ -155,7 +159,7 @@ describe ChangeSubscription, :freeze do
         before { change_subscription('pro') }
 
         it 'changes subscription' do
-          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect { change_subscription('free') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Free
         end
 
@@ -172,7 +176,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now do
+            travel_to 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -183,7 +187,7 @@ describe ChangeSubscription, :freeze do
         before { change_subscription('enterprise') }
 
         it 'changes subscription' do
-          expect { change_subscription('free') }.to change { site.current_subscription }
+          expect { change_subscription('free') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Free
         end
 
@@ -200,7 +204,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now do
+            travel_to 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -208,7 +212,7 @@ describe ChangeSubscription, :freeze do
       end
 
       context 'when payment fails' do
-        let(:last_bill) { site.current_subscription.bills.last }
+        let(:last_bill) { site.reload.current_subscription.bills.last }
 
         it 'returns problem bill' do
           expect { change_subscription('pro') }.to make_gateway_call(:purchase).and_fail
@@ -226,7 +230,7 @@ describe ChangeSubscription, :freeze do
 
           monthly_bill = change_subscription('pro', 'monthly')
           expect(monthly_bill.amount).to eql Subscription::Pro.defaults[:monthly_amount]
-          expect(monthly_bill.due_at).to be_within(2.hours).of(yearly_bill.due_at + 1.year)
+          expect(monthly_bill.due_at).to eql yearly_bill.due_at + 1.year
           expect(monthly_bill).to be_pending
         end
       end
@@ -239,8 +243,8 @@ describe ChangeSubscription, :freeze do
           refund(yearly_bill)
           monthly_bill = change_subscription('pro', 'monthly')
           expect(monthly_bill.bill_at).to eql Time.current
-          expect(monthly_bill.start_date).to eql 1.hour.ago
-          expect(monthly_bill.end_date).to eql 1.month.since(1.hour.ago)
+          expect(monthly_bill.start_date).to eql Time.current
+          expect(monthly_bill.end_date).to eql 1.month.from_now
         end
       end
     end
