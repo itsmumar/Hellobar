@@ -2,5 +2,6 @@
   "id": "traffic-growth",
   "type": "template",
   "element_types": ["Modal"],
-  "name": "Traffic Growth"
+  "name": "Traffic Growth",
+  "disabled": true
 }
