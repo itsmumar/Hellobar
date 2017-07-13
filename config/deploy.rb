@@ -6,7 +6,7 @@ set :application, 'hellobar'
 set :repo_url, 'git@github.com:Hello-bar/hellobar_new.git'
 set :deploy_to, '/mnt/deploy'
 set :linked_files, %w[config/database.yml config/secrets.yml]
-set :linked_dirs, %w[log tmp/pids]
+set :linked_dirs, %w[log]
 set :branch, ENV['REVISION'] || ENV['BRANCH'] || 'master'
 set :whenever_roles, %w[app db web]
 set :keep_releases, 15
