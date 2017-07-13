@@ -1,7 +1,6 @@
 /* globals ConfirmModal */
 
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Custom', 'Alert'];
 
@@ -87,9 +86,7 @@ export default Ember.Component.extend({
       }
       this.set('style', style);
       this.set('selectionInProgress', false);
-      if (!_.includes(this.get('model.theme.element_types'), style)) {
-        this.set('model.theme', null);
-        this.set('model.theme_id', null);
+      if (this.get('theming').resetThemeIfNeeded(style)) {
         this.send('showThemeGrid');
       }
     },
