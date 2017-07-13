@@ -55,6 +55,10 @@ Here's the list of additional settings in `secrets.yml`, which might need to be 
 * `host`
 * `sendgrid_password`
 
+If you want to use service providers integrations in the development environment,
+you need to update `config/secrets.yml` with appropriate credentials, which can
+be found at Confluence: https://crossover.atlassian.net/wiki/display/XOHB/Systems
+
 
 ### Front-end
 
