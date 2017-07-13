@@ -13,10 +13,6 @@
   }
 
   #hellobar-takeover {
-    background: url(https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-background.jpg);
-    background-size: cover;
-    background-position: center,center;
-
     .hb-content-wrapper {
       top: 0;
       left: 0;
@@ -34,6 +30,9 @@
       border-bottom-right-radius: 3px;
       margin: 10px 10px 10px 10px;
       max-width: none;
+      background: url(https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-background.jpg);
+      background-size: cover;
+      background-position: center,center;
 
       .hb-inner-content {
         top: 50%;
