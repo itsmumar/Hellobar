@@ -78,11 +78,11 @@ hellobar.defineModule('elements.class',
           return model[`image_${imageStyle}_url`] || model.image_url || defaultImage();
         }
 
-        var locationIndex = location.indexOf(model.image_placement);
-        if (!defaultImage() && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
+        var matchingPlacement = location === model.image_placement;
+        if (!defaultImage() && (!model.image_url || !matchingPlacement)) {
           return '';
         }
-        else if (model.image_placement == 'background') {
+        else if (model.image_placement === 'background') {
           return `
             <div class="hb-image-wrapper ${model.image_placement}" style="opacity: ${model.image_opacity / 100.0}; background-image: url(${imageSrc()});"></div>          
           `;
