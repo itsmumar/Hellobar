@@ -155,6 +155,7 @@ export default Ember.Component.extend({
     'model.trigger_icon_color',
     'model.type',
     'model.use_question',
+    'model.use_default_image',
     'model.view_condition',
     'model.wiggle_button',
     'model.custom_html',

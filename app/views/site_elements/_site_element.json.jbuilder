@@ -20,6 +20,7 @@ json.cache! site_element do
     :custom_css,
     :custom_js,
 
+    :use_default_image,
     :image_url,
     :image_small_url,
     :image_medium_url,
