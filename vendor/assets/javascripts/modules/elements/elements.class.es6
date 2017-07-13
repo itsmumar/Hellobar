@@ -68,7 +68,7 @@ hellobar.defineModule('elements.class',
         options = options || {};
 
         function defaultImage() {
-          if (useDefaultImage && location == model.theme.image.position_default) {
+          if (useDefaultImage && location === model.theme.image.position_default) {
             return model.theme.image.default_url;
           }
         }
