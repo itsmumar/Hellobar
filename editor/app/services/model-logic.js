@@ -111,7 +111,17 @@ export default Ember.Service.extend({
   // ------ Image
 
   resetUploadedImage() {
-    this.setImageProps({imageID: null, imageUrl: null, imageFileName: null});
+    const properties = {
+      'model.active_image_id': null,
+      'model.image_url': null,
+      'model.image_small_url': null,
+      'model.image_medium_url': null,
+      'model.image_large_url': null,
+      'model.image_modal_url': null,
+      'model.image_file_name': null
+    };
+
+    return this.setProperties(properties);
   },
 
   setImageProps (props) {
@@ -139,10 +149,6 @@ export default Ember.Service.extend({
 
     if ('useDefaultImage' in props) {
       properties['model.use_default_image'] = props.useDefaultImage;
-    }
-
-    if ('imageFileName' in props) {
-      properties['model.image_file_name'] = props.imageFileName;
     }
 
     return this.setProperties(properties);
