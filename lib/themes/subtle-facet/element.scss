@@ -42,6 +42,7 @@
         border: 2px solid rgba(241, 241, 247, 0.3);
         border-top-right-radius: 3px;
         border-bottom-right-radius: 3px;
+        pointer-events: none;
       }
 
       .hb-inner-content {
