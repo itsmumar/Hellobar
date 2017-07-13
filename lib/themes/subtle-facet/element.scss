@@ -17,22 +17,32 @@
       top: 0;
       left: 0;
       padding: 0;
-      height: calc(100% - 20px);
-      width: calc(100% - 20px);
+      height: 100%;
+      width: 100%;
       font-size: 24px;
       text-align: center;
       transform: translate(0%, 0%);
       -o-transform: translate(0%, 0%);
       -moz-transform: translate(0%, 0%);
       -webkit-transform: translate(0%, 0%);
-      border: 1px solid #5A5A6A;
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      margin: 10px 10px 10px 10px;
+      margin: 0;
       max-width: none;
-      background: url(https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-background.jpg);
+      background: url(https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-background.png);
       background-size: cover;
       background-position: center,center;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 15px;
+        border: 2px solid rgba(241, 241, 247, 0.3);
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
 
       .hb-inner-content {
         top: 50%;
@@ -48,8 +58,8 @@
     }
 
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      width: calc(57% - 20px);
-      margin: 10px 10px 10px calc(43% + 10px);
+      width: 57%;
+      margin-left: 43%;
     }
 
     .hb-text-wrapper {
@@ -141,7 +151,7 @@
       border: 2px solid;
       border-left: none;
       border-right: none;
-      border-color: #4C4B5D;
+      border-color: rgba(241, 241, 247, 0.3);
       padding: 10px 0;
       font-size: 41px;
       margin: 20px auto;
