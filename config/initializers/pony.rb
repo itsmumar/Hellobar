@@ -6,10 +6,10 @@ unless Rails.env.test?
       address: 'smtp.sendgrid.net',
       port: 587,
       enable_starttls_auto: true,
-      user_name: 'support@crazyegg.com',
+      user_name: Settings.sendgrid_user_name,
       password: Settings.sendgrid_password,
       authentication: :plain,
-      domain: 'crazyegg.com'
+      domain: Settings.host
     }
   }
 end
