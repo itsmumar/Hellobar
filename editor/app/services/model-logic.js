@@ -111,7 +111,7 @@ export default Ember.Service.extend({
   // ------ Image
 
   resetUploadedImage() {
-    this.setImageProps({imageID: null, imageUrl: null, imageFileName: null})
+    this.setImageProps({imageID: null, imageUrl: null, imageFileName: null});
   },
 
   setImageProps (props) {
