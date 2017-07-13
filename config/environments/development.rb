@@ -35,6 +35,10 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = false
 
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
+
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
@@ -46,6 +50,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # When enqueueing jobs with the Inline adapter the job will be executed immediately.
+  # When enqueueing jobs with the Inline adapter the job will be executed immediately
   config.active_job.queue_adapter = :inline
 end
