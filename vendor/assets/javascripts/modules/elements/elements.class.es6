@@ -49,26 +49,37 @@ hellobar.defineModule('elements.class',
       }
 
       imagePlacementClass() {
-        if (!!this.model().image_url) {
+        if (!!this.model().image_url || this.useDefaultImage()) {
           return 'image-' + this.model().image_placement;
         } else {
           return '';
         }
       }
 
+      useDefaultImage() {
+        if (this.model().use_default_image && this.model().theme.image) {
+          return !!this.model().theme.image.default_url;
+        }
+      }
+
       imageFor(location, options) {
         var model = this.model();
+        var useDefaultImage = this.useDefaultImage();
         options = options || {};
+
+        function defaultImage() {
+          if (useDefaultImage && location == model.theme.image.position_default) {
+            return model.theme.image.default_url;
+          }
+        }
 
         function imageSrc() {
           const imageStyle = model.image_style || 'modal';
-          const imageUrl = model[`image_${imageStyle}_url`] || model.image_url;
-
-          return imageUrl || options.defaultImgSrc;
+          return model[`image_${imageStyle}_url`] || model.image_url || defaultImage();
         }
 
         var locationIndex = location.indexOf(model.image_placement);
-        if (!options.defaultImgSrc && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
+        if (!defaultImage() && (!model.image_url || locationIndex === undefined || locationIndex === -1)) {
           return '';
         }
         else if (model.image_placement == 'background') {

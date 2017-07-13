@@ -110,6 +110,10 @@ export default Ember.Service.extend({
 
   // ------ Image
 
+  resetUploadedImage() {
+    this.setImageProps({imageID: null, imageUrl: null, imageFileName: null})
+  },
+
   setImageProps (props) {
     const {
       imageID,
@@ -135,6 +139,10 @@ export default Ember.Service.extend({
 
     if ('useDefaultImage' in props) {
       properties['model.use_default_image'] = props.useDefaultImage;
+    }
+
+    if ('imageFileName' in props) {
+      properties['model.image_file_name'] = props.imageFileName;
     }
 
     return this.setProperties(properties);
