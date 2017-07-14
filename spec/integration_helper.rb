@@ -46,4 +46,9 @@ RSpec.configure do |config|
       TestProvider
     end
   end
+
+  # TODO: remove after Site#script_installed? refactoring
+  config.before do
+    allow_any_instance_of(Site).to receive(:script_installed?).and_return true
+  end
 end
