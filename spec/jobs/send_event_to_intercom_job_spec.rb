@@ -15,13 +15,25 @@ describe SendEventToIntercomJob do
     end
 
     context 'when Intercom::ResourceNotFound is raised' do
+      let(:message) { 'Tag Not Found' }
+
       before do
-        expect(analytics).to receive(:track).once.and_raise(Intercom::ResourceNotFound, 'User Not Found')
+        expect(analytics).to receive(:track).once.and_raise(Intercom::ResourceNotFound, message)
       end
 
       it 'calls IntercomAnalytics#create_user and retries the job' do
-        expect(analytics).to receive(:created_user).with(user: user).once
-        expect { perform }.to have_enqueued_job(SendEventToIntercomJob)
+        expect(Raven).to receive(:capture_exception)
+        perform
+      end
+
+      context 'with message "User Not Found"' do
+        let(:message) { 'User Not Found' }
+
+        it 'calls IntercomAnalytics#create_user and retries the job' do
+          expect(analytics)
+            .to receive_message_chain(:intercom, :users, :create).with(user_id: user.id, email: user.email)
+          expect { perform }.to have_enqueued_job(SendEventToIntercomJob)
+        end
       end
     end
   end
