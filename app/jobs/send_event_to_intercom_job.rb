@@ -13,7 +13,7 @@ class SendEventToIntercomJob < ApplicationJob
 
   private
 
-  def handle_user_not_found(event, options)
+  def handle_user_not_found(_event, options)
     return unless options[:user]
     IntercomAnalytics.new.created_user user: options[:user]
     retry_job

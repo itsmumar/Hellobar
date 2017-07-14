@@ -15,7 +15,6 @@ describe SendEventToIntercomJob do
     end
 
     context 'when Intercom::ResourceNotFound is raised' do
-
       before do
         expect(analytics).to receive(:track).once.and_raise(Intercom::ResourceNotFound, 'User Not Found')
       end
