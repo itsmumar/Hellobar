@@ -5,6 +5,8 @@ describe 'Content upgrade requests' do
   let(:site) { create :site, :with_rule, user: user }
   let!(:subscription) { create :subscription, :pro_managed, user: user, site: site }
 
+  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
+
   context 'when unauthenticated' do
     describe 'GET :index' do
       it 'responds with a redirect to the login page' do

@@ -3,6 +3,8 @@ describe 'ContactList requests' do
   let(:contact_list) { create :contact_list, site: site }
   let(:user) { site.owners.last }
 
+  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
+
   context 'when unauthenticated' do
     describe 'GET :index' do
       it 'responds with a redirect to the login page' do

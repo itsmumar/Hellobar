@@ -3,6 +3,10 @@ describe CheckStaticScriptInstallation do
   let(:service) { CheckStaticScriptInstallation.new(site) }
 
   shared_examples 'uninstalled' do
+    before do
+      stub_request(:get, site.url).to_return(status: 200, body: '', headers: {})
+    end
+
     it 'updates the script_uninstalled_at' do
       expect { service.call }.to change { site.reload.script_uninstalled_at }
     end
@@ -14,6 +18,10 @@ describe CheckStaticScriptInstallation do
   end
 
   shared_examples 'installed' do
+    before do
+      stub_request(:get, site.url).to_return(status: 200, body: site.script_name, headers: {})
+    end
+
     it 'updates the script_installed_at' do
       expect { service.call }.to change { site.reload.script_installed_at }
     end

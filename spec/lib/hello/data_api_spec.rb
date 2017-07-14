@@ -86,34 +86,32 @@ describe Hello::DataAPI do
     end
   end
 
-  describe '.contacts', vcr: 'contact_list/get_contacts' do
+  describe '.contacts', :freeze do
+    before do
+      allow(Hello::DataAPIHelper).to receive(:generate_signature).and_return('signature')
+    end
+
     let(:contact_list) { create :contact_list }
-    let(:id) { contact_list.id }
-    let(:site_id) { contact_list.site_id }
-    let(:read_key) { contact_list.site.read_key }
     let(:limit) { 5 }
-    let(:contacts) { Hello::DataAPI.contacts(contact_list, limit) }
-
-    before(:each) do
-      allow(Hello::DataAPIHelper::RequestParts).to receive(:contacts)
-        .with(site_id, id, read_key, limit, nil)
-        .and_return(['/e/GIHiEM2QmS/qvpJXYvS6',
-                     { 'l' => 5, 'd' => 1481207259, 't' => 1482071362,
-                       's' => '2981a1d7a8745e492943f561d4a6aef30de' \
-                             '889af48cd4c32e6c0a4b56abf400e30f4f8' \
-                             '115fb091130f2e5925106a6e50485f67e73' \
-                             'a3ffe9f0260cd1cd80c1c2c' }])
+    let(:params) do
+      {
+        'l' => limit,
+        'd' => 0,
+        't' => Time.current.to_i,
+        's' => 'signature'
+      }
     end
 
-    it 'should cache `Hello::DataAPIHelper::RequestParts.contacts`' do
-      expect(Hello::DataAPIHelper::RequestParts).to receive(:contacts)
-        .with(site_id, id, read_key, limit, nil).once
+    let(:response_body) { [['person100@gmail.com', 'person name', 1388534400]] }
 
-      2.times { contacts }
+    let!(:request) do
+      stub_request(:get, %r{http://mock-hi.hellobar.com/e/\w+/\w+})
+        .with(query: params.to_query)
+        .to_return(status: 200, body: response_body.to_json)
     end
 
-    it 'should return 5 contact records' do
-      expect(contacts.count).to eq(limit)
+    it 'returns an array of contacts' do
+      expect(Hello::DataAPI.contacts(contact_list, limit)).to eql response_body
     end
   end
 end

@@ -2,6 +2,8 @@ describe SitesController do
   let(:user) { create(:user) }
   let(:site) { create(:site) }
 
+  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
+
   describe 'GET new' do
     before { stub_current_user(user) }
 

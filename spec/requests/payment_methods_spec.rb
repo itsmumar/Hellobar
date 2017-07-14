@@ -2,6 +2,8 @@ describe 'PaymentMethods requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
 
+  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
+
   context 'when unauthenticated' do
     before { create :payment_method, user: user }
 
