@@ -33,4 +33,44 @@ describe SitesHelper do
       expect(helper.bill_estimated_amount(bill)).to eq('$12.34')
     end
   end
+
+  describe 'install_help_data' do
+    let(:install_help_data) { helper.install_help_data(site) }
+
+    context 'when install_type is "weebly"' do
+      let(:site) { build :site, install_type: 'weebly' }
+
+      specify do
+        expect(install_help_data)
+          .to eql ['Weebly', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
+      end
+    end
+
+    context 'when install_type is "squarespace"' do
+      let(:site) { build :site, install_type: 'squarespace' }
+
+      specify do
+        expect(install_help_data)
+          .to eql ['Squarespace', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
+      end
+    end
+
+    context 'when install_type is "shopify"' do
+      let(:site) { build :site, install_type: 'shopify' }
+
+      specify do
+        expect(install_help_data)
+          .to eql ['Shopify', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
+      end
+    end
+
+    context 'when install_type is "blogspot"' do
+      let(:site) { build :site, install_type: 'blogspot' }
+
+      specify do
+        expect(install_help_data)
+          .to eql ['Blogger', 'http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
+      end
+    end
+  end
 end

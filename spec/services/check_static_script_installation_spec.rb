@@ -73,6 +73,12 @@ describe CheckStaticScriptInstallation do
       include_examples 'uninstalled'
     end
 
+    context 'and could not get the homepage' do
+      before { allow(HTTParty).to receive(:get).and_raise('error') }
+
+      include_examples 'uninstalled'
+    end
+
     context 'and site is inaccessible' do
       before do
         stub_request(:get, site.url).to_return status: 504
