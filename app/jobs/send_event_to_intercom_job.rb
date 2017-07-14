@@ -13,6 +13,11 @@ class SendEventToIntercomJob < ApplicationJob
 
   private
 
+  # if user is not found we have to create him
+  # it is possible in case of :created_site event for example
+  # cause if user just signed up the intercom script isn't loaded yet
+  # it will be loaded on "create new bar" page, just after that event
+  # also user's info will be update there
   def handle_user_not_found(_event, options)
     return unless options[:user]
     IntercomAnalytics.new.created_user user: options[:user]
