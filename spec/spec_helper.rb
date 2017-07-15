@@ -102,4 +102,8 @@ RSpec.configure do |config|
   config.define_derived_metadata(file_path: %r{/service_provider/}) do |metadata|
     metadata[:type] = :service_provider
   end
+
+  config.define_derived_metadata(file_path: %r{/features/}) do |metadata|
+    metadata[:type] = :feature
+  end
 end
