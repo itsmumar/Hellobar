@@ -1,0 +1,29 @@
+{
+  "name": "Subtle Facet",
+  "type": "generic",
+  "id": "subtle-facet",
+  "fonts": [
+    "kanit",
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Takeover"],
+  "defaults": {
+    "Takeover": {
+      "background_color": "3A3A49",
+      "text_color": "FFF46E",
+      "button_color": "FEF035",
+      "link_color": "3B386B",
+      "font_id": "kanit"
+    }
+  },
+  "image": {
+    "default_url": "https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-default.jpg",
+    "upload_copy": "Recommended minimum is 750 x 900",
+    "position_default": "background",
+    "position_selectable": false
+  }
+}

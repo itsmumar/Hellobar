@@ -95,6 +95,10 @@ class Subscription
       false
     end
 
+    def subtle_facet_theme?
+      false
+    end
+
     def ==(other)
       self.class == other.class &&
         subscription == other.subscription &&

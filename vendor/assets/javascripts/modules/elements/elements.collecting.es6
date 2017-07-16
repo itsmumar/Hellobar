@@ -121,7 +121,7 @@ hellobar.defineModule('elements.collecting',
         },
         function () {
           // Fail
-          dom.shake(emailField);
+          dom.shake(emailField.parentNode);
         }
       );
       return false;
