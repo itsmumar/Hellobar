@@ -55,6 +55,10 @@ Here's the list of additional settings in `secrets.yml`, which might need to be 
 * `host`
 * `sendgrid_password`
 
+If you want to use service providers integrations in the development environment,
+you need to update `config/secrets.yml` with appropriate credentials, which can
+be found at Confluence: https://crossover.atlassian.net/wiki/display/XOHB/Systems
+
 
 ### Front-end
 
@@ -112,23 +116,10 @@ See [wiki](https://github.com/Hello-bar/hellobar_new/wiki/Application-Setup-on-U
 
 
 
-## Icons
+## Icons / Icon font
 
-If you would like to install or modify any existing icon fonts, you need to install some dependencies, which add support for local font compilation:
-
-`brew install fontforge ttfautohint eot-utils`
-
-To add a new icon to the custom icon font file add the SVG file to `app/assets/icons` and run:
-
-```
-rake icons:compile
-```
-
-You can also install `fontcustom` which automatically builds the fonts (the configuration for this gem is in `.fontcustom-manifest.json` and `config/fontcustom.yml`):
-
-```
-gem install fontcustom
-```
+Compiling custom icons into a font file:
+https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+font+file
 
 
 

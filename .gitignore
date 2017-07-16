@@ -38,6 +38,10 @@ config/secrets.yml
 !/public/assets/logo_orange_box.png
 !/public/assets/logo_orange_h.png
 
+# Fontcustom
+config/fontcustom.yml
+.fontcustom-manifest.json
+
 # Frontend files and folders
 node_modules
 bower_components

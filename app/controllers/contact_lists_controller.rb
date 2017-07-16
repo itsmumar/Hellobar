@@ -86,7 +86,8 @@ class ContactListsController < ApplicationController
   def contact_list_csv_url(list)
     path, params = Hello::DataAPIHelper::RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
     path_with_params = Hello::DataAPIHelper.url_for(path, params)
-    URI.join(Settings.data_api_url, path_with_params).to_s
+
+    URI.join(Settings.tracking_api_url, path_with_params).to_s
   end
 
   def omniauth_error?

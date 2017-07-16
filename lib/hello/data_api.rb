@@ -170,7 +170,7 @@ module Hello::DataAPI
     end
 
     def fake_contacts(_contact_list)
-      [['dmitriy+person100@polymathic.me', 'First Last', 1_388_534_400], ['dmitriy+person99@polymathic.me', 'Dr Pepper', 1_388_534_399]]
+      [['user@hellobar.com', 'John Doe', 1388534400], ['someone@hellobar.com', 'Anonymous', 1388534399]]
     end
 
     def get(path, params)
@@ -178,7 +178,7 @@ module Hello::DataAPI
       timeout_index = 0
       begin
         begin_time = Time.current.to_f
-        url = URI.join(Settings.data_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
+        url = URI.join(Settings.tracking_api_url, Hello::DataAPIHelper.url_for(path, params)).to_s
         response = nil
         Timeout.timeout(timeouts[timeout_index]) do
           response = Net::HTTP.get(URI.parse(url))
