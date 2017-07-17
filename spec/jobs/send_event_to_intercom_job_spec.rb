@@ -2,13 +2,38 @@ describe SendEventToIntercomJob do
   let(:job) { described_class }
 
   describe '#perform' do
-    context 'with "changed_subscription" event' do
-      let(:site) { create :site }
-      let(:perform) { job.new.perform('changed_subscription', site: site) }
+    let(:user) { create :user }
+    let(:site) { create :site }
+    let(:perform) { job.perform_now('created_site', user: user, site: site) }
+    let(:analytics) { IntercomAnalytics.new }
 
-      it 'calls on the IntercomAnalytics' do
-        expect_any_instance_of(IntercomAnalytics).to receive(:changed_subscription).with(site: site)
+    before { allow(IntercomAnalytics).to receive(:new).and_return(analytics) }
+
+    it 'calls IntercomAnalytics#fire_event' do
+      expect(analytics).to receive(:fire_event).with('created_site', user: user, site: site)
+      perform
+    end
+
+    context 'when Intercom::ResourceNotFound is raised' do
+      let(:message) { 'Tag Not Found' }
+
+      before do
+        expect(analytics).to receive(:track).once.and_raise(Intercom::ResourceNotFound, message)
+      end
+
+      it 'calls IntercomAnalytics#create_user and retries the job' do
+        expect(Raven).to receive(:capture_exception)
         perform
+      end
+
+      context 'with message "User Not Found"' do
+        let(:message) { 'User Not Found' }
+
+        it 'calls IntercomAnalytics#create_user and retries the job' do
+          expect(analytics)
+            .to receive_message_chain(:intercom, :users, :create).with(user_id: user.id, email: user.email)
+          expect { perform }.to have_enqueued_job(SendEventToIntercomJob)
+        end
       end
     end
   end

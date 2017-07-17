@@ -24,7 +24,7 @@ describe TrackEvent, :freeze do
       expect(tags).to receive(:tag).with(name: 'Paid', users: [user_id: owner.id])
       expect(tags).to receive(:tag).with(name: 'Pro', users: [user_id: owner.id])
 
-      fire_event :changed_subscription, site: site
+      fire_event :changed_subscription, site: site, user: owner
     end
   end
 

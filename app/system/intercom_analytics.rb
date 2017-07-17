@@ -12,6 +12,10 @@ class IntercomAnalytics
     public_send event.underscore.to_sym, **args
   end
 
+  def created_user(user:)
+    intercom.users.create(user_id: user.id, email: user.email)
+  end
+
   def invited_member(site:, user:)
     track(
       event_name: 'invited-member',
@@ -48,11 +52,11 @@ class IntercomAnalytics
     )
   end
 
-  def changed_subscription(site:)
+  def changed_subscription(site:, user:)
     subscription = site.current_subscription
     track(
       event_name: 'changed-subscription',
-      user_id: site.owners.first.id,
+      user_id: user.id,
       created_at: Time.current.to_i,
       metadata: { subscription: subscription.name, schedule: subscription.schedule }
     )
