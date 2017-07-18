@@ -1,6 +1,4 @@
 describe SiteElementsController do
-  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
-
   let(:settings) do
     {
       'fields_to_collect' => [

@@ -12,8 +12,6 @@ describe 'Autofills requests' do
     end
   end
 
-  before { allow_any_instance_of(Site).to receive(:script_installed?).and_return true }
-
   context 'when authenticated but without ProManaged subscription' do
     let(:user) { create :user }
     let(:site) { create :site, user: user }
