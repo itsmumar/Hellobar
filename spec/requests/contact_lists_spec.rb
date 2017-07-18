@@ -30,7 +30,7 @@ describe 'ContactList requests' do
 
     describe 'GET :show' do
       before { allow(Hello::DataAPI).to receive(:contact_list_totals).and_return(contact_list.id.to_s => 1) }
-      before { allow(Hello::DataAPI).to receive(:contacts).and_return({}) }
+      before { allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([]) }
 
       it 'responds with success' do
         get site_contact_list_path(site, contact_list)
@@ -43,9 +43,9 @@ describe 'ContactList requests' do
         let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
 
         before do
-          allow(Hello::DataAPI).to receive(:contacts).and_return([
-            [contact_list_log.email, contact_list_log.name],
-            [completed_contact_list_log.email, completed_contact_list_log.name]
+          allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([
+            { 'email' => contact_list_log.email, 'n' => contact_list_log.name },
+            { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name },
           ])
         end
 
