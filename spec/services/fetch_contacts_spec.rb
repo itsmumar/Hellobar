@@ -6,7 +6,7 @@ describe FetchContacts do
     let!(:request) do
       body = {
         'Items': [
-          { 'email' => { 'S': 'email@example.com' }, 'n' => { 'S': 'Name' }, 'ts' => { 'N': Time.current.to_i } },
+          { 'email' => { 'S': 'email@example.com' }, 'n' => { 'S': 'Name' }, 'ts' => { 'N': Time.current.to_i } }
         ]
       }
 

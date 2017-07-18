@@ -71,6 +71,6 @@ class FetchBarsStatistics
   def convert_from_weird_date(date)
     year = date.to_s[0..2].to_i * 2000
     yday = date.to_s[2..4].to_i
-    yday.days.since(Date.new(2017) - 1)
+    yday.days.since(Date.new(year) - 1)
   end
 end

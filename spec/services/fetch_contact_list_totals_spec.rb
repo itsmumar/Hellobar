@@ -8,7 +8,7 @@ describe FetchContactListTotals do
       body = {
         'Responses' => {
           'edge_contacts' => [
-            { 'lid' => { 'N': contact_list.id }, 't' => { 'N': 10 } },
+            { 'lid' => { 'N': contact_list.id }, 't' => { 'N': 10 } }
           ]
         }
       }

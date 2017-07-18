@@ -8,7 +8,7 @@ class FetchBarsStatisticsByType
     statistics = FetchBarsStatistics.new(site, days_limit: days_limit).call
     totals = BarStatistics::Totals.new.set :total, statistics.values
 
-    %i[call email social traffic].inject(totals) do |hash, type|
+    %i[call email social traffic].each do |type|
       totals.set type, statistics_for_type(statistics, type)
     end
   end
