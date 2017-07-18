@@ -39,7 +39,8 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'sends an event to Intercom' do
-      expect { service.call }.to have_enqueued_job(SendEventToIntercomJob).with('changed_subscription', site: site)
+      expect { service.call }
+        .to have_enqueued_job(SendEventToIntercomJob).with('changed_subscription', site: site, user: user)
     end
 
     context 'without payment method' do

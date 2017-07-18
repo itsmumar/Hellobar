@@ -28,6 +28,10 @@ class Subscription
       def opacity?
         true
       end
+
+      def subtle_facet_theme?
+        true
+      end
     end
 
     class << self

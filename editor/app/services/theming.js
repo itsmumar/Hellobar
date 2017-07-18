@@ -139,6 +139,16 @@ export default Ember.Service.extend({
   currentThemeIsGeneric: Ember.computed.equal('currentTheme.type', 'generic'),
   currentThemeIsTemplate: Ember.computed.equal('currentTheme.type', 'template'),
 
+  resetThemeIfNeeded: function(style) {
+    const themeSupportsStyle = !_.includes(this.get('model.theme.element_types'), style);
+
+    if (themeSupportsStyle) {
+      this.set('model.theme', null);
+      this.set('model.theme_id', null);
+      return true;
+    }
+  },
+
   onCurrentThemeChanged: (function () {
     if (this.get('currentThemeIsTemplate')) {
       this.set('model.element_subtype', 'email');

@@ -8,7 +8,7 @@ class ApplicationJob < ActiveJob::Base
   rescue_from Aws::S3::Errors::InternalError, with: :retry_job
 
   before_perform do |job|
-    Raven.extra_context arguments: job.arguments, job_id: job.job_id, queue_name: job.queue_name
+    Raven.extra_context arguments: job.arguments.inspect, job_id: job.job_id, queue_name: job.queue_name
     Raven.tags_context job: job.class.to_s
   end
 

@@ -102,3 +102,8 @@
   id: unsupported_courier_new
   name: 'Courier New'
   value: "Courier New,monospace"
+-
+  id: kanit
+  name: 'Kanit'
+  value: "'Kanit', sans-serif"
+  google_font: 'Kanit'
