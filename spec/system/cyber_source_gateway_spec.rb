@@ -1,4 +1,4 @@
-describe CyberSourceGateway, :no_vcr do
+describe CyberSourceGateway do
   let(:gateway) { CyberSourceGateway.new }
   let(:credit_card) { create :cyber_source_credit_card }
 
