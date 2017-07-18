@@ -42,7 +42,7 @@ describe SitesHelper do
 
       specify do
         expect(install_help_data)
-          .to eql ['Weebly', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
+          .to match ['Weebly', a_string_matching(/support\.hellobar\.com.+weebly/)]
       end
     end
 
@@ -51,7 +51,7 @@ describe SitesHelper do
 
       specify do
         expect(install_help_data)
-          .to eql ['Squarespace', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
+          .to match ['Squarespace', a_string_matching(/support\.hellobar\.com.+squarespace/)]
       end
     end
 
@@ -60,7 +60,7 @@ describe SitesHelper do
 
       specify do
         expect(install_help_data)
-          .to eql ['Shopify', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
+          .to match ['Shopify', a_string_matching(/support\.hellobar\.com.+shopify/)]
       end
     end
 
@@ -69,7 +69,7 @@ describe SitesHelper do
 
       specify do
         expect(install_help_data)
-          .to eql ['Blogger', 'http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
+          .to match ['Blogger', a_string_matching(/support\.hellobar\.com.+bloggerblogspot/)]
       end
     end
   end
