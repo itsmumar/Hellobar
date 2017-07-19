@@ -29,7 +29,7 @@ describe 'ContactList requests' do
     end
 
     describe 'GET :show' do
-      before { allow_any_instance_of(DynamoDB).to receive(:batch_fetch).and_return({'edge_contacts' => [contact_list.id.to_s => 1]}) }
+      before { allow_any_instance_of(DynamoDB).to receive(:batch_fetch).and_return('edge_contacts' => [contact_list.id.to_s => 1]) }
       before { allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([]) }
 
       it 'responds with success' do
