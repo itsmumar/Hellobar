@@ -45,7 +45,7 @@ describe 'ContactList requests' do
         before do
           allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([
             { 'email' => contact_list_log.email, 'n' => contact_list_log.name },
-            { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name },
+            { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name }
           ])
         end
 

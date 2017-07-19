@@ -15,7 +15,7 @@ class FetchBarsStatistics
 
   def process(response)
     response.each do |item|
-      item['date'] = convert_from_weird_date item['date']
+      item['date'] = convert_from_weird_date item['date'].to_i
       statistics[item['sid'].to_i] << item
     end
     statistics
@@ -69,7 +69,7 @@ class FetchBarsStatistics
 
   # convert "17001" to 2017-01-01
   def convert_from_weird_date(date)
-    year = date.to_s[0..2].to_i * 2000
+    year = date.to_s[0..1].to_i + 2000
     yday = date.to_s[2..4].to_i
     yday.days.since(Date.new(year) - 1)
   end
