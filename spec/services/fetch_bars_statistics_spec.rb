@@ -1,7 +1,7 @@
-describe FetchBarsStatistics do
+describe FetchBarStatistics do
   let!(:site) { create :site, :with_rule }
   let!(:site_element) { create :site_element, site: site }
-  let(:service) { FetchBarsStatistics.new(site, days_limit: 5) }
+  let(:service) { FetchBarStatistics.new(site, days_limit: 5) }
 
   describe '#call', freeze: '2017-01-05' do
     let!(:request) do

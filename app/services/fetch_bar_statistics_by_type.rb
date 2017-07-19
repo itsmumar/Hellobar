@@ -1,4 +1,4 @@
-class FetchBarsStatisticsByType
+class FetchBarStatisticsByType
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit
@@ -19,7 +19,7 @@ class FetchBarsStatisticsByType
   end
 
   def statistics
-    @statistics ||= FetchBarsStatistics.new(site, days_limit: days_limit).call
+    @statistics ||= FetchBarStatistics.new(site, days_limit: days_limit).call
   end
 
   def set_statistics_for_types

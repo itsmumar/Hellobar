@@ -1,11 +1,11 @@
-describe FetchBarsStatisticsByType do
+describe FetchBarStatisticsByType do
   let!(:site) { create :site, :with_rule }
   let!(:site_element_traffic) { create :site_element, :traffic, site: site }
   let!(:site_element_email) { create :site_element, :email, site: site }
   let!(:site_element_call) { create :site_element, :call, site: site }
   let!(:site_element_twitter) { create :site_element, :twitter, site: site }
   let!(:site_element_facebook) { create :site_element, :facebook, site: site }
-  let(:service) { FetchBarsStatisticsByType.new(site, days_limit: 5) }
+  let(:service) { FetchBarStatisticsByType.new(site, days_limit: 5) }
 
   describe '#call', freeze: '2017-01-05' do
     let!(:request) do
