@@ -1,6 +1,7 @@
 hellobar.defineModule('contentUpgrades',
-  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion', 'contentUpgrades.class', 'base.bus', 'base.dom', 'elements.data'],
-  function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade, bus, dom, elementsData) {
+  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion',
+   'contentUpgrades.class', 'base.bus', 'base.dom', 'elements.data', 'base.cdn'],
+  function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade, bus, dom, elementsData, cdn) {
 
     const AB_TEST_FLAG = 'ab';
 
@@ -92,6 +93,7 @@ hellobar.defineModule('contentUpgrades',
         var tpl = templating.getTemplateByName('contentupgrade');
         const content = templating.renderTemplate(tpl, {siteElement: siteElement.model(), siteStyles: siteStyles});
 
+        cdn.addCss('https://fonts.googleapis.com/css?family=' + siteStyles.offer_font_family_name, document);
         if (!node) {
           node = document.getElementById('hb-cu-' + contentUpgradeId);
         }

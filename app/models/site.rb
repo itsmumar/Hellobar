@@ -12,7 +12,8 @@ class Site < ActiveRecord::Base
     'modal_button_color' => '#1285dd',
     'offer_font_size' => '15px',
     'offer_font_weight' => 'bold',
-    'offer_font_family' => 'open_sans'
+    'offer_font_family' => '\'Open Sans\',sans-serif',
+    'offer_font_family_name' => 'Open Sans'
   }.freeze
 
   attr_accessor :skip_script_generation

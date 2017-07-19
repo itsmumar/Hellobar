@@ -75,7 +75,8 @@ class ContentUpgradesController < ApplicationController
       :offer_font_family
     )
 
-    @site.update_content_upgrade_styles!(style_params)
+    offer_font_family_name = ContentUpgrade::AVAILABLE_FONTS.invert.fetch(style_params[:offer_font_family])
+    @site.update_content_upgrade_styles!(style_params.merge(offer_font_family_name: offer_font_family_name))
 
     flash[:success] = 'Content Upgrade styles have been saved.'
     redirect_to site_content_upgrades_path(@site.id)

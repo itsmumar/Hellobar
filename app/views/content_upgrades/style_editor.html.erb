@@ -52,8 +52,8 @@
         <div class="select-wrapper">
           <label for="offer-font-family">Offer Font</label>
           <select  name="offer_font_family"  id="offer-font-family"  class="style-input">
-            <% Font.all.each do |f| %>
-                <option value="<%=f.value%>" <% if @styles['offer_font_family'] && @styles['offer_font_family'] == f.value %>selected="selected"<% end %>><%=f.name%></option>
+            <% ContentUpgrade::AVAILABLE_FONTS.each do |name, value| %>
+                <option value="<%=value%>" <% if @styles['offer_font_family'] && @styles['offer_font_family'] == value %>selected="selected"<% end %>><%=name%></option>
             <% end %>
           </select>
         </div>
