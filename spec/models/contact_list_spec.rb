@@ -1,13 +1,6 @@
 describe ContactList do
   let!(:contact_list) { create(:contact_list, :aweber) }
 
-  before do
-    allow(Hello::DataAPI).to receive(:contacts).and_return([
-      ['test1@hellobar.com', '', 1384807897],
-      ['test2@hellobar.com', '', 1384807898]
-    ])
-  end
-
   describe 'as a valid object' do
     let(:identity) { build :identity, provider: 'webhooks' }
     let(:list) { build :contact_list, identity: identity, data: { 'webhook_url' => 'http://localhost/hook' } }

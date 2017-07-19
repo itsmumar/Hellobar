@@ -153,26 +153,6 @@ module Hello::DataAPI
       end
     end
 
-    # Return name, email and timestamp of subscribers for a contact list
-    #
-    # contacts(contact_list)
-    # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
-    #
-    def contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
-      return fake_contacts(contact_list) if Settings.fake_data_api
-      cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
-      cache_options[:expires_in] = 10.minutes
-
-      Rails.cache.fetch cache_key, cache_options do
-        path, params = Hello::DataAPIHelper::RequestParts.contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, limit, from_timestamp)
-        get(path, params)
-      end
-    end
-
-    def fake_contacts(_contact_list)
-      [['user@hellobar.com', 'John Doe', 1388534400], ['someone@hellobar.com', 'Anonymous', 1388534399]]
-    end
-
     def get(path, params)
       timeouts = [3, 3, 5, 5, 8] # Determines the length and number of attempts
       timeout_index = 0

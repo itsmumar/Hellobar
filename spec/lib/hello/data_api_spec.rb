@@ -85,33 +85,4 @@ describe Hello::DataAPI do
       expect(result).to eq stats
     end
   end
-
-  describe '.contacts', :freeze do
-    before do
-      allow(Hello::DataAPIHelper).to receive(:generate_signature).and_return('signature')
-    end
-
-    let(:contact_list) { create :contact_list }
-    let(:limit) { 5 }
-    let(:params) do
-      {
-        'l' => limit,
-        'd' => 0,
-        't' => Time.current.to_i,
-        's' => 'signature'
-      }
-    end
-
-    let(:response_body) { [['person100@gmail.com', 'person name', 1388534400]] }
-
-    let!(:request) do
-      stub_request(:get, %r{#{ Settings.tracking_api_url }/e/\w+/\w+})
-        .with(query: params.to_query)
-        .to_return(status: 200, body: response_body.to_json)
-    end
-
-    it 'returns an array of contacts' do
-      expect(Hello::DataAPI.contacts(contact_list, limit)).to eql response_body
-    end
-  end
 end
