@@ -25,7 +25,7 @@ describe FetchContactListTotals do
       expect(request).to have_been_made
     end
 
-    it 'returns array of email:, name:, subscribed_at:' do
+    it 'returns Hash[id: number]' do
       expect(service.call).to match(contact_list.id => 10)
     end
 

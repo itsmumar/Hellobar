@@ -20,4 +20,5 @@ RSpec.configure do |config|
   config.include WebMockHelper
 end
 
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.enable!
+WebMock.disable_net_connect!(allow_localhost: false)
