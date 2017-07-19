@@ -5,7 +5,7 @@ class FetchContacts
   end
 
   def call
-    process DynamoDB.new(cache_key: cache_key).fetch(request)
+    process DynamoDB.new(cache_key: cache_key, expires_in: 1.hour).fetch(request)
   end
 
   private

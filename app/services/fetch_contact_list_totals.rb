@@ -6,7 +6,7 @@ class FetchContactListTotals
 
   def call
     return {} if contact_list_ids.blank?
-    reduce process DynamoDB.new(cache_key: cache_key).batch_fetch(request)
+    reduce process DynamoDB.new(cache_key: cache_key, expires_in: 1.hour).batch_fetch(request)
   end
 
   private

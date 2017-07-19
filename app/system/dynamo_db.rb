@@ -1,5 +1,5 @@
 class DynamoDB
-  def initialize(cache_key:, expires_in: 10.seconds)
+  def initialize(cache_key:, expires_in: 1.hour)
     @cache_key = cache_key
     @expires_in = expires_in
   end

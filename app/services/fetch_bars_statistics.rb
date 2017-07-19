@@ -6,7 +6,7 @@ class FetchBarsStatistics
 
   def call
     statistics.clear
-    process DynamoDB.new(cache_key: cache_key).scan(request)
+    process DynamoDB.new(cache_key: cache_key, expires_in: 1.hour).scan(request)
   end
 
   private
@@ -26,7 +26,7 @@ class FetchBarsStatistics
   end
 
   def cache_key
-    site.cache_key
+    "#{ site.cache_key }/#{ days_limit }"
   end
 
   def request
