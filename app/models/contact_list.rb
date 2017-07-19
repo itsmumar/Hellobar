@@ -1,7 +1,7 @@
 class ContactList < ActiveRecord::Base
   attr_accessor :provider_token
 
-  belongs_to :site
+  belongs_to :site, touch: true
   belongs_to :identity, dependent: :destroy
 
   has_many :site_elements, dependent: :destroy

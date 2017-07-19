@@ -1,11 +1,8 @@
 class DynamoDB
-  CACHE_PREFIX = 'DynamoDB'.freeze
+  DEFAULT_TTL = 1.hour
+  CACHE_KEY_PREFIX = 'DynamoDB'.freeze
 
-  def self.clear_cache(key)
-    Rails.cache.delete [CACHE_PREFIX, key].join('/')
-  end
-
-  def initialize(cache_key:, expires_in: 1.hour)
+  def initialize(cache_key:, expires_in: DEFAULT_TTL)
     @cache_key = cache_key
     @expires_in = expires_in
   end
@@ -37,7 +34,7 @@ class DynamoDB
   end
 
   def cache_key
-    [CACHE_PREFIX, @cache_key].join('/')
+    [CACHE_KEY_PREFIX, @cache_key].join('/')
   end
 
   def batch_query(request)

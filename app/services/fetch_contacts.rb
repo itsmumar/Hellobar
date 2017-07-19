@@ -1,15 +1,14 @@
 class FetchContacts
   MAXIMUM_ALLOWED_LIMIT = 100
-  CACHE_TTL = 1.hour
 
-  def initialize(contact_list, limit: 20)
+  def initialize(contact_list, limit: nil)
     @contact_list = contact_list
     @limit = limit
   end
 
   def call
-    response = DynamoDB.new(cache_key: cache_key, expires_in: CACHE_TTL).fetch(request)
-    process(response).take(limit)
+    response = DynamoDB.new(cache_key: cache_key).fetch(request)
+    process(response).take(limit || MAXIMUM_ALLOWED_LIMIT)
   end
 
   private
