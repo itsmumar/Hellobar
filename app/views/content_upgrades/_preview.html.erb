@@ -35,6 +35,9 @@
       function loadStyles() {
         $('#content-preview .hb-cu-offer').css('background-color', <%=raw @styles['offer_bg_color'].to_json %>);
         $('#content-preview .hb-cu-offer').css('color', <%=raw @styles['offer_text_color'].to_json %>);
+        $('#content-preview .hb-cu-offer').css('font-family', <%=raw @styles['offer_font_family'].to_json %>);
+        $('#content-preview .hb-cu-offer').css('font-size', <%=raw @styles['offer_font_size'].to_json %>);
+        $('#content-preview .hb-cu-offer').css('font-weight', <%=raw @styles['offer_font_weight'].to_json %>);
         $('#content-preview .hb-cu-offer a').css('color', <%=raw @styles['offer_link_color'].to_json %>);
         $('#content-preview .hb-cu-modal .cta').css('background-color', <%=raw @styles['modal_button_color'].to_json %>);
         $('#content-preview .hb-cu-offer').css('border-color', <%=raw @styles['offer_border_color'].to_json %>);

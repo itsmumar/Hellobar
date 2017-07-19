@@ -1,4 +1,21 @@
 class ContentUpgrade < SiteElement
+  AVAILABLE_FONTS = {
+    'Arial' => 'Arial,Helvetica,sans-serif',
+    'Georgia' => 'Georgia,serif',
+    'Impact' => 'Impact, Charcoal, sans-serif',
+    'Lato' => 'Lato,sans-serif',
+    'Montserrat' => 'Montserrat,sans-serif',
+    'Open Sans' => '\'Open Sans\',sans-serif',
+    'Oswald' => 'Oswald,sans-serif',
+    'PT Sans' => '\'PT Sans\',sans-serif',
+    'PT Serif' => '\'PT Serif\',sans-serif',
+    'Raleway' => 'Raleway, sans-serif',
+    'Roboto' => 'Roboto,sans-serif',
+    'Tahoma' => 'Tahoma, Geneva, sans-serif',
+    'Times New Roman' => '\'Times New Roman\', Times, serif, -webkit-standard',
+    'Verdana' => 'Verdana, Geneva, sans-serif'
+  }.freeze
+
   has_attached_file :content_upgrade_pdf, s3_headers: { 'Content-Disposition' => 'attachment' }
 
   validates_attachment :content_upgrade_pdf, presence: true, content_type: { content_type: 'application/pdf' }
