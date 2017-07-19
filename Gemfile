@@ -180,7 +180,6 @@ group :test do
   gem 'rspec-retry'
   gem 'shoulda-matchers'
   gem 'timecop'
-  gem 'vcr'
   gem 'webmock'
 end
 

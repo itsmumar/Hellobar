@@ -4,6 +4,8 @@ describe SiteSerializer do
   let(:serialized_site) { SiteSerializer.new(site, scope: user) }
   let(:serializable_hash) { serialized_site.serializable_hash }
 
+  before { allow(site).to receive(:script_installed?).and_return true }
+
   it 'serializes capabilities' do
     expected_capabilities = {
       remove_branding: site.capabilities.remove_branding?,

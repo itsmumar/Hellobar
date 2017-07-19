@@ -546,7 +546,6 @@ GEM
     unf_ext (0.0.7.4)
     unicode-display_width (1.2.1)
     url (0.3.2)
-    vcr (3.0.3)
     verticalresponse (0.1.6)
     warden (1.2.7)
       rack (>= 1.0)
@@ -682,7 +681,6 @@ DEPENDENCIES
   timecop
   uglifier
   unf
-  vcr
   verticalresponse
   web-console
   webmock

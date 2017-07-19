@@ -2,7 +2,16 @@ describe CheckStaticScriptInstallation do
   let(:site) { create(:site, :with_user, :with_rule) }
   let(:service) { CheckStaticScriptInstallation.new(site) }
 
+  # this needs because we stub CheckStaticScriptInstallation#call globally
+  # as it is being called from many places
+  # which is going to be refactored, though
+  before { allow_any_instance_of(CheckStaticScriptInstallation).to receive(:call).and_call_original }
+
   shared_examples 'uninstalled' do
+    before do
+      stub_request(:get, site.url).to_return(status: 200, body: '', headers: {})
+    end
+
     it 'updates the script_uninstalled_at' do
       expect { service.call }.to change { site.reload.script_uninstalled_at }
     end
@@ -14,6 +23,10 @@ describe CheckStaticScriptInstallation do
   end
 
   shared_examples 'installed' do
+    before do
+      stub_request(:get, site.url).to_return(status: 200, body: site.script_name, headers: {})
+    end
+
     it 'updates the script_installed_at' do
       expect { service.call }.to change { site.reload.script_installed_at }
     end
@@ -61,6 +74,12 @@ describe CheckStaticScriptInstallation do
       before do
         stub_request(:get, site.url).to_return status: 200, body: body
       end
+
+      include_examples 'uninstalled'
+    end
+
+    context 'and could not get the homepage' do
+      before { allow(HTTParty).to receive(:get).and_raise('error') }
 
       include_examples 'uninstalled'
     end
