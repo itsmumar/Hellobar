@@ -9,7 +9,10 @@ class Site < ActiveRecord::Base
     'offer_border_width' => '0px',
     'offer_border_style' => 'solid',
     'offer_border_radius' => '0px',
-    'modal_button_color' => '#1285dd'
+    'modal_button_color' => '#1285dd',
+    'offer_font_size' => '15px',
+    'offer_font_weight' => 'bold',
+    'offer_font_family' => 'open_sans'
   }.freeze
 
   attr_accessor :skip_script_generation

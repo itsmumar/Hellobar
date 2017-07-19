@@ -61,16 +61,19 @@ class ContentUpgradesController < ApplicationController
   end
 
   def update_styles
-    style_params = {
-      offer_bg_color: params[:offer_bg_color],
-      offer_text_color: params[:offer_text_color],
-      offer_link_color: params[:offer_link_color],
-      offer_border_color: params[:offer_border_color],
-      offer_border_width: params[:offer_border_width],
-      offer_border_style: params[:offer_border_style],
-      offer_border_radius: params[:offer_border_radius],
-      modal_button_color: params[:modal_button_color]
-    }
+    style_params = params.permit(
+      :offer_bg_color,
+      :offer_text_color,
+      :offer_link_color,
+      :offer_border_color,
+      :offer_border_width,
+      :offer_border_style,
+      :offer_border_radius,
+      :modal_button_color,
+      :offer_font_size,
+      :offer_font_weight,
+      :offer_font_family
+    )
 
     @site.update_content_upgrade_styles!(style_params)
 

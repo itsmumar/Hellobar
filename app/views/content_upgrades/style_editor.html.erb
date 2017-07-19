@@ -21,6 +21,9 @@
         $(".hb-cu-offer").css("border-style",$("#offer-border-style").val());
         $(".hb-cu-offer").css("border-width",$("#offer-border-width").val());
         $(".hb-cu-offer").css("border-radius",$("#offer-border-radius").val());
+        $(".hb-cu-offer").css("font-size",$("#offer-font-size").val());
+        $(".hb-cu-offer").css("font-weight",$("#offer-font-weight").val());
+        $(".hb-cu-offer").css("font-family",$("#offer-font-family").val());
     }
 
     load_styles();
@@ -44,6 +47,40 @@
           <label for="offer-background-color">Offer Background Color</label>
           <input name="offer_bg_color" id="offer-background-color" type="color" class="style-input js-color-picker-field color-picker-field"
                  value="<%= @styles['offer_bg_color'] || '#ffffb6' %>" >
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-font-family">Offer Font</label>
+          <select  name="offer_font_family"  id="offer-font-family"  class="style-input">
+            <% Font.all.each do |f| %>
+                <option value="<%=f.value%>" <% if @styles['offer_font_family'] && @styles['offer_font_family'] == f.value %>selected="selected"<% end %>><%=f.name%></option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <label for="offer-font-weight">Offer Font Weight</label>
+          <select  name="offer_font_weight"  id="offer-font-weight"  class="style-input">
+            <% %w[Bold Normal].each do |weight| %>
+                <option value="<%=weight.downcase%>" <% if @styles['offer_font_waight'] && @styles['offer_font_waight'] == f.value %>selected="selected"<% end %>><%=weight%></option>
+            <% end %>
+          </select>
+        </div>
+
+
+        <div class="select-wrapper">
+          <label for="offer-font-size">Offer Font Size</label>
+          <select  name="offer_font_size" id="offer-font-size" class="style-input">
+            <% (10..42).each do |n| %>
+                <option value="<%=n%>px" <% if @styles['offer_font_size'] && @styles['offer_font_size'] == n.to_s+'px' %>selected="selected"<% end %>><%=n%>px</option>
+            <% end %>
+          </select>
+        </div>
+
+        <div class="field-wrapper">
+          <label for="offer-text-color">Offer Font</label>
+          <input  name="offer_text_color"  id="offer-text-color" type="color" class="js-color-picker-field color-picker-field"
+                 value="<%= @styles['offer_font_family'] || '#666' %>" class="style-input">
         </div>
 
         <div class="field-wrapper">
