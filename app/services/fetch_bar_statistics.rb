@@ -1,4 +1,6 @@
 class FetchBarStatistics
+  CACHE_TTL = 1.hour
+
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit
@@ -6,7 +8,7 @@ class FetchBarStatistics
 
   def call
     statistics.clear # clear the results in case we are calling this service object a second time
-    process DynamoDB.new(cache_key: cache_key, expires_in: 1.hour).scan(request)
+    process DynamoDB.new(cache_key: cache_key, expires_in: CACHE_TTL).scan(request)
   end
 
   private

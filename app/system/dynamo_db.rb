@@ -1,4 +1,10 @@
 class DynamoDB
+  CACHE_PREFIX = 'DynamoDB'.freeze
+
+  def self.clear_cache(key)
+    Rails.cache.delete [CACHE_PREFIX, key].join('/')
+  end
+
   def initialize(cache_key:, expires_in: 1.hour)
     @cache_key = cache_key
     @expires_in = expires_in
@@ -21,13 +27,17 @@ class DynamoDB
 
   private
 
-  attr_reader :cache_key, :expires_in
+  attr_reader :expires_in
   attr_accessor :last_request
 
   def cache
     Rails.cache.fetch cache_key, expires_in: expires_in do
       yield
     end
+  end
+
+  def cache_key
+    [CACHE_PREFIX, @cache_key].join('/')
   end
 
   def batch_query(request)

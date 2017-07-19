@@ -24,6 +24,12 @@ describe SubscribeContact do
     expect(last_log_entry).to be_completed
   end
 
+  it 'deletes dynamo db cache for contact_list.cache_key' do
+    expect(DynamoDB).to receive(:clear_cache).with(contact_list.cache_key)
+    expect(DynamoDB).to receive(:clear_cache).with(contact_list.site.cache_key)
+    service.call
+  end
+
   context 'when error is raised' do
     before { allow(provider).to receive(:subscribe).and_raise StandardError }
     before { allow(Rails.env).to receive(:test?).and_return(false) }

@@ -8,6 +8,7 @@ class SubscribeContact
   end
 
   def call
+    clear_contact_list_cache
     with_log_entry do
       provider.subscribe(email: email, name: name)
     end
@@ -26,6 +27,11 @@ class SubscribeContact
   rescue => e
     log_entry.update(completed: false, error: e.to_s)
     raven_log e
+  end
+
+  def clear_contact_list_cache
+    DynamoDB.clear_cache(contact_list.cache_key)
+    DynamoDB.clear_cache(contact_list.site.cache_key)
   end
 
   def raven_log(exception)
