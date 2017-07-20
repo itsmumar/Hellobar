@@ -246,7 +246,7 @@ describe StaticScriptModel do
 
   describe '#external_tracking' do
     context 'when site has external tracking capability' do
-      let!(:site_elements) { create_list :site_element, 2, site: site }
+      let!(:site_elements) { [create(:site_element, :alert, site: site), create(:site_element, :slider, site: site)] }
       let(:external_events) { site_elements.flat_map { |se| create :site_element_external_events, site_element: se } }
 
       before do

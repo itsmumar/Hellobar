@@ -172,7 +172,7 @@ class StaticScriptModel
   # In the future we will consider providing a customizable UI for this
   def external_tracking_for(element)
     providers = ['google_analytics', 'legacy_google_analytics']
-    default = Hash[site_element_id: element.id, category: 'Hello Bar', label: "#{ element.class.name }-#{ element.id }"]
+    default = Hash[site_element_id: element.id, category: 'Hello Bar', label: "#{ element.type }-#{ element.id }"]
 
     providers.each_with_object([]) do |provider, memo|
       memo << default.merge(provider: provider, type: 'view', action: 'View')
