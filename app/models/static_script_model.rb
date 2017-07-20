@@ -111,7 +111,10 @@ class StaticScriptModel
   end
 
   def external_tracking
-    site.active_site_elements.flat_map(&:external_tracking)
+    return [] unless site && site.capabilities.external_tracking?
+
+    site.active_site_elements.flat_map(&method(:external_tracking_for)) +
+      site.site_elements.active_content_upgrades.flat_map(&method(:external_tracking_for))
   end
 
   def rules
@@ -148,7 +151,8 @@ class StaticScriptModel
           email_placeholder: content_upgrade.email_placeholder,
           name_placeholder: content_upgrade.name_placeholder,
           contact_list_id: content_upgrade.contact_list_id,
-          download_link: content_upgrade.content_upgrade_download_link
+          download_link: content_upgrade.content_upgrade_download_link,
+          subtype: content_upgrade.short_subtype
         }
       }
     }.inject({}, &:update)
@@ -163,6 +167,18 @@ class StaticScriptModel
   end
 
   private
+
+  # Hardcoded array of external events for Google Analytics
+  # In the future we will consider providing a customizable UI for this
+  def external_tracking_for(element)
+    providers = ['google_analytics', 'legacy_google_analytics']
+    default = Hash[site_element_id: element.id, category: 'Hello Bar', label: "#{ element.type }-#{ element.id }"]
+
+    providers.each_with_object([]) do |provider, memo|
+      memo << default.merge(provider: provider, type: 'view', action: 'View')
+      memo << default.merge(provider: provider, type: "#{ element.short_subtype }_conversion", action: 'Conversion')
+    end
+  end
 
   def branding_variation
     # Options are ["original", "add_hb", "not_using_hb", "powered_by", "gethb", "animated"]

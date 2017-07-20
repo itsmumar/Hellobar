@@ -59,7 +59,8 @@ FactoryGirl.define do
           email_placeholder: content_upgrade.email_placeholder,
           name_placeholder: content_upgrade.name_placeholder,
           contact_list_id: content_upgrade.contact_list_id,
-          download_link: content_upgrade.content_upgrade_download_link
+          download_link: content_upgrade.content_upgrade_download_link,
+          subtype: content_upgrade.short_subtype
         }
       }
     end

@@ -224,9 +224,9 @@ FactoryGirl.define do
 
     site_element
     category 'Hello Bar'
-    label { "SiteElement-#{ site_element.id }" }
+    label { "#{ site_element.type }-#{ site_element.id }" }
     providers { %w[google_analytics legacy_google_analytics] }
-    types { %w[view email_conversion social_conversion traffic_conversion] }
+    types { %w[view] + ["#{ site_element.short_subtype }_conversion"] }
 
     initialize_with do
       providers.product(types).flat_map do |provider, type|
