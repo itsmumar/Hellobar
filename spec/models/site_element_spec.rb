@@ -377,51 +377,6 @@ describe SiteElement do
     end
   end
 
-  describe '#external_tracking' do
-    let(:capabilities) { double 'Capabilities', external_tracking?: false }
-    let(:site) { create :site }
-    let(:id) { 777 }
-    let(:site_element) { SiteElement.new id: id }
-
-    before do
-      allow(site).to receive(:capabilities).and_return capabilities
-      allow(site_element).to receive(:site).and_return site
-    end
-
-    context 'when site does not have `external_tracking` capabilities' do
-      it 'is an empty array' do
-        expect(site_element.external_tracking).to eq []
-      end
-    end
-
-    context 'when site has `external_tracking` capabilities' do
-      let(:external_tracking) { site_element.external_tracking }
-
-      before do
-        allow(capabilities).to receive(:external_tracking?).and_return true
-      end
-
-      %w[google_analytics legacy_google_analytics].each do |provider|
-        it "is an array of external `#{ provider }` events" do
-          expect(external_tracking).to be_an Array
-          expect(external_tracking.count).to be > 1
-
-          google_analytics_events = external_tracking.select do |tracking|
-            tracking[:provider] == provider
-          end
-
-          expect(google_analytics_events).not_to be_empty
-
-          google_analytics_event = google_analytics_events.first
-
-          expect(google_analytics_event[:category]).to eq 'Hello Bar'
-          expect(google_analytics_event[:site_element_id]).to eq id
-          expect(google_analytics_event[:label]).to include id.to_s
-        end
-      end
-    end
-  end
-
   describe '#image_modal_url' do
     let(:element) { create(:site_element, :traffic, :with_active_image) }
 
