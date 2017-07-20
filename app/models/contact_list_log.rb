@@ -1,5 +1,5 @@
 class ContactListLog < ActiveRecord::Base
-  belongs_to :contact_list, touch: true
+  belongs_to :contact_list
 
   scope :completed, -> { where(completed: true) }
 
