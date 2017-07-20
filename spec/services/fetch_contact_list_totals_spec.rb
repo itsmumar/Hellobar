@@ -4,11 +4,13 @@ describe FetchContactListTotals do
   let(:service) { FetchContactListTotals.new(site) }
 
   describe '#call' do
+    let(:contacts_count) { 10 }
+
     let!(:request) do
       body = {
         'Responses' => {
           'edge_contacts' => [
-            { 'lid' => { 'N': contact_list.id }, 't' => { 'N': 10 } }
+            { 'lid' => { 'N': contact_list.id }, 't' => { 'N': contacts_count } }
           ]
         }
       }
@@ -26,7 +28,7 @@ describe FetchContactListTotals do
     end
 
     it 'returns Hash[id: number]' do
-      expect(service.call).to match(contact_list.id => 10)
+      expect(service.call).to match(contact_list.id => contacts_count)
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do

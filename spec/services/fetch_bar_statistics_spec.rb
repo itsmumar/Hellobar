@@ -4,14 +4,16 @@ describe FetchBarStatistics do
   let(:service) { FetchBarStatistics.new(site, days_limit: 5) }
 
   describe '#call', freeze: '2017-01-05' do
+    let(:records) do
+      [
+        create(:bar_statistics, date: '2017-01-01', site_element: site_element),
+        create(:bar_statistics, date: '2017-01-02', site_element: site_element),
+        create(:bar_statistics, date: '2017-01-03', site_element: site_element)
+      ]
+    end
+
     let!(:request) do
-      body = {
-        'Items': [
-          { 'v' => { 'N': 100 }, 'c' => { 'N': 10 }, 'date' => { 'N': 17001 }, 'sid' => { 'N': site_element.id } },
-          { 'v' => { 'N': 100 }, 'c' => { 'N': 10 }, 'date' => { 'N': 17002 }, 'sid' => { 'N': site_element.id } },
-          { 'v' => { 'N': 100 }, 'c' => { 'N': 10 }, 'date' => { 'N': 17003 }, 'sid' => { 'N': site_element.id } }
-        ]
-      }
+      body = { 'Items': records.map(&:json) }
 
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
         .with(
@@ -27,8 +29,8 @@ describe FetchBarStatistics do
 
     it 'returns a hash site_element_id => BarStatistics' do
       expect(service.call).to match site_element.id => an_instance_of(BarStatistics)
-      expect(service.call[site_element.id].views).to eql 300
-      expect(service.call[site_element.id].conversions).to eql 30
+      expect(service.call[site_element.id].views).to eql records.sum(&:views)
+      expect(service.call[site_element.id].conversions).to eql records.sum(&:conversions)
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
