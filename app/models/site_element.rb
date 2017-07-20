@@ -254,25 +254,6 @@ class SiteElement < ActiveRecord::Base
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  # Hardcoded array of external events for Google Analytics
-  # In the future we will consider providing a customizable UI for this
-  def external_tracking
-    return [] unless site && site.capabilities.external_tracking?
-
-    providers = ['google_analytics', 'legacy_google_analytics']
-    category = 'Hello Bar'
-    label = "SiteElement-#{ id }"
-
-    default = Hash[site_element_id: id, category: category, label: label]
-
-    providers.each_with_object([]) do |provider, memo|
-      memo << default.merge(provider: provider, type: 'view', action: 'View')
-      memo << default.merge(provider: provider, type: 'email_conversion', action: 'Conversion')
-      memo << default.merge(provider: provider, type: 'social_conversion', action: 'Conversion')
-      memo << default.merge(provider: provider, type: 'traffic_conversion', action: 'Conversion')
-    end
-  end
-
   def pushes_page_down
     nil
   end

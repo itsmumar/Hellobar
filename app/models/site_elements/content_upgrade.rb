@@ -28,21 +28,4 @@ class ContentUpgrade < SiteElement
   def display_title
     content_upgrade_title.present? ? content_upgrade_title : offer_headline
   end
-
-  # Hardcoded array of external events for Google Analytics
-  # In the future we will consider providing a customizable UI for this
-  def external_tracking
-    return [] unless site && site.capabilities.external_tracking?
-
-    providers = ['google_analytics', 'legacy_google_analytics']
-    category = 'Hello Bar'
-    label = "ContentUpgrade-#{ id }"
-
-    default = Hash[site_element_id: id, category: category, label: label]
-
-    providers.each_with_object([]) do |provider, memo|
-      memo << default.merge(provider: provider, type: 'view', action: 'View')
-      memo << default.merge(provider: provider, type: 'email_conversion', action: 'Conversion')
-    end
-  end
 end
