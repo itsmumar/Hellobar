@@ -6,7 +6,7 @@ class FetchBarStatisticsByType
 
   def call
     totals.set :total, statistics.values
-    set_statistics_for_types
+    set_statistics_for_goals
     totals
   end
 
@@ -22,7 +22,7 @@ class FetchBarStatisticsByType
     @statistics ||= FetchBarStatistics.new(site, days_limit: days_limit).call
   end
 
-  def set_statistics_for_types
+  def set_statistics_for_goals
     %i[call email social traffic].each do |type|
       totals.set type, statistics_for_type(statistics, type)
     end
