@@ -105,7 +105,7 @@ describe Hello::DataAPI do
     let(:response_body) { [['person100@gmail.com', 'person name', 1388534400]] }
 
     let!(:request) do
-      stub_request(:get, %r{#{ Settings.tracking_api_url }/e/\w+/\w+})
+      stub_request(:get, %r{#{ Settings.tracking_api_url }/e/.+/.+})
         .with(query: params.to_query)
         .to_return(status: 200, body: response_body.to_json)
     end
