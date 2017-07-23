@@ -19,7 +19,7 @@
         td
           span= list.provider_name
           = image_tag list.provider_icon_path
-        td= @contact_list_totals[list.id.to_s] || 0
+        td= @contact_list_totals.fetch(list.id, 0)
         td= list.created_at.strftime("%-m-%-d-%Y")
 
   .button#new-contact-list New Contact List
