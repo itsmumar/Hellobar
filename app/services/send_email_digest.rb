@@ -1,4 +1,9 @@
 class SendEmailDigest
+  cattr_reader :logger do
+    file = Rails.root.join('log', 'send_email_digest.log')
+    ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(file))
+  end
+
   def initialize(site)
     @site = site
   end
@@ -7,13 +12,21 @@ class SendEmailDigest
     mailers.each do |recipient, mailer|
       options = options_for(mailer)
       Analytics.track(:user, recipient.id, 'Sent Email', 'Email Template' => template_name)
-      MailerGateway.send_email(template_name, recipient.email, options)
+      response = MailerGateway.send_email(template_name, recipient.email, options)
+      log_response(response)
     end
   end
 
   private
 
   attr_reader :site
+
+  def log_response(response)
+    response.each do |email, status|
+      message = status.gsub(/\d{10}/) { |timestamp| Time.zone.at(timestamp.to_i) }
+      self.class.logger.tagged(Time.current, email) { logger.info message }
+    end
+  end
 
   def mailers
     site.owners_and_admins.inject({}) { |hash, recipient|
