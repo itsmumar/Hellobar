@@ -31,14 +31,15 @@ module ServiceProvider::Adapters
       raw_lists.presence || []
     end
 
-    def prepare_params(subscriber, double_optin = true)
-      email, name = subscriber.values_at(:email, :name)
+    def prepare_params(subscriber_params)
+      email, name, double_optin = subscriber_params.values_at :email, :name, :double_optin
 
       { email_address: email }.tap do |body|
         body[:status] = double_optin ? 'pending' : 'subscribed'
 
         if name.present?
           first_name, last_name = name.split(' ', 2)
+
           body[:merge_fields] = {}
           body[:merge_fields][:FNAME] = first_name if first_name.present?
           body[:merge_fields][:LNAME] = last_name if last_name.present?
