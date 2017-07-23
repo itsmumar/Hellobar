@@ -121,58 +121,6 @@ module Hello::DataAPI
       totals
     end
 
-    # Returns the total subscribers for each contact list
-    #
-    # contact_list_totals(site, site.contact_lists)
-    # => {"1" => 141, "2" => 951}
-    #
-    def contact_list_totals(site, contact_lists, cache_options = {})
-      return fake_contact_list_totals(contact_lists) if Settings.fake_data_api
-      return {} if contact_lists.empty?
-      contact_list_ids = contact_lists.map(&:id).sort
-
-      cache_key = "hello:data-api:#{ site.id }:#{ contact_list_ids.sort.join('-') }:contact_list_totals:#{ site.script_installed_at.to_i }"
-      cache_options[:expires_in] = 10.minutes
-
-      Rails.cache.fetch cache_key, cache_options do
-        results = {}
-
-        contact_list_ids.each_slice(API_MAX_SLICE) do |ids|
-          path, params = Hello::DataAPIHelper::RequestParts.contact_list_totals(site.id, ids, site.read_key)
-          slice_results = get(path, params)
-          results.merge!(slice_results) if slice_results
-        end
-
-        results
-      end
-    end
-
-    def fake_contact_list_totals(contact_lists)
-      {}.tap do |results|
-        contact_lists.each { |cl| results[cl.id.to_s] = rand(500) }
-      end
-    end
-
-    # Return name, email and timestamp of subscribers for a contact list
-    #
-    # contacts(contact_list)
-    # => [["person100@gmail.com", "person name", 1388534400], ["person99@gmail.com", "person name", 1388534399]]
-    #
-    def contacts(contact_list, limit = nil, from_timestamp = nil, cache_options = {})
-      return fake_contacts(contact_list) if Settings.fake_data_api
-      cache_key = "hello:data-api:#{ contact_list.site_id }:contact_list-#{ contact_list.id }:from#{ from_timestamp }:limit#{ limit }"
-      cache_options[:expires_in] = 10.minutes
-
-      Rails.cache.fetch cache_key, cache_options do
-        path, params = Hello::DataAPIHelper::RequestParts.contacts(contact_list.site_id, contact_list.id, contact_list.site.read_key, limit, from_timestamp)
-        get(path, params)
-      end
-    end
-
-    def fake_contacts(_contact_list)
-      [['user@hellobar.com', 'John Doe', 1388534400], ['someone@hellobar.com', 'Anonymous', 1388534399]]
-    end
-
     def get(path, params)
       timeouts = [3, 3, 5, 5, 8] # Determines the length and number of attempts
       timeout_index = 0

@@ -1,13 +1,6 @@
 describe ContactList do
   let!(:contact_list) { create(:contact_list, :aweber) }
 
-  before do
-    allow(Hello::DataAPI).to receive(:contacts).and_return([
-      ['test1@hellobar.com', '', 1384807897],
-      ['test2@hellobar.com', '', 1384807898]
-    ])
-  end
-
   describe 'as a valid object' do
     let(:identity) { build :identity, provider: 'webhooks' }
     let(:list) { build :contact_list, identity: identity, data: { 'webhook_url' => 'http://localhost/hook' } }
@@ -72,17 +65,20 @@ describe ContactList do
 
   describe '#subscribers' do
     it 'gets subscribers from the data API' do
-      allow(Hello::DataAPI).to receive(:contacts).and_return([['person@gmail.com', 'Per Son', 123456789]])
-      expect(contact_list.subscribers).to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }]
+      expect(FetchContacts).to receive_service_call
+        .and_return([{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }])
+
+      expect(contact_list.subscribers)
+        .to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }]
     end
 
     it 'defaults to [] if data API returns nil' do
-      allow(Hello::DataAPI).to receive(:contacts).and_return(nil)
+      expect(FetchContacts).to receive_service_call.and_return([])
       expect(contact_list.subscribers).to be_empty
     end
 
     it 'sends a limit to the data api if specified' do
-      expect(Hello::DataAPI).to receive(:contacts).with(contact_list, 100)
+      expect(FetchContacts).to receive_service_call.with(contact_list, limit: 100)
       contact_list.subscribers(100)
     end
   end

@@ -27,17 +27,6 @@ module Hello
           sign_path_and_params(generate_path('t', site_id, site_element_ids), { 'd' => number_of_days.to_i }.merge(additional_params), read_key)
         end
 
-        # Generates the path and params for getting the contact list totals
-        # for the contact lists provided.
-        #
-        # Response format:
-        #
-        # {list_id: x, list_id2: y, ...}
-        #
-        def contact_list_totals(site_id, contact_list_ids, read_key, additional_params = {})
-          sign_path_and_params(generate_path('et', site_id, contact_list_ids), additional_params, read_key)
-        end
-
         # Generates the path and params for getting the contacts for a contact
         # list. You'll notice you can only get the contacts for a single list
         # at a time. There is an option limit (without this all contacts
