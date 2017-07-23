@@ -12,8 +12,8 @@ describe PayBill do
     specify { expect { service.call }.to change { BillingAttempt.success.count }.to 1 }
 
     it 'creates pending bill for next period', :freeze do
-      expect { service.call }.to change { Bill.pending.last }.from(nil)
-      expect(Bill.pending.last.bill_at).to eql 3.days.until(bill.end_date)
+      expect { service.call }.to change { subscription.bills.pending.last }.from(nil)
+      expect(subscription.bills.pending.last.bill_at).to eql 3.days.until(bill.end_date)
     end
 
     it 'returns given bill' do
