@@ -14,7 +14,7 @@ class ServiceProvider
   attr_reader :remote_list_id
 
   delegate :lists, :tags, :config, :connected?, to: :adapter
-  delegate :double_optin, to: :contact_list
+  delegate :double_optin, to: :contact_list, allow_nil: true
 
   def initialize(identity, contact_list = nil)
     @identity = identity
