@@ -1,12 +1,8 @@
+require 'ext/faraday'
+
 module ServiceProvider::Adapters
   class FaradayClient < Base
     class RaiseError < Faraday::Response::RaiseError
-      # define custom Faraday errors
-      Faraday::NotFound ||= Class.new(Faraday::ClientError)
-      Faraday::Unauthorized ||= Class.new(Faraday::ClientError)
-      Faraday::Conflict ||= Class.new(Faraday::ClientError)
-      Faraday::BadRequest ||= Class.new(Faraday::ClientError)
-
       def on_complete(env)
         case env[:status]
         when 400, 422
