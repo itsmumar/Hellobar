@@ -12,8 +12,7 @@ class ContactListsController < ApplicationController
     end
 
     @contact_lists = @site.contact_lists
-    @contact_list_totals =
-      Hello::DataAPI.contact_list_totals(@site, @contact_lists) || {}
+    @contact_list_totals = FetchContactListTotals.new(@site).call
   end
 
   def create
@@ -38,7 +37,7 @@ class ContactListsController < ApplicationController
   def show
     @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
     @subscribers = @contact_list.subscribers(100)
-    @total_subscribers = Hello::DataAPI.contact_list_totals(@site, [@contact_list])[@contact_list.id.to_s]
+    @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
     @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
 
     respond_to do |format|

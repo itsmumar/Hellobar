@@ -8,6 +8,7 @@ class SubscribeContact
   end
 
   def call
+    update_contact_list_cache
     with_log_entry do
       provider.subscribe(email: email, name: name)
     end
@@ -16,6 +17,11 @@ class SubscribeContact
   private
 
   attr_reader :email, :name, :contact_list, :provider
+
+  # it updates cache_key and causes cached things to be updated
+  def update_contact_list_cache
+    contact_list.touch
+  end
 
   def with_log_entry
     log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
