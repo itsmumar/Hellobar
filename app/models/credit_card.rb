@@ -10,9 +10,10 @@ class CreditCard < ActiveRecord::Base
   validates :number, :last_digits, :month, :year, :first_name, :last_name, :brand, presence: true
   validates :city, :zip, :address, :country, presence: true
   validates :state, presence: true, if: -> { country == 'US' }
-  validates :token, presence: true#, uniqueness: true
+  validates :token, presence: true
+  validates :number, format: { with: /\A(XXXX-){3}(\d{4})\Z/ }
 
-  Address = Struct.new(:zip, :address, :city, :state, :country, :address1)
+  Address = Struct.new(:zip, :address, :city, :state, :country, :address1) # address1 is needed for ActiveMerchant
   composed_of :billing_address, class_name: 'CreditCard::Address', mapping: [
     %w[zip zip], %w[address address], %w[city city], %w[state state], %w[country country], %w[address address1]
   ]
@@ -43,13 +44,8 @@ class CreditCard < ActiveRecord::Base
     [true, response.authorization]
   end
 
-  def delete_token
-    return if token.blank?
-    update_columns data: data.merge('token' => nil)
-  end
-
+  # The order_id is fairly irrelevant
   def order_id
-    # The order_id is fairly irrelevant
     "#{ id || 'NA' }-#{ Time.current.to_i }"
   end
 

@@ -43,7 +43,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
   ### for testing purposes
 
   def card_declined?(credit_card)
-    credit_card.address.address1 == INVALID_ADDRESS_FOR_TESTING_PURPOSES
+    credit_card.billing_address.address1 == INVALID_ADDRESS_FOR_TESTING_PURPOSES
   end
 
   def decline_card
