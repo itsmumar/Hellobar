@@ -1,10 +1,8 @@
+require 'ext/faraday'
+
 module ServiceProvider::Adapters
   class FaradayClient < Base
     class RaiseError < Faraday::Response::RaiseError
-      %w[NotFound Unauthorized Conflict BadRequest].each do |name|
-        Faraday.const_set name, Class.new(Faraday::ClientError)
-      end
-
       def on_complete(env)
         case env[:status]
         when 400, 422

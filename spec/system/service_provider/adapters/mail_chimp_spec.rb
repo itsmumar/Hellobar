@@ -37,12 +37,12 @@ describe ServiceProvider::Adapters::MailChimp do
   describe '#subscribe' do
     let(:body) do
       {
-        email_address: 'example@email.com',
+        email_address: email,
         status: 'pending',
-        merge_fields: { FNAME: 'FirstName', LNAME: 'LastName' }
-      }.to_json
+        merge_fields: { FNAME: first_name, LNAME: last_name }
+      }
     end
-    let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
+    let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json }
 
     let(:subscribe) { provider.subscribe(email: email, name: name) }
 
@@ -51,9 +51,20 @@ describe ServiceProvider::Adapters::MailChimp do
       expect(subscribe_request).to have_been_made
     end
 
+    context 'when double optin is disabled' do
+      let(:contact_list) { create(:contact_list, :with_tags, list_id: list_id, double_optin: false) }
+      let(:single_optin_body) { body.merge(status: 'subscribed') }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: single_optin_body.to_json }
+
+      it 'sends :subscribed status' do
+        subscribe
+        expect(subscribe_request).to have_been_made
+      end
+    end
+
     context 'when API key is invalid' do
       let(:response) { { status: 401, body: { title: 'API Key Invalid' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'calls DestroyIdentity' do
         expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
@@ -63,7 +74,7 @@ describe ServiceProvider::Adapters::MailChimp do
 
     context 'when Resource Not Found' do
       let(:response) { { status: 404, body: { title: 'Resource Not Found' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'calls DestroyIdentity' do
         expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
@@ -73,7 +84,7 @@ describe ServiceProvider::Adapters::MailChimp do
 
     context 'when Invalid Resource' do
       let(:response) { { status: 400, body: { title: 'Invalid Resource' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'raises ServiceProvider::InvalidSubscriberError' do
         expect { subscribe }.to raise_error(ServiceProvider::InvalidSubscriberError)
@@ -82,7 +93,7 @@ describe ServiceProvider::Adapters::MailChimp do
 
     context 'when Member Exists' do
       let(:response) { { status: 400, body: { title: 'Member Exists' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'does not raise error' do
         expect { subscribe }.not_to raise_error
@@ -91,7 +102,7 @@ describe ServiceProvider::Adapters::MailChimp do
 
     context 'when Net::ReadTimeout' do
       let(:response) { { status: 400, body: { title: 'Net::ReadTimeout' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'does not raise error' do
         expect { subscribe }.not_to raise_error
@@ -100,7 +111,7 @@ describe ServiceProvider::Adapters::MailChimp do
 
     context 'with another exception' do
       let(:response) { { status: 400, body: { title: 'Unknown' }.to_json } }
-      let!(:subscribe_request) { allow_request :post, :subscribe, body: body, response: response }
+      let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
       it 'does not raise error' do
         expect { subscribe }.to raise_error(Gibbon::MailChimpError)
