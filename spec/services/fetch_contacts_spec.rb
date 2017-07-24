@@ -1,18 +1,23 @@
 describe FetchContacts do
   let!(:contact_list) { create :contact_list }
-  let(:service) { FetchContacts.new(contact_list, limit: 5) }
+  let(:limit) { 5 }
+  let(:service) { FetchContacts.new(contact_list, limit: limit) }
 
   describe '#call', freeze: true do
     let!(:request) do
       body = {
         'Items': [
-          { 'email' => { 'S': 'email@example.com' }, 'n' => { 'S': 'Name' }, 'ts' => { 'N': Time.current.to_i } }
+          {
+            'email' => { 'S': 'email@example.com' },
+            'n' => { 'S': 'Name' },
+            'ts' => { 'N': Time.current.to_i }
+          }
         ]
       }
 
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
         .with(
-          body: /"TableName":"edge_contacts"/,
+          body: %r{"TableName":"edge_contacts".+"IndexName":"ts-index".+"Limit":#{ limit }},
           headers: { 'X-Amz-Target' => 'DynamoDB_20120810.Query' }
         ).and_return(body: body.to_json)
     end
