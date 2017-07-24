@@ -15,6 +15,7 @@ describe SendEmailDigest, :freeze do
     )
   end
 
+  before { allow(service).to receive(:log_response) }
   before { allow(Settings).to receive(:fake_data_api).and_return(true) }
 
   describe '#call' do
