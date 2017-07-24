@@ -14,6 +14,7 @@ class CreateOrUpdatePaymentMethod
     credit_card = create_credit_card
     save_to_cybersource(credit_card)
     credit_card.save!
+    user.credit_cards.create!(form.attributes.merge(token: credit_card.token))
     credit_card.payment_method
   end
 

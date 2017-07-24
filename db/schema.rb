@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713114606) do
+ActiveRecord::Schema.define(version: 20170723190737) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -73,9 +73,11 @@ ActiveRecord::Schema.define(version: 20170713114606) do
     t.integer  "status",                    limit: 4
     t.string   "response",                  limit: 255
     t.datetime "created_at"
+    t.integer  "credit_card_id",            limit: 4
   end
 
   add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
+  add_index "billing_attempts", ["credit_card_id"], name: "index_billing_attempts_on_credit_card_id", using: :btree
   add_index "billing_attempts", ["payment_method_details_id"], name: "index_billing_attempts_on_payment_method_details_id", using: :btree
 
   create_table "bills", force: :cascade do |t|
@@ -159,6 +161,27 @@ ActiveRecord::Schema.define(version: 20170713114606) do
     t.datetime "updated_at"
     t.boolean  "public",                                             default: false
   end
+
+  create_table "credit_cards", force: :cascade do |t|
+    t.string   "number",     limit: 255, null: false
+    t.integer  "month",      limit: 4,   null: false
+    t.integer  "year",       limit: 4,   null: false
+    t.string   "first_name", limit: 255, null: false
+    t.string   "last_name",  limit: 255, null: false
+    t.string   "brand",      limit: 255, null: false
+    t.string   "city",       limit: 255, null: false
+    t.string   "state",      limit: 255, null: false
+    t.string   "zip",        limit: 255, null: false
+    t.string   "address",    limit: 255, null: false
+    t.string   "country",    limit: 255, null: false
+    t.string   "token",      limit: 255, null: false
+    t.integer  "user_id",    limit: 4
+    t.datetime "deleted_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
   create_table "identities", force: :cascade do |t|
     t.integer  "site_id",     limit: 4
@@ -394,9 +417,11 @@ ActiveRecord::Schema.define(version: 20170713114606) do
     t.datetime "created_at"
     t.integer  "payment_method_id",    limit: 4
     t.datetime "trial_end_date"
+    t.integer  "credit_card_id",       limit: 4
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
+  add_index "subscriptions", ["credit_card_id"], name: "index_subscriptions_on_credit_card_id", using: :btree
   add_index "subscriptions", ["payment_method_id"], name: "index_subscriptions_on_payment_method_id", using: :btree
   add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
 
@@ -436,4 +461,7 @@ ActiveRecord::Schema.define(version: 20170713114606) do
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "billing_attempts", "credit_cards"
+  add_foreign_key "credit_cards", "users"
+  add_foreign_key "subscriptions", "credit_cards"
 end
