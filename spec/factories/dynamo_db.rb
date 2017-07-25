@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :bar_statistics, class: OpenStruct do
+  factory :bar_statistics_record, class: OpenStruct do
     skip_create
 
     site_element

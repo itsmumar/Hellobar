@@ -6,44 +6,44 @@ class FetchBarStatistics
 
   def call
     statistics.clear # clear the results in case we are calling this service object a second time
-    process DynamoDB.new(cache_key: cache_key).scan(request)
+    site_elements.each { |site_element| process site_element }
+    statistics
   end
 
   private
 
   attr_reader :site, :days_limit
 
-  def process(response)
+  def process(site_element)
+    request = request_for(site_element.id)
+    process_response site_element.id, dynamo_db_for(site_element).fetch(request)
+  end
+
+  def process_response(site_element_id, response)
     response.each do |item|
       item['date'] = convert_from_weird_date item['date'].to_i
-      statistics[item['sid'].to_i] << item
+      statistics[site_element_id] << item
     end
-    statistics
   end
 
   def statistics
     @statistics ||= Hash.new { |hash, k| hash[k] = BarStatistics.new }
   end
 
-  def cache_key
-    "#{ site.cache_key }/#{ days_limit }"
-  end
-
-  def request
-    ids_query = site_element_ids.map { |id| [":sid#{ id }", id] }.to_h
+  def request_for(id)
     {
       table_name: table,
-      filter_expression: "#D >= :last_date AND sid IN (#{ ids_query.keys.join(',') })",
+      key_condition_expression: "#D >= :last_date AND sid = :sid",
       expression_attribute_names: { '#D' => 'date' },
-      expression_attribute_values: { ':last_date' => last_date }.merge(ids_query),
-      select: 'ALL_ATTRIBUTES',
+      expression_attribute_values: { ':last_date' => last_date, ':sid' => id },
+      projection_expression: '#D, c, v, sid',
       return_consumed_capacity: 'INDEXES',
-      limit: days_limit * site_element_ids.size
+      limit: days_limit
     }
   end
 
-  def site_element_ids
-    @site_element_ids ||= site.site_elements.ids
+  def site_elements
+    @site_elements ||= site.site_elements
   end
 
   def table
@@ -72,5 +72,9 @@ class FetchBarStatistics
     year = date.to_s[0..1].to_i + 2000
     yday = date.to_s[2..4].to_i
     yday.days.since(Date.new(year) - 1)
+  end
+
+  def dynamo_db_for(site_element)
+    DynamoDB.new(cache_key: "#{ site_element.cache_key }/#{ days_limit }")
   end
 end

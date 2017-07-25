@@ -1,24 +1,30 @@
 describe FetchBarStatistics do
   let!(:site) { create :site, :with_rule }
   let!(:site_element) { create :site_element, site: site }
-  let(:service) { FetchBarStatistics.new(site, days_limit: 5) }
+  let!(:days_limit) { 5 }
+  let(:service) { FetchBarStatistics.new(site, days_limit: days_limit) }
+
+  # see FetchBarStatistics#convert_to_weird_date
+  def convert_to_weird_date(date)
+    (date.year - 2000) * 1000 + date.yday
+  end
 
   describe '#call', freeze: '2017-01-05' do
     let(:records) do
       [
-        create(:bar_statistics, date: '2017-01-01', site_element: site_element),
-        create(:bar_statistics, date: '2017-01-02', site_element: site_element),
-        create(:bar_statistics, date: '2017-01-03', site_element: site_element)
+        create(:bar_statistics_record, date: '2017-01-01', site_element: site_element),
+        create(:bar_statistics_record, date: '2017-01-02', site_element: site_element),
+        create(:bar_statistics_record, date: '2017-01-03', site_element: site_element)
       ]
     end
 
     let!(:request) do
       body = { 'Items': records.map(&:json) }
-
+      date = convert_to_weird_date(days_limit.days.ago)
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
         .with(
-          body: /"TableName":"over_time"/,
-          headers: { 'X-Amz-Target' => 'DynamoDB_20120810.Scan' }
+          body: %r{"TableName":"over_time".+":last_date":{"N":"#{ date }"}.+":sid":{"N":"#{ site_element.id }"}.+"Limit":#{ days_limit }},
+          headers: { 'X-Amz-Target' => 'DynamoDB_20120810.Query' }
         ).and_return(body: body.to_json)
     end
 
@@ -29,14 +35,14 @@ describe FetchBarStatistics do
 
     it 'returns a hash site_element_id => BarStatistics' do
       expect(service.call).to match site_element.id => an_instance_of(BarStatistics)
-      expect(service.call[site_element.id].views).to eql records.sum(&:views)
-      expect(service.call[site_element.id].conversions).to eql records.sum(&:conversions)
+      expect(service.call[site_element.id].views).to eql records.sum(&:views).to_f
+      expect(service.call[site_element.id].conversions).to eql records.sum(&:conversions).to_f
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
       before do
         allow_any_instance_of(Aws::DynamoDB::Client)
-          .to receive(:scan).and_raise(Aws::DynamoDB::Errors::ServiceError.new(double('context'), 'message'))
+          .to receive(:query).and_raise(Aws::DynamoDB::Errors::ServiceError.new(double('context'), 'message'))
         allow(Rails.env).to receive(:test?).and_return false
       end
 
