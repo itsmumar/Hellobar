@@ -21,7 +21,7 @@ hellobar.defineModule('tracking.external.legacyGoogleAnalytics', ['hellobar'], f
   }
 
   /**
-   * @module Supports sending data to Legacy Google Analytics to track user's actions.
+   * @module Supports sending events to Legacy Google Analytics to track user's actions.
    */
   return {
     configuration: () => configuration,
