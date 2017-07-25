@@ -26,7 +26,7 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
   }
 
   /**
-   * @module Supports sending data to Google Analytics to track user's actions.
+   * @module Supports sending events to Google Analytics to track user's actions.
    */
   return {
     configuration: () => configuration,
@@ -38,7 +38,8 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
     inspect: () => ({
       ga,
       available() {
-        return typeof ga() === 'function';
+        const ga = window[window['GoogleAnalyticsObject'] || 'ga'];
+        return typeof ga === 'function';
       }
     })
   };
