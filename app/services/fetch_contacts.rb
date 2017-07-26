@@ -45,7 +45,8 @@ class FetchContacts
   end
 
   def limit
-    @limit > MAXIMUM_ALLOWED_LIMIT ? MAXIMUM_ALLOWED_LIMIT : @limit
+    return nil if @limit == Float::INFINITY
+    [MAXIMUM_ALLOWED_LIMIT, @limit].min
   end
 
   def table

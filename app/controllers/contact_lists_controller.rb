@@ -44,7 +44,7 @@ class ContactListsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv  { redirect_to contact_list_csv_url(@contact_list) }
+      format.csv  { send_contact_list_csv(@contact_list) }
       format.json { render json: @contact_list }
     end
   end
@@ -84,8 +84,8 @@ class ContactListsController < ApplicationController
     @contact_list = @site.contact_lists.find(params[:id])
   end
 
-  def contact_list_csv_url(list)
-    URI.join(Settings.tracking_api_url, Hello::DataAPIHelper.url_for_contacts_csv(list)).to_s
+  def send_contact_list_csv(list)
+    send_data FetchContactsCSV.new(list).call, type: 'text/csv', filename: "#{ list.name.parameterize }.csv"
   end
 
   def omniauth_error?
