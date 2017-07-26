@@ -1,7 +1,7 @@
 hellobar.defineModule('tracking.external',
   ['hellobar',
     'tracking.external.googleAnalytics',
-   'tracking.external.legacyGoogleAnalytics',
+    'tracking.external.legacyGoogleAnalytics',
     'tracking.external.googleTagManager'],
 
   function (hellobar, googleAnalytics, legacyGoogleAnalytics, googleTagManager) {
@@ -17,21 +17,30 @@ hellobar.defineModule('tracking.external',
 
     const trackingsByTypeAndElementId = (type, siteElementId) => {
       const allTrackings = configuration.externalTrackings() || [];
-      return allTrackings.filter((tracking) => tracking.type === type && tracking.site_element_id === siteElementId);
+      return allTrackings.filter((tracking) => tracking.type === type && tracking.id === siteElementId);
+    };
+
+    function available () {
+      return trackingEngines.some((trackingEngine) => trackingEngine.available());
     };
 
     function send(trackingType, siteElementId) {
       const processExternalTracking = (externalTracking) => {
+        console.log(`processExternalTracking(): with ${ externalTracking }`);
         trackingEngines.forEach((engine) => engine.send(externalTracking));
       };
-      trackingsByTypeAndElementId(trackingType, siteElementId).forEach((tracking) => processExternalTracking(tracking));
-    }
+
+      const trackings = trackingsByTypeAndElementId(trackingType, siteElementId);
+
+      trackings.forEach((tracking) => processExternalTracking(tracking));
+    };
 
     /**
      * @module Main module for all external tracking systems (Google Analytics etc.)
      */
     return {
       configuration: () => configuration,
+      available,
       /**
        * Sends information about known tracking specified by trackingType.
        * @param {string} trackingType
@@ -39,8 +48,7 @@ hellobar.defineModule('tracking.external',
        */
       send,
       inspect: () => ({
-        available: () => trackingEngines.some((trackingEngine) => trackingEngine.inspect().available())
+        trackingEngines
       })
     };
-
   });

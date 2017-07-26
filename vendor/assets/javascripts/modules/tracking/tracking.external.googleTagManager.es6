@@ -1,24 +1,26 @@
 hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], function (hellobar) {
 
-  const configuration = hellobar.createModuleConfiguration({ gtmProvider: 'function' });
+  const configuration = hellobar.createModuleConfiguration({ provider: 'function' });
 
   const gtm = () => {
-    const gtmProvider = configuration.gtmProvider();
+    const provider = configuration.provider();
 
-    if (gtmProvider) {
-      return gtmProvider();
+    if (provider) {
+      return provider();
     }
 
-    const gtm = window['dataLayer'];
+    return window['dataLayer'];
+  };
 
-    return typeof gtm === 'object' ? gtm : { push: () => null };
+  function available () {
+    return typeof gtm() === 'object';
   };
 
   function send(externalTracking) {
-    const { category, action, label } = externalTracking;
     const event = 'HelloBarEvent'
+    const { category, action, label } = externalTracking;
 
-    gtm().push({ event, category, action, label });
+    available() && gtm().push({ event, category, action, label });
   };
 
   /**
@@ -26,16 +28,14 @@ hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], functi
    */
   return {
     configuration: () => configuration,
+    available,
     /**
      * Sends event data to Google Tag Manager
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
     send,
     inspect: () => ({
-      gtm,
-      available() {
-        return typeof gtm().hide === 'object';
-      }
+      gtm
     })
   };
 

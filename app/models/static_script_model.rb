@@ -168,18 +168,15 @@ class StaticScriptModel
 
   private
 
-  # Hardcoded array of external events for Google Analytics
-  # In the future we will consider providing a customizable UI for this
+  # Hardcoded array of external events for Google Analytics (modern + legacy)
+  # and Google Tag Manager. In the future there might be a customizable UI for this
   def external_tracking_for(element)
-    # FIXME this should really be just one list of events as all providers
-    # use the same naming for events
-    providers = ['google_analytics', 'legacy_google_analytics', 'google_tag_manager']
-    default = Hash[site_element_id: element.id, category: 'Hello Bar', label: "#{ element.type }-#{ element.id }"]
+    default = Hash[id: element.id, category: 'Hello Bar', label: "#{ element.type }-#{ element.id }"]
 
-    providers.each_with_object([]) do |provider, memo|
-      memo << default.merge(provider: provider, type: 'view', action: 'View')
-      memo << default.merge(provider: provider, type: "#{ element.short_subtype }_conversion", action: 'Conversion')
-    end
+    [
+      default.merge(type: 'view', action: 'View'),
+      default.merge(type: "#{ element.short_subtype }_conversion", action: 'Conversion')
+    ]
   end
 
   def branding_variation
