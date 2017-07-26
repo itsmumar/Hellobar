@@ -1,24 +1,27 @@
 hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], function (hellobar) {
 
-  const configuration = hellobar.createModuleConfiguration({gaProvider: 'function'});
+  const configuration = hellobar.createModuleConfiguration({ provider: 'function' });
 
   const ga = () => {
-    const gaProvider = configuration.gaProvider();
+    const provider = configuration.provider();
 
-    if (gaProvider) {
-      return gaProvider();
+    if (provider) {
+      return provider();
     }
 
-    const ga = window[window['GoogleAnalyticsObject'] || 'ga'];
+    return window[window['GoogleAnalyticsObject'] || 'ga'];
+  };
 
-    return typeof ga === 'function' ? ga : () => null;
+  function available () {
+    return typeof ga() === 'function';
   };
 
   function send(externalTracking) {
+    const hitType = 'event';
     const { category, action, label } = externalTracking;
 
-    ga()('send', {
-      hitType: 'event',
+    available() && ga()('send', {
+      hitType,
       eventCategory: category,
       eventAction: action,
       eventLabel: label
@@ -30,17 +33,14 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
    */
   return {
     configuration: () => configuration,
+    available,
     /**
      * Sends event data to Google Analytics
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
     send,
     inspect: () => ({
-      ga,
-      available() {
-        const ga = window[window['GoogleAnalyticsObject'] || 'ga'];
-        return typeof ga === 'function';
-      }
+      ga
     })
   };
 
