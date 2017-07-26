@@ -25,10 +25,13 @@ class UserUpgradePolicy
     @user.sites.select(&:script_installed?).empty?
   end
 
+  # At least one active HB bar for that user should have received
+  # 1000 views in the last 30 days
   def any_max_total_views_in_month?
-    # At least one active HB bar for that user should have received
-    # 1000 views in the last 30 days
-    @user.site_elements.active.any? { |site_element| site_element.total_views(days: 30) >= MAX_VIEW_IN_MONTH }
+    @user.site_elements.active.any? do |site_element|
+      statistics = FetchBarStatistics.new(site_element.site, days_limit: 30).call
+      statistics[site_element.id].views >= MAX_VIEW_IN_MONTH
+    end
   end
 
   def already_viewed_before?(last_shown_at)

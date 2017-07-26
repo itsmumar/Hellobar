@@ -151,12 +151,12 @@ class SiteElement < ActiveRecord::Base
     attributes.reject { |k, _| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
-  def total_views(opts = {})
-    lifetime_totals(opts).try(:views) || 0
+  def total_views
+    statistics.views
   end
 
   def total_conversions
-    lifetime_totals.try(:conversions) || 0
+    statistics.conversions
   end
 
   def conversion_percentage
@@ -262,6 +262,10 @@ class SiteElement < ActiveRecord::Base
     :modal
   end
 
+  def statistics
+    (site&.bar_statistics || {}).fetch(id, BarStatistics.new)
+  end
+
   private
 
   def remove_unreferenced_images
@@ -273,12 +277,6 @@ class SiteElement < ActiveRecord::Base
 
   def email?
     element_subtype == 'email'
-  end
-
-  def lifetime_totals(opts = {})
-    return nil if site.nil?
-
-    site.lifetime_totals(opts).try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element

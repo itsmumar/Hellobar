@@ -228,19 +228,16 @@ describe SiteElement do
   describe '#total_views' do
     let(:element) { create(:site_element, :traffic) }
     let(:site) { element.site }
+    let(:statistic) { BarStatistics.new }
 
     it 'returns total views as reported by the data API' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+      allow(statistic).to receive(:views).and_return(12)
+      expect(FetchBarStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
       expect(element.total_views).to eq(12)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element.total_views).to eq(0)
-    end
-
-    it 'returns zero if data API returns nil' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      expect(FetchBarStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
       expect(element.total_views).to eq(0)
     end
   end
@@ -248,19 +245,16 @@ describe SiteElement do
   describe '#total_conversions' do
     let(:element) { create(:site_element, :traffic) }
     let(:site) { element.site }
+    let(:statistic) { BarStatistics.new }
 
     it 'returns total views as reported by the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+      allow(statistic).to receive(:conversions).and_return(6)
+      expect(FetchBarStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
       expect(element.total_conversions).to eq(6)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element.total_conversions).to eq(0)
-    end
-
-    it 'returns zero if data API returns nil' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      expect(FetchBarStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
       expect(element.total_conversions).to eq(0)
     end
   end
@@ -268,15 +262,25 @@ describe SiteElement do
   describe '#converted?' do
     let(:element) { create(:site_element, :traffic) }
     let(:site) { element.site }
+    let(:statistic) { BarStatistics.new }
 
-    it 'is false when there are no conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element).not_to be_converted
+    context 'when there are no conversions' do
+      before do
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+      end
+
+      specify { expect(element).not_to be_converted }
     end
 
-    it 'is true when there are conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      expect(element).to be_converted
+    context 'when there are conversions' do
+      before do
+        allow(statistic).to receive(:conversions).and_return(1)
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+      end
+
+      specify { expect(element).to be_converted }
     end
   end
 

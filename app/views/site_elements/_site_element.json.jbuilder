@@ -95,19 +95,8 @@ json.cache! site_element do
 
   json.caption site_element.caption unless site_element.use_question?
 
-  lifetime_totals = site_element.site.lifetime_totals
-  conversion_data = lifetime_totals ? lifetime_totals[site_element.id.to_s] : nil
-  views = conversions = conversion_rate = 0
-
-  if conversion_data && conversion_data[0]
-    views = conversion_data[0][0]
-    conversions = conversion_data[0][1]
-    if views > 0
-      conversion_rate = ((conversions.to_f / views) * 1000).floor.to_f / 1000
-    end
-  end
-
-  json.views views
-  json.conversions conversions
-  json.conversion_rate conversion_rate
+  statistics = site_element.statistics
+  json.views statistics.views
+  json.conversions statistics.conversions
+  json.conversion_rate statistics.conversion_rate
 end

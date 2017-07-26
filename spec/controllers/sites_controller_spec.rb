@@ -202,7 +202,6 @@ describe SitesController do
     let(:site) { user.sites.last }
 
     it 'sets current_site session value' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       stub_current_user(user)
 
       get :show, id: site
@@ -257,10 +256,13 @@ describe SitesController do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
+    let(:total_statistics) { create :bar_statistics, views: [6, 10, 2], conversions: [1,0,1] }
+    let(:statistics) { { total: total_statistics } }
 
     before do
       stub_current_user(user)
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(total: [[10, 1], [12, 1], [18, 2]])
+      expect(FetchBarStatisticsByType)
+        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
     end
 
     it 'should return the latest lifeteime totals' do
