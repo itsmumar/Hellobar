@@ -13,6 +13,12 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
   };
 
   const legacyGa = () => {
+    const provider = configuration.provider();
+
+    if (provider) {
+      return provider();
+    }
+
     return window['_gaq'];
   };
 
@@ -58,7 +64,8 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
      */
     send,
     inspect: () => ({
-      ga
+      ga,
+      legacyGa
     })
   };
 
