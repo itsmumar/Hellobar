@@ -21,6 +21,16 @@ describe BarStatistics, freeze: '2017-01-03' do
     end
   end
 
+  describe '#+' do
+    let(:merged_statistics) { model + model }
+
+    it 'sums records on same date' do
+      expect(merged_statistics.records.size).to eql model.records.size
+      expect(merged_statistics.views).to eql model.views * 2
+      expect(merged_statistics.conversions).to eql model.conversions * 2
+    end
+  end
+
   describe '#views' do
     it 'sums all views' do
       expect(model.views).to eql records.sum(&:views).to_f

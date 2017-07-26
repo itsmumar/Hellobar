@@ -17,11 +17,6 @@ class DynamoDB
     cache { batch_query(request) }
   end
 
-  def scan(request)
-    self.last_request = request
-    cache { scan_all(request) }
-  end
-
   private
 
   attr_reader :expires_in
@@ -43,10 +38,6 @@ class DynamoDB
 
   def query(request)
     rescue_from_service_error { client.query(request).items } || []
-  end
-
-  def scan_all(request)
-    rescue_from_service_error { client.scan(request).items } || []
   end
 
   def rescue_from_service_error

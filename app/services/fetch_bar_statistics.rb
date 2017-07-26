@@ -21,8 +21,7 @@ class FetchBarStatistics
 
   def process_response(site_element_id, response)
     response.each do |item|
-      item['date'] = convert_from_weird_date item['date'].to_i
-      statistics[site_element_id] << item
+      statistics[site_element_id] << item.merge('date' => convert_from_weird_date(item['date'].to_i))
     end
   end
 

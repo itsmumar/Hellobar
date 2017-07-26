@@ -1,10 +1,16 @@
 class BarStatistics
   include Enumerable
 
-  Record = Struct.new(:views, :conversions, :date, :site_element_id)
-  Total = Struct.new(:views, :conversions)
+  Record = Struct.new(:views, :conversions, :date, :site_element_id) do
+    def +(other)
+      raise 'Cannot sum records with different dates' unless other.date == date
+      self.class.new(views + other.views, conversions + other.conversions, date, nil)
+    end
+  end
 
-  delegate :each, :clear, :[], to: :@records
+  delegate :each, :clear, :empty?, :size, :[], to: :@records
+
+  attr_reader :records
 
   def initialize(records = [])
     @records = records
@@ -12,6 +18,11 @@ class BarStatistics
 
   def <<(item)
     @records << Record.new(item['v'].to_i, item['c'].to_i, item['date'], item['sid'].to_i)
+  end
+
+  def +(other)
+    merged_records = (records + other.records).group_by(&:date).values.map { |same_day_records| same_day_records.inject :+ }
+    BarStatistics.new(merged_records)
   end
 
   def has_views?
@@ -46,14 +57,5 @@ class BarStatistics
 
   def conversion_percent_between(a, b = Date.current)
     conversion_rate_between(a, b) * 100
-  end
-
-  class Totals < OpenStruct
-    # @param [Symbol] key
-    # @param [Array<BarStatistics>] statistics
-    def set(key, statistics)
-      self[key] = Total.new(statistics.sum(&:views), statistics.sum(&:conversions))
-      self
-    end
   end
 end

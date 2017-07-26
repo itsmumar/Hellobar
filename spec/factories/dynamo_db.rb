@@ -1,4 +1,21 @@
 FactoryGirl.define do
+  factory :bar_statistics, class: BarStatistics do
+    skip_create
+
+    transient do
+      views []
+      conversions []
+    end
+
+    initialize_with do
+      records =
+        views.zip(conversions).map.with_index do |(view, conversion), number|
+          BarStatistics::Record.new(view || 0, conversion || 0, number.days.ago.to_date)
+        end
+      BarStatistics.new records
+    end
+  end
+
   factory :bar_statistics_record, class: OpenStruct do
     skip_create
 

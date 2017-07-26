@@ -42,14 +42,20 @@ describe FetchBarStatisticsByType do
       requests.each { |request| expect(request).to have_been_made }
     end
 
-    it 'returns BarStatistics::Totals' do
-      expect(service.call).to an_instance_of(BarStatistics::Totals)
-      expect(service.call.total).to eql BarStatistics::Total.new(total_views, total_conversions)
-      expect(service.call.traffic).to eql BarStatistics::Total.new(traffic.views.to_f, traffic.conversions.to_f)
-      expect(service.call.email).to eql BarStatistics::Total.new(email.views.to_f, email.conversions.to_f)
-      expect(service.call.call).to eql BarStatistics::Total.new(call.views.to_f, call.conversions.to_f)
-      expect(service.call.social)
-        .to eql BarStatistics::Total.new((twitter.views + facebook.views).to_f, (twitter.conversions + facebook.conversions).to_f)
+    it 'returns a Hash of goal => BarStatistics' do
+      expect(service.call).to be_a Hash
+
+      expect(service.call[:total].views).to eql total_views
+      expect(service.call[:total].conversions).to eql total_conversions
+
+      expect(service.call[:traffic].views).to eql traffic.views.to_f
+      expect(service.call[:traffic].conversions).to eql traffic.conversions.to_f
+
+      expect(service.call[:email].views).to eql email.views.to_f
+      expect(service.call[:call].conversions).to eql email.conversions.to_f
+
+      expect(service.call[:social].views).to eql (twitter.views + facebook.views).to_f
+      expect(service.call[:social].conversions).to eql (twitter.conversions + facebook.conversions).to_f
     end
   end
 end

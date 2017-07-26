@@ -2,38 +2,39 @@ class FetchBarStatisticsByType
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit
+    @totals = {}
   end
 
   def call
-    totals.set :total, statistics.values
+    totals[:total] = merge_statistics(statistics)
     set_statistics_for_goals
     totals
   end
 
   private
 
-  attr_reader :site, :days_limit
-
-  def totals
-    @totals ||= BarStatistics::Totals.new
-  end
+  attr_reader :site, :days_limit, :totals
 
   def statistics
     @statistics ||= FetchBarStatistics.new(site, days_limit: days_limit).call
   end
 
   def set_statistics_for_goals
-    %i[call email social traffic].each do |type|
-      totals.set type, statistics_for_type(statistics, type)
+    %i[call email social traffic].each do |goal|
+      totals[goal] = statistics_for_goal(statistics, goal)
     end
   end
 
-  def statistics_for_type(statistics, type)
-    statistics.select { |site_element_id| element_type[site_element_id] == type }.values
+  def statistics_for_goal(statistics, goal)
+    merge_statistics statistics.select { |site_element_id| element_goal[site_element_id] == goal }
   end
 
-  def element_type
-    @element_type ||= site.site_elements.map { |element|
+  def merge_statistics(statistics)
+    statistics.values.inject(:+) || BarStatistics.new
+  end
+
+  def element_goal
+    @element_goal ||= site.site_elements.map { |element|
       [element.id, element.short_subtype.to_sym]
     }.to_h
   end
