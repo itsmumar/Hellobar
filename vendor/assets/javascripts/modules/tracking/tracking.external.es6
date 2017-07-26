@@ -1,10 +1,9 @@
 hellobar.defineModule('tracking.external',
   ['hellobar',
     'tracking.external.googleAnalytics',
-    'tracking.external.legacyGoogleAnalytics',
     'tracking.external.googleTagManager'],
 
-  function (hellobar, googleAnalytics, legacyGoogleAnalytics, googleTagManager) {
+  function (hellobar, googleAnalytics, googleTagManager) {
 
     const configuration = hellobar.createModuleConfiguration({
       externalTrackings: {
@@ -13,7 +12,7 @@ hellobar.defineModule('tracking.external',
       }
     });
 
-    const trackingEngines = [googleAnalytics, legacyGoogleAnalytics, googleTagManager];
+    const trackingEngines = [googleAnalytics, googleTagManager];
 
     const trackingsByTypeAndElementId = (type, siteElementId) => {
       const allTrackings = configuration.externalTrackings() || [];

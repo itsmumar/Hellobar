@@ -1,15 +1,14 @@
 //= require modules/tracking/tracking.external
 
 describe('Module tracking.external', function () {
-
   var module;
   var externalTrackings;
   var googleAnalyticsMock;
-  var legacyGoogleAnalyticsMock;
 
   beforeEach(function () {
     hellobar.finalize();
 
+    // FIXME
     externalTrackings = [{
       site_element_id: 2,
       provider: 'google_analytics',
@@ -27,7 +26,6 @@ describe('Module tracking.external', function () {
     }];
 
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
-    legacyGoogleAnalyticsMock = jasmine.createSpyObj('LGA', ['send']);
 
     googleAnalyticsMock.inspect = function () {
       return {
@@ -39,8 +37,7 @@ describe('Module tracking.external', function () {
 
     module = hellobar('tracking.external', {
       dependencies: {
-        'tracking.external.googleAnalytics': googleAnalyticsMock,
-        'tracking.external.legacyGoogleAnalytics': legacyGoogleAnalyticsMock
+        'tracking.external.googleAnalytics': googleAnalyticsMock
       },
       configurator: function (configuration) {
         configuration.externalTrackings(externalTrackings);
@@ -59,16 +56,12 @@ describe('Module tracking.external', function () {
 
     expect(googleAnalyticsMock.send).toHaveBeenCalled();
     expect(googleAnalyticsMock.send.calls.count()).toEqual(2);
-
-    expect(legacyGoogleAnalyticsMock.send).toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send.calls.count()).toEqual(2);
   });
 
   it('does not send anything for unknown tracking type', function () {
     module.send('unknown_tracking_type', 2);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
   });
 
   it('considers site_element_id while sending', function () {
@@ -76,12 +69,9 @@ describe('Module tracking.external', function () {
     module.send('traffic_conversion', 54321);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
   });
 
   it('is considered available if at least one of the tracking engine is available', function () {
     expect(module.inspect().available()).toEqual(true);
   });
-
-
 });
