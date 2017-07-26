@@ -160,7 +160,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def conversion_percentage
-    total_views == 0 ? 0 : total_conversions.to_f / total_views
+    statistics.conversion_rate
   end
 
   def converted?

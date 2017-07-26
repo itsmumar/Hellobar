@@ -72,14 +72,12 @@ describe SiteElementsHelper do
       end
 
       it 'returns the correct message for twitter elements' do
-        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
         element = create(:site_element, :twitter)
         stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 tweets/)
       end
 
       it 'returns the correct message for facebook elements' do
-        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
         element = create(:site_element, :facebook)
         stub_views_and_conversations(element)
         expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/resulted in 5 likes/)
@@ -89,10 +87,10 @@ describe SiteElementsHelper do
     it 'shows the conversion rate relative to other elements of the same type' do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
-        element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
-        create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
-      )
+      expect(FetchBarStatistics).to receive_service_call.and_return(
+        element.id => create(:bar_statistics, views: [10], conversions: [5]),
+        create(:site_element, :twitter, rule: rule).id => create(:bar_statistics, views: [10], conversions: [1])
+      ).exactly(2).times
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
     end
@@ -100,19 +98,19 @@ describe SiteElementsHelper do
     it "doesn't show a percentage when comparing against other bars with no conversions" do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
-        element.id.to_s => Hello::DataAPI::Performance.new([[10, 5]]),
-        create(:site_element, :twitter, rule: rule).id.to_s => Hello::DataAPI::Performance.new([[10, 0]])
-      )
+      expect(FetchBarStatistics).to receive_service_call.and_return(
+        element.id => create(:bar_statistics, views: [10], conversions: [5]),
+        create(:site_element, :twitter, rule: rule).id => create(:bar_statistics, views: [10], conversions: [0])
+      ).exactly(2).times
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting better than your other social bars/)
     end
 
     it 'doesnt return the conversion rate when it is Infinite' do
       element = create(:site_element, :twitter)
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(
-        element.id.to_s => Hello::DataAPI::Performance.new([[0, 5]]),
-        create(:site_element, :facebook).id.to_s => Hello::DataAPI::Performance.new([[10, 1]])
+      expect(FetchBarStatistics).to receive_service_call.and_return(
+        element.id => create(:bar_statistics, views: [0], conversions: [5]),
+        create(:site_element, :facebook).id => create(:bar_statistics, views: [10], conversions: [1])
       )
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).not_to match(/Currently this bar is converting/)
@@ -202,6 +200,8 @@ describe SiteElementsHelper do
   end
 
   describe 'ab_test_icon' do
+    before { allow_any_instance_of(FetchBarStatistics).to receive(:call) }
+    
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
       se.update_attribute(:paused, true)
@@ -250,13 +250,9 @@ describe SiteElementsHelper do
 
       allow(variation3).to receive(:rule_id) { 0 }
 
-      allow(variation1).to receive(:total_views) { 250 }
-      allow(variation2).to receive(:total_views) { 250 }
-      allow(variation3).to receive(:total_views) { 250 }
-
-      allow(variation1).to receive(:total_conversions) { 250 }
-      allow(variation2).to receive(:total_conversions) { 250 }
-      allow(variation3).to receive(:total_conversions) { 250 }
+      allow(variation1).to receive(:statistics).and_return(create(:bar_statistics, views: [250], conversions: [250]))
+      allow(variation2).to receive(:statistics).and_return(create(:bar_statistics, views: [250], conversions: [250]))
+      allow(variation3).to receive(:statistics).and_return(create(:bar_statistics, views: [250], conversions: [250]))
 
       allow_any_instance_of(Site).to receive(:site_elements).and_return([variation1, variation2, variation3])
 

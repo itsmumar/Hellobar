@@ -161,7 +161,7 @@ class Site < ActiveRecord::Base
   end
 
   def bar_statistics
-    FetchBarStatistics.new(self, days_limit: 7).call
+    @bar_statistics ||= FetchBarStatistics.new(self, days_limit: 7).call
   end
 
   def create_default_rules

@@ -152,7 +152,7 @@ module SiteElementsHelper
   # rubocop: disable Rails/OutputSafety
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
-    elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
+    elements_in_group.sort_by!(&:created_at)
     index = elements_in_group.find_index { |e| e.id == site_element.id }
     # site element is paused, its the only site element in the group, or something wacky is going on
     return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? || elements_in_group.size == 1
