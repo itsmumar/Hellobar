@@ -33,7 +33,7 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    - if @totals[:total].size < 7
+                    - if @totals.size < 7
                       | n/a
                     - else
                       = format_number(@totals.conversions_between(@date_ranges[0], @date_ranges[1]))

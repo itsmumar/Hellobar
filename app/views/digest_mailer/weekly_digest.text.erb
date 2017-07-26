@@ -9,7 +9,7 @@ Your performance this week for <%= @site.url %>
 
 <% @sorted_elements.each_with_index do |se, index| %>
 <%= index + 1 %>) <%= strip_tags(se.headline || "").html_safe %>
-  * Views: <%= @se_totals[se.id.to_s].views_between(@date_ranges[2], @date_ranges[3]) %>
+  * Views: <%= se.statistics.views_between(@date_ranges[2], @date_ranges[3]) %>
   * <%= @conversion_header %>: <%= se.statistics.conversions_between(@date_ranges[2], @date_ranges[3]) %> (<%= formatted_percent(se.statistics.conversion_percent_between(@date_ranges[2], @date_ranges[3]), false) %>)
 <% end %>
 

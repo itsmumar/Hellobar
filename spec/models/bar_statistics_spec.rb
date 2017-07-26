@@ -40,16 +40,16 @@ describe BarStatistics, freeze: '2017-01-03' do
   end
 
   describe '#views?' do
-    subject { model }
+    subject { model.views? }
 
     context 'when views > 0' do
       before { allow(model).to receive(:views).and_return 1 }
-      specify { is_expected.to have_views }
+      specify { is_expected.to be_truthy }
     end
 
     context 'when views < 1' do
       before { allow(model).to receive(:views).and_return 0 }
-      specify { is_expected.not_to have_views }
+      specify { is_expected.to be_falsey }
     end
   end
 

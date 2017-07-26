@@ -3,11 +3,18 @@ describe DigestMailer do
     let(:site) { create(:site, :with_user, elements: [:email]) }
     let(:user) { site.owners.first }
     let(:mail) { DigestMailer.weekly_digest(site, user) }
+    let(:views) { Array.new(6) { 1 } }
+    let(:conversions) { Array.new(6) { 1 } }
+    let(:statistics) do
+      site.site_elements.map { |element|
+        [element.id, create(:bar_statistics, views: views, conversions: conversions)]
+      }.to_h
+    end
 
     it 'should work correctly when there are no site elements' do
       site.site_elements.each(&:destroy)
       site.reload
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
+      expect(FetchBarStatistics).to receive_service_call.and_return({})
       expect { mail.body }.not_to raise_error
     end
 
@@ -15,21 +22,17 @@ describe DigestMailer do
       # Travel to one day past the delivery date to ensure it's picking up the
       # mocked data regardless of when the test runs
       travel_to(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
-        data = {}.tap do |d|
-          site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2]]) }
-        end
-        allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(data)
-        allow(Hello::DataAPI).to receive(:lifetime_totals_by_type).and_return(total: Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [2, 2]]))
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 90).and_return(statistics).exactly(2).times
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
         expect(mail.body.encoded).to match('n/a')
       end
     end
 
     it 'should be nil if there were no views in the past week' do
-      data = {}.tap do |d|
-        site.site_elements.each { |se| d[se.id.to_s] = Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1]]) }
-      end
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(data)
-      allow(Hello::DataAPI).to receive(:lifetime_totals_by_type).and_return(total: Hello::DataAPI::Performance.new([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1], [1, 1]]))
+      expect(FetchBarStatistics)
+        .to receive_service_call.with(site, days_limit: 90).and_return({})
       expect { mail.deliver_now }.not_to raise_error
       expect(ActionMailer::Base.deliveries).to be_empty
     end
