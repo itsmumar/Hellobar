@@ -1,3 +1,5 @@
+require 'hello/data_api_helper'
+
 class ContactListsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
@@ -83,10 +85,7 @@ class ContactListsController < ApplicationController
   end
 
   def contact_list_csv_url(list)
-    path, params = Hello::DataAPIHelper::RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
-    path_with_params = Hello::DataAPIHelper.url_for(path, params)
-
-    URI.join(Settings.tracking_api_url, path_with_params).to_s
+    URI.join(Settings.tracking_api_url, Hello::DataAPIHelper.url_for_contacts_csv(list)).to_s
   end
 
   def omniauth_error?

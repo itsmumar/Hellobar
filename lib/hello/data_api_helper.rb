@@ -68,6 +68,11 @@ module Hello
     end
 
     class << self
+      def url_for_contacts_csv(list)
+        path, params = RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
+        url_for(path, params)
+      end
+
       # Generates a signature for the given key, path and parameters (params
       # should be a hash. Key will be either the read key or the write key
       def generate_signature(key, path, params)
