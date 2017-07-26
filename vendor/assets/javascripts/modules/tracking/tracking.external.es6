@@ -25,7 +25,6 @@ hellobar.defineModule('tracking.external',
 
     function send(trackingType, siteElementId) {
       const processExternalTracking = (externalTracking) => {
-        console.log(`processExternalTracking(): with ${ externalTracking }`);
         trackingEngines.forEach((engine) => engine.send(externalTracking));
       };
 
