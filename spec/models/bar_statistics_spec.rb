@@ -39,7 +39,7 @@ describe BarStatistics, freeze: '2017-01-03' do
     end
   end
 
-  describe '#has_views?' do
+  describe '#views?' do
     subject { model }
 
     context 'when views > 0' do
@@ -80,7 +80,7 @@ describe BarStatistics, freeze: '2017-01-03' do
   describe '#conversion_rate' do
     it 'returns proportion of conversion/views' do
       expect(model.conversion_rate(2.days.ago)).to eql(model.conversions(2.days.ago) / model.views(2.days.ago))
-      expect(model.conversion_rate(1.day.ago)).to eql(model.conversions(1.days.ago) / model.views(1.days.ago))
+      expect(model.conversion_rate(1.day.ago)).to eql(model.conversions(1.day.ago) / model.views(1.day.ago))
       expect(model.conversion_rate(Date.current)).to eql(model.conversions / model.views)
     end
   end
@@ -91,7 +91,7 @@ describe BarStatistics, freeze: '2017-01-03' do
         .to eql(model.conversions_between(2.days.ago, 1.day.ago) / model.views_between(2.days.ago, 1.day.ago))
 
       expect(model.conversion_rate_between(1.day.ago))
-        .to eql(model.conversions_between(1.days.ago) / model.views_between(1.days.ago))
+        .to eql(model.conversions_between(1.day.ago) / model.views_between(1.day.ago))
 
       expect(model.conversion_rate_between(Date.current))
         .to eql(model.conversions_between(Date.current) / model.views_between(Date.current))

@@ -54,8 +54,8 @@ describe FetchBarStatisticsByType do
       expect(service.call[:email].views).to eql email.views.to_f
       expect(service.call[:call].conversions).to eql email.conversions.to_f
 
-      expect(service.call[:social].views).to eql (twitter.views + facebook.views).to_f
-      expect(service.call[:social].conversions).to eql (twitter.conversions + facebook.conversions).to_f
+      expect(service.call[:social].views).to eql(twitter.views + facebook.views.to_f)
+      expect(service.call[:social].conversions).to eql(twitter.conversions + facebook.conversions.to_f)
     end
   end
 end

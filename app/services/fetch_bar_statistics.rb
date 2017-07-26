@@ -32,7 +32,7 @@ class FetchBarStatistics
   def request_for(id)
     {
       table_name: table,
-      key_condition_expression: "#D >= :last_date AND sid = :sid",
+      key_condition_expression: '#D >= :last_date AND sid = :sid',
       expression_attribute_names: { '#D' => 'date' },
       expression_attribute_values: { ':last_date' => last_date, ':sid' => id },
       projection_expression: '#D, c, v, sid',

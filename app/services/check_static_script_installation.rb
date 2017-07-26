@@ -38,7 +38,7 @@ class CheckStaticScriptInstallation
 
   # has the script been installed according to the API?
   def script_installed_api?
-    bar_statistics.values.any? &:has_views?
+    bar_statistics.values.any?(&:views?)
   end
 
   def script_installed_on_homepage?

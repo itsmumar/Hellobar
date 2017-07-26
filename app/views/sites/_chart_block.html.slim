@@ -1,7 +1,7 @@
 - statistics = totals[type]
 - method = type == :total ? :views : :conversions
 
-- if statistics.empty? || !statistics.has_views?
+- if statistics.empty? || !statistics.views?
   div class="chart-block #{chart}"
     i class="icon-#{icon}"
     .chart-overview

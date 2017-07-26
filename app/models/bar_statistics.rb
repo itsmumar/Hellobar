@@ -25,7 +25,7 @@ class BarStatistics
     BarStatistics.new(merged_records)
   end
 
-  def has_views?
+  def views?
     views > 0
   end
 

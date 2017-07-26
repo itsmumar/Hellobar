@@ -28,6 +28,6 @@ class ChartDataSerializer
   end
 
   def method
-    (type == 'total') ? :views : :conversions
+    type == 'total' ? :views : :conversions
   end
 end

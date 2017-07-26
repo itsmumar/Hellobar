@@ -256,7 +256,7 @@ describe SitesController do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
-    let(:total_statistics) { create :bar_statistics, views: [6, 10, 2], conversions: [1,0,1] }
+    let(:total_statistics) { create :bar_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
     let(:statistics) { { total: total_statistics } }
 
     before do
