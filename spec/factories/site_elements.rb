@@ -225,16 +225,14 @@ FactoryGirl.define do
     site_element
     category 'Hello Bar'
     label { "#{ site_element.type }-#{ site_element.id }" }
-    providers { %w[google_analytics legacy_google_analytics] }
     types { %w[view] + ["#{ site_element.short_subtype }_conversion"] }
 
     initialize_with do
-      providers.product(types).flat_map do |provider, type|
+      types.map do |type|
         {
-          site_element_id: site_element.id,
+          id: site_element.id,
           category: category,
           label: label,
-          provider: provider,
           type: type,
           action: type == 'view' ? 'View' : 'Conversion'
         }

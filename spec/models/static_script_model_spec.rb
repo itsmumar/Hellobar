@@ -246,11 +246,17 @@ describe StaticScriptModel do
 
   describe '#external_tracking' do
     context 'when site has external tracking capability' do
-      let!(:site_elements) { [create(:site_element, :alert, site: site), create(:site_element, :slider, site: site)] }
-      let(:external_events) { site_elements.flat_map { |se| create :site_element_external_events, site_element: se } }
+      let!(:alert) { create(:site_element, :alert, site: site) }
+      let!(:slider) { create(:site_element, :slider, site: site) }
+      let(:alert_events) { create :site_element_external_events, site_element: alert }
+      let(:slider_events) { create :site_element_external_events, site_element: slider }
+      let(:site_elements) { [alert, slider] }
+      let(:external_events) { alert_events + slider_events }
 
       before do
-        allow_any_instance_of(Site).to receive_message_chain(:capabilities, :external_tracking?).and_return(true)
+        allow_any_instance_of(Site)
+          .to receive_message_chain(:capabilities, :external_tracking?)
+          .and_return(true)
       end
 
       it 'returns array of Google Analytics events' do
@@ -262,7 +268,9 @@ describe StaticScriptModel do
       let!(:site_elements) { create_list :site_element, 2, site: site }
 
       before do
-        allow_any_instance_of(Site).to receive_message_chain(:capabilities, :external_tracking?).and_return(false)
+        allow_any_instance_of(Site)
+          .to receive_message_chain(:capabilities, :external_tracking?)
+          .and_return(false)
       end
 
       it 'returns empty array' do

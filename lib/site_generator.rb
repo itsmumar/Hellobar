@@ -40,7 +40,7 @@ class SiteGenerator
             <li>create a new autofill rule: <code>listen_selector: `input#f-builtin-email`, populate_selector: `input.email`</code></li>
             <li>regenerate the site: <code>rake test_site:generate</code></li>
             <li>visit local testing page (this page)</li>
-            <li>fill in the email address in the bar and click 'Subscripbe'</li>
+            <li>fill in the email address in the bar and click 'Subscribe'</li>
             <li>reload the page</li>
             <li>observe the input below is autofilled with the value from the the bar (from the localStorage value actually)</li>
           </ul>
@@ -61,6 +61,37 @@ class SiteGenerator
         </section>
 
         <script>#{ script_content }</script>
+
+        <section>
+          <h1>External Tracking</h1>
+          <pre class="events"></pre>
+
+          <script>
+            const events = document.querySelector('pre.events');
+
+            // Google Tag Manager
+            var dataLayer = {
+              push: (externalEvent) => {
+                const { event, category, action, label } = externalEvent;
+                events.innerHTML += `Google Tag Manager event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
+              }
+            }
+
+            // Google Analytics (Modern)
+            var ga = (action, externalEvent) => {
+              const { hitType, eventCategory, eventAction, eventLabel } = externalEvent;
+              events.innerHTML += `Google Analytics (Modern) event, hitType: '${ hitType }', eventCategory: '${ eventCategory }', eventAction: '${ eventAction }', eventLabel: '${ eventLabel }'\n`;
+            }
+
+            // Google Analytics (Legacy)
+            var _gaq =  {
+              push: (externalEvent) => {
+                const [event, category, action, label] = externalEvent;
+                events.innerHTML += `Google Analytics (Legacy) event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
+              }
+            }
+          </script>
+        </section>
 
         <section>
           <p style="margin-top: 100px;">Generated on #{ Time.current }</p>
