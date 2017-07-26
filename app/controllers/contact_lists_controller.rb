@@ -35,13 +35,13 @@ class ContactListsController < ApplicationController
   end
 
   def show
-    @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
-    @subscribers = FetchContacts.new(@contact_list).call
-    @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-    @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
-
     respond_to do |format|
-      format.html
+      format.html do
+        @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
+        @subscribers = FetchContacts.new(@contact_list).call
+        @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
+        @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
+      end
       format.csv  { send_contact_list_csv(@contact_list) }
       format.json { render json: @contact_list }
     end
