@@ -54,9 +54,7 @@ describe CheckStaticScriptInstallation do
       site.update script_installed_at: Time.current, script_uninstalled_at: nil
     end
 
-    context 'and bar has views according Hello::DataAPI' do
-      before { expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(lifetime_totals) }
-
+    context 'and bar has views' do
       context 'when lifetime_totals is empty hash' do
         let(:lifetime_totals) { {} }
         include_examples 'uninstalled'
@@ -99,8 +97,6 @@ describe CheckStaticScriptInstallation do
     end
 
     context 'and bar has no views according Hello::DataAPI' do
-      before { expect(Hello::DataAPI).to receive(:lifetime_totals).and_return(lifetime_totals) }
-
       context 'if there is only one day of data' do
         let(:lifetime_totals) { Hash[1 => [[1, 0]]] }
         include_examples 'installed'
@@ -142,8 +138,6 @@ describe CheckStaticScriptInstallation do
 
       before do
         stub_request(:get, site.url).to_return status: 200, body: body
-
-        expect(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
       end
 
       include_examples 'installed'
@@ -153,7 +147,6 @@ describe CheckStaticScriptInstallation do
   context 'when installed_at is more recent than uninstalled_at' do
     before do
       site.update script_installed_at: 1.day.ago, script_uninstalled_at: 1.week.ago
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return({})
     end
 
     include_examples 'uninstalled'
@@ -162,7 +155,6 @@ describe CheckStaticScriptInstallation do
   context 'when uninstalled_at is more recent than installed_at' do
     before do
       site.update script_installed_at: 1.week.ago, script_uninstalled_at: 1.day.ago
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(1 => [[1, 0]])
     end
 
     include_examples 'installed'
