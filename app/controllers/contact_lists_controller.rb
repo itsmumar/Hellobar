@@ -38,7 +38,7 @@ class ContactListsController < ApplicationController
 
   def show
     @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
-    @subscribers = @contact_list.subscribers(100)
+    @subscribers = FetchContacts.new(@contact_list).call
     @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
     @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
 

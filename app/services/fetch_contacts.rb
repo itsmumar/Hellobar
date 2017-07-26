@@ -1,7 +1,5 @@
 class FetchContacts
-  MAXIMUM_ALLOWED_LIMIT = 100
-
-  def initialize(contact_list, limit: MAXIMUM_ALLOWED_LIMIT)
+  def initialize(contact_list, limit: 100)
     @contact_list = contact_list
     @limit = limit
   end
@@ -12,7 +10,7 @@ class FetchContacts
 
   private
 
-  attr_reader :contact_list
+  attr_reader :contact_list, :limit
 
   def process_response
     response.map do |item|
@@ -42,11 +40,6 @@ class FetchContacts
 
   def cache_key
     contact_list.cache_key
-  end
-
-  def limit
-    return nil if @limit == Float::INFINITY
-    [MAXIMUM_ALLOWED_LIMIT, @limit].min
   end
 
   def table
