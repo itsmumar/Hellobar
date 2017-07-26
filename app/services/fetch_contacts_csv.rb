@@ -5,7 +5,7 @@ class FetchContactsCSV
 
   def call
     CSV.generate do |csv|
-      csv << %w(Email Fields Subscribed\ At)
+      csv << %w[Email Fields Subscribed\ At]
       fetch_contacts.each do |row|
         csv << [row[:email], row[:name], row[:subscribed_at].to_s]
       end

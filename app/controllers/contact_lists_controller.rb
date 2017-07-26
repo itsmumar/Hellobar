@@ -1,5 +1,3 @@
-require 'hello/data_api_helper'
-
 class ContactListsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site

@@ -201,7 +201,7 @@ describe SiteElementsHelper do
 
   describe 'ab_test_icon' do
     before { allow_any_instance_of(FetchBarStatistics).to receive(:call) }
-    
+
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
       se.update_attribute(:paused, true)
