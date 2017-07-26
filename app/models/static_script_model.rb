@@ -170,6 +170,8 @@ class StaticScriptModel
 
   # Hardcoded array of external events for Google Analytics (modern + legacy)
   # and Google Tag Manager. In the future there might be a customizable UI for this
+  # `type` is not being sent with event to GA/GTM; instead it is used to match
+  # HB event in the bar with those external events
   def external_tracking_for(element)
     default = Hash[id: element.id, category: 'Hello Bar', label: "#{ element.type }-#{ element.id }"]
 

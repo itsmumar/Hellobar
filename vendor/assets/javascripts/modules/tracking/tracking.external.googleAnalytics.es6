@@ -29,7 +29,7 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
   };
 
   function send(externalTracking) {
-    const hitType = 'event';
+    const hitType = 'event'; // required GA value
     const { category, action, label } = externalTracking;
 
     // Modern Google Analytics
