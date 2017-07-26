@@ -12,20 +12,36 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
     return window[window['GoogleAnalyticsObject'] || 'ga'];
   };
 
+  const legacyGa = () => {
+    return window['_gaq'];
+  };
+
   function available () {
+    return availableModern() || availableLegacy();
+  };
+
+  function availableModern () {
     return typeof ga() === 'function';
+  };
+
+  function availableLegacy () {
+    return typeof legacyGa() === 'object';
   };
 
   function send(externalTracking) {
     const hitType = 'event';
     const { category, action, label } = externalTracking;
 
-    available() && ga()('send', {
+    // Modern Google Analytics
+    availableModern() && ga()('send', {
       hitType,
       eventCategory: category,
       eventAction: action,
       eventLabel: label
     });
+
+    // Legacy Google Analytics
+    availableLegacy() && legacyGa().push(['_trackEvent', category, action, label]);
   }
 
   /**
@@ -34,6 +50,8 @@ hellobar.defineModule('tracking.external.googleAnalytics', ['hellobar'], functio
   return {
     configuration: () => configuration,
     available,
+    availableModern,
+    availableLegacy,
     /**
      * Sends event data to Google Analytics
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
