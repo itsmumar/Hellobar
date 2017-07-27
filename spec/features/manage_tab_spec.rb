@@ -37,8 +37,8 @@ feature 'Manage Bars', js: true do
     end
 
     scenario 'shows option for a/b testing a bar when site elements exist' do
-      create(:site_element, rule: @rule)
-
+      element = create(:site_element, rule: @rule)
+      allow_any_instance_of(FetchBarStatistics).to receive(:call).and_return(element.id => create(:bar_statistics))
       visit site_site_elements_path(@site)
       wait_for_ajax
       expect(page).to have_content('A/B test a new bar for this rule')
