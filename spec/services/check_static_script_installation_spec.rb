@@ -54,7 +54,7 @@ describe CheckStaticScriptInstallation do
       let(:element_id) { 1 } # doesn't matter for this specs
       let(:statistics) { create :bar_statistics, views: [0] }
       before do
-        allow(service).to receive(:site_statistics)
+        expect(FetchBarStatistics)
           .to receive_service_call.with(site, days_limit: 10)
           .and_return(SiteStatistics.new(element_id => statistics))
       end

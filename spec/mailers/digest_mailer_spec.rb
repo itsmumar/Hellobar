@@ -6,15 +6,15 @@ describe DigestMailer do
     let(:views) { Array.new(6) { 1 } }
     let(:conversions) { Array.new(6) { 1 } }
     let(:statistics) do
-      site.site_elements.map { |element|
+      SiteStatistics.new(site.site_elements.map { |element|
         [element.id, create(:bar_statistics, views: views, conversions: conversions)]
-      }.to_h
+      }.to_h)
     end
 
     it 'should work correctly when there are no site elements' do
       site.site_elements.each(&:destroy)
       site.reload
-      expect(FetchBarStatistics).to receive_service_call.and_return({})
+      expect(FetchBarStatistics).to receive_service_call.and_return(SiteStatistics.new)
       expect { mail.body }.not_to raise_error
     end
 
