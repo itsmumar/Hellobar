@@ -50,4 +50,8 @@ RSpec.configure do |config|
       TestProvider
     end
   end
+
+  config.before type: :feature do
+    allow_any_instance_of(FetchBarStatistics).to receive(:call).and_return({})
+  end
 end
