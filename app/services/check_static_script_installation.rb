@@ -42,8 +42,8 @@ class CheckStaticScriptInstallation
   end
 
   def script_installed_on_homepage?
-    site_url_content =~ /#{ site.script_name }/ ||
-      (site.had_wordpress_bars? && site_url_content =~ /hellobar\.js/)
+    site_url_content.match(/#{ site.script_name }/).present? ||
+      (site.had_wordpress_bars? && site_url_content.match(/hellobar\.js/).present?)
   rescue => _
     return false
   end

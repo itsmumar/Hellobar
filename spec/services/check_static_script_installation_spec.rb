@@ -7,11 +7,11 @@ describe CheckStaticScriptInstallation do
   # which is going to be refactored, though
   before { allow_any_instance_of(CheckStaticScriptInstallation).to receive(:call).and_call_original }
 
-  shared_examples 'uninstalled' do
-    before do
-      stub_request(:get, site.url).to_return(status: 200, body: '', headers: {})
-    end
+  before do
+    stub_request(:get, site.url).to_return(status: 200, body: '', headers: {})
+  end
 
+  shared_examples 'uninstalled' do
     it 'updates the script_uninstalled_at' do
       expect { service.call }.to change { site.reload.script_uninstalled_at }
     end
@@ -23,10 +23,6 @@ describe CheckStaticScriptInstallation do
   end
 
   shared_examples 'installed' do
-    before do
-      stub_request(:get, site.url).to_return(status: 200, body: site.script_name, headers: {})
-    end
-
     it 'updates the script_installed_at' do
       expect { service.call }.to change { site.reload.script_installed_at }
     end
@@ -55,15 +51,14 @@ describe CheckStaticScriptInstallation do
     end
 
     context 'and bar has views' do
-      context 'when lifetime_totals is empty hash' do
-        let(:lifetime_totals) { {} }
-        include_examples 'uninstalled'
+      let(:element_id) { 1 } # doesn't matter for this specs
+      let(:statistics) { create :bar_statistics, views: [0] }
+      before do
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 10).and_return(element_id => statistics)
       end
 
-      context 'when lifetime_totals returns no views in the last 10 days' do
-        let(:lifetime_totals) { Hash['1' => [[1, 0]] * 11] }
-        include_examples 'uninstalled'
-      end
+      include_examples 'uninstalled'
     end
 
     context 'and script is not installed on the homepage' do
@@ -96,41 +91,15 @@ describe CheckStaticScriptInstallation do
       site.update script_installed_at: nil, script_uninstalled_at: Time.current
     end
 
-    context 'and bar has no views according Hello::DataAPI' do
-      context 'if there is only one day of data' do
-        let(:lifetime_totals) { Hash[1 => [[1, 0]]] }
-        include_examples 'installed'
+    context 'and bar has no views' do
+      let(:element_id) { 1 } # doesn't matter for this specs
+      let(:statistics) { create :bar_statistics, views: [1] }
+      before do
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 10).and_return(element_id => statistics)
       end
 
-      context 'if there are multiple days of data' do
-        let(:lifetime_totals) { Hash[1 => [[1, 0], [2, 0]]] }
-        include_examples 'installed'
-      end
-
-      context 'if there are multiple days of data' do
-        let(:lifetime_totals) { Hash[1 => [[1, 0], [2, 0]]] }
-        include_examples 'installed'
-      end
-
-      context 'if one element has views but others do not' do
-        let(:lifetime_totals) do
-          {
-            '1' => [[1, 0]] * 8,
-            '2' => [[1, 0], [1, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0], [2, 0]]
-          }
-        end
-        include_examples 'installed'
-      end
-
-      context 'if any of the elements have been installed in the last 7 days' do
-        let(:lifetime_totals) do
-          {
-            '1' => [[1, 0]] * 8,
-            '2' => [[1, 0], [1, 0]]
-          }
-        end
-        include_examples 'installed'
-      end
+      include_examples 'installed'
     end
 
     context 'and script is installed on the homepage' do
@@ -157,6 +126,21 @@ describe CheckStaticScriptInstallation do
       site.update script_installed_at: 1.week.ago, script_uninstalled_at: 1.day.ago
     end
 
-    include_examples 'installed'
+    context 'and bar has views' do
+      let(:element_id) { 1 } # doesn't matter for this specs
+      let(:statistics) { create :bar_statistics, views: [1] }
+      before do
+        expect(FetchBarStatistics)
+          .to receive_service_call.with(site, days_limit: 10).and_return(element_id => statistics)
+      end
+
+      include_examples 'installed'
+    end
+
+    context 'and script is installed on the homepage' do
+      let(:body) { "<script src='//localhost/#{ site.script_name }'></script>" }
+      before { stub_request(:get, site.url).to_return status: 200, body: body }
+      include_examples 'installed'
+    end
   end
 end
