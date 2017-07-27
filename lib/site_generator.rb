@@ -73,21 +73,21 @@ class SiteGenerator
             var dataLayer = {
               push: (externalEvent) => {
                 const { event, category, action, label } = externalEvent;
-                events.innerHTML += `Google Tag Manager event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
+                events.innerHTML += `[Google Tag Manager] event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
               }
             }
 
             // Google Analytics (Modern)
             var ga = (action, externalEvent) => {
               const { hitType, eventCategory, eventAction, eventLabel } = externalEvent;
-              events.innerHTML += `Google Analytics (Modern) event, hitType: '${ hitType }', eventCategory: '${ eventCategory }', eventAction: '${ eventAction }', eventLabel: '${ eventLabel }'\n`;
+              events.innerHTML += `[Google Analytics (Modern)] event, hitType: '${ hitType }', eventCategory: '${ eventCategory }', eventAction: '${ eventAction }', eventLabel: '${ eventLabel }'\n`;
             }
 
             // Google Analytics (Legacy)
             var _gaq =  {
               push: (externalEvent) => {
                 const [event, category, action, label] = externalEvent;
-                events.innerHTML += `Google Analytics (Legacy) event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
+                events.innerHTML += `[Google Analytics (Legacy)] event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
               }
             }
           </script>
