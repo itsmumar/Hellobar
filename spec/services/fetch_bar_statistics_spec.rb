@@ -34,9 +34,9 @@ describe FetchBarStatistics do
     end
 
     it 'returns a hash site_element_id => BarStatistics' do
-      expect(service.call).to match site_element.id => an_instance_of(BarStatistics)
-      expect(service.call[site_element.id].views).to eql records.sum(&:views).to_f
-      expect(service.call[site_element.id].conversions).to eql records.sum(&:conversions).to_f
+      expect(service.call).to be_a SiteStatistics
+      expect(service.call.views).to eql records.sum(&:views).to_f
+      expect(service.call.conversions).to eql records.sum(&:conversions).to_f
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
@@ -55,7 +55,8 @@ describe FetchBarStatistics do
       end
 
       it 'returns {}' do
-        expect(service.call).to eql({})
+        expect(service.call).to be_a SiteStatistics
+        expect(service.call).to be_empty
       end
     end
   end

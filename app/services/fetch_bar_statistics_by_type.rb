@@ -6,7 +6,7 @@ class FetchBarStatisticsByType
   end
 
   def call
-    totals[:total] = merge_statistics(statistics)
+    totals[:total] = statistics.totals
     set_statistics_for_goals
     totals
   end
@@ -26,16 +26,6 @@ class FetchBarStatisticsByType
   end
 
   def statistics_for_goal(statistics, goal)
-    merge_statistics statistics.select { |site_element_id| element_goal[site_element_id] == goal }
-  end
-
-  def merge_statistics(statistics)
-    statistics.values.inject(:+) || BarStatistics.new
-  end
-
-  def element_goal
-    @element_goal ||= site.site_elements.map { |element|
-      [element.id, element.short_subtype.to_sym]
-    }.to_h
+    statistics.for_goal(goal)
   end
 end

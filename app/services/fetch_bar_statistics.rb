@@ -26,7 +26,7 @@ class FetchBarStatistics
   end
 
   def statistics
-    @statistics ||= Hash.new { |hash, k| hash[k] = BarStatistics.new }
+    @statistics ||= SiteStatistics.new(site_elements: site.site_elements)
   end
 
   def request_for(id)

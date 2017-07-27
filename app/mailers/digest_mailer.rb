@@ -12,7 +12,7 @@ class DigestMailer < ActionMailer::Base
     @user = user
 
     # First find the site elements that actually have views
-    @bar_statistics = FetchBarStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
+    @site_statistics = FetchBarStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
     @sorted_elements = site_elements_to_send(site)
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
@@ -60,6 +60,6 @@ class DigestMailer < ActionMailer::Base
   end
 
   def views_for(site_element)
-    @bar_statistics[site_element.id]&.views_between(@date_ranges[2], @date_ranges[3])
+    @site_statistics[site_element.id]&.views_between(@date_ranges[2], @date_ranges[3])
   end
 end

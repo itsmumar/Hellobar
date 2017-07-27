@@ -38,7 +38,7 @@ class CheckStaticScriptInstallation
 
   # has the script been installed according to the API?
   def script_installed_api?
-    bar_statistics.values.any?(&:views?)
+    site_statistics.views?
   end
 
   def script_installed_on_homepage?
@@ -69,10 +69,8 @@ class CheckStaticScriptInstallation
     end
   end
 
-  # @return [Hash[Integer => BarStatistics]]
-  # example:
-  #   {site_element_id => BarStatistics}
-  def bar_statistics
-    @bar_statistics ||= FetchBarStatistics.new(site, days_limit: LIFETIME_TOTALS_PERIOD_IN_DAYS).call
+  # @return [SiteStatistics]
+  def site_statistics
+    @site_statistics ||= FetchBarStatistics.new(site, days_limit: LIFETIME_TOTALS_PERIOD_IN_DAYS).call
   end
 end
