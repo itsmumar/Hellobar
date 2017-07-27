@@ -1,6 +1,7 @@
 describe SendEmailDigest, :freeze do
   let(:service) { described_class.new(site) }
   let(:site) { create(:site, :with_user, elements: [:email]) }
+  let(:site_element) { site.site_elements.first }
   let(:recipient) { site.owners.first }
   let(:start_date) { end_date - 6.days }
   let(:end_date) { EmailDigestHelper.date_of_previous('Sunday') }
@@ -51,6 +52,8 @@ describe SendEmailDigest, :freeze do
       context 'and script installed' do
         let(:mailer) { DigestMailer.weekly_digest(site, recipient) }
         before { allow(site).to receive(:script_installed?).and_return(true) }
+        let(:statistics) { { site_element.id => create(:bar_statistics, :with_views, first_date: end_date) } }
+        before { allow_any_instance_of(FetchBarStatistics).to receive(:call).and_return(statistics) }
 
         context 'when script is installed more than a week ago' do
           before { site.script_installed_at = 1.week.ago }

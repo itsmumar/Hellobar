@@ -2,7 +2,7 @@ describe SiteGenerator do
   let(:site) { create(:site) }
 
   before do
-    allow_any_instance_of(Site).to receive(:lifetime_totals).and_return('1' => [[1, 0]])
+    allow_any_instance_of(Site).to receive(:bar_statistics).and_return({})
   end
 
   describe '#initialize' do
@@ -46,7 +46,7 @@ describe SiteGenerator do
   end
 
   describe '#generate_html' do
-    before { allow_any_instance_of(RenderStaticScript).to receive(:call).and_return('script content') }
+    before { expect(RenderStaticScript).to receive_service_call.with(site, compress: false).and_return('script content') }
 
     it "includes the site's script content", :freeze do
       generator = described_class.new(site.id)
@@ -59,6 +59,7 @@ describe SiteGenerator do
 
   describe '#generate_file' do
     it 'creates a file at full path' do
+      expect(RenderStaticScript).to receive_service_call.with(site, compress: false)
       path = generate_path
       generator = described_class.new(site.id, full_path: path)
 

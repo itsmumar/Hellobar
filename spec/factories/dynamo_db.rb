@@ -3,6 +3,7 @@ FactoryGirl.define do
     skip_create
 
     transient do
+      first_date Date.current
       views []
       conversions []
     end
@@ -10,9 +11,15 @@ FactoryGirl.define do
     initialize_with do
       records =
         views.zip(conversions).map.with_index do |(view, conversion), number|
-          BarStatistics::Record.new(view || 0, conversion || 0, number.days.ago.to_date)
+          BarStatistics::Record.new(view || 0, conversion || 0, number.days.until(first_date).to_date)
         end
       BarStatistics.new records
+    end
+
+    trait :with_views do
+      transient do
+        views [1,2,3,4]
+      end
     end
   end
 
