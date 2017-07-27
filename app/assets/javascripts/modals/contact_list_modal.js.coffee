@@ -193,7 +193,7 @@ class @ContactListModal extends Modal
           modal.$modal.trigger('provider:disconnected')
           delete modal.options.identity
         error: (response) =>
-          if response.status == 403
+          if response.status == 422
             delete modal.options.identity
             modal._chooseHelloBar()
 
