@@ -396,9 +396,9 @@ GEM
     rainbow (2.2.2)
       rake
     rake (10.3.2)
-    rb-fsevent (0.9.8)
-    rb-inotify (0.9.8)
-      ffi (>= 0.5.0)
+    rb-fsevent (0.10.2)
+    rb-inotify (0.9.10)
+      ffi (>= 0.5.0, < 2)
     render_anywhere (0.0.9)
       rails (>= 3.0.7)
     responders (2.4.0)
