@@ -6,7 +6,7 @@ class DestroyIdentity
 
   def call
     identity.site.owners.each(&method(:email_user)) if notify_user
-    identity.destroy!
+    identity.destroy
   end
 
   private
