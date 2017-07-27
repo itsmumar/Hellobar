@@ -1,4 +1,4 @@
-class FetchSiteStatisticsByType
+class FetchSiteStatisticsByGoal
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit

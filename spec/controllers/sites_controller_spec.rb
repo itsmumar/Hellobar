@@ -261,7 +261,7 @@ describe SitesController do
 
     before do
       stub_current_user(user)
-      expect(FetchSiteStatisticsByType)
+      expect(FetchSiteStatisticsByGoal)
         .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
     end
 

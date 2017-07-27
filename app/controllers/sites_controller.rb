@@ -103,7 +103,7 @@ class SitesController < ApplicationController
   private
 
   def fetch_site_element_statistics_by_type
-    FetchSiteStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+    FetchSiteStatisticsByGoal.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
   end
 
   def site_params

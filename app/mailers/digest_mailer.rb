@@ -17,7 +17,7 @@ class DigestMailer < ActionMailer::Base
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
     # Get the totals for the elements with views
-    @totals = FetchSiteStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call[:total]
+    @totals = FetchSiteStatisticsByGoal.new(@site, days_limit: @site.capabilities.num_days_improve_data).call[:total]
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(

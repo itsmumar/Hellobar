@@ -1,4 +1,4 @@
-describe FetchSiteStatisticsByType do
+describe FetchSiteStatisticsByGoal do
   let!(:site) { create :site, :with_rule }
   let!(:site_element_traffic) { create :site_element, :traffic, site: site }
   let!(:site_element_email) { create :site_element, :email, site: site }
@@ -6,7 +6,7 @@ describe FetchSiteStatisticsByType do
   let!(:site_element_twitter) { create :site_element, :twitter, site: site }
   let!(:site_element_facebook) { create :site_element, :facebook, site: site }
   let!(:days_limit) { 5 }
-  let(:service) { FetchSiteStatisticsByType.new(site, days_limit: days_limit) }
+  let(:service) { FetchSiteStatisticsByGoal.new(site, days_limit: days_limit) }
 
   # see FetchSiteStatistics#convert_to_weird_date
   def convert_to_weird_date(date)
