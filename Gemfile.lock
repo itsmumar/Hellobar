@@ -6,6 +6,13 @@ GIT
       omniauth-oauth2 (~> 1.1)
 
 GIT
+  remote: https://github.com/Hello-bar/omniauth-verticalresponse.git
+  revision: 416e1a6276b1933d1025cac815ea6dee9be0548d
+  specs:
+    omniauth-verticalresponse (1.0.0)
+      omniauth-oauth (~> 1.0)
+
+GIT
   remote: https://github.com/aweber/AWeber-API-Ruby-Library.git
   revision: d67bdfb09129c988275927fbffc27c59c4e03f29
   specs:
@@ -334,8 +341,6 @@ GEM
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    omniauth-verticalresponse (1.0.0)
-      omniauth-oauth (~> 1.0)
     orm_adapter (0.5.0)
     paperclip (5.1.0)
       activemodel (>= 4.2.0)
@@ -630,7 +635,7 @@ DEPENDENCIES
   omniauth-drip
   omniauth-google-oauth2
   omniauth-mailchimp!
-  omniauth-verticalresponse
+  omniauth-verticalresponse!
   paperclip (~> 5.1)
   paranoia
   php-serialize
