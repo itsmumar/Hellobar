@@ -43,7 +43,7 @@ Style/NumericLiterals:
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Security/MarshalLoad:
@@ -52,12 +52,12 @@ Security/MarshalLoad:
 
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Style/IndentArray:
+Layout/IndentArray:
   EnforcedStyle: consistent
 
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Style/IndentHash:
+Layout/IndentHash:
   EnforcedStyle: consistent
 
 # Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
@@ -82,7 +82,7 @@ Style/WordArray:
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
 
-Style/SpaceInsideStringInterpolation:
+Layout/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
 Style/FileName:
@@ -112,6 +112,10 @@ Rails/SkipsModelValidations:
 # SupportedStyles: referer, referrer
 Rails/RequestReferer:
   EnforcedStyle: referrer
+
+# TODO enable when using Rails 5
+Rails/ApplicationRecord:
+  Enabled: false
 
 Rails/DynamicFindBy:
   Whitelist:

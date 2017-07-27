@@ -115,8 +115,10 @@ describe 'Content upgrade requests' do
         params = site.content_upgrade_styles.merge(offer_font_size: '32px', offer_font_family: 'Oswald,sans-serif')
 
         expect { post update_styles_site_content_upgrades_path(site), params }
-          .to change { site.reload.content_upgrade_styles[:offer_font_size] }.to('32px')
-          .and change { site.reload.content_upgrade_styles[:offer_font_family_name] }.to('Oswald')
+          .to change { site.reload.content_upgrade_styles[:offer_font_size] }
+          .to('32px')
+          .and change { site.reload.content_upgrade_styles[:offer_font_family_name] }
+          .to('Oswald')
 
         expect(response).to be_a_redirect
       end

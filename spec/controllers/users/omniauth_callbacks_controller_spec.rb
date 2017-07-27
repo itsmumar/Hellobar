@@ -38,9 +38,12 @@ describe Users::OmniauthCallbacksController do
 
         it 'updates authentication tokens' do
           expect { send_request }
-            .to change { authentication.reload.refresh_token }.to(credentials.refresh_token)
-            .and change { authentication.reload.access_token }.to(credentials.token)
-            .and change { authentication.reload.expires_at }.to(Time.zone.at(credentials.expires_at))
+            .to change { authentication.reload.refresh_token }
+            .to(credentials.refresh_token)
+            .and change { authentication.reload.access_token }
+            .to(credentials.token)
+            .and change { authentication.reload.expires_at }
+            .to(Time.zone.at(credentials.expires_at))
         end
       end
     end

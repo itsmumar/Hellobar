@@ -77,7 +77,7 @@ class CheckStaticScriptInstallation
   # problem and then implement an appropriate fix.
   def debug_install(type)
     lines = ["[#{ Time.current }] #{ type } - Site[#{ site.id }] script_installed_at: #{ site.script_installed_at.inspect }, script_uninstalled_at: #{ site.script_uninstalled_at.inspect }, lifetime_totals: #{ lifetime_totals.inspect }"]
-    caller[0..4].each do |line|
+    caller(0..4).each do |line|
       lines << "\t#{ line }"
     end
 

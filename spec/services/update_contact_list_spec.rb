@@ -54,8 +54,10 @@ describe UpdateContactList do
       context 'and identity does not have contact lists' do
         it 'destroys identity' do
           expect { service.call }
-            .to change(contact_list, :name).to('Changed')
-            .and change(Identity, :count).by(-1)
+            .to change(contact_list, :name)
+            .to('Changed')
+            .and change(Identity, :count)
+            .by(-1)
         end
       end
 
