@@ -18,7 +18,7 @@ FactoryGirl.define do
 
     trait :with_views do
       transient do
-        views [1,2,3,4]
+        views [1, 2, 3, 4]
       end
     end
   end

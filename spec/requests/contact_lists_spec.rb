@@ -76,7 +76,7 @@ describe 'ContactList requests' do
       end
 
       context '.csv', :freeze do
-        let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current.to_s }\n" }
+        let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current }\n" }
         let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
 
         it 'redirects to csv downloading' do
