@@ -106,7 +106,8 @@ describe CreateOrUpdatePaymentMethod do
     context 'when error is raised' do
       it 'raises error' do
         expect { service.call }
-          .to make_gateway_call(:store).and_raise_error('an error')
+          .to make_gateway_call(:store)
+          .and_raise_error('an error')
           .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: an error')
       end
     end
@@ -114,14 +115,16 @@ describe CreateOrUpdatePaymentMethod do
     context 'with unsuccessful response' do
       it 'raises error' do
         expect { service.call }
-          .to make_gateway_call(:store).and_fail.with_response(message: 'error', params: {})
+          .to make_gateway_call(:store)
+          .and_fail.with_response(message: 'error', params: {})
           .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: error')
       end
 
       context 'when invalid cardType' do
         it 'raises error' do
           expect { service.call }
-            .to make_gateway_call(:store).and_fail.with_response(params: { 'invalidField' => 'c:cardType' })
+            .to make_gateway_call(:store)
+            .and_fail.with_response(params: { 'invalidField' => 'c:cardType' })
             .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Invalid credit card')
         end
       end
@@ -129,7 +132,8 @@ describe CreateOrUpdatePaymentMethod do
       context 'when invalid field' do
         it 'raises error' do
           expect { service.call }
-            .to make_gateway_call(:store).and_fail.with_response(params: { 'invalidField' => 'c:number' })
+            .to make_gateway_call(:store)
+            .and_fail.with_response(params: { 'invalidField' => 'c:number' })
             .and raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Invalid number')
         end
       end

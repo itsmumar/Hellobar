@@ -19,14 +19,25 @@ describe Identity do
   end
 
   describe '#destroy' do
-    specify { expect { identity.destroy }.to change(identity, :destroyed?) }
+    it 'destroys the identity' do
+      identity.destroy
 
-    context 'when identity has contact_lists' do
-      before { create :contact_list, identity: identity }
+      expect(identity).to be_destroyed
+    end
 
-      it 'returns nothing' do
-        expect(identity.destroy).to be_nil
-        expect(identity).not_to be_destroyed
+    context 'when identity is connected to a contact list' do
+      let!(:contact_list) { create :contact_list, identity: identity }
+
+      it 'destroys the identity' do
+        identity.destroy
+
+        expect(identity).to be_destroyed
+      end
+
+      it 'sets identity_id to null at contact list' do
+        identity.destroy
+
+        expect(contact_list.reload.identity_id).to be_nil
       end
     end
   end

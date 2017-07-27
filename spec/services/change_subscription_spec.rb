@@ -62,8 +62,10 @@ describe ChangeSubscription, :freeze do
     context 'upgrade to Pro' do
       it 'creates Subscription::Pro' do
         expect { service.call }
-          .to change(site.subscriptions, :count).by(1)
-          .and change(payment_method.subscriptions, :count).by(1)
+          .to change(site.subscriptions, :count)
+          .by(1)
+          .and change(payment_method.subscriptions, :count)
+          .by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Pro
@@ -75,8 +77,10 @@ describe ChangeSubscription, :freeze do
 
       it 'creates Subscription::Enterprise' do
         expect { service.call }
-          .to change(site.subscriptions, :count).by(1)
-          .and change(payment_method.subscriptions, :count).by(1)
+          .to change(site.subscriptions, :count)
+          .by(1)
+          .and change(payment_method.subscriptions, :count)
+          .by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Enterprise
@@ -88,8 +92,10 @@ describe ChangeSubscription, :freeze do
         expect(PayBill).to receive_service_call.and_raise(StandardError)
         expect { service.call }
           .to raise_error(StandardError)
-          .and change(Subscription, :count).by(0)
-          .and change(Bill, :count).by(0)
+          .and change(Subscription, :count)
+          .by(0)
+          .and change(Bill, :count)
+          .by(0)
       end
     end
 

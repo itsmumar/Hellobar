@@ -1,7 +1,7 @@
 class Identity < ActiveRecord::Base
   belongs_to :site
 
-  has_many :contact_lists
+  has_many :contact_lists, dependent: :nullify
 
   # credentials and extra are populated by the third party service at the end of the OAuth flow
   serialize :credentials, JSON
@@ -30,10 +30,6 @@ class Identity < ActiveRecord::Base
 
   def provider_icon_path
     "providers/#{ provider }.png"
-  end
-
-  def destroy
-    super if contact_lists.empty?
   end
 
   def service_provider(contact_list: nil)

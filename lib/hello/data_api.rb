@@ -146,7 +146,7 @@ module Hello::DataAPI
       # Log the error
       lines = ["[#{ now }] Data API Error::#{ e.class } (#{ duration }s) - #{ e.message.inspect } => #{ url.inspect }"]
       lines << "Response: #{ response.inspect }" if response
-      caller[0..4].each do |line|
+      caller(0..4).each do |line|
         lines << "\t#{ line }"
       end
       # Write everything to the log

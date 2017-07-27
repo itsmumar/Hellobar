@@ -105,9 +105,9 @@ describe 'Identities requests' do
         it 'responds with :forbidden' do
           expect {
             delete site_identity_path(site, identity)
-          }.not_to change(Identity, :count)
+          }.to change(Identity, :count).by(-1)
 
-          expect(response).to be_forbidden
+          expect(response).to be_successful
         end
       end
     end
