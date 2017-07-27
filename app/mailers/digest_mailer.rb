@@ -12,12 +12,12 @@ class DigestMailer < ActionMailer::Base
     @user = user
 
     # First find the site elements that actually have views
-    @site_statistics = FetchBarStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
+    @site_statistics = FetchSiteStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
     @sorted_elements = site_elements_to_send(site)
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
     # Get the totals for the elements with views
-    @totals = FetchBarStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call[:total]
+    @totals = FetchSiteStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call[:total]
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(

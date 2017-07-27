@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :bar_statistics, class: BarStatistics do
+  factory :site_element_statistics, class: SiteElementStatistics do
     skip_create
 
     transient do
@@ -11,9 +11,9 @@ FactoryGirl.define do
     initialize_with do
       records =
         views.zip(conversions).map.with_index do |(view, conversion), number|
-          BarStatistics::Record.new(view || 0, conversion || 0, number.days.until(first_date).to_date)
+          SiteElementStatistics::Record.new(view || 0, conversion || 0, number.days.until(first_date).to_date)
         end
-      BarStatistics.new records
+      SiteElementStatistics.new records
     end
 
     trait :with_views do
@@ -23,7 +23,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :bar_statistics_record, class: OpenStruct do
+  factory :site_element_statistics_record, class: OpenStruct do
     skip_create
 
     site_element

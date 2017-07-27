@@ -1,4 +1,4 @@
-class BarStatistics
+class SiteElementStatistics
   include Enumerable
 
   Record = Struct.new(:views, :conversions, :date, :site_element_id) do
@@ -22,7 +22,7 @@ class BarStatistics
 
   def +(other)
     merged_records = (records + other.records).group_by(&:date).values.map { |same_day_records| same_day_records.inject :+ }
-    BarStatistics.new(merged_records)
+    SiteElementStatistics.new(merged_records)
   end
 
   def views?

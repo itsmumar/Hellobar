@@ -52,6 +52,6 @@ RSpec.configure do |config|
   end
 
   config.before type: :feature do
-    allow_any_instance_of(FetchBarStatistics).to receive(:call).and_return(SiteStatistics.new)
+    allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(SiteStatistics.new)
   end
 end

@@ -5,11 +5,11 @@ class SiteStatistics
 
   def initialize(site_element_statistics = nil, site_elements: [])
     @site_elements = site_elements
-    @site_element_statistics = site_element_statistics || Hash.new { |hash, k| hash[k] = BarStatistics.new }
+    @site_element_statistics = site_element_statistics || Hash.new { |hash, k| hash[k] = SiteElementStatistics.new }
   end
 
   def totals
-    @totals ||= site_element_statistics.values.inject(:+) || BarStatistics.new
+    @totals ||= site_element_statistics.values.inject(:+) || SiteElementStatistics.new
   end
 
   def for_goal(goal)
@@ -34,6 +34,6 @@ class SiteStatistics
   private
 
   def merge_records(site_element_statistics)
-    site_element_statistics.inject(:+) || BarStatistics.new
+    site_element_statistics.inject(:+) || SiteElementStatistics.new
   end
 end

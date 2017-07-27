@@ -46,7 +46,7 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = fetch_bar_statistics_by_type
+        @totals = fetch_site_element_statistics_by_type
         @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render json: @site }
@@ -54,7 +54,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = fetch_bar_statistics_by_type
+    @totals = fetch_site_element_statistics_by_type
   end
 
   def update
@@ -87,7 +87,7 @@ class SitesController < ApplicationController
   end
 
   def chart_data
-    statistics = fetch_bar_statistics_by_type.fetch(params[:type].to_sym)
+    statistics = fetch_site_element_statistics_by_type.fetch(params[:type].to_sym)
     render json: ChartDataSerializer.new(statistics, params[:type], sample_size: params[:days]).as_json, root: false
   end
 
@@ -102,8 +102,8 @@ class SitesController < ApplicationController
 
   private
 
-  def fetch_bar_statistics_by_type
-    FetchBarStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+  def fetch_site_element_statistics_by_type
+    FetchSiteStatisticsByType.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
   end
 
   def site_params

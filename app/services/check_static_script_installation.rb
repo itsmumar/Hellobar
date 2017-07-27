@@ -71,6 +71,6 @@ class CheckStaticScriptInstallation
 
   # @return [SiteStatistics]
   def site_statistics
-    @site_statistics ||= FetchBarStatistics.new(site, days_limit: LIFETIME_TOTALS_PERIOD_IN_DAYS).call
+    @site_statistics ||= FetchSiteStatistics.new(site, days_limit: LIFETIME_TOTALS_PERIOD_IN_DAYS).call
   end
 end

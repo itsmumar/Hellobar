@@ -59,8 +59,8 @@ IntercomRails.config do |config|
     primary_domain: proc { |user| NormalizeURI[user.sites.first&.url]&.domain },
     additional_domains: proc { |user| user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', ') },
     contact_lists: proc { |user| user.contact_lists.count },
-    total_views: proc { |user| user.sites.map { |site| site.bar_statistics.values.sum(&:views) }.sum },
-    total_conversions: proc { |user| user.sites.map { |site| site.bar_statistics.values.sum(&:conversions) }.sum }
+    total_views: proc { |user| user.sites.map { |site| site.site_element_statistics.values.sum(&:views) }.sum },
+    total_conversions: proc { |user| user.sites.map { |site| site.site_element_statistics.values.sum(&:conversions) }.sum }
   }
 
   # == Current company method/variable

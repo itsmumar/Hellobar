@@ -3,7 +3,7 @@ describe StaticScriptModel do
   let(:options) { {} }
   let!(:model) { described_class.new(site, options) }
 
-  before { allow_any_instance_of(SiteElement).to receive(:statistics).and_return(BarStatistics.new) }
+  before { allow_any_instance_of(SiteElement).to receive(:statistics).and_return(SiteElementStatistics.new) }
 
   describe '#preview_is_active' do
     let(:options) { { preview: true } }

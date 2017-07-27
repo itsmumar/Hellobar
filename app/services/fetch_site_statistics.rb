@@ -1,4 +1,4 @@
-class FetchBarStatistics
+class FetchSiteStatistics
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit

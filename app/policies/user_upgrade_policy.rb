@@ -29,7 +29,7 @@ class UserUpgradePolicy
   # 1000 views in the last 30 days
   def any_max_total_views_in_month?
     @user.site_elements.active.any? do |site_element|
-      statistics = FetchBarStatistics.new(site_element.site, days_limit: 30).call
+      statistics = FetchSiteStatistics.new(site_element.site, days_limit: 30).call
       statistics[site_element.id].views >= MAX_VIEW_IN_MONTH
     end
   end

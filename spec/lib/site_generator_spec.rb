@@ -2,7 +2,7 @@ describe SiteGenerator do
   let(:site) { create(:site) }
 
   before do
-    allow_any_instance_of(Site).to receive(:bar_statistics).and_return({})
+    allow_any_instance_of(Site).to receive(:site_element_statistics).and_return({})
   end
 
   describe '#initialize' do

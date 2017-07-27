@@ -1,5 +1,5 @@
 describe SiteStatistics, freeze: '2017-01-03' do
-  let(:site_element_statistics) { create_list :bar_statistics, 5, views: [1, 2, 3], conversions: [1, 2, 3] }
+  let(:site_element_statistics) { create_list :site_element_statistics, 5, views: [1, 2, 3], conversions: [1, 2, 3] }
   let(:model) { SiteStatistics.new([1, 2, 3, 4, 5].zip(site_element_statistics).to_h) }
 
   describe '#views' do
@@ -30,7 +30,7 @@ describe SiteStatistics, freeze: '2017-01-03' do
 
   describe '#totals' do
     it 'sums all site element statistics' do
-      expect(model.totals).to be_a BarStatistics
+      expect(model.totals).to be_a SiteElementStatistics
       expect(model.totals.views).to eql site_element_statistics.sum(&:views).to_f
       expect(model.totals.conversions).to eql site_element_statistics.sum(&:conversions).to_f
     end
@@ -41,14 +41,14 @@ describe SiteStatistics, freeze: '2017-01-03' do
 
     let(:site_element_statistics) do
       site_elements.each_with_object({}) do |element, hash|
-        hash[element.id] = create(:bar_statistics, :with_views)
+        hash[element.id] = create(:site_element_statistics, :with_views)
       end
     end
 
     let(:model) { SiteStatistics.new(site_element_statistics) }
 
     it 'sums all site element statistics' do
-      expect(model.for_goal(:click)).to be_a BarStatistics
+      expect(model.for_goal(:click)).to be_a SiteElementStatistics
       expect(model.for_goal(:click).views).to eql site_element_statistics.values.sum(&:views).to_f
       expect(model.for_goal(:click).conversions).to eql site_element_statistics.values.sum(&:conversions).to_f
     end

@@ -1,4 +1,4 @@
-class FetchBarStatisticsByType
+class FetchSiteStatisticsByType
   def initialize(site, days_limit:)
     @site = site
     @days_limit = days_limit
@@ -16,7 +16,7 @@ class FetchBarStatisticsByType
   attr_reader :site, :days_limit, :totals
 
   def statistics
-    @statistics ||= FetchBarStatistics.new(site, days_limit: days_limit).call
+    @statistics ||= FetchSiteStatistics.new(site, days_limit: days_limit).call
   end
 
   def set_statistics_for_goals

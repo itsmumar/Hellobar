@@ -42,7 +42,7 @@ describe 'Content upgrade requests' do
 
     describe 'GET :index' do
       before do
-        expect(FetchBarStatistics)
+        expect(FetchSiteStatistics)
           .to receive_service_call.with(site, days_limit: 7).and_return({})
       end
 

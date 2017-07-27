@@ -1,9 +1,9 @@
-describe BarStatistics, freeze: '2017-01-03' do
-  let(:model) { BarStatistics.new(records) }
+describe SiteElementStatistics, freeze: '2017-01-03' do
+  let(:model) { SiteElementStatistics.new(records) }
 
-  let(:two_days_ago) { BarStatistics::Record.new(50, 4, 2.days.ago, 1) }
-  let(:one_days_ago) { BarStatistics::Record.new(75, 6, 1.day.ago, 1) }
-  let(:today) { BarStatistics::Record.new(100, 10, Date.current, 1) }
+  let(:two_days_ago) { SiteElementStatistics::Record.new(50, 4, 2.days.ago, 1) }
+  let(:one_days_ago) { SiteElementStatistics::Record.new(75, 6, 1.day.ago, 1) }
+  let(:today) { SiteElementStatistics::Record.new(100, 10, Date.current, 1) }
 
   let(:records) { [two_days_ago, one_days_ago, today] }
 
@@ -13,7 +13,7 @@ describe BarStatistics, freeze: '2017-01-03' do
 
     it 'creates BarStatistics::Record and appends it to array' do
       model << { 'v' => 100, 'c' => 10, 'date' => 2.days.ago, 'sid' => 1 }
-      expect(last_record).to be_a BarStatistics::Record
+      expect(last_record).to be_a SiteElementStatistics::Record
       expect(last_record.conversions).to eql 10
       expect(last_record.views).to eql 100
       expect(last_record.date).to eql 2.days.ago

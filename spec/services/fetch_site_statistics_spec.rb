@@ -1,10 +1,10 @@
-describe FetchBarStatistics do
+describe FetchSiteStatistics do
   let!(:site) { create :site, :with_rule }
   let!(:site_element) { create :site_element, site: site }
   let!(:days_limit) { 5 }
-  let(:service) { FetchBarStatistics.new(site, days_limit: days_limit) }
+  let(:service) { FetchSiteStatistics.new(site, days_limit: days_limit) }
 
-  # see FetchBarStatistics#convert_to_weird_date
+  # see FetchSiteStatistics#convert_to_weird_date
   def convert_to_weird_date(date)
     (date.year - 2000) * 1000 + date.yday
   end
@@ -12,9 +12,9 @@ describe FetchBarStatistics do
   describe '#call', freeze: '2017-01-05' do
     let(:records) do
       [
-        create(:bar_statistics_record, date: '2017-01-01', site_element: site_element),
-        create(:bar_statistics_record, date: '2017-01-02', site_element: site_element),
-        create(:bar_statistics_record, date: '2017-01-03', site_element: site_element)
+        create(:site_element_statistics_record, date: '2017-01-01', site_element: site_element),
+        create(:site_element_statistics_record, date: '2017-01-02', site_element: site_element),
+        create(:site_element_statistics_record, date: '2017-01-03', site_element: site_element)
       ]
     end
 
