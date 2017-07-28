@@ -48,8 +48,4 @@ class DigestMailer < ActionMailer::Base
   def site_elements_to_send(site)
     site.site_elements.where(id: @last_week_statistics.with_views.site_element_ids) || []
   end
-
-  def statistics_for_last_week_with_views
-    @site_statistics.between(@last_week)
-  end
 end

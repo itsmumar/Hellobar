@@ -282,6 +282,26 @@ describe SitesController do
     end
   end
 
+  describe 'GET improve' do
+    let(:site) { create(:site, :with_user, :with_rule) }
+    let(:site_element) { create(:site_element, :traffic, site: site) }
+    let(:user) { site.owners.first }
+    let(:statistics) { create :site_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
+
+    before do
+      stub_current_user(user)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
+    end
+
+    it 'responds successfully' do
+      get :improve, id: site_element.site.id
+      expect(response).to be_success
+    end
+  end
+
   describe 'PUT downgrade' do
     let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
