@@ -45,6 +45,10 @@ class SiteStatistics
     scope { |record| record.date.in? a.to_date..b.to_date }
   end
 
+  def within(range)
+    scope { |record| record.date.in? range }
+  end
+
   def until(date)
     scope { |record| record.date <= date.to_date }
   end

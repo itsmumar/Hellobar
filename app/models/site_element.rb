@@ -76,6 +76,7 @@ class SiteElement < ActiveRecord::Base
   delegate :image_uploads, to: :site
   delegate :url, :small_url, :medium_url, :large_url, :modal_url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
+  delegate :conversion_rate, to: :statistics
 
   store :settings, coder: Hash
   serialize :blocks, Array
@@ -133,10 +134,6 @@ class SiteElement < ActiveRecord::Base
 
   def fonts
     (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS
-  end
-
-  def conversion_rate
-    total_conversions * 1.0 / total_views
   end
 
   def related_site_elements

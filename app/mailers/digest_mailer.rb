@@ -13,6 +13,9 @@ class DigestMailer < ActionMailer::Base
 
     # First find the site elements that actually have views
     @site_statistics = FetchSiteStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
+    @last_week_statistics = @site_statistics.within(@last_week)
+    @week_before_statistics = @site_statistics.within(@week_before)
+
     @sorted_elements = site_elements_to_send(site)
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
@@ -37,15 +40,16 @@ class DigestMailer < ActionMailer::Base
   private
 
   def set_weekly_dates
-    @end_date = EmailDigestHelper.date_of_previous('Sunday')
-    @date_ranges = [@end_date - 13, @end_date - 7, @end_date - 6, @end_date]
+    end_date = EmailDigestHelper.date_of_previous('Sunday')
+    @week_before = 13.days.until(end_date)..7.days.until(end_date)
+    @last_week = 6.days.until(end_date)..end_date
   end
 
   def site_elements_to_send(site)
-    site.site_elements.where(id: statistics_for_range_with_views.site_element_ids) || []
+    site.site_elements.where(id: @last_week_statistics.with_views.site_element_ids) || []
   end
 
-  def statistics_for_range_with_views
-    @site_statistics.between(@date_ranges[2], @date_ranges[3]).with_views
+  def statistics_for_last_week_with_views
+    @site_statistics.between(@last_week)
   end
 end

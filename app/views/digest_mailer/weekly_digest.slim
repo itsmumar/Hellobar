@@ -21,13 +21,13 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #FE3817;"
-                    = format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).views)
+                    = format_number(@last_week_statistics.views)
                   div.smallLabel
                     | views last week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
-                    = format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).conversions)
+                    = format_number(@last_week_statistics.conversions)
                   div.smallLabel
                     | #{@conversion_header.downcase} last week
               td.summaryCell
@@ -36,7 +36,7 @@ tr.lightGrey
                     - if @site_statistics.size < 7
                       | n/a
                     - else
-                      = format_number(@site_statistics.between(@date_ranges[0], @date_ranges[1]).conversions)
+                      = format_number(@week_before_statistics.conversions)
                   div.smallLabel
                     | #{@conversion_header.downcase} the week before
               td.summaryCell
@@ -65,24 +65,24 @@ tr.lightGrey
               td.top.bottom.alignCenter.cell
                 = @conversion_header
               td.top.bottom.right.alignCenter.cell
-            - @sorted_elements.each_with_index do |se, index|
+            - @sorted_elements.each_with_index do |site_element, index|
               tr class=('odd' if index % 2 == 1)
                 td.left.bottom.alignCenter.cell
-                  div class="circle #{se.short_subtype}"
+                  div class="circle #{site_element.short_subtype}"
                     = index + 1
-                  div.elementText= truncate(strip_tags(se.headline || "").html_safe, length: 50, separator: ' ')
-                td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
-                td.bottom.alignCenter.cell= se.statistics.between(@date_ranges[2], @date_ranges[3]).views
+                  div.elementText= truncate(strip_tags(site_element.headline || '').html_safe, length: 50, separator: ' ')
+                td.bottom.alignCenter.cell= image_tag(site_element.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: site_element.type)
+                td.bottom.alignCenter.cell= site_element.statistics.within(@last_week).views
                 td.bottom.alignCenter.cell
-                  - if se.element_subtype == "announcement"
+                  - if site_element.element_subtype == "announcement"
                     span.darkGreyText --
-                  - elsif se.statistics.between(@date_ranges[2], @date_ranges[3]).conversions > 0
-                    | #{se.statistics.between(@date_ranges[2], @date_ranges[3]).conversions}
-                    |  (#{formatted_percent(se.statistics.between(@date_ranges[2], @date_ranges[3]).conversion_percent, false)})
+                  - elsif site_element.statistics.within(@last_week).conversions > 0
+                    | #{site_element.statistics.within(@last_week).conversions}
+                    |  (#{formatted_percent(site_element.statistics.within(@last_week).conversion_percent, false)})
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter
-                  = link_to "update", edit_site_site_element_url(se, site_id: @site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Edit Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button smallButton"
+                  = link_to "update", edit_site_site_element_url(site_element, site_id: @site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Edit Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button smallButton"
             tr.alignCenter
               td.bottom.right.left colspan=5 style="padding: 10px 0;"
                 = link_to "Get more conversions", site_site_elements_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Add Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
