@@ -226,59 +226,44 @@ describe SiteElement do
   end
 
   describe '#total_views' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
-    let(:statistic) { SiteElementStatistics.new }
+    let(:element) { create(:site_element) }
 
-    it 'returns total views as reported by the data API' do
-      allow(statistic).to receive(:views).and_return(12)
-      expect(FetchSiteStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+    it 'returns total views' do
+      allow(element).to receive(:statistics).and_return(double(views: 12))
       expect(element.total_views).to eq(12)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(FetchSiteStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+      allow(element).to receive(:statistics).and_return(double(views: 0))
       expect(element.total_views).to eq(0)
     end
   end
 
   describe '#total_conversions' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
-    let(:statistic) { SiteElementStatistics.new }
+    let(:element) { create(:site_element) }
 
-    it 'returns total views as reported by the data API' do
-      allow(statistic).to receive(:conversions).and_return(6)
-      expect(FetchSiteStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+    it 'returns total conversions' do
+      allow(element).to receive(:statistics).and_return(double(conversions: 6))
       expect(element.total_conversions).to eq(6)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(FetchSiteStatistics).to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
+      allow(element).to receive(:statistics).and_return(double(conversions: 0))
       expect(element.total_conversions).to eq(0)
     end
   end
 
   describe '#converted?' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
-    let(:statistic) { SiteElementStatistics.new }
+    let(:element) { create(:site_element) }
 
     context 'when there are no conversions' do
-      before do
-        expect(FetchSiteStatistics)
-          .to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
-      end
+      before { allow(element).to receive(:statistics).and_return(double(conversions: 0)) }
 
       specify { expect(element).not_to be_converted }
     end
 
     context 'when there are conversions' do
-      before do
-        allow(statistic).to receive(:conversions).and_return(1)
-        expect(FetchSiteStatistics)
-          .to receive_service_call.with(site, days_limit: 7).and_return(element.id => statistic)
-      end
+      before { allow(element).to receive(:statistics).and_return(double(conversions: 1)) }
 
       specify { expect(element).to be_converted }
     end

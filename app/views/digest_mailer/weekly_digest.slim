@@ -21,28 +21,28 @@ tr.lightGrey
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #FE3817;"
-                    = format_number(@totals.views_between(@date_ranges[2], @date_ranges[3]))
+                    = format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).views)
                   div.smallLabel
                     | views last week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #00B7DB;"
-                    = format_number(@totals.conversions_between(@date_ranges[2], @date_ranges[3]))
+                    = format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).conversions)
                   div.smallLabel
                     | #{@conversion_header.downcase} last week
               td.summaryCell
                 div.greyBorder.right
                   div.largeLabel style="color: #A738BB;"
-                    - if @totals.size < 7
+                    - if @site_statistics.size < 7
                       | n/a
                     - else
-                      = format_number(@totals.conversions_between(@date_ranges[0], @date_ranges[1]))
+                      = format_number(@site_statistics.between(@date_ranges[0], @date_ranges[1]).conversions)
                   div.smallLabel
                     | #{@conversion_header.downcase} the week before
               td.summaryCell
                 div.greyBorder
                   div.largeLabel style="color: #7FEBB9;"
-                    = format_number(@totals.conversions)
+                    = format_number(@site_statistics.conversions)
                   div.smallLabel
                     | total #{@conversion_header.downcase} ever
       tr
@@ -72,13 +72,13 @@ tr.lightGrey
                     = index + 1
                   div.elementText= truncate(strip_tags(se.headline || "").html_safe, length: 50, separator: ' ')
                 td.bottom.alignCenter.cell= image_tag(se.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: se.type)
-                td.bottom.alignCenter.cell= se.statistics.views_between(@date_ranges[2], @date_ranges[3])
+                td.bottom.alignCenter.cell= se.statistics.between(@date_ranges[2], @date_ranges[3]).views
                 td.bottom.alignCenter.cell
                   - if se.element_subtype == "announcement"
                     span.darkGreyText --
-                  - elsif se.statistics.conversions_between(@date_ranges[2], @date_ranges[3]) > 0
-                    | #{se.statistics.conversions_between(@date_ranges[2], @date_ranges[3])}
-                    |  (#{formatted_percent(se.statistics.conversion_percent_between(@date_ranges[2], @date_ranges[3]), false)})
+                  - elsif se.statistics.between(@date_ranges[2], @date_ranges[3]).conversions > 0
+                    | #{se.statistics.between(@date_ranges[2], @date_ranges[3]).conversions}
+                    |  (#{formatted_percent(se.statistics.between(@date_ranges[2], @date_ranges[3]).conversion_percent, false)})
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter

@@ -5,7 +5,7 @@ feature 'Manage Bars', js: true do
     @user = login
     @site = @user.sites.first
     @rule = @site.create_default_rules
-    allow_any_instance_of(Site).to receive(:site_element_statistics)
+    allow_any_instance_of(Site).to receive(:statistics)
   end
 
   context 'script is not installed' do
@@ -37,9 +37,7 @@ feature 'Manage Bars', js: true do
     end
 
     scenario 'shows option for a/b testing a bar when site elements exist' do
-      element = create(:site_element, rule: @rule)
-      allow_any_instance_of(FetchSiteStatistics)
-        .to receive(:call).and_return(SiteStatistics.new(element.id => create(:site_element_statistics)))
+      create(:site_element, rule: @rule)
       visit site_site_elements_path(@site)
       wait_for_ajax
       expect(page).to have_content('A/B test a new bar for this rule')

@@ -46,7 +46,7 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = fetch_site_element_statistics_by_type
+        @totals = site_statistics
         @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render json: @site }
@@ -54,7 +54,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = fetch_site_element_statistics_by_type
+    @totals = site_statistics
   end
 
   def update
@@ -87,8 +87,8 @@ class SitesController < ApplicationController
   end
 
   def chart_data
-    statistics = fetch_site_element_statistics_by_type.fetch(params[:type].to_sym)
-    render json: ChartDataSerializer.new(statistics, params[:type], sample_size: params[:days]).as_json, root: false
+    json = ChartDataSerializer.new(site_statistics, params).as_json
+    render json: json, root: false
   end
 
   def downgrade
@@ -102,8 +102,9 @@ class SitesController < ApplicationController
 
   private
 
-  def fetch_site_element_statistics_by_type
-    FetchSiteStatisticsByGoal.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+  def site_statistics
+    @site_statistics ||=
+      FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
   end
 
   def site_params

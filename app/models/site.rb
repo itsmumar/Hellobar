@@ -160,8 +160,8 @@ class Site < ActiveRecord::Base
     HbTestSite.generate_default id
   end
 
-  def site_element_statistics
-    @site_element_statistics ||= FetchSiteStatistics.new(self, days_limit: 7).call
+  def statistics
+    @statistics ||= FetchSiteStatistics.new(self, days_limit: 7).call
   end
 
   def create_default_rules

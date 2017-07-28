@@ -66,7 +66,10 @@ describe FetchSiteStatistics do
       it 'sends error to Raven' do
         expect(Raven)
           .to receive(:capture_exception)
-                .with(an_instance_of(Aws::DynamoDB::Errors::ServiceError), context: { request: instance_of(Hash) })
+          .with(
+            an_instance_of(Aws::DynamoDB::Errors::ServiceError),
+            context: { request: instance_of(Hash) }
+          )
 
         service.call
       end

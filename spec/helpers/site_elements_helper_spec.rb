@@ -87,10 +87,13 @@ describe SiteElementsHelper do
     it 'shows the conversion rate relative to other elements of the same type' do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      expect(FetchSiteStatistics).to receive_service_call.and_return(
-        element.id => create(:site_element_statistics, views: [10], conversions: [5]),
-        create(:site_element, :twitter, rule: rule).id => create(:site_element_statistics, views: [10], conversions: [1])
-      ).exactly(2).times
+      other_element = create(:site_element, :twitter, rule: rule)
+      records = [
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
+        create(:site_statistics_record, views: 10, conversions: 1, site_element_id: other_element.id)
+      ]
+      statistics = SiteStatistics.new(records)
+      expect(FetchSiteStatistics).to receive_service_call.and_return(statistics).exactly(2).times
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
     end
@@ -98,20 +101,28 @@ describe SiteElementsHelper do
     it "doesn't show a percentage when comparing against other bars with no conversions" do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
-      expect(FetchSiteStatistics).to receive_service_call.and_return(
-        element.id => create(:site_element_statistics, views: [10], conversions: [5]),
-        create(:site_element, :twitter, rule: rule).id => create(:site_element_statistics, views: [10], conversions: [0])
-      ).exactly(2).times
+      other_element = create(:site_element, :twitter, rule: rule)
+      records = [
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
+        create(:site_statistics_record, views: 10, conversions: 0, site_element_id: other_element.id)
+      ]
+      statistics = SiteStatistics.new(records)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.and_return(statistics).exactly(2).times
 
-      expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting better than your other social bars/)
+      expect(helper.activity_message_for_conversion(element, element.related_site_elements))
+        .to match(/converting better than your other social bars/)
     end
 
     it 'doesnt return the conversion rate when it is Infinite' do
       element = create(:site_element, :twitter)
-      expect(FetchSiteStatistics).to receive_service_call.and_return(
-        element.id => create(:site_element_statistics, views: [0], conversions: [5]),
-        create(:site_element, :facebook).id => create(:site_element_statistics, views: [10], conversions: [1])
-      )
+      other_element = create(:site_element, :facebook)
+      records = [
+        create(:site_statistics_record, site_element_id: element.id),
+        create(:site_statistics_record, views: 10, conversions: 1, site_element_id: other_element.id)
+      ]
+      statistics = SiteStatistics.new(records)
+      expect(FetchSiteStatistics).to receive_service_call.and_return(statistics)
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).not_to match(/Currently this bar is converting/)
     end
@@ -250,9 +261,9 @@ describe SiteElementsHelper do
 
       allow(variation3).to receive(:rule_id) { 0 }
 
-      allow(variation1).to receive(:statistics).and_return(create(:site_element_statistics, views: [250], conversions: [250]))
-      allow(variation2).to receive(:statistics).and_return(create(:site_element_statistics, views: [250], conversions: [250]))
-      allow(variation3).to receive(:statistics).and_return(create(:site_element_statistics, views: [250], conversions: [250]))
+      allow(variation1).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
+      allow(variation2).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
+      allow(variation3).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
 
       allow_any_instance_of(Site).to receive(:site_elements).and_return([variation1, variation2, variation3])
 

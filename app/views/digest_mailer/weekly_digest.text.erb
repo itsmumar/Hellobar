@@ -1,16 +1,16 @@
 Your performance this week for <%= @site.url %>
 
-<%= format_number(@totals.views_between(@date_ranges[2], @date_ranges[3])) %> views last week
-<%= format_number(@totals.conversions_between(@date_ranges[2], @date_ranges[3])) %> <%= @conversion_header.downcase %> last week
-<%= format_number(@totals.conversions_between(@date_ranges[0], @date_ranges[1])) %> <%= @conversion_header.downcase %> the week before
-<%= format_number(@totals.conversions) %> total <%= @conversion_header.downcase %> ever
+<%= format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).views) %> views last week
+<%= format_number(@site_statistics.between(@date_ranges[2], @date_ranges[3]).conversions) %> <%= @conversion_header.downcase %> last week
+<%= format_number(@site_statistics.between(@date_ranges[0], @date_ranges[1]).conversions) %> <%= @conversion_header.downcase %> the week before
+<%= format_number(@site_statistics.conversions) %> total <%= @conversion_header.downcase %> ever
 
 <%= @conversion_header %>
 
 <% @sorted_elements.each_with_index do |se, index| %>
 <%= index + 1 %>) <%= strip_tags(se.headline || "").html_safe %>
-  * Views: <%= se.statistics.views_between(@date_ranges[2], @date_ranges[3]) %>
-  * <%= @conversion_header %>: <%= se.statistics.conversions_between(@date_ranges[2], @date_ranges[3]) %> (<%= formatted_percent(se.statistics.conversion_percent_between(@date_ranges[2], @date_ranges[3]), false) %>)
+  * Views: <%= se.statistics.between(@date_ranges[2], @date_ranges[3]).views %>
+  * <%= @conversion_header %>: <%= se.statistics.between(@date_ranges[2], @date_ranges[3]).conversions %> (<%= formatted_percent(se.statistics.between(@date_ranges[2], @date_ranges[3]).conversion_percent, false) %>)
 <% end %>
 
 Get more conversions by visiting <%= site_site_elements_url(@site) %>

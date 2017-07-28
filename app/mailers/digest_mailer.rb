@@ -16,8 +16,6 @@ class DigestMailer < ActionMailer::Base
     @sorted_elements = site_elements_to_send(site)
     # Bail if we don't have any elements with data
     return nil if @sorted_elements.empty?
-    # Get the totals for the elements with views
-    @totals = FetchSiteStatisticsByGoal.new(@site, days_limit: @site.capabilities.num_days_improve_data).call[:total]
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(
@@ -44,22 +42,10 @@ class DigestMailer < ActionMailer::Base
   end
 
   def site_elements_to_send(site)
-    # We get the views and store them in an tuple with the site element
-    site_elements_with_views = site.site_elements.map do |site_element|
-      views = views_for(site_element)
-      [views.to_i, site_element]
-    end
-
-    # Next we reject any elements without any views, sort by the views, and then
-    # distill the results back to just the site elements
-    site_elements_with_views
-      .reject { |views_count, _| views_count.zero? }
-      .sort_by { |views_count, _| views_count }
-      .reverse
-      .map { |_, site_element| site_element }
+    site.site_elements.where(id: statistics_for_range_with_views.site_element_ids) || []
   end
 
-  def views_for(site_element)
-    @site_statistics[site_element.id]&.views_between(@date_ranges[2], @date_ranges[3])
+  def statistics_for_range_with_views
+    @site_statistics.between(@date_ranges[2], @date_ranges[3]).with_views
   end
 end

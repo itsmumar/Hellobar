@@ -52,7 +52,9 @@ describe SendEmailDigest, :freeze do
       context 'and script installed' do
         let(:mailer) { DigestMailer.weekly_digest(site, recipient) }
         before { allow(site).to receive(:script_installed?).and_return(true) }
-        let(:statistics) { SiteStatistics.new(site_element.id => create(:site_element_statistics, :with_views, first_date: end_date)) }
+        let(:statistics) do
+          create(:site_statistics, :with_views, first_date: end_date, site_element_id: site_element.id)
+        end
         before { allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(statistics) }
 
         context 'when script is installed more than a week ago' do

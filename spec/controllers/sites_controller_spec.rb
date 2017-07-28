@@ -256,12 +256,11 @@ describe SitesController do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
-    let(:total_statistics) { create :site_element_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
-    let(:statistics) { { total: total_statistics } }
+    let(:statistics) { create :site_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
 
     before do
       stub_current_user(user)
-      expect(FetchSiteStatisticsByGoal)
+      expect(FetchSiteStatistics)
         .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
     end
 
@@ -269,6 +268,7 @@ describe SitesController do
       request.env['HTTP_ACCEPT'] = 'application/json'
       get :chart_data, id: site_element.site.id, type: :total, days: 2
       json = JSON.parse(response.body)
+
       expect(json.size).to eq(2)
       expect(json[0]['value']).to eq(12)
       expect(json[1]['value']).to eq(18)

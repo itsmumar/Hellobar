@@ -64,7 +64,8 @@ describe RenderStaticScript do
           .with('modules.js')
           .and_return('MODULES')
 
-        allow_any_instance_of(SiteElement).to receive(:statistics).and_return(SiteElementStatistics.new)
+        allow_any_instance_of(SiteElement)
+          .to receive(:statistics).and_return(SiteStatistics.new)
       end
 
       it 'escapes </script>' do

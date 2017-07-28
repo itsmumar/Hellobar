@@ -94,7 +94,6 @@ describe SiteStatistics, freeze: '2017-01-03' do
     end
   end
 
-
   describe '#<<' do
     let(:last_record) { model.records.last }
     before { model.clear }

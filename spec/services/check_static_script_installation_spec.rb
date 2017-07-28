@@ -52,11 +52,11 @@ describe CheckStaticScriptInstallation do
 
     context 'and bar has views' do
       let(:element_id) { 1 } # doesn't matter for this specs
-      let(:statistics) { create :site_element_statistics, views: [0] }
+      let(:statistics) { create :site_statistics, views: [0] }
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call.with(site, days_limit: 10)
-          .and_return(SiteStatistics.new(element_id => statistics))
+          .and_return(statistics)
       end
 
       include_examples 'uninstalled'
@@ -94,11 +94,11 @@ describe CheckStaticScriptInstallation do
 
     context 'and bar has no views' do
       let(:element_id) { 1 } # doesn't matter for this specs
-      let(:statistics) { create :site_element_statistics, views: [1] }
+      let(:statistics) { create :site_statistics, views: [1] }
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call.with(site, days_limit: 10)
-          .and_return(SiteStatistics.new(element_id => statistics))
+          .and_return(statistics)
       end
 
       include_examples 'installed'
@@ -130,11 +130,11 @@ describe CheckStaticScriptInstallation do
 
     context 'and bar has views' do
       let(:element_id) { 1 } # doesn't matter for this specs
-      let(:statistics) { create :site_element_statistics, views: [1] }
+      let(:statistics) { create :site_statistics, views: [1] }
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call.with(site, days_limit: 10)
-          .and_return(SiteStatistics.new(element_id => statistics))
+          .and_return(statistics)
       end
 
       include_examples 'installed'
