@@ -22,7 +22,7 @@ class SiteStatistics
   end
 
   def site_element_ids
-    map(&:site_element_id)
+    map(&:site_element_id).uniq
   end
 
   def days
