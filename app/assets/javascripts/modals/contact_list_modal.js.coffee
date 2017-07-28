@@ -191,9 +191,10 @@ class @ContactListModal extends Modal
           modal.blocks.remoteListSelect.hide()
           modal.blocks.tagListSelect.hide()
           modal.$modal.trigger('provider:disconnected')
+          delete modal.options.identity
+          modal._chooseHelloBar()
         error: (response) =>
-          if response.status == 403
-            delete modal.options.identity
+          if response.status == 422
             modal._chooseHelloBar()
 
   _chooseHelloBar: () ->

@@ -12,8 +12,10 @@ describe DestroyIdentity do
 
       it 'destroys identity' do
         expect { service.call }
-          .to change(Identity, :count).by(-1)
-          .and change { conntact_list.reload.identity }.to nil
+          .to change(Identity, :count)
+          .by(-1)
+          .and change { conntact_list.reload.identity }
+          .to nil
       end
     end
 

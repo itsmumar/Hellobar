@@ -1,25 +1,23 @@
 //= require modules/tracking/tracking.external
 
 describe('Module tracking.external', function () {
-
   var module;
   var externalTrackings;
   var googleAnalyticsMock;
-  var legacyGoogleAnalyticsMock;
+  var googleTagManagerMock;
+  var id = 2;
 
   beforeEach(function () {
     hellobar.finalize();
 
     externalTrackings = [{
-      site_element_id: 2,
-      provider: 'google_analytics',
+      id: id,
       type: 'view',
       category: 'HelloBar',
       action: 'View',
       label: 'SiteElement-2'
     }, {
-      site_element_id: 2,
-      provider: 'legacy_google_analytics',
+      id: id,
       type: 'traffic_conversion',
       category: 'HelloBar',
       action: 'Converted',
@@ -27,20 +25,20 @@ describe('Module tracking.external', function () {
     }];
 
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
-    legacyGoogleAnalyticsMock = jasmine.createSpyObj('LGA', ['send']);
+    googleTagManagerMock = jasmine.createSpyObj('GTM', ['send']);
 
-    googleAnalyticsMock.inspect = function () {
-      return {
-        available: function () {
-          return true;
-        }
-      };
+    googleAnalyticsMock.available = function () {
+      return true;
+    };
+
+    googleTagManagerMock.available = function () {
+      return true;
     };
 
     module = hellobar('tracking.external', {
       dependencies: {
         'tracking.external.googleAnalytics': googleAnalyticsMock,
-        'tracking.external.legacyGoogleAnalytics': legacyGoogleAnalyticsMock
+        'tracking.external.googleTagManager': googleTagManagerMock
       },
       configurator: function (configuration) {
         configuration.externalTrackings(externalTrackings);
@@ -54,34 +52,32 @@ describe('Module tracking.external', function () {
   });
 
   it('calls tracking engines on send', function () {
-    module.send('view', 2);
-    module.send('traffic_conversion', 2);
+    module.send('view', id);
+    module.send('traffic_conversion', id);
 
     expect(googleAnalyticsMock.send).toHaveBeenCalled();
     expect(googleAnalyticsMock.send.calls.count()).toEqual(2);
 
-    expect(legacyGoogleAnalyticsMock.send).toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send.calls.count()).toEqual(2);
+    expect(googleTagManagerMock.send).toHaveBeenCalled();
+    expect(googleTagManagerMock.send.calls.count()).toEqual(2);
   });
 
   it('does not send anything for unknown tracking type', function () {
-    module.send('unknown_tracking_type', 2);
+    module.send('unknown_tracking_type', id);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(googleTagManagerMock.send).not.toHaveBeenCalled();
   });
 
-  it('considers site_element_id while sending', function () {
+  it('considers id (SiteElement#id) while sending', function () {
     module.send('view', 12345);
     module.send('traffic_conversion', 54321);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
-    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(googleTagManagerMock.send).not.toHaveBeenCalled();
   });
 
-  it('is considered available if at least one of the tracking engine is available', function () {
-    expect(module.inspect().available()).toEqual(true);
+  it('is considered available if at least one of the tracking engines is available', function () {
+    expect(module.available()).toEqual(true);
   });
-
-
 });

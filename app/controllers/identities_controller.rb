@@ -54,7 +54,7 @@ class IdentitiesController < ApplicationController
     if identity.destroy
       render json: identity
     else
-      head :forbidden
+      head :unprocessable_entity
     end
   end
 

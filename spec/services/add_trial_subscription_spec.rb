@@ -60,8 +60,10 @@ describe AddTrialSubscription, :freeze do
         expect(Bill::Recurring).to receive(:create!).and_raise(StandardError)
         expect { service.call }
           .to raise_error(StandardError)
-          .and change(Subscription, :count).by(0)
-          .and change(Bill, :count).by(0)
+          .and change(Subscription, :count)
+          .by(0)
+          .and change(Bill, :count)
+          .by(0)
       end
     end
   end
