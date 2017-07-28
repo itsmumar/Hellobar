@@ -16,17 +16,17 @@ class FetchSiteStatistics
 
   def process(site_element)
     request = request_for(site_element.id)
-    process_response site_element.id, dynamo_db_for(site_element).fetch(request)
+    process_response site_element, dynamo_db_for(site_element).fetch(request)
   end
 
-  def process_response(site_element_id, response)
+  def process_response(site_element, response)
     response.each do |item|
-      statistics[site_element_id] << item.merge('date' => convert_from_weird_date(item['date'].to_i))
+      statistics << enhance_record(site_element, item)
     end
   end
 
   def statistics
-    @statistics ||= SiteStatistics.new(site_elements: site.site_elements)
+    @statistics ||= SiteStatistics.new
   end
 
   def request_for(id)
@@ -51,6 +51,14 @@ class FetchSiteStatistics
 
   def last_date
     convert_to_weird_date days_limit.days.ago
+  end
+
+  def enhance_record(site_element, item)
+    attributes = {
+      'date' => convert_from_weird_date(item['date'].to_i),
+      'goal' => site_element.short_subtype
+    }
+    item.merge(attributes)
   end
 
   # convert 2017-01-01 to "17001"

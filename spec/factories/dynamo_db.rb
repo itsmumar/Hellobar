@@ -1,9 +1,10 @@
 FactoryGirl.define do
-  factory :site_element_statistics, class: SiteElementStatistics do
+  factory :site_statistics, class: SiteStatistics do
     skip_create
 
     transient do
       first_date Date.current
+      site_element_id nil
       views []
       conversions []
     end
@@ -11,9 +12,15 @@ FactoryGirl.define do
     initialize_with do
       records =
         views.zip(conversions).map.with_index do |(view, conversion), number|
-          SiteElementStatistics::Record.new(view || 0, conversion || 0, number.days.until(first_date).to_date)
+          attributes = {
+            views: view || 0,
+            conversions: conversion || 0,
+            date: number.days.until(first_date).to_date,
+            site_element_id: site_element_id
+          }
+          create :site_statistics_record, attributes
         end
-      SiteElementStatistics.new records
+      SiteStatistics.new records
     end
 
     trait :with_views do
@@ -23,30 +30,22 @@ FactoryGirl.define do
     end
   end
 
-  factory :site_element_statistics_record, class: OpenStruct do
+  factory :site_statistics_record, class: SiteStatistics::Record do
     skip_create
 
-    site_element
+    site_element_id nil
+    goal :email
     views { 100 }
     conversions { 10 }
-    date { '2017-01-01' }
-
-    json do
-      dt = Date.parse(date) if date
-      {
-        'v' => { 'N': views },
-        'c' => { 'N': conversions },
-        'date' => { 'N': (dt.year - 2000) * 1000 + dt.yday },
-        'sid' => { 'N': site_element.id }
-      }
-    end
+    date { Date.current }
 
     initialize_with do
-      OpenStruct.new(
-        views: views,
-        conversions: conversions,
-        date: date,
-        site_element: site_element
+      SiteStatistics::Record.new(
+        views,
+        conversions,
+        date,
+        site_element_id,
+        goal
       )
     end
   end

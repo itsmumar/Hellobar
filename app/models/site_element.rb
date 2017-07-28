@@ -263,7 +263,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def statistics
-    (site&.site_element_statistics || {}).fetch(id, SiteElementStatistics.new)
+    site&.statistics&.for_element(id) || SiteStatistics.new
   end
 
   private

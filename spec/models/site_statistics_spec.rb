@@ -1,10 +1,82 @@
 describe SiteStatistics, freeze: '2017-01-03' do
-  let(:site_element_statistics) { create_list :site_element_statistics, 5, views: [1, 2, 3], conversions: [1, 2, 3] }
-  let(:model) { SiteStatistics.new([1, 2, 3, 4, 5].zip(site_element_statistics).to_h) }
+  let(:first_record) { create(:site_statistics_record, site_element_id: 1) }
+  let(:second_record) { create(:site_statistics_record, site_element_id: 2) }
+  let(:third_record) { create(:site_statistics_record, site_element_id: 3) }
+
+  let(:records) { [first_record, second_record, third_record] }
+  let(:model) { SiteStatistics.new(records) }
+
+  describe '#for_element' do
+    it 'returns SiteStatistics with records which have a given site element id' do
+      expect(model.for_element(2)).to be_a SiteStatistics
+      expect(model.for_element(2).views).to eql second_record.views
+    end
+  end
+
+  describe '#site_element_ids' do
+    it 'returns all site element ids' do
+      expect(model.site_element_ids).to eql records.map(&:site_element_id)
+    end
+  end
+
+  describe '#days' do
+    it 'returns uniq record dates' do
+      expect(model.days).to eql [Date.current]
+    end
+  end
+
+  describe '#with_views' do
+    let(:third_record) { create(:site_statistics_record, views: 0, site_element_id: 3) }
+
+    it 'returns a scope with records that have views > 0' do
+      expect(model.with_views)
+        .to match_array([first_record, second_record])
+        .and be_a SiteStatistics
+    end
+  end
+
+  describe '#between' do
+    let(:third_record) { create(:site_statistics_record, date: 2.days.ago) }
+
+    it 'returns a scope with records that have views > 0' do
+      expect(model.between(1.day.ago)).to match_array [first_record, second_record]
+      expect(model.between(1.day.ago, Date.current))
+        .to match_array([first_record, second_record])
+        .and be_a SiteStatistics
+    end
+  end
+
+  describe '#until' do
+    let(:third_record) { create(:site_statistics_record, date: 2.days.ago) }
+
+    it 'returns a scope with records that have views > 0' do
+      expect(model.until(1.day.ago))
+        .to match_array([third_record])
+        .and be_a SiteStatistics
+    end
+  end
+
+  describe '#for_goal' do
+    let(:first_record) do
+      create(:site_statistics_record, site_element_id: 1, goal: :foo)
+    end
+
+    it 'returns SiteStatistics with records which have a given goal' do
+      expect(model.for_goal(:foo)).to be_a SiteStatistics
+      expect(model.for_goal(:foo).views).to eql first_record.views
+      expect(model.for_goal(:foo).conversions).to eql first_record.conversions
+    end
+  end
 
   describe '#views' do
     it 'sums all views' do
-      expect(model.views).to eql site_element_statistics.sum(&:views).to_f
+      expect(model.views).to eql records.sum(&:views)
+    end
+  end
+
+  describe '#conversions' do
+    it 'sums all conversions' do
+      expect(model.conversions).to eql records.sum(&:conversions)
     end
   end
 
@@ -22,35 +94,31 @@ describe SiteStatistics, freeze: '2017-01-03' do
     end
   end
 
-  describe '#conversions' do
-    it 'sums all conversions' do
-      expect(model.conversions).to eql site_element_statistics.sum(&:conversions).to_f
+
+  describe '#<<' do
+    let(:last_record) { model.records.last }
+    before { model.clear }
+
+    it 'creates SiteStatistics::Record and appends it to array' do
+      model << { 'v' => 100, 'c' => 10, 'date' => 2.days.ago, 'sid' => 1, 'goal' => 'call' }
+      expect(last_record).to be_a SiteStatistics::Record
+      expect(last_record.conversions).to eql 10
+      expect(last_record.views).to eql 100
+      expect(last_record.date).to eql 2.days.ago
+      expect(last_record.site_element_id).to eql 1
+      expect(last_record.goal).to eql :call
     end
   end
 
-  describe '#totals' do
-    it 'sums all site element statistics' do
-      expect(model.totals).to be_a SiteElementStatistics
-      expect(model.totals.views).to eql site_element_statistics.sum(&:views).to_f
-      expect(model.totals.conversions).to eql site_element_statistics.sum(&:conversions).to_f
+  describe '#conversion_rate' do
+    it 'returns proportion of conversion/views' do
+      expect(model.conversion_rate).to eql(model.conversions.to_f / model.views)
     end
   end
 
-  describe '#for_goal' do
-    let(:site_elements) { create_list :site_element, 3, :click_to_call }
-
-    let(:site_element_statistics) do
-      site_elements.each_with_object({}) do |element, hash|
-        hash[element.id] = create(:site_element_statistics, :with_views)
-      end
-    end
-
-    let(:model) { SiteStatistics.new(site_element_statistics) }
-
-    it 'sums all site element statistics' do
-      expect(model.for_goal(:click)).to be_a SiteElementStatistics
-      expect(model.for_goal(:click).views).to eql site_element_statistics.values.sum(&:views).to_f
-      expect(model.for_goal(:click).conversions).to eql site_element_statistics.values.sum(&:conversions).to_f
+  describe '#conversion_percent' do
+    it 'returns proportion of conversion/views' do
+      expect(model.conversion_percent).to eql(model.conversion_rate * 100)
     end
   end
 end

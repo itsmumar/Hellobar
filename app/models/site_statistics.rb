@@ -1,22 +1,52 @@
 class SiteStatistics
-  delegate :[], :fetch, :empty?, :clear, to: :@site_element_statistics
+  include Enumerable
 
-  attr_reader :site_element_statistics
+  Record = Struct.new(:views, :conversions, :date, :site_element_id, :goal)
 
-  def initialize(site_element_statistics = nil, site_elements: [])
-    @site_elements = site_elements
-    @site_element_statistics = site_element_statistics || Hash.new { |hash, k| hash[k] = SiteElementStatistics.new }
+  delegate :select, :empty?, :size, :each, :clear, to: :@records
+
+  attr_reader :records
+
+  def initialize(records = [])
+    @records = records
   end
 
-  def totals
-    @totals ||= site_element_statistics.values.inject(:+) || SiteElementStatistics.new
+  def <<(item)
+    @records << Record.new(
+      item['v'].to_i,
+      item['c'].to_i,
+      item['date'],
+      item['sid'].to_i,
+      item['goal'].to_sym
+    )
+  end
+
+  def site_element_ids
+    map(&:site_element_id)
+  end
+
+  def days
+    group_by(&:date).keys
+  end
+
+  def with_views
+    scope { |record| !record.views.zero? }
+  end
+
+  def for_element(id)
+    scope { |record| record.site_element_id == id }
   end
 
   def for_goal(goal)
-    elements_with_goal = @site_elements.select { |element| element.short_subtype.to_sym == goal }.map(&:id)
-    statistics_for_goal =
-      site_element_statistics.select { |site_element_id| site_element_id.in? elements_with_goal }.values
-    merge_records(statistics_for_goal)
+    scope { |record| record.goal == goal }
+  end
+
+  def between(a, b = Date.current)
+    scope { |record| record.date.in? a.to_date..b.to_date }
+  end
+
+  def until(date)
+    scope { |record| record.date <= date.to_date }
   end
 
   def views?
@@ -24,16 +54,24 @@ class SiteStatistics
   end
 
   def views
-    site_element_statistics.values.sum(&:views).to_f
+    records.sum(&:views)
   end
 
   def conversions
-    site_element_statistics.values.sum(&:conversions).to_f
+    records.sum(&:conversions)
+  end
+
+  def conversion_rate
+    views == 0 ? 0 : conversions.to_f / views
+  end
+
+  def conversion_percent
+    conversion_rate * 100
   end
 
   private
 
-  def merge_records(site_element_statistics)
-    site_element_statistics.inject(:+) || SiteElementStatistics.new
+  def scope(&block)
+    SiteStatistics.new(select(&block))
   end
 end
