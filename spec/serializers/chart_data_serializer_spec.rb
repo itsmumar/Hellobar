@@ -1,7 +1,7 @@
 describe ChartDataSerializer, freeze: '2017-01-10' do
   let(:site_statistics) { create :site_statistics, views: Array.new(3, 1) }
   let(:type) { :total }
-  let(:days) { }
+  let(:days) {}
   let(:serializer) { ChartDataSerializer.new(site_statistics, days: days, type: type) }
 
   describe '#as_json' do

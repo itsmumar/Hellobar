@@ -55,7 +55,8 @@ describe CheckStaticScriptInstallation do
       let(:statistics) { create :site_statistics, views: [0] }
       before do
         expect(FetchSiteStatistics)
-          .to receive_service_call.with(site, days_limit: 10)
+          .to receive_service_call
+          .with(site, days_limit: 10)
           .and_return(statistics)
       end
 
@@ -97,7 +98,8 @@ describe CheckStaticScriptInstallation do
       let(:statistics) { create :site_statistics, views: [1] }
       before do
         expect(FetchSiteStatistics)
-          .to receive_service_call.with(site, days_limit: 10)
+          .to receive_service_call
+          .with(site, days_limit: 10)
           .and_return(statistics)
       end
 
@@ -133,7 +135,8 @@ describe CheckStaticScriptInstallation do
       let(:statistics) { create :site_statistics, views: [1] }
       before do
         expect(FetchSiteStatistics)
-          .to receive_service_call.with(site, days_limit: 10)
+          .to receive_service_call
+          .with(site, days_limit: 10)
           .and_return(statistics)
       end
 
