@@ -38,6 +38,7 @@ class SiteStatistics
   end
 
   def for_goal(goal)
+    return self if goal == :total
     scope { |record| record.goal == goal }
   end
 
@@ -51,6 +52,10 @@ class SiteStatistics
 
   def until(date)
     scope { |record| record.date <= date.to_date }
+  end
+
+  def since(date)
+    scope { |record| record.date >= date.to_date }
   end
 
   def views?

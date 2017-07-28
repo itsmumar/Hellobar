@@ -3,8 +3,9 @@ FactoryGirl.define do
     skip_create
 
     transient do
-      first_date Date.current
+      first_date { Date.current }
       site_element_id nil
+      goal :foo
       views []
       conversions []
     end
@@ -16,7 +17,8 @@ FactoryGirl.define do
             views: view || 0,
             conversions: conversion || 0,
             date: number.days.until(first_date).to_date,
-            site_element_id: site_element_id
+            site_element_id: site_element_id,
+            goal: goal
           }
           create :site_statistics_record, attributes
         end

@@ -1,14 +1,14 @@
 class ChartDataSerializer
-  attr_reader :site_statistics, :type, :sample_size
+  attr_reader :site_statistics, :type, :days_limit
 
   def initialize(site_statistics, params)
-    @site_statistics = site_statistics
     @type = params[:type].to_sym
-    @sample_size = params[:days].to_i
+    @days_limit = params[:days].presence&.to_i
+    @site_statistics = site_statistics
   end
 
   def as_json
-    days_range.map do |date|
+    date_range.map do |date|
       {
         date: date.strftime('%-m/%d'),
         value: statistics_for_type.until(date).send(method)
@@ -18,30 +18,23 @@ class ChartDataSerializer
 
   private
 
-  def statistics_for_type
-    if type == :total
-      site_statistics
-    else
-      site_statistics.for_goal(type)
-    end
+  def date_range
+    first_date..Date.current
   end
 
-  def from_date
+  def statistics_for_type
+    @statistics_for_type ||= site_statistics.for_goal(type)
+  end
+
+  def first_date
+    return site_statistics.days.last unless limit_data?
     # compensate today so that
     # `days_number = 2` means get 2 days -- yesterday and today
-    (days_number - 1).days.ago.to_date
+    (days_limit - 1).days.ago.to_date
   end
 
-  def days_number
-    if sample_size.present?
-      [site_statistics.days.size, sample_size.to_i].min
-    else
-      site_statistics.days.size
-    end
-  end
-
-  def days_range
-    from_date..Date.current
+  def limit_data?
+    days_limit.present? && days_limit < site_statistics.days.size
   end
 
   def method
