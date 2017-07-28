@@ -96,10 +96,19 @@ describe SiteStatistics, freeze: '2017-01-03' do
 
   describe '#<<' do
     let(:last_record) { model.records.last }
-    before { model.clear }
+
+    before do
+      model.clear
+      model << {
+        'v' => 100,
+        'c' => 10,
+        'date' => 2.days.ago,
+        'sid' => 1,
+        'goal' => 'call'
+      }
+    end
 
     it 'creates SiteStatistics::Record and appends it to array' do
-      model << { 'v' => 100, 'c' => 10, 'date' => 2.days.ago, 'sid' => 1, 'goal' => 'call' }
       expect(last_record).to be_a SiteStatistics::Record
       expect(last_record.conversions).to eql 10
       expect(last_record.views).to eql 100
