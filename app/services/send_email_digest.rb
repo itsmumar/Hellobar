@@ -26,7 +26,7 @@ class SendEmailDigest
     any_elements_created_recently? && site.script_installed_at.nil?
   end
 
-  def any_elements_created_recently
+  def any_elements_created_recently?
     site.site_elements.where('site_elements.created_at > ?', 10.days.ago).any?
   end
 

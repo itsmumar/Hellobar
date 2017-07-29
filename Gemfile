@@ -176,6 +176,7 @@ group :test do
   gem 'simplecov', require: false
 
   gem 'database_cleaner'
+  gem 'email_spec'
   gem 'launchy'
   gem 'rspec-retry'
   gem 'shoulda-matchers'
