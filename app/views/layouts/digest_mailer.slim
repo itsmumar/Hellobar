@@ -257,4 +257,8 @@ html
       | &nbsp;or&nbsp;
       = link_to "hellobar.com", root_url
       | .
-      img src=tracking_pixel_url(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))
+      img src=tracking_pixel_url(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email"))
+    br
+    br
+    p style="text-align: center"
+      small This email was sent to #{ @user.email }.

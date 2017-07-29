@@ -18,7 +18,7 @@ module EmailDigestHelper
   end
 
   def self.date_of_previous(day)
-    date  = Date.parse(day)
+    date = Date.parse(day)
     delta = date > Date.current ? 7 : 0
     date - delta
   end
@@ -26,6 +26,19 @@ module EmailDigestHelper
   def self.last_week
     last_sunday = date_of_previous('Sunday')
     6.days.until(last_sunday)..last_sunday
+  end
+
+  def last_week
+    EmailDigestHelper.last_week
+  end
+
+  def week_for_subject
+    start_date = last_week.first
+    end_date = last_week.last
+    end_date_format = start_date.month == end_date.month ? '%-d, %Y' : '%b %-d, %Y'
+    from = start_date.strftime('%b %-d')
+    till = end_date.strftime(end_date_format)
+    "#{ from } - #{ till }"
   end
 
   def self.template_name(site)

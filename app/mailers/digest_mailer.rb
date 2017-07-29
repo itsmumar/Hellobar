@@ -1,9 +1,8 @@
 class DigestMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
   include EmailDigestHelper
-  include Hello::InternalAnalytics
   add_template_helper(EmailDigestHelper)
-  default from: 'from@example.com'
+  default from: 'Hello Bar <contact@hellobar.com>'
 
   before_filter :set_weekly_dates
 
@@ -18,8 +17,8 @@ class DigestMailer < ActionMailer::Base
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(
-      to: '', # Doesn't matter, we're sending the results through Grand Central
-      subject: 'Your Weekly Hello Bar Digest'
+      to: user.email,
+      subject: "Hello Bar Weekly Digest for #{ site.url } - #{ week_for_subject }"
     )
   end
 
@@ -28,8 +27,8 @@ class DigestMailer < ActionMailer::Base
     @user = user
 
     roadie_mail(
-      to: '', # Doesn't matter, we're sending the results through Grand Central
-      subject: 'One final step and your Hello Bar is live!'
+      to: user.email,
+      subject: 'One final step and your Hello bar is live'
     )
   end
 
