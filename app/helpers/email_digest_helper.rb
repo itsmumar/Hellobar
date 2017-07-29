@@ -19,8 +19,13 @@ module EmailDigestHelper
 
   def self.date_of_previous(day)
     date  = Date.parse(day)
-    delta = date > Date.today ? 7 : 0
+    delta = date > Date.current ? 7 : 0
     date - delta
+  end
+
+  def self.last_week
+    last_sunday = date_of_previous('Sunday')
+    6.days.until(last_sunday)..last_sunday
   end
 
   def self.template_name(site)

@@ -38,12 +38,5 @@ describe DigestMailer do
         end
       end
     end
-
-    it 'should be nil if there were no views in the past week' do
-      expect(FetchSiteStatistics)
-        .to receive_service_call.with(site, days_limit: 90).and_return(SiteStatistics.new)
-      expect { mail.deliver_now }.not_to raise_error
-      expect(ActionMailer::Base.deliveries).to be_empty
-    end
   end
 end

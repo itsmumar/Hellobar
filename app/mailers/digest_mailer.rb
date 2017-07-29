@@ -11,14 +11,10 @@ class DigestMailer < ActionMailer::Base
     @site = site
     @user = user
 
-    # First find the site elements that actually have views
-    @site_statistics = FetchSiteStatistics.new(site, days_limit: site.capabilities.num_days_improve_data).call
+    @site_statistics = fetch_site_statistics
     @last_week_statistics = @site_statistics.within(@last_week)
     @week_before_statistics = @site_statistics.within(@week_before)
-
     @sorted_elements = site_elements_to_send(site)
-    # Bail if we don't have any elements with data
-    return nil if @sorted_elements.empty?
     @conversion_header = conversion_header(@sorted_elements)
 
     roadie_mail(
@@ -39,13 +35,17 @@ class DigestMailer < ActionMailer::Base
 
   private
 
+  def fetch_site_statistics
+    FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+  end
+
   def set_weekly_dates
-    end_date = EmailDigestHelper.date_of_previous('Sunday')
-    @week_before = 13.days.until(end_date)..7.days.until(end_date)
-    @last_week = 6.days.until(end_date)..end_date
+    last_sunday = EmailDigestHelper.date_of_previous('Sunday')
+    @week_before = 13.days.until(last_sunday)..7.days.until(last_sunday)
+    @last_week = 6.days.until(last_sunday)..last_sunday
   end
 
   def site_elements_to_send(site)
-    site.site_elements.where(id: @last_week_statistics.with_views.site_element_ids) || []
+    site.site_elements.where(id: @last_week_statistics.with_views.site_element_ids)
   end
 end

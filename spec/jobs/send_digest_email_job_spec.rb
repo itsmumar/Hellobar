@@ -5,9 +5,29 @@ describe SendDigestEmailJob do
   describe '#perform' do
     let(:perform) { job.new.perform(site) }
 
-    it 'calls on the SendEmailDigest' do
-      expect(SendEmailDigest).to receive_service_call.with(site)
-      perform
+    before do
+      expect(FetchSiteStatistics)
+        .to receive_service_call
+        .with(site, days_limit: 14)
+        .and_return(statistics)
+    end
+
+    context 'when site has views' do
+      let(:statistics) { create :site_statistics, views: [1], first_date: 9.days.ago }
+
+      it 'calls SendEmailDigest' do
+        expect(SendEmailDigest).to receive_service_call.with(site)
+        perform
+      end
+    end
+
+    context 'when site has no views' do
+      let(:statistics) { create :site_statistics, views: [0], first_date: 9.days.ago }
+
+      it 'does not call SendEmailDigest' do
+        expect(SendEmailDigest).not_to receive_service_call.with(site)
+        perform
+      end
     end
   end
 
