@@ -41,19 +41,7 @@ module EmailDigestHelper
     "#{ from } - #{ till }"
   end
 
-  def self.template_name(site)
-    if site.script_installed_at.nil?
-      'New Email Digest (Not Installed)'
-    elsif site.script_installed_at > 1.week.ago
-      if site.free?
-        'New Email Digest (First Time)'
-      else
-        'New Email Digest (First Time, Pro)'
-      end
-    elsif site.free?
-      'New Email Digest'
-    else
-      'New Email Digest (Pro)'
-    end
+  def tracker_param(*args)
+    Hello::TrackingParam.encode_tracker(*args)
   end
 end

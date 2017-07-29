@@ -5,7 +5,6 @@ class SendEmailDigest
 
   def call
     site.owners_and_admins.each do |recipient|
-      Analytics.track(:user, recipient.id, 'Sent Email', 'Email Template' => template_name)
       mailer_for(recipient)&.deliver_now
     end
   end
@@ -28,9 +27,5 @@ class SendEmailDigest
 
   def any_elements_created_recently?
     site.site_elements.where('site_elements.created_at > ?', 10.days.ago).any?
-  end
-
-  def template_name
-    EmailDigestHelper.template_name(site)
   end
 end
