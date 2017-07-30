@@ -55,8 +55,6 @@ class DynamoDB
       response = yield
       payload[:method], payload[:request] = last_request
       payload[:consumed_capacity] = response.consumed_capacity
-      # payload[:table_name] = response.consumed_capacity&.table_name
-      # payload[:capacity] = response.consumed_capacity&.capacity_units
       response
     end
   end

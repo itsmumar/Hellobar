@@ -26,8 +26,7 @@ class DynamoDB::LogSubscriber < ActiveSupport::LogSubscriber
 
   def capacity(payload)
     return unless payload[:consumed_capacity]
-
-    Array(payload[:consumed_capacity]).map { |consumed_capacity|
+    Array.wrap(payload[:consumed_capacity]).map { |consumed_capacity|
       color(
         "[#{ consumed_capacity.table_name } #{ consumed_capacity.capacity_units }]",
         :green,
