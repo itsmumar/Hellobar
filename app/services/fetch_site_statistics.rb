@@ -46,7 +46,7 @@ class FetchSiteStatistics
   end
 
   def table
-    'over_time'
+    Rails.env.production? ? 'over_time' : 'edge_over_time2'
   end
 
   def last_date
