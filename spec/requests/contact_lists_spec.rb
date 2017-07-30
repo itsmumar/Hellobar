@@ -90,7 +90,7 @@ describe 'ContactList requests' do
         it 'enqueues ExportNotifications mailer' do
           expect(ExportNotifications).to receive(:send_contacts_csv).and_call_original
           expect { get site_contact_list_path(site, contact_list, format: :csv) }
-            .to have_enqueued_job.on_queue('mailers')
+            .to have_enqueued_job.on_queue('test_mailers')
         end
 
         it 'redirects back' do
