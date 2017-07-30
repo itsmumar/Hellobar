@@ -193,7 +193,7 @@ describe Site do
     end
   end
 
-  describe '#destroy' do
+  describe '#destroy', :freeze do
     let(:mock_upload_to_s3) { double(:upload_to_s3) }
 
     before do
@@ -204,12 +204,14 @@ describe Site do
 
     it 'blanks-out the site script when destroyed' do
       site.destroy
+
       expect(UploadToS3).to have_received(:new).with(site.script_name, '')
     end
 
-    it 'soft-deletes record' do
+    it 'marks the record as deleted' do
       site.destroy
-      expect(Site.only_deleted).to include(site)
+
+      expect(site.deleted_at).to eq Time.current
     end
   end
 

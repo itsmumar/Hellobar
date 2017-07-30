@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  acts_as_paranoid
+
   include UserValidator
   include ReferralTokenizable
 
@@ -41,8 +43,6 @@ class User < ActiveRecord::Base
   }
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
-
-  acts_as_paranoid
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
