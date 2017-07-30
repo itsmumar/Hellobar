@@ -1,4 +1,4 @@
-class SendDigestEmailJob < ApplicationJob
+class SendEmailDigestJob < ApplicationJob
   def perform(site)
     return unless any_views_within_last_week?(site)
     SendEmailDigest.new(site).call

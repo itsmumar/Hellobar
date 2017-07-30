@@ -1,4 +1,4 @@
-describe SendDigestEmailJob do
+describe SendEmailDigestJob do
   let(:job) { described_class }
   let(:site) { create :site }
 
