@@ -44,22 +44,25 @@ describe ContactList do
   end
 
   describe '#destroy' do
-    it 'deletes contact list from default scope' do
+    it 'marks the record as deleted', :freeze do
+      expect(contact_list.deleted_at).to be_nil
+
+      contact_list.destroy
+
+      expect(contact_list.deleted_at).to eq Time.current
+
       expect {
-        contact_list.destroy
-      }.to change { ContactList.count }.by(-1)
+        ContactList.find(contact_list.id)
+      }.to raise_exception ActiveRecord::RecordNotFound
     end
 
-    it 'soft deletes a contact list' do
-      expect {
-        contact_list.destroy
-      }.to change { ContactList.only_deleted.count }
-    end
+    it 'destroys the identity and nullifies identity_id' do
+      identity = contact_list.identity
 
-    it 'destroys identity' do
-      expect {
-        contact_list.destroy
-      }.to change { Identity.count }
+      contact_list.destroy
+
+      expect(identity).to be_destroyed
+      expect(contact_list.reload.identity_id).to be_nil
     end
   end
 
