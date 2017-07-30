@@ -36,7 +36,7 @@ class FetchSiteStatistics
       expression_attribute_names: { '#D' => 'date' },
       expression_attribute_values: { ':last_date' => last_date, ':sid' => id },
       projection_expression: '#D, c, v, sid',
-      return_consumed_capacity: 'INDEXES',
+      return_consumed_capacity: 'TOTAL',
       limit: days_limit
     }
   end

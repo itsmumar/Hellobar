@@ -35,7 +35,8 @@ class FetchContactListTotals
           keys: contact_list_ids.map { |id| { 'lid' => id, 'email' => 'total' } },
           projection_expression: 'lid,t'
         }
-      }
+      },
+      return_consumed_capacity: 'TOTAL'
     }
   end
 

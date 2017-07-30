@@ -12,7 +12,8 @@ describe FetchContacts do
             'n' => { 'S': 'Name' },
             'ts' => { 'N': Time.current.to_i }
           }
-        ]
+        ],
+        'ConsumedCapacity': {}
       }
 
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
@@ -43,7 +44,10 @@ describe FetchContacts do
       it 'sends error to Raven' do
         expect(Raven)
           .to receive(:capture_exception)
-          .with(an_instance_of(Aws::DynamoDB::Errors::ServiceError), context: { request: instance_of(Hash) })
+          .with(
+            an_instance_of(Aws::DynamoDB::Errors::ServiceError),
+            context: { request: [:query, instance_of(Hash)] }
+          )
 
         service.call
       end
