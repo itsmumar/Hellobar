@@ -19,7 +19,7 @@ class FetchContactListTotals
   end
 
   def process(response)
-    response.fetch(table, []).inject({}) do |result, item|
+    response.fetch(table_name, []).inject({}) do |result, item|
       result.update item['lid'].to_i => item['t'].to_i
     end
   end
@@ -31,7 +31,7 @@ class FetchContactListTotals
   def request
     {
       request_items: {
-        table => {
+        table_name => {
           keys: contact_list_ids.map { |id| { 'lid' => id, 'email' => 'total' } },
           projection_expression: 'lid,t'
         }
@@ -43,7 +43,14 @@ class FetchContactListTotals
     @contact_list_ids ||= site.contact_lists.ids
   end
 
-  def table
-    Rails.env.production? ? 'contacts' : 'edge_contacts'
+  def table_name
+    case Rails.env
+    when 'staging'
+      'staging_contacts'
+    when 'production'
+      'contacts'
+    else # edge / development / test
+      'edge_contacts'
+    end
   end
 end

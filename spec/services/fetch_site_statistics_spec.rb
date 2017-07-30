@@ -20,7 +20,7 @@ describe FetchSiteStatistics do
 
     let(:request_body) do
       date = convert_to_weird_date(days_limit.days.ago)
-      %r{"TableName":"over_time".+":last_date":{"N":"#{ date }"}.+":sid":{"N":"#{ site_element.id }"}.+"Limit":#{ days_limit }}
+      %r{"TableName":"edge_over_time2".+":last_date":{"N":"#{ date }"}.+":sid":{"N":"#{ site_element.id }"}.+"Limit":#{ days_limit }}
     end
 
     def response_body

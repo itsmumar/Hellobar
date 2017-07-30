@@ -31,7 +31,7 @@ class FetchSiteStatistics
 
   def request_for(id)
     {
-      table_name: table,
+      table_name: table_name,
       key_condition_expression: '#D >= :last_date AND sid = :sid',
       expression_attribute_names: { '#D' => 'date' },
       expression_attribute_values: { ':last_date' => last_date, ':sid' => id },
@@ -45,8 +45,15 @@ class FetchSiteStatistics
     @site_elements ||= site.site_elements
   end
 
-  def table
-    'over_time'
+  def table_name
+    case Rails.env
+    when 'staging'
+      'staging_over_time'
+    when 'production'
+      'over_time'
+    else # edge / development / test
+      'edge_over_time2'
+    end
   end
 
   def last_date

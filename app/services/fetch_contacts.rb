@@ -28,7 +28,7 @@ class FetchContacts
 
   def request
     {
-      table_name: table,
+      table_name: table_name,
       index_name: 'ts-index', # use secondary index
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
@@ -42,8 +42,15 @@ class FetchContacts
     contact_list.cache_key
   end
 
-  def table
-    Rails.env.production? ? 'contacts' : 'edge_contacts'
+  def table_name
+    case Rails.env
+    when 'staging'
+      'staging_contacts'
+    when 'production'
+      'contacts'
+    else # edge / development / test
+      'edge_contacts'
+    end
   end
 
   def dynamo_db
