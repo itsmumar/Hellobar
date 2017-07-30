@@ -160,15 +160,8 @@ class Site < ActiveRecord::Base
     HbTestSite.generate_default id
   end
 
-  def lifetime_totals(opts = {})
-    days = opts.delete(:days) || 7
-    @lifetime_totals ||= {}
-
-    if opts[:force] || @lifetime_totals[days].nil?
-      @lifetime_totals[days] = Hello::DataAPI.lifetime_totals(self, site_elements, days, opts)
-    else
-      @lifetime_totals[days]
-    end
+  def statistics
+    @statistics ||= FetchSiteStatistics.new(self, days_limit: 7).call
   end
 
   def create_default_rules

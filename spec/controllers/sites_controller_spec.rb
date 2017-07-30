@@ -202,7 +202,6 @@ describe SitesController do
     let(:site) { user.sites.last }
 
     it 'sets current_site session value' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(nil)
       stub_current_user(user)
 
       get :show, id: site
@@ -257,16 +256,19 @@ describe SitesController do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
+    let(:statistics) { create :site_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
 
     before do
       stub_current_user(user)
-      allow(Hello::DataAPI).to receive(:lifetime_totals).and_return(total: [[10, 1], [12, 1], [18, 2]])
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
     end
 
     it 'should return the latest lifeteime totals' do
       request.env['HTTP_ACCEPT'] = 'application/json'
       get :chart_data, id: site_element.site.id, type: :total, days: 2
       json = JSON.parse(response.body)
+
       expect(json.size).to eq(2)
       expect(json[0]['value']).to eq(12)
       expect(json[1]['value']).to eq(18)
@@ -277,6 +279,26 @@ describe SitesController do
       get :chart_data, id: site_element.site.id, type: :total, days: 10
       json = JSON.parse(response.body)
       expect(json.size).to eq(3)
+    end
+  end
+
+  describe 'GET improve' do
+    let(:site) { create(:site, :with_user, :with_rule) }
+    let(:site_element) { create(:site_element, :traffic, site: site) }
+    let(:user) { site.owners.first }
+    let(:statistics) { create :site_statistics, views: [6, 10, 2], conversions: [1, 0, 1] }
+
+    before do
+      stub_current_user(user)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
+    end
+
+    it 'responds successfully' do
+      get :improve, id: site_element.site.id
+      expect(response).to be_success
     end
   end
 

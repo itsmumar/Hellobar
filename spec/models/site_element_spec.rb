@@ -226,57 +226,46 @@ describe SiteElement do
   end
 
   describe '#total_views' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
+    let(:element) { create(:site_element) }
 
-    it 'returns total views as reported by the data API' do
-      allow(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+    it 'returns total views' do
+      allow(element).to receive(:statistics).and_return(double(views: 12))
       expect(element.total_views).to eq(12)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element.total_views).to eq(0)
-    end
-
-    it 'returns zero if data API returns nil' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      allow(element).to receive(:statistics).and_return(double(views: 0))
       expect(element.total_views).to eq(0)
     end
   end
 
   describe '#total_conversions' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
+    let(:element) { create(:site_element) }
 
-    it 'returns total views as reported by the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
+    it 'returns total conversions' do
+      allow(element).to receive(:statistics).and_return(double(conversions: 6))
       expect(element.total_conversions).to eq(6)
     end
 
     it 'returns zero if no data is returned from the data API' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element.total_conversions).to eq(0)
-    end
-
-    it 'returns zero if data API returns nil' do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(nil)
+      allow(element).to receive(:statistics).and_return(double(conversions: 0))
       expect(element.total_conversions).to eq(0)
     end
   end
 
   describe '#converted?' do
-    let(:element) { create(:site_element, :traffic) }
-    let(:site) { element.site }
+    let(:element) { create(:site_element) }
 
-    it 'is false when there are no conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return({})
-      expect(element).not_to be_converted
+    context 'when there are no conversions' do
+      before { allow(element).to receive(:statistics).and_return(double(conversions: 0)) }
+
+      specify { expect(element).not_to be_converted }
     end
 
-    it 'is true when there are conversions', aggregate_failures: true do
-      expect(Hello::DataAPI).to receive(:lifetime_totals).with(site, site.site_elements, anything, {}).and_return(element.id.to_s => Hello::DataAPI::Performance.new([[10, 5], [12, 6]]))
-      expect(element).to be_converted
+    context 'when there are conversions' do
+      before { allow(element).to receive(:statistics).and_return(double(conversions: 1)) }
+
+      specify { expect(element).to be_converted }
     end
   end
 

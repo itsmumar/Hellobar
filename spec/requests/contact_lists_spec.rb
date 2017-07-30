@@ -75,11 +75,19 @@ describe 'ContactList requests' do
         end
       end
 
-      context '.csv' do
+      context '.csv', :freeze do
+        let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current }\n" }
+        let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
+
         it 'redirects to csv downloading' do
+          expect(FetchContacts).to receive_service_call.with(contact_list, limit: nil).and_return(contacts)
+
           get site_contact_list_path(site, contact_list, format: :csv)
-          expect(response).to be_a_redirect
-          expect(response.location).to include 'http://mock-hi.hellobar.com/e'
+
+          expect(headers).to include 'Content-Type' => 'text/csv'
+          expect(headers).to include 'Content-Disposition' => 'attachment; filename="my-list.csv"'
+          expect(response).to be_successful
+          expect(response.body).to eql csv
         end
       end
     end

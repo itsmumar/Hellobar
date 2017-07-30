@@ -191,8 +191,6 @@ describe SiteElementsController do
       stub_current_user(user)
 
       allow_any_instance_of(Site).to receive(:generate_script)
-      allow_any_instance_of(Site)
-        .to receive(:lifetime_totals).and_return('1' => [[1, 0]])
     end
 
     it 'creates an updater' do
