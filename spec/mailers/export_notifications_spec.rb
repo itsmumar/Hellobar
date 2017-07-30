@@ -1,0 +1,38 @@
+describe ExportNotifications do
+  describe 'send_contacts_csv' do
+    let(:user) { create :user }
+    let(:contact_list) { create :contact_list }
+    let(:mail) { ExportNotifications.send_contacts_csv user, contact_list }
+    let(:attachment) { mail.attachments[0] }
+
+    let(:subject) do
+      url = contact_list.site.normalized_url
+      "#{ url }: Your CSV export is ready #{ contact_list.zip_filename }"
+    end
+
+    before do
+      expect(FetchContactListTotals)
+        .to receive_service_call
+        .with(contact_list.site, id: contact_list.id)
+        .and_return(100)
+
+      expect(FetchContactsCSV)
+        .to receive_service_call.with(contact_list).and_return('csv')
+    end
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq subject
+      expect(mail.to).to eq [user.email]
+      expect(mail.from).to eq ['contact@hellobar.com']
+    end
+
+    it 'renders the body' do
+      expect(mail.body.encoded).to match('Your CSV export is ready')
+      expect(mail.body.encoded).to match('100 contacts were exported to csv.')
+    end
+
+    it 'attaches zipped csv' do
+      expect(attachment.filename).to eql contact_list.zip_filename
+    end
+  end
+end

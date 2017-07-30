@@ -57,6 +57,14 @@ class ContactList < ActiveRecord::Base
     data['tags'] || []
   end
 
+  def csv_filename
+    "#{ name.parameterize }.csv"
+  end
+
+  def zip_filename
+    "#{ name.parameterize }.zip"
+  end
+
   private
 
   def provider_valid
