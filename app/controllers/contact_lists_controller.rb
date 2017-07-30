@@ -3,6 +3,8 @@ class ContactListsController < ApplicationController
   before_action :load_site
   before_action :load_contact_list, only: %i[show update destroy]
 
+  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+
   def index
     @site ||= current_site # Necessary here in case this is a redirect from failed oauth
 
@@ -18,19 +20,19 @@ class ContactListsController < ApplicationController
   def create
     provider_token = contact_list_params[:provider_token]
 
-    identity =
-      if params[:identity_id].present?
-        @site.identities.find params[:identity_id]
-      elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
-        @site.identities.find_or_create_by(provider: provider_token)
-      end
+    Identity.transaction do
+      identity =
+        if params[:identity_id].present?
+          @site.identities.find params[:identity_id]
+        elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
+          @site.identities.find_or_create_by!(provider: provider_token)
+        end
 
-    contact_list = @site.contact_lists.create(contact_list_params.merge(identity: identity))
-    if contact_list.persisted?
+      contact_list = @site.contact_lists.create!(contact_list_params.merge(identity: identity))
+
       TrackEvent.new(:created_contact_list, contact_list: contact_list, user: current_user).call
+
       render json: contact_list, status: :created
-    else
-      render json: contact_list, status: :bad_request
     end
   end
 
@@ -42,15 +44,14 @@ class ContactListsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv  { redirect_to contact_list_csv_url(@contact_list) }
+      format.csv { redirect_to contact_list_csv_url(@contact_list) }
       format.json { render json: @contact_list }
     end
   end
 
   def update
     identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
-    result = UpdateContactList.new(@contact_list, contact_list_params.merge(identity: identity)).call
-    status = result ? :ok : :bad_request
+    UpdateContactList.new(@contact_list, contact_list_params.merge(identity: identity)).call
     render json: @contact_list, status: status
   end
 
@@ -97,5 +98,9 @@ class ContactListsController < ApplicationController
     message = request.env['omniauth.error'].try(:message) || request.env['omniauth.error.type']
     return nil if message.nil?
     message.to_s.split('|').last.try(:strip) || ''
+  end
+
+  def record_invalid
+    render json: exception.record, status: :bad_request
   end
 end
