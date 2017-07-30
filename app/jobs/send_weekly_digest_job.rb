@@ -1,7 +1,10 @@
-class SendEmailDigestJob < ApplicationJob
+class SendWeeklyDigestJob < ApplicationJob
   def perform(site)
     return unless any_views_within_last_week?(site)
-    SendEmailDigest.new(site).call
+
+    site.owners_and_admins.each do |user|
+      DigestMailer.weekly_digest(site, user).deliver_now
+    end
   end
 
   private

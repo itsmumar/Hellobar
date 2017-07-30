@@ -1,3 +1,6 @@
+require 'email_spec'
+require 'email_spec/rspec'
+
 # We need this because we use both Pony and ActionMailer
 # but EmailSpec checks for Pony and use its deliveries
 module EmailSpec

@@ -23,6 +23,7 @@ class Site < ActiveRecord::Base
   has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :owners, -> { where(site_memberships: { role: 'owner' }) }, through: :site_memberships, source: :user
+  has_many :admins, -> { where(site_memberships: { role: 'admin' }) }, through: :site_memberships, source: :user
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy

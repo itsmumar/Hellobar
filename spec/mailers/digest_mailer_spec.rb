@@ -1,8 +1,9 @@
 describe DigestMailer do
-  describe 'weekly_digest' do
-    let(:site) { create(:site, :with_user, elements: [:email]) }
-    let(:site_element) { site.site_elements.first }
-    let(:user) { site.owners.first }
+  let!(:site) { create :site, :with_user, elements: [:email] }
+  let(:site_element) { site.site_elements.first }
+  let(:user) { site.owners.first }
+
+  describe '.weekly_digest' do
     let(:mail) { DigestMailer.weekly_digest(site, user) }
     let(:views) { Array.new(6) { 1 } }
     let(:conversions) { Array.new(6) { 1 } }
@@ -14,15 +15,34 @@ describe DigestMailer do
         conversions: conversions
     end
 
-    context 'when there are no site elements' do
-      let(:statistics) { create :site_statistics }
+    let(:subject) do
+      "Hello Bar Weekly Digest for #{ site.url } - #{ week_for_subject }"
+    end
 
-      it 'does not raise error' do
-        site.site_elements.each(&:destroy)
-        site.reload
-        expect(FetchSiteStatistics).to receive_service_call.and_return(statistics)
-        expect { mail.body }.not_to raise_error
-      end
+    def week_for_subject
+      start_date = EmailDigestHelper.last_week.first
+      end_date = EmailDigestHelper.last_week.last
+      end_date_format = start_date.month == end_date.month ? '%-d, %Y' : '%b %-d, %Y'
+      from = start_date.strftime('%b %-d')
+      till = end_date.strftime(end_date_format)
+      "#{ from } - #{ till }"
+    end
+
+    before do
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
+    end
+
+    it 'renders headers' do
+      expect(mail).to deliver_to(user.email)
+      expect(mail).to have_subject(subject)
+      expect(mail).to deliver_from('Hello Bar <contact@hellobar.com>')
+    end
+
+    it 'renders body' do
+      expect(mail.body.encoded).to match(/Your Performance Last Week/)
     end
 
     context 'when history is too short' do
@@ -30,13 +50,24 @@ describe DigestMailer do
         # Travel to one day past the delivery date to ensure it's picking up the
         # mocked data regardless of when the test runs
         travel_to(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
-          expect(FetchSiteStatistics)
-            .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
-          expect(FetchSiteStatistics)
-            .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
           expect(mail.body.encoded).to match('n/a')
         end
       end
+    end
+  end
+
+  describe '.not_installed' do
+    let(:mail) { DigestMailer.not_installed(site, user) }
+
+    it 'renders headers' do
+      expect(mail).to deliver_to(user.email)
+      expect(mail).to have_subject('One final step and your Hello bar is live')
+      expect(mail).to deliver_from('Hello Bar <contact@hellobar.com>')
+    end
+
+    it 'renders body' do
+      expect(mail.body.encoded).to match 'Start using Hello Bar!'
+      expect(mail.body.encoded).to match 'collecting emails'
     end
   end
 end
