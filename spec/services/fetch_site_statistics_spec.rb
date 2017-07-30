@@ -34,7 +34,7 @@ describe FetchSiteStatistics do
           }
         end
 
-      { 'Items': items }.to_json
+      { 'Items': items, 'ConsumedCapacity': {} }.to_json
     end
 
     let!(:request) do
@@ -68,7 +68,7 @@ describe FetchSiteStatistics do
           .to receive(:capture_exception)
           .with(
             an_instance_of(Aws::DynamoDB::Errors::ServiceError),
-            context: { request: instance_of(Hash) }
+            context: { request: [:query, instance_of(Hash)] }
           )
 
         service.call
