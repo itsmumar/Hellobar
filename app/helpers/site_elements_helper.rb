@@ -51,16 +51,8 @@ module SiteElementsHelper
     message
   end
 
-  def site_elements_group_view_count(site_elements)
-    site_elements.to_a.sum(&:total_views)
-  end
-
-  def site_elements_group_conversion_count(site_elements)
-    site_elements.to_a.sum(&:total_conversions)
-  end
-
   def site_elements_group_conversion_rate(site_elements)
-    site_elements_group_conversion_count(site_elements) * 1.0 / site_elements_group_view_count(site_elements)
+    site_elements.to_a.sum(&:conversion_percentage)
   end
 
   def total_conversion_text(site_element)
