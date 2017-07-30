@@ -170,7 +170,7 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  get '/rails/mailers/*path', to: 'rails/mailers#preview'  if Rails.env.development?
+  get '/rails/mailers/*path', to: 'rails/mailers#preview' if Rails.env.development?
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end
