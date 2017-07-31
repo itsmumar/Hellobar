@@ -1,17 +1,20 @@
 div#user_profile
   div#profile_header
+
     h1= @user.email
-    - unless @user.destroyed?
-      = link_to "Destroy User", admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
-      = link_to "Impersonate User", admin_impersonate_user_path(@user), :method => :post
-      = link_to "Send Password Reset Email", user_password_path, id: :reset_password, "data-user-email" => @user.email
+
+    - unless @user.deleted?
+      = link_to 'Delete User', admin_user_path(@user), method: :delete, data: { confirm: "Are you sure?" }
+      = link_to 'Impersonate User', admin_impersonate_user_path(@user), :method => :post
+      = link_to 'Send Password Reset Email', user_password_path, id: :reset_password, "data-user-email" => @user.email
 
   - @user.sites.with_deleted.each do |site|
+
     div.site-block
       div.site-title
         h3 = site_title(site)
         - unless site.deleted?
-          = link_to "Contact Lists", admin_user_site_contact_lists_path(@user, site), target: "_blank"
+          = link_to 'Contact Lists', admin_user_site_contact_lists_path(@user, site), target: "_blank"
           a.subscription_link data-siteid=site.id change plan
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script

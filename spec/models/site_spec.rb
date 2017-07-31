@@ -193,7 +193,7 @@ describe Site do
     end
   end
 
-  describe '#destroy' do
+  describe '#destroy', :freeze do
     let(:mock_upload_to_s3) { double(:upload_to_s3) }
 
     before do
@@ -204,12 +204,15 @@ describe Site do
 
     it 'blanks-out the site script when destroyed' do
       site.destroy
+
       expect(UploadToS3).to have_received(:new).with(site.script_name, '')
     end
 
-    it 'soft-deletes record' do
+    it 'marks the record as deleted' do
       site.destroy
-      expect(Site.only_deleted).to include(site)
+
+      expect(site).to be_deleted
+      expect(site.deleted_at).to eq Time.current
     end
   end
 
@@ -352,7 +355,7 @@ describe Site do
       it 'sets needs_script_regeneration? to true' do
         site = create(:site)
         site.touch
-        expect(site.needs_script_regeneration?).to be(true)
+        expect(site.needs_script_regeneration?).to be_truthy
       end
     end
 
@@ -360,9 +363,11 @@ describe Site do
       it 'sets needs_script_regeneration? to false' do
         site = create(:site)
         allow(site).to receive(:generate_blank_static_assets)
+
         site.destroy
-        site.touch
-        expect(site.needs_script_regeneration?).to be(false)
+
+        expect(site).to be_deleted
+        expect(site.needs_script_regeneration?).to be_falsey
       end
     end
   end

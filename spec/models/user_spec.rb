@@ -181,7 +181,7 @@ describe User do
     end
   end
 
-  describe '#destroy' do
+  describe '#destroy', :freeze do
     let(:site_member) { create(:site_membership) }
 
     before do
@@ -191,15 +191,18 @@ describe User do
     it 'destroying a user should destroy their sites' do
       user = site_member.user
       site = site_member.site
+
       user.destroy
-      expect(user.destroyed?).to be_truthy
-      expect(site.reload.destroyed?).to be_truthy
+
+      expect(site.reload.deleted_at).to eq Time.current
     end
 
-    it 'should soft-delete' do
+    it 'marks the record as deleted' do
       user = create(:user)
+
       user.destroy
-      expect(User.only_deleted).to include(user)
+
+      expect(user.deleted_at).to eq Time.current
     end
   end
 

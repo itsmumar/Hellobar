@@ -1,5 +1,5 @@
 class ContactList < ActiveRecord::Base
-  attr_accessor :provider_token
+  acts_as_paranoid
 
   belongs_to :site
   belongs_to :identity, dependent: :destroy
@@ -9,9 +9,8 @@ class ContactList < ActiveRecord::Base
 
   store :data, coder: Hash
 
-  acts_as_paranoid
-
   before_validation :reject_empty_data_values, :clean_embed_code
+  after_destroy :nullify_identity_reference
 
   validates :name, presence: true
   validates :site, presence: true, associated: true
@@ -22,6 +21,8 @@ class ContactList < ActiveRecord::Base
   validate :webhook_url_valid?, if: :webhook?
 
   delegate :count, to: :site_elements, prefix: true
+
+  attr_accessor :provider_token
 
   def statuses_for_subscribers(subscribers)
     return [] unless identity
@@ -96,5 +97,14 @@ class ContactList < ActiveRecord::Base
     rescue SocketError
       errors.add(:base, 'could not connect to the webhook URL')
     end
+  end
+
+  def nullify_identity_reference
+    # Identity#has_many :contact_lists, dependent: :nullify doesn't work because
+    # it wants to update a contact list with `deleted_at` being NULL which at
+    # this point is not the case as the record is already marked as being
+    # deleted (thanks, paranoia), so we have to nullify the reference manually
+    # https://github.com/rubysherpas/paranoia/issues/413
+    update_attribute :identity_id, nil
   end
 end

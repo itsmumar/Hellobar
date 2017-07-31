@@ -1,10 +1,11 @@
 describe SiteElements::Update do
   let!(:element) { create(:site_element, :email) }
+  let(:headline) { 'Updated headline' }
   let(:valid_params) do
     {
       closable: true,
       show_border: true,
-      headline: 'We are Polymathic!'
+      headline: headline
     }
   end
   let(:interaction) { SiteElements::Update.new(element: element, params: params) }
@@ -38,7 +39,7 @@ describe SiteElements::Update do
 
       expect(new_element.closable).to be_truthy
       expect(new_element.show_border).to be_truthy
-      expect(new_element.headline).to eq('We are Polymathic!')
+      expect(new_element.headline).to eq headline
     end
 
     context 'when type is not changed' do
@@ -62,10 +63,10 @@ describe SiteElements::Update do
         expect(new_element.id).not_to eq(element.id)
       end
 
-      it 'disables the original element' do
+      it 'pauses the original element' do
         run_interaction
 
-        expect(element.reload.paused).to be_truthy
+        expect(element.reload).to be_paused
       end
     end
   end
@@ -89,13 +90,13 @@ describe SiteElements::Update do
         expect { run_interaction }.not_to change { SiteElement.count }
       end
 
-      it 'does not disable original element' do
+      it 'does not pause the original element' do
         run_interaction
 
-        expect(element.reload.paused).to be_falsey
+        expect(SiteElement.find(element.id).paused).to be_falsey
       end
 
-      context 'when update succeeds but disabling fails' do
+      context 'when update succeeds but pausing fails' do
         let(:params) { valid_params.update(element_subtype: 'traffic') }
 
         it 'does not create new element' do

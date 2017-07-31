@@ -94,10 +94,10 @@ describe 'ContactList requests' do
 
     describe 'DELETE :destroy' do
       context 'when site_element_action is 1' do
-        it 'destroys an existing identity' do
+        it 'deletes an existing contact_list' do
           expect {
             delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 1 })
-          }.to change { contact_list.reload.destroyed? }
+          }.to change { contact_list.reload.deleted? }
 
           expect(response).to be_successful
         end
@@ -106,17 +106,17 @@ describe 'ContactList requests' do
       context 'when site_element_action is 0' do
         let!(:site_element) { create :site_element, contact_list: contact_list }
 
-        it 'destroys an existing identity' do
+        it 'deletes an existing identity' do
           expect {
             delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 0 })
-          }.to change { contact_list.reload.destroyed? }
+          }.to change { contact_list.reload.deleted? }
 
           expect(response).to be_successful
         end
 
         it 'creates new contact list and updates all bars' do
           expect { delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 0 }) }
-            .to change { contact_list.reload.destroyed? }
+            .to change { contact_list.reload.deleted? }
             .and change { site_element.reload.contact_list_id }
 
           expect(response).to be_successful

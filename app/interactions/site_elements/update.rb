@@ -9,7 +9,7 @@ class SiteElements::Update < Less::Interaction
       element.update_attributes!(params)
     end
     true
-  rescue ActiveRecord::ActiveRecordError
+  rescue ActiveRecord::ActiveRecordError, ActiveRecord::RecordInvalid
     false
   end
 

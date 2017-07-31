@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-feature 'IContact Integration', :js, :contact_list_feature do
+feature 'iContact Integration', :js, :contact_list_feature do
   let(:provider) { 'icontact' }
 
   let!(:user) { create :user }
@@ -14,8 +14,6 @@ feature 'IContact Integration', :js, :contact_list_feature do
   end
 
   context 'when invalid' do
-    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
-
     let(:embed_code) { 'invalid' }
 
     scenario 'displays error' do

@@ -5,8 +5,10 @@ class UpdateContactList
   end
 
   def call
-    destroy_identity_if_necessary
-    update_contact_list
+    Identity.transaction do
+      destroy_identity_if_necessary
+      update_contact_list
+    end
   end
 
   private
@@ -34,7 +36,7 @@ class UpdateContactList
   end
 
   def update_contact_list
-    contact_list.update_attributes(params.merge(identity: identity))
+    contact_list.update! params.merge(identity: identity)
   end
 
   def destroy_identity_if_necessary
@@ -43,6 +45,6 @@ class UpdateContactList
     # will destroy when:
     # 1) passed params[:identity] is nil and there is an existing identity
     # 2) passed params[:identity] is different than the existing one
-    contact_list.identity.destroy
+    contact_list.identity.destroy!
   end
 end
