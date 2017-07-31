@@ -71,7 +71,7 @@ class SiteStatistics
   end
 
   def conversion_rate
-    views == 0 ? 0 : conversions.to_f / views
+    views == 0 ? 0.0 : conversions.to_f / views
   end
 
   def conversion_percent
