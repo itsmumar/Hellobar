@@ -18,7 +18,7 @@ every :monday, at: '3:00pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
 end
 
-every 4.days, at: '3:00pm', roles: [:cron] do
+every 4.days, at: '11:00am', roles: [:cron] do
   rake 'mailing:send_site_not_installed_reminders'
 end
 
