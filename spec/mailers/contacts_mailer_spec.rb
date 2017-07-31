@@ -7,7 +7,7 @@ describe ContactsMailer do
 
     let(:subject) do
       url = contact_list.site.normalized_url
-      "#{ url }: Your CSV export is ready #{ contact_list.zip_filename }"
+      "#{ url }: Your CSV export is ready #{ contact_list.name.parameterize }.zip"
     end
 
     before do
@@ -32,7 +32,7 @@ describe ContactsMailer do
     end
 
     it 'attaches zipped csv' do
-      expect(attachment.filename).to eql contact_list.zip_filename
+      expect(attachment.filename).to eql "#{ contact_list.name.parameterize }.zip"
     end
   end
 end

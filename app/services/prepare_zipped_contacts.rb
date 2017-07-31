@@ -1,6 +1,7 @@
 class PrepareZippedContacts
-  def initialize(contact_list)
+  def initialize(contact_list, filename)
     @contact_list = contact_list
+    @filename = filename
   end
 
   def call
@@ -10,7 +11,7 @@ class PrepareZippedContacts
 
   private
 
-  attr_reader :contact_list
+  attr_reader :contact_list, :filename
 
   def zip(csv_content)
     zip_to_buffer(csv_content).string
@@ -18,7 +19,7 @@ class PrepareZippedContacts
 
   def zip_to_buffer(csv_content)
     Zip::OutputStream.write_buffer do |stream|
-      stream.put_next_entry contact_list.csv_filename
+      stream.put_next_entry filename
       stream.write csv_content
     end
   end
