@@ -14,6 +14,8 @@ feature 'iContact Integration', :js, :contact_list_feature do
   end
 
   context 'when invalid' do
+    let(:embed_code) { 'invalid' }
+
     scenario 'displays error' do
       connect
       expect(page).to have_content('Embed code is invalid')
