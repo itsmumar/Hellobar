@@ -102,7 +102,7 @@ jobs:
 
       - run:
           name: Run Rubocop
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec rubocop; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
           name: Run JSHint
