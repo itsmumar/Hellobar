@@ -88,7 +88,7 @@ describe 'ContactList requests' do
         end
 
         it 'enqueues ExportNotifications mailer' do
-          expect(ExportNotifications).to receive(:send_contacts_csv).and_call_original
+          expect(ContactsMailer).to receive(:csv_export).and_call_original
           expect { get site_contact_list_path(site, contact_list, format: :csv) }
             .to have_enqueued_job.on_queue('test_mailers')
         end

@@ -84,7 +84,7 @@ class ContactListsController < ApplicationController
 
   def send_contact_list_csv(list)
     @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-    ExportNotifications.send_contacts_csv(current_user, list).deliver_later
+    ContactsMailer.csv_export(current_user, list).deliver_later
     flash[:success] =
       "You will be emailed a CSV of #{ @total_subscribers } users to #{ current_user.email }." \
       ' At peak times this can take a few minutes'

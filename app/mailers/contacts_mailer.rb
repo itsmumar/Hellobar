@@ -1,4 +1,4 @@
-class ExportNotifications < ApplicationMailer
+class ContactsMailer < ApplicationMailer
   def send_contacts_csv(user, contact_list)
     @contact_list = contact_list
     @total_subscribers = FetchContactListTotals.new(contact_list.site, id: contact_list.id).call

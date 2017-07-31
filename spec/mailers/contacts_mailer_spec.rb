@@ -1,8 +1,8 @@
-describe ExportNotifications do
-  describe 'send_contacts_csv' do
+describe ContactsMailer do
+  describe 'csv_export' do
     let(:user) { create :user }
     let(:contact_list) { create :contact_list }
-    let(:mail) { ExportNotifications.send_contacts_csv user, contact_list }
+    let(:mail) { ContactsMailer.csv_export user, contact_list }
     let(:attachment) { mail.attachments[0] }
 
     let(:subject) do
