@@ -1,7 +1,5 @@
 class FetchContacts
-  MAXIMUM_ALLOWED_LIMIT = 100
-
-  def initialize(contact_list, limit: MAXIMUM_ALLOWED_LIMIT)
+  def initialize(contact_list, limit: 100)
     @contact_list = contact_list
     @limit = limit
   end
@@ -12,7 +10,7 @@ class FetchContacts
 
   private
 
-  attr_reader :contact_list
+  attr_reader :contact_list, :limit
 
   def process_response
     response.map do |item|
@@ -30,7 +28,7 @@ class FetchContacts
 
   def request
     {
-      table_name: table,
+      table_name: table_name,
       index_name: 'ts-index', # use secondary index
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
@@ -44,12 +42,15 @@ class FetchContacts
     contact_list.cache_key
   end
 
-  def limit
-    @limit > MAXIMUM_ALLOWED_LIMIT ? MAXIMUM_ALLOWED_LIMIT : @limit
-  end
-
-  def table
-    Rails.env.production? ? 'contacts' : 'edge_contacts'
+  def table_name
+    case Rails.env
+    when 'staging'
+      'staging_contacts'
+    when 'production'
+      'contacts'
+    else # edge / development / test
+      'edge_contacts'
+    end
   end
 
   def dynamo_db

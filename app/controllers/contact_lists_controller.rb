@@ -37,14 +37,14 @@ class ContactListsController < ApplicationController
   end
 
   def show
-    @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
-    @subscribers = @contact_list.subscribers(100)
-    @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-    @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
-
     respond_to do |format|
-      format.html
-      format.csv { redirect_to contact_list_csv_url(@contact_list) }
+      format.html do
+        @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
+        @subscribers = FetchContacts.new(@contact_list).call
+        @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
+        @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
+      end
+      format.csv  { send_contact_list_csv(@contact_list) }
       format.json { render json: @contact_list }
     end
   end
@@ -83,11 +83,8 @@ class ContactListsController < ApplicationController
     @contact_list = @site.contact_lists.find(params[:id])
   end
 
-  def contact_list_csv_url(list)
-    path, params = Hello::DataAPIHelper::RequestParts.contacts(list.site_id, list.id, list.site.read_key, nil, nil, 'f' => 'c')
-    path_with_params = Hello::DataAPIHelper.url_for(path, params)
-
-    URI.join(Settings.tracking_api_url, path_with_params).to_s
+  def send_contact_list_csv(list)
+    send_data FetchContactsCSV.new(list).call, type: 'text/csv', filename: "#{ list.name.parameterize }.csv"
   end
 
   def omniauth_error?

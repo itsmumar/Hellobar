@@ -76,6 +76,7 @@ class SiteElement < ActiveRecord::Base
   delegate :image_uploads, to: :site
   delegate :url, :small_url, :medium_url, :large_url, :modal_url, to: :active_image, allow_nil: true, prefix: :image
   delegate :image_file_name, to: :active_image, allow_nil: true
+  delegate :conversion_rate, to: :statistics
 
   store :settings, coder: Hash
   serialize :blocks, Array
@@ -135,10 +136,6 @@ class SiteElement < ActiveRecord::Base
     (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS
   end
 
-  def conversion_rate
-    total_conversions * 1.0 / total_views
-  end
-
   def related_site_elements
     site.site_elements.where.not(id: id).where(SiteElement.arel_table[:element_subtype].matches("%#{ short_subtype }%"))
   end
@@ -151,16 +148,16 @@ class SiteElement < ActiveRecord::Base
     attributes.reject { |k, _| NOT_CLONEABLE_ATTRIBUTES.include?(k.to_sym) }
   end
 
-  def total_views(opts = {})
-    lifetime_totals(opts).try(:views) || 0
+  def total_views
+    statistics.views
   end
 
   def total_conversions
-    lifetime_totals.try(:conversions) || 0
+    statistics.conversions
   end
 
   def conversion_percentage
-    total_views == 0 ? 0 : total_conversions.to_f / total_views
+    statistics.conversion_rate
   end
 
   def converted?
@@ -262,6 +259,10 @@ class SiteElement < ActiveRecord::Base
     :modal
   end
 
+  def statistics
+    @statistics ||= FetchSiteStatistics.new(site, site_element_ids: [id]).call
+  end
+
   private
 
   def remove_unreferenced_images
@@ -273,12 +274,6 @@ class SiteElement < ActiveRecord::Base
 
   def email?
     element_subtype == 'email'
-  end
-
-  def lifetime_totals(opts = {})
-    return nil if site.nil?
-
-    site.lifetime_totals(opts).try(:[], id.to_s)
   end
 
   def site_is_capable_of_creating_element

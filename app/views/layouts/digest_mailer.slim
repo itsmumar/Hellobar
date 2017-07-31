@@ -246,7 +246,7 @@ html
                           td.alignCenter
                           td.alignRight
                             div.headerText
-                              | #{@date_ranges[2].strftime("%b %e")} - #{@date_ranges[3].strftime("%b %e")}
+                              | #{@last_week.first.strftime("%b %e")} - #{@last_week.last.strftime("%b %e")}
                     td
                     = yield
                     tr.lightGrey

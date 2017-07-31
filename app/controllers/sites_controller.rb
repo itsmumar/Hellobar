@@ -46,7 +46,7 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
+        @totals = site_statistics
         @recent_elements = @site.site_elements.recent(5)
       end
       format.json { render json: @site }
@@ -54,7 +54,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data, force: page_refresh?)
+    @totals = site_statistics
   end
 
   def update
@@ -87,20 +87,8 @@ class SitesController < ApplicationController
   end
 
   def chart_data
-    raw_data = Hello::DataAPI.lifetime_totals_by_type(@site, @site.site_elements, @site.capabilities.num_days_improve_data).try(:[], params[:type].to_sym) || []
-    series = raw_data.map { |d| d[params[:type] == 'total' ? 0 : 1] }
-    days_limits = [series.size]
-    days_limits << params[:days].to_i if params[:days].present?
-    days = days_limits.min
-
-    series_with_dates = (days - 1).downto(0).map do |i|
-      {
-        date: (Date.today - i).strftime('%-m/%d'),
-        value: series[(series.size - i) - 1]
-      }
-    end
-
-    render json: series_with_dates, root: false
+    json = ChartDataSerializer.new(site_statistics, params).as_json
+    render json: json, root: false
   end
 
   def downgrade
@@ -113,6 +101,11 @@ class SitesController < ApplicationController
   end
 
   private
+
+  def site_statistics
+    @site_statistics ||=
+      FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+  end
 
   def site_params
     if session[:new_site_url]

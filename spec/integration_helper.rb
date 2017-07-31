@@ -50,4 +50,8 @@ RSpec.configure do |config|
       TestProvider
     end
   end
+
+  config.before type: :feature do
+    allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(SiteStatistics.new)
+  end
 end

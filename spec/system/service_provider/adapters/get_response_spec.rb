@@ -57,7 +57,10 @@ describe ServiceProvider::Adapters::GetResponse do
     let(:body) { { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' } }
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
-    before { allow(contact_list).to receive(:subscribers).and_return([email: 'example@email.com']) }
+    before do
+      expect(FetchContacts)
+        .to receive_service_call.with(contact_list, limit: 10).and_return([email: 'example@email.com'])
+    end
 
     it 'sends subscribe request' do
       provider.subscribe(email: email, name: name)

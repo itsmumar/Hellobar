@@ -1,24 +1,27 @@
-- if totals[type].empty? || totals[type].last == [0,0]
+- statistics = totals.for_goal(type)
+- method = type == :total ? :views : :conversions
+
+- if statistics.empty? || !statistics.views?
   div class="chart-block #{chart}"
     i class="icon-#{icon}"
     .chart-overview
       - case type
       - when :total
-        = link_to "Get More Views", new_site_site_element_path(site)
+        = link_to 'Get More Views', new_site_site_element_path(site)
       - when :email
-        = link_to "Collect Emails", new_site_site_element_path(site, :anchor => "/interstitial/contacts")
+        = link_to 'Collect Emails', new_site_site_element_path(site, anchor: '/interstitial/email')
       - when :traffic
-        = link_to "Get Traffic", new_site_site_element_path(site, :anchor => "/settings/click")
+        = link_to 'Get Traffic', new_site_site_element_path(site, anchor: '/interstitial/traffic')
       - when :social
-        = link_to "Increase Social Marketing", new_site_site_element_path(site, :anchor => "/settings/social")
+        = link_to 'Increase Social Marketing', new_site_site_element_path(site, anchor: '/interstitial/social')
       - when :call
-        = link_to "Talk to Your Visitors", new_site_site_element_path(site, :anchor => "/interstitial/call")
+        = link_to 'Talk to Your Visitors', new_site_site_element_path(site, anchor: '/interstitial/call')
 
 - else
   div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
     i class="icon-#{icon}"
     .chart-overview
-      = number_to_human(totals[type].last[type == :total ? 0 : 1], :units => {:thousand => "K", :million => "M", :billion => "B"})
+      = number_to_human(statistics.send(method), units: { thousand: 'K', million: 'M', billion: 'B' })
       - case type
       - when :total
         small views

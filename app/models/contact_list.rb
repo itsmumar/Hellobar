@@ -42,10 +42,6 @@ class ContactList < ActiveRecord::Base
     @service_provider ||= identity.service_provider(contact_list: self)
   end
 
-  def subscribers(limit = nil)
-    FetchContacts.new(self, limit: limit).call
-  end
-
   def provider_set?
     ServiceProvider::Adapters.exists? provider_token
   end

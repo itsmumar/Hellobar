@@ -1,6 +1,4 @@
 require './lib/hello/internal_analytics'
-require './lib/hello/data_api'
-require './lib/hello/data_api_helper'
 require './lib/hello/email_drip'
 require './lib/hello/segments'
 require './lib/hello/tracking_param'

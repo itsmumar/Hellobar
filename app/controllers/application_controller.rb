@@ -131,10 +131,6 @@ class ApplicationController < ActionController::Base
     session[:last_requested_path] = request.path if request.format == :html
   end
 
-  def page_refresh?
-    request.path == session[:last_requested_path]
-  end
-
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(_resource_or_scope)
     logout_confirmation_path

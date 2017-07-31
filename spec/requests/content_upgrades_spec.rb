@@ -3,6 +3,7 @@ require 'integration_helper'
 describe 'Content upgrade requests' do
   let(:user) { create :user }
   let(:site) { create :site, :with_rule, user: user }
+  let(:site_element) { site.site_elements.last }
   let!(:subscription) { create :subscription, :pro_managed, user: user, site: site }
 
   context 'when unauthenticated' do
@@ -41,6 +42,13 @@ describe 'Content upgrade requests' do
     end
 
     describe 'GET :index' do
+      before do
+        expect(FetchSiteStatistics)
+          .to receive_service_call
+          .with(site, site_element_ids: [site_element.id])
+          .and_return(SiteStatistics.new)
+      end
+
       it 'responds with success' do
         get site_content_upgrades_path(site)
 

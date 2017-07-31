@@ -51,16 +51,8 @@ module SiteElementsHelper
     message
   end
 
-  def site_elements_group_view_count(site_elements)
-    site_elements.to_a.sum(&:total_views)
-  end
-
-  def site_elements_group_conversion_count(site_elements)
-    site_elements.to_a.sum(&:total_conversions)
-  end
-
   def site_elements_group_conversion_rate(site_elements)
-    site_elements_group_conversion_count(site_elements) * 1.0 / site_elements_group_view_count(site_elements)
+    site_elements.to_a.sum(&:conversion_percentage)
   end
 
   def total_conversion_text(site_element)
@@ -152,7 +144,7 @@ module SiteElementsHelper
   # rubocop: disable Rails/OutputSafety
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
-    elements_in_group.sort! { |a, b| a.created_at <=> b.created_at }
+    elements_in_group.sort_by!(&:created_at)
     index = elements_in_group.find_index { |e| e.id == site_element.id }
     # site element is paused, its the only site element in the group, or something wacky is going on
     return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? || elements_in_group.size == 1

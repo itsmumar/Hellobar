@@ -66,26 +66,6 @@ describe ContactList do
     end
   end
 
-  describe '#subscribers' do
-    it 'gets subscribers from the data API' do
-      expect(FetchContacts).to receive_service_call
-        .and_return([{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }])
-
-      expect(contact_list.subscribers)
-        .to eql [{ email: 'person@gmail.com', name: 'Per Son', subscribed_at: Time.zone.at(123456789) }]
-    end
-
-    it 'defaults to [] if data API returns nil' do
-      expect(FetchContacts).to receive_service_call.and_return([])
-      expect(contact_list.subscribers).to be_empty
-    end
-
-    it 'sends a limit to the data api if specified' do
-      expect(FetchContacts).to receive_service_call.with(contact_list, limit: 100)
-      contact_list.subscribers(100)
-    end
-  end
-
   describe '#data' do
     it 'drops nil values in data' do
       contact_list.data = { 'remote_name' => '', 'remote_id' => 1 }
