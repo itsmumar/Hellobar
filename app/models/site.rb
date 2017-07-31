@@ -54,7 +54,7 @@ class Site < ActiveRecord::Base
   scope :for_not_installed_reminder, lambda {
     joins(:site_elements)
       .where(script_installed_at: nil)
-      .where('site_elements.created_at > ?', 10.days.ago)
+      .where('site_elements.created_at > ?', 4.days.ago)
   }
 
   before_validation :standardize_url
