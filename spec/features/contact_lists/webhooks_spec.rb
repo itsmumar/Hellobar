@@ -11,7 +11,11 @@ feature 'Webhooks Integration', :js, :contact_list_feature do
   end
 
   context 'when invalid' do
-    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
+    let(:service_provider) { double connected?: false, lists: [] }
+
+    before do
+      allow(ServiceProvider).to receive(:new).and_return service_provider
+    end
 
     scenario 'empty url' do
       connect('')
