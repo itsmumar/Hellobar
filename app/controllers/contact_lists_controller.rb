@@ -100,7 +100,7 @@ class ContactListsController < ApplicationController
     message.to_s.split('|').last.try(:strip) || ''
   end
 
-  def record_invalid
+  def record_invalid exception
     render json: exception.record, status: :bad_request
   end
 end

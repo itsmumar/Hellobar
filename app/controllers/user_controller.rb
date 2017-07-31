@@ -67,7 +67,7 @@ class UserController < ApplicationController
 
   def destroy
     @user.destroy
-    if @user.destroyed?
+    if @user.deleted?
       respond_to do |format|
         format.html do
           flash[:success] = 'Account successfully deleted.'

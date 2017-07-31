@@ -211,6 +211,7 @@ describe Site do
     it 'marks the record as deleted' do
       site.destroy
 
+      expect(site).to be_deleted
       expect(site.deleted_at).to eq Time.current
     end
   end
@@ -354,7 +355,7 @@ describe Site do
       it 'sets needs_script_regeneration? to true' do
         site = create(:site)
         site.touch
-        expect(site.needs_script_regeneration?).to be(true)
+        expect(site.needs_script_regeneration?).to be_truthy
       end
     end
 
@@ -362,9 +363,11 @@ describe Site do
       it 'sets needs_script_regeneration? to false' do
         site = create(:site)
         allow(site).to receive(:generate_blank_static_assets)
+
         site.destroy
-        site.touch
-        expect(site.needs_script_regeneration?).to be(false)
+
+        expect(site).to be_deleted
+        expect(site.needs_script_regeneration?).to be_falsey
       end
     end
   end

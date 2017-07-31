@@ -91,23 +91,27 @@ describe 'Identities requests' do
     describe 'DELETE :destroy' do
       before { allow(ServiceProvider).to receive(:adapter).and_return(TestProvider) }
 
-      it 'destroys an existing identity' do
-        expect {
-          delete site_identity_path(site, identity)
-        }.to change(Identity, :count).by(-1)
-
-        expect(response).to be_successful
-      end
-
-      context 'when identity has contact lists' do
-        before { create :contact_list, identity: identity }
-
-        it 'responds with :forbidden' do
+      context 'when identity has no contact lists' do
+        it 'destroys an existing identity' do
           expect {
             delete site_identity_path(site, identity)
           }.to change(Identity, :count).by(-1)
 
           expect(response).to be_successful
+        end
+      end
+
+      context 'when identity has an attached contact list' do
+        let!(:contact_list) { create :contact_list, identity: identity }
+
+        it 'destroys an identity and nullifies identity reference' do
+          expect {
+            delete site_identity_path(site, identity)
+          }.to change(Identity, :count).by(-1)
+
+          expect(response).to be_successful
+
+          expect(contact_list.reload.identity_id).to be_nil
         end
       end
     end

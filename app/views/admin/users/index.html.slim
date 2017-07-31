@@ -52,8 +52,8 @@ div.row
             td= user.sign_in_count
             td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
             td
-              - if user.destroyed?
-                | Destroyed
+              - if user.deleted?
+                | Deleted
               - else
                 = link_to "impersonate", admin_impersonate_user_path(user), :method => :post
 
