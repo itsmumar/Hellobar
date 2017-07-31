@@ -47,6 +47,16 @@ class Site < ActiveRecord::Base
     )
   }
 
+  scope :for_weekly_digest, lambda {
+    script_installed_db.where(opted_in_to_email_digest: true)
+  }
+
+  scope :for_not_installed_reminder, lambda {
+    joins(:site_elements)
+      .where(script_installed_at: nil)
+      .where('site_elements.created_at > ?', 10.days.ago)
+  }
+
   before_validation :standardize_url
   before_validation :generate_read_write_keys
 
