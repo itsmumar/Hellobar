@@ -147,16 +147,10 @@
 
     .hb-headline-text {
       font-size: 3em;
-      line-height: 90%;
+      line-height: 1;
       text-transform: uppercase;
       font-weight: 700;
       margin-bottom: 20px;
-    }
-
-    @media screen and (max-width: 1100px) {
-      .hb-headline-text {
-        line-height: 100%;
-      }
     }
 
     @media screen and (max-width: 840px) {
@@ -178,7 +172,6 @@
 
       .hb-secondary-text {
         font-size: 0.8em;
-        line-height: 90%;
         font-weight: 400;
         color: white;
       }
@@ -195,7 +188,7 @@
 
     .hb-secondary-text {
       font-size: 0.8em;
-      line-height: 90%;
+      line-height: 1;
       font-weight: 400;
       color: white;
       max-width: 540px;
