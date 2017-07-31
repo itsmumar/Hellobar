@@ -2,46 +2,65 @@ class DynamoDB
   DEFAULT_TTL = 1.hour
   CACHE_KEY_PREFIX = 'DynamoDB'.freeze
 
-  def initialize(cache_key:, expires_in: DEFAULT_TTL)
+  attr_accessor :last_request, :last_response
+  attr_reader :expires_in
+
+  def initialize(cache_key: nil, expires_in: DEFAULT_TTL)
     @cache_key = cache_key
     @expires_in = expires_in
   end
 
   def fetch(request)
-    self.last_request = request
     cache { query(request) }
   end
 
   def batch_fetch(request)
-    self.last_request = request
     cache { batch_query(request) }
   end
 
   private
 
-  attr_reader :expires_in
-  attr_accessor :last_request
-
   def cache
+    return yield unless cache_key
     Rails.cache.fetch cache_key, expires_in: expires_in do
       yield
     end
   end
 
   def cache_key
+    return unless @cache_key
     [CACHE_KEY_PREFIX, @cache_key].join('/')
   end
 
   def batch_query(request)
-    rescue_from_service_error { client.batch_get_item(request).responses } || {}
+    response = send_request(:batch_get_item, request)
+    response&.responses || {}
   end
 
   def query(request)
-    rescue_from_service_error { client.query(request).items } || []
+    response = send_request(:query, request)
+    response&.items || []
+  end
+
+  def send_request(method, request)
+    self.last_request = [method, request]
+    rescue_from_service_error do
+      self.last_response = client.send(method, request)
+    end
+    last_response
+  end
+
+  def instrument
+    ActiveSupport::Notifications.instrument('query.dynamo_db', {}) do |payload|
+      response = yield
+      payload[:method], payload[:request] = last_request
+      payload[:consumed_capacity] = response.consumed_capacity
+      response
+    end
   end
 
   def rescue_from_service_error
-    yield
+    instrument { yield }
   rescue Aws::DynamoDB::Errors::ServiceError => e
     raise if Rails.env.development? || Rails.env.test?
     Raven.capture_exception(e, context: { request: last_request })
@@ -52,3 +71,5 @@ class DynamoDB
     Aws::DynamoDB::Client.new
   end
 end
+
+DynamoDB::LogSubscriber.attach_to :dynamo_db

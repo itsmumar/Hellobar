@@ -1,7 +1,13 @@
 class FetchSiteStatistics
-  def initialize(site, days_limit:)
+  # 5 years; basically we don't care of it
+  # but since we must filter by date
+  # let's take some synthetic date
+  MAX_DAYS = 5 * 365
+
+  def initialize(site, days_limit: MAX_DAYS, site_element_ids: nil)
     @site = site
     @days_limit = days_limit
+    @site_element_ids = site_element_ids
   end
 
   def call
@@ -12,7 +18,7 @@ class FetchSiteStatistics
 
   private
 
-  attr_reader :site, :days_limit
+  attr_reader :site, :days_limit, :site_element_ids
 
   def process(site_element)
     request = request_for(site_element.id)
@@ -31,22 +37,34 @@ class FetchSiteStatistics
 
   def request_for(id)
     {
-      table_name: table,
+      table_name: table_name,
       key_condition_expression: '#D >= :last_date AND sid = :sid',
       expression_attribute_names: { '#D' => 'date' },
       expression_attribute_values: { ':last_date' => last_date, ':sid' => id },
       projection_expression: '#D, c, v, sid',
-      return_consumed_capacity: 'INDEXES',
+      return_consumed_capacity: 'TOTAL',
       limit: days_limit
     }
   end
 
   def site_elements
-    @site_elements ||= site.site_elements
+    @site_elements ||=
+      if site_element_ids.present?
+        site.site_elements.where(id: site_element_ids)
+      else
+        site.site_elements
+      end
   end
 
-  def table
-    'over_time'
+  def table_name
+    case Rails.env
+    when 'staging'
+      'staging_over_time'
+    when 'production'
+      'over_time'
+    else # edge / development / test
+      'edge_over_time2'
+    end
   end
 
   def last_date

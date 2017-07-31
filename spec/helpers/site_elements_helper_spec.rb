@@ -88,12 +88,22 @@ describe SiteElementsHelper do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
       other_element = create(:site_element, :twitter, rule: rule)
+
       records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
+      ]
+      expect(FetchSiteStatistics)
+        .to receive_service_call
+        .with(rule.site, site_element_ids: [element.id])
+        .and_return(SiteStatistics.new(records))
+
+      records = [
         create(:site_statistics_record, views: 10, conversions: 1, site_element_id: other_element.id)
       ]
-      statistics = SiteStatistics.new(records)
-      expect(FetchSiteStatistics).to receive_service_call.and_return(statistics).exactly(2).times
+      expect(FetchSiteStatistics)
+        .to receive_service_call
+        .with(rule.site, site_element_ids: [other_element.id])
+        .and_return(SiteStatistics.new(records))
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
     end
@@ -102,13 +112,22 @@ describe SiteElementsHelper do
       rule = create(:rule)
       element = create(:site_element, :twitter, rule: rule)
       other_element = create(:site_element, :twitter, rule: rule)
+
       records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
+      ]
+      expect(FetchSiteStatistics)
+        .to receive_service_call
+        .with(rule.site, site_element_ids: [element.id])
+        .and_return(SiteStatistics.new(records))
+
+      records = [
         create(:site_statistics_record, views: 10, conversions: 0, site_element_id: other_element.id)
       ]
-      statistics = SiteStatistics.new(records)
       expect(FetchSiteStatistics)
-        .to receive_service_call.and_return(statistics).exactly(2).times
+        .to receive_service_call
+        .with(rule.site, site_element_ids: [other_element.id])
+        .and_return(SiteStatistics.new(records))
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements))
         .to match(/converting better than your other social bars/)
@@ -211,7 +230,10 @@ describe SiteElementsHelper do
   end
 
   describe 'ab_test_icon' do
-    before { allow_any_instance_of(FetchSiteStatistics).to receive(:call) }
+    before do
+      allow_any_instance_of(FetchSiteStatistics)
+        .to receive(:call).and_return(SiteStatistics.new)
+    end
 
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
@@ -261,9 +283,9 @@ describe SiteElementsHelper do
 
       allow(variation3).to receive(:rule_id) { 0 }
 
-      allow(variation1).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
-      allow(variation2).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
-      allow(variation3).to receive(:statistics).and_return(create(:site_statistics, views: [250], conversions: [250]))
+      statistics = create(:site_statistics, views: [250], conversions: [250])
+      allow_any_instance_of(FetchSiteStatistics)
+        .to receive(:call).and_return(statistics)
 
       allow_any_instance_of(Site).to receive(:site_elements).and_return([variation1, variation2, variation3])
 
