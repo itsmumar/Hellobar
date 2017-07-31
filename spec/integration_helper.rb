@@ -26,17 +26,8 @@ RSpec.configure do |config|
     setup_site_generator
   end
 
-  config.before(:suite) do
-    begin
-      DatabaseCleaner.start
-      Rake.application.rake_require 'tasks/onboarding_campaigns'
-      Rake::Task.define_task(:environment)
-    ensure
-      DatabaseCleaner.clean
-    end
-  end
-
   config.include ContactListFeatureHelper, :contact_list_feature
+
   config.before contact_list_feature: true do
     stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
     allow(Settings).to receive(:fake_data_api).and_return true
