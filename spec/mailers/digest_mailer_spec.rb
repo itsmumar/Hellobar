@@ -31,7 +31,9 @@ describe DigestMailer do
         # mocked data regardless of when the test runs
         travel_to(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
           expect(FetchSiteStatistics)
-            .to receive_service_call.with(site, days_limit: 7).and_return(statistics)
+            .to receive_service_call
+            .with(site, site_element_ids: [site_element.id])
+            .and_return(statistics)
           expect(FetchSiteStatistics)
             .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
           expect(mail.body.encoded).to match('n/a')

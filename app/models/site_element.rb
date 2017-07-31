@@ -260,7 +260,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def statistics
-    site&.statistics&.for_element(id) || SiteStatistics.new
+    @statistics ||= FetchSiteStatistics.new(site, site_element_ids: [id]).call
   end
 
   private
