@@ -1,6 +1,7 @@
 describe DiamondAnalytics do
   let(:analytics) { described_class.new }
   let(:tracker) { double(:tracker) }
+  let(:diamond_endpoint) { 'http://foobar.com/hbprod' }
   let(:user) { create(:user, :with_site) }
   let(:site) { user.sites.first }
   let(:rule) { create(:rule, site: site) }
@@ -9,6 +10,7 @@ describe DiamondAnalytics do
 
   before do
     allow(analytics).to receive(:diamond).and_return(tracker)
+    allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
   end
 
   describe '#invited_member' do

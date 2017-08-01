@@ -5,12 +5,14 @@ describe TrackEvent, :freeze do
 
   let(:intercom) { instance_double(Intercom::Client) }
   let(:diamond) { instance_double(Diamond::Client) }
+  let(:diamond_endpoint) { 'http://foo.bar/hbprod' }
   let!(:owner) { create :user }
   let!(:site) { create :site, :pro, :with_rule, user: owner }
 
   before do
     allow(Intercom::Client).to receive(:new).and_return(intercom)
     allow(Diamond::Client).to receive(:new).and_return(diamond)
+    allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
   end
 
   around { |example| perform_enqueued_jobs(&example) }
