@@ -5,13 +5,13 @@ describe Diamond::Client do
   let(:headers) { { 'Accept': '*/*', 'Content-Type': 'application/json' } }
 
   describe '#track' do
-    subject { client.track(params) }
+    subject(:track) { client.track(params) }
 
     context 'when identities is nil' do
       let(:params) { { identities: nil, timestamp: Time.current } }
 
       it 'raises a TypeError' do
-        expect { subject }.to raise_error(TypeError, 'Must provide identities as a Hash')
+        expect { track }.to raise_error(TypeError, 'Must provide identities as a Hash')
       end
     end
 
@@ -19,7 +19,7 @@ describe Diamond::Client do
       let(:params) { { identities: {}, timestamp: Time.current } }
 
       it 'raises an ArgumentError' do
-        expect { subject }.to raise_error(ArgumentError, 'Must provide at least one identity')
+        expect { track }.to raise_error(ArgumentError, 'Must provide at least one identity')
       end
     end
 
@@ -37,7 +37,7 @@ describe Diamond::Client do
           }.to_json
         )
 
-        subject
+        track
       end
     end
 
@@ -54,7 +54,7 @@ describe Diamond::Client do
           }.to_json
         )
 
-        subject
+        track
       end
     end
 
@@ -72,7 +72,7 @@ describe Diamond::Client do
           }.to_json
         )
 
-        subject
+        track
       end
     end
   end
