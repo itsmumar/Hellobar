@@ -43,7 +43,7 @@ describe TrackEvent, :freeze do
         }
       )
 
-      # track padi/subscription status on owner
+      # track paid/subscription status on owner
       expect(diamond).to receive(:track).with(
         identities: {
           user_id: owner.id,
