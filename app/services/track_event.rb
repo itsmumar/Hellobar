@@ -6,6 +6,7 @@ class TrackEvent
 
   def call
     SendEventToIntercomJob.perform_later event.to_s, args
+    SendEventToDiamondJob.perform_later event.to_s, args
   end
 
   private
