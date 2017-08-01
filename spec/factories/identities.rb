@@ -42,6 +42,9 @@ FactoryGirl.define do
 
     trait :get_response_api do
       provider 'get_response_api'
+      credentials nil
+      extra nil
+      api_key 'api-key'
     end
 
     trait :icontact do
