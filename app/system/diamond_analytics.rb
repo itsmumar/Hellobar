@@ -1,5 +1,3 @@
-require 'diamond/client'
-
 class DiamondAnalytics
   def fire_event(event, **args)
     public_send(event.underscore.to_sym, **args)

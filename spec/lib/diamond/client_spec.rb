@@ -1,5 +1,3 @@
-require 'diamond/client'
-
 describe Diamond::Client do
   let(:endpoint) { 'http://foobar.com/hbprod' }
   let(:client) { described_class.new(endpoint: endpoint) }
