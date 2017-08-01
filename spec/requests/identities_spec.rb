@@ -54,7 +54,7 @@ describe 'Identities requests' do
 
           it 'sets error flash message' do
             request
-            expect(flash[:error]).to eql 'There was a problem connecting your Active Campaign account. Please try again later.'
+            expect(flash[:error]).to include 'There was a problem connecting your Active Campaign account.'
           end
         end
 
