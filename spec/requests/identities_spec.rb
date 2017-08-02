@@ -63,7 +63,7 @@ describe 'Identities requests' do
 
           it 'sets error flash message' do
             request
-            expect(flash[:error]).to eql 'Please disconnect your Active Campaign before adding a new one.'
+            expect(flash[:error]).to include 'Please disconnect your Active Campaign account'
           end
         end
       end

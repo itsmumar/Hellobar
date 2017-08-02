@@ -24,6 +24,7 @@ describe ContactListsHelper, type: :helper do
         ['GetResponse', :get_response_api, options(requires_api_key: true)],
         ['iContact', :icontact, options(requires_embed_code: true)],
         ['Infusionsoft', :infusionsoft, options(requires_app_url: true, requires_api_key: true)],
+        ['Iterable', :iterable, options(requires_api_key: true)],
         ['MadMimi', :mad_mimi_api, options(requires_api_key: true, requires_username: true)],
         ['MailChimp', :mailchimp, options(oauth: true)],
         ['Maropost', :maropost, options(requires_account_id: true, requires_api_key: true)],
