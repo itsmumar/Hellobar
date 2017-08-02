@@ -7,5 +7,5 @@ shared_context 'service provider' do
   let(:email) { 'example@email.com' }
   let(:first_name) { 'FirstName' }
   let(:last_name) { 'LastName' }
-  let(:name) { "#{ first_name } #{ last_name }"}
+  let(:name) { "#{ first_name } #{ last_name }" }
 end
