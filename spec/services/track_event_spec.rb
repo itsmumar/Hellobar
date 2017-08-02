@@ -17,6 +17,27 @@ describe TrackEvent, :freeze do
 
   around { |example| perform_enqueued_jobs(&example) }
 
+  describe '"signed_up" event' do
+    it 'sends "signed-up" event to intercom and diamond' do
+      expect(intercom).to receive_message_chain(:events, :create).with(
+        event_name: 'signed-up',
+        user_id: owner.id,
+        created_at: Time.current.to_i
+      )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Signed Up',
+        identities: {
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: owner.created_at.to_f
+      )
+
+      fire_event :signed_up, user: owner
+    end
+  end
+
   describe '"changed_subscription" event' do
     let(:tags) { double('tags') }
 

@@ -16,6 +16,14 @@ class IntercomAnalytics
     intercom.users.create(user_id: user.id, email: user.email)
   end
 
+  def signed_up(user:)
+    track(
+      event_name: 'signed-up',
+      user_id: user.id,
+      created_at: Time.current.to_i
+    )
+  end
+
   def invited_member(site:, user:)
     track(
       event_name: 'invited-member',

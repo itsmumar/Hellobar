@@ -3,6 +3,17 @@ class DiamondAnalytics
     public_send(event.underscore.to_sym, **args)
   end
 
+  def signed_up(user:)
+    track(
+      event: 'Signed Up',
+      identities: {
+        user_id: user.id,
+        user_email: user.email
+      },
+      timestamp: user.created_at.to_f
+    )
+  end
+
   def invited_member(site:, user:)
     track(
       event: 'Invited Member',
