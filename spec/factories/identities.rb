@@ -55,6 +55,13 @@ FactoryGirl.define do
       provider 'infusionsoft'
     end
 
+    trait :iterable do
+      provider 'iterable'
+      credentials nil
+      extra nil
+      api_key 'api-key'
+    end
+
     trait :mad_mimi_api do
       provider 'mad_mimi_api'
     end
