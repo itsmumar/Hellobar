@@ -10,7 +10,7 @@ describe ServiceProvider::Adapters::Aweber do
 
   let(:identity) { double('identity', provider: 'aweber', credentials: { 'token' => 'token', 'secret' => 'secret' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   before do
     ServiceProvider::Adapters::Aweber.configure do |config|

@@ -25,7 +25,7 @@ class IdentitiesController < ApplicationController
     identity = Identity.where(site_id: @site.id, provider: params[:provider]).first_or_initialize
 
     if @site && identity.persisted?
-      flash[:error] = "Please disconnect your #{ t(identity.provider, scope: :service_providers) } before adding a new one."
+      flash[:error] = "Please disconnect your #{ t(identity.provider, scope: :service_providers) } account first before adding a new one."
       return redirect_to site_contact_lists_path(@site)
     end
 
@@ -42,7 +42,7 @@ class IdentitiesController < ApplicationController
     if identity.save
       flash[:success] = "We've successfully connected your #{ t(identity.provider, scope: :service_providers) } account."
     else
-      flash[:error] = "There was a problem connecting your #{ t(identity.provider, scope: :service_providers) } account. Please try again later."
+      flash[:error] = "There was a problem connecting your #{ t(identity.provider, scope: :service_providers) } account. Please verify that you have provided valid credentials and try again."
     end
 
     redirect_to after_auth_redirect_url

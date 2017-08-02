@@ -9,7 +9,7 @@ describe ServiceProvider::Adapters::Maropost do
 
   let(:identity) { double('identity', provider: 'maropost', api_key: 'api_key', credentials: { 'username' => '12345' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   before do
     ServiceProvider::Adapters::Maropost.configure do |config|

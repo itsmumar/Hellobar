@@ -9,16 +9,19 @@ describe ServiceProvider::Adapters::GetResponse do
     }
   end
 
-  let(:identity) { double('identity', provider: 'get_response_api', api_key: 'api_key') }
+  let(:identity) { build_stubbed :identity, :get_response_api }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
-    let(:auth) { { access_token: 'token' } }
+    let(:auth) { Hash[access_token: 'token'] }
+    let(:headers) { Hash['X-Auth-Token' => "api-key #{ identity.api_key }"] }
 
     it 'initializes Faraday::Connection' do
-      headers = { 'X-Auth-Token' => 'api-key api_key' }
-      expect(Faraday).to receive(:new).with(url: 'https://api.getresponse.com/v3', headers: headers, params: {}).and_call_original
+      expect(Faraday).to receive(:new)
+        .with(url: 'https://api.getresponse.com/v3', params: {}, headers: headers)
+        .and_call_original
+
       expect(adapter.client).to be_a Faraday::Connection
     end
   end
@@ -29,7 +32,12 @@ describe ServiceProvider::Adapters::GetResponse do
     specify { expect(adapter).to be_connected }
 
     context 'when an error is raised' do
-      before { allow(adapter.client).to receive(:get).with('campaigns', perPage: 500).and_raise StandardError }
+      before do
+        allow(adapter.client).to receive(:get)
+          .with('campaigns', perPage: 500)
+          .and_raise StandardError
+      end
+
       specify { expect(adapter).not_to be_connected }
     end
   end
@@ -51,15 +59,25 @@ describe ServiceProvider::Adapters::GetResponse do
   end
 
   describe '#subscribe' do
-    before { allow_request :get, :contacts }
-    before { allow_request :post, :contact }
+    let(:body) do
+      {
+        campaign: {
+          campaignId: '4567456'
+        },
+        email: 'example@email.com',
+        name: 'FirstName LastName'
+      }
+    end
 
-    let(:body) { { campaign: { campaignId: '4567456' }, email: 'example@email.com', name: 'FirstName LastName' } }
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     before do
-      expect(FetchContacts)
-        .to receive_service_call.with(contact_list, limit: 10).and_return([email: 'example@email.com'])
+      allow_request :get, :contacts
+      allow_request :post, :contact
+
+      expect(FetchContacts).to receive_service_call
+        .with(contact_list, limit: 10)
+        .and_return [email: 'example@email.com']
     end
 
     it 'sends subscribe request' do

@@ -11,7 +11,7 @@ describe ServiceProvider::Adapters::ConstantContact do
 
   let(:identity) { double('identity', provider: 'constantcontact', credentials: { 'token' => 'token' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   before do
     ServiceProvider::Adapters::ConstantContact.configure do |config|
