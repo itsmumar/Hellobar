@@ -4,10 +4,17 @@ describe TrackEvent, :freeze do
   end
 
   let(:intercom) { instance_double(Intercom::Client) }
+  let(:diamond) { instance_double(Diamond::Client) }
+  let(:diamond_endpoint) { 'http://foo.bar/hbprod' }
   let!(:owner) { create :user }
   let!(:site) { create :site, :pro, :with_rule, user: owner }
 
-  before { allow(Intercom::Client).to receive(:new).and_return(intercom) }
+  before do
+    allow(Intercom::Client).to receive(:new).and_return(intercom)
+    allow(Diamond::Client).to receive(:new).and_return(diamond)
+    allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
+  end
+
   around { |example| perform_enqueued_jobs(&example) }
 
   describe '"changed_subscription" event' do
@@ -24,6 +31,33 @@ describe TrackEvent, :freeze do
       expect(tags).to receive(:tag).with(name: 'Paid', users: [user_id: owner.id])
       expect(tags).to receive(:tag).with(name: 'Pro', users: [user_id: owner.id])
 
+      expect(diamond).to receive(:track).with(
+        event: 'Changed Subscription',
+        identities: {
+          site_id: site.id,
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: site.created_at.to_f,
+        properties: {
+          subscription: 'Pro',
+          subscription_schedule: 'monthly'
+        }
+      )
+
+      # track paid/subscription status on owner
+      expect(diamond).to receive(:track).with(
+        identities: {
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: site.created_at.to_f,
+        properties: {
+          paid: true,
+          subscription: 'Pro'
+        }
+      )
+
       fire_event :changed_subscription, site: site, user: owner
     end
   end
@@ -38,6 +72,21 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { bar_type: site_element.type, goal: site_element.element_subtype }
       )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Created Bar',
+        identities: {
+          site_id: site.id,
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: site.created_at.to_f,
+        properties: {
+          element_type: site_element.type,
+          element_goal: site_element.element_subtype
+        }
+      )
+
       fire_event :created_bar, site_element: site_element, user: owner
     end
   end
@@ -52,6 +101,20 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { site_url: site.url }
       )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Created Contact List',
+        identities: {
+          site_id: site.id,
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: contact_list.created_at.to_f,
+        properties: {
+          site_url: contact_list.site.url
+        }
+      )
+
       fire_event :created_contact_list, contact_list: contact_list, user: owner
     end
   end
@@ -64,6 +127,20 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { url: site.url }
       )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Created Site',
+        identities: {
+          site_id: site.id,
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: site.created_at.to_f,
+        properties: {
+          site_url: site.url
+        }
+      )
+
       fire_event :created_site, site: site, user: owner
     end
   end
@@ -76,6 +153,20 @@ describe TrackEvent, :freeze do
         created_at: Time.current.to_i,
         metadata: { site_url: site.url }
       )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Invited Member',
+        identities: {
+          site_id: site.id,
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: site.created_at.to_f,
+        properties: {
+          site_url: site.url
+        }
+      )
+
       fire_event :invited_member, site: site, user: owner
     end
   end
