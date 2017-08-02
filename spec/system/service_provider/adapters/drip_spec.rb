@@ -12,7 +12,7 @@ describe ServiceProvider::Adapters::Drip do
   let(:token) { identity.credentials['token'] }
   let(:account_id) { identity.extra['accounts'].first['id'] }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }

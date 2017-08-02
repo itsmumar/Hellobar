@@ -13,7 +13,7 @@ describe ServiceProvider::Adapters::MailChimp do
       credentials: { 'token' => 'api_key' })
   end
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   let(:list_id) { '57afe96172' }
 

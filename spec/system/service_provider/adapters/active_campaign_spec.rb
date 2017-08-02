@@ -8,7 +8,7 @@ describe ServiceProvider::Adapters::ActiveCampaign do
 
   let(:identity) { double('identity', provider: 'active_campaign', api_key: 'api_key', extra: { 'app_url' => 'example.com' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '.initialize' do
     let(:config) { { api_endpoint: 'https://example.com/admin/api.php', api_key: 'api_key' } }

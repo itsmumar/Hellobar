@@ -11,7 +11,7 @@ describe ServiceProvider::Adapters::GetResponse do
 
   let(:identity) { build_stubbed :identity, :get_response_api }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     let(:auth) { Hash[access_token: 'token'] }

@@ -8,7 +8,7 @@ describe ServiceProvider::Adapters::MadMimi do
 
   let(:identity) { double('identity', provider: 'mad_mimi_api', api_key: 'api_key', credentials: { 'username' => 'username' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }

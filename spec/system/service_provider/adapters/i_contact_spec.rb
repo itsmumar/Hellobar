@@ -7,7 +7,7 @@ describe ServiceProvider::Adapters::IContact do
   end
 
   let(:identity) { double('identity', provider: 'icontact') }
-  include_examples 'service provider'
+  include_context 'service provider'
   let(:contact_list) { create(:contact_list, :icontact) }
 
   before { allow_request :get, :form }

@@ -7,7 +7,7 @@ describe ServiceProvider::Adapters::MyEmma do
   end
 
   let(:identity) { double('identity', provider: 'my_emma') }
-  include_examples 'service provider'
+  include_context 'service provider'
   let(:contact_list) { create(:contact_list, :my_emma) }
 
   before { allow_request :get, :form }

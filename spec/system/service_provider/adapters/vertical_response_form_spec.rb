@@ -6,7 +6,7 @@ describe ServiceProvider::Adapters::VerticalResponseForm do
   end
 
   let(:identity) { double('identity', provider: 'vertical_response') }
-  include_examples 'service provider'
+  include_context 'service provider'
   let(:contact_list) { create(:contact_list, :vertical_response) }
 
   describe '#initialize' do

@@ -10,14 +10,14 @@ describe PayRecurringBills do
       allow(report).to receive(:email)
     end
 
-    shared_context 'pay bill' do
+    shared_examples 'pay bill' do
       specify do
         expect(PayBill).to receive_service_call.and_return(double(paid?: true))
         service.call
       end
     end
 
-    shared_context 'do not pay bill' do
+    shared_examples 'do not pay bill' do
       specify do
         expect(PayBill).not_to receive_service_call
         service.call
