@@ -396,3 +396,8 @@ $ docker run --rm --volumes-from=hellobarnew_agent_1 -v ~/.ssh:/ssh -it whilp/ss
 ```
 
 You'll want to substitute your private key name and agent container (the default is `hellobarnew_agent_1`)
+
+## Local Configuration
+
+For local settings of the application we have added `config/initializers/local.rb` to .gitignore.
+You can for example configure mailcatcher instead of sending emails directly via SendGrid.

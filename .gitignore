@@ -55,3 +55,6 @@ out
 
 # RSpec local run summary
 spec/examples.txt
+
+# Developer's config override
+config/initializers/local.rb

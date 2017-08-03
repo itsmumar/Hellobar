@@ -84,7 +84,12 @@ class ContactListsController < ApplicationController
   end
 
   def send_contact_list_csv(list)
-    send_data FetchContactsCSV.new(list).call, type: 'text/csv', filename: "#{ list.name.parameterize }.csv"
+    @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
+    ContactsMailer.csv_export(current_user, list).deliver_later
+    flash[:success] =
+      "You will be emailed a CSV of #{ @total_subscribers } users to #{ current_user.email }." \
+      ' At peak times this can take a few minutes'
+    redirect_to site_contact_list_path(@site, list)
   end
 
   def omniauth_error?
