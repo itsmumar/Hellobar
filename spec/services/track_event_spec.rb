@@ -17,10 +17,31 @@ describe TrackEvent, :freeze do
 
   around { |example| perform_enqueued_jobs(&example) }
 
+  describe '"signed_up" event' do
+    it 'sends "signed-up" event to intercom and diamond' do
+      expect(intercom).to receive_message_chain(:events, :create).with(
+        event_name: 'signed-up',
+        user_id: owner.id,
+        created_at: Time.current.to_i
+      )
+
+      expect(diamond).to receive(:track).with(
+        event: 'Signed Up',
+        identities: {
+          user_id: owner.id,
+          user_email: owner.email
+        },
+        timestamp: owner.created_at.to_f
+      )
+
+      fire_event :signed_up, user: owner
+    end
+  end
+
   describe '"changed_subscription" event' do
     let(:tags) { double('tags') }
 
-    it 'sends "changed-subscription" to intercom and tag owners' do
+    it 'sends "changed-subscription" to intercom and diamond, tags owners' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'changed-subscription',
         user_id: owner.id,
@@ -65,7 +86,7 @@ describe TrackEvent, :freeze do
   describe '"created_bar" event' do
     let!(:site_element) { create :site_element, site: site }
 
-    it 'sends "created-bar" to intercom' do
+    it 'sends "created-bar" to intercom and diamond' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'created-bar',
         user_id: owner.id,
@@ -94,7 +115,7 @@ describe TrackEvent, :freeze do
   describe '"created_contact_list" event' do
     let!(:contact_list) { create :contact_list, site: site }
 
-    it 'sends "created-contact-list" to intercom' do
+    it 'sends "created-contact-list" to intercom and diamond' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'created-contact-list',
         user_id: owner.id,
@@ -120,7 +141,7 @@ describe TrackEvent, :freeze do
   end
 
   describe '"created_site" event' do
-    it 'sends "created-site" to intercom' do
+    it 'sends "created-site" to intercom and diamond' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'created-site',
         user_id: owner.id,
@@ -146,7 +167,7 @@ describe TrackEvent, :freeze do
   end
 
   describe '"invited_member" event' do
-    it 'sends "invited-member" to intercom' do
+    it 'sends "invited-member" to intercom and diamond' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'invited-member',
         user_id: owner.id,

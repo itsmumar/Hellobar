@@ -227,6 +227,8 @@ class User < ActiveRecord::Base
       user.status = ACTIVE_STATUS
 
       if user.save
+        TrackEvent.new(:signed_up, user: user).call
+
         Analytics.track(:user, user.id, 'Signed Up', track_options)
         Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
       end

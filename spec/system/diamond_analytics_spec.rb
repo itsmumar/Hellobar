@@ -13,6 +13,35 @@ describe DiamondAnalytics do
     allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
   end
 
+  describe '#signed_up' do
+    subject { analytics.signed_up(user: user) }
+
+    it 'tracks the invited-member event' do
+      expect(tracker).to receive(:track).with(
+        event: 'Signed Up',
+        identities: {
+          user_id: user.id,
+          user_email: user.email
+        },
+        timestamp: user.created_at.to_f
+      )
+
+      subject
+    end
+
+    context 'when tracking is disabled' do
+      before do
+        expect(analytics).to receive(:enabled?).and_return(false)
+      end
+
+      it 'does not track' do
+        expect(tracker).not_to receive(:track)
+
+        subject
+      end
+    end
+  end
+
   describe '#invited_member' do
     subject { analytics.invited_member(site: site, user: user) }
 
