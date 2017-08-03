@@ -13,7 +13,7 @@ describe SendNotInstalledJob do
 
     it 'sends not installed email for all admins and owners' do
       [admin, owner].each do |user|
-        expect(DigestMailer).to receive(:not_installed).with(site, user).and_return(mail)
+        expect(SiteMailer).to receive(:not_installed).with(site, user).and_return(mail)
       end
       perform
     end

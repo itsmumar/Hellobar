@@ -24,7 +24,7 @@ describe SendWeeklyDigestJob do
 
       it 'sends weekly digest for all admins and owners' do
         [admin, owner].each do |user|
-          expect(DigestMailer).to receive(:weekly_digest).with(site, user).and_return(mail)
+          expect(SiteMailer).to receive(:weekly_digest).with(site, user).and_return(mail)
         end
         perform
       end
@@ -34,7 +34,7 @@ describe SendWeeklyDigestJob do
       let(:statistics) { create :site_statistics, views: [0], first_date: beginning_of_week }
 
       it 'does not call SendEmailDigest' do
-        expect(DigestMailer).not_to receive(:weekly_digest)
+        expect(SiteMailer).not_to receive(:weekly_digest)
         perform
       end
     end

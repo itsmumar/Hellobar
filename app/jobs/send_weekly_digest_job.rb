@@ -3,7 +3,7 @@ class SendWeeklyDigestJob < ApplicationJob
     return unless any_views_within_last_week?(site)
 
     site.owners_and_admins.each do |user|
-      DigestMailer.weekly_digest(site, user).deliver_now
+      SiteMailer.weekly_digest(site, user).deliver_now
     end
   end
 

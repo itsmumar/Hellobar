@@ -1,10 +1,10 @@
-describe DigestMailer do
+describe SiteMailer do
   let!(:site) { create :site, :with_user, elements: [:email] }
   let(:site_element) { site.site_elements.first }
   let(:user) { site.owners.first }
 
   describe '.weekly_digest' do
-    let(:mail) { DigestMailer.weekly_digest(site, user) }
+    let(:mail) { SiteMailer.weekly_digest(site, user) }
     let(:views) { Array.new(6) { 1 } }
     let(:conversions) { Array.new(6) { 1 } }
 
@@ -60,7 +60,7 @@ describe DigestMailer do
   end
 
   describe '.not_installed' do
-    let(:mail) { DigestMailer.not_installed(site, user) }
+    let(:mail) { SiteMailer.not_installed(site, user) }
 
     it 'renders headers' do
       expect(mail).to deliver_to(user.email)
