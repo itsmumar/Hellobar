@@ -1,4 +1,4 @@
-describe SendWeeklyDigestJob do
+describe SendWeeklyDigestEmailJob do
   let(:job) { described_class }
   let(:owner) { create :user }
   let(:admin) { create :user }

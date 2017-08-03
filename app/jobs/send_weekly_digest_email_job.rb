@@ -1,4 +1,4 @@
-class SendWeeklyDigestJob < ApplicationJob
+class SendWeeklyDigestEmailJob < ApplicationJob
   def perform(site)
     return unless any_views_within_last_week?(site)
 

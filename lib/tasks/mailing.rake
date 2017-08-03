@@ -1,7 +1,7 @@
 namespace :mailing do
   task send_weekly_digest: :environment do
     Site.for_weekly_digest.find_each do |site|
-      SendWeeklyDigestJob.perform_later site
+      SendWeeklyDigestEmailJob.perform_later site
     end
   end
 
