@@ -9,7 +9,7 @@ describe ServiceProvider::Adapters::ConvertKit do
 
   let(:identity) { double('identity', provider: 'convert_kit', api_key: 'api_key') }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token' } }

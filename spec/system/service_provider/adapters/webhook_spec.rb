@@ -7,7 +7,7 @@ describe ServiceProvider::Adapters::Webhook do
   end
 
   let(:identity) { double('identity', provider: 'webhooks') }
-  include_examples 'service provider'
+  include_context 'service provider'
 
   let(:contact_list) do
     create(:contact_list, data: { 'webhook_url' => 'http://webhook.url/subscribe', 'webhook_method' => 'POST' })

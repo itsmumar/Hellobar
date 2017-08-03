@@ -40,6 +40,7 @@ gem 'verticalresponse'
 
 # Mailing
 gem 'pony'
+gem 'roadie-rails'
 
 # Billing
 gem 'activemerchant', '~> 1.65.0'
@@ -99,7 +100,6 @@ gem 'psych'
 gem 'rack-ssl-enforcer'
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'render_anywhere'
-gem 'roadie-rails'
 gem 'rubyzip'
 gem 'thread'
 gem 'uglifier'

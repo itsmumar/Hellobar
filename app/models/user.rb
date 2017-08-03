@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  acts_as_paranoid
+
   include UserValidator
   include ReferralTokenizable
 
@@ -41,8 +43,6 @@ class User < ActiveRecord::Base
   }
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
-
-  acts_as_paranoid
 
   validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
@@ -227,6 +227,8 @@ class User < ActiveRecord::Base
       user.status = ACTIVE_STATUS
 
       if user.save
+        TrackEvent.new(:signed_up, user: user).call
+
         Analytics.track(:user, user.id, 'Signed Up', track_options)
         Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
       end

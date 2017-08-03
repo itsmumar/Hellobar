@@ -10,7 +10,7 @@ describe ServiceProvider::Adapters::Infusionsoft do
 
   let(:identity) { double('identity', provider: 'infusionsoft', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     it 'initializes Infusionsoft' do

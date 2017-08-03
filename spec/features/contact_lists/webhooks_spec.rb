@@ -11,8 +11,6 @@ feature 'Webhooks Integration', :js, :contact_list_feature do
   end
 
   context 'when invalid' do
-    before { allow(ServiceProvider).to receive(:new).and_return(double(connected?: false, lists: [])) }
-
     scenario 'empty url' do
       connect('')
       expect(page).to have_content('webhook URL cannot be blank')

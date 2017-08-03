@@ -7,7 +7,7 @@ describe ServiceProvider::Adapters::MadMimiForm do
   end
 
   let(:identity) { double('identity', provider: 'mad_mimi_form') }
-  include_examples 'service provider'
+  include_context 'service provider'
   let(:contact_list) { create(:contact_list, :mad_mimi_form) }
 
   before { allow_request :get, :form }

@@ -12,7 +12,7 @@ describe ServiceProvider::Adapters::CampaignMonitor do
     double('identity', provider: 'createsend', credentials: { 'token' => 'token', 'refresh_token' => 'refresh_token' })
   end
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     let(:auth) { { access_token: 'token', refresh_token: 'refresh_token' } }

@@ -46,5 +46,16 @@ module Hellobar
 
     # Use Shoryuken as ActiveJob adapter
     config.active_job.queue_adapter = :shoryuken
+
+    # Configure SMTP for Mailers
+    config.action_mailer.smtp_settings = {
+      address: 'smtp.sendgrid.net',
+      port: 587,
+      enable_starttls_auto: true,
+      user_name: Settings.sendgrid_user_name,
+      password: Settings.sendgrid_password,
+      authentication: :plain,
+      domain: Settings.host
+    }
   end
 end

@@ -9,7 +9,7 @@ describe ServiceProvider::Adapters::VerticalResponse do
 
   let(:identity) { double('identity', provider: 'verticalresponse', credentials: { 'token' => 'token' }) }
 
-  include_examples 'service provider'
+  include_context 'service provider'
 
   describe '#initialize' do
     it 'initializes VerticalResponse::API::OAuth' do

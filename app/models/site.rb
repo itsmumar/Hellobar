@@ -131,11 +131,11 @@ class Site < ActiveRecord::Base
   end
 
   def needs_script_regeneration?
-    !skip_script_generation && @needs_script_regeneration.present?
+    !skip_script_generation && @needs_script_regeneration.presence
   end
 
   def regenerate_script
-    @needs_script_regeneration = true unless destroyed?
+    @needs_script_regeneration = true unless deleted? || destroyed?
   end
 
   def script_installed?

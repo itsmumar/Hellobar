@@ -78,26 +78,37 @@ describe 'ContactList requests' do
       context '.csv', :freeze do
         let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current }\n" }
         let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
+        let(:total_contacts) { 100 }
 
-        it 'redirects to csv downloading' do
-          expect(FetchContacts).to receive_service_call.with(contact_list, limit: nil).and_return(contacts)
+        before do
+          expect(FetchContactListTotals)
+            .to receive_service_call
+            .with(contact_list.site, id: contact_list.id.to_s)
+            .and_return(total_contacts)
+        end
 
+        it 'enqueues ExportNotifications mailer' do
+          expect(ContactsMailer).to receive(:csv_export).and_call_original
+          expect { get site_contact_list_path(site, contact_list, format: :csv) }
+            .to have_enqueued_job.on_queue('test_mailers')
+        end
+
+        it 'redirects back' do
           get site_contact_list_path(site, contact_list, format: :csv)
-
-          expect(headers).to include 'Content-Type' => 'text/csv'
-          expect(headers).to include 'Content-Disposition' => 'attachment; filename="my-list.csv"'
-          expect(response).to be_successful
-          expect(response.body).to eql csv
+          expect(flash[:success])
+            .to eql "You will be emailed a CSV of #{ total_contacts } users to #{ user.email }." \
+                    ' At peak times this can take a few minutes'
+          expect(response).to redirect_to site_contact_list_path(site, contact_list)
         end
       end
     end
 
     describe 'DELETE :destroy' do
       context 'when site_element_action is 1' do
-        it 'destroys an existing identity' do
+        it 'deletes an existing contact_list' do
           expect {
             delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 1 })
-          }.to change { contact_list.reload.destroyed? }
+          }.to change { contact_list.reload.deleted? }
 
           expect(response).to be_successful
         end
@@ -106,17 +117,17 @@ describe 'ContactList requests' do
       context 'when site_element_action is 0' do
         let!(:site_element) { create :site_element, contact_list: contact_list }
 
-        it 'destroys an existing identity' do
+        it 'deletes an existing identity' do
           expect {
             delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 0 })
-          }.to change { contact_list.reload.destroyed? }
+          }.to change { contact_list.reload.deleted? }
 
           expect(response).to be_successful
         end
 
         it 'creates new contact list and updates all bars' do
           expect { delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 0 }) }
-            .to change { contact_list.reload.destroyed? }
+            .to change { contact_list.reload.deleted? }
             .and change { site_element.reload.contact_list_id }
 
           expect(response).to be_successful

@@ -37,7 +37,6 @@ end
 every 1.hour, roles: [:cron] do
   # Disable all DynamoDB adjusting
   # rake 'backend:adjust_dynamo_db_capacity[recent_throttled_only]'
-  rake 'cloudwatch_metrics:create_alarms'
 end
 
 # Disabling temporarily for now (due to this code being mostly bollocks and
