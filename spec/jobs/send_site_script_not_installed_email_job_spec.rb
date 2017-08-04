@@ -1,4 +1,4 @@
-describe SendNotInstalledJob do
+describe SendSiteScriptNotInstalledEmailJob do
   let(:job) { described_class }
   let(:owner) { create :user }
   let(:admin) { create :user }
@@ -13,7 +13,7 @@ describe SendNotInstalledJob do
 
     it 'sends not installed email for all admins and owners' do
       [admin, owner].each do |user|
-        expect(SiteMailer).to receive(:not_installed).with(site, user).and_return(mail)
+        expect(SiteMailer).to receive(:site_script_not_installed).with(site, user).and_return(mail)
       end
       perform
     end

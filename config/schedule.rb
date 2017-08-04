@@ -19,7 +19,7 @@ every :monday, at: '3:00pm', roles: [:cron] do
 end
 
 every 4.days, at: '11:00am', roles: [:cron] do
-  rake 'mailing:send_site_not_installed_reminders'
+  rake 'mailing:send_site_script_not_installed'
 end
 
 every 24.hours, at: '12:00am', roles: [:cron] do

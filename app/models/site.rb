@@ -47,11 +47,8 @@ class Site < ActiveRecord::Base
     )
   }
 
-  scope :for_weekly_digest, lambda {
-    script_installed_db.where(opted_in_to_email_digest: true)
-  }
-
-  scope :for_not_installed_reminder, lambda {
+  scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
+  scope :script_not_installed_but_active, lambda {
     joins(:site_elements)
       .where(script_installed_at: nil)
       .where('site_elements.created_at > ?', 4.days.ago)

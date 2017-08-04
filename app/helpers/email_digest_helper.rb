@@ -44,7 +44,7 @@ module EmailDigestHelper
   end
 
   def last_week
-    self.last_week
+    EmailDigestHelper.last_week
   end
 
   def week_for_subject

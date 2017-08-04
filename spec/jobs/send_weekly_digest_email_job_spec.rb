@@ -4,7 +4,6 @@ describe SendWeeklyDigestEmailJob do
   let(:admin) { create :user }
   let(:site) { create :site, user: owner }
   let(:beginning_of_week) { EmailDigestHelper.last_week.first }
-
   let(:mail) { double(deliver_now: true) }
 
   before { site.admins << admin }

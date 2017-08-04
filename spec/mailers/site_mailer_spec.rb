@@ -15,7 +15,7 @@ describe SiteMailer do
         conversions: conversions
     end
 
-    let(:subject) do
+    let(:email_subject) do
       "Hello Bar Weekly Digest for #{ site.url } - #{ week_for_subject }"
     end
 
@@ -40,7 +40,7 @@ describe SiteMailer do
 
     it 'renders headers' do
       expect(mail).to deliver_to(user.email)
-      expect(mail).to have_subject(subject)
+      expect(mail).to have_subject(email_subject)
       expect(mail).to deliver_from('Hello Bar <contact@hellobar.com>')
     end
 
@@ -59,8 +59,8 @@ describe SiteMailer do
     end
   end
 
-  describe '.not_installed' do
-    let(:mail) { SiteMailer.not_installed(site, user) }
+  describe '.site_script_not_installed' do
+    let(:mail) { SiteMailer.site_script_not_installed(site, user) }
 
     it 'renders headers' do
       expect(mail).to deliver_to(user.email)

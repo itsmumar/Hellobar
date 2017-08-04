@@ -1,6 +1,7 @@
 class SiteMailer < ActionMailer::Base
   include Roadie::Rails::Mailer
   include EmailDigestHelper
+
   add_template_helper(EmailDigestHelper)
 
   default from: 'Hello Bar <contact@hellobar.com>'
@@ -23,7 +24,7 @@ class SiteMailer < ActionMailer::Base
     )
   end
 
-  def not_installed(site, user)
+  def site_script_not_installed(site, user)
     @site = site
     @user = user
 
