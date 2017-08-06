@@ -1,7 +1,9 @@
-- no_branding_image_url = "https://s3.amazonaws.com/assets.hellobar.com/no_branding.png"
-- ab_test_image_url = "https://s3.amazonaws.com/assets.hellobar.com/abicon.png"
-- targeted_bars_image_url = "https://s3.amazonaws.com/assets.hellobar.com/targeted.png"
-- charts_image_url = "https://s3.amazonaws.com/assets.hellobar.com/better_stats.png"
+- no_branding_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/no_branding.png'
+- ab_test_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/abicon.png'
+- targeted_bars_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/targeted.png'
+- charts_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/better_stats.png'
+- bar_icon_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/bar_icon.png'
+- modal_icon_image_url = 'https://s3.amazonaws.com/assets.hellobar.com/modal_icon.png'
 
 tr.lightGrey
   td
@@ -71,10 +73,10 @@ tr.lightGrey
                   div class="circle #{site_element.short_subtype}"
                     = index + 1
                   div.elementText= truncate(strip_tags(site_element.headline || '').html_safe, length: 50, separator: ' ')
-                td.bottom.alignCenter.cell= image_tag(site_element.type == "Bar" ? "https://s3.amazonaws.com/cms.crazyegg.com/90390b20772c69a20814109f7a60c5e47f3428fe_1428003600.png" : "https://s3.amazonaws.com/cms.crazyegg.com/eefb053c36da049df423d800206943f5d972ce35_1428003605.png", class: site_element.type)
+                td.bottom.alignCenter.cell= image_tag(site_element.type == 'Bar' ? bar_icon_image_url : modal_icon_image_url, class: site_element.type)
                 td.bottom.alignCenter.cell= site_element.statistics.within(@last_week).views
                 td.bottom.alignCenter.cell
-                  - if site_element.element_subtype == "announcement"
+                  - if site_element.element_subtype == 'announcement'
                     span.darkGreyText --
                   - elsif site_element.statistics.within(@last_week).conversions > 0
                     | #{site_element.statistics.within(@last_week).conversions}
@@ -82,10 +84,10 @@ tr.lightGrey
                   - else
                     span.darkGreyText none
                 td.bottom.right.cell.alignCenter
-                  = link_to "update", edit_site_site_element_url(site_element, site_id: @site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Edit Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button smallButton"
+                  = link_to 'update', edit_site_site_element_url(site_element, site_id: @site, trk: tracker_param(@user.id, 'Edit Bar')), class: 'button smallButton'
             tr.alignCenter
               td.bottom.right.left colspan=5 style="padding: 10px 0;"
-                = link_to "Get more conversions", site_site_elements_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Add Bar", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                = link_to 'Get more conversions', site_site_elements_url(@site, trk: tracker_param(@user.id, 'Add Bar')), class: 'button largeButton'
 
       tr
         td colspan="3"
@@ -107,14 +109,14 @@ tr.lightGrey
                           div.content
                             div.strong Brand it as your bar
                             div.text No Hello Bar logo in your bar, it's all yours!
-                            = link_to "Brand your bar", edit_site_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Branding", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                            = link_to 'Brand your bar', edit_site_url(@site, trk: tracker_param(@user.id, 'Pro Branding')), class: 'button largeButton'
                       td
                         div.feature
                           img src=ab_test_image_url
                           div.content
                             div.strong Unlimited bars
                             div.text A/B test with more variations.
-                            = link_to "Test more bars", edit_site_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro More Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                            = link_to 'Test more bars', edit_site_url(@site, trk: tracker_param(@user.id, 'Pro More Bars')), class: 'button largeButton'
                     tr
                       td
                         div.feature
@@ -122,17 +124,17 @@ tr.lightGrey
                           div.content
                             div.strong Targeted messages
                             div.text Show different visitors different messages.
-                            = link_to "Customize now", edit_site_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Targeted Bars", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                            = link_to 'Customize now', edit_site_url(@site, trk: tracker_param(@user.id, 'Pro Targeted Bars')), class: 'button largeButton'
                       td
                         div.feature
                           img src=charts_image_url
                           div.content
                             div.strong Better stats
                             div.text See tips to improve your marketing.
-                            = link_to "Get better stats", edit_site_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Stats", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                            = link_to 'Get better stats', edit_site_url(@site, trk: tracker_param(@user.id, 'Pro Stats')), class: 'button largeButton'
               tr
                 td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
                   span style="line-height: 24px; height: 24px; margin-right: 10px;"
                     | Get all the pro features for $15/mo
-                  = link_to "Start using Hello Bar Pro", edit_site_url(@site, :trk => Hello::TrackingParam.encode_tracker(@user.id, "Pro Start", "Email Template"=> EmailDigestHelper.template_name(@site))), class: "button largeButton"
+                  = link_to 'Start using Hello Bar Pro', edit_site_url(@site, trk: tracker_param(@user.id, 'Pro Start')), class: 'button largeButton'
   td

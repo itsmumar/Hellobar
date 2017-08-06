@@ -1,5 +1,5 @@
-- logo_top_url = "https://s3.amazonaws.com/cms.crazyegg.com/60c976ea4f6e50d356a66f371cc6e06810844670_1429134188.png"
-- logo_bottom_url = "https://s3.amazonaws.com/cms.crazyegg.com/bb319efb07cf515b7dccf4be97d30ba919f278e4_1429134183.png"
+- logo_top_url = 'https://s3.amazonaws.com/assets.hellobar.com/logo_top.png'
+- logo_bottom_url = 'https://s3.amazonaws.com/assets.hellobar.com/logo_bottom.png'
 
 <!DOCTYPE html>
 html
@@ -246,15 +246,19 @@ html
                           td.alignCenter
                           td.alignRight
                             div.headerText
-                              | #{@last_week.first.strftime("%b %e")} - #{@last_week.last.strftime("%b %e")}
+                              | #{@last_week.first.strftime('%b %e')} - #{@last_week.last.strftime('%b %e')}
                     td
                     = yield
                     tr.lightGrey
                       td colspan="3"
     div.footerText
       | You are receiving weekly updates. You can turn off or change your settings by visiting your&nbsp;
-      = link_to "email settings page", profile_url
+      = link_to 'email settings page', profile_url
       | &nbsp;or&nbsp;
-      = link_to "hellobar.com", root_url
+      = link_to 'hellobar.com', root_url
       | .
-      img src=tracking_pixel_url(:trk => Hello::TrackingParam.encode_tracker(@user.id, "Opened Email", "Email Template"=> EmailDigestHelper.template_name(@site)))
+      img src=tracking_pixel_url(trk: tracker_param(@user.id, 'Opened Email'))
+    br
+    br
+    p style="text-align: center"
+      small This email was sent to #{ @user.email }.

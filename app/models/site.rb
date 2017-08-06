@@ -23,6 +23,7 @@ class Site < ActiveRecord::Base
   has_many :active_site_elements, through: :rules
   has_many :site_memberships, dependent: :destroy
   has_many :owners, -> { where(site_memberships: { role: 'owner' }) }, through: :site_memberships, source: :user
+  has_many :admins, -> { where(site_memberships: { role: 'admin' }) }, through: :site_memberships, source: :user
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
@@ -44,6 +45,13 @@ class Site < ActiveRecord::Base
       :site_elements, :active_site_elements,
       rules: [:conditions, :active_site_elements, :site_elements, site: :bills]
     )
+  }
+
+  scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
+  scope :script_not_installed_but_active, lambda {
+    joins(:site_elements)
+      .where(script_installed_at: nil)
+      .where('site_elements.created_at > ?', 4.days.ago)
   }
 
   before_validation :standardize_url

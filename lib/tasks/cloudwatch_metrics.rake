@@ -1,10 +1,5 @@
 namespace :cloudwatch_metrics do
-  # Send the data to Cloudwatch
-  def cloudwatch
-    Aws::CloudWatch::Client.new
-  end
-
-  desc 'Reports memory and disk space stats to AWS CloudWatch'
+  desc 'Report memory and disk space stats to AWS CloudWatch'
   task send: :environment do
     instance_id = `ec2metadata --instance-id`
     instance_id.strip!
@@ -41,6 +36,7 @@ namespace :cloudwatch_metrics do
       metric[:unit] = 'Kilobytes'
     end
 
+    cloudwatch = Aws::CloudWatch::Client.new
     cloudwatch.put_metric_data(namespace: "HB/#{ Rails.env }", metric_data: metrics)
   end
 end
