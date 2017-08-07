@@ -33,12 +33,13 @@
         <div class="col-xs-12">
           <ul class="list-inline list-footer">
 
-            <li><a href="#">Sign In</a></li>
-            <li><a href="#">Use Cases</a></li>
-            <li><a href="#">Terms of Use In</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Help</a></li>
-            <li class="copyright">&copy; Hello Bar 2017</li>
+            <li><%= active_link_to 'Sign In', new_user_session_path %></li>
+            <li><%= active_link_to 'Use Cases', use_cases_path %></li>
+            <li><%= active_link_to 'Terms of Use', terms_of_use_path %></li>
+            <li><%= active_link_to 'Privacy Policy', privacy_policy_path %></li>
+            <li><%= active_link_to 'Help', 'http://support.hellobar.com/' %></li>
+
+            <li class="copyright">&copy; Hello Bar <%= Time.current.year %></li>
           </ul>
         </div>
       </div>
