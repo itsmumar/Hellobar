@@ -13,6 +13,10 @@ class WelcomeController < ApplicationController
     render layout: 'static-alternate' if @homepage_variation == 'variant'
   end
 
+  def get_started
+    render '_index_original'
+  end
+
   def email_quickstart
     @signup_type = :email
     Analytics.track(*current_person_type_and_id, 'Homepage - Email Signup')

@@ -6,7 +6,7 @@
     <div class="container">
       <div class="row margin-bottom-30">
         <div class="col-xs-12">
-          <a href="#"><img src="<%= image_path('welcome/logo.png') %>" /></a>
+          <a href="/"><img src="<%= image_path('welcome/logo.png') %>" /></a>
           <h1 class="proximaBold color-white margin-top-30">Get more signups and sales from the traffic you already have</h1>
 
         </div>
@@ -65,15 +65,8 @@
       <div class="row">
         <div class="col-xs-12">
           <h2 class="color-white margin-bottom-20">Enter your URL to get started for free</h2>
-          <div class="web-url-bar-bottom">
-            <form role="form">
-              <div class="web-url-bar">
-                <input type="text" placeholder="Your website URL..." class="login-with-google-input" />
-                <input type="submit" value="Log in with" class="login-with-google" />
-              </div>
-              <p class="color-silver margin-top-20">Use Hello Bar for free. No credit card required.</p>
-            </form>
-          </div>
+
+          <%= render 'index_form' %>
         </div>
       </div>
 
@@ -137,7 +130,7 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="btn-bottom">
-            <a href="#" class="btn btn-orange text-uppercase">The Solution</a>
+            <a href="#signup" class="btn btn-orange text-uppercase">The Solution</a>
           </div>
 
         </div>
@@ -253,7 +246,7 @@
 
       <div class="row margin-top-60 margin-bottom-60">
         <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-          <a href="#" class="btn btn-orange btn-lg btn-radius">Create Free Opt Ins Now</a>
+          <a href="#signup" class="btn btn-orange btn-lg btn-radius">Create Free Opt Ins Now</a>
         </div>
       </div>
       <!-- ./row -->
@@ -412,7 +405,7 @@
 
       <div class="row margin-bottom-60 text-center">
         <div class="col-xs-12">
-          <a href="#" class="btn btn-orange btn-lg btn-radius">Get Started For FREE</a>
+          <a href="#signup" class="btn btn-orange btn-lg btn-radius">Get Started For FREE</a>
         </div>
       </div>
 
@@ -480,7 +473,7 @@
 
       <div class="row margin-bottom-40 text-center">
         <div class="col-xs-12">
-          <a href="#" class="btn btn-orange btn-lg btn-radius margin-top-30">Get Started For FREE</a>
+          <a href="#signup" class="btn btn-orange btn-lg btn-radius margin-top-30">Get Started For FREE</a>
         </div>
       </div>
       <!-- ./row -->
@@ -516,17 +509,17 @@
         <div class="col-xs-12">
           <div class="hello-social cl">
             <div class="logo-white"></div>
-            <a href="#" class="social social1"></a>
-            <a href="#" class="social social2"></a>
-            <a href="#" class="social social3"></a>
-            <a href="#" class="social social4"></a>
-            <a href="#" class="social social5"></a>
-            <a href="#" class="social social6"></a>
-            <a href="#" class="social social7"></a>
-            <a href="#" class="social social8"></a>
-            <a href="#" class="social social9"></a>
-            <a href="#" class="social social10"></a>
-            <a href="#" class="social social11"></a>
+            <a class="social social1"></a>
+            <a class="social social2"></a>
+            <a class="social social3"></a>
+            <a class="social social4"></a>
+            <a class="social social5"></a>
+            <a class="social social6"></a>
+            <a class="social social7"></a>
+            <a class="social social8"></a>
+            <a class="social social9"></a>
+            <a class="social social10"></a>
+            <a class="social social11"></a>
           </div>
 
         </div>
@@ -552,7 +545,7 @@
       <div class="row text-center">
         <div class="col-xs-12">
           <div class="btn-bottom">
-            <a href="#" class="btn btn-white text-uppercase">Get Started For FREE</a>
+            <a href="#signup" class="btn btn-white text-uppercase">Get Started For FREE</a>
           </div>
 
         </div>
@@ -563,7 +556,8 @@
   </section>
 
 
-  <section class="bg-orange text-center join-websites">
+  <a name="signup"></a>
+  <section class="bg-orange text-center join-websites quickstart-wrapper">
     <div class="container">
 
       <div class="row margin-bottom-40">
@@ -575,15 +569,8 @@
 
       <div class="row">
         <div class="col-xs-12">
-          <div class="web-url-bar-bottom">
-            <form role="form">
-              <div class="web-url-bar">
-                <input type="text" placeholder="Your website URL..." class="login-with-google-input" />
-                <input type="submit" value="Log in with" class="login-with-google" />
-              </div>
-              <p class="color-silver margin-top-20">Use Hello Bar for free. No credit card required.</p>
-            </form>
-          </div>
+
+          <%= render 'index_form' %>
 
         </div>
       </div>
