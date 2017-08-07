@@ -1,13 +1,5 @@
 describe User do
   describe 'validations' do
-    it 'cannot have the same email as someone in the wordpress database' do
-      expect(Hello::WordpressUser).to receive(:email_exists?).with('foo@bar.com').and_return(true)
-
-      user = User.create(email: 'foo@bar.com')
-
-      expect(user.errors.messages[:email]).to include('has already been taken')
-    end
-
     it 'cannot have the same email as someone in the Rails database' do
       email = 'hoogaboo@gmail.com'
       User.create email: email, password: 'supers3cr37'
@@ -442,17 +434,9 @@ describe User do
     end
 
     it 'returns a new user if a referred user' do
-      expect(Hello::WordpressUser).not_to receive(:find_by_email)
       expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
 
       User.search_all_versions_for_email('email@email.com')
-    end
-
-    it 'falls back to querying the v1 wordpress database' do
-      email = 'email@email.com'
-      expect(Hello::WordpressUser).to receive(:find_by_email).with(email) { double('wordpress user') }
-
-      User.search_all_versions_for_email(email)
     end
   end
 end
