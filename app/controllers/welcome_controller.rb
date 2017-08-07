@@ -13,7 +13,7 @@ class WelcomeController < ApplicationController
     render layout: 'static-alternate' if @homepage_variation == 'variant'
   end
 
-  def get_started
+  def get_started # rubocop:disable AccessorMethodName
     render '_index_original'
   end
 
