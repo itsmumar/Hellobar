@@ -227,4 +227,34 @@ describe DiamondAnalytics do
       end
     end
   end
+
+  describe '#identify' do
+    let(:identities) { { foo: :bar } }
+    let(:timestamp) { Time.current }
+
+    subject { analytics.identify(identities: identities, timestamp: timestamp) }
+
+    it 'tracks the invited-member event' do
+      expect(tracker).to receive(:track).with(
+        identities: {
+          foo: :bar
+        },
+        timestamp: timestamp.to_f
+      )
+
+      subject
+    end
+
+    context 'when tracking is disabled' do
+      before do
+        expect(analytics).to receive(:enabled?).and_return(false)
+      end
+
+      it 'does not track' do
+        expect(tracker).not_to receive(:track)
+
+        subject
+      end
+    end
+  end
 end

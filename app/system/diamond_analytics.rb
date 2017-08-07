@@ -107,6 +107,15 @@ class DiamondAnalytics
     end
   end
 
+  def identify(identities:, timestamp: nil)
+    timestamp ||= Time.current
+
+    track(
+      identities: identities,
+      timestamp: timestamp.to_f
+    )
+  end
+
   private
 
   def track(args)
