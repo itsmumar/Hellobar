@@ -13,12 +13,33 @@ feature 'User can sign up', :js do
       .and_return('original')
   end
 
-  scenario 'through oauth' do
+  scenario 'through oauth, original homepage' do
+    # force original variation
+    allow_any_instance_of(WelcomeController).to receive(:ab_variation).and_return('original')
+
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
+
+    within('.header-user-wrapper') do
+      find('.dropdown-wrapper').click
+      expect(page).to have_content('Sign Out')
+    end
+
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+
+  scenario 'through oauth, variation homepage' do
+    # force new variation
+    allow_any_instance_of(WelcomeController).to receive(:ab_variation).and_return('variant')
+
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
+    visit root_path
+
+    first('input[name="site[url]"]').set 'mewgle.com'
+    first('.login-with-google').click
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
