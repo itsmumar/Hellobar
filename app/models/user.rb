@@ -44,7 +44,6 @@ class User < ActiveRecord::Base
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
 
-  validate :email_does_not_exist_in_wordpress, on: :create
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :oauth_user?
 
@@ -70,9 +69,7 @@ class User < ActiveRecord::Base
   def self.search_all_versions_for_email(email)
     return if email.blank?
 
-    find_by_email(email) ||
-      find_and_create_by_referral(email) ||
-      Hello::WordpressUser.find_by_email(email)
+    find_by_email(email) || find_and_create_by_referral(email)
   end
 
   def self.find_and_create_by_referral(email)
@@ -294,10 +291,6 @@ class User < ActiveRecord::Base
     received_referral.present?
   end
 
-  def wordpress_user?
-    false
-  end
-
   private
 
   def user_upgrade_policy
@@ -336,10 +329,5 @@ class User < ActiveRecord::Base
   def oauth_email_change
     return unless !id_changed? && oauth_user? && email_changed? && !encrypted_password_changed?
     errors.add(:email, 'cannot be changed without a password.')
-  end
-
-  def email_does_not_exist_in_wordpress
-    return if legacy_migration # Don't check this
-    errors.add(:email, 'has already been taken') if Hello::WordpressUser.email_exists?(email)
   end
 end

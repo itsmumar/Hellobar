@@ -358,7 +358,6 @@ GEM
       activerecord (>= 4.0, < 5.2)
     parser (2.4.0.0)
       ast (~> 2.2)
-    php-serialize (1.1.0)
     phpass-ruby (0.1.2)
     pony (1.8)
       mail (>= 2.0)
@@ -644,7 +643,6 @@ DEPENDENCIES
   omniauth-verticalresponse!
   paperclip (~> 5.1)
   paranoia
-  php-serialize
   phpass-ruby
   pony
   pry
