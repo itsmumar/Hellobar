@@ -32,6 +32,11 @@ class ApplicationController < ActionController::Base
     }
   end
 
+  # needed to expose cookies (private method) to InternalAnalytics
+  def cookies
+    super
+  end
+
   def current_admin
     return nil if @current_admin == false
     @current_admin ||= Admin.validate_session(session[:admin_token]) || false
