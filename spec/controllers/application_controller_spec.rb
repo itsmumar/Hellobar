@@ -74,6 +74,44 @@ describe ApplicationController, '#require_no_user' do
   end
 end
 
+describe ApplicationController, '#identify_visitors' do
+  controller do
+    def index
+      render nothing: true
+    end
+  end
+
+  let(:user) { create :user, :with_site }
+  let(:visitor_id) { Digest::SHA1.hexdigest(user.email) }
+  let(:visitor_id_cookie) { "#{ visitor_id }#{ cookie_user_id }" }
+
+  before do
+    allow(controller).to receive(:current_user).and_return(user)
+
+    request.cookies[Hello::InternalAnalytics::VISITOR_ID_COOKIE] = visitor_id_cookie
+  end
+
+  context 'when user is currently anonymous' do
+    let(:cookie_user_id) { Hello::InternalAnalytics::USER_ID_NOT_SET_YET }
+
+    it 'identifies logged in user' do
+      expect(Analytics).to receive(:alias).with(visitor_id, user.id)
+
+      get :index
+    end
+  end
+
+  context 'when user is not anonymous' do
+    let(:cookie_user_id) { user.id }
+
+    it 'does not identify user' do
+      expect(Analytics).not_to receive(:alias)
+
+      get :index
+    end
+  end
+end
+
 describe ApplicationController, '#require_pro_managed_subscription' do
   controller do
     before_action :require_pro_managed_subscription
