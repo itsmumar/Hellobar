@@ -16,11 +16,36 @@ hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], functi
     return typeof gtm() === 'object';
   };
 
-  function send(externalTracking) {
-    const event = 'HelloBarEvent'
-    const { category, action, label } = externalTracking;
+  function utmCodes () {
+    const codes = {};
 
-    available() && gtm().push({ event, category, action, label });
+    location.search &&
+      location
+        .search
+        .substr(1)
+        .split('&')
+        .forEach(item => {
+          let [key, value] = item.split('=');
+
+          if (key && /^utm_/.test(key) && value) {
+            codes[key] = decodeURIComponent(value);
+          }
+        });
+
+    return codes;
+  };
+
+  function send(externalTracking) {
+    const { category, action, label } = externalTracking;
+    const event = { event: 'HelloBarEvent', category, action, label };
+
+    const codes = this.utmCodes();
+
+    for (let code in codes) {
+      event[code] = codes[code];
+    }
+
+    available() && gtm().push(event);
   };
 
   /**
@@ -34,6 +59,7 @@ hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], functi
      * @param externalTracking {object} external tracking data structure (category, action, label are required fields).
      */
     send,
+    utmCodes,
     inspect: () => ({
       gtm
     })
