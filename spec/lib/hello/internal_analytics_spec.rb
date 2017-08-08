@@ -59,7 +59,7 @@ describe Hello::InternalAnalytics do
       it 'tracks a "First Event" event if user has never visited before' do
         allow(object).to receive(:current_user) { user }
 
-        expect(Analytics).to receive(:track).with(:user, user.id, 'First Visit', { ip: '' })
+        expect(Analytics).to receive(:track).with(:user, user.id, 'First Visit', ip: '')
         expect(Analytics).to receive(:track).with(:user, user.id, 'Example Test', anything)
         object.ab_variation('Example Test')
       end
