@@ -177,6 +177,7 @@ class StaticScriptModel
 
     [
       default.merge(type: 'view', action: 'View'),
+      default.merge(type: 'click', action: 'Click'),
       default.merge(type: "#{ element.short_subtype }_conversion", action: 'Conversion')
     ]
   end

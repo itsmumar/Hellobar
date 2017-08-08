@@ -225,7 +225,7 @@ FactoryGirl.define do
     site_element
     category 'Hello Bar'
     label { "#{ site_element.type }-#{ site_element.id }" }
-    types { %w[view] + ["#{ site_element.short_subtype }_conversion"] }
+    types { %w[view click] + ["#{ site_element.short_subtype }_conversion"] }
 
     initialize_with do
       types.map do |type|
@@ -234,7 +234,7 @@ FactoryGirl.define do
           category: category,
           label: label,
           type: type,
-          action: type == 'view' ? 'View' : 'Conversion'
+          action: { 'view' => 'View', 'click' => 'Click' }.fetch(type, 'Conversion')
         }
       end
     end
