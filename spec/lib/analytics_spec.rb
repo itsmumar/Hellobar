@@ -19,7 +19,7 @@ describe Analytics do
 
     it 'queues Diamond identity call' do
       expect(SendEventToDiamondAnalyticsJob).to receive(:perform_later)
-        .with('identify', timestamp: match(Time), identities: { visitor_id: visitor_id, user_id: user_id })
+        .with('identify', timestamp: match(Float), identities: { visitor_id: visitor_id, user_id: user_id })
 
       call_alias
     end

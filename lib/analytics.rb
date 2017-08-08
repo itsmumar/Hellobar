@@ -14,7 +14,7 @@ class Analytics
         visitor_id: visitor_id,
         user_id: user_id
       }
-      SendEventToDiamondAnalyticsJob.perform_later('identify', timestamp: Time.current, identities: identities)
+      SendEventToDiamondAnalyticsJob.perform_later('identify', timestamp: Time.current.to_f, identities: identities)
 
       track_internal :visitor, visitor_id, :user_id, value: user_id
     end
