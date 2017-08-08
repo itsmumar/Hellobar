@@ -19,7 +19,3 @@ production:
   database: hellobar_production
   username: hellobar
   password: <%= ENV['HELLOBAR_DATABASE_PASSWORD'] %>
-
-wordpress_development:
-  <<: *default
-  database: hellobar_wordpress_development

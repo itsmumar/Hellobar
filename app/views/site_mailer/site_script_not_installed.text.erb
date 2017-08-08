@@ -1,5 +1,5 @@
 Your Hello Bars aren't helping <%= @site.url %> yet!
-Install Hello Bar on your website to start <% case @site.site_elements.first.short_subtype %><% when "traffic" %>driving traffic.<% when "email" -%>collecting emails.<% when "social" -%>driving social media traffic.<% end %>
+Install Hello Bar on your website to start <%= reason_for_element(@site.site_elements.first) %>
 
 Here are some quick links to get you started. Once installed, your dashboard will show you how many people have seen your bars and how effective they are.
 

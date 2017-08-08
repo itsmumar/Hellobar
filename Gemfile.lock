@@ -182,7 +182,7 @@ GEM
       hashie (~> 3.0)
       httparty (~> 0.14)
       json (>= 1.0)
-    css_parser (1.4.10)
+    css_parser (1.5.0)
       addressable
     currencies (0.4.2)
     daemons (1.2.4)
@@ -201,6 +201,10 @@ GEM
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
     elif (0.1.0)
+    email_spec (2.1.1)
+      htmlentities (~> 4.3.3)
+      launchy (~> 2.1)
+      mail (~> 2.6)
     erubis (2.7.0)
     eventmachine (1.2.3)
     execjs (2.7.0)
@@ -250,6 +254,7 @@ GEM
       tilt (>= 1.2)
     hashdiff (0.3.2)
     hashie (3.5.6)
+    htmlentities (4.3.4)
     httparty (0.15.5)
       multi_xml (>= 0.5.2)
     httpi (2.4.2)
@@ -296,7 +301,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mimemagic (0.3.2)
-    mini_portile2 (2.1.0)
+    mini_portile2 (2.2.0)
     minitest (5.10.3)
     multi_json (1.12.1)
     multi_xml (0.6.0)
@@ -307,8 +312,8 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
-    nokogiri (1.7.2)
-      mini_portile2 (~> 2.1.0)
+    nokogiri (1.8.0)
+      mini_portile2 (~> 2.2.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -353,7 +358,6 @@ GEM
       activerecord (>= 4.0, < 5.2)
     parser (2.4.0.0)
       ast (~> 2.2)
-    php-serialize (1.1.0)
     phpass-ruby (0.1.2)
     pony (1.8)
       mail (>= 2.0)
@@ -410,9 +414,9 @@ GEM
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
-    roadie (3.2.1)
-      css_parser (~> 1.4.5)
-      nokogiri (>= 1.5.0, < 1.8.0)
+    roadie (3.2.2)
+      css_parser (~> 1.4)
+      nokogiri (~> 1.5)
     roadie-rails (1.1.1)
       railties (>= 3.0, < 5.1)
       roadie (~> 3.1)
@@ -604,6 +608,7 @@ DEPENDENCIES
   devise
   drip-ruby
   elif
+  email_spec
   factory_girl_rails
   faraday
   gibbon
@@ -638,7 +643,6 @@ DEPENDENCIES
   omniauth-verticalresponse!
   paperclip (~> 5.1)
   paranoia
-  php-serialize
   phpass-ruby
   pony
   pry

@@ -11,13 +11,5 @@ describe Users::PasswordsController do
 
       post :create, user: { email: user.email }
     end
-
-    it "redirects if trying to reset with an email that's in the wordpress database" do
-      expect(Hello::WordpressUser).to receive(:email_exists?).with('user@website.com').and_return(true)
-
-      post :create, user: { email: 'user@website.com' }
-
-      expect(response).to render_template('pages/redirect_forgot')
-    end
   end
 end

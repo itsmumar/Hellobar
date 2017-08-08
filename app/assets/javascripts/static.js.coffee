@@ -5,7 +5,6 @@
 #= require serialize-json
 #= require jstz-1.0.4.min
 
-#= require user_migration
 #= require flash_message_initializer
 #= require modal
 #= require modals/welcome_back_modal

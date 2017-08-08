@@ -2,7 +2,7 @@ module Hello
   class TrackingParam
     SALT = 'imasaltydogyarrr'.freeze
 
-    def self.encode_tracker(user_id, event, props)
+    def self.encode_tracker(user_id, event, props = {})
       props = [props].to_json
       sig = Digest::SHA1.hexdigest("#{ user_id }#{ event }#{ props }#{ SALT }")[0, 8]
       Base64.urlsafe_encode64("#{ user_id }///#{ event }///#{ props }///#{ sig }")

@@ -36,7 +36,6 @@ module Hellobar
     config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
 
     # Action Mailer
-    config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
     config.action_mailer.default_url_options = { host: Settings.host }
 
     # Devise

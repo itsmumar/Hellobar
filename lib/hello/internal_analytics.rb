@@ -132,14 +132,6 @@ module Hello
       [value_index, :new]
     end
 
-    def ab_variation_without_setting(test_name, user = nil)
-      ab_test = ab_test(test_name)
-      value_index, _status = ab_variation_index_without_setting(test_name, user)
-      return unless value_index
-      value = ab_test[:values][value_index]
-      value
-    end
-
     def ab_variation_or_nil(test_name, user = nil)
       return unless tests[test_name]
       ab_variation(test_name, user)

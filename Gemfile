@@ -94,7 +94,6 @@ gem 'hashie'
 gem 'less_interactions'
 gem 'nokogiri'
 gem 'paranoia'
-gem 'php-serialize', require: 'php_serialize'
 gem 'phpass-ruby', require: 'phpass'
 gem 'psych'
 gem 'rack-ssl-enforcer'
@@ -176,6 +175,7 @@ group :test do
   gem 'simplecov', require: false
 
   gem 'database_cleaner'
+  gem 'email_spec'
   gem 'launchy'
   gem 'rspec-retry'
   gem 'shoulda-matchers'

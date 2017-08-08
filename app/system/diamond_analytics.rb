@@ -48,7 +48,7 @@ class DiamondAnalytics
     track(
       event: 'Created Contact List',
       identities: {
-        site_id: contact_list.site.id,
+        site_id: contact_list.site_id,
         user_id: user.id,
         user_email: user.email
       },
