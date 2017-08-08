@@ -73,10 +73,7 @@ class IntercomAnalytics
   end
 
   def assigned_ab_test(user:, test_name:, assignment:, **_)
-    return if user.blank?
-
-    tag = "#{ test_name }: #{ assignment }"
-    tag_users(tag, [user])
+    # don't track A/B assignments in Intercom for now
   end
 
   private
