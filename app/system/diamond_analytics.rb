@@ -107,6 +107,26 @@ class DiamondAnalytics
     end
   end
 
+  def assigned_ab_test(visitor_id:, user:, test_name:, assignment:, timestamp:)
+    identities = {
+      visitor_id: visitor_id,
+      user_id: user&.id,
+      user_email: user&.email
+    }.compact
+
+    return if identities.blank?
+
+    track(
+      event: 'A/B Assignment',
+      identities: identities,
+      timestamp: timestamp.to_f,
+      properties: {
+        test_name: test_name,
+        assignment: assignment
+      }
+    )
+  end
+
   def identify(identities:, timestamp: nil)
     timestamp ||= Time.current
 

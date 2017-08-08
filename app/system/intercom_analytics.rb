@@ -72,6 +72,13 @@ class IntercomAnalytics
     tag_users subscription.name, site.owners
   end
 
+  def assigned_ab_test(user:, test_name:, assignment:, **_)
+    return if user.blank?
+
+    tag = "#{ test_name }: #{ assignment }"
+    tag_users(tag, [user])
+  end
+
   private
 
   def track(options)

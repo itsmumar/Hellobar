@@ -158,6 +158,11 @@ module Hello
 
         # Track it
         Analytics.track(*current_person_type_and_id(user), test_name, value: value)
+
+        TrackEvent.new(
+          'assigned_ab_test',
+          visitor_id: visitor_id, user: user, test_name: test_name, assignment: value, timestamp: Time.current.to_f
+        ).call
       else
         # Just get the value
         value = ab_test[:values][value_index]
