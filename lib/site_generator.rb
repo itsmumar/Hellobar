@@ -74,6 +74,7 @@ class SiteGenerator
               push: (externalEvent) => {
                 const { event, category, action, label } = externalEvent;
                 events.innerHTML += `[Google Tag Manager] event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
+                events.innerHTML += '<hr>';
               }
             }
 
