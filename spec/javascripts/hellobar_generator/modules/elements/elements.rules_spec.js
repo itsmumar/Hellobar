@@ -44,6 +44,7 @@ describe('Module elements.rules', function () {
         configuration.addRule('all', [], [fakeSiteElement(1, 'Bar'), fakeSiteElement(2, 'Slider')]);
       }
     });
+
     module.applyRules().then(function (siteElements) {
       expect(siteElements.length).toEqual(2);
       done();

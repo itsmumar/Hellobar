@@ -5,11 +5,12 @@ describe('Module elements', function () {
 
   beforeEach(function () {
     hellobar.finalize();
+
     var ElementClass = function (model) {
       this.id = model.id;
-      this.remove = this.attach = this.setCSS = function () {
-      };
+      this.remove = this.attach = this.setCSS = function () {};
     };
+
     module = hellobar('elements', {
       configurator: function (configuration) {
         configuration.autoRun(false);
