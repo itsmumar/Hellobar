@@ -15,10 +15,12 @@ class PayBill
 
     if bill.amount.zero?
       create_bill_for_next_period
-      bill.tap(&:paid!)
+      bill.paid!
     else
-      charge
+      pay_bill
     end
+
+    bill
   end
 
   private
@@ -29,29 +31,35 @@ class PayBill
     !bill.pending? && !bill.problem?
   end
 
-  def charge
+  def pay_bill
     raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
 
     response = gateway.purchase(bill.amount, payment_method.current_details)
-    create_billing_attempt(response)
 
     BillingLogger.charge(bill, response.success?)
-
     if response.success?
-      bill.update authorization_code: response.authorization
-      bill.paid!
-      create_bill_for_next_period
-      fix_problem_bills
+      process_successful_response(response)
     else
-      bill.problem!
-      Raven.capture_message 'Unsuccessful charge', extra: {
-        message: response.message,
-        bill: bill.id,
-        amount: bill.amount
-      }
+      process_unsuccessful_response(response)
     end
+  end
 
-    bill
+  def process_successful_response(response)
+    create_billing_attempt(response)
+    bill.update authorization_code: response.authorization
+    bill.paid!
+    create_bill_for_next_period
+    fix_problem_bills
+  end
+
+  def process_unsuccessful_response(response)
+    create_billing_attempt(response)
+    bill.problem!
+    Raven.capture_message 'Unsuccessful charge', extra: {
+      message: response.message,
+      bill: bill.id,
+      amount: bill.amount
+    }
   end
 
   def set_final_amount
