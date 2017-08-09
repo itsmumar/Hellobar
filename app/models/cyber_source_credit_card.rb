@@ -19,7 +19,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     ActiveMerchant::Billing::CreditCard.last_digits number.gsub(/[^\d]/, '') if number.present?
   end
 
-  def address
+  def billing_address
     @address ||=
       begin
         attributes = data.slice(*ADDRESS_FIELDS).symbolize_keys

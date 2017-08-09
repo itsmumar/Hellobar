@@ -34,7 +34,7 @@ class CreateOrUpdatePaymentMethod
     params = {
       order_id: credit_card.order_id,
       email: email_for_cybersource,
-      address: credit_card.address.to_h
+      address: credit_card.billing_address.to_h
     }
     credit_card.token = SaveCardToCyberSource.new(user, form.card, params).call
   rescue => e
