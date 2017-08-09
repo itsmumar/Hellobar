@@ -209,5 +209,19 @@ describe('Module elements.conversion', function () {
 
       expect(callbackSpy).not.toHaveBeenCalled();
     });
+
+    it('performs clicked call', function () {
+      var siteElement = contentUpgrade();
+      var callbackSpy = jasmine.createSpy('callback');
+
+      module.clicked(siteElement, callbackSpy);
+
+      expect(dependencies['visitor'].setConverted).not.toHaveBeenCalled();
+      expect(dependencies['elements.visibility'].setVisibilityControlCookie).not.toHaveBeenCalled();
+      expect(dependencies['base.bus'].trigger).toHaveBeenCalledWith('hellobar.elements.clicked', siteElement);
+      expect(dependencies['tracking.external'].send).toHaveBeenCalled();
+
+      expect(callbackSpy).not.toHaveBeenCalled();
+    });
   });
 });

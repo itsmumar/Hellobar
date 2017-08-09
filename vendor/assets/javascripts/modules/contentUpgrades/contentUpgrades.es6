@@ -61,11 +61,27 @@ hellobar.defineModule('contentUpgrades',
       show(contentUpgrade.id, node);
     }
 
-    // Run content upgrades by finding elements with data attributes.
-    // Example usage:
-    // <div data-hb-cu-ab-test="1,2,3,4"></div>
     function run() {
       dom.runOnDocumentReady(() => {
+        if(window.addEventListener) {
+          const contentUpgrades = configuration.contentUpgrades();
+          let viewed = {}
+
+          window.addEventListener('scroll', () => {
+            for (let id in contentUpgrades) {
+              let element = document.getElementById('hb-cu-offer-' + id);
+
+              if (isInViewport(element) && !viewed[id]) {
+                elementsConversion.viewed(contentUpgrades[id]);
+                viewed[id] = true;
+              }
+            }
+          })
+        }
+
+        // Run content upgrades by finding elements with data attributes.
+        // Example usage:
+        // <div data-hb-cu-ab-test="1,2,3,4"></div>
         if (document.querySelectorAll) {
           const testNodes = document.querySelectorAll('[data-hb-cu-ab-test]');
           const ids = [];
@@ -102,11 +118,25 @@ hellobar.defineModule('contentUpgrades',
       }
     }
 
+    function isInViewport(element) {
+      if (!element) return false;
+
+      const rect = element.getBoundingClientRect();
+      const html = document.documentElement;
+
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || html.clientHeight) &&
+        rect.right <= (window.innerWidth || html.clientWidth)
+      );
+    }
+
     function view(contentUpgradeId) {
       const siteElement = contentUpgradeById(contentUpgradeId);
 
       if (siteElement) {
-        elementsConversion.viewed(siteElement);
+        elementsConversion.clicked(siteElement);
         document.getElementById(`hb-cu-modal-${siteElement.model().id}`).style.display = 'inline';
       }
     }

@@ -57,6 +57,19 @@ hellobar.defineModule('elements.conversion',
       bus.trigger('hellobar.elements.viewed', siteElementModel);
     }
 
+    // Called when a content upgrade gets clicked
+    function clicked(siteElement) {
+      const siteElementModel = siteElement.model ? siteElement.model() : siteElement;
+      const id = siteElementModel.id;
+
+      if (!didConvert(siteElementModel)) {
+        trackingExternal.send('click', id);
+      }
+
+      // Trigger event
+      bus.trigger('hellobar.elements.clicked', siteElementModel);
+    }
+
     function getVisitorAttributes() {
       // Ignore first/last view timestamps, call/email/social conversions, date of visit
       const ignoredAttributes = 'fv lv cc ec sc dt';
@@ -154,6 +167,7 @@ hellobar.defineModule('elements.conversion',
     return {
       converted,
       viewed,
+      clicked,
       trackClick
     };
   });

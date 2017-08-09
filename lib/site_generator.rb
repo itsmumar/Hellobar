@@ -80,7 +80,7 @@ class SiteGenerator
                 utm_medium && (events.innerHTML += `, utm_medium: '${ utm_medium }'`);
                 utm_campaign && (events.innerHTML += `, utm_campaign: '${ utm_campaign }'`);
 
-                events.innerHTML += `\n`;
+                events.innerHTML += `\n<hr>`;
               }
             }
 
