@@ -64,7 +64,7 @@ class SiteGenerator
 
         <section>
           <h1>External Tracking</h1>
-          <p><a href="?utm_source=Hello%20Bar&amp;utm_medium=test_site&amp;utm_campaign=MakeItWork">utm tags</a> <a href="?">no utm tags</a></p>
+          <p><a href="?utm_source=Hello%20Bar&amp;utm_medium=test_site&amp;utm_campaign=test">utm tags</a> <a href="?">no utm tags</a></p>
           <pre class="events"></pre>
 
           <script>
