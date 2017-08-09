@@ -30,13 +30,6 @@ class CreditCard < ActiveRecord::Base
     15.days
   end
 
-  def charge(amount_in_dollars)
-    response = gateway.purchase(amount_in_dollars.to_f * 100, self)
-
-    return false, response.message unless response.success?
-    [true, response.authorization]
-  end
-
   # The order_id is fairly irrelevant
   def order_id
     "#{ id || 'NA' }-#{ Time.current.to_i }"
