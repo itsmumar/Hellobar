@@ -23,7 +23,8 @@ describe ContactsMailer do
 
     it 'renders the body' do
       expect(mail.body.encoded).to match('Your CSV export is ready')
-      expect(mail.body.encoded).to match('All your contacts were exported to csv.')
+      expect(mail.body.encoded)
+        .to match("All contacts from '#{ contact_list.name }' have been exported to CSV.")
     end
 
     it 'attaches zipped csv' do
