@@ -22,7 +22,7 @@ nav.tabs-wrapper
 
   .service-actions
     a#edit-contact-list.button Edit
-    = button_to "Export CSV", site_contact_list_path(@site, @contact_list, :format => :csv), :method => :get, :class => 'button'
+    = link_to 'Export CSV', download_site_contact_list_path(@site, @contact_list), method: :get, class: 'button'
 
 - if @contact_list.service_provider
   .info-block

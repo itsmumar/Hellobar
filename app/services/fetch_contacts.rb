@@ -39,7 +39,11 @@ class FetchContacts
   end
 
   def cache_key
-    contact_list.cache_key
+    if limit
+      "#{ contact_list.cache_key }/#{ limit }"
+    else
+      "#{ contact_list.cache_key }/all"
+    end
   end
 
   def table_name
