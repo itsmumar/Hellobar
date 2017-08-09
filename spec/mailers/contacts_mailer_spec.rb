@@ -11,11 +11,6 @@ describe ContactsMailer do
     end
 
     before do
-      expect(FetchContactListTotals)
-        .to receive_service_call
-        .with(contact_list.site, id: contact_list.id)
-        .and_return(100)
-
       expect(FetchContactsCSV)
         .to receive_service_call.with(contact_list).and_return('csv')
     end
@@ -28,7 +23,7 @@ describe ContactsMailer do
 
     it 'renders the body' do
       expect(mail.body.encoded).to match('Your CSV export is ready')
-      expect(mail.body.encoded).to match('100 contacts were exported to csv.')
+      expect(mail.body.encoded).to match('All your contacts were exported to csv.')
     end
 
     it 'attaches zipped csv' do
