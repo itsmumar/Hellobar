@@ -11,8 +11,10 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     )
   end
 
-  # @param [Integer] amount; in cents
-  def purchase(amount, credit_card)
+  # @param [Integer] amount_in_dollars
+  def purchase(amount_in_dollars, credit_card)
+    amount = amount_in_dollars.to_f * 100
+
     raise 'credit card token does not exist' if credit_card.token.blank?
     check_amount!(amount)
 
@@ -23,8 +25,9 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     end
   end
 
-  # @param [Integer] amount; in cents
-  def refund(amount, original_transaction_id)
+  # @param [Integer] amount_in_dollars
+  def refund(amount_in_dollars, original_transaction_id)
+    amount = amount_in_dollars.to_f * 100
     check_amount!(amount)
 
     if original_transaction_id.blank?

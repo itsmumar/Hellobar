@@ -32,20 +32,20 @@ class PayBill
   def charge
     raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
 
-    success, response = payment_method.charge(bill.amount)
-    create_billing_attempt(success, response)
+    response = gateway.purchase(bill.amount, payment_method.current_details)
+    create_billing_attempt(response)
 
-    BillingLogger.charge(bill, success)
+    BillingLogger.charge(bill, response.success?)
 
-    if success
-      bill.update authorization_code: response
+    if response.success?
+      bill.update authorization_code: response.authorization
       bill.paid!
       create_bill_for_next_period
       fix_problem_bills
     else
       bill.problem!
       Raven.capture_message 'Unsuccessful charge', extra: {
-        message: response,
+        message: response.message,
         bill: bill.id,
         amount: bill.amount
       }
@@ -66,12 +66,12 @@ class PayBill
     DiscountCalculator.new(bill.subscription).current_discount
   end
 
-  def create_billing_attempt(success, response)
+  def create_billing_attempt(response)
     BillingAttempt.create!(
       bill: bill,
       payment_method_details: payment_method.current_details,
-      status: success ? :success : :failed,
-      response: response
+      status: response.success? ? :success : :failed,
+      response: response.success? ? response.authorization : response.message
     )
   end
 
@@ -89,5 +89,9 @@ class PayBill
 
   def fix_problem_bills
     bill.site.bills_with_payment_issues.each(&:voided!)
+  end
+
+  def gateway
+    @gateway ||= CyberSourceGateway.new
   end
 end

@@ -31,7 +31,7 @@ describe RefundBill do
   it 'calls gateway.refund' do
     expect { service.call }
       .to make_gateway_call(:refund)
-      .with(amount * 100, bill.authorization_code)
+      .with(amount, bill.authorization_code)
   end
 
   it 'stores authorization_code in bill' do
