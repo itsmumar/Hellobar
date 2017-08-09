@@ -74,32 +74,26 @@ describe 'ContactList requests' do
           expect(response).to be_successful
         end
       end
+    end
 
-      context '.csv', :freeze do
-        let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current }\n" }
-        let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
-        let(:total_contacts) { 100 }
+    describe 'GET download', :freeze do
+      let(:csv) { "Email,Fields,Subscribed At\nemail@example.com,Name,#{ Time.current }\n" }
+      let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
+      let(:total_contacts) { 100 }
 
-        before do
-          expect(FetchContactListTotals)
-            .to receive_service_call
-            .with(contact_list.site, id: contact_list.id.to_s)
-            .and_return(total_contacts)
-        end
+      it 'enqueues DownloadContactListJob' do
+        expect { get download_site_contact_list_path(site, contact_list) }
+          .to have_enqueued_job(DownloadContactListJob)
+          .on_queue('hb3_test')
+          .with(user, contact_list)
+      end
 
-        it 'enqueues ExportNotifications mailer' do
-          expect(ContactsMailer).to receive(:csv_export).and_call_original
-          expect { get site_contact_list_path(site, contact_list, format: :csv) }
-            .to have_enqueued_job.on_queue('test_mailers')
-        end
-
-        it 'redirects back' do
-          get site_contact_list_path(site, contact_list, format: :csv)
-          expect(flash[:success])
-            .to eql "You will be emailed a CSV of #{ total_contacts } users to #{ user.email }." \
-                    ' At peak times this can take a few minutes'
-          expect(response).to redirect_to site_contact_list_path(site, contact_list)
-        end
+      it 'redirects back' do
+        get download_site_contact_list_path(site, contact_list)
+        expect(flash[:success])
+          .to eql "We will email you the list of your contacts to #{ user.email }." \
+                  ' At peak times this can take a few minutes'
+        expect(response).to redirect_to site_contact_list_path(site, contact_list)
       end
     end
 

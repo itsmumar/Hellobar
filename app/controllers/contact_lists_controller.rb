@@ -1,7 +1,7 @@
 class ContactListsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, only: %i[show update destroy]
+  before_action :load_contact_list, only: %i[show update destroy download]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
@@ -44,9 +44,17 @@ class ContactListsController < ApplicationController
         @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
         @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
       end
-      format.csv  { send_contact_list_csv(@contact_list) }
       format.json { render json: @contact_list }
     end
+  end
+
+  def download
+    DownloadContactListJob.perform_later(current_user, @contact_list)
+    flash[:success] =
+      "We will email you the list of your contacts to #{ current_user.email }." \
+      ' At peak times this can take a few minutes'
+
+    redirect_to site_contact_list_path(@site, @contact_list)
   end
 
   def update
@@ -81,15 +89,6 @@ class ContactListsController < ApplicationController
 
   def load_contact_list
     @contact_list = @site.contact_lists.find(params[:id])
-  end
-
-  def send_contact_list_csv(list)
-    @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-    ContactsMailer.csv_export(current_user, list).deliver_later
-    flash[:success] =
-      "You will be emailed a CSV of #{ @total_subscribers } users to #{ current_user.email }." \
-      ' At peak times this can take a few minutes'
-    redirect_to site_contact_list_path(@site, list)
   end
 
   def omniauth_error?

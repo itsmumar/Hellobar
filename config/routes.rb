@@ -65,7 +65,12 @@ Rails.application.routes.draw do
     end
 
     resources :identities
-    resources :contact_lists
+    resources :contact_lists do
+      member do
+        get :download
+      end
+    end
+
     resources :targeted_segments
 
     resources :site_memberships do
