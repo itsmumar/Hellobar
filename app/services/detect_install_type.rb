@@ -24,15 +24,7 @@ class DetectInstallType
   end
 
   def topic_arn
-    if Rails.env.production?
-      "#{ core_arn }_production"
-    else
-      "#{ core_arn }_latest"
-    end
-  end
-
-  def core_arn
-    'arn:aws:sns:us-east-1:199811731772:lambda_detectInstallType'
+    Settings.sns['lambda_detect_install_type']
   end
 
   def subject
