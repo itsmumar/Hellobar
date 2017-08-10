@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170723190737) do
+ActiveRecord::Schema.define(version: 20170723190622) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "zip",        limit: 255, null: false
     t.string   "address",    limit: 255, null: false
     t.string   "country",    limit: 255, null: false
-    t.string   "token",      limit: 255, null: false
+    t.string   "token",      limit: 255
     t.integer  "user_id",    limit: 4
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
