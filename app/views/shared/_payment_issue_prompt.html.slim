@@ -3,4 +3,4 @@
     ' We could not charge #{number_to_currency(payment_issue_amount(site))} on your credit card ending in #{ site.bills_with_payment_issues.last.payment_method.current_details.last_digits }.
     .button.show-payment-modal Update credit card details
     ' or
-    a href=edit_site_path(site, anchor: 'problem-bill') Try again
+    a href=edit_site_path(site, anchor: 'problem-bill') Charge again

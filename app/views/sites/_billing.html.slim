@@ -75,7 +75,10 @@ section
               td= credit_card_description(bill.payment_method_detail)
               td
                 - if bill.problem?
-                  a#problem-bill.button href=pay_bill_path(bill) data-method="put" Try Again
+                  - if params[:should_update_card]
+                    a#problem-bill.button.show-payment-modal Update credit card details
+                  - else
+                    a#problem-bill.button href=pay_bill_path(bill) data-method="put" Charge again
                 - else
                   = link_to bill_path(bill), target: '_blank' do
                     i.icon-export
