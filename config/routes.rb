@@ -85,7 +85,9 @@ Rails.application.routes.draw do
   end
 
   resources :payment_methods, only: %i[index create update]
-  resources :bills, only: :show
+  resources :bills, only: :show do
+    put :pay, on: :member
+  end
 
   get 'continue_create_site', to: 'sites#create', as: :continue_create_site
   get 'sites/:id/install', to: 'sites#install', as: :site_install

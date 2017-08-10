@@ -7,8 +7,10 @@ class ChangeSubscription
   end
 
   def call
-    transaction.tap do |bill|
-      track_subscription_change(bill.subscription)
+    if same_subscription?
+      update_payment_method
+    else
+      change_subscription
     end
   end
 
@@ -16,7 +18,23 @@ class ChangeSubscription
 
   attr_reader :site, :payment_method, :billing_params, :old_subscription
 
-  def transaction
+  def same_subscription?
+    old_subscription.is_a?(subscription_class) &&
+      billing_params[:schedule] == old_subscription.schedule
+  end
+
+  def update_payment_method
+    old_subscription.update payment_method: payment_method
+    old_subscription.bills.last
+  end
+
+  def change_subscription
+    create_subscription_and_pay_bill.tap do |bill|
+      track_subscription_change(bill.subscription)
+    end
+  end
+
+  def create_subscription_and_pay_bill
     Subscription.transaction do
       subscription = create_subscription
       bill = create_bill(subscription)
@@ -34,7 +52,14 @@ class ChangeSubscription
 
   def pay_bill(bill)
     PayBill.new(bill).call if bill.due_at(payment_method) <= Time.current
+    raise_record_invalid_if_problem(bill)
     bill
+  end
+
+  def raise_record_invalid_if_problem(bill)
+    return unless bill.problem?
+    bill.errors.add :base, 'There was a problem charging the credit card. Try to use another one'
+    raise ActiveRecord::RecordInvalid, bill
   end
 
   def create_bill(subscription)

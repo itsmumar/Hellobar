@@ -46,6 +46,7 @@ class PaymentMethodsController < ApplicationController
 
     payment_method = current_user.payment_methods.find params[:id]
     payment_method = CreateOrUpdatePaymentMethod.new(@site, current_user, params, payment_method: payment_method).call
+
     changed_subscription = change_subscription(payment_method)
 
     respond_to do |format|
@@ -61,7 +62,6 @@ class PaymentMethodsController < ApplicationController
     end
   end
 
-  # TODO: move it to a serializer
   def change_subscription(payment_method)
     bill = ChangeSubscription.new(@site, params[:billing], payment_method).call
     BillSerializer.new(bill).tap do |serializer|
