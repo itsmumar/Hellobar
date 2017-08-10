@@ -48,7 +48,7 @@ describe 'Bills requests' do
       it 'pays bill' do
         put pay_bill_path(bill)
         expect(response).to redirect_to site_path(site)
-        expect(flash[:success]).to eql 'The bill has been successfully paid. Thank you!'
+        expect(flash[:success]).to eql 'Your bill has been successfully paid. Thank you!'
         expect(bill.reload).to be_paid
       end
 
@@ -71,9 +71,12 @@ describe 'Bills requests' do
         it 'responds with success' do
           put pay_bill_path(bill)
 
-          expect(response).to redirect_to edit_site_path(site)
+          expect(response)
+            .to redirect_to edit_site_path(site, should_update_card: true, anchor: 'problem-bill')
           expect(flash[:alert])
-            .to eql "There was a problem charging your card #{ card.number }. Try to use another one"
+            .to eql "There was a problem while charging your credit card ending in #{ card.last_digits }." \
+                    ' You can fix this by adding another credit card'
+
           expect(bill.reload).not_to be_paid
         end
       end
