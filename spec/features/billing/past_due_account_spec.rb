@@ -17,6 +17,6 @@ feature 'Billing. Past due account', :js do
 
     expect(page).to have_content "We could not charge $#{ bill.amount.to_i }.00" \
                                  " on your credit card ending in #{ card.last_digits }." \
-                                 ' Update credit card or Try again'
+                                 ' Update credit card details or Charge again'
   end
 end
