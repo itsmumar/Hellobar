@@ -4,6 +4,7 @@ class Subscription < ActiveRecord::Base
   ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
   belongs_to :payment_method
+  belongs_to :credit_card
   belongs_to :site, touch: true
   belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription

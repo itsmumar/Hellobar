@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
 
   before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
 
+  has_many :credit_cards
   has_many :payment_methods
   has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy

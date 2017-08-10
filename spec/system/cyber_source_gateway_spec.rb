@@ -13,7 +13,8 @@ describe CyberSourceGateway do
     end
 
     it 'makes purchase to cybersource' do
-      expect(credit_card.charge(9.99)).to eql [false, nil]
+      expect(gateway.purchase(9.99, credit_card))
+        .to respond_to(:success?, :authorization, :message)
       expect(request).to have_been_made
     end
   end
@@ -25,7 +26,8 @@ describe CyberSourceGateway do
     end
 
     it 'makes request to cybersource' do
-      expect(credit_card.refund(9.99, 'transaction ID')).to eql [false, nil]
+      expect(gateway.refund(9.99, 'transaction ID'))
+        .to respond_to(:success?, :authorization, :message)
       expect(request).to have_been_made
     end
   end

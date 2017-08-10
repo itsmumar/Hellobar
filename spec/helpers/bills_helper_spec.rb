@@ -50,7 +50,7 @@ describe BillsHelper do
           state: 'CA', country: 'USA', zip: '90210',
           city: 'Los Anageles', address1: nil
 
-        details = double 'Details', address: address
+        details = double 'Details', billing_address: address
 
         site = build_stubbed :site
 
