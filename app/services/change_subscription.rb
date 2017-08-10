@@ -64,7 +64,9 @@ class ChangeSubscription
 
   def raise_record_invalid_if_problem(bill)
     return unless bill.problem?
-    bill.errors.add :base, 'There was a problem charging the credit card. Try to use another one'
+    bill.errors.add :base,
+      "There was a problem while charging your credit card ending in #{ card.last_digits }." \
+      ' You can fix this by adding another credit card'
     raise ActiveRecord::RecordInvalid, bill
   end
 
