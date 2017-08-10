@@ -30,7 +30,7 @@ class ChangeSubscription
   end
 
   def try_to_pay_problem_bill
-    return unless last_problem_bill = old_subscription.bills.problem.last
+    return unless (last_problem_bill = old_subscription.bills.problem.last)
     PayBill.new(last_problem_bill).call
   end
 

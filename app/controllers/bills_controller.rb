@@ -32,14 +32,10 @@ class BillsController < ApplicationController
   end
 
   def check_permissions
-    if !Permissions.view_bills?(current_user, @site)
-      raise ActiveRecord::RecordNotFound
-    end
+    Permissions.view_bills?(current_user, @site) || raise(ActiveRecord::RecordNotFound)
   end
 
   def dont_allow_probem_bill
-    if @bill.problem?
-      raise ActiveRecord::RecordNotFound
-    end
+    @bill.problem? && raise(ActiveRecord::RecordNotFound)
   end
 end
