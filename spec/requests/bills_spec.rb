@@ -41,5 +41,50 @@ describe 'Bills requests' do
         end
       end
     end
+
+    describe 'PUT :pay' do
+      before { stub_cyber_source :purchase }
+
+      it 'pays bill' do
+        put pay_bill_path(bill)
+        expect(response).to redirect_to site_path(site)
+        expect(flash[:success]).to eql 'The bill has been successfully paid. Thank you!'
+        expect(bill.reload).to be_paid
+      end
+
+      context 'when bill with problem' do
+        let!(:bill) { create :bill, :problem, site: site }
+
+        it 'responds with success' do
+          put pay_bill_path(bill)
+          expect(response).to redirect_to site_path(site)
+          expect(bill.reload).to be_paid
+        end
+      end
+
+      context 'when cannot pay bill' do
+        let!(:bill) { create :bill, :problem, site: site }
+        let(:card) { bill.payment_method_detail }
+
+        before { stub_cyber_source :purchase, success?: false }
+
+        it 'responds with success' do
+          put pay_bill_path(bill)
+
+          expect(response).to redirect_to edit_site_path(site)
+          expect(flash[:alert])
+            .to eql "There was a problem charging your card #{ card.number }. Try to use another one"
+          expect(bill.reload).not_to be_paid
+        end
+      end
+
+      context 'when no permissions' do
+        before { allow(Permissions).to receive(:view_bills?).and_return false }
+
+        it 'responds with :not_found' do
+          expect { put pay_bill_path(bill) }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
   end
 end
