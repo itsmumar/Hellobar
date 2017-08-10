@@ -10,8 +10,7 @@ class CreditCard < ActiveRecord::Base
   validates :number, :last_digits, :month, :year, :first_name, :last_name, :brand, presence: true
   validates :city, :zip, :address, :country, presence: true
   validates :state, presence: true, if: -> { country == 'US' }
-  validates :token, presence: true
-  validates :number, format: { with: /\A(XXXX-){3}(\d{4})\Z/ }
+  validates :number, format: { with: /\A(XXXX-){3}(\d{3,4})\Z/ }
 
   Address = Struct.new(:zip, :address, :city, :state, :country, :address1) # address1 is needed for ActiveMerchant
   composed_of :billing_address, class_name: 'CreditCard::Address', mapping: [
@@ -19,7 +18,7 @@ class CreditCard < ActiveRecord::Base
   ]
 
   def number=(value)
-    self[:number] = self.class.mask(value)
+    self[:number] = self.class.mask(value).strip
   end
 
   def last_digits
