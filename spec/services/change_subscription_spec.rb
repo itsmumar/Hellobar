@@ -130,6 +130,18 @@ describe ChangeSubscription, :freeze do
           expect { change_subscription('pro', 'monthly') }
             .to change { site.current_subscription.reload.payment_method }
         end
+
+        context 'when there is a problem bill' do
+          before do
+            change_subscription('pro', 'monthly')
+            site.current_subscription.bills.last.problem!
+          end
+
+          it 'pays the problem bill' do
+            change_subscription('pro', 'monthly')
+            expect(site.bills.problem).to be_empty
+          end
+        end
       end
 
       context 'when starting with Free plan' do

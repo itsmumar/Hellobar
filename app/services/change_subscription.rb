@@ -25,7 +25,13 @@ class ChangeSubscription
 
   def update_payment_method
     old_subscription.update payment_method: payment_method
+    try_to_pay_problem_bill
     old_subscription.bills.last
+  end
+
+  def try_to_pay_problem_bill
+    return unless last_problem_bill = old_subscription.bills.problem.last
+    PayBill.new(last_problem_bill).call
   end
 
   def change_subscription
