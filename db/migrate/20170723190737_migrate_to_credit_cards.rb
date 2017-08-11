@@ -20,6 +20,6 @@ class MigrateToCreditCards < ActiveRecord::Migration
   def down
     BillingAttempt.update_all credit_card_id: nil
     Subscription.update_all credit_card_id: nil
-    CreditCard.delete_all
+    CreditCard.unscoped.delete_all
   end
 end
