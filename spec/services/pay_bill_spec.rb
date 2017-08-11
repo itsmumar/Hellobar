@@ -1,6 +1,6 @@
 describe PayBill do
-  let(:payment_method) { create :payment_method }
-  let(:subscription) { create :subscription, :pro, payment_method: payment_method }
+  let(:credit_card) { create :credit_card }
+  let(:subscription) { create :subscription, :pro, credit_card: credit_card }
   let(:bill) { create :bill, grace_period_allowed: false, subscription: subscription }
   let(:service) { PayBill.new(bill) }
 
@@ -81,7 +81,7 @@ describe PayBill do
     end
 
     context 'without payment_method' do
-      before { bill.payment_method = nil }
+      before { bill.credit_card = nil }
 
       it 'changes subscription and capabilities' do
         expect { service.call }.to raise_error PayBill::Error, 'could not pay bill without credit card'

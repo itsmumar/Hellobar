@@ -45,16 +45,10 @@ class BillingReport
     @attempt = nil
   end
 
-  def no_details
+  def cannot_pay
     @amount_failed += @bill.amount
     @num_failed += 1
-    info(@attempt + ' Skipped: no payment method details available')
-  end
-
-  def no_payment_method
-    @amount_failed += @bill.amount
-    @num_failed += 1
-    info(@attempt + ' Skipped: no payment method available')
+    info(@attempt + ' Skipped: no credit card available')
   end
 
   def void(bill)

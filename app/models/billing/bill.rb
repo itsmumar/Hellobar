@@ -21,6 +21,7 @@ class Bill < ActiveRecord::Base
   has_many :coupon_uses
   has_one :site, through: :subscription, inverse_of: :bills
   has_one :payment_method, through: :subscription
+  has_one :credit_card, through: :subscription
 
   validates :subscription, presence: true
   delegate :site_id, to: :subscription
@@ -63,12 +64,15 @@ class Bill < ActiveRecord::Base
     super.to_sym
   end
 
-  def due_at(payment_method = nil)
-    if grace_period_allowed && payment_method&.current_details&.grace_period
-      return bill_at + payment_method.current_details.grace_period
-    end
-    # Otherwise it is due now
-    bill_at
+  def can_pay?
+    credit_card&.token.present?
+  end
+
+  def due_at(credit_card = nil)
+    # it is due now
+    return bill_at unless grace_period_allowed && credit_card&.grace_period
+
+    bill_at + credit_card.grace_period
   end
 
   def past_due?(payment_method = nil)

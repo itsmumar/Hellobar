@@ -1,7 +1,7 @@
 describe RefundBill do
   let(:amount) { bill.amount }
-  let(:payment_method) { create :payment_method }
-  let(:subscription) { create :subscription, payment_method: payment_method }
+  let(:credit_card) { create :credit_card }
+  let(:subscription) { create :subscription, credit_card: credit_card }
   let(:bill) { create :pro_bill, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
@@ -100,7 +100,7 @@ describe RefundBill do
   end
 
   context 'when payment method is missing' do
-    before { allow(bill.subscription).to receive(:payment_method).and_return(nil) }
+    before { allow(bill.subscription).to receive(:credit_card).and_return(nil) }
 
     it 'raises MissingPaymentMethod' do
       expect { service.call }.to raise_error RefundBill::MissingPaymentMethod, 'Could not find payment method'

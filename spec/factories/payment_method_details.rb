@@ -1,24 +1,5 @@
 FactoryGirl.define do
-  factory :payment_method_details do
-    data do
-      {
-        'first_name' => 'John',
-        'last_name' => 'Doe'
-      }
-    end
-
-    factory :cyber_source_credit_card, class: 'CyberSourceCreditCard' do
-      transient do
-        token 'token'
-        user nil
-      end
-      payment_method { user ? create(:payment_method, user: user) : create(:payment_method) }
-
-      data { create :payment_data, token: token }
-    end
-  end
-
-  factory :payment_data, class: Hash do
+  factory :payment_data_, class: Hash do
     skip_create
 
     number '4111 1111 1111 1111'

@@ -11,7 +11,7 @@ class RefundBill
 
   def call
     raise InvalidRefund, 'Cannot refund unsuccessful billing attempt' unless successful_billing_attempt
-    raise MissingPaymentMethod, 'Could not find payment method' unless subscription.payment_method
+    raise MissingPaymentMethod, 'Could not find payment method' unless subscription.credit_card
     check_refund_amount!
 
     refund_bill = create_refund_bill!
@@ -71,14 +71,14 @@ class RefundBill
     create_billing_attempt(refund_bill, response)
   end
 
-  def payment_method_details
-    successful_billing_attempt.payment_method_details
+  def credit_card
+    successful_billing_attempt.credit_card
   end
 
   def create_billing_attempt(refund_bill, response)
     BillingAttempt.create!(
       bill: refund_bill,
-      payment_method_details: payment_method_details,
+      credit_card: credit_card,
       status: response.success? ? :success : :failed,
       response: response.success? ? response.authorization : response.message
     )

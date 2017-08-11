@@ -1,13 +1,13 @@
 describe ChangeSubscription, :freeze do
   let(:user) { create :user }
   let(:site) { create :site, user: user }
-  let(:payment_method) { create :payment_method, user: user }
+  let(:credit_card) { create :credit_card, user: user }
   let(:params) { { subscription: 'pro', schedule: 'yearly' } }
-  let(:service) { ChangeSubscription.new(site, params, payment_method) }
+  let(:service) { ChangeSubscription.new(site, params, credit_card) }
   let(:last_subscription) { Subscription.last }
 
   before { stub_cyber_source :purchase }
-  before { create :subscription, :free, payment_method: payment_method, site: site }
+  before { create :subscription, :free, credit_card: credit_card, site: site }
 
   describe '.call' do
     it 'creates a bill for current period' do
@@ -43,8 +43,8 @@ describe ChangeSubscription, :freeze do
         .to have_enqueued_job(SendEventToIntercomJob).with('changed_subscription', site: site, user: user)
     end
 
-    context 'without payment method' do
-      let(:payment_method) { nil }
+    context 'without credit card' do
+      let(:credit_card) { nil }
 
       it 'raises PayBill::Error' do
         expect { service.call }.to raise_error PayBill::Error, 'could not pay bill without credit card'
@@ -64,7 +64,7 @@ describe ChangeSubscription, :freeze do
         expect { service.call }
           .to change(site.subscriptions, :count)
           .by(1)
-          .and change(payment_method.subscriptions, :count)
+          .and change(credit_card.subscriptions, :count)
           .by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
@@ -79,7 +79,7 @@ describe ChangeSubscription, :freeze do
         expect { service.call }
           .to change(site.subscriptions, :count)
           .by(1)
-          .and change(payment_method.subscriptions, :count)
+          .and change(credit_card.subscriptions, :count)
           .by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
@@ -101,7 +101,7 @@ describe ChangeSubscription, :freeze do
 
     describe 'upgrading/downgrading' do
       def change_subscription(subscription, schedule = 'monthly')
-        ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
+        ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, credit_card).call
       end
 
       def refund(bill)

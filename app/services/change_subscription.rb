@@ -1,8 +1,8 @@
 class ChangeSubscription
-  def initialize(site, params, payment_method = nil)
+  def initialize(site, params, credit_card = nil)
     @site = site
     @old_subscription = site.current_subscription
-    @payment_method = payment_method
+    @credit_card = credit_card
     @billing_params = params.reverse_merge(schedule: 'monthly')
   end
 
@@ -14,7 +14,7 @@ class ChangeSubscription
 
   private
 
-  attr_reader :site, :payment_method, :billing_params, :old_subscription
+  attr_reader :site, :credit_card, :billing_params, :old_subscription
 
   def transaction
     Subscription.transaction do
@@ -27,13 +27,13 @@ class ChangeSubscription
   def create_subscription
     subscription_class.create!(
       site: site,
-      payment_method: payment_method,
+      credit_card: credit_card,
       schedule: billing_params[:schedule]
     )
   end
 
   def pay_bill(bill)
-    PayBill.new(bill).call if bill.due_at(payment_method) <= Time.current
+    PayBill.new(bill).call if bill.due_at(credit_card) <= Time.current
     bill
   end
 

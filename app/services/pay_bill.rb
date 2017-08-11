@@ -5,7 +5,7 @@ class PayBill
   def initialize(bill)
     raise Error, 'cannot pay a refund' if bill.is_a?(Bill::Refund)
     @bill = bill
-    @payment_method = bill.payment_method
+    @credit_card = bill.credit_card
   end
 
   def call
@@ -25,16 +25,16 @@ class PayBill
 
   private
 
-  attr_reader :bill, :payment_method
+  attr_reader :bill, :credit_card
 
   def cannot_pay?
     !bill.pending? && !bill.problem?
   end
 
   def pay_bill
-    raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
+    raise MissingPaymentMethod, 'could not pay bill without credit card' unless credit_card
 
-    response = gateway.purchase(bill.amount, payment_method.current_details)
+    response = gateway.purchase(bill.amount, credit_card)
 
     BillingLogger.charge(bill, response.success?)
     if response.success?
@@ -77,7 +77,7 @@ class PayBill
   def create_billing_attempt(response)
     BillingAttempt.create!(
       bill: bill,
-      payment_method_details: payment_method.current_details,
+      credit_card: credit_card,
       status: response.success? ? :success : :failed,
       response: response.success? ? response.authorization : response.message
     )
