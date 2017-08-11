@@ -2,6 +2,7 @@ class CreditCard < ActiveRecord::Base
   include ActiveMerchant::Billing::CreditCardMethods
 
   belongs_to :user
+  belongs_to :details, class_name: 'PaymentMethodDetails'
   has_many :subscriptions
   has_many :billing_attempts
 
