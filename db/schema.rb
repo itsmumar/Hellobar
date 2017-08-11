@@ -179,8 +179,10 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "details_id", limit: 4
   end
 
+  add_index "credit_cards", ["details_id"], name: "index_credit_cards_on_details_id", using: :btree
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
   create_table "identities", force: :cascade do |t|
