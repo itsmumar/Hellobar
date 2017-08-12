@@ -72,7 +72,7 @@ section
                 - if bill.is_a?(Bill::Refund)
                   |  (Refund)
               td= "Hello Bar #{bill.subscription.values[:name]}"
-              td= credit_card.description
+              td= bill.credit_card.description
               td
                 - unless bill.problem?
                   = link_to bill_path(bill), target: '_blank' do

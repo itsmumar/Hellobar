@@ -90,7 +90,7 @@ feature 'Payment modal interaction', :js do
 
     def fill_payment_form
       form = create :payment_form
-      select 'New card...', from: 'linked_payment_id'
+      select 'New card...', from: 'linked_credit_card_id'
       fill_in 'credit_card[name]', with: form.name
       fill_in 'credit_card[number]', with: form.number
       fill_in 'credit_card[expiration]', with: form.expiration
