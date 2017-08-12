@@ -195,8 +195,8 @@ class @PaymentModal extends Modal
 
   _url: ->
     if @_isUsingLinkedCreditCard()
-      "/credit_cards/" + @_linkedCreditCardId()
+      "/subscription/?credit_card_id=" + @_linkedCreditCardId()
     else if @_isFree()
-      "/credit_cards/" + @currentCreditCard.id
+      "/subscription/?credit_card_id=" + @currentCreditCard.id
     else
-      "/credit_cards"
+      "/subscription"

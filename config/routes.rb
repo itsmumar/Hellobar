@@ -84,7 +84,8 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :credit_cards, only: %i[index create update]
+  resources :credit_cards, only: %i[index]
+  resource :subscription, only: %i[create update]
   resources :bills, only: :show
 
   get 'continue_create_site', to: 'sites#create', as: :continue_create_site
