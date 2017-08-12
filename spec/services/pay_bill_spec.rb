@@ -80,7 +80,7 @@ describe PayBill do
       specify { expect { service.call }.not_to change { BillingAttempt.success.count } }
     end
 
-    context 'without payment_method' do
+    context 'without credit card' do
       before { bill.credit_card = nil }
 
       it 'changes subscription and capabilities' do

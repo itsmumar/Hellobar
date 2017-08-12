@@ -3,13 +3,13 @@ require 'integration_helper'
 feature 'Payment modal interaction', :js do
   given(:user) { login }
   given(:site) { user.sites.first }
-  given(:payment_method) { create(:payment_method, user: user) }
+  given(:credit_card) { create(:credit_card, user: user) }
 
   context 'pro subscription' do
     before { stub_cyber_source :purchase }
 
     scenario "downgrade to free from pro should say when it's active until" do
-      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, payment_method).call
+      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
 
       end_date = site.current_subscription.active_until
 
@@ -29,7 +29,7 @@ feature 'Payment modal interaction', :js do
 
     before do
       create :rule, site: site
-      create(:subscription, :free, site: site, payment_method: payment_method)
+      create(:subscription, :free, site: site, credit_card: credit_card)
 
       allow_any_instance_of(SiteElementSerializer)
         .to receive(:proxied_url2png).and_return('')
@@ -91,15 +91,15 @@ feature 'Payment modal interaction', :js do
     def fill_payment_form
       form = create :payment_form
       select 'New card...', from: 'linked_payment_id'
-      fill_in 'payment_method_details[name]', with: form.name
-      fill_in 'payment_method_details[number]', with: form.number
-      fill_in 'payment_method_details[expiration]', with: form.expiration
-      fill_in 'payment_method_details[verification_value]', with: form.verification_value
-      fill_in 'payment_method_details[address]', with: form.address
-      fill_in 'payment_method_details[city]', with: form.city
-      fill_in 'payment_method_details[state]', with: form.state
-      fill_in 'payment_method_details[zip]', with: form.zip
-      select 'United States of America', match: :first, from: 'payment_method_details[country]'
+      fill_in 'credit_card[name]', with: form.name
+      fill_in 'credit_card[number]', with: form.number
+      fill_in 'credit_card[expiration]', with: form.expiration
+      fill_in 'credit_card[verification_value]', with: form.verification_value
+      fill_in 'credit_card[address]', with: form.address
+      fill_in 'credit_card[city]', with: form.city
+      fill_in 'credit_card[state]', with: form.state
+      fill_in 'credit_card[zip]', with: form.zip
+      select 'United States of America', match: :first, from: 'credit_card[country]'
       page.find('.submit').click
     end
   end
