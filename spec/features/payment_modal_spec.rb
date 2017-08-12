@@ -25,7 +25,7 @@ feature 'Payment modal interaction', :js do
   end
 
   context 'free subscription' do
-    before { stub_cyber_source :update, :purchase }
+    before { stub_cyber_source :store, :purchase }
 
     before do
       create :rule, site: site
