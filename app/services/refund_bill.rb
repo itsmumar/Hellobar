@@ -25,7 +25,6 @@ class RefundBill
 
   delegate :subscription, to: :bill
 
-  # cache billing attempt in case it will change
   def successful_billing_attempt
     @successful_billing_attempt ||= bill.successful_billing_attempt
   end
@@ -71,7 +70,7 @@ class RefundBill
   end
 
   def credit_card
-    successful_billing_attempt.credit_card
+    bill.paid_with_credit_card
   end
 
   def create_billing_attempt(refund_bill, response)

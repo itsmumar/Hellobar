@@ -32,10 +32,6 @@ class SaveCardToCyberSource
     gateway.store(credit_card, params)
   end
 
-  def previous_token
-    @previous_token ||= credit_card_with_token&.formatted_token
-  end
-
   def gateway
     @gateway ||= CyberSourceGateway.new
   end
