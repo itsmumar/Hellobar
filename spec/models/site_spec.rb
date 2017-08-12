@@ -422,10 +422,14 @@ describe Site do
   describe 'bills_with_payment_issues' do
     let(:user) { create :user }
     let(:site) { create :site, user: user }
-    let(:payment_method) { create :payment_method, user: user }
+    let(:credit_card) { create :credit_card, user: user }
 
     def change_subscription(subscription, schedule = 'monthly')
-      ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
+      ChangeSubscription.new(
+        site,
+        { subscription: subscription, schedule: schedule },
+        credit_card
+      ).call
     end
 
     before { stub_cyber_source :purchase, success?: false }

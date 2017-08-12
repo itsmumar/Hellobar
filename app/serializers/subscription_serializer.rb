@@ -28,11 +28,6 @@ class SubscriptionSerializer < ActiveModel::Serializer
     amount_to_string(amount)
   end
 
-  def payment_method_details_id
-    return unless object.payment_method.try(:current_details)
-    object.payment_method.current_details.id
-  end
-
   def trial
     object.currently_on_trial?
   end
