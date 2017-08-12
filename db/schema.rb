@@ -25,10 +25,12 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "email",               limit: 255
     t.string   "initial_password",    limit: 255
     t.string   "password_hashed",     limit: 255
+    t.string   "mobile_code",         limit: 255
     t.string   "session_token",       limit: 255
     t.string   "permissions_json",    limit: 255
     t.datetime "password_last_reset"
     t.datetime "session_last_active"
+    t.integer  "mobile_codes_sent",   limit: 4,   default: 0
     t.integer  "login_attempts",      limit: 4,   default: 0
     t.boolean  "locked",                          default: false
     t.datetime "created_at"
@@ -99,6 +101,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.integer  "refunded_billing_attempt_id", limit: 4
   end
 
+  add_index "bills", ["amount", "start_date", "end_date", "status"], name: "bill_start_date_end_date", using: :btree
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
   add_index "bills", ["refunded_billing_attempt_id"], name: "index_bills_on_refunded_billing_attempt_id", using: :btree
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
@@ -123,8 +126,8 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.integer  "contact_list_id", limit: 4
     t.string   "email",           limit: 255
     t.string   "name",            limit: 255
-    t.text     "error",           limit: 65535
-    t.boolean  "completed",                     default: false
+    t.text     "error",           limit: 16777215
+    t.boolean  "completed",                        default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "stacktrace",      limit: 65535
@@ -174,7 +177,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "zip",        limit: 255, null: false
     t.string   "address",    limit: 255, null: false
     t.string   "country",    limit: 255, null: false
-    t.string   "token",      limit: 255
+    t.string   "token",      limit: 255, null: false
     t.integer  "user_id",    limit: 4
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
@@ -315,10 +318,10 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "thank_you_text",                   limit: 255
     t.boolean  "pushes_page_down",                                  default: true
     t.boolean  "remains_at_top",                                    default: true
-    t.integer  "wordpress_bar_id",                 limit: 4
     t.boolean  "open_in_new_window",                                default: false
     t.boolean  "animated",                                          default: true
     t.boolean  "wiggle_button",                                     default: false
+    t.integer  "wordpress_bar_id",                 limit: 4
     t.string   "type",                             limit: 255,      default: "Bar"
     t.text     "caption",                          limit: 16777215
     t.text     "content",                          limit: 65535
@@ -456,6 +459,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "invite_token",                        limit: 255
     t.datetime "invite_token_expire_at"
     t.integer  "wordpress_user_id",                   limit: 4
+    t.string   "state",                               limit: 40
     t.datetime "exit_intent_modal_last_shown_at"
     t.datetime "upgrade_suggest_modal_last_shown_at"
   end

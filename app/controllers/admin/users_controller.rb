@@ -15,7 +15,7 @@ class Admin::UsersController < AdminController
       end
 
       if q =~ /\d{4}/
-        users += PaymentMethodDetails.where('data like ?', "%-#{ q }%").map(&:user).compact
+        users += User.joins(:credit_cards).where('credit_cards.number like ?', "%-#{ q }%").uniq
       end
 
       @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)

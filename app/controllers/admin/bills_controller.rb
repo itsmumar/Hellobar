@@ -2,7 +2,7 @@ class Admin::BillsController < AdminController
   def show
     @bill = Bill.find(params[:id])
     @site = Site.with_deleted.find(@bill.site_id)
-    @details = @bill.successful_billing_attempt.try(:payment_method_details)
+    @credit_card = @bill.successful_billing_attempt&.credit_card
     render 'bills/show', layout: 'receipt'
   end
 

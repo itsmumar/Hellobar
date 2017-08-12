@@ -41,13 +41,14 @@ div.row
                       ' (shared)
             td
               ul
-                - user.payment_method_details.uniq.each do |details|
+                - user.credit_cards.each do |credit_card|
                   li
-                    = "#{details.brand} X#{details.last_digits}"
-                    - if details.token
-                      = link_to "remove", admin_payment_method_detail_path(details), method: :delete, data: { confirm: "Are you sure?" }
+                    = credit_card.description
+                    - if credit_card.token
+                      = link_to 'remove', admin_credit_card_path(credit_card), method: :delete, data: { confirm: 'Are you sure?' }
                     - else
-                      = "(token removed)"
+                      = '(token removed)'
+
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
             td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")

@@ -46,7 +46,7 @@ describe 'Admin Bills requests' do
       end
 
       context 'when failed' do
-        before { bill.payment_method.destroy }
+        before { bill.credit_card.destroy }
 
         it 'returns refund error' do
           expect {

@@ -1,7 +1,7 @@
 describe Admin::UsersController do
   let!(:admin) { create(:admin) }
   let!(:site) { user.sites.last }
-  let(:user) { create :user, :with_site, :with_payment_method }
+  let(:user) { create :user, :with_site, :with_credit_card }
 
   describe 'GET admin_users_path' do
     before(:each) { stub_current_admin(admin) }
@@ -47,7 +47,7 @@ describe Admin::UsersController do
     end
 
     context 'when finding users by credit card' do
-      let(:q) { user.payment_method_details.last.last_digits }
+      let(:q) { user.credit_cards.last.last_digits }
 
       it_behaves_like 'success response'
     end

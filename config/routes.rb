@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :payment_methods, only: %i[index create update]
+  resources :credit_cards, only: %i[index create update]
   resources :bills, only: :show
 
   get 'continue_create_site', to: 'sites#create', as: :continue_create_site
@@ -117,6 +117,7 @@ Rails.application.routes.draw do
     end
 
     resources :payment_method_details, only: [:destroy]
+    resources :credit_cards, only: [:destroy]
 
     resources :users, only: %i[index show destroy] do
       resources :sites, only: [:update] do
