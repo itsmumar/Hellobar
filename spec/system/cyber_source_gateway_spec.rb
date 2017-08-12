@@ -1,6 +1,6 @@
 describe CyberSourceGateway do
   let(:gateway) { CyberSourceGateway.new }
-  let(:credit_card) { create :cyber_source_credit_card }
+  let(:credit_card) { create :credit_card }
 
   it 'is in test mode' do
     expect(gateway).to be_test

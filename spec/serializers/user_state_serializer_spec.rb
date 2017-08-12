@@ -4,7 +4,7 @@ describe ApiSerializer::UserStateSerializer do
 
   it 'serializes user' do
     expect(serializer.serializable_hash).to include(
-      :user, :sites, :site_memberships, :rules, :site_elements, :payment_methods
+      :user, :sites, :site_memberships, :rules, :site_elements, :credit_cards
     )
   end
 end

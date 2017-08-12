@@ -9,7 +9,7 @@ describe 'CreditCards requests' do
       it 'responds with a redirect to the login page' do
         get credit_cards_path
 
-        expect(response).to redirect_to /sign_in/
+        expect(response).to redirect_to(/sign_in/)
       end
     end
   end
