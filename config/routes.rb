@@ -116,7 +116,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :payment_method_details, only: [:destroy]
     resources :credit_cards, only: [:destroy]
 
     resources :users, only: %i[index show destroy] do

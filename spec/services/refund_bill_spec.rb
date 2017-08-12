@@ -99,11 +99,12 @@ describe RefundBill do
     end
   end
 
-  context 'when payment method is missing' do
+  context 'when credit card is missing' do
     before { allow(bill.subscription).to receive(:credit_card).and_return(nil) }
 
-    it 'raises MissingPaymentMethod' do
-      expect { service.call }.to raise_error RefundBill::MissingPaymentMethod, 'Could not find payment method'
+    it 'raises MissingCreditCard' do
+      expect { service.call }
+        .to raise_error RefundBill::MissingCreditCard, 'Could not find credit card'
     end
   end
 end

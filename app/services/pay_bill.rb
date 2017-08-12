@@ -1,6 +1,6 @@
 class PayBill
   class Error < StandardError; end
-  class MissingPaymentMethod < Error; end
+  class MissingCreditCard < Error; end
 
   def initialize(bill)
     raise Error, 'cannot pay a refund' if bill.is_a?(Bill::Refund)
@@ -32,7 +32,7 @@ class PayBill
   end
 
   def pay_bill
-    raise MissingPaymentMethod, 'could not pay bill without credit card' unless credit_card
+    raise MissingCreditCard, 'could not pay bill without credit card' unless credit_card
 
     response = gateway.purchase(bill.amount, credit_card)
 

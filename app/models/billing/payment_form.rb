@@ -1,4 +1,4 @@
-# breaks up user input to be used by a PaymentMethodDetail instance
+# breaks up user input to be used by a CreditCard instance
 class PaymentForm
   include ActiveModel::Model
 

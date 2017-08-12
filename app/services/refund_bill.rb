@@ -1,6 +1,6 @@
 class RefundBill
   class InvalidRefund < StandardError; end
-  class MissingPaymentMethod < StandardError; end
+  class MissingCreditCard < StandardError; end
 
   # @param [Bill::Recurring] bill
   # @param [Float] amount, default bill.amount
@@ -11,7 +11,7 @@ class RefundBill
 
   def call
     raise InvalidRefund, 'Cannot refund unsuccessful billing attempt' unless successful_billing_attempt
-    raise MissingPaymentMethod, 'Could not find payment method' unless subscription.credit_card
+    raise MissingCreditCard, 'Could not find credit card' unless subscription.credit_card
     check_refund_amount!
 
     refund_bill = create_refund_bill!
@@ -54,7 +54,6 @@ class RefundBill
   end
 
   def refund!(refund_bill)
-    # Make sure we use the same payment method details as the refunded attempt
     response = gateway.refund(-amount, bill.authorization_code)
 
     BillingLogger.refund(bill, response.success?)
