@@ -10,7 +10,7 @@ class CreditCardsController < ApplicationController
     subscription_credit_card_id = @site.current_subscription.credit_card_id if @site
 
     response = credit_cards.map do |credit_card|
-      CreditCardSerializer.new(credit_card).to_hash.tap do |hash|
+      CreditCardSerializer.new(credit_card).serializable_hash.tap do |hash|
         hash[:current_site_credit_card] = hash[:id] == subscription_credit_card_id
       end
     end

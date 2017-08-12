@@ -3,7 +3,7 @@ class @PaymentModal extends Modal
   modalName: "payment-account"
   modalTemplate: -> $('script#payment-modal-template').html()
   creditCardDetailsTemplate: -> $('script#credit-card-details-template').html()
-  linkedMethodsTemplate: -> $("script#linked-credit-cards-template").html()
+  linkedCreditCardsTemplate: -> $("script#linked-credit-cards-template").html()
   currentCreditCard: null
 
   constructor: (@options = {}) ->

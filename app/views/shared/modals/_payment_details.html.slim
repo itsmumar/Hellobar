@@ -1,4 +1,4 @@
-script id="cc-payment-details-template" type="text/x-handlebars-template"
+script id="credit-card-details-template" type="text/x-handlebars-template"
   .site-select-form style="#{current_user.sites.size <= 1 ? 'display: none' : ''}"
     header Site Details
 
@@ -59,12 +59,12 @@ script id="cc-payment-details-template" type="text/x-handlebars-template"
             .select-wrapper
               = country_select("credit_card", "country", priority_countries: ['US'], selected: "{{currentCreditCard.country}}")
 
-script id="linked-methods-template" type="text/x-handlebars-template"
+script id="linked-credit-cards-template" type="text/x-handlebars-template"
   label Use credit card on file
   .select-wrapper
     select#linked-credit-card name="linked_credit_card_id"
       option New card...
       | {{#each creditCards}}
       option value="{{id}}"
-        | {{currentCreditCard.number}}
+        | {{number}}
       | {{/each}}
