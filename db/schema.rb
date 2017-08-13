@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170723190737) do
+ActiveRecord::Schema.define(version: 20170813101549) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -22,10 +22,10 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   end
 
   create_table "admins", force: :cascade do |t|
-    t.string   "email",               limit: 255
+    t.string   "email",               limit: 191
     t.string   "initial_password",    limit: 255
     t.string   "password_hashed",     limit: 255
-    t.string   "session_token",       limit: 255
+    t.string   "session_token",       limit: 191
     t.string   "permissions_json",    limit: 255
     t.datetime "password_last_reset"
     t.datetime "session_last_active"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.boolean  "locked",                          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "api_token",           limit: 255
+    t.string   "api_token",           limit: 191
     t.string   "authentication_code", limit: 255
     t.string   "rotp_secret_base",    limit: 255
   end
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id",       limit: 4
     t.string   "provider",      limit: 255
-    t.string   "uid",           limit: 255
+    t.string   "uid",           limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "refresh_token", limit: 255
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id",             limit: 4
     t.integer  "status",                      limit: 4,                            default: 0
-    t.string   "type",                        limit: 255
+    t.string   "type",                        limit: 191
     t.decimal  "amount",                                  precision: 7,  scale: 2
     t.string   "description",                 limit: 255
     t.boolean  "grace_period_allowed",                                             default: true
@@ -108,9 +108,9 @@ ActiveRecord::Schema.define(version: 20170723190737) do
 
   create_table "conditions", force: :cascade do |t|
     t.integer  "rule_id",        limit: 4
-    t.string   "segment",        limit: 255,   null: false
-    t.string   "operand",        limit: 255,   null: false
-    t.text     "value",          limit: 65535
+    t.string   "segment",        limit: 255,      null: false
+    t.string   "operand",        limit: 255,      null: false
+    t.text     "value",          limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "custom_segment", limit: 255
@@ -123,11 +123,11 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.integer  "contact_list_id", limit: 4
     t.string   "email",           limit: 255
     t.string   "name",            limit: 255
-    t.text     "error",           limit: 65535
-    t.boolean  "completed",                     default: false
+    t.text     "error",           limit: 16777215
+    t.boolean  "completed",                        default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "stacktrace",      limit: 65535
+    t.text     "stacktrace",      limit: 16777215
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
@@ -136,10 +136,10 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.integer  "site_id",      limit: 4
     t.integer  "identity_id",  limit: 4
     t.string   "name",         limit: 255
-    t.text     "data",         limit: 65535
+    t.text     "data",         limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "double_optin",               default: true
+    t.boolean  "double_optin",                  default: true
     t.datetime "deleted_at"
   end
 
@@ -188,9 +188,9 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   create_table "identities", force: :cascade do |t|
     t.integer  "site_id",     limit: 4
     t.string   "provider",    limit: 255
-    t.text     "credentials", limit: 65535
-    t.text     "extra",       limit: 65535
-    t.text     "embed_code",  limit: 65535
+    t.text     "credentials", limit: 16777215
+    t.text     "extra",       limit: 16777215
+    t.text     "embed_code",  limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "api_key",     limit: 255
@@ -207,7 +207,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.datetime "updated_at"
     t.integer  "site_id",            limit: 4
     t.string   "preuploaded_url",    limit: 255
-    t.string   "theme_id",           limit: 255
+    t.string   "theme_id",           limit: 191
     t.integer  "version",            limit: 4,   default: 2
   end
 
@@ -217,8 +217,8 @@ ActiveRecord::Schema.define(version: 20170723190737) do
 
   create_table "improve_suggestions", force: :cascade do |t|
     t.integer  "site_id",    limit: 4
-    t.string   "name",       limit: 255
-    t.text     "data",       limit: 65535
+    t.string   "name",       limit: 191
+    t.text     "data",       limit: 16777215
     t.datetime "updated_at"
   end
 
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   create_table "payment_method_details", force: :cascade do |t|
     t.integer  "payment_method_id", limit: 4
     t.string   "type",              limit: 255
-    t.text     "data",              limit: 65535
+    t.text     "data",              limit: 16777215
     t.datetime "created_at"
   end
 
@@ -263,13 +263,13 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "email",                    limit: 255
-    t.text     "body",                     limit: 65535
+    t.text     "body",                     limit: 16777215
     t.integer  "recipient_id",             limit: 4
     t.datetime "redeemed_by_sender_at"
     t.datetime "redeemed_by_recipient_at"
     t.integer  "site_id",                  limit: 4
-    t.boolean  "available_to_sender",                    default: false
-    t.integer  "state",                    limit: 4,     default: 0
+    t.boolean  "available_to_sender",                       default: false
+    t.integer  "state",                    limit: 4,        default: 0
   end
 
   add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree
@@ -290,7 +290,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   create_table "site_elements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",                  limit: 255,                              null: false
+    t.string   "element_subtype",                  limit: 191,                              null: false
     t.string   "target_segment",                   limit: 255
     t.boolean  "closable",                                          default: false
     t.boolean  "show_border",                                       default: false
@@ -308,7 +308,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "texture",                          limit: 255,      default: "none"
     t.boolean  "paused",                                            default: false
     t.integer  "rule_id",                          limit: 4
-    t.text     "settings",                         limit: 65535
+    t.text     "settings",                         limit: 16777215
     t.boolean  "show_branding",                                     default: true
     t.integer  "contact_list_id",                  limit: 4
     t.string   "display_when",                     limit: 255,      default: "immediately"
@@ -321,7 +321,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.boolean  "wiggle_button",                                     default: false
     t.string   "type",                             limit: 255,      default: "Bar"
     t.text     "caption",                          limit: 16777215
-    t.text     "content",                          limit: 65535
+    t.text     "content",                          limit: 16777215
     t.string   "placement",                        limit: 255
     t.datetime "deleted_at"
     t.string   "view_condition",                   limit: 255,      default: "immediately"
@@ -344,10 +344,10 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.string   "phone_country_code",               limit: 255,      default: "US"
     t.string   "theme_id",                         limit: 255
     t.boolean  "use_default_image",                                 default: true,          null: false
-    t.text     "blocks",                           limit: 65535
-    t.text     "custom_html",                      limit: 65535
-    t.text     "custom_css",                       limit: 65535
-    t.text     "custom_js",                        limit: 65535
+    t.text     "blocks",                           limit: 16777215
+    t.text     "custom_html",                      limit: 16777215
+    t.text     "custom_css",                       limit: 16777215
+    t.text     "custom_js",                        limit: 16777215
     t.string   "offer_headline",                   limit: 255
     t.string   "offer_text",                       limit: 255
     t.string   "disclaimer",                       limit: 255
@@ -360,12 +360,12 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.integer  "content_upgrade_pdf_file_size",    limit: 4
     t.datetime "content_upgrade_pdf_updated_at"
     t.string   "content_upgrade_title",            limit: 255
-    t.text     "content_upgrade_url",              limit: 65535
+    t.text     "content_upgrade_url",              limit: 16777215
     t.boolean  "thank_you_enabled",                                 default: false
     t.string   "thank_you_headline",               limit: 255
     t.string   "thank_you_subheading",             limit: 255
     t.string   "thank_you_cta",                    limit: 255
-    t.text     "thank_you_url",                    limit: 65535
+    t.text     "thank_you_url",                    limit: 16777215
     t.integer  "image_opacity",                    limit: 4,        default: 100
   end
 
@@ -390,7 +390,7 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "url",                             limit: 255
-    t.boolean  "opted_in_to_email_digest",                      default: true
+    t.boolean  "opted_in_to_email_digest",                         default: true
     t.datetime "script_installed_at"
     t.datetime "script_generated_at"
     t.datetime "script_attempted_to_generate_at"
@@ -400,9 +400,9 @@ ActiveRecord::Schema.define(version: 20170723190737) do
     t.datetime "deleted_at"
     t.datetime "script_uninstalled_at"
     t.string   "install_type",                    limit: 255
-    t.text     "invoice_information",             limit: 65535
+    t.text     "invoice_information",             limit: 16777215
     t.datetime "selected_goal_clicked_at"
-    t.text     "settings",                        limit: 65535
+    t.text     "settings",                        limit: 16777215
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -437,9 +437,9 @@ ActiveRecord::Schema.define(version: 20170723190737) do
   add_index "user_onboarding_statuses", ["user_id"], name: "index_user_onboarding_statuses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                               limit: 255, default: "",       null: false
+    t.string   "email",                               limit: 191, default: "",       null: false
     t.string   "encrypted_password",                  limit: 255, default: "",       null: false
-    t.string   "reset_password_token",                limit: 255
+    t.string   "reset_password_token",                limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                       limit: 4,   default: 0,        null: false
