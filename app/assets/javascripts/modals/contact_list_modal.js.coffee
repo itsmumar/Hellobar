@@ -177,7 +177,6 @@ class @ContactListModal extends Modal
 
     object.find("#contact_list_provider").change (e) ->
       doubleOptIn = e.target.value != 'mailchimp'
-      debugger
       modal._loadRemoteLists(select: this, listData: {double_optin: doubleOptIn})
 
   _bindDisconnect: (object) ->
