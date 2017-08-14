@@ -23,13 +23,14 @@ describe 'Admin CreditCard requests' do
     end
 
     describe 'DELETE :destroy', :freeze do
-      it 'marks credit card as deleted (sets deleted_at)' do
+      it 'marks credit card as deleted (sets deleted_at) and erases token' do
         expect(credit_card.token).to be_present
 
         delete admin_credit_card_path(credit_card)
 
         expect(response).to redirect_to(admin_users_path)
         expect(credit_card.reload).to be_deleted
+        expect(credit_card.reload.token).to be_nil
       end
     end
   end
