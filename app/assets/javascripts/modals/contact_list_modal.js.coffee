@@ -176,7 +176,9 @@ class @ContactListModal extends Modal
     modal = this
 
     object.find("#contact_list_provider").change (e) ->
-      modal._loadRemoteLists(select: this, listData: {double_optin: true})
+      doubleOptIn = e.target.value != 'mailchimp'
+      debugger
+      modal._loadRemoteLists(select: this, listData: {double_optin: doubleOptIn})
 
   _bindDisconnect: (object) ->
     modal = this
@@ -321,7 +323,7 @@ class @ContactListModal extends Modal
     {
       name: @$modal.find("form #contact_list_name").val()
       provider_token: @$modal.find("form #contact_list_provider").val()
-      double_optin: if @$modal.find("#contact_list_double_optin").prop("checked") then "1" else "0"
+      double_optin: !!@$modal.find("#contact_list_double_optin").prop("checked")
       data: @_getContactListData()
     }
 
@@ -478,7 +480,7 @@ class @ContactListModal extends Modal
           $cycle_day.toggle(cycle_day_enabled)
 
         if listData
-          @$modal.find("#contact_list_double_optin").prop("checked", true) if listData.double_optin
+          @$modal.find("#contact_list_double_optin").prop("checked", listData.double_optin)
 
         if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
