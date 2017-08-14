@@ -1,4 +1,4 @@
-describe SaveCardToCyberSource do
+describe CreateCreditCardAtCyberSource do
   let(:user) { create :user }
   let(:form) { create :payment_form }
   let(:params) do
@@ -8,7 +8,7 @@ describe SaveCardToCyberSource do
       address: form.address_attributes
     }
   end
-  let(:service) { SaveCardToCyberSource.new(user, form.card, params) }
+  let(:service) { CreateCreditCardAtCyberSource.new(user, form.card, params) }
 
   describe '#call' do
     it 'sends store request to CyberSource gateway' do

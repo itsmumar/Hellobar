@@ -1,4 +1,4 @@
-class SaveCardToCyberSource
+class CreateCreditCardAtCyberSource
   # @param [User] user
   # @param [ActiveMerchant::Billing::CreditCard] credit_card
   # @param [Hash] params; keys: order_id, email, address
