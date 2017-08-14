@@ -65,7 +65,12 @@ Rails.application.routes.draw do
     end
 
     resources :identities
-    resources :contact_lists
+    resources :contact_lists do
+      member do
+        get :download
+      end
+    end
+
     resources :targeted_segments
 
     resources :site_memberships do
@@ -162,6 +167,8 @@ Rails.application.routes.draw do
   %w[404 422 500].each do |code|
     get code, to: 'errors#show', code: code
   end
+
+  get 'get-started', to: 'welcome#get_started'
 
   root 'welcome#index'
 

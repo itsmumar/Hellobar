@@ -197,3 +197,9 @@
   values:
     - original
     - pop_up
+-
+  index: 32
+  name: Homepage Test 2017-08
+  values:
+    - original
+    - variant

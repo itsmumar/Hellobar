@@ -1,33 +1,37 @@
 class DetectInstallType
-  TOPIC_ARN = 'arn:aws:sns:us-east-1:199811731772:lambda_detectInstallType'.freeze
-
   def initialize site
     @site = site
   end
 
   def call
-    # TODO: change `subject` and introduce SendSNSNotification service object
-    # (when new Lambda function parsing the message is deployed)
-    sns.publish(
-      topic_arn: TOPIC_ARN,
-      subject: "detectInstallType() for Site#id #{ site.id }",
-      message: message
-    )
+    send_sns_notification
   end
 
   private
 
   attr_reader :site
 
-  def sns
-    Aws::SNS::Client.new
+  def send_sns_notification
+    SendSnsNotification.new(notification).call
   end
 
-  def message
-    JSON.generate message_params
+  def notification
+    {
+      topic_arn: topic_arn,
+      subject: subject,
+      message_hash: message_hash
+    }
   end
 
-  def message_params
+  def topic_arn
+    Settings.sns['lambda_detect_install_type']
+  end
+
+  def subject
+    "detectInstallType() for Site#id #{ site.id }"
+  end
+
+  def message_hash
     {
       environment: Rails.env,
       siteId: site.id,

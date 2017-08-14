@@ -9,6 +9,7 @@ RSpec.configure do |config|
     stub_out_ab_variations('Onboarding Email Volume 2016-06-28') { 'original' }
     stub_out_ab_variations('Pricing Modal Copy 2016-07-07') { 'original' }
     stub_out_ab_variations('Email Integration UI 2016-06-22') { 'original' }
+    stub_out_ab_variations('Homepage Test 2017-08') { 'original' }
   end
 end
 

@@ -103,14 +103,14 @@ describe SitesController do
       it 'redirects to the landing page with an error if site is not valid' do
         post :create, site: { url: 'not a url lol' }
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
       end
 
       it 'redirects to the landing page with an error if site is an email address' do
         post :create, site: { url: 'asdf@mail.com' }
 
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
       end
 

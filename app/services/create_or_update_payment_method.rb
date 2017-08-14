@@ -14,6 +14,7 @@ class CreateOrUpdatePaymentMethod
     credit_card = create_credit_card
     save_to_cybersource(credit_card)
     credit_card.save!
+    user.credit_cards.create!(form.attributes.merge(token: credit_card.token))
     credit_card.payment_method
   end
 
@@ -33,7 +34,7 @@ class CreateOrUpdatePaymentMethod
     params = {
       order_id: credit_card.order_id,
       email: email_for_cybersource,
-      address: credit_card.address.to_h
+      address: credit_card.billing_address.to_h
     }
     credit_card.token = SaveCardToCyberSource.new(user, form.card, params).call
   rescue => e

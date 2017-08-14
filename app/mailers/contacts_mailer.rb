@@ -1,7 +1,6 @@
 class ContactsMailer < ApplicationMailer
   def csv_export(user, contact_list)
     @contact_list = contact_list
-    @total_subscribers = FetchContactListTotals.new(contact_list.site, id: contact_list.id).call
 
     csv_filename = "#{ contact_list.name.parameterize }.csv"
     zip_filename = "#{ contact_list.name.parameterize }.zip"
