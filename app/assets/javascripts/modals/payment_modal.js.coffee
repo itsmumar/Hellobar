@@ -54,7 +54,7 @@ class @PaymentModal extends Modal
         template = Handlebars.compile(@creditCardDetailsTemplate())
 
         @currentCreditCard = response.credit_cards.filter((creditCard) ->
-          creditCard.current_site_credit_card
+          creditCard.id == response.current_credit_card_id
         )[0] || {}
 
         html = $(template(

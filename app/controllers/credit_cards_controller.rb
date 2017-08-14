@@ -3,15 +3,12 @@ class CreditCardsController < ApplicationController
 
   def index
     load_site if params[:site_id] # not required for this action
-
-    credit_cards = current_user.credit_cards
     subscription_credit_card_id = @site.current_subscription.credit_card_id if @site
 
-    response = credit_cards.map do |credit_card|
-      CreditCardSerializer.new(credit_card).serializable_hash.tap do |hash|
-        hash[:current_site_credit_card] = hash[:id] == subscription_credit_card_id
-      end
-    end
+    response = {
+      credit_cards: ActiveModel::ArraySerializer.new(current_user.credit_cards).as_json,
+      current_credit_card_id: subscription_credit_card_id
+    }
 
     respond_to do |format|
       format.json { render json: response }
