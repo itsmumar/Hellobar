@@ -4,6 +4,7 @@ describe('Module tracking.external', function () {
   var module;
   var externalTrackings;
   var googleAnalyticsMock;
+  var legacyGoogleAnalyticsMock;
   var googleTagManagerMock;
   var id = 2;
 
@@ -25,9 +26,14 @@ describe('Module tracking.external', function () {
     }];
 
     googleAnalyticsMock = jasmine.createSpyObj('GA', ['send']);
+    legacyGoogleAnalyticsMock = jasmine.createSpyObj('GA (Legacy)', ['send']);
     googleTagManagerMock = jasmine.createSpyObj('GTM', ['send']);
 
     googleAnalyticsMock.available = function () {
+      return true;
+    };
+
+    legacyGoogleAnalyticsMock.available = function () {
       return true;
     };
 
@@ -38,6 +44,7 @@ describe('Module tracking.external', function () {
     module = hellobar('tracking.external', {
       dependencies: {
         'tracking.external.googleAnalytics': googleAnalyticsMock,
+        'tracking.external.legacyGoogleAnalytics': legacyGoogleAnalyticsMock,
         'tracking.external.googleTagManager': googleTagManagerMock
       },
       configurator: function (configuration) {
@@ -58,6 +65,9 @@ describe('Module tracking.external', function () {
     expect(googleAnalyticsMock.send).toHaveBeenCalled();
     expect(googleAnalyticsMock.send.calls.count()).toEqual(2);
 
+    expect(legacyGoogleAnalyticsMock.send).toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send.calls.count()).toEqual(2);
+
     expect(googleTagManagerMock.send).toHaveBeenCalled();
     expect(googleTagManagerMock.send.calls.count()).toEqual(2);
   });
@@ -66,6 +76,7 @@ describe('Module tracking.external', function () {
     module.send('unknown_tracking_type', id);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
     expect(googleTagManagerMock.send).not.toHaveBeenCalled();
   });
 
@@ -74,6 +85,7 @@ describe('Module tracking.external', function () {
     module.send('traffic_conversion', 54321);
 
     expect(googleAnalyticsMock.send).not.toHaveBeenCalled();
+    expect(legacyGoogleAnalyticsMock.send).not.toHaveBeenCalled();
     expect(googleTagManagerMock.send).not.toHaveBeenCalled();
   });
 

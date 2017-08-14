@@ -1,16 +1,49 @@
 hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
 
   const configuration = hellobar.createModuleConfiguration({
-    userAgentProvider: 'function'
+    userAgentProvider: 'function',
+    locationSearchProvider: 'function'
   });
 
-  function getUserAgent() {
+  function getUserAgent () {
     const userAgentProvider = configuration.userAgentProvider();
+
     if (userAgentProvider) {
       return userAgentProvider();
     }
+
     return navigator.userAgent;
-  }
+  };
+
+  function getLocationSearch () {
+    const locationSearchProvider = configuration.locationSearchProvider();
+
+    if (locationSearchProvider) {
+      return locationSearchProvider();
+    }
+
+    return location.search;
+  };
+
+  // Returns an object with all detected UTM codes
+  function utmCodes () {
+    const utmCodes = {};
+    const locationSearch = getLocationSearch();
+
+    locationSearch &&
+      locationSearch
+        .substr(1)
+        .split('&')
+        .forEach(item => {
+          let [key, value] = item.split('=');
+
+          if (key && /^utm_/i.test(key) && value) {
+            utmCodes[key] = decodeURIComponent(value);
+          }
+        });
+
+    return utmCodes;
+  };
 
   /**
    * Determines if the screen width is considered mobile for given element
@@ -19,6 +52,7 @@ hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
    */
   function isMobileWidth(siteElementData) {
     var width = windowWidth();
+
     if (siteElementData.type === 'Modal') {
       return width <= 640;
     } else if (siteElementData.type === 'Slider') {
@@ -31,7 +65,6 @@ hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
   function windowWidth() {
     return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
   }
-
 
   function isIE11() {
     var myNav = getUserAgent().toLowerCase();
@@ -61,8 +94,6 @@ hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
     return device() === 'mobile';
   }
 
-
-
   function device() {
     var ua = getUserAgent();
     if (ua.match(/ipad/i))
@@ -81,6 +112,7 @@ hellobar.defineModule('base.environment', ['hellobar'], function (hellobar) {
 
   return {
     configuration: () => configuration,
+    utmCodes,
     device,
     isMobileDevice,
     isMobileWidth,
