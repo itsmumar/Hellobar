@@ -16,8 +16,8 @@
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
         - if current_site.free?
-          = content_tag 'a', 'Hello Bar PRO', class: "show-upgrade-modal", data: { source: 'Hello Bar PRO' }
-        h6= current_user.sites.count <= 1 ? "Sites" : "Switch Sites"
+          = content_tag 'a', 'Hello Bar PRO', class: 'show-upgrade-modal floating-button', data: { source: 'Hello Bar PRO' }
+        h6= current_user.sites.count <= 1 ? 'Sites' : 'Switch Sites'
 
         ul
           - current_user.sites.sort_by(&:normalized_url).each do |site|
@@ -28,13 +28,13 @@
 
               = active_link_to site.normalized_url, site_path(site)
 
-        = button_to "Add New Site", new_site_path, :class => "button", :method => :get
+        = button_to 'Add New Site', new_site_path, class: 'button', method: :get
 
   .header-user-wrapper
     .ctas
       - unless current_user.temporary?
         - if current_site.free?
-          a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
+          a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
             | Want More Power?
 
         - elsif current_site.current_subscription.try(:currently_on_trial?)
@@ -49,20 +49,20 @@
       .dropdown-block
         = active_link_to 'User Settings', profile_path()
         - if current_site.free?
-          = content_tag 'a', 'Upgrade Plan', class: "show-upgrade-modal", data: { source: "Header Drop-down" }
+          a.show-upgrade-modal.floating-button data-source='Header Drop-down' Upgrade Plan
         - else
-          = content_tag 'a', 'Payment Info', class: "show-payment-modal"
+          a.show-payment-modal.floating-button data-source='Header Drop-down' Payment Info
         - if impersonated_user
-          = active_link_to "Stop Impersonating", admin_unimpersonate_user_path, :method => :delete
+          = active_link_to "Stop Impersonating", admin_unimpersonate_user_path, method: :delete
         - else
-          = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+          = active_link_to 'Sign Out', destroy_user_session_path, method: :delete
 - elsif current_user
   .header-user-wrapper
     .ctas
-      a.button.show-upgrade-modal data={ source: "Menu Button: Want More Power" }
+      a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
       | Want more power?
     .dropdown-wrapper
-      = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
+      = image_tag gravatar_url_for(current_user), class: 'user-avatar'
       span.user-name= display_name_for_user(current_user)
       span.caret
         = image_tag('caret-down.svg')

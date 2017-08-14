@@ -99,6 +99,14 @@ describe ChangeSubscription, :freeze do
       end
     end
 
+    context 'when could not charge credit card' do
+      it 'raises ActiveRecord::RecordInvalid' do
+        expect {
+          expect { service.call }.to make_gateway_call(:purchase).and_fail
+        }.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
+
     describe 'upgrading/downgrading' do
       def change_subscription(subscription, schedule = 'monthly')
         ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
@@ -108,7 +116,37 @@ describe ChangeSubscription, :freeze do
         RefundBill.new(bill).call
       end
 
+      context 'when changing to the same type' do
+        before { change_subscription('pro', 'monthly') }
+
+        it 'does not change subscription' do
+          expect { change_subscription('pro', 'monthly') }
+            .not_to change { site.reload.current_subscription }
+        end
+
+        it 'updates payment method' do
+          site.current_subscription.update payment_method: create(:payment_method)
+
+          expect { change_subscription('pro', 'monthly') }
+            .to change { site.current_subscription.reload.payment_method }
+        end
+
+        context 'when there is a problem bill' do
+          before do
+            change_subscription('pro', 'monthly')
+            site.current_subscription.bills.last.problem!
+          end
+
+          it 'pays the problem bill' do
+            change_subscription('pro', 'monthly')
+            expect(site.bills.problem).to be_empty
+          end
+        end
+      end
+
       context 'when starting with Free plan' do
+        before { site.current_subscription.destroy }
+
         it 'changes subscription and capabilities' do
           expect { change_subscription('free') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Free
@@ -222,9 +260,11 @@ describe ChangeSubscription, :freeze do
         let(:last_bill) { site.reload.current_subscription.bills.last }
 
         it 'returns problem bill' do
-          expect { change_subscription('pro') }.to make_gateway_call(:purchase).and_fail
-          expect(last_bill).to be_problem
-          expect(site.current_subscription).to be_instance_of Subscription::Pro
+          expect {
+            expect { service.call }.to make_gateway_call(:purchase).and_fail
+          }.to raise_error ActiveRecord::RecordInvalid
+          expect(last_bill).to be_nil
+          expect(site.current_subscription).to be_instance_of Subscription::Free
           expect(site).to be_capable_of :free
         end
       end

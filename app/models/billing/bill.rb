@@ -80,7 +80,7 @@ class Bill < ActiveRecord::Base
   end
 
   def payment_method_detail
-    billing_attempts.first&.payment_method_details
+    billing_attempts.last&.payment_method_details
   end
 
   def successful_billing_attempt

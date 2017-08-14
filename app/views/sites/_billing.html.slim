@@ -62,7 +62,7 @@ section
             tr
               td
                 - if bill.problem?
-                  i.icon-alert
+                  i.icon-alert title="There was a problem while charging your card"
                 - else
                   i.icon-thumbsup
 
@@ -74,7 +74,12 @@ section
               td= "Hello Bar #{bill.subscription.values[:name]}"
               td= credit_card_description(bill.payment_method_detail)
               td
-                - unless bill.problem?
+                - if bill.problem?
+                  - if params[:should_update_card]
+                    a#problem-bill.button.show-payment-modal Update credit card details
+                  - else
+                    a#problem-bill.button href=pay_bill_path(bill) data-method="put" Charge again
+                - else
                   = link_to bill_path(bill), target: '_blank' do
                     i.icon-export
 

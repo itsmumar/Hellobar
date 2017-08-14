@@ -1,2 +1,6 @@
 .prompt.payment-issue-prompt
-  span= "You have an outstanding bill for #{number_to_currency(payment_issue_amount(site))}, dated #{payment_issue_date(site).strftime("%b %d, %Y")}. #{link_to "Fix this", edit_site_path(site)}.".html_safe
+  span
+    ' We could not charge #{number_to_currency(payment_issue_amount(site))} on your credit card ending in #{ site.bills_with_payment_issues.last.payment_method.current_details.last_digits }.
+    .button.show-payment-modal Update credit card details
+    ' or
+    a href=edit_site_path(site, anchor: 'problem-bill') Charge again
