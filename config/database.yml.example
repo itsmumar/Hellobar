@@ -1,6 +1,7 @@
 default: &default
   adapter: mysql2
-  encoding: utf8
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
   pool: 5
   username: root
   password:
@@ -8,14 +9,8 @@ default: &default
 
 development:
   <<: *default
-  database: new_hellobar_development
+  database: hellobar_development
 
 test:
   <<: *default
   database: hellobar_test
-
-production:
-  <<: *default
-  database: hellobar_production
-  username: hellobar
-  password: <%= ENV['HELLOBAR_DATABASE_PASSWORD'] %>
