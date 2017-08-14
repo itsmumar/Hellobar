@@ -1,5 +1,6 @@
 class BillingAttempt < ActiveRecord::Base
   belongs_to :bill
+  belongs_to :credit_card
   belongs_to :payment_method_details
   has_one :payment_method, through: :payment_method_details
   has_one :user, through: :payment_method

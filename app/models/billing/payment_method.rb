@@ -5,7 +5,7 @@ class PaymentMethod < ActiveRecord::Base
 
   acts_as_paranoid
 
-  delegate :name, :charge, :refund, to: :current_details, allow_nil: true
+  delegate :name, to: :current_details, allow_nil: true
 
   def current_details
     details.last

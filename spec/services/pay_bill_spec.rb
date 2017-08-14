@@ -7,7 +7,7 @@ describe PayBill do
   before { stub_cyber_source(:purchase) }
 
   describe '#call' do
-    specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount * 100, any_args) }
+    specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount, any_args) }
     specify { expect { service.call }.to change(bill, :status).to :paid }
     specify { expect { service.call }.to change { BillingAttempt.success.count }.to 1 }
 

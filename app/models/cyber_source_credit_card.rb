@@ -19,7 +19,7 @@ class CyberSourceCreditCard < PaymentMethodDetails
     ActiveMerchant::Billing::CreditCard.last_digits number.gsub(/[^\d]/, '') if number.present?
   end
 
-  def address
+  def billing_address
     @address ||=
       begin
         attributes = data.slice(*ADDRESS_FIELDS).symbolize_keys
@@ -32,20 +32,6 @@ class CyberSourceCreditCard < PaymentMethodDetails
     data = new_data.stringify_keys.slice(*FIELDS)
     data['number'] = ActiveMerchant::Billing::CreditCard.mask(data['number'])
     self[:data] = data
-  end
-
-  def refund(amount_in_dollars, original_transaction_id)
-    response = gateway.refund(amount_in_dollars.to_f * 100, original_transaction_id)
-
-    return false, response.message unless response.success?
-    [true, response.authorization]
-  end
-
-  def charge(amount_in_dollars)
-    response = gateway.purchase(amount_in_dollars.to_f * 100, self)
-
-    return false, response.message unless response.success?
-    [true, response.authorization]
   end
 
   def delete_token

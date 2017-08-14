@@ -17,6 +17,10 @@ describe CreateOrUpdatePaymentMethod do
       expect { service.call }.to change(user.payment_methods, :count).to 1
     end
 
+    it 'creates CreditCard' do
+      expect { service.call }.to change(user.credit_cards, :count).to 1
+    end
+
     context 'when params are invalid' do
       let(:params) { {} }
 

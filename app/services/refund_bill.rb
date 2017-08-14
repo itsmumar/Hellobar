@@ -55,32 +55,36 @@ class RefundBill
 
   def refund!(refund_bill)
     # Make sure we use the same payment method details as the refunded attempt
-    success, response = payment_method_details.refund(-amount, bill.authorization_code)
+    response = gateway.refund(-amount, bill.authorization_code)
 
-    BillingLogger.refund(bill, success)
+    BillingLogger.refund(bill, response.success?)
 
-    if success
-      refund_bill.update authorization_code: response, status: :paid
+    if response.success?
+      refund_bill.update authorization_code: response.authorization, status: :paid
     else
       Raven.capture_message 'Unsuccessful refund', extra: {
-        message: response,
+        message: response.message,
         bill: bill.id,
         amount: amount
       }
     end
-    create_billing_attempt(refund_bill, success, response)
+    create_billing_attempt(refund_bill, response)
   end
 
   def payment_method_details
     successful_billing_attempt.payment_method_details
   end
 
-  def create_billing_attempt(refund_bill, success, response)
+  def create_billing_attempt(refund_bill, response)
     BillingAttempt.create!(
       bill: refund_bill,
       payment_method_details: payment_method_details,
-      status: success ? :success : :failed,
-      response: response
+      status: response.success? ? :success : :failed,
+      response: response.success? ? response.authorization : response.message
     )
+  end
+
+  def gateway
+    @gateway ||= CyberSourceGateway.new
   end
 end

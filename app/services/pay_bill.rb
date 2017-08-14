@@ -15,10 +15,12 @@ class PayBill
 
     if bill.amount.zero?
       create_bill_for_next_period
-      bill.tap(&:paid!)
+      bill.paid!
     else
-      charge
+      pay_bill
     end
+
+    bill
   end
 
   private
@@ -29,29 +31,35 @@ class PayBill
     !bill.pending? && !bill.problem?
   end
 
-  def charge
+  def pay_bill
     raise MissingPaymentMethod, 'could not pay bill without credit card' unless payment_method
 
-    success, response = payment_method.charge(bill.amount)
-    create_billing_attempt(success, response)
+    response = gateway.purchase(bill.amount, payment_method.current_details)
 
-    BillingLogger.charge(bill, success)
-
-    if success
-      bill.update authorization_code: response
-      bill.paid!
-      create_bill_for_next_period
-      fix_problem_bills
+    BillingLogger.charge(bill, response.success?)
+    if response.success?
+      process_successful_response(response)
     else
-      bill.problem!
-      Raven.capture_message 'Unsuccessful charge', extra: {
-        message: response,
-        bill: bill.id,
-        amount: bill.amount
-      }
+      process_unsuccessful_response(response)
     end
+  end
 
-    bill
+  def process_successful_response(response)
+    create_billing_attempt(response)
+    bill.update authorization_code: response.authorization
+    bill.paid!
+    create_bill_for_next_period
+    fix_problem_bills
+  end
+
+  def process_unsuccessful_response(response)
+    create_billing_attempt(response)
+    bill.problem!
+    Raven.capture_message 'Unsuccessful charge', extra: {
+      message: response.message,
+      bill: bill.id,
+      amount: bill.amount
+    }
   end
 
   def set_final_amount
@@ -66,12 +74,12 @@ class PayBill
     DiscountCalculator.new(bill.subscription).current_discount
   end
 
-  def create_billing_attempt(success, response)
+  def create_billing_attempt(response)
     BillingAttempt.create!(
       bill: bill,
       payment_method_details: payment_method.current_details,
-      status: success ? :success : :failed,
-      response: response
+      status: response.success? ? :success : :failed,
+      response: response.success? ? response.authorization : response.message
     )
   end
 
@@ -89,5 +97,9 @@ class PayBill
 
   def fix_problem_bills
     bill.site.bills_with_payment_issues.each(&:voided!)
+  end
+
+  def gateway
+    @gateway ||= CyberSourceGateway.new
   end
 end
