@@ -264,11 +264,11 @@ class Site < ActiveRecord::Base
     bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
   end
 
-  private
-
   def active_subscription
     active_paid_bill&.subscription
   end
+
+  private
 
   def generate_blank_static_assets
     GenerateAndStoreStaticScript.new(self, script_content: '').call
