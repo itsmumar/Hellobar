@@ -64,7 +64,7 @@ describe 'Bills requests' do
 
       context 'when cannot pay bill' do
         let!(:bill) { create :bill, :problem, site: site }
-        let(:card) { bill.payment_method_detail }
+        let(:credit_card) { bill.credit_card }
 
         before { stub_cyber_source :purchase, success?: false }
 
@@ -74,7 +74,7 @@ describe 'Bills requests' do
           expect(response)
             .to redirect_to edit_site_path(site, should_update_card: true, anchor: 'problem-bill')
           expect(flash[:alert])
-            .to eql "There was a problem while charging your credit card ending in #{ card.last_digits }." \
+            .to eql "There was a problem while charging your credit card ending in #{ credit_card.last_digits }." \
                     ' You can fix this by adding another credit card'
 
           expect(bill.reload).not_to be_paid
