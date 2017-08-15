@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
 
   delegate :url_helpers, to: 'Rails.application.routes'
 
-  attr_accessor :legacy_migration, :timezone, :is_impersonated
+  attr_accessor :timezone, :is_impersonated
 
   ACTIVE_STATUS = 'active'.freeze
   TEMPORARY_STATUS = 'temporary'.freeze
@@ -80,12 +80,6 @@ class User < ActiveRecord::Base
     User.create email: email,
                 status: TEMPORARY_STATUS,
                 password: password, password_confirmation: password
-  end
-
-  # dont require the password virtual attribute to be present
-  # if we are migrating users from the legacy DB
-  def password_required?
-    legacy_migration ? false : super
   end
 
   def can_view_exit_intent_modal?
