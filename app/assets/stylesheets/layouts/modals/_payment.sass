@@ -205,10 +205,23 @@
 
       /*-----------  Pro  -----------*/
 
-      &.pro, &.pro_comped, &.pro_managed
-
+      &.pro_managed
         .payment-sidebar
+          header
+            background-color: $purple
 
+          input:checked + label:before
+            border-color: $purple
+            background-color: $purple
+
+          > a
+            color: $purple
+
+            &:hover
+              color: lighten($purple, 5%)
+
+      &.pro, &.pro_comped
+        .payment-sidebar
           header
             background-color: $green
 
