@@ -21,7 +21,7 @@ class SyncCreditCardsReferences < ActiveRecord::Migration
 
   def find_or_create_credit_card(details)
     raise 'Details not found' unless details
-    credit_card = CreditCard.where(details_id: details.id).first
+    credit_card = CreditCard.unscoped.where(details_id: details.id).first
     return credit_card if credit_card
     create_credit_card(details)
   end

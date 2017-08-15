@@ -3,8 +3,6 @@ class PaymentMethod < ActiveRecord::Base
   has_many :details, -> { order 'id' }, class_name: 'PaymentMethodDetails'
   has_many :subscriptions
 
-  acts_as_paranoid
-
   delegate :name, to: :current_details, allow_nil: true
 
   def current_details
