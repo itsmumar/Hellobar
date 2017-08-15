@@ -1,6 +1,6 @@
 class ApiSerializer
   class UserStateSerializer < ActiveModel::Serializer
-    attributes :user, :sites, :site_memberships, :rules, :site_elements, :payment_methods
+    attributes :user, :sites, :site_memberships, :rules, :site_elements, :credit_cards
 
     def rules
       rules = sites.map(&:rules).flatten

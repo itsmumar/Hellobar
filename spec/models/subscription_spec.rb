@@ -201,10 +201,10 @@ describe Subscription do
   describe '#currently_on_trial?' do
     let(:bill) { create(:pro_bill, :paid) }
 
-    context 'when subscription amount is not 0 and has a paid bill but no payment method' do
+    context 'when subscription amount is not 0 and has a paid bill but no credit card' do
       before do
         bill.update_attribute(:amount, 0)
-        bill.subscription.payment_method = nil
+        bill.subscription.credit_card = nil
       end
 
       specify { expect(bill.subscription).to be_currently_on_trial }

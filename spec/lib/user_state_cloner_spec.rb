@@ -49,12 +49,6 @@ describe UserStateCloner, '#save' do
     }.to change(SiteElement, :count).by(11)
   end
 
-  it 'creates the payment methods' do
-    expect {
-      UserStateCloner.new(json).save
-    }.to change(PaymentMethod, :count).by(1)
-  end
-
   it 'upgrades the site to pro' do
     expect {
       UserStateCloner.new(json).save

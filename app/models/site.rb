@@ -232,7 +232,7 @@ class Site < ActiveRecord::Base
       Subscription::Free::Capabilities.new(nil, self)
   end
 
-  def requires_payment_method?
+  def requires_credit_card?
     return false unless current_subscription
     return false if current_subscription.amount == 0
     true

@@ -84,7 +84,8 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :payment_methods, only: %i[index create update]
+  resources :credit_cards, only: %i[index]
+  resource :subscription, only: %i[create update]
   resources :bills, only: :show do
     put :pay, on: :member
   end
@@ -118,7 +119,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :payment_method_details, only: [:destroy]
+    resources :credit_cards, only: [:destroy]
 
     resources :users, only: %i[index show destroy] do
       resources :sites, only: [:update] do

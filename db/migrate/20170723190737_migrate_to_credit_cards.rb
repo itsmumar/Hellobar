@@ -8,7 +8,7 @@ class MigrateToCreditCards < ActiveRecord::Migration
         data = details.data.dup
         data['number'].gsub! /[^\d]/, ''
         data['address'] ||= data.delete('address1')
-        credit_card = CreditCard.create!(data.merge(details: details, user: payment_method.user, deleted_at: payment_method.deleted_at))
+        credit_card = CreditCard.create!(data.merge(details_id: details.id, user: payment_method.user, deleted_at: payment_method.deleted_at))
         payment_method.subscriptions.update_all credit_card_id: credit_card.id
         details.billing_attempts.update_all credit_card_id: credit_card.id
       end

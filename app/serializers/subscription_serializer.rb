@@ -1,7 +1,10 @@
 class SubscriptionSerializer < ActiveModel::Serializer
   attributes :schedule, :type, :name, :yearly_amount, :monthly_amount
-  attributes :trial, :payment_method_details_id, :payment_method_number
+  attributes :trial, :credit_card_id, :credit_card_last_digits
   attributes :payment_valid
+
+  delegate :credit_card, to: :object
+  delegate :last_digits, to: :credit_card, prefix: true, allow_nil: true
 
   def schedule
     object.values[:schedule]
@@ -23,16 +26,6 @@ class SubscriptionSerializer < ActiveModel::Serializer
   def monthly_amount
     amount = object.class.estimated_price(scope, :monthly)
     amount_to_string(amount)
-  end
-
-  def payment_method_details_id
-    return unless object.payment_method.try(:current_details)
-    object.payment_method.current_details.id
-  end
-
-  def payment_method_number
-    return unless object.payment_method.try(:current_details)
-    (object.payment_method.current_details.data.try(:[], 'number') || '')[-4..-1]
   end
 
   def trial

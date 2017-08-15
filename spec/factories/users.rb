@@ -39,9 +39,9 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_payment_method do
+    trait :with_credit_card do
       after(:create) do |user|
-        create :payment_method, user: user
+        create :credit_card, user: user
       end
     end
 

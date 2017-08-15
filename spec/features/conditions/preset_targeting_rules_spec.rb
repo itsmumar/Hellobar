@@ -49,8 +49,8 @@ feature 'Users can use site element targeting rule presets', :js do
     before { stub_cyber_source :purchase }
 
     before do
-      payment_method = create(:payment_method, user: @user)
-      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, payment_method).call
+      credit_card = create(:credit_card, user: @user)
+      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
       site.rules << custom_rule

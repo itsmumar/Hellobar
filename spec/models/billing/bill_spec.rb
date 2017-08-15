@@ -46,19 +46,16 @@ describe Bill do
     expect(bill.status_set_at).to be_within(2).of(Time.current)
   end
 
-  it 'should take the payment_method grace period into account when grace_period_allowed' do
+  it 'should take the credit_card grace period into account when grace_period_allowed' do
     now = Time.current
     bill = create(:pro_bill, bill_at: now)
     expect(bill.grace_period_allowed?).to eq(true)
     expect(bill.bill_at).to be_within(5.minutes).of(now)
     expect(bill.due_at).to eq(bill.bill_at)
-    payment_method = PaymentMethod.new
-    payment_method_details = CyberSourceCreditCard.new
-    payment_method.details << payment_method_details
-    expect(payment_method_details.grace_period).to be > 5.minutes
-    expect(bill.due_at(payment_method)).to eq(bill.bill_at + payment_method_details.grace_period)
+    credit_card = CreditCard.new
+    expect(bill.due_at(credit_card)).to eq(bill.bill_at + credit_card.grace_period)
     bill.grace_period_allowed = false
-    expect(bill.due_at(payment_method)).to eq(bill.bill_at)
+    expect(bill.due_at(credit_card)).to eq(bill.bill_at)
   end
 
   describe '#during_trial_subscription?' do
@@ -70,7 +67,7 @@ describe Bill do
     it 'should be on trial subscription' do
       bill = create(:pro_bill, :paid)
       bill.update_attribute(:amount, 0)
-      bill.subscription.payment_method = nil
+      bill.subscription.credit_card = nil
       expect(bill.during_trial_subscription?).to be_truthy
     end
   end
@@ -136,7 +133,7 @@ describe Bill do
           bill = create(:pro_bill, status: :paid)
           bill.site.users << user
           user.reload
-          bill.subscription.payment_method.update(user: user)
+          bill.subscription.credit_card.update(user: user)
           bill.update(discount: bill.calculate_discount)
           bill
         end
@@ -172,13 +169,13 @@ describe Bill do
 
     context 'when past due but have not tried billing yet' do
       let(:bill) { create :past_due_bill }
-      let(:payment_method) { create :payment_method }
+      let(:credit_card) { create :credit_card }
       before { bill.billing_attempts.delete_all }
 
       specify { expect(bill).to be_past_due }
     end
 
-    context 'when past due and there is no payment method' do
+    context 'when past due and there is no credit card' do
       let(:bill) { create :pro_bill }
       before { bill.billing_attempts.delete_all }
 

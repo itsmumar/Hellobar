@@ -28,7 +28,7 @@ class @PaymentConfirmationModal extends Modal
     old_subscription = @options.data.old_subscription
     bill = @options.data
 
-    chargeDescription = "Your card ending in #{subscription.payment_method_number} "
+    chargeDescription = "Your card ending in #{subscription.credit_card_last_digits} "
 
     if bill && bill.amount > 0 && bill.status == "paid"
       chargeDescription += "has been charged $#{parseInt(bill.amount).toFixed(2)}."

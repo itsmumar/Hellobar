@@ -1,5 +1,5 @@
 class UserStateCloner
-  attr_reader :json, :user, :sites, :site_memberships, :rules, :site_elements, :payment_methods
+  attr_reader :json, :user, :sites, :site_memberships, :rules, :site_elements
 
   def initialize(json)
     @json = JSON.parse(json).with_indifferent_access
@@ -12,7 +12,6 @@ class UserStateCloner
     @site_memberships = build_site_memberships(json[:site_memberships])
     @rules = build_rules(json[:rules])
     @site_elements = build_site_elements(json[:site_elements])
-    @payment_methods = build_payment_methods(json[:payment_methods])
   end
 
   def save
@@ -23,7 +22,6 @@ class UserStateCloner
     site_memberships.each(&:save)
     rules.each(&:save)
     site_elements.each(&:save!)
-    payment_methods.each(&:save)
     ActiveRecord::Base.record_timestamps = true # generate timestamps
   rescue ActiveRecord::RecordNotUnique => _ # rubocop:disable Lint/HandleExceptions
     # just ignore
@@ -97,14 +95,6 @@ class UserStateCloner
       element.attributes = site_element_json
       element.font = font
       element
-    end
-  end
-
-  def build_payment_methods(payment_methods_json)
-    payment_methods_json.map do |payment_method_json|
-      payment_method = PaymentMethod.find_or_initialize_by(id: payment_method_json[:id])
-      payment_method.attributes = payment_method_json
-      payment_method
     end
   end
 end

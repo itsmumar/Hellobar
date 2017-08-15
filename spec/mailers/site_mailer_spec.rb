@@ -12,7 +12,8 @@ describe SiteMailer do
       create :site_statistics,
         site_element_id: site_element.id,
         views: views,
-        conversions: conversions
+        conversions: conversions,
+        first_date: EmailDigestHelper.date_of_previous('Sunday') - 6.days
     end
 
     let(:email_subject) do

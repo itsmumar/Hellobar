@@ -98,26 +98,10 @@ describe BillingReport, :freeze do
       end
     end
 
-    describe '#no_details' do
+    describe '#cannot_pay' do
       specify do
-        expect { report.no_details }.to log [
-          "#{ attempting_msg } Skipped: no payment method details available"
-        ]
-      end
-    end
-
-    describe '#no_payment_method' do
-      specify do
-        expect { report.no_payment_method }.to log [
-          "#{ attempting_msg } Skipped: no payment method available"
-        ]
-      end
-    end
-
-    describe '#no_payment_method' do
-      specify do
-        expect { report.no_payment_method }.to log [
-          "#{ attempting_msg } Skipped: no payment method available"
+        expect { report.cannot_pay }.to log [
+          "#{ attempting_msg } Skipped: no credit card available"
         ]
       end
     end

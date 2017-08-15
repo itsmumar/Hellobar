@@ -25,13 +25,13 @@ describe PayRecurringBills do
     end
 
     context 'subscription should not be inactive because of billing' do
-      let(:payment_method) { create :payment_method }
-      let(:site) { create :site, user: payment_method.user }
+      let(:credit_card) { create :credit_card }
+      let(:site) { create :site, user: credit_card.user }
 
       before { stub_cyber_source :purchase }
 
       specify 'tries to charge users 3 days before the subscription ends', freeze: '2017-07-01 11:00 UTC' do
-        ChangeSubscription.new(site, { subscription: 'pro' }, payment_method).call
+        ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
         expect(site).to be_capable_of :pro
 
         travel_to '2017-07-28 13:00 UTC' do
@@ -97,30 +97,15 @@ describe PayRecurringBills do
     end
 
     context 'with bill which has no payment method' do
-      let!(:bill_without_payment_method) { create :bill }
+      let!(:bill_without_credit_card) { create :bill }
 
-      before { bill_without_payment_method.payment_method.delete }
-
-      specify do
-        expect(report).to receive(:no_payment_method)
-
-        expect { service.call }
-          .not_to change { bill_without_payment_method.reload.status }
-      end
-
-      include_examples 'do not pay bill'
-    end
-
-    context 'with bill which has no payment details' do
-      let!(:bill_without_payment_details) { create :bill }
-
-      before { bill_without_payment_details.payment_method.details.delete_all }
+      before { bill_without_credit_card.credit_card.destroy }
 
       specify do
-        expect(report).to receive(:no_details)
+        expect(report).to receive(:cannot_pay)
 
         expect { service.call }
-          .not_to change { bill_without_payment_details.reload.status }
+          .not_to change { bill_without_credit_card.reload.status }
       end
 
       include_examples 'do not pay bill'

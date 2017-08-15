@@ -20,7 +20,7 @@ class Bill < ActiveRecord::Base
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
   has_one :site, through: :subscription, inverse_of: :bills
-  has_one :payment_method, through: :subscription
+  has_one :credit_card, through: :subscription
 
   validates :subscription, presence: true
   delegate :site_id, to: :subscription
@@ -41,7 +41,7 @@ class Bill < ActiveRecord::Base
   scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
 
   def during_trial_subscription?
-    subscription.amount != 0 && subscription.payment_method.nil? && amount == 0 && paid?
+    subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
   end
 
   def check_amount
@@ -63,24 +63,23 @@ class Bill < ActiveRecord::Base
     super.to_sym
   end
 
-  def due_at(payment_method = nil)
-    if grace_period_allowed && payment_method&.current_details&.grace_period
-      return bill_at + payment_method.current_details.grace_period
-    end
-    # Otherwise it is due now
-    bill_at
+  def can_pay?
+    credit_card&.token.present?
   end
 
-  def past_due?(payment_method = nil)
-    Time.current >= due_at(payment_method)
+  def due_at(credit_card = nil)
+    # it is due now
+    return bill_at unless grace_period_allowed && credit_card&.grace_period
+
+    bill_at + credit_card.grace_period
   end
 
-  def paid_with_payment_method_detail
-    successful_billing_attempt.try(:payment_method_details)
+  def past_due?(credit_card = nil)
+    Time.current >= due_at(credit_card)
   end
 
-  def payment_method_detail
-    billing_attempts.last&.payment_method_details
+  def paid_with_credit_card
+    successful_billing_attempt&.credit_card
   end
 
   def successful_billing_attempt
