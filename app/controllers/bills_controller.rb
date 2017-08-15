@@ -14,9 +14,8 @@ class BillsController < ApplicationController
     PayBill.new(@bill).call
 
     if @bill.problem?
-      card = @bill.payment_method_detail
       flash[:alert] =
-        "There was a problem while charging your credit card ending in #{ card.last_digits }. " \
+        "There was a problem while charging your credit card ending in #{ @bill.credit_card.last_digits }. " \
         'You can fix this by adding another credit card'
       redirect_to edit_site_path(@bill.site, should_update_card: true, anchor: 'problem-bill')
     else

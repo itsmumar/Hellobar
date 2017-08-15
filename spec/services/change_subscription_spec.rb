@@ -125,10 +125,10 @@ describe ChangeSubscription, :freeze do
         end
 
         it 'updates payment method' do
-          site.current_subscription.update payment_method: create(:payment_method)
+          site.current_subscription.update credit_card: create(:credit_card)
 
           expect { change_subscription('pro', 'monthly') }
-            .to change { site.current_subscription.reload.payment_method }
+            .to change { site.current_subscription.reload.credit_card }
         end
 
         context 'when there is a problem bill' do
