@@ -12,8 +12,6 @@
 #= require tablesorter
 #= require serialize-json
 
-#= require content_upgrade_previews
-
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
 #= require admin_metrics
@@ -32,7 +30,6 @@
 #= require summary
 #= require improve
 #= require sites_controller
-#= require upgrade_modal_initializer
 #= require enforce_restrictions_initializer
 #= require flash_message_initializer
 #= require install_check

@@ -86,7 +86,9 @@ Rails.application.routes.draw do
 
   resources :credit_cards, only: %i[index]
   resource :subscription, only: %i[create update]
-  resources :bills, only: :show
+  resources :bills, only: :show do
+    put :pay, on: :member
+  end
 
   get 'continue_create_site', to: 'sites#create', as: :continue_create_site
   get 'sites/:id/install', to: 'sites#install', as: :site_install
@@ -154,7 +156,6 @@ Rails.application.routes.draw do
   get '/amazon' => 'pages#use_cases'
   get '/terms-of-use' => 'pages#terms_of_use'
   get '/privacy-policy' => 'pages#privacy_policy'
-  get '/migrate-faq' => 'pages#migrate_faq'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get '/heartbeat' => 'heartbeat#index'

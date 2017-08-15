@@ -1,6 +1,10 @@
-hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], function (hellobar) {
+hellobar.defineModule('tracking.external.googleTagManager',
+  ['hellobar', 'base.environment'],
+  function (hellobar, environment) {
 
-  const configuration = hellobar.createModuleConfiguration({ provider: 'function' });
+  const configuration = hellobar.createModuleConfiguration({
+    provider: 'function'
+  });
 
   const gtm = () => {
     const provider = configuration.provider();
@@ -17,10 +21,16 @@ hellobar.defineModule('tracking.external.googleTagManager', ['hellobar'], functi
   };
 
   function send(externalTracking) {
-    const event = 'HelloBarEvent'
     const { category, action, label } = externalTracking;
+    const event = { event: 'HelloBarEvent', category, action, label };
 
-    available() && gtm().push({ event, category, action, label });
+    const codes = environment.utmCodes();
+
+    for (let code in codes) {
+      event[code] = codes[code];
+    }
+
+    available() && gtm().push(event);
   };
 
   /**

@@ -423,6 +423,7 @@ describe Site do
     let(:user) { create :user }
     let(:site) { create :site, user: user }
     let(:credit_card) { create :credit_card, user: user }
+    let(:last_bill) { site.bills.last }
 
     def change_subscription(subscription, schedule = 'monthly')
       ChangeSubscription.new(
@@ -432,12 +433,13 @@ describe Site do
       ).call
     end
 
-    before { stub_cyber_source :purchase, success?: false }
+    before { stub_cyber_source :purchase }
 
     it 'returns bills that are problem' do
       expect(site.bills_with_payment_issues).to be_empty
-      bill = change_subscription('pro')
-      expect(site.bills_with_payment_issues).to match_array [bill]
+      change_subscription('pro')
+      last_bill.problem!
+      expect(site.bills_with_payment_issues).to match_array [last_bill]
     end
   end
 

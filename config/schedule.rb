@@ -14,7 +14,7 @@ every :day, at: '1:00pm', roles: [:cron] do
   rake 'billing:run'
 end
 
-every :monday, at: '3:00pm', roles: [:cron] do
+every :monday, at: '2:00pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
 end
 

@@ -17,6 +17,10 @@ class CreditCard < ActiveRecord::Base
     %w[zip zip], %w[address address], %w[city city], %w[state state], %w[country country], %w[address address1]
   ]
 
+  def name
+    "#{ first_name } #{ last_name }"
+  end
+
   def description
     "#{ brand.capitalize } ending in #{ last_digits }"
   end

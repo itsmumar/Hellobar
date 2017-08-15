@@ -35,25 +35,6 @@ describe Subscription::Capabilities do
     expect(site).to be_capable_of :pro
   end
 
-  context 'when on a paid plan and payment has not been made' do
-    before { expect { change_subscription('pro', credit_card) }.to make_gateway_call(:purchase).and_fail }
-
-    it 'returns Free capabilities' do
-      expect(site).to be_capable_of :free
-    end
-  end
-
-  context 'when a payment issue has been resolved' do
-    before { expect { change_subscription('pro', credit_card) }.to make_gateway_call(:purchase).and_fail }
-
-    it 'returns the previous capabilities' do
-      expect(site.capabilities.remove_branding?).to be_falsey
-      expect(site.capabilities.closable?).to be_falsey
-      expect(site.site_elements.all?(&:show_branding)).to be_truthy
-      expect(site.site_elements.all?(&:closable)).to be_truthy
-    end
-  end
-
   context 'when successfully changed subscription' do
     before { expect { change_subscription('pro', credit_card) }.to make_gateway_call(:purchase).and_succeed }
 
@@ -62,16 +43,6 @@ describe Subscription::Capabilities do
       expect(site.capabilities.closable?).to be_truthy
       expect(site.site_elements.none?(&:show_branding)).to be_truthy
       expect(site.site_elements.none?(&:closable)).to be_truthy
-    end
-  end
-
-  context 'when payment is not due yet' do
-    it 'returns new capabilities' do
-      expect { change_subscription('pro', credit_card) }.to make_gateway_call(:purchase).and_fail
-
-      expect(site).to be_capable_of :free
-      last_bill.paid!
-      expect(site).to be_capable_of :pro
     end
   end
 
