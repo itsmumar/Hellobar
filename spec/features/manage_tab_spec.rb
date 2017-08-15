@@ -43,20 +43,4 @@ feature 'Manage Bars', js: true do
       expect(page).to have_content('A/B test a new bar for this rule')
     end
   end
-
-  context 'user updates' do
-    before { create(:site_element, rule: @rule) }
-
-    it 'show update to old users' do
-      @user.update_attributes(wordpress_user_id: 12345)
-      visit site_site_elements_path(@site)
-      expect(page).to have_content('Where did all my views and conversions go')
-    end
-
-    it 'shouldnt show update to new users' do
-      @user.update_attributes(wordpress_user_id: nil)
-      visit site_site_elements_path(@site)
-      expect(page).not_to have_content('Where did all my views and conversions go')
-    end
-  end
 end

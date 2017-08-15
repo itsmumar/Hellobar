@@ -10,8 +10,6 @@ if ENV['COVERAGE'] || ENV['CI']
     add_group 'System', 'app/system'
     add_group 'Services', 'app/services'
     add_group 'Jobs', 'app/jobs'
-    add_filter '/lib/legacy_migrator/'
-    add_filter '/lib/legacy_migrator.rb'
     add_filter '/lib/test_site.rb'
   end
 end
