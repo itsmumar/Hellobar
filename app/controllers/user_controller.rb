@@ -72,7 +72,7 @@ class UserController < ApplicationController
         format.html do
           flash[:success] = 'Account successfully deleted.'
           sign_out @user
-          redirect_to root_path
+          redirect_to get_started_path
         end
         format.json { render json: { success: true }, status: :ok }
       end
