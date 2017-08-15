@@ -131,7 +131,7 @@ Rails.application.routes.draw do
 
       resources :bills, only: [:show] do
         put 'void'
-        put 'paid'
+        put 'pay'
         put 'refund'
       end
     end

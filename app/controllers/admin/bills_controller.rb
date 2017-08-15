@@ -13,7 +13,7 @@ class Admin::BillsController < AdminController
     redirect_to admin_user_path(params[:user_id])
   end
 
-  def paid
+  def pay
     bill = Bill.find(params[:bill_id])
     PayBill.new(bill).call
     flash[:success] = 'Bill is successfully paid'
