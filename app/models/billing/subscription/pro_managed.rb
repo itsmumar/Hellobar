@@ -38,6 +38,7 @@ class Subscription
       def defaults
         {
           name: 'Pro Managed',
+          label: 'MNG',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: nil, # after this many visits in a month
