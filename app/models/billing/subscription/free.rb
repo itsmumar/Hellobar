@@ -1,5 +1,9 @@
 class Subscription
   class Free < Base
+    def free?
+      true
+    end
+
     class Capabilities < Subscription::Capabilities
     end
 

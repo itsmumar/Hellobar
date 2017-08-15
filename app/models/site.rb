@@ -221,7 +221,7 @@ class Site < ActiveRecord::Base
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
-      Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
+      current_subscription.free?
   end
 
   # in case of downgrade user can have e.g Pro capabilities with Free subscription
