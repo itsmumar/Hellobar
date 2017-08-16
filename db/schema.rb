@@ -68,17 +68,15 @@ ActiveRecord::Schema.define(version: 20170814135827) do
   add_index "autofills", ["site_id"], name: "index_autofills_on_site_id", using: :btree
 
   create_table "billing_attempts", force: :cascade do |t|
-    t.integer  "bill_id",                   limit: 4
-    t.integer  "payment_method_details_id", limit: 4
-    t.integer  "status",                    limit: 4
-    t.string   "response",                  limit: 255
+    t.integer  "bill_id",        limit: 4
+    t.integer  "status",         limit: 4
+    t.string   "response",       limit: 255
     t.datetime "created_at"
-    t.integer  "credit_card_id",            limit: 4
+    t.integer  "credit_card_id", limit: 4
   end
 
   add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
   add_index "billing_attempts", ["credit_card_id"], name: "index_billing_attempts_on_credit_card_id", using: :btree
-  add_index "billing_attempts", ["payment_method_details_id"], name: "index_billing_attempts_on_payment_method_details_id", using: :btree
 
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id",             limit: 4
@@ -179,10 +177,8 @@ ActiveRecord::Schema.define(version: 20170814135827) do
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.integer  "details_id", limit: 4
   end
 
-  add_index "credit_cards", ["details_id"], name: "index_credit_cards_on_details_id", using: :btree
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
   create_table "identities", force: :cascade do |t|
@@ -230,25 +226,6 @@ ActiveRecord::Schema.define(version: 20170814135827) do
     t.integer "last_prop_processed",            limit: 4, null: false
     t.integer "last_visitor_user_id_processed", limit: 4, null: false
   end
-
-  create_table "payment_method_details", force: :cascade do |t|
-    t.integer  "payment_method_id", limit: 4
-    t.string   "type",              limit: 255
-    t.text     "data",              limit: 16777215
-    t.datetime "created_at"
-  end
-
-  add_index "payment_method_details", ["payment_method_id"], name: "index_payment_method_details_on_payment_method_id", using: :btree
-
-  create_table "payment_methods", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "deleted_at"
-  end
-
-  add_index "payment_methods", ["deleted_at"], name: "index_payment_methods_on_deleted_at", using: :btree
-  add_index "payment_methods", ["user_id"], name: "index_payment_methods_on_user_id", using: :btree
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
@@ -417,14 +394,12 @@ ActiveRecord::Schema.define(version: 20170814135827) do
     t.integer  "visit_overage_unit",   limit: 4
     t.decimal  "visit_overage_amount",             precision: 5, scale: 2
     t.datetime "created_at"
-    t.integer  "payment_method_id",    limit: 4
     t.datetime "trial_end_date"
     t.integer  "credit_card_id",       limit: 4
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["credit_card_id"], name: "index_subscriptions_on_credit_card_id", using: :btree
-  add_index "subscriptions", ["payment_method_id"], name: "index_subscriptions_on_payment_method_id", using: :btree
   add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
 
   create_table "user_onboarding_statuses", force: :cascade do |t|
