@@ -55,9 +55,14 @@ describe Admin::UsersController do
 
   describe 'GET admin_user_path' do
     let(:user) { create :user }
+    let(:site) { create :site, :pro, user: user }
 
     before do
       stub_current_admin(admin)
+      create :pro_bill, subscription: site.current_subscription
+      create :refund_bill, subscription: site.current_subscription
+      site_with_invoice_information = create :site, :pro, user: user, invoice_information: 'foo bar'
+      create :pro_bill, subscription: site_with_invoice_information.current_subscription
     end
 
     it 'shows the specified user' do

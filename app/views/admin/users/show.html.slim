@@ -94,7 +94,7 @@ div#user_profile
                     = link_to("view", admin_user_bill_path(@user, bill))
                 td
                   - if bill.status == :pending
-                    = link_to "pay", admin_user_bill_paid_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
+                    = link_to "pay", admin_user_bill_pay_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
                     br
 
                   - if bill.status != :voided && bill.amount == 0
