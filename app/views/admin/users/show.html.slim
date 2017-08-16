@@ -65,6 +65,7 @@ div#user_profile
           table
             tr
               th ID
+              th Subscription
               th Amount
               th Status
               th Due At
@@ -74,6 +75,7 @@ div#user_profile
             - bills_for(site).each do |bill, refunds|
               tr
                 td= bill.id
+                td= bill.subscription.values[:name]
                 td
                   = bill.amount
                   - if context_for_trial(@user, bill)
@@ -91,9 +93,15 @@ div#user_profile
                   - if bill.status == :paid && bill.amount != 0
                     = link_to("view", admin_user_bill_path(@user, bill))
                 td
-                  - if bill.status == :pending && bill.amount != 0
+                  - if bill.status == :pending
+                    = link_to "pay", admin_user_bill_pay_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
+                    br
+
+                  - if bill.status != :voided && bill.amount == 0
                     = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
-                  - elsif bill.status == :paid && !bill.instance_of?(Bill::Refund) && bill.amount != 0
+                    br
+
+                  - if bill.status == :paid && !bill.instance_of?(Bill::Refund) && bill.amount != 0
                     a.refund_link data-id=bill.id refund
                     = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put, html: {class: "hidden"} do |f|
                       = f.label "Refund Amount: "

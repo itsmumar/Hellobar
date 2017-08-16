@@ -46,6 +46,7 @@ class Subscription
       def defaults
         {
           name: 'Pro',
+          label: 'PRO',
           monthly_amount: 15.0,
           yearly_amount: 149.0,
           visit_overage: 250_000, # after this many visits in a month

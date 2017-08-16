@@ -34,6 +34,15 @@ describe 'Admin Bills requests' do
       end
     end
 
+    describe 'PUT #pay' do
+      it 'pays a bill' do
+        put admin_user_bill_pay_path(user_id: user, bill_id: bill)
+
+        expect(response).to redirect_to admin_user_path(user)
+        expect(bill.reload).to be_paid
+      end
+    end
+
     describe 'PUT #refund' do
       before { stub_cyber_source :refund }
 

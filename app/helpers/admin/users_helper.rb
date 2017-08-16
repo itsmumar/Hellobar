@@ -1,15 +1,12 @@
 module Admin::UsersHelper
   def bills_for(site)
     bills = Hash.new { |h, k| h[k] = [] } # Bill => [Refunds]
-    bills_for_non_free_subscription = site.bills.select do |b|
-      b.subscription.nil? || !b.subscription.instance_of?(Subscription::Free)
-    end
 
-    bills_for_non_free_subscription.sort_by(&:bill_at).reverse.each do |bill|
+    site.bills.sort_by(&:bill_at).reverse.each do |bill|
       if bill.instance_of?(Bill::Refund)
         bills[bill.refunded_billing_attempt.bill] << bill
       else
-        bills[bill]
+        bills[bill] = []
       end
     end
     bills
@@ -55,7 +52,8 @@ module Admin::UsersHelper
   def site_title(site)
     trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date })" if site.current_subscription.trial_end_date
     subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
-    "#{ site.url } - #{ subscription_name }#{ trial_info }"
+    active_subscription_name = " (#{ site.active_subscription.values[:name] } is still active)" if site.active_subscription && site.current_subscription != site.active_subscription
+    "#{ site.url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name }"
   end
 
   private

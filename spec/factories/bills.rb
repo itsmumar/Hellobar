@@ -45,6 +45,7 @@ FactoryGirl.define do
     factory :refund_bill, class: 'Bill::Refund' do
       amount(-10)
       subscription
+      type 'Bill::Refund'
       refunded_bill { create :pro_bill, subscription: subscription }
       refunded_billing_attempt { refunded_bill.billing_attempts.last }
     end

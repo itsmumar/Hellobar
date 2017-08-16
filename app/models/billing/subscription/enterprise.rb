@@ -7,6 +7,7 @@ class Subscription
       def defaults
         {
           name: 'Enterprise',
+          label: 'ENT',
           monthly_amount: 99.0,
           yearly_amount: 999.0,
           visit_overage: nil, # unlimited

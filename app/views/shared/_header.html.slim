@@ -23,8 +23,8 @@
           - current_user.sites.sort_by(&:normalized_url).each do |site|
             li.padded
               - unless site.free?
-                div.pill class=site.current_subscription.values[:name]
-                  = site.current_subscription.values[:name][0..2]
+                div.pill class=site.current_subscription.values[:name].parameterize
+                  = site.current_subscription.values[:label]
 
               = active_link_to site.normalized_url, site_path(site)
 

@@ -221,7 +221,7 @@ class Site < ActiveRecord::Base
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
-      Subscription::Comparison.new(current_subscription, Subscription::Free.new).same_plan?
+      current_subscription.free?
   end
 
   # in case of downgrade user can have e.g Pro capabilities with Free subscription
@@ -264,11 +264,11 @@ class Site < ActiveRecord::Base
     bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
   end
 
-  private
-
   def active_subscription
     active_paid_bill&.subscription
   end
+
+  private
 
   def generate_blank_static_assets
     GenerateAndStoreStaticScript.new(self, script_content: '').call
