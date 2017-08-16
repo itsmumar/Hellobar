@@ -1,16 +1,15 @@
-describe 'PaymentMethods requests' do
+describe 'Subscription requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
 
   context 'when unauthenticated' do
-    before { create :payment_method, user: user }
+    before { create :credit_card, user: user }
 
-    describe 'GET :index' do
+    describe 'POST :create' do
       it 'responds with a redirect to the login page' do
-        get payment_methods_path
+        post subscription_path
 
-        expect(response).to be_a_redirect
-        expect(response.location).to include 'sign_in'
+        expect(response).to redirect_to(/sign_in/)
       end
     end
   end
@@ -20,42 +19,33 @@ describe 'PaymentMethods requests' do
       login_as user, scope: :user, run_callbacks: false
     end
 
-    describe 'GET :index' do
-      before { create :payment_method, user: user }
-
-      it 'responds with success' do
-        get payment_methods_path(format: :json)
-        expect(response).to be_successful
-      end
-    end
-
     describe 'POST :create' do
       before { stub_cyber_source :store, :purchase }
 
-      let(:payment_method_details) { create :payment_form_params }
+      let(:credit_card_params) { create :payment_form_params }
       let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
-          payment_method_details: payment_method_details,
+          credit_card: credit_card_params,
           billing: billing_params,
           format: :json
         }
       end
 
-      it 'creates payment method' do
+      it 'creates credit card' do
         expect {
-          post payment_methods_path, params
-        }.to change { user.payment_methods.count }.by(1)
+          post subscription_path, params
+        }.to change { user.credit_cards.count }.by(1)
 
         expect(response).to be_successful
       end
 
       context 'when invalid' do
-        let(:payment_method_details) { {} }
+        let(:credit_card_params) { {} }
 
         it 'responds with errors' do
-          post payment_methods_path, params
+          post subscription_path, params
 
           expect(response).not_to be_successful
           expect(json).to match(
@@ -84,7 +74,7 @@ describe 'PaymentMethods requests' do
         end
 
         it 'responds with errors' do
-          post payment_methods_path, params
+          post subscription_path, params
 
           expect(response).not_to be_successful
         end
@@ -94,52 +84,30 @@ describe 'PaymentMethods requests' do
     describe 'PUT :update' do
       before { stub_cyber_source :update, :purchase }
 
-      let!(:payment_method) { create :payment_method, user: user }
+      let!(:credit_card) { create :credit_card, user: user }
+      let!(:new_credit_card) { create :credit_card, user: user }
 
-      let(:payment_method_details) { create :payment_form_params }
       let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
       let(:params) do
         {
           site_id: site.id,
-          payment_method_details: payment_method_details,
+          credit_card_id: new_credit_card.id,
           billing: billing_params,
           format: :json
         }
       end
 
-      it 'creates new credit card' do
-        expect { put payment_method_path(payment_method, params) }
-          .to change { user.payment_method_details.count }.by(1)
+      before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
 
-        expect(response).to be_successful
-      end
+      it 'links new credit card to subscription' do
+        expect { put subscription_path(params) }
+          .to change { site.current_subscription.credit_card }
 
-      it 'changes subscription to Pro' do
-        expect { put payment_method_path(payment_method, params) }
-          .to change { site.current_subscription }
-
+        expect(site.current_subscription.credit_card).to eql new_credit_card
         expect(site.current_subscription).to be_a Subscription::Pro
       end
 
-      context 'without payment_method_details' do
-        let(:payment_method_details) { {} }
-
-        it 'does not create new credit card' do
-          expect { put payment_method_path(payment_method, params) }
-            .not_to change { user.payment_method_details.count }
-
-          expect(response).to be_successful
-        end
-
-        it 'changes subscription to Pro' do
-          expect { put payment_method_path(payment_method, params) }
-            .to change { site.current_subscription }
-
-          expect(site.current_subscription).to be_a Subscription::Pro
-        end
-      end
-
-      context 'when upgrading' do
+      context 'when subscription type is changed' do
         let!(:previous_subscription) { create :subscription, :free, site: site }
 
         it 'tracks upgrade event in analytics' do
@@ -150,7 +118,7 @@ describe 'PaymentMethods requests' do
           )
           expect(Analytics).to receive(:track).with(:user, user.id, 'Upgraded')
 
-          expect { put payment_method_path(payment_method, params) }
+          expect { put subscription_path(params) }
             .to change { site.current_subscription }
         end
       end

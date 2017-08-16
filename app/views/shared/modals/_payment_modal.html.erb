@@ -41,8 +41,8 @@
               <a class="different-plan">Choose a different plan</a>
             </div>
 
-            <div id="payment-details">
-              {{> cc-payment-details this}}
+            <div id="credit-card-details" class="credit_card_form">
+              {{> credit-card-details this}}
             </div>
 
           </div>
@@ -57,4 +57,4 @@
   </div>
 </script>
 
-<%= render 'shared/modals/payment_details' -%>
+<%= render 'shared/modals/credit_card_details' -%>

@@ -3,7 +3,6 @@ require 'discount_calculator'
 class Subscription < ActiveRecord::Base
   ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
-  belongs_to :payment_method
   belongs_to :credit_card
   belongs_to :site, touch: true
   belongs_to :user
@@ -40,7 +39,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def currently_on_trial?
-    amount != 0 && payment_method.nil? && active_bills.paid.free.any?
+    amount != 0 && credit_card.nil? && active_bills.paid.free.any?
   end
 
   def period
@@ -74,7 +73,7 @@ class Subscription < ActiveRecord::Base
 
   def mark_user_onboarding_as_bought_subscription!
     return unless capabilities.acts_as_paid_subscription? && (user || site)
-    (user || site.owners.unscoped.first).onboarding_status_setter.bought_subscription!
+    (user || site.owners.unscoped.first)&.onboarding_status_setter&.bought_subscription!
   end
 
   def <=> other

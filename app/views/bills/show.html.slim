@@ -16,10 +16,10 @@ main
       div
         address
           div= @site.url
-          - if @details.present?
+          - if @credit_card.present?
             br
-            = @details.data["first_name"] + ' ' + @details.data["last_name"]
-            = bill_address_info(@site, @details).html_safe
+            = @credit_card.name
+            = bill_address_info(@site, @credit_card).html_safe
 
     div.right
       strong Invoice:

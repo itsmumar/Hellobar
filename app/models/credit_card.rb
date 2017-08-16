@@ -2,7 +2,6 @@ class CreditCard < ActiveRecord::Base
   include ActiveMerchant::Billing::CreditCardMethods
 
   belongs_to :user
-  belongs_to :details, class_name: 'PaymentMethodDetails'
   has_many :subscriptions
   has_many :billing_attempts
 
@@ -17,6 +16,14 @@ class CreditCard < ActiveRecord::Base
   composed_of :billing_address, class_name: 'CreditCard::Address', mapping: [
     %w[zip zip], %w[address address], %w[city city], %w[state state], %w[country country], %w[address address1]
   ]
+
+  def name
+    "#{ first_name } #{ last_name }"
+  end
+
+  def description
+    "#{ brand.capitalize } ending in #{ last_digits }"
+  end
 
   def number=(value)
     self[:number] = self.class.mask(value).strip

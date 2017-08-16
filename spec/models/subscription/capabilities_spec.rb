@@ -1,7 +1,7 @@
 describe Subscription::Capabilities do
   let(:user) { create(:user) }
   let(:site) { create(:site) }
-  let(:payment_method) { create(:payment_method, user: user) }
+  let(:credit_card) { create(:credit_card, user: user) }
   let(:free) { create :subscription, :free, user: user, site: site }
   let(:pro) { create :subscription, :pro, user: user, site: site }
   let(:enterprise) { create :subscription, :enterprise, user: user, site: site }
@@ -10,15 +10,19 @@ describe Subscription::Capabilities do
 
   before { stub_cyber_source :purchase, :refund }
 
-  def change_subscription(subscription, payment_method, schedule = 'monthly')
-    ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, payment_method).call
+  def change_subscription(subscription, credit_card, schedule = 'monthly')
+    ChangeSubscription.new(
+      site,
+      { subscription: subscription, schedule: schedule },
+      credit_card
+    ).call
   end
 
   it 'returns the latest subscription capabilities' do
-    change_subscription 'pro', payment_method
+    change_subscription 'pro', credit_card
     expect(site).to be_capable_of :pro
 
-    change_subscription 'enterprise', payment_method
+    change_subscription 'enterprise', credit_card
     expect(site).to be_capable_of :enterprise
   end
 
@@ -26,13 +30,13 @@ describe Subscription::Capabilities do
     expect(site).to be_capable_of :free
     expect(capabilities).not_to be_closable
 
-    change_subscription('pro', payment_method)
+    change_subscription('pro', credit_card)
 
     expect(site).to be_capable_of :pro
   end
 
   context 'when successfully changed subscription' do
-    before { expect { change_subscription('pro', payment_method) }.to make_gateway_call(:purchase).and_succeed }
+    before { expect { change_subscription('pro', credit_card) }.to make_gateway_call(:purchase).and_succeed }
 
     it 'returns new capabilities' do
       expect(site.capabilities.remove_branding?).to be_truthy
@@ -43,8 +47,8 @@ describe Subscription::Capabilities do
   end
 
   context 'when downgrade from enterprise to pro' do
-    before { change_subscription('enterprise', payment_method) }
-    before { change_subscription('pro', payment_method) }
+    before { change_subscription('enterprise', credit_card) }
+    before { change_subscription('pro', credit_card) }
 
     it 'returns enterprise capabilities' do
       expect(site).to be_capable_of :enterprise
@@ -52,7 +56,7 @@ describe Subscription::Capabilities do
   end
 
   it 'should handle refund, switch, and void' do
-    pro_bill = change_subscription('pro', payment_method)
+    pro_bill = change_subscription('pro', credit_card)
 
     expect(site).to be_capable_of :pro
 
@@ -66,7 +70,7 @@ describe Subscription::Capabilities do
     expect(pending.first.subscription).to be_a Subscription::Pro
 
     # Switch to Free
-    change_subscription('free', payment_method)
+    change_subscription('free', credit_card)
 
     # Should not have pro capabilities
     expect(site).to be_capable_of :free
@@ -90,14 +94,14 @@ describe Subscription::Capabilities do
 
   it 'gives the greatest capability of all current paid subscriptions' do
     # Auto pays each of these
-    change_subscription('enterprise', payment_method)
-    change_subscription('pro', payment_method)
-    change_subscription('free', payment_method)
+    change_subscription('enterprise', credit_card)
+    change_subscription('pro', credit_card)
+    change_subscription('free', credit_card)
     expect(site).to be_capable_of :enterprise
   end
 
   it 'stays at pro capabilities until bill period is over' do
-    change_subscription('pro', payment_method, 'yearly')
+    change_subscription('pro', credit_card, 'yearly')
     expect(site).to be_capable_of :pro
     travel_to 2.years.from_now do
       expect(site).to be_capable_of :free

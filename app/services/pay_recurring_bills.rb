@@ -36,12 +36,10 @@ class PayRecurringBills
     return if skip? bill
 
     report.attempt bill do
-      if no_payment_method?(bill)
-        report.no_details
-      elsif bill.amount != 0 && !bill.subscription.payment_method
-        report.no_payment_method
-      else
+      if bill.can_pay?
         pay bill
+      else
+        report.cannot_pay
       end
     end
   end
@@ -58,12 +56,6 @@ class PayRecurringBills
   def void(bill)
     report.void bill
     bill.voided!
-  end
-
-  def no_payment_method?(bill)
-    bill.amount != 0 &&
-      bill.subscription.payment_method &&
-      !bill.subscription.payment_method.current_details&.token
   end
 
   def skip?(bill)

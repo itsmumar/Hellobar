@@ -2,7 +2,7 @@ class DiscountCalculator
   attr_reader :discounts
 
   def initialize(subscription, user = nil)
-    @user = user || subscription.payment_method.try(:user)
+    @user = user || subscription.credit_card&.user
     @subscription = subscription
     @discounts = subscription.class.defaults[:discounts] || []
     @discounts.sort_by!(&:tier)
@@ -36,9 +36,9 @@ class DiscountCalculator
   end
 
   def active_subscriptions
-    subscriptions = @user.sites.includes(subscriptions: :payment_method).map(&:current_subscription)
+    subscriptions = @user.sites.includes(subscriptions: :credit_card).map(&:current_subscription)
     subscriptions.select! { |s| s.instance_of?(@subscription.class) }
-    subscriptions.select! { |s| s.payment_method && s.payment_method.try(:user) == @user }
+    subscriptions.select! { |s| s.credit_card && s.credit_card&.user == @user }
     subscriptions
   end
 end

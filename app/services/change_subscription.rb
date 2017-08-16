@@ -1,14 +1,14 @@
 class ChangeSubscription
-  def initialize(site, params, payment_method = nil)
+  def initialize(site, params, credit_card = nil)
     @site = site
     @old_subscription = site.current_subscription
-    @payment_method = payment_method
+    @credit_card = credit_card
     @billing_params = params.reverse_merge(schedule: 'monthly')
   end
 
   def call
     if same_subscription?
-      update_payment_method
+      update_credit_card
     else
       change_subscription
     end
@@ -16,15 +16,15 @@ class ChangeSubscription
 
   private
 
-  attr_reader :site, :payment_method, :billing_params, :old_subscription
+  attr_reader :site, :credit_card, :billing_params, :old_subscription
 
   def same_subscription?
     old_subscription.is_a?(subscription_class) &&
       billing_params[:schedule] == old_subscription.schedule
   end
 
-  def update_payment_method
-    old_subscription.update payment_method: payment_method
+  def update_credit_card
+    old_subscription.update credit_card: credit_card
     try_to_pay_problem_bill
     old_subscription.bills.last
   end
@@ -51,22 +51,21 @@ class ChangeSubscription
   def create_subscription
     subscription_class.create!(
       site: site,
-      payment_method: payment_method,
+      credit_card: credit_card,
       schedule: billing_params[:schedule]
     )
   end
 
   def pay_bill(bill)
-    PayBill.new(bill).call if bill.due_at(payment_method) <= Time.current
+    PayBill.new(bill).call if bill.due_at(credit_card) <= Time.current
     raise_record_invalid_if_problem(bill)
     bill
   end
 
   def raise_record_invalid_if_problem(bill)
     return unless bill.problem?
-    card = payment_method.current_details
     bill.errors.add :base,
-      "There was a problem while charging your credit card ending in #{ card.last_digits }." \
+      "There was a problem while charging your credit card ending in #{ credit_card.last_digits }." \
       ' You can fix this by adding another credit card'
     raise ActiveRecord::RecordInvalid, bill
   end

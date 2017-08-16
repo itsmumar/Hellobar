@@ -2,7 +2,7 @@ class Admin::BillsController < AdminController
   def show
     @bill = Bill.find(params[:id])
     @site = Site.with_deleted.find(@bill.site_id)
-    @details = @bill.successful_billing_attempt.try(:payment_method_details)
+    @credit_card = @bill.paid_with_credit_card
     render 'bills/show', layout: 'receipt'
   end
 
@@ -26,7 +26,7 @@ class Admin::BillsController < AdminController
       amount = params[:bill_recurring][:amount].to_f
       RefundBill.new(bill, amount: amount).call
       flash[:success] = "Refund successful: Refunded #{ amount } of #{ bill.amount }."
-    rescue RefundBill::InvalidRefund, RefundBill::MissingPaymentMethod, Bill::InvalidBillingAmount => e
+    rescue RefundBill::InvalidRefund, RefundBill::MissingCreditCard, Bill::InvalidBillingAmount => e
       flash[:error] = "Refund error: #{ e.message }"
     end
 

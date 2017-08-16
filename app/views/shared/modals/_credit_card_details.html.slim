@@ -1,0 +1,70 @@
+script id="credit-card-details-template" type="text/x-handlebars-template"
+  .site-select-form style="#{current_user.sites.size <= 1 ? 'display: none' : ''}"
+    header Site Details
+
+    .site-select
+      .field-row
+        label Site
+        .select-wrapper
+          = select_tag 'site_id', options_for_select(current_user.sites.map{|site| [site.url, site.id] }, current_site.try(:id))
+
+  .payment-form
+    header Billing Information
+
+    .credit-card
+      #linked-credit-cards
+
+      .details-fields
+
+        .field-row
+          .cc-name
+            label Name on card
+            input type="text" placeholder="John Smith" name="credit_card[name]" value="{{currentCreditCard.name}}" autocomplete="cc-name"
+
+        .field-row
+          .cc-number
+            label Card number
+            input type="text" placeholder="    -    -    -" name="credit_card[number]" value="{{currentCreditCard.number}}" autocomplete="cc-number"
+            i.icon-modal
+
+          .cc-expiry
+            label Expiry
+            input type="text" placeholder="08/2016" name="credit_card[expiration]" value="{{currentCreditCard.expiration}}" autocomplete="cc-exp"
+
+          .cc-csv
+            label CSV
+            input type="text" placeholder="123" name="credit_card[verification_value]" value="{{currentCreditCard.verification_value}}" autocomplete="cc-csc"
+
+        .field-row
+          .cc-address
+            label Address
+            input type="text" placeholder="123 Main Street" name="credit_card[address]" value="{{currentCreditCard.address}}" autocomplete="street-address"
+
+        .field-row
+          .cc-city
+            label City
+            input type="text" placeholder="Beverly Hills" name="credit_card[city]" value="{{currentCreditCard.city}}" autocomplete="city"
+
+          .cc-state
+            label State
+            input type="text" placeholder="CA" name="credit_card[state]" value="{{currentCreditCard.state}}" autocomplete="state" maxlength="2"
+
+          .cc-zip
+            label Zipcode
+            input type="text" placeholder="90210" name="credit_card[zip]" value="{{currentCreditCard.zip}}" autocomplete="postal-code" maxlength="9"
+
+        .field-row
+          .cc-country
+            label Country
+            .select-wrapper
+              = country_select("credit_card", "country", priority_countries: ['US'], selected: "{{currentCreditCard.country}}")
+
+script id="linked-credit-cards-template" type="text/x-handlebars-template"
+  label Use credit card on file
+  .select-wrapper
+    select#linked-credit-card name="linked_credit_card_id"
+      option New card...
+      | {{#each creditCards}}
+      option value="{{id}}"
+        | {{number}}
+      | {{/each}}

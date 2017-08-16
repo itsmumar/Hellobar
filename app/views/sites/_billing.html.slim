@@ -16,7 +16,7 @@ section
         '
         = @site.current_subscription.schedule
         | .
-      - if @site.requires_payment_method?
+      - if @site.requires_credit_card?
         - # only show "billing schedule" if user is on a plan that actually has one
         = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal', data: { source: "Change plan or billing" }
 
@@ -24,8 +24,8 @@ section
   section
     label Card
     p
-      - if @site.current_subscription && @site.current_subscription.payment_method
-        = @site.current_subscription.payment_method.current_details.data['number']
+      - if @site.current_subscription && @site.current_subscription.credit_card
+        = @site.current_subscription.credit_card.number
         = link_to 'Add or change card', '#', class: 'show-payment-modal', data: {source: "Add or change card"}
       - else
         small
@@ -72,7 +72,7 @@ section
                 - if bill.is_a?(Bill::Refund)
                   |  (Refund)
               td= "Hello Bar #{bill.subscription.values[:name]}"
-              td= credit_card_description(bill.payment_method_detail)
+              td= bill.credit_card.description
               td
                 - if bill.problem?
                   - if params[:should_update_card]
@@ -87,7 +87,7 @@ section
     - if @site.current_subscription.currently_on_trial?
       ' This site is on a trial plan.
       a.show-payment-modal.underlined data-source="Please enter payment text"
-        ' Please enter a payment method by #{bill_due_at(@next_bill)}
+        ' Please enter credit card details by #{bill_due_at(@next_bill)}
         ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
     - elsif @next_bill.amount > 0
       small

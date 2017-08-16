@@ -16,8 +16,6 @@ class User < ActiveRecord::Base
   before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
 
   has_many :credit_cards
-  has_many :payment_methods
-  has_many :payment_method_details, through: :payment_methods, source: :details
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
   has_many :site_elements, through: :sites
@@ -50,7 +48,7 @@ class User < ActiveRecord::Base
 
   delegate :url_helpers, to: 'Rails.application.routes'
 
-  attr_accessor :legacy_migration, :timezone, :is_impersonated
+  attr_accessor :timezone, :is_impersonated
 
   ACTIVE_STATUS = 'active'.freeze
   TEMPORARY_STATUS = 'temporary'.freeze
@@ -80,12 +78,6 @@ class User < ActiveRecord::Base
     User.create email: email,
                 status: TEMPORARY_STATUS,
                 password: password, password_confirmation: password
-  end
-
-  # dont require the password virtual attribute to be present
-  # if we are migrating users from the legacy DB
-  def password_required?
-    legacy_migration ? false : super
   end
 
   def can_view_exit_intent_modal?

@@ -8,8 +8,8 @@ feature 'Manage Settings', :js do
     @site = @user.sites.first
     @rule = @site.create_default_rules
 
-    payment_method = create(:payment_method, user: @user)
-    ChangeSubscription.new(@site, { subscription: 'pro', schedule: 'monthly' }, payment_method).call
+    credit_card = create(:credit_card, user: @user)
+    ChangeSubscription.new(@site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
 
     visit edit_site_path(@site)
   end

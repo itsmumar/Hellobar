@@ -16,7 +16,7 @@ FactoryGirl.define do
       after :create do |bill|
         create :billing_attempt, :success,
           bill: bill, response: 'authorization',
-          payment_method_details: bill.subscription.payment_method.details.first
+          credit_card: bill.credit_card
 
         bill.reload
       end
@@ -34,7 +34,7 @@ FactoryGirl.define do
       status :problem
 
       after :create do |bill|
-        create :billing_attempt, :failed, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+        create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
         bill.reload
       end
     end
@@ -57,7 +57,7 @@ FactoryGirl.define do
   trait :paid do
     status :paid
     after :create do |bill|
-      create :billing_attempt, :success, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+      create :billing_attempt, :success, bill: bill, credit_card: bill.credit_card
       bill.reload
     end
   end
@@ -80,7 +80,7 @@ FactoryGirl.define do
 
   trait :with_attempt do
     after :create do |bill|
-      create :billing_attempt, :failed, bill: bill, payment_method_details: bill.subscription.payment_method.details.first
+      create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
     end
   end
 end
