@@ -20,7 +20,6 @@ RSpec.configure do |config|
 
   config.before contact_list_feature: true do
     stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
-    allow(Settings).to receive(:fake_data_api).and_return true
     allow_any_instance_of(FetchContacts).to receive(:call).and_return([])
     allow(FetchContactListTotals).to receive(:new).with(instance_of(Site), id: instance_of(String)).and_return(double(call: 0))
     allow(FetchContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: {}))

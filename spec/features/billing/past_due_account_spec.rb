@@ -7,8 +7,6 @@ feature 'Billing. Past due account', :js do
   given!(:credit_card) { bill.credit_card }
 
   before do
-    allow(Settings).to receive(:fake_data_api).and_return true
-
     login user
   end
 
