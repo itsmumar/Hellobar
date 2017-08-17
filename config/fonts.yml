@@ -107,3 +107,8 @@
   name: 'Kanit'
   value: "'Kanit', sans-serif"
   google_font: 'Kanit'
+-
+  id: oswald
+  name: 'Oswald'
+  value: "'Oswald', sans-serif"
+  google_font: 'Oswald'
