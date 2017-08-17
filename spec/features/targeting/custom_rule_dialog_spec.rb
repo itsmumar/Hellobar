@@ -7,8 +7,6 @@ feature 'Targeting. Custom rule dialog', :js do
   before { create :subscription, :pro, :paid, site: site }
 
   before do
-    allow(Settings).to receive(:fake_data_api).and_return true
-
     login user
   end
 
