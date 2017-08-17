@@ -72,6 +72,7 @@ div#user_profile
               th Receipt
               th Actions
               th Bill Duration
+
             - bills_for(site).each do |bill, refunds|
               tr
                 td= bill.id
@@ -81,12 +82,11 @@ div#user_profile
                   - if context_for_trial(@user, bill)
                     span.refund_status
                       |  #{context_for_trial(@user, bill)}
-                  - if refunds.length > 0
-                    - refunds.each do |refund|
-                      br
-                      | (#{refund.amount}) Refunded
-                      span.refund_status
-                        |  (#{refund.status})
+                  - if bill.refund
+                    br
+                    | (#{bill.refund.amount}) Refunded
+                    span.refund_status
+                      |  (#{bill.refund.status})
                 td= bill.status
                 td= bill.due_at.strftime('%D')
                 td

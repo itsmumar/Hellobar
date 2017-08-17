@@ -1,15 +1,6 @@
 module Admin::UsersHelper
   def bills_for(site)
-    bills = Hash.new { |h, k| h[k] = [] } # Bill => [Refunds]
-
-    site.bills.sort_by(&:bill_at).reverse.each do |bill|
-      if bill.instance_of?(Bill::Refund)
-        bills[bill.refunded_billing_attempt.bill] << bill
-      else
-        bills[bill] = []
-      end
-    end
-    bills
+    site.bills.reorder(bill_at: :desc).recurring
   end
 
   def subscriptions
