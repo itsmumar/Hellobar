@@ -1,10 +1,15 @@
-RSpec.describe Admin::UsersHelper do
+describe Admin::UsersHelper do
   describe '#bills_for' do
     let(:site) { create(:site) }
+    let!(:bills) do
+      [
+        create(:pro_bill, :paid, site: site),
+        create(:bill, site: site)
+      ]
+    end
 
     it 'returns hash with bills to display' do
-      expected_hash = site.bills.inject({}) { |r, e| r.update e => [] }
-      expect(helper.bills_for(site)).to include(expected_hash)
+      expect(helper.bills_for(site)).to match_array bills
     end
   end
 
