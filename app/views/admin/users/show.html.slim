@@ -72,6 +72,7 @@ div#user_profile
               th Receipt
               th Actions
               th Bill Duration
+              th Paid at
 
             - bills_for(site).each do |bill, refunds|
               tr
@@ -111,6 +112,8 @@ div#user_profile
                       = f.submit "Refund", data: { confirm: "Refund this bill?" }
                 td
                   = bill_duration(bill)
+                td
+                  = bill.status_set_at&.strftime('%D')
 
       div.site_section
         div.title Subscription History
