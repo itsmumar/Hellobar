@@ -43,11 +43,15 @@ module Admin::UsersHelper
   def site_title(site)
     trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date })" if site.current_subscription.trial_end_date
     subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
-    active_subscription_name = " (#{ site.active_subscription.values[:name] } is still active)" if site.active_subscription && site.current_subscription != site.active_subscription
-    "#{ site.url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name }"
+    "#{ site.url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name(site) }"
   end
 
   private
+
+  def active_subscription_name(site)
+    return unless site.active_subscription && site.current_subscription.class != site.active_subscription.class
+    " (#{ site.active_subscription.values[:name] } is still active)"
+  end
 
   def us_short_datetime(datetime)
     datetime.to_date.to_s(:us_short)
