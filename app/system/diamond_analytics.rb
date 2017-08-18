@@ -44,6 +44,21 @@ class DiamondAnalytics
     )
   end
 
+  def installed_script(site:, user:)
+    track(
+      event: 'Installed Script',
+      identities: {
+        site_id: site.id,
+        user_id: user.id,
+        user_email: user.email
+      },
+      timestamp: site.script_installed_at.to_f,
+      properties: {
+        site_url: site.url
+      }
+    )
+  end
+
   def created_contact_list(contact_list:, user:)
     track(
       event: 'Created Contact List',

@@ -60,6 +60,8 @@ class CheckStaticScriptInstallation
   def onboarding_track_script_installation!
     site.owners.each do |user|
       user.onboarding_status_setter.installed_script!
+
+      TrackEvent.new(:installed_script, site: site, user: user).call
     end
   end
 

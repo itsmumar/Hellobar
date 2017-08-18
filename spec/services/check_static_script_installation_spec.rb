@@ -37,6 +37,13 @@ describe CheckStaticScriptInstallation do
       service.call
     end
 
+    it 'tracks the install event to analytics' do
+      track_event_double = double(call: nil)
+      expect(TrackEvent).to receive(:new).with(:installed_script, site: site, user: site.owners.first).and_return(track_event_double)
+
+      service.call
+    end
+
     let(:last_status) { UserOnboardingStatus.last }
 
     it 'creates onboarding status :installed_script' do

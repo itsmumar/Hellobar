@@ -78,7 +78,7 @@ describe DiamondAnalytics do
   describe '#created_site' do
     subject { analytics.created_site(site: site, user: user) }
 
-    it 'tracks the invited-member event' do
+    it 'tracks the created site event' do
       expect(tracker).to receive(:track).with(
         event: 'Created Site',
         identities: {
@@ -108,10 +108,45 @@ describe DiamondAnalytics do
     end
   end
 
+  describe '#installed_script' do
+    before { site.update(script_installed_at: Time.current) }
+
+    subject { analytics.installed_script(site: site, user: user) }
+
+    it 'tracks the installed script event' do
+      expect(tracker).to receive(:track).with(
+        event: 'Installed Script',
+        identities: {
+          site_id: site.id,
+          user_id: user.id,
+          user_email: user.email
+        },
+        timestamp: site.script_installed_at.to_f,
+        properties: {
+          site_url: site.url
+        }
+      )
+
+      subject
+    end
+
+    context 'when tracking is disabled' do
+      before do
+        expect(analytics).to receive(:enabled?).and_return(false)
+      end
+
+      it 'does not track' do
+        expect(tracker).not_to receive(:track)
+
+        subject
+      end
+    end
+  end
+
   describe '#created_contact_list' do
     subject { analytics.created_contact_list(contact_list: contact_list, user: user) }
 
-    it 'tracks the invited-member event' do
+    it 'tracks the created contact list event' do
       expect(tracker).to receive(:track).with(
         event: 'Created Contact List',
         identities: {
@@ -144,7 +179,7 @@ describe DiamondAnalytics do
   describe '#created_bar' do
     subject { analytics.created_bar(site_element: site_element, user: user) }
 
-    it 'tracks the invited-member event' do
+    it 'tracks the created bar event' do
       expect(tracker).to receive(:track).with(
         event: 'Created Bar',
         identities: {
@@ -180,7 +215,7 @@ describe DiamondAnalytics do
 
     subject { analytics.changed_subscription(site: site, user: user) }
 
-    it 'tracks the invited-member event' do
+    it 'tracks the changed subscription event' do
       # subscription.created_at.to_f was causing errors
       subscription.reload
 
