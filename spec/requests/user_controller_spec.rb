@@ -111,7 +111,8 @@ describe 'User requests' do
       context 'when ActiveRecord::RecordNotDestroyed error is raised' do
         before do
           expect(DestroyUser)
-            .to receive_service_call.with(user)
+            .to receive_service_call
+            .with(user)
             .and_raise(ActiveRecord::RecordNotDestroyed.new('message', user))
         end
 
