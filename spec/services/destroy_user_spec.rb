@@ -39,7 +39,7 @@ describe DestroyUser do
 
     it 'destroys the user' do
       expect { service.call }
-        .to change(User, :count).by -1
+        .to change(User, :count).by(-1)
     end
 
     context 'when site has other users' do
@@ -55,7 +55,7 @@ describe DestroyUser do
 
       it 'does not delete site with other users' do
         expect { service.call }
-          .to change(Site, :count).by -1
+          .to change(Site, :count).by(-1)
         expect(Site.last.users).to match_array [other_user]
       end
 

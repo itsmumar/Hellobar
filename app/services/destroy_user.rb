@@ -26,7 +26,7 @@ class DestroyUser
 
   def destroy_credit_cards
     user.credit_cards.update_all token: nil
-    user.credit_cards.each &:destroy!
+    user.credit_cards.each(&:destroy!)
   end
 
   def destroy_own_sites
