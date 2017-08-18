@@ -26,14 +26,14 @@ class CheckStaticScriptInstallation
   def script_uninstalled!
     site.update(script_uninstalled_at: Time.current)
     Analytics.track(:site, site.id, 'Uninstalled')
-    onboarding_track_script_uninstallation!
+    track_script_uninstallation!
   end
 
   def script_installed!
     site.update(script_installed_at: Time.current)
     Referrals::RedeemForRecipient.run(site: site)
     Analytics.track(:site, site.id, 'Installed')
-    onboarding_track_script_installation!
+    track_script_installation!
   end
 
   # has the script been installed according to the API?
@@ -57,7 +57,7 @@ class CheckStaticScriptInstallation
       (site.script_uninstalled_at.blank? || site.script_installed_at > site.script_uninstalled_at)
   end
 
-  def onboarding_track_script_installation!
+  def track_script_installation!
     site.owners.each do |user|
       user.onboarding_status_setter.installed_script!
 
@@ -65,7 +65,7 @@ class CheckStaticScriptInstallation
     end
   end
 
-  def onboarding_track_script_uninstallation!
+  def track_script_uninstallation!
     site.owners.each do |user|
       user.onboarding_status_setter.uninstalled_script!
     end
