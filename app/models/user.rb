@@ -2,7 +2,6 @@ class User < ActiveRecord::Base
   acts_as_paranoid
 
   include UserValidator
-  include ReferralTokenizable
 
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
   # devise :omniauthable, :omniauth_providers => [:google_oauth2]
@@ -11,10 +10,12 @@ class User < ActiveRecord::Base
   before_save :clear_invite_token
   after_save :disconnect_oauth, if: :oauth_user?
   after_save :track_temporary_status_change
+  after_create :create_referral_token
   after_create :add_to_onboarding_campaign
 
   before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
 
+  has_one :referral_token, as: :tokenizable
   has_many :credit_cards
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
