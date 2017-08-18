@@ -10,7 +10,7 @@ describe RefundBill do
   before { stub_cyber_source :refund }
 
   it 'returns array of Bill::Refund and BillingAttempt' do
-    expect(service.call).to match_array [instance_of(Bill::Refund), instance_of(BillingAttempt)]
+    expect(service.call).to be_a Bill::Refund
   end
 
   it 'creates a new Bill::Refund', :freeze do
@@ -55,14 +55,14 @@ describe RefundBill do
       expect { service.call }.to change(BillingAttempt.failed, :count).by 1
     end
 
-    it 'sends event to Raven' do
+    it 'sends event to Raven and return false' do
       extra = {
         message: 'gateway error',
         bill: bill.id,
         amount: -bill.amount
       }
       expect(Raven).to receive(:capture_message).with('Unsuccessful refund', extra: extra)
-      service.call
+      expect(service.call).to be_a Bill::Refund
     end
   end
 
@@ -100,7 +100,7 @@ describe RefundBill do
   end
 
   context 'when credit card is missing' do
-    before { allow(bill.subscription).to receive(:credit_card).and_return(nil) }
+    before { allow(bill).to receive(:paid_with_credit_card).and_return(nil) }
 
     it 'raises MissingCreditCard' do
       expect { service.call }

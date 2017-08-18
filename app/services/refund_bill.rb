@@ -11,12 +11,9 @@ class RefundBill
 
   def call
     raise InvalidRefund, 'Cannot refund unsuccessful billing attempt' unless successful_billing_attempt
-    raise MissingCreditCard, 'Could not find credit card' unless subscription.credit_card
+    raise MissingCreditCard, 'Could not find credit card' unless credit_card
     check_refund_amount!
-
-    refund_bill = create_refund_bill!
-    refund_attempt = refund!(refund_bill)
-    [refund_bill, refund_attempt]
+    refund
   end
 
   private
@@ -25,21 +22,49 @@ class RefundBill
 
   delegate :subscription, to: :bill
 
-  def successful_billing_attempt
-    @successful_billing_attempt ||= bill.successful_billing_attempt
-  end
-
   # Check that we're not refunding more than they paid
   def check_refund_amount!
-    raise InvalidRefund, 'Cannot refund more than paid amount' if bill.amount + (amount + previous_refunds) < 0
+    raise InvalidRefund, 'Cannot refund more than paid amount' if fully_paid?
     raise InvalidRefund, 'Refund amount cannot be 0' if amount.zero?
+  end
+
+  def refund
+    response = make_refund_request
+
+    if response.success?
+      create_success_refund_bill(response)
+    else
+      create_failed_refund_bill(response)
+    end
+  end
+
+  def fully_paid?
+    (bill.amount + amount + previous_refunds) < 0
   end
 
   def previous_refunds
     successful_billing_attempt.refunds.sum(:amount)
   end
 
-  def create_refund_bill!
+  def successful_billing_attempt
+    @successful_billing_attempt ||= bill.successful_billing_attempt
+  end
+
+  def create_success_refund_bill(response)
+    attributes = { status: :paid, authorization_code: response.authorization }
+
+    create_refund_bill!(attributes).tap do |refund_bill|
+      create_billing_attempt(refund_bill, response)
+    end
+  end
+
+  def create_failed_refund_bill(response)
+    create_refund_bill!(status: :voided).tap do |refund_bill|
+      create_billing_attempt(refund_bill, response)
+    end
+  end
+
+  def create_refund_bill!(status:, authorization_code: nil)
     Bill::Refund.create!(
       subscription: bill.subscription,
       amount: amount,
@@ -48,29 +73,28 @@ class RefundBill
       start_date: Time.current,
       end_date: bill.end_date,
       refunded_billing_attempt: successful_billing_attempt,
-      refunded_bill: bill
+      refunded_bill: bill,
+      status: status,
+      authorization_code: authorization_code
     )
   end
 
-  def refund!(refund_bill)
-    response = gateway.refund(-amount, bill.authorization_code)
+  def make_refund_request
+    gateway.refund(-amount, bill.authorization_code).tap do |response|
+      BillingLogger.refund(bill, response.success?)
 
-    BillingLogger.refund(bill, response.success?)
-
-    if response.success?
-      refund_bill.update authorization_code: response.authorization, status: :paid
-    else
-      Raven.capture_message 'Unsuccessful refund', extra: {
-        message: response.message,
-        bill: bill.id,
-        amount: amount
-      }
+      unless response.success?
+        Raven.capture_message 'Unsuccessful refund', extra: {
+          message: response.message,
+          bill: bill.id,
+          amount: amount
+        }
+      end
     end
-    create_billing_attempt(refund_bill, response)
   end
 
   def credit_card
-    bill.paid_with_credit_card
+    @credit_card ||= bill.paid_with_credit_card
   end
 
   def create_billing_attempt(refund_bill, response)
