@@ -143,6 +143,41 @@ describe DiamondAnalytics do
     end
   end
 
+  describe '#uninstalled_script' do
+    before { site.update(script_uninstalled_at: Time.current) }
+
+    subject { analytics.uninstalled_script(site: site, user: user) }
+
+    it 'tracks the installed script event' do
+      expect(tracker).to receive(:track).with(
+        event: 'Uninstalled Script',
+        identities: {
+          site_id: site.id,
+          user_id: user.id,
+          user_email: user.email
+        },
+        timestamp: site.script_uninstalled_at.to_f,
+        properties: {
+          site_url: site.url
+        }
+      )
+
+      subject
+    end
+
+    context 'when tracking is disabled' do
+      before do
+        expect(analytics).to receive(:enabled?).and_return(false)
+      end
+
+      it 'does not track' do
+        expect(tracker).not_to receive(:track)
+
+        subject
+      end
+    end
+  end
+
   describe '#created_contact_list' do
     subject { analytics.created_contact_list(contact_list: contact_list, user: user) }
 

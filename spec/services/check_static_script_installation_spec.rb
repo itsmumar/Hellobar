@@ -16,8 +16,15 @@ describe CheckStaticScriptInstallation do
       expect { service.call }.to change { site.reload.script_uninstalled_at }
     end
 
-    it 'tracks the install event' do
+    it 'tracks the uninstall event' do
       expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
+      service.call
+    end
+
+    it 'tracks the uninstall event to analytics' do
+      track_event_double = double(call: nil)
+      expect(TrackEvent).to receive(:new).with(:uninstalled_script, site: site, user: site.owners.first).and_return(track_event_double)
+
       service.call
     end
   end

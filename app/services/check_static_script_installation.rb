@@ -68,6 +68,8 @@ class CheckStaticScriptInstallation
   def track_script_uninstallation!
     site.owners.each do |user|
       user.onboarding_status_setter.uninstalled_script!
+
+      TrackEvent.new(:uninstalled_script, site: site, user: user).call
     end
   end
 

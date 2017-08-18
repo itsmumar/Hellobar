@@ -51,6 +51,15 @@ class IntercomAnalytics
     )
   end
 
+  def uninstalled_script(site:, user:)
+    track(
+      event_name: 'uninstalled-script',
+      user_id: user.id,
+      created_at: Time.current.to_i,
+      metadata: { url: site.url }
+    )
+  end
+
   def created_contact_list(contact_list:, user:)
     track(
       event_name: 'created-contact-list',
