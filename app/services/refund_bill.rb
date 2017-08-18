@@ -10,7 +10,7 @@ class RefundBill
   end
 
   def call
-    raise InvalidRefund, 'Cannot refund unsuccessful billing attempt' unless successful_billing_attempt
+    raise InvalidRefund, 'Cannot refund an unpaid bill' unless bill.paid?
     raise MissingCreditCard, 'Could not find credit card' unless credit_card
     check_refund_amount!
     refund
@@ -32,10 +32,15 @@ class RefundBill
     response = make_refund_request
 
     if response.success?
-      create_success_refund_bill(response)
+      create_success_refund_bill(response) { cancel_subscription }
     else
       create_failed_refund_bill(response)
     end
+  end
+
+  def cancel_subscription
+    bill.subscription.bills.pending.each(&:voided!)
+    ChangeSubscription.new(bill.site, subscription: 'free').call
   end
 
   def fully_paid?
@@ -55,6 +60,7 @@ class RefundBill
 
     create_refund_bill!(attributes).tap do |refund_bill|
       create_billing_attempt(refund_bill, response)
+      yield refund_bill
     end
   end
 

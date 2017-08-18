@@ -1,15 +1,16 @@
 describe RefundBill do
   let(:amount) { bill.amount }
   let(:credit_card) { create :credit_card }
-  let(:subscription) { create :subscription, credit_card: credit_card }
+  let(:subscription) { create :subscription, :pro, credit_card: credit_card }
   let(:bill) { create :pro_bill, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
 
-  before { stub_cyber_source :refund }
+  before { stub_cyber_source :purchase, :refund }
+  before { PayBill.new(bill).call }
 
-  it 'returns array of Bill::Refund and BillingAttempt' do
+  it 'returns a Bill::Refund' do
     expect(service.call).to be_a Bill::Refund
   end
 
@@ -48,6 +49,11 @@ describe RefundBill do
       .to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
   end
 
+  it 'cancels current subscription' do
+    expect { service.call }.to change(bill.subscription.bills.pending, :count).to 0
+    expect(bill.site.current_subscription).to be_a Subscription::Free
+  end
+
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 
@@ -67,10 +73,10 @@ describe RefundBill do
   end
 
   context 'with pending bill' do
-    let(:bill) { create :past_due_bill }
+    before { allow(bill).to receive(:paid?).and_return(false) }
 
     it 'raises InvalidRefund' do
-      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund unsuccessful billing attempt'
+      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund an unpaid bill'
     end
   end
 
