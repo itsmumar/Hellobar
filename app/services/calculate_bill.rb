@@ -59,7 +59,8 @@ class CalculateBill
   # Subtract the unused paid amount from the price and round it
   def calculate_reduced_amount
     num_days_used = (Time.current - active_paid_bills.last.start_date) / 1.day
-    total_days_of_last_subcription = (active_paid_bills.last.end_date - active_paid_bills.last.start_date) / 1.day
+    last_paid_bill = active_paid_bills.last
+    total_days_of_last_subcription = (last_paid_bill.end_date - last_paid_bill.start_date) / 1.day
     percentage_unused = 1.0 - (num_days_used.to_f / total_days_of_last_subcription)
 
     unused_paid_amount = last_subscription.amount * percentage_unused
