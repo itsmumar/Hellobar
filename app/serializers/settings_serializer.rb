@@ -36,7 +36,7 @@ class SettingsSerializer < ActiveModel::Serializer
     if scope.capabilities.advanced_themes?
       Theme.sorted
     else
-      Theme.sorted.reject { |theme| theme.advanced? }
+      Theme.sorted.reject(&:advanced?)
     end
   end
 end
