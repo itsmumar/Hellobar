@@ -41,6 +41,12 @@ module StaticScriptAssets
     env.js_compressor = nil
   end
 
+  def digest_path(*path, site_id: nil)
+    asset = manifest.find(File.join(*path)).first
+    return asset.digest_path if asset
+    raise Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site_id }"
+  end
+
   # @param [Array[String]] *path
   # @option [Integer] site_id:
   # @raises Sprockets::FileNotFound

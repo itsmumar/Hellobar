@@ -22,18 +22,35 @@ class RenderStaticScript
     template.gsub('</script>', '<\/script>')
   end
 
+  # replace $INJECT_DATA with json settings
   def inject_data(template)
     template['$INJECT_DATA'] = model.to_json
     template
   end
 
+  # replace $INJECT_MODULES with something like
+  # "https://my.hellobar.com/modules-a3865d95d1e68a2f017fc3a84a71a5adc12d278f230d94e18134ad546aa7aac5.js"
   def inject_modules(template)
-    template['$INJECT_MODULES'] = render_asset 'modules.js'
+    template['$INJECT_MODULES'] = url_for_modules.inspect
     template
   end
 
   def template
     render_asset self.class.template
+  end
+
+  def url_for_modules
+    if Settings.store_site_scripts_locally
+      "/generated_scripts/#{ path_for_modules }"
+    elsif Settings.script_cdn_url.present?
+      "https://#{ Settings.script_cdn_url }/#{ path_for_modules }"
+    else
+      "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ path_for_modules }"
+    end
+  end
+
+  def path_for_modules
+    StaticScriptAssets.digest_path('modules.js')
   end
 
   def render_asset(*path)
