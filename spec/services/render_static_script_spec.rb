@@ -110,6 +110,11 @@ describe RenderStaticScript do
           .with('static_script_template.js')
           .and_return('$INJECT_DATA; $INJECT_MODULES')
 
+        allow(StaticScriptAssets)
+          .to receive(:digest_path)
+          .with('modules.js')
+          .and_return 'modules.js'
+
         allow_any_instance_of(SiteElement)
           .to receive(:statistics).and_return(SiteStatistics.new)
       end
