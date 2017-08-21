@@ -1,4 +1,4 @@
-class UpdateModulesScript
+class GenerateStaticScriptModules
   def call
     if store_site_scripts_locally?
       store_locally

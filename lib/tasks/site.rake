@@ -3,7 +3,7 @@ namespace :site do
     desc 'Precompile assets (js, css, html) which are used in site script'
     task precompile_static_assets: :environment do
       StaticScriptAssets.precompile
-      UpdateModulesScript.new.call
+      GenerateStaticScriptModules.new.call
     end
 
     desc 'Schedule a re-generation of ALL site scripts'
