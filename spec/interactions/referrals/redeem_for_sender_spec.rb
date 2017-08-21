@@ -10,7 +10,7 @@ describe Referrals::RedeemForSender do
     let(:ownership) { create(:site_membership, site: past_due_site) }
     let(:user) { ownership.user }
     let(:site) { ownership.site }
-
+    let!(:coupon) { create :coupon, :referral }
     let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user, site: site) }
 
     before :each do
@@ -39,6 +39,7 @@ describe Referrals::RedeemForSender do
     let!(:site) { create(:site, :free_subscription, :with_user) }
     let!(:user) { site.owners.first }
     let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user, site: site) }
+    let!(:coupon) { create :coupon, :referral }
     let(:subscription) { site.current_subscription }
 
     before do
