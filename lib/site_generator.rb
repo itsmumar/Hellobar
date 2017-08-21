@@ -7,7 +7,9 @@ class SiteGenerator
     @compress = opts.fetch(:compress, false)
   end
 
-  def generate_file
+  def call
+    GenerateAndStoreStaticScript.new(site, path: 'test_site.js').call
+
     File.open(@full_path, 'w') do |file|
       file.write(generate_html)
     end
@@ -60,7 +62,7 @@ class SiteGenerator
           <div data-hb-cu-ab-test="#{ content_upgrade_tests.pluck(:id).join(',') }"></div>
         </section>
 
-        <script>#{ script_content }</script>
+        <script src="generated_scripts/test_site.js"></script>
 
         <section>
           <h1>External Tracking</h1>
