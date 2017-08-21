@@ -123,7 +123,7 @@
       }
 
       hellobar.initialized = true;
-    })(hellobar, window.hellobarbSiteSettings);
+    })(hellobar, window.hellobarSiteSettings);
   } else {
     console.warn('Hello Bar script is already loaded. It seems like you are including the Hello Bar script more than once. Ignoring.');
   }
