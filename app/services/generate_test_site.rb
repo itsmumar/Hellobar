@@ -8,9 +8,11 @@ class GenerateTestSite
   def call
     GenerateAndStoreStaticScript.new(site, path: 'test_site.js').call
 
-    File.open(@full_path, 'w') do |file|
+    File.open(full_path, 'w') do |file|
       file.write(generate_html)
     end
+
+    full_path
   end
 
   private
