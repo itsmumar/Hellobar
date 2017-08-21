@@ -1,6 +1,4 @@
 class GenerateTestSite
-  attr_reader :full_path, :site
-
   def initialize(site_id, opts = {})
     @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
@@ -14,6 +12,10 @@ class GenerateTestSite
       file.write(generate_html)
     end
   end
+
+  private
+
+  attr_reader :full_path, :site
 
   def generate_html
     <<~EOS
@@ -110,19 +112,12 @@ class GenerateTestSite
     EOS
   end
 
-  private
-
-  def script_content
-    RenderStaticScript.new(@site, compress: @compress).call
-  end
-
   def generate_full_path(opts)
     directory = opts[:directory]
 
     return nil if directory.nil?
-
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
-    @full_path = directory.join("#{ SecureRandom.hex }.html")
+    directory.join("#{ SecureRandom.hex }.html")
   end
 
   def content_upgrades

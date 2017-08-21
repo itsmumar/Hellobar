@@ -24,15 +24,13 @@ class RenderStaticScript
 
   # replace $INJECT_DATA with json settings
   def inject_data(template)
-    template['$INJECT_DATA'] = model.to_json
-    template
+    template.sub '$INJECT_DATA', model.to_json
   end
 
   # replace $INJECT_MODULES with something like
   # "https://my.hellobar.com/modules-a3865d95d1e68a2f017fc3a84a71a5adc12d278f230d94e18134ad546aa7aac5.js"
   def inject_modules(template)
-    template['$INJECT_MODULES'] = url_for_modules.inspect
-    template
+    template.sub '$INJECT_MODULES', url_for_modules.inspect
   end
 
   def template
@@ -44,8 +42,10 @@ class RenderStaticScript
       "/generated_scripts/#{ path_for_modules }"
     elsif Settings.script_cdn_url.present?
       "https://#{ Settings.script_cdn_url }/#{ path_for_modules }"
-    else
+    elsif Settings.s3_bucket.present?
       "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ path_for_modules }"
+    else
+      raise 'Could not determine url for modules.js'
     end
   end
 

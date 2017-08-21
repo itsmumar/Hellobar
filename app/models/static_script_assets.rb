@@ -42,9 +42,8 @@ module StaticScriptAssets
   end
 
   def digest_path(*path, site_id: nil)
-    asset = manifest.find(File.join(*path)).first
-    return asset.digest_path if asset
-    raise Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site_id }"
+    manifest.assets[File.join(path)] ||
+      raise(Sprockets::FileNotFound, "couldn't find file '#{ file }' for site ##{ site_id }")
   end
 
   # @param [Array[String]] *path
