@@ -24,12 +24,16 @@ class CouponUses::ApplyFromReferrals < Less::Interaction
   end
 
   def apply_referral_coupon
-    bill.amount -= Coupon::REFERRAL_AMOUNT
-    bill.discount += Coupon::REFERRAL_AMOUNT
+    bill.amount -= referral_coupon.amount
+    bill.discount += referral_coupon.amount
     bill.amount = 0 if bill.amount < 0
     bill.discount = bill.base_amount if bill.discount > bill.base_amount
 
-    CouponUse.create(bill: bill, coupon: Coupon.for_referrals)
+    CouponUse.create(bill: bill, coupon: referral_coupon)
+  end
+
+  def referral_coupon
+    @referral_coupon ||= Coupon.for_referrals
   end
 
   def use_up(referral)

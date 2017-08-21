@@ -2,9 +2,9 @@ describe Referrals::RedeemForRecipient do
   let(:ownership) { create(:site_membership) }
   let(:site) { ownership.site }
   let(:user) { ownership.user }
+  let!(:coupon) { create :coupon, :referral }
 
   before :each do
-    create(:referral_coupon)
     ChangeSubscription.new(site, subscription: 'free').call
   end
 
@@ -20,7 +20,7 @@ describe Referrals::RedeemForRecipient do
     expect(referral.available_to_sender).to be_truthy
     expect(site.current_subscription).to be_a(Subscription::Pro)
     expect(bill.amount).to eq(0.0)
-    expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
+    expect(bill.discount).to eq coupon.amount
   end
 
   it 'subscribes the sender to Pro too' do
