@@ -93,7 +93,7 @@ describe Bill do
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
-      create(:referral_coupon)
+      create :coupon, :referral
       allow(bill).to receive(:calculate_discount).and_return(2.0)
 
       expect {
@@ -105,7 +105,7 @@ describe Bill do
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's no discount" do
-      create(:referral_coupon)
+      create :coupon, :referral
       allow(bill).to receive(:calculate_discount).and_return(0.0)
 
       expect {

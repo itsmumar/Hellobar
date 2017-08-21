@@ -1,7 +1,7 @@
 describe BillsHelper do
   describe '#coupons_and_uses' do
     it 'yields a list of coupons and uses' do
-      coupon = create(:referral_coupon)
+      coupon = create :coupon, :referral
       bill = create(:pro_bill)
       3.times { bill.coupon_uses.create(coupon: coupon) }
       run_coupon = ->(b) { helper.coupons_and_uses(bill, &b) }
@@ -13,21 +13,21 @@ describe BillsHelper do
 
   describe '#coupon_label' do
     it 'displays a nice coupon label' do
-      coupon = build_stubbed :referral_coupon
+      coupon = build_stubbed :coupon, :referral
       label = helper.coupon_label(coupon, 3)
 
       expect(label).to include(coupon.label)
       expect(label).to include('&times; 3')
-      expect(label).to include(helper.number_to_currency(Coupon::REFERRAL_AMOUNT))
+      expect(label).to include(helper.number_to_currency(coupon.amount))
     end
   end
 
   describe '#coupon_discount' do
     it 'displays a discount' do
-      coupon = build_stubbed :referral_coupon
+      coupon = build_stubbed :coupon, :referral
       label = helper.coupon_discount(coupon, 3)
 
-      expect(label).to include(helper.number_to_currency(Coupon::REFERRAL_AMOUNT * -3))
+      expect(label).to include(helper.number_to_currency(coupon.amount * -3))
     end
   end
 
