@@ -35,4 +35,8 @@ RSpec.configure do |config|
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
   config.include ServiceProviderHelper, type: :service_provider
+
+  config.before(:each) do
+    allow(StaticScriptAssets).to receive(:digest_path).and_return('modules.js')
+  end
 end
