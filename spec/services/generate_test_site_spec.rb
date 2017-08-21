@@ -1,4 +1,4 @@
-describe TestSiteGenerator do
+describe GenerateTestSite do
   let(:site) { create(:site) }
 
   before do

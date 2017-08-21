@@ -7,7 +7,7 @@ module SiteGeneratorHelper
   end
 
   def generate_file_and_return_path(site_id)
-    generator = TestSiteGenerator.new(site_id, directory: site_generator_directory, compress: true)
+    generator = GenerateTestSite.new(site_id, directory: site_generator_directory, compress: true)
 
     generator.generate_file
 
