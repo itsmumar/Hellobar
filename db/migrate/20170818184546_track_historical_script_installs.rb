@@ -6,7 +6,7 @@ class TrackHistoricalScriptInstalls < ActiveRecord::Migration
       end
     end
 
-    Site.where('created_at > ? AND script_uninstalled_at IS NOT NULL', Time.gm(2017, 8, 9)).find_each do |site|
+    Site.script_uninstalled_db.where('created_at > ?', Time.gm(2017, 8, 9)).find_each do |site|
       site.owners.each do |owner|
         TrackEvent.new(:uninstalled_script, site: site, user: owner).call
       end
