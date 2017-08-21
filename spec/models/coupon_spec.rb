@@ -1,6 +1,9 @@
 describe Coupon do
-  it 'has a way to fetch the coupon for referrals' do
-    c = Coupon.create(public: false, amount: 10.0, label: Coupon::REFERRAL_LABEL)
-    expect(Coupon.for_referrals).to eq(c)
+  describe '.for_referrals' do
+    it 'returns the coupon for referrals' do
+      coupon = Coupon.create(public: false, amount: Coupon::REFERRAL_AMOUNT, label: Coupon::REFERRAL_LABEL)
+
+      expect(Coupon.for_referrals).to eq coupon
+    end
   end
 end
