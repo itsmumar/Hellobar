@@ -1,5 +1,6 @@
 class GenerateStaticScriptModules
   def call
+    compile
     if store_site_scripts_locally?
       store_locally
     else
@@ -9,9 +10,9 @@ class GenerateStaticScriptModules
 
   private
 
-  attr_reader :site, :compress
+  attr_reader :site, :compress, :script_content
 
-  def script_content
+  def compile
     @script_content ||=
       if compress_script?
         StaticScriptAssets.render_compressed('modules.js')
