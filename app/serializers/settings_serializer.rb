@@ -33,10 +33,10 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def themes_for_site
-    if scope.capabilities.subtle_facet_theme?
+    if scope.capabilities.advanced_themes?
       Theme.sorted
     else
-      Theme.sorted.reject { |theme| theme.id == 'subtle-facet' }
+      Theme.sorted.reject { |theme| theme.advanced? }
     end
   end
 end

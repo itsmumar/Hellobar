@@ -29,7 +29,7 @@ class Subscription
         true
       end
 
-      def subtle_facet_theme?
+      def advanced_themes?
         true
       end
     end
