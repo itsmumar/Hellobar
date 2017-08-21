@@ -62,17 +62,6 @@ describe Subscription::Capabilities do
 
     # Refund
     RefundBill.new(pro_bill).call
-    expect(site).to be_capable_of :pro
-
-    # Should have a pending bill for pro
-    pending = site.bills.pending
-    expect(pending.size).to eq(1)
-    expect(pending.first.subscription).to be_a Subscription::Pro
-
-    # Switch to Free
-    change_subscription('free', credit_card)
-
-    # Should not have pro capabilities
     expect(site).to be_capable_of :free
 
     # Should have a pending bill for free subscription
