@@ -13,7 +13,7 @@ class HbTestSite
 
   def self.generate(site_id, full_path)
     raise 'site id is empty' if site_id.blank?
-    SiteGenerator.new(site_id, full_path: full_path).call
+    TestSiteGenerator.new(site_id, full_path: full_path).call
   end
 
   def self.generate_default(site_id = nil)

@@ -1,4 +1,4 @@
-class SiteGenerator
+class TestSiteGenerator
   attr_reader :full_path, :site
 
   def initialize(site_id, opts = {})
