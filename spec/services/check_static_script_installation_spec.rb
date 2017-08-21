@@ -22,8 +22,7 @@ describe CheckStaticScriptInstallation do
     end
 
     it 'tracks the uninstall event to analytics' do
-      track_event_double = double(call: nil)
-      expect(TrackEvent).to receive(:new).with(:uninstalled_script, site: site, user: site.owners.first).and_return(track_event_double)
+      expect(TrackEvent).to receive_service_call.with(:uninstalled_script, site: site, user: site.owners.first)
 
       service.call
     end
@@ -45,8 +44,7 @@ describe CheckStaticScriptInstallation do
     end
 
     it 'tracks the install event to analytics' do
-      track_event_double = double(call: nil)
-      expect(TrackEvent).to receive(:new).with(:installed_script, site: site, user: site.owners.first).and_return(track_event_double)
+      expect(TrackEvent).to receive_service_call.with(:installed_script, site: site, user: site.owners.first)
 
       service.call
     end
