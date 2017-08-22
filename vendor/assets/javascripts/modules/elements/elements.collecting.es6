@@ -37,6 +37,8 @@ hellobar.defineModule('elements.collecting',
         switch (field.type) {
           case 'builtin-email':
             return 'builtin-email';
+          case 'builtin-phone':
+            return 'builtin-phone';
           default:
             return '';
         }
