@@ -13,9 +13,9 @@
   "element_types": ["Takeover"],
   "defaults": {
     "Takeover": {
-      "background_color": "CCCCCC",
-      "text_color": "36383C",
-      "button_color": "EF643D",
+      "background_color": "012FFF",
+      "text_color": "7282B8",
+      "button_color": "264AAE",
       "link_color": "FFFFFF",
       "font_id": "open_sans"
     }
