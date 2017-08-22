@@ -26,7 +26,7 @@ class GenerateStaticScriptModules
   end
 
   def store_remotely
-    UploadToS3.new(filename, script_content).call
+    UploadToS3.new(filename, script_content, cache: 1.year).call
   end
 
   def compress_script?

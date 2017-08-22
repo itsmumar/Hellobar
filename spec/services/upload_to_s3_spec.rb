@@ -6,9 +6,14 @@ describe UploadToS3 do
   let(:bucket) { 'foobar' }
   let(:s3_double) { double(:s3_double, put_object: true) }
 
-  let(:service) { described_class.new(filename, contents, bucket) }
+  let(:service) { described_class.new(filename, contents) }
 
-  before { allow(Aws::S3::Bucket).to receive(:new).and_return(s3_double) }
+  before do
+    allow(Aws::S3::Bucket)
+      .to receive(:new)
+      .with(Settings.s3_bucket)
+      .and_return(s3_double)
+  end
 
   describe '#call' do
     before { service.call }
@@ -23,14 +28,6 @@ describe UploadToS3 do
           cache_control: 'must-revalidate, proxy-revalidate, max-age=86400, s-maxage=10'
         )
       )
-    end
-
-    context 'when no bucket is defined' do
-      let(:bucket) { nil }
-
-      it 'defaults to Settings.s3_bucket' do
-        expect(Aws::S3::Bucket).to have_received(:new).with(Settings.s3_bucket)
-      end
     end
   end
 end

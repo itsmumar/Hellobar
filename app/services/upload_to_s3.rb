@@ -7,11 +7,12 @@ class UploadToS3
 
   # @param [String] filename
   # @param [String] contents
-  # @param [String] bucket
-  def initialize(filename, contents, bucket = nil)
+  # @param [Integer] maxage
+  def initialize(filename, contents, cache: nil)
     @filename = filename
     @contents = contents
-    @bucket = bucket || Settings.s3_bucket
+    @maxage = cache || MAXAGE
+    @s_maxage = cache || S_MAXAGE
   end
 
   def call
@@ -44,10 +45,10 @@ class UploadToS3
   # with this configuration CloudFront will be refreshing cache every 10 seconds
   # but end user will be getting more often 304 or 200 (cached in CloudFront) version during a day
   def cache_header
-    "must-revalidate, proxy-revalidate, max-age=#{ MAXAGE }, s-maxage=#{ S_MAXAGE }"
+    "must-revalidate, proxy-revalidate, max-age=#{ @maxage }, s-maxage=#{ @s_maxage }"
   end
 
   def s3_bucket
-    Aws::S3::Bucket.new(@bucket)
+    Aws::S3::Bucket.new(Settings.s3_bucket)
   end
 end
