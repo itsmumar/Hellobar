@@ -1,6 +1,13 @@
 describe Coupon do
-  it 'has a way to fetch the coupon for referrals' do
-    c = Coupon.create(public: false, amount: 10.0, label: Coupon::REFERRAL_LABEL)
-    expect(Coupon.for_referrals).to eq(c)
+  it { is_expected.to validate_presence_of :label }
+  it { is_expected.to validate_presence_of :amount }
+  it { is_expected.to validate_numericality_of(:amount).is_greater_than 0 }
+
+  describe '.for_referrals' do
+    it 'returns the coupon for referrals' do
+      coupon = create :coupon, :referral
+
+      expect(Coupon.for_referrals).to eq coupon
+    end
   end
 end

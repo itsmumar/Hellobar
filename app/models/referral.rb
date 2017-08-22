@@ -1,6 +1,4 @@
 class Referral < ActiveRecord::Base
-  include ReferralTokenizable
-
   FOLLOWUP_INTERVAL = 5.days
 
   enum state: %i[sent signed_up installed]
@@ -17,6 +15,8 @@ class Referral < ActiveRecord::Base
   validates :sender_id, presence: true
   validates :email, presence: true
   validate :ensure_email_available, on: :create
+
+  after_create :create_referral_token
 
   def self.redeemable_for_site(site)
     possible_recipient_ids = site.owners.pluck(:id)

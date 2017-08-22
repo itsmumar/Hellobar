@@ -4,7 +4,7 @@ describe SettingsSerializer do
   let(:serializer) { SettingsSerializer.new(user, scope: site) }
 
   describe '#available_themes' do
-    context 'when site has got subtle_facet_theme capability' do
+    context 'when site has got advanced_themes capability' do
       let(:site) { create :site, :pro_managed, user: user }
 
       it 'returns all themes' do
@@ -13,11 +13,12 @@ describe SettingsSerializer do
       end
     end
 
-    context 'when site has not got subtle_facet_theme capability' do
+    context 'when site has not got advanced_themes capability' do
       let(:site) { create :site, :pro, user: user }
+      let(:advanced_themes) { %w[subtle-facet smooth-impact] }
 
-      it 'does not return subtle-facet theme' do
-        themes = Theme.sorted.reject { |theme| theme.id == 'subtle-facet' }
+      it 'does not return advanced themes' do
+        themes = Theme.sorted.reject { |theme| theme.id.in? advanced_themes }
 
         expect(serializer.available_themes)
           .to eql ActiveModel::ArraySerializer.new(themes, each_serializer: ThemeSerializer).as_json

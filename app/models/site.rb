@@ -98,10 +98,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.script_uninstalled_db
-    where(
-      'script_installed_at IS NOT NULL ' \
-      'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
-    )
+    where('script_uninstalled_at > script_installed_at')
   end
 
   def self.script_was_installed_again

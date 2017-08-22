@@ -10,7 +10,7 @@ describe Referrals::RedeemForSender do
     let(:ownership) { create(:site_membership, site: past_due_site) }
     let(:user) { ownership.user }
     let(:site) { ownership.site }
-
+    let!(:coupon) { create :coupon, :referral }
     let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user, site: site) }
 
     before :each do
@@ -31,7 +31,7 @@ describe Referrals::RedeemForSender do
     it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
       bill = site.bills.paid.last
       expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq([bill.base_amount, Coupon::REFERRAL_AMOUNT].min)
+      expect(bill.discount).to eq([bill.base_amount, coupon.amount].min)
     end
   end
 
@@ -39,6 +39,7 @@ describe Referrals::RedeemForSender do
     let!(:site) { create(:site, :free_subscription, :with_user) }
     let!(:user) { site.owners.first }
     let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user, site: site) }
+    let!(:coupon) { create :coupon, :referral }
     let(:subscription) { site.current_subscription }
 
     before do
@@ -58,7 +59,7 @@ describe Referrals::RedeemForSender do
     it 'should mark the last bill as paid with an amount of 0.0 and discounted' do
       bill = subscription.active_bills.last
       expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(Coupon::REFERRAL_AMOUNT)
+      expect(bill.discount).to eq coupon.amount
     end
   end
 end

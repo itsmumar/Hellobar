@@ -68,6 +68,7 @@ describe ReferralsController do
   end
 
   describe 'PUT :update' do
+    let!(:coupon) { create :coupon, :referral }
     let!(:site) { create :site, :free_subscription, users: [user] }
     let!(:referral) { create(:referral, state: :installed, available_to_sender: true, sender: user) }
 
