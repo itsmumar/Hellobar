@@ -66,24 +66,25 @@ class UserController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    if @user.deleted?
-      respond_to do |format|
-        format.html do
-          flash[:success] = 'Account successfully deleted.'
-          sign_out @user
-          redirect_to get_started_path
-        end
-        format.json { render json: { success: true }, status: :ok }
+    DestroyUser.new(@user).call
+
+    respond_to do |format|
+      format.html do
+        flash[:success] = 'Account successfully deleted.'
+        sign_out @user
+        redirect_to get_started_path
       end
-    else
-      respond_to do |format|
-        format.html do
-          flash.now[:error] = "There was a problem deleting your account#{ @user.errors.any? ? ": #{ @user.errors.full_messages.first.downcase }." : '.' }"
-          render action: :edit
-        end
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+      format.json { render json: { success: true }, status: :ok }
+    end
+  rescue ActiveRecord::ActiveRecordError => e
+    errors = e.record.errors
+
+    respond_to do |format|
+      format.html do
+        flash.now[:error] = "There was a problem deleting your account#{ errors.any? ? ": #{ errors.full_messages.first.downcase }." : '.' }"
+        render action: :edit
       end
+      format.json { render json: errors, status: :unprocessable_entity }
     end
   end
 

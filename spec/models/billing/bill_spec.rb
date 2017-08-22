@@ -75,6 +75,7 @@ describe Bill do
   describe 'set_final_amount' do
     let!(:bill) { create(:pro_bill, bill_at: 15.days.ago) }
     let!(:user) { create(:user) }
+    let!(:coupon) { create :coupon, :referral }
     let!(:refs) do
       (1..3).map do
         create(:referral, sender: user, site: bill.site, state: 'installed', available_to_sender: true)
@@ -93,7 +94,7 @@ describe Bill do
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
-      create(:referral_coupon)
+      create :coupon, :referral
       allow(bill).to receive(:calculate_discount).and_return(2.0)
 
       expect {
@@ -105,7 +106,7 @@ describe Bill do
     end
 
     it "sets the final amount to 0 and uses up one available referral if there's no discount" do
-      create(:referral_coupon)
+      create :coupon, :referral
       allow(bill).to receive(:calculate_discount).and_return(0.0)
 
       expect {

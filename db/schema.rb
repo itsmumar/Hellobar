@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170816134913) do
+ActiveRecord::Schema.define(version: 20170821122653) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -145,19 +145,21 @@ ActiveRecord::Schema.define(version: 20170816134913) do
   add_index "contact_lists", ["site_id"], name: "index_contact_lists_on_site_id", using: :btree
 
   create_table "coupon_uses", force: :cascade do |t|
-    t.integer  "coupon_id",  limit: 4
-    t.integer  "bill_id",    limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "coupon_id",  limit: 4, null: false
+    t.integer  "bill_id",    limit: 4, null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
+  add_index "coupon_uses", ["bill_id"], name: "fk_rails_73bec6a49d", using: :btree
+  add_index "coupon_uses", ["coupon_id"], name: "fk_rails_f2d61c8f47", using: :btree
+
   create_table "coupons", force: :cascade do |t|
-    t.string   "label",          limit: 255
-    t.integer  "available_uses", limit: 4
-    t.decimal  "amount",                     precision: 7, scale: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "public",                                             default: false
+    t.string   "label",      limit: 255,                                         null: false
+    t.decimal  "amount",                 precision: 7, scale: 2,                 null: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
+    t.boolean  "public",                                         default: false, null: false
   end
 
   create_table "credit_cards", force: :cascade do |t|
@@ -439,6 +441,8 @@ ActiveRecord::Schema.define(version: 20170816134913) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "billing_attempts", "credit_cards"
+  add_foreign_key "coupon_uses", "bills"
+  add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"
   add_foreign_key "subscriptions", "credit_cards"
 end
