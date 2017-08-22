@@ -66,7 +66,7 @@ class GenerateTestSite
           <div data-hb-cu-ab-test="#{ content_upgrade_tests.pluck(:id).join(',') }"></div>
         </section>
 
-        <script src="generated_scripts/test_site.js"></script>
+        <script src="/generated_scripts/test_site.js"></script>
 
         <section>
           <h1>External Tracking</h1>
