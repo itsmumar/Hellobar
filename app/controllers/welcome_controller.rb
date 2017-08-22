@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
   layout 'static'
 
-  before_action :require_no_user, only: %i[index email_quickstart]
+  before_action :require_no_user, only: %i[index]
 
   def index
     @last_logged_in_user = User.find_by(email: cookies[:login_email])
@@ -15,13 +15,6 @@ class WelcomeController < ApplicationController
 
   def get_started # rubocop:disable AccessorMethodName
     render '_index_original'
-  end
-
-  def email_quickstart
-    @signup_type = :email
-    Analytics.track(*current_person_type_and_id, 'Homepage - Email Signup')
-    set_site_url
-    render action: 'index'
   end
 
   private

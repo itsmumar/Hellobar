@@ -5,14 +5,11 @@ h1.subheadline= "Enter your URL below to get started"
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
-    - if @signup_type == :email
-      button type="submit"
-        | Continue, It's Free
-    - else
-      input type="hidden" name="oauth" value="google_oauth2"
-      button#sign-up-button type="submit"
-        | Log in with Google
+    input type="hidden" name="oauth" value="google_oauth2"
+    button#sign-up-button type="submit"
+      | Log in with Google
 
     .clear
+
   - if flash[:error]
     .error= flash[:error]
