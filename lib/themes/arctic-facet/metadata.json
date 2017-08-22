@@ -17,11 +17,11 @@
       "text_color": "36383C",
       "button_color": "EF643D",
       "link_color": "FFFFFF",
-      "font_id": "roboto"
+      "font_id": "open_sans"
     }
   },
   "image": {
-    "default_url": "https://s3.amazonaws.com/assets.hellobar.com/subtle-facet-default.jpg",
+    "default_url": "https://s3.amazonaws.com/assets.hellobar.com/arctic-facet-default.jpg",
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "background",
     "position_selectable": false
