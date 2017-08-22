@@ -66,7 +66,7 @@ class GenerateTestSite
           <div data-hb-cu-ab-test="#{ content_upgrade_tests.pluck(:id).join(',') }"></div>
         </section>
 
-        <script src="/generated_scripts/test_site.js"></script>
+        #{ script_tag }
 
         <section>
           <h1>External Tracking</h1>
@@ -112,6 +112,18 @@ class GenerateTestSite
       </body>
       </html>
     EOS
+  end
+
+  def script_tag
+    if Rails.env.test?
+      "<script>#{ script_content }</script>"
+    else
+      '<script src="/generated_scripts/test_site.js"></script>'
+    end
+  end
+
+  def script_content
+    RenderStaticScript.new(@site, compress: @compress).call
   end
 
   def generate_full_path(opts)
