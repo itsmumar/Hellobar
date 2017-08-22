@@ -31,77 +31,13 @@ describe SitesController do
     end
 
     context 'when no user is logged-in' do
-      it 'creates a new temporary user and logs them in' do
-        expect {
-          post :create, site: { url: 'temporary-site.com' }
-        }.to change(User, :count).by(1)
-
-        temp_user = User.last
-        expect(temp_user.status).to eq(User::TEMPORARY_STATUS)
-        expect(controller.current_user).to eq(temp_user)
-      end
-
-      it 'redirects to oauth login if oauth is set' do
-        post :create, site: { url: 'temporary-sitee.com' }, oauth: true
+      it 'redirects to oauth login' do
+        post :create, site: { url: 'temporary-site.com' }
         expect(response).to redirect_to('/auth/google_oauth2')
       end
 
-      it 'creates a new site and sets a temporary user as the owner' do
-        temp_user = User.new
-        allow(User).to receive(:generate_temporary_user).and_return(temp_user)
-        expect(DetectInstallType).to receive_service_call
-
-        expect {
-          post :create, site: { url: 'temporary-site.com' }
-        }.to change(Site, :count).by(1)
-
-        expect(temp_user.sites).to include(Site.last)
-      end
-
-      it "creates a new referral if a user's token is given" do
-        user = User.new(email: 'temporary@email.com')
-        allow(user).to receive(:temporary?).and_return(true)
-        allow(User).to receive(:generate_temporary_user).and_return(user)
-        expect(DetectInstallType).to receive_service_call
-
-        expect {
-          post(
-            :create,
-            { site: { url: 'temporary-site.com' } },
-            referral_token: create(:referral_token).token
-          )
-        }.to change(Referral, :count).by(1)
-
-        ref = Referral.last
-        expect(ref.state).to eq('signed_up')
-        expect(ref.recipient).to eq(user)
-      end
-
-      it 'updates an existing referral if its token is given' do
-        ref = create(:referral, state: :sent)
-        allow(User).to receive(:generate_temporary_user).and_return(user)
-
-        expect {
-          post(
-            :create,
-            { site: { url: 'temporary-site.com' } },
-            referral_token: ref.referral_token.token
-          )
-        }.not_to change(Referral, :count)
-
-        ref.reload
-        expect(ref.state).to eq('signed_up')
-        expect(ref.recipient).to eq(user)
-      end
-
-      it 'redirects to the editor after creation' do
-        post :create, site: { url: 'temporary-site.com' }
-
-        expect(response).to redirect_to new_site_site_element_path(Site.last)
-      end
-
       it 'redirects to the landing page with an error if site is not valid' do
-        post :create, site: { url: 'not a url lol' }
+        post :create, site: { url: 'not a valid url' }
 
         expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
@@ -112,15 +48,6 @@ describe SitesController do
 
         expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'creates the site with an initial free subscription' do
-        post :create, site: { url: 'good-site.com' }
-
-        site = Site.last
-
-        expect(site.current_subscription).to be_present
-        expect(site.current_subscription.is_a?(Subscription::Free)).to be_truthy
       end
 
       it 'redirects to login page if base URL has already been taken' do

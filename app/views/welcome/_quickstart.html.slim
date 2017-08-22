@@ -5,7 +5,6 @@ h1.subheadline= "Enter your URL below to get started"
   = form_tag sites_path do
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
-    input type="hidden" name="oauth" value="google_oauth2"
     button#sign-up-button type="submit"
       | Log in with Google
 

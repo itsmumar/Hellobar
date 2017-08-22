@@ -55,17 +55,6 @@ class User < ActiveRecord::Base
   TEMPORARY_STATUS = 'temporary'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
 
-  # returns a user with a random email and password
-  def self.generate_temporary_user
-    timestamp = Time.current.to_i
-
-    new_user = User.create email: "hello-#{ timestamp }-#{ rand(timestamp) }@hellobar.com", password: Digest::SHA1.hexdigest("hello-#{ timestamp }-me"), status: TEMPORARY_STATUS
-
-    generate_temporary_user until new_user.valid?
-
-    new_user
-  end
-
   def self.search_all_versions_for_email(email)
     return if email.blank?
 
