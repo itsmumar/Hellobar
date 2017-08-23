@@ -110,10 +110,11 @@ describe StaticScriptModel do
       expect(model.hellobar_container_css)
         .to eql "container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n" \
                 "takeover/container.css\ncustom/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
-                "hellobar-classic/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
+                "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
-                "marigold/container.css\nsubtle-facet/container.css\ntraffic-growth/container.css\nviolet/container.css"
+                "marigold/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\n" \
+                "traffic-growth/container.css\nviolet/container.css"
     end
   end
 

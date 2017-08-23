@@ -27,7 +27,7 @@ class ChartDataSerializer
   end
 
   def first_date
-    return site_statistics.days.last unless limit_data?
+    return site_statistics.days.first unless limit_data?
     # compensate today so that
     # `days_number = 2` means get 2 days -- yesterday and today
     (days_limit - 1).days.ago.to_date

@@ -26,7 +26,7 @@ class SiteStatistics
   end
 
   def days
-    group_by(&:date).keys
+    group_by(&:date).keys.sort
   end
 
   def with_views

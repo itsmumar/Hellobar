@@ -95,7 +95,7 @@ class Subscription
       false
     end
 
-    def subtle_facet_theme?
+    def advanced_themes?
       false
     end
 

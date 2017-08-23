@@ -37,6 +37,8 @@ hellobar.defineModule('elements.collecting',
         switch (field.type) {
           case 'builtin-email':
             return 'builtin-email';
+          case 'builtin-phone':
+            return 'builtin-phone';
           default:
             return '';
         }
@@ -90,8 +92,20 @@ hellobar.defineModule('elements.collecting',
                 // Remove the entire email input wrapper including the button
                 removeElements = siteElementContainer.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
               }
-              targetSiteElement.innerHTML = '<span>' + thankYouText + '</span>';
+
+              buttonStyle = `
+                color: #${siteElementModel.link_color}; 
+                background-color: #${siteElementModel.secondary_color}; 
+                border-color: #${siteElementModel.secondary_color}
+              `
+              closeLink =
+                `<a style="${buttonStyle}" class="thank-you-button hb-cta-style-button cta" href="javascript:void(0)" onclick="${siteElement.me}.close()">
+                  <div class="hb-text-holder">Close</div>
+                 </a>`
+
+              targetSiteElement.innerHTML = `<span>${thankYouText}</span>${closeLink}`;
             }
+
             if (thankYouCssClass) {
               dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
             }
