@@ -51,6 +51,7 @@ export default Ember.Component.extend({
         return;
       }
       this.set('goal', goal === 'social' ? 'social/like_on_facebook' : goal);
+      this.get('theming').setThemeById('autodetect');
       this.set('selectionInProgress', false);
     },
 
