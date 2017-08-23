@@ -76,6 +76,10 @@
   padding: 5px 15px;
 }
 
+#hellobar-slider .hb-cta-style-button.thank-you-button {
+  margin-top: 10px;
+}
+
 #hellobar-bar .answer {
   margin-right: 1em
 }

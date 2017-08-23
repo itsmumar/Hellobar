@@ -265,5 +265,15 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         background-image: $phone-input-icon;
       }
     }
+
+    .thank-you-button {
+      max-width: 200px;
+      margin-left: 0;
+      padding: 15px 20px 18px;
+
+      .hb-text-holder {
+        padding: 12px 40px;
+      }
+    }
   }
 }
