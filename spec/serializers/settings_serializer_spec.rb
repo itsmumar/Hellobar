@@ -15,7 +15,7 @@ describe SettingsSerializer do
 
     context 'when site has not got advanced_themes capability' do
       let(:site) { create :site, :pro, user: user }
-      let(:advanced_themes) { %w[subtle-facet smooth-impact] }
+      let(:advanced_themes) { %w[arctic-facet subtle-facet smooth-impact] }
 
       it 'does not return advanced themes' do
         themes = Theme.sorted.reject { |theme| theme.id.in? advanced_themes }
