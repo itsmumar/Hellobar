@@ -148,7 +148,7 @@ class @RuleModal extends Modal
       # select the correct hour
       hourValue = conditionData.value?[0] || 0
       minuteValue = conditionData.value?[1] || 0
-      timezoneValue = conditionData.value?[2] || window.site.timezone || "visitor"
+      timezoneValue = conditionData.value?[2] || window.siteTimezone || "visitor"
 
       $condition.find(classToEnable)
                 .find(".value:eq(0) > option[value=\"#{hourValue}\"]")

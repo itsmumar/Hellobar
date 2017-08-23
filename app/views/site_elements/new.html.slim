@@ -7,6 +7,7 @@ javascript:
   window.HB_DATA = {
     skipInterstitial: #{not render_interstitial?}
   }
+  window.siteTimezone = "#{@site.timezone}"
 
 - unless params[:element_to_copy_id].blank?
   javascript:
