@@ -22,7 +22,7 @@ FactoryGirl.define do
           }
           create :site_statistics_record, attributes
         end
-      SiteStatistics.new records
+      SiteStatistics.new records.reverse
     end
 
     trait :with_views do
