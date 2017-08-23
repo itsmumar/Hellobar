@@ -11,8 +11,8 @@ class UploadToS3
   def initialize(filename, contents, cache: nil)
     @filename = filename
     @contents = contents
-    @maxage = cache || MAXAGE
-    @s_maxage = cache || S_MAXAGE
+    @maxage = (cache || MAXAGE).to_i
+    @s_maxage = (cache || S_MAXAGE).to_i
   end
 
   def call
