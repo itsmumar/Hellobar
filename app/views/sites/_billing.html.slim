@@ -90,7 +90,7 @@ section
       ' Please enter credit card details by #{@site.current_subscription.trial_end_date.strftime('%-m-%-d-%Y')}
       ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
 
-  - if @next_bill&.amount > 0
+  - if @next_bill && @next_bill.amount > 0
     small
       ' Next bill is due on
       = bill_due_at(@next_bill)
