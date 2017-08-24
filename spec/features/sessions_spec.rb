@@ -21,8 +21,8 @@ feature 'User can sign up', :js do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
-    fill_in 'site[url]', with: 'mewgle.com'
-    click_button 'sign-up-button'
+    first('input[name="site[url]"]').set 'mewgle.com'
+    first('.login-with-google').click
 
     expect(page).to have_content "I'll create it later"
 
