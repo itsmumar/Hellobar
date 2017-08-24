@@ -20,8 +20,11 @@ describe SiteStatistics, freeze: '2017-01-03' do
   end
 
   describe '#days' do
-    it 'returns uniq record dates' do
-      expect(model.days).to eql [Date.current]
+    it 'returns uniq and sorted dates' do
+      allow(first_record).to receive(:date).and_return(1.day.ago.to_date)
+      allow(second_record).to receive(:date).and_return(2.days.ago.to_date)
+
+      expect(model.days).to eql [2.days.ago.to_date, 1.day.ago.to_date, Date.current]
     end
   end
 

@@ -140,7 +140,8 @@ export default Ember.Service.extend({
   currentThemeIsTemplate: Ember.computed.equal('currentTheme.type', 'template'),
 
   resetThemeIfNeeded: function(style) {
-    const themeSupportsStyle = !_.includes(this.get('model.theme.element_types'), style);
+    const type = style || this.get('model.type');
+    const themeSupportsStyle = !_.includes(this.get('model.theme.element_types'), type);
 
     if (themeSupportsStyle) {
       this.set('model.theme', null);
