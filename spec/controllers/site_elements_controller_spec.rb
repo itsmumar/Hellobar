@@ -88,7 +88,7 @@ describe SiteElementsController do
     end
 
     it 'sets the correct error if a rule is not provided' do
-      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
+      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
 
       post :create, site_id: site.id, site_element: { element_subtype: 'traffic', rule_id: 0 }
 
@@ -190,7 +190,7 @@ describe SiteElementsController do
     before do
       stub_current_user(user)
 
-      allow_any_instance_of(Site).to receive(:generate_script)
+      allow_any_instance_of(StaticScript).to receive(:generate)
     end
 
     it 'creates an updater' do

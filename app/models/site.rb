@@ -64,8 +64,7 @@ class Site < ActiveRecord::Base
 
   after_commit do
     if needs_script_regeneration?
-      generate_script
-      generate_test_site
+      script.generate
       @needs_script_regeneration = false
     end
   end
@@ -77,6 +76,8 @@ class Site < ActiveRecord::Base
   validate :url_is_unique?
 
   store :settings, coder: JSON
+
+  delegate :installed?, :name, :url, to: :script, prefix: true
 
   def self.protocol_ignored_url(url)
     host = normalize_url(url).normalized_host if url.include?('http')
@@ -106,15 +107,11 @@ class Site < ActiveRecord::Base
       .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
   end
 
-  def self.id_to_script_hash(id)
-    Digest::SHA1.hexdigest("bar#{ id }cat")
-  end
-
   def self.find_by_script(script_embed)
     target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
 
     (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by(id: i) if id_to_script_hash(i) == target_hash
+      return Site.find_by(id: i) if StaticScript.hash_id(i) == target_hash
     end
 
     nil
@@ -132,37 +129,8 @@ class Site < ActiveRecord::Base
     @needs_script_regeneration = true unless deleted? || destroyed?
   end
 
-  def script_installed?
-    CheckStaticScriptInstallation.new(self).call
-
-    script_installed_at.present? &&
-      (script_uninstalled_at.blank? || script_installed_at > script_uninstalled_at)
-  end
-
   def script_url
-    if Settings.store_site_scripts_locally
-      "generated_scripts/#{ script_name }"
-    elsif Settings.script_cdn_url.present?
-      "#{ Settings.script_cdn_url }/#{ script_name }"
-    else
-      "#{ Settings.s3_bucket }.s3.amazonaws.com/#{ script_name }"
-    end
-  end
-
-  def script_name
-    raise 'script_name requires ID' unless persisted?
-    "#{ Site.id_to_script_hash(id) }.js"
-  end
-
-  def generate_script
-    GenerateStaticScriptJob.perform_later self
-  end
-
-  def generate_test_site
-    return unless Rails.env.development?
-
-    Rails.logger.info "[HbTestSite] Generating static test site for Site##{ id }"
-    HbTestSite.generate_default id
+    script.cdn_url
   end
 
   def statistics
@@ -265,10 +233,14 @@ class Site < ActiveRecord::Base
     active_paid_bill&.subscription
   end
 
+  def script
+    @script ||= StaticScript.new(self)
+  end
+
   private
 
   def generate_blank_static_assets
-    GenerateAndStoreStaticScript.new(self, script_content: '').call
+    script.destroy
   end
 
   def standardize_url
