@@ -2,7 +2,7 @@ describe SitesController do
   let(:user) { create(:user) }
   let(:site) { create(:site) }
 
-  describe 'GET new' do
+  describe 'GET #new' do
     before { stub_current_user(user) }
 
     it 'sets the site instance variable' do
@@ -24,84 +24,20 @@ describe SitesController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     before do
       upload_to_s3 = double(:upload_to_s3, call: true)
       allow(UploadToS3).to receive(:new).and_return(upload_to_s3)
     end
 
     context 'when no user is logged-in' do
-      it 'creates a new temporary user and logs them in' do
-        expect {
-          post :create, site: { url: 'temporary-site.com' }
-        }.to change(User, :count).by(1)
-
-        temp_user = User.last
-        expect(temp_user.status).to eq(User::TEMPORARY_STATUS)
-        expect(controller.current_user).to eq(temp_user)
-      end
-
-      it 'redirects to oauth login if oauth is set' do
-        post :create, site: { url: 'temporary-sitee.com' }, oauth: true
+      it 'redirects to oauth login' do
+        post :create, site: { url: 'temporary-site.com' }
         expect(response).to redirect_to('/auth/google_oauth2')
       end
 
-      it 'creates a new site and sets a temporary user as the owner' do
-        temp_user = User.new
-        allow(User).to receive(:generate_temporary_user).and_return(temp_user)
-        expect(DetectInstallType).to receive_service_call
-
-        expect {
-          post :create, site: { url: 'temporary-site.com' }
-        }.to change(Site, :count).by(1)
-
-        expect(temp_user.sites).to include(Site.last)
-      end
-
-      it "creates a new referral if a user's token is given" do
-        user = User.new(email: 'temporary@email.com')
-        allow(user).to receive(:temporary?).and_return(true)
-        allow(User).to receive(:generate_temporary_user).and_return(user)
-        expect(DetectInstallType).to receive_service_call
-
-        expect {
-          post(
-            :create,
-            { site: { url: 'temporary-site.com' } },
-            referral_token: create(:referral_token).token
-          )
-        }.to change(Referral, :count).by(1)
-
-        ref = Referral.last
-        expect(ref.state).to eq('signed_up')
-        expect(ref.recipient).to eq(user)
-      end
-
-      it 'updates an existing referral if its token is given' do
-        ref = create(:referral, state: :sent)
-        allow(User).to receive(:generate_temporary_user).and_return(user)
-
-        expect {
-          post(
-            :create,
-            { site: { url: 'temporary-site.com' } },
-            referral_token: ref.referral_token.token
-          )
-        }.not_to change(Referral, :count)
-
-        ref.reload
-        expect(ref.state).to eq('signed_up')
-        expect(ref.recipient).to eq(user)
-      end
-
-      it 'redirects to the editor after creation' do
-        post :create, site: { url: 'temporary-site.com' }
-
-        expect(response).to redirect_to new_site_site_element_path(Site.last)
-      end
-
       it 'redirects to the landing page with an error if site is not valid' do
-        post :create, site: { url: 'not a url lol' }
+        post :create, site: { url: 'not a valid url' }
 
         expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
@@ -112,15 +48,6 @@ describe SitesController do
 
         expect(response).to redirect_to get_started_path
         expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'creates the site with an initial free subscription' do
-        post :create, site: { url: 'good-site.com' }
-
-        site = Site.last
-
-        expect(site.current_subscription).to be_present
-        expect(site.current_subscription.is_a?(Subscription::Free)).to be_truthy
       end
 
       it 'redirects to login page if base URL has already been taken' do
@@ -138,6 +65,7 @@ describe SitesController do
 
       it 'can create a new site and is set as the owner' do
         expect(DetectInstallType).to receive_service_call
+        expect(UsePromotionalCode).to receive_service_call
 
         expect {
           post :create, site: { url: 'newzombo.com' }
@@ -169,7 +97,7 @@ describe SitesController do
     end
   end
 
-  describe 'put update' do
+  describe 'PUT #update' do
     let(:membership) { create(:site_membership) }
     let(:user) { membership.user }
     let(:site) { membership.site }
@@ -197,7 +125,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -210,7 +138,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET preview_script' do
+  describe 'GET #preview_script' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -231,7 +159,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET script' do
+  describe 'GET #script' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -252,7 +180,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET chart_data' do
+  describe 'GET #chart_data' do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
@@ -282,7 +210,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET improve' do
+  describe 'GET #improve' do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
@@ -307,7 +235,7 @@ describe SitesController do
     end
   end
 
-  describe 'PUT downgrade' do
+  describe 'PUT #downgrade' do
     let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
 
@@ -321,7 +249,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET install_redirect' do
+  describe 'GET #install_redirect' do
     let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
 

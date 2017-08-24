@@ -26,12 +26,11 @@ class SitesController < ApplicationController
       flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
       redirect_to get_started_path
     elsif params[:source] == 'landing' && @site.url_exists?
-      redirect_to new_user_session_path(existing_url: @site.url, oauth: params[:oauth])
-    elsif params[:oauth]
-      session[:new_site_url] = @site.url
-      redirect_to '/auth/google_oauth2'
+      redirect_to new_user_session_path(existing_url: @site.url)
     else
-      create_for_temporary_user
+      session[:new_site_url] = @site.url
+      session[:promotional_code] = params[:promotional_code]
+      redirect_to '/auth/google_oauth2'
     end
   end
 
@@ -125,31 +124,6 @@ class SitesController < ApplicationController
     params[:action] == 'preview_script' ? false : 'application'
   end
 
-  def generate_temporary_logged_in_user
-    sign_in(User.generate_temporary_user)
-  end
-
-  def create_for_temporary_user
-    if @site.save
-      generate_temporary_logged_in_user
-      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      Analytics.track(*current_person_type_and_id, 'Signed Up', ip: request.remote_ip, url: @site.url, site_id: @site.id)
-
-      SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
-      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
-
-      @site.create_default_rules
-
-      DetectInstallType.new(@site).call
-
-      redirect_to new_site_site_element_path(@site)
-    else
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-      redirect_to get_started_path
-    end
-  end
-
   def create_for_logged_in_user
     if @site.valid? && @site.url_exists?(current_user)
       flash[:error] = 'Url is already in use.'
@@ -159,7 +133,9 @@ class SitesController < ApplicationController
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(site: @site, user: current_user)
       Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+
       ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
+      UsePromotionalCode.new(@site, session.delete(:promotional_code)).call
 
       @site.create_default_rules
 

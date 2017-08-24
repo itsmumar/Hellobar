@@ -56,16 +56,6 @@ describe User do
     end
   end
 
-  describe '.generate_temporary_user' do
-    it 'creates a user with a random email and password' do
-      expect {
-        User.generate_temporary_user
-      }.to change(User, :count).by(1)
-
-      expect(User.last.status).to eq(User::TEMPORARY_STATUS)
-    end
-  end
-
   describe '.find_and_create_by_referral' do
     it 'returns nil if there are no referrals for the email' do
       no_user = User.find_and_create_by_referral('asd')
