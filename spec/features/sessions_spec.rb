@@ -14,10 +14,7 @@ feature 'User can sign up', :js do
       .and_return('original')
   end
 
-  scenario 'through oauth, original homepage' do
-    # force original variation
-    allow_any_instance_of(WelcomeController).to receive(:ab_variation).and_return('original')
-
+  scenario 'through oauth, without coupon code' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
@@ -34,6 +31,26 @@ feature 'User can sign up', :js do
       find('.dropdown-wrapper').click
       expect(page).to have_content('Sign Out')
     end
+
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+
+  scenario 'through oauth, using promotional code to have free Pro trial' do
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
+    visit root_path
+
+    first('input[name="site[url]"]').set 'mewgle.com'
+    first('input[name="promotional_code"]').set coupon.label
+
+    first('.login-with-google').click
+
+    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
+
+    expect(page).to have_content 'Enjoying Hello Bar Pro?'
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

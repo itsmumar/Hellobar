@@ -64,7 +64,7 @@ module Hello
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================
-    Hello::InternalAnalytics.load_ab_tests unless Rails.env.test?
+    Hello::InternalAnalytics.load_ab_tests
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
