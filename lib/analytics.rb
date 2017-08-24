@@ -9,13 +9,6 @@ class Analytics
     end
 
     def alias(visitor_id, user_id)
-      # add alias to Diamond
-      identities = {
-        visitor_id: visitor_id,
-        user_id: user_id
-      }
-      SendEventToDiamondAnalyticsJob.perform_later('identify', timestamp: Time.current.to_f, identities: identities)
-
       track_internal :visitor, visitor_id, :user_id, value: user_id
     end
 

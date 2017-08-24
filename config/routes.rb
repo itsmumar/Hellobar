@@ -169,8 +169,6 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: 'welcome#get_started'
-
   root 'welcome#index'
 
   get '*unmatched_route', to: 'errors#show', code: 404

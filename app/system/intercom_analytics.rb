@@ -90,10 +90,6 @@ class IntercomAnalytics
     tag_users subscription.name, site.owners
   end
 
-  def assigned_ab_test(user:, test_name:, assignment:, **_)
-    # don't track A/B assignments in Intercom for now
-  end
-
   private
 
   def track(options)

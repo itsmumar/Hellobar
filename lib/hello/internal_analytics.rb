@@ -64,7 +64,7 @@ module Hello
     # ================================================================
     # ==      REGISTER YOUR TESTS AT: lib/hello/ab_tests.yml        ==
     # ================================================================
-    Hello::InternalAnalytics.load_ab_tests
+    Hello::InternalAnalytics.load_ab_tests unless Rails.env.test?
 
     def ab_test_cookie_name
       AB_TEST_COOKIE
@@ -158,11 +158,6 @@ module Hello
 
         # Track it
         Analytics.track(*current_person_type_and_id(user), test_name, value: value)
-
-        TrackEvent.new(
-          'assigned_ab_test',
-          visitor_id: visitor_id, user: user, test_name: test_name, assignment: value, timestamp: Time.current.to_f
-        ).call
       else
         # Just get the value
         value = ab_test[:values][value_index]
