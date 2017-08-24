@@ -129,10 +129,6 @@ class Site < ActiveRecord::Base
     @needs_script_regeneration = true unless deleted? || destroyed?
   end
 
-  def script_url
-    script.cdn_url
-  end
-
   def statistics
     @statistics ||= FetchSiteStatistics.new(self, days_limit: 7).call
   end
