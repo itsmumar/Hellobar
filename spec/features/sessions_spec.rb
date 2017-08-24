@@ -12,6 +12,9 @@ feature 'User can sign up', :js do
       .to receive(:ab_variation)
       .with('Sign Up Button 2016-03-17')
       .and_return('original')
+
+    allow_any_instance_of(RenderStaticScript)
+      .to receive(:call).and_return('function hellobar(){}')
   end
 
   scenario 'through oauth, original homepage' do
@@ -23,8 +26,6 @@ feature 'User can sign up', :js do
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
-
-    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
 
     expect(page).to have_content "I'll create it later"
 
@@ -47,8 +48,6 @@ feature 'User can sign up', :js do
 
     first('input[name="site[url]"]').set 'mewgle.com'
     first('.login-with-google').click
-
-    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
 
     expect(page).to have_content "I'll create it later"
 
@@ -73,8 +72,6 @@ feature 'User can sign up', :js do
     first('input[name="promotional_code"]').set coupon.label
 
     first('.login-with-google').click
-
-    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
 
     expect(page).to have_content "I'll create it later"
 
