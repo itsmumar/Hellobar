@@ -23,14 +23,20 @@ class RenderStaticScript
   end
 
   # replace $INJECT_DATA with json settings
+  #
+  # String#[]= is used here intentional cause
+  # `sub` has different behaviour
+  # for example `sub` deletes escaped chars like `\\e602`
   def inject_data(template)
-    template.sub '$INJECT_DATA', model.to_json
+    template['$INJECT_DATA'] = model.to_json
+    template
   end
 
   # replace $INJECT_MODULES with something like
   # "https://my.hellobar.com/modules-a3865d95d1e68a2f017fc3a84a71a5adc12d278f230d94e18134ad546aa7aac5.js"
   def inject_modules(template)
-    template.sub '$INJECT_MODULES', url_for_modules.inspect
+    template['$INJECT_MODULES'] = url_for_modules.inspect
+    template
   end
 
   def template
