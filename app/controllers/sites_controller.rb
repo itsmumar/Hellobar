@@ -29,6 +29,7 @@ class SitesController < ApplicationController
       redirect_to new_user_session_path(existing_url: @site.url)
     else
       session[:new_site_url] = @site.url
+      session[:promotional_code] = params[:promotional_code]
       redirect_to '/auth/google_oauth2'
     end
   end
@@ -132,7 +133,9 @@ class SitesController < ApplicationController
       Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
       SiteMembership.create!(site: @site, user: current_user)
       Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+
       ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
+      UsePromotionalCode.new(@site, session.delete(:promotional_code)).call
 
       @site.create_default_rules
 

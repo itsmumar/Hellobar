@@ -2,7 +2,7 @@ describe SitesController do
   let(:user) { create(:user) }
   let(:site) { create(:site) }
 
-  describe 'GET new' do
+  describe 'GET #new' do
     before { stub_current_user(user) }
 
     it 'sets the site instance variable' do
@@ -24,7 +24,7 @@ describe SitesController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     before do
       upload_to_s3 = double(:upload_to_s3, call: true)
       allow(UploadToS3).to receive(:new).and_return(upload_to_s3)
@@ -65,6 +65,7 @@ describe SitesController do
 
       it 'can create a new site and is set as the owner' do
         expect(DetectInstallType).to receive_service_call
+        expect(UsePromotionalCode).to receive_service_call
 
         expect {
           post :create, site: { url: 'newzombo.com' }
@@ -96,7 +97,7 @@ describe SitesController do
     end
   end
 
-  describe 'put update' do
+  describe 'PUT #update' do
     let(:membership) { create(:site_membership) }
     let(:user) { membership.user }
     let(:site) { membership.site }
@@ -124,7 +125,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -137,7 +138,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET preview_script' do
+  describe 'GET #preview_script' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -158,7 +159,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET script' do
+  describe 'GET #script' do
     let(:user) { create(:user, :with_site) }
     let(:site) { user.sites.last }
 
@@ -179,7 +180,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET chart_data' do
+  describe 'GET #chart_data' do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
@@ -209,7 +210,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET improve' do
+  describe 'GET #improve' do
     let(:site) { create(:site, :with_user, :with_rule) }
     let(:site_element) { create(:site_element, :traffic, site: site) }
     let(:user) { site.owners.first }
@@ -234,7 +235,7 @@ describe SitesController do
     end
   end
 
-  describe 'PUT downgrade' do
+  describe 'PUT #downgrade' do
     let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
 
@@ -248,7 +249,7 @@ describe SitesController do
     end
   end
 
-  describe 'GET install_redirect' do
+  describe 'GET #install_redirect' do
     let(:site) { create(:site, :with_user) }
     let(:user) { site.owners.first }
 
