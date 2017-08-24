@@ -150,7 +150,7 @@ describe StaticScriptAssets do
     before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
 
     it 'returns path to file with a hash' do
-      expect(assets.digest_path('modules.js')).to match /modules-\w{64}.js/
+      expect(assets.digest_path('modules.js')).to match(/modules-\w{64}.js/)
     end
   end
 end
