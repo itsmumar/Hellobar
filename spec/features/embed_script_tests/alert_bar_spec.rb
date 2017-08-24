@@ -10,6 +10,7 @@ feature 'Alert bar injection', :js do
 
   before do
     allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
+    expect(GenerateStaticScriptModules).to receive_service_call
   end
 
   scenario 'injection functionality' do

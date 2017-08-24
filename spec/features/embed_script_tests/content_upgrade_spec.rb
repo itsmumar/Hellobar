@@ -9,6 +9,7 @@ feature 'Content upgrades', :js do
 
   before do
     allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
+    expect(GenerateStaticScriptModules).to receive_service_call
   end
 
   scenario 'inserting a single content upgrade' do
@@ -18,7 +19,7 @@ feature 'Content upgrades', :js do
 
     within '#content-upgrade-container' do
       expect(page).to have_selector 'p.hb-cu-offer'
-      expect(find('.hb-cu-modal-container', visible: false)).to_not be_visible
+      expect(find('.hb-cu-modal-container', visible: false)).not_to be_visible
 
       find('p.hb-cu-offer').click
 
