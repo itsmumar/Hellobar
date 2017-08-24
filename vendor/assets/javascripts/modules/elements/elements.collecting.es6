@@ -92,20 +92,8 @@ hellobar.defineModule('elements.collecting',
                 // Remove the entire email input wrapper including the button
                 removeElements = siteElementContainer.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
               }
-
-              buttonStyle = `
-                color: #${siteElementModel.link_color}; 
-                background-color: #${siteElementModel.secondary_color}; 
-                border-color: #${siteElementModel.secondary_color}
-              `
-              closeLink =
-                `<a style="${buttonStyle}" class="thank-you-button hb-cta-style-button cta" href="javascript:void(0)" onclick="${siteElement.me}.close()">
-                  <div class="hb-text-holder">Close</div>
-                 </a>`
-
-              targetSiteElement.innerHTML = `<span>${thankYouText}</span>${closeLink}`;
+              targetSiteElement.innerHTML = '<span>' + thankYouText + '</span>';
             }
-
             if (thankYouCssClass) {
               dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
             }

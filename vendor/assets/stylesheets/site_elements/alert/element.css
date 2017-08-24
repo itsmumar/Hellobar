@@ -64,10 +64,6 @@
   padding: 6px 20px;
 }
 
-#hellobar-slider .hb-cta-style-button.thank-you-button {
-  display: block;
-}
-
 /* ---- Alarm animation ---- */
 @keyframes alarm-swing {
   10% {
