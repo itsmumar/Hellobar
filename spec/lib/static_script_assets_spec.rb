@@ -146,7 +146,11 @@ describe StaticScriptAssets do
   end
 
   describe '.digest_path' do
-    before { StaticScriptAssets.precompile }
+    before do
+      StaticScriptAssets.env.clear_paths
+      StaticScriptAssets.env.append_path 'vendor/assets/javascripts/modules'
+      StaticScriptAssets.precompile
+    end
     before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
 
     it 'returns path to file with a hash' do
