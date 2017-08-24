@@ -147,9 +147,7 @@ describe StaticScriptAssets do
 
   describe '.digest_path' do
     before do
-      StaticScriptAssets.env.clear_paths
-      StaticScriptAssets.env.append_path 'vendor/assets/javascripts/modules'
-      StaticScriptAssets.precompile
+      StaticScriptAssets.manifest.compile('modules.js')
     end
     before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
 
