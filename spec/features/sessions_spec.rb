@@ -18,11 +18,17 @@ feature 'User can sign up', :js do
     # force original variation
     allow_any_instance_of(WelcomeController).to receive(:ab_variation).and_return('original')
 
-    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
     fill_in 'site[url]', with: 'mewgle.com'
     click_button 'sign-up-button'
+
+    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
@@ -36,11 +42,17 @@ feature 'User can sign up', :js do
     # force new variation
     allow_any_instance_of(WelcomeController).to receive(:ab_variation).and_return('variant')
 
-    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
     first('input[name="site[url]"]').set 'mewgle.com'
     first('.login-with-google').click
+
+    sleep 55 # TODO: investigate 40-50 seconds sign-up timeout
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
