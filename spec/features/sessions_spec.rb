@@ -21,8 +21,9 @@ feature 'User can sign up', :js do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
-    first('input[name="site[url]"]').set 'mewgle.com'
-    first('.login-with-google').click
+    fill_in 'site[url]', with: 'mewgle.com'
+
+    click_on 'sign-up-button'
 
     expect(page).to have_content "I'll create it later"
 
@@ -40,10 +41,10 @@ feature 'User can sign up', :js do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
-    first('input[name="site[url]"]').set 'mewgle.com'
-    first('input[name="promotional_code"]').set coupon.label
+    fill_in 'site[url]', with: 'mewgle.com'
+    fill_in 'promotional_code', with: coupon.label
 
-    first('.login-with-google').click
+    click_on 'sign-up-button'
 
     expect(page).to have_content "I'll create it later"
 
