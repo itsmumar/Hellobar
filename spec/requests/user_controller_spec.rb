@@ -100,7 +100,7 @@ describe 'User requests' do
     describe 'DELETE :destroy' do
       it 'responds with a redirect to get_started path' do
         delete user_path
-        expect(response).to redirect_to get_started_path
+        expect(response).to redirect_to root_path
       end
 
       it 'destroys user' do

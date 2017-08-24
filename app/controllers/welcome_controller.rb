@@ -5,16 +5,8 @@ class WelcomeController < ApplicationController
 
   def index
     @last_logged_in_user = User.find_by(email: cookies[:login_email])
-    @homepage_variation = ab_variation('Homepage Test 2017-08')
-
     Analytics.track(*current_person_type_and_id, 'Homepage')
     set_site_url
-
-    render layout: 'static-alternate' if @homepage_variation == 'variant'
-  end
-
-  def get_started # rubocop:disable AccessorMethodName
-    render '_index_original'
   end
 
   private

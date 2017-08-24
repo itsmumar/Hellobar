@@ -56,17 +56,7 @@ describe Hello::InternalAnalytics do
         object.ab_variation('Example Test')
       end
 
-      it 'tracks a "First Event" event if user has never visited before' do
-        allow(object).to receive(:current_user) { user }
-
-        expect(Analytics).to receive(:track).with(:user, user.id, 'First Visit', ip: '')
-        expect(Analytics).to receive(:track).with(:user, user.id, 'Example Test', anything)
-        object.ab_variation('Example Test')
-      end
-
       it 'uses current_user if available and no explicit user is passed' do
-        cookies[:vid] = 'visitor_id'
-        allow(object).to receive(:cookies) { cookies }
         allow(object).to receive(:current_user) { user }
 
         expect(Analytics).to receive(:track).with(:user, user.id, 'Example Test', anything)

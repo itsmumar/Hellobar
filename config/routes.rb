@@ -169,7 +169,7 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: 'welcome#get_started'
+  get 'get-started', to: redirect('/')
 
   root 'welcome#index'
 
