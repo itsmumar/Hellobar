@@ -85,7 +85,12 @@ describe StaticScript do
       before { allow(Rails.env).to receive(:development?).and_return true }
 
       it 'generates test site' do
-        expect(HbTestSite).to receive(:generate_default).with(site.id)
+        full_path = Rails.root.join('public/test_site.html')
+
+        expect(GenerateTestSite)
+          .to receive_service_call
+          .with(site.id, full_path: full_path)
+
         script.generate
       end
     end
