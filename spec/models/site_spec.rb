@@ -339,7 +339,6 @@ describe Site do
     context 'destroyed' do
       it 'sets needs_script_regeneration? to false' do
         site = create(:site)
-        allow(site).to receive(:generate_blank_static_assets)
 
         site.destroy
 
