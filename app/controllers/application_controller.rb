@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   before_action :record_tracking_param
   before_action :track_h_visit
   before_action :set_raven_context
-  before_action :identify_visitors
   after_action :store_last_requested_path
 
   delegate :remote_ip, to: :request
@@ -31,11 +30,6 @@ class ApplicationController < ActionController::Base
       expires: 90.days.from_now,
       httponly: true
     }
-  end
-
-  # needed to expose cookies (private method) to InternalAnalytics
-  def cookies
-    super
   end
 
   def current_admin
@@ -121,11 +115,6 @@ class ApplicationController < ActionController::Base
       end
     end
     Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
-  end
-
-  def identify_visitors
-    # call current_person_type_and_id to identify previously anonymous users
-    current_person_type_and_id
   end
 
   def set_raven_context
