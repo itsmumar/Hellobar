@@ -96,6 +96,9 @@ class SitesController < ApplicationController
     redirect_to site_path(@site)
   end
 
+  def install
+  end
+
   def install_redirect
     redirect_to site_install_path(current_site)
   end

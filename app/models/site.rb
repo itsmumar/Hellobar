@@ -48,11 +48,6 @@ class Site < ActiveRecord::Base
   }
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
-  scope :script_not_installed_but_active, lambda {
-    joins(:site_elements)
-      .where(script_installed_at: nil)
-      .where('site_elements.created_at > ?', 4.days.ago)
-  }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -79,32 +74,38 @@ class Site < ActiveRecord::Base
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
-  def self.protocol_ignored_url(url)
-    host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
-  end
-
-  def self.script_installed_db
+  def self.script_installed
     where(
       'script_installed_at IS NOT NULL ' \
       'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
     )
   end
 
-  def self.script_not_installed_db
-    where.not(
-      'script_installed_at IS NOT NULL ' \
-      'AND (script_uninstalled_at IS NULL OR script_installed_at > script_uninstalled_at)'
+  def self.script_not_installed
+    where(
+      'script_installed_at IS NULL ' \
+      'OR (script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at)'
     )
   end
 
-  def self.script_uninstalled_db
-    where('script_uninstalled_at > script_installed_at')
+  def self.script_not_installed_but_active
+    joins(:site_elements)
+      .where(script_installed_at: nil)
+      .where('site_elements.created_at > ?', 4.days.ago)
   end
 
-  def self.script_was_installed_again
+  def self.script_uninstalled
+    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
+  end
+
+  def self.script_uninstalled_recently_or_active
     where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
       .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
+  end
+
+  def self.protocol_ignored_url(url)
+    host = normalize_url(url).normalized_host if url.include?('http')
+    where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
   end
 
   def self.find_by_script(script_embed)

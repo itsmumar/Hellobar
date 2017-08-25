@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if current_user.should_send_to_new_site_element_path?
-      new_site_site_element_path(current_user.sites.script_not_installed_db.last)
+      new_site_site_element_path(current_user.sites.script_not_installed.last)
 
     elsif current_user.sites.any?
       # Use last site viewed if available
