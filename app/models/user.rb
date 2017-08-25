@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
     return false unless current_onboarding_status
 
     %i[new selected_goal].include?(current_onboarding_status.status_name) &&
-      sites.script_not_installed_db.any?
+      sites.script_not_installed.any?
   end
 
   def active?
