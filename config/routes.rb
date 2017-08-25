@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   resources :sites do
     member do
       put :downgrade
+      post :install_check
     end
 
     get 'team'

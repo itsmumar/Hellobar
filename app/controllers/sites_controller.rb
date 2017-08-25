@@ -48,6 +48,7 @@ class SitesController < ApplicationController
         @totals = site_statistics
         @recent_elements = @site.site_elements.recent(5)
       end
+
       format.json { render json: @site }
     end
   end
@@ -100,6 +101,13 @@ class SitesController < ApplicationController
 
   def install_redirect
     redirect_to site_install_path(current_site)
+  end
+
+  # async check, but will respond instantly with a not-up-to-date info
+  def install_check
+    CheckStaticScriptInstallation.new(@site).call
+
+    render json: @site
   end
 
   private
