@@ -68,8 +68,7 @@ class SitesController < ApplicationController
   end
 
   def destroy
-    @site.bills.pending.map(&:voided!)
-    @site.destroy
+    DestroySite.new(@site).call
     flash[:success] = 'Your site has been successfully deleted'
 
     redirect_to(current_site ? site_path(current_site) : new_site_path)

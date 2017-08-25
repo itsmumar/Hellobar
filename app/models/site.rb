@@ -52,8 +52,6 @@ class Site < ActiveRecord::Base
   before_validation :standardize_url
   before_validation :generate_read_write_keys
 
-  before_destroy :generate_blank_static_assets
-
   after_update :regenerate_script
   after_touch  :regenerate_script
 
@@ -267,10 +265,6 @@ class Site < ActiveRecord::Base
   end
 
   private
-
-  def generate_blank_static_assets
-    GenerateAndStoreStaticScript.new(self, script_content: '').call
-  end
 
   def standardize_url
     return if url.blank?

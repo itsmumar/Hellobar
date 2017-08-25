@@ -193,29 +193,6 @@ describe Site do
     end
   end
 
-  describe '#destroy', :freeze do
-    let(:mock_upload_to_s3) { double(:upload_to_s3) }
-
-    before do
-      allow(Settings).to receive(:store_site_scripts_locally).and_return false
-      allow(UploadToS3).to receive(:new).and_return(mock_upload_to_s3)
-      allow(mock_upload_to_s3).to receive(:call).with(no_args)
-    end
-
-    it 'blanks-out the site script when destroyed' do
-      site.destroy
-
-      expect(UploadToS3).to have_received(:new).with(site.script_name, '')
-    end
-
-    it 'marks the record as deleted' do
-      site.destroy
-
-      expect(site).to be_deleted
-      expect(site.deleted_at).to eq Time.current
-    end
-  end
-
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
       expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
