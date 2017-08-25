@@ -114,8 +114,12 @@ describe Admin::UsersController do
     end
 
     context 'when cannot destroy' do
-      let(:user) { instance_double(User, id: 1, sites: [], destroy: false) }
-      before { allow(User).to receive(:find).with(user.id.to_s).and_return(user) }
+      before do
+        expect(DestroyUser)
+          .to receive_service_call
+          .with(user)
+          .and_raise(ActiveRecord::RecordNotDestroyed.new('message', user))
+      end
 
       it 'shows a deleted users' do
         delete admin_user_path(user.id)

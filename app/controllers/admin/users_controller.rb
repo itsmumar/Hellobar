@@ -28,13 +28,12 @@ class Admin::UsersController < AdminController
 
   def destroy
     @user = User.find(params[:id])
-    if @user.destroy
-      flash[:success] = "Deleted user #{ @user.id } (#{ @user.email })"
-      redirect_to admin_users_path
-    else
-      flash[:error] = 'Failed to delete user.'
-      redirect_to admin_user_path(@user)
-    end
+    DestroyUser.new(@user).call
+    flash[:success] = "Deleted user #{ @user.id } (#{ @user.email })"
+    redirect_to admin_users_path
+  rescue ActiveRecord::ActiveRecordError => e
+    flash[:error] = 'Could not delete user.'
+    redirect_to admin_user_path(e.record)
   end
 
   def impersonate
