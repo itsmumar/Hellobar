@@ -31,7 +31,7 @@ class Admin::UsersController < AdminController
     DestroyUser.new(@user).call
     flash[:success] = "Deleted user #{ @user.id } (#{ @user.email })"
     redirect_to admin_users_path
-  rescue ActiveRecord::ActiveRecordError => e
+  rescue ActiveRecord::RecordNotDestroyed => e
     flash[:error] = 'Could not delete user.'
     redirect_to admin_user_path(e.record)
   end
