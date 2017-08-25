@@ -4,10 +4,12 @@ class DestroyUser
   end
 
   def call
-    downgrade_subscriptions
-    destroy_credit_cards
-    destroy_own_sites
-    user.destroy!
+    Site.no_touching do # TODO: remove when site callbacks are gone
+      downgrade_subscriptions
+      destroy_credit_cards
+      destroy_own_sites
+      user.destroy!
+    end
   end
 
   private
