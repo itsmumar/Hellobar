@@ -1,7 +1,7 @@
 namespace :mailing do
   desc 'Send weekly site digest email'
   task send_weekly_digest: :environment do
-    Site.script_installed_db.weekly_digest_optin.find_each do |site|
+    Site.script_installed.weekly_digest_optin.find_each do |site|
       SendWeeklyDigestEmailJob.perform_later site
     end
   end

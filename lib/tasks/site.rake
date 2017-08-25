@@ -14,13 +14,13 @@ namespace :site do
 
     desc 'Schedule a re-generation of all active site scripts'
     task regenerate_all_active: :environment do
-      Site.script_installed_db.find_each do |site|
+      Site.script_installed.find_each do |site|
         GenerateDailyStaticScriptJob.perform_later site
         CheckScriptStatusJob.perform_later site
       end
 
-      # See if anyone who uninstalled has installed
-      Site.script_was_installed_again.each do |site|
+      # See if anyone who has uninstalled recently has reinstalled
+      Site.script_uninstalled_recently_or_active.each do |site|
         CheckScriptStatusJob.perform_later site
       end
     end
