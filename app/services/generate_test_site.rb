@@ -1,17 +1,23 @@
-class SiteGenerator
-  attr_reader :full_path, :site
-
+class GenerateTestSite
   def initialize(site_id, opts = {})
     @site = Site.preload_for_script.find(site_id)
     @full_path = opts[:full_path] || generate_full_path(opts)
     @compress = opts.fetch(:compress, false)
   end
 
-  def generate_file
-    File.open(@full_path, 'w') do |file|
+  def call
+    GenerateAndStoreStaticScript.new(site, path: 'test_site.js').call
+
+    File.open(full_path, 'w') do |file|
       file.write(generate_html)
     end
+
+    full_path
   end
+
+  private
+
+  attr_reader :full_path, :site
 
   def generate_html
     <<~EOS
@@ -60,7 +66,7 @@ class SiteGenerator
           <div data-hb-cu-ab-test="#{ content_upgrade_tests.pluck(:id).join(',') }"></div>
         </section>
 
-        <script>#{ script_content }</script>
+        #{ script_tag }
 
         <section>
           <h1>External Tracking</h1>
@@ -108,7 +114,13 @@ class SiteGenerator
     EOS
   end
 
-  private
+  def script_tag
+    if Rails.env.test?
+      "<script>#{ script_content }</script>"
+    else
+      '<script src="/generated_scripts/test_site.js"></script>'
+    end
+  end
 
   def script_content
     RenderStaticScript.new(@site, compress: @compress).call
@@ -118,9 +130,8 @@ class SiteGenerator
     directory = opts[:directory]
 
     return nil if directory.nil?
-
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
-    @full_path = directory.join("#{ SecureRandom.hex }.html")
+    directory.join("#{ SecureRandom.hex }.html")
   end
 
   def content_upgrades

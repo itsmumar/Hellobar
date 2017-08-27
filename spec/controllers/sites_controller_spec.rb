@@ -145,17 +145,24 @@ describe SitesController do
     it 'renders static script' do
       stub_current_user(user)
 
-      expect(StaticScriptAssets)
-        .to receive(:render_model).with(instance_of(StaticScriptModel)).and_return('__DATA__')
-      expect(StaticScriptAssets)
-        .to receive(:render).with('modules.js', site_id: site.id).and_return('__MODULES__')
-      expect(StaticScriptAssets)
-        .to receive(:render).with('static_script_template.js', site_id: site.id).and_return('$INJECT_MODULES; $INJECT_DATA')
+      expect(GenerateStaticScriptModules).to receive_service_call
+
+      options = {
+        templates: SiteElement.all_templates,
+        no_rules: true,
+        preview: true,
+        compress: false
+      }
+
+      expect(RenderStaticScript)
+        .to receive_service_call
+        .with(site, options)
+        .and_return('content')
 
       get :preview_script, id: site
 
       expect(response).to be_success
-      expect(response.body).to eql '__MODULES__; __DATA__'
+      expect(response.body).to eql 'content'
     end
   end
 
@@ -169,14 +176,14 @@ describe SitesController do
       expect(StaticScriptAssets)
         .to receive(:render_model).with(instance_of(StaticScriptModel)).and_return('__DATA__')
       expect(StaticScriptAssets)
-        .to receive(:render).with('modules.js', site_id: site.id).and_return('__MODULES__')
+        .to receive(:digest_path).with('modules.js').and_return('modules.js')
       expect(StaticScriptAssets)
         .to receive(:render).with('static_script_template.js', site_id: site.id).and_return('$INJECT_MODULES; $INJECT_DATA')
 
       get :script, id: site
 
       expect(response).to be_success
-      expect(response.body).to eql '__MODULES__; __DATA__'
+      expect(response.body).to eql '"/generated_scripts/modules.js"; __DATA__'
     end
   end
 

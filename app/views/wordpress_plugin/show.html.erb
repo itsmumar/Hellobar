@@ -27,7 +27,7 @@ License: GPL v2
 */
 function add_hellobar_script()
 {
-  echo "<script src=\"//<%= site.script_url %>\" type=\"text/javascript\" async=\"async\"></script>";
+  echo "<script src=\"<%= site.script_url %>\" type=\"text/javascript\" async=\"async\"></script>";
 }
 
 add_action( 'wp_footer',  'add_hellobar_script');

@@ -50,30 +50,9 @@ describe Site do
   end
 
   describe '#script_installed?' do
-    it 'calls CheckStaticScriptInstallation' do
-      expect(CheckStaticScriptInstallation).to receive_service_call.with(site)
+    it 'is delegated to #script' do
+      expect(site.script).to receive(:installed?)
       site.script_installed?
-    end
-
-    context 'when script_installed_at is present' do
-      before { expect(CheckStaticScriptInstallation).to receive_service_call.with(site) }
-
-      context 'and script_uninstalled_at is blank' do
-        let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: nil) }
-        specify { expect(site.script_installed?).to be_truthy }
-      end
-
-      context 'and script_installed_at > script_uninstalled_at' do
-        let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: 1.day.ago) }
-        specify { expect(site.script_installed?).to be_truthy }
-      end
-    end
-
-    context 'when script_installed_at is blank' do
-      before { expect(CheckStaticScriptInstallation).to receive_service_call.with(site) }
-      let(:site) { create(:site, script_installed_at: nil) }
-
-      specify { expect(site.script_installed?).to be_falsey }
     end
   end
 
@@ -259,22 +238,9 @@ describe Site do
   end
 
   describe '#script_url' do
-    context 'when Settings.store_site_scripts_locally' do
-      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(true) }
-      specify { expect(site.script_url).to eql "generated_scripts/#{ site.script_name }" }
-    end
-
-    context 'when Settings.script_cdn_url' do
-      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(false) }
-      before { allow(Settings).to receive(:script_cdn_url).and_return('http://script_cdn_url') }
-      specify { expect(site.script_url).to eql "http://script_cdn_url/#{ site.script_name }" }
-    end
-
-    context 'otherwise' do
-      before { allow(Settings).to receive(:store_site_scripts_locally).and_return(false) }
-      before { allow(Settings).to receive(:script_cdn_url).and_return(nil) }
-      before { allow(Settings).to receive(:s3_bucket).and_return('s3_bucket') }
-      specify { expect(site.script_url).to eql "s3_bucket.s3.amazonaws.com/#{ site.script_name }" }
+    it 'is delegated to #script' do
+      expect(site.script).to receive(:url)
+      site.script_url
     end
   end
 

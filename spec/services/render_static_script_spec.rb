@@ -14,16 +14,16 @@ describe RenderStaticScript do
         .and_return('__DATA__')
 
       expect(StaticScriptAssets)
-        .to receive(:render)
-        .with('modules.js', site_id: site.id)
-        .and_return('__MODULES__')
+        .to receive(:digest_path)
+        .with('modules.js')
+        .and_return('modules.js')
 
       expect(StaticScriptAssets)
         .to receive(:render)
         .with('static_script_template.js', site_id: site.id)
         .and_return('$INJECT_MODULES; $INJECT_DATA')
 
-      expect(script).to eql '__MODULES__; __DATA__'
+      expect(script).to eql '"/generated_scripts/modules.js"; __DATA__'
     end
 
     context 'when options[:compress]' do
@@ -36,16 +36,16 @@ describe RenderStaticScript do
           .and_return('__DATA__')
 
         allow(StaticScriptAssets)
-          .to receive(:render_compressed)
-          .with('modules.js', site_id: site.id)
-          .and_return 'compressed_modules.js'
+          .to receive(:digest_path)
+          .with('modules.js')
+          .and_return 'modules.js'
 
         allow(StaticScriptAssets)
           .to receive(:render_compressed)
           .with('static_script_template.js', site_id: site.id)
           .and_return '$INJECT_MODULES; $INJECT_DATA'
 
-        expect(service.call).to eql 'compressed_modules.js; __DATA__'
+        expect(service.call).to eql '"/generated_scripts/modules.js"; __DATA__'
       end
     end
 
@@ -59,10 +59,10 @@ describe RenderStaticScript do
           .with('static_script_template.js')
           .and_return('$INJECT_DATA; $INJECT_MODULES')
 
-        allow(service)
-          .to receive(:render_asset)
+        allow(StaticScriptAssets)
+          .to receive(:digest_path)
           .with('modules.js')
-          .and_return('MODULES')
+          .and_return 'modules.js'
 
         allow_any_instance_of(SiteElement)
           .to receive(:statistics).and_return(SiteStatistics.new)

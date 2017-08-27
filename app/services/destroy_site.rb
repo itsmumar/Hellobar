@@ -5,7 +5,7 @@ class DestroySite
 
   def call
     void_pending_bills
-    generate_blank_static_assets
+    override_script
     site.destroy
   end
 
@@ -17,7 +17,7 @@ class DestroySite
     site.bills.pending.map(&:voided!)
   end
 
-  def generate_blank_static_assets
-    GenerateAndStoreStaticScript.new(site, script_content: '').call
+  def override_script
+    site.script.destroy
   end
 end

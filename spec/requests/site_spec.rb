@@ -21,6 +21,12 @@ describe 'Site requests' do
     end
 
     describe 'DELETE :destroy' do
+      before do
+        expect(GenerateAndStoreStaticScript)
+          .to receive_service_call
+          .with(site, script_content: '')
+      end
+
       it 'destroys an existing site' do
         expect {
           delete site_path(site)
