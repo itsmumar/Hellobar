@@ -166,12 +166,6 @@ describe Site do
     end
   end
 
-  describe '#generate_script' do
-    it 'enqueues GenerateStaticScriptJob' do
-      expect { site.generate_script }.to have_enqueued_job GenerateStaticScriptJob
-    end
-  end
-
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
       expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
