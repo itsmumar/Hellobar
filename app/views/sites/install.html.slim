@@ -29,7 +29,7 @@
           li Go beyond the bar.  Use our other elements such as sliders and modals.
 
         p To install Hello Bar, copy and paste the following code right before your closing &lt;/body&gt; tag.
-        pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+        pre= "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
         p That's it! You'll never need to update the code on your site again.
 
   - elsif install_help
@@ -44,7 +44,7 @@
           = link_to "support page", install_help[1], target: "_blank"
           | . Once complete you'll never need to update the Hello Bar code on your site again.
         p Your install code is -
-        pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+        pre= "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
 
   .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_myself"}.to_json
     i.icon-installmyself
@@ -53,7 +53,7 @@
 
     .reveal-block.myself-reveal
       p To install Hello Bar, copy and paste the following code right before your closing &lt;/body&gt; tag.
-      pre= "<script src=\"//#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
+      pre= "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
       p That's it! You'll never need to update the code on your site again.
 
   div class=["reveal-wrapper", "track-click", @site.install_type == "wordpress" ? "activated" : ""] data-tracking-event="install_page_clicked" data-tracking-props={install_button: "wordpress"}.to_json
@@ -94,7 +94,7 @@
 
         pre= "I just created a Hello Bar for #{@site.normalized_url} and I've asked Hello Bar to email you the instructions for installing it. All you need to do is add the following bit of JavaScript at the end of each page (right before the closing </body> tag):"
 
-        pre= "<script type=\"text/javascript\" src=\"//#{@site.script_url}\" async=\"async\"></script>"
+        pre= "<script type=\"text/javascript\" src=\"#{@site.script_url}\" async=\"async\"></script>"
 
         pre= "If you have any questions don't hesitate to email Hello Bar support at support@hellobar.com, or e-mail me at #{current_user.email}."
 

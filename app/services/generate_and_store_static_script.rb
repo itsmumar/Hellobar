@@ -8,6 +8,8 @@ class GenerateAndStoreStaticScript
   def call
     site.update_column(:script_attempted_to_generate_at, Time.current)
 
+    GenerateStaticScriptModules.new.call if Rails.env.development? || Rails.env.test?
+
     if store_site_scripts_locally?
       store_locally
     else
@@ -48,7 +50,7 @@ class GenerateAndStoreStaticScript
   end
 
   def local_path
-    Rails.root.join('public', 'generated_scripts', site.script_name)
+    Rails.root.join('public', 'generated_scripts', options[:path] || site.script_name)
   end
 
   def store_site_scripts_locally?

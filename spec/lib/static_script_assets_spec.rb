@@ -144,4 +144,15 @@ describe StaticScriptAssets do
       assets.render_model(model)
     end
   end
+
+  describe '.digest_path' do
+    before do
+      StaticScriptAssets.manifest.compile('modules.js')
+    end
+    before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
+
+    it 'returns path to file with a hash' do
+      expect(assets.digest_path('modules.js')).to match(/modules-\w{64}.js/)
+    end
+  end
 end

@@ -79,7 +79,7 @@ describe SiteElements::Update do
     end
 
     it 'does not regenerate the script' do
-      expect(element.site).not_to receive(:generate_script)
+      expect(element.site.script).not_to receive(:generate)
       run_interaction
     end
 

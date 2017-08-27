@@ -8,6 +8,7 @@ describe GenerateAndStoreStaticScript do
   before do
     allow(Settings).to receive(:store_site_scripts_locally).and_return false
     allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
+    expect(GenerateStaticScriptModules).to receive_service_call
   end
 
   it 'generates and uploads the script content for a site' do

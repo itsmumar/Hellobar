@@ -36,7 +36,7 @@ describe RulesController do
 
   describe 'POST :create' do
     before do
-      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
+      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
     end
 
     it 'should fail when not logged in' do
@@ -88,7 +88,7 @@ describe RulesController do
 
   describe 'DELETE :destroy' do
     before do
-      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
+      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
     end
 
     let!(:second_rule) { create(:rule, site: site) }
@@ -129,7 +129,7 @@ describe RulesController do
 
   describe 'PUT :update' do
     before do
-      allow_any_instance_of(Site).to receive(:generate_script).and_return(true)
+      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
     end
 
     it 'should fail when not logged in' do

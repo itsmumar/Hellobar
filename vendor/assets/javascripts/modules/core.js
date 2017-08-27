@@ -212,3 +212,8 @@ function Hellobar() {
 
   return hellobar;
 }
+
+if (typeof(window.hellobar) === 'undefined') {
+  // Initialize core for module management
+  window.hellobar = Hellobar();
+}
