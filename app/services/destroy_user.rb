@@ -4,10 +4,12 @@ class DestroyUser
   end
 
   def call
-    downgrade_subscriptions
-    destroy_credit_cards
-    destroy_own_sites
-    user.destroy!
+    Site.no_touching do # TODO: remove when site callbacks are gone
+      downgrade_subscriptions
+      destroy_credit_cards
+      destroy_own_sites
+      user.destroy!
+    end
   end
 
   private
@@ -31,11 +33,13 @@ class DestroyUser
 
   def destroy_own_sites
     SiteMembership.where(user_id: user.id, role: 'owner').each do |membership|
+      next membership.destroy! unless membership.site
+
       if membership.site.users.count > 1
         promote_first_user_to_owner(membership)
         membership.destroy!
       else
-        membership.site.destroy!
+        DestroySite.new(membership.site).call
       end
     end
   end

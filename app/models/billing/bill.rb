@@ -20,7 +20,7 @@ class Bill < ActiveRecord::Base
   has_many :billing_attempts, -> { order 'id' }
   has_many :coupon_uses
   has_one :site, through: :subscription, inverse_of: :bills
-  has_one :credit_card, through: :subscription
+  has_one :credit_card, -> { with_deleted }, through: :subscription
 
   validates :subscription, presence: true
   delegate :site_id, to: :subscription
@@ -64,7 +64,7 @@ class Bill < ActiveRecord::Base
   end
 
   def can_pay?
-    credit_card&.token.present?
+    !credit_card.deleted? && credit_card.token.present?
   end
 
   def due_at(credit_card = nil)

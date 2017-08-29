@@ -76,7 +76,7 @@ class UserController < ApplicationController
       end
       format.json { render json: { success: true }, status: :ok }
     end
-  rescue ActiveRecord::ActiveRecordError => e
+  rescue ActiveRecord::RecordNotDestroyed => e
     errors = e.record.errors
 
     respond_to do |format|
