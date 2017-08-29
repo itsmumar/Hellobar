@@ -45,12 +45,12 @@ class SiteElements::Update < Less::Interaction
   end
 
   def previous_image
-    @old_image ||=
+    @previous_image ||=
       begin
         return unless @element.previous_changes.include? 'active_image_id'
 
         old_image_id, _new_image_id = @element.previous_changes['active_image_id']
-        old_image = ImageUpload.find(old_image_id)
+        ImageUpload.find(old_image_id)
       end
   end
 
