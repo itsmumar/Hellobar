@@ -136,4 +136,17 @@ describe SiteElements::Update do
       end
     end
   end
+
+  context 'when active image has been changed' do
+    let!(:old_image) { create(:image_upload) }
+    let!(:image) { create(:image_upload) }
+    let!(:element) { create(:site_element, :email, active_image: old_image) }
+    let(:params) { { active_image_id: image.id } }
+
+    it 'destroys previous active image' do
+      expect { run_interaction }
+        .to change { ImageUpload.exists? old_image.id }
+        .from(true).to(false)
+    end
+  end
 end

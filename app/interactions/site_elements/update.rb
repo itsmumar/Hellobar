@@ -7,6 +7,7 @@ class SiteElements::Update < Less::Interaction
       change_type! if type_should_change?
       disable_use_question_if_template
       element.update_attributes!(params)
+      destroy_previous_image_if_necessary
     end
     true
   rescue ActiveRecord::ActiveRecordError, ActiveRecord::RecordInvalid
@@ -37,6 +38,20 @@ class SiteElements::Update < Less::Interaction
 
   def copy_active_image_to(new_element)
     new_element.active_image = @element.active_image
+  end
+
+  def destroy_previous_image_if_necessary
+    previous_image.destroy if previous_image && previous_image.site_elements.blank?
+  end
+
+  def previous_image
+    @old_image ||=
+      begin
+        return unless @element.previous_changes.include? 'active_image_id'
+
+        old_image_id, _new_image_id = @element.previous_changes['active_image_id']
+        old_image = ImageUpload.find(old_image_id)
+      end
   end
 
   def type_should_change?
