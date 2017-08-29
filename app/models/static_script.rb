@@ -28,11 +28,7 @@ class StaticScript
   end
 
   def installed?
-    CheckStaticScriptInstallation.new(site).call
-
-    site.script_installed_at.present? &&
-      (site.script_uninstalled_at.blank? ||
-        site.script_installed_at > site.script_uninstalled_at)
+    current_script_status || check_status_again
   end
 
   def generate
@@ -45,6 +41,17 @@ class StaticScript
   end
 
   private
+
+  def current_script_status
+    site.script_installed_at.present? &&
+      (site.script_uninstalled_at.blank? ||
+        site.script_installed_at > site.script_uninstalled_at)
+  end
+
+  def check_status_again
+    CheckScriptStatusJob.perform_later site
+    false
+  end
 
   def generate_test_site
     return unless Rails.env.development?

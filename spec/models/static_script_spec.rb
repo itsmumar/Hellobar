@@ -97,30 +97,44 @@ describe StaticScript do
   end
 
   describe '#installed?' do
-    it 'calls CheckStaticScriptInstallation' do
-      expect(CheckStaticScriptInstallation).to receive_service_call.with(site)
-      script.installed?
+    it 'enqueues CheckScriptStatusJob' do
+      expect { script.installed? }
+        .to have_enqueued_job(CheckScriptStatusJob).with(site)
     end
 
     context 'when script_installed_at is present' do
-      before { expect(CheckStaticScriptInstallation).to receive_service_call.with(site) }
-
       context 'and script_uninstalled_at is blank' do
         let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: nil) }
+
         specify { expect(script.installed?).to be_truthy }
+
+        it 'does not enqueue CheckScriptStatusJob' do
+          expect { script.installed? }
+            .not_to have_enqueued_job(CheckScriptStatusJob)
+        end
       end
 
       context 'and script_installed_at > script_uninstalled_at' do
         let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: 1.day.ago) }
+
         specify { expect(script.installed?).to be_truthy }
+
+        it 'does not enqueue CheckScriptStatusJob' do
+          expect { script.installed? }
+            .not_to have_enqueued_job(CheckScriptStatusJob)
+        end
       end
     end
 
     context 'when script_installed_at is blank' do
-      before { expect(CheckStaticScriptInstallation).to receive_service_call.with(site) }
       let(:site) { create(:site, script_installed_at: nil) }
 
       specify { expect(script.installed?).to be_falsey }
+
+      it 'enqueues CheckScriptStatusJob' do
+        expect { script.installed? }
+          .to have_enqueued_job(CheckScriptStatusJob).with(site)
+      end
     end
   end
 
