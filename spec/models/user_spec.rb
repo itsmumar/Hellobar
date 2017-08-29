@@ -170,15 +170,6 @@ describe User do
       allow_any_instance_of(GenerateAndStoreStaticScript).to receive(:call)
     end
 
-    it 'destroying a user should destroy their sites' do
-      user = site_member.user
-      site = site_member.site
-
-      user.destroy
-
-      expect(site.reload.deleted_at).to eq Time.current
-    end
-
     it 'marks the record as deleted' do
       user = create(:user)
 

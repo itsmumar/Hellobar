@@ -35,7 +35,7 @@ div#user_profile
               td
                 - Subscription.schedules.each do |name, val|
                   div
-                    = sf.radio_button 'schedule', name, checked: site.current_subscription.schedule == name
+                    = sf.radio_button 'schedule', name, checked: site.current_subscription&.schedule == name
                     = sf.label "#{name.capitalize}"
                 div= sf.label "Trial period in days.  Leave blank for no trial."
                 div= sf.number_field 'trial_period'

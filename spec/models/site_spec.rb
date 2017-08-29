@@ -166,25 +166,6 @@ describe Site do
     end
   end
 
-  describe '#destroy', :freeze do
-    before { allow_any_instance_of(GenerateAndStoreStaticScript).to receive(:call) }
-
-    it 'blanks-out the site script when destroyed' do
-      expect(GenerateAndStoreStaticScript)
-        .to receive_service_call
-        .with(site, script_content: '')
-
-      site.destroy
-    end
-
-    it 'marks the record as deleted' do
-      site.destroy
-
-      expect(site).to be_deleted
-      expect(site.deleted_at).to eq Time.current
-    end
-  end
-
   describe '#url_exists?' do
     it 'should return false if no other site exists with the url' do
       expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
@@ -318,7 +299,6 @@ describe Site do
     context 'destroyed' do
       it 'sets needs_script_regeneration? to false' do
         site = create(:site)
-        allow(site).to receive(:generate_blank_static_assets)
 
         site.destroy
 

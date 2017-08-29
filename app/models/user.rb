@@ -13,8 +13,6 @@ class User < ActiveRecord::Base
   after_create :create_referral_token
   after_create :add_to_onboarding_campaign
 
-  before_destroy :destroy_orphan_sites_before_active_record_association_callbacks
-
   has_one :referral_token, as: :tokenizable
   has_many :credit_cards
   has_many :site_memberships, dependent: :destroy
@@ -301,12 +299,6 @@ class User < ActiveRecord::Base
 
   def clear_invite_token
     self.invite_token = nil if active? && invite_token
-  end
-
-  def destroy_orphan_sites_before_active_record_association_callbacks
-    sites.each do |site|
-      site.destroy if site.site_memberships.size <= 1
-    end
   end
 
   def oauth_email_change
