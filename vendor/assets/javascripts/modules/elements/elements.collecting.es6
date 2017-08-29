@@ -143,7 +143,7 @@ hellobar.defineModule('elements.collecting',
       if (values && values.length > 0) {
         var sanitizedValues = values.map(function (value) {
           // Replace all the commas with spaces as the comma symbol is a delimiter
-          return value.replace(/\,/g, ' ');
+          return value.trim().replace(/\,/g, ' ');
         });
         var joinedValues = sanitizedValues.join(',');
 
