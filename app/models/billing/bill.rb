@@ -64,7 +64,7 @@ class Bill < ActiveRecord::Base
   end
 
   def can_pay?
-    !credit_card.deleted? && credit_card.token.present?
+    credit_card && !credit_card.deleted? && credit_card.token.present?
   end
 
   def due_at(credit_card = nil)

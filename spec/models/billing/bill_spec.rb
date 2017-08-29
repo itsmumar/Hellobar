@@ -1,4 +1,30 @@
 describe Bill do
+  describe '#can_pay?' do
+    subject { bill.can_pay? }
+    let(:credit_card) { create :credit_card }
+    let!(:bill) { create :bill, credit_card: credit_card }
+
+    context 'without credit card' do
+      let(:credit_card) { nil }
+
+      specify { expect(subject).to be_falsey }
+    end
+
+    context 'with deleted credit card' do
+      before { bill.credit_card.destroy }
+
+      specify { expect(subject).to be_falsey }
+    end
+
+    context 'without credit card token' do
+      before { bill.credit_card.update token: nil }
+
+      specify { expect(subject).to be_falsey }
+    end
+
+    specify { expect(subject).to be_truthy }
+  end
+
   describe '.without_refunds' do
     let!(:bill) { create :bill }
     let!(:bill_to_refund) { create :bill, :paid }
