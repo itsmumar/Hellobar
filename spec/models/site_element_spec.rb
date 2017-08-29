@@ -39,16 +39,6 @@ describe SiteElement do
     end
 
     describe 'callbacks' do
-      it 'removes unreferenced image uploads' do
-        image = create(:image_upload, site: element.site)
-        create(:image_upload, site: element.site)
-
-        expect {
-          element.active_image = image
-          element.save
-        }.to change { ImageUpload.count }.by(-1)
-      end
-
       it 'does not remove image uploads that are still active' do
         image = create(:image_upload, site: element.site)
         element.update(active_image: image)

@@ -39,7 +39,7 @@ class SiteElement < ActiveRecord::Base
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
-  belongs_to :active_image, class_name: 'ImageUpload'
+  belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy
   belongs_to :theme
   belongs_to :font
 
@@ -82,7 +82,6 @@ class SiteElement < ActiveRecord::Base
   serialize :blocks, Array
 
   after_create :track_creation
-  after_save :remove_unreferenced_images
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
     element_subtype
@@ -264,13 +263,6 @@ class SiteElement < ActiveRecord::Base
   end
 
   private
-
-  def remove_unreferenced_images
-    # Done through SQL to ensure references are up to date
-    image_uploads
-      .joins('LEFT JOIN site_elements ON site_elements.active_image_id = image_uploads.id')
-      .where('site_elements.id IS NULL').destroy_all
-  end
 
   def email?
     element_subtype == 'email'
