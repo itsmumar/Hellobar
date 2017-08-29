@@ -31,7 +31,12 @@ class SiteElements::Update < Less::Interaction
   def element_with_new_type
     new_element = @element.dup
     new_element.element_subtype = new_type
+    copy_active_image_to(new_element)
     new_element
+  end
+
+  def copy_active_image_to(new_element)
+    new_element.active_image = @element.active_image
   end
 
   def type_should_change?
