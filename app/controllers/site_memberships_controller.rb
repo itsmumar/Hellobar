@@ -4,13 +4,15 @@ class SiteMembershipsController < ApplicationController
   before_action :load_site_membership, only: %i[show edit update destroy]
 
   def create
-    @site_membership = @site.site_memberships.create(site_membership_params)
-    if @site_membership.valid?
+    site_membership = @site.site_memberships.create(site_membership_params)
+
+    if site_membership.valid?
       TrackEvent.new(:invited_member, site: @site, user: current_user).call
-      @site_membership.user.send_invitation_email(@site_membership.site)
-      render json: @site_membership
+      TeamMailer.invite(site_membership).deliver_later
+
+      render json: site_membership
     else
-      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
+      render json: site_membership.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -35,13 +37,15 @@ class SiteMembershipsController < ApplicationController
   def invite
     user = User.find_or_invite_by_email(params[:email], @site)
     notice = nil
+
     if user.valid?
-      @site_membership = @site.site_memberships.create(user: user, role: 'admin')
-      if @site_membership.valid?
-        @site_membership.user.send_invitation_email(@site_membership.site)
+      site_membership = @site.site_memberships.create(user: user, role: 'admin')
+
+      if site_membership.valid?
+        TeamMailer.invite(site_membership).deliver_later
         notice = "#{ user.email } has been invited to #{ @site.url }."
       else
-        notice = @site_membership.errors.full_messages.join('. ')
+        notice = site_membership.errors.full_messages.join('. ')
       end
     else
       notice = user.errors.full_messages.join('. ')

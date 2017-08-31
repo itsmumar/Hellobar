@@ -162,14 +162,6 @@ class User < ActiveRecord::Base
     first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
   end
 
-  def send_invitation_email(site)
-    if temporary? && !invite_token_expired?
-      send_invite_token_email(site)
-    else
-      send_team_invite_email(site)
-    end
-  end
-
   def self.find_for_google_oauth2(omniauth_hash, original_email = nil, track_options = {})
     info = omniauth_hash.info
 
@@ -268,19 +260,6 @@ class User < ActiveRecord::Base
 
   def user_upgrade_policy
     @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, paying_subscription?)
-  end
-
-  def send_team_invite_email(site)
-    host = ActionMailer::Base.default_url_options[:host]
-    login_link = oauth_user? ? "#{ host }/auth/google_oauth2" : url_helpers.new_user_session_url(host: host)
-    MailerGateway.send_email('Team Invite', email, site_url: site.url, login_url: login_link)
-  end
-
-  def send_invite_token_email(site)
-    host = ActionMailer::Base.default_url_options[:host]
-    oauth_link = "#{ host }/auth/google_oauth2"
-    signup_link = url_helpers.invite_user_url(invite_token: invite_token, host: host)
-    MailerGateway.send_email('Invitation', email, site_url: site.url, oauth_link: oauth_link, signup_link: signup_link)
   end
 
   # Disconnect oauth logins if user sets their own password

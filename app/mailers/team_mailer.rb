@@ -1,7 +1,10 @@
 class TeamMailer < ApplicationMailer
   default from: 'Hello Bar <contact@hellobar.com>'
 
-  def invite(user, site)
+  def invite(site_membership)
+    user = site_membership.user
+    site = site_membership.site
+
     if user.temporary? && !user.invite_token_expired?
       return invite_new_user(user, site)
     end
