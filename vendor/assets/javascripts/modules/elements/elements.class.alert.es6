@@ -406,6 +406,10 @@ hellobar.defineModule('elements.class.alert',
         return this._isPopupVisible;
       }
 
+      close() {
+        this.hidePopup();
+      }
+
       showPopup() {
         this._isPopupVisible = true;
         this._trigger.showCloseIcon();

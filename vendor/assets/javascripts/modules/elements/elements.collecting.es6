@@ -77,11 +77,13 @@ hellobar.defineModule('elements.collecting',
 
           if (!doRedirect) {
             if ((targetSiteElement != null) && thankYouText) {
+              let btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
+              let btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
+
               if (siteElementModel.use_free_email_default_msg) {
                 // Hijack the submit button and turn it into a link
-                var btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
-                var linkUrl = 'http://www.hellobar.com?hbt=emailSubmittedLink&sid=' + site.siteId();
-                btnElement.textContent = 'Click Here';
+                const linkUrl = `http://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
+                btnTextHolder.textContent = 'Click Here';
                 btnElement.href = linkUrl;
                 btnElement.setAttribute('target', '_parent');
                 btnElement.onclick = null;
@@ -89,10 +91,14 @@ hellobar.defineModule('elements.collecting',
                 // Remove all the fields
                 removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
               } else {
+                btnElement.href = 'javascript:void(0)';
+                btnTextHolder.textContent = 'Close';
+                btnElement.addEventListener('click', () => hellobar('elements').findById(siteElement.id).close());
+
                 // Remove the entire email input wrapper including the button
-                removeElements = siteElementContainer.querySelectorAll('.hb-input-wrapper, .hb-secondary-text');
+                removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
               }
-              targetSiteElement.innerHTML = '<span>' + thankYouText + '</span>';
+              targetSiteElement.innerHTML = `<span>${thankYouText}</span>`;
             }
             if (thankYouCssClass) {
               dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);

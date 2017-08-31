@@ -54,6 +54,13 @@ hellobar.defineModule('elements.class.bar',
         dom.animateIn(this.pullDown);
       }
 
+      onClosed() {
+        if (pusher) {
+          pusher.style.display = 'none';
+        }
+        super.onClosed();
+      }
+
       onHidden() {
         elementsVisibility.setVisibilityControlCookie('dismiss', this);
       }
