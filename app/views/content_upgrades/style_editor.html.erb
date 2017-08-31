@@ -62,7 +62,7 @@
           <label for="offer-font-weight">Offer Font Weight</label>
           <select  name="offer_font_weight"  id="offer-font-weight"  class="style-input">
             <% %w[Bold Normal].each do |weight| %>
-                <option value="<%=weight.downcase%>" <% if @styles['offer_font_waight'] && @styles['offer_font_waight'] == f.value %>selected="selected"<% end %>><%=weight%></option>
+              <option value="<%=weight.downcase%>" <% if @styles['offer_font_weight'] && @styles['offer_font_weight'] == weight.downcase %>selected="selected"<% end %>><%= weight %></option>
             <% end %>
           </select>
         </div>
