@@ -45,12 +45,10 @@ describe Referrals::RedeemForRecipient do
   it 'sends out an email to the referral sender when referred' do
     referral = create(:referral, recipient: user, state: :signed_up)
 
-    expect(MailerGateway).to receive(:send_email) do |name, email, params|
-      expect(name).to eq('Referral Successful')
-      expect(email).to eq(referral.sender.email)
-      expect(params[:referral_sender]).to eq(referral.sender.first_name)
-      expect(params[:referral_recipient]).to eq(referral.recipient.name)
-    end
+    expect(ReferralsMailer)
+      .to receive(:successful)
+      .with(referral, user)
+      .and_return double(deliver_later: true)
 
     Referrals::RedeemForRecipient.run(site: site)
   end

@@ -4,12 +4,10 @@ describe Referrals::SendSecondEmail do
   let!(:referral) { create(:referral, sender: user, state: :sent, email: email) }
 
   it 'will send the email under normal circumstances' do
-    expect(MailerGateway).to receive :send_email do |name, email, params|
-      expect(name).to eq 'Referal Invite Second'
-      expect(email).to eq email
-      expect(params[:referral_link]).to include("http://#{ Settings.host }/referrals/accept")
-      expect(params[:referral_sender]).to eq user.name
-    end
+    expect(ReferralsMailer)
+      .to receive(:second_invite)
+      .with(referral)
+      .and_return double(deliver_later: true)
 
     Referrals::SendSecondEmail.run(referral: referral)
   end

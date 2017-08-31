@@ -14,13 +14,10 @@ describe Referrals::Create do
   end
 
   it 'sends an email when we ask it to' do
-    expect(MailerGateway).to receive :send_email do |name, email, params|
-      expect(name).to eq 'Referral Invite Initial'
-      expect(email).to eq 'tj@hellobar.com'
-      expect(params[:referral_link]).to match Regexp.new("http://#{ Settings.host }/referrals/accept")
-      expect(params[:referral_sender]).to eq user.name
-      expect(params[:referral_body]).to eq 'test body'
-    end
+    expect(ReferralsMailer)
+      .to receive(:invite)
+      .with(instance_of(Referral))
+      .and_return double(deliver_later: true)
 
     Referrals::Create.run(
       sender: user,
@@ -30,7 +27,8 @@ describe Referrals::Create do
   end
 
   it 'does not send an email when we ask it not to' do
-    expect(MailerGateway).not_to receive :send_email
+    expect(ReferralsMailer).not_to receive :invite
+
     Referrals::Create.run(
       sender: user,
       params: { email: 'tj@hellobar.com', body: 'test body' },
