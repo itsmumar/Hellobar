@@ -117,18 +117,10 @@ class User < ActiveRecord::Base
     @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, paying_subscription?, onboarding_statuses)
   end
 
-  def send_devise_notification(notification, *args)
-    host = ActionMailer::Base.default_url_options[:host]
-
+  def send_devise_notification(notification, reset_password_token = nil, *_args)
     case notification
     when :reset_password_instructions
-      if oauth_user?
-        reset_link = "#{ host }/auth/google_oauth2"
-        MailerGateway.send_email('Reset Password Oauth', email, email: email, reset_link: reset_link)
-      else
-        reset_link = url_helpers.edit_user_password_url(self, reset_password_token: args[0], host: host)
-        MailerGateway.send_email('Reset Password', email, email: email, reset_link: reset_link)
-      end
+      PasswordMailer.reset(self, reset_password_token).deliver_later
     end
   end
 
