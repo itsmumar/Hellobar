@@ -25,12 +25,10 @@ describe DestroyIdentity do
       let(:service) { DestroyIdentity.new(identity, notify_user: true) }
 
       it 'emails the user that there was a problem syncing their identity' do
-        expect(MailerGateway).to receive(:send_email) do |type, recipient, params|
-          expect(type).to eql 'Integration Sync Error'
-          expect(recipient).to eql site.owners.first.email
-          expect(params[:link]).to match(/http\S+sites\S+#{site.id}/)
-          expect(params[:integration_name]).to eql 'MailChimp'
-        end
+        expect(IntegrationMailer)
+          .to receive(:sync_error)
+          .with(site.owners.first, identity)
+          .and_return(double(deliver_later: true))
 
         service.call
       end
