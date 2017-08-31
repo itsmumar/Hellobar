@@ -13,21 +13,21 @@ describe Referrals::SendSecondEmail do
   end
 
   it "will not send the email for a referral that's been accepted" do
-    expect(MailerGateway).not_to receive :send_email
+    expect(ReferralsMailer).not_to receive :second_invite
     referral.state = 'signed_up'
 
     Referrals::SendSecondEmail.run(referral: referral)
   end
 
   it 'will not send the email for a referral that has a recipient' do
-    expect(MailerGateway).not_to receive :send_email
+    expect(ReferralsMailer).not_to receive :second_invite
 
     referral.recipient = create(:user)
     Referrals::SendSecondEmail.run(referral: referral)
   end
 
   it "will not send the email for a referral that's too old" do
-    expect(MailerGateway).not_to receive :send_email
+    expect(ReferralsMailer).not_to receive :second_invite
 
     referral.created_at = (Referral::FOLLOWUP_INTERVAL + 1.day).ago
     Referrals::SendSecondEmail.run(referral: referral)
