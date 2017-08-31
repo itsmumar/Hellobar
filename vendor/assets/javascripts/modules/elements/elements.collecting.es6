@@ -74,11 +74,12 @@ hellobar.defineModule('elements.collecting',
           const doRedirect = format.asBool(redirect);
           let removeElements;
           let siteElementContainer = siteElement.contentDocument();
-          let btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
-          let btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
 
           if (!doRedirect) {
             if ((targetSiteElement != null) && thankYouText) {
+              let btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
+              let btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
+
               if (siteElementModel.use_free_email_default_msg) {
                 // Hijack the submit button and turn it into a link
                 const linkUrl = `http://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
