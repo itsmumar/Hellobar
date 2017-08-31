@@ -4,12 +4,9 @@ feature 'Forgot password', :js do
   given(:email) { 'bob@lawblog.com' }
   given!(:user) { create :user, email: email }
 
-  before do
-    @sent_emails = []
-    allow(MailerGateway).to receive(:send_email) do |type, recipient, params|
-      @sent_emails << { recipient: recipient, type: type, params: params }
-    end
+  around { |example| perform_enqueued_jobs(&example) }
 
+  before do
     allow(Settings).to receive(:deliver_emails).and_return true
     visit new_user_session_path
     click_on 'Forgot your password?'
@@ -17,7 +14,7 @@ feature 'Forgot password', :js do
     click_on 'Send Reset Instructions'
 
     expect(page).to have_content('you will receive a password recovery link at your email address')
-    @reset_password_link = @sent_emails.last[:params][:reset_link]
+    @reset_password_link = links_in_email(last_email_sent).first
     uri = URI.parse(@reset_password_link)
     @reset_password_path = "#{ uri.path }?#{ uri.query }"
   end

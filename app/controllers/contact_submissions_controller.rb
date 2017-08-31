@@ -33,7 +33,7 @@ class ContactSubmissionsController < ApplicationController
 
     email_params = params.require(:contact_submission).permit(:name, :email, :message)
 
-    ContactFormMailer.guest_message(email_params).deliver_later
+    ContactFormMailer.guest_message(**email_params.symbolize_keys).deliver_later
 
     flash[:success] = 'Your message has been sent!'
     redirect_to new_contact_submission_path
