@@ -1,6 +1,6 @@
 class DripCampaignMailer < ApplicationMailer
   default from: 'Hello Bar <contact@hellobar.com>',
-    subject: 'Note from Hello Bar support'
+          subject: 'Note from Hello Bar support'
 
   helper_method :greeting
 

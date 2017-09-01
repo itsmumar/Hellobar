@@ -21,10 +21,9 @@ describe DeliverUserOnboardingCampaign do
 
       it 'tracks event' do
         expect(Analytics)
-          .to receive(:track).with(:user, user.id, 'Sent Email', {
+          .to receive(:track).with(:user, user.id, 'Sent Email',
             'Email Template' => 'create_a_bar',
-            'Campaign Name' => 'CreateABarCampaign'
-          })
+            'Campaign Name' => 'CreateABarCampaign')
 
         service.call
       end

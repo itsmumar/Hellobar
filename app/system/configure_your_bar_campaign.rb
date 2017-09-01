@@ -21,9 +21,8 @@ class ConfigureYourBarCampaign
   def deliver_campaign_email!
     DripCampaignMailer.configure_your_bar(user).deliver_later
 
-    Analytics.track(:user, user.id, 'Sent Email', {
+    Analytics.track(:user, user.id, 'Sent Email',
       'Email Template' => 'configure_your_bar',
-      'Campaign Name' => 'ConfigureYourBarCampaign'
-    })
+      'Campaign Name' => 'ConfigureYourBarCampaign')
   end
 end
