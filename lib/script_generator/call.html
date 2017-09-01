@@ -3,7 +3,7 @@
    onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.model().open_in_new_window ? 'true' : 'false'}} };"
    style="color: #{{siteElement.model().link_color}}; background-color: #{{siteElement.model().secondary_color}}; border-color: #{{siteElement.model().secondary_color}}">
   <img class="icon-phone"
-    src="{{hellobar('base.coloring').colorIsBright(siteElement.model().secondary_color) ? 'https://s3.amazonaws.com/assets.hellobar.com/dark-phone.png' : 'https://s3.amazonaws.com/assets.hellobar.com/white-phone.png'}}"
+    src="{{hellobar('base.coloring').colorIsBright(siteElement.model().secondary_color) ? 'https://assets.hellobar.com/dark-phone.png' : 'https://assets.hellobar.com/white-phone.png'}}"
   />
   <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown && siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
        data-hb-editable-block="action_link"
