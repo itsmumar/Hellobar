@@ -1,0 +1,15 @@
+<p>Hi,</p>
+
+<p><%= @referral.body %></p>
+
+<p>
+  <a href="<%= @referral.url %>"><%= @referral.url %></a><br>
+
+  If you have any questions, please feel free to contact me.<br>
+
+  <br>Best regards,
+  <br>Christopher Lai
+  <br>Customer Service Specialist
+  <br>
+  <br>P.S. This invitation expires on <%= @referral.expiration_date_string %>.
+</p>

@@ -14,17 +14,7 @@ class Referrals::Create < Less::Interaction
 
   private
 
-  def email
-    params[:email]
-  end
-
   def send_initial_email
-    MailerGateway.send_email(
-      'Referral Invite Initial', email,
-      referral_sender: sender.name,
-      referral_expiration_date: @referral.expiration_date_string,
-      referral_body: @referral.body,
-      referral_link: @referral.url
-    )
+    ReferralsMailer.invite(@referral).deliver_later
   end
 end

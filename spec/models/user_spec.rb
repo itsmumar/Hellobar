@@ -329,26 +329,6 @@ describe User do
     end
   end
 
-  describe '#send_invitation_email' do
-    it 'should send the token invite email when token has not been redeemed' do
-      user = User.new(status: User::TEMPORARY_STATUS, invite_token: 'sdaf', invite_token_expire_at: 1.month.from_now)
-      expect(user).to receive(:send_invite_token_email)
-      user.send_invitation_email(nil)
-    end
-
-    it 'should send the team invite email if token expired' do
-      user = User.new(status: User::TEMPORARY_STATUS, invite_token: 'sdaf', invite_token_expire_at: 1.month.ago)
-      expect(user).to receive(:send_team_invite_email)
-      user.send_invitation_email(nil)
-    end
-
-    it 'should send the team invite email if user is not temporary' do
-      user = User.new(status: User::ACTIVE_STATUS, invite_token: 'sdaf', invite_token_expire_at: 1.month.from_now)
-      expect(user).to receive(:send_team_invite_email)
-      user.send_invitation_email(nil)
-    end
-  end
-
   describe '.search_by_site_url' do
     context 'invalid urls' do
       ['a b c', 'user@email.com', 'site .com'].each do |url|

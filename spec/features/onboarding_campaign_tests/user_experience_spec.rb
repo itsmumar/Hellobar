@@ -56,7 +56,7 @@ feature 'One User In all onboarding Campaigns' do
     before { transition_user_through_onboarding(user) }
 
     scenario "the user receives the 'Create a bar' on day 0" do
-      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['Drip Campaign: Create a bar'])
+      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['CreateABar'])
     end
 
     scenario 'the user does not receive email on day 1' do
@@ -64,7 +64,7 @@ feature 'One User In all onboarding Campaigns' do
     end
 
     scenario "the user receives the 'Configure your bar' on day 2" do
-      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['Drip Campaign: Configure your bar'])
+      expect(email_received_a_number_of_days_after(user, start_date)).to eq(['ConfigureYourBar'])
     end
 
     scenario 'the user does not receive email on day 3' do

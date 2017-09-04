@@ -1,12 +1,7 @@
 require 'integration_helper'
 
 feature 'Contact Submission' do
-  before do
-    @sent_email = []
-    allow(MailerGateway).to receive(:send_email) do |type, recipient, params|
-      @sent_email << { recipient: recipient, type: type, params: params }
-    end
-  end
+  around { |example| perform_enqueued_jobs(&example) }
 
   scenario 'page has correct content' do
     visit '/contact'
@@ -20,7 +15,7 @@ feature 'Contact Submission' do
     fill_in 'contact_submission[message]', with: 'Test'
     find('#contact_submission_submit_btn').click
 
-    expect(@sent_email.last[:params][:email]).to eq(user.email)
+    expect(last_email_sent.from).to eq([user.email])
   end
 
   scenario 'non-user can create' do
@@ -30,6 +25,6 @@ feature 'Contact Submission' do
     fill_in 'contact_submission[message]', with: 'Test'
     find('#contact_submission_submit_btn').click
 
-    expect(@sent_email.last[:params][:email]).to eq('bart@simpson.com')
+    expect(last_email_sent.from).to eq(['bart@simpson.com'])
   end
 end

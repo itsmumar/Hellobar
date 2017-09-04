@@ -54,11 +54,6 @@ class Referrals::RedeemForRecipient < Less::Interaction
   end
 
   def send_success_email_to_sender
-    MailerGateway.send_email(
-      'Referral Successful',
-      referral.sender.email,
-      referral_sender: referral.sender.first_name,
-      referral_recipient: user.name
-    )
+    ReferralsMailer.successful(referral, user).deliver_later
   end
 end

@@ -1,0 +1,25 @@
+<p>Hi,</p>
+
+<p>
+  This is a friendly heads-up that the invitation to
+  you from your buddy <%= @referral.sender.name %> is about to expire.
+</p>
+
+<p>
+  The invitation allows you to get what other people pay money for -- the ability to use Hello Bar Pro for one month free.
+  <br>
+  Hello Bar shows the right message at the right time to your website visitors.
+  That means more signups, and more profit.
+</p>
+
+<p>
+  If you want to try it, you can get it below.
+  Once you install Hello Bar, both you and your friend will enjoy a free month of Hello Bar Pro.
+  (There's also a free version.)
+</p>
+
+<p>
+  <a href="<%= @referral.url %>"><%= @referral.url %></a>
+</p>
+
+<p>P.S. This invitation expires on <%= @referral.expiration_date_string %>.</p>
