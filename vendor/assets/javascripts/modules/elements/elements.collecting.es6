@@ -138,7 +138,7 @@ hellobar.defineModule('elements.collecting',
 
     // Called to validate the email. Does not actually submit the email
     function validateEmail(email, successCallback, failCallback) {
-      if (email && email.match(/^\S+@\S+\..+$/) && !email.match(/,/))
+      if (email && email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/) && !email.match(/,/))
         successCallback();
       else
         failCallback();
