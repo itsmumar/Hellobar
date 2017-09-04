@@ -1,12 +1,14 @@
 <p>
   We received a notice on our website that you forgot your password.
-  This account was authenticated through Google so no password reset is necessary.
+</p>
+<p>
+  This account was authenticated through Google so no password reset is necessary.<br>
   To continue with your sign in, please use the following link:
 </p>
 
 <p>
-  <a href="<%= oauth_url action: 'google_oauth2' %>">
-    <%= oauth_url action: 'google_oauth2' %>
+  <a href="<%= oauth_login_url action: 'google_oauth2' %>">
+    <%= oauth_login_url action: 'google_oauth2' %>
   </a>
 </p>
 

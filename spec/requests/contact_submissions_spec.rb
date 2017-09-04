@@ -1,4 +1,6 @@
 describe ContactSubmissionsController do
+  around { |example| perform_enqueued_jobs(&example) }
+
   describe 'GET #new' do
     it 'responds with success' do
       get new_contact_submission_path
@@ -28,9 +30,12 @@ describe ContactSubmissionsController do
       expect(ContactFormMailer)
         .to receive(:guest_message)
         .with(params[:contact_submission])
-        .and_return double(deliver_later: true)
+        .and_call_original.twice
 
       post contact_submissions_path, params
+
+      expect(last_email_sent)
+        .to have_subject "Contact Form: #{ params[:contact_submission][:message][0..50] }"
     end
 
     context 'when the spam catcher field "blank" is not blank' do
@@ -65,9 +70,12 @@ describe ContactSubmissionsController do
         expect(ContactFormMailer)
           .to receive(:contact_developer)
           .with(developer_email.first, site, user)
-          .and_return double(deliver_later: true)
+          .and_call_original.twice
 
         post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
+
+        expect(last_email_sent)
+          .to have_subject "Please install Hello Bar on #{ site.normalized_url }"
       end
 
       it 'redirects to site_path with success message' do
@@ -85,9 +93,12 @@ describe ContactSubmissionsController do
         expect(ContactFormMailer)
           .to receive(:contact_developer)
           .with(developer_email, site, user)
-          .and_return double(deliver_later: true)
+          .and_call_original.twice
 
         post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
+
+        expect(last_email_sent)
+          .to have_subject "Please install Hello Bar on #{ site.normalized_url }"
       end
 
       it 'redirects to site_path with success message' do
@@ -127,9 +138,12 @@ describe ContactSubmissionsController do
         expect(ContactFormMailer)
           .to receive(:generic_message)
           .with('message', user, site)
-          .and_return(double(deliver_later: true))
+          .and_call_original.twice
 
         post generic_message_contact_submission_path, params
+
+        expect(last_email_sent)
+          .to have_subject "Contact Form: #{ params[:message][0..50] }"
       end
     end
 
@@ -151,9 +165,12 @@ describe ContactSubmissionsController do
         expect(ContactFormMailer)
           .to receive(:generic_message)
           .with('message', user, nil)
-          .and_return(double(deliver_later: true))
+          .and_call_original.twice
 
         post generic_message_contact_submission_path, params
+
+        expect(last_email_sent)
+          .to have_subject "Contact Form: #{ params[:message][0..50] }"
       end
     end
   end

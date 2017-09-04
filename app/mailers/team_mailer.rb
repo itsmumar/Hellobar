@@ -1,4 +1,5 @@
 class TeamMailer < ApplicationMailer
+  layout 'user_mailer'
   default from: 'Hello Bar <contact@hellobar.com>'
 
   def invite(site_membership)
@@ -10,7 +11,7 @@ class TeamMailer < ApplicationMailer
     end
 
     @site = site
-    @login_url = user.oauth_user? ? oauth_url(action: 'google_oauth2') : new_user_session_url
+    @login_url = user.oauth_user? ? oauth_login_url(action: 'google_oauth2') : new_user_session_url
 
     params = {
       subject: 'You\'ve been added to a Hello Bar team.',

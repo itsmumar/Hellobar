@@ -1,0 +1,64 @@
+<html>
+<body>
+<style>
+  body {
+    margin: 0 0;
+    padding: 0 0;
+  }
+
+  p {
+
+    font-family: Arial, sans-serif;
+  }
+
+  div {
+
+    font-family: Arial, sans-serif;
+  }
+
+  ol {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  li {
+    margin-left: 30px;
+  }
+
+  a {
+    color: #eb593c;
+  }
+
+  a:active {
+    color: #70C1D7;
+  }
+
+  a:visited {
+    color: #eb593c;
+  }
+</style>
+
+<div class="content"><%= yield %></div>
+<br>
+<div class="footer">
+  <p>
+    Best regards,<br>
+    <img src="https://s3.amazonaws.com/cms.crazyegg.com/f395fdf677fffa4879e71733a0dc30b3c86ac8e9_1346788095.png" alt="Amee Shah"><br>
+  </p>
+  <p></p>
+  <p><a href="http://www.hellobar.com/">http://www.hellobar.com/</a></p>
+  <p>support@hellobar.com</p></div>
+<br><br>
+<p></p>
+<p align="center">
+  <small>This email was sent to <%= message.to.first %>.</small>
+</p>
+</body>
+</html>

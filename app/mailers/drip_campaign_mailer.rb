@@ -1,4 +1,5 @@
 class DripCampaignMailer < ApplicationMailer
+  layout 'user_mailer'
   default from: 'Hello Bar <contact@hellobar.com>',
           subject: 'Note from Hello Bar support'
 
@@ -10,6 +11,7 @@ class DripCampaignMailer < ApplicationMailer
   end
 
   def configure_your_bar(user)
+    @user = user
     mail to: user.email
   end
 
