@@ -50,7 +50,7 @@
     }
   },
   "image": {
-    "default_url": "https://s3.amazonaws.com/assets.hellobar.com/french-rose-default.jpeg",
+    "default_url": "https://assets.hellobar.com/french-rose-default.jpeg",
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "background",
     "position_selectable": false
