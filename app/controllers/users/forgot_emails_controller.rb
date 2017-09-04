@@ -5,7 +5,7 @@ class Users::ForgotEmailsController < ApplicationController
   end
 
   def create
-    ContactFormMailer.forgot_email(forgot_email_params).deliver_later
+    ContactFormMailer.forgot_email(**forgot_email_params.symbolize_keys).deliver_later
     redirect_to new_forgot_email_path, notice: "We'll get in touch with you shortly!"
   end
 

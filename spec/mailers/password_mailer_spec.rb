@@ -27,7 +27,7 @@ describe PasswordMailer do
       end
 
       it 'renders the body' do
-        expect(mail.body.encoded).to include oauth_url(action: 'google_oauth2')
+        expect(mail.body.encoded).to include oauth_login_url(action: 'google_oauth2')
       end
     end
   end

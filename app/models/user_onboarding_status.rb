@@ -1,6 +1,8 @@
 class UserOnboardingStatus < ActiveRecord::Base
   belongs_to :user
 
+  scope :with_status, ->(status) { where(status_id: STATUSES[status]) }
+
   validates :user_id, presence: true
   validates :status_id, presence: true, uniqueness: { scope: [:user_id] }
 
@@ -12,6 +14,7 @@ class UserOnboardingStatus < ActiveRecord::Base
     installed_script: 5,
     bought_subscription: 6
   }.freeze
+
   STATUS_IDS = STATUSES.invert.freeze
 
   def status_name

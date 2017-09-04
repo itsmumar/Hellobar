@@ -28,7 +28,7 @@ module FeatureHelper
   end
 
   def the_onboarding_campaigns_run
-    UserOnboardingCampaign.deliver_all_onboarding_campaign_email!
+    DeliverOnboardingCampaigns.new.call
   end
 
   def wait_for_ajax

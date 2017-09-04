@@ -85,11 +85,11 @@ class UserOnboardingStatusSetter
   end
 
   def active_for_onboarding_campaigns?
-    onboarding_statuses.where(status_id: UserOnboardingStatus::STATUSES[:new]).any?
+    onboarding_statuses.with_status(:new).any?
   end
 
   def recent_status(status_name)
-    onboarding_statuses.find_by(status_id: UserOnboardingStatus::STATUSES[status_name])
+    onboarding_statuses.with_status(status_name).first
   end
 
   def independant_user?

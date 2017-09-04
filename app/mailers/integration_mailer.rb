@@ -1,4 +1,5 @@
 class IntegrationMailer < ApplicationMailer
+  layout 'user_mailer'
   default from: 'Hello Bar <support@hellobar.com>'
 
   def sync_error(user, identity)
