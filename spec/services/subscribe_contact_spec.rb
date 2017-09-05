@@ -35,7 +35,7 @@ describe SubscribeContact do
           identity_id: contact_list.identity.id,
           contact_list_id: contact_list.id,
           remote_list_id: contact_list.data['remote_id'],
-          arguments: { email: email, name: name },
+          arguments: { email: email, name: name.titleize },
           double_optin: contact_list.double_optin,
           tags: contact_list.tags,
           exception: '#<StandardError: StandardError>'
