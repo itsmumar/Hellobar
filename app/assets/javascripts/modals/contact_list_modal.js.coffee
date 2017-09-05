@@ -422,6 +422,7 @@ class @ContactListModal extends Modal
               [null]
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
+                                          when 'Infusionsoft' then 'campaign'
                                           when 'ConvertKit' then 'form'
                                           else 'list'
       )
@@ -481,7 +482,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", listData.double_optin)
 
-        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0]?.id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
