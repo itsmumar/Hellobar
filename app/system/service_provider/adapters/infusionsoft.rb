@@ -3,6 +3,7 @@ module ServiceProvider::Adapters
     configure do |config|
       config.requires_api_key = true
       config.requires_app_url = true
+      config.hidden = true
     end
 
     def initialize(identity)
