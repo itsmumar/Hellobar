@@ -59,5 +59,3 @@ module ServiceProvider::Adapters
     end
   end
 end
-
-

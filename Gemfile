@@ -20,9 +20,9 @@ gem 'omniauth-constantcontact2'
 gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
 gem 'omniauth-drip'
 gem 'omniauth-google-oauth2'
+gem 'omniauth-infusionsoft', github: 'Hello-bar/omniauth-infusionsoft'
 gem 'omniauth-mailchimp', github: 'floomoon/omniauth-mailchimp', ref: '239e08d3297cf637b5b0b77b419fdc8461239378'
 gem 'omniauth-verticalresponse', github: 'Hello-bar/omniauth-verticalresponse'
-gem 'omniauth-infusionsoft', github: 'Hello-bar/omniauth-infusionsoft'
 
 # Email integrations
 

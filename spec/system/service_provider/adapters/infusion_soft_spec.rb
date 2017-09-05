@@ -4,7 +4,7 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
       subscribe: 'https://api.infusionsoft.com/crm/rest/v1/contacts',
       campaigns: 'https://api.infusionsoft.com/crm/rest/v1/campaigns',
       campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}?optional_properties=sequences',
-      add_to_campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}/sequences/{sequence_id}/contacts/{contact_id}',
+      add_to_campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}/sequences/{sequence_id}/contacts/{contact_id}'
     }
   end
 
@@ -17,8 +17,8 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
       headers = { 'Authorization': 'Bearer token' }
 
       expect(Faraday).to receive(:new)
-       .with(url: 'https://api.infusionsoft.com/crm/rest/v1', params: {}, headers: headers)
-       .and_call_original
+        .with(url: 'https://api.infusionsoft.com/crm/rest/v1', params: {}, headers: headers)
+        .and_call_original
 
       expect(adapter.client).to be_a Faraday::Connection
     end
