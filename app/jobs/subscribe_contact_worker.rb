@@ -12,7 +12,7 @@ class SubscribeContactWorker
     def fields
       # titleize fields so that names are always capitilized:
       #   "firstname lastname" => "Firstname Lastname"
-      cleanup(self[:fields]).titleize
+      cleanup(self[:fields])&.titleize
     end
 
     def contact_list

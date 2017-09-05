@@ -2,7 +2,7 @@ describe SubscribeContact do
   let(:contact_list) { create :contact_list, :mailchimp }
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
-  let(:name) { 'FirstName LastName' }
+  let(:name) { 'firstname lastname' }
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
   let(:provider) { double('ServiceProvider') }
@@ -13,7 +13,7 @@ describe SubscribeContact do
   end
 
   before { allow(contact).to receive(:contact_list).and_return(contact_list) }
-  before { allow(provider).to receive(:subscribe).with(email: email, name: name) }
+  before { allow(provider).to receive(:subscribe).with(email: email, name: name.titleize) }
 
   it 'creates contact list logs' do
     expect { service.call }.to change(contact_list.contact_list_logs, :count).to(1)

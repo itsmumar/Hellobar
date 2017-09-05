@@ -94,10 +94,10 @@ describe SubscribeContactWorker do
 
   describe SubscribeContactWorker::Contact do
     describe '.fields' do
-      let(:contact) { make_contact('1', 'email@example.com', ' firstname,lastname ') }
+      let(:contact) { make_contact('1', 'email@example.com', ' firstname lastname ') }
 
       it 'returns striped fields' do
-        expect(contact.fields).to eql 'firstname,lastname'
+        expect(contact.fields).to eql 'Firstname Lastname'
       end
 
       context 'when fields is "nil"' do
