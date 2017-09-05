@@ -1,0 +1,31 @@
+{
+  "campaigns": [
+    {
+      "error_message": null,
+      "date_created": "2017-09-05T18:05:07.000+0000",
+      "name": "List1",
+      "active_contact_count": 0,
+      "completed_contact_count": 0,
+      "published_status": false,
+      "id": 4567456,
+      "published_time_zone": "America/Chicago",
+      "time_zone": "America/Chicago",
+      "published_date": "2017-09-05T18:05:07.000+0000"
+    },
+    {
+      "error_message": null,
+      "date_created": "2017-09-05T18:00:32.000+0000",
+      "name": "Unpublished",
+      "active_contact_count": 0,
+      "completed_contact_count": 0,
+      "published_status": false,
+      "id": 1,
+      "published_time_zone": "America/Chicago",
+      "time_zone": "America/Chicago",
+      "published_date": null
+    }
+  ],
+  "count": 2,
+  "next": "https://api.infusionsoft.com/crm/rest/v1/campaigns/?limit=2&offset=1000",
+  "previous": "https://api.infusionsoft.com/crm/rest/v1/campaigns/?limit=1000&offset=0"
+}

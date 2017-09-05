@@ -1,11 +1,10 @@
 require 'integration_helper'
 
 feature 'Infusionsoft Integration', :js, :contact_list_feature do
-  let(:provider) { 'infusionsoft' }
+  let(:provider) { 'infusion_soft' }
 
   let!(:user) { create :user }
   let!(:site) { create :site, :with_bars, user: user }
-  let(:last_contact_list) { ContactList.last }
 
   before do
     sign_in user
@@ -23,22 +22,21 @@ feature 'Infusionsoft Integration', :js, :contact_list_feature do
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Apply Tags (Optional)')
+    expect(page).to have_content('Choose a Infusionsoft campaign to sync with')
 
-    page.find('select[name="contact_list[remote_list_id]"]').select('Tag 1')
+    page.find('select#contact_list_remote_list_id').select('List 1')
     page.find('.button.submit').click
 
-    expect(page).to have_content 'Syncing contacts with Infusionsoft'
+    expect(page).to have_content 'Syncing contacts with Infusionsoft list "List 1"'
 
-    expect(last_contact_list.tags).to eql ['tag1']
+    page.find('#edit-contact-list').click
+
+    expect(page).to have_content('List 1')
   end
 
   private
 
   def connect
-    connect_to_provider(site, provider) do
-      fill_in 'contact_list[data][app_url]', with: 'hellobar.api-us1.com'
-      fill_in 'contact_list[data][api_key]', with: 'api-key'
-    end
+    connect_to_provider(site, provider)
   end
 end
