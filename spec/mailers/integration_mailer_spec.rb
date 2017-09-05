@@ -3,7 +3,7 @@ describe IntegrationMailer do
     let(:user) { create :user }
     let(:site) { create :site }
     let(:identity) { create :identity, site: site }
-    let(:mail) { IntegrationMailer.sync_error user, identity }
+    let(:mail) { IntegrationMailer.sync_error user, site, identity.provider_name }
 
     let(:subject) { "There was a problem syncing your #{ identity.provider_name } account" }
 
