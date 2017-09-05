@@ -2,8 +2,6 @@ describe DestroyIdentity do
   let!(:identity) { create :identity }
   let(:service) { DestroyIdentity.new(identity) }
 
-  around { |example| perform_enqueued_jobs(&example) }
-
   describe '#call' do
     it 'destroys identity' do
       expect { service.call }.to change(Identity, :count).by(-1)
@@ -32,7 +30,7 @@ describe DestroyIdentity do
           .with(site.owners.first, site, identity.provider_name)
           .and_call_original.twice
 
-        service.call
+        perform_enqueued_jobs { service.call }
 
         expect(last_email_sent)
           .to have_subject "There was a problem syncing your #{ identity.provider_name } account"
