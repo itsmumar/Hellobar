@@ -6,6 +6,14 @@ GIT
       omniauth-oauth2 (~> 1.1)
 
 GIT
+  remote: https://github.com/Hello-bar/omniauth-infusionsoft.git
+  revision: 05fdfebfe01a305726acac6b678eb8b54fca39ec
+  specs:
+    omniauth-infusionsoft (1.0.3)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.1)
+
+GIT
   remote: https://github.com/Hello-bar/omniauth-verticalresponse.git
   revision: 416e1a6276b1933d1025cac815ea6dee9be0548d
   specs:
@@ -639,6 +647,7 @@ DEPENDENCIES
   omniauth-createsend!
   omniauth-drip
   omniauth-google-oauth2
+  omniauth-infusionsoft!
   omniauth-mailchimp!
   omniauth-verticalresponse!
   paperclip (~> 5.1)
@@ -694,4 +703,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
