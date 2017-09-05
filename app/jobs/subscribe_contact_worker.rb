@@ -10,7 +10,9 @@ class SubscribeContactWorker
     end
 
     def fields
-      cleanup(self[:fields])
+      # titleize fields so that names are always capitilized:
+      #   "firstname lastname" => "Firstname Lastname"
+      cleanup(self[:fields]).titleize
     end
 
     def contact_list
@@ -22,7 +24,7 @@ class SubscribeContactWorker
     end
   end
 
-  # parse message like 'contact_list:sync_one[1,"email@example.com","firstname, lastname"]'
+  # parse message like 'contact_list:sync_one[1,"email@example.com","firstname lastname"]'
   def self.parse(body)
     data = body.match(/contact_list:sync_one\[(?<id>\d+),\s*"?(?<email>.*?)"?,\s*"?(?<fields>.*?)"?\]/)
     Contact.new(*data.captures) if data
