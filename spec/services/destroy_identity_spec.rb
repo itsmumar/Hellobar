@@ -27,10 +27,13 @@ describe DestroyIdentity do
       it 'emails the user that there was a problem syncing their identity' do
         expect(IntegrationMailer)
           .to receive(:sync_error)
-          .with(site.owners.first, identity)
-          .and_return(double(deliver_later: true))
+          .with(site.owners.first, site, identity.provider_name)
+          .and_call_original.twice
 
-        service.call
+        perform_enqueued_jobs { service.call }
+
+        expect(last_email_sent)
+          .to have_subject "There was a problem syncing your #{ identity.provider_name } account"
       end
     end
   end
