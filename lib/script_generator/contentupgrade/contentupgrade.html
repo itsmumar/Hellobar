@@ -140,18 +140,11 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
 }
 
 #hb-cu-close-button {
-  margin-top: -32px ! important;
-  margin-right: -32px ! important;
-  display: inline-block ! important;
-  font-size: 19px ! important;
+  margin-top: -35px ! important;
+  margin-right: -35px ! important;
   float: right ! important;
-  width: 26px ! important;
-  height: 26px ! important;
-  color: #fff ! important;
-  padding-left: 1px ! important;
-  line-height: 22px ! important;
-  text-decoration: none ! important;
-  cursor: pointer ! important;
+  width: auto ! important;
+  height: auto ! important;
   background: #333 ! important;
   border: 2px solid white ! important;
   -webkit-border-radius: 18px ! important;
@@ -162,6 +155,17 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
   letter-spacing: normal ! important;
   word-spacing: 0 ! important;
   text-size-adjust: 100% ! important;
+  padding: 7px ! important;
+  display: flex ! important;
+  justify-content: center ! important;
+  align-items: center ! important;
+}
+
+#hb-cu-close-button svg {
+  fill: transparent ! important;
+  stroke: white ! important;
+  stroke-linecap: round ! important;
+  stroke-width: 5px ! important;
 }
 </style>
 
@@ -169,9 +173,11 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
 
 <div class="hb-cu-modal-container" id="hb-cu-modal-{{context.siteElement.id}}">
   <div class="hb-cu-modal">
-    <div>
-      <a id="hb-cu-close-button" onclick="document.getElementById('hb-cu-modal-{{context.siteElement.id}}').style.display = 'none';" href="javascript:void(0)">×</a>
-    </div>
+    <a id="hb-cu-close-button" onclick="document.getElementById('hb-cu-modal-{{context.siteElement.id}}').style.display = 'none';" href="javascript:void(0)">
+      <svg viewBox="5 5 30 30" width="12" height="12">
+        <path d="M 10,10 L 30,30 M 30,10 L 10,30"></path>
+      </svg>
+    </a>
 
     <div class="hb-cu-main-content">
       <img class="progress" src="https://assets.hellobar.com/status_gray_fifty_percent.gif">
