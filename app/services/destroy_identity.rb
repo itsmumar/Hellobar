@@ -14,6 +14,6 @@ class DestroyIdentity
   attr_reader :identity, :notify_user
 
   def email_user(user)
-    IntegrationMailer.sync_error(user, identity).deliver_later
+    IntegrationMailer.sync_error(user, identity.site, identity.provider_name).deliver_later
   end
 end
