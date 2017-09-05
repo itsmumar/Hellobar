@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/Hello-bar/omniauth-infusionsoft.git
-  revision: 05fdfebfe01a305726acac6b678eb8b54fca39ec
+  revision: 7cfc3ffcf97373ff3c59caa236f31c0d9b3a6505
   specs:
     omniauth-infusionsoft (1.0.3)
       omniauth (~> 1.0)
@@ -311,7 +311,7 @@ GEM
     mimemagic (0.3.2)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
-    multi_json (1.12.1)
+    multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     mustache (1.0.5)
