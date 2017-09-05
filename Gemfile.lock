@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/Hello-bar/omniauth-infusionsoft.git
-  revision: 7cfc3ffcf97373ff3c59caa236f31c0d9b3a6505
+  revision: 08269b3bd46758fb8a954aad57bb5d1b90e018af
   specs:
     omniauth-infusionsoft (1.0.3)
       omniauth (~> 1.0)

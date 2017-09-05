@@ -12,6 +12,7 @@ describe ServiceProvider::Adapters do
       get_response_api: ServiceProvider::Adapters::GetResponse,
       icontact: ServiceProvider::Adapters::IContact,
       infusionsoft: ServiceProvider::Adapters::Infusionsoft,
+      infusion_soft: ServiceProvider::Adapters::InfusionsoftOauth,
       iterable: ServiceProvider::Adapters::Iterable,
       mad_mimi_api: ServiceProvider::Adapters::MadMimi,
       mad_mimi_form: ServiceProvider::Adapters::MadMimiForm,
@@ -77,7 +78,8 @@ describe ServiceProvider::Adapters do
       [
         ServiceProvider::Adapters::Hellobar,
         ServiceProvider::Adapters::MadMimiForm,
-        ServiceProvider::Adapters::VerticalResponseForm
+        ServiceProvider::Adapters::VerticalResponseForm,
+        ServiceProvider::Adapters::Infusionsoft
       ]
     end
 
