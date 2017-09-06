@@ -7,7 +7,10 @@ class ContentUpgradesController < ApplicationController
   before_action :load_content_upgrade, only: %i[show edit update destroy]
 
   def index
-    @content_upgrades = @site.site_elements.active_content_upgrades
+    @content_upgrades = @site.site_elements.active_content_upgrades.order(created_at: :desc)
+    if params[:sort]
+      @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym).reverse
+    end
   end
 
   def new
