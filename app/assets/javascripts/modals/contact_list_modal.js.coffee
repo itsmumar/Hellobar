@@ -420,11 +420,11 @@ class @ContactListModal extends Modal
               @options.contactList?.data?.tags
             else
               [null]
-      providerNameLabel: (label + ' ' + switch label
-                                          when 'Drip' then 'campaign'
-                                          when 'Infusionsoft' then 'campaign'
-                                          when 'ConvertKit' then 'form'
-                                          else 'list'
+      providerNameLabel: (switch label
+                          when 'Drip' then 'a Drip campaign'
+                          when 'Infusionsoft' then 'an Infusionsoft campaign'
+                          when 'ConvertKit' then 'a ConvertKit form'
+                          else 'a list'
       )
 
     if value == "0" # user selected "in Hello Bar only"
