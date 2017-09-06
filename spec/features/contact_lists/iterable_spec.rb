@@ -22,7 +22,7 @@ feature 'Iterable integration', :js, :contact_list_feature do
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Choose a Iterable list to sync with')
+    expect(page).to have_content('Choose Iterable list to sync with')
 
     page.find('select#contact_list_remote_list_id').select('List 1')
     page.find('.button.submit').click

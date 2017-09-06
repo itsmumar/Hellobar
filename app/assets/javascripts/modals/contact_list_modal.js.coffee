@@ -420,13 +420,11 @@ class @ContactListModal extends Modal
               @options.contactList?.data?.tags
             else
               [null]
-      providerNameLabel: (switch label
-                          when 'Drip' then 'a Drip campaign'
-                          when 'Infusionsoft' then 'an Infusionsoft campaign'
-                          when 'Iterable' then 'an Iterable list'
-                          when 'ConvertKit' then 'a ConvertKit form'
-                          else `a #{label} list`
-      )
+      providerNameLabel: (label + ' ' + switch label
+                                          when 'Drip' then 'campaign'
+                                          when 'Infusionsoft' then 'campaign'
+                                          when 'ConvertKit' then 'form'
+                                          else 'list')
 
     if value == "0" # user selected "in Hello Bar only"
       @blocks.hellobarOnly.show()
@@ -483,7 +481,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", listData.double_optin)
 
-        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0]?.id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider

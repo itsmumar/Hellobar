@@ -22,7 +22,7 @@ feature 'Drip Integration', :js, :contact_list_feature do
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Choose a Drip campaign to sync with')
+    expect(page).to have_content('Choose Drip campaign to sync with')
 
     page.find('select#contact_list_remote_list_id').select('List 1')
     page.find('.button.submit').click

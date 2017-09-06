@@ -22,7 +22,7 @@ feature 'ConvertKit integration', :js, :contact_list_feature do
   scenario 'when valid' do
     connect
 
-    expect(page).to have_content('Choose a ConvertKit form to sync with')
+    expect(page).to have_content('Choose ConvertKit form to sync with')
 
     find('select#contact_list_remote_list_id').select('List 1')
     find('.button.submit').click
