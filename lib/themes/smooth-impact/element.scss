@@ -195,10 +195,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
 
     .hb-input-block input {
       font-size: .7em;
-    }
-
-    .hb-name-input {
-      margin-bottom: 12px;
+      height: 6rem;
     }
 
     [data-hb-editable-block="caption"] {
@@ -230,25 +227,16 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       background-repeat: no-repeat;
       background-position: 30px,0;
       background-size: 25px;
-      padding: 20px 35px 20px 90px;
       border-radius: 3px;
 
       input {
         background: transparent;
         border: none;
-        padding: 0;
+        padding: 0 0 0 70px;
       }
     }
 
     @media screen and (max-height: 700px) {
-      .hb-input-block {
-        padding: 10px 35px 10px 90px;
-
-        &:before {
-          top: 25px;
-        }
-      }
-
       .hb-cta-style-button {
         padding: 5px 20px 8px;
       }
