@@ -44,8 +44,8 @@ class ServiceProvider
     register :drip, Adapters::Drip
     register :get_response_api, Adapters::GetResponse
     register :icontact, Adapters::IContact
-    register :infusionsoft, Adapters::Infusionsoft
-    register :infusion_soft, Adapters::InfusionsoftOauth
+    register :infusion_soft, Adapters::Infusionsoft
+    register :infusionsoft, Adapters::InfusionsoftOauth
     register :iterable, Adapters::Iterable
     register :mad_mimi_api, Adapters::MadMimi
     register :mad_mimi_form, Adapters::MadMimiForm

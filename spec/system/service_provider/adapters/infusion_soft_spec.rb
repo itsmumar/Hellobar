@@ -8,7 +8,7 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
     }
   end
 
-  let(:identity) { double('identity', provider: 'infusion_soft', credentials: { 'token' => 'token' }) }
+  let(:identity) { double('identity', provider: 'infusionsoft', credentials: { 'token' => 'token' }) }
 
   include_context 'service provider'
 

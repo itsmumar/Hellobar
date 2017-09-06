@@ -459,10 +459,9 @@ class @ContactListModal extends Modal
               "<br>Please check your credentials and connect again."
           )
 
-        if data.provider != "infusionsoft"
-          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+        @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
-        if data.provider == "infusionsoft" or data.provider == "maropost" or @_showListsAndTags(defaultContext)
+        if data.provider == "maropost" or @_showListsAndTags(defaultContext)
           noTags = $.isArray(data.tags) && data.tags.length == 0
           tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: noTags})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
