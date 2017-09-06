@@ -423,8 +423,9 @@ class @ContactListModal extends Modal
       providerNameLabel: (switch label
                           when 'Drip' then 'a Drip campaign'
                           when 'Infusionsoft' then 'an Infusionsoft campaign'
+                          when 'Iterable' then 'an Iterable list'
                           when 'ConvertKit' then 'a ConvertKit form'
-                          else 'a list'
+                          else `a #{label} list`
       )
 
     if value == "0" # user selected "in Hello Bar only"
