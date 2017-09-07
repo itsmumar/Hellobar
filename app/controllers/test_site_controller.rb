@@ -11,7 +11,7 @@ class TestSiteController < ActionController::Base
   def generate_test_site
     Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
     clear_cache if params[:fresh]
-    TestSite.generate @site.id, path
+    GenerateTestSite.new(@site.id, full_path: path).call
   end
 
   def path
