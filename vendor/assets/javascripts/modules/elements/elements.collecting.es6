@@ -54,18 +54,18 @@ hellobar.defineModule('elements.collecting',
 
       var fieldAttrs = fieldAttributes();
 
-      let name = fieldAttrs.name ? `name="${fieldAttrs.name}"` : '';
-      let type = `type="${fieldAttrs.type}"`;
-      let placeholder = `placeholder="${fieldAttrs.label}"`;
+      let name = fieldAttrs.name ? `name="${ fieldAttrs.name }"` : '';
+      let type = `type="${ fieldAttrs.type }"`;
+      let placeholder = `placeholder="${ fieldAttrs.label }"`;
       let required = field.type === 'builtin-email' ? 'required' : '';
-      let value = preview.isActive() ? `value="${fieldAttrs.label}"` : '';
+      let value = preview.isActive() ? `value="${ fieldAttrs.label }"` : '';
       let autocomplete = fieldAttrs.name ? 'autocomplete="on"' : '';
       let defaultClasses = 'hb-input-block hb-editable-block hb-editable-block-input';
 
       let html = `
-        <div class="${defaultClasses} ${additionalCssClasses()}" data-hb-editable-block="${id()}">
-          <label for="${id()}">${fieldAttrs.label}</label>
-          <input id="${id()}" ${type} ${name} ${placeholder} ${required} ${value} ${autocomplete}/>
+        <div class="${ defaultClasses } ${ additionalCssClasses() }" data-hb-editable-block="${ id() }">
+          <label for="${ id() }">${ fieldAttrs.label }</label>
+          <input id="${ id() }" ${ type } ${ name } ${ placeholder } ${ required } ${ value } ${ autocomplete }/>
         </div>
       `;
       return html;
