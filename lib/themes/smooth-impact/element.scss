@@ -257,7 +257,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
 
   #hellobar-alert {
     .image-background .hb-image-wrapper.background {
-      width: 50%;
+      width: 45%;
     }
 
     @media screen and (max-width: 100px) {
@@ -284,10 +284,10 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       width: 500px;
 
       .slider-content {
-        margin-left: 50%;
-        width: 50%;
+        margin-left: 45%;
+        width: 55%;
         height: 100%;
-        padding: 10px;
+        padding: 20px;
 
         .hb-content-wrapper {
           width: 100%;
@@ -372,13 +372,13 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
 
       .hb-cta-style-button {
-        border-radius: 4px;
+        border-radius: 2px;
         display: block;
-        font-size: 1.4rem;
+        font-size: 1.1rem;
         font-weight: 700;
         margin-top: 10px;
         letter-spacing: 2px;
-        padding: 10px 20px 7px;
+        padding: 5px 10px 3px;
         box-shadow: 0px 4px 20px -7px black;
       }
     }
