@@ -1,13 +1,7 @@
 describe GenerateTestSite do
   let(:site) { create(:site) }
-  let(:path) { generate_path }
-  let(:service) { GenerateTestSite.new(site.id, full_path: path) }
-
-  def generate_path
-    dir = Rails.root.join('spec', 'tmp')
-    Dir.mkdir(dir) unless File.directory?(dir)
-    dir.join("#{ SecureRandom.hex }.html")
-  end
+  let(:service) { GenerateTestSite.new(site.id) }
+  let(:site_html_file) { service.call }
 
   before do
     allow_any_instance_of(Site).to receive(:statistics).and_return(SiteStatistics.new)
@@ -17,7 +11,7 @@ describe GenerateTestSite do
   end
 
   after do
-    File.delete(path) if File.exist?(path)
+    File.delete(site_html_file) if File.exist?(site_html_file)
   end
 
   describe '#call' do
@@ -28,25 +22,20 @@ describe GenerateTestSite do
     end
 
     it 'renders the site\'s script content', :freeze do
-      service.call
-      expect(File.read(path)).to eql 'html'
+      expect(File.read(site_html_file)).to eql 'html'
     end
 
     it 'creates a file at full path' do
-      service.call
-
-      expect(File.exist?(path)).to be_truthy
+      expect(File.exist?(site_html_file)).to be_truthy
     end
 
     context 'with directory option' do
-      before { allow(SecureRandom).to receive(:hex).and_return 'hex-digest' }
-      after { directory.join('hex-digest.html').delete }
-
       let(:directory) { Rails.root.join('tmp') }
+      let(:service) { GenerateTestSite.new(site.id, directory: directory) }
 
       it 'creates a file at directory' do
-        GenerateTestSite.new(site.id, directory: directory).call
-        expect(directory.join('hex-digest.html')).to be_exist
+        expect(site_html_file).to be_exist
+        expect(site_html_file.to_s).to start_with directory.to_s
       end
     end
   end

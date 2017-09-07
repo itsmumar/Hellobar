@@ -1,8 +1,9 @@
 class GenerateTestSite
-  def initialize(site_id, opts = {})
+  def initialize(site_id, options = {})
     @site = Site.preload_for_script.find(site_id)
-    @full_path = opts[:full_path] || generate_full_path(opts)
-    @compress = opts.fetch(:compress, false)
+
+    directory = options[:directory] || Rails.root.join('tmp', 'sites')
+    @full_path = generate_full_path(directory)
   end
 
   def call
@@ -123,15 +124,13 @@ class GenerateTestSite
   end
 
   def script_content
-    RenderStaticScript.new(@site, compress: @compress).call
+    RenderStaticScript.new(@site).call
   end
 
-  def generate_full_path(opts)
-    directory = opts[:directory]
-
-    return nil if directory.nil?
+  def generate_full_path(directory)
     directory = Pathname.new(directory) unless directory.respond_to?(:join)
-    directory.join("#{ SecureRandom.hex }.html")
+    directory.mkpath
+    directory.join("#{ @site.id }.html")
   end
 
   def content_upgrades

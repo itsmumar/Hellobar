@@ -2,8 +2,7 @@ class TestSiteController < ActionController::Base
   before_action :load_site
 
   def show
-    generate_test_site
-    render file: path
+    render file: generate_test_site
   end
 
   private
@@ -11,15 +10,7 @@ class TestSiteController < ActionController::Base
   def generate_test_site
     Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
     clear_cache if params[:fresh]
-    GenerateTestSite.new(@site.id, full_path: path).call
-  end
-
-  def path
-    if params[:path].present?
-      Rails.root.join(params[:path])
-    else
-      Rails.root.join('tmp', 'test_site.html')
-    end
+    GenerateTestSite.new(@site.id).call
   end
 
   def load_site
