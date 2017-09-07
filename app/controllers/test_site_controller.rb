@@ -9,9 +9,9 @@ class TestSiteController < ActionController::Base
   private
 
   def generate_test_site
-    Rails.logger.info "[HbTestSite] Generating static test site for Site##{ @site.id }"
-    clear_cache
-    HbTestSite.generate @site.id, path
+    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
+    clear_cache if params[:fresh]
+    TestSite.generate @site.id, path
   end
 
   def path
@@ -32,7 +32,6 @@ class TestSiteController < ActionController::Base
   end
 
   def clear_cache
-    return unless params[:fresh]
     @site.update_column :updated_at, Time.current
   end
 end

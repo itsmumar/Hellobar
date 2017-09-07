@@ -1,4 +1,4 @@
-class HbTestSite
+class TestSite
   def self.path(relative_path = '')
     Rails.root.join(relative_path)
   end
