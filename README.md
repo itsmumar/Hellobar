@@ -255,40 +255,18 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 
 ## Testing generated site scripts
 
-### Manually in Development
+Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
 
-There is a Sinatra app in `lib/test_site.rb`.
-
-#### Defaults
-
-Run `rake test_site:generate` to generate `public/test_site.html`
-using the most recently updated `Site`.
-
-Run `rake test_site:run` to start the Sinatra server and navigate to
-`http://localhost:4567` to views a test page with the bars for this site.
-
-You can explicitly pass a site id as well:
-
-```
-rake test_site:generate[2]
-```
-
-Additionaly, when making changes to the bars in the Ember Editor, test site is
-automatically regenerated (this only happens while in development mode).
-
+Also you can find the source html here: `tmp/test_site.html`
 
 #### Options
 
-To generate a site html file at an arbitrary location:
+You can specify `id` param to exact site you need: `http://localhost:3000/test_site?id=133`
 
-```
-rake test_site:file[2, '/Users/hb/index.html']
-```
+To generate a site html file at an arbitrary location use `path`: `http://localhost:3000/test_site?path=public/foo.html`
 
-The above method is used by the capybara integration/feature specs.
-
-All of these rake tasks use the `lib/site_generator.rb` class.
-
+If you are working on css/js of script you might want to fully regenerate script on every reload
+just use `fresh=1``: `http://localhost:3000/test_site?fresh=1`
 
 ## Live testing/QA info
 
