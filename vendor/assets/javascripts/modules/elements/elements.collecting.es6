@@ -52,7 +52,6 @@ hellobar.defineModule('elements.collecting',
         return field.type === 'builtin-email' ? 'f-builtin-email' : 'f-' + field.id;
       }
 
-      debugger
       var fieldAttrs = fieldAttributes();
 
       let name = fieldAttrs.name ? `name="${fieldAttrs.name}"` : '';
