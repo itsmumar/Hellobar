@@ -172,15 +172,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       margin-bottom: 20px;
     }
 
-    @media screen and (max-width: 840px) {
-    }
-
-    @media screen and (max-height: 700px) {
-    }
-
-    @media screen and (max-width: 550px), screen and (max-height: 700px)  {
-    }
-
     .hb-secondary-text {
       font-size: 0.8em;
       font-weight: normal;
@@ -287,20 +278,51 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         margin-left: 45%;
         width: 55%;
         height: 100%;
-        padding: 20px;
+        padding: 25px;
+        position: relative;
 
         .hb-content-wrapper {
           width: 100%;
           height: 100%;
         }
+
+        &:after { // border around the screen
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: 5px;
+          border: 2px solid rgba(241, 241, 247, 0.3);
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          pointer-events: none;
+        }
       }
 
-      .hb-inner-content {
-        padding-top: 20px;
+      .hb-headline-text {
+        font-size: 1.2em;
+        text-align: left;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 15px;
       }
 
-      .hb-input-wrapper {
-        margin-top: 20px;
+      .hb-secondary-text {
+        font-size: 0.9em;
+        font-weight: normal;
+        color: white;
+        margin: 0 auto;
+        text-align: left;
+
+        &:empty {
+          display: none;
+        }
+      }
+
+      .hb-text-wrapper {
+        margin-bottom: 15px;
       }
 
       .hb-input-block input {
@@ -376,7 +398,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         display: block;
         font-size: 1.1rem;
         font-weight: 700;
-        margin-top: 10px;
+        margin-top: 12px;
         letter-spacing: 2px;
         padding: 5px 10px 3px;
         box-shadow: 0px 4px 20px -7px black;
