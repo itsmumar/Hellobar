@@ -38,16 +38,11 @@ class TestSitesController < ActionController::Base
   end
 
   def script_tag
-    if Rails.env.development?
-      GenerateAndStoreStaticScript.new(@site, path: 'test_site.js').call
-      '<script src="/generated_scripts/test_site.js"></script>'
-    else
-      "<script>#{ script_content }</script>"
-    end
+    "<script>#{ script_content }</script>"
   end
 
   def script_content
-    GenerateStaticScriptModules.new.call
+    GenerateStaticScriptModules.new.call if Rails.env.development? || Rails.env.test?
     RenderStaticScript.new(@site).call
   end
 end
