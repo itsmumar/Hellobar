@@ -3,10 +3,6 @@ class TestSitesController < ActionController::Base
 
   helper_method :script_tag, :content_upgrades_script_tags, :content_upgrade_tests
 
-  def index
-    show
-  end
-
   def show
     clear_cache if params.key?(:fresh)
     Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
@@ -42,11 +38,11 @@ class TestSitesController < ActionController::Base
   end
 
   def script_tag
-    if Rails.env.test?
-      "<script>#{ script_content }</script>"
-    else
+    if Rails.env.development?
       GenerateAndStoreStaticScript.new(@site, path: 'test_site.js').call
       '<script src="/generated_scripts/test_site.js"></script>'
+    else
+      "<script>#{ script_content }</script>"
     end
   end
 

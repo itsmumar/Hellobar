@@ -1,6 +1,8 @@
 require 'integration_helper'
 
 feature 'Every x number of sessions condition', js: true do
+  let(:element) { create(:site_element) }
+
   def set_ns_cookie(page, sessions)
     page.execute_script("
       var d = new Date();
@@ -9,22 +11,19 @@ feature 'Every x number of sessions condition', js: true do
     ")
   end
 
-  before(:each) do
-    @element = create(:site_element)
+  def visit_and_set_cookie(day)
+    visit test_site_path(element.site.id)
+    set_ns_cookie(page, day)
+    visit test_site_path(element.site.id) # Reload the page
+  end
 
-    @test_doesnt_exist = proc do |day|
-      visit site_path_to_url(@path)
-      set_ns_cookie(page, day)
-      visit site_path_to_url(@path) # Reload the page
+  before(:each) do
+    @test_doesnt_exist = proc do
       sleep(1) # Give time for JS to execute
       expect(page).not_to have_xpath('.//iframe[@id="random-container"]')
     end
 
-    @test_does_exist = proc do |day|
-      visit site_path_to_url(@path)
-      set_ns_cookie(page, day)
-      visit site_path_to_url(@path)
-
+    @test_does_exist = proc do
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')
       within_frame 'random-container-0' do
@@ -40,15 +39,25 @@ feature 'Every x number of sessions condition', js: true do
     end
 
     it 'shows if the number of sessions is divisible by 4' do
-      @test_does_exist.call(0)
-      @test_does_exist.call(4)
-      @test_does_exist.call(8)
+      visit_and_set_cookie(0)
+      @test_does_exist.call
+
+      visit_and_set_cookie(4)
+      @test_does_exist.call
+
+      visit_and_set_cookie(8)
+      @test_does_exist.call
     end
 
     it "doesn't show if number of sessions is not divisible by 4" do
-      @test_doesnt_exist.call(1)
-      @test_doesnt_exist.call(2)
-      @test_doesnt_exist.call(3)
+      visit_and_set_cookie(1)
+      @test_doesnt_exist.call
+
+      visit_and_set_cookie(2)
+      @test_doesnt_exist.call
+
+      visit_and_set_cookie(3)
+      @test_doesnt_exist.call
     end
   end
 end
