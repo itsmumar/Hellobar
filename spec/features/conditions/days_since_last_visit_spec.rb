@@ -18,12 +18,12 @@ feature 'Days since last visit condition', js: true do
   end
 
   before(:each) do
-    @test_doesnt_exist = proc do |day|
+    @test_doesnt_exist = proc do
       sleep(1) # Give time for JS to execute
       expect(page).not_to have_xpath('.//iframe[@id="random-container"]')
     end
 
-    @test_does_exist = proc do |day|
+    @test_does_exist = proc do
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')
       within_frame 'random-container-0' do

@@ -12,7 +12,7 @@ feature 'Geolocation', :js do
       allow(Settings).to receive(:geolocation_url).and_return server.url
 
       visit test_site_path(id: site.id)
-      binding.pry
+
       within_frame('random-container-0') do
         expect(page).to have_content 'Country: Poland'
         expect(page).to have_content 'City: Gdańsk'

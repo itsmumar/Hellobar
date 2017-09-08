@@ -20,7 +20,7 @@ class TestSiteController < ActionController::Base
   end
 
   def clear_cache
-    Rails.logger.info "[TestSite] Clearing cache..."
+    Rails.logger.info '[TestSite] Clearing cache...'
     @site.update_column :updated_at, Time.current
   end
 
