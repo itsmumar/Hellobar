@@ -1,6 +1,6 @@
 require 'integration_helper'
 
-describe TestSiteController do
+describe TestSitesController do
   describe 'GET :show' do
     let!(:site) { create :site }
     let(:script) { "#{ target_site.id } script" }
@@ -14,7 +14,7 @@ describe TestSiteController do
       let(:target_site) { site }
 
       it 'responds with generated html' do
-        get '/test_site', id: site.id
+        get '/test_sites', id: site.id
         expect(response).to be_successful
         expect(response.body).to include script
       end
@@ -25,7 +25,7 @@ describe TestSiteController do
       let(:target_site) { Site.order(updated_at: :desc).first }
 
       it 'responds with generated html' do
-        get '/test_site'
+        get '/test_sites'
         expect(response).to be_successful
         expect(response.body).to include script
       end
@@ -37,7 +37,7 @@ describe TestSiteController do
       it 'responds with generated html', :freeze do
         expect(Site).to receive(:find).with(site.id.to_s).and_return(site)
         expect(site).to receive(:update_column).with(:updated_at, Time.current)
-        get '/test_site', id: site.id, fresh: 1
+        get '/test_sites', id: site.id, fresh: 1
       end
     end
   end

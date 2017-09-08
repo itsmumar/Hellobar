@@ -173,7 +173,7 @@ Rails.application.routes.draw do
   get 'get-started', to: redirect('/')
 
   root 'welcome#index'
-  get '/test_site', to: 'test_site#show', as: :test_site if Rails.env.development? || Rails.env.test?
+  resources :test_sites, only: %i[index show] if Rails.env.development? || Rails.env.test?
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end

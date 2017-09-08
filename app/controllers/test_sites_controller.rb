@@ -1,11 +1,16 @@
-class TestSiteController < ActionController::Base
+class TestSitesController < ActionController::Base
   before_action :load_site
 
   helper_method :script_tag, :content_upgrades_script_tags, :content_upgrade_tests
 
+  def index
+    show
+  end
+
   def show
     clear_cache if params.key?(:fresh)
     Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
+    render :show
   end
 
   private

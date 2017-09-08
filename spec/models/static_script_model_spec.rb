@@ -63,6 +63,7 @@ describe StaticScriptModel do
     before do
       allow_any_instance_of(Array).to receive(:sample).and_return('d')
       allow(model).to receive(:rand).with(1_000_000).and_return(999)
+      allow(Rails.env).to receive(:test?).and_return(false)
     end
 
     it 'returns random token based on site url and id' do
