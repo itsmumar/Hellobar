@@ -36,6 +36,8 @@ class StaticScriptModel
   end
 
   def pro_secret
+    return 'random' if Rails.env.test?
+
     @pro_secret ||=
       begin
         ('a'..'z').to_a.sample +

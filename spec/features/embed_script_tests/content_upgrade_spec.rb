@@ -3,8 +3,6 @@ require 'integration_helper'
 feature 'Content upgrades', :js do
   given!(:content_upgrade) { create(:content_upgrade, offer_headline: 'Offer 123') }
   given(:site) { content_upgrade.site }
-  given(:path) { generate_file_and_return_path site.id }
-  given(:site_path) { site_path_to_url path }
   given!(:subscription) { create(:subscription, :pro_managed, site: site) }
 
   before do
@@ -13,7 +11,7 @@ feature 'Content upgrades', :js do
   end
 
   scenario 'inserting a single content upgrade' do
-    visit site_path
+    visit test_site_path(id: site.id)
 
     expect(page).to have_selector '#content-upgrade-container'
 
@@ -32,7 +30,7 @@ feature 'Content upgrades', :js do
     create(:content_upgrade, rule: content_upgrade.rule, offer_headline: 'Test 456')
     create(:content_upgrade, rule: content_upgrade.rule, offer_headline: 'Test 789')
 
-    visit site_path
+    visit test_site_path(id: site.id)
 
     expect(page).to have_selector '#content-upgrade-ab-test-container'
 

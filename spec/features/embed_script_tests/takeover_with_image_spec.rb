@@ -6,10 +6,7 @@ feature 'Takeover with image', js: true do
     image = create(:image_upload, :with_valid_image, site: element.site)
     element.update(active_image: image)
 
-    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
-    path = generate_file_and_return_path(element.site.id)
-
-    visit site_path_to_url(path)
+    visit test_site_path(id: element.site.id)
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
@@ -24,10 +21,7 @@ feature 'Takeover with image', js: true do
     image = create(:image_upload, :with_valid_image, site: element.site, version: 2)
     element.update(active_image: image)
 
-    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
-    path = generate_file_and_return_path(element.site.id)
-
-    visit site_path_to_url(path)
+    visit test_site_path(id: element.site.id)
 
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
@@ -43,10 +37,7 @@ feature 'Takeover with image', js: true do
       image = create(:image_upload, :with_valid_image, site: element.site)
       element.update(active_image: image)
 
-      allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
-      path = generate_file_and_return_path(element.site.id)
-
-      visit site_path_to_url(path)
+      visit test_site_path(id: element.site.id)
 
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')

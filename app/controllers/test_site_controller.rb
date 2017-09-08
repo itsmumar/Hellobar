@@ -1,17 +1,14 @@
 class TestSiteController < ActionController::Base
   before_action :load_site
 
+  helper_method :script_tag, :content_upgrades_script_tags, :content_upgrade_tests
+
   def show
-    render file: generate_test_site
+    clear_cache if params.key?(:fresh)
+    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
   end
 
   private
-
-  def generate_test_site
-    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
-    clear_cache if params[:fresh]
-    GenerateTestSite.new(@site.id).call
-  end
 
   def load_site
     @site =
@@ -23,6 +20,33 @@ class TestSiteController < ActionController::Base
   end
 
   def clear_cache
+    Rails.logger.info "[TestSite] Clearing cache..."
     @site.update_column :updated_at, Time.current
+  end
+
+  def content_upgrades
+    @site.site_elements.active_content_upgrades
+  end
+
+  def content_upgrade_tests
+    content_upgrades.where('offer_headline like ?', 'Test %')
+  end
+
+  def content_upgrades_script_tags
+    content_upgrades.where.not('offer_headline like ?', 'Test %').first&.content_upgrade_script_tag
+  end
+
+  def script_tag
+    if Rails.env.test?
+      "<script>#{ script_content }</script>"
+    else
+      GenerateAndStoreStaticScript.new(@site, path: 'test_site.js').call
+      '<script src="/generated_scripts/test_site.js"></script>'
+    end
+  end
+
+  def script_content
+    GenerateStaticScriptModules.new.call
+    RenderStaticScript.new(@site).call
   end
 end
