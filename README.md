@@ -257,16 +257,12 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 
 Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
 
-Also you can find the source html here: `tmp/test_site.html`
-
 #### Options
 
-You can specify `id` param to exact site you need: `http://localhost:3000/test_site?id=133`
-
-To generate a site html file at an arbitrary location use `path`: `http://localhost:3000/test_site?path=public/foo.html`
+You can specify `id` param to exact site you need: `http://localhost:3000/test_sites/133`
 
 If you are working on css/js of script you might want to fully regenerate script on every reload
-just use `fresh=1``: `http://localhost:3000/test_site?fresh=1`
+just use `fresh` param then: `http://localhost:3000/test_site?fresh`
 
 ## Live testing/QA info
 
