@@ -27,15 +27,14 @@ feature 'Every x number of sessions condition', js: true do
       # force capybara to wait until iframe is loaded
       page.has_xpath?('.//iframe[@id="random-container"]')
       within_frame 'random-container-0' do
-        expect(page).to have_content(@element.headline)
+        expect(page).to have_content(element.headline)
       end
     end
   end
 
   context 'condition is every 4 sessions' do
     before(:each) do
-      @element.rule.conditions << create(:condition, operand: 'every', segment: 'EveryXSession', value: '4')
-      @path = generate_file_and_return_path(@element.site.id)
+      element.rule.conditions << create(:condition, operand: 'every', segment: 'EveryXSession', value: '4')
     end
 
     it 'shows if the number of sessions is divisible by 4' do
@@ -53,10 +52,10 @@ feature 'Every x number of sessions condition', js: true do
       visit_and_set_cookie(1)
       @test_doesnt_exist.call
 
-      visit_and_set_cookie(2)
+      visit_and_set_cookie(5)
       @test_doesnt_exist.call
 
-      visit_and_set_cookie(3)
+      visit_and_set_cookie(7)
       @test_doesnt_exist.call
     end
   end
