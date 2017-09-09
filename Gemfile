@@ -149,7 +149,6 @@ group :development, :test do
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
-  gem 'sinatra'
   gem 'teaspoon-jasmine'
 
   # Debugging
@@ -173,6 +172,7 @@ group :test do
   # Code coverage metrics
   gem 'codecov', require: false
   gem 'simplecov', require: false
+  gem 'sinatra'
 
   gem 'database_cleaner'
   gem 'email_spec'

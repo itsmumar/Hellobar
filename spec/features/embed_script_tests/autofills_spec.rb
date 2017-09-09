@@ -3,8 +3,6 @@ require 'integration_helper'
 feature 'Autofills', :js do
   given!(:site_element) { create :site_element, :bar, :email }
   given(:site) { site_element.site }
-  given(:path) { generate_file_and_return_path site.id }
-  given(:site_path) { site_path_to_url path }
   given(:email) { 'some@email.com' }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
   given!(:autofill) { create :autofill, site: site }
@@ -14,7 +12,7 @@ feature 'Autofills', :js do
   end
 
   scenario 'email autofilling functionality' do
-    visit site_path
+    visit test_site_path(id: site.id)
 
     within_frame('random-container-0') do
       # we have to use `send_keys` so that the focus will be set on this
@@ -25,7 +23,7 @@ feature 'Autofills', :js do
     end
 
     # reload the page to test if autofilling works
-    visit site_path
+    visit test_site_path(id: site.id)
 
     # give a chance for the autofills script to execute
     sleep 0.3

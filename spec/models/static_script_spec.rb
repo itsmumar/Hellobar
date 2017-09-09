@@ -80,20 +80,6 @@ describe StaticScript do
     it 'enqueues GenerateStaticScriptJob' do
       expect { script.generate }.to have_enqueued_job GenerateStaticScriptJob
     end
-
-    context 'when development' do
-      before { allow(Rails.env).to receive(:development?).and_return true }
-
-      it 'generates test site' do
-        full_path = Rails.root.join('public', 'test_site.html')
-
-        expect(GenerateTestSite)
-          .to receive_service_call
-          .with(site.id, full_path: full_path)
-
-        script.generate
-      end
-    end
   end
 
   describe '#installed?' do
