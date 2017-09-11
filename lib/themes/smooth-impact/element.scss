@@ -280,6 +280,9 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         padding: 25px;
         position: relative;
         min-height: 250px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
         .hb-content-wrapper {
           width: 100%;
