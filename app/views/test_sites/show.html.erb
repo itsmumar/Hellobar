@@ -81,6 +81,13 @@
         events.innerHTML += `[Google Analytics (Legacy)] event: '${ event }', category: '${ category }', action: '${ action }', label: '${ label }'\n`;
       }
     }
+
+    // remove the conversion cookies
+    document.addEventListener('DOMContentLoaded', function(){
+      setTimeout(function(){
+        ['ec', 'cc', 'sc'].forEach(key => hellobar('visitor').inspect().setData(key, null))
+      }, 500);
+    });
   </script>
 </section>
 
