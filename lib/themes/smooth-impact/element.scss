@@ -270,8 +270,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
 
       max-width: 500px;
-      max-height: 300px;
-      height: 300px;
+      min-height: 250px;
       width: 500px;
 
       .slider-content {
@@ -280,6 +279,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         height: 100%;
         padding: 25px;
         position: relative;
+        min-height: 250px;
 
         .hb-content-wrapper {
           width: 100%;
