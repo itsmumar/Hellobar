@@ -19,6 +19,13 @@
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
       "font_id": "oswald"
+    },
+    "Alert": {
+      "background_color": "4A47F2",
+      "text_color": "FFFFFF",
+      "button_color": "FFFFFF",
+      "link_color": "DC5B38",
+      "font_id": "oswald"
     }
   },
   "image": {
