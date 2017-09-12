@@ -270,22 +270,20 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
 
       max-width: 500px;
-      min-height: 250px;
       width: 500px;
 
       .slider-content {
-        margin-left: 45%;
-        width: 55%;
-        height: 100%;
-        padding: 25px;
-        position: relative;
+        padding: 25px 25px 40px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        margin-left: 45%;
+        min-height: 250px;
 
         .hb-content-wrapper {
-          width: 100%;
-          height: 100%;
+          .hb-text-wrapper {
+            padding-right: 0;
+          }
         }
 
         &:after { // border around the screen
@@ -294,7 +292,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
           top: 0;
           right: 0;
           bottom: 0;
-          left: 0;
+          left: 45%;
           margin: 5px;
           border: 1px solid rgba(241, 241, 247, 0.3);
           border-top-right-radius: 3px;
