@@ -31,6 +31,12 @@ class Admin::SitesController < AdminController
     end
   end
 
+  def add_free_days
+    AddFreeDays.new(site, params[:free_days][:number]).call
+    flash[:success] = "#{ params[:free_days][:number] } free days have been added."
+    redirect_to admin_user_path(params[:user_id])
+  end
+
   private
 
   def change_subscription

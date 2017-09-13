@@ -136,4 +136,53 @@ describe Admin::SitesController do
       end
     end
   end
+
+  describe 'PUT add_free_days', :freeze do
+    let(:params) { { free_days: { number: '10' } } }
+    let(:current_subscription) { site.current_subscription }
+    let(:next_bill) { current_subscription.bills.last }
+    let(:current_bill) { current_subscription.bills.first }
+
+    let(:add_free_days) do
+      put add_free_days_admin_user_site_path(site, user_id: site.owners.first), params
+    end
+
+    context 'with a paid subscription' do
+      before do
+        stub_cyber_source :purchase
+        ChangeSubscription.new(site, { subscription: 'Pro' }, create(:credit_card)).call
+      end
+
+      it 'pushes next billing date forward' do
+        expect { add_free_days }
+          .to change { next_bill.reload.start_date }
+          .by(10.days) \
+
+          .and change { next_bill.reload.end_date }
+          .by(10.days) \
+
+          .and change { next_bill.reload.bill_at }
+          .by(10.days) \
+
+          .and change { current_bill.reload.end_date }
+          .by(10.days)
+      end
+    end
+
+    context 'with a trail subscription' do
+      before do
+        stub_cyber_source :purchase
+        AddTrialSubscription.new(site, subscription: 'Pro', trial_period: '10').call
+      end
+
+      it 'adds free days to the trial' do
+        expect { add_free_days }
+          .to change { current_bill.reload.end_date }
+          .by(10.days) \
+
+          .and change { current_subscription.reload.trial_end_date }
+          .by(10.days)
+      end
+    end
+  end
 end

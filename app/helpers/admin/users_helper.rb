@@ -1,6 +1,6 @@
 module Admin::UsersHelper
   def bills_for(site)
-    site.bills.reorder(bill_at: :desc).recurring
+    site.bills.reorder(id: :desc).recurring
   end
 
   def subscriptions

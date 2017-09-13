@@ -80,6 +80,10 @@ class Subscription < ActiveRecord::Base
     Comparison.new(self, other).direction
   end
 
+  def paid?
+    values[:monthly_amount] > 0
+  end
+
   private
 
   def set_initial_values

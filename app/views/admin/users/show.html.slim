@@ -16,10 +16,11 @@ div#user_profile
         - unless site.deleted?
           = link_to 'Contact Lists', admin_user_site_contact_lists_path(@user, site), target: "_blank"
           a.subscription_link data-siteid=site.id change plan
+          a.free_days_link data-siteid=site.id add free days
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script
 
-      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "schedule_form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
+      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
         = f.hidden_field :id, value: site.id
         table
           tr
@@ -40,6 +41,15 @@ div#user_profile
                 div= sf.label "Trial period in days.  Leave blank for no trial."
                 div= sf.number_field 'trial_period'
                 = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
+
+      = form_for site, url: add_free_days_admin_user_site_path(@user, site), method: :put, html: {class: "free_days_site_form form hidden"}, data: { "site-id" => site.id } do |f|
+        = f.hidden_field :id, value: site.id
+        table
+          tr
+            td
+              div= f.label 'Free days'
+              div= number_field 'free_days', 'number', value: 1, min: 1
+              = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
       - if site.users.count > 1
         div.site_section

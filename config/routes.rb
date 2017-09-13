@@ -126,6 +126,7 @@ Rails.application.routes.draw do
       resources :sites, only: [:update] do
         member do
           post :regenerate
+          put :add_free_days
         end
 
         resources :contact_lists, only: [:index]
