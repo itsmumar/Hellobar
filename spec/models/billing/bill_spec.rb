@@ -209,4 +209,21 @@ describe Bill do
       specify { expect(bill).to be_past_due }
     end
   end
+
+  describe '#problem_reason' do
+    let!(:bill) { create :past_due_bill }
+
+    it 'returns response from CyberSource' do
+      expect(bill.problem_reason).to eql 'General decline of the card'
+    end
+  end
+
+  describe '#estimated_amount' do
+    let!(:bill) { create :bill }
+    before { allow(bill).to receive(:calculate_discount).and_return 10.0 }
+
+    it 'returns discounted amount' do
+      expect(bill.estimated_amount).to eql (bill.amount - 10).to_f
+    end
+  end
 end
