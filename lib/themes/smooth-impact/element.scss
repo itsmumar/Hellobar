@@ -277,7 +277,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-left: 45%;
         min-height: 250px;
 
         .hb-content-wrapper {
@@ -292,7 +291,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
           top: 0;
           right: 0;
           bottom: 0;
-          left: 45%;
+          left: 0;
           margin: 5px;
           border: 1px solid rgba(241, 241, 247, 0.3);
           border-top-right-radius: 3px;
@@ -302,7 +301,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
 
       .hb-headline-text {
-        font-size: 1.2em;
+        font-size: 1.8em;
         text-align: left;
         text-transform: uppercase;
         font-weight: 700;
@@ -310,7 +309,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
 
       .hb-secondary-text {
-        font-size: 0.9em;
+        font-size: 1.1em;
         font-weight: normal;
         color: white;
         margin: 0 auto;
@@ -330,6 +329,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         -moz-appearance: none;
         -webkit-appearance: none;
         color: white;
+        font-size: 1.2em;
 
         &::placeholder {
           color: white;
@@ -361,10 +361,10 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
           background-repeat: no-repeat;
           content: "";
           position: absolute;
-          left: 15px;
-          top: 15px;
-          width: 12px;
-          height: 12px;
+          left: 13px;
+          top: 13px;
+          width: 16px;
+          height: 16px;
         }
 
         background-color: $inputs-color;
@@ -403,6 +403,17 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         letter-spacing: 2px;
         padding: 4px 5px 3px;
         box-shadow: 0px 4px 20px -7px black;
+        max-width: inherit;
+      }
+    }
+
+    #hellobar-slider.image-background {
+      .slider-content {
+        margin-left: 45%;
+
+        &:after {
+          left: 45%;
+        }
       }
     }
   }
