@@ -32,8 +32,8 @@ class Admin::SitesController < AdminController
   end
 
   def add_free_days
-    AddFreeDays.new(site, params[:free_days][:number]).call
-    flash[:success] = "#{ params[:free_days][:number] } free days have been added."
+    AddFreeDays.new(site, params[:free_days][:count]).call
+    flash[:success] = "#{ params[:free_days][:count] } free days have been added."
     redirect_to admin_user_path(params[:user_id])
   rescue AddFreeDays::Error => e
     flash[:error] = "There was an error: #{ e.message }"
