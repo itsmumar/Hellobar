@@ -98,7 +98,11 @@ div#user_profile
                     | (#{bill.refund.amount}) Refunded
                     span.refund_status
                       |  (#{bill.refund.status})
-                td= bill.status
+                td
+                  span= bill.status
+                  - if bill.problem?
+                    span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
+
                 td= bill.due_at.strftime('%D')
                 td
                   - if bill.status == :paid && bill.amount != 0

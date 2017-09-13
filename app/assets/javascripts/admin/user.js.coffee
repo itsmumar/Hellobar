@@ -10,6 +10,8 @@ deliverPasswordReset = (ahref) ->
       $link.text('Sent!')
 
 $ ->
+  $('[data-toggle="tooltip"]').tooltip()
+
   $('a#reset_password').on 'click', (event) ->
     event.preventDefault()
     deliverPasswordReset(this)
