@@ -277,7 +277,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-left: 45%;
         min-height: 250px;
 
         .hb-content-wrapper {
@@ -292,7 +291,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
           top: 0;
           right: 0;
           bottom: 0;
-          left: 45%;
+          left: 0;
           margin: 5px;
           border: 1px solid rgba(241, 241, 247, 0.3);
           border-top-right-radius: 3px;
@@ -403,6 +402,16 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         letter-spacing: 2px;
         padding: 4px 5px 3px;
         box-shadow: 0px 4px 20px -7px black;
+      }
+    }
+
+    #hellobar-slider.image-background {
+      .slider-content {
+        margin-left: 45%;
+
+        &:after {
+          left: 45%;
+        }
       }
     }
   }
