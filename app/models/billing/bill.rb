@@ -63,6 +63,10 @@ class Bill < ActiveRecord::Base
     super.to_sym
   end
 
+  def problem_reason
+    billing_attempts.last&.response
+  end
+
   def can_pay?
     credit_card && !credit_card.deleted? && credit_card.token.present?
   end

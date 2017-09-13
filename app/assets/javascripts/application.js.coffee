@@ -41,6 +41,7 @@
 #= require_self
 
 $ ->
+  $('[data-toggle="tooltip"]').tooltip()
 
   # Reveal Blocks
   $('.reveal-wrapper').click (evt) ->

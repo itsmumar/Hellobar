@@ -6,6 +6,7 @@ FactoryGirl.define do
 
     trait :failed do
       status :failed
+      response 'General decline of the card'
     end
   end
 end
