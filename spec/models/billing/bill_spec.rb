@@ -223,7 +223,7 @@ describe Bill do
     before { allow(bill).to receive(:calculate_discount).and_return 10.0 }
 
     it 'returns discounted amount' do
-      expect(bill.estimated_amount).to eql (bill.amount - 10).to_f
+      expect(bill.estimated_amount).to eql((bill.amount - 10).to_f)
     end
   end
 end
