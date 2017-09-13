@@ -42,7 +42,7 @@
 
 $ ->
   $('[data-toggle="tooltip"]').tooltip()
-  
+
   # Reveal Blocks
   $('.reveal-wrapper').click (evt) ->
     unless $(@).hasClass('activated')
