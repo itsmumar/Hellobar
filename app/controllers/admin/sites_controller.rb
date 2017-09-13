@@ -1,7 +1,6 @@
 class Admin::SitesController < AdminController
   def update
     begin
-      return add_free_days if params.key?(:free_days)
       site.update_attributes(site_params) if params.key?(:site)
       change_subscription if params.key?(:subscription)
       flash[:success] = 'Site and/or subscription has been updated.'
@@ -32,6 +31,12 @@ class Admin::SitesController < AdminController
     end
   end
 
+  def add_free_days
+    AddFreeDays.new(site, params[:free_days][:number]).call
+    flash[:success] = "#{ params[:free_days][:number] } free days have been added."
+    redirect_to admin_user_path(params[:user_id])
+  end
+
   private
 
   def change_subscription
@@ -40,12 +45,6 @@ class Admin::SitesController < AdminController
     else
       ChangeSubscription.new(site, subscription_params).call
     end
-  end
-
-  def add_free_days
-    AddFreeDays.new(site, params[:free_days][:number]).call
-    flash[:success] = "#{ params[:free_days][:number] } free days have been added."
-    redirect_to admin_user_path(params[:user_id])
   end
 
   def subscription_params

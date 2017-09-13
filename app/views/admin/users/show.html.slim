@@ -42,7 +42,7 @@ div#user_profile
                 div= sf.number_field 'trial_period'
                 = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
-      = form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "free_days_site_form form hidden"}, data: { "site-id" => site.id } do |f|
+      = form_for site, url: add_free_days_admin_user_site_path(@user, site), method: :put, html: {class: "free_days_site_form form hidden"}, data: { "site-id" => site.id } do |f|
         = f.hidden_field :id, value: site.id
         table
           tr
