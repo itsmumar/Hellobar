@@ -62,9 +62,9 @@ section
             tr
               td
                 - if bill.problem?
-                  i.icon-alert title="There was a problem while charging your card"
+                  i.icon-alert title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
                 - else
-                  i.icon-thumbsup
+                  i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
 
               td= bill.bill_at.strftime("%-m-%-d-%Y")
               td
