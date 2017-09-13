@@ -16,7 +16,8 @@ div#user_profile
         - unless site.deleted?
           = link_to 'Contact Lists', admin_user_site_contact_lists_path(@user, site), target: "_blank"
           a.subscription_link data-siteid=site.id change plan
-          a.free_days_link data-siteid=site.id add free days
+          - if site.current_subscription.paid?
+            a.free_days_link data-siteid=site.id add free days
           a.regenerate_link data-url=regenerate_admin_user_site_path(@user, site)
             | regenerate script
 
@@ -48,7 +49,7 @@ div#user_profile
           tr
             td
               div= f.label 'Free days'
-              div= number_field 'free_days', 'number', value: 1, min: 1
+              div= number_field 'free_days', 'count', value: 1, min: 1
               = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
       - if site.users.count > 1
