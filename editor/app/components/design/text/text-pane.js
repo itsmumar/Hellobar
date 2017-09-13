@@ -47,8 +47,8 @@ export default Ember.Component.extend({
 
   clearSecondaryText: function () {
     if (this.get('model.use_question')) {
-      this.set('model.caption', '')
-      this.set('model.content', '')
+      this.set('model.caption', '');
+      this.set('model.content', '');
     }
   }.observes('model.use_question'),
 
