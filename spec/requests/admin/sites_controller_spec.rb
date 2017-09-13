@@ -138,7 +138,7 @@ describe Admin::SitesController do
   end
 
   describe 'PUT add_free_days', :freeze do
-    let(:params) { { free_days: { number: '10' } } }
+    let(:params) { { free_days: { count: '10' } } }
     let(:current_subscription) { site.current_subscription }
     let(:next_bill) { current_subscription.bills.last }
     let(:current_bill) { current_subscription.bills.first }
