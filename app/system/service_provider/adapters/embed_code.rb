@@ -26,6 +26,8 @@ module ServiceProvider::Adapters
       raise EmbedCodeError, 'Embed code must be provided' if @contact_list.blank? || @contact_list.data['embed_code'].blank?
 
       ExtractEmbedForm.new(@contact_list.data['embed_code']).call
+    rescue ExtractEmbedForm::Error => e
+      raise EmbedCodeError, "Wrong embed code: #{ e.message }"
     end
 
     def fill_form(params)

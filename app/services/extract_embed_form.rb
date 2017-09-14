@@ -1,4 +1,7 @@
 class ExtractEmbedForm
+  class Error < StandardError
+  end
+
   URL_REGEX = /^(?:https?:\/\/|\/\/)/
 
   def initialize(embed_code)
@@ -67,7 +70,7 @@ class ExtractEmbedForm
   def remote_code
     if reference_object&.name == 'script'
       match_data = extract_html_from_script(request_embed_url)
-      raise 'Cannot parse remote html' if match_data.nil?
+      raise Error, 'Cannot parse remote html' if match_data.nil?
       match_data[1].gsub('\n', '').delete('\\')
     else
       request_embed_url
