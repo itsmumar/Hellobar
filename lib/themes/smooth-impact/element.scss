@@ -141,26 +141,13 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       color: white;
 
       &::placeholder {
-        color: white;
-        opacity: 1;
+        color: rgba(255, 255, 255, 0.25);
       }
       &::-webkit-input-placeholder {
-        color: white;
-        opacity: 1;
+        color: rgba(255, 255, 255, 0.25);
       }
       &:-ms-input-placeholder {
-        color: white;
-        opacity: 1;
-      }
-
-      &:focus::placeholder {
-        color: rgba(0,0,0,.4);
-      }
-      &:focus::-webkit-input-placeholder {
-        color: rgba(0,0,0,.4);
-      }
-      &:focus:-ms-input-placeholder {
-        color: rgba(0,0,0,.4);
+        color: rgba(255, 255, 255, 0.25);
       }
     }
 
@@ -332,26 +319,13 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         font-size: 1.2em;
 
         &::placeholder {
-          color: white;
-          opacity: 1;
+          color: rgba(255, 255, 255, 0.25);
         }
         &::-webkit-input-placeholder {
-          color: white;
-          opacity: 1;
+          color: rgba(255, 255, 255, 0.25);
         }
         &:-ms-input-placeholder {
-          color: white;
-          opacity: 1;
-        }
-
-        &:focus::placeholder {
-          color: rgba(0,0,0,.4);
-        }
-        &:focus::-webkit-input-placeholder {
-          color: rgba(0,0,0,.4);
-        }
-        &:focus:-ms-input-placeholder {
-          color: rgba(0,0,0,.4);
+          color: rgba(255, 255, 255, 0.25);
         }
       }
 
