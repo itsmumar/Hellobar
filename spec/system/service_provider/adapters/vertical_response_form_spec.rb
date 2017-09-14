@@ -39,5 +39,15 @@ describe ServiceProvider::Adapters::VerticalResponseForm do
         expect { provider.subscribe(email: email, name: name) }.not_to raise_error
       end
     end
+
+    context 'when could not parse html' do
+      it 'calls DestroyIdentity' do
+        expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
+        expect(ExtractEmbedForm)
+          .to receive_service_call.and_raise ExtractEmbedForm::Error.new('test message')
+
+        expect { provider.subscribe(email: email, name: name) }.not_to raise_error
+      end
+    end
   end
 end
