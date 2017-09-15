@@ -33,6 +33,7 @@
 
     <% if @styles %>
       function loadStyles() {
+        $('head').append("<link rel='stylesheet' media='all' href='https://fonts.googleapis.com/css?family=<%= @styles['offer_font_family_name'] %>'>");
         $('#content-preview .hb-cu-offer').css('background-color', <%=raw @styles['offer_bg_color'].to_json %>);
         $('#content-preview .hb-cu-offer').css('color', <%=raw @styles['offer_text_color'].to_json %>);
         $('#content-preview .hb-cu-offer').css('font-family', <%=raw @styles['offer_font_family'].to_json %>);

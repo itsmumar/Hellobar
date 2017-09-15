@@ -48,7 +48,7 @@ gem 'activemerchant', '~> 1.65.0'
 # Assets / Frontend
 gem 'active_link_to'
 gem 'autoprefixer-rails'
-gem 'bootstrap-sass', '~> 3.1.1'
+gem 'bootstrap-sass'
 gem 'coffee-rails'
 gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
