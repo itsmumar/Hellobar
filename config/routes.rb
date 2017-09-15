@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :sites, only: [] do
       member do
         post :update_install_type
+        post :update_static_script_installation
       end
     end
   end
