@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :sites, only: [] do
       member do
         post :update_install_type
+        post :update_static_script_installation
       end
     end
   end
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   resources :sites do
     member do
       put :downgrade
+      post :install_check
     end
 
     get 'team'
