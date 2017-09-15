@@ -19,7 +19,6 @@ module ApplicationHelper
 
   def subscription_cost(subscription, schedule)
     cost = subscription.estimated_price(current_user, schedule)
-    cost /= 12 if schedule == :yearly
     number_to_currency(cost, precision: 0)
   end
 
