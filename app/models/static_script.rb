@@ -28,7 +28,9 @@ class StaticScript
   end
 
   def installed?
-    current_script_status || check_status_again
+    site.script_installed_at.present? &&
+      (site.script_uninstalled_at.blank? ||
+        site.script_installed_at > site.script_uninstalled_at)
   end
 
   def generate
@@ -40,17 +42,6 @@ class StaticScript
   end
 
   private
-
-  def current_script_status
-    site.script_installed_at.present? &&
-      (site.script_uninstalled_at.blank? ||
-        site.script_installed_at > site.script_uninstalled_at)
-  end
-
-  def check_status_again
-    CheckScriptStatusJob.perform_later site
-    false
-  end
 
   def cdn_url_for(path)
     File.join(cdn_domain, path)
