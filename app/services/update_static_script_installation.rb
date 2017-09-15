@@ -32,7 +32,6 @@ class UpdateStaticScriptInstallation
   def script_installed
     # update_column so that we don't trigger site script regeneration
     site.update_column :script_installed_at, Time.current
-    # site.update script_installed_at: Time.current
 
     Referrals::RedeemForRecipient.run(site: site)
 
@@ -43,7 +42,6 @@ class UpdateStaticScriptInstallation
   def script_uninstalled
     # update_column so that we don't trigger site script regeneration
     site.update_column :script_uninstalled_at, Time.current
-    # site.update script_uninstalled_at: Time.current
 
     Analytics.track(:site, site.id, 'Uninstalled')
     track_script_uninstallation
