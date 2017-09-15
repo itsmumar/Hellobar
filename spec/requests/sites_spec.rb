@@ -34,7 +34,6 @@ describe 'Sites requests' do
       end
     end
 
-
     describe 'DELETE #destroy' do
       let!(:site) { create :site, user: user }
 

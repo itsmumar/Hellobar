@@ -5,8 +5,12 @@ describe CheckStaticScriptInstallation do
       site_elements = double 'Site Elements', pluck: site_element_ids
 
       script_name = 'script.js'
-      site = instance_double Site, id: 1, url: 'http://localhost',
-        script_name: script_name, site_elements: site_elements
+
+      site = instance_double Site,
+        id: 1,
+        url: 'http://localhost',
+        script_name: script_name,
+        site_elements: site_elements
 
       message_hash = {
         environment: 'test',

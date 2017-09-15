@@ -19,12 +19,12 @@ namespace :site do
       Site.script_installed.find_each do |site|
         GenerateDailyStaticScriptJob.perform_later site
 
-        # TODO this should be executed uniformly over a period of 24 hours
+        # TODO: this should be executed uniformly over a period of 24 hours
         CheckStaticScriptInstallation.new(site).call
       end
 
       # See if anyone who has uninstalled recently has reinstalled
-      # TODO this should be executed uniformly over a period of 24 hours
+      # TODO: this should be executed uniformly over a period of 24 hours
       Site.script_uninstalled_recently_or_active.each do |site|
         CheckStaticScriptInstallation.new(site).call
       end

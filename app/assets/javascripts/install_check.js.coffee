@@ -7,7 +7,7 @@ $ ->
       success: (data, status, xhr) ->
         wasInstalled = isInstalled
         if data.script_installed && wasInstalled == false
-          window.location.replace("/sites/#{siteId}?installed=true")
+          window.location.replace("/sites/#{ siteId }?installed=true")
         else if data.script_installed == false
           isInstalled = data.script_installed
           callback = -> checkInstalled siteId, isInstalled

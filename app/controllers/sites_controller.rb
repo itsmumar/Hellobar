@@ -103,7 +103,7 @@ class SitesController < ApplicationController
     redirect_to site_install_path(current_site)
   end
 
-  # async check, but will respond instantly with a not-up-to-date info
+  # async installation check, but will respond instantly with a not-up-to-date info
   def install_check
     CheckStaticScriptInstallation.new(@site).call
 
