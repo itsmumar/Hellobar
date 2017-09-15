@@ -25,7 +25,6 @@ describe 'Sites requests' do
 
         expect(CheckStaticScriptInstallation).to receive_service_call
           .with(site)
-          .exactly(:twice) # TODO: remove this when site serializer stops doing installation checks
 
         post install_check_site_path(site)
 
