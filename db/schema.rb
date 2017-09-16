@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821182825) do
+ActiveRecord::Schema.define(version: 20170916191428) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -221,13 +221,6 @@ ActiveRecord::Schema.define(version: 20170821182825) do
   end
 
   add_index "improve_suggestions", ["site_id", "name", "updated_at"], name: "index_improve_suggestions_on_site_id_and_name_and_updated_at", using: :btree
-
-  create_table "internal_processing", id: false, force: :cascade do |t|
-    t.integer "last_updated_at",                limit: 4, null: false
-    t.integer "last_event_processed",           limit: 4, null: false
-    t.integer "last_prop_processed",            limit: 4, null: false
-    t.integer "last_visitor_user_id_processed", limit: 4, null: false
-  end
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
