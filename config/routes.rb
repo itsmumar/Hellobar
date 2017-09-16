@@ -74,8 +74,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :targeted_segments
-
     resources :site_memberships do
       collection do
         post 'invite'
