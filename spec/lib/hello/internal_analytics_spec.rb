@@ -44,7 +44,6 @@ describe Hello::InternalAnalytics do
     describe 'ab_variation' do
       it 'creates an internal prop if a user is available' do
         object.ab_variation('Example Test', user)
-        # InternalProp.where(:target_id => user.id, :target_type => "user", :name => "Example Test").count.should == 1
       end
 
       it 'tracks a visitor prop if no user is available, but cookies are' do
