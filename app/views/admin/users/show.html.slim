@@ -84,6 +84,7 @@ div#user_profile
               th Actions
               th Bill Duration
               th Paid at
+              th Extra days
 
             - bills_for(site).each do |bill, refunds|
               tr
@@ -129,6 +130,8 @@ div#user_profile
                   = bill_duration(bill)
                 td
                   = bill.status_set_at&.strftime('%D')
+                td
+                  = bill_extra_days(bill)
 
       div.site_section
         div.title Subscription History
