@@ -71,7 +71,12 @@ class ChangeSubscription
   end
 
   def create_bill(subscription)
-    CalculateBill.new(subscription, bills: site.bills.recurring).call.tap(&:save!)
+    void_pending_bills!
+    CalculateBill.new(subscription, bills: site.bills).call.tap(&:save!)
+  end
+
+  def void_pending_bills!
+    site.bills.pending.each(&:voided!)
   end
 
   def subscription_class

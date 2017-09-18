@@ -3,15 +3,6 @@ describe CalculateBill do
   let(:site) { create :site, :free_subscription }
   let(:service) { described_class.new(subscription, bills: site.bills) }
 
-  context 'with pending bills' do
-    let!(:pending_bill) { create :free_bill, subscription: site.current_subscription }
-
-    it 'voids pending bills' do
-      service.call
-      expect(pending_bill.reload).to be_voided
-    end
-  end
-
   context 'with active paid bills', :freeze do
     let(:bill) { service.call }
 

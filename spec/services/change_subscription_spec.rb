@@ -27,6 +27,15 @@ describe ChangeSubscription, :freeze do
       expect(service.call).to be_a(Bill).and be_paid
     end
 
+    context 'with pending bills' do
+      let!(:pending_bill) { create :free_bill, subscription: site.current_subscription }
+
+      it 'voids pending bills' do
+        service.call
+        expect(pending_bill.reload).to be_voided
+      end
+    end
+
     it 'sends an event to Analytics' do
       props = {
         to_subscription: 'Pro',
