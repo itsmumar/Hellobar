@@ -1,4 +1,2 @@
-- if site_has_payment_issue?(@site)
-  = render "shared/payment_issue_prompt", {site: @site}
-- elsif show_whats_new_prompt?
-  = render "shared/whats_new_prompt", {site: @site}
+- if site_has_payment_issue? @site
+  = render 'shared/payment_issue_prompt', { site: @site }

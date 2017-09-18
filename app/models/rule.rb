@@ -35,24 +35,6 @@ class Rule < ActiveRecord::Base
     [everyone, mobile, homepage]
   end
 
-  def self.create_from_segment(site, segment)
-    segment, value = segment.split(':', 2)
-    segment = Condition::SEGMENTS.find { |_, v| v == segment }[0]
-    value = [value] if segment == 'UrlCondition'
-
-    new(site: site).tap do |rule|
-      condition = rule.conditions.new(
-        segment: segment,
-        operand: 'is',
-        value: value
-      )
-
-      rule.name = condition.to_sentence
-
-      rule.save
-    end
-  end
-
   def to_sentence
     if conditions.empty?
       'Show this to everyone'
