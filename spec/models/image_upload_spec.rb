@@ -62,23 +62,6 @@ describe ImageUpload do
           expect(subject).to include 'original'
         end
       end
-
-      # version 1 does not have medium style
-      context 'when style is medium' do
-        let(:style) { :medium }
-
-        it 'returns the original URL' do
-          expect(subject).to include 'original'
-        end
-      end
-
-      context 'when style is thumb' do
-        let(:style) { :thumb }
-
-        it 'returns the thumb URL' do
-          expect(subject).to include 'thumb'
-        end
-      end
     end
 
     context 'when version is 2' do
@@ -98,23 +81,6 @@ describe ImageUpload do
 
         it 'returns the large URL' do
           expect(subject).to include 'large'
-        end
-      end
-
-      # version 2 has medium style
-      context 'when style is medium' do
-        let(:style) { :medium }
-
-        it 'returns the medium URL' do
-          expect(subject).to include 'medium'
-        end
-      end
-
-      context 'when style is thumb' do
-        let(:style) { :thumb }
-
-        it 'returns the thumb URL' do
-          expect(subject).to include 'thumb'
         end
       end
     end

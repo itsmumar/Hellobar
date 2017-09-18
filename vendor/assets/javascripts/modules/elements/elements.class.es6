@@ -75,7 +75,7 @@ hellobar.defineModule('elements.class',
 
         function imageSrc() {
           const imageStyle = model.image_style || 'modal';
-          return model[`image_${imageStyle}_url`] || model.image_url || defaultImage();
+          return model[`image_${ imageStyle }_url`] || model.image_url || defaultImage();
         }
 
         var matchingPlacement = location === model.image_placement;
@@ -84,7 +84,7 @@ hellobar.defineModule('elements.class',
         }
         else if (model.image_placement === 'background') {
           return `
-            <div class="hb-image-wrapper ${model.image_placement}" style="opacity: ${model.image_opacity / 100.0}; background-image: url(${imageSrc()});"></div>          
+            <div class="hb-image-wrapper ${model.image_placement}" style="opacity: ${model.image_opacity / 100.0}; background-image: url(${imageSrc()});"></div>
           `;
         } else {
           var imgClasses = [];
