@@ -21,7 +21,7 @@ module Admin::UsersHelper
   end
 
   def subscription_name(bill)
-    return "#{ bill.subscription.values[:name]} (trial)" if bill.subscription.trial_end_date
+    return "#{ bill.subscription.values[:name] } (trial)" if bill.subscription.trial_end_date
     bill.subscription.values[:name]
   end
 
