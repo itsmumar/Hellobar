@@ -1,8 +1,15 @@
 module Admin::UsersHelper
   def bill_extra_days(bill)
+    return trial_days(bill) if bill.subscription.trial_end_date
+
     expected_start_date = bill.end_date - bill.subscription.period
     difference = (expected_start_date - bill.start_date) / 1.day
     difference.zero? ? '' : difference.round
+  end
+
+  def trial_days(bill)
+    period = bill.subscription.trial_period / 1.day
+    period.round
   end
 
   def bills_for(site)
@@ -11,6 +18,11 @@ module Admin::UsersHelper
 
   def subscriptions
     Subscription::ALL
+  end
+
+  def subscription_name(bill)
+    return "#{ bill.subscription.values[:name]} (trial)" if bill.subscription.trial_end_date
+    bill.subscription.values[:name]
   end
 
   def bill_duration(bill)

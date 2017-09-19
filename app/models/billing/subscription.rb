@@ -46,6 +46,11 @@ class Subscription < ActiveRecord::Base
     monthly? ? 1.month : 1.year
   end
 
+  def trial_period
+    return unless trial_end_date
+    trial_end_date - created_at
+  end
+
   def values
     self.class.defaults.merge(schedule: schedule)
   end
