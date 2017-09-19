@@ -83,6 +83,7 @@ export default Ember.Component.extend({
 
     const options = {
       ruleData,
+      site: this.get('model.site'),
       successCallback() {
         that.ruleModal = null;
         ruleData = this;

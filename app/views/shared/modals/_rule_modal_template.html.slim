@@ -52,7 +52,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "UTMMediumCondition" "Ad Medium"}}
           | {{rule-option segment "UTMSourceCondition" "Ad Source"}}
           | {{rule-option segment "UTMTermCondition" "Ad Term"}}
-          / | {{rule-option segment "LocationCityCondition" "City"}}
+          | {{#if canUseAdvancedLocation}}
+          | {{rule-option segment "LocationCityCondition" "City"}}
+          | {{/if}}
           | {{rule-option segment "LocationCountryCondition" "Country"}}
           | {{rule-option segment "DateCondition" "date"}}
           | {{rule-option segment "LastVisitCondition" "days since last visit"}}
@@ -62,7 +64,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "PreviousPageURL" "previous page url"}}
           | {{rule-option segment "ReferrerCondition" "referrer"}}
           | {{rule-option segment "ReferrerDomainCondition" "Referrer Domain"}}
-          / | {{rule-option segment "LocationRegionCondition" "Region/State"}}
+          | {{#if canUseAdvancedLocation}}
+          | {{rule-option segment "LocationRegionCondition" "Region/State"}}
+          | {{/if}}
           | {{rule-option segment "TimeCondition" "Time"}}
           | {{rule-option segment "UrlCondition" "URL"}}
           | {{rule-option segment "UrlPathCondition" "URL Path"}}

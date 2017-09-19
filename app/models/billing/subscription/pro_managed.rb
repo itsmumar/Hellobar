@@ -34,7 +34,7 @@ class Subscription
       end
 
       def advanced_geolocation_segments?
-        false
+        true
       end
     end
 
