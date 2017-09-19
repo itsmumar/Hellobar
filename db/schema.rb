@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821182825) do
+ActiveRecord::Schema.define(version: 20170916191641) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -212,22 +212,6 @@ ActiveRecord::Schema.define(version: 20170821182825) do
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
   add_index "image_uploads", ["theme_id"], name: "index_image_uploads_on_theme_id", unique: true, using: :btree
   add_index "image_uploads", ["version"], name: "index_image_uploads_on_version", using: :btree
-
-  create_table "improve_suggestions", force: :cascade do |t|
-    t.integer  "site_id",    limit: 4
-    t.string   "name",       limit: 191
-    t.text     "data",       limit: 16777215
-    t.datetime "updated_at"
-  end
-
-  add_index "improve_suggestions", ["site_id", "name", "updated_at"], name: "index_improve_suggestions_on_site_id_and_name_and_updated_at", using: :btree
-
-  create_table "internal_processing", id: false, force: :cascade do |t|
-    t.integer "last_updated_at",                limit: 4, null: false
-    t.integer "last_event_processed",           limit: 4, null: false
-    t.integer "last_prop_processed",            limit: 4, null: false
-    t.integer "last_visitor_user_id_processed", limit: 4, null: false
-  end
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255

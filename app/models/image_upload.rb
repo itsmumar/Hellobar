@@ -4,14 +4,11 @@ class ImageUpload < ActiveRecord::Base
 
   VERSION_STYLES = {
     1 => Set[DEFAULT_STYLE, :thumb].freeze,
-    2 => Set[DEFAULT_STYLE, :thumb, :small, :medium, :large, :modal].freeze
+    2 => Set[DEFAULT_STYLE, :large, :modal].freeze
   }.freeze
 
   STYLES = {
     DEFAULT_STYLE => '2000x2000>',
-    thumb: '100x100>',
-    small: '500x500>',
-    medium: '1000x1000>',
     large: '1500x1500>',
     modal: '600x360>' # for legacy purposes
   }.freeze

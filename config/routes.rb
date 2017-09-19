@@ -74,8 +74,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :targeted_segments
-
     resources :site_memberships do
       collection do
         post 'invite'
@@ -99,7 +97,6 @@ Rails.application.routes.draw do
   get 'sites/:id/preview_script', to: 'sites#preview_script', as: :preview_script
   get 'sites/:id/script', to: 'sites#script', as: :script
   get 'sites/:id/chart_data', to: 'sites#chart_data', as: :chart_data
-  get 'sites/:id/whats_new', to: 'sites#whats_new', as: :whats_new
 
   get '/auth/:provider/callback', to: 'identities#create'
 

@@ -1,4 +1,10 @@
 module Admin::UsersHelper
+  def bill_extra_days(bill)
+    expected_start_date = bill.end_date - bill.subscription.period
+    difference = (expected_start_date - bill.start_date) / 1.day
+    difference.zero? ? '' : difference.round
+  end
+
   def bills_for(site)
     site.bills.reorder(id: :desc).recurring
   end

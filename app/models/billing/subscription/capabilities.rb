@@ -35,10 +35,6 @@ class Subscription
       false
     end
 
-    def max_suggestions
-      3
-    end
-
     def activate_on_exit?
       false
     end

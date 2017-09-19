@@ -412,8 +412,6 @@ describe StaticScriptModel do
               hash_including(
                 image_style: 'modal',
                 image_url: /original/,
-                image_small_url: /original/,
-                image_medium_url: /original/,
                 image_large_url: /original/,
                 image_modal_url: /original/
               )
@@ -429,8 +427,6 @@ describe StaticScriptModel do
               hash_including(
                 image_style: 'modal',
                 image_url: /modal/,
-                image_small_url: /small/,
-                image_medium_url: /medium/,
                 image_large_url: /large/,
                 image_modal_url: /modal/
               )
@@ -450,8 +446,6 @@ describe StaticScriptModel do
               hash_including(
                 image_style: 'large',
                 image_url: /original/,
-                image_small_url: /original/,
-                image_medium_url: /original/,
                 image_large_url: /original/,
                 image_modal_url: /original/
               )
@@ -467,8 +461,6 @@ describe StaticScriptModel do
               hash_including(
                 image_style: 'large',
                 image_url: /modal/,
-                image_small_url: /small/,
-                image_medium_url: /medium/,
                 image_large_url: /large/,
                 image_modal_url: /modal/
               )
