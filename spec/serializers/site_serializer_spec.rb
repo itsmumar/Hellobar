@@ -20,7 +20,8 @@ describe SiteSerializer do
       geolocation_injection: site.capabilities.geolocation_injection?,
       external_tracking: site.capabilities.external_tracking?,
       alert_bars: site.capabilities.alert_bars?,
-      opacity: site.capabilities.opacity?
+      opacity: site.capabilities.opacity?,
+      precise_geolocation_targeting: site.capabilities.precise_geolocation_targeting?
     }
     expect(serializable_hash[:capabilities]).to match expected_capabilities
   end

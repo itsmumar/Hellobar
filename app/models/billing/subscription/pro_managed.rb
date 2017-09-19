@@ -33,7 +33,7 @@ class Subscription
         true
       end
 
-      def advanced_geolocation_segments?
+      def precise_geolocation_targeting?
         true
       end
     end

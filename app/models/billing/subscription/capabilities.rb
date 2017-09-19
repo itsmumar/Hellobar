@@ -99,7 +99,7 @@ class Subscription
       false
     end
 
-    def advanced_geolocation_segments?
+    def precise_geolocation_targeting?
       false
     end
 
