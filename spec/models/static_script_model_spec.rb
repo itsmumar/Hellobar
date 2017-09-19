@@ -53,7 +53,8 @@ describe StaticScriptModel do
         geolocation_injection: site_capabilities.geolocation_injection?,
         external_tracking: site_capabilities.external_tracking?,
         alert_bars: site_capabilities.alert_bars?,
-        opacity: site_capabilities.opacity?
+        opacity: site_capabilities.opacity?,
+        advanced_geolocation_segments: site_capabilities.advanced_geolocation_segments?
       }
       expect(capabilities).to match expected_capabilities
     end

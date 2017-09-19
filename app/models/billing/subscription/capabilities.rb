@@ -99,6 +99,10 @@ class Subscription
       false
     end
 
+    def advanced_geolocation_segments?
+      false
+    end
+
     def ==(other)
       self.class == other.class &&
         subscription == other.subscription &&

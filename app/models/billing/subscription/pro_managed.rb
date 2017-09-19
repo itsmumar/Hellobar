@@ -32,6 +32,10 @@ class Subscription
       def advanced_themes?
         true
       end
+
+      def advanced_geolocation_segments?
+        false
+      end
     end
 
     class << self
