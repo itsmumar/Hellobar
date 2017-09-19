@@ -89,7 +89,7 @@ div#user_profile
             - bills_for(site).each do |bill, refunds|
               tr
                 td= bill.id
-                td= bill.subscription.values[:name]
+                td= subscription_name(bill)
                 td
                   = bill.amount
                   - if context_for_trial(@user, bill)

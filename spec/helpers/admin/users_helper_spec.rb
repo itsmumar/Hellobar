@@ -13,6 +13,15 @@ describe Admin::UsersHelper do
     end
   end
 
+  describe '#trial_days' do
+    let(:subscription) { create(:subscription, trial_end_date: 1.week.from_now) }
+    let(:bill) { create :bill, subscription: subscription }
+
+    it 'returns a number of days' do
+      expect(helper.trial_days(bill)).to eql 7
+    end
+  end
+
   describe '#bill_duration' do
     it "returns the bill's date in the correct format" do
       bill = create(:pro_bill, :paid)
