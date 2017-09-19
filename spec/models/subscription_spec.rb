@@ -110,6 +110,24 @@ describe Subscription do
     end
   end
 
+  describe '#trial_period' do
+    context 'when subscription is a trial' do
+      let(:subscription) { create(:subscription, trial_end_date: 1.week.from_now) }
+
+      specify 'returns the difference between trial end date and created_at' do
+        expect(subscription.trial_period).to eql 1.week
+      end
+    end
+
+    context 'when subscription is not a trial' do
+      let(:subscription) { build(:subscription, trial_end_date: nil) }
+
+      specify 'returns nil' do
+        expect(subscription.trial_period).to be_nil
+      end
+    end
+  end
+
   describe '#initialize' do
     context 'by default' do
       let(:subscription) { Subscription.new }

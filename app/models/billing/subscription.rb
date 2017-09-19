@@ -48,7 +48,8 @@ class Subscription < ActiveRecord::Base
 
   def trial_period
     return unless trial_end_date
-    trial_end_date - created_at
+    difference = trial_end_date - created_at
+    (difference / 1.day).round.days # round the difference to the day
   end
 
   def values
