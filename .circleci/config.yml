@@ -39,7 +39,6 @@ jobs:
       - restore_cache:
           keys:
             - editor-assets-cache-{{ .Revision }}
-            - editor-assets-cache
 
       - restore_cache:
           keys:
