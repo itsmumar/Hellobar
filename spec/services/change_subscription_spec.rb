@@ -7,15 +7,24 @@ describe ChangeSubscription, :freeze do
   let(:last_subscription) { Subscription.last }
 
   before { stub_cyber_source :purchase }
-  before { create :subscription, :free, credit_card: credit_card, site: site }
+  before { change_subscription 'free' }
+
+  def change_subscription(subscription, schedule = 'monthly')
+    ChangeSubscription.new(
+      site,
+      { subscription: subscription, schedule: schedule },
+      credit_card
+    ).call
+  end
 
   describe '.call' do
     it 'creates a bill for current period' do
-      expect { service.call }.to change(site.bills.where(bill_at: Time.current), :count).to(1)
+      expect { service.call }
+        .to change(site.bills.where(bill_at: Time.current), :count).by(1)
     end
 
     it 'creates a bill for next period' do
-      expect { service.call }.to change(site.bills.pending, :count).to(1)
+      expect { service.call }.to change(site.bills.pending, :count).by(1)
     end
 
     it 'pays bill' do
@@ -49,14 +58,16 @@ describe ChangeSubscription, :freeze do
 
     it 'sends an event to Intercom' do
       expect { service.call }
-        .to have_enqueued_job(SendEventToIntercomJob).with('changed_subscription', site: site, user: user)
+        .to have_enqueued_job(SendEventToIntercomJob)
+        .with('changed_subscription', site: site, user: user)
     end
 
     context 'without credit card' do
       let(:credit_card) { nil }
 
       it 'raises PayBill::Error' do
-        expect { service.call }.to raise_error PayBill::Error, 'could not pay bill without credit card'
+        expect { service.call }
+          .to raise_error PayBill::Error, 'could not pay bill without credit card'
       end
     end
 
@@ -117,10 +128,6 @@ describe ChangeSubscription, :freeze do
     end
 
     describe 'upgrading/downgrading' do
-      def change_subscription(subscription, schedule = 'monthly')
-        ChangeSubscription.new(site, { subscription: subscription, schedule: schedule }, credit_card).call
-      end
-
       def refund(bill)
         RefundBill.new(bill).call
       end
@@ -178,6 +185,13 @@ describe ChangeSubscription, :freeze do
         it 'pays bill' do
           expect(PayBill).to receive_service_call
           change_subscription('pro')
+        end
+
+        it 'voids free bill' do
+          expect(PayBill).to receive_service_call
+          change_subscription('pro')
+          expect(site.previous_subscription.bills).to match_array([kind_of(Bill)])
+          expect(site.previous_subscription.bills.first).to be_voided
         end
 
         context 'and then to Enterprise from Pro' do
@@ -266,7 +280,7 @@ describe ChangeSubscription, :freeze do
       end
 
       context 'when payment fails' do
-        let(:last_bill) { site.reload.current_subscription.bills.last }
+        let(:last_bill) { site.reload.current_subscription.bills.with_amount.last }
 
         it 'returns problem bill' do
           expect {

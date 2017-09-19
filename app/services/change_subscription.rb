@@ -18,6 +18,11 @@ class ChangeSubscription
 
   attr_reader :site, :credit_card, :billing_params, :old_subscription
 
+  def cancel_subscription_if_it_is_free
+    return if !old_subscription || old_subscription.paid?
+    old_subscription.bills.free.each(&:voided!)
+  end
+
   def same_subscription?
     old_subscription.is_a?(subscription_class) &&
       billing_params[:schedule] == old_subscription.schedule
@@ -35,6 +40,7 @@ class ChangeSubscription
   end
 
   def change_subscription
+    cancel_subscription_if_it_is_free
     create_subscription_and_pay_bill.tap do |bill|
       track_subscription_change(bill.subscription)
     end
