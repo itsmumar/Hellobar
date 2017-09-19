@@ -138,5 +138,9 @@ jobs:
           path: /tmp/hellobar_new/tmp/coverage
           destination: coverage
 
+      - store_artifacts:
+          path: /tmp/hellobar_new/tmp/screenshots
+          destination: screenshots
+
       - store_test_results:
           path: /tmp/hellobar_new/test-results
