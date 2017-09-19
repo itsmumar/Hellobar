@@ -2,6 +2,8 @@ module ServiceProvider::Adapters
   class EmbedCode < FaradayClient
     class EmbedCodeError < StandardError; end
 
+    rescue_from EmbedCodeError, with: :notify_user_about_unauthorized_error
+
     def initialize(contact_list)
       @contact_list = contact_list
       super()
@@ -24,6 +26,8 @@ module ServiceProvider::Adapters
       raise EmbedCodeError, 'Embed code must be provided' if @contact_list.blank? || @contact_list.data['embed_code'].blank?
 
       ExtractEmbedForm.new(@contact_list.data['embed_code']).call
+    rescue ExtractEmbedForm::Error => e
+      raise EmbedCodeError, "Wrong embed code: #{ e.message }"
     end
 
     def fill_form(params)
@@ -31,7 +35,7 @@ module ServiceProvider::Adapters
     end
 
     def notify_user_about_unauthorized_error
-      # do nothing
+      DestroyIdentity.new(@contact_list.identity, notify_user: true).call
     end
   end
 end
