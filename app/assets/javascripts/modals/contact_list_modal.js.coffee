@@ -17,6 +17,7 @@ class @ContactListModal extends Modal
 
   close: ->
     @options.close(this) if @options.close
+    @disconnect() if @options.identity?.id && !@options.id
     super
 
   open: ->
@@ -26,6 +27,26 @@ class @ContactListModal extends Modal
     @_setBlockVisibilty(true)
 
     super
+
+  disconnect: (element) ->
+    identityId = @options.identity.id
+    return unless identityId
+
+    $.ajax "/sites/#{@options.siteID}/identities/#{identityId}",
+      data:
+        contact_list_id: @options.id
+      type: "DELETE"
+      success: (data) =>
+        @blocks.instructions.show()
+        @blocks.syncDetails.hide()
+        @blocks.remoteListSelect.hide()
+        @blocks.tagListSelect.hide()
+        @$modal.trigger('provider:disconnected')
+        delete @options.identity
+        @_chooseHelloBar()
+      error: (response) =>
+        if response.status == 422
+          @_chooseHelloBar()
 
   _hasSiteElements: ->
     num = @$modal.find("#contact_list_site_elements_count").val()
@@ -180,23 +201,7 @@ class @ContactListModal extends Modal
       modal._loadRemoteLists(select: this, listData: {double_optin: doubleOptIn})
 
   _bindDisconnect: (object) ->
-    modal = this
-    object.find("a.unlink").click (e) ->
-      $.ajax "/sites/#{modal.options.siteID}/identities/#{$(this).data('identity-id')}",
-        data:
-          contact_list_id: modal.options.id
-        type: "DELETE"
-        success: (data) =>
-          modal.blocks.instructions.show()
-          modal.blocks.syncDetails.hide()
-          modal.blocks.remoteListSelect.hide()
-          modal.blocks.tagListSelect.hide()
-          modal.$modal.trigger('provider:disconnected')
-          delete modal.options.identity
-          modal._chooseHelloBar()
-        error: (response) =>
-          if response.status == 422
-            modal._chooseHelloBar()
+    object.find("a.unlink").click => @disconnect()
 
   _chooseHelloBar: () ->
     select = @$modal.find("#contact_list_provider")
