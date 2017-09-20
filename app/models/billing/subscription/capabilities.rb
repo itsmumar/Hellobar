@@ -95,6 +95,10 @@ class Subscription
       false
     end
 
+    def precise_geolocation_targeting?
+      false
+    end
+
     def ==(other)
       self.class == other.class &&
         subscription == other.subscription &&

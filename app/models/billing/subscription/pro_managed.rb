@@ -32,6 +32,10 @@ class Subscription
       def advanced_themes?
         true
       end
+
+      def precise_geolocation_targeting?
+        true
+      end
     end
 
     class << self

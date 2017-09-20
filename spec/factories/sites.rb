@@ -90,6 +90,9 @@ FactoryGirl.define do
     geolocation_injection? { [true, false].sample }
     external_tracking? { [true, false].sample }
     alert_bars? { [true, false].sample }
+    opacity? { [true, false].sample }
+    advanced_themes? { [true, false].sample }
+    precise_geolocation_targeting? { [true, false].sample }
   end
 
   sequence :content_upgrade_styles do

@@ -289,7 +289,7 @@ hellobar.defineModule('elements.rules',
       }
       else if (condition.segment === 'tc')
         return timeConditionTrue(condition);
-      else if (condition.segment === 'gl_ctr')
+      else if (condition.segment.indexOf('gl_') !== -1)
         return geoLocationConditionTrue(condition);
       else {
         currentValue = getSegmentValue(condition.segment);

@@ -6,6 +6,7 @@ class @RuleModal extends Modal
 
   constructor: (@options={}) ->
     @ruleData = @options.ruleData
+    @site = @options.site
     @ruleData.conditions ||= []
     @$modal = @buildModal(@ruleData)
 
@@ -17,7 +18,7 @@ class @RuleModal extends Modal
   buildCondition: (conditionData, index) ->
     conditionData.index ||= index
     conditionData.is_between = true if conditionData.operand == 'between'
-
+    conditionData.canUseAdvancedLocation = @site.capabilities.precise_geolocation_targeting
     template = Handlebars.compile(@conditionTemplate())
     $condition = $(template(conditionData))
     @_updateConditionMarkup($condition, conditionData)
