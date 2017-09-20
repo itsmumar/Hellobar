@@ -17,12 +17,12 @@
           {{siteElement.headline}}
         </div>
         {{siteElement.imageFor('above-caption')}}
-        <div class="hb-secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-full-formatting"
+        <div class="hb-secondary-text {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-optional hb-editable-block-with-full-formatting'}}"
              data-hb-editable-block="caption"
              data-hb-inline-editor-placeholder="Optional caption">
           {{siteElement.caption}}
         </div>
-        <div class="hb-secondary-text hb-editable-block hb-editable-block-optional hb-editable-block-with-full-formatting"
+        <div class="hb-secondary-text {{siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-optional hb-editable-block-with-full-formatting'}}"
              data-hb-editable-block="content"
              data-hb-inline-editor-placeholder="Optional content">
           {{siteElement.content}}

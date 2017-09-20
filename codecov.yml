@@ -1,3 +1,7 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+
 coverage:
   status:
     project:
@@ -6,3 +10,9 @@ coverage:
     patch:
       default:
         threshold: "0.5%"
+
+ignore:
+  - "lib/git_utils.rb"
+  - "app/controllers/heartbeat_controller.rb"
+  - "app/controllers/modals_controller.rb"
+  - "app/controllers/proxy_controller.rb"

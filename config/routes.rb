@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :sites, only: [] do
       member do
         post :update_install_type
+        post :update_static_script_installation
       end
     end
   end
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   resources :sites do
     member do
       put :downgrade
+      post :install_check
     end
 
     get 'team'
@@ -72,8 +74,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :targeted_segments
-
     resources :site_memberships do
       collection do
         post 'invite'
@@ -97,7 +97,6 @@ Rails.application.routes.draw do
   get 'sites/:id/preview_script', to: 'sites#preview_script', as: :preview_script
   get 'sites/:id/script', to: 'sites#script', as: :script
   get 'sites/:id/chart_data', to: 'sites#chart_data', as: :chart_data
-  get 'sites/:id/whats_new', to: 'sites#whats_new', as: :whats_new
 
   get '/auth/:provider/callback', to: 'identities#create'
 
@@ -126,6 +125,7 @@ Rails.application.routes.draw do
       resources :sites, only: [:update] do
         member do
           post :regenerate
+          put :add_free_days
         end
 
         resources :contact_lists, only: [:index]
@@ -173,6 +173,9 @@ Rails.application.routes.draw do
   get 'get-started', to: redirect('/')
 
   root 'welcome#index'
+
+  resources :test_sites, only: :show
+  resource :test_site, only: :show, as: :latest_test_site
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end

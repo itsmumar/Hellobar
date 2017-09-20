@@ -1,80 +1,48 @@
 class CheckStaticScriptInstallation
-  LIFETIME_TOTALS_PERIOD_IN_DAYS = 10
-
   # @param [Site] site
   def initialize(site)
     @site = site
   end
 
   def call
-    script_installed! if not_really_uninstalled?
-    script_uninstalled! if not_really_installed?
+    send_sns_notification
   end
 
   private
 
   attr_reader :site
 
-  def not_really_uninstalled?
-    !script_installed? && (script_installed_api? || script_installed_on_homepage?)
+  def send_sns_notification
+    SendSnsNotification.new(notification).call
   end
 
-  def not_really_installed?
-    script_installed? && !(script_installed_api? || script_installed_on_homepage?)
+  def notification
+    {
+      topic_arn: topic_arn,
+      subject: subject,
+      message_hash: message_hash
+    }
   end
 
-  def script_uninstalled!
-    site.update(script_uninstalled_at: Time.current)
-    Analytics.track(:site, site.id, 'Uninstalled')
-    track_script_uninstallation!
+  def topic_arn
+    Settings.sns['lambda_install_check']
   end
 
-  def script_installed!
-    site.update(script_installed_at: Time.current)
-    Referrals::RedeemForRecipient.run(site: site)
-    Analytics.track(:site, site.id, 'Installed')
-    track_script_installation!
+  def subject
+    "installCheck() for Site#id #{ site.id }"
   end
 
-  # has the script been installed according to the API?
-  def script_installed_api?
-    site_statistics.views?
+  def message_hash
+    {
+      environment: Rails.env,
+      scriptName: site.script_name,
+      siteElementIds: site_element_ids,
+      siteId: site.id,
+      siteUrl: site.url
+    }
   end
 
-  def script_installed_on_homepage?
-    site_url_content.match(/#{ site.script_name }/).present? ||
-      (site.had_wordpress_bars? && site_url_content.match(/hellobar\.js/).present?)
-  rescue => _
-    return false
-  end
-
-  def site_url_content
-    @site_url_content ||= HTTParty.get(site.url, timeout: 5).body
-  end
-
-  def script_installed?
-    site.script_installed_at.present? &&
-      (site.script_uninstalled_at.blank? || site.script_installed_at > site.script_uninstalled_at)
-  end
-
-  def track_script_installation!
-    site.owners.each do |user|
-      user.onboarding_status_setter.installed_script!
-
-      TrackEvent.new(:installed_script, site: site, user: user).call
-    end
-  end
-
-  def track_script_uninstallation!
-    site.owners.each do |user|
-      user.onboarding_status_setter.uninstalled_script!
-
-      TrackEvent.new(:uninstalled_script, site: site, user: user).call
-    end
-  end
-
-  # @return [SiteStatistics]
-  def site_statistics
-    @site_statistics ||= FetchSiteStatistics.new(site, days_limit: LIFETIME_TOTALS_PERIOD_IN_DAYS).call
+  def site_element_ids
+    site.site_elements.pluck :id
   end
 end

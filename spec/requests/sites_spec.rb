@@ -1,8 +1,8 @@
-describe 'Site requests' do
+describe 'Sites requests' do
   let(:site) { create :site }
 
   context 'when unauthenticated' do
-    describe 'GET :show' do
+    describe 'GET #show' do
       it 'responds with a redirect to the login page' do
         get site_path site
 
@@ -14,13 +14,28 @@ describe 'Site requests' do
 
   context 'when authenticated' do
     let(:user) { create :user }
-    let!(:site) { create :site, user: user }
 
     before do
       login_as user, scope: :user, run_callbacks: false
     end
 
-    describe 'DELETE :destroy' do
+    describe 'POST #install_check' do
+      it 'checks site script installation and responds with site' do
+        site = create :site, :installed, user: user
+
+        expect(CheckStaticScriptInstallation).to receive_service_call
+          .with(site)
+
+        post install_check_site_path(site)
+
+        expect(response).to be_successful
+        expect(JSON.parse(response.body)['id']).to eq site.id
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let!(:site) { create :site, user: user }
+
       before do
         expect(GenerateAndStoreStaticScript)
           .to receive_service_call

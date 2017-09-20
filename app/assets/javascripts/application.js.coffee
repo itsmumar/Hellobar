@@ -28,7 +28,6 @@
 #= require exit_intent
 #= require upgrade_suggest
 #= require summary
-#= require improve
 #= require sites_controller
 #= require enforce_restrictions_initializer
 #= require flash_message_initializer
@@ -41,6 +40,7 @@
 #= require_self
 
 $ ->
+  $('[data-toggle="tooltip"]').tooltip()
 
   # Reveal Blocks
   $('.reveal-wrapper').click (evt) ->

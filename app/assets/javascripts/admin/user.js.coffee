@@ -10,6 +10,8 @@ deliverPasswordReset = (ahref) ->
       $link.text('Sent!')
 
 $ ->
+  $('[data-toggle="tooltip"]').tooltip()
+
   $('a#reset_password').on 'click', (event) ->
     event.preventDefault()
     deliverPasswordReset(this)
@@ -22,6 +24,10 @@ $ ->
   $(".subscription_link").click ->
     siteId = $(@).data("siteid")
     $(".edit_site_form[data-site-id='" + siteId + "']").toggleClass("hidden")
+
+  $(".free_days_link").click ->
+    siteId = $(@).data("siteid")
+    $(".free_days_site_form[data-site-id='" + siteId + "']").toggleClass("hidden")
 
   $(".add-invoice-info").click (e) ->
     e.preventDefault()

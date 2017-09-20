@@ -9,8 +9,8 @@ describe ServiceProvider::Adapters::Base do
   end
 
   describe '#tags' do
-    it 'returns empty array' do
-      expect(adapter.tags).to eql []
+    it 'returns nil' do
+      expect(adapter.tags).to be_nil
     end
   end
 

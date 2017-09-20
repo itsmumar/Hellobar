@@ -179,37 +179,4 @@ describe Rule do
       expect(rule).not_to be_same_as(other_rule)
     end
   end
-
-  describe '.create_from_segment' do
-    let(:site) { create(:site) }
-
-    it 'creates a rule with the correct conditions' do
-      rule = Rule.create_from_segment(site, 'dv:mobile')
-      condition = rule.conditions.first
-
-      expect(rule).to be_valid
-      expect(rule.conditions.count).to eq(1)
-
-      expect(condition.segment).to eq('DeviceCondition')
-      expect(condition.value).to eq('mobile')
-      expect(condition.operand).to eq('is')
-    end
-
-    it 'creates a url condition' do
-      rule = Rule.create_from_segment(site, 'pu:httpsomeurl')
-      condition = rule.conditions.first
-
-      expect(rule).to be_valid
-      expect(rule.conditions.count).to eq(1)
-
-      expect(condition.segment).to eq('UrlCondition')
-      expect(condition.value).to eq(['/httpsomeurl'])
-      expect(condition.operand).to eq('is')
-    end
-
-    it 'sets the name based on segment' do
-      rule = Rule.create_from_segment(site, 'dv:mobile')
-      expect(rule.name).to eq('Device is mobile')
-    end
-  end
 end

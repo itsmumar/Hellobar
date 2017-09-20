@@ -33,6 +33,8 @@ class ContentUpgrade < SiteElement
   validates :thank_you_cta, presence: true, if: :thank_you_enabled?
   validates :thank_you_url, url: true, if: :thank_you_enabled?
 
+  delegate :name, to: :contact_list, prefix: true, allow_nil: true
+
   def content_upgrade_download_link
     content_upgrade_pdf.url
   end

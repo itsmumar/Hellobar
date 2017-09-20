@@ -7,14 +7,9 @@ SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 Dir[Rails.root.join('spec', 'features', 'support', '**', '*.rb')].each(&method(:require))
 
 RSpec.configure do |config|
-  config.include SiteGeneratorHelper
   config.include FeatureHelper
 
   OmniAuth.config.test_mode = true
-
-  config.before(:all) do
-    setup_site_generator
-  end
 
   config.include ContactListFeatureHelper, :contact_list_feature
 

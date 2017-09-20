@@ -22,8 +22,6 @@ json.cache! site_element do
 
     :use_default_image,
     :image_url,
-    :image_small_url,
-    :image_medium_url,
     :image_large_url,
     :image_modal_url,
     :image_style,
@@ -85,7 +83,7 @@ json.cache! site_element do
 
   json.template_name "#{ site_element.class.name.downcase }_#{ site_element.element_subtype }"
 
-  json.branding_url "http://www.hellobar.com?sid=#{ site_element.id }"
+  json.branding_url "https://www.hellobar.com?sid=#{ site_element.id }"
 
   json.closable(site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false)
 

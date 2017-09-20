@@ -80,49 +80,20 @@ describe StaticScript do
     it 'enqueues GenerateStaticScriptJob' do
       expect { script.generate }.to have_enqueued_job GenerateStaticScriptJob
     end
-
-    context 'when development' do
-      before { allow(Rails.env).to receive(:development?).and_return true }
-
-      it 'generates test site' do
-        full_path = Rails.root.join('public', 'test_site.html')
-
-        expect(GenerateTestSite)
-          .to receive_service_call
-          .with(site.id, full_path: full_path)
-
-        script.generate
-      end
-    end
   end
 
   describe '#installed?' do
-    it 'enqueues CheckScriptStatusJob' do
-      expect { script.installed? }
-        .to have_enqueued_job(CheckScriptStatusJob).with(site)
-    end
-
     context 'when script_installed_at is present' do
       context 'and script_uninstalled_at is blank' do
         let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: nil) }
 
         specify { expect(script.installed?).to be_truthy }
-
-        it 'does not enqueue CheckScriptStatusJob' do
-          expect { script.installed? }
-            .not_to have_enqueued_job(CheckScriptStatusJob)
-        end
       end
 
       context 'and script_installed_at > script_uninstalled_at' do
         let(:site) { create(:site, script_installed_at: Time.current, script_uninstalled_at: 1.day.ago) }
 
         specify { expect(script.installed?).to be_truthy }
-
-        it 'does not enqueue CheckScriptStatusJob' do
-          expect { script.installed? }
-            .not_to have_enqueued_job(CheckScriptStatusJob)
-        end
       end
     end
 
@@ -130,11 +101,6 @@ describe StaticScript do
       let(:site) { create(:site, script_installed_at: nil) }
 
       specify { expect(script.installed?).to be_falsey }
-
-      it 'enqueues CheckScriptStatusJob' do
-        expect { script.installed? }
-          .to have_enqueued_job(CheckScriptStatusJob).with(site)
-      end
     end
   end
 

@@ -1,3 +1,5 @@
 # allow all
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /test_sites/
+Disallow: /test_site

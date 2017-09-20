@@ -39,6 +39,10 @@ FactoryGirl.define do
       invoice_information "1 Melrose Place\n90210 Hollywood Blv, Ca"
     end
 
+    trait :installed do
+      script_installed_at Time.current
+    end
+
     trait :free_subscription do
       after(:create) do |site, evaluator|
         create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)

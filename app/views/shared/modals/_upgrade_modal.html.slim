@@ -46,7 +46,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-title
             .package-name Pro
             .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/year
 
           .package-features
 
@@ -80,7 +80,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-title
             .package-name Enterprise
             .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/year
 
           .package-features
 

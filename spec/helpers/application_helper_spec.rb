@@ -11,8 +11,8 @@ describe ApplicationHelper, type: :helper do
     end
 
     it 'returns the monthly price for annual subscriptions' do
-      allow(Subscription::Pro).to receive(:estimated_price).with(@user, :yearly).and_return(144)
-      expect(helper.subscription_cost(Subscription::Pro, :yearly)).to eq('$12')
+      allow(Subscription::Pro).to receive(:estimated_price).with(@user, :yearly).and_return(149)
+      expect(helper.subscription_cost(Subscription::Pro, :yearly)).to eq('$149')
     end
 
     it 'rounds the results to the nearest dollar' do

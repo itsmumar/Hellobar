@@ -63,6 +63,7 @@ describe StaticScriptModel do
     before do
       allow_any_instance_of(Array).to receive(:sample).and_return('d')
       allow(model).to receive(:rand).with(1_000_000).and_return(999)
+      allow(Rails.env).to receive(:test?).and_return(false)
     end
 
     it 'returns random token based on site url and id' do
@@ -395,83 +396,37 @@ describe StaticScriptModel do
     end
 
     describe 'image URLs' do
-      let(:image) { create(:image_upload, :with_valid_image, site: site, version: version) }
+      let(:image) { create(:image_upload, :with_valid_image, site: site) }
 
-      subject { json[:rules].first[:site_elements].first }
+      let(:site_element) { json[:rules].first[:site_elements].first }
 
       context 'when there is a Modal site element' do
         let!(:element) { create(:modal_element, rule: site.rules.first, active_image: image) }
 
-        context 'when image_upload version is 1' do
-          let(:version) { 1 }
-
-          it 'generates the correct image data' do
-            expect(subject).to match(
-              hash_including(
-                image_style: 'modal',
-                image_url: /original/,
-                image_small_url: /original/,
-                image_medium_url: /original/,
-                image_large_url: /original/,
-                image_modal_url: /original/
-              )
+        it 'generates the correct image data' do
+          expect(site_element).to match(
+            hash_including(
+              image_style: 'modal',
+              image_url: /modal/,
+              image_large_url: /large/,
+              image_modal_url: /modal/
             )
-          end
-        end
-
-        context 'when image_upload version is 2' do
-          let(:version) { 2 }
-
-          it 'generates the correct image data' do
-            expect(subject).to match(
-              hash_including(
-                image_style: 'modal',
-                image_url: /modal/,
-                image_small_url: /small/,
-                image_medium_url: /medium/,
-                image_large_url: /large/,
-                image_modal_url: /modal/
-              )
-            )
-          end
+          )
         end
       end
 
       context 'when there is a Takeover site element' do
         let!(:element) { create(:takeover_element, rule: site.rules.first, active_image: image) }
 
-        context 'when image_upload version is 1' do
-          let(:version) { 1 }
-
-          it 'generates the correct image data' do
-            expect(subject).to match(
-              hash_including(
-                image_style: 'large',
-                image_url: /original/,
-                image_small_url: /original/,
-                image_medium_url: /original/,
-                image_large_url: /original/,
-                image_modal_url: /original/
-              )
+        it 'generates the correct image data' do
+          expect(site_element).to match(
+            hash_including(
+              image_style: 'large',
+              image_url: /modal/,
+              image_large_url: /large/,
+              image_modal_url: /modal/
             )
-          end
-        end
-
-        context 'when image_upload version is 2' do
-          let(:version) { 2 }
-
-          it 'generates the correct image data' do
-            expect(subject).to match(
-              hash_including(
-                image_style: 'large',
-                image_url: /modal/,
-                image_small_url: /small/,
-                image_medium_url: /medium/,
-                image_large_url: /large/,
-                image_modal_url: /modal/
-              )
-            )
-          end
+          )
         end
       end
     end

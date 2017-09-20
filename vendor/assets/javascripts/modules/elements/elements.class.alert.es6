@@ -9,7 +9,7 @@ hellobar.defineModule('elements.class.alert',
     const geometry = {
       offset: 10,
       triggerWidth: 60,
-      maxPopupWidth: 380
+      maxPopupWidth: 500
     };
 
     /**

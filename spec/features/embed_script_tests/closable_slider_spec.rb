@@ -2,14 +2,9 @@ require 'integration_helper'
 
 feature 'Site with a closable slider', :js do
   given(:site_element) { create :site_element, :slider, :closable }
-  given(:path) { generate_file_and_return_path(site_element.site.id) }
-
-  before do
-    allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return('random')
-  end
 
   scenario 'shows headline and allows the bar to be hidden and shown again' do
-    visit site_path_to_url(path)
+    visit test_site_path(id: site_element.site.id)
 
     expect(page).to have_selector '#random-container'
     expect(page).to have_selector 'iframe.hb-animateIn'

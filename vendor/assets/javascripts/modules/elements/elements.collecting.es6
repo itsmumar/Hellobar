@@ -13,24 +13,28 @@ hellobar.defineModule('elements.collecting',
       function fieldAttributes() {
         var label = '';
         var type = 'text';
+        var name = null;
 
         switch (field.type) {
           case 'builtin-name':
             label = field.label || siteElementModel.name_placeholder || 'Name';
+            name = 'name';
             break;
           case 'builtin-email':
             label = field.label || siteElementModel.email_placeholder || 'Email';
             type = preview.isActive() ? 'text' : 'email';
+            name = 'email';
             break;
           case 'builtin-phone':
             label = field.label || 'Phone';
             type = 'tel';
+            name = 'phone';
             break;
           default:
             label = sanitizing.sanitize({label: field.label}).label;
         }
 
-        return {label: label, type: type}
+        return {label: label, type: type, name: name}
       }
 
       function additionalCssClasses() {
@@ -50,15 +54,20 @@ hellobar.defineModule('elements.collecting',
 
       var fieldAttrs = fieldAttributes();
 
-      var html = '<div class="hb-input-block hb-editable-block hb-editable-block-input ' +
-        additionalCssClasses() + '" ' +
-        'data-hb-editable-block="' + id() + '">' +
-        '<label for="' + id() + '">' + fieldAttrs.label + '</label>' +
-        '<input id="' + id() + '" type="' + fieldAttrs.type + '" placeholder="' +
-        fieldAttrs.label + '" ' + (field.type === 'builtin-email' ? 'required' : '') +
-        ' value="' + (preview.isActive() ? fieldAttrs.label : '') + '" />' +
-        '</div>';
+      let name = fieldAttrs.name ? `name="${ fieldAttrs.name }"` : '';
+      let type = `type="${ fieldAttrs.type }"`;
+      let placeholder = `placeholder="${ fieldAttrs.label }"`;
+      let required = field.type === 'builtin-email' ? 'required' : '';
+      let value = preview.isActive() ? `value="${ fieldAttrs.label }"` : '';
+      let autocomplete = fieldAttrs.name ? 'autocomplete="on"' : '';
+      let defaultClasses = 'hb-input-block hb-editable-block hb-editable-block-input';
 
+      let html = `
+        <div class="${ defaultClasses } ${ additionalCssClasses() }" data-hb-editable-block="${ id() }">
+          <label for="${ id() }">${ fieldAttrs.label }</label>
+          <input id="${ id() }" ${ type } ${ name } ${ placeholder } ${ required } ${ value } ${ autocomplete }/>
+        </div>
+      `;
       return html;
     }
 
@@ -138,7 +147,7 @@ hellobar.defineModule('elements.collecting',
 
     // Called to validate the email. Does not actually submit the email
     function validateEmail(email, successCallback, failCallback) {
-      if (email && email.match(/.+@.+\..+/) && !email.match(/,/))
+      if (email && email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/) && !email.match(/,/))
         successCallback();
       else
         failCallback();

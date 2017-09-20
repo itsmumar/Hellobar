@@ -26,7 +26,6 @@ module ServiceProvider::Adapters
     end
 
     def tags
-      []
     end
 
     def connected?

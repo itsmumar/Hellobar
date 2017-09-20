@@ -45,6 +45,13 @@ export default Ember.Component.extend({
     }
   }.observes('model.use_question').on('init'),
 
+  clearSecondaryText: function () {
+    if (this.get('model.use_question')) {
+      this.set('model.caption', '');
+      this.set('model.content', '');
+    }
+  }.observes('model.use_question'),
+
   actions: {
     showQuestion() {
       hellobar('base.preview').setAnswerToDisplay(null);

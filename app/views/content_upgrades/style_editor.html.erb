@@ -13,17 +13,19 @@
     });
 
     function load_styles(){
-        $(".hb-cu-offer").css("background-color",$("#offer-background-color").val());
-        $(".hb-cu-offer").css("color",$("#offer-text-color").val());
-        $(".hb-cu-offer a").css("color",$("#offer-link-color").val());
-        $(".hb-cu-modal .cta").css("background-color",$("#modal-button-color").val());
-        $(".hb-cu-offer").css("border-color",$("#offer-border-color").val());
-        $(".hb-cu-offer").css("border-style",$("#offer-border-style").val());
-        $(".hb-cu-offer").css("border-width",$("#offer-border-width").val());
-        $(".hb-cu-offer").css("border-radius",$("#offer-border-radius").val());
-        $(".hb-cu-offer").css("font-size",$("#offer-font-size").val());
-        $(".hb-cu-offer").css("font-weight",$("#offer-font-weight").val());
-        $(".hb-cu-offer").css("font-family",$("#offer-font-family").val());
+      var fontFamily = $("#offer-font-family").val().split(',')[0].replace(/'/g, '');
+      $('head').append("<link rel='stylesheet' media='all' href='https://fonts.googleapis.com/css?family=" + fontFamily + "'>");
+      $(".hb-cu-offer").css("background-color",$("#offer-background-color").val());
+      $(".hb-cu-offer").css("color",$("#offer-text-color").val());
+      $(".hb-cu-offer a").css("color",$("#offer-link-color").val());
+      $(".hb-cu-modal .cta").css("background-color",$("#modal-button-color").val());
+      $(".hb-cu-offer").css("border-color",$("#offer-border-color").val());
+      $(".hb-cu-offer").css("border-style",$("#offer-border-style").val());
+      $(".hb-cu-offer").css("border-width",$("#offer-border-width").val());
+      $(".hb-cu-offer").css("border-radius",$("#offer-border-radius").val());
+      $(".hb-cu-offer").css("font-size",$("#offer-font-size").val());
+      $(".hb-cu-offer").css("font-weight",$("#offer-font-weight").val());
+      $(".hb-cu-offer").css("font-family",$("#offer-font-family").val());
     }
 
     load_styles();

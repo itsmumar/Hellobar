@@ -28,12 +28,13 @@ class StaticScript
   end
 
   def installed?
-    current_script_status || check_status_again
+    site.script_installed_at.present? &&
+      (site.script_uninstalled_at.blank? ||
+        site.script_installed_at > site.script_uninstalled_at)
   end
 
   def generate
     GenerateStaticScriptJob.perform_later site
-    generate_test_site
   end
 
   def destroy
@@ -41,24 +42,6 @@ class StaticScript
   end
 
   private
-
-  def current_script_status
-    site.script_installed_at.present? &&
-      (site.script_uninstalled_at.blank? ||
-        site.script_installed_at > site.script_uninstalled_at)
-  end
-
-  def check_status_again
-    CheckScriptStatusJob.perform_later site
-    false
-  end
-
-  def generate_test_site
-    return unless Rails.env.development?
-
-    Rails.logger.info "[HbTestSite] Generating static test site for Site##{ site.id }"
-    HbTestSite.generate_default site.id
-  end
 
   def cdn_url_for(path)
     File.join(cdn_domain, path)
