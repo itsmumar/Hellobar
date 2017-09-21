@@ -96,9 +96,15 @@ class Site < ActiveRecord::Base
     where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
   end
 
-  def self.script_uninstalled_recently_or_active
-    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
-      .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
+  def self.script_recently_uninstalled
+    script_uninstalled
+      .where('script_uninstalled_at > ?', 30.days.ago)
+  end
+
+  def self.script_uninstalled_but_recently_modified
+    script_uninstalled
+      .where('script_generated_at > script_uninstalled_at')
+      .where('script_generated_at > ?', 7.days.ago)
   end
 
   def self.protocol_ignored_url(url)
