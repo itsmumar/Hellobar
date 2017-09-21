@@ -159,7 +159,7 @@ hellobar.defineModule('visitor',
         return visitor;
       }
 
-      if (key.indexOf('gl_') !== -1) {
+      if (key.indexOf('region') !== -1 || key.indexOf('gl_') !== -1) {
         return geolocation.getGeolocationData(key);
       }
       else {

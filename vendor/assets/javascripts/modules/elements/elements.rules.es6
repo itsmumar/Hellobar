@@ -44,7 +44,7 @@ hellobar.defineModule('elements.rules',
       const rulePromises = rules.map((rule) => {
         if (rule.siteElements.length > 0) {
           const ruleResult = ruleTrue(rule);
-          return ruleResult instanceof deferred.Promise ? ruleResult : deferred.constant(ruleResult);
+          return deferred.wrap(ruleResult);
         }
         return deferred.constant(false);
       });
@@ -269,13 +269,33 @@ hellobar.defineModule('elements.rules',
     }
 
     function geoLocationConditionTrue(condition) {
-      const apply = (value) => applyOperands(value, condition.operand, condition.value, condition.segment)
       const currentValue = getSegmentValue(condition.segment);
-      if (currentValue instanceof deferred.Promise) {
-        return currentValue.then((result) => apply(result));
-      } else {
-        return apply(currentValue);
+
+      return deferred
+        .wrap(currentValue)
+        .then(value => applyCondition(value, condition));
+    }
+
+    function applyCondition(value, condition) {
+      return applyOperands(value, condition.operand, condition.value, condition.segment);
+    }
+
+    function regionConditionTrue(condition) {
+      const region = getSegmentValue('region');
+      const regionName = getSegmentValue('regionName');
+
+      return deferred.all([region, regionName]).then(results => {
+        return results
+          .map(value => applyCondition(value, condition))
+          .find(ok => ok)
+      })
+    }
+
+    function handleGeoLocationCondition(condition) {
+      if (condition.segment === 'gl_rgn') {
+        return regionConditionTrue(condition);
       }
+      return geoLocationConditionTrue(condition);
     }
 
     // Determines if the condition (a rule is made of one or more conditions)
@@ -289,9 +309,9 @@ hellobar.defineModule('elements.rules',
       }
       else if (condition.segment === 'tc')
         return timeConditionTrue(condition);
-      else if (condition.segment.indexOf('gl_') !== -1)
-        return geoLocationConditionTrue(condition);
-      else {
+      else if (condition.segment.indexOf('gl_') !== -1) {
+        return handleGeoLocationCondition(condition);
+      } else {
         currentValue = getSegmentValue(condition.segment);
         values = condition.value;
       }
