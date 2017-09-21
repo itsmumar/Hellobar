@@ -15,6 +15,7 @@ hellobar.defineModule('geolocation',
         'gl_rgn': parsedResponse.region,
         'countryName': parsedResponse.country,
         'regionName': parsedResponse.regionName,
+        'region': parsedResponse.region,
         'cityName': parsedResponse.city
       };
     }
