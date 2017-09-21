@@ -48,10 +48,10 @@ describe UpdateSiteElement do
       end
 
       it 'sets element to the new element' do
-        expect do
+        expect {
           new_element = service.call
           expect(new_element.id).not_to eq(element.id)
-        end.to change { SiteElement.count }.by(1)
+        }.to change { SiteElement.count }.by(1)
       end
 
       it 'pauses the original element' do
