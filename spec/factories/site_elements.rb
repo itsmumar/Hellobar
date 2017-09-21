@@ -13,6 +13,7 @@ FactoryGirl.define do
     rule
 
     trait :bar
+    factory :bar, class: 'Bar'
 
     trait :slider do
       type 'Slider'

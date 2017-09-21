@@ -181,8 +181,16 @@ describe SiteElementsController do
   end
 
   describe 'POST #update' do
-    let(:user) { create(:user) }
-    let(:element) { create(:site_element) }
+    let(:user) { create :user }
+    let(:element) { create :bar, closable: false }
+    let(:params) do
+      {
+        id: element.id,
+        site_id: element.site_id,
+        site_element: { closable: true }
+      }
+    end
+
     before do
       element.site.users << user
     end
@@ -193,18 +201,11 @@ describe SiteElementsController do
       allow_any_instance_of(StaticScript).to receive(:generate)
     end
 
-    it 'creates an updater' do
-      expect(SiteElements::Update).to receive(:new).and_call_original
-
-      post :update, valid_params(element)
-    end
-
     it 'updates with the params' do
-      updater = double(SiteElements::Update, element: element)
-      params = valid_params(element)
-
-      expect(SiteElements::Update).to receive(:new).and_return(updater)
-      expect(updater).to receive(:run).and_return(true)
+      expect(UpdateSiteElement)
+        .to receive_service_call
+        .with(element, closable: true)
+        .and_return(element)
 
       post :update, params
     end
@@ -229,7 +230,7 @@ describe SiteElementsController do
       end
 
       context 'if type was changed' do
-        let(:element) { create(:site_element, :email) }
+        let(:element) { create(:site_element, :email, :bar) }
 
         it 'sends json of new element' do
           params = valid_params(element)
@@ -293,18 +294,6 @@ describe SiteElementsController do
         site_id: el.site_id,
         site_element: { closable: true }
       }
-    end
-
-    def create_successful_updater
-      updater = double(SiteElements::Update, update: true)
-      expect(SiteElements::Update).to receive(:new).and_return(updater)
-      updater
-    end
-
-    def create_failing_updater
-      updater = double(SiteElements::Update, update: false)
-      expect(SiteElements::Update).to receive(:new).and_return(updater)
-      updater
     end
   end
 end

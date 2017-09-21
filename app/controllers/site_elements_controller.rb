@@ -54,16 +54,12 @@ class SiteElementsController < ApplicationController
   end
 
   def update
-    updater = SiteElements::Update.new(element: @site_element, params: site_element_params)
-    updated = updater.run
+    element = UpdateSiteElement.new(@site_element, site_element_params).call
+    flash[:success] = message_to_clear_cache
 
-    if updated
-      flash[:success] = message_to_clear_cache
-
-      render json: updater.element, serializer: SiteElementSerializer
-    else
-      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
-    end
+    render json: element, serializer: SiteElementSerializer
+  rescue ActiveRecord::RecordInvalid => e
+    render json: e.record, status: :unprocessable_entity, serializer: SiteElementSerializer
   end
 
   def destroy
