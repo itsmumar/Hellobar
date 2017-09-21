@@ -105,6 +105,7 @@ $ ->
     console.log "Couldnt find rule with ID: #{ruleId}" unless ruleJson
 
     options =
+      site: window.site
       ruleData: ruleJson
       successCallback: ->
         $ruleContent = $(".rule-block[data-rule-id=#{@id}]")
