@@ -1,64 +1,59 @@
 namespace :site do
   namespace :scripts do
-    desc 'Precompile assets (js, css, html) which are used in site script'
+    desc 'Precompile assets (js, css, html) which are used in the static site script'
     task precompile_static_assets: :environment do
       StaticScriptAssets.precompile
       GenerateStaticScriptModules.new.call
       puts "Uploaded new modules.js version to S3: #{ StaticScriptAssets.digest_path('modules.js') }"
     end
 
-    desc 'Schedule a re-generation of ALL site scripts'
-    task regenerate_all: :environment do
-      Site.find_each do |site|
-        GenerateDailyStaticScriptJob.perform_later site
+    namespace :regenerate do
+      desc 'Regenerate static site scripts for all non-deleted sites'
+      task all: :environment do
+        Site.find_each do |site|
+          GenerateStaticScriptLowPriorityJob.perform_later site
+        end
+      end
+
+      desc 'Regenerate static site scripts for all active sites'
+      task all_active: :environment do
+        Site.script_installed.find_each do |site|
+          GenerateStaticScriptLowPriorityJob.perform_later site
+        end
+      end
+
+      desc 'Regenerate static site scripts for active sites (take 200 least recently regenerated sites)'
+      task sample_of_least_recently_regenerated_active_sites: :environment do
+        # Take 200 sites at one go; at 39K active sites it will take a little
+        # bit under 23 hours to regenerate them all (if executed every 7 minutes)
+        # (#each and not #find_each, to respect #limit)
+        Site.script_installed.order(:script_generated_at).limit(200).each do |site|
+          GenerateStaticScriptLowPriorityJob.perform_later site
+
+          # We also check static script installation at the same time (we do it
+          # here out of convenience as we don't store the time when we did last
+          # install check for each site)
+          CheckStaticScriptInstallation.new(site).call
+        end
       end
     end
 
-    desc 'Schedule a re-generation of all active site scripts'
-    task regenerate_all_active: :environment do
-      Site.script_installed.find_each do |site|
-        GenerateDailyStaticScriptJob.perform_later site
-
-        # TODO: this should be executed uniformly over a period of 24 hours
-        CheckStaticScriptInstallation.new(site).call
+    namespace :install_check do
+      desc 'Install check for recently uninstalled sites'
+      task recently_uninstalled: :environment do
+        # around 4K; we can deal with them at one go every day
+        Site.script_recently_uninstalled.find_each do |site|
+          CheckStaticScriptInstallation.new(site).call
+        end
       end
 
-      # See if anyone who has uninstalled recently has reinstalled
-      # TODO: this should be executed uniformly over a period of 24 hours
-      Site.script_uninstalled_recently_or_active.each do |site|
-        CheckStaticScriptInstallation.new(site).call
+      desc 'Install check for uninstalled sites recently modified'
+      task uninstalled_but_recently_modified: :environment do
+        # around 2K; we can deal with them at one go every day
+        Site.script_uninstalled_but_recently_modified.find_each do |site|
+          CheckStaticScriptInstallation.new(site).call
+        end
       end
-    end
-  end
-
-  namespace :rules do
-    desc 'Make sure all sites have all of the default rule presets'
-    task add_presets: :environment do |_t, _args|
-      sites_without_mobile_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Mobile Visitors'")
-                                      .where('rules.id IS NULL')
-
-      sites_without_mobile_rule.find_each do |site|
-        site.skip_script_generation = true
-        mobile_rule = site.rules.defaults[1]
-        finder_params = { name: mobile_rule.name, editable: false }
-        mobile_rule.save! unless site.rules.find_by(finder_params)
-      end
-
-      sites_without_homepage_rule = Site.joins("LEFT OUTER JOIN rules ON rules.site_id = sites.id AND rules.name = 'Homepage Visitors'")
-                                        .where('rules.id IS NULL')
-
-      sites_without_homepage_rule.find_each do |site|
-        site.skip_script_generation = true
-        homepage_rule = site.rules.defaults[2]
-        finder_params = { name: homepage_rule.name, editable: false }
-        homepage_rule.save! unless site.rules.find_by(finder_params)
-      end
-    end
-
-    desc 'Remove rule presents from all sites'
-    task remove_specific_presets: :environment do |_t, _args|
-      Rule.where(name: 'Mobile Visitors', editable: false).destroy_all
-      Rule.where(name: 'Homepage Visitors', editable: false).destroy_all
     end
   end
 end

@@ -1,4 +1,4 @@
-describe GenerateDailyStaticScriptJob do
+describe GenerateStaticScriptLowPriorityJob do
   let(:job) { described_class }
   let(:site) { create :site }
 
