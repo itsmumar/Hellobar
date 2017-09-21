@@ -11,15 +11,14 @@ namespace :site do
       desc 'Regenerate static site scripts for all non-deleted sites'
       task all: :environment do
         Site.find_each do |site|
-          # Periodically, so that this job is placed in the `lowpriority` queue
-          GenerateStaticScriptPeriodicallyJob.perform_later site
+          GenerateStaticScriptLowPriorityJob.perform_later site
         end
       end
 
       desc 'Regenerate static site scripts for all active sites'
       task all_active: :environment do
         Site.script_installed.find_each do |site|
-          GenerateStaticScriptPeriodicallyJob.perform_later site
+          GenerateStaticScriptLowPriorityJob.perform_later site
         end
       end
 
@@ -29,7 +28,7 @@ namespace :site do
         # bit under 23 hours to regenerate them all (if executed every 7 minutes)
         # (#each and not #find_each, to respect #limit)
         Site.script_installed.order(:script_generated_at).limit(200).each do |site|
-          GenerateStaticScriptPeriodicallyJob.perform_later site
+          GenerateStaticScriptLowPriorityJob.perform_later site
 
           # We also check static script installation at the same time (we do it
           # here out of convenience as we don't store the time when we did last
