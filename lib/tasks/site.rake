@@ -27,14 +27,18 @@ namespace :site do
         # Take 200 sites at one go; at 39K active sites it will take a little
         # bit under 23 hours to regenerate them all (if executed every 7 minutes)
         # (#each and not #find_each, to respect #limit)
-        Site.script_installed.order(:script_generated_at).limit(200).each do |site|
-          GenerateStaticScriptLowPriorityJob.perform_later site
+        Site
+          .script_installed
+          .where('script_generated_at < ?', 12.hours.ago)
+          .order(:script_generated_at)
+          .limit(200).each do |site|
+            GenerateStaticScriptLowPriorityJob.perform_later site
 
-          # We also check static script installation at the same time (we do it
-          # here out of convenience as we don't store the time when we did last
-          # install check for each site)
-          CheckStaticScriptInstallation.new(site).call
-        end
+            # We also check static script installation at the same time (we do
+            # it here out of convenience as we don't store the time when we did
+            # last install check for each site)
+            CheckStaticScriptInstallation.new(site).call
+          end
       end
     end
 
