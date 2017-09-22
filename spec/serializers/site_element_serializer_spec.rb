@@ -2,14 +2,6 @@ describe SiteElementSerializer do
   let(:element) { create(:site_element, :traffic) }
   let(:serializer) { SiteElementSerializer.new(element) }
 
-  it 'should translate missing element subtype error into something more readable' do
-    element.element_subtype = nil
-    element.valid?
-
-    serializer = SiteElementSerializer.new(element)
-    expect(serializer.as_json[:full_error_messages]).to eq(['You must select your goal in the "goals" section'])
-  end
-
   it 'serializes :email_redirect' do
     site_element = build_stubbed :site_element, :email_with_redirect
 
