@@ -101,6 +101,7 @@ describe 'SiteElements requests' do
 
     describe 'POST #create' do
       let(:owner) { user }
+      let(:rule_id) { site.rules.first.id }
 
       def post_create(params)
         post site_site_elements_path(element.site, site_element: params)
@@ -115,14 +116,15 @@ describe 'SiteElements requests' do
       end
 
       it 'sets `fields_to_collect` under `settings` and return back' do
-        post_create element_subtype: 'traffic', rule_id: 0, settings: settings
+        post_create element_subtype: 'traffic', rule_id: rule_id, settings: settings
+
         expect(json).to include settings: settings
       end
 
       it 'accepts whitelisted fields only' do
         post_create(
           element_subtype: 'traffic',
-          rule_id: 0,
+          rule_id: rule_id,
           settings: manipulated_settings
         )
 
@@ -132,7 +134,7 @@ describe 'SiteElements requests' do
       it 'accepts custom fields' do
         post_create(
           element_subtype: 'traffic',
-          rule_id: 0,
+          rule_id: rule_id,
           settings: settings_custom_fields
         )
 
@@ -143,7 +145,7 @@ describe 'SiteElements requests' do
         allow_any_instance_of(SiteElement).to receive(:valid?).and_return(true)
         allow_any_instance_of(SiteElement).to receive(:save!).and_return(true)
 
-        post_create element_subtype: 'traffic', rule_id: 0
+        post_create element_subtype: 'traffic', rule_id: rule_id
         expect(request.flash[:success]).to be_present
       end
     end
@@ -263,6 +265,18 @@ describe 'SiteElements requests' do
           put_update params
 
           expect(response.status).to eq(422)
+        end
+      end
+
+      context 'when you have invalid image_id referenced in SiteElement' do
+        let(:element) { create :bar, site: site, active_image_id: 1 }
+
+        it 'returns unprocessable_entity' do
+          put_update params.merge(active_image_id: 2)
+
+          expect(response.status).to eq(422)
+          expect(json[:errors]).to match base: ['Previous image could not be found']
+          expect(json[:full_error_messages]).to match_array ['Previous image could not be found']
         end
       end
     end

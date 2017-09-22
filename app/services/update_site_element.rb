@@ -44,12 +44,15 @@ class UpdateSiteElement
 
   def previous_image
     return unless element.previous_changes.include? 'active_image_id'
+    old_image_id, _new_image_id = element.previous_changes['active_image_id']
+    find_image(old_image_id)
+  rescue ActiveRecord::RecordNotFound
+    element.errors.add(:base, 'Previous image could not be found')
+    raise ActiveRecord::RecordInvalid.new(element)
+  end
 
-    @previous_image ||=
-      begin
-        old_image_id, _new_image_id = element.previous_changes['active_image_id']
-        ImageUpload.find(old_image_id) if old_image_id
-      end
+  def find_image(old_image_id)
+    @previous_image ||= ImageUpload.find(old_image_id) if old_image_id
   end
 
   def type_should_change?

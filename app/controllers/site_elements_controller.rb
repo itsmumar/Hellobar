@@ -6,6 +6,8 @@ class SiteElementsController < ApplicationController
 
   layout :determine_layout
 
+  rescue_from ActiveRecord::RecordInvalid, with: :record_not_found_error
+
   def show
     render json: @site_element, serializer: SiteElementSerializer
   end
@@ -41,16 +43,12 @@ class SiteElementsController < ApplicationController
 
   def create
     @site_element = SiteElement.new(site_element_params)
+    @site_element.save!
 
-    if @site_element.valid?
-      @site_element.save!
-      flash[:success] = message_to_clear_cache
-      TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
+    flash[:success] = message_to_clear_cache
+    TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
 
-      render json: @site_element, serializer: SiteElementSerializer
-    else
-      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
-    end
+    render json: @site_element, serializer: SiteElementSerializer
   end
 
   def update
@@ -58,8 +56,6 @@ class SiteElementsController < ApplicationController
     flash[:success] = message_to_clear_cache
 
     render json: element, serializer: SiteElementSerializer
-  rescue ActiveRecord::RecordInvalid => e
-    render json: e.record, status: :unprocessable_entity, serializer: SiteElementSerializer
   end
 
   def destroy
@@ -84,6 +80,11 @@ class SiteElementsController < ApplicationController
   end
 
   private
+
+  def record_not_found_error(e)
+    response = { errors: e.record.errors, full_error_messages: e.record.errors.to_a }
+    render json: response, status: :unprocessable_entity
+  end
 
   def message_to_clear_cache
     message = 'It may take a few minutes for Hello Bar to show up on your site. '
