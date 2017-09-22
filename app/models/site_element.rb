@@ -164,9 +164,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def toggle_paused!
-    new_pause_state = !paused?
-
-    update_attribute :paused, new_pause_state
+    update paused: !paused?
   end
 
   def short_subtype
