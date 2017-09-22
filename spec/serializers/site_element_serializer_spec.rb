@@ -10,17 +10,6 @@ describe SiteElementSerializer do
     expect(serialized_site_element.serializable_hash).to have_key :email_redirect
   end
 
-  context 'with email element' do
-    let(:element) { create(:site_element, :email) }
-
-    it 'should translate missing element subtype error into something more readable' do
-      element.contact_list = nil
-      element.valid?
-
-      expect(serializer.as_json[:full_error_messages]).to eq(['You must select a contact list to sync with in the "goals" section'])
-    end
-  end
-
   context 'with scope' do
     let(:user) { create(:user) }
     let(:serializer) { SiteElementSerializer.new(element, scope: user) }
