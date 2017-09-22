@@ -48,7 +48,7 @@ class UpdateSiteElement
     find_image(old_image_id)
   rescue ActiveRecord::RecordNotFound
     element.errors.add(:base, 'Previous image could not be found')
-    raise ActiveRecord::RecordInvalid.new(element)
+    raise ActiveRecord::RecordInvalid, element
   end
 
   def find_image(old_image_id)
