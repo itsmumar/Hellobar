@@ -1,15 +1,14 @@
 class UpdateSiteElement
   def initialize(element, params)
     @element = element
-    @params = params
-    @theme_id = params[:theme_id]
+    @params = disable_use_question_if_template(params)
+    @theme = Theme.find_by(id: params[:theme_id])
     @new_type = params[:element_subtype]
   end
 
   def call
     SiteElement.transaction do
       @element = copy_element_and_change_type if type_should_change?
-      disable_use_question_if_template
       element.update!(params)
       destroy_previous_image_if_necessary
     end
@@ -18,7 +17,7 @@ class UpdateSiteElement
 
   private
 
-  attr_reader :element, :params, :new_type, :theme_id
+  attr_reader :element, :params, :new_type, :theme
 
   def copy_element_and_change_type
     existing_element = element
@@ -59,9 +58,8 @@ class UpdateSiteElement
     new_type.present? && new_type != element.element_subtype
   end
 
-  def disable_use_question_if_template
-    return unless (theme = Theme.find_by(id: theme_id))
-    return unless theme.type == 'template'
-    params[:use_question] = false
+  def disable_use_question_if_template(params)
+    params[:use_question] = false if theme&.type == 'template'
+    params
   end
 end
