@@ -22,10 +22,6 @@ every 4.days, at: '11:00am', roles: [:cron] do
   rake 'mailing:send_site_script_not_installed'
 end
 
-every 24.hours, at: '12:00am', roles: [:cron] do
-  rake 'site:scripts:regenerate_all_active'
-end
-
 every 24.hours, at: '1:00pm', roles: [:cron] do
   rake 'referrals:send_followups'
 end
@@ -45,6 +41,18 @@ end
 # every 6.hours, roles: [:cron] do
 #   rake 'backend:adjust_dynamo_db_capacity[all]'
 # end
+
+every 7.minutes, roles: [:cron] do
+  rake 'site:scripts:regenerate:sample_of_least_recently_regenerated_active_sites'
+end
+
+every 24.hours, at: '12:00am', roles: [:cron] do
+  rake 'site:scripts:install_check:recently_uninstalled'
+end
+
+every 24.hours, at: '1:00am', roles: [:cron] do
+  rake 'site:scripts:install_check:uninstalled_but_recently_modified'
+end
 
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
