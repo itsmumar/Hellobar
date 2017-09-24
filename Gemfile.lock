@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/Hello-bar/createsend-ruby.git
+  revision: b1cc5b1a833affd374d9edb1fdd0710d62f388cc
+  specs:
+    createsend (4.1.1)
+      hashie (~> 3.0)
+      httparty (~> 0.14)
+      json (>= 1.0)
+
+GIT
   remote: https://github.com/Hello-bar/omniauth-createsend.git
   revision: 8c550ca79bdb8f702c9ef8bd3ecab33875c38398
   specs:
@@ -179,10 +188,6 @@ GEM
       currencies (~> 0.4.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    createsend (4.1.1)
-      hashie (~> 3.0)
-      httparty (~> 0.14)
-      json (>= 1.0)
     css_parser (1.5.0)
       addressable
     currencies (0.4.2)
@@ -607,7 +612,7 @@ DEPENDENCIES
   connection_pool
   countries
   country_select!
-  createsend
+  createsend!
   dalli
   database_cleaner
   devise
