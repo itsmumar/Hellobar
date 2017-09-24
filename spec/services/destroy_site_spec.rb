@@ -5,18 +5,15 @@ describe DestroySite do
   describe '#call', :freeze do
     let(:mock_upload_to_s3) { double(:upload_to_s3) }
 
-    before do
-      allow(Settings).to receive(:store_site_scripts_locally).and_return false
-      allow(UploadToS3).to receive(:new).and_return(mock_upload_to_s3)
-      allow(mock_upload_to_s3).to receive(:call).with(no_args)
-    end
-
     it 'blanks-out the site script when destroyed' do
+      expect(site.script).to receive(:destroy)
       service.call
-      expect(UploadToS3).to have_received(:new).with(site.script_name, '')
     end
 
     it 'marks the record as deleted' do
+      expect(GenerateAndStoreStaticScript)
+        .to receive_service_call.with(site, script_content: '')
+
       service.call
 
       expect(site).to be_deleted

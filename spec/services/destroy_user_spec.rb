@@ -7,6 +7,8 @@ describe DestroyUser do
   before { stub_cyber_source :purchase }
 
   before do
+    allow_any_instance_of(StaticScript).to receive(:destroy)
+
     sites.each do |site|
       ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
     end
