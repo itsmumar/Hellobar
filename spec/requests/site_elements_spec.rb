@@ -59,8 +59,8 @@ describe 'SiteElements requests' do
   end
 
   let(:user) { create :user }
-  let(:site) { create :site, :with_rule, user: user }
-  let(:element) { create :bar, site: site }
+  let(:site) { create :site, :with_rule, :installed, user: user }
+  let!(:element) { create :bar, site: site }
 
   context 'when unauthenticated' do
     describe 'GET :show' do
@@ -80,8 +80,6 @@ describe 'SiteElements requests' do
 
     describe 'GET #show' do
       it 'serializes a site_element to json' do
-        allow_any_instance_of(Site).to receive(:script_installed?).and_return(true)
-
         get site_site_element_path(element.site, element, format: :json)
 
         expect(json).to include(
@@ -96,6 +94,7 @@ describe 'SiteElements requests' do
       it 'responds with success' do
         put site_site_element_toggle_paused_path(site, element)
         expect(response).to redirect_to site_site_elements_path(site)
+        expect(element.reload).to be_paused
       end
     end
 
@@ -142,10 +141,10 @@ describe 'SiteElements requests' do
       end
 
       it 'sets the success flash message on create' do
-        allow_any_instance_of(SiteElement).to receive(:valid?).and_return(true)
-        allow_any_instance_of(SiteElement).to receive(:save!).and_return(true)
+        expect { post_create element_subtype: 'traffic', rule_id: rule_id }
+          .to change(SiteElement, :count)
+          .by(1)
 
-        post_create element_subtype: 'traffic', rule_id: rule_id
         expect(request.flash[:success]).to be_present
       end
     end
