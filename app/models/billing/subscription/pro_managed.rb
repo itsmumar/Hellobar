@@ -1,5 +1,5 @@
 class Subscription
-  class ProManaged < Pro
+  class ProManaged < Subscription
     class Capabilities < Pro::Capabilities
       def custom_html?
         true

@@ -1,5 +1,5 @@
 class Subscription
-  class Free < Base
+  class Free < Subscription
     def free?
       true
     end

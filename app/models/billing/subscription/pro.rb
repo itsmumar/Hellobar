@@ -1,5 +1,5 @@
 class Subscription
-  class Pro < Base
+  class Pro < Subscription
     class Capabilities < Free::Capabilities
       def acts_as_paid_subscription?
         true
