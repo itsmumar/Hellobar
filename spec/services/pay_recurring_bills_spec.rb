@@ -158,5 +158,74 @@ describe PayRecurringBills do
         end
       end
     end
+
+    context 'subscription lifecycle simulation', freeze: '2017-01-01 10:04 UTC' do
+      let!(:credit_card) { create :credit_card }
+      let!(:site) { create :site }
+
+      def change_subscription(kind)
+        ChangeSubscription.new(site, { subscription: kind }, credit_card).call
+        site.reload
+      end
+
+      before { stub_cyber_source :purchase }
+
+      let(:free_bill) { site.bills[0] }
+      let(:first_pro_bill) { site.bills[1] }
+      let(:renewal_pro_bill) { site.bills[2] }
+      let(:last_pending_pro_bill) { site.bills[3] }
+      let(:last_bill) { site.bills.last }
+
+      it 'creates correct bills' do
+        change_subscription('free')
+
+        expect(site.reload.bills.count).to eql 1
+
+        travel_to '2017-02-01 10:04 UTC'
+        service.call
+        site.reload
+
+        expect(site.bills.count).to eql 1
+
+        change_subscription('pro')
+        expect(site.active_paid_bill).to eql first_pro_bill
+
+        expect(site.bills.count).to eql 3
+        expect(site.bills.paid).to match_array([first_pro_bill])
+        expect(site.bills.pending).to match_array([renewal_pro_bill])
+        expect(site.bills.voided).to match_array([free_bill])
+
+        travel_to '2017-03-01 10:04 UTC'
+        expect(site).to be_capable_of :pro
+        service.call
+        site.reload
+
+        travel_to site.active_paid_bill.end_date + 1.second do
+          expect(site).to be_capable_of :free
+          expect(site.active_paid_bill).to be_nil
+        end
+
+        travel_to '2017-03-01 10:04 UTC'
+
+        expect(site.bills.count).to eql 4
+        expect(site.bills.paid).to match_array([first_pro_bill, renewal_pro_bill])
+        expect(site.bills.pending).to match_array([last_pending_pro_bill])
+        expect(site.bills.voided).to match_array([free_bill])
+
+        expect(site.active_paid_bill).to eql renewal_pro_bill
+
+        expect(free_bill.end_date.to_s).to match '2017-02-01'
+
+        expect(first_pro_bill.end_date.to_s).to match '2017-03-01'
+        expect(renewal_pro_bill.bill_at.to_s).to match '2017-02-26'
+        expect(renewal_pro_bill.end_date.to_s).to match '2017-04-01'
+
+        travel_to renewal_pro_bill.bill_at + 1.second
+        service.call
+
+        expect(last_bill.start_date.to_s).to match '2017-04-01'
+        expect(last_bill.end_date.to_s).to match '2017-05-01'
+      end
+    end
   end
 end
