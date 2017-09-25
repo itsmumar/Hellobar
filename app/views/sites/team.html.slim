@@ -13,7 +13,7 @@ nav.tabs-wrapper
   #add-user.button
     | Add user
 
-div.table-wrapper
+.table-wrapper
   table.team-table
     tr
       td
@@ -26,32 +26,37 @@ div.table-wrapper
           .name-tag
             .name= user.name || user.email
             - if user.name
-              div= user.email     
+              div= user.email
 
         - sites.each do |site|
           - membership = site.membership_for_user(user)
-          td data={site_id: site.id, user_id: user.id, site_membership_id: membership.try(:id)}
-            div class=["role-icon", "permission-icon", format_role(membership)]
+
+          td data={ site_id: site.id, user_id: user.id, site_membership_id: membership.try(:id) }
+            .role-icon.permission-icon class=format_role(membership)
 
             .dropdown-wrapper
               span= format_role(membership)
               i.icon-dropdown
               .dropdown-block
-                a.change-permission href="#" data={option: "owner"}
-                  div.permission-icon.owner
+                a.change-permission href="#" data={ option: "owner" }
+                  .permission-icon.owner
                   | owner
-                a.change-permission href="#" data={option: "admin"}
-                  div.permission-icon.admin
+                a.change-permission href="#" data={ option: "admin" }
+                  .permission-icon.admin
                   | admin
-                a.change-permission href="#" data={option: "none"}
-                  div.permission-icon.none
+                a.change-permission href="#" data={ option: "none" }
+                  .permission-icon.none
                   | none
 
-div.permission-block
-  div class=["role-icon", "permission-icon", "owner"]
+.permission-block
+  .role-icon.permission-icon.owner
   strong Owner:
-  span  Has full access to the site
-div.permission-block
-  div class=["role-icon", "permission-icon", "admin"]
+  span Has full access to the site
+.permission-block
+  .role-icon.permission-icon.admin
   strong Admin:
-  span  Has full access, but cannot edit or view billing information
+  span Has full access, but cannot edit or view billing information
+.permission-block
+  .role-icon.permission-icon.none
+  strong None:
+  span Revokes user's access to the site
