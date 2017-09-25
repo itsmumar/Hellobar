@@ -2,7 +2,7 @@ class Subscription
   class ProComped < Subscription
     class Capabilities < Pro::Capabilities
     end
-    
+
     class << self
       def defaults
         {

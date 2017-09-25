@@ -78,7 +78,7 @@ class PayBill
   end
 
   def create_bill_for_next_period
-    return if bill.subscription.amount.zero?
+    return if bill.subscription.free?
 
     Bill::Recurring.create!(
       subscription: bill.subscription,
