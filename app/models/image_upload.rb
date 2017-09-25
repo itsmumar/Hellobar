@@ -20,7 +20,7 @@ class ImageUpload < ActiveRecord::Base
   end
 
   def url(style = :modal)
-    preuploaded_url || image.url(style)
+    image.url(style)
   end
 
   STYLES.keys.each do |style|

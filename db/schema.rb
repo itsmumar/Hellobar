@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922151115) do
+ActiveRecord::Schema.define(version: 20170923163633) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -195,8 +195,6 @@ ActiveRecord::Schema.define(version: 20170922151115) do
   end
 
   create_table "image_uploads", force: :cascade do |t|
-    t.string   "description",        limit: 255
-    t.string   "url",                limit: 255
     t.string   "image_file_name",    limit: 255
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size",    limit: 4
@@ -204,12 +202,9 @@ ActiveRecord::Schema.define(version: 20170922151115) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "site_id",            limit: 4
-    t.string   "preuploaded_url",    limit: 255
-    t.string   "theme_id",           limit: 191
   end
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
-  add_index "image_uploads", ["theme_id"], name: "index_image_uploads_on_theme_id", unique: true, using: :btree
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
