@@ -1,4 +1,4 @@
-/* globals html_beautify, siteID */
+/* globals siteID */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
