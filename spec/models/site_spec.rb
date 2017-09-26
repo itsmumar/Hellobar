@@ -371,4 +371,15 @@ describe Site do
       expect(site.membership_for_user(user)).to eql user.site_memberships.first
     end
   end
+
+  describe '#statistics' do
+    let(:statistics) { double('statistics') }
+
+    it 'calls FetchSiteStatistics' do
+      expect(FetchSiteStatistics)
+        .to receive_service_call.with(site, days_limit: 7)
+        .and_return(statistics)
+      expect(site.statistics).to be statistics
+    end
+  end
 end
