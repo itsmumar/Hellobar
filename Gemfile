@@ -3,7 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.8'
 
 # AWS
-gem 'aws-sdk'
+gem 'aws-sdk-cloudwatch'
+gem 'aws-sdk-dynamodb'
+gem 'aws-sdk-s3'
+gem 'aws-sdk-sns'
+gem 'aws-sdk-sqs'
 
 # Authentication / authorization
 gem 'devise'
