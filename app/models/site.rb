@@ -27,7 +27,7 @@ class Site < ActiveRecord::Base
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
-  has_many :contact_lists, dependent: :destroy
+  has_many :contact_lists, -> { order 'name' }, dependent: :destroy
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
 
