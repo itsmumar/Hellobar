@@ -112,7 +112,7 @@ gem 'intercom-rails'
 
 # Queue
 gem 'connection_pool'
-gem 'shoryuken', '3.0.7' # 3.1.0 is buggy: https://github.com/phstc/shoryuken/issues/396
+gem 'shoryuken'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work
