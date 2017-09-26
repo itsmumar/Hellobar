@@ -12,7 +12,7 @@ class IdentitiesController < ApplicationController
 
   def show
     identity = @site.identities.find_by(provider: params[:id])
-    identity = Identity.from_session(session) if !identity
+    identity ||= Identity.from_session(session)
 
     return render json: nil unless identity
 
@@ -29,7 +29,7 @@ class IdentitiesController < ApplicationController
     unless identity.valid?
       flash[:error] = "There was a problem connecting your #{ t(identity.provider, scope: :service_providers) } account. Please verify that you have provided valid credentials and try again."
     end
-    
+
     redirect_to after_auth_redirect_url
   end
 
