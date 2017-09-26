@@ -377,7 +377,8 @@ describe Site do
 
     it 'calls FetchSiteStatistics' do
       expect(FetchSiteStatistics)
-        .to receive_service_call.with(site, days_limit: 7)
+        .to receive_service_call
+        .with(site, days_limit: 7)
         .and_return(statistics)
       expect(site.statistics).to be statistics
     end
