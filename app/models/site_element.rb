@@ -61,7 +61,6 @@ class SiteElement < ActiveRecord::Base
   scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
-  scope :custom_elements, -> { where(type: 'Custom') }
   scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
@@ -109,7 +108,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def self.types
-    [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].map(&:name)
+    [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
   end
 
   def caption=(c_value)

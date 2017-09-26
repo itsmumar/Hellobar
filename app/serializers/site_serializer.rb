@@ -25,7 +25,6 @@ class SiteSerializer < ActiveModel::Serializer
       at_site_element_limit: object.capabilities.at_site_element_limit?,
       custom_thank_you_text: object.capabilities.custom_thank_you_text?,
       after_submit_redirect: object.capabilities.after_submit_redirect?,
-      custom_html: object.capabilities.custom_html?,
       content_upgrades: object.capabilities.content_upgrades?,
       autofills: object.capabilities.autofills?,
       geolocation_injection: object.capabilities.geolocation_injection?,

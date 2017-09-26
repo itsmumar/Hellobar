@@ -16,10 +16,6 @@ json.cache! site_element do
 
     :contact_list_id,
 
-    :custom_html,
-    :custom_css,
-    :custom_js,
-
     :use_default_image,
     :image_url,
     :image_large_url,

@@ -155,23 +155,6 @@ class BlockBasedModelAdapter {
 }
 
 /**
- * Model adapter that provides inline editing support for Custom HTML elements
- */
-class CustomHtmlModelAdapter {
-  constructor(modelHandler, service) {
-    this.modelHandler = modelHandler;
-    this.service = service;
-  }
-
-  handleContentChange(blockId, content) {
-    const customHtml = html_beautify(content);
-    this.modelHandler.requestPreviewUpdateSkipping();
-    this.modelHandler.set('model.custom_html', customHtml);
-    this.service.customHtmlChangeListeners.forEach((listener) => listener(customHtml));
-  }
-}
-
-/**
  * @deprecated
  */
 class InlineImageManagementPane {
@@ -233,9 +216,6 @@ export default Ember.Service.extend({
   modelHandler: null,
   simpleModelAdapter: null,
   blockBasedModelAdapter: null,
-  customHtmlModelAdapter: null,
-
-  customHtmlChangeListeners: [],
 
   $currentFroalaInstances: null,
   $currentInputInstances: null,
@@ -307,16 +287,10 @@ export default Ember.Service.extend({
     if (modelHandler) {
       this.simpleModelAdapter = new SimpleModelAdapter(modelHandler, this);
       this.blockBasedModelAdapter = new BlockBasedModelAdapter(modelHandler, this);
-      this.customHtmlModelAdapter = new CustomHtmlModelAdapter(modelHandler, this);
     } else {
       this.simpleModelAdapter = null;
       this.blockBasedModelAdapter = null;
-      this.customHtmlModelAdapter = null;
     }
-  },
-
-  addCustomHtmlChangeListener(listener) {
-    this.customHtmlChangeListeners.push(listener);
   },
 
   preconfigure(capabilities) {
@@ -527,11 +501,7 @@ export default Ember.Service.extend({
 
 
   handleContentChange(blockId, content) {
-    if (blockId === 'custom_html') {
-      if (this.customHtmlModelAdapter) {
-        this.customHtmlModelAdapter.handleContentChange(blockId, content);
-      }
-    } else if (blockId && _.startsWith(blockId, 'blocks.')) {
+    if (blockId && _.startsWith(blockId, 'blocks.')) {
       if (this.blockBasedModelAdapter) {
         this.blockBasedModelAdapter.handleContentChange(blockId, content);
       }

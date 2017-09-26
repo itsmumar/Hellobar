@@ -2,7 +2,7 @@
 
 import Ember from 'ember';
 
-const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Custom', 'Alert'];
+const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Alert'];
 
 export default Ember.Component.extend({
 
@@ -19,7 +19,6 @@ export default Ember.Component.extend({
 
   style: Ember.computed.alias('model.type'),
 
-  isCustom: Ember.computed.equal('style', 'Custom'),
   currentTheme: Ember.computed.alias('theming.currentTheme'),
   currentThemeName: Ember.computed.alias('theming.currentThemeName'),
   isEditing: Ember.computed.bool('model.id'),
@@ -55,7 +54,6 @@ export default Ember.Component.extend({
     );
   },
 
-  canUseCustomStyle: Ember.computed.alias('model.site.capabilities.custom_html'),
   canUseAlertStyle: Ember.computed.alias('model.site.capabilities.alert_bars'),
 
   onlyTopBarStyleIsAvailable: Ember.computed.equal('model.element_subtype', 'call'),
@@ -66,7 +64,7 @@ export default Ember.Component.extend({
 
   manageRightPaneOnElementTypeChanged: function () {
     let elementType = this.get('model.type');
-    if (elementType === 'Custom' || this.get('isEditing')) {
+    if (this.get('isEditing')) {
       this.get('bus').trigger('hellobar.core.rightPane.hide');
     } else {
       this.get('bus').trigger('hellobar.core.rightPane.show', {

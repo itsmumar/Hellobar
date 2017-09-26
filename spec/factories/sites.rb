@@ -84,7 +84,6 @@ FactoryGirl.define do
     at_site_element_limit? { [true, false].sample }
     custom_thank_you_text? { [true, false].sample }
     after_submit_redirect? { [true, false].sample }
-    custom_html? { [true, false].sample }
     content_upgrades? { [true, false].sample }
     autofills? { [true, false].sample }
     geolocation_injection? { [true, false].sample }

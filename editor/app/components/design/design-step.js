@@ -9,8 +9,6 @@ export default Ember.Component.extend({
   currentThemeIsGeneric: Ember.computed.alias('theming.currentThemeIsGeneric'),
   currentThemeIsTemplate: Ember.computed.alias('theming.currentThemeIsTemplate'),
 
-  isCustom: Ember.computed.equal('model.type', 'Custom'),
-
   elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
   elementTypeIsNotAlert: Ember.computed.not('elementTypeIsAlert'),
 

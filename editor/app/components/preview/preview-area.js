@@ -46,7 +46,6 @@ export default Ember.Component.extend({
   barSize: Ember.computed.alias('model.size'),
   barPosition: Ember.computed.alias('model.placement'),
   elementType: Ember.computed.alias('model.type'),
-  isCustom: Ember.computed.equal('model.type', 'Custom'),
 
   previewStyleString: (function () {
     return `background-image: url(${ this.get('previewImageURL') })`;
@@ -158,9 +157,6 @@ export default Ember.Component.extend({
     'model.use_default_image',
     'model.view_condition',
     'model.wiggle_button',
-    'model.custom_html',
-    'model.custom_css',
-    'model.custom_js',
     'isFullscreen',
     'isMobile'
   ),

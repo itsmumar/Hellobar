@@ -1,45 +1,39 @@
 <h5 class="step-title">Design &amp; Content</h5>
 
-{{#if isCustom}}
-  These are some instructions about doing your custom templating.
-{{else}}
+{{#if shouldShowThankYouEditor}}
+  {{design/thank-you/thank-you-editor model=model}}
+{{/if}}
 
-  {{#if shouldShowThankYouEditor}}
-    {{design/thank-you/thank-you-editor model=model}}
-  {{/if}}
+{{#if currentThemeIsGeneric}}
 
-  {{#if currentThemeIsGeneric}}
-
-    {{#ivy-tabs selection=selection as |tabs|}}
-      {{#tabs.tablist as |tablist|}}
-        {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
-        {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
-
-        {{#if elementTypeIsNotAlert}}
-          {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
-        {{/if}}
-      {{/tabs.tablist}}
-
-      {{#tabs.tabpanel "TabColors"}}
-        {{design/colors/colors-pane model=model}}
-      {{/tabs.tabpanel}}
-
-
-      {{#tabs.tabpanel "TabImage"}}
-        {{design/images/image-pane model=model}}
-      {{/tabs.tabpanel}}
+  {{#ivy-tabs selection=selection as |tabs|}}
+    {{#tabs.tablist as |tablist|}}
+      {{#tablist.tab "TabColors" on-select=(action (mut selection))}}Colors{{/tablist.tab}}
+      {{#tablist.tab "TabImage" on-select=(action (mut selection))}}Image{{/tablist.tab}}
 
       {{#if elementTypeIsNotAlert}}
-        {{#tabs.tabpanel "TabText"}}
-          {{design/text/text-pane model=model}}
-        {{/tabs.tabpanel}}
+        {{#tablist.tab "TabText" on-select=(action (mut selection))}}Text{{/tablist.tab}}
       {{/if}}
-    {{/ivy-tabs}}
+    {{/tabs.tablist}}
 
-  {{/if}}
+    {{#tabs.tabpanel "TabColors"}}
+      {{design/colors/colors-pane model=model}}
+    {{/tabs.tabpanel}}
 
-  {{#if currentThemeIsTemplate}}
-    {{no-content-parameters}}
-  {{/if}}
 
+    {{#tabs.tabpanel "TabImage"}}
+      {{design/images/image-pane model=model}}
+    {{/tabs.tabpanel}}
+
+    {{#if elementTypeIsNotAlert}}
+      {{#tabs.tabpanel "TabText"}}
+        {{design/text/text-pane model=model}}
+      {{/tabs.tabpanel}}
+    {{/if}}
+  {{/ivy-tabs}}
+
+{{/if}}
+
+{{#if currentThemeIsTemplate}}
+  {{no-content-parameters}}
 {{/if}}

@@ -60,10 +60,6 @@ FactoryGirl.define do
       thank_you_url 'http://www.hellobar.com/'
     end
 
-    trait :custom do
-      type 'Custom'
-    end
-
     factory :modal_element do
       type 'Modal'
       placement nil
