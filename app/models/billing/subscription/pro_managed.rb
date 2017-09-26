@@ -1,10 +1,6 @@
 class Subscription
   class ProManaged < Pro
     class Capabilities < Pro::Capabilities
-      def custom_html?
-        true
-      end
-
       def content_upgrades?
         true
       end

@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site, :rule_id, :rule, :contact_list_id, :errors, :full_error_messages,
+  attributes :id, :site, :rule_id, :rule, :contact_list_id,
 
     # settings
     :type, :element_subtype, :settings, :view_condition, :phone_number,
@@ -24,9 +24,6 @@ class SiteElementSerializer < ActiveModel::Serializer
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
-
-    # custom html
-    :custom_html, :custom_css, :custom_js,
 
     # alert type
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
@@ -97,38 +94,5 @@ class SiteElementSerializer < ActiveModel::Serializer
     # Calculate the token
     token = Digest::MD5.hexdigest("#{ params }SC10DF8C7E0FE8")
     "https://api.url2png.com/v6/P52EBC321291EF/#{ token }/png/#{ params }"
-  end
-
-  def errors
-    object.errors.to_hash
-  end
-
-  def full_error_messages
-    messages = []
-
-    object.errors.keys.each do |attribute|
-      errors = object.errors[attribute]
-
-      if attribute == :element_subtype && errors.include?("can't be blank")
-        messages << 'You must select your goal in the "goals" section'
-        next
-      end
-
-      if attribute == :rule && errors.include?("can't be blank")
-        messages << 'You must select who will see this in the "targeting" section'
-        next
-      end
-
-      if attribute == :contact_list && errors.include?("can't be blank")
-        messages << 'You must select a contact list to sync with in the "goals" section'
-        next
-      end
-
-      errors.each do |error|
-        messages << object.errors.full_message(attribute, error)
-      end
-    end
-
-    messages
   end
 end

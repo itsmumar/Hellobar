@@ -63,10 +63,6 @@ class Subscription
       @subscription ? @subscription.visit_overage_amount : parent_class.defaults[:visit_overage_amount]
     end
 
-    def custom_html?
-      false
-    end
-
     def content_upgrades?
       false
     end

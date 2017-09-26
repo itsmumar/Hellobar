@@ -14,7 +14,6 @@ describe SiteSerializer do
       at_site_element_limit: site.capabilities.at_site_element_limit?,
       custom_thank_you_text: site.capabilities.custom_thank_you_text?,
       after_submit_redirect: site.capabilities.after_submit_redirect?,
-      custom_html: site.capabilities.custom_html?,
       content_upgrades: site.capabilities.content_upgrades?,
       autofills: site.capabilities.autofills?,
       geolocation_injection: site.capabilities.geolocation_injection?,

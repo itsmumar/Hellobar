@@ -13,6 +13,7 @@ FactoryGirl.define do
     rule
 
     trait :bar
+    factory :bar, class: 'Bar'
 
     trait :slider do
       type 'Slider'
@@ -58,10 +59,6 @@ FactoryGirl.define do
       thank_you_subheading 'thank_you_subheading'
       thank_you_cta 'thank_you_cta'
       thank_you_url 'http://www.hellobar.com/'
-    end
-
-    trait :custom do
-      type 'Custom'
     end
 
     factory :modal_element do

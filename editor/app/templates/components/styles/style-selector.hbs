@@ -59,15 +59,6 @@
 
     {{/if}}
 
-    {{#if canUseCustomHtml}}
-      <div class="step-link-block active" {{action 'select' 'Custom'}}>
-        <i class="icon-modal"></i>
-        <h6>Custom HTML</h6>
-
-        <p>Custom HTML</p>
-      </div>
-    {{/if}}
-
     {{#if shouldShowAlert}}
       <div class="step-link-block active" {{action 'select' 'Alert'}}>
         <i class="icon-modal"></i>
@@ -80,7 +71,6 @@
       {{styles/theming/theme-info theme=currentTheme onChangeTheme=(action 'changeTheme')}}
     {{/if}}
 
-
     {{#if notOnlyTopBarStyleIsAvailable}}
       <a {{action 'initiateSelection'}} class="change-selection">
         <i class="icon-back1"></i>
@@ -89,5 +79,4 @@
     {{/if}}
 
   </div>
-
 </div>

@@ -16,11 +16,7 @@ class RenderStaticScript
   private
 
   def render
-    escape_script_tag inject_modules inject_data template
-  end
-
-  def escape_script_tag(template)
-    template.gsub('</script>', '<\/script>')
+    inject_modules inject_data template
   end
 
   # replace $INJECT_DATA with json settings
