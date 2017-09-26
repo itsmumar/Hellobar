@@ -11,7 +11,7 @@ class ExtractEmbedForm
   # @return [EmbedForm]
   def call
     EmbedForm.new form, params, action_url
-  rescue HTTParty::Error => _
+  rescue ExtractEmbedForm::Error, HTTParty::Error => _
     EmbedForm.new
   end
 
