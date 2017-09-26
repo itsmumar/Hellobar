@@ -91,7 +91,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def paid?
-    values[:monthly_amount] > 0
+    values.fetch(:monthly_amount, 0) > 0
   end
 
   private
