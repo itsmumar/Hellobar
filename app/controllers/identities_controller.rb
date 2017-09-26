@@ -24,7 +24,7 @@ class IdentitiesController < ApplicationController
   end
 
   def store
-    identity = Identity.store_to_session(session, env['omniauth.auth'])
+    Identity.store_to_session(session, env['omniauth.auth'])
     redirect_to after_auth_redirect_url
   end
 
@@ -78,7 +78,7 @@ class IdentitiesController < ApplicationController
   end
 
   def after_auth_redirect_url
-    url = env.dig('omniauth.params', 'redirect_to') || request.referer
+    url = env.dig('omniauth.params', 'redirect_to') || request.referrer
     url += '#/goals' if url.include?('/site_elements/')
     url
   end

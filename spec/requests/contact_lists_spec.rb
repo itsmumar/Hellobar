@@ -171,8 +171,10 @@ describe 'ContactList requests' do
           get '/auth/drip/callback', {}, env
 
           expect { post site_contact_lists_path(site, contact_list: { name: 'Contact List' }) }
-            .to change { site.contact_lists.count }.by(1)
-            .and change { site.identities.count }.by(1)
+            .to change { site.contact_lists.count }
+            .by(1)
+            .and change { site.identities.count }
+            .by(1)
         end
       end
     end
