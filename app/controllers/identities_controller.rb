@@ -1,6 +1,6 @@
 class IdentitiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_site
+  before_action :load_site, except: :store
 
   def new
     if params[:api_key].blank?
@@ -25,11 +25,6 @@ class IdentitiesController < ApplicationController
 
   def store
     identity = Identity.store_to_session(session, env['omniauth.auth'])
-
-    unless identity.valid?
-      flash[:error] = "There was a problem connecting your #{ t(identity.provider, scope: :service_providers) } account. Please verify that you have provided valid credentials and try again."
-    end
-
     redirect_to after_auth_redirect_url
   end
 
@@ -83,7 +78,7 @@ class IdentitiesController < ApplicationController
   end
 
   def after_auth_redirect_url
-    url = env['omniauth.params']['redirect_to']
+    url = env.dig('omniauth.params', 'redirect_to') || request.referer
     url += '#/goals' if url.include?('/site_elements/')
     url
   end
