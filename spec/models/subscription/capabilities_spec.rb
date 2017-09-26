@@ -102,7 +102,6 @@ describe Subscription::Capabilities do
       subscription = build_stubbed :subscription, :free
       capabilities = subscription.capabilities
 
-      expect(capabilities.custom_html?).to be_falsey
       expect(capabilities.content_upgrades?).to be_falsey
       expect(capabilities.autofills?).to be_falsey
       expect(capabilities.geolocation_injection?).to be_falsey
@@ -115,7 +114,6 @@ describe Subscription::Capabilities do
       subscription = build_stubbed :subscription, :pro_managed
       capabilities = subscription.capabilities
 
-      expect(capabilities.custom_html?).to be_truthy
       expect(capabilities.content_upgrades?).to be_truthy
       expect(capabilities.autofills?).to be_truthy
       expect(capabilities.geolocation_injection?).to be_truthy

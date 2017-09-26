@@ -14,8 +14,7 @@ hellobar.defineModule('elements.class',
       'hellobar-bar': 'bar',
       'hellobar-modal': 'modal',
       'hellobar-slider': 'slider',
-      'hellobar-takeover': 'takeover',
-      'hellobar-custom': 'custom'
+      'hellobar-takeover': 'takeover'
     };
 
     let iosFocusInterval = null;
@@ -133,16 +132,7 @@ hellobar.defineModule('elements.class',
           return templating.renderTemplate(template(), {siteElement: this});
         };
 
-        const generateCustomHtml = () => {
-          const customScript = () => {
-            const customJs = this.custom_js || '';
-            const allJs = `var hbElement=hellobar('elements').findById(${this.id}); ${customJs}`;
-            return `<script>setTimeout(function () { ${allJs} }, 1)` + '<\/script>';
-          };
-          return generateHtml() + customScript();
-        };
-
-        const html = this.type === 'Custom' ? generateCustomHtml() : generateHtml();
+        const html = generateHtml();
 
         // Once the dom is ready we inject the html returned from renderTemplate
         dom.runOnDocumentReady(function () {
@@ -155,7 +145,7 @@ hellobar.defineModule('elements.class',
             this.setPullDown();
 
             // Monitor zoom scale events
-            !(this.type === 'Custom') && this.hideOnZoom();
+            this.hideOnZoom();
 
             // Set wiggle listeners
             if (this.wiggle_button.length > 0)
@@ -488,7 +478,7 @@ hellobar.defineModule('elements.class',
             element.w.style.top = window.pageYOffset + "px";
           }, 200);
         }
-        else if (this.type == "Takeover" || this.type == "Modal" || this.type == "Custom") {
+        else if (this.type == "Takeover" || this.type == "Modal") {
           this.updateStyleFor(false);
         }
       }
@@ -501,10 +491,7 @@ hellobar.defineModule('elements.class',
           iosFocusInterval = null;
         }
 
-        if (this.type == "Takeover" ||
-          this.type == "Modal" ||
-          this.type == "Slider" ||
-          this.type == "Custom") {
+        if (this.type == "Takeover" || this.type == "Modal" || this.type == "Slider") {
           this.updateStyleFor(true);
         }
       }
@@ -512,7 +499,7 @@ hellobar.defineModule('elements.class',
       updateStyleFor(reset) {
         var element = this;
         var contentDocument = element.w.contentDocument;
-        var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover') || contentDocument.getElementById('hellobar-custom');
+        var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
 
         if (reset) {
           this.w.style.position = "";

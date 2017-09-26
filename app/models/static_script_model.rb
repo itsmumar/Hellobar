@@ -220,8 +220,6 @@ class StaticScriptModel
   end
 
   def content_markup(bar_type, subtype, category = :generic)
-    return '' if bar_type == 'custom'
-
     if category == :generic
       path = subtype.tr('/', '_')
       render_asset("#{ path }.html")
