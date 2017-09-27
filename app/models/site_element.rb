@@ -81,6 +81,7 @@ class SiteElement < ActiveRecord::Base
   serialize :blocks, Array
 
   after_create :track_creation
+  after_destroy :nullify_image_upload_reference
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
     element_subtype
@@ -298,5 +299,13 @@ class SiteElement < ActiveRecord::Base
   def subscription_for_custom_targeting
     return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
     errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
+  end
+
+  def nullify_image_upload_reference
+    # When marking site element as deleted, it will not be able to nullify the
+    # active_image_id reference when ImageUpload record is destroyed
+    # This is a Paranoia issue, which we need to work around manually
+    # https://github.com/rubysherpas/paranoia/issues/413
+    update_attribute :active_image_id, nil
   end
 end
