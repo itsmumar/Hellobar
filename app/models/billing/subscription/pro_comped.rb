@@ -1,5 +1,8 @@
 class Subscription
-  class ProComped < Pro
+  class ProComped < Subscription
+    class Capabilities < Pro::Capabilities
+    end
+
     class << self
       def defaults
         {

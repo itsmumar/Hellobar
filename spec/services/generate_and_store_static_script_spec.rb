@@ -47,4 +47,13 @@ describe GenerateAndStoreStaticScript do
       service.call
     end
   end
+
+  context 'when store remotly' do
+    before { allow(Settings).to receive(:store_site_scripts_locally).and_return false }
+
+    it 'uploads script to S3' do
+      expect(UploadToS3).to receive_service_call.with(site.script_name, script_content)
+      service.call
+    end
+  end
 end

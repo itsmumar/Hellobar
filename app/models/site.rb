@@ -93,7 +93,8 @@ class Site < ActiveRecord::Base
   end
 
   def self.script_uninstalled
-    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
+    where('script_uninstalled_at > script_installed_at')
+      .where.not(script_uninstalled_at: nil)
   end
 
   def self.script_recently_uninstalled

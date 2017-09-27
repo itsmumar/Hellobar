@@ -76,7 +76,7 @@ describe PayBill do
       before { allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(bill.amount) }
 
       specify { expect { service.call }.to change(bill, :status).to :paid }
-      specify { expect { service.call }.not_to make_gateway_call(:purchase).with(bill.amount * 100, any_args) }
+      specify { expect { service.call }.not_to make_gateway_call(:purchase) }
       specify { expect { service.call }.not_to change { BillingAttempt.success.count } }
     end
 
