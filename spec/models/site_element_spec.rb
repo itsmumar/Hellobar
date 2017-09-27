@@ -101,6 +101,31 @@ describe SiteElement do
     end
   end
 
+  describe '#destroy' do
+    let(:element) { create :site_element, :traffic, :with_active_image }
+
+    it 'marks the record as deleted', :freeze do
+      expect(element.deleted_at).to be_nil
+
+      element.destroy
+
+      expect(element.deleted_at).to eq Time.current
+
+      expect {
+        SiteElement.find(element.id)
+      }.to raise_exception ActiveRecord::RecordNotFound
+    end
+
+    it 'destroys the record and nullifies active_image_id' do
+      active_image = element.active_image
+
+      element.destroy
+
+      expect(active_image).to be_destroyed
+      expect(element.reload.active_image_id).to be_nil
+    end
+  end
+
   describe '#recent' do
     before { SiteElement.destroy_all }
     it 'should only include site elements created within the last 2 weeks' do
