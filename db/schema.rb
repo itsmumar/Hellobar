@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926082306) do
+ActiveRecord::Schema.define(version: 20170927123930) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -283,7 +283,6 @@ ActiveRecord::Schema.define(version: 20170926082306) do
     t.string   "view_condition",                   limit: 255,      default: "immediately"
     t.string   "email_placeholder",                limit: 255,      default: "Your email",  null: false
     t.string   "name_placeholder",                 limit: 255,      default: "Your name",   null: false
-    t.integer  "image_upload_id",                  limit: 4
     t.string   "image_placement",                  limit: 255,      default: "bottom"
     t.integer  "active_image_id",                  limit: 4
     t.string   "question",                         limit: 255
@@ -324,7 +323,6 @@ ActiveRecord::Schema.define(version: 20170926082306) do
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
   add_index "site_elements", ["element_subtype"], name: "index_site_elements_on_element_subtype", using: :btree
-  add_index "site_elements", ["image_upload_id"], name: "index_site_elements_on_image_upload_id", using: :btree
   add_index "site_elements", ["rule_id"], name: "index_site_elements_on_rule_id", using: :btree
 
   create_table "site_memberships", force: :cascade do |t|
