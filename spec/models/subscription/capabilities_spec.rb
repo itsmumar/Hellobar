@@ -64,21 +64,14 @@ describe Subscription::Capabilities do
     RefundBill.new(pro_bill).call
     expect(site).to be_capable_of :free
 
-    # Should have a pending bill for free subscription
-    pending = site.bills.pending
-    expect(pending.size).to eq(1)
-    expect(pending.first.subscription).to be_a Subscription::Free
-
     # Void the paid bill
     pro_bill.voided!
 
     # Should not have pro capabilities
     expect(site).to be_capable_of :free
 
-    # Should still have a pending bill for free
-    pending = site.bills.pending
-    expect(pending.size).to eq(1)
-    expect(pending.first.subscription).to be_a Subscription::Free
+    # Shouldn't have recurring bills for free
+    expect(site.bills.pending).to be_empty
   end
 
   it 'gives the greatest capability of all current paid subscriptions' do

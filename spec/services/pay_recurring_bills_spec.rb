@@ -158,5 +158,111 @@ describe PayRecurringBills do
         end
       end
     end
+
+    context 'subscription lifecycle simulation', freeze: '2017-01-01 10:04 UTC' do
+      let!(:credit_card) { create :credit_card }
+      let!(:site) { create :site }
+
+      def change_subscription(kind)
+        ChangeSubscription.new(site, { subscription: kind }, credit_card).call
+        site.reload
+      end
+
+      before { stub_cyber_source :purchase }
+
+      let(:free_bill) { site.bills[0] }
+      let(:first_pro_bill) { site.bills[1] }
+      let(:renewal_pro_bill) { site.bills[2] }
+      let(:last_pending_pro_bill) { site.bills[3] }
+      let(:last_bill) { site.bills.last }
+
+      def travel_to_next_billing_date
+        travel_to 1.month.from_now + 1.day
+      end
+
+      def bills
+        site.reload.bills
+      end
+
+      after { travel_back }
+
+      context 'when just signed up' do
+        before { change_subscription('free') }
+
+        it 'does not create free bill' do
+          expect(bills.count).to eql 1
+
+          travel_to_next_billing_date
+          service.call
+
+          expect(bills.count).to eql 1
+        end
+
+        context 'when upgraded to pro next month' do
+          before do
+            travel_to_next_billing_date
+            service.call
+            change_subscription('pro')
+          end
+
+          it 'creates right bills' do
+            expect(site.active_paid_bill).to eql first_pro_bill
+
+            expect(bills.count).to eql 3
+            expect(bills.paid).to match_array([first_pro_bill])
+            expect(bills.pending).to match_array([renewal_pro_bill])
+            expect(bills.voided).to match_array([free_bill])
+          end
+
+          context 'a month later' do
+            before { travel_to 1.month.from_now }
+
+            it 'still on Pro' do
+              expect(site).to be_capable_of :pro
+              service.call
+              site.reload
+
+              expect(site).to be_capable_of :pro
+              expect(bills.count).to eql 4
+            end
+
+            context 'when expires' do
+              before do
+                service.call
+                travel_to_next_billing_date
+              end
+
+              it 'fallbacks to Free' do
+                expect(site).to be_capable_of :free
+                service.call
+                expect(site).to be_capable_of :pro
+              end
+            end
+
+            it 'has correct bills' do
+              service.call
+              expect(site.bills.count).to eql 4
+              expect(site.bills.paid).to match_array([first_pro_bill, renewal_pro_bill])
+              expect(site.bills.pending).to match_array([last_pending_pro_bill])
+              expect(site.bills.voided).to match_array([free_bill])
+
+              expect(site.active_paid_bill).to eql renewal_pro_bill
+
+              expect(free_bill.end_date.to_s).to match '2017-02-01'
+
+              expect(first_pro_bill.end_date.to_s).to match '2017-03-02'
+              expect(renewal_pro_bill.bill_at.to_s).to match '2017-02-27'
+              expect(renewal_pro_bill.end_date.to_s).to match '2017-04-02'
+
+              travel_to_next_billing_date
+              service.call
+
+              expect(last_bill.start_date.to_s).to match '2017-04-02'
+              expect(last_bill.end_date.to_s).to match '2017-05-02'
+            end
+          end
+        end
+      end
+    end
   end
 end

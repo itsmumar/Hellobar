@@ -12,14 +12,7 @@ class PayBill
     return bill if cannot_pay?
 
     set_final_amount
-
-    if bill.amount.zero?
-      create_bill_for_next_period
-      bill.paid!
-    else
-      pay_bill
-    end
-
+    pay_bill
     bill
   end
 
@@ -32,6 +25,7 @@ class PayBill
   end
 
   def pay_bill
+    return bill.paid! if bill.amount.zero?
     raise MissingCreditCard, 'could not pay bill without credit card' unless credit_card
 
     response = gateway.purchase(bill.amount, credit_card)
@@ -84,6 +78,8 @@ class PayBill
   end
 
   def create_bill_for_next_period
+    return if bill.subscription.free?
+
     Bill::Recurring.create!(
       subscription: bill.subscription,
       amount: bill.subscription.amount,
