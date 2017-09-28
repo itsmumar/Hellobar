@@ -105,12 +105,15 @@ describe RefundBill do
     end
   end
 
-  context 'when credit card is missing' do
-    before { allow(bill).to receive(:paid_with_credit_card).and_return(nil) }
+  context 'when credit card is deleted' do
+    before { bill.paid_with_credit_card.destroy }
 
-    it 'raises MissingCreditCard' do
-      expect { service.call }
-        .to raise_error RefundBill::MissingCreditCard, 'Could not find credit card'
+    it 'still uses deleted card' do
+      service.call
+      expect(bill.refund.successful_billing_attempt.credit_card).to be_nil
+      CreditCard.unscoped do
+        expect(bill.refund.successful_billing_attempt.credit_card).to eql credit_card
+      end
     end
   end
 end

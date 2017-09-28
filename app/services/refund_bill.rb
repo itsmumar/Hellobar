@@ -11,7 +11,6 @@ class RefundBill
 
   def call
     raise InvalidRefund, 'Cannot refund an unpaid bill' unless bill.paid?
-    raise MissingCreditCard, 'Could not find credit card' unless credit_card
     check_refund_amount!
     refund
   end
@@ -100,7 +99,7 @@ class RefundBill
   end
 
   def credit_card
-    @credit_card ||= bill.paid_with_credit_card
+    @credit_card ||= CreditCard.unscoped { bill.paid_with_credit_card }
   end
 
   def create_billing_attempt(refund_bill, response)
