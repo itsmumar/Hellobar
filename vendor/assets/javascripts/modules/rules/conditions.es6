@@ -1,37 +1,9 @@
-hellobar.defineModule('elements.rules.resolving',
-  ['base.format', 'base.timezone', 'base.deferred', 'visitor'],
-  function (format, timezone, deferred, visitor) {
+hellobar.defineModule('rules.conditions',
+  ['base.format', 'base.timezone', 'base.deferred', 'visitor', 'geolocation'],
+  function (format, timezone, deferred, visitor, geolocation) {
 
-    // Checks if the rule is true by checking each of the conditions and
-    // the matching logic of the rule (any vs all).
-    function resolveRule(rule) {
-      const results = rule.conditions.map((condition) => conditionTrue(condition));
-      const checkResult = (results) => {
-        if (rule.matchType === 'any' && results.filter((result) => result === true).length > 0) {
-          return { rule, ruleActive: true };
-        }
-        if (rule.matchType !== 'any' && results.filter((result) => result === false).length > 0) {
-          return { rule, ruleActive: false };
-        }
-        return undefined;
-      };
-      const checkedResult = checkResult(results);
-      if (checkedResult !== undefined) {
-        return checkedResult;
-      }
-
-      return deferred.all(results.map((result) => result instanceof deferred.Promise ? result : deferred.constant(result))).then((finalResults) => {
-        const checkedResult = checkResult(finalResults);
-        if (checkedResult !== undefined) {
-          return checkedResult;
-        }
-        // If we needed to match any condition (and we had at least one)
-        // and didn't yet return false
-        if (rule.matchType === 'any' && rule.conditions.length > 0) {
-          return { rule, ruleActive: false };
-        }
-        return { rule, ruleActive: true };
-      });
+    function applyCondition(value, condition) {
+      return applyOperands(value, condition.operand, condition.value, condition.segment);
     }
 
     function timeConditionTrue(condition) {
@@ -57,18 +29,13 @@ hellobar.defineModule('elements.rules.resolving',
         .then(value => applyCondition(value, condition));
     }
 
-    function applyCondition(value, condition) {
-      return applyOperands(value, condition.operand, condition.value, condition.segment);
-    }
-
     function regionConditionTrue(condition) {
-      const region = getSegmentValue('region');
-      const regionName = getSegmentValue('regionName');
+      return geolocation.getGeolocationData().then(geolocationData => {
+        const region = geolocationData.region;
+        const regionName = geolocationData.regionName;
 
-      return deferred.all([region, regionName]).then(results => {
-        return results
-          .map(value => applyCondition(value, condition))
-          .find(ok => ok)
+        return applyCondition(region, condition) ||
+          applyCondition(regionName, condition);
       })
     }
 
@@ -77,34 +44,6 @@ hellobar.defineModule('elements.rules.resolving',
         return regionConditionTrue(condition);
       }
       return geoLocationConditionTrue(condition);
-    }
-
-    // Determines if the condition (a rule is made of one or more conditions)
-    // is true. It gets the current value and applies the operand
-    function conditionTrue(condition) {
-      // Handle for URL Query
-      if (condition.segment === 'pq') {
-        var conditionKey = condition.value.split('=')[0];
-        var currentValue = getSegmentValue(condition.segment)[conditionKey];
-        var values = condition.value.split('=')[1] || '';
-      }
-      else if (condition.segment === 'tc')
-        return timeConditionTrue(condition);
-      else if (condition.segment.indexOf('gl_') !== -1) {
-        return handleGeoLocationCondition(condition);
-      } else {
-        currentValue = getSegmentValue(condition.segment);
-        values = condition.value;
-      }
-
-      // Now we need to apply the operands
-      // If it's an array of values this is true if the operand is true for any of the values
-
-      // We don't want to mess with the array for the between operand
-      if (condition.operand === 'between')
-        return applyOperand(currentValue, condition.operand, values, condition.segment);
-
-      return applyOperands(currentValue, condition.operand, values, condition.segment);
     }
 
     // Sanitizes the value parameter based on the segment and input
@@ -223,26 +162,38 @@ hellobar.defineModule('elements.rules.resolving',
       return visitor.getData(segmentName);
     }
 
-    // If window.HB_element_id is set, use that to find the site element
-    // Will return null if HB_element_id is not set or no site element exists with that id
-    function getFixedSiteElement() {
-      var i, j;
-      if (window.HB_element_id != null) {
-        for (i = 0; i < rules.length; i++) {
-          var rule = rules[i];
-          for (j = 0; j < rule.siteElements.length; j++) {
-            var siteElement = rule.siteElements[j];
-            if (siteElement.wordpress_bar_id === window.HB_element_id)
-              return siteElement;
-          }
-        }
+    // Determines if the condition (a rule is made of one or more conditions)
+    // is true. It gets the current value and applies the operand
+    function resolve(condition) {
+      let currentValue;
+      let values;
+
+      // Handle for URL Query
+      if (condition.segment === 'pq') {
+        const conditionKey = condition.value.split('=')[0];
+        currentValue = getSegmentValue(condition.segment)[conditionKey];
+        values = condition.value.split('=')[1] || '';
       }
-      return null;
+      else if (condition.segment === 'tc')
+        return timeConditionTrue(condition);
+      else if (condition.segment.indexOf('gl_') !== -1) {
+        return handleGeoLocationCondition(condition);
+      } else {
+        currentValue = getSegmentValue(condition.segment);
+        values = condition.value;
+      }
+
+      // Now we need to apply the operands
+      // If it's an array of values this is true if the operand is true for any of the values
+
+      // We don't want to mess with the array for the between operand
+      if (condition.operand === 'between')
+        return applyOperand(currentValue, condition.operand, values, condition.segment);
+
+      return applyOperands(currentValue, condition.operand, values, condition.segment);
     }
 
-
     return {
-      resolveRule
+      resolve
     };
-
   });

@@ -9,6 +9,4 @@
 //= require ./elements.injection
 //= require ./elements.intents
 //= require ./elements.relevance
-//= require ./elements.rules.resolving
-//= require ./elements.rules
 //= require ./elements.visibility
