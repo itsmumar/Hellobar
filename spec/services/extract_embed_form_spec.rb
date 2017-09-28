@@ -1,5 +1,6 @@
 describe ExtractEmbedForm do
   let(:service) { described_class.new(embed_code) }
+  let(:form) { service.call }
 
   context 'when error is raised while remote request' do
     let(:embed_code) { 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a' }
@@ -12,7 +13,6 @@ describe ExtractEmbedForm do
 
   context 'when embed code is a form' do
     let(:embed_code) { build :embed_code, provider: 'mad_mimi_form' }
-    let(:form) { service.call }
 
     it 'has form' do
       expect(form.form).to be_a Nokogiri::XML::Element
@@ -30,7 +30,6 @@ describe ExtractEmbedForm do
 
   context 'when embed code is a url' do
     let(:embed_code) { 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a' }
-    let(:form) { service.call }
 
     before do
       stub_request(
@@ -60,7 +59,6 @@ describe ExtractEmbedForm do
 
   context 'when embed is a script (icontact)' do
     let(:embed_code) { build :embed_code, provider: 'icontact' }
-    let(:form) { service.call }
 
     before do
       stub_request(
@@ -97,7 +95,6 @@ describe ExtractEmbedForm do
 
   context 'when embed code contains "#load_check a" element (my emma js)' do
     let(:embed_code) { build :embed_code, provider: 'my_emma_js' }
-    let(:form) { service.call }
 
     before do
       stub_request(
@@ -127,7 +124,6 @@ describe ExtractEmbedForm do
 
   context 'when embed code is a link element (my emma pop up)' do
     let(:embed_code) { build :embed_code, provider: 'my_emma_popup' }
-    let(:form) { service.call }
 
     before do
       stub_request(
@@ -157,7 +153,6 @@ describe ExtractEmbedForm do
 
   context 'when embed code is an iframe' do
     let(:embed_code) { build :embed_code, provider: 'my_emma_iframe' }
-    let(:form) { service.call }
 
     before do
       stub_request(
@@ -182,6 +177,15 @@ describe ExtractEmbedForm do
 
     it 'has action_url' do
       expect(form.action_url).to eql 'https://app.e2ma.net/app2/audience/signup/1759483/1735963/?v=a'
+    end
+  end
+
+  context 'when ExtractEmbedForm::Error is raised' do
+    let(:embed_code) { build :embed_code, provider: 'my_emma_iframe' }
+
+    it 'returns invalid/empty form' do
+      allow(HTTParty).to receive(:get).and_return ''
+      expect(form).not_to be_valid
     end
   end
 end
