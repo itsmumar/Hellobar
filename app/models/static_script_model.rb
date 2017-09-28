@@ -246,10 +246,8 @@ class StaticScriptModel
   end
 
   def condition_settings(condition)
-    segment = condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key
-
     settings = {
-      segment: segment,
+      segment: condition.segment_key,
       operand: condition.operand,
       value: condition.value
     }

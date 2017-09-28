@@ -71,18 +71,12 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "UrlCondition" "URL"}}
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
           | {{rule-option segment "UrlQuery" "URL Query"}}
-          | {{rule-option segment "CustomCondition" "Custom"}}
-      .custom-segment-name
-        | Segment name is:
-        input.custom-segment-name-input name="rule[conditions_attributes][{{index}}][custom_segment]" type="text" value="{{custom_segment}}"
       .select-wrapper.optional.rule_conditions_data_type
         | The data type is:
         select class="condition-data-type" name="rule[conditions_attributes][{{index}}][data_type]"
           | {{rule-option data_type "date" "date"}}
           | {{rule-option data_type "number" "number"}}
           | {{rule-option data_type "string" "string"}}
-      .custom-segment-text
-        ' The value
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{rule-option operand "every" "every"}}

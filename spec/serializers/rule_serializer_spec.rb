@@ -20,7 +20,6 @@ describe RuleSerializer do
         segment: condition.segment,
         operand: condition.operand,
         value: condition.value,
-        custom_segment: nil,
         data_type: nil
       }]
     )

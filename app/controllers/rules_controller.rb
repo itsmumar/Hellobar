@@ -60,7 +60,7 @@ class RulesController < ApplicationController
   end
 
   def conditions_attrs
-    [:id, :rule_id, :segment, :operand, :custom_segment, :data_type, :_destroy, { value: [] }, :value]
+    [:id, :rule_id, :segment, :operand, :data_type, :_destroy, { value: [] }, :value]
   end
 
   def verify_capability
