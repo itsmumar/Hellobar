@@ -18,10 +18,16 @@ class DynamoDB
     cache { batch_query(request) }
   end
 
+  def update_item params
+    response = send_request :update_item, params
+    response || {}
+  end
+
   private
 
   def cache
     return yield unless cache_key
+
     Rails.cache.fetch cache_key, expires_in: expires_in do
       yield
     end
