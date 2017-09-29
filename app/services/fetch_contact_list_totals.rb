@@ -50,8 +50,10 @@ class FetchContactListTotals
       'staging_contacts'
     when 'production'
       'contacts'
-    else # edge / development / test
+    when 'edge'
       'edge_contacts'
+    else # development / test
+      'development_contacts'
     end
   end
 end
