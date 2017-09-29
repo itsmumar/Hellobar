@@ -85,7 +85,7 @@ class Condition < ActiveRecord::Base
     elsif segment == 'TimeCondition'
       "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value[0] }:#{ value[1] }"
     else
-      name = segment == 'CustomCondition' ? custom_segment : segment_data[:name]
+      name = segment_data[:name]
       if operand.to_s == 'between'
         "#{ name } is between #{ value.first } and #{ value.last }"
       else

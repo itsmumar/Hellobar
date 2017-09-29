@@ -42,7 +42,7 @@ class ConditionsController < ApplicationController
 
   def condition_params
     params.require(:condition)
-          .permit(:id, :segment, :operand, :custom_segment, :data_type, :_destroy, { value: [] }, :value)
+          .permit(:id, :segment, :operand, :data_type, :_destroy, { value: [] }, :value)
   end
 
   def verify_capability

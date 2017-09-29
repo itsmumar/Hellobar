@@ -40,7 +40,6 @@ module.exports = {
         "segment": "DeviceCondition",
         "operand": "is",
         "value": "mobile",
-        "custom_segment": null,
         "data_type": null
       }]
     }, {
@@ -57,7 +56,6 @@ module.exports = {
         "segment": "UrlPathCondition",
         "operand": "is",
         "value": ["/"],
-        "custom_segment": null,
         "data_type": null
       }]
     }]

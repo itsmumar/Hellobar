@@ -120,18 +120,6 @@ RSpec.describe Condition, type: :model do
         expect(condition.to_sentence).to eq('Every 5th session')
       end
     end
-
-    context 'is a CustomCondition' do
-      it "converts 'is between' conditions to sentences" do
-        condition = create(:condition, operand: 'between', segment: 'CustomCondition', custom_segment: 'ABC', value: ['7/6', '7/13'])
-        expect(condition.to_sentence).to eq('ABC is between 7/6 and 7/13')
-      end
-
-      it 'displays the name, operand and value' do
-        condition = create(:condition, operand: 'is_not', segment: 'CustomCondition', custom_segment: 'ABC', value: '4')
-        expect(condition.to_sentence).to eq('ABC is not 4')
-      end
-    end
   end
 
   describe '#normalize_url_condition' do

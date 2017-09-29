@@ -20,9 +20,14 @@ FactoryGirl.define do
     skip_create
 
     transient do
-      segment { condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key }
       condition
-      settings { { segment: segment, operand: condition.operand, value: condition.value } }
+      settings do
+        {
+          segment: condition.segment_key,
+          operand: condition.operand,
+          value: condition.value
+        }
+      end
     end
 
     initialize_with do
