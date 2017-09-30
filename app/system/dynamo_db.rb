@@ -5,6 +5,30 @@ class DynamoDB
   attr_accessor :last_request, :last_response
   attr_reader :expires_in
 
+  def self.contacts_table_name
+    case Rails.env
+    when 'staging'
+      'staging_contacts'
+    when 'production'
+      'contacts'
+    when 'edge'
+      'edge_contacts'
+    else # development / test
+      'development_contacts'
+    end
+  end
+
+  def self.visits_table_name
+    case Rails.env
+    when 'staging'
+      'staging_over_time'
+    when 'production'
+      'over_time'
+    else # edge / development / test
+      'edge_over_time2'
+    end
+  end
+
   def initialize(cache_key: nil, expires_in: DEFAULT_TTL)
     @cache_key = cache_key
     @expires_in = expires_in

@@ -56,6 +56,32 @@ describe DynamoDB do
     allow(Aws::DynamoDB::Client).to receive(:new).and_return client
   end
 
+  describe '.contacts_table_name' do
+    it 'returns appropriate table name for the test environment' do
+      expect(DynamoDB.contacts_table_name).to eq 'development_contacts'
+    end
+
+    %i[staging production edge].each do |env|
+      it "returns appropriate table name for the #{ env } environment" do
+        expect(Rails).to receive(:env).and_return env
+        expect(DynamoDB.contacts_table_name).to include 'contacts'
+      end
+    end
+  end
+
+  describe '.visits_table_name' do
+    it 'returns appropriate table name for the test environment' do
+      expect(DynamoDB.visits_table_name).to eq 'edge_over_time2'
+    end
+
+    %i[staging production edge].each do |env|
+      it "returns appropriate table name for the #{ env } environment" do
+        expect(Rails).to receive(:env).and_return env
+        expect(DynamoDB.visits_table_name).to include 'over_time'
+      end
+    end
+  end
+
   describe '#query' do
     let(:params) { Hash[table_name: table_name] }
     let(:query) { dynamo_db.query params }

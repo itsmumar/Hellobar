@@ -57,14 +57,7 @@ class FetchSiteStatistics
   end
 
   def table_name
-    case Rails.env
-    when 'staging'
-      'staging_over_time'
-    when 'production'
-      'over_time'
-    else # edge / development / test
-      'edge_over_time2'
-    end
+    DynamoDB.visits_table_name
   end
 
   def last_date

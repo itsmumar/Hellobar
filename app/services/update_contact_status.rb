@@ -54,16 +54,7 @@ class UpdateContactStatus
   end
 
   def table_name
-    case Rails.env
-    when 'staging'
-      'staging_contacts'
-    when 'production'
-      'contacts'
-    when 'edge'
-      'edge_contacts'
-    else # development / test
-      'development_contacts'
-    end
+    DynamoDB.contacts_table_name
   end
 
   def dynamo_db
