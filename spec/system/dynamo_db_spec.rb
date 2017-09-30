@@ -8,7 +8,7 @@ describe DynamoDB do
 
   describe '#fetch' do
     let(:fetch) { db.fetch({}) }
-    let(:items) { [{'foo' => 'foo', 'bar' => 'bar'}] }
+    let(:items) { [Hash['foo' => 'foo', 'bar' => 'bar']] }
 
     let(:response) do
       double(
@@ -58,7 +58,7 @@ describe DynamoDB do
 
   describe '#batch_fetch' do
     let(:batch_fetch) { db.batch_fetch({}) }
-    let(:items) { [{'foo' => 'foo', 'bar' => 'bar'}] }
+    let(:items) { [Hash['foo' => 'foo', 'bar' => 'bar']] }
     let(:responses) { Hash[table_name: items] }
 
     let(:response) do
