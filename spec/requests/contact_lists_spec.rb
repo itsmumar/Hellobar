@@ -20,7 +20,7 @@ describe 'ContactList requests' do
     end
 
     describe 'GET :index' do
-      before { allow_any_instance_of(DynamoDB).to receive(:batch_fetch).and_return({}) }
+      before { allow_any_instance_of(DynamoDB).to receive(:batch_get_item).and_return({}) }
 
       it 'responds with success' do
         get site_contact_lists_path(site)
@@ -30,7 +30,7 @@ describe 'ContactList requests' do
 
     describe 'GET :show' do
       before do
-        allow_any_instance_of(DynamoDB).to receive(:batch_fetch)
+        allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
         allow_any_instance_of(DynamoDB).to receive(:fetch)
           .and_return([])

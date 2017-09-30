@@ -108,7 +108,7 @@ describe DynamoDB do
     end
   end
 
-  describe '#batch_fetch' do
+  describe '#batch_get_item' do
     let(:params) do
       {
         request_items: {
@@ -121,11 +121,11 @@ describe DynamoDB do
       }
     end
 
-    let(:batch_fetch) { dynamo_db.batch_fetch params }
+    let(:batch_get_item) { dynamo_db.batch_get_item params }
     let(:responses) { Hash[table_name: items] }
 
     it 'returns an array of items' do
-      expect(batch_fetch).to eql table_name => items
+      expect(batch_get_item).to eql table_name => items
     end
 
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
@@ -133,7 +133,7 @@ describe DynamoDB do
       expect(Rails.cache).to receive(:fetch)
         .with "DynamoDB/#{ cache_key }", expires_in: expires_in
 
-      batch_fetch
+      batch_get_item
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
@@ -143,21 +143,21 @@ describe DynamoDB do
       end
 
       specify do
-        expect { batch_fetch }.to raise_error Aws::DynamoDB::Errors::ServiceError
+        expect { batch_get_item }.to raise_error Aws::DynamoDB::Errors::ServiceError
       end
 
       context 'when production' do
         before { allow(Rails.env).to receive(:test?).and_return false }
 
         specify do
-          expect { batch_fetch }.not_to raise_error
+          expect { batch_get_item }.not_to raise_error
         end
 
         it 'sends error to Sentry' do
           args = [instance_of(Aws::DynamoDB::Errors::ServiceError), context: { request: anything }]
           expect(Raven).to receive(:capture_exception).with(*args)
 
-          batch_fetch
+          batch_get_item
         end
       end
     end

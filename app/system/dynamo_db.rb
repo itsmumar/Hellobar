@@ -14,7 +14,7 @@ class DynamoDB
     cache { query(request) }
   end
 
-  def batch_fetch(request)
+  def batch_get_item(request)
     cache { batch_query(request) }
   end
 
