@@ -33,28 +33,5 @@ describe FetchContacts do
         [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }]
       )
     end
-
-    context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
-      before do
-        allow_any_instance_of(Aws::DynamoDB::Client)
-          .to receive(:query).and_raise(Aws::DynamoDB::Errors::ServiceError.new(double('context'), 'message'))
-        allow(Rails.env).to receive(:test?).and_return false
-      end
-
-      it 'sends error to Raven' do
-        expect(Raven)
-          .to receive(:capture_exception)
-          .with(
-            an_instance_of(Aws::DynamoDB::Errors::ServiceError),
-            context: { request: [:query, instance_of(Hash)] }
-          )
-
-        service.call
-      end
-
-      it 'returns []' do
-        expect(service.call).to eql []
-      end
-    end
   end
 end
