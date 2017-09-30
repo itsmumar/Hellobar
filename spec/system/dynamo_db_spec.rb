@@ -1,9 +1,40 @@
 describe DynamoDB do
   describe '#update_item' do
-    it 'sends #update_item POST request to DynamoDB' do
-      id = 5
-      table_name = 'table'
+    let(:capacity_units) { 1.0 }
+    let(:table_name) { 'table' }
+    let(:id) { 5 }
 
+    let(:consumed_capacity) do
+      Aws::DynamoDB::Types::ConsumedCapacity.new(
+        capacity_units: capacity_units,
+        table_name: table_name
+      )
+    end
+
+    let(:update_item_response) do
+      Aws::DynamoDB::Types::UpdateItemOutput.new(
+        attributes: {
+          id: id
+        },
+        consumed_capacity: consumed_capacity
+      )
+    end
+
+    let(:client) do
+      Aws::DynamoDB::Client.new(
+        stub_responses: {
+          update_item: update_item_response
+        }
+      )
+    end
+
+    let(:dynamo_db) { DynamoDB.new }
+
+    before do
+      expect(Aws::DynamoDB::Client).to receive(:new).and_return client
+    end
+
+    it 'sends #update_item request to DynamoDB' do
       params = {
         key: {
           id: id
@@ -11,21 +42,11 @@ describe DynamoDB do
         table_name: table_name
       }
 
-      dynamo_params = {
-        Key: {
-          id: {
-            N: id.to_s
-          }
-        },
-        TableName: table_name
-      }
+      response = dynamo_db.update_item params
 
-      dynamo_db = DynamoDB.new
-
-      stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com')
-        .with(body: dynamo_params.to_json)
-
-      dynamo_db.update_item params
+      expect(response.attributes).to eq id: id
+      expect(response.consumed_capacity.table_name).to eq table_name
+      expect(response.consumed_capacity.capacity_units).to eq capacity_units
     end
   end
 end
