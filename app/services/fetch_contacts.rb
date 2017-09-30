@@ -23,7 +23,7 @@ class FetchContacts
   end
 
   def response
-    dynamo_db.fetch request
+    dynamo_db.query request
   end
 
   def request

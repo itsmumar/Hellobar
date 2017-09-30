@@ -56,12 +56,12 @@ describe DynamoDB do
     allow(Aws::DynamoDB::Client).to receive(:new).and_return client
   end
 
-  describe '#fetch' do
+  describe '#query' do
     let(:params) { Hash[table_name: table_name] }
-    let(:fetch) { dynamo_db.fetch params }
+    let(:query) { dynamo_db.query params }
 
     it 'returns array of items' do
-      expect(fetch).to eql items
+      expect(query).to eql items
     end
 
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
@@ -69,7 +69,7 @@ describe DynamoDB do
       expect(Rails.cache).to receive(:fetch)
         .with "DynamoDB/#{ cache_key }", expires_in: expires_in
 
-      fetch
+      query
     end
 
     context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
@@ -79,7 +79,7 @@ describe DynamoDB do
       end
 
       it 'raises an error' do
-        expect { fetch }
+        expect { query }
           .to raise_error Aws::DynamoDB::Errors::ServiceError
       end
 
@@ -89,7 +89,7 @@ describe DynamoDB do
         end
 
         it 'does not raise an error' do
-          expect { fetch }.not_to raise_error
+          expect { query }.not_to raise_error
         end
 
         it 'sends error to Sentry' do
@@ -102,7 +102,7 @@ describe DynamoDB do
 
           expect(Raven).to receive(:capture_exception).with(*args)
 
-          fetch
+          query
         end
       end
     end

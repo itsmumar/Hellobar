@@ -10,12 +10,12 @@ class DynamoDB
     @expires_in = expires_in
   end
 
-  def fetch(request)
-    cache { query(request) }
+  def query(request)
+    cache { send_query(request) }
   end
 
   def batch_get_item(request)
-    cache { batch_query(request) }
+    cache { send_batch_get_item(request) }
   end
 
   def update_item params
@@ -38,12 +38,12 @@ class DynamoDB
     [CACHE_KEY_PREFIX, @cache_key].join('/')
   end
 
-  def batch_query(request)
+  def send_batch_get_item(request)
     response = send_request(:batch_get_item, request)
     response&.responses || {}
   end
 
-  def query(request)
+  def send_query(request)
     response = send_request(:query, request)
     response&.items || []
   end

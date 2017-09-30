@@ -32,7 +32,7 @@ describe 'ContactList requests' do
       before do
         allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
-        allow_any_instance_of(DynamoDB).to receive(:fetch)
+        allow_any_instance_of(DynamoDB).to receive(:query)
           .and_return([])
       end
 
@@ -47,7 +47,7 @@ describe 'ContactList requests' do
         let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
 
         before do
-          allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([
+          allow_any_instance_of(DynamoDB).to receive(:query).and_return([
             { 'email' => contact_list_log.email, 'n' => contact_list_log.name },
             { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name }
           ])
