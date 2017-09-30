@@ -17,6 +17,17 @@ describe CyberSourceGateway do
         .to respond_to(:success?, :authorization, :message)
       expect(request).to have_been_made
     end
+
+    context 'when card declined' do
+      let(:credit_card) { create :credit_card, address: CyberSourceGateway::INVALID_ADDRESS_FOR_TESTING_PURPOSES }
+      let(:response) { gateway.purchase(9.99, credit_card) }
+
+      it 'makes purchase to cybersource' do
+        expect(response)
+          .to respond_to(:success?, :authorization, :message)
+        expect(response).not_to be_success
+      end
+    end
   end
 
   describe '#refund' do
@@ -29,6 +40,16 @@ describe CyberSourceGateway do
       expect(gateway.refund(9.99, 'transaction ID'))
         .to respond_to(:success?, :authorization, :message)
       expect(request).to have_been_made
+    end
+
+    context 'when original_transaction_id is nil' do
+      it 'raises error' do
+        expect { gateway.refund(9.99, '') }
+          .to raise_error 'Can not refund without original transaction ID'
+
+        expect { gateway.refund(9.99, nil) }
+          .to raise_error 'Can not refund without original transaction ID'
+      end
     end
   end
 end
