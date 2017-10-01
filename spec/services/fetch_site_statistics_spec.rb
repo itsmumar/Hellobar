@@ -45,7 +45,7 @@ describe FetchSiteStatistics do
         ).and_return(body: response_body)
     end
 
-    it 'sends scan query to DynamoDB' do
+    it 'sends query request to DynamoDB' do
       service.call
       expect(request).to have_been_made
     end
@@ -54,30 +54,6 @@ describe FetchSiteStatistics do
       expect(service.call).to be_a SiteStatistics
       expect(service.call.views).to eql records.sum(&:views)
       expect(service.call.conversions).to eql records.sum(&:conversions)
-    end
-
-    context 'when Aws::DynamoDB::Errors::ServiceError is raised' do
-      before do
-        allow_any_instance_of(Aws::DynamoDB::Client)
-          .to receive(:query).and_raise(Aws::DynamoDB::Errors::ServiceError.new(double('context'), 'message'))
-        allow(Rails.env).to receive(:test?).and_return false
-      end
-
-      it 'sends error to Raven' do
-        expect(Raven)
-          .to receive(:capture_exception)
-          .with(
-            an_instance_of(Aws::DynamoDB::Errors::ServiceError),
-            context: { request: [:query, instance_of(Hash)] }
-          )
-
-        service.call
-      end
-
-      it 'returns an empty SiteStatistics' do
-        expect(service.call).to be_a SiteStatistics
-        expect(service.call).to be_empty
-      end
     end
   end
 end

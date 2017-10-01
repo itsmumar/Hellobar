@@ -20,7 +20,7 @@ describe 'ContactList requests' do
     end
 
     describe 'GET :index' do
-      before { allow_any_instance_of(DynamoDB).to receive(:batch_fetch).and_return({}) }
+      before { allow_any_instance_of(DynamoDB).to receive(:batch_get_item).and_return({}) }
 
       it 'responds with success' do
         get site_contact_lists_path(site)
@@ -29,8 +29,12 @@ describe 'ContactList requests' do
     end
 
     describe 'GET :show' do
-      before { allow_any_instance_of(DynamoDB).to receive(:batch_fetch).and_return('edge_contacts' => [contact_list.id.to_s => 1]) }
-      before { allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([]) }
+      before do
+        allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
+          .and_return('development_contacts' => [contact_list.id.to_s => 1])
+        allow_any_instance_of(DynamoDB).to receive(:query)
+          .and_return([])
+      end
 
       it 'responds with success' do
         get site_contact_list_path(site, contact_list)
@@ -43,7 +47,7 @@ describe 'ContactList requests' do
         let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
 
         before do
-          allow_any_instance_of(DynamoDB).to receive(:fetch).and_return([
+          allow_any_instance_of(DynamoDB).to receive(:query).and_return([
             { 'email' => contact_list_log.email, 'n' => contact_list_log.name },
             { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name }
           ])

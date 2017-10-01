@@ -5,23 +5,53 @@ class DynamoDB
   attr_accessor :last_request, :last_response
   attr_reader :expires_in
 
+  def self.contacts_table_name
+    case Rails.env
+    when 'staging'
+      'staging_contacts'
+    when 'production'
+      'contacts'
+    when 'edge'
+      'edge_contacts'
+    else # development / test
+      'development_contacts'
+    end
+  end
+
+  def self.visits_table_name
+    case Rails.env
+    when 'staging'
+      'staging_over_time'
+    when 'production'
+      'over_time'
+    else # edge / development / test
+      'edge_over_time2'
+    end
+  end
+
   def initialize(cache_key: nil, expires_in: DEFAULT_TTL)
     @cache_key = cache_key
     @expires_in = expires_in
   end
 
-  def fetch(request)
-    cache { query(request) }
+  def query(request)
+    cache { send_query(request) }
   end
 
-  def batch_fetch(request)
-    cache { batch_query(request) }
+  def batch_get_item(request)
+    cache { send_batch_get_item(request) }
+  end
+
+  def update_item params
+    response = send_request :update_item, params
+    response || {}
   end
 
   private
 
   def cache
     return yield unless cache_key
+
     Rails.cache.fetch cache_key, expires_in: expires_in do
       yield
     end
@@ -32,12 +62,12 @@ class DynamoDB
     [CACHE_KEY_PREFIX, @cache_key].join('/')
   end
 
-  def batch_query(request)
+  def send_batch_get_item(request)
     response = send_request(:batch_get_item, request)
     response&.responses || {}
   end
 
-  def query(request)
+  def send_query(request)
     response = send_request(:query, request)
     response&.items || []
   end
