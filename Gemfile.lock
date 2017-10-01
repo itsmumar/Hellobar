@@ -47,6 +47,18 @@ GIT
       omniauth-oauth2
 
 GIT
+  remote: https://github.com/morgoth/paperclip.git
+  revision: 80aa39747a763251bd5c57fa2b20c2f88c898dd4
+  branch: aws-sdk-s3
+  specs:
+    paperclip (5.1.0)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      cocaine (~> 0.5.5)
+      mime-types
+      mimemagic (~> 0.3.0)
+
+GIT
   remote: https://github.com/stefanpenner/country_select.git
   revision: 79755038ca61dafdfebf4c55346d4a2085f98479
   ref: 79755038ca61dafdfebf4c55346d4a2085f98479
@@ -375,12 +387,6 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
-    paperclip (5.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      cocaine (~> 0.5.5)
-      mime-types
-      mimemagic (~> 0.3.0)
     parallel (1.12.0)
     paranoia (2.3.1)
       activerecord (>= 4.0, < 5.2)
@@ -676,7 +682,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   omniauth-mailchimp!
   omniauth-verticalresponse!
-  paperclip (~> 5.1)
+  paperclip!
   paranoia
   phpass-ruby
   pony
