@@ -72,7 +72,7 @@ gem 'kaminari'
 gem 'mysql2'
 
 # File uploads
-gem 'paperclip', '~> 5.1'
+gem 'paperclip', github: 'morgoth/paperclip', branch: 'aws-sdk-s3'
 
 # JSON
 gem 'active_model_serializers'
