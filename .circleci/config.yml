@@ -97,7 +97,7 @@ jobs:
 
       - run:
           name: Run Brakeman
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
 
       - run:
           name: Run Rubocop
