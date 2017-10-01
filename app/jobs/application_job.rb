@@ -12,10 +12,6 @@ class ApplicationJob < ActiveJob::Base
     Raven.tags_context job: job.class.to_s
   end
 
-  after_perform do
-    Raven::Context.clear!
-  end
-
   def self.perform_later(*args)
     super
   rescue => e
