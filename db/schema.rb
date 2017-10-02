@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170929100416) do
+ActiveRecord::Schema.define(version: 20171002064422) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20170929100416) do
     t.string   "password_hashed",     limit: 255
     t.string   "session_token",       limit: 191
     t.string   "permissions_json",    limit: 255
-    t.datetime "password_last_reset"
     t.datetime "session_last_active"
     t.integer  "login_attempts",      limit: 4,   default: 0
     t.boolean  "locked",                          default: false
