@@ -131,6 +131,15 @@ describe 'ContactList requests' do
           expect(response).to be_successful
         end
       end
+
+      context 'when could not destroy' do
+        it 'response with errors' do
+          allow(ContactLists::Destroy).to receive(:run).and_return(false)
+          delete site_contact_list_path(site, contact_list, contact_list: { site_elements_action: 0 })
+          expect(response).not_to be_successful
+          expect(response.status).to eql 400
+        end
+      end
     end
 
     describe 'POST :create' do
@@ -150,18 +159,65 @@ describe 'ContactList requests' do
         expect(last_contact_list.identity).to eql identity
         expect(response).to be_successful
       end
+
+      context 'when identity is stored in the session' do
+        let(:env) { Hash['HTTP_REFERER' => site_contact_lists_path(site)] }
+
+        before do
+          OmniAuth.config.add_mock(
+            :drip,
+            credentials: {},
+            extra: { accounts: [{ id: 1 }] }
+          )
+        end
+
+        it 'stores onniauth data to the session' do
+          get '/auth/drip/callback', {}, env
+
+          expect { post site_contact_lists_path(site, contact_list: { name: 'Contact List' }) }
+            .to change { site.contact_lists.count }
+            .by(1)
+            .and change { site.identities.count }
+            .by(1)
+        end
+      end
     end
 
     describe 'PUT :update' do
       let!(:identity) { create :identity, site: site }
       let(:contact_list) { create :contact_list, site: site }
 
+      def put_update(identity_id: identity.id)
+        put site_contact_list_path(site, contact_list),
+          identity_id: identity_id, contact_list: { name: 'Updated' }
+      end
+
       it 'updates a contact list' do
-        expect {
-          put site_contact_list_path(site, contact_list, identity_id: identity.id, contact_list: { name: 'Updated' })
-        }.to change { contact_list.reload.identity }.and change { contact_list.reload.name }
+        expect { put_update }
+          .to change { contact_list.reload.identity }
+          .and change { contact_list.reload.name }
 
         expect(response).to be_successful
+      end
+
+      context 'when identity is stored in the session' do
+        let(:env) { Hash['HTTP_REFERER' => site_contact_lists_path(site)] }
+
+        before do
+          OmniAuth.config.add_mock(
+            :drip,
+            credentials: {},
+            extra: { accounts: [{ id: 1 }] }
+          )
+        end
+
+        it 'stores onniauth data to the session' do
+          get '/auth/drip/callback', {}, env
+
+          expect { put_update identity_id: nil }
+            .to change { contact_list.reload.identity }
+            .and change { contact_list.reload.name }
+        end
       end
     end
   end

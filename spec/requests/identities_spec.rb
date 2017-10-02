@@ -114,6 +114,28 @@ describe 'Identities requests' do
           expect(contact_list.reload.identity_id).to be_nil
         end
       end
+
+      context 'when could not destroy' do
+        let!(:contact_list) { create :contact_list, identity: identity }
+
+        it 'destroys an identity and nullifies identity reference' do
+          allow_any_instance_of(Identity).to receive(:destroy).and_return(false)
+          delete site_identity_path(site, identity)
+
+          expect(response).not_to be_successful
+          expect(response.status).to eql 422
+        end
+      end
+    end
+
+    describe 'GET :store' do
+      let(:env) { Hash['HTTP_REFERER' => site_contact_lists_path(site)] }
+
+      it 'stores onniauth data to the session' do
+        OmniAuth.config.add_mock(:drip, 'credentials' => {})
+        get '/auth/drip/callback', {}, env
+        expect(session['omniauth_provider']).to eql OmniAuth.config.mock_auth[:drip]
+      end
     end
   end
 end
