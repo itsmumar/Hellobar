@@ -109,14 +109,10 @@ describe Admin do
   end
 
   it 'reset_password! resets password and notifies admin via email' do
-    expect(admin.password_last_reset).to be < 1.minute.ago
-
     expect(Pony).to receive(:mail)
-    expect(admin).to receive(:password=).with('new_password')
 
-    admin.reset_password!('new_password')
-
-    expect(admin.password_last_reset).to be > 1.minute.ago
+    expect { admin.reset_password!('new_password') }
+      .to change(admin, :password_hashed)
   end
 
   it 'login! logs the admin in' do
