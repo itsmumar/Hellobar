@@ -4,7 +4,7 @@ feature 'Theme with default image', js: true do
   scenario 'shows the default image' do
     theme_yaml = YAML.load_file('spec/support/themes.yml')
     theme = Theme.new(theme_yaml['with_default_image'])
-    element = create :modal_element, theme_id: theme.id, use_default_image: true
+    element = create :modal, theme_id: theme.id, use_default_image: true
 
     visit test_site_path(id: element.site.id)
 
@@ -20,7 +20,7 @@ feature 'Theme with default image', js: true do
     theme_yaml = YAML.load_file('spec/support/themes.yml')
     theme = Theme.new(theme_yaml['with_default_image'])
     element = create(
-      :modal_element,
+      :modal,
       image_placement: 'bottom',
       theme_id: theme.id,
       use_default_image: false

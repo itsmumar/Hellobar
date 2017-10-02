@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Site with a closable announcement topbar', :js do
-  given(:element) { create :site_element, :bar, :closable }
+  given(:element) { create :bar, :closable }
 
   scenario 'shows headline and allows the bar to be hidden an shown again' do
     visit test_site_path(id: element.site.id)

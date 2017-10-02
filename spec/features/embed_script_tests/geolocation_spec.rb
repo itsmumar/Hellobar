@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Geolocation', :js do
-  given!(:site_element) { create :site_element, :bar, :geolocation }
+  given!(:site_element) { create :bar, :geolocation }
   given(:site) { site_element.site }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
