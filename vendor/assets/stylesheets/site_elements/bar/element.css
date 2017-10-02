@@ -400,21 +400,3 @@
     transform: translateX(-1px) rotate(0);
   }
 }
-
-/*
-  Fix conflict #wpadminbar vs .HB-Bar
- */
-
-body.logged-in.admin-bar #pull-down.hb-top-right,
-body.logged-in.admin-bar #pull-down.hb-top-left,
-body.logged-in.admin-bar #pull-down.hb-bar-top,
-body.logged-in.admin-bar .HB-Bar.hb-bar-top {
-  z-index: 1!important;
-  top: 32px!important;
-}
-
-body.logged-in.admin-bar .HB-Slider.hb-top-right,
-body.logged-in.admin-bar .HB-Slider.hb-top-left {
-  z-index: 1!important;
-  top: 12px!important;
-}
