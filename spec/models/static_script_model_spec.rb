@@ -190,13 +190,13 @@ describe StaticScriptModel do
     end
 
     context 'when templates not provided' do
-      let!(:active_site_elements) { create :site_element, :slider, element_subtype: 'announcement', site: site }
+      let!(:active_site_elements) { create :site_element, element_subtype: 'announcement', site: site }
       let(:markups) { model.templates.map { |template| template[:markup] } }
       let(:names) { model.templates.map { |template| template[:name] } }
 
       it 'returns array of template names and markups' do
         expect(markups.all?(&:present?)).to be_truthy
-        expect(names).to match_array %w[slider_announcement]
+        expect(names).to match_array %w[bar_announcement]
       end
     end
   end
@@ -255,8 +255,8 @@ describe StaticScriptModel do
 
   describe '#external_tracking' do
     context 'when site has external tracking capability' do
-      let!(:alert) { create(:site_element, :alert, site: site) }
-      let!(:slider) { create(:site_element, :slider, site: site) }
+      let!(:alert) { create(:alert, site: site) }
+      let!(:slider) { create(:slider, site: site) }
       let(:alert_events) { create :site_element_external_events, site_element: alert }
       let(:slider_events) { create :site_element_external_events, site_element: slider }
       let(:site_elements) { [alert, slider] }
@@ -403,7 +403,7 @@ describe StaticScriptModel do
       let(:site_element) { json[:rules].first[:site_elements].first }
 
       context 'when there is a Modal site element' do
-        let!(:element) { create(:modal_element, rule: site.rules.first, active_image: image) }
+        let!(:element) { create(:modal, rule: site.rules.first, active_image: image) }
 
         it 'generates the correct image data' do
           expect(site_element).to match(
@@ -418,7 +418,7 @@ describe StaticScriptModel do
       end
 
       context 'when there is a Takeover site element' do
-        let!(:element) { create(:takeover_element, rule: site.rules.first, active_image: image) }
+        let!(:element) { create(:takeover, rule: site.rules.first, active_image: image) }
 
         it 'generates the correct image data' do
           expect(site_element).to match(

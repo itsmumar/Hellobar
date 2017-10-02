@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Alert bar injection', :js do
-  given!(:site_element) { create :site_element, :alert, :traffic }
+  given!(:site_element) { create :alert, :traffic }
   given(:site) { site_element.site }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
   given(:last_alert) { Alert.last }
