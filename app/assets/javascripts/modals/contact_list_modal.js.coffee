@@ -27,22 +27,24 @@ class @ContactListModal extends Modal
 
     super
 
+  onDisconect: (data) =>
+    @blocks.instructions.show()
+    @blocks.syncDetails.hide()
+    @blocks.remoteListSelect.hide()
+    @blocks.tagListSelect.hide()
+    @$modal.trigger('provider:disconnected')
+    delete @options.identity
+    @_chooseHelloBar()
+
   disconnect: (element) ->
     identityId = @options.identity.id
-    return unless identityId
+    return @onDisconect() unless identityId
 
     $.ajax "/sites/#{@options.siteID}/identities/#{identityId}",
       data:
         contact_list_id: @options.id
       type: "DELETE"
-      success: (data) =>
-        @blocks.instructions.show()
-        @blocks.syncDetails.hide()
-        @blocks.remoteListSelect.hide()
-        @blocks.tagListSelect.hide()
-        @$modal.trigger('provider:disconnected')
-        delete @options.identity
-        @_chooseHelloBar()
+      success: @onDisconect
       error: (response) =>
         if response.status == 422
           @_chooseHelloBar()

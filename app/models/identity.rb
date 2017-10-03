@@ -18,14 +18,17 @@ class Identity < ActiveRecord::Base
   scope :active, -> { where('credentials IS NOT NULL') }
 
   def self.store_to_session(session, auth)
-    session[:omniauth_provider] = auth
+    data = auth.slice('provider', 'credentials', 'extra')
+    data['extra'] = data.fetch('extra', {}).slice('metadata', 'accounts', 'app_url')
+    session[:omniauth_provider] = data
     from_session session
   end
 
-  def self.from_session(session, clear: false)
+  def self.from_session(session, provider: nil, clear: false)
     omniuth = session[:omniauth_provider]
     session.delete(:omniauth_provider) if clear
     return unless omniuth
+    return if provider && provider != omniuth['provider']
 
     new(
       provider: omniuth['provider'],
