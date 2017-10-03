@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927123930) do
+ActiveRecord::Schema.define(version: 20170929100416) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -105,14 +105,13 @@ ActiveRecord::Schema.define(version: 20170927123930) do
   add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "conditions", force: :cascade do |t|
-    t.integer  "rule_id",        limit: 4
-    t.string   "segment",        limit: 255,      null: false
-    t.string   "operand",        limit: 255,      null: false
-    t.text     "value",          limit: 16777215
+    t.integer  "rule_id",    limit: 4
+    t.string   "segment",    limit: 255,      null: false
+    t.string   "operand",    limit: 255,      null: false
+    t.text     "value",      limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "custom_segment", limit: 255
-    t.string   "data_type",      limit: 255
+    t.string   "data_type",  limit: 255
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
@@ -126,6 +125,7 @@ ActiveRecord::Schema.define(version: 20170927123930) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "stacktrace",      limit: 16777215
+    t.boolean  "migrated",                         default: false, null: false
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree

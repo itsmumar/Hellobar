@@ -4,7 +4,7 @@ class CustomWorkerRegistry < Shoryuken::DefaultWorkerRegistry
   def fetch_worker(queue, message)
     return SubscribeContactWorker.new if SubscribeContactWorker.parse(message.body)
     super
-  rescue => _
+  rescue StandardError
     Raven.capture_message('Could not parse sqs message', extra: { message: message.body, sqs_msg: message.as_json })
     Rails.logger.error "Could not parse sqs message: #{ message.body }; #{ message.as_json }"
   end

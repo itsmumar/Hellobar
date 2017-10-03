@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Site with a closable slider', :js do
-  given(:site_element) { create :site_element, :slider, :closable }
+  given(:site_element) { create :slider, :closable }
 
   scenario 'shows headline and allows the bar to be hidden and shown again' do
     visit test_site_path(id: site_element.site.id)

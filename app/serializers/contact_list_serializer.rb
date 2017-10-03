@@ -16,6 +16,6 @@ class ContactListSerializer < ActiveModel::Serializer
   end
 
   def provider_token
-    object.identity && object.identity.provider || '0'
+    object&.identity&.provider || '0'
   end
 end

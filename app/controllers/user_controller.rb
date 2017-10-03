@@ -91,14 +91,14 @@ class UserController < ApplicationController
   private
 
   def load_user_from_invitation
-    token = params[:token] || params[:invite_token] || params[:user].try(:[], :invite_token)
-    return nil unless token
+    token = params[:token] || params[:invite_token] || params.dig(:user, :invite_token)
+    return unless token
 
     @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first
   end
 
   def update_timezones_on_sites(user)
-    return unless params[:user] && params[:user][:timezone]
+    return unless params.dig :user, :timezone
     timezone = params[:user][:timezone]
 
     user.sites.each do |site|

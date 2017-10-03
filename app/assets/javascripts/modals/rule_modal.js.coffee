@@ -83,7 +83,6 @@ class @RuleModal extends Modal
         index: $condition.data('condition-index')
         segment: segment
         operand: $condition.find('.condition-operand').val()
-        custom_segment: $condition.find('.custom-segment-name-input').val()
         data_type: $condition.find('.condition-data-type').val() || 'string'
         value: value
 
@@ -96,27 +95,13 @@ class @RuleModal extends Modal
     @_renderDataTypes($condition, conditionData)
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
-    @_renderCustomSegment($condition, conditionData)
 
   _renderDataTypes: ($condition, conditionData) ->
     types = Object.keys(@_dataTypeOperandMapping)
-
-    if conditionData.segment == 'CustomCondition'
-      $condition.find('select.condition-data-type option')
-                # filter and remove all invalid operands for this condition
-                .filter (index, option) ->
-                  $option = $(option)
-                  $.inArray($option.val(), types) == -1
-                .remove()
-    else
-      $condition.find('.rule_conditions_data_type').remove()
+    $condition.find('.rule_conditions_data_type').remove()
 
   _renderOperands: ($condition, conditionData) ->
     validOperands = @filteredOperands(conditionData.segment)
-    if conditionData.segment == 'CustomCondition'
-      validOperands = @_dataTypeOperandMapping[conditionData.data_type]
-    else
-      $condition.find('.custom-segment-text').remove()
 
     $condition.find('select.condition-operand option')
               # filter and remove all invalid operands for this condition
@@ -130,9 +115,6 @@ class @RuleModal extends Modal
     $condition.find('.rule_conditions_choices .value').prop('disabled', true) # disable the values by default
 
     classToEnable = @_segmentToClassMapping[conditionData.segment]
-
-    if conditionData.segment == 'CustomCondition'
-      classToEnable = @_dataTypeToClass[conditionData.data_type]
 
     # select the country because country_select is rendered on the server
     # we must select this manually with JS
@@ -168,13 +150,6 @@ class @RuleModal extends Modal
               .show()
               .find('.value')
               .prop('disabled', false)
-
-  _renderCustomSegment: ($condition, conditionData) ->
-    if conditionData.segment != 'CustomCondition'
-      $condition.find('.custom-segment-name')
-                .hide()
-                .find('.value')
-                .prop('disabled', true)
 
   filteredOperands: (segment) ->
     @_validOperands(segment)

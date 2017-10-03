@@ -1,4 +1,5 @@
 class BillingAttempt < ActiveRecord::Base
+  # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :bill
   belongs_to :credit_card
   has_one :subscription, through: :bill

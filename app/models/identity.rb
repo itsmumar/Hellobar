@@ -17,6 +17,26 @@ class Identity < ActiveRecord::Base
   scope :by_type, ->(type) { where(provider: Settings.identity_providers.select { |_, v| v['type'] == type }.map { |k, _| k.to_s }) }
   scope :active, -> { where('credentials IS NOT NULL') }
 
+  def self.store_to_session(session, auth)
+    data = auth.slice('provider', 'credentials', 'extra')
+    data['extra'] = data.fetch('extra', {}).slice('metadata', 'accounts', 'app_url')
+    session[:omniauth_provider] = data
+    from_session session
+  end
+
+  def self.from_session(session, provider: nil, clear: false)
+    omniuth = session[:omniauth_provider]
+    session.delete(:omniauth_provider) if clear
+    return unless omniuth
+    return if provider && provider != omniuth['provider']
+
+    new(
+      provider: omniuth['provider'],
+      extra: omniuth['extra'],
+      credentials: omniuth['credentials']
+    )
+  end
+
   def as_json(options = nil)
     extra['raw_info']&.select! { |k, _| %w[user_id username].include? k }
     extra['lists'] = extra['lists'].try(:collect) { |h| h.select { |k, _| %w[id web_id name].include? k } }

@@ -23,7 +23,7 @@ module.exports = {
       "payment_valid": true
     },
     "script_installed": true,
-    "num_site_elements": 2,
+    "site_elements_count": 2,
     "view_billing": true,
     "timezone": null
     }, {
@@ -40,7 +40,6 @@ module.exports = {
         "segment": "DeviceCondition",
         "operand": "is",
         "value": "mobile",
-        "custom_segment": null,
         "data_type": null
       }]
     }, {
@@ -57,7 +56,6 @@ module.exports = {
         "segment": "UrlPathCondition",
         "operand": "is",
         "value": ["/"],
-        "custom_segment": null,
         "data_type": null
       }]
     }]

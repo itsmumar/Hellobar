@@ -2,7 +2,7 @@ require 'integration_helper'
 
 feature 'Takeover with image', js: true do
   scenario 'shows large image' do
-    element = create(:takeover_element, image_placement: 'bottom')
+    element = create(:takeover, image_placement: 'bottom')
     image = create(:image_upload, :with_valid_image, site: element.site)
     element.update(active_image: image)
 
@@ -18,7 +18,7 @@ feature 'Takeover with image', js: true do
 
   context 'with autodetect theme' do
     scenario 'shows large image' do
-      element = create(:takeover_element, image_placement: 'bottom', theme_id: 'autodetect')
+      element = create(:takeover, image_placement: 'bottom', theme_id: 'autodetect')
       image = create(:image_upload, :with_valid_image, site: element.site)
       element.update(active_image: image)
 

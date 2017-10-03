@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def show_account_prompt?
-    current_user && current_user.temporary? &&
+    current_user&.temporary? &&
       !(params[:controller] == 'user' && params[:action] == 'edit') &&
       !(params[:controller] == 'user' && params[:action] == 'update')
   end

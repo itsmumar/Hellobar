@@ -7,7 +7,7 @@ class FetchContactListTotals
   # @return [Hash] contact_list.id => total
   def call
     return {} if contact_list_ids.blank?
-    reduce process DynamoDB.new(cache_key: cache_key).batch_fetch(request)
+    reduce process DynamoDB.new(cache_key: cache_key).batch_get_item(request)
   end
 
   private
@@ -45,13 +45,6 @@ class FetchContactListTotals
   end
 
   def table_name
-    case Rails.env
-    when 'staging'
-      'staging_contacts'
-    when 'production'
-      'contacts'
-    else # edge / development / test
-      'edge_contacts'
-    end
+    DynamoDB.contacts_table_name
   end
 end

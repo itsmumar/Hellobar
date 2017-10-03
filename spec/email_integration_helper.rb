@@ -15,7 +15,7 @@ def day_from_current_spec_description
 end
 
 def expect_no_email(user)
-  @email_history.each do |_date, messages|
+  @email_history.each_value do |messages|
     expect(messages).not_to include(user.email)
   end
 end

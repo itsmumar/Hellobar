@@ -42,11 +42,11 @@ class ConditionsController < ApplicationController
 
   def condition_params
     params.require(:condition)
-          .permit(:id, :segment, :operand, :custom_segment, :data_type, :_destroy, { value: [] }, :value)
+          .permit(:id, :segment, :operand, :data_type, :_destroy, { value: [] }, :value)
   end
 
   def verify_capability
-    return if @site && @site.capabilities.custom_targeted_bars?
+    return if @site&.capabilities&.custom_targeted_bars?
     render json: { error: 'forbidden' }, status: :forbidden
   end
 end

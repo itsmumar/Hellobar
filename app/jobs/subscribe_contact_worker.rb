@@ -34,7 +34,7 @@ class SubscribeContactWorker
 
   def perform(sqs_msg, contact)
     subscribe(contact)
-  rescue => e
+  rescue StandardError => e
     Raven.capture_exception(e, extra: { arguments: [sqs_msg.body, contact], queue_name: sqs_msg.queue_name })
     sqs_msg.delete
   end
