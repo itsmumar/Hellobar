@@ -95,10 +95,6 @@ class RefundBill
     end
   end
 
-  def credit_card
-    @credit_card ||= CreditCard.unscoped { bill.paid_with_credit_card }
-  end
-
   def gateway
     @gateway ||= CyberSourceGateway.new
   end
