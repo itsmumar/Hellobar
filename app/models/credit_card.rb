@@ -1,6 +1,7 @@
 class CreditCard < ActiveRecord::Base
   include ActiveMerchant::Billing::CreditCardMethods
 
+  # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :user
   has_many :subscriptions
   has_many :billing_attempts

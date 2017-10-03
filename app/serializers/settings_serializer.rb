@@ -19,7 +19,7 @@ class SettingsSerializer < ActiveModel::Serializer
   end
 
   def track_editor_flow
-    user && user.sites.count == 1 && user.site_elements.count == 0
+    user&.sites&.count == 1 && user&.site_elements&.count == 0
   end
 
   def country_codes

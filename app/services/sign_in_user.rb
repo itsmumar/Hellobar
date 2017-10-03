@@ -50,7 +50,8 @@ class SignInUser
   end
 
   def find_user
-    return unless omniauth_hash && omniauth_hash.info.present?
+    return if omniauth_hash&.info.blank?
+
     User.find_by(email: omniauth_hash.info.email)
   end
 

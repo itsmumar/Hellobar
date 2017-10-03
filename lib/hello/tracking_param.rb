@@ -22,7 +22,7 @@ module Hello
     def self.track(tracker)
       user_id, event, props = decode_tracker(tracker)
       Analytics.track(:user, user_id, event, props)
-    rescue => e
+    rescue StandardError => e
       Raven.capture_exception(e)
       Rails.logger.error("Error recording tracker: #{ tracker }")
     end
