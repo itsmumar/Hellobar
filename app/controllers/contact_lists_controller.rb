@@ -27,8 +27,9 @@ class ContactListsController < ApplicationController
         elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
           @site.identities.find_or_create_by!(provider: provider_token)
         elsif Identity.from_session(session)
-          @site.identities.from_session(session, clear: true)
+          @site.identities.from_session(session, provider: provider_token, clear: true)
         end
+
       contact_list = @site.contact_lists.create!(contact_list_params.merge(identity: identity))
 
       TrackEvent.new(:created_contact_list, contact_list: contact_list, user: current_user).call

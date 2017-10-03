@@ -12,7 +12,7 @@ class IdentitiesController < ApplicationController
 
   def show
     identity = @site.identities.find_by(provider: params[:id])
-    identity ||= Identity.from_session(session)
+    identity ||= Identity.from_session(session, provider: params[:id])
 
     return render json: nil unless identity
 
