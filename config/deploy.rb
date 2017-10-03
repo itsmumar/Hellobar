@@ -213,12 +213,12 @@ task :trigger_automated_qa_tests do
     if !dry_run? && %i[edge production].include?(stage)
       info "Trigger automated QA tests on #{ stage }"
 
-      execute <<~EOS
+      execute <<~CMD
         curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
              -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
              --header "Content-Type: application/json" \
              --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
-      EOS
+      CMD
     else
       info 'Skipping automated QA tests'
 

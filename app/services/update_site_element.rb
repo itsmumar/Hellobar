@@ -38,7 +38,7 @@ class UpdateSiteElement
   end
 
   def destroy_previous_image_if_necessary
-    previous_image.destroy if previous_image && previous_image.site_elements.blank?
+    previous_image.destroy if previous_image&.site_elements&.empty?
   end
 
   def previous_image

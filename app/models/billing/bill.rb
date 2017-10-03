@@ -15,10 +15,11 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :subscription, inverse_of: :bills
   belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
-  has_many :billing_attempts, -> { order 'id' }
-  has_many :coupon_uses
+  has_many :billing_attempts, -> { order 'id' }, dependent: :destroy
+  has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
   has_one :credit_card, -> { with_deleted }, through: :subscription
 
@@ -68,7 +69,9 @@ class Bill < ActiveRecord::Base
   end
 
   def can_pay?
-    credit_card && !credit_card.deleted? && credit_card.token.present?
+    return unless credit_card
+
+    !credit_card.deleted? && credit_card.token.present?
   end
 
   def due_at(credit_card = nil)

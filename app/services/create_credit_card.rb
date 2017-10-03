@@ -31,7 +31,7 @@ class CreateCreditCard
       address: credit_card.billing_address.to_h
     }
     CreateCreditCardAtCyberSource.new(user, form.card, params).call
-  rescue => e
+  rescue StandardError => e
     credit_card.errors.add :base, e.message
     raise ActiveRecord::RecordInvalid, credit_card
   end

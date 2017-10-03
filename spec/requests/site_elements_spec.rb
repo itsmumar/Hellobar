@@ -150,7 +150,7 @@ describe 'SiteElements requests' do
     end
 
     describe 'GET #new' do
-      def get_new # rubocop: disable Style/AccessorMethodName
+      def get_new # rubocop: disable Naming/AccessorMethodName
         get new_site_site_element_path site, format: :json
       end
 

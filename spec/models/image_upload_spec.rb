@@ -10,7 +10,7 @@ describe ImageUpload do
   describe '#url' do
     let(:image_upload) { build :image_upload, :with_valid_image }
 
-    ImageUpload::STYLES.keys.each do |style|
+    ImageUpload::STYLES.each_key do |style|
       context "when style is :#{ style }" do
         it "returns #{ style } url" do
           expect(image_upload.url(style)).to include style.to_s
@@ -19,7 +19,7 @@ describe ImageUpload do
     end
   end
 
-  ImageUpload::STYLES.keys.each do |style|
+  ImageUpload::STYLES.each_key do |style|
     describe "##{ style }_url" do
       let(:image_upload) { build(:image_upload, :with_valid_image) }
 

@@ -5,7 +5,7 @@ class ContactList < ActiveRecord::Base
   belongs_to :identity, dependent: :destroy
 
   has_many :site_elements, dependent: :destroy
-  has_many :contact_list_logs
+  has_many :contact_list_logs, dependent: :destroy
 
   store :data, coder: Hash
 

@@ -5,13 +5,13 @@ module ServiceProvider::Rescuable
 
   def lists
     super
-  rescue => exception
+  rescue StandardError => exception
     rescue_with_handler(exception)
   end
 
   def subscribe(*args)
     super
-  rescue => exception
+  rescue StandardError => exception
     rescue_with_handler(exception)
   end
 
