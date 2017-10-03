@@ -33,7 +33,7 @@ class RefundBill
     if response.success?
       create_success_refund_bill(response) { cancel_subscription }
     else
-      create_failed_refund_bill(response)
+      create_failed_refund_bill
     end
   end
 
@@ -58,15 +58,12 @@ class RefundBill
     attributes = { status: :paid, authorization_code: response.authorization }
 
     create_refund_bill!(attributes).tap do |refund_bill|
-      create_billing_attempt(refund_bill, response)
       yield refund_bill
     end
   end
 
-  def create_failed_refund_bill(response)
-    create_refund_bill!(status: :voided).tap do |refund_bill|
-      create_billing_attempt(refund_bill, response)
-    end
+  def create_failed_refund_bill
+    create_refund_bill!(status: :voided)
   end
 
   def create_refund_bill!(status:, authorization_code: nil)
@@ -100,15 +97,6 @@ class RefundBill
 
   def credit_card
     @credit_card ||= CreditCard.unscoped { bill.paid_with_credit_card }
-  end
-
-  def create_billing_attempt(refund_bill, response)
-    BillingAttempt.create!(
-      bill: refund_bill,
-      credit_card: credit_card,
-      status: response.success? ? :success : :failed,
-      response: response.success? ? response.authorization : response.message
-    )
   end
 
   def gateway

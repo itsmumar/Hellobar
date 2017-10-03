@@ -57,10 +57,6 @@ describe RefundBill do
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 
-    it 'creates failed BillingAttempt' do
-      expect { service.call }.to change(BillingAttempt.failed, :count).by 1
-    end
-
     it 'sends event to Raven and return false' do
       extra = {
         message: 'gateway error',
@@ -108,12 +104,9 @@ describe RefundBill do
   context 'when credit card is deleted' do
     before { bill.paid_with_credit_card.destroy }
 
-    it 'still uses deleted card' do
+    it 'creates refund bill' do
       service.call
-      expect(bill.refund.successful_billing_attempt.credit_card).to be_nil
-      CreditCard.unscoped do
-        expect(bill.refund.successful_billing_attempt.credit_card).to eql credit_card
-      end
+      expect(bill.refund).to be_a Bill::Refund
     end
   end
 end
