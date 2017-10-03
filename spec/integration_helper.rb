@@ -24,6 +24,8 @@ RSpec.configure do |config|
       TestProvider.config = original_provider.config
       TestProvider
     end
+
+    OmniAuth.config.add_mock(provider)
   end
 
   config.before type: :feature do

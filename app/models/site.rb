@@ -18,6 +18,7 @@ class Site < ActiveRecord::Base
 
   attr_accessor :skip_script_generation
 
+  # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules

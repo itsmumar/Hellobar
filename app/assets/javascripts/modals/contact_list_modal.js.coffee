@@ -17,7 +17,6 @@ class @ContactListModal extends Modal
 
   close: ->
     @options.close(this) if @options.close
-    @disconnect() if @options.identity?.id && !@options.id
     super
 
   open: ->
@@ -28,22 +27,24 @@ class @ContactListModal extends Modal
 
     super
 
+  onDisconect: (data) =>
+    @blocks.instructions.show()
+    @blocks.syncDetails.hide()
+    @blocks.remoteListSelect.hide()
+    @blocks.tagListSelect.hide()
+    @$modal.trigger('provider:disconnected')
+    delete @options.identity
+    @_chooseHelloBar()
+
   disconnect: (element) ->
     identityId = @options.identity.id
-    return unless identityId
+    return @onDisconect() unless identityId
 
     $.ajax "/sites/#{@options.siteID}/identities/#{identityId}",
       data:
         contact_list_id: @options.id
       type: "DELETE"
-      success: (data) =>
-        @blocks.instructions.show()
-        @blocks.syncDetails.hide()
-        @blocks.remoteListSelect.hide()
-        @blocks.tagListSelect.hide()
-        @$modal.trigger('provider:disconnected')
-        delete @options.identity
-        @_chooseHelloBar()
+      success: @onDisconect
       error: (response) =>
         if response.status == 422
           @_chooseHelloBar()
@@ -486,7 +487,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", listData.double_optin)
 
-        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0]?.id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider

@@ -2,7 +2,7 @@ require 'integration_helper'
 
 feature 'Site with a question modal', :js do
   let(:element) do
-    create(:modal_element,
+    create(:modal,
       use_question: true,
       question: 'What is 1+1?',
       answer1: 'its 2',

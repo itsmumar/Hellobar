@@ -102,7 +102,7 @@ class SiteElement < ActiveRecord::Base
     answer2link_text: 'Shop now'
   }.freeze
 
-  QUESTION_DEFAULTS.keys.each do |attr_name|
+  QUESTION_DEFAULTS.each_key do |attr_name|
     define_method attr_name do
       self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
@@ -194,7 +194,7 @@ class SiteElement < ActiveRecord::Base
   def self.all_templates
     [].tap do |templates|
       types.each do |type|
-        BAR_TYPES.keys.each do |subtype|
+        BAR_TYPES.each_key do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
             if types.include?(type)
@@ -225,7 +225,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def default_email_thank_you_text
-    if site && site.free?
+    if site&.free?
       DEFAULT_FREE_EMAIL_THANK_YOU
     else
       DEFAULT_EMAIL_THANK_YOU
@@ -267,7 +267,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
-    return unless site && site.capabilities.at_site_element_limit?
+    return unless site&.capabilities&.at_site_element_limit?
 
     errors.add(:site, 'is currently at its limit to create site elements')
   end
@@ -293,7 +293,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def custom_targeting?
-    rule && rule.conditions.any?
+    rule&.conditions&.any?
   end
 
   def subscription_for_custom_targeting

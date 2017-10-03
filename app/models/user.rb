@@ -13,18 +13,27 @@ class User < ActiveRecord::Base
   after_create :create_referral_token
   after_create :add_to_onboarding_campaign
 
-  has_one :referral_token, as: :tokenizable
-  has_many :credit_cards
+  # rubocop: disable Rails/HasManyOrHasOneDependent
+  has_one :referral_token, as: :tokenizable, dependent: :destroy
+  has_many :credit_cards, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
   has_many :site_elements, through: :sites
   has_many :contact_lists, through: :sites
   has_many :subscriptions, through: :sites
   has_many :authentications, dependent: :destroy
-  has_many :sent_referrals, dependent: :destroy, class_name: 'Referral', foreign_key: 'sender_id'
-  has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id'
-  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) }, class_name: 'UserOnboardingStatus'
-  has_one :current_onboarding_status, -> { order 'created_at DESC' }, class_name: 'UserOnboardingStatus'
+
+  has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id',
+    dependent: :destroy
+
+  has_many :sent_referrals, class_name: 'Referral',
+    foreign_key: 'sender_id', dependent: :destroy
+
+  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) },
+    class_name: 'UserOnboardingStatus', dependent: :destroy
+
+  has_one :current_onboarding_status, -> { order 'created_at DESC' },
+    class_name: 'UserOnboardingStatus'
 
   scope :join_current_onboarding_status, lambda {
     joins(:onboarding_statuses)
@@ -82,7 +91,7 @@ class User < ActiveRecord::Base
 
   def most_viewed_site_element_subtype
     subtype = most_viewed_site_element.try(:element_subtype)
-    subtype = 'social' if subtype && subtype.include?('social')
+    subtype = 'social' if subtype&.include?('social')
     subtype
   end
 

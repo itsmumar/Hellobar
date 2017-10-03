@@ -125,7 +125,7 @@ class ContentUpgradesController < ApplicationController
   end
 
   def verify_capability
-    return if @site && @site.capabilities.content_upgrades?
+    return if @site&.capabilities&.content_upgrades?
 
     error_response(:forbidden)
   end

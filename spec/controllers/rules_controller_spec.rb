@@ -70,11 +70,10 @@ describe RulesController do
 
       post :create, site_id: site, rule: {
         name: rule_name,
-        priority: '10',
         match: 'all',
         conditions_attributes: {
-          '1' => {
-            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA'
+          '0' => {
+            'segment' => 'LocationCountryCondition', 'operand' => 'is', 'value' => ['US']
           }
         }
       }
