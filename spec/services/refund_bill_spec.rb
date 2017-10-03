@@ -104,4 +104,16 @@ describe RefundBill do
       expect(latest_refund.amount).to eql(-amount)
     end
   end
+
+  context 'when credit card is deleted' do
+    before { bill.paid_with_credit_card.destroy }
+
+    it 'still uses deleted card' do
+      service.call
+      expect(bill.refund.successful_billing_attempt.credit_card).to be_nil
+      CreditCard.unscoped do
+        expect(bill.refund.successful_billing_attempt.credit_card).to eql credit_card
+      end
+    end
+  end
 end

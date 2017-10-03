@@ -99,7 +99,7 @@ class RefundBill
   end
 
   def credit_card
-    @credit_card ||= bill.paid_with_credit_card
+    @credit_card ||= CreditCard.unscoped { bill.paid_with_credit_card }
   end
 
   def create_billing_attempt(refund_bill, response)

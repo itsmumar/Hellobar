@@ -5,6 +5,8 @@ class CreditCard < ActiveRecord::Base
   has_many :subscriptions
   has_many :billing_attempts
 
+  acts_as_paranoid
+
   validates :number, :last_digits, :month, :year, :first_name, :last_name, :brand, presence: true
   validates :city, :zip, :address, :country, presence: true
   validates :state, presence: true, if: -> { country == 'US' }
