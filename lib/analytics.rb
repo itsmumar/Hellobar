@@ -19,7 +19,7 @@ class Analytics
     private
 
     def track_internal(target_type, target_id, event_name, props = {})
-      props = {} unless props
+      props ||= {}
       # Default :at to now
       props[:at] ||= Time.current
       # If :at is a timestamp convert to a Time object

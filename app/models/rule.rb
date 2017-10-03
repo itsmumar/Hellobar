@@ -69,7 +69,7 @@ class Rule < ActiveRecord::Base
 
   def update_conditions(conditions_attributes)
     transaction do
-      conditions_attributes.each do |_, attributes|
+      conditions_attributes.each_value do |attributes|
         if attributes['id']
           c = conditions.detect { |x| x.id == attributes['id'].to_i }
           if attributes['_destroy'] == 'true'
@@ -86,7 +86,7 @@ class Rule < ActiveRecord::Base
       end
     end
     true
-  rescue
+  rescue StandardError
     false
   end
 end

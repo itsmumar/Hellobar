@@ -40,6 +40,9 @@ Style/NumericPredicate:
 Style/NumericLiterals:
   Enabled: false
 
+Layout/AlignHash:
+  Enabled: false
+
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
 Layout/AlignParameters:
@@ -84,7 +87,7 @@ Style/WordArray:
 Layout/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
-Style/FileName:
+Naming/FileName:
   Exclude:
     - Guardfile
 

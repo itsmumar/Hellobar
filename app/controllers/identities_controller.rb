@@ -64,7 +64,7 @@ class IdentitiesController < ApplicationController
     if params[:api_key] && params[:username].present?
       { 'username' => params[:username] }
     else
-      env['omniauth.auth'] && env['omniauth.auth']['credentials']
+      env.dig('omniauth.auth', 'credentials')
     end
   end
 
@@ -72,7 +72,7 @@ class IdentitiesController < ApplicationController
     if params[:app_url].present?
       { 'app_url' => sanitize_app_url(params[:app_url]) }
     else
-      env['omniauth.auth'] && env['omniauth.auth']['extra']
+      env.dig('omniauth.auth', 'extra')
     end
   end
 

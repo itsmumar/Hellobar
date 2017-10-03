@@ -10,7 +10,7 @@ class Referral < ActiveRecord::Base
   belongs_to :recipient, class_name: 'User'
   belongs_to :site
 
-  has_one :referral_token, as: :tokenizable
+  has_one :referral_token, as: :tokenizable, dependent: :destroy
 
   validates :sender_id, presence: true
   validates :email, presence: true

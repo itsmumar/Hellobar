@@ -14,7 +14,7 @@ describe Hello::TrackingParam do
 
   it 'encodes and decodes a tracker' do
     expect(Hello::TrackingParam.decode_tracker(tracker)).to eql [user_id, action, props]
-    expect(URI.escape(tracker)).to eq(tracker)
+    expect(CGI.unescape(tracker)).to eq(tracker)
   end
 
   it 'can handle cgi-escaped params' do

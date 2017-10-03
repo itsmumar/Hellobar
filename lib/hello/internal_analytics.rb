@@ -95,7 +95,7 @@ module Hello
     def set_ab_test_value_index_from_cookie(cookie, index, value_index)
       raise "Value: #{ value.inspect } is out of range" if value_index > MAX_VALUES_PER_TEST || value_index < 0
       # Make sure there is enough values
-      cookie = '' unless cookie
+      cookie ||= ''
       num_chars_needed = ((index + 1) - cookie.length)
       cookie += 'x' * num_chars_needed if num_chars_needed > 0
       # Set the value

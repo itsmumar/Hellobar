@@ -6,7 +6,7 @@ class ImageUpload < ActiveRecord::Base
   }.freeze
 
   belongs_to :site
-  has_many :site_elements, foreign_key: :active_image_id
+  has_many :site_elements, foreign_key: :active_image_id, dependent: :nullify
 
   has_attached_file :image, styles: STYLES
   validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
@@ -23,7 +23,7 @@ class ImageUpload < ActiveRecord::Base
     image.url(style)
   end
 
-  STYLES.keys.each do |style|
+  STYLES.each_key do |style|
     define_method "#{ style }_url" do
       url(style)
     end
