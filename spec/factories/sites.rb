@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     trait :with_bars do
-      elements %i[bar email]
+      elements %i[email traffic]
     end
 
     trait :with_rule do

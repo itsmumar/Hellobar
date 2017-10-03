@@ -2,7 +2,7 @@ class SiteSerializer < ActiveModel::Serializer
   include SitesHelper
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
-  attributes :current_subscription, :script_installed, :num_site_elements
+  attributes :current_subscription, :script_installed, :site_elements_count
   attributes :view_billing, :timezone
 
   has_many :rules, serializer: RuleSerializer
@@ -47,7 +47,7 @@ class SiteSerializer < ActiveModel::Serializer
     end
   end
 
-  def num_site_elements
+  def site_elements_count
     object.site_elements.size
   end
 

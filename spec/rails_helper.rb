@@ -39,4 +39,8 @@ RSpec.configure do |config|
   config.before(:each) do
     allow(StaticScriptAssets).to receive(:digest_path).and_return('modules-hexdigest.js')
   end
+
+  config.before(type: :request) do
+    OmniAuth.config.test_mode = true
+  end
 end

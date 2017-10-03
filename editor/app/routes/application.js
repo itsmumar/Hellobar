@@ -138,7 +138,7 @@ export default Ember.Route.extend({
                 save_attempts: this.get('saveCount')
               });
             }
-            if (this.controller.get('model.site.num_site_elements') === 0) {
+            if (this.controller.get('model.site.site_elements_count') === 0) {
               window.location = `/sites/${window.siteID}`;
             } else {
               window.location = `/sites/${window.siteID}/site_elements`;

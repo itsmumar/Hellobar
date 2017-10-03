@@ -1,6 +1,6 @@
 class IdentitiesController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_site
+  before_action :load_site, except: :store
 
   def new
     if params[:api_key].blank?
@@ -12,6 +12,8 @@ class IdentitiesController < ApplicationController
 
   def show
     identity = @site.identities.find_by(provider: params[:id])
+    identity ||= Identity.from_session(session, provider: params[:id])
+
     return render json: nil unless identity
 
     if identity.service_provider.connected?
@@ -19,6 +21,11 @@ class IdentitiesController < ApplicationController
     else
       render json: { error: true, lists: [] }
     end
+  end
+
+  def store
+    Identity.store_to_session(session, env['omniauth.auth'])
+    redirect_to after_auth_redirect_url
   end
 
   def create
@@ -31,13 +38,7 @@ class IdentitiesController < ApplicationController
 
     identity.extra       = extra_from_request
     identity.credentials = credentials_from_request
-
-    if params[:api_key]
-      # TODO: sanitze me?
-      identity.api_key = params[:api_key]
-      env['omniauth.params'] ||= {}
-      env['omniauth.params']['redirect_to'] = request.referrer
-    end
+    identity.api_key     = params[:api_key] if params[:api_key]
 
     if identity.save
       flash[:success] = "We've successfully connected your #{ t(identity.provider, scope: :service_providers) } account."
@@ -61,19 +62,11 @@ class IdentitiesController < ApplicationController
   private
 
   def credentials_from_request
-    if params[:api_key] && params[:username].present?
-      { 'username' => params[:username] }
-    else
-      env.dig('omniauth.auth', 'credentials')
-    end
+    { 'username' => params[:username] } if params[:api_key] && params[:username].present?
   end
 
   def extra_from_request
-    if params[:app_url].present?
-      { 'app_url' => sanitize_app_url(params[:app_url]) }
-    else
-      env.dig('omniauth.auth', 'extra')
-    end
+    { 'app_url' => sanitize_app_url(params[:app_url]) } if params[:app_url].present?
   end
 
   def load_site
@@ -85,7 +78,7 @@ class IdentitiesController < ApplicationController
   end
 
   def after_auth_redirect_url
-    url = env['omniauth.params']['redirect_to']
+    url = env.dig('omniauth.params', 'redirect_to') || request.referrer
     url += '#/goals' if url.include?('/site_elements/')
     url
   end

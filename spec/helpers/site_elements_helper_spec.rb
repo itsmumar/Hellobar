@@ -243,7 +243,7 @@ describe SiteElementsHelper do
     end
 
     it 'returns the bars indexed by letter' do
-      se1 = create(:site_element, :bar, :traffic)
+      se1 = create(:site_element, :traffic)
       se2 = se1.dup
       se2.created_at = se1.created_at + 1.minute
       se2.save
@@ -272,7 +272,7 @@ describe SiteElementsHelper do
     end
 
     it 'does not group elements that are in different rules' do
-      variation1 = create(:site_element, :bar, :traffic)
+      variation1 = create(:site_element, :traffic)
       variation2 = variation1.dup
       variation3 = variation1.dup
 
@@ -300,9 +300,9 @@ describe SiteElementsHelper do
 
     it 'only groups elements with the same type' do
       site = create(:site, :with_rule)
-      variation1 = create(:site_element, :bar, :traffic, site: site)
-      variation2 = create(:site_element, :bar, :traffic, site: site)
-      variation3 = create(:site_element, :slider, :traffic, site: site)
+      variation1 = create(:site_element, :traffic, site: site)
+      variation2 = create(:site_element, :traffic, site: site)
+      variation3 = create(:slider, :traffic, site: site)
 
       icon1 = helper.ab_test_icon(variation1)
       icon2 = helper.ab_test_icon(variation2)
@@ -362,7 +362,7 @@ describe SiteElementsHelper do
     context 'when blocks are present' do
       let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
       let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
-      let(:slider_element) { create(:site_element, :slider, site: site) }
+      let(:slider_element) { create(:slider, site: site) }
 
       it 'strips tags' do
         expect(helper.render_headline(element_with_blocks)).to eql 'Grow your blog traffic by 300% with our free tool '
