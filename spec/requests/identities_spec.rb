@@ -140,9 +140,8 @@ describe 'Identities requests' do
 
       it 'stores onniauth data to the session' do
         OmniAuth.config.add_mock(:drip,
-          'credentials' => {'foo' => 'bar'},
-          'extra' => { 'metadata' => {}, 'accounts' => [], 'app_url' => 'url' }
-        )
+          'credentials' => { 'foo' => 'bar' },
+          'extra' => { 'metadata' => {}, 'accounts' => [], 'app_url' => 'url' })
 
         get '/auth/drip/callback', {}, env
         expect(session['omniauth_provider']).to eql omniauth_data
