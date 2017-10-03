@@ -113,7 +113,7 @@ class StaticScriptModel
   end
 
   def external_tracking
-    return [] unless site && site.capabilities.external_tracking?
+    return [] unless site&.capabilities&.external_tracking?
 
     site.active_site_elements.flat_map(&method(:external_tracking_for)) +
       site.site_elements.active_content_upgrades.flat_map(&method(:external_tracking_for))

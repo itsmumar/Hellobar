@@ -22,7 +22,8 @@ class SiteMembership < ActiveRecord::Base
   private
 
   def updater_permission
-    return unless updated_by && updated_by.role_for_site(site) == :admin
+    return unless updated_by&.role_for_site(site) == :admin
+
     errors.add(:owner, 'can only be set by other owners') if role == 'owner'
   end
 

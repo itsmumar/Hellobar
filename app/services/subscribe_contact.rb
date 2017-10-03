@@ -41,7 +41,7 @@ class SubscribeContact
 
     # TODO: remove
     log_entry.update(completed: false, migrated: true, error: e.to_s)
-  rescue => e
+  rescue StandardError => e
     update_status :error, error: e.to_s
 
     # TODO: remove

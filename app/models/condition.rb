@@ -47,7 +47,9 @@ class Condition < ActiveRecord::Base
   before_validation :format_string_values
   before_validation :normalize_url_condition
 
-  validates :rule, association_exists: true
+  validates :rule, presence: true, association_exists: true
+  validates :segment, presence: true, inclusion: { in: SEGMENTS.keys }
+  validates :operand, presence: true
   validates :value, presence: true
   validate :value_is_valid
   validate :operand_is_valid
@@ -164,7 +166,8 @@ class Condition < ActiveRecord::Base
       'UtmCondition'              => %w[is is_not includes does_not_include]
     }
 
-    return unless @operands[segment] && !@operands[segment].include?(operand)
+    return if @operands[segment]&.include? operand
+
     errors.add(:operand, 'is not valid')
   end
 

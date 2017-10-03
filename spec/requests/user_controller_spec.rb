@@ -98,6 +98,10 @@ describe 'User requests' do
     end
 
     describe 'DELETE :destroy' do
+      before do
+        allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
+      end
+
       it 'responds with a redirect to get_started path' do
         delete user_path
         expect(response).to redirect_to root_path

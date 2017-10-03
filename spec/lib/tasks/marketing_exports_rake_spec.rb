@@ -15,7 +15,7 @@ describe 'marketing:export_recent_logins_with_plan' do
     @user_enterprise_plan = create(:site_membership).user
     create(:subscription, :enterprise, user: @user_enterprise_plan, site: @user_enterprise_plan.sites.first)
 
-    files.values.each { |user| user.update_attribute(:current_sign_in_at, Time.zone.now - 10.days) }
+    files.each_value { |user| user.update_attribute(:current_sign_in_at, Time.zone.now - 10.days) }
 
     @user_too_old = create(:user, current_sign_in_at: Time.zone.now - 60.days)
 

@@ -8,7 +8,7 @@ class Admin::SitesController < AdminController
       flash[:error] = 'You are trying to upgrade subscription but it must be paid by the user'
     rescue Bill::InvalidBillingAmount => e
       flash[:error] = "You are trying to downgrade subscription but difference between subscriptions is #{ e.amount }$. Try to refund this amount first"
-    rescue => e
+    rescue StandardError => e
       flash[:error] = "There was an error trying to update the subscription: #{ e.message }"
       raise if Rails.env.test?
     end

@@ -17,7 +17,7 @@ class ExtractEmbedForm
 
   private
 
-  attr_reader :html, :embed_code
+  attr_reader :embed_code
 
   def form
     html.css('form').first
@@ -60,7 +60,7 @@ class ExtractEmbedForm
   end
 
   def html
-    @_html ||= Nokogiri::HTML(remote_code? ? remote_code : embed_code)
+    @html ||= Nokogiri::HTML(remote_code? ? remote_code : embed_code)
   end
 
   def remote_code?
