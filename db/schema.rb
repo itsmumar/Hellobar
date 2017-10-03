@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170928114726) do
+ActiveRecord::Schema.define(version: 20170929100416) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 20170928114726) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "stacktrace",      limit: 16777215
+    t.boolean  "migrated",                         default: false, null: false
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree

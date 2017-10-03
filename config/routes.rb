@@ -98,7 +98,7 @@ Rails.application.routes.draw do
   get 'sites/:id/script', to: 'sites#script', as: :script
   get 'sites/:id/chart_data', to: 'sites#chart_data', as: :chart_data
 
-  get '/auth/:provider/callback', to: 'identities#create'
+  get '/auth/:provider/callback', to: 'identities#store'
 
   resources :contact_submissions, only: [:create]
   get '/contact', to: 'contact_submissions#new', as: :new_contact_submission

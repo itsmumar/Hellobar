@@ -23,7 +23,7 @@ class FetchContacts
   end
 
   def response
-    dynamo_db.fetch request
+    dynamo_db.query request
   end
 
   def request
@@ -47,14 +47,7 @@ class FetchContacts
   end
 
   def table_name
-    case Rails.env
-    when 'staging'
-      'staging_contacts'
-    when 'production'
-      'contacts'
-    else # edge / development / test
-      'edge_contacts'
-    end
+    DynamoDB.contacts_table_name
   end
 
   def dynamo_db

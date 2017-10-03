@@ -26,6 +26,8 @@ class ContactListsController < ApplicationController
           @site.identities.find params[:identity_id]
         elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
           @site.identities.find_or_create_by!(provider: provider_token)
+        elsif Identity.from_session(session)
+          @site.identities.from_session(session, provider: provider_token, clear: true)
         end
 
       contact_list = @site.contact_lists.create!(contact_list_params.merge(identity: identity))
@@ -58,7 +60,13 @@ class ContactListsController < ApplicationController
   end
 
   def update
-    identity = @site.identities.find params[:identity_id] if params[:identity_id].present?
+    identity =
+      if params[:identity_id].present?
+        @site.identities.find params[:identity_id]
+      else
+        @site.identities.from_session(session, clear: true)
+      end
+
     UpdateContactList.new(@contact_list, contact_list_params.merge(identity: identity)).call
     render json: @contact_list, status: status
   end

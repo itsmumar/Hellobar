@@ -37,7 +37,7 @@ feature 'Users can select a design theme for SiteElements', :js do
 
   context 'with Bar type' do
     given(:subtype) { 'Bar' }
-    given(:site) { create(:site, user: user, elements: [:bar]) }
+    given(:site) { create(:site, user: user, elements: [:email]) }
 
     scenario '"Pushes page down" is ON by default' do
       find('a', text: 'CHANGE TYPE').click

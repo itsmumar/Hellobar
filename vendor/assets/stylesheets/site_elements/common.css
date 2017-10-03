@@ -747,3 +747,17 @@ a.barlinkred {
   display: none !important;
 }
 
+
+/*
+  Fix conflict #wpadminbar vs .HB-Bar
+*/
+
+body.logged-in.admin-bar #pull-down.hb-top-right,
+body.logged-in.admin-bar #pull-down.hb-top-left,
+body.logged-in.admin-bar #pull-down.hb-bar-top,
+body.logged-in.admin-bar .HB-Slider.hb-top-right,
+body.logged-in.admin-bar .HB-Slider.hb-top-left
+body.logged-in.admin-bar .HB-Bar.hb-bar-top {
+  z-index: 99998!important;
+  top: 32px!important;
+}
