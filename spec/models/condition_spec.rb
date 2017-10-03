@@ -1,5 +1,11 @@
-RSpec.describe Condition, type: :model do
+describe Condition do
   it_behaves_like 'a model triggering script regeneration'
+
+  it { is_expected.to validate_presence_of :rule }
+  it { is_expected.to validate_presence_of :segment }
+  it { is_expected.to validate_inclusion_of(:segment).in_array Condition::SEGMENTS.keys }
+  it { is_expected.to validate_presence_of :operand }
+  it { is_expected.to validate_presence_of :value }
 
   describe '#validating the value format' do
     it 'clears empty values during validation' do
@@ -16,13 +22,15 @@ RSpec.describe Condition, type: :model do
 
     context 'the operand is NOT "between"' do
       it 'is NOT valid when the value is a non-String object' do
-        condition = Condition.new operand: 'is', value: ['array'], rule: Rule.new
+        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+          value: ['array'], rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is a String' do
-        condition = Condition.new operand: 'is', value: 'string', rule: Rule.new
+        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+          value: 'string', rule: Rule.new
 
         expect(condition).to be_valid
       end
@@ -30,32 +38,36 @@ RSpec.describe Condition, type: :model do
 
     context 'the operand is "between"' do
       it 'is NOT valid when the value is a non-Array object' do
-        condition = Condition.new operand: 'between', value: 'string value', rule: Rule.new
+        condition = Condition.new segment: 'DateCondition', operand: 'between',
+          value: 'string value', rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is NOT valid when the value is an Array with 1 element' do
-        condition = Condition.new operand: 'between', value: ['one'], rule: Rule.new
+        condition = Condition.new segment: 'LastVisitCondition', operand: 'between',
+          value: ['one'], rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is NOT valid when the value is an array with 2 empty values' do
-        condition = Condition.new operand: 'between', value: ['', ''], rule: Rule.new
+        condition = Condition.new segment: 'LastVisitCondition', operand: 'between',
+          value: ['', ''], rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is an Array with 2 elements' do
-        condition = Condition.new operand: 'between', value: ['one', 'two'], rule: Rule.new
+        condition = Condition.new segment: 'LastVisitCondition', operand: 'between',
+          value: ['one', 'two'], rule: Rule.new
 
         expect(condition).to be_valid
       end
     end
   end
 
-  describe '#date_condition_from_params' do
+  describe '.date_condition_from_params' do
     it 'creates a between condition when both start_date and end_date are present' do
       condition = Condition.date_condition_from_params('start', 'end')
 
@@ -85,8 +97,9 @@ RSpec.describe Condition, type: :model do
   describe '#to_sentence' do
     context 'is a UrlCondition' do
       it 'calls #url_condition_sentence' do
-        condition = create(:condition, operand: 'is', segment: 'UrlCondition', value: ['http://www.wee.com'])
+        condition = create :condition, :url_is
 
+        expect(condition).to be_persisted
         expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
@@ -94,8 +107,9 @@ RSpec.describe Condition, type: :model do
 
     context 'is a UrlPathCondition' do
       it 'calls #url_condition_sentence' do
-        condition = create(:condition, operand: 'is', segment: 'UrlPathCondition', value: ['/path/to/page'])
+        condition = create :condition, :url_path
 
+        expect(condition).to be_persisted
         expect(condition).to receive(:multiple_condition_sentence) { 'right' }
         expect(condition.to_sentence).to eql('right')
       end
@@ -116,7 +130,9 @@ RSpec.describe Condition, type: :model do
 
     context 'is a EveryXSession' do
       it 'ordinalizes the value' do
-        condition = create(:condition, operand: 'every', segment: 'EveryXSession', value: '5')
+        condition = create :condition, :every_x_session, value: '5'
+
+        expect(condition).to be_persisted
         expect(condition.to_sentence).to eq('Every 5th session')
       end
     end
@@ -125,126 +141,144 @@ RSpec.describe Condition, type: :model do
   describe '#normalize_url_condition' do
     context 'is not a UrlCondition' do
       it 'should do nothing to the value' do
-        condition = build(:condition, segment: 'ReferrerCondition', value: 'google.com')
+        value = 'https://google.com'
+        condition = build :condition, :referrer, value: value
+
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('google.com')
+        expect(condition.value).to eq value
       end
     end
 
     context 'is a UrlCondition' do
       it 'should do nothing if url is already absolute (http)' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'http://google.com')
+        url = 'http://google.com'
+        condition = build(:condition, :url_is, value: url)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('http://google.com')
+
+        expect(condition.value).to eq url
       end
 
       it 'should do nothing if url is already absolute (https)' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'https://google.com')
+        url = 'https://google.com'
+        condition = build(:condition, :url_is, value: url)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('https://google.com')
+
+        expect(condition.value).to eq url
       end
 
-      it 'should do nothing if url is already relative' do
-        condition = build(:condition, segment: 'UrlCondition', value: '/about')
+      it 'should do nothing if url is a relative path' do
+        path = '/about'
+        condition = build(:condition, :url_is, value: path)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about')
+        expect(condition.value).to eq path
       end
 
       it 'should prepend a / if url is relative' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'about')
+        condition = build(:condition, :url_is, value: 'about')
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq('/about')
       end
 
       it 'should prepend a / if url is relative and has an extension' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'about.html')
+        condition = build(:condition, :url_is, value: 'about.html')
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq('/about.html')
       end
 
-      it 'should prepend http if url is absolute' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'about.com')
+      it 'should prepend http:// if url is absolute' do
+        host = 'about.com'
+        condition = build(:condition, :url_is, value: host)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('http://about.com')
-      end
-
-      it 'should prepend http if url is absolute' do
-        condition = build(:condition, segment: 'UrlCondition', value: 'hey.hellobar.com')
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('http://hey.hellobar.com')
+        expect(condition.value).to eq "http://#{ host }"
       end
 
       it 'should normalize values in an array' do
-        condition = build(:condition, segment: 'UrlCondition', value: ['hey.hellobar.com', 'about.html'])
+        host = 'hey.hellobar.com'
+        path = 'about.html'
+
+        condition = build(:condition, :url_is, value: [host, path])
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq(['http://hey.hellobar.com', '/about.html'])
+
+        expect(condition.value).to eq(["http://#{ host }", "/#{ path }"])
       end
     end
 
     context 'is a UrlPathCondition' do
       it 'should do nothing if url is already relative' do
-        condition = build(:condition, segment: 'UrlPathCondition', value: '/about')
+        path = '/about'
+        condition = build(:condition, :url_path, value: path)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about')
+
+        expect(condition.value).to eq path
       end
 
       it 'should prepend a / if url is relative' do
-        condition = build(:condition, segment: 'UrlPathCondition', value: 'about')
+        path = 'about'
+        condition = build(:condition, :url_path, value: path)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about')
+
+        expect(condition.value).to eq "/#{ path }"
       end
 
       it 'should prepend a / if url is relative and has an extension' do
-        condition = build(:condition, segment: 'UrlPathCondition', value: 'about.html')
+        path = 'about.html'
+        condition = build(:condition, :url_path, value: path)
         condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about.html')
+
+        expect(condition.value).to eq "/#{ path }"
       end
     end
   end
 
   describe '#format_string_values' do
     it 'it strips whitespace from string values' do
-      condition = build(:condition, segment: 'ReferrerCondition', value: '  abc  ')
+      referrer = '  abc  '
+      condition = build(:condition, :referrer, value: referrer)
       condition.send(:format_string_values)
-      expect(condition.value).to eq('abc')
+
+      expect(condition.value).to eq referrer.strip
     end
 
     it 'it strips whitespace from strings in the value array' do
-      condition = build(:condition, segment: 'ReferrerCondition', value: ['  abc  '])
+      referrer = '  abc  '
+      condition = build(:condition, :referrer, value: [referrer])
       condition.send(:format_string_values)
-      expect(condition.value[0]).to eq('abc')
+
+      expect(condition.value.first).to eq referrer.strip
     end
 
     it 'does nothing when value is not a string or array' do
-      condition = build(:condition, segment: 'ReferrerCondition', value: 1)
+      referrer = 1
+      condition = build(:condition, :referrer, value: referrer)
       condition.send(:format_string_values)
-      expect(condition.value).to eq(1)
+
+      expect(condition.value).to eq referrer
     end
   end
-end
 
-describe Condition, '#timezone_offset' do
-  let(:condition) { Condition.new(segment: 'TimeCondition') }
+  describe '#timezone_offset' do
+    let(:condition) { Condition.new(segment: 'TimeCondition') }
 
-  it 'returns nil if the condition is not a TimeCondition' do
-    condition.segment = 'not time condition'
+    it 'returns nil if the condition is not a TimeCondition' do
+      condition.segment = 'not time condition'
 
-    expect(condition.timezone_offset).to be_nil
-  end
-
-  it 'returns visitor if the condition is set to user the visitors timezone' do
-    condition.value = [1, 2, 'visitor']
-
-    expect(condition.timezone_offset).to eql('visitor')
-  end
-
-  it 'returns the correct timezone offset when a TimeCondition and has the timezone set' do
-    condition.value = [1, 2, 'America/Chicago']
-
-    expected_offset = Time.use_zone('America/Chicago') do
-      Time.zone.now.formatted_offset
+      expect(condition.timezone_offset).to be_nil
     end
 
-    expect(condition.timezone_offset).to eql(expected_offset)
+    it 'returns visitor if the condition is set to user the visitors timezone' do
+      condition.value = [1, 2, 'visitor']
+
+      expect(condition.timezone_offset).to eql('visitor')
+    end
+
+    it 'returns the correct timezone offset when a TimeCondition and has the timezone set' do
+      condition.value = [1, 2, 'America/Chicago']
+
+      expected_offset = Time.use_zone('America/Chicago') do
+        Time.zone.now.formatted_offset
+      end
+
+      expect(condition.timezone_offset).to eql(expected_offset)
+    end
   end
 end
