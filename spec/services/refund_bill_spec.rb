@@ -1,7 +1,9 @@
 describe RefundBill do
   let(:amount) { bill.amount }
-  let(:credit_card) { create :credit_card }
-  let(:subscription) { create :subscription, :pro, credit_card: credit_card }
+  let(:user) { create :user }
+  let(:site) { create :site, user: user }
+  let(:credit_card) { create :credit_card, user: user }
+  let(:subscription) { create :subscription, :pro, site: site, credit_card: credit_card }
   let(:bill) { create :pro_bill, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
@@ -101,8 +103,12 @@ describe RefundBill do
     end
   end
 
-  context 'when credit card is deleted' do
-    before { bill.paid_with_credit_card.destroy }
+  context 'when user has canceled his account' do
+    before { allow_any_instance_of(StaticScript).to receive(:destroy) }
+    before do
+      DestroyUser.new(user).call
+      bill.reload
+    end
 
     it 'creates refund bill' do
       service.call
