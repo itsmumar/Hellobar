@@ -154,7 +154,7 @@ hellobar.defineModule('elements.relevance',
 
       return service.theOnlyElement() ||
         service.elementThatUserSeen() ||
-        service.randomElementWithoutEnaoughViews() ||
+        service.randomElementWithoutEnoughViews() ||
         service.highestConversionRateElement() ||
         service.randomElement();
     }
