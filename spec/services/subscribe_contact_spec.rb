@@ -6,7 +6,6 @@ describe SubscribeContact do
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
   let(:provider) { double('ServiceProvider') }
-  let(:last_log_entry) { contact_list.contact_list_logs.last }
 
   before do
     allow(ServiceProvider).to receive(:new)
@@ -17,24 +16,17 @@ describe SubscribeContact do
   end
 
   context 'when subscription is successful' do
-    before do
+    it 'updates contact status' do
       expect(provider).to receive(:subscribe).with(email: email, name: name)
 
       expect(UpdateContactStatus).to receive_service_call
         .with(contact_list.id, email, :synced, error: nil)
-    end
 
-    it 'creates contact list logs' do
-      expect { service.call }.to change(contact_list.contact_list_logs, :count).to(1)
-    end
-
-    it 'marks contact list log as completed' do
       service.call
-      expect(last_log_entry).to be_completed
     end
   end
 
-  context 'when error is raised' do
+  context 'when StandardError exception is raised' do
     let(:exception) { StandardError }
     let(:options) do
       {
@@ -59,18 +51,12 @@ describe SubscribeContact do
     before { allow(Rails.env).to receive(:test?).and_return(false) }
     before { allow(provider).to receive(:adapter).and_return(TestProvider.new(nil)) }
 
-    before do
+    it 'sets contact status to :error and raises the exception' do
       expect(UpdateContactStatus).to receive_service_call
         .with(contact_list.id, email, :error, error: exception.to_s)
-    end
 
-    it 'does not mark contact list log as completed and raises error' do
-      service.call
-      expect(last_log_entry).not_to be_completed
-    end
-
-    it 'calls Raven.capture_exception' do
       expect(Raven).to receive(:capture_exception).with(instance_of(exception), options)
+
       service.call
     end
   end
@@ -78,16 +64,12 @@ describe SubscribeContact do
   context 'when ServiceProvider::InvalidSubscriberError exception is raised' do
     let(:exception) { ServiceProvider::InvalidSubscriberError }
 
-    before do
+    it 'sets contact status to :error and raises the exception' do
       expect(provider).to receive(:subscribe).and_raise exception
       expect(UpdateContactStatus).to receive_service_call
         .with(contact_list.id, email, :error, error: exception.to_s)
-    end
 
-    it 'does not mark contact list log as completed' do
       service.call
-
-      expect(last_log_entry).not_to be_completed
     end
   end
 end

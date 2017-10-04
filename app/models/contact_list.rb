@@ -5,7 +5,6 @@ class ContactList < ActiveRecord::Base
   belongs_to :identity, dependent: :destroy
 
   has_many :site_elements, dependent: :destroy
-  has_many :contact_list_logs, dependent: :destroy
 
   store :data, coder: Hash
 
@@ -23,11 +22,6 @@ class ContactList < ActiveRecord::Base
   delegate :count, to: :site_elements, prefix: true
 
   attr_accessor :provider_token
-
-  def statuses_for_subscribers(subscribers)
-    return [] unless identity
-    contact_list_logs.statuses(subscribers)
-  end
 
   def provider_name
     identity&.provider_name || 'Hello Bar'

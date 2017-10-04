@@ -50,7 +50,7 @@ describe FetchSiteStatistics do
       expect(request).to have_been_made
     end
 
-    it 'returns a SiteStatistics' do
+    it 'returns SiteStatistics' do
       expect(service.call).to be_a SiteStatistics
       expect(service.call.views).to eql records.sum(&:views)
       expect(service.call.conversions).to eql records.sum(&:conversions)
