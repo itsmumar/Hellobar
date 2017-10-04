@@ -105,7 +105,7 @@ export default Ember.Route.extend({
         this.get('validation').validate('url_to_like', this.currentModel)
       ]);
 
-      allValidation.then((...args) => {
+      allValidation.then(() => {
         // Successful validation
         this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.set('saveSubmitted', true);
