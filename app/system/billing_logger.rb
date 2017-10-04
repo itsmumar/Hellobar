@@ -24,7 +24,7 @@ module BillingLogger
   end
 
   def refund(bill, success)
-    info 'RefundBill', to_status(success), "#{ bill.site.url } bill##{ bill.id } $#{ bill.amount }"
+    info 'RefundBill', to_status(success), "#{ bill.site&.url } bill##{ bill.id } $#{ bill.amount }"
   end
 
   def credit_card(site, response)

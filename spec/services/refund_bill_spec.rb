@@ -1,7 +1,9 @@
 describe RefundBill do
   let(:amount) { bill.amount }
-  let(:credit_card) { create :credit_card }
-  let(:subscription) { create :subscription, :pro, credit_card: credit_card }
+  let(:user) { create :user }
+  let(:site) { create :site, user: user }
+  let(:credit_card) { create :credit_card, user: user }
+  let(:subscription) { create :subscription, :pro, site: site, credit_card: credit_card }
   let(:bill) { create :pro_bill, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
@@ -57,10 +59,6 @@ describe RefundBill do
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 
-    it 'creates failed BillingAttempt' do
-      expect { service.call }.to change(BillingAttempt.failed, :count).by 1
-    end
-
     it 'sends event to Raven and return false' do
       extra = {
         message: 'gateway error',
@@ -105,12 +103,16 @@ describe RefundBill do
     end
   end
 
-  context 'when credit card is missing' do
-    before { allow(bill).to receive(:paid_with_credit_card).and_return(nil) }
+  context 'when user has canceled his account' do
+    before { allow_any_instance_of(StaticScript).to receive(:destroy) }
+    before do
+      DestroyUser.new(user).call
+      bill.reload
+    end
 
-    it 'raises MissingCreditCard' do
-      expect { service.call }
-        .to raise_error RefundBill::MissingCreditCard, 'Could not find credit card'
+    it 'creates refund bill' do
+      service.call
+      expect(bill.refund).to be_a Bill::Refund
     end
   end
 end
