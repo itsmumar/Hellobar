@@ -1,22 +1,41 @@
 FactoryGirl.define do
   factory :condition do
     rule
-    operand 'is'
+
     segment 'UrlCondition'
+    operand 'is'
     value ['http://test.com']
 
     trait :url_is
 
     trait :url_includes do
-      operand 'includes'
       segment 'UrlCondition'
+      operand 'includes'
       value ['/asdf']
     end
 
     trait :url_does_not_include do
-      operand 'does_not_include'
       segment 'UrlCondition'
+      operand 'does_not_include'
       value ['/asdf']
+    end
+
+    trait :url_path do
+      segment 'UrlCondition'
+      operand 'is'
+      value ['/path']
+    end
+
+    trait :every_x_session do
+      segment 'EveryXSession'
+      operand 'every'
+      value '2'
+    end
+
+    trait :referrer do
+      segment 'ReferrerCondition'
+      operand 'is'
+      value 'https://google.com'
     end
 
     trait :date_between do

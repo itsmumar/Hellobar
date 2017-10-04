@@ -7,8 +7,6 @@ class CalculateBill
   end
 
   def call
-    void_pending_bills!
-
     if active_paid_bills.empty?
       make_bill_to_full_amount
     elsif upgrading?
@@ -21,10 +19,6 @@ class CalculateBill
   private
 
   attr_reader :bills, :subscription
-
-  def void_pending_bills!
-    bills.pending.each(&:voided!)
-  end
 
   def active_paid_bills
     @active_paid_bills ||= bills.paid.active.without_refunds

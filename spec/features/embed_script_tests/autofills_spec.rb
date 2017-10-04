@@ -1,7 +1,7 @@
 require 'integration_helper'
 
 feature 'Autofills', :js do
-  given!(:site_element) { create :site_element, :bar, :email }
+  given!(:site_element) { create :bar, :email }
   given(:site) { site_element.site }
   given(:email) { 'some@email.com' }
   given!(:subscription) { create :subscription, :pro_managed, site: site }

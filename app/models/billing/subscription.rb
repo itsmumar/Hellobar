@@ -72,6 +72,10 @@ class Subscription < ActiveRecord::Base
     bills.problem.any?
   end
 
+  def free?
+    false
+  end
+
   def expired?
     return false if amount&.zero? # a free subscription never expires
     !last_paid_bill || last_paid_bill.end_date < Time.current
@@ -87,7 +91,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def paid?
-    values[:monthly_amount] > 0
+    values.fetch(:monthly_amount, 0) > 0
   end
 
   private

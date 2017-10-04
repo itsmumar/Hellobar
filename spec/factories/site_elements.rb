@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :site_element, class: SiteElement do
+  factory :site_element, class: 'Bar' do
     transient do
       site nil
     end
@@ -11,13 +11,6 @@ FactoryGirl.define do
     placement 'bar-top'
 
     rule
-
-    trait :bar
-
-    trait :slider do
-      type 'Slider'
-      placement 'top-left'
-    end
 
     trait :with_blocks do
       blocks [
@@ -31,10 +24,6 @@ FactoryGirl.define do
       headline '<p>
         Country: <span data-hb-geolocation="country"></span>,
         City: <span data-hb-geolocation="city"></span></p>'
-    end
-
-    trait :alert do
-      type 'Alert'
     end
 
     factory :content_upgrade, class: 'ContentUpgrade' do
@@ -58,20 +47,6 @@ FactoryGirl.define do
       thank_you_subheading 'thank_you_subheading'
       thank_you_cta 'thank_you_cta'
       thank_you_url 'http://www.hellobar.com/'
-    end
-
-    trait :custom do
-      type 'Custom'
-    end
-
-    factory :modal_element do
-      type 'Modal'
-      placement nil
-    end
-
-    factory :takeover_element, class: Takeover do
-      type 'Takeover'
-      placement nil
     end
 
     trait :click_to_call do

@@ -1,9 +1,9 @@
 hellobar.defineModule('elements',
   ['hellobar', 'base.sanitizing', 'base.preview',
-    'elements.rules',
+    'rules',
     'elements.class', 'elements.class.bar', 'elements.class.slider', 'elements.class.alert'],
   function (hellobar, sanitizing, preview,
-            elementsRules,
+            rules,
             SiteElement, BarElement, SliderElement, AlertElement) {
 
     const configuration = hellobar.createModuleConfiguration({
@@ -26,7 +26,7 @@ hellobar.defineModule('elements',
 
     // Returns a SiteElement object from a hash of data
     function create(data) {
-      const whitelistedProperties = ['headline', 'caption', 'content', 'link_text', 'custom_html', 'custom_css', 'custom_js'];
+      const whitelistedProperties = ['headline', 'caption', 'content', 'link_text'];
 
       // Sanitize the data
       data = sanitizing.sanitize(data, whitelistedProperties);
@@ -164,22 +164,12 @@ hellobar.defineModule('elements',
 
     // Grabs site elements from valid rules and displays them
     function showSiteElements() {
-      const processSiteElements = (siteElements) => {
-        for (var i = 0; i < siteElements.length; i++) {
+      rules.apply().then((siteElements) => {
+        for (let i = 0; i < siteElements.length; i++) {
           createAndAddToPage(siteElements[i]);
         }
-      };
-      // If a specific element has already been set, use it
-      // Otherwise use the tradition apply rules method
-      var siteElement = elementsRules.getFixedSiteElement();
-      if (siteElement) {
-        processSiteElements([siteElement]);
-      } else {
-        elementsRules.applyRules().then((siteElements) => processSiteElements(siteElements));
-      }
-
+      });
     }
-
 
     return {
       configuration: () => configuration,

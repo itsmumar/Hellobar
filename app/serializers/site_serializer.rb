@@ -2,7 +2,7 @@ class SiteSerializer < ActiveModel::Serializer
   include SitesHelper
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
-  attributes :current_subscription, :script_installed, :num_site_elements
+  attributes :current_subscription, :script_installed, :site_elements_count
   attributes :view_billing, :timezone
 
   has_many :rules, serializer: RuleSerializer
@@ -25,10 +25,10 @@ class SiteSerializer < ActiveModel::Serializer
       at_site_element_limit: object.capabilities.at_site_element_limit?,
       custom_thank_you_text: object.capabilities.custom_thank_you_text?,
       after_submit_redirect: object.capabilities.after_submit_redirect?,
-      custom_html: object.capabilities.custom_html?,
       content_upgrades: object.capabilities.content_upgrades?,
       autofills: object.capabilities.autofills?,
       geolocation_injection: object.capabilities.geolocation_injection?,
+      precise_geolocation_targeting: object.capabilities.precise_geolocation_targeting?,
       external_tracking: object.capabilities.external_tracking?,
       alert_bars: object.capabilities.alert_bars?,
       opacity: object.capabilities.opacity?
@@ -47,7 +47,7 @@ class SiteSerializer < ActiveModel::Serializer
     end
   end
 
-  def num_site_elements
+  def site_elements_count
     object.site_elements.size
   end
 

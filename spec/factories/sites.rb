@@ -20,7 +20,7 @@ FactoryGirl.define do
     end
 
     trait :with_bars do
-      elements %i[bar email]
+      elements %i[email traffic]
     end
 
     trait :with_rule do
@@ -84,12 +84,14 @@ FactoryGirl.define do
     at_site_element_limit? { [true, false].sample }
     custom_thank_you_text? { [true, false].sample }
     after_submit_redirect? { [true, false].sample }
-    custom_html? { [true, false].sample }
     content_upgrades? { [true, false].sample }
     autofills? { [true, false].sample }
     geolocation_injection? { [true, false].sample }
     external_tracking? { [true, false].sample }
     alert_bars? { [true, false].sample }
+    opacity? { [true, false].sample }
+    advanced_themes? { [true, false].sample }
+    precise_geolocation_targeting? { [true, false].sample }
   end
 
   sequence :content_upgrade_styles do

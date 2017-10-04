@@ -70,11 +70,10 @@ describe RulesController do
 
       post :create, site_id: site, rule: {
         name: rule_name,
-        priority: '10',
         match: 'all',
         conditions_attributes: {
-          '1' => {
-            'segment' => 'CountryCondition', 'operand' => 'is', 'value' => 'USA'
+          '0' => {
+            'segment' => 'LocationCountryCondition', 'operand' => 'is', 'value' => ['US']
           }
         }
       }
@@ -171,7 +170,6 @@ describe RulesController do
             'segment' => 'DateCondition',
             'operand' => 'between',
             'value' => [(Date.current - 1.day).strftime('%Y-%m-%d'), (Date.current + 1.day).strftime('%Y-%m-%d')],
-            'custom_segment' => nil,
             'data_type' => nil
           }])
         end
@@ -204,7 +202,6 @@ describe RulesController do
             'segment' => 'UrlCondition',
             'operand' => 'includes',
             'value' => ['/asdf'],
-            'custom_segment' => nil,
             'data_type' => nil
           }])
         end

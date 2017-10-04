@@ -105,6 +105,7 @@ $ ->
     console.log "Couldnt find rule with ID: #{ruleId}" unless ruleJson
 
     options =
+      site: window.site
       ruleData: ruleJson
       successCallback: ->
         $ruleContent = $(".rule-block[data-rule-id=#{@id}]")
@@ -156,6 +157,8 @@ $ ->
   $('body').on 'click', '.remove-rule', (event) ->
     event.preventDefault()
 
+    return unless confirm('Are you sure you want to delete this rule and all its bars?')
+
     $rule = $(this).parents('tr')
     ruleId = $rule.data('rule-id')
     $siteElements = $rule.siblings("[data-rule-id=#{ruleId}]")
@@ -178,6 +181,8 @@ $ ->
 
   $('body').on 'click', '.delete-element', (event) ->
     event.preventDefault()
+
+    return unless confirm('Are you sure you want to delete this bar?')
 
     $element = $(this)
     $row = $element.parents('tr')

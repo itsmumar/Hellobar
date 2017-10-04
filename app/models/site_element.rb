@@ -61,7 +61,6 @@ class SiteElement < ActiveRecord::Base
   scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
-  scope :custom_elements, -> { where(type: 'Custom') }
   scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
   scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
@@ -82,6 +81,7 @@ class SiteElement < ActiveRecord::Base
   serialize :blocks, Array
 
   after_create :track_creation
+  after_destroy :nullify_image_upload_reference
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
     element_subtype
@@ -102,14 +102,14 @@ class SiteElement < ActiveRecord::Base
     answer2link_text: 'Shop now'
   }.freeze
 
-  QUESTION_DEFAULTS.keys.each do |attr_name|
+  QUESTION_DEFAULTS.each_key do |attr_name|
     define_method attr_name do
       self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
   end
 
   def self.types
-    [Bar, Modal, Slider, Takeover, Custom, ContentUpgrade, Alert].map(&:name)
+    [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
   end
 
   def caption=(c_value)
@@ -164,9 +164,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def toggle_paused!
-    new_pause_state = !paused?
-
-    update_attribute :paused, new_pause_state
+    update paused: !paused?
   end
 
   def short_subtype
@@ -196,7 +194,7 @@ class SiteElement < ActiveRecord::Base
   def self.all_templates
     [].tap do |templates|
       types.each do |type|
-        BAR_TYPES.keys.each do |subtype|
+        BAR_TYPES.each_key do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
             if types.include?(type)
@@ -227,7 +225,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def default_email_thank_you_text
-    if site && site.free?
+    if site&.free?
       DEFAULT_FREE_EMAIL_THANK_YOU
     else
       DEFAULT_EMAIL_THANK_YOU
@@ -269,7 +267,7 @@ class SiteElement < ActiveRecord::Base
   end
 
   def site_is_capable_of_creating_element
-    return unless site && site.capabilities.at_site_element_limit?
+    return unless site&.capabilities&.at_site_element_limit?
 
     errors.add(:site, 'is currently at its limit to create site elements')
   end
@@ -295,11 +293,19 @@ class SiteElement < ActiveRecord::Base
   end
 
   def custom_targeting?
-    rule && rule.conditions.any?
+    rule&.conditions&.any?
   end
 
   def subscription_for_custom_targeting
     return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
     errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
+  end
+
+  def nullify_image_upload_reference
+    # When marking site element as deleted, it will not be able to nullify the
+    # active_image_id reference when ImageUpload record is destroyed
+    # This is a Paranoia issue, which we need to work around manually
+    # https://github.com/rubysherpas/paranoia/issues/413
+    update_attribute :active_image_id, nil
   end
 end

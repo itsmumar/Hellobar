@@ -6,7 +6,7 @@
   position: fixed;
   _position: absolute;
   _top: expression(eval(document.body.scrollTop));
-  z-index: 10000004;
+  z-index: 10000005;
 }
 
 /*-----------  Animations  -----------*/

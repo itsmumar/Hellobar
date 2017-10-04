@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919152424) do
+ActiveRecord::Schema.define(version: 20170929100416) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -105,14 +105,13 @@ ActiveRecord::Schema.define(version: 20170919152424) do
   add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "conditions", force: :cascade do |t|
-    t.integer  "rule_id",        limit: 4
-    t.string   "segment",        limit: 255,      null: false
-    t.string   "operand",        limit: 255,      null: false
-    t.text     "value",          limit: 16777215
+    t.integer  "rule_id",    limit: 4
+    t.string   "segment",    limit: 255,      null: false
+    t.string   "operand",    limit: 255,      null: false
+    t.text     "value",      limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "custom_segment", limit: 255
-    t.string   "data_type",      limit: 255
+    t.string   "data_type",  limit: 255
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
@@ -126,6 +125,7 @@ ActiveRecord::Schema.define(version: 20170919152424) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "stacktrace",      limit: 16777215
+    t.boolean  "migrated",                         default: false, null: false
   end
 
   add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
@@ -195,8 +195,6 @@ ActiveRecord::Schema.define(version: 20170919152424) do
   end
 
   create_table "image_uploads", force: :cascade do |t|
-    t.string   "description",        limit: 255
-    t.string   "url",                limit: 255
     t.string   "image_file_name",    limit: 255
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size",    limit: 4
@@ -204,12 +202,9 @@ ActiveRecord::Schema.define(version: 20170919152424) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "site_id",            limit: 4
-    t.string   "preuploaded_url",    limit: 255
-    t.string   "theme_id",           limit: 191
   end
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
-  add_index "image_uploads", ["theme_id"], name: "index_image_uploads_on_theme_id", unique: true, using: :btree
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
@@ -288,7 +283,6 @@ ActiveRecord::Schema.define(version: 20170919152424) do
     t.string   "view_condition",                   limit: 255,      default: "immediately"
     t.string   "email_placeholder",                limit: 255,      default: "Your email",  null: false
     t.string   "name_placeholder",                 limit: 255,      default: "Your name",   null: false
-    t.integer  "image_upload_id",                  limit: 4
     t.string   "image_placement",                  limit: 255,      default: "bottom"
     t.integer  "active_image_id",                  limit: 4
     t.string   "question",                         limit: 255
@@ -306,9 +300,6 @@ ActiveRecord::Schema.define(version: 20170919152424) do
     t.string   "theme_id",                         limit: 255
     t.boolean  "use_default_image",                                 default: true,          null: false
     t.text     "blocks",                           limit: 16777215
-    t.text     "custom_html",                      limit: 16777215
-    t.text     "custom_css",                       limit: 16777215
-    t.text     "custom_js",                        limit: 16777215
     t.string   "offer_headline",                   limit: 255
     t.string   "offer_text",                       limit: 255
     t.string   "disclaimer",                       limit: 255
@@ -332,7 +323,6 @@ ActiveRecord::Schema.define(version: 20170919152424) do
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
   add_index "site_elements", ["element_subtype"], name: "index_site_elements_on_element_subtype", using: :btree
-  add_index "site_elements", ["image_upload_id"], name: "index_site_elements_on_image_upload_id", using: :btree
   add_index "site_elements", ["rule_id"], name: "index_site_elements_on_rule_id", using: :btree
 
   create_table "site_memberships", force: :cascade do |t|

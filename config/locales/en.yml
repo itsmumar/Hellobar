@@ -41,3 +41,21 @@ en:
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
+
+  # Active Record models configuration
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+      models:
+        site_element:
+          attributes:
+            element_subtype:
+              blank: You must select your goal in the "goals" section
+            rule:
+              blank: You must select who will see this in the "targeting" section
+            contact_list:
+              blank: You must select a contact list to sync with in the "goals" section

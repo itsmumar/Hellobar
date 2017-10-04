@@ -36,7 +36,7 @@ class BillingReport
     @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription&.site&.url || 'NO SITE' } for #{ number_to_currency(bill.amount) }..."
     @bill = bill
     yield
-  rescue => e
+  rescue StandardError => e
     exception(e)
     Raven.capture_exception(e)
     raise

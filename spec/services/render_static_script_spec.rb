@@ -48,29 +48,5 @@ describe RenderStaticScript do
         expect(service.call).to eql '"/generated_scripts/modules.js"; __DATA__'
       end
     end
-
-    context 'with custom html/js' do
-      let(:custom_html) { '<script>alert(1)</script>' }
-      let!(:site_element) { create(:site_element, :custom, custom_html: custom_html, site: site) }
-
-      before do
-        allow(service)
-          .to receive(:render_asset)
-          .with('static_script_template.js')
-          .and_return('$INJECT_DATA; $INJECT_MODULES')
-
-        allow(StaticScriptAssets)
-          .to receive(:digest_path)
-          .with('modules.js')
-          .and_return 'modules.js'
-
-        allow_any_instance_of(SiteElement)
-          .to receive(:statistics).and_return(SiteStatistics.new)
-      end
-
-      it 'escapes </script>' do
-        expect(service.call).to include '"custom_html":"\u003cscript\u003ealert(1)\u003c/script\u003e",'
-      end
-    end
   end
 end

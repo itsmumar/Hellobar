@@ -1,5 +1,4 @@
 class SubscribeContact
-  # @return [SubscribeContactWorker::Contact]
   def initialize(contact)
     @contact_list = contact.contact_list
     @provider = ServiceProvider.new(contact_list.identity, contact_list)
@@ -9,9 +8,7 @@ class SubscribeContact
 
   def call
     update_contact_list_cache
-    with_log_entry do
-      provider.subscribe(email: email, name: name)
-    end
+    subscribe
   end
 
   private
@@ -23,15 +20,38 @@ class SubscribeContact
     contact_list.touch
   end
 
-  def with_log_entry
+  def subscribe
+    with_status_update do
+      provider.subscribe email: email, name: name
+    end
+  end
+
+  def with_status_update
+    # TODO: remove
     log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
+
     yield
-    log_entry.update(completed: true)
+
+    update_status :synced
+
+    # TODO: remove
+    log_entry.update(completed: true, migrated: true)
   rescue ServiceProvider::InvalidSubscriberError => e
-    log_entry.update(completed: false, error: e.to_s)
-  rescue => e
-    log_entry.update(completed: false, error: e.to_s)
+    update_status :error, error: e.to_s
+
+    # TODO: remove
+    log_entry.update(completed: false, migrated: true, error: e.to_s)
+  rescue StandardError => e
+    update_status :error, error: e.to_s
+
+    # TODO: remove
+    log_entry.update(completed: false, migrated: true, error: e.to_s)
+
     raven_log e
+  end
+
+  def update_status status, error: nil
+    UpdateContactStatus.new(contact_list.id, email, status, error: error).call
   end
 
   def raven_log(exception)

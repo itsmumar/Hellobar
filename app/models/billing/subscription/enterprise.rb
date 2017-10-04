@@ -1,5 +1,5 @@
 class Subscription
-  class Enterprise < Base
+  class Enterprise < Subscription
     class Capabilities < Pro::Capabilities
     end
 

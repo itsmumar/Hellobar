@@ -18,6 +18,7 @@ class Site < ActiveRecord::Base
 
   attr_accessor :skip_script_generation
 
+  # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules
@@ -27,7 +28,7 @@ class Site < ActiveRecord::Base
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
-  has_many :contact_lists, dependent: :destroy
+  has_many :contact_lists, -> { order 'name' }, dependent: :destroy
   has_many :subscriptions, -> { order 'id' }
   accepts_nested_attributes_for :subscriptions
 
@@ -93,12 +94,19 @@ class Site < ActiveRecord::Base
   end
 
   def self.script_uninstalled
-    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
+    where('script_uninstalled_at > script_installed_at')
+      .where.not(script_uninstalled_at: nil)
   end
 
-  def self.script_uninstalled_recently_or_active
-    where('script_uninstalled_at IS NOT NULL AND script_uninstalled_at > script_installed_at')
-      .where('script_uninstalled_at > ? OR script_generated_at > script_uninstalled_at', 30.days.ago)
+  def self.script_recently_uninstalled
+    script_uninstalled
+      .where('script_uninstalled_at > ?', 30.days.ago)
+  end
+
+  def self.script_uninstalled_but_recently_modified
+    script_uninstalled
+      .where('script_generated_at > script_uninstalled_at')
+      .where('script_generated_at > ?', 7.days.ago)
   end
 
   def self.protocol_ignored_url(url)

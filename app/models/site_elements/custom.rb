@@ -1,2 +1,0 @@
-class Custom < SiteElement
-end

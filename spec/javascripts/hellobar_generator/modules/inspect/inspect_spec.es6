@@ -18,6 +18,7 @@ describe('Module inspect', () => {
     contentUpgrades = [{id: 5}];
     elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
+      'headline', 'link_text',
       'notification_delay', 'closable', 'show_branding', 'background_color',
       'link_color', 'text_color', 'button_color', 'primary_color',
       'trigger_color'
@@ -28,8 +29,8 @@ describe('Module inspect', () => {
         elements: {
           inspect: () => jasmine.createSpyObj('elements', { elementsOnPage: elementsOnPage })
         },
-        'elements.rules': {
-          inspect: () => jasmine.createSpyObj('elements.rules', { allElementModels: allElementModels, allRules: rules })
+        'rules': {
+          inspect: () => jasmine.createSpyObj('rules', { allElementModels: allElementModels, allRules: rules })
         },
         'base.site': jasmine.createSpyObj('base.site', { siteId: 999, siteUrl: 'http://example.com' }),
         'base.metainfo': jasmine.createSpyObj('base.metainfo', {

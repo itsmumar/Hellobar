@@ -113,7 +113,7 @@ class StaticScriptModel
   end
 
   def external_tracking
-    return [] unless site && site.capabilities.external_tracking?
+    return [] unless site&.capabilities&.external_tracking?
 
     site.active_site_elements.flat_map(&method(:external_tracking_for)) +
       site.site_elements.active_content_upgrades.flat_map(&method(:external_tracking_for))
@@ -220,8 +220,6 @@ class StaticScriptModel
   end
 
   def content_markup(bar_type, subtype, category = :generic)
-    return '' if bar_type == 'custom'
-
     if category == :generic
       path = subtype.tr('/', '_')
       render_asset("#{ path }.html")
@@ -248,10 +246,8 @@ class StaticScriptModel
   end
 
   def condition_settings(condition)
-    segment = condition.segment == 'CustomCondition' ? condition.custom_segment : condition.segment_key
-
     settings = {
-      segment: segment,
+      segment: condition.segment_key,
       operand: condition.operand,
       value: condition.value
     }

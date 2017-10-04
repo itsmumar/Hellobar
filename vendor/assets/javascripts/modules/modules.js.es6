@@ -5,6 +5,7 @@
 //= require ./base
 //= require ./autofills
 //= require ./contentUpgrades
+//= require ./rules
 //= require ./elements
 //= require ./geolocation
 //= require ./tracking
@@ -97,7 +98,7 @@
           configuration.externalTrackings(data.external_tracking);
         });
 
-        configure('elements.rules', function (configuration) {
+        configure('rules', function (configuration) {
           each(data.rules, function (rule) {
             configuration.addRule(rule.match, rule.conditions, rule.site_elements);
           });

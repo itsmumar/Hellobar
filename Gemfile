@@ -3,7 +3,11 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.8'
 
 # AWS
-gem 'aws-sdk'
+gem 'aws-sdk-cloudwatch'
+gem 'aws-sdk-dynamodb'
+gem 'aws-sdk-s3'
+gem 'aws-sdk-sns'
+gem 'aws-sdk-sqs'
 
 # Authentication / authorization
 gem 'devise'
@@ -31,7 +35,7 @@ gem 'omniauth-verticalresponse', github: 'Hello-bar/omniauth-verticalresponse'
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
-gem 'createsend' # CampaignMonitor
+gem 'createsend', github: 'Hello-bar/createsend-ruby' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
@@ -69,7 +73,7 @@ gem 'kaminari'
 gem 'mysql2'
 
 # File uploads
-gem 'paperclip', '~> 5.1'
+gem 'paperclip', github: 'morgoth/paperclip', branch: 'aws-sdk-s3'
 
 # JSON
 gem 'active_model_serializers'
@@ -113,7 +117,7 @@ gem 'intercom-rails'
 
 # Queue
 gem 'connection_pool'
-gem 'shoryuken', '3.0.7' # 3.1.0 is buggy: https://github.com/phstc/shoryuken/issues/396
+gem 'shoryuken'
 
 # Be very careful with upgrading rake as version 11 changes the way passing
 # param works and double dashes in queue_worker no longer work

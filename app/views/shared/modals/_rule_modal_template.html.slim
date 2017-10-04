@@ -52,7 +52,9 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "UTMMediumCondition" "Ad Medium"}}
           | {{rule-option segment "UTMSourceCondition" "Ad Source"}}
           | {{rule-option segment "UTMTermCondition" "Ad Term"}}
-          / | {{rule-option segment "LocationCityCondition" "City"}}
+          | {{#if canUseAdvancedLocation}}
+          | {{rule-option segment "LocationCityCondition" "City"}}
+          | {{/if}}
           | {{rule-option segment "LocationCountryCondition" "Country"}}
           | {{rule-option segment "DateCondition" "date"}}
           | {{rule-option segment "LastVisitCondition" "days since last visit"}}
@@ -62,23 +64,19 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "PreviousPageURL" "previous page url"}}
           | {{rule-option segment "ReferrerCondition" "referrer"}}
           | {{rule-option segment "ReferrerDomainCondition" "Referrer Domain"}}
-          / | {{rule-option segment "LocationRegionCondition" "Region/State"}}
+          | {{#if canUseAdvancedLocation}}
+          | {{rule-option segment "LocationRegionCondition" "Region/State"}}
+          | {{/if}}
           | {{rule-option segment "TimeCondition" "Time"}}
           | {{rule-option segment "UrlCondition" "URL"}}
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
           | {{rule-option segment "UrlQuery" "URL Query"}}
-          | {{rule-option segment "CustomCondition" "Custom"}}
-      .custom-segment-name
-        | Segment name is:
-        input.custom-segment-name-input name="rule[conditions_attributes][{{index}}][custom_segment]" type="text" value="{{custom_segment}}"
       .select-wrapper.optional.rule_conditions_data_type
         | The data type is:
         select class="condition-data-type" name="rule[conditions_attributes][{{index}}][data_type]"
           | {{rule-option data_type "date" "date"}}
           | {{rule-option data_type "number" "number"}}
           | {{rule-option data_type "string" "string"}}
-      .custom-segment-text
-        ' The value
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{rule-option operand "every" "every"}}

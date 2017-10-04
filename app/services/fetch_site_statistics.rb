@@ -22,7 +22,7 @@ class FetchSiteStatistics
 
   def process(site_element)
     request = request_for(site_element.id)
-    process_response site_element, dynamo_db_for(site_element).fetch(request)
+    process_response site_element, dynamo_db_for(site_element).query(request)
   end
 
   def process_response(site_element, response)
@@ -57,14 +57,7 @@ class FetchSiteStatistics
   end
 
   def table_name
-    case Rails.env
-    when 'staging'
-      'staging_over_time'
-    when 'production'
-      'over_time'
-    else # edge / development / test
-      'edge_over_time2'
-    end
+    DynamoDB.visits_table_name
   end
 
   def last_date

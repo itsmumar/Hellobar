@@ -14,13 +14,13 @@ describe SiteSerializer do
       at_site_element_limit: site.capabilities.at_site_element_limit?,
       custom_thank_you_text: site.capabilities.custom_thank_you_text?,
       after_submit_redirect: site.capabilities.after_submit_redirect?,
-      custom_html: site.capabilities.custom_html?,
       content_upgrades: site.capabilities.content_upgrades?,
       autofills: site.capabilities.autofills?,
       geolocation_injection: site.capabilities.geolocation_injection?,
       external_tracking: site.capabilities.external_tracking?,
       alert_bars: site.capabilities.alert_bars?,
-      opacity: site.capabilities.opacity?
+      opacity: site.capabilities.opacity?,
+      precise_geolocation_targeting: site.capabilities.precise_geolocation_targeting?
     }
     expect(serializable_hash[:capabilities]).to match expected_capabilities
   end

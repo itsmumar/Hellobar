@@ -6,6 +6,8 @@ class SiteElementsController < ApplicationController
 
   layout :determine_layout
 
+  rescue_from ActiveRecord::RecordInvalid, with: :record_not_found_error
+
   def show
     render json: @site_element, serializer: SiteElementSerializer
   end
@@ -41,29 +43,19 @@ class SiteElementsController < ApplicationController
 
   def create
     @site_element = SiteElement.new(site_element_params)
+    @site_element.save!
 
-    if @site_element.valid?
-      @site_element.save!
-      flash[:success] = message_to_clear_cache
-      TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
+    flash[:success] = message_to_clear_cache
+    TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
 
-      render json: @site_element, serializer: SiteElementSerializer
-    else
-      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
-    end
+    render json: @site_element, serializer: SiteElementSerializer
   end
 
   def update
-    updater = SiteElements::Update.new(element: @site_element, params: site_element_params)
-    updated = updater.run
+    element = UpdateSiteElement.new(@site_element, site_element_params).call
+    flash[:success] = message_to_clear_cache
 
-    if updated
-      flash[:success] = message_to_clear_cache
-
-      render json: updater.element, serializer: SiteElementSerializer
-    else
-      render json: @site_element, status: :unprocessable_entity, serializer: SiteElementSerializer
-    end
+    render json: element, serializer: SiteElementSerializer
   end
 
   def destroy
@@ -88,6 +80,11 @@ class SiteElementsController < ApplicationController
   end
 
   private
+
+  def record_not_found_error(e)
+    response = { errors: e.record.errors, full_error_messages: e.record.errors.to_a }
+    render json: response, status: :unprocessable_entity
+  end
 
   def message_to_clear_cache
     message = 'It may take a few minutes for Hello Bar to show up on your site. '
@@ -122,16 +119,16 @@ class SiteElementsController < ApplicationController
       :active_image_id, :animated,
       :answer1, :answer1caption, :answer1link_text, :answer1response,
       :answer2, :answer2caption, :answer2link_text, :answer2response,
-      :background_color, :border_color, :button_color,
-      :content, :caption, :closable, :contact_list_id, :display_when, :element_subtype,
-      :email_placeholder, :font_id, :headline, :image_placement, :image_opacity, :link_color, :link_text,
-      :name_placeholder, :open_in_new_window, :phone_country_code,
-      :phone_number, :placement, :pushes_page_down, :question,
-      :remains_at_top, :rule_id, :show_branding, :size, :text_color,
+      :background_color, :border_color, :button_color, :content, :caption,
+      :closable, :contact_list_id, :display_when, :element_subtype,
+      :email_placeholder, :font_id, :headline, :image_placement, :image_opacity,
+      :link_color, :link_text, :name_placeholder, :open_in_new_window,
+      :phone_country_code, :phone_number, :placement, :pushes_page_down,
+      :question, :remains_at_top, :rule_id, :show_branding, :size, :text_color,
       :thank_you_text, :theme_id, :type, :use_question,
-      :view_condition_attribute, :view_condition,
-      :wiggle_button, :use_default_image, :custom_html, :custom_css,
-      :custom_js, :sound, :notification_delay, :trigger_color, :trigger_icon_color,
+      :view_condition_attribute, :view_condition, :wiggle_button,
+      :use_default_image, :sound, :notification_delay, :trigger_color,
+      :trigger_icon_color,
       { settings: settings_keys },
       blocks: blocks_keys
     )

@@ -59,7 +59,7 @@ hellobar.defineModule('base.deferred', [], function () {
     let results = [];
     const resolve = () => allDeferred.resolve(results);
     (!promises || promises.length === 0) && resolve();
-    promises.forEach((promise, index) => promise.then((result) => {
+    promises.forEach((promise, index) => deferred.wrap(promise).then((result) => {
       resolvedCount++;
       results[index] = result;
       (resolvedCount >= promises.length) && resolve();
@@ -68,6 +68,14 @@ hellobar.defineModule('base.deferred', [], function () {
   };
 
   deferred.constant = (value) => deferred().resolve(value).promise();
+
+  deferred.wrap = (value) => {
+    if (value instanceof Promise) {
+      return value
+    } else {
+      return deferred().resolve(value).promise();
+    }
+  }
 
   deferred.Promise = Promise;
 

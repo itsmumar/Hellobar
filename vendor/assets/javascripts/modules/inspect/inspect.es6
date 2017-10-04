@@ -1,5 +1,5 @@
 hellobar.defineModule('inspect',
-  ['hellobar', 'elements', 'elements.rules', 'base.site', 'base.metainfo', 'contentUpgrades'],
+  ['hellobar', 'elements', 'rules', 'base.site', 'base.metainfo', 'contentUpgrades'],
   function (hellobar, elements, rules, site, metainfo, contentUpgrades) {
     const elementsOnPage = () => elements.inspect().elementsOnPage();
     const allElementModels = () => rules.inspect().allElementModels();
@@ -7,6 +7,7 @@ hellobar.defineModule('inspect',
     const allContentUpgrades = () => contentUpgrades.configuration().contentUpgrades();
     const elementColumns = [
       'id', 'subtype', 'type', 'template_name', 'theme_id', 'placement',
+      'headline', 'link_text',
       'notification_delay', 'closable', 'show_branding', 'background_color',
       'link_color', 'text_color', 'button_color', 'primary_color',
       'trigger_color'
@@ -31,7 +32,8 @@ hellobar.defineModule('inspect',
     const printRule = (info, rule, index) => {
       let label = info.activeRules.filter((activeRule) => activeRule == rule).length > 0 ? 'ACTIVE' : 'INACTIVE'
 
-      console.log(`[${label}] Rule ${index}, matchType: ${rule.matchType}`);
+      const conditions = rule.conditions.map(condition => `${condition.segment} ${condition.operand} ${condition.value}`).join(', ')
+      console.groupCollapsed(`[${label}] Rule ${index}, matchType: ${rule.matchType} ${conditions}`);
 
       rule.conditions.forEach((condition, index) => {
         console.log(`* Condition ${index}:`);
@@ -61,6 +63,7 @@ hellobar.defineModule('inspect',
       }
 
       console.log('---------------------------------------------------------------');
+      console.groupEnd();
     }
 
     return {

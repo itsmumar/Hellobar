@@ -31,7 +31,7 @@ module ServiceProvider::Adapters
     def connected?
       test_connection
       true
-    rescue => _
+    rescue StandardError => _
       false
     end
 

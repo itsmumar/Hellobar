@@ -1,10 +1,6 @@
 class Subscription
-  class ProManaged < Pro
+  class ProManaged < Subscription
     class Capabilities < Pro::Capabilities
-      def custom_html?
-        true
-      end
-
       def content_upgrades?
         true
       end
@@ -30,6 +26,10 @@ class Subscription
       end
 
       def advanced_themes?
+        true
+      end
+
+      def precise_geolocation_targeting?
         true
       end
     end

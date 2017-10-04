@@ -47,13 +47,13 @@ describe StaticScriptModel do
         at_site_element_limit: site_capabilities.at_site_element_limit?,
         custom_thank_you_text: site_capabilities.custom_thank_you_text?,
         after_submit_redirect: site_capabilities.after_submit_redirect?,
-        custom_html: site_capabilities.custom_html?,
         content_upgrades: site_capabilities.content_upgrades?,
         autofills: site_capabilities.autofills?,
         geolocation_injection: site_capabilities.geolocation_injection?,
         external_tracking: site_capabilities.external_tracking?,
         alert_bars: site_capabilities.alert_bars?,
-        opacity: site_capabilities.opacity?
+        opacity: site_capabilities.opacity?,
+        precise_geolocation_targeting: site_capabilities.precise_geolocation_targeting?
       }
       expect(capabilities).to match expected_capabilities
     end
@@ -110,7 +110,7 @@ describe StaticScriptModel do
 
       expect(model.hellobar_container_css)
         .to eql "container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n" \
-                "takeover/container.css\ncustom/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
+                "takeover/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
@@ -132,7 +132,7 @@ describe StaticScriptModel do
            question traffic_growth]
       end
 
-      let(:bar_types) { %w[Bar Modal Slider Takeover Custom ContentUpgrade Alert] }
+      let(:bar_types) { %w[Bar Modal Slider Takeover ContentUpgrade Alert] }
       let(:template_names) { %w[traffic_growth] }
 
       def all_templates
@@ -156,6 +156,7 @@ describe StaticScriptModel do
 
         it 'renders header and footer' do
           templates
+
           bar_types.map(&:downcase).each do |type|
             header_args = [type, 'header.html', site_id: site.id]
             footer_args = [type, 'footer.html', site_id: site.id]
@@ -164,11 +165,12 @@ describe StaticScriptModel do
           end
         end
 
-        context 'for all bar subtypes except Custom' do
-          let(:bars_number) { (bar_types - %w[Custom]).count }
+        context 'for all bar subtypes' do
+          let(:bars_number) { bar_types.count }
 
           it 'renders content markup' do
             templates
+
             bar_subtypes_except_traffic_growth.each do |subtype|
               args = ["#{ subtype.tr('/', '_') }.html", site_id: site.id]
               expect(StaticScriptAssets).to have_received(:render).with(*args).exactly(bars_number).times
@@ -188,13 +190,13 @@ describe StaticScriptModel do
     end
 
     context 'when templates not provided' do
-      let!(:active_site_elements) { create :site_element, :slider, element_subtype: 'announcement', site: site }
+      let!(:active_site_elements) { create :site_element, element_subtype: 'announcement', site: site }
       let(:markups) { model.templates.map { |template| template[:markup] } }
       let(:names) { model.templates.map { |template| template[:name] } }
 
       it 'returns array of template names and markups' do
         expect(markups.all?(&:present?)).to be_truthy
-        expect(names).to match_array %w[slider_announcement]
+        expect(names).to match_array %w[bar_announcement]
       end
     end
   end
@@ -253,8 +255,8 @@ describe StaticScriptModel do
 
   describe '#external_tracking' do
     context 'when site has external tracking capability' do
-      let!(:alert) { create(:site_element, :alert, site: site) }
-      let!(:slider) { create(:site_element, :slider, site: site) }
+      let!(:alert) { create(:alert, site: site) }
+      let!(:slider) { create(:slider, site: site) }
       let(:alert_events) { create :site_element_external_events, site_element: alert }
       let(:slider_events) { create :site_element_external_events, site_element: slider }
       let(:site_elements) { [alert, slider] }
@@ -401,7 +403,7 @@ describe StaticScriptModel do
       let(:site_element) { json[:rules].first[:site_elements].first }
 
       context 'when there is a Modal site element' do
-        let!(:element) { create(:modal_element, rule: site.rules.first, active_image: image) }
+        let!(:element) { create(:modal, rule: site.rules.first, active_image: image) }
 
         it 'generates the correct image data' do
           expect(site_element).to match(
@@ -416,7 +418,7 @@ describe StaticScriptModel do
       end
 
       context 'when there is a Takeover site element' do
-        let!(:element) { create(:takeover_element, rule: site.rules.first, active_image: image) }
+        let!(:element) { create(:takeover, rule: site.rules.first, active_image: image) }
 
         it 'generates the correct image data' do
           expect(site_element).to match(

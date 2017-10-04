@@ -13,7 +13,7 @@ module ServiceProvider::RailsLogger
     yield.tap do
       Rails.logger.info "#{ tags } Performed ##{ method } successfully with arguments #{ args.inspect }"
     end
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "#{ tags } Error on ##{ method } #{ e.inspect }"
     raise e
   end

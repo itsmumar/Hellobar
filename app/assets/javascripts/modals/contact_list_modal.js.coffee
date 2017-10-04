@@ -27,6 +27,28 @@ class @ContactListModal extends Modal
 
     super
 
+  onDisconect: (data) =>
+    @blocks.instructions.show()
+    @blocks.syncDetails.hide()
+    @blocks.remoteListSelect.hide()
+    @blocks.tagListSelect.hide()
+    @$modal.trigger('provider:disconnected')
+    delete @options.identity
+    @_chooseHelloBar()
+
+  disconnect: (element) ->
+    identityId = @options.identity.id
+    return @onDisconect() unless identityId
+
+    $.ajax "/sites/#{@options.siteID}/identities/#{identityId}",
+      data:
+        contact_list_id: @options.id
+      type: "DELETE"
+      success: @onDisconect
+      error: (response) =>
+        if response.status == 422
+          @_chooseHelloBar()
+
   _hasSiteElements: ->
     num = @$modal.find("#contact_list_site_elements_count").val()
     parseInt(num) > 0
@@ -180,23 +202,7 @@ class @ContactListModal extends Modal
       modal._loadRemoteLists(select: this, listData: {double_optin: doubleOptIn})
 
   _bindDisconnect: (object) ->
-    modal = this
-    object.find("a.unlink").click (e) ->
-      $.ajax "/sites/#{modal.options.siteID}/identities/#{$(this).data('identity-id')}",
-        data:
-          contact_list_id: modal.options.id
-        type: "DELETE"
-        success: (data) =>
-          modal.blocks.instructions.show()
-          modal.blocks.syncDetails.hide()
-          modal.blocks.remoteListSelect.hide()
-          modal.blocks.tagListSelect.hide()
-          modal.$modal.trigger('provider:disconnected')
-          delete modal.options.identity
-          modal._chooseHelloBar()
-        error: (response) =>
-          if response.status == 422
-            modal._chooseHelloBar()
+    object.find("a.unlink").click => @disconnect()
 
   _chooseHelloBar: () ->
     select = @$modal.find("#contact_list_provider")
@@ -480,7 +486,7 @@ class @ContactListModal extends Modal
         if listData
           @$modal.find("#contact_list_double_optin").prop("checked", listData.double_optin)
 
-        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0].id
+        if selectedList = defaultContext.contactList?.data.remote_id or lists?[0]?.id
           @$modal.find("#contact_list_remote_list_id").val(selectedList)
 
       else # no identity found, or an embed provider
