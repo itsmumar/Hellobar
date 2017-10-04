@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170929100416) do
+ActiveRecord::Schema.define(version: 20171003141419) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -115,20 +115,6 @@ ActiveRecord::Schema.define(version: 20170929100416) do
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
-
-  create_table "contact_list_logs", force: :cascade do |t|
-    t.integer  "contact_list_id", limit: 4
-    t.string   "email",           limit: 255
-    t.string   "name",            limit: 255
-    t.text     "error",           limit: 16777215
-    t.boolean  "completed",                        default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "stacktrace",      limit: 16777215
-    t.boolean  "migrated",                         default: false, null: false
-  end
-
-  add_index "contact_list_logs", ["contact_list_id"], name: "index_contact_list_logs_on_contact_list_id", using: :btree
 
   create_table "contact_lists", force: :cascade do |t|
     t.integer  "site_id",      limit: 4
