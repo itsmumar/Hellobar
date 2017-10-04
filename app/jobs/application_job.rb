@@ -7,8 +7,4 @@ class ApplicationJob < ActiveJob::Base
     Shoryuken.logger.error exception
     Shoryuken.logger.error exception.backtrace.join("\n")
   end
-
-  before_perform do |job|
-    Raven.extra_context queue_name: job.queue_name
-  end
 end
