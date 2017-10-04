@@ -36,27 +36,34 @@ table.contacts-table
       th #
       th Email
       th Name
-      - if @email_statuses.any?
+      - if @contact_list.service_provider
         th Status
       th Date Subscribed
 
   tbody
-    - if @subscribers.any?
-      - @subscribers.each_with_index do |subscriber, index|
-        tr
-          td= index + 1
-          td= subscriber[:email]
-          td= subscriber[:name]
-          - if @email_statuses.any?
-            td= @email_statuses[subscriber[:email]]
-          td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
+    - @subscribers.each_with_index do |subscriber, index|
+      tr
+        td= index + 1
+        td= subscriber[:email]
+        td= subscriber[:name]
 
-    - else
+        - if @contact_list.service_provider
+          td
+            - if subscriber[:status].blank? || subscriber[:status] == 'unsynced'
+              = 'Unsynced'
+            - elsif subscriber[:status] == 'synced'
+              = 'Sent'
+            - elsif subscriber[:status] == 'error'
+              abbr title=subscriber[:error] Error
+
+        td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
+
+    - if @subscribers.empty?
       tr
         td colspan='9'
           h6 No Emails Collected Yet
 
 - if @total_subscribers > 100
   p
-    'Only showing the first 100 subscribers.
+    'Only showing latest 100 subscribers.
     = link_to 'Download all subscribers', download_site_contact_list_path(@site, @contact_list)

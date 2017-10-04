@@ -29,46 +29,34 @@ describe 'ContactList requests' do
     end
 
     describe 'GET :show' do
+      let(:contact_list) { create :contact_list, :aweber, site: site }
+
       before do
         allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
-        allow_any_instance_of(DynamoDB).to receive(:query)
-          .and_return([])
+        allow_any_instance_of(FetchContacts).to receive(:call).and_return([
+          { email: 'user@example.com', status: 'synced' },
+          { email: 'john@example.com', status: 'error' }
+        ])
       end
 
-      it 'responds with success' do
+      it 'responds with success and displays syncing statuses' do
         get site_contact_list_path(site, contact_list)
+
         expect(response).to be_successful
+        expect(response.body).to include 'Sent'
+        expect(response.body).to include 'Error'
       end
 
-      context 'with contact_list_logs' do
-        let(:contact_list) { create :contact_list, :aweber, site: site }
-        let(:contact_list_log) { create :contact_list_log, contact_list: contact_list }
-        let(:completed_contact_list_log) { create :contact_list_log, :completed, contact_list: contact_list }
+      context 'with Hello Bar contact list' do
+        let(:contact_list) { create :contact_list, site: site }
 
-        before do
-          allow_any_instance_of(DynamoDB).to receive(:query).and_return([
-            { 'email' => contact_list_log.email, 'n' => contact_list_log.name },
-            { 'email' => completed_contact_list_log.email, 'n' => completed_contact_list_log.name }
-          ])
-        end
-
-        it 'includes syncing statuses' do
+        it 'does not include syncing statuses' do
           get site_contact_list_path(site, contact_list)
+
           expect(response).to be_successful
-          expect(response.body).to include 'Sent'
-          expect(response.body).to include 'Error'
-        end
-
-        context 'with Hello Bar contact list' do
-          let(:contact_list) { create :contact_list, site: site }
-
-          it 'does not include syncing statuses' do
-            get site_contact_list_path(site, contact_list)
-            expect(response).to be_successful
-            expect(response.body).not_to include 'Sent'
-            expect(response.body).not_to include 'Error'
-          end
+          expect(response.body).not_to include 'Sent'
+          expect(response.body).not_to include 'Error'
         end
       end
 
