@@ -30,7 +30,13 @@ hellobar.defineModule('elements.relevance',
       }
 
       elementThatUserSeen() {
-        return this.possibleSiteElements.find(element => elementsData.getData(element.id, 'nv'));
+        for (let i = 0; i < this.possibleSiteElements.length; i++) {
+          const element = this.possibleSiteElements[i];
+
+          if (elementsData.getData(element.id, 'nv')) {
+            return element
+          }
+        }
       }
 
       randomElement() {
