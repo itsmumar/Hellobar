@@ -217,7 +217,6 @@ GEM
       currencies (~> 0.4.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.2)
     css_parser (1.5.0)
       addressable
     currencies (0.4.2)
@@ -326,8 +325,7 @@ GEM
       actionpack (>= 4, < 5.1)
       activesupport (>= 4, < 5.1)
       railties (>= 4, < 5.1)
-    loofah (2.1.1)
-      crass (~> 1.0.2)
+    loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.12)
     madmimi (1.1.2)
@@ -670,6 +668,7 @@ DEPENDENCIES
   launchy
   less_interactions
   lograge
+  loofah (= 2.0.3)
   madmimi
   mustache
   mysql2
