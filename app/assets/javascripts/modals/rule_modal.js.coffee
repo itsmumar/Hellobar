@@ -168,7 +168,6 @@ class @RuleModal extends Modal
     'PreviousPageURL': ['includes', 'does_not_include']
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'TimeCondition': ['before', 'after']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -191,7 +190,6 @@ class @RuleModal extends Modal
     'PreviousPageURL': '.previous-page-choice'
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
-    'SearchTermCondition': '.search-term-choice'
     'TimeCondition': '.time-choice'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
