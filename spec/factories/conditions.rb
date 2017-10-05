@@ -69,7 +69,7 @@ FactoryGirl.define do
     end
 
     trait :url_query do
-      segment 'UrlQuery'
+      segment 'UrlQueryCondition'
       operand 'includes'
       value 'a=b'
     end

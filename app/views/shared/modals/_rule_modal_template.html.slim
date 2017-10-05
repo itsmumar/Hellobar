@@ -70,7 +70,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "TimeCondition" "Time"}}
           | {{rule-option segment "UrlCondition" "URL"}}
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
-          | {{rule-option segment "UrlQuery" "URL Query"}}
+          | {{rule-option segment "UrlQueryCondition" "URL Query"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{rule-option operand "every" "every"}}

@@ -165,7 +165,7 @@ class @RuleModal extends Modal
     'TimeCondition': ['before', 'after']
     'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQueryCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
@@ -187,7 +187,7 @@ class @RuleModal extends Modal
     'TimeCondition': '.time-choice'
     'UrlCondition': '.url-choice'
     'UrlPathCondition': '.url-choice'
-    'UrlQuery': '.url-query'
+    'UrlQueryCondition': '.url-query'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'

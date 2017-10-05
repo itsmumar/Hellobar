@@ -115,7 +115,7 @@ describe Condition do
       end
     end
 
-    context 'is a UrlQuery' do
+    context 'is a UrlQueryCondition' do
       it 'outputs nice sentence' do
         condition = create :condition, :url_query
 
