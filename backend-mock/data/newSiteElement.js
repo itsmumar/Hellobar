@@ -39,8 +39,7 @@ module.exports = {
         "rule_id": 8,
         "segment": "DeviceCondition",
         "operand": "is",
-        "value": "mobile",
-        "data_type": null
+        "value": "mobile"
       }]
     }, {
       "id": 9,
@@ -55,8 +54,7 @@ module.exports = {
         "rule_id": 9,
         "segment": "UrlPathCondition",
         "operand": "is",
-        "value": ["/"],
-        "data_type": null
+        "value": ["/"]
       }]
     }]
   },

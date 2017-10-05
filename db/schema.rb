@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003141419) do
+ActiveRecord::Schema.define(version: 20171005151449) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -111,7 +111,6 @@ ActiveRecord::Schema.define(version: 20171003141419) do
     t.text     "value",      limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "data_type",  limit: 255
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree

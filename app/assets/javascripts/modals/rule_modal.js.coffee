@@ -65,7 +65,7 @@ class @RuleModal extends Modal
 
     @_toggleNewConditionMessage()
 
-    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_data_type, .rule_conditions_operand', ->
+    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->
       $this = $(this)
       $condition = $this.parents('.condition-block:first')
       segment = $condition.find('.condition-segment').val()
@@ -83,7 +83,6 @@ class @RuleModal extends Modal
         index: $condition.data('condition-index')
         segment: segment
         operand: $condition.find('.condition-operand').val()
-        data_type: $condition.find('.condition-data-type').val() || 'string'
         value: value
 
       $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
@@ -92,13 +91,8 @@ class @RuleModal extends Modal
       $condition.html($updatedCondition.html())
 
   _updateConditionMarkup: ($condition, conditionData) ->
-    @_renderDataTypes($condition, conditionData)
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
-
-  _renderDataTypes: ($condition, conditionData) ->
-    types = Object.keys(@_dataTypeOperandMapping)
-    $condition.find('.rule_conditions_data_type').remove()
 
   _renderOperands: ($condition, conditionData) ->
     validOperands = @filteredOperands(conditionData.segment)
@@ -200,16 +194,6 @@ class @RuleModal extends Modal
     'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
 
-  _dataTypeOperandMapping:
-    'string': ['is', 'is_not', 'includes', 'does_not_include']
-    'date': ['is', 'is_not', 'before', 'after', 'between']
-    'number': ['is', 'is_not', 'less_than', 'greater_than']
-
-  _dataTypeToClass:
-    'date': '.date-choice'
-    'string': '.string-choice'
-    'number': '.number-of-visits-choice'
-
   _bindSubmit: ->
     @_unbindSubmit() # clear any existing event bindings to make sure we only have one at a time
     modal = this
@@ -258,7 +242,6 @@ class @RuleModal extends Modal
       conditionData =
         index: nextIndex
         segment: 'DeviceCondition'
-        data_type: 'string'
         operand: 'is'
 
       $condition = @buildCondition(conditionData, nextIndex)
