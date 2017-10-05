@@ -72,7 +72,7 @@ class PayBill
     BillingAttempt.create!(
       bill: bill,
       credit_card: credit_card,
-      status: response.success? ? :success : :failed,
+      status: response.success? ? :successful : :failed,
       response: response.success? ? response.authorization : response.message
     )
   end

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :billing_attempt do
-    status :success
+    status :successful
 
     trait :success
 
