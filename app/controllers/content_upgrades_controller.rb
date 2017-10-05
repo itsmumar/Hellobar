@@ -8,7 +8,8 @@ class ContentUpgradesController < ApplicationController
 
   def index
     @content_upgrades = @site.site_elements.active_content_upgrades.order(created_at: :desc)
-    @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym).reverse if params[:sort]
+    @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym) if params[:sort]
+    @content_upgrades = @content_upgrades.reverse if params[:desc].eql?('true')
   end
 
   def new
