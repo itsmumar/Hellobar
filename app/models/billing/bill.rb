@@ -29,17 +29,20 @@ class Bill < ActiveRecord::Base
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  enum status: %i[pending paid voided problem]
+  scope :pending, -> { where(status: :pending) }
+  scope :paid, -> { where(status: :paid) }
+  scope :void, -> { where(status: :void) }
+  scope :failed, -> { where(status: :failed) }
 
   scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :not_void, -> { where.not(status: statuses[:voided]) }
+  scope :not_void, -> { where.not(status: :voided) }
   scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
-  scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
+  scope :paid_or_problem, -> { where(status: [:paid, :problem]) }
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
