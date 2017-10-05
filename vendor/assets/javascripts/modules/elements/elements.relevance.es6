@@ -47,7 +47,7 @@ hellobar.defineModule('elements.relevance',
 
       highestConversionRateElement() {
         if (this.mode === 'Exploit') {
-          possibleSiteElements.sort((a, b) => {
+          this.possibleSiteElements.sort((a, b) => {
             if (a.conversion_rate < b.conversion_rate)
               return 1;
             else if (a.conversion_rate > b.conversion_rate)
@@ -56,7 +56,7 @@ hellobar.defineModule('elements.relevance',
           });
 
           // Return the site element with the highest conversion rate
-          return possibleSiteElements[0];
+          return this.possibleSiteElements[0];
         }
       }
 
