@@ -12,7 +12,7 @@ class RulesController < ApplicationController
   end
 
   def create
-    rule = @site.rules.new rule_params.permit!
+    rule = @site.rules.new rule_params
 
     if rule.save
       render json: rule
@@ -24,7 +24,7 @@ class RulesController < ApplicationController
   def update
     rule = @site.rules.find(params[:id])
 
-    if rule.editable? && rule.update_attributes(rule_params.permit!)
+    if rule.editable? && rule.update_attributes(rule_params)
       render json: rule
     else
       render json: format_errors(rule.errors), status: :unprocessable_entity
