@@ -169,14 +169,14 @@ class @RuleModal extends Modal
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'TimeCondition': ['before', 'after']
+    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DateCondition': '.date-choice'
@@ -191,14 +191,14 @@ class @RuleModal extends Modal
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
     'TimeCondition': '.time-choice'
+    'UrlCondition': '.url-choice'
+    'UrlPathCondition': '.url-choice'
+    'UrlQuery': '.url-query'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'
     'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
-    'UrlCondition': '.url-choice'
-    'UrlPathCondition': '.url-choice'
-    'UrlQuery': '.url-query'
 
   _dataTypeOperandMapping:
     'string': ['is', 'is_not', 'includes', 'does_not_include']

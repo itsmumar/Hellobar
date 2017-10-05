@@ -15,14 +15,14 @@ class Condition < ActiveRecord::Base
     'ReferrerCondition' => 'rf',
     'ReferrerDomainCondition' => 'rd',
     'TimeCondition' => 'tc',
+    'UrlCondition' => 'pu',
+    'UrlPathCondition' => 'pup',
+    'UrlQuery' => 'pq',
     'UTMCampaignCondition' => 'ad_ca',
     'UTMContentCondition' => 'ad_co',
     'UTMMediumCondition' => 'ad_me',
     'UTMSourceCondition' => 'ad_so',
-    'UTMTermCondition' => 'ad_te',
-    'UrlCondition' => 'pu',
-    'UrlPathCondition' => 'pup',
-    'UrlQuery' => 'pq'
+    'UTMTermCondition' => 'ad_te'
   }.freeze
 
   MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
@@ -161,7 +161,12 @@ class Condition < ActiveRecord::Base
       'TimeCondition'             => %w[before after],
       'UrlCondition'              => %w[is is_not includes does_not_include],
       'UrlPathCondition'          => %w[is is_not includes does_not_include],
-      'UtmCondition'              => %w[is is_not includes does_not_include]
+      'UrlQuery'                  => %w[is is_not includes does_not_include],
+      'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
+      'UTMContentCondition'       => %w[is is_not includes does_not_include],
+      'UTMMediumCondition'        => %w[is is_not includes does_not_include],
+      'UTMSourceCondition'        => %w[is is_not includes does_not_include],
+      'UTMTermCondition'          => %w[is is_not includes does_not_include]
     }
 
     return if @operands[segment]&.include? operand
