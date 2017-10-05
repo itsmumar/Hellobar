@@ -9,7 +9,7 @@ describe PayBill do
   describe '#call' do
     specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount, any_args) }
     specify { expect { service.call }.to change(bill, :status).to :paid }
-    specify { expect { service.call }.to change { BillingAttempt.success.count }.to 1 }
+    specify { expect { service.call }.to change { BillingAttempt.successful.count }.to 1 }
 
     it 'creates pending bill for next period', :freeze do
       expect { service.call }.to change { subscription.bills.pending.last }.from(nil)
@@ -56,7 +56,7 @@ describe PayBill do
       it 'does not change bill' do
         expect { service.call }.not_to make_gateway_call(:purchase).with(bill.amount * 100, any_args)
         expect { service.call }.not_to change(bill, :status)
-        expect(BillingAttempt.success.count).to eql 0
+        expect(BillingAttempt.successful.count).to eql 0
       end
     end
 
@@ -77,7 +77,7 @@ describe PayBill do
 
       specify { expect { service.call }.to change(bill, :status).to :paid }
       specify { expect { service.call }.not_to make_gateway_call(:purchase) }
-      specify { expect { service.call }.not_to change { BillingAttempt.success.count } }
+      specify { expect { service.call }.not_to change { BillingAttempt.successful.count } }
     end
 
     context 'without credit card' do

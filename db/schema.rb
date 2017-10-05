@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20171005070619) do
     t.string   "response",       limit: 255
     t.datetime "created_at"
     t.integer  "credit_card_id", limit: 4
-    t.string   "status",         limit: 255
+    t.string   "status",         limit: 255, default: "pending", null: false
   end
 
   add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree
