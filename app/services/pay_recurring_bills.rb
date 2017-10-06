@@ -55,7 +55,7 @@ class PayRecurringBills
 
   def void(bill)
     report.void bill
-    bill.voided!
+    bill.update! status: Bill::VOID
   end
 
   def skip?(bill)

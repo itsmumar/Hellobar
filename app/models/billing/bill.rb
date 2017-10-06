@@ -63,7 +63,7 @@ class Bill < ActiveRecord::Base
   end
 
   def status=(value)
-    value = value.to_sym
+    value = value.to_s
     return if status == value
     raise StatusAlreadySet.new(self, status) unless can_change_status?(value)
 
