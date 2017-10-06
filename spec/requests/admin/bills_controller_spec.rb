@@ -30,7 +30,7 @@ describe 'Admin Bills requests' do
         put admin_user_bill_void_path(user_id: user, bill_id: bill)
 
         expect(response).to redirect_to admin_user_path(user)
-        expect(bill.reload).to be_void
+        expect(bill.reload).to be_voided
       end
     end
 

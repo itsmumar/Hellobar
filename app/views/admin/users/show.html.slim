@@ -116,7 +116,7 @@ div#user_profile
                     = link_to "cancel", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Cancel this bill?" }
                     br
 
-                  - if !bill.void? && bill.amount == 0
+                  - if !bill.voided? && bill.amount == 0
                     = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
                     br
 
