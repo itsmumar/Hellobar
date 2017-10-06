@@ -65,7 +65,7 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet.new(self, status) if status == PAID
+    raise StatusAlreadySet.new(self, status) unless can_change_status?(value)
 
     self[:status] = value
     self.status_set_at = Time.current
@@ -113,6 +113,10 @@ class Bill < ActiveRecord::Base
   end
 
   private
+
+  def can_change_status?(value)
+    value == VOID || [PENDING, FAILED].include?(status)
+  end
 
   def set_base_amount
     self.base_amount ||= amount

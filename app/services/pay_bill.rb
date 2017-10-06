@@ -25,7 +25,7 @@ class PayBill
   end
 
   def pay_bill
-    return bill.paid! if bill.amount.zero?
+    return bill.update! status: Bill::PAID if bill.amount.zero?
     raise MissingCreditCard, 'could not pay bill without credit card' unless credit_card
 
     response = gateway.purchase(bill.amount, credit_card)
@@ -40,8 +40,7 @@ class PayBill
 
   def process_successful_response(response)
     create_billing_attempt(response)
-    bill.update authorization_code: response.authorization
-    bill.paid!
+    bill.update! authorization_code: response.authorization, status: Bill::PAID
     create_bill_for_next_period
     fix_failed_bills
   end
