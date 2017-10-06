@@ -6,7 +6,7 @@ FactoryGirl.define do
     operand 'is'
     value ['http://test.com']
 
-    trait :url_is
+    trait :url
 
     trait :url_includes do
       segment 'UrlCondition'
@@ -66,6 +66,18 @@ FactoryGirl.define do
       segment 'DeviceCondition'
       operand 'is'
       value 'mobile'
+    end
+
+    trait :url_query do
+      segment 'UrlQueryCondition'
+      operand 'includes'
+      value 'a=b'
+    end
+
+    trait :utm_source do
+      segment 'UTMSourceCondition'
+      operand 'is'
+      value 'hellobar'
     end
   end
 end

@@ -14,16 +14,15 @@ class Condition < ActiveRecord::Base
     'PreviousPageURL' => 'pp',
     'ReferrerCondition' => 'rf',
     'ReferrerDomainCondition' => 'rd',
-    'SearchTermCondition' => 'st',
     'TimeCondition' => 'tc',
+    'UrlCondition' => 'pu',
+    'UrlPathCondition' => 'pup',
+    'UrlQueryCondition' => 'pq',
     'UTMCampaignCondition' => 'ad_ca',
     'UTMContentCondition' => 'ad_co',
     'UTMMediumCondition' => 'ad_me',
     'UTMSourceCondition' => 'ad_so',
-    'UTMTermCondition' => 'ad_te',
-    'UrlCondition' => 'pu',
-    'UrlPathCondition' => 'pup',
-    'UrlQuery' => 'pq'
+    'UTMTermCondition' => 'ad_te'
   }.freeze
 
   MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
@@ -51,8 +50,8 @@ class Condition < ActiveRecord::Base
   validates :segment, presence: true, inclusion: { in: SEGMENTS.keys }
   validates :operand, presence: true
   validates :value, presence: true
-  validate :value_is_valid
-  validate :operand_is_valid
+  validate :value_correctness
+  validate :operand_correctness
 
   delegate :site, to: :rule
 
@@ -136,7 +135,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def value_is_valid
+  def value_correctness
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.is_a?(Array) && value.length == 2 && value.all?(&:present?)
     elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
@@ -146,7 +145,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def operand_is_valid
+  def operand_correctness
     @operands ||= {
       'DateCondition'             => %w[is is_not before after between],
       'DeviceCondition'           => %w[is is_not],
@@ -159,11 +158,15 @@ class Condition < ActiveRecord::Base
       'PreviousPageURL'           => %w[includes does_not_include],
       'ReferrerCondition'         => %w[is is_not includes does_not_include],
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
-      'SearchTermCondition'       => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
       'UrlCondition'              => %w[is is_not includes does_not_include],
       'UrlPathCondition'          => %w[is is_not includes does_not_include],
-      'UtmCondition'              => %w[is is_not includes does_not_include]
+      'UrlQueryCondition'         => %w[is is_not includes does_not_include],
+      'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
+      'UTMContentCondition'       => %w[is is_not includes does_not_include],
+      'UTMMediumCondition'        => %w[is is_not includes does_not_include],
+      'UTMSourceCondition'        => %w[is is_not includes does_not_include],
+      'UTMTermCondition'          => %w[is is_not includes does_not_include]
     }
 
     return if @operands[segment]&.include? operand
