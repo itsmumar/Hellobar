@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20171003141419) do
     t.string   "password_hashed",     limit: 255
     t.string   "session_token",       limit: 191
     t.string   "permissions_json",    limit: 255
-    t.datetime "password_last_reset"
     t.datetime "session_last_active"
     t.integer  "login_attempts",      limit: 4,   default: 0
     t.boolean  "locked",                          default: false
