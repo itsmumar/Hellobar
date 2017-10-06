@@ -112,23 +112,22 @@ class SiteElement < ActiveRecord::Base
     [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
   end
 
-  def caption=(c_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    c_value = white_list_sanitizer.sanitize(c_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    self[:caption] = c_value
+  def caption=(value)
+    self[:caption] = sanitize value
   end
 
-  def headline=(h_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    h_value = 'Hello. Add your message here.' if h_value.blank?
-    self[:headline] = h_value
+  def headline=(value)
+    value = sanitize value
+    value = 'Hello. Add your message here.' if value.blank?
+    self[:headline] = value
   end
 
-  def link_text=(lt_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    self[:link_text] = lt_value
+  def link_text=(value)
+    self[:link_text] = sanitize value
+  end
+
+  def content=(value)
+    self[:content] = sanitize value
   end
 
   def fonts
@@ -307,5 +306,10 @@ class SiteElement < ActiveRecord::Base
     # This is a Paranoia issue, which we need to work around manually
     # https://github.com/rubysherpas/paranoia/issues/413
     update_attribute :active_image_id, nil
+  end
+
+  def sanitize(value)
+    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+    white_list_sanitizer.sanitize(value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
   end
 end

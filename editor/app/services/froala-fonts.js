@@ -15,7 +15,7 @@ export default Ember.Service.extend({
       "Raleway, sans-serif": 'Raleway',
       "Roboto,sans-serif": 'Roboto',
       "Tahoma, Geneva, sans-serif": 'Tahoma',
-      "'Times New Roman', Times, serif, -webkit-standard": 'Times New Roman',
+      "\'Times New Roman\', Times, serif": 'Times New Roman',
       "Verdana, Geneva, sans-serif": 'Verdana'
     };
   },
