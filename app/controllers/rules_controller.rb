@@ -1,6 +1,4 @@
 class RulesController < ApplicationController
-  include RulesHelper
-
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability, only: %i[create update]
@@ -17,7 +15,7 @@ class RulesController < ApplicationController
     if rule.save
       render json: rule
     else
-      render json: rule.errors, status: :unprocessable_entity
+      render json: rule.nested_error_messages, status: :unprocessable_entity
     end
   end
 
@@ -27,7 +25,7 @@ class RulesController < ApplicationController
     if rule.editable? && rule.update_attributes(rule_params)
       render json: rule
     else
-      render json: format_errors(rule.errors), status: :unprocessable_entity
+      render json: rule.nested_error_messages, status: :unprocessable_entity
     end
   end
 
@@ -39,7 +37,7 @@ class RulesController < ApplicationController
     elsif rule.editable? && rule.destroy
       render nothing: true, status: :ok
     else
-      render json: rule.errors, status: :unprocessable_entity
+      render json: rule.nested_error_messages, status: :unprocessable_entity
     end
   end
 

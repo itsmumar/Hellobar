@@ -50,8 +50,8 @@ class Condition < ActiveRecord::Base
   validates :segment, presence: true, inclusion: { in: SEGMENTS.keys }
   validates :operand, presence: true
   validates :value, presence: true
-  validate :value_is_valid
-  validate :operand_is_valid
+  validate :value_correctness
+  validate :operand_correctness
 
   delegate :site, to: :rule
 
@@ -135,7 +135,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def value_is_valid
+  def value_correctness
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.is_a?(Array) && value.length == 2 && value.all?(&:present?)
     elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
@@ -145,7 +145,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def operand_is_valid
+  def operand_correctness
     @operands ||= {
       'DateCondition'             => %w[is is_not before after between],
       'DeviceCondition'           => %w[is is_not],

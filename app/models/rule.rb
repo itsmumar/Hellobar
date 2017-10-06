@@ -89,4 +89,18 @@ class Rule < ActiveRecord::Base
   rescue StandardError
     false
   end
+
+  def nested_error_messages
+    error_messages = conditions.each.with_object([]) do |condition, memo|
+      condition.errors.full_messages.each do |message|
+        memo << message.downcase
+      end
+    end
+
+    errors.full_messages.each do |message|
+      error_messages << message.downcase unless message == 'Conditions is invalid'
+    end
+
+    error_messages
+  end
 end
