@@ -13,7 +13,7 @@ class BillsController < ApplicationController
   def pay
     PayBill.new(@bill).call
 
-    if @bill.problem?
+    if @bill.failed?
       flash[:alert] =
         "There was a problem while charging your credit card ending in #{ @bill.credit_card.last_digits }. " \
         'You can fix this by adding another credit card'
@@ -36,6 +36,6 @@ class BillsController < ApplicationController
   end
 
   def dont_allow_probem_bill
-    @bill.problem? && raise(ActiveRecord::RecordNotFound)
+    @bill.failed? && raise(ActiveRecord::RecordNotFound)
   end
 end

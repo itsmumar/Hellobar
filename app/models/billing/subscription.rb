@@ -69,7 +69,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def problem_with_payment?
-    bills.problem.any?
+    bills.failed.any?
   end
 
   def free?

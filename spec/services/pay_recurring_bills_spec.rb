@@ -143,7 +143,7 @@ describe PayRecurringBills do
           expect(report).to receive(:fail)
 
           expect { service.call }
-            .to change { bill.reload.status }.to :problem
+            .to change { bill.reload.status }.to Bill::FAILED
         end
       end
 

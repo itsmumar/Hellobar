@@ -26,10 +26,14 @@ describe PayBill do
     end
 
     context 'when site had problems with payment' do
-      let!(:problem_bill) { create :bill, :problem, site: bill.site }
+      let!(:failed_bill) { create :bill, :problem, site: bill.site }
 
       it 'voids problem bills' do
-        expect { service.call }.to change { problem_bill.reload.status }.from(:problem).to(:voided)
+        expect { service.call }
+          .to change { failed_bill.reload.status }
+          .from(Bill::FAILED)
+          .to(Bill::VOID)
+
         expect(bill.site.reload.bills_with_payment_issues).to be_empty
       end
     end

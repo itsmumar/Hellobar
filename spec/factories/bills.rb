@@ -31,7 +31,7 @@ FactoryGirl.define do
       amount 10
       bill_at { '2014-09-01'.to_date }
       subscription { create :subscription, :pro }
-      status :problem
+      status Bill::FAILED
 
       after :create do |bill|
         create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
@@ -64,19 +64,19 @@ FactoryGirl.define do
   end
 
   trait :voided do
-    status :voided
+    status Bill::VOID
   end
 
   trait :void do
-    status :voided
+    status Bill::VOID
   end
 
   trait :pending do
-    status :pending
+    status Bill::PENDING
   end
 
   trait :problem do
-    status :problem
+    status Bill::FAILED
   end
 
   trait :with_attempt do

@@ -1,4 +1,10 @@
 class Bill < ActiveRecord::Base
+  PENDING = 'pending'.freeze
+  PAID = 'paid'.freeze
+  VOID = 'void'.freeze
+  FAILED = 'failed'.freeze
+  STATUSES = [PENDING, PAID, VOID, FAILED].freeze
+
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
       super "Can not change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
@@ -23,16 +29,14 @@ class Bill < ActiveRecord::Base
   has_one :site, through: :subscription, inverse_of: :bills
   has_one :credit_card, -> { with_deleted }, through: :subscription
 
-  validates :subscription, presence: true
   delegate :site_id, to: :subscription
 
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  scope :pending, -> { where(status: :pending) }
-  scope :paid, -> { where(status: :paid) }
-  scope :void, -> { where(status: :void) }
-  scope :failed, -> { where(status: :failed) }
+  STATUSES.each do |status|
+    scope status, -> { where(status: status) }
+  end
 
   scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
@@ -42,7 +46,13 @@ class Bill < ActiveRecord::Base
   scope :not_void, -> { where.not(status: :voided) }
   scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
-  scope :paid_or_problem, -> { where(status: [:paid, :problem]) }
+  scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
+
+  validates :subscription, presence: true
+  validates :status, presence: true, inclusion: { in: STATUSES }
+
+  # define #pending?, #paid?, etc.
+  delegate *STATUSES.map { |status| status + '?' }, to: :status
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
@@ -55,16 +65,14 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_sym
     return if status == value
-    raise StatusAlreadySet.new(self, status) unless status == :pending || status == :problem || value == :voided
+    raise StatusAlreadySet.new(self, status) if status == PAID
 
-    status_value = Bill.statuses[value.to_sym]
-    raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
-    self[:status] = status_value
+    self[:status] = value
     self.status_set_at = Time.current
   end
 
   def status
-    super.to_sym
+    ActiveSupport::StringInquirer.new(super)
   end
 
   def problem_reason
