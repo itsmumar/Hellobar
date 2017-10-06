@@ -179,4 +179,26 @@ describe Rule do
       expect(rule).not_to be_same_as(other_rule)
     end
   end
+
+  describe '#nested_error_messages' do
+    it 'includes errors on the Rule model' do
+      rule = Rule.new site: Site.new
+
+      rule.valid?
+
+      expect(rule.nested_error_messages).to include "name can't be blank"
+    end
+
+    it 'includes errors on the nested model' do
+      condition = Condition.new
+      rule = Rule.new site: Site.new, name: 'Name', conditions: [condition]
+
+      rule.valid?
+
+      expect(rule.nested_error_messages).to include "segment can't be blank"
+      expect(rule.nested_error_messages).to include 'segment is not included in the list'
+      expect(rule.nested_error_messages).to include "operand can't be blank"
+      expect(rule.nested_error_messages).to include "conditions value can't be blank"
+    end
+  end
 end

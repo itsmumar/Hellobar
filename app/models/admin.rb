@@ -3,7 +3,6 @@ class Admin < ActiveRecord::Base
   MAX_ACCESS_TOKENS = 10
   MAX_LOGIN_ATTEMPTS = 10
   MAX_SESSION_TIME = 24.hours
-  MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MIN_PASSWORD_LENGTH = 8
   SALT = 'thisismyawesomesaltgoducks'.freeze
   ISSUER = 'HelloBar'.freeze
@@ -105,7 +104,6 @@ class Admin < ActiveRecord::Base
 
   def reset_password!(unencrypted_password)
     timestamp = Time.current
-    self.password_last_reset = timestamp
     self.password = unencrypted_password
     save!
 
@@ -131,10 +129,6 @@ class Admin < ActiveRecord::Base
       session_token: hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join(''))
     )
     session_heartbeat!
-  end
-
-  def needs_to_set_new_password?
-    !password_last_reset || Time.current - password_last_reset > MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD
   end
 
   def lock!

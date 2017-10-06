@@ -94,7 +94,6 @@ export default Ember.Component.extend({
           Ember.set(updatedRule, 'description', ruleData.description);
           Ember.set(updatedRule, 'name', ruleData.name);
           Ember.set(updatedRule, 'match', ruleData.match);
-          Ember.set(updatedRule, 'priority', ruleData.priority);
         } else { // we created a new rule
           that.get('model.site.rules').push(ruleData);
         }

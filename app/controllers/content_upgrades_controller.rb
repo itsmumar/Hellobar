@@ -1,6 +1,4 @@
 class ContentUpgradesController < ApplicationController
-  include RulesHelper
-
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability

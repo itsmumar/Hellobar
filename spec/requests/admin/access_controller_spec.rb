@@ -16,7 +16,6 @@ describe Admin::AccessController do
       it 'resets password' do
         expect { do_reset_password }
           .to change { admin.reload.password_hashed }
-          .and change { admin.reload.password_last_reset }
       end
 
       it 'redirects to admin_path' do

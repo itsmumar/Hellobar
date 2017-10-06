@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20171005070619) do
     t.string   "password_hashed",     limit: 255
     t.string   "session_token",       limit: 191
     t.string   "permissions_json",    limit: 255
-    t.datetime "password_last_reset"
     t.datetime "session_last_active"
     t.integer  "login_attempts",      limit: 4,   default: 0
     t.boolean  "locked",                          default: false
@@ -111,7 +110,6 @@ ActiveRecord::Schema.define(version: 20171005070619) do
     t.text     "value",      limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "data_type",  limit: 255
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
@@ -221,7 +219,6 @@ ActiveRecord::Schema.define(version: 20171005070619) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",       limit: 255
-    t.integer  "priority",   limit: 4
     t.string   "match",      limit: 255
     t.boolean  "editable",               default: true
     t.datetime "deleted_at"
