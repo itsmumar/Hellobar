@@ -25,7 +25,7 @@ class PayBill
   end
 
   def pay_bill
-    return bill.update! status: Bill::PAID if bill.amount.zero?
+    return bill.paid! if bill.amount.zero?
     raise MissingCreditCard, 'could not pay bill without credit card' unless credit_card
 
     response = gateway.purchase(bill.amount, credit_card)
@@ -47,7 +47,7 @@ class PayBill
 
   def process_unsuccessful_response(response)
     create_billing_attempt(response)
-    bill.update! status: Bill::FAILED
+    bill.fail!
     Raven.capture_message 'Unsuccessful charge', extra: {
       message: response.message,
       bill: bill.id,
@@ -91,7 +91,7 @@ class PayBill
   end
 
   def fix_failed_bills
-    bill.site.bills_with_payment_issues.each { |bill| bill.update! status: Bill::VOID }
+    bill.site.bills_with_payment_issues.each { |bill| bill.void! }
   end
 
   def gateway

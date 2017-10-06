@@ -150,7 +150,7 @@ describe ChangeSubscription, :freeze do
         context 'when there is a problem bill' do
           before do
             change_subscription('pro', 'monthly')
-            site.current_subscription.bills.last.update! status: Bill::FAILED
+            site.current_subscription.bills.last.fail!
           end
 
           it 'pays the problem bill' do

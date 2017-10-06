@@ -17,7 +17,7 @@ class AddTrialSubscription
 
   def void_active_free_bill
     return unless site.active_paid_bill
-    site.active_paid_bill.update! status: Bill::VOID if site.active_paid_bill.amount.zero?
+    site.active_paid_bill.void! if site.active_paid_bill.amount.zero?
   end
 
   def create_trial_subscription

@@ -76,7 +76,7 @@ describe PayRecurringBills do
         expect(report).to receive(:void).with(bill_without_site)
 
         expect { service.call }
-          .to change { bill_without_site.reload.status }.to(Bill::VOID)
+          .to change { bill_without_site.reload.status }.to(Bill::VOIDED)
       end
 
       include_examples 'do not pay bill'

@@ -1,9 +1,9 @@
 class Bill < ActiveRecord::Base
   PENDING = 'pending'.freeze
   PAID = 'paid'.freeze
-  VOID = 'void'.freeze
+  VOIDED = 'voided'.freeze
   FAILED = 'failed'.freeze
-  STATUSES = [PENDING, PAID, VOID, FAILED].freeze
+  STATUSES = [PENDING, PAID, VOIDED, FAILED].freeze
 
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
@@ -43,15 +43,15 @@ class Bill < ActiveRecord::Base
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :not_void, -> { where.not(status: VOID) }
-  scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
+  scope :not_voided, -> { where.not(status: VOIDED) }
+  scope :active, -> { not_voided.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
   scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
 
   validates :subscription, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
-  # define #pending?, #paid?, etc.
+  # defines #pending? #paid? #voided? #failed?
   delegate(*STATUSES.map { |status| status + '?' }, to: :status)
 
   def during_trial_subscription?
@@ -65,14 +65,16 @@ class Bill < ActiveRecord::Base
   def status=(value)
     value = value.to_s
     return if status == value
-    raise StatusAlreadySet.new(self, status) unless can_change_status?(value)
+    raise StatusAlreadySet.new(self, status) unless can_status_be_changed?(value)
 
     self[:status] = value
     self.status_set_at = Time.current
   end
 
+  # this gives you a prettier way to test for equality
+  #   i.e: bill.status.paid? || bill.status.voided?
   def status
-    ActiveSupport::StringInquirer.new(super)
+    ActiveSupport::StringInquirer.new(super).freeze
   end
 
   def problem_reason
@@ -112,10 +114,26 @@ class Bill < ActiveRecord::Base
     (base_amount || amount) - calculate_discount
   end
 
+  def pending!
+    update! status: PENDING
+  end
+
+  def paid!
+    update! status: PAID
+  end
+
+  def void!
+    update! status: VOIDED
+  end
+
+  def fail!
+    update! status: FAILED
+  end
+
   private
 
-  def can_change_status?(value)
-    value == VOID || [PENDING, FAILED].include?(status)
+  def can_status_be_changed?(value)
+    value == VOIDED || [PENDING, FAILED].include?(status)
   end
 
   def set_base_amount

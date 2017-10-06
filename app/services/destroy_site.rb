@@ -14,7 +14,7 @@ class DestroySite
   attr_reader :site
 
   def void_pending_bills
-    site.bills.pending.each { |bill| bill.update! status: Bill::VOID }
+    site.bills.pending.each { |bill| bill.void! }
   end
 
   def override_script

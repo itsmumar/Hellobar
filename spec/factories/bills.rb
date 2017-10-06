@@ -64,7 +64,7 @@ FactoryGirl.define do
   end
 
   trait :void do
-    status Bill::VOID
+    status Bill::VOIDED
   end
 
   trait :pending do

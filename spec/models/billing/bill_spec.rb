@@ -50,12 +50,12 @@ describe Bill do
   it 'should not let you change the status once set' do
     bill = create(:pro_bill)
     expect(bill.status).to eq Bill::PENDING
-    bill.update! status: Bill::VOID
-    expect(bill.status).to eq Bill::VOID
+    bill.void!
+    expect(bill.status).to eq Bill::VOIDED
     bill.reload
-    expect(bill.status).to eq Bill::VOID
-    expect { bill.update! status: Bill::PENDING }.to raise_error(Bill::StatusAlreadySet)
-    expect { bill.update! status: Bill::PAID }.to raise_error(Bill::StatusAlreadySet)
+    expect(bill.status).to eq Bill::VOIDED
+    expect { bill.pending! }.to raise_error(Bill::StatusAlreadySet)
+    expect { bill.paid! }.to raise_error(Bill::StatusAlreadySet)
     expect { bill.status = Bill::PENDING }.to raise_error(Bill::StatusAlreadySet)
   end
 
@@ -63,7 +63,7 @@ describe Bill do
     bill = create(:pro_bill)
     expect(bill.status).to eq Bill::PENDING
     expect(bill.status_set_at).to be_nil
-    bill.update! status: Bill::PAID
+    bill.paid!
     expect(bill.status_set_at).to be_within(2).of(Time.current)
   end
 

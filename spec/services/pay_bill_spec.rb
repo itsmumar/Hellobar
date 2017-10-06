@@ -32,7 +32,7 @@ describe PayBill do
         expect { service.call }
           .to change { failed_bill.reload.status }
           .from(Bill::FAILED)
-          .to(Bill::VOID)
+          .to(Bill::VOIDED)
 
         expect(bill.site.reload.bills_with_payment_issues).to be_empty
       end
