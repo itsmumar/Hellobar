@@ -52,7 +52,7 @@ describe 'Sites requests' do
       it 'voids all pending bills' do
         bill = create :bill, :pending, site: site
         expect { delete site_path(site) }.to change { site.bills.pending.count }.to 0
-        expect(bill.reload).to be_voided
+        expect(bill.reload).to be_void
       end
     end
   end

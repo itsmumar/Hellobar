@@ -62,7 +62,7 @@ describe PayRecurringBills do
 
       specify do
         expect { service.call }
-          .to change { zero_amount_bill.reload.status }.to(:paid)
+          .to change { zero_amount_bill.reload.status }.to(Bill::PAID)
       end
 
       include_examples 'pay bill'
@@ -76,7 +76,7 @@ describe PayRecurringBills do
         expect(report).to receive(:void).with(bill_without_site)
 
         expect { service.call }
-          .to change { bill_without_site.reload.status }.to(:voided)
+          .to change { bill_without_site.reload.status }.to(Bill::VOID)
       end
 
       include_examples 'do not pay bill'
@@ -120,7 +120,7 @@ describe PayRecurringBills do
         expect(report).to receive(:success)
 
         expect { service.call }
-          .to change { bill.reload.status }.to :paid
+          .to change { bill.reload.status }.to Bill::PAID
       end
 
       include_examples 'pay bill'
@@ -130,7 +130,7 @@ describe PayRecurringBills do
 
         specify do
           expect { service.call }
-            .to change { bill.reload.status }.to :paid
+            .to change { bill.reload.status }.to Bill::PAID
         end
 
         include_examples 'pay bill'
@@ -211,7 +211,7 @@ describe PayRecurringBills do
             expect(bills.count).to eql 3
             expect(bills.paid).to match_array([first_pro_bill])
             expect(bills.pending).to match_array([renewal_pro_bill])
-            expect(bills.voided).to match_array([free_bill])
+            expect(bills.void).to match_array([free_bill])
           end
 
           context 'a month later' do
@@ -244,7 +244,7 @@ describe PayRecurringBills do
               expect(site.bills.count).to eql 4
               expect(site.bills.paid).to match_array([first_pro_bill, renewal_pro_bill])
               expect(site.bills.pending).to match_array([last_pending_pro_bill])
-              expect(site.bills.voided).to match_array([free_bill])
+              expect(site.bills.void).to match_array([free_bill])
 
               expect(site.active_paid_bill).to eql renewal_pro_bill
 

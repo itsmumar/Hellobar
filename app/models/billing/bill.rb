@@ -43,7 +43,7 @@ class Bill < ActiveRecord::Base
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :not_void, -> { where.not(status: :voided) }
+  scope :not_void, -> { where.not(status: VOID) }
   scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
   scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
