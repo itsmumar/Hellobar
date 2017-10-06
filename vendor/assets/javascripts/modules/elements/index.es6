@@ -8,5 +8,5 @@
 //= require ./elements
 //= require ./elements.injection
 //= require ./elements.intents
-//= require ./elements.rules
+//= require ./elements.relevance
 //= require ./elements.visibility

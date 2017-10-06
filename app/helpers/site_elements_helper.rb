@@ -200,4 +200,8 @@ module SiteElementsHelper
     end
   end
   # rubocop: enable Rails/OutputSafety
+
+  def link_to_order(text, by:)
+    link_to text, url_for(sort: by, desc: !params[:desc].eql?('true'))
+  end
 end

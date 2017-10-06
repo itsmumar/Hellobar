@@ -44,7 +44,6 @@ class ContactListsController < ApplicationController
         @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
         @subscribers = FetchContacts.new(@contact_list).call
         @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-        @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
       end
       format.json { render json: @contact_list }
     end

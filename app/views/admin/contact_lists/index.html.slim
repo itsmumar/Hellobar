@@ -1,22 +1,27 @@
-- @site.contact_lists.each do |contact_list|
-  h4= "#{contact_list.name}    (#{contact_list.id})"
-  h4
-    ' Synced to:
-    = contact_list.identity.try(:provider) || "Hello Bar"
+- @contact_lists.each do |contact_list|
 
-  table.table.table-striped
-    th colspan=2
-      | Last Synced
-    - contact_list.contact_list_logs.where(error: nil).order(created_at: :desc).limit(5).each do |log|
-      tr
-        td= log.email
-        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
+  .contact-list
 
-  table.table.table-striped
-    th colspan=3
-      | Recent Errors
-    - contact_list.contact_list_logs.where.not(error: nil).order(created_at: :desc).limit(5).each do |log|
-      tr
-        td= log.email
-        td= log.error
-        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
+    h4= "#{contact_list.name} (id: #{contact_list.id})"
+    h5
+      ' Synced to:
+      = contact_list&.identity&.provider || "Hello Bar"
+
+    - if @contacts[contact_list.id].any?
+
+      table.table.table-striped.contacts
+        tr
+          th colspan=5
+            | Latest contacts
+
+        - @contacts[contact_list.id].each do |contact|
+          tr
+            td= contact[:email]
+            td= contact[:name]
+            td= contact[:subscribed_at].strftime("%b %d, %Y at %l:%M %p")
+            td= contact[:status]
+            td.error= simple_format contact[:error]
+
+    - else
+
+      p No contacts.

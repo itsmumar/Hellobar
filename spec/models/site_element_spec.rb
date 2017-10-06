@@ -5,6 +5,10 @@ describe SiteElement do
   let(:contact_list) { create(:contact_list) }
   let(:site) { create(:site) }
 
+  def stub_capability(site, capability, value = true)
+    allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
+  end
+
   it 'belongs to a site through a rule set' do
     element.rule = nil
     expect(element.site).to be_nil
@@ -452,7 +456,35 @@ describe SiteElement do
     end
   end
 
-  def stub_capability(site, capability, value = true)
-    allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
+  describe 'sanitized attributes' do
+    let(:text) { '<p><span style="color: rgb(1,1,1); font-family: \'Times New Roman\', Times, serif;"></span></p>' }
+
+    describe '#link_text=' do
+      it 'does not remove style' do
+        element.link_text = text
+        expect(element.link_text).to eql text
+      end
+    end
+
+    describe '#headline=' do
+      it 'does not remove style' do
+        element.headline = text
+        expect(element.headline).to eql text
+      end
+    end
+
+    describe '#caption=' do
+      it 'does not remove style' do
+        element.caption = text
+        expect(element.caption).to eql text
+      end
+    end
+
+    describe '#content=' do
+      it 'does not remove style' do
+        element.content = text
+        expect(element.content).to eql text
+      end
+    end
   end
 end

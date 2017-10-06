@@ -17,7 +17,9 @@ class FetchContacts
       {
         email: item['email'],
         name: item['n'],
-        subscribed_at: item['ts'].presence && Time.zone.at(item['ts'].to_i)
+        subscribed_at: item['ts'].presence && Time.zone.at(item['ts'].to_i),
+        status: item['status'],
+        error: item['error']
       }
     end
   end
@@ -32,7 +34,8 @@ class FetchContacts
       index_name: 'ts-index', # use secondary index
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
-      projection_expression: 'email,n,ts',
+      expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
+      projection_expression: 'email,n,ts,#s,#e',
       limit: limit,
       scan_index_forward: false # sort results in reverse chronological order
     }

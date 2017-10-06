@@ -22,7 +22,7 @@ describe('Module elements', function () {
             return arg;
           }
         },
-        'elements.rules': true,
+        'rules': true,
         'elements.class': ElementClass,
         'elements.class.bar': ElementClass,
         'elements.class.slider': ElementClass,
