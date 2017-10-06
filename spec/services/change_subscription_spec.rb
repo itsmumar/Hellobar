@@ -41,7 +41,7 @@ describe ChangeSubscription, :freeze do
 
       it 'voids pending bills' do
         service.call
-        expect(pending_bill.reload).to be_void
+        expect(pending_bill.reload).to be_voided
       end
     end
 
@@ -191,7 +191,7 @@ describe ChangeSubscription, :freeze do
           expect(PayBill).to receive_service_call
           change_subscription('pro')
           expect(site.previous_subscription.bills).to match_array([kind_of(Bill)])
-          expect(site.previous_subscription.bills.first).to be_void
+          expect(site.previous_subscription.bills.first).to be_voided
         end
 
         context 'and then to Enterprise from Pro' do
