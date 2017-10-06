@@ -30,7 +30,6 @@ module.exports = {
       "id": 8,
       "site_id": 3,
       "name": "Mobile Visitors",
-      "priority": null,
       "match": "all",
       "description": "Device is mobile",
       "editable": false,
@@ -39,14 +38,12 @@ module.exports = {
         "rule_id": 8,
         "segment": "DeviceCondition",
         "operand": "is",
-        "value": "mobile",
-        "data_type": null
+        "value": "mobile"
       }]
     }, {
       "id": 9,
       "site_id": 3,
       "name": "Homepage Visitors",
-      "priority": null,
       "match": "all",
       "description": "URL Path is /",
       "editable": false,
@@ -55,8 +52,7 @@ module.exports = {
         "rule_id": 9,
         "segment": "UrlPathCondition",
         "operand": "is",
-        "value": ["/"],
-        "data_type": null
+        "value": ["/"]
       }]
     }]
   },
@@ -65,7 +61,6 @@ module.exports = {
     "id": 7,
     "site_id": 3,
     "name": "Everyone",
-    "priority": null,
     "match": "all",
     "description": "Show this to everyone",
     "editable": false,

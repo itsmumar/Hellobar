@@ -41,7 +41,8 @@ module ServiceProvider::Adapters
       end
     rescue Faraday::Conflict
       contact = find_contact(params[:email])
-      contact['lists'] << data[:lists].first
+      return unless contact
+      contact['lists'] << { id: list_id }
       update_contact params, contact
     rescue ServiceProvider::InvalidSubscriberError => e
       # if the email is not valid, CC will raise an exception and we end up here

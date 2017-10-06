@@ -6,10 +6,10 @@ coverage:
   status:
     project:
       default:
-        threshold: "0.5%"
+        threshold: "0.3%"
     patch:
       default:
-        threshold: "0.5%"
+        threshold: "3%"
 
 ignore:
   - "lib/git_utils.rb"

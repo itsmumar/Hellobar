@@ -6,14 +6,14 @@
 </ul>
 <table>
   <tr>
-    <th>Offer</th>
+    <th><%= link_to_order 'Offer', by: 'offer_headline' %></th>
     <th>WP Script Tag</th>
-    <th><%= link_to 'Contact List', url_for(sort: 'contact_list_name') %></th>
-    <th><%= link_to 'Views', url_for(sort: 'total_views') %></th>
-    <th><%= link_to 'Conversions', url_for(sort: 'total_conversions') %></th>
+    <th><%= link_to_order 'Contact List', by: 'contact_list_name' %></th>
+    <th><%= link_to_order 'Views', by: 'total_views' %></th>
+    <th><%= link_to_order 'Conversions', by: 'total_conversions' %></th>
     <th>%</th>
     <th>PDF</th>
-    <th><%= link_to 'Created At', url_for(sort: 'created_at') %></th>
+    <th><%= link_to_order 'Created At', by: 'created_at' %></th>
   </tr>
 <% @content_upgrades.each do |content_upgrade| %>
 <tr>
