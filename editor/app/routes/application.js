@@ -99,7 +99,13 @@ export default Ember.Route.extend({
         }
       };
 
-      this.get('validation').validate('phone_number', this.currentModel).then(() => {
+      const allValidation = Ember.RSVP.Promise.all([
+        this.get('validation').validate('phone_number', this.currentModel),
+        this.get('validation').validate('url', this.currentModel),
+        this.get('validation').validate('url_to_like', this.currentModel)
+      ]);
+
+      allValidation.then(() => {
         // Successful validation
         this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.set('saveSubmitted', true);
