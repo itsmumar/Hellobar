@@ -20,7 +20,7 @@ class ChangeSubscription
 
   def cancel_subscription_if_it_is_free
     return if !old_subscription || old_subscription.paid?
-    old_subscription.bills.free.each { |bill| bill.void! }
+    old_subscription.bills.free.each(&:void!)
   end
 
   def same_subscription?
@@ -82,7 +82,7 @@ class ChangeSubscription
   end
 
   def void_pending_bills!
-    site.bills.pending.each { |bill| bill.void! }
+    site.bills.pending.each(&:void!)
   end
 
   def subscription_class

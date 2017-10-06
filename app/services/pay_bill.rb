@@ -91,7 +91,7 @@ class PayBill
   end
 
   def fix_failed_bills
-    bill.site.bills_with_payment_issues.each { |bill| bill.void! }
+    bill.site.bills_with_payment_issues.each(&:void!)
   end
 
   def gateway

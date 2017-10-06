@@ -38,7 +38,7 @@ class RefundBill
   end
 
   def cancel_subscription
-    bill.subscription.bills.pending.each { |bill| bill.void! }
+    bill.subscription.bills.pending.each(&:void!)
     return unless bill.site&.current_subscription
     ChangeSubscription.new(bill.site, subscription: 'free').call
   end
