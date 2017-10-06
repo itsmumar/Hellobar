@@ -1,5 +1,3 @@
-UNAUTHORIZED = '401'.freeze
-
 describe RulesController do
   before do
     request.env['HTTP_ACCEPT'] = 'application/json'
@@ -12,10 +10,10 @@ describe RulesController do
 
   before { create :subscription, :pro, :paid, site: site }
 
-  describe 'GET :show' do
+  describe 'GET #show' do
     it 'should fail when not logged in' do
       get :show, site_id: 1, id: rule
-      expect(response.code).to eq UNAUTHORIZED
+      expect(response.code).to eq '401'
     end
 
     it 'should fail when not owner' do
@@ -27,21 +25,34 @@ describe RulesController do
     it 'should succeed when owner' do
       stub_current_user owner
       get :show, site_id: site, id: rule
-      expect(response).to be_success
+      expect(response).to be_successful
 
       json = JSON.parse(response.body)
       expect(json.keys).to match_array %w[id site_id name match conditions description editable]
     end
   end
 
-  describe 'POST :create' do
+  describe 'POST #create' do
     before do
       allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
     end
 
-    it 'should fail when not logged in' do
+    it 'fails when user is not logged in' do
       post :create, site_id: 1, rule: {}
-      expect(response.code).to eq UNAUTHORIZED
+      expect(response.code).to eq '401'
+    end
+
+    it 'fails when validation fails' do
+      stub_current_user owner
+
+      post :create, site_id: site.id, rule: { name: '' }
+
+      expect(response).not_to be_successful
+      expect(response.code).to eq '422'
+
+      body = JSON.parse response.body
+
+      expect(body['rules']).to include "name can't be blank"
     end
 
     it 'should succeed when not logged in' do
@@ -51,7 +62,7 @@ describe RulesController do
         post :create, site_id: site, rule: { name: 'rule name' }
       }.to change(Rule, :count).by(1)
 
-      expect(response).to be_success
+      expect(response).to be_successful
 
       JSON.parse(response.body).tap do |rule|
         expect(rule['site_id']).to eq site.id
@@ -81,63 +92,50 @@ describe RulesController do
     end
   end
 
-  describe 'DELETE :destroy' do
+  describe 'PUT #update' do
     before do
       allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
     end
 
-    let!(:second_rule) { create(:rule, site: site) }
-
-    it 'should fail when not logged in' do
-      delete :destroy, site_id: site, id: rule
-      expect(response.code).to eq UNAUTHORIZED
-    end
-
-    it 'should fail when not site owner' do
-      stub_current_user user
-      delete :destroy, site_id: site, id: rule
-      expect(response).to be_not_found
-    end
-
-    it 'should succeed when owner' do
-      stub_current_user owner
-      expect {
-        delete :destroy, site_id: site, id: rule
-      }.to change(Rule, :count).by(-1)
-
-      expect(response).to be_success
-    end
-
-    context 'when user only has one rule for their site' do
-      let(:second_rule) { nil }
-
-      it 'fails' do
-        stub_current_user owner
-        expect {
-          delete :destroy, site_id: site.id, id: rule
-        }.not_to change { Rule.count }
-
-        expect(response.status).to eq(422)
-      end
-    end
-  end
-
-  describe 'PUT :update' do
-    before do
-      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
-    end
-
-    it 'should fail when not logged in' do
+    it 'fails when not logged in' do
       put :update, site_id: site, id: rule
 
-      expect(response.code).to eq UNAUTHORIZED
+      expect(response.code).to eq '401'
     end
 
-    it 'should fail when not site owner' do
+    it 'fails when not site owner' do
       stub_current_user user
+
       put :update, site_id: site, id: rule, rule: {}
 
       expect(response).to be_forbidden
+    end
+
+    it 'fails when validation fails' do
+      stub_current_user owner
+
+      params = {
+        id: rule.id,
+        site_id: site.id,
+        rule: {
+          name: 'test',
+          conditions_attributes: {
+            '0' => {
+              operand: 'is'
+            }
+          }
+        }
+      }
+
+      put :update, params
+
+      expect(response).not_to be_successful
+      expect(response.code).to eq '422'
+
+      body = JSON.parse response.body
+
+      expect(body['rules']).to include "segment can't be blank"
+      expect(body['rules']).to include 'conditions value is not a valid value'
     end
 
     describe 'succeed as owner' do
@@ -153,7 +151,7 @@ describe RulesController do
           }
         }.to change { Condition.count }.by(1)
 
-        expect(response).to be_success
+        expect(response).to be_successful
 
         JSON.parse(response.body).tap do |rule_obj|
           expect(rule_obj['name']).to eq 'new rule name'
@@ -232,6 +230,58 @@ describe RulesController do
           }
         }
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before do
+      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
+    end
+
+    let!(:second_rule) { create(:rule, site: site) }
+
+    it 'should fail when not logged in' do
+      delete :destroy, site_id: site, id: rule
+      expect(response.code).to eq '401'
+    end
+
+    it 'should fail when not site owner' do
+      stub_current_user user
+      delete :destroy, site_id: site, id: rule
+      expect(response).to be_not_found
+    end
+
+    it 'fails when validation fails' do
+      stub_current_user owner
+
+      expect_any_instance_of(Rule).to receive(:destroy).and_return false
+
+      delete :destroy, site_id: site.id, id: rule.id
+
+      expect(response).not_to be_successful
+      expect(response.code).to eq '422'
+    end
+
+    it 'should succeed when owner' do
+      stub_current_user owner
+      expect {
+        delete :destroy, site_id: site, id: rule
+      }.to change(Rule, :count).by(-1)
+
+      expect(response).to be_successful
+    end
+
+    context 'when user only has one rule for their site' do
+      let(:second_rule) { nil }
+
+      it 'fails' do
+        stub_current_user owner
+        expect {
+          delete :destroy, site_id: site.id, id: rule
+        }.not_to change { Rule.count }
+
+        expect(response.status).to eq(422)
       end
     end
   end
