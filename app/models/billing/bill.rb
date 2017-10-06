@@ -52,7 +52,7 @@ class Bill < ActiveRecord::Base
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   # define #pending?, #paid?, etc.
-  delegate *STATUSES.map { |status| status + '?' }, to: :status
+  delegate(*STATUSES.map { |status| status + '?' }, to: :status)
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
