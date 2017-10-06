@@ -102,7 +102,7 @@ div#user_profile
                       |  (#{bill.refund.status})
                 td
                   span= bill.status
-                  - if bill.problem?
+                  - if bill.failed?
                     span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
 
                 td= bill.due_at.strftime('%D')
