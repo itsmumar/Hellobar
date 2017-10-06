@@ -10,7 +10,6 @@ describe RuleSerializer do
       site_id: rule.site_id,
       name: rule.name,
       match: rule.match,
-      priority: rule.priority,
       description: rule.to_sentence,
       editable: true,
 

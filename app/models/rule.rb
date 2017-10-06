@@ -4,25 +4,20 @@ class Rule < ActiveRecord::Base
     any: 'any'
   }.freeze
 
+  acts_as_paranoid
+
   belongs_to :site, touch: true, inverse_of: :rules
   has_many :site_elements, dependent: :destroy
   has_many :active_site_elements, -> { merge(SiteElement.active) }, class_name: 'SiteElement', inverse_of: :rule
   has_many :conditions, dependent: :destroy, inverse_of: :rule
 
-  acts_as_paranoid
+  accepts_nested_attributes_for :conditions, allow_destroy: true
 
   scope :editable, -> { where(editable: true) }
 
-  accepts_nested_attributes_for :conditions, allow_destroy: true
-
+  validates_associated :conditions
   validates :name, presence: true
   validates :site, association_exists: true
-  validates_associated :conditions
-  validates :priority, numericality: {
-    only_integer: true,
-    greater_than_or_equal_to: 1,
-    less_than_or_equal_to: 100
-  }, if: 'priority.present?'
 
   def self.defaults
     everyone = Rule.new(name: 'Everyone',          match: MATCH_ON[:all], editable: false)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171005185308) do
+ActiveRecord::Schema.define(version: 20171006104444) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -220,7 +220,6 @@ ActiveRecord::Schema.define(version: 20171005185308) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",       limit: 255
-    t.integer  "priority",   limit: 4
     t.string   "match",      limit: 255
     t.boolean  "editable",               default: true
     t.datetime "deleted_at"

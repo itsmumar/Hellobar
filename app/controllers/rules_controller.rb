@@ -54,7 +54,7 @@ class RulesController < ApplicationController
   end
 
   def rule_params
-    params.require(:rule).permit(:name, :priority, :match, conditions_attributes: conditions_attrs)
+    params.require(:rule).permit(:name, :match, conditions_attributes: conditions_attrs)
   end
 
   def conditions_attrs

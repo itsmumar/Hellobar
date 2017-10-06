@@ -30,7 +30,7 @@ describe RulesController do
       expect(response).to be_success
 
       json = JSON.parse(response.body)
-      expect(json.keys).to match_array %w[id site_id name priority match conditions description editable]
+      expect(json.keys).to match_array %w[id site_id name match conditions description editable]
     end
   end
 
@@ -48,10 +48,7 @@ describe RulesController do
       stub_current_user owner
 
       expect {
-        post :create, site_id: site, rule: {
-          name: 'rule name',
-          priority: 1
-        }
+        post :create, site_id: site, rule: { name: 'rule name' }
       }.to change(Rule, :count).by(1)
 
       expect(response).to be_success
@@ -59,7 +56,6 @@ describe RulesController do
       JSON.parse(response.body).tap do |rule|
         expect(rule['site_id']).to eq site.id
         expect(rule['name']).to eq 'rule name'
-        expect(rule['priority']).to eq 1
       end
     end
 
