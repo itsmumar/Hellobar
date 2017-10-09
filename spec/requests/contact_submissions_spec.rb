@@ -10,10 +10,12 @@ describe ContactSubmissionsController do
   end
 
   describe 'POST #create' do
+    let(:email) { 'kaitlen@hellobar.com' }
+
     let(:params) do
       {
         contact_submission: {
-          email: 'kaitlen@hellobar.com',
+          email: email,
           name: 'Kaitlen',
           message: 'Hi Kaitlen'
         }
@@ -42,6 +44,16 @@ describe ContactSubmissionsController do
       it 'raises an error' do
         expect { post contact_submissions_path, blank: 'not blank' }
           .to raise_error(ActionController::RoutingError)
+      end
+    end
+
+    context 'with invalid email' do
+      let(:email) { 'invalid' }
+
+      it 'does not send email' do
+        expect(ContactFormMailer).not_to receive(:guest_message)
+
+        post contact_submissions_path, params
       end
     end
   end
@@ -125,6 +137,16 @@ describe ContactSubmissionsController do
 
         expect(last_email_sent)
           .to have_subject "Contact Form: #{ params[:message][0..50] }"
+      end
+
+      context 'with invalid email' do
+        before { expect(user).to receive(:email).and_return('invalid').twice }
+
+        it 'does not send email' do
+          expect(ContactFormMailer).not_to receive(:generic_message)
+
+          post generic_message_contact_submission_path, params
+        end
       end
     end
 
