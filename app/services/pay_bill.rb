@@ -47,7 +47,7 @@ class PayBill
 
   def process_unsuccessful_response(response)
     create_billing_attempt(response)
-    bill.fail!
+    bill.failed!
     Raven.capture_message 'Unsuccessful charge', extra: {
       message: response.message,
       bill: bill.id,
@@ -91,7 +91,7 @@ class PayBill
   end
 
   def fix_failed_bills
-    bill.site.bills_with_payment_issues.each(&:void!)
+    bill.site.bills_with_payment_issues.each(&:voided!)
   end
 
   def gateway

@@ -122,11 +122,11 @@ class Bill < ActiveRecord::Base
     update! status: PAID
   end
 
-  def void!
+  def voided!
     update! status: VOIDED
   end
 
-  def fail!
+  def failed!
     update! status: FAILED
   end
 

@@ -65,7 +65,7 @@ describe Subscription::Capabilities do
     expect(site).to be_capable_of :free
 
     # Void the paid bill
-    pro_bill.void!
+    pro_bill.voided!
 
     # Should not have pro capabilities
     expect(site).to be_capable_of :free

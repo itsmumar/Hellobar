@@ -50,7 +50,7 @@ describe Bill do
   it 'should not let you change the status once set' do
     bill = create(:pro_bill)
     expect(bill.status).to eq Bill::PENDING
-    bill.void!
+    bill.voided!
     expect(bill.status).to eq Bill::VOIDED
     bill.reload
     expect(bill.status).to eq Bill::VOIDED
