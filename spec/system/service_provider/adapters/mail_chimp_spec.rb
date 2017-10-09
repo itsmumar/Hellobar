@@ -113,8 +113,24 @@ describe ServiceProvider::Adapters::MailChimp do
       let(:response) { { status: 400, body: { title: 'Unknown' }.to_json } }
       let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json, response: response }
 
-      it 'does not raise error' do
+      it 'raises error' do
         expect { subscribe }.to raise_error(Gibbon::MailChimpError)
+      end
+    end
+
+    context 'when could not connect' do
+      let(:client) { double('Gibbon::Request') }
+
+      before do
+        allow(Gibbon::Request).to receive(:new).and_return(client)
+        allow(client)
+          .to receive(:lists)
+          .and_raise(Gibbon::MailChimpError, 'Net::OpenTimeout')
+          .once
+      end
+
+      it 'raises ServiceProvider::ConnectionProblemError' do
+        expect { subscribe }.to raise_error(ServiceProvider::ConnectionProblemError)
       end
     end
   end

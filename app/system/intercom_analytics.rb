@@ -97,6 +97,8 @@ class IntercomAnalytics
   end
 
   def tag_users(tag, users)
+    return if users.blank?
+
     intercom.tags.tag(name: tag, users: users.map { |u| { user_id: u.id } })
   end
 
