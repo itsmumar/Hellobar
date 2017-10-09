@@ -1,19 +1,19 @@
 class AddStatusTextToBills < ActiveRecord::Migration
   def up
-    add_column :bills, :status_text, :string, default: 'pending', null: false
+    add_column :bills, :status_text, :string, default: Bill::PENDING, null: false
 
-    Bill.where(status: 0).update_all status_text: 'pending'
-    Bill.where(status: 1).update_all status_text: 'paid'
-    Bill.where(status: 2).update_all status_text: 'void'
-    Bill.where(status: 3).update_all status_text: 'failed'
+    Bill.where(status: 0).update_all status_text: Bill::PENDING
+    Bill.where(status: 1).update_all status_text: Bill::PAID
+    Bill.where(status: 2).update_all status_text: Bill::VOIDED
+    Bill.where(status: 3).update_all status_text: Bill::FAILED
   end
 
   def down
-    Bill.where(status_text: 'pending').update_all status: 0
-    Bill.where(status_text: 'paid').update_all status: 1
-    Bill.where(status_text: 'void').update_all status: 2
-    Bill.where(status_text: 'failed').update_all status: 3
+    Bill.where(status_text: Bill::PENDING).update_all status: 0
+    Bill.where(status_text: Bill::PAID).update_all status: 1
+    Bill.where(status_text: Bill::VOIDED).update_all status: 2
+    Bill.where(status_text: Bill::FAILED).update_all status: 3
 
-    remove_column :bills, :status_text, :string, default: 'pending', null: false
+    remove_column :bills, :status_text, :string, default: Bill::PENDING, null: false
   end
 end
