@@ -1,4 +1,9 @@
 class BillingAttempt < ActiveRecord::Base
+  SUCCESSFUL = 'successful'.freeze
+  FAILED = 'failed'.freeze
+  PENDING = 'pending'.freeze
+  STATUSES = [FAILED, SUCCESSFUL, PENDING].freeze
+
   # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :bill
   belongs_to :credit_card
@@ -6,13 +11,14 @@ class BillingAttempt < ActiveRecord::Base
   has_one :site, through: :bill
   has_many :refunds, foreign_key: 'refunded_billing_attempt_id', class_name: 'Bill::Refund'
 
-  enum status: %i[success failed]
+  # define .successful, .failed and .pending scopes
+  STATUSES.each do |status|
+    scope status, -> { where(status: status) }
+  end
+
+  validates :status, presence: true, inclusion: { in: STATUSES }
 
   def readonly?
     new_record? ? false : true
-  end
-
-  def status
-    super.to_sym
   end
 end

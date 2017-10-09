@@ -58,8 +58,13 @@ module ServiceProvider::Adapters
       when 'Net::ReadTimeout'
         ignore_error exception
       else
+        raise ServiceProvider::ConnectionProblemError if connection_problem?(exception)
         raise exception
       end
+    end
+
+    def connection_problem?(exception)
+      exception.message =~ /Net::OpenTimeout|execution expired/
     end
   end
 end

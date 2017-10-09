@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 20171006104444) do
 
   create_table "billing_attempts", force: :cascade do |t|
     t.integer  "bill_id",        limit: 4
-    t.integer  "status",         limit: 4
     t.string   "response",       limit: 255
     t.datetime "created_at"
     t.integer  "credit_card_id", limit: 4
+    t.string   "status",         limit: 255, default: "pending", null: false
   end
 
   add_index "billing_attempts", ["bill_id"], name: "index_billing_attempts_on_bill_id", using: :btree

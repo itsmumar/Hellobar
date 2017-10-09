@@ -103,7 +103,7 @@ class Bill < ActiveRecord::Base
   end
 
   def successful_billing_attempt
-    billing_attempts.success.first
+    billing_attempts.successful.first
   end
 
   def calculate_discount
