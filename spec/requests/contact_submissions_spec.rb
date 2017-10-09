@@ -112,6 +112,7 @@ describe ContactSubmissionsController do
 
   describe 'POST #generic_message' do
     let(:user) { create :user }
+    let!(:site) { create :site, user: user }
 
     before do
       login_as user, scope: :user, run_callbacks: false
@@ -123,15 +124,14 @@ describe ContactSubmissionsController do
       let(:params) do
         {
           site_id: site.id,
-          message: 'message',
-          return_to: root_path
+          message: 'message'
         }
       end
 
       it 'responds with a redirect to params[:return_to]' do
         post generic_message_contact_submission_path, params
 
-        expect(response).to redirect_to params[:return_to]
+        expect(response).to redirect_to site_path(site)
       end
 
       it 'sends email' do
@@ -158,7 +158,7 @@ describe ContactSubmissionsController do
       it 'responds with a redirect to params[:return_to]' do
         post generic_message_contact_submission_path, params
 
-        expect(response).to redirect_to params[:return_to]
+        expect(response).to redirect_to sites_path
       end
 
       it 'sends email' do

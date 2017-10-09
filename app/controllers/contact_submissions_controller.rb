@@ -21,7 +21,7 @@ class ContactSubmissionsController < ApplicationController
     ContactFormMailer.generic_message(params[:message], current_user, site).deliver_later
     flash[:success] = 'Your message has been sent!'
 
-    redirect_to site_path(site)
+    redirect_to site ? site_path(site) : sites_path
   end
 
   def new
