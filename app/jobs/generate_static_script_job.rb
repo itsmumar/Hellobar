@@ -3,6 +3,10 @@ class GenerateStaticScriptJob < ApplicationJob
 
   def perform(site)
     # preload relations for better performance
-    GenerateAndStoreStaticScript.new(Site.preload_for_script.find(site.id)).call
+    site = Site.preload_for_script.find_by id: site.id
+
+    return unless site
+
+    GenerateAndStoreStaticScript.new(site).call
   end
 end
