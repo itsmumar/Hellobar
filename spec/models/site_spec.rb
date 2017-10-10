@@ -297,7 +297,7 @@ describe Site do
     end
 
     it 'regenerates script' do
-      expect { service.call }
+      expect { site.update_content_upgrade_styles! content_upgrade_styles }
         .to have_enqueued_job(GenerateStaticScriptJob).with(site)
     end
   end
