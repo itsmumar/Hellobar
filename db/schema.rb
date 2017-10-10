@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 20171006104444) do
     t.text     "value",      limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "data_type",  limit: 255
   end
 
   add_index "conditions", ["rule_id"], name: "index_conditions_on_rule_id", using: :btree
@@ -220,7 +219,6 @@ ActiveRecord::Schema.define(version: 20171006104444) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",       limit: 255
-    t.integer  "priority",   limit: 4
     t.string   "match",      limit: 255
     t.boolean  "editable",               default: true
     t.datetime "deleted_at"
