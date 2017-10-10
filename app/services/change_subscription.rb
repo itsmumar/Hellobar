@@ -7,6 +7,16 @@ class ChangeSubscription
   end
 
   def call
+    change_or_update_subscription.tap do
+      regenerate_script
+    end
+  end
+
+  private
+
+  attr_reader :site, :credit_card, :billing_params, :old_subscription
+
+  def change_or_update_subscription
     if same_subscription?
       update_credit_card
     else
@@ -14,9 +24,9 @@ class ChangeSubscription
     end
   end
 
-  private
-
-  attr_reader :site, :credit_card, :billing_params, :old_subscription
+  def regenerate_script
+    site.script.generate
+  end
 
   def cancel_subscription_if_it_is_free
     return if !old_subscription || old_subscription.paid?
