@@ -58,6 +58,7 @@ class SitesController < ApplicationController
 
   def update
     if @site.update_attributes(site_params)
+      @site.script.generate
       flash[:success] = 'Your settings have been updated.'
       redirect_to site_path(@site)
     else

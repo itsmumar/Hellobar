@@ -20,5 +20,4 @@ class CreateSite
   private
 
   attr_reader :site, :current_user, :referral_token
-
 end
