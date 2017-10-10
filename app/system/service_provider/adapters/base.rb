@@ -7,7 +7,7 @@ module ServiceProvider::Adapters
       base.config = ActiveSupport::OrderedOptions.new
     end
 
-    attr_reader :client
+    attr_reader :client, :identity
     class_attribute :key, :config
 
     rescue_from Net::HTTPServerException, Net::ReadTimeout, with: :ignore_error
@@ -45,7 +45,7 @@ module ServiceProvider::Adapters
     end
 
     def notify_user_about_unauthorized_error
-      DestroyIdentity.new(@identity, notify_user: true).call
+      DestroyIdentity.new(identity, notify_user: true).call
     end
 
     def ignore_error(exception)
