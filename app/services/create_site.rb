@@ -12,9 +12,8 @@ class CreateSite
     TrackEvent.new(:created_site, site: site, user: current_user).call
 
     Referrals::HandleToken.run(user: current_user, token: referral_token)
-    ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call
     DetectInstallType.new(site).call
-    site.script.generate
+    ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call
   end
 
   private
