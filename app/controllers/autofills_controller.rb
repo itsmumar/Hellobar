@@ -16,6 +16,7 @@ class AutofillsController < ApplicationController
     @autofill = Autofill.new autofill_params
 
     if @autofill.save
+      @site.script.regenerate
       flash[:success] = 'Autofill was successfully created.'
       redirect_to site_autofills_path @site
     else
@@ -29,6 +30,7 @@ class AutofillsController < ApplicationController
 
   def update
     if @autofill.update autofill_params
+      @site.script.regenerate
       flash[:success] = 'Autofill was successfully updated.'
       redirect_to site_autofills_path @site
     else
@@ -39,6 +41,7 @@ class AutofillsController < ApplicationController
 
   def destroy
     @autofill.destroy
+    @site.script.regenerate
     flash[:success] = 'Autofill was successfully deleted.'
     redirect_to site_autofills_path @site
   end

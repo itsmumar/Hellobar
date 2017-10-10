@@ -33,10 +33,6 @@ describe RulesController do
   end
 
   describe 'POST #create' do
-    before do
-      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
-    end
-
     it 'fails when user is not logged in' do
       post :create, site_id: 1, rule: {}
       expect(response.code).to eq '401'
@@ -90,13 +86,16 @@ describe RulesController do
       expect(rule.name).to eq(rule_name)
       expect(rule.conditions.size).to eq(1)
     end
+
+    it 'regenerates script' do
+      stub_current_user owner
+
+      expect { post :create, site_id: site, rule: { name: 'rule name' } }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+    end
   end
 
   describe 'PUT #update' do
-    before do
-      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
-    end
-
     it 'fails when not logged in' do
       put :update, site_id: site, id: rule
 
@@ -232,13 +231,16 @@ describe RulesController do
         expect { condition.reload }.to raise_error ActiveRecord::RecordNotFound
       end
     end
+
+    it 'regenerates script' do
+      stub_current_user owner
+
+      expect { put :update, site_id: site, id: rule.id, rule: { name: 'rule' } }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+    end
   end
 
   describe 'DELETE #destroy' do
-    before do
-      allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
-    end
-
     let!(:second_rule) { create(:rule, site: site) }
 
     it 'should fail when not logged in' do
@@ -283,6 +285,13 @@ describe RulesController do
 
         expect(response.status).to eq(422)
       end
+    end
+
+    it 'regenerates script' do
+      stub_current_user owner
+
+      expect { delete :destroy, site_id: site.id, id: rule }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
     end
   end
 

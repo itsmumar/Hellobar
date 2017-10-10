@@ -147,12 +147,17 @@ describe StaticScriptAssets do
 
   describe '.digest_path' do
     before do
-      StaticScriptAssets.manifest.compile('modules.js')
+      allow(StaticScriptAssets)
+        .to receive_message_chain(:manifest, :assets)
+        .and_return('modules.js' => 'modules-compiled.js')
+
+      allow(StaticScriptAssets)
+        .to receive(:digest_path)
+        .and_call_original
     end
-    before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
 
     it 'returns path to file with a hash' do
-      expect(assets.digest_path('modules.js')).to match(/modules-\w{64}.js/)
+      expect(assets.digest_path('modules.js')).to eql 'modules-compiled.js'
     end
   end
 end

@@ -1,6 +1,4 @@
 describe Condition do
-  it_behaves_like 'a model triggering script regeneration'
-
   it { is_expected.to validate_presence_of :rule }
   it { is_expected.to validate_presence_of :segment }
   it { is_expected.to validate_inclusion_of(:segment).in_array Condition::SEGMENTS.keys }

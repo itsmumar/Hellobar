@@ -16,8 +16,6 @@ class Site < ActiveRecord::Base
     'offer_font_family_name' => 'Open Sans'
   }.freeze
 
-  attr_accessor :skip_script_generation
-
   # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
@@ -52,16 +50,6 @@ class Site < ActiveRecord::Base
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
-
-  after_update :regenerate_script
-  after_touch  :regenerate_script
-
-  after_commit do
-    if needs_script_regeneration?
-      script.generate
-      @needs_script_regeneration = false
-    end
-  end
 
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
@@ -126,14 +114,6 @@ class Site < ActiveRecord::Base
 
   def self.normalize_url(url)
     Addressable::URI.heuristic_parse(url)
-  end
-
-  def needs_script_regeneration?
-    !skip_script_generation && @needs_script_regeneration.presence
-  end
-
-  def regenerate_script
-    @needs_script_regeneration = true unless deleted? || destroyed?
   end
 
   def statistics

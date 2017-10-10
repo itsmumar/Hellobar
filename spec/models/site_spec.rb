@@ -287,27 +287,6 @@ describe Site do
     end
   end
 
-  describe 'after_touch' do
-    context 'not destroyed' do
-      it 'sets needs_script_regeneration? to true' do
-        site = create(:site)
-        site.touch
-        expect(site.needs_script_regeneration?).to be_truthy
-      end
-    end
-
-    context 'destroyed' do
-      it 'sets needs_script_regeneration? to false' do
-        site = create(:site)
-
-        site.destroy
-
-        expect(site).to be_deleted
-        expect(site.needs_script_regeneration?).to be_falsey
-      end
-    end
-  end
-
   describe '#update_content_upgrade_styles!' do
     let(:site) { create :site }
     let(:content_upgrade_styles) { generate :content_upgrade_styles }
@@ -316,27 +295,10 @@ describe Site do
       expect { site.update_content_upgrade_styles! content_upgrade_styles }
         .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
     end
-  end
 
-  describe 'after_commit callback' do
-    let(:site) { create :site }
-    let(:commit) { site.run_callbacks :commit }
-
-    context 'when skip_script_generation' do
-      before { site.skip_script_generation = true }
-
-      it 'does not generate script' do
-        expect { commit }.not_to have_enqueued_job GenerateStaticScriptJob
-      end
-    end
-
-    context 'when not skip_script_generation' do
-      before { site.skip_script_generation = false }
-      before { site.touch }
-
-      it 'generates script' do
-        expect { commit }.to have_enqueued_job GenerateStaticScriptJob
-      end
+    it 'regenerates script' do
+      expect { service.call }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
     end
   end
 
