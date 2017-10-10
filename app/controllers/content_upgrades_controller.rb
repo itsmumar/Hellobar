@@ -31,6 +31,7 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade = ContentUpgrade.new(content_upgrade_params)
 
     if @content_upgrade.save
+      @site.script.generate
       flash[:success] = 'Your content upgrade has been saved.'
       redirect_to site_content_upgrades_path(@site.id)
     else
@@ -43,6 +44,7 @@ class ContentUpgradesController < ApplicationController
 
   def update
     if @content_upgrade.update(content_upgrade_params)
+      @site.script.generate
       flash[:success] = 'Your content upgrade has been saved.'
       redirect_to site_content_upgrades_path(@site.id)
     else
@@ -54,6 +56,7 @@ class ContentUpgradesController < ApplicationController
   end
 
   def destroy
+    # don't forget to call @site.script.generate
   end
 
   def style_editor

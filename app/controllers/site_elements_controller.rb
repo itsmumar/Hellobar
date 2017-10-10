@@ -55,6 +55,7 @@ class SiteElementsController < ApplicationController
 
   def destroy
     @site_element.destroy
+    @site.script.generate
 
     respond_to do |format|
       format.js { head :ok }
@@ -67,6 +68,7 @@ class SiteElementsController < ApplicationController
 
   def toggle_paused
     @site_element.toggle_paused!
+    @site.script.generate
 
     respond_to do |format|
       format.js { head :ok }
