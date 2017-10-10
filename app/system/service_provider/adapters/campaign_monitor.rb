@@ -16,9 +16,11 @@ module ServiceProvider::Adapters
     end
 
     def lists
-      client.clients.flat_map do |raw_client|
-        client_api = CreateSend::Client.new(client.auth_details, raw_client['ClientID'])
-        client_api.lists.map { |raw_list| { 'id' => raw_list['ListID'], 'name' => raw_list['Name'] } }
+      with_token_refresh do
+        client.clients.flat_map do |raw_client|
+          client_api = CreateSend::Client.new(client.auth_details, raw_client['ClientID'])
+          client_api.lists.map { |raw_list| { 'id' => raw_list['ListID'], 'name' => raw_list['Name'] } }
+        end
       end
     end
 

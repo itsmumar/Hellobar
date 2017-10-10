@@ -3,6 +3,7 @@ describe ServiceProvider::Adapters::CampaignMonitor do
     {
       clients: 'https://api.createsend.com/api/v3.1/clients.json',
       clients_unauthorized: 'https://api.createsend.com/api/v3.1/clients.json',
+      clients_expired_token: 'https://api.createsend.com/api/v3.1/clients.json',
       lists: 'https://api.createsend.com/api/v3.1/clients/4a397ccaaa55eb4e6aa1221e1e2d7122/lists.json',
       subscribe: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
       subscribe_unauthorized: 'https://api.createsend.com/api/v3.1/subscribers/4567456.json',
@@ -50,6 +51,24 @@ describe ServiceProvider::Adapters::CampaignMonitor do
         expect(DestroyIdentity).to receive_service_call.with(identity, notify_user: true)
 
         provider.lists
+      end
+    end
+
+    context 'when CreateSend::ExpiredOAuthToken is raised', :freeze do
+      it 'sends request for new OAuth token and retries the request' do
+        # first request will raise ExpiredOauthToken, second wil succeed
+        allow_request(:get, :clients_expired_token)
+          .then
+          .to_return response_for(:get, :clients)
+
+        allow_request :get, :lists
+        allow_request :post, :refresh_token
+
+        expect(identity).to receive(:update)
+          .with(credentials: new_token_credentials)
+        expect(DestroyIdentity).not_to receive_service_call
+
+        expect(provider.lists).to eql [{ 'id' => list_id, 'name' => 'List1' }]
       end
     end
   end
