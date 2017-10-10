@@ -295,11 +295,6 @@ describe Site do
       expect { site.update_content_upgrade_styles! content_upgrade_styles }
         .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
     end
-
-    it 'regenerates script' do
-      expect { site.update_content_upgrade_styles! content_upgrade_styles }
-        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
-    end
   end
 
   describe 'bills_with_payment_issues' do
