@@ -138,23 +138,15 @@ class SitesController < ApplicationController
     if @site.valid? && @site.url_exists?(current_user)
       flash[:error] = 'Url is already in use.'
       sites = current_user.sites.merge(Site.protocol_ignored_url(@site.url))
-      redirect_to site_path(sites.first)
-    elsif @site.save
-      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
-
-      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
-
-      @site.create_default_rules
-
-      DetectInstallType.new(@site).call
-      TrackEvent.new(:created_site, site: @site, user: current_user).call
-      redirect_to new_site_site_element_path(@site)
-    else
-      flash.now[:error] = @site.errors.full_messages
-      render action: :new
+      return redirect_to site_path(sites.first)
     end
+
+    CreateSite.new(@site, current_user, session[:referral_token]).call
+    Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+    redirect_to new_site_site_element_path(@site)
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:error] = e.record.errors.full_messages
+    render action: :new
   end
 
   def load_top_performers
