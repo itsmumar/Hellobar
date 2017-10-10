@@ -44,6 +44,7 @@ class PayBill
     bill.paid!
     create_bill_for_next_period
     fix_problem_bills
+    regenerate_script
   end
 
   def process_unsuccessful_response(response)
@@ -54,6 +55,10 @@ class PayBill
       bill: bill.id,
       amount: bill.amount
     }
+  end
+
+  def regenerate_script
+    bill.site.script.generate
   end
 
   def set_final_amount

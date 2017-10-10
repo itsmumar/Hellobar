@@ -34,7 +34,7 @@ describe ChangeSubscription, :freeze do
 
     it 'regenerates script' do
       expect { service.call }
-        .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site).twice
     end
 
     it 'returns paid bill' do
