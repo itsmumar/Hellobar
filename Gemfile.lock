@@ -8,6 +8,15 @@ GIT
       json (>= 1.0)
 
 GIT
+  remote: https://github.com/Hello-bar/omniauth-constantcontact2.git
+  revision: ba9860968b50dd9dd29dbe692ee6ecafc3a591b2
+  specs:
+    omniauth-constantcontact2 (1.0.6)
+      multi_json (~> 1.0)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.0)
+
+GIT
   remote: https://github.com/Hello-bar/omniauth-createsend.git
   revision: 8c550ca79bdb8f702c9ef8bd3ecab33875c38398
   specs:
@@ -367,10 +376,6 @@ GEM
       rack (>= 1.6.2, < 3)
     omniauth-aweber (1.0.0)
       omniauth-oauth (~> 1.0)
-    omniauth-constantcontact2 (1.0.6)
-      multi_json (~> 1.0)
-      omniauth (~> 1.0)
-      omniauth-oauth2 (~> 1.0)
     omniauth-drip (0.0.3)
       omniauth-oauth2 (~> 1.2)
     omniauth-google-oauth2 (0.5.0)
@@ -675,7 +680,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   omniauth-aweber
-  omniauth-constantcontact2
+  omniauth-constantcontact2!
   omniauth-createsend!
   omniauth-drip
   omniauth-google-oauth2

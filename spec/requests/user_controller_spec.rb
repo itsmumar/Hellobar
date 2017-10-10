@@ -100,6 +100,7 @@ describe 'User requests' do
     describe 'DELETE :destroy' do
       before do
         allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
+        allow_any_instance_of(StaticScript).to receive(:destroy).and_return(true)
       end
 
       it 'responds with a redirect to get_started path' do

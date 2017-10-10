@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :billing_attempt do
-    status :success
+    status BillingAttempt::SUCCESSFUL
 
     trait :success
 
     trait :failed do
-      status :failed
+      status BillingAttempt::FAILED
       response 'General decline of the card'
     end
   end

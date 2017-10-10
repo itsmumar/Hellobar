@@ -33,7 +33,7 @@ class Site < ActiveRecord::Base
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
-  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.problem) },
+  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.failed) },
     class_name: 'Bill', through: :subscriptions, inverse_of: :site, source: :bills
 
   has_many :image_uploads, dependent: :destroy

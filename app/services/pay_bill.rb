@@ -21,7 +21,7 @@ class PayBill
   attr_reader :bill, :credit_card
 
   def cannot_pay?
-    !bill.pending? && !bill.problem?
+    !bill.pending? && !bill.failed?
   end
 
   def pay_bill
@@ -40,15 +40,14 @@ class PayBill
 
   def process_successful_response(response)
     create_billing_attempt(response)
-    bill.update authorization_code: response.authorization
-    bill.paid!
+    bill.update! authorization_code: response.authorization, status: Bill::PAID
     create_bill_for_next_period
-    fix_problem_bills
+    fix_failed_bills
   end
 
   def process_unsuccessful_response(response)
     create_billing_attempt(response)
-    bill.problem!
+    bill.failed!
     Raven.capture_message 'Unsuccessful charge', extra: {
       message: response.message,
       bill: bill.id,
@@ -72,7 +71,7 @@ class PayBill
     BillingAttempt.create!(
       bill: bill,
       credit_card: credit_card,
-      status: response.success? ? :success : :failed,
+      status: response.success? ? BillingAttempt::SUCCESSFUL : BillingAttempt::FAILED,
       response: response.success? ? response.authorization : response.message
     )
   end
@@ -91,7 +90,7 @@ class PayBill
     )
   end
 
-  def fix_problem_bills
+  def fix_failed_bills
     bill.site.bills_with_payment_issues.each(&:voided!)
   end
 
