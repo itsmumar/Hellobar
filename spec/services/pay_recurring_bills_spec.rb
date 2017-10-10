@@ -62,7 +62,7 @@ describe PayRecurringBills do
 
       specify do
         expect { service.call }
-          .to change { zero_amount_bill.reload.status }.to(:paid)
+          .to change { zero_amount_bill.reload.status }.to(Bill::PAID)
       end
 
       include_examples 'pay bill'
@@ -76,7 +76,7 @@ describe PayRecurringBills do
         expect(report).to receive(:void).with(bill_without_site)
 
         expect { service.call }
-          .to change { bill_without_site.reload.status }.to(:voided)
+          .to change { bill_without_site.reload.status }.to(Bill::VOIDED)
       end
 
       include_examples 'do not pay bill'
@@ -120,7 +120,7 @@ describe PayRecurringBills do
         expect(report).to receive(:success)
 
         expect { service.call }
-          .to change { bill.reload.status }.to :paid
+          .to change { bill.reload.status }.to Bill::PAID
       end
 
       include_examples 'pay bill'
@@ -130,7 +130,7 @@ describe PayRecurringBills do
 
         specify do
           expect { service.call }
-            .to change { bill.reload.status }.to :paid
+            .to change { bill.reload.status }.to Bill::PAID
         end
 
         include_examples 'pay bill'
@@ -143,7 +143,7 @@ describe PayRecurringBills do
           expect(report).to receive(:fail)
 
           expect { service.call }
-            .to change { bill.reload.status }.to :problem
+            .to change { bill.reload.status }.to Bill::FAILED
         end
       end
 

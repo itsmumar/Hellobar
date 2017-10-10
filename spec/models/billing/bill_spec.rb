@@ -49,24 +49,19 @@ describe Bill do
 
   it 'should not let you change the status once set' do
     bill = create(:pro_bill)
-    expect(bill.status).to eq(:pending)
+    expect(bill.status).to eq Bill::PENDING
     bill.voided!
-    expect(bill.status).to eq(:voided)
-    bill = Bill.find(bill.id)
-    expect(bill.status).to eq(:voided)
+    expect(bill.status).to eq Bill::VOIDED
+    bill.reload
+    expect(bill.status).to eq Bill::VOIDED
     expect { bill.pending! }.to raise_error(Bill::StatusAlreadySet)
     expect { bill.paid! }.to raise_error(Bill::StatusAlreadySet)
-    expect { bill.status = :pending }.to raise_error(Bill::StatusAlreadySet)
-  end
-
-  it 'should raise an error if you try to change the status to an invalid value' do
-    bill = create(:pro_bill)
-    expect { bill.status = 'foo' }.to raise_error(Bill::InvalidStatus)
+    expect { bill.status = Bill::PENDING }.to raise_error(Bill::StatusAlreadySet)
   end
 
   it 'should record when the status was set' do
     bill = create(:pro_bill)
-    expect(bill.status).to eq(:pending)
+    expect(bill.status).to eq Bill::PENDING
     expect(bill.status_set_at).to be_nil
     bill.paid!
     expect(bill.status_set_at).to be_within(2).of(Time.current)

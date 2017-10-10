@@ -102,25 +102,25 @@ div#user_profile
                       |  (#{bill.refund.status})
                 td
                   span= bill.status
-                  - if bill.problem?
+                  - if bill.failed?
                     span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
 
                 td= bill.due_at.strftime('%D')
                 td
-                  - if bill.status == :paid && bill.amount != 0
+                  - if bill.paid? && bill.amount != 0
                     = link_to("view", admin_user_bill_path(@user, bill))
                 td
-                  - if bill.status == :pending
+                  - if bill.pending?
                     = link_to "pay", admin_user_bill_pay_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
                     '  or
                     = link_to "cancel", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Cancel this bill?" }
                     br
 
-                  - if bill.status != :voided && bill.amount == 0
+                  - if !bill.voided? && bill.amount == 0
                     = link_to "void", admin_user_bill_void_path(@user, bill), method: :put, data: { confirm: "Void this bill?" }
                     br
 
-                  - if bill.status == :paid && !bill.instance_of?(Bill::Refund) && bill.amount != 0
+                  - if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0
                     a.refund_link data-id=bill.id refund
                     = form_for bill, url: admin_user_bill_refund_path(@user, bill), method: :put, html: {class: "hidden"} do |f|
                       = f.label "Refund Amount: "

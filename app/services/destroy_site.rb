@@ -14,7 +14,7 @@ class DestroySite
   attr_reader :site
 
   def void_pending_bills
-    site.bills.pending.map(&:voided!)
+    site.bills.pending.each(&:voided!)
   end
 
   def override_script
