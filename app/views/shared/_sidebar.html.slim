@@ -30,6 +30,12 @@
           i.icon-views
           | Autofills
 
+    - if current_site.capabilities.email_campaigns?
+      li
+        = active_link_to site_email_campaigns_path(current_site) do
+          i.icon-content
+          | Email Campaigns
+
     li
       = active_link_to edit_site_path(current_site) do
         i.icon-settings

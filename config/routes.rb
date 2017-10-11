@@ -61,6 +61,8 @@ Rails.application.routes.draw do
 
     resources :autofills, only: %i[index new create edit update destroy]
 
+    resources :email_campaigns, only: %i[index show new create edit update]
+
     resources :image_uploads, only: [:create]
 
     resources :rules do
