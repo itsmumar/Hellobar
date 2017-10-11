@@ -17,11 +17,24 @@ class EmailCampaignsController < ApplicationController
     @email_campaign = @site.email_campaigns.new email_campaign_params
 
     if @email_campaign.save
-      flash[:success] = 'Email Campaign successfully created'
+      flash[:success] = 'Email Campaign successfully created.'
       redirect_to site_email_campaigns_path @site
     else
       flash.now[:error] = @email_campaign.errors.full_messages
       render :new
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @email_campaign.update email_campaign_params
+      flash[:success] = 'Email Campaign was successfully updated.'
+      redirect_to site_email_campaigns_path @site
+    else
+      flash.now[:error] = @email_campaign.errors.full_messages
+      render :edit
     end
   end
 

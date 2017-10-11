@@ -38,12 +38,27 @@ feature 'Email Campaigns management' do
       fill_in 'email_campaign_body', with: body
     end
 
-    click_on 'Create Email Campaign'
+    click_on 'Create Email campaign'
 
     within '.email-campaigns' do
       expect(page).to have_content name
       expect(page).to have_content campaign_subject
       expect(page).to have_content contact_list.name
+
+      click_on 'Edit'
+    end
+
+    expect(page). to have_content 'Edit Email Campaign'
+
+    within '.form-inputs' do
+      fill_in 'email_campaign_name', with: new_name
+    end
+
+    click_on 'Update Email campaign'
+
+    within '.email-campaigns' do
+      expect(page).to have_content new_name
+      expect(page).to have_content campaign_subject
     end
   end
 end

@@ -10,6 +10,7 @@
   <th>Subject</th>
   <th>Contact List</th>
   <th>Status</th>
+  <th>Actions</th>
 </tr>
 </thead>
 
@@ -21,6 +22,7 @@
   <td><%= email_campaign.subject %></td>
   <td><%= link_to email_campaign.contact_list.name, site_contact_list_path(@site, email_campaign.contact_list) %></td>
   <td><%= email_campaign.status %></td>
+  <td><%= link_to 'Edit', edit_site_email_campaign_path(@site, email_campaign), class: 'button' %></td>
 </tr>
 <% end %>
 </tbody>
