@@ -22,14 +22,8 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
-    elsif !@site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-      redirect_to root_path
-    elsif params[:source] == 'landing' && @site.url_exists?
-      redirect_to new_user_session_path(existing_url: @site.url)
     else
-      session[:new_site_url] = @site.url
-      redirect_to '/auth/google_oauth2'
+      validate_and_redirect_to_google_auth
     end
   end
 
@@ -136,18 +130,27 @@ class SitesController < ApplicationController
   end
 
   def create_for_logged_in_user
-    if @site.valid? && @site.url_exists?(current_user)
-      flash[:error] = 'Url is already in use.'
-      sites = current_user.sites.merge(Site.protocol_ignored_url(@site.url))
-      return redirect_to site_path(sites.first)
-    end
-
     CreateSite.new(@site, current_user, session[:referral_token]).call
     Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
     redirect_to new_site_site_element_path(@site)
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:error] = e.record.errors.full_messages
     render action: :new
+  rescue CreateSite::DuplicateURLError => e
+    flash[:error] = e.message
+    return redirect_to site_path(e.existing_site)
+  end
+
+  def validate_and_redirect_to_google_auth
+    if !@site.valid?
+      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      redirect_to root_path
+    elsif params[:source] == 'landing' && Site.with_url(@site.url).any?
+      redirect_to new_user_session_path(existing_url: @site.url)
+    else
+      session[:new_site_url] = @site.url
+      redirect_to '/auth/google_oauth2'
+    end
   end
 
   def load_top_performers

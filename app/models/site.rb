@@ -47,6 +47,7 @@ class Site < ActiveRecord::Base
   }
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
+  scope :with_url, ->(url) { protocol_ignored_url(url) }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -55,7 +56,7 @@ class Site < ActiveRecord::Base
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
-  validate :url_is_unique?
+  validate :validate_url_uniqueness
 
   store :settings, coder: JSON
 
@@ -99,7 +100,7 @@ class Site < ActiveRecord::Base
 
   def self.protocol_ignored_url(url)
     host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
+    where(url: ["https://#{ host || url }", "http://#{ host || url }"])
   end
 
   def self.find_by_script(script_embed)
@@ -110,6 +111,10 @@ class Site < ActiveRecord::Base
     end
 
     nil
+  end
+
+  def self.by_url_for(user, url:)
+    with_url(url).joins(:users).find_by(users: { id: user.id })
   end
 
   def self.normalize_url(url)
@@ -152,17 +157,6 @@ class Site < ActiveRecord::Base
           .any?
     else
       Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
-    end
-  end
-
-  def url_is_unique?
-    if users
-       .joins(:sites)
-       .merge(Site.protocol_ignored_url(url))
-       .where.not(sites: { id: id })
-       .any?
-
-      errors.add(:url, 'is already in use')
     end
   end
 
@@ -221,6 +215,17 @@ class Site < ActiveRecord::Base
   end
 
   private
+
+  def validate_url_uniqueness
+    if users
+       .joins(:sites)
+       .merge(Site.protocol_ignored_url(url))
+       .where.not(sites: { id: id })
+       .any?
+
+      errors.add(:url, 'is already in use')
+    end
+  end
 
   def standardize_url
     return if url.blank?

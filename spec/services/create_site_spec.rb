@@ -51,4 +51,15 @@ describe CreateSite do
     expect { service.call }
       .to have_enqueued_job(GenerateStaticScriptJob).with(site)
   end
+
+  context 'when URL is already in use by user' do
+    let!(:existing_site) { create :site, user: user, url: site.url }
+
+    it 'raises DuplicateURLError' do
+      expect { service.call }.to raise_error CreateSite::DuplicateURLError do |error|
+        expect(error.existing_site).to eql existing_site
+        expect(error.message).to eql 'Url is already in use.'
+      end
+    end
+  end
 end
