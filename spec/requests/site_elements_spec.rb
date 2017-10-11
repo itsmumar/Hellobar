@@ -96,6 +96,11 @@ describe 'SiteElements requests' do
         expect(response).to redirect_to site_site_elements_path(site)
         expect(element.reload).to be_paused
       end
+
+      it 'regenerates script' do
+        expect { put site_site_element_toggle_paused_path(site, element) }
+          .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+      end
     end
 
     describe 'POST #create' do

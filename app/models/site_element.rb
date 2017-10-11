@@ -80,7 +80,6 @@ class SiteElement < ActiveRecord::Base
   store :settings, coder: Hash
   serialize :blocks, Array
 
-  after_create :track_creation
   after_destroy :nullify_image_upload_reference
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
@@ -168,26 +167,6 @@ class SiteElement < ActiveRecord::Base
 
   def short_subtype
     element_subtype[/(\w+)/]
-  end
-
-  def track_creation
-    analytics_track_site_element_creation!
-    onboarding_track_site_element_creation!
-  end
-
-  def analytics_track_site_element_creation!
-    Analytics.track(
-      :site, site_id, 'Created Site Element',
-      site_element_id: id,
-      type: element_subtype,
-      style: type.to_s.downcase
-    )
-  end
-
-  def onboarding_track_site_element_creation!
-    site.owners.each do |user|
-      user.onboarding_status_setter.created_element!
-    end
   end
 
   def self.all_templates

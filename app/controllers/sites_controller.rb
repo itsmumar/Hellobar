@@ -22,14 +22,8 @@ class SitesController < ApplicationController
 
     if current_user
       create_for_logged_in_user
-    elsif !@site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-      redirect_to root_path
-    elsif params[:source] == 'landing' && @site.url_exists?
-      redirect_to new_user_session_path(existing_url: @site.url)
     else
-      session[:new_site_url] = @site.url
-      redirect_to '/auth/google_oauth2'
+      validate_and_redirect_to_google_auth
     end
   end
 
@@ -58,6 +52,7 @@ class SitesController < ApplicationController
 
   def update
     if @site.update_attributes(site_params)
+      @site.script.generate
       flash[:success] = 'Your settings have been updated.'
       redirect_to site_path(@site)
     else
@@ -135,25 +130,26 @@ class SitesController < ApplicationController
   end
 
   def create_for_logged_in_user
-    if @site.valid? && @site.url_exists?(current_user)
-      flash[:error] = 'Url is already in use.'
-      sites = current_user.sites.merge(Site.protocol_ignored_url(@site.url))
-      redirect_to site_path(sites.first)
-    elsif @site.save
-      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+    CreateSite.new(@site, current_user, session[:referral_token]).call
+    Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+    redirect_to new_site_site_element_path(@site)
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:error] = e.record.errors.full_messages
+    render action: :new
+  rescue CreateSite::DuplicateURLError => e
+    flash[:error] = e.message
+    return redirect_to site_path(e.existing_site)
+  end
 
-      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
-
-      @site.create_default_rules
-
-      DetectInstallType.new(@site).call
-      TrackEvent.new(:created_site, site: @site, user: current_user).call
-      redirect_to new_site_site_element_path(@site)
+  def validate_and_redirect_to_google_auth
+    if !@site.valid?
+      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      redirect_to root_path
+    elsif params[:source] == 'landing' && Site.with_url(@site.url).any?
+      redirect_to new_user_session_path(existing_url: @site.url)
     else
-      flash.now[:error] = @site.errors.full_messages
-      render action: :new
+      session[:new_site_url] = @site.url
+      redirect_to '/auth/google_oauth2'
     end
   end
 

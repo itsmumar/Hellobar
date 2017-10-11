@@ -43,6 +43,7 @@ class PayBill
     bill.update! authorization_code: response.authorization, status: Bill::PAID
     create_bill_for_next_period
     fix_failed_bills
+    regenerate_script
   end
 
   def process_unsuccessful_response(response)
@@ -53,6 +54,10 @@ class PayBill
       bill: bill.id,
       amount: bill.amount
     }
+  end
+
+  def regenerate_script
+    bill.site.script.generate
   end
 
   def set_final_amount

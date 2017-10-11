@@ -6,7 +6,7 @@ class SiteElementsController < ApplicationController
 
   layout :determine_layout
 
-  rescue_from ActiveRecord::RecordInvalid, with: :record_not_found_error
+  rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity_error
 
   def show
     render json: @site_element, serializer: SiteElementSerializer
@@ -42,24 +42,20 @@ class SiteElementsController < ApplicationController
   end
 
   def create
-    @site_element = SiteElement.new(site_element_params)
-    @site_element.save!
-
+    site_element = CreateSiteElement.new(site_element_params, current_user).call
     flash[:success] = message_to_clear_cache
-    TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
-
-    render json: @site_element, serializer: SiteElementSerializer
+    render json: site_element, serializer: SiteElementSerializer
   end
 
   def update
-    element = UpdateSiteElement.new(@site_element, site_element_params).call
+    site_element = UpdateSiteElement.new(@site_element, site_element_params).call
     flash[:success] = message_to_clear_cache
-
-    render json: element, serializer: SiteElementSerializer
+    render json: site_element, serializer: SiteElementSerializer
   end
 
   def destroy
     @site_element.destroy
+    @site.script.generate
 
     respond_to do |format|
       format.js { head :ok }
@@ -72,6 +68,7 @@ class SiteElementsController < ApplicationController
 
   def toggle_paused
     @site_element.toggle_paused!
+    @site.script.generate
 
     respond_to do |format|
       format.js { head :ok }
@@ -81,7 +78,7 @@ class SiteElementsController < ApplicationController
 
   private
 
-  def record_not_found_error(e)
+  def unprocessable_entity_error(e)
     response = { errors: e.record.errors, full_error_messages: e.record.errors.to_a }
     render json: response, status: :unprocessable_entity
   end
