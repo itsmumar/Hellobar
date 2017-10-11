@@ -6,13 +6,13 @@ feature 'Email Campaigns management' do
   given!(:subscription) { create :subscription, :pro_managed, site: site }
   given!(:contact_list) { create :contact_list, site: site }
 
-  given(:name) { 'Email rule' }
+  given(:name) { 'Hello Bar Campaign' }
   given(:from_name) { 'Hello Bar' }
   given(:from_email) { 'me@example.com' }
   given(:campaign_subject) { 'Test subject' }
   given(:body) { 'Test body' }
 
-  given(:new_name) { 'New Email rule' }
+  given(:new_name) { 'New Hello Bar Campaign' }
 
   before do
     login_as user, scope: :user, run_callbacks: false
@@ -40,7 +40,7 @@ feature 'Email Campaigns management' do
 
     click_on 'Create Email campaign'
 
-    within '.email-campaigns' do
+    within '.email-campaign' do
       expect(page).to have_content name
       expect(page).to have_content campaign_subject
       expect(page).to have_content contact_list.name
@@ -56,9 +56,12 @@ feature 'Email Campaigns management' do
 
     click_on 'Update Email campaign'
 
-    within '.email-campaigns' do
-      expect(page).to have_content new_name
-      expect(page).to have_content campaign_subject
-    end
+    expect(page).to have_content new_name
+    expect(page).to have_content campaign_subject
+    expect(page).to have_content EmailCampaign::NEW
+
+    click_on 'Go back'
+
+    expect(page).to have_content new_name
   end
 end

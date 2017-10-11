@@ -60,6 +60,16 @@ describe 'Email Campaigns requests' do
       end
     end
 
+    describe 'GET #show' do
+      let(:email_campaign) { create :email_campaign, site: site, contact_list: contact_list }
+
+      it 'responds with success' do
+        get site_email_campaign_path site, email_campaign
+
+        expect(response).to be_successful
+      end
+    end
+
     describe 'GET #new' do
       it 'responds with success' do
         get new_site_email_campaign_path site

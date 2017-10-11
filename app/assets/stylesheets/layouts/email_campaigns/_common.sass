@@ -1,19 +1,34 @@
+%status
+  border: 1px solid transparent
+  border-radius: 3px
+  color: $white
+  padding: 3px 10px
+
+  &.new
+    background-color: $green
+
+  &.sent
+    background-color: $blue
+
 .email-campaigns
   .button
     @extend %green-button
 
   .status
-    border: 1px solid transparent
-    border-radius: 3px
-    color: $white
-    padding: 3px 10px
+    @extend %status
 
-    &.new
-      background-color: $green
+.email-campaign
+  .details
+    margin: 20px 3px
 
-    &.sent
-      background-color: $blue
+  .status
+    @extend %status
 
+  a.button
+    @extend %gray-button
+
+    &.action
+      @extend %green-button
 
 .email-campaign-form
   width: 85%

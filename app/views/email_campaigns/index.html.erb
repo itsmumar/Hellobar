@@ -18,7 +18,7 @@
 <% @email_campaigns.each do |email_campaign| %>
 <tr>
   <td><%= email_campaign.id %></td>
-  <td><%= email_campaign.name %></td>
+  <td><%= link_to email_campaign.name, site_email_campaign_path(@site, email_campaign) %></td>
   <td><%= email_campaign.subject %></td>
   <td><%= link_to email_campaign.contact_list.name, site_contact_list_path(@site, email_campaign.contact_list) %></td>
   <td><span class="status <%= email_campaign.status %>"><%= email_campaign.status %></span></td>
