@@ -125,8 +125,9 @@ describe ServiceProvider::Adapters::CampaignMonitor do
         # request for refresh token will raise RuntimeError, then CreateSend::Unauthorized
         allow_request :post, :refresh_token_unauthorized
 
-        expect(identity).not_to receive(:update)
+        expect(identity).not_to receive :update
         expect(DestroyIdentity).to receive_service_call
+        expect(Raven).to receive :capture_exception
 
         subscribe
       end
@@ -137,7 +138,7 @@ describe ServiceProvider::Adapters::CampaignMonitor do
 
         allow_request :post, :refresh_token
 
-        allow(identity).to receive(:update)
+        expect(identity).to receive(:update).twice
         expect(DestroyIdentity).to receive_service_call
 
         subscribe
