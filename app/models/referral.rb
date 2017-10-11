@@ -49,6 +49,10 @@ class Referral < ActiveRecord::Base
     expiration_date.strftime('%B ') + expiration_date.day.ordinalize
   end
 
+  def already_accepted?
+    installed? || redeemed_by_recipient_at?
+  end
+
   def accepted?
     state != 'sent'
   end
@@ -59,16 +63,6 @@ class Referral < ActiveRecord::Base
 
   def redeemed_by_sender?
     state == 'installed' && available_to_sender == false && redeemed_by_sender_at.present?
-  end
-
-  def email_already_registered?
-    return false if email.blank?
-    User.where(email: email).count > 0
-  end
-
-  def email_already_referrred?
-    return false if email.blank?
-    Referral.where(email: email).count > 0
   end
 
   private

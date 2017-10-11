@@ -7,37 +7,29 @@
 # which will then run CouponUses::ApplyFromReferrals
 #
 
-class Referrals::NotSignedUp < StandardError; end
 class Referrals::RedeemForRecipient < Less::Interaction
   expects :site
 
   def run
-    return if current_subscription.blank?
     return if user.blank?
     return unless user.was_referred?
-    return if already_accepted_referral?
+    return if referral.already_accepted?
+    return unless referral.signed_up?
 
-    raise Referrals::NotSignedUp unless user.received_referral.signed_up?
-
-    user.received_referral.update_attributes(state: :installed, available_to_sender: true)
-    ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
+    update_referral
+    update_subscription
     redeem_for_sender
     send_success_email_to_sender
-  rescue Referrals::NotSignedUp => ex
-    # This really is an exceptional situation, but because the caller of this interaction,
-    # Site#script_installed? is referenced from so many places, let's play it safe
-    # and not have the user see an exception they're not directly affected by.
-    Raven.capture_exception(ex)
   end
 
   private
 
-  def already_accepted_referral?
-    referral.state == :installed || referral.redeemed_by_recipient_at?
+  def update_subscription
+    ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
   end
 
-  def current_subscription
-    @subscription ||= site.subscriptions.first
+  def update_referral
+    referral.update_attributes(state: :installed, available_to_sender: true)
   end
 
   def user
