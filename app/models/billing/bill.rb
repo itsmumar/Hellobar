@@ -1,4 +1,10 @@
 class Bill < ActiveRecord::Base
+  PENDING = 'pending'.freeze
+  PAID = 'paid'.freeze
+  VOIDED = 'voided'.freeze
+  FAILED = 'failed'.freeze
+  STATUSES = [PENDING, PAID, VOIDED, FAILED].freeze
+
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
       super "Can not change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
@@ -23,23 +29,30 @@ class Bill < ActiveRecord::Base
   has_one :site, through: :subscription, inverse_of: :bills
   has_one :credit_card, -> { with_deleted }, through: :subscription
 
-  validates :subscription, presence: true
   delegate :site_id, to: :subscription
 
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  enum status: %i[pending paid voided problem]
+  STATUSES.each do |status|
+    scope status, -> { where(status: status) }
+  end
 
   scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :not_void, -> { where.not(status: statuses[:voided]) }
-  scope :active, -> { not_void.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
+  scope :not_voided, -> { where.not(status: VOIDED) }
+  scope :active, -> { not_voided.where('bills.start_date <= :now AND bills.end_date >= :now', now: Time.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
-  scope :paid_or_problem, -> { where(status: statuses.values_at(:paid, :problem)) }
+  scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
+
+  validates :subscription, presence: true
+  validates :status, presence: true, inclusion: { in: STATUSES }
+
+  # defines #pending? #paid? #voided? #failed?
+  delegate(*STATUSES.map { |status| status + '?' }, to: :status)
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
@@ -50,18 +63,18 @@ class Bill < ActiveRecord::Base
   end
 
   def status=(value)
-    value = value.to_sym
+    value = value.to_s
     return if status == value
-    raise StatusAlreadySet.new(self, status) unless status == :pending || status == :problem || value == :voided
+    raise StatusAlreadySet.new(self, status) unless can_status_be_changed?(value)
 
-    status_value = Bill.statuses[value.to_sym]
-    raise InvalidStatus, "Invalid status: #{ value.inspect }" unless status_value
-    self[:status] = status_value
+    self[:status] = value
     self.status_set_at = Time.current
   end
 
+  # this gives you a prettier way to test for equality
+  #   i.e: bill.status.paid? || bill.status.voided?
   def status
-    super.to_sym
+    ActiveSupport::StringInquirer.new(super).freeze
   end
 
   def problem_reason
@@ -101,7 +114,27 @@ class Bill < ActiveRecord::Base
     (base_amount || amount) - calculate_discount
   end
 
+  def pending!
+    update! status: PENDING
+  end
+
+  def paid!
+    update! status: PAID
+  end
+
+  def voided!
+    update! status: VOIDED
+  end
+
+  def failed!
+    update! status: FAILED
+  end
+
   private
+
+  def can_status_be_changed?(value)
+    value == VOIDED || [PENDING, FAILED].include?(status)
+  end
 
   def set_base_amount
     self.base_amount ||= amount

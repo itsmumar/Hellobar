@@ -56,7 +56,7 @@ class RefundBill
   end
 
   def create_success_refund_bill(response)
-    attributes = { status: :paid, authorization_code: response.authorization }
+    attributes = { status: Bill::PAID, authorization_code: response.authorization }
 
     create_refund_bill!(attributes).tap do |refund_bill|
       yield refund_bill
@@ -64,7 +64,7 @@ class RefundBill
   end
 
   def create_failed_refund_bill
-    create_refund_bill!(status: :voided)
+    create_refund_bill!(status: Bill::VOIDED)
   end
 
   def create_refund_bill!(status:, authorization_code: nil)

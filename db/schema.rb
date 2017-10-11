@@ -79,7 +79,6 @@ ActiveRecord::Schema.define(version: 20171006104444) do
 
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id",             limit: 4
-    t.integer  "status",                      limit: 4,                            default: 0
     t.string   "type",                        limit: 191
     t.decimal  "amount",                                  precision: 7,  scale: 2
     t.string   "description",                 limit: 255
@@ -94,6 +93,7 @@ ActiveRecord::Schema.define(version: 20171006104444) do
     t.integer  "refund_id",                   limit: 4
     t.string   "authorization_code",          limit: 255
     t.integer  "refunded_billing_attempt_id", limit: 4
+    t.string   "status",                      limit: 255,                          default: "pending", null: false
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree

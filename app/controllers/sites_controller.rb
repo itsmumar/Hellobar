@@ -170,7 +170,7 @@ class SitesController < ApplicationController
   end
 
   def load_bills
-    @bills = @site.bills.paid_or_problem.non_free.includes(:subscription).reorder(bill_at: :desc)
+    @bills = @site.bills.paid_or_failed.non_free.includes(:subscription).reorder(bill_at: :desc)
     @next_bill = @site.bills.pending.includes(:subscription).last
   end
 

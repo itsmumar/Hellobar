@@ -31,7 +31,7 @@ class Referrals::RedeemForSender < Less::Interaction
   end
 
   def last_failed_bill
-    @last_failed_bill ||= subscription.bills.problem.last
+    @last_failed_bill ||= subscription.bills.failed.last
   end
 
   def subscription

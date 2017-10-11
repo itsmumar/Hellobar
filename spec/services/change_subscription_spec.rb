@@ -155,12 +155,12 @@ describe ChangeSubscription, :freeze do
         context 'when there is a problem bill' do
           before do
             change_subscription('pro', 'monthly')
-            site.current_subscription.bills.last.problem!
+            site.current_subscription.bills.last.failed!
           end
 
           it 'pays the problem bill' do
             change_subscription('pro', 'monthly')
-            expect(site.bills.problem).to be_empty
+            expect(site.bills.failed).to be_empty
           end
         end
       end

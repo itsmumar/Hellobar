@@ -101,14 +101,17 @@ jobs:
 
       - run:
           name: Run Rubocop
+          when: always
           command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
           name: Run JSHint
+          when: always
           command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
 
       - run:
           name: Run unit tests
+          when: always
           environment:
             CODECOV_FLAG: unit
           command: |
@@ -117,10 +120,12 @@ jobs:
 
       - run:
           name: Run teaspoon tests
+          when: always
           command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
+          when: always
           environment:
             CODECOV_FLAG: integration
           command: |

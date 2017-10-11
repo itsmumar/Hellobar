@@ -61,7 +61,7 @@ section
           - @bills.each do |bill|
             tr
               td
-                - if bill.problem?
+                - if bill.failed?
                   i.icon-alert title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
                 - else
                   i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
@@ -74,7 +74,7 @@ section
               td= "Hello Bar #{bill.subscription.values[:name]}"
               td= bill.credit_card.description
               td
-                - if bill.problem?
+                - if bill.failed?
                   - if params[:should_update_card]
                     a#problem-bill.button.show-payment-modal Update credit card details
                   - else

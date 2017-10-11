@@ -40,13 +40,13 @@ class ChangeSubscription
 
   def update_credit_card
     old_subscription.update credit_card: credit_card
-    try_to_pay_problem_bill
+    try_to_pay_failed_bill
     old_subscription.bills.last
   end
 
-  def try_to_pay_problem_bill
-    return unless (last_problem_bill = old_subscription.bills.problem.last)
-    PayBill.new(last_problem_bill).call
+  def try_to_pay_failed_bill
+    return unless (last_failed_bill = old_subscription.bills.failed.last)
+    PayBill.new(last_failed_bill).call
   end
 
   def change_subscription
@@ -74,12 +74,12 @@ class ChangeSubscription
 
   def pay_bill(bill)
     PayBill.new(bill).call if bill.due_at(credit_card) <= Time.current
-    raise_record_invalid_if_problem(bill)
+    raise_record_invalid_if_failed(bill)
     bill
   end
 
-  def raise_record_invalid_if_problem(bill)
-    return unless bill.problem?
+  def raise_record_invalid_if_failed(bill)
+    return unless bill.failed?
     bill.errors.add :base,
       "There was a problem while charging your credit card ending in #{ credit_card.last_digits }." \
       ' You can fix this by adding another credit card'
