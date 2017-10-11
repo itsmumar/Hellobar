@@ -168,14 +168,14 @@ ActiveRecord::Schema.define(version: 20171011115111) do
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
   create_table "email_campaigns", force: :cascade do |t|
-    t.integer  "site_id",         limit: 4,                   null: false
-    t.integer  "contact_list_id", limit: 4,                   null: false
-    t.string   "name",            limit: 255,                 null: false
-    t.string   "from_name",       limit: 255,                 null: false
-    t.string   "from_email",      limit: 255,                 null: false
-    t.string   "subject",         limit: 255,                 null: false
-    t.string   "body",            limit: 255,                 null: false
-    t.string   "status",          limit: 20,  default: "new", null: false
+    t.integer  "site_id",         limit: 4,                     null: false
+    t.integer  "contact_list_id", limit: 4,                     null: false
+    t.string   "name",            limit: 255,                   null: false
+    t.string   "from_name",       limit: 255,                   null: false
+    t.string   "from_email",      limit: 255,                   null: false
+    t.string   "subject",         limit: 255,                   null: false
+    t.text     "body",            limit: 65535,                 null: false
+    t.string   "status",          limit: 20,    default: "new", null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"

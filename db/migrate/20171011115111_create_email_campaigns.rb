@@ -7,7 +7,7 @@ class CreateEmailCampaigns < ActiveRecord::Migration
       t.string :from_name, null: false
       t.string :from_email, null: false
       t.string :subject, null: false
-      t.string :body, null: false
+      t.text :body, null: false
       t.string :status, null: false, limit: 20, default: 'new'
       t.datetime :deleted_at
 
