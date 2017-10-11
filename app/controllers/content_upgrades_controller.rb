@@ -55,10 +55,6 @@ class ContentUpgradesController < ApplicationController
     end
   end
 
-  def destroy
-    # don't forget to call @site.script.generate
-  end
-
   def style_editor
     @styles = @site.content_upgrade_styles
   end
