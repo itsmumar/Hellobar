@@ -3,6 +3,10 @@ namespace :site do
     desc 'Precompile assets (js, css, html) which are used in the static site script'
     task precompile_static_assets: :environment do
       StaticScriptAssets.precompile
+    end
+
+    desc 'Generate and upload modules.js to S3'
+    task generate_modules: :environment do
       GenerateStaticScriptModules.new.call
       puts "Uploaded new modules.js version to S3: #{ StaticScriptAssets.digest_path('modules.js') }"
     end
