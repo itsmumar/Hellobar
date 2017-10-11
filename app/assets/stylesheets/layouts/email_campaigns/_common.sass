@@ -2,6 +2,19 @@
   .button
     @extend %green-button
 
+  .status
+    border: 1px solid transparent
+    border-radius: 3px
+    color: $white
+    padding: 3px 10px
+
+    &.new
+      background-color: $green
+
+    &.sent
+      background-color: $blue
+
+
 .email-campaign-form
   width: 85%
 
