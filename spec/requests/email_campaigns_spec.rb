@@ -59,5 +59,33 @@ describe 'Email Campaigns requests' do
         expect(response).to be_successful
       end
     end
+
+    describe 'GET :new' do
+      it 'responds with success' do
+        get new_site_email_campaign_path site
+
+        expect(response).to be_successful
+      end
+    end
+
+    describe 'POST :create' do
+      it 'creates a new email_campaign when params are correct' do
+        expect {
+          post site_email_campaigns_path(site), email_campaign: email_campaign_params
+        }.to change { EmailCampaign.count }.by 1
+
+        expect(response).to be_a_redirect
+      end
+
+      it 'does not create a new email_campaign when some params are missing' do
+        params = Hash[email_campaign: email_campaign_params.merge(name: '')]
+
+        expect {
+          post site_email_campaigns_path(site), params
+        }.not_to change { EmailCampaign.count }
+
+        expect(response).to be_successful
+      end
+    end
   end
 end

@@ -1,20 +1,32 @@
+<div class="email-campaigns">
+
 <h1>Email Campaigns</h1>
 
 <table>
+<thead>
 <tr>
   <th>ID</th>
   <th>Name</th>
   <th>Subject</th>
+  <th>Contact List</th>
   <th>Status</th>
 </tr>
+</thead>
 
+<tbody>
 <% @email_campaigns.each do |email_campaign| %>
 <tr>
   <td><%= email_campaign.id %></td>
   <td><%= email_campaign.name %></td>
   <td><%= email_campaign.subject %></td>
+  <td><%= link_to email_campaign.contact_list.name, site_contact_list_path(@site, email_campaign.contact_list) %></td>
   <td><%= email_campaign.status %></td>
 </tr>
 <% end %>
+</tbody>
 
 </table>
+
+<p><%= link_to 'New Email Campaign', new_site_email_campaign_path(@site), class: 'button' %></p>
+
+</div>
