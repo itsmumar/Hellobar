@@ -13,11 +13,11 @@ class EmailCampaignsController < ApplicationController
   end
 
   def new
-    @email_campaign = @site.email_campaigns.new
+    @email_campaign = @site.email_campaigns.build
   end
 
   def create
-    @email_campaign = @site.email_campaigns.new email_campaign_params
+    @email_campaign = @site.email_campaigns.build email_campaign_params
 
     if @email_campaign.save
       flash[:success] = 'Email Campaign successfully created.'
