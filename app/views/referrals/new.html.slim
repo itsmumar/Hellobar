@@ -6,7 +6,7 @@ header
 = simple_form_for @referral do |f|
   section
     h2 Invite friends to Hello Bar via email:
-    = f.input :email, label: false
+    = f.input :email, label: false, required: true
 
   section
     h2 Here's what they'll see:
