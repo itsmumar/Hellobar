@@ -109,7 +109,6 @@ describe SitesController do
 
         it 'redirects to existing site' do
           post :create, site: { url: 'www.test.com' }
-          puts flash[:error]
           expect(flash[:error]).to eq 'Url is already in use.'
           expect(response).to redirect_to site_path(existing_site)
         end
