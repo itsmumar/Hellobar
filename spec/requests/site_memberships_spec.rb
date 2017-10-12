@@ -127,6 +127,21 @@ describe SiteMembershipsController do
         expect(response).to redirect_to site_team_path(site)
       end
 
+      context 'when user already has site membership' do
+        before do
+          create :user, email: email, site: site
+        end
+
+        it 'redirects to site_team_path with a notice' do
+          post invite_site_site_memberships_path(site), email: email
+
+          expect(response).not_to be_successful
+          expect(response.status).to eql 302
+          expect(flash[:notice])
+            .to eql "User already has a membership to #{ site.url }"
+        end
+      end
+
       context 'with invalid params' do
         it 'redirects to site_team_path with a notice' do
           post invite_site_site_memberships_path(site), email: ''

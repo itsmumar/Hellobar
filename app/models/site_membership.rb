@@ -1,10 +1,12 @@
 class SiteMembership < ActiveRecord::Base
+  acts_as_paranoid
+
   belongs_to :user
   belongs_to :site
-  acts_as_paranoid
 
   validates :user, :site, presence: true
   validates :role, inclusion: { in: %w[owner admin] }
+  validate :site_membership_uniqueness
   validate :at_least_one_owner_per_site
   validate :updater_permission
 
@@ -24,6 +26,16 @@ class SiteMembership < ActiveRecord::Base
     return unless updated_by&.role_for_site(site) == :admin
 
     errors.add(:owner, 'can only be set by other owners') if role == 'owner'
+  end
+
+  # Have to write our own check because of paranoia
+  def site_membership_uniqueness
+    return unless site && user
+
+    existing_membership =
+      user.site_memberships.where(site_id: site.id).where.not(id: id).first
+
+    errors.add(:user, "already has a membership to #{ site.url }") if existing_membership
   end
 
   def at_least_one_owner_per_site
