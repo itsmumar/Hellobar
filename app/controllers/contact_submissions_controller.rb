@@ -5,12 +5,13 @@ class ContactSubmissionsController < ApplicationController
 
   def email_developer
     site = current_user.sites.find(params[:site_id])
-    if params[:developer_email].blank?
-      flash[:error] = "Please enter your developer's email address."
-    else
-      developer_email = params[:developer_email].is_a?(Array) ? params[:developer_email].first : params[:developer_email]
+    developer_email = params[:developer][:email]
+
+    if validate_email(developer_email)
       ContactFormMailer.contact_developer(developer_email, site, current_user).deliver_later
       flash[:success] = "We've sent the installation instructions to your developer!"
+    else
+      flash[:error] = "Please enter your developer's email address."
     end
 
     redirect_to site_path(site)
@@ -18,8 +19,12 @@ class ContactSubmissionsController < ApplicationController
 
   def generic_message
     site = current_user.sites.find_by(id: params[:site_id])
-    ContactFormMailer.generic_message(params[:message], current_user, site).deliver_later
-    flash[:success] = 'Your message has been sent!'
+    if validate_email(current_user.email)
+      ContactFormMailer.generic_message(params[:message], current_user, site).deliver_later
+      flash[:success] = 'Your message has been sent!'
+    else
+      flash[:error] = 'Your email is not valid. Please correct your email first.'
+    end
 
     redirect_to site ? site_path(site) : sites_path
   end
@@ -33,9 +38,19 @@ class ContactSubmissionsController < ApplicationController
 
     email_params = params.require(:contact_submission).permit(:name, :email, :message)
 
-    ContactFormMailer.guest_message(**email_params.symbolize_keys).deliver_later
+    if validate_email(email_params[:email])
+      ContactFormMailer.guest_message(**email_params.symbolize_keys).deliver_later
+      flash[:success] = 'Your message has been sent!'
+    else
+      flash[:error] = 'Your email is not valid. Please correct your email first.'
+    end
 
-    flash[:success] = 'Your message has been sent!'
     redirect_to new_contact_submission_path
+  end
+
+  private
+
+  def validate_email(email)
+    email.present? && Devise.email_regexp =~ email
   end
 end

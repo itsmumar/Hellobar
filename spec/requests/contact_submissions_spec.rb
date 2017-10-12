@@ -10,10 +10,12 @@ describe ContactSubmissionsController do
   end
 
   describe 'POST #create' do
+    let(:email) { 'kaitlen@hellobar.com' }
+
     let(:params) do
       {
         contact_submission: {
-          email: 'kaitlen@hellobar.com',
+          email: email,
           name: 'Kaitlen',
           message: 'Hi Kaitlen'
         }
@@ -44,65 +46,56 @@ describe ContactSubmissionsController do
           .to raise_error(ActionController::RoutingError)
       end
     end
+
+    context 'with invalid email' do
+      let(:email) { 'invalid' }
+
+      it 'does not send email' do
+        expect(ContactFormMailer).not_to receive(:guest_message)
+
+        post contact_submissions_path, params
+      end
+    end
   end
 
   describe 'POST #email_developer' do
     let!(:user) { create :user }
     let!(:site) { create :site, user: user }
 
+    let(:params) { Hash[developer: { email: email }, site_id: site.id] }
+
     before do
       login_as user, scope: :user, run_callbacks: false
     end
 
     context 'when developer email is empty' do
+      let(:email) { '' }
+
       it 'redirects to site_path with an error ' do
-        post email_developer_contact_submission_path, developer_email: '', site_id: site.id
+        post email_developer_contact_submission_path, params
 
         expect(response).to redirect_to site_path(site)
         expect(flash[:error]).to eql 'Please enter your developer\'s email address.'
       end
     end
 
-    context 'when developer email is an array' do
-      let(:developer_email) { ['developer@email.com'] }
-
-      it 'emails developer' do
-        expect(ContactFormMailer)
-          .to receive(:contact_developer)
-          .with(developer_email.first, site, user)
-          .and_call_original.twice
-
-        post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
-
-        expect(last_email_sent)
-          .to have_subject "Please install Hello Bar on #{ site.normalized_url }"
-      end
-
-      it 'redirects to site_path with success message' do
-        post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
-
-        expect(response).to redirect_to site_path(site)
-        expect(flash[:success]).to eql 'We\'ve sent the installation instructions to your developer!'
-      end
-    end
-
     context 'when developer email is string' do
-      let(:developer_email) { 'developer@email.com' }
+      let(:email) { 'developer@email.com' }
 
       it 'emails developer' do
         expect(ContactFormMailer)
           .to receive(:contact_developer)
-          .with(developer_email, site, user)
+          .with(email, site, user)
           .and_call_original.twice
 
-        post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
+        post email_developer_contact_submission_path, params
 
         expect(last_email_sent)
           .to have_subject "Please install Hello Bar on #{ site.normalized_url }"
       end
 
       it 'redirects to site_path with success message' do
-        post email_developer_contact_submission_path, developer_email: developer_email, site_id: site.id
+        post email_developer_contact_submission_path, params
 
         expect(response).to redirect_to site_path(site)
         expect(flash[:success]).to eql 'We\'ve sent the installation instructions to your developer!'
@@ -144,6 +137,16 @@ describe ContactSubmissionsController do
 
         expect(last_email_sent)
           .to have_subject "Contact Form: #{ params[:message][0..50] }"
+      end
+
+      context 'with invalid email' do
+        before { expect(user).to receive(:email).and_return('invalid').twice }
+
+        it 'does not send email' do
+          expect(ContactFormMailer).not_to receive(:generic_message)
+
+          post generic_message_contact_submission_path, params
+        end
       end
     end
 
