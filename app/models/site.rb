@@ -47,7 +47,7 @@ class Site < ActiveRecord::Base
   }
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
-  scope :with_url, ->(url) { protocol_ignored_url(url) }
+  scope :by_url, ->(url) { protocol_ignored_url(url) }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -112,7 +112,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.by_url_for(user, url:)
-    with_url(url).joins(:users).find_by(users: { id: user.id })
+    by_url(url).joins(:users).find_by(users: { id: user.id })
   end
 
   def self.normalize_url(url)
