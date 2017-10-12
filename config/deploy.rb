@@ -74,19 +74,6 @@ namespace :deploy do
     end
   end
 
-  # TODO: Move node and bower dependencies to some shared folder
-  before 'assets:precompile', 'node:yarn_install'
-  before 'assets:precompile', 'node:bower_install'
-  before 'assets:precompile', 'ember:build'
-  after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
-  after 'assets:precompile', 'precompile_static_assets'
-  after 'precompile_static_assets', 'generate_modules'
-
-  after :publishing, :restart
-  after :publishing, :copy_additional_logrotate_files
-  after :finished, 'tag_release:github'
-  after :finished, 'trigger_automated_qa_tests'
-
   desc 'Precompile static assets to be used for static site scripts recompilation'
   task :precompile_static_assets do
     on roles(:web, :worker) do
@@ -104,6 +91,19 @@ namespace :deploy do
       end
     end
   end
+
+  # TODO: Move node and bower dependencies to some shared folder
+  before 'assets:precompile', 'node:yarn_install'
+  before 'assets:precompile', 'node:bower_install'
+  before 'assets:precompile', 'ember:build'
+  after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
+  after 'assets:precompile', 'precompile_static_assets'
+  after 'precompile_static_assets', 'generate_modules'
+
+  after :publishing, :restart
+  after :publishing, :copy_additional_logrotate_files
+  after :finished, 'tag_release:github'
+  after :finished, 'trigger_automated_qa_tests'
 
   desc 'Starts maintenance mode'
   task :start_maintenance do
