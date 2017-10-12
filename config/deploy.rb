@@ -80,6 +80,7 @@ namespace :deploy do
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
   after 'assets:precompile', 'precompile_static_assets'
+  after 'precompile_static_assets', 'generate_modules'
 
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
@@ -91,6 +92,15 @@ namespace :deploy do
     on roles(:web, :worker) do
       within release_path do
         execute :rake, "site:scripts:precompile_static_assets RAILS_ENV=#{ fetch :stage }"
+      end
+    end
+  end
+
+  desc 'Generate and upload modules.js to S3'
+  task :generate_modules do
+    on roles(:cron) do
+      within release_path do
+        execute :rake, "site:scripts:generate_modules RAILS_ENV=#{ fetch :stage }"
       end
     end
   end

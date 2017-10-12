@@ -13,6 +13,7 @@ class RulesController < ApplicationController
     rule = @site.rules.new rule_params
 
     if rule.save
+      @site.script.generate
       render json: rule
     else
       render json: rule.nested_error_messages, status: :unprocessable_entity
@@ -23,6 +24,7 @@ class RulesController < ApplicationController
     rule = @site.rules.find(params[:id])
 
     if rule.editable? && rule.update_attributes(rule_params)
+      @site.script.generate
       render json: rule
     else
       render json: rule.nested_error_messages, status: :unprocessable_entity
@@ -35,6 +37,7 @@ class RulesController < ApplicationController
     if @site.rules.count == 1
       render nothing: true, status: :unprocessable_entity
     elsif rule.editable? && rule.destroy
+      @site.script.generate
       render nothing: true, status: :ok
     else
       render json: rule.nested_error_messages, status: :unprocessable_entity

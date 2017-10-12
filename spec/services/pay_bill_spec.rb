@@ -21,6 +21,11 @@ describe PayBill do
       expect(service.call).to eql bill
     end
 
+    it 'regenerates script' do
+      expect { service.call }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(bill.site)
+    end
+
     it 'stores authorization_code in bill' do
       expect { service.call }.to make_gateway_call(:purchase).and_succeed.with_response(authorization: 'code')
       expect(bill.authorization_code).to eql 'code'

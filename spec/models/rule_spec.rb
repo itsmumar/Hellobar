@@ -1,6 +1,4 @@
 describe Rule do
-  it_behaves_like 'a model triggering script regeneration'
-
   describe '.defaults' do
     let(:defaults)         { Rule.defaults }
     let(:everyone)         { defaults[0] }

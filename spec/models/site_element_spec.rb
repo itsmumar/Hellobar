@@ -1,6 +1,4 @@
 describe SiteElement do
-  it_behaves_like 'a model triggering script regeneration'
-
   let(:element) { create(:site_element, :traffic) }
   let(:contact_list) { create(:contact_list) }
   let(:site) { create(:site) }

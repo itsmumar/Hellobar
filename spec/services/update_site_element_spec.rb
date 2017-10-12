@@ -10,18 +10,14 @@ describe UpdateSiteElement do
   end
   let(:service) { UpdateSiteElement.new(element, params) }
 
-  before do
-    allow_any_instance_of(Site).to receive(:regenerate_script)
-  end
-
   context 'when update is successful' do
     it 'returns element' do
       expect(service.call).to eql element
     end
 
-    it 'regenerates the script' do
-      service.call
-      expect(element.site).to have_received(:regenerate_script)
+    it 'regenerates script' do
+      expect { service.call }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(element.site)
     end
 
     it 'updates the attributes' do
