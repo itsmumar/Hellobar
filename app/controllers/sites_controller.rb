@@ -136,6 +136,9 @@ class SitesController < ApplicationController
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:error] = e.record.errors.full_messages
     render action: :new
+  rescue CreateSite::DuplicateURLError => e
+    flash[:error] = e.message
+    return redirect_to site_path(e.existing_site)
   end
 
   def validate_and_redirect_to_google_auth

@@ -1,4 +1,13 @@
 class CreateSite
+  class DuplicateURLError < StandardError
+    attr_reader :existing_site
+
+    def initialize(existing_site)
+      @existing_site = existing_site
+      super 'Url is already in use.'
+    end
+  end
+
   def initialize(site, current_user, referral_token)
     @site = site
     @current_user = current_user
@@ -6,6 +15,7 @@ class CreateSite
   end
 
   def call
+    check_for_duplicate!
     create_site
     track_site_creation
     handle_referral_token
@@ -39,5 +49,10 @@ class CreateSite
       site.save!
       site.create_default_rules
     end
+  end
+
+  def check_for_duplicate!
+    existing_site = Site.by_url_for(current_user, url: site.url)
+    raise DuplicateURLError, existing_site if existing_site
   end
 end
