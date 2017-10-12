@@ -8,13 +8,6 @@ describe SiteMembership do
     it 'is valid' do
       expect(site_membership).to be_valid
     end
-
-    it 'catches duplicate site urls' do
-      expect(duplicate_site_membership.valid?).to eq(false)
-      expect(duplicate_site_membership.errors.full_messages).to(
-        include("User already has a membership to #{ duplicate_site.url }")
-      )
-    end
   end
 
   describe 'can_destroy?' do

@@ -85,13 +85,12 @@ describe SitesController do
         expect(response).to redirect_to new_site_site_element_path(Site.last)
       end
 
-      it 'redirects to the site when using existing url' do
+      it 'redirects to the editor when adding a site with an existing url' do
         site = create(:site, url: 'www.test.com')
         site.users << user
         post :create, site: { url: 'www.test.com' }
 
-        expect(response).to redirect_to(site_path(site))
-        expect(flash[:error]).to eq('Url is already in use.')
+        expect(response).to redirect_to(new_site_site_element_path(Site.last))
       end
 
       context 'when ActiveRecord::RecordInvalid is raised' do
@@ -101,16 +100,6 @@ describe SitesController do
           expect(CreateSite).to receive_service_call.and_raise(error)
           post :create, site: { url: 'www.test.com' }
           expect(flash[:error]).to eq ['foo']
-        end
-      end
-
-      context 'when CreateSite::DuplicateURLError is raised' do
-        let!(:existing_site) { create :site, user: user, url: 'www.test.com' }
-
-        it 'redirects to existing site' do
-          post :create, site: { url: 'www.test.com' }
-          expect(flash[:error]).to eq 'Url is already in use.'
-          expect(response).to redirect_to site_path(existing_site)
         end
       end
     end
@@ -127,13 +116,6 @@ describe SitesController do
       put :update, id: site.id, site: { url: 'http://updatedurl.com' }
 
       expect(site.reload.url).to eq('http://updatedurl.com')
-    end
-
-    it 'does not allow updating to existing urls' do
-      new_membership = create(:site_membership, user: user)
-      put :update, id: new_membership.site.id, site: { url: site.url }
-
-      expect(flash[:error]).to include('URL is already in use')
     end
 
     it 'renders the edit template if the change was rejected' do

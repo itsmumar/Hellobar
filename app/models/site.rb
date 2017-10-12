@@ -56,8 +56,6 @@ class Site < ActiveRecord::Base
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
 
-  validate :validate_url_uniqueness
-
   store :settings, coder: JSON
 
   delegate :installed?, :name, :url, to: :script, prefix: true
@@ -215,17 +213,6 @@ class Site < ActiveRecord::Base
   end
 
   private
-
-  def validate_url_uniqueness
-    if users
-       .joins(:sites)
-       .merge(Site.protocol_ignored_url(url))
-       .where.not(sites: { id: id })
-       .any?
-
-      errors.add(:url, 'is already in use')
-    end
-  end
 
   def standardize_url
     return if url.blank?

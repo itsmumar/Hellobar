@@ -5,7 +5,6 @@ class SiteMembership < ActiveRecord::Base
 
   validates :user, :site, presence: true
   validates :role, inclusion: { in: %w[owner admin] }
-  validate :user_site_uniqueness
   validate :at_least_one_owner_per_site
   validate :updater_permission
 
@@ -25,27 +24,6 @@ class SiteMembership < ActiveRecord::Base
     return unless updated_by&.role_for_site(site) == :admin
 
     errors.add(:owner, 'can only be set by other owners') if role == 'owner'
-  end
-
-  # Have to write our own check because of acts as paranoid
-  # Unique by :site_id was not enough since site urls are not unique
-  def user_site_uniqueness
-    return unless site && user
-
-    existing_membership  = user.site_memberships
-                               .where(site_id: site.id)
-                               .where.not(id: id)
-                               .first
-
-    duplicate_membership = user.site_memberships
-                               .joins(:site)
-                               .where('sites.url' => site.url)
-                               .where.not('site_memberships.id' => id)
-                               .first
-
-    return unless existing_membership || duplicate_membership
-
-    errors.add(:user, "already has a membership to #{ site.url }")
   end
 
   def at_least_one_owner_per_site
