@@ -1,4 +1,4 @@
-describe Admin::UsersController do
+describe 'Admin::Users requests' do
   let!(:admin) { create(:admin) }
   let!(:site) { user.sites.last }
   let(:user) { create :user, :with_site, :with_credit_card }
