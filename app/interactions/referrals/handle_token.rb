@@ -16,7 +16,7 @@ class Referrals::HandleToken < Less::Interaction
   private
 
   def token_record
-    @token_record ||= ReferralToken.where(token: token).first
+    @token_record ||= ReferralToken.find_by(token: token)
   end
 
   def create_from_user_token(user_token)
