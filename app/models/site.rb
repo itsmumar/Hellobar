@@ -146,18 +146,6 @@ class Site < ActiveRecord::Base
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
   end
 
-  def url_exists?(user = nil)
-    if user
-      Site.joins(:users)
-          .merge(Site.protocol_ignored_url(url))
-          .where(users: { id: user.id })
-          .where.not(id: id)
-          .any?
-    else
-      Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
-    end
-  end
-
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||

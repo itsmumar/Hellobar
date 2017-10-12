@@ -171,36 +171,6 @@ describe Site do
     end
   end
 
-  describe '#url_exists?' do
-    it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
-    end
-
-    it 'should return true if another site exists with the url' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'http://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should return true if another site exists even with other protocol' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'https://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should scope to user if user is given' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
-    end
-
-    it 'should ignore protocol if user scoped call' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
-    end
-  end
-
   describe '#set_branding_on_site_elements' do
     let!(:site) { create(:site, :with_rule) }
     let!(:element) { create(:site_element, :traffic, rule: site.rules.first!, show_branding: true) }
