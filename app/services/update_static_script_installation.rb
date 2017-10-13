@@ -33,7 +33,7 @@ class UpdateStaticScriptInstallation
     # update_column so that we don't trigger site script regeneration
     site.update_column :script_installed_at, Time.current
 
-    Referrals::RedeemForRecipient.run(site: site)
+    RedeemReferralForRecipient.new(site).call
 
     Analytics.track(:site, site.id, 'Installed')
     track_script_installation

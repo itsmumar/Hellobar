@@ -14,7 +14,7 @@ feature 'User sign ups with a referral token', :js do
     allow_any_instance_of(RenderStaticScript)
       .to receive(:call).and_return('function hellobar(){}')
 
-    Coupon.create! label: Coupon::REFERRAL_LABEL, amount: Coupon::REFERRAL_AMOUNT, public: false
+    create :coupon, :referral
   end
 
   background do

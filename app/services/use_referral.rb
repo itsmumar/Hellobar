@@ -2,7 +2,6 @@ class UseReferral
   def initialize(bill, referral)
     @bill = bill
     @referral = referral
-    @recipient = bill.site.owners.first
   end
 
   def call
@@ -12,7 +11,7 @@ class UseReferral
 
   private
 
-  attr_reader :bill, :referral, :recipient
+  attr_reader :bill, :referral
 
   def create_coupon_use
     CouponUse.create(bill: bill, coupon: referral_coupon)
