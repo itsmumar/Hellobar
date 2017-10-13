@@ -9,6 +9,7 @@ abort("The Rails environment is running in #{ Rails.env } mode!") if Rails.env.p
 require 'spec_helper'
 require 'rspec/rails'
 require 'paperclip/matchers'
+require 'support/page_object'
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
 Dir[Rails.root.join('spec', 'models', 'concerns', '**', '*.rb')].each(&method(:require))
