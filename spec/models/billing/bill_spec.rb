@@ -104,36 +104,15 @@ describe Bill do
     end
 
     before do
+      stub_cyber_source :purchase
       bill.site.owners << user
     end
 
     it "sets the final amount to 0 if there's a discount for 15.0" do
-      allow(bill).to receive(:calculate_discount).and_return(15.0)
+      allow_any_instance_of(DiscountCalculator)
+        .to receive(:current_discount).and_return(15.0)
+
       PayBill.new(bill).call
-      expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(15.0)
-    end
-
-    it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
-      create :coupon, :referral
-      allow(bill).to receive(:calculate_discount).and_return(2.0)
-
-      expect {
-        PayBill.new(bill).call
-      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
-
-      expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(15.0)
-    end
-
-    it "sets the final amount to 0 and uses up one available referral if there's no discount" do
-      create :coupon, :referral
-      allow(bill).to receive(:calculate_discount).and_return(0.0)
-
-      expect {
-        PayBill.new(bill).call
-      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
-
       expect(bill.amount).to eq(0.0)
       expect(bill.discount).to eq(15.0)
     end
