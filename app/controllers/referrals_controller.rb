@@ -29,7 +29,7 @@ class ReferralsController < ApplicationController
     @referral = current_user.sent_referrals.find(params[:id])
     if @referral.update_attributes(referral_params)
       site = Site.unscoped.find_by(id: @referral.site_id)
-      Referrals::RedeemForSender.run(site: site) if site
+      RedeemReferralForSender.new(@referral).call if site
       flash[:success] = I18n.t('referral.flash.saved')
     else
       flash[:error] = I18n.t('referral.flash.not_saved')

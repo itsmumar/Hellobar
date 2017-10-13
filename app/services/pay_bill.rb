@@ -61,11 +61,11 @@ class PayBill
   end
 
   def set_final_amount
-    return if bill.base_amount.nil? || bill.amount.zero?
+    # return if bill.base_amount.nil? || bill.amount.zero?
 
-    bill.discount = bill.is_a?(Bill::Refund) ? 0 : calculate_discount
-    bill.amount = [bill.base_amount - bill.discount, 0].max
-    CouponUses::ApplyFromReferrals.run(bill: bill)
+    # bill.discount = bill.is_a?(Bill::Refund) ? 0 : calculate_discount
+    # bill.amount = [bill.base_amount - bill.discount, 0].max
+    # CouponUses::ApplyFromReferrals.run(bill: bill)
   end
 
   def calculate_discount

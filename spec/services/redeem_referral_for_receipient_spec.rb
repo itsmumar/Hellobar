@@ -7,7 +7,7 @@ describe RedeemReferralForRecipient do
   let(:service) { RedeemReferralForRecipient.new(site) }
 
   before do
-    allow(Referrals::RedeemForSender).to receive(:run)
+    allow_any_instance_of(RedeemReferralForSender).to receive(:call)
   end
 
   context 'when can redeem the referral' do
@@ -37,10 +37,10 @@ describe RedeemReferralForRecipient do
       service.call
     end
 
-    it 'calls Referrals::RedeemForSender service' do
-      expect(Referrals::RedeemForSender)
-        .to receive(:run)
-        .with(referral: referral)
+    it 'calls RedeemReferralForSender service' do
+      expect(RedeemReferralForSender)
+        .to receive_service_call
+        .with(referral)
 
       service.call
     end

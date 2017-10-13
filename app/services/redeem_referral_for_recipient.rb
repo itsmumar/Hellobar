@@ -39,7 +39,7 @@ class RedeemReferralForRecipient
   end
 
   def redeem_for_sender
-    Referrals::RedeemForSender.run(referral: referral)
+    RedeemReferralForSender.new(referral).call
   end
 
   def send_success_email_to_sender
