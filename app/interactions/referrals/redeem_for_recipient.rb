@@ -25,7 +25,12 @@ class Referrals::RedeemForRecipient < Less::Interaction
   private
 
   def update_subscription
-    ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
+    bill = AddTrialSubscription.new(site, subscription: 'pro', trial_period: 1.month).call
+    use_referral bill, referral
+  end
+
+  def use_referral(bill, referral)
+    UseReferral.new(bill, referral).call
   end
 
   def update_referral
@@ -42,7 +47,7 @@ class Referrals::RedeemForRecipient < Less::Interaction
 
   def redeem_for_sender
     # This will be a no-op if the user is already on Free Pro
-    Referrals::RedeemForSender.run(site: referral.site) if referral.site
+    Referrals::RedeemForSender.run(referral: referral)
   end
 
   def send_success_email_to_sender

@@ -11,14 +11,13 @@
 
 class Referrals::NoAvailableReferrals < StandardError; end
 class Referrals::RedeemForSender < Less::Interaction
-  expects :site
+  expects :referral
 
   def run
-    return if subscription.blank?
-    raise Referrals::NoAvailableReferrals unless available_referrals?
+    raise Referrals::NoAvailableReferrals unless referral.available_to_sender
 
-    if subscription.is_a?(Subscription::Free)
-      ChangeSubscription.new(site, subscription: 'pro', schedule: 'monthly').call
+    if !subscription || subscription.is_a?(Subscription::Free)
+      update_subscription
     elsif last_failed_bill
       PayBill.new(last_failed_bill).call
     end
@@ -26,15 +25,25 @@ class Referrals::RedeemForSender < Less::Interaction
 
   private
 
-  def available_referrals?
-    Referral.redeemable_by_sender_for_site(site).count > 0
+  def update_subscription
+    bill = AddTrialSubscription.new(site, subscription: 'pro', trial_period: 1.month).call
+    use_referral bill, referral
+  end
+
+  def use_referral(bill, referral)
+    UseReferral.new(bill, referral).call
   end
 
   def last_failed_bill
+    return if subscription.blank?
     @last_failed_bill ||= subscription.bills.failed.last
   end
 
   def subscription
     @subscription ||= site.current_subscription
+  end
+
+  def site
+    @site ||= referral.site
   end
 end

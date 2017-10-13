@@ -2,7 +2,7 @@ class AddTrialSubscription
   def initialize(site, params)
     @site = site
     @subscription = params[:subscription]
-    @period = params[:trial_period].to_i
+    @period = to_period params[:trial_period]
   end
 
   def call
@@ -40,5 +40,14 @@ class AddTrialSubscription
 
   def subscription_class
     Subscription.const_get(subscription.camelize)
+  end
+
+  def to_period(duration_or_period)
+    if duration_or_period.is_a? ActiveSupport::Duration
+      duration = duration_or_period.from_now - Time.current
+      (duration / 1.day).round
+    else
+      duration_or_period.to_i
+    end
   end
 end
