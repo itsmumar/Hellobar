@@ -5,7 +5,7 @@ namespace :internal_metrics do
     two_weeks_ago = last_week - 1.week
     sites = Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week).all
     installed_sites = sites.select(&:script_installed?)
-    revenue = Bill.where('created_at >= ? and created_at <= ? and status=1 and amount > 0', two_weeks_ago, last_week)
+    revenue = Bill.where('created_at >= ? and created_at <= ? and status=? and amount > 0', two_weeks_ago, last_week, Bill::PAID)
     sum = revenue.sum(:amount)
     pro = revenue.select { |b| b.subscription.type =~ /Pro/ }
     enterprise = revenue.select { |b| b.subscription.type =~ /Enterprise/ }
