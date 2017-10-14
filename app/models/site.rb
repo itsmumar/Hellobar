@@ -47,7 +47,7 @@ class Site < ActiveRecord::Base
   }
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
-  scope :with_url, ->(url) { protocol_ignored_url(url) }
+  scope :by_url, ->(url) { protocol_ignored_url(url) }
 
   before_validation :standardize_url
   before_validation :generate_read_write_keys
@@ -55,8 +55,6 @@ class Site < ActiveRecord::Base
   validates :url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
-
-  validate :validate_url_uniqueness
 
   store :settings, coder: JSON
 
@@ -114,7 +112,7 @@ class Site < ActiveRecord::Base
   end
 
   def self.by_url_for(user, url:)
-    with_url(url).joins(:users).find_by(users: { id: user.id })
+    by_url(url).joins(:users).find_by(users: { id: user.id })
   end
 
   def self.normalize_url(url)
@@ -146,18 +144,6 @@ class Site < ActiveRecord::Base
 
   def pro_managed_subscription?
     subscriptions.any? { |s| s.class == Subscription::ProManaged }
-  end
-
-  def url_exists?(user = nil)
-    if user
-      Site.joins(:users)
-          .merge(Site.protocol_ignored_url(url))
-          .where(users: { id: user.id })
-          .where.not(id: id)
-          .any?
-    else
-      Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
-    end
   end
 
   def free?
@@ -215,17 +201,6 @@ class Site < ActiveRecord::Base
   end
 
   private
-
-  def validate_url_uniqueness
-    if users
-       .joins(:sites)
-       .merge(Site.protocol_ignored_url(url))
-       .where.not(sites: { id: id })
-       .any?
-
-      errors.add(:url, 'is already in use')
-    end
-  end
 
   def standardize_url
     return if url.blank?

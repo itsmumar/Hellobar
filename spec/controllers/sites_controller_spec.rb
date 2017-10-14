@@ -129,13 +129,6 @@ describe SitesController do
       expect(site.reload.url).to eq('http://updatedurl.com')
     end
 
-    it 'does not allow updating to existing urls' do
-      new_membership = create(:site_membership, user: user)
-      put :update, id: new_membership.site.id, site: { url: site.url }
-
-      expect(flash[:error]).to include('URL is already in use')
-    end
-
     it 'renders the edit template if the change was rejected' do
       allow_any_instance_of(Site).to receive(:update_attributes).and_return false
       put :update, id: site.id, site: { url: 'abc' }
