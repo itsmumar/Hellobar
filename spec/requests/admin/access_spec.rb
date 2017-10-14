@@ -1,4 +1,4 @@
-describe Admin::AccessController do
+describe 'Admin::Access requests' do
   let!(:admin) { create(:admin) }
 
   describe 'POST do_reset_password' do

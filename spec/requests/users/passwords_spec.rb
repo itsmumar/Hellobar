@@ -1,4 +1,4 @@
-describe Users::PasswordsController do
+describe 'Users::Passwords requests' do
   let(:user) { create :user }
 
   around { |example| perform_enqueued_jobs(&example) }

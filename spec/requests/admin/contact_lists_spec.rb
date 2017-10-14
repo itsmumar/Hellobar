@@ -1,4 +1,4 @@
-describe Admin::ContactListsController do
+describe 'Admin::ContactLists requests' do
   let(:admin) { create(:admin) }
   let(:site) { create(:site, :with_user) }
   let!(:user) { site.owners.last }

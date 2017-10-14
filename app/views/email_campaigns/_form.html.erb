@@ -1,0 +1,17 @@
+<%= simple_form_for([current_site, @email_campaign]) do |f| %>
+
+  <div class="form-inputs">
+    <%= f.association :contact_list, prompt: 'Select a contact list...', collection: @contact_lists %>
+    <%= f.input :name, input_html: { maxlength: 255 }, placeholder: 'Name of this campaign' %>
+    <%= f.input :from_name, input_html: { maxlength: 255 }, placeholder: 'Name of person / organization sending this campaign' %>
+    <%= f.input :from_email, as: :email, input_html: { maxlength: 255 }, placeholder: 'Email of person / organization sending this campaign' %>
+    <%= f.input :subject, input_html: { maxlength: 255 }, placeholder: 'Subject of the email' %>
+    <%= f.input :body, placeholder: 'Body of the email' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+    <%= link_to 'Cancel', site_email_campaigns_path(current_site), class: 'button' %>
+  </div>
+
+<% end %>

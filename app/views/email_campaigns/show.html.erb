@@ -1,0 +1,25 @@
+<div class="email-campaign">
+
+  <h1>Email Campaign</h1>
+
+  <div class="details">
+    <p><strong>ID:</strong> <%= @email_campaign.id %></p>
+    <p><strong>Name:</strong> <%= @email_campaign.name %></p>
+    <p>
+      <strong>Contact List:</strong>
+      <%= link_to @email_campaign.contact_list.name, site_contact_list_path(@site, @email_campaign.contact_list) %>
+    </p>
+    <p><strong>Subject:</strong> <%= @email_campaign.subject %></p>
+    <p><strong>From name:</strong> <%= @email_campaign.from_name %></p>
+    <p><strong>From email:</strong> <%= @email_campaign.from_email %></p>
+    <p>
+      <strong>Status:</strong>
+      <span class="status <%= @email_campaign.status %>"><%= @email_campaign.status %></span>
+    </p>
+
+    <p>
+      <%= link_to 'Edit', edit_site_email_campaign_path(current_site, @email_campaign), class: 'button action' %>
+      <%= link_to 'Go back', site_email_campaigns_path(current_site), class: 'button' %>
+    </p>
+  </div>
+</div>

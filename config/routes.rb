@@ -59,7 +59,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :autofills, only: %i[index new create edit update destroy]
+    resources :autofills, except: :show
+
+    resources :email_campaigns, except: :destroy
 
     resources :image_uploads, only: [:create]
 

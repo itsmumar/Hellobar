@@ -36,6 +36,7 @@ class Site < ActiveRecord::Base
 
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
+  has_many :email_campaigns, dependent: :destroy
 
   acts_as_paranoid
 
