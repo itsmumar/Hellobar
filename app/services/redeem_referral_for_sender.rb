@@ -4,7 +4,7 @@ class RedeemReferralForSender
 
   def initialize(referral)
     @referral = referral
-    @site = referral.site
+    @site = Site.with_deleted.find_by(id: referral.site_id)
     @subscription = site&.active_subscription
   end
 

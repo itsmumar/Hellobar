@@ -1,6 +1,7 @@
 class UseReferral
   def initialize(bill, referral)
     @bill = bill
+    @site = Site.with_deleted.find_by(id: bill.site_id)
     @referral = referral
   end
 
@@ -11,7 +12,7 @@ class UseReferral
 
   private
 
-  attr_reader :bill, :referral
+  attr_reader :bill, :referral, :site
 
   def create_coupon_use
     CouponUse.create(bill: bill, coupon: referral_coupon)
@@ -41,7 +42,7 @@ class UseReferral
   end
 
   def for_recipient?
-    bill.site.owners.where(id: referral.recipient_id).any?
+    site.owners.where(id: referral.recipient_id).any?
   end
 
   def for_sender?
