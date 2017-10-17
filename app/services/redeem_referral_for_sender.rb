@@ -11,7 +11,7 @@ class RedeemReferralForSender
   def call
     raise ReferralNotAvailable unless referral.available_to_sender
 
-    if last_failed_bill && last_failed_bill.subscription.period == 1.month
+    if last_failed_bill&.subscription&.period == 1.month
       mark_failed_bill_as_paid
     else
       bill = add_free_days_or_trial
