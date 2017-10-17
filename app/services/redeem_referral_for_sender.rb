@@ -14,7 +14,7 @@ class RedeemReferralForSender
     if last_failed_bill
       mark_failed_bill_as_paid
     else
-      add_free_days_and_use_referral
+      add_free_days_or_trial_and_use_referral
     end
   end
 
@@ -22,7 +22,7 @@ class RedeemReferralForSender
 
   attr_reader :referral, :site, :subscription
 
-  def add_free_days_and_use_referral
+  def add_free_days_or_trial_and_use_referral
     bill = add_free_days_or_trial
     use_referral bill
   end
