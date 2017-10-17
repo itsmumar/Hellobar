@@ -80,9 +80,18 @@ describe RedeemReferralForSender do
     end
 
     context 'when subscription schedule is yearly' do
+      before do
+        params = { subscription: 'pro', schedule: 'yearly' }
+        ChangeSubscription.new(site, params, credit_card).call
+      end
+      before { site.bills.last.failed! }
+
       it 'adds one month trial' do
+        expect(Raven)
+          .to receive(:capture_exception)
+          .with(/Trying to redeem referral/, hash_including(:extra))
+
         service.call
-        expect(site).to be_capable_of :pro
       end
     end
   end

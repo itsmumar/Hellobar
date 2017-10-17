@@ -40,7 +40,14 @@ class RedeemReferralForSender
       last_failed_bill.paid!
       CreateBillForNextPeriod.new(last_failed_bill).call
     else
-      add_free_days_and_use_referral
+      Raven.capture_exception(
+        'Trying to redeem referral for sender that has a failed bill',
+        extra: {
+          referral: referral.inspect,
+          site: site.inspect,
+          last_failed_bill: last_failed_bill.inspect
+        }
+      )
     end
   end
 
