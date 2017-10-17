@@ -55,25 +55,35 @@ describe RedeemReferralForSender do
     let(:credit_card) { create :credit_card }
 
     before { stub_cyber_source :purchase }
-    before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
-    before { site.bills.last.failed! }
 
-    let!(:failed_bill) { Bill.failed.last }
+    context 'when subscription schedule is monthly' do
+      before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
+      before { site.bills.last.failed! }
 
-    it 'marks failed bill as paid' do
-      expect { service.call }
-        .to change(site.bills.failed, :count)
-        .by(-1)
-        .and change(site.bills.paid, :count)
-        .by(1)
+      let!(:failed_bill) { Bill.failed.last }
 
-      expect(failed_bill.reload).to be_paid
+      it 'marks failed bill as paid' do
+        expect { service.call }
+          .to change(site.bills.failed, :count)
+          .by(-1)
+          .and change(site.bills.paid, :count)
+          .by(1)
+
+        expect(failed_bill.reload).to be_paid
+      end
+
+      it 'creates pending bill for next period' do
+        expect { service.call }
+          .to change(site.bills.pending, :count)
+          .by(1)
+      end
     end
 
-    it 'creates pending bill for next period' do
-      expect { service.call }
-        .to change(site.bills.pending, :count)
-        .by(1)
+    context 'when subscription schedule is yearly' do
+      it 'adds one month trial' do
+        service.call
+        expect(site).to be_capable_of :pro
+      end
     end
   end
 end

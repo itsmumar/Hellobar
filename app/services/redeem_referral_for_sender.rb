@@ -11,17 +11,21 @@ class RedeemReferralForSender
   def call
     raise ReferralNotAvailable unless referral.available_to_sender
 
-    if last_failed_bill&.subscription&.period == 1.month
+    if last_failed_bill
       mark_failed_bill_as_paid
     else
-      bill = add_free_days_or_trial
-      use_referral bill
+      add_free_days_and_use_referral
     end
   end
 
   private
 
   attr_reader :referral, :site, :subscription
+
+  def add_free_days_and_use_referral
+    bill = add_free_days_or_trial
+    use_referral bill
+  end
 
   def add_free_days_or_trial(period = 1.month)
     AddFreeDaysOrTrialSubscription.new(site, period).call
@@ -32,8 +36,12 @@ class RedeemReferralForSender
   end
 
   def mark_failed_bill_as_paid
-    last_failed_bill.paid!
-    CreateBillForNextPeriod.new(last_failed_bill).call
+    if subscription.period == 1.month
+      last_failed_bill.paid!
+      CreateBillForNextPeriod.new(last_failed_bill).call
+    else
+      add_free_days_and_use_referral
+    end
   end
 
   def last_failed_bill
