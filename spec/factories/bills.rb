@@ -27,6 +27,11 @@ FactoryGirl.define do
       subscription { create :subscription, :free }
     end
 
+    trait :free do
+      amount 0
+      subscription { create :subscription, :free }
+    end
+
     factory :past_due_bill do
       amount 10
       bill_at { '2014-09-01'.to_date }
@@ -53,6 +58,15 @@ FactoryGirl.define do
 
   trait :pro do
     amount { Subscription::Pro.defaults[:monthly_amount] }
+    subscription { create :subscription, :pro }
+
+    after :create do |bill|
+      create :billing_attempt, :success,
+        bill: bill, response: 'authorization',
+        credit_card: bill.credit_card
+
+      bill.reload
+    end
   end
 
   trait :paid do

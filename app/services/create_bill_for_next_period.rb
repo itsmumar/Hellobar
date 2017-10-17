@@ -4,6 +4,8 @@ class CreateBillForNextPeriod
   end
 
   def call
+    return if bill.subscription&.free?
+
     create_bill_for_next_period
   end
 
@@ -12,8 +14,6 @@ class CreateBillForNextPeriod
   attr_reader :bill
 
   def create_bill_for_next_period
-    return if bill.subscription.free?
-
     Bill::Recurring.create!(
       subscription: bill.subscription,
       amount: bill.subscription.amount,
