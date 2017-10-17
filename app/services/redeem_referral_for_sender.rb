@@ -11,8 +11,8 @@ class RedeemReferralForSender
   def call
     raise ReferralNotAvailable unless referral.available_to_sender
 
-    if last_failed_bill
-      PayBill.new(last_failed_bill).call
+    if last_failed_bill && last_failed_bill.subscription.period == 1.month
+      mark_failed_bill_as_paid
     else
       bill = add_free_days_or_trial
       use_referral bill
@@ -29,6 +29,11 @@ class RedeemReferralForSender
 
   def use_referral(bill)
     UseReferral.new(bill, referral).call
+  end
+
+  def mark_failed_bill_as_paid
+    last_failed_bill.paid!
+    CreateBillForNextPeriod.new(last_failed_bill).call
   end
 
   def last_failed_bill

@@ -47,4 +47,33 @@ describe RedeemReferralForSender do
         .to raise_error(RedeemReferralForSender::ReferralNotAvailable)
     end
   end
+
+  context 'when site has a failed bill' do
+    let!(:referral) do
+      create(:referral, state: :installed, available_to_sender: true, sender: sender, site: site)
+    end
+    let(:credit_card) { create :credit_card }
+
+    before { stub_cyber_source :purchase }
+    before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
+    before { site.bills.last.failed! }
+
+    let!(:failed_bill) { Bill.failed.last }
+
+    it 'marks failed bill as paid' do
+      expect { service.call }
+        .to change(site.bills.failed, :count)
+        .by(-1)
+        .and change(site.bills.paid, :count)
+        .by(1)
+
+      expect(failed_bill.reload).to be_paid
+    end
+
+    it 'creates pending bill for next period' do
+      expect { service.call }
+        .to change(site.bills.pending, :count)
+        .by(1)
+    end
+  end
 end
