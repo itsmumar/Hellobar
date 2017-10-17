@@ -49,7 +49,7 @@ describe PayRecurringBills do
     end
 
     it 'logs results' do
-      create :free_bill
+      create :bill, :free
       expect(report).to receive(:start)
       expect(report).to receive(:count).exactly(1).times
       expect(report).to receive(:finish)
@@ -58,7 +58,7 @@ describe PayRecurringBills do
     end
 
     context 'with zero amount bill' do
-      let!(:zero_amount_bill) { create :free_bill }
+      let!(:zero_amount_bill) { create :bill, :free }
 
       specify do
         expect { service.call }

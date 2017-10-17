@@ -49,7 +49,7 @@ FactoryGirl.define do
 
     trait :paid do
       after(:create) do |subscription|
-        create :pro_bill, :paid, subscription: subscription
+        create :bill, :pro, :paid, subscription: subscription
         subscription.reload
       end
     end

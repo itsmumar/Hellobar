@@ -42,7 +42,7 @@ describe ChangeSubscription, :freeze do
     end
 
     context 'with pending bills' do
-      let!(:pending_bill) { create :free_bill, subscription: site.current_subscription }
+      let!(:pending_bill) { create :bill, :free, subscription: site.current_subscription }
 
       it 'voids pending bills' do
         service.call
