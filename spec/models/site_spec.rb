@@ -8,6 +8,28 @@ describe Site do
     expect(site.owners.first).not_to be_nil
   end
 
+  it 'allows creating a second site with the same url' do
+    url = 'http://test.com'
+    user = create :user
+    first_site = create :site, user: user, url: url
+    second_site = create :site, user: user, url: url
+
+    expect(first_site).to be_valid
+    expect(first_site).to be_persisted
+    expect(second_site).to be_valid
+    expect(second_site).to be_persisted
+  end
+
+  it 'allows having membership access to two sites with the same url' do
+    url = 'http://test.com'
+    membership = create :site_membership
+
+    new_site = membership.user.sites.create url: url
+
+    expect(new_site).to be_valid
+    expect(new_site).to be_persisted
+  end
+
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
       create(:site_membership, :admin, site: site)
@@ -146,53 +168,6 @@ describe Site do
       site = Site.new(url: '')
       expect(site).not_to be_valid
       expect(site.url).to be_blank
-    end
-  end
-
-  describe 'url_uniqueness' do
-    let(:membership) { create(:site_membership) }
-
-    it 'returns false if the url is not unique to the user' do
-      s2 = membership.user.sites.create(url: 'different.com')
-      s2.url = membership.site.url
-
-      expect(s2.valid?).to be_falsey
-    end
-
-    it 'returns true if the url is unqiue to the user' do
-      s2 = membership.user.sites.create(url: 'uniqueurl.com')
-
-      expect(s2.valid?).to be_truthy
-    end
-  end
-
-  describe '#url_exists?' do
-    it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
-    end
-
-    it 'should return true if another site exists with the url' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'http://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should return true if another site exists even with other protocol' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'https://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should scope to user if user is given' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
-    end
-
-    it 'should ignore protocol if user scoped call' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
     end
   end
 

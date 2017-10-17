@@ -145,7 +145,7 @@ class SitesController < ApplicationController
     if !@site.valid?
       flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
       redirect_to root_path
-    elsif params[:source] == 'landing' && Site.with_url(@site.url).any?
+    elsif params[:source] == 'landing' && Site.by_url(@site.url).any?
       redirect_to new_user_session_path(existing_url: @site.url)
     else
       session[:new_site_url] = @site.url

@@ -1,5 +1,6 @@
-describe Admin::AdminsController do
+describe 'Admin::Admins requests' do
   let!(:admin) { create(:admin) }
+
   before { stub_current_admin(admin) }
 
   describe 'GET admin_admins_path' do

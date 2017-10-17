@@ -1,0 +1,11 @@
+FactoryGirl.define do
+  factory :email_campaign do
+    site
+    contact_list
+    sequence(:name) { |i| "Email Campaign #{ i }" }
+    from_name 'Hello Bar'
+    from_email 'dev@hellobar.com'
+    subject 'Hello'
+    body 'Test email campaign'
+  end
+end

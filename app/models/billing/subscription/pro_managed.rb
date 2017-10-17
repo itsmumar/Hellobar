@@ -32,6 +32,10 @@ class Subscription
       def precise_geolocation_targeting?
         true
       end
+
+      def email_campaigns?
+        true
+      end
     end
 
     class << self

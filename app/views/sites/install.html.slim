@@ -85,7 +85,7 @@
       = form_tag email_developer_contact_submission_path, method: :post do |f|
         = hidden_field_tag :site_id, @site.id
         label To:
-        = email_field :developer_email, "", placeholder: "Your developer's email address", required: true
+        = email_field :developer, :email, placeholder: "Your developer's email address", required: true
         label From:
         pre Hello Bar &lt;contact@hellobar.com&gt;
 

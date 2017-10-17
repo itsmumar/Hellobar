@@ -1,4 +1,4 @@
-describe 'Admin Bills requests' do
+describe 'Admin::Bills requests' do
   context 'when unauthenticated' do
     describe 'GET :show' do
       it 'responds with a redirect to the login page' do

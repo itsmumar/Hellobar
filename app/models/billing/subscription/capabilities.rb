@@ -95,6 +95,10 @@ class Subscription
       false
     end
 
+    def email_campaigns?
+      false
+    end
+
     def ==(other)
       self.class == other.class &&
         subscription == other.subscription &&

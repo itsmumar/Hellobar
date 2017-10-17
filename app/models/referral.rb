@@ -13,7 +13,7 @@ class Referral < ActiveRecord::Base
   has_one :referral_token, as: :tokenizable, dependent: :destroy
 
   validates :sender_id, presence: true
-  validates :email, presence: true
+  validates :email, presence: true, format: { with: Devise.email_regexp }
   validate :ensure_email_available, on: :create
 
   after_create :create_referral_token
@@ -68,7 +68,6 @@ class Referral < ActiveRecord::Base
   private
 
   def ensure_email_available
-    return if email.blank?
     return if recipient # If we're creating with a recipient, we don't need to run this check at all
 
     if User.where(email: email).count > 0
