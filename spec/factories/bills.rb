@@ -9,20 +9,7 @@ FactoryGirl.define do
     sequence(:authorization_code) { |n| "authorization-#{ n }" }
     grace_period_allowed true
 
-    factory :pro_bill do
-      amount Subscription::Pro.defaults[:monthly_amount]
-      subscription { create :subscription, :pro }
-
-      after :create do |bill|
-        create :billing_attempt, :success,
-          bill: bill, response: 'authorization',
-          credit_card: bill.credit_card
-
-        bill.reload
-      end
-    end
-
-    factory :free_bill do
+    trait :free do
       amount 0
       subscription { create :subscription, :free }
     end
@@ -46,38 +33,47 @@ FactoryGirl.define do
       amount(-10)
       subscription
       type 'Bill::Refund'
-      refunded_bill { create :pro_bill, subscription: subscription }
+      refunded_bill { create :bill, :pro, subscription: subscription }
       refunded_billing_attempt { refunded_bill.billing_attempts.last }
     end
-  end
 
-  trait :pro do
-    amount { Subscription::Pro.defaults[:monthly_amount] }
-  end
+    trait :pro do
+      amount { Subscription::Pro.defaults[:monthly_amount] }
+      subscription { create :subscription, :pro }
 
-  trait :paid do
-    status :paid
-    after :create do |bill|
-      create :billing_attempt, :success, bill: bill, credit_card: bill.credit_card
-      bill.reload
+      after :create do |bill|
+        create :billing_attempt, :success,
+          bill: bill, response: 'authorization',
+          credit_card: bill.credit_card
+
+        bill.reload
+      end
     end
-  end
 
-  trait :void do
-    status Bill::VOIDED
-  end
+    trait :paid do
+      status :paid
+      after :create do |bill|
+        create :billing_attempt, :success, bill: bill, credit_card: bill.credit_card
+        bill.reload
+      end
+    end
 
-  trait :pending do
-    status Bill::PENDING
-  end
+    trait :void do
+      status Bill::VOIDED
+    end
 
-  trait :problem do
-    status Bill::FAILED
-  end
+    trait :pending do
+      status Bill::PENDING
+    end
 
-  trait :with_attempt do
-    after :create do |bill|
-      create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
+    trait :problem do
+      status Bill::FAILED
+    end
+
+    trait :with_attempt do
+      after :create do |bill|
+        create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
+      end
     end
   end
 end

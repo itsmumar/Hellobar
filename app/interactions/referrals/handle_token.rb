@@ -6,8 +6,6 @@ class Referrals::HandleToken < Less::Interaction
     return if token.nil?
     return if user.sites.count > 1
 
-    token_record = ReferralToken.where(token: token).first
-
     if token_record&.belongs_to_a?(User)
       create_from_user_token(token_record)
     elsif token_record&.belongs_to_a?(Referral)
@@ -16,6 +14,10 @@ class Referrals::HandleToken < Less::Interaction
   end
 
   private
+
+  def token_record
+    @token_record ||= ReferralToken.find_by(token: token)
+  end
 
   def create_from_user_token(user_token)
     Referrals::Create.run(

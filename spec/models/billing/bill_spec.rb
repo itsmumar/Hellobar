@@ -48,7 +48,7 @@ describe Bill do
   end
 
   it 'should not let you change the status once set' do
-    bill = create(:pro_bill)
+    bill = create(:bill, :pro)
     expect(bill.status).to eq Bill::PENDING
     bill.voided!
     expect(bill.status).to eq Bill::VOIDED
@@ -60,7 +60,7 @@ describe Bill do
   end
 
   it 'should record when the status was set' do
-    bill = create(:pro_bill)
+    bill = create(:bill, :pro)
     expect(bill.status).to eq Bill::PENDING
     expect(bill.status_set_at).to be_nil
     bill.paid!
@@ -69,7 +69,7 @@ describe Bill do
 
   it 'should take the credit_card grace period into account when grace_period_allowed' do
     now = Time.current
-    bill = create(:pro_bill, bill_at: now)
+    bill = create(:bill, :pro, bill_at: now)
     expect(bill.grace_period_allowed?).to eq(true)
     expect(bill.bill_at).to be_within(5.minutes).of(now)
     expect(bill.due_at).to eq(bill.bill_at)
@@ -81,12 +81,12 @@ describe Bill do
 
   describe '#during_trial_subscription?' do
     it 'should not be on trial subscription' do
-      bill = create(:pro_bill, :paid)
+      bill = create(:bill, :pro, :paid)
       expect(bill.during_trial_subscription?).to be_falsey
     end
 
     it 'should be on trial subscription' do
-      bill = create(:pro_bill, :paid)
+      bill = create(:bill, :pro, :paid)
       bill.update_attribute(:amount, 0)
       bill.subscription.credit_card = nil
       expect(bill.during_trial_subscription?).to be_truthy
@@ -94,7 +94,7 @@ describe Bill do
   end
 
   describe 'set_final_amount' do
-    let!(:bill) { create(:pro_bill, bill_at: 15.days.ago) }
+    let!(:bill) { create(:bill, :pro, bill_at: 15.days.ago) }
     let!(:user) { create(:user) }
     let!(:coupon) { create :coupon, :referral }
     let!(:refs) do
@@ -104,36 +104,15 @@ describe Bill do
     end
 
     before do
+      stub_cyber_source :purchase
       bill.site.owners << user
     end
 
     it "sets the final amount to 0 if there's a discount for 15.0" do
-      allow(bill).to receive(:calculate_discount).and_return(15.0)
+      allow_any_instance_of(DiscountCalculator)
+        .to receive(:current_discount).and_return(15.0)
+
       PayBill.new(bill).call
-      expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(15.0)
-    end
-
-    it "sets the final amount to 0 and uses up one available referral if there's a discount for 2.0" do
-      create :coupon, :referral
-      allow(bill).to receive(:calculate_discount).and_return(2.0)
-
-      expect {
-        PayBill.new(bill).call
-      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
-
-      expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(15.0)
-    end
-
-    it "sets the final amount to 0 and uses up one available referral if there's no discount" do
-      create :coupon, :referral
-      allow(bill).to receive(:calculate_discount).and_return(0.0)
-
-      expect {
-        PayBill.new(bill).call
-      }.to change { user.sent_referrals.redeemable_for_site(bill.site).count }.by(-1)
-
       expect(bill.amount).to eq(0.0)
       expect(bill.discount).to eq(15.0)
     end
@@ -142,7 +121,7 @@ describe Bill do
   describe '#calculate_discount' do
     it 'should be 0' do
       user = create(:user)
-      bill = create(:pro_bill)
+      bill = create(:bill, :pro)
       bill.site.users << user
 
       expect(bill.calculate_discount).to eq(0)
@@ -152,7 +131,7 @@ describe Bill do
       user = create(:user)
       bills =
         Array.new(35) do
-          bill = create(:pro_bill, status: :paid)
+          bill = create(:bill, :pro, status: :paid)
           bill.site.users << user
           user.reload
           bill.subscription.credit_card.update(user: user)
@@ -198,7 +177,7 @@ describe Bill do
     end
 
     context 'when past due and there is no credit card' do
-      let(:bill) { create :pro_bill }
+      let(:bill) { create :bill, :pro }
       before { bill.billing_attempts.delete_all }
 
       specify { expect(bill).to be_past_due }

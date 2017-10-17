@@ -2,13 +2,13 @@ class AddFreeDays
   class Error < StandardError
   end
 
-  def initialize(site, days_number)
+  def initialize(site, duration_or_days)
     @site = site
-    @days_number = days_number.to_i.days
+    @duration = to_duration duration_or_days
   end
 
   def call
-    raise Error, 'Could not add negative days' if days_number < 1
+    raise Error, 'Could not add negative days' if duration < 1
     raise Error, 'Could not add trial days to a free subscription' unless active_subscription&.paid?
 
     if active_subscription.currently_on_trial?
@@ -16,11 +16,13 @@ class AddFreeDays
     else
       update_paid_subscription
     end
+
+    current_bill
   end
 
   private
 
-  attr_reader :site, :days_number
+  attr_reader :site, :duration
 
   def update_paid_subscription
     update_current_bill
@@ -34,21 +36,21 @@ class AddFreeDays
 
   def update_trial_end_date
     active_subscription.update(
-      trial_end_date: active_subscription.trial_end_date + days_number
+      trial_end_date: active_subscription.trial_end_date + duration
     )
   end
 
   def update_current_bill
     current_bill.update!(
-      end_date: current_bill.end_date + days_number
+      end_date: current_bill.end_date + duration
     )
   end
 
   def update_next_bill
     next_bill.update!(
-      bill_at: next_bill.bill_at + days_number,
-      start_date: next_bill.start_date + days_number,
-      end_date: next_bill.end_date + days_number
+      bill_at: next_bill.bill_at + duration,
+      start_date: next_bill.start_date + duration,
+      end_date: next_bill.end_date + duration
     )
   end
 
@@ -62,5 +64,13 @@ class AddFreeDays
 
   def current_bill
     @current_bill ||= active_subscription.bills.paid.last
+  end
+
+  def to_duration(duration_or_days)
+    if duration_or_days.is_a? ActiveSupport::Duration
+      duration_or_days
+    else
+      duration_or_days.to_i.days
+    end
   end
 end

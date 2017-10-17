@@ -217,7 +217,7 @@ describe Subscription do
   end
 
   describe '#currently_on_trial?' do
-    let(:bill) { create(:pro_bill, :paid) }
+    let(:bill) { create(:bill, :pro, :paid) }
 
     context 'when subscription amount is not 0 and has a paid bill but no credit card' do
       before do
@@ -245,7 +245,7 @@ describe Subscription do
     end
 
     context 'all bills are paid' do
-      let!(:bill) { create(:pro_bill, :paid) }
+      let!(:bill) { create(:bill, :pro, :paid) }
 
       specify { expect(bill.subscription).not_to be_problem_with_payment }
     end
@@ -253,7 +253,7 @@ describe Subscription do
 
   describe '#expired?' do
     context 'when pro' do
-      let!(:bill) { create(:pro_bill, :paid) }
+      let!(:bill) { create(:bill, :pro, :paid) }
 
       specify { expect(bill.subscription).not_to be_expired }
 
@@ -262,7 +262,7 @@ describe Subscription do
       end
 
       context 'and not paid' do
-        let!(:bill) { create(:pro_bill) }
+        let!(:bill) { create(:bill, :pro) }
 
         specify { expect(bill.subscription).to be_expired }
       end

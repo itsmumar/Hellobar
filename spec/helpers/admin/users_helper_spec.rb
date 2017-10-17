@@ -3,7 +3,7 @@ describe Admin::UsersHelper do
     let(:site) { create(:site) }
     let!(:bills) do
       [
-        create(:pro_bill, :paid, site: site),
+        create(:bill, :pro, :paid, site: site),
         create(:bill, site: site)
       ]
     end
@@ -24,7 +24,7 @@ describe Admin::UsersHelper do
 
   describe '#bill_duration' do
     it "returns the bill's date in the correct format" do
-      bill = create(:pro_bill, :paid)
+      bill = create(:bill, :pro, :paid)
       bill.start_date = '2015-07-01'
       bill.end_date = '2015-07-31'
 
@@ -35,7 +35,7 @@ describe Admin::UsersHelper do
   end
 
   describe '#context_for_trial(user, bill)' do
-    let(:bill) { create :pro_bill, :paid }
+    let(:bill) { create :bill, :pro, :paid }
     let(:user) { create :user }
 
     it 'should be nil if the subscription is not on trial' do

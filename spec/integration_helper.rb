@@ -4,8 +4,6 @@ require 'support/ab_test_config'
 
 SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 
-Dir[Rails.root.join('spec', 'features', 'support', '**', '*.rb')].each(&method(:require))
-
 RSpec.configure do |config|
   config.include FeatureHelper
 

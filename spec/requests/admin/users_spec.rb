@@ -59,10 +59,10 @@ describe 'Admin::Users requests' do
 
     before do
       stub_current_admin(admin)
-      create :pro_bill, subscription: site.current_subscription
+      create :bill, :pro, subscription: site.current_subscription
       create :refund_bill, subscription: site.current_subscription
       site_with_invoice_information = create :site, :pro, user: user, invoice_information: 'foo bar'
-      create :pro_bill, subscription: site_with_invoice_information.current_subscription
+      create :bill, :pro, subscription: site_with_invoice_information.current_subscription
     end
 
     it 'shows the specified user' do

@@ -12,7 +12,7 @@ describe UpdateStaticScriptInstallation do
       end
 
       it 'redeems referrals' do
-        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
+        expect(RedeemReferralForRecipient).to receive_service_call.with(site)
 
         service.call
       end

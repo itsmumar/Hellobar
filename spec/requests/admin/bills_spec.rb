@@ -16,7 +16,7 @@ describe 'Admin::Bills requests' do
 
     let!(:user) { create :user }
     let!(:site) { create :site, user: user }
-    let!(:bill) { create :pro_bill, :paid }
+    let!(:bill) { create :bill, :pro, :paid }
 
     describe 'GET #show' do
       it 'allows admins to see a bill' do

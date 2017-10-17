@@ -4,7 +4,7 @@ describe RefundBill do
   let(:site) { create :site, user: user }
   let(:credit_card) { create :credit_card, user: user }
   let(:subscription) { create :subscription, :pro, site: site, credit_card: credit_card }
-  let(:bill) { create :pro_bill, subscription: subscription }
+  let(:bill) { create :bill, :pro, subscription: subscription }
   let!(:service) { described_class.new(bill, amount: amount) }
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
