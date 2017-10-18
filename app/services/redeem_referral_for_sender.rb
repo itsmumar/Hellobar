@@ -23,8 +23,10 @@ class RedeemReferralForSender
   attr_reader :referral, :site, :subscription
 
   def add_free_days_or_trial_and_use_referral
-    bill = add_free_days_or_trial
-    use_referral bill
+    Referral.transaction do
+      bill = add_free_days_or_trial
+      use_referral bill
+    end
   end
 
   def add_free_days_or_trial(period = 1.month)
