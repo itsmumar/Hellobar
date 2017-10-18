@@ -41,7 +41,6 @@ class ChangeSubscription
   def update_credit_card
     old_subscription.update credit_card: credit_card
     try_to_pay_failed_bill
-    old_subscription.bills.last
   end
 
   def try_to_pay_failed_bill

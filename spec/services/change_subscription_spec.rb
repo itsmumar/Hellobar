@@ -9,11 +9,11 @@ describe ChangeSubscription, :freeze do
   before { stub_cyber_source :purchase }
   before { change_subscription 'free' }
 
-  def change_subscription(subscription, schedule = 'monthly')
+  def change_subscription(subscription, schedule = 'monthly', new_credit_card: nil)
     ChangeSubscription.new(
       site,
       { subscription: subscription, schedule: schedule },
-      credit_card
+      new_credit_card || credit_card
     ).call
   end
 
@@ -153,14 +153,26 @@ describe ChangeSubscription, :freeze do
         end
 
         context 'when there is a problem bill' do
+          let!(:new_credit_card) { create :credit_card }
+          let(:failed_bill) { site.current_subscription.bills.last }
+
           before do
             change_subscription('pro', 'monthly')
-            site.current_subscription.bills.last.failed!
+            failed_bill.failed!
           end
 
-          it 'pays the problem bill' do
-            change_subscription('pro', 'monthly')
-            expect(site.bills.failed).to be_empty
+          it 'pays the failed bill' do
+            expect { change_subscription('pro', 'monthly') }
+              .to change(site.bills.failed, :count)
+              .by(-1)
+          end
+
+          it 'uses new credit card if provided' do
+            expect(failed_bill.reload.credit_card).to eql credit_card
+              travel_to site.current_subscription.active_until + 1.day do
+              change_subscription('pro', 'monthly', new_credit_card: new_credit_card)
+              expect(failed_bill.reload.credit_card).to eql new_credit_card
+            end
           end
         end
       end
