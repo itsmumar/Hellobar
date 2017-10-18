@@ -9,6 +9,7 @@ class RedeemReferralForSender
   end
 
   def call
+    return unless site
     raise ReferralNotAvailable unless referral.available_to_sender
 
     if last_failed_bill
