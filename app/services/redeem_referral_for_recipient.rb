@@ -7,10 +7,11 @@ class RedeemReferralForRecipient
 
   def call
     return unless can_redeem_referral?
-
-    update_referral
-    update_subscription
-    redeem_for_sender
+    Referral.transaction do
+      update_referral
+      update_subscription
+      redeem_for_sender
+    end
     send_success_email_to_sender
   end
 
@@ -27,7 +28,7 @@ class RedeemReferralForRecipient
   end
 
   def update_referral
-    referral.update_attributes(state: :installed, available_to_sender: true)
+    referral.update!(state: :installed, available_to_sender: true)
   end
 
   def update_subscription
