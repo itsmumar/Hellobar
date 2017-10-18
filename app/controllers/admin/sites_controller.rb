@@ -44,7 +44,11 @@ class Admin::SitesController < AdminController
 
   def change_subscription
     if subscription_params[:trial_period].present?
-      AddTrialSubscription.new(site, subscription_params).call
+      AddFreeDaysOrTrialSubscription.new(
+        site,
+        subscription_params[:trial_period],
+        subscription: subscription_params[:subscription]
+      ).call
     else
       ChangeSubscription.new(site, subscription_params).call
     end
