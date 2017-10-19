@@ -15,6 +15,12 @@ Rails.application.routes.draw do
         post :update_static_script_installation
       end
     end
+
+    resources :email_campaigns, only: [] do
+      member do
+        post :update_status
+      end
+    end
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
