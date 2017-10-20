@@ -24,7 +24,10 @@
   <td><span class="status <%= email_campaign.status %>"><%= email_campaign.status %></span></td>
   <td>
     <%= link_to 'Send', send_out_site_email_campaign_path(@site, email_campaign),
-          class: 'button', method: :post, data: { confirm: 'Are you sure you want to send out this email campaign?' } %>
+          class: 'button', method: :post, data: {
+            confirm: 'Are you sure you want to send out this email campaign?',
+            disable_with: "Sending..."
+          } %>
     <%= link_to 'Edit', edit_site_email_campaign_path(@site, email_campaign), class: 'button' %>
   </td>
 </tr>
