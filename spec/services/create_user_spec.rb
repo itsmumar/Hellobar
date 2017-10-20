@@ -39,7 +39,8 @@ describe CreateUser do
         :user,
         anything,
         'Configure Your Bar Reminder New Users Only 2016-03-28',
-        value: 'original')
+        value: 'original'
+      )
 
     expect(Analytics)
       .to receive(:track)
@@ -59,7 +60,7 @@ describe CreateUser do
       expect { service.call }
         .to raise_error(
           ActiveRecord::RecordInvalid,
-          "Validation failed: Please log in with your user2@eample.com Google email"
+          'Validation failed: Please log in with your user2@eample.com Google email'
         )
     end
   end
