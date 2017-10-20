@@ -3,11 +3,11 @@ class Users::OmniauthCallbacksController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :show_invalid_credentials_error
 
   def google_oauth2
-    SignInUser.new(request).call do |user, redirect_url|
-      sign_in user, event: :authentication
+    user, redirect_url = SignInUser.new(request).call
 
-      redirect_to redirect_url || after_sign_in_path_for(user)
-    end
+    sign_in user, event: :authentication
+
+    redirect_to redirect_url || after_sign_in_path_for(user)
   end
 
   def failure

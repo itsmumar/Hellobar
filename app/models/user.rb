@@ -68,6 +68,7 @@ class User < ActiveRecord::Base
     find_by_email(email) || find_and_create_by_referral(email)
   end
 
+  # TODO: obsolete
   def self.find_and_create_by_referral(email)
     return unless Referral.find_by(email: email)
     password = Devise.friendly_token[9, 20]
@@ -169,70 +170,6 @@ class User < ActiveRecord::Base
 
   def name
     first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
-  end
-
-  def self.find_for_google_oauth2(omniauth_hash, original_email = nil, track_options = {})
-    info = omniauth_hash.info
-
-    if original_email.present? && info.email != original_email # the user is trying to login with a different Google account
-      user = User.new
-      user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-      raise ActiveRecord::RecordInvalid, user
-    elsif (user = User.joins(:authentications).find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider }))
-      # TODO: deprecated case. use #update_authentication directly
-      user.first_name = info.first_name if info.first_name.present?
-      user.last_name = info.last_name if info.last_name.present?
-
-      user.save
-    else # create a new user
-      user = User.find_by(email: info.email, status: TEMPORARY_STATUS) || User.new(email: info.email)
-
-      password = Devise.friendly_token[9, 20]
-      user.password = password
-      user.password_confirmation = password
-
-      user.first_name = info.first_name
-      user.last_name = info.last_name
-
-      user.authentications.build(provider: omniauth_hash.provider, uid: omniauth_hash.uid)
-      user.status = ACTIVE_STATUS
-
-      if user.save
-        TrackEvent.new(:signed_up, user: user).call
-
-        Analytics.track(:user, user.id, 'Signed Up', track_options)
-        Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
-      end
-    end
-
-    # TODO: deprecated. use #update_authentication directly
-    # update the authentication tokens & expires for this provider
-    if omniauth_hash.credentials && user.persisted?
-      user.authentications.detect { |x| x.provider == omniauth_hash.provider }.update(
-        refresh_token: omniauth_hash.credentials.refresh_token,
-        access_token: omniauth_hash.credentials.token,
-        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
-      )
-    end
-
-    user
-  end
-
-  def update_authentication(omniauth_hash)
-    authentication = authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
-
-    self.first_name = omniauth_hash.info.first_name if omniauth_hash.info.first_name.present?
-    self.last_name = omniauth_hash.info.last_name if omniauth_hash.info.last_name.present?
-
-    if omniauth_hash.credentials && persisted?
-      authentication.update(
-        refresh_token: omniauth_hash.credentials.refresh_token,
-        access_token: omniauth_hash.credentials.token,
-        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
-      )
-    end
-
-    save!
   end
 
   def self.find_or_invite_by_email(email, _site)
