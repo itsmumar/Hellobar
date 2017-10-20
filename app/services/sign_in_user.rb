@@ -49,9 +49,19 @@ class SignInUser
   end
 
   def find_user
+    find_by_email || find_by_uid
+  end
+
+  def find_by_email
     return if omniauth_hash&.info.blank?
 
     User.find_by(email: omniauth_hash.info.email)
+  end
+
+  def find_by_uid
+    User
+      .joins(:authentications)
+      .find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider })
   end
 
   def update_authentication(user, omniauth_hash)
