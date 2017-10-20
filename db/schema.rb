@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171011115111) do
+ActiveRecord::Schema.define(version: 20171018170258) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20171011115111) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "sent_at"
   end
 
   add_index "email_campaigns", ["deleted_at"], name: "index_email_campaigns_on_deleted_at", using: :btree

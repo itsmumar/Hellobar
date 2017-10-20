@@ -15,6 +15,12 @@ Rails.application.routes.draw do
         post :update_static_script_installation
       end
     end
+
+    resources :email_campaigns, only: [] do
+      member do
+        post :update_status
+      end
+    end
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
@@ -61,7 +67,11 @@ Rails.application.routes.draw do
 
     resources :autofills, except: :show
 
-    resources :email_campaigns, except: :destroy
+    resources :email_campaigns, except: :destroy do
+      member do
+        post :send_out
+      end
+    end
 
     resources :image_uploads, only: [:create]
 
