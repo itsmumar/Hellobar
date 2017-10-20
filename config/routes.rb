@@ -67,7 +67,11 @@ Rails.application.routes.draw do
 
     resources :autofills, except: :show
 
-    resources :email_campaigns, except: :destroy
+    resources :email_campaigns, except: :destroy do
+      member do
+        post :send_out
+      end
+    end
 
     resources :image_uploads, only: [:create]
 

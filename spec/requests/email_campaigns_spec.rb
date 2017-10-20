@@ -131,5 +131,17 @@ describe 'Email Campaigns requests' do
         expect(response).to be_successful
       end
     end
+
+    describe 'POST #send_out' do
+      let(:email_campaign) { create :email_campaign, site: site, contact_list: contact_list }
+
+      it 'sends out SNS notification to send out the campaign' do
+        expect(SendSnsNotification).to receive_service_call
+
+        post send_out_site_email_campaign_path(site, email_campaign)
+
+        expect(response).to be_a_redirect
+      end
+    end
   end
 end

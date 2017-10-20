@@ -16,6 +16,7 @@
       <strong>Status:</strong>
       <span class="status <%= @email_campaign.status %>"><%= @email_campaign.status %></span>
     </p>
+    <p><strong>Sent at:</strong> <%= @email_campaign.sent_at %></p>
 
     <p>
       <%= link_to 'Edit', edit_site_email_campaign_path(current_site, @email_campaign), class: 'button action' %>

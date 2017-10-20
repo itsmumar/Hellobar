@@ -6,6 +6,6 @@ FactoryGirl.define do
     from_name 'Hello Bar'
     from_email 'dev@hellobar.com'
     subject 'Hello'
-    body 'Test email campaign'
+    body 'Test Email Campaign'
   end
 end
