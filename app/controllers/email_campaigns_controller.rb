@@ -6,8 +6,10 @@ class EmailCampaignsController < ApplicationController
   before_action :load_email_campaign, only: %i[show edit update send_out]
 
   def index
-    flash.now[:notice] = 'This is an exeprimental feature, still in its infancy.
-It will send out email campaign only to the 3 latest subscribers of a contact list.'
+    flash.now[:notice] = <<~NOTICE
+      This is an exeprimental feature, still in its infancy. It will send out
+      email campaign only to the 3 latest subscribers of a contact list.
+    NOTICE
 
     @email_campaigns = @site.email_campaigns
   end

@@ -20,7 +20,7 @@ class SendEmailCampaign
   def notification
     {
       topic_arn: topic_arn,
-      subject: subject,
+      subject: notification_subject,
       message_hash: message_hash
     }
   end
@@ -29,7 +29,7 @@ class SendEmailCampaign
     Settings.sns['lambda_send_email_campaign']
   end
 
-  def subject
+  def notification_subject
     "sendEmailCampaign() for EmailCampaign#id #{ email_campaign.id } and \
 ContactList##{ contact_list.id }"
   end

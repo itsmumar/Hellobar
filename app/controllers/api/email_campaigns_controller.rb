@@ -6,8 +6,10 @@ class Api::EmailCampaignsController < ApplicationController
   respond_to :json
 
   def update_status
-    email_campaign.update status: email_campaign_params[:status],
+    email_campaign.update(
+      status: email_campaign_params[:status],
       sent_at: Time.current
+    )
 
     head :ok
   end
