@@ -30,8 +30,8 @@ class SendEmailCampaign
   end
 
   def notification_subject
-    "sendEmailCampaign() for EmailCampaign#id #{ email_campaign.id } and \
-ContactList##{ contact_list.id }"
+    "sendEmailCampaign() for EmailCampaign#id #{ email_campaign.id } and " \
+    "ContactList##{ contact_list.id }"
   end
 
   def message_hash
