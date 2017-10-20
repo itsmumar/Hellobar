@@ -51,7 +51,7 @@ describe AddFreeDays, :freeze do
 
     it 'raises error' do
       expect { service.call }
-        .to raise_error(AddFreeDays::Error, 'Could not add negative days')
+        .to raise_error(AddFreeDays::Error, 'Invalid number of days')
     end
   end
 
