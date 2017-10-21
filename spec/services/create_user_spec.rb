@@ -33,14 +33,8 @@ describe CreateUser do
   end
 
   it 'tracks events with Analytics' do
-    expect(Analytics)
-      .to receive(:track)
-      .with(
-        :user,
-        anything,
-        'Configure Your Bar Reminder New Users Only 2016-03-28',
-        value: 'original'
-      )
+    allow_any_instance_of(UserOnboardingStatusSetter)
+      .to receive(:ab_variation_or_nil).and_return(nil)
 
     expect(Analytics)
       .to receive(:track)
