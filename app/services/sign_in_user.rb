@@ -5,7 +5,7 @@ class SignInUser
   end
 
   def call
-    find_or_create_user.tap do
+    find_or_create_user.tap do |user, _|
       store_email_in_cookie(user)
     end
   end
