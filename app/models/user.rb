@@ -68,7 +68,6 @@ class User < ActiveRecord::Base
     find_by_email(email) || find_and_create_by_referral(email)
   end
 
-  # TODO: obsolete
   def self.find_and_create_by_referral(email)
     return unless Referral.find_by(email: email)
     password = Devise.friendly_token[9, 20]
