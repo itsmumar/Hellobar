@@ -19,6 +19,7 @@ export default Ember.Component.extend({
   inlineEditing: Ember.inject.service(),
   imaging: Ember.inject.service(),
   preview: Ember.inject.service(),
+  theming: Ember.inject.service(),
   fonts: Ember.inject.service(),
   froalaFonts: Ember.inject.service(),
 
@@ -187,7 +188,7 @@ export default Ember.Component.extend({
       return _.find(this.get('availableFonts'), font => font.id === fontId);
     };
     const font = getFont();
-    const currentTheme = this.get('currentTheme');
+    const currentTheme = this.get('theming.currentTheme');
     let previewElement = $.extend({}, this.get('model'), {
         animated: withAnimations && this.get('model.animated'),
         hide_destination: true,

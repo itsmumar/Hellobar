@@ -56,7 +56,9 @@ hellobar.defineModule('elements.class',
       }
 
       useDefaultImage() {
-        if (this.model().use_default_image && this.model().theme.image) {
+        var theme = this.model().theme;
+
+        if (this.model().use_default_image && theme && theme.image) {
           return !!this.model().theme.image.default_url;
         }
       }
