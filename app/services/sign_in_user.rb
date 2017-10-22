@@ -5,10 +5,9 @@ class SignInUser
   end
 
   def call
-    user, redirect_url = find_or_create_user
-    user.save!
-    cookies.permanent[:login_email] = user.email
-    yield user, redirect_url
+    find_or_create_user.tap do |user, _|
+      store_email_in_cookie(user)
+    end
   end
 
   private
@@ -19,18 +18,20 @@ class SignInUser
   delegate :session, to: :request
 
   def find_or_create_user
-    user = find_user
-    user.update_authentication(omniauth_hash) if should_update_authentication?(user)
-
-    [user || create_user, redirect_url_for(user)]
+    if (user = find_user)
+      update_authentication(user, omniauth_hash) if should_update_authentication?(user)
+      [user, redirect_url_for_existing_user]
+    else
+      create_user
+    end
   end
 
-  def redirect_url_for(user)
-    if session[:new_site_url] && user
-      new_site_path(url: session[:new_site_url])
-    elsif session[:new_site_url]
-      continue_create_site_path
-    end
+  def redirect_url_for_existing_user
+    new_site_path(url: session[:new_site_url]) if session[:new_site_url]
+  end
+
+  def redirect_url_for_new_user
+    continue_create_site_path if session[:new_site_url]
   end
 
   def should_update_authentication?(user)
@@ -45,17 +46,46 @@ class SignInUser
     request.env['omniauth.auth']
   end
 
-  def track_options
-    { ip: request.remote_ip, url: session[:new_site_url] }
+  def find_user
+    by_email || by_uid
   end
 
-  def find_user
+  def by_email
     return if omniauth_hash&.info.blank?
 
     User.find_by(email: omniauth_hash.info.email)
   end
 
+  def by_uid
+    User
+      .joins(:authentications)
+      .find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider })
+  end
+
+  def update_authentication(user, omniauth_hash)
+    authentication = user.authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
+
+    user.first_name = omniauth_hash.info.first_name if omniauth_hash.info.first_name.present?
+    user.last_name = omniauth_hash.info.last_name if omniauth_hash.info.last_name.present?
+
+    if omniauth_hash.credentials && user.persisted?
+      authentication.update(
+        refresh_token: omniauth_hash.credentials.refresh_token,
+        access_token: omniauth_hash.credentials.token,
+        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
+      )
+    end
+
+    user.save!
+  end
+
   def create_user
-    User.find_for_google_oauth2(omniauth_hash, cookies[:login_email], track_options)
+    track_options = { ip: request.remote_ip, url: session[:new_site_url] }
+    user = CreateUser.new(omniauth_hash, cookies[:login_email], track_options).call
+    [user, redirect_url_for_new_user]
+  end
+
+  def store_email_in_cookie(user)
+    cookies.permanent[:login_email] = user.email
   end
 end

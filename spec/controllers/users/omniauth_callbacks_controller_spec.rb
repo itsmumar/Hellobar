@@ -104,7 +104,9 @@ describe Users::OmniauthCallbacksController do
         context 'without validation errors' do
           before do
             stub_omniauth
-            allow(User).to receive(:find_for_google_oauth2).and_raise(ActiveRecord::ActiveRecordError)
+            expect(SignInUser)
+              .to receive_service_call
+              .and_raise(ActiveRecord::ActiveRecordError)
           end
 
           it 'sets flash[:error]' do

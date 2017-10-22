@@ -18,7 +18,7 @@ class SitesController < ApplicationController
 
   def create
     @site = Site.new(site_params)
-    cookies.permanent[:registration_url] = params[:site][:url]
+    cookies.permanent[:registration_url] = @site.url
 
     if current_user
       create_for_logged_in_user
@@ -114,8 +114,7 @@ class SitesController < ApplicationController
   def site_params
     if session[:new_site_url]
       params[:site] ||= {}
-      params[:site][:url] ||= session[:new_site_url]
-      session.delete(:new_site_url)
+      params[:site][:url] ||= session.delete(:new_site_url)
     end
     params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone, :invoice_information)
   end
