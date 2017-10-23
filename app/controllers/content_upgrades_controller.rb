@@ -82,6 +82,12 @@ class ContentUpgradesController < ApplicationController
     redirect_to site_content_upgrades_path(@site.id)
   end
 
+  def destroy
+    @content_upgrade.destroy!
+    flash[:success] = 'Content Upgrade styles have been deleted.'
+    redirect_to site_content_upgrades_path(@site.id)
+  end
+
   private
 
   def content_upgrade_params
