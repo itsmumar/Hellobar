@@ -71,6 +71,18 @@ describe 'Admin::Sites requests' do
         expect(site.current_subscription).to be_a Subscription::Pro
         expect(site.current_subscription.trial_end_date).to eql 10.days.from_now
       end
+
+      context 'but site already on Pro' do
+        let(:params) { { subscription: { subscription: 'Pro', trial_period: '10' } } }
+
+        before { AddTrialSubscription.new(site, params[:subscription]).call }
+
+        it 'changes the subscription with trial_end_date' do
+          expect(site.current_subscription).to be_a Subscription::Pro
+          expect { update }.not_to change { site.reload.current_subscription }
+          expect(site.current_subscription.trial_end_date).to eql 20.days.from_now
+        end
+      end
     end
 
     context 'when updating invoice_information' do
@@ -182,6 +194,24 @@ describe 'Admin::Sites requests' do
 
           .and change { current_subscription.reload.trial_end_date }
           .by(10.days)
+      end
+    end
+
+    context 'when days number less than 1' do
+      let(:params) { { free_days: { count: '0' } } }
+
+      it 'sets flash message' do
+        add_free_days
+        expect(flash[:error]).to eql 'Invalid number of days'
+        expect(response).to redirect_to admin_user_path(user.id)
+      end
+    end
+
+    context 'when subscription is free' do
+      it 'sets flash message' do
+        add_free_days
+        expect(flash[:error]).to eql 'Could not add trial days to a free subscription'
+        expect(response).to redirect_to admin_user_path(user.id)
       end
     end
   end

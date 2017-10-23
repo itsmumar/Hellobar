@@ -39,13 +39,13 @@ class ChangeSubscription
   end
 
   def update_credit_card
-    old_subscription.update credit_card: credit_card
+    site.current_subscription.update! credit_card: credit_card
     try_to_pay_failed_bill
     old_subscription.bills.last
   end
 
   def try_to_pay_failed_bill
-    return unless (last_failed_bill = old_subscription.bills.failed.last)
+    return unless (last_failed_bill = site.current_subscription.bills.failed.last)
     PayBill.new(last_failed_bill).call
   end
 
