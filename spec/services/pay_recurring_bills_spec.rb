@@ -170,10 +170,9 @@ describe PayRecurringBills do
 
       before { stub_cyber_source :purchase }
 
-      let(:free_bill) { site.bills[0] }
-      let(:first_pro_bill) { site.bills[1] }
-      let(:renewal_pro_bill) { site.bills[2] }
-      let(:last_pending_pro_bill) { site.bills[3] }
+      let(:first_pro_bill) { site.bills[0] }
+      let(:renewal_pro_bill) { site.bills[1] }
+      let(:last_pending_pro_bill) { site.bills[2] }
       let(:last_bill) { site.bills.last }
 
       def travel_to_next_billing_date
@@ -190,12 +189,12 @@ describe PayRecurringBills do
         before { change_subscription('free') }
 
         it 'does not create free bill' do
-          expect(bills.count).to eql 1
+          expect(bills.count).to eql 0
 
           travel_to_next_billing_date
           service.call
 
-          expect(bills.count).to eql 1
+          expect(bills.count).to eql 0
         end
 
         context 'when upgraded to pro next month' do
@@ -208,10 +207,10 @@ describe PayRecurringBills do
           it 'creates right bills' do
             expect(site.active_paid_bill).to eql first_pro_bill
 
-            expect(bills.count).to eql 3
+            expect(bills.count).to eql 2
             expect(bills.paid).to match_array([first_pro_bill])
             expect(bills.pending).to match_array([renewal_pro_bill])
-            expect(bills.voided).to match_array([free_bill])
+            expect(bills.voided).to be_empty
           end
 
           context 'a month later' do
@@ -223,7 +222,7 @@ describe PayRecurringBills do
               site.reload
 
               expect(site).to be_capable_of :pro
-              expect(bills.count).to eql 4
+              expect(bills.count).to eql 3
             end
 
             context 'when expires' do
@@ -241,14 +240,12 @@ describe PayRecurringBills do
 
             it 'has correct bills' do
               service.call
-              expect(site.bills.count).to eql 4
+              expect(site.bills.count).to eql 3
               expect(site.bills.paid).to match_array([first_pro_bill, renewal_pro_bill])
               expect(site.bills.pending).to match_array([last_pending_pro_bill])
-              expect(site.bills.voided).to match_array([free_bill])
+              expect(site.bills.voided).to be_empty
 
               expect(site.active_paid_bill).to eql renewal_pro_bill
-
-              expect(free_bill.end_date.to_s).to match '2017-02-01'
 
               expect(first_pro_bill.end_date.to_s).to match '2017-03-02'
               expect(renewal_pro_bill.bill_at.to_s).to match '2017-02-27'
