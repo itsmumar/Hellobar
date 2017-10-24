@@ -6,7 +6,7 @@
 </ul>
 <table>
   <tr>
-    <th><%= link_to_order 'Offer', by: 'offer_headline' %></th>
+    <th><%= link_to_order 'Title', by: 'display_title' %></th>
     <th>WP Script Tag</th>
     <th><%= link_to_order 'Contact List', by: 'contact_list_name' %></th>
     <th><%= link_to_order 'Views', by: 'total_views' %></th>
@@ -14,6 +14,7 @@
     <th>%</th>
     <th>PDF</th>
     <th><%= link_to_order 'Created At', by: 'created_at' %></th>
+    <th></th>
   </tr>
 <% @content_upgrades.each do |content_upgrade| %>
 <tr>
@@ -31,6 +32,7 @@
  <td><%= conversion_percent_text content_upgrade %></td>
  <td><a href="<%= content_upgrade.content_upgrade_download_link %>" target="_blank">View PDF</a></td>
  <td><%= l content_upgrade.created_at, format: :long %></td>
+ <td><%= link_to 'Delete', site_content_upgrade_path(@site, content_upgrade), method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %></td>
 </tr>
 <% end %>
 </table>

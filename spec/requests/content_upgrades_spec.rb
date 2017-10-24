@@ -118,6 +118,18 @@ describe 'Content upgrade requests' do
       end
     end
 
+    describe 'DELETE :destroy' do
+      let(:content_upgrade) { create :content_upgrade, site: site }
+
+      it 'destroys record' do
+        expect {
+          delete site_content_upgrade_path(site, content_upgrade)
+        }.to change(ContentUpgrade, :count).by(-1)
+
+        expect(response).to be_a_redirect
+      end
+    end
+
     describe 'POST :update_styles' do
       let(:params) do
         site.content_upgrade_styles.merge(
