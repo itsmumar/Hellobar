@@ -5,9 +5,9 @@ class UserController < ApplicationController
 
   def new
     load_user_from_invitation
-    return unless @user.nil? || @user.invite_token_expired?
+    return if @user.present? && !@user.invite_token_expired?
 
-    flash[:error] = 'This invitation token has expired.  Please request the owner to issue you a new invitation.'
+    flash[:error] = 'This invitation token has expired. Please request the owner to issue you a new invitation.'
     redirect_to root_path
   end
 
