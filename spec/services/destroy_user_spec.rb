@@ -44,6 +44,11 @@ describe DestroyUser do
         .to change(User, :count).by(-1)
     end
 
+    it 'sets status to deleted' do
+      service.call
+      expect(User.with_deleted.last.status).to eql User::DELETED
+    end
+
     context 'when site has other users' do
       let!(:other_user) { create :user }
       let!(:membership) do
