@@ -16,13 +16,11 @@ class Subscription < ActiveRecord::Base
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!
 
-  enum schedule: %i[monthly yearly]
-
   scope :paid, -> { joins(:bills).merge(Bill.paid.active) }
   scope :active, -> { paid.merge(Bill.without_refunds) }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
 
-  validates :schedule, presence: true
+  validates :schedule, presence: true, inclusion: { in: [MONTHLY, YEARLY] }
   validates :site, presence: true, associated: true
 
   class << self
@@ -47,6 +45,10 @@ class Subscription < ActiveRecord::Base
 
   def period
     monthly? ? 1.month : 1.year
+  end
+
+  def monthly?
+    schedule == MONTHLY
   end
 
   def trial_period
