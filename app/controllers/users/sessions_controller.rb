@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
     @user = User.search_all_versions_for_email(email)
 
     if @user
-      if @user.status == User::TEMPORARY_STATUS
+      if @user.status == User::TEMPORARY
         sign_in(@user)
 
         render 'users/forgot_emails/set_password'

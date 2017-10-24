@@ -13,7 +13,7 @@ class UserController < ApplicationController
 
   def create
     load_user_from_invitation
-    attr_hash = user_params.merge!(status: User::ACTIVE_STATUS)
+    attr_hash = user_params.merge!(status: User::ACTIVE)
     if @user.update(attr_hash)
       sign_in @user, event: :authentication
       redirect_to after_sign_in_path_for(@user)
@@ -26,7 +26,7 @@ class UserController < ApplicationController
   def update
     active_before_update = @user.active?
 
-    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE_STATUS))
+    if can_attempt_update?(@user, user_params) && @user.update_attributes(user_params.merge(status: User::ACTIVE))
       bypass_sign_in @user
 
       update_timezones_on_sites(@user)
@@ -94,7 +94,7 @@ class UserController < ApplicationController
     token = params[:token] || params[:invite_token] || params.dig(:user, :invite_token)
     return unless token
 
-    @user = User.where(invite_token: token, status: User::TEMPORARY_STATUS).first
+    @user = User.where(invite_token: token, status: User::TEMPORARY).first
   end
 
   def update_timezones_on_sites(user)

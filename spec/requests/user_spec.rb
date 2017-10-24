@@ -72,7 +72,7 @@ describe 'User requests' do
 
           expect(user.encrypted_password).not_to eq(original_hash)
           expect(user.email).to eq('myrealemail@gmail.com')
-          expect(user.status).to eq(User::ACTIVE_STATUS)
+          expect(user.status).to eq(User::ACTIVE)
         end
 
         it 'does not update the user if the password param is blank' do
@@ -81,7 +81,7 @@ describe 'User requests' do
           user.reload
 
           expect(user.email).not_to eq('myrealemail@gmail.com')
-          expect(user.status).to eq(User::TEMPORARY_STATUS)
+          expect(user.status).to eq(User::TEMPORARY)
         end
 
         it 'does not update the user if the email param is blank' do
@@ -92,7 +92,7 @@ describe 'User requests' do
           user.reload
 
           expect(user.encrypted_password).to eq(original_hash)
-          expect(user.status).to eq(User::TEMPORARY_STATUS)
+          expect(user.status).to eq(User::TEMPORARY)
         end
       end
     end
