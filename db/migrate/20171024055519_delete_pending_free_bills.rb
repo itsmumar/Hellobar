@@ -1,5 +1,5 @@
 class DeletePendingFreeBills < ActiveRecord::Migration
-  def change
+  def up
     puts "Found #{ scope.count } free bills"
     puts "    #{ pending.count } PENDING bills to delete"
     pending.delete_all
