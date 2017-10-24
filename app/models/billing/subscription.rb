@@ -3,6 +3,7 @@ require 'discount_calculator'
 class Subscription < ActiveRecord::Base
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
+  SCHEDULES = [MONTHLY, YEARLY].freeze
 
   ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
@@ -20,7 +21,7 @@ class Subscription < ActiveRecord::Base
   scope :active, -> { paid.merge(Bill.without_refunds) }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
 
-  validates :schedule, presence: true, inclusion: { in: [MONTHLY, YEARLY] }
+  validates :schedule, presence: true, inclusion: { in: SCHEDULES }
   validates :site, presence: true, associated: true
 
   class << self
