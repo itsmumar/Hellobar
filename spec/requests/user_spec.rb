@@ -18,6 +18,55 @@ describe 'User requests' do
       login_as user, scope: :user, run_callbacks: false
     end
 
+    describe 'GET :new' do
+      context 'when user does not exist' do
+        it 'redirects to root' do
+          get invite_user_path(invite_token: 'token')
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      context 'when user exists' do
+        let!(:user) { create :user, :temporary, invite_token: 'token' }
+
+        it 'renders sing up form' do
+          get invite_user_path(invite_token: 'token')
+          expect(response).to be_success
+        end
+
+        context 'but token has been expired' do
+          before { user.update invite_token_expire_at: 1.day.ago }
+
+          it 'redirects to root' do
+            get invite_user_path(invite_token: 'token')
+            expect(response).to redirect_to root_path
+          end
+        end
+      end
+    end
+
+    describe 'POST :create' do
+      let!(:user) { create :user, :temporary, invite_token: 'token' }
+
+      let(:params) do
+        {
+          user: {
+            invite_token: 'token',
+            email: 'email@example.com',
+            first_name: 'FirstName',
+            last_name: 'LastName',
+            password: 'password',
+            password_confirmation: 'password'
+          }
+        }
+      end
+
+      it 'renders sing up form' do
+        post user_path, params
+        expect(response).to redirect_to new_site_path
+      end
+    end
+
     describe 'PUT :update' do
       context 'when user is active' do
         let(:current_password) { 'current_pass' }
@@ -72,7 +121,7 @@ describe 'User requests' do
 
           expect(user.encrypted_password).not_to eq(original_hash)
           expect(user.email).to eq('myrealemail@gmail.com')
-          expect(user.status).to eq(User::ACTIVE_STATUS)
+          expect(user.status).to eq(User::ACTIVE)
         end
 
         it 'does not update the user if the password param is blank' do
@@ -81,7 +130,7 @@ describe 'User requests' do
           user.reload
 
           expect(user.email).not_to eq('myrealemail@gmail.com')
-          expect(user.status).to eq(User::TEMPORARY_STATUS)
+          expect(user.status).to eq(User::TEMPORARY)
         end
 
         it 'does not update the user if the email param is blank' do
@@ -92,7 +141,7 @@ describe 'User requests' do
           user.reload
 
           expect(user.encrypted_password).to eq(original_hash)
-          expect(user.status).to eq(User::TEMPORARY_STATUS)
+          expect(user.status).to eq(User::TEMPORARY)
         end
       end
     end

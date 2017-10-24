@@ -27,7 +27,7 @@ class CreateUser
   end
 
   def find_temporary_user
-    User.find_by(email: info.email, status: User::TEMPORARY_STATUS)
+    User.find_by(email: info.email, status: User::TEMPORARY)
   end
 
   def initialize_user
@@ -44,7 +44,7 @@ class CreateUser
     user.last_name = info.last_name
 
     user.authentications.build(provider: omniauth_hash.provider, uid: omniauth_hash.uid)
-    user.status = User::ACTIVE_STATUS
+    user.status = User::ACTIVE
     user.save!
     user
   end
