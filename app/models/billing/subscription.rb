@@ -1,6 +1,9 @@
 require 'discount_calculator'
 
 class Subscription < ActiveRecord::Base
+  MONTHLY = 'monthly'.freeze
+  YEARLY = 'yearly'.freeze
+
   ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
   belongs_to :credit_card
