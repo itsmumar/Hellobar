@@ -187,13 +187,15 @@ describe ChangeSubscription, :freeze do
           expect(site).to be_capable_of :free
         end
 
-        it 'pays bill' do
-          expect(PayBill).to receive_service_call
-          change_subscription('free')
+        it 'does not create a bill' do
+          expect(PayBill).not_to receive_service_call
+          expect { change_subscription('free') }.not_to change(Bill, :count)
         end
       end
 
-      context 'when upgrading to Pro from Free' do
+      context 'when upgrading to Pro from FreePlus' do
+        before { change_subscription('free_plus') }
+
         it 'changes subscription and capabilities' do
           expect { change_subscription('pro') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Pro

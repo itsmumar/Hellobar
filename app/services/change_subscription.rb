@@ -51,17 +51,21 @@ class ChangeSubscription
 
   def change_subscription
     cancel_subscription_if_it_is_free
-    create_subscription_and_pay_bill.tap do |bill|
-      track_subscription_change(bill.subscription)
-    end
+    create_subscription_and_pay_bill
   end
 
   def create_subscription_and_pay_bill
     Subscription.transaction do
       subscription = create_subscription
-      bill = create_bill(subscription)
-      pay_bill(bill)
+      track_subscription_change(subscription)
+      create_and_pay_bill_if_necessary(subscription)
     end
+  end
+
+  def create_and_pay_bill_if_necessary(subscription)
+    return if subscription_class == Subscription::Free
+    bill = create_bill(subscription)
+    pay_bill(bill)
   end
 
   def create_subscription
