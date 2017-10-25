@@ -18,7 +18,7 @@ FactoryGirl.define do
     end
 
     trait :temporary do
-      status { User::TEMPORARY_STATUS }
+      status { User::TEMPORARY }
     end
 
     trait :with_free_subscription do

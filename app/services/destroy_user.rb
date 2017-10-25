@@ -8,6 +8,7 @@ class DestroyUser
       downgrade_subscriptions
       destroy_credit_cards
       destroy_own_sites
+      user.update! status: User::DELETED
       user.destroy!
     end
   end

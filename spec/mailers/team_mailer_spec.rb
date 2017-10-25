@@ -28,7 +28,7 @@ describe TeamMailer do
     end
 
     context 'when inviting a new user' do
-      let!(:user) { create :user, status: User::TEMPORARY_STATUS, invite_token: Devise.friendly_token }
+      let!(:user) { create :user, status: User::TEMPORARY, invite_token: Devise.friendly_token }
       let(:site_membership) { create :site_membership, user: user }
 
       it 'renders the headers' do
