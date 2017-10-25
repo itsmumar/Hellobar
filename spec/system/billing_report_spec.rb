@@ -101,7 +101,7 @@ describe BillingReport, :freeze do
     describe '#cannot_pay' do
       specify do
         expect { report.cannot_pay }.to log [
-          "#{ attempting_msg } Skipped: no credit card available"
+          "#{ attempting_msg } Cannot pay the bill"
         ]
       end
     end

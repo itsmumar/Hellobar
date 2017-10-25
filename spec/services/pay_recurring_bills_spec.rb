@@ -263,6 +263,32 @@ describe PayRecurringBills do
           end
         end
       end
+
+      context 'when there is a past due bill' do
+        before { change_subscription('pro') }
+        let(:pending_bill) { site.bills.pending.last }
+
+        it 'voids failed bills on 27th day from first attempt' do
+          stub_cyber_source :purchase, success?: false
+
+          travel_to pending_bill.bill_at
+
+          expect { service.call }
+            .to change { pending_bill.reload.status }
+            .from(Bill::PENDING)
+            .to(Bill::FAILED)
+
+          travel_to 27.days.from_now
+
+          expect { service.call }
+            .to change { pending_bill.reload.status }
+            .from(Bill::FAILED)
+            .to(Bill::VOIDED)
+
+          expect(site.active_subscription).to be_a Subscription::Free
+          expect(site).to be_capable_of :free
+        end
+      end
     end
   end
 end

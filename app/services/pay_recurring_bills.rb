@@ -1,6 +1,6 @@
 class PayRecurringBills
   MIN_RETRY_TIME = 3.days
-  MAX_RETRY_TIME = 30.days
+  MAX_RETRY_TIME = 27.days
 
   def initialize
     @report = BillingReport.new(pending_bills.count)
@@ -25,15 +25,16 @@ class PayRecurringBills
 
   # Find all pending bills less than 30 days old
   def pending_bills
-    Bill
-      .where(status: [Bill::PENDING, Bill::FAILED])
-      .where('? >= bill_at AND bill_at > ?', Time.current, Time.current - MAX_RETRY_TIME)
+    Bill.where(status: [Bill::PENDING, Bill::FAILED])
   end
 
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?
     return void(bill) if !bill.subscription || !bill.site
-    return if skip? bill
+    return skip(bill) if skip? bill
+    return downgrade(bill) if expired? bill
+
+    # Try to bill the person if he/she hasn't been within the last MIN_RETRY_TIME
 
     report.attempt bill do
       if bill.can_pay?
@@ -58,13 +59,24 @@ class PayRecurringBills
     bill.voided!
   end
 
+  def skip(bill)
+    report.skip bill, bill.billing_attempts.last
+  end
+
+  def downgrade(bill)
+    void(bill)
+    ChangeSubscription.new(bill.site, subscription: 'free').call
+  end
+
   def skip?(bill)
-    # Try to bill the person if they haven't been within the last MIN_RETRY_TIME
     last_billing_attempt = bill.billing_attempts.last
-    no_retry = last_billing_attempt && Time.current - last_billing_attempt.created_at < MIN_RETRY_TIME
+    last_billing_attempt &&
+      Time.current - last_billing_attempt.created_at <= MIN_RETRY_TIME
+  end
 
-    report.skip bill, last_billing_attempt if no_retry
-
-    no_retry
+  def expired?(bill)
+    last_billing_attempt = bill.billing_attempts.last
+    last_billing_attempt &&
+      Time.current - last_billing_attempt.created_at >= MAX_RETRY_TIME
   end
 end
