@@ -93,6 +93,6 @@ class UserOnboardingStatusSetter
   end
 
   def independant_user?
-    user.status != User::TEMPORARY_STATUS
+    user.status != User::TEMPORARY
   end
 end

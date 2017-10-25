@@ -58,8 +58,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :timezone, :is_impersonated
 
-  ACTIVE_STATUS = 'active'.freeze
-  TEMPORARY_STATUS = 'temporary'.freeze
+  ACTIVE = 'active'.freeze
+  TEMPORARY = 'temporary'.freeze
+  DELETED = 'deleted'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
 
   def self.search_all_versions_for_email(email)
@@ -73,7 +74,7 @@ class User < ActiveRecord::Base
     password = Devise.friendly_token[9, 20]
 
     User.create email: email,
-                status: TEMPORARY_STATUS,
+                status: TEMPORARY,
                 password: password, password_confirmation: password
   end
 
@@ -107,11 +108,11 @@ class User < ActiveRecord::Base
   end
 
   def active?
-    status == ACTIVE_STATUS
+    status == ACTIVE
   end
 
   def temporary?
-    status == TEMPORARY_STATUS
+    status == TEMPORARY
   end
 
   def temporary_email?
@@ -181,7 +182,7 @@ class User < ActiveRecord::Base
       user.password_confirmation = password
       user.invite_token = Devise.friendly_token
       user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
-      user.status = TEMPORARY_STATUS
+      user.status = TEMPORARY
       user.save
     end
 

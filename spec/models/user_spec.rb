@@ -75,7 +75,7 @@ describe User do
 
       user = User.find_and_create_by_referral(email_to_invite)
 
-      expect(user.status).to eql(User::TEMPORARY_STATUS)
+      expect(user.status).to eql(User::TEMPORARY)
     end
   end
 
@@ -151,7 +151,7 @@ describe User do
     let(:user) { User.new }
 
     it 'returns true when the user is active' do
-      user.status = User::ACTIVE_STATUS
+      user.status = User::ACTIVE
 
       expect(user).to be_active
     end
@@ -286,7 +286,7 @@ describe User do
     end
 
     it 'returns a new user if a referred user' do
-      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
+      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY) }
 
       User.search_all_versions_for_email('email@email.com')
     end
