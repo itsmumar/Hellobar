@@ -64,7 +64,8 @@ class PayRecurringBills
   end
 
   def downgrade(bill)
-    void(bill)
+    report.downgrade bill
+    bill.voided!
     ChangeSubscription.new(bill.site, subscription: 'free').call
   end
 

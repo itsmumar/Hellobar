@@ -55,6 +55,11 @@ class BillingReport
     info "Voiding bill #{ bill.id } because subscription or site not found"
   end
 
+  def downgrade(bill)
+    info "Voiding outdated bill #{ bill.id }"
+    info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
+  end
+
   def skip(bill, last_billing_attempt)
     info "Not attempting bill #{ bill.id } because last billing attempt was #{ last_billing_attempt.created_at }"
   end
