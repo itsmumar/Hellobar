@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     get 'site_elements/:id/edit/*path', to: 'site_elements#edit'
     get 'site_elements/new/*path', to: 'site_elements#new'
 
-    resources :content_upgrades, except: :destroy do
+    resources :content_upgrades do
       collection do
         get :style_editor
         post :update_styles

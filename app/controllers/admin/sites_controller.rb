@@ -36,7 +36,7 @@ class Admin::SitesController < AdminController
     flash[:success] = "#{ params[:free_days][:count] } free days have been added."
     redirect_to admin_user_path(params[:user_id])
   rescue AddFreeDays::Error => e
-    flash[:error] = "There was an error: #{ e.message }"
+    flash[:error] = e.message
     redirect_to admin_user_path(params[:user_id])
   end
 
@@ -44,7 +44,11 @@ class Admin::SitesController < AdminController
 
   def change_subscription
     if subscription_params[:trial_period].present?
-      AddTrialSubscription.new(site, subscription_params).call
+      AddFreeDaysOrTrialSubscription.new(
+        site,
+        subscription_params[:trial_period],
+        subscription: subscription_params[:subscription]
+      ).call
     else
       ChangeSubscription.new(site, subscription_params).call
     end

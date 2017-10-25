@@ -8,7 +8,7 @@ class AddFreeDays
   end
 
   def call
-    raise Error, 'Could not add negative days' if duration < 1
+    raise Error, 'Invalid number of days' if duration < 1
     raise Error, 'Could not add trial days to a free subscription' unless active_subscription&.paid?
 
     if active_subscription.currently_on_trial?

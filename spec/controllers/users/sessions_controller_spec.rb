@@ -24,7 +24,7 @@ describe Users::SessionsController do
 
     context 'the user email is found' do
       it 'renders the set_password page for temporary users' do
-        user = User.new status: User::TEMPORARY_STATUS
+        user = User.new status: User::TEMPORARY
         allow(User).to receive(:search_all_versions_for_email) { user }
 
         post :find_email, user: { email: 'hello@email.com' }

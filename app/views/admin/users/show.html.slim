@@ -110,6 +110,9 @@ div#user_profile
                   - if bill.paid? && bill.amount != 0
                     = link_to("view", admin_user_bill_path(@user, bill))
                 td
+                  - if bill.failed?
+                    = link_to "pay", admin_user_bill_pay_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
+
                   - if bill.pending?
                     = link_to "pay", admin_user_bill_pay_path(@user, bill), method: :put, data: { confirm: "Pay this bill?" }
                     '  or
