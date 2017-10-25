@@ -4,6 +4,7 @@ export default Ember.Component.extend({
   global: ( () => window).property(),
 
   csrfToken: ( () => $('meta[name=csrf-token]').attr('content')).property(),
+  siteID: Ember.computed.alias('model.site.id'),
 
   afterModel: function () {
     // default values are defined in DB schema (shema.rb); we remember them here
@@ -26,12 +27,10 @@ export default Ember.Component.extend({
 
   actions: {
     selectGoal (routeName) {
-      const { siteID } = window;
-
-      if (siteID) {
+      if (this.get('siteID')) {
         $.ajax({
           method: 'POST',
-          url: `/sites/${siteID}/track_selected_goal`
+          url: `/sites/${this.get('siteID')}/track_selected_goal`
         });
       }
 
