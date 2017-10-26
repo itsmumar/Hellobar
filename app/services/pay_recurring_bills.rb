@@ -31,8 +31,8 @@ class PayRecurringBills
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?
     return void(bill) if !bill.subscription || !bill.site
-    return skip(bill) if !expired?(bill) && skip?(bill)
     return downgrade(bill) if expired? bill
+    return skip(bill) if skip? bill
 
     # Try to bill the person if he/she hasn't been within the last MIN_RETRY_TIME
 
