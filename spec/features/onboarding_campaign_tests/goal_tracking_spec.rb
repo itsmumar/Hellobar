@@ -8,6 +8,7 @@ feature 'User onboarding statuses get updated as they select a goal for their fi
   end
 
   before do
+    allow_any_instance_of(GenerateStaticScriptModules).to receive(:call)
     allow_any_instance_of(User).to receive(:onboarding_status_setter).and_return onboarding_status_setter
   end
 
