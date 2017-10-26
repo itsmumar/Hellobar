@@ -80,14 +80,15 @@ class PayRecurringBills
   end
 
   def days_since_first_billing_attempt(bill)
-    first_billing_attempt = bill.billing_attempts.first
-    return unless first_billing_attempt
-    (Time.current.to_date - first_billing_attempt.created_at.to_date) * 1.day
+    days_since_billing_attempt bill.billing_attempts.first
   end
 
   def days_since_last_billing_attempt(bill)
-    last_billing_attempt = bill.billing_attempts.last
-    return unless last_billing_attempt
-    (Time.current.to_date - last_billing_attempt.created_at.to_date) * 1.day
+    days_since_billing_attempt bill.billing_attempts.last
+  end
+
+  def days_since_billing_attempt(attempt)
+    return unless attempt
+    (Time.current.to_date - attempt.created_at.to_date) * 1.day
   end
 end
