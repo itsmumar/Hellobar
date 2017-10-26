@@ -1,13 +1,16 @@
 require 'integration_helper'
 
 feature 'User onboarding statuses get updated as they select a goal for their first Hello Bar', :js do
-  given!(:user) { login }
+  given!(:user) { create(:user) }
+  given!(:site) { create(:site, :with_rule, user: user) }
 
   given(:onboarding_status_setter) do
     UserOnboardingStatusSetter.new(user, true, UserOnboardingStatus.none)
   end
 
   before do
+    sign_in user
+    allow_any_instance_of(GenerateStaticScriptModules).to receive(:call)
     allow_any_instance_of(User).to receive(:onboarding_status_setter).and_return onboarding_status_setter
   end
 
