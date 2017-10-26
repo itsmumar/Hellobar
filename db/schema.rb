@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024101013) do
+ActiveRecord::Schema.define(version: 20171024165356) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -363,7 +363,6 @@ ActiveRecord::Schema.define(version: 20171024101013) do
     t.integer  "user_id",              limit: 4
     t.integer  "site_id",              limit: 4
     t.string   "type",                 limit: 255
-    t.integer  "schedule",             limit: 4,                           default: 0
     t.decimal  "amount",                           precision: 7, scale: 2
     t.integer  "visit_overage",        limit: 4
     t.integer  "visit_overage_unit",   limit: 4
@@ -371,6 +370,7 @@ ActiveRecord::Schema.define(version: 20171024101013) do
     t.datetime "created_at"
     t.datetime "trial_end_date"
     t.integer  "credit_card_id",       limit: 4
+    t.string   "schedule",             limit: 20,                          default: "monthly", null: false
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
