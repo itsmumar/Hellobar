@@ -56,6 +56,7 @@ class ChangeSubscription
 
   def create_subscription_and_pay_bill
     Subscription.transaction do
+      void_pending_bills!
       subscription = create_subscription
       track_subscription_change(subscription)
       create_and_pay_bill_if_necessary(subscription)
@@ -91,7 +92,6 @@ class ChangeSubscription
   end
 
   def create_bill(subscription)
-    void_pending_bills!
     CalculateBill.new(subscription, bills: site.bills).call.tap(&:save!)
   end
 
