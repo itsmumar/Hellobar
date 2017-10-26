@@ -1,6 +1,6 @@
 class PayRecurringBills
-  MIN_RETRY_TIME = 3
-  MAX_RETRY_TIME = 27
+  MIN_RETRY_TIME = 3 # days
+  MAX_RETRY_TIME = 27 # days
 
   def initialize
     @report = BillingReport.new(pending_bills.count)
