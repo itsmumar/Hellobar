@@ -1,6 +1,6 @@
 class PayRecurringBills
-  MIN_RETRY_TIME = 3 # days
-  MAX_RETRY_TIME = 27 # days
+  MIN_RETRY_TIME = 3.days
+  MAX_RETRY_TIME = 27.days
 
   def initialize
     @report = BillingReport.new(pending_bills.count)
@@ -70,18 +70,18 @@ class PayRecurringBills
   end
 
   def skip?(bill)
-    last_billing_attempt = bill.billing_attempts.last
-    last_billing_attempt &&
-      days_difference(last_billing_attempt.created_at) <= MIN_RETRY_TIME
+    days = days_since_last_billing_attempt(bill)
+    days && days < MIN_RETRY_TIME
   end
 
   def expired?(bill)
-    last_billing_attempt = bill.billing_attempts.last
-    last_billing_attempt &&
-      days_difference(last_billing_attempt.created_at) >= MAX_RETRY_TIME
+    days = days_since_last_billing_attempt(bill)
+    days && days >= MAX_RETRY_TIME
   end
 
-  def days_difference(time)
-    Time.current.to_date - time.to_date
+  def days_since_last_billing_attempt(bill)
+    last_billing_attempt = bill.billing_attempts.last
+    return unless last_billing_attempt
+    Time.current.to_date - last_billing_attempt.created_at.to_date * 1.day
   end
 end
