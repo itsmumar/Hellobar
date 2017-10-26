@@ -278,11 +278,26 @@ describe PayRecurringBills do
             .from(Bill::PENDING)
             .to(Bill::FAILED)
 
-          travel_to 27.days.from_now
+          travel_to 3.days.from_now
+
+          expect { service.call }
+            .to change { pending_bill.billing_attempts.failed.count }
+            .by(1)
+
+          travel_to 2.days.from_now
+
+          expect { service.call }
+            .not_to change { pending_bill.billing_attempts.failed.count }
+
+          travel_to 22.days.from_now
+
+          expect { service.call }
+            .to change { pending_bill.billing_attempts.failed.count }
+
+          travel_to 1.day.from_now
 
           expect { service.call }
             .to change { pending_bill.reload.status }
-            .from(Bill::FAILED)
             .to(Bill::VOIDED)
 
           expect(site.active_subscription).to be_a Subscription::Free

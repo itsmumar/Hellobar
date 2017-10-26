@@ -31,7 +31,7 @@ class PayRecurringBills
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?
     return void(bill) if !bill.subscription || !bill.site
-    return skip(bill) if skip? bill
+    return skip(bill) if !expired?(bill) && skip?(bill)
     return downgrade(bill) if expired? bill
 
     # Try to bill the person if he/she hasn't been within the last MIN_RETRY_TIME
@@ -75,13 +75,19 @@ class PayRecurringBills
   end
 
   def expired?(bill)
-    days = days_since_last_billing_attempt(bill)
-    days && days >= MAX_RETRY_TIME
+    days = days_since_first_billing_attempt(bill)
+    days && days > MAX_RETRY_TIME
+  end
+
+  def days_since_first_billing_attempt(bill)
+    first_billing_attempt = bill.billing_attempts.first
+    return unless first_billing_attempt
+    (Time.current.to_date - first_billing_attempt.created_at.to_date) * 1.day
   end
 
   def days_since_last_billing_attempt(bill)
     last_billing_attempt = bill.billing_attempts.last
     return unless last_billing_attempt
-    Time.current.to_date - last_billing_attempt.created_at.to_date * 1.day
+    (Time.current.to_date - last_billing_attempt.created_at.to_date) * 1.day
   end
 end
