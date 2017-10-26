@@ -260,6 +260,12 @@ describe ChangeSubscription, :freeze do
           change_subscription('free')
         end
 
+        it 'voids pending bill' do
+          expect { change_subscription('free') }
+            .to change { site.bills.voided.count }
+            .by(1)
+        end
+
         context 'when Pro subscription expires' do
           it 'changes capabilities to Free' do
             change_subscription('free')
