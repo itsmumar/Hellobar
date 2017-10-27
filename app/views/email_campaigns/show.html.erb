@@ -20,6 +20,11 @@
 
     <p>
       <%= link_to 'Edit', edit_site_email_campaign_path(current_site, @email_campaign), class: 'button action' %>
+      <%= link_to 'Send', send_out_site_email_campaign_path(current_site, @email_campaign),
+          class: 'action button', method: :post, data: {
+              confirm: 'Are you sure you want to send out this email campaign?',
+              disable_with: 'Sending...'
+          } %>
       <%= link_to 'Go back', site_email_campaigns_path(current_site), class: 'button' %>
     </p>
   </div>
