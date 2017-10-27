@@ -92,20 +92,9 @@ class IntercomAnalytics
 
   private
 
-  def track(options)
-    intercom.events.create options
-  end
-
-  def tag_users(tag, users)
-    return if users.blank?
-
-    intercom.tags.tag(name: tag, users: users.map { |u| { user_id: u.id } })
-  end
+  delegate :track, :tag_users, to: :intercom
 
   def intercom
-    @intercom ||= Intercom::Client.new(
-      token: Settings.intercom_token,
-      handle_rate_limit: true
-    )
+    IntercomGateway.new
   end
 end
