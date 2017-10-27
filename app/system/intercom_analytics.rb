@@ -13,7 +13,7 @@ class IntercomAnalytics
   end
 
   def created_user(user:)
-    intercom.users.create(user_id: user.id, email: user.email)
+    create_user user
   end
 
   def signed_up(user:)
@@ -80,19 +80,21 @@ class IntercomAnalytics
 
   def changed_subscription(site:, user:)
     subscription = site.current_subscription
+
     track(
       event_name: 'changed-subscription',
       user_id: user.id,
       created_at: Time.current.to_i,
       metadata: { subscription: subscription.name, schedule: subscription.schedule }
     )
+
     tag_users 'Paid', site.owners unless subscription.amount.zero?
     tag_users subscription.name, site.owners
   end
 
   private
 
-  delegate :track, :tag_users, to: :intercom
+  delegate :track, :create_user, :tag_users, to: :intercom
 
   def intercom
     IntercomGateway.new

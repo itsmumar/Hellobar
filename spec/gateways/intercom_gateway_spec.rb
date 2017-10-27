@@ -15,6 +15,16 @@ describe IntercomGateway do
     end
   end
 
+  describe '#create_user' do
+    it 'sends create user request to Intercom' do
+      stub_request(:post, "#{ url }/users")
+
+      user = instance_double User, id: 5, email: 'me@example.org'
+
+      intercom.create_user user
+    end
+  end
+
   describe '#tag_users' do
     let(:tag) { 'tag' }
 

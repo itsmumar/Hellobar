@@ -3,6 +3,10 @@ class IntercomGateway
     intercom.events.create opts
   end
 
+  def create_user user
+    intercom.users.create(user_id: user.id, email: user.email)
+  end
+
   def tag_users tag, users
     return if users.blank?
 
