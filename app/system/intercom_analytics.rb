@@ -103,6 +103,9 @@ class IntercomAnalytics
   end
 
   def intercom
-    @intercom ||= Intercom::Client.new(token: Settings.intercom_token)
+    @intercom ||= Intercom::Client.new(
+      token: Settings.intercom_token,
+      handle_rate_limit: true
+    )
   end
 end
