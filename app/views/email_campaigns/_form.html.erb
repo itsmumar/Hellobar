@@ -1,13 +1,3 @@
-<p>You can use the following substitution tags, which will be replaced with corresponding data:</p>
-<ul>
-  <li>
-    subscriber's name: <code>-name-</code>
-  </li>
-  <li>
-    subscriber's email: <code>-email-</code>
-  </li>
-</table>
-
 <%= simple_form_for([current_site, @email_campaign]) do |f| %>
 
   <div class="form-inputs">
@@ -18,6 +8,16 @@
     <%= f.input :subject, input_html: { maxlength: 255 }, placeholder: 'Hey -name-! Get YOUR 90% discount' %>
     <%= f.input :body, placeholder: 'Body of the email' %>
   </div>
+  <br>
+  <p>You can use the following substitution tags (in body and subject fields), which will be replaced with corresponding data:</p>
+  <ul>
+    <li>
+      subscriber's name: <code>-name-</code>
+    </li>
+    <li>
+      subscriber's email: <code>-email-</code>
+    </li>
+  </ul>
 
   <div class="form-actions">
     <%= f.button :submit %>
