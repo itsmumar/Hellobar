@@ -45,14 +45,19 @@ class BillingReport
     @attempt = nil
   end
 
-  def cannot_pay
+  def cannot_pay(message = ' Cannot pay the bill')
     @amount_failed += @bill.amount
     @num_failed += 1
-    info(@attempt + ' Skipped: no credit card available')
+    info(@attempt + message)
   end
 
   def void(bill)
     info "Voiding bill #{ bill.id } because subscription or site not found"
+  end
+
+  def downgrade(bill)
+    info "Voiding outdated bill #{ bill.id }"
+    info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
   end
 
   def skip(bill, last_billing_attempt)
