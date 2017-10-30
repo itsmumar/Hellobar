@@ -10,8 +10,13 @@ class @ContactListModal extends Modal
     @_initializeTemplates()
     @_initializeBlocks()
 
-    @$modal.on 'load', -> $(this).addClass('loading')
-    @$modal.on 'complete', -> $(this).removeClass('loading').finish()
+    @$modal.on 'load', ->
+      $(this).addClass('loading')
+      $(this).find('.button').attr('disabled', true)
+
+    @$modal.on 'complete', ->
+      $(this).removeClass('loading').finish()
+      $(this).find('.button').attr('disabled', false)
 
     super(@$modal)
 
