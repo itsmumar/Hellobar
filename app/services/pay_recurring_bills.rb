@@ -23,9 +23,11 @@ class PayRecurringBills
 
   attr_reader :report
 
-  # Find all pending bills less than 30 days old
+  # Find all pending bills which should be processed today
   def pending_bills
-    Bill.where(status: [Bill::PENDING, Bill::FAILED])
+    Bill
+      .where(status: [Bill::PENDING, Bill::FAILED])
+      .where('bill_at <= ?', Time.current)
   end
 
   def handle(bill)
@@ -75,8 +77,15 @@ class PayRecurringBills
   end
 
   def expired?(bill)
-    days = days_since_first_billing_attempt(bill)
-    days && days > MAX_RETRY_TIME
+    if (days = days_since_first_billing_attempt(bill))
+      days > MAX_RETRY_TIME
+    else
+      too_old?(bill)
+    end
+  end
+
+  def too_old?(bill)
+    bill.end_date < MAX_RETRY_TIME.ago
   end
 
   def days_since_first_billing_attempt(bill)

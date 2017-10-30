@@ -109,6 +109,33 @@ describe PayRecurringBills do
       end
 
       include_examples 'do not pay bill'
+
+      context 'when its end_date < 27.days.ago' do
+        let!(:bill_without_credit_card) { create :bill, end_date: 28.days.ago }
+
+        specify do
+          expect(report).to receive(:downgrade)
+          expect(report).not_to receive(:attempt)
+
+          expect(ChangeSubscription)
+            .to receive_service_call
+            .with(bill_without_credit_card.site, subscription: 'free')
+
+          expect { service.call }
+            .to change { bill_without_credit_card.reload.status }
+            .to(Bill::VOIDED)
+        end
+      end
+    end
+
+    context 'with bill in the future' do
+      let!(:bill) { create :bill, bill_at: 1.month.from_now }
+
+      specify do
+        expect(report).not_to receive(:count)
+        expect { service.call }
+          .not_to change { bill.reload.status }
+      end
     end
 
     context 'with payable bill' do
@@ -297,7 +324,8 @@ describe PayRecurringBills do
             .to change { pending_bill.reload.status }
             .to(Bill::VOIDED)
 
-          expect(site.active_subscription).to be_a Subscription::Free
+          expect(site.active_subscription).to be_nil
+          expect(site.current_subscription).to be_a Subscription::Free
           expect(site).to be_capable_of :free
         end
       end
