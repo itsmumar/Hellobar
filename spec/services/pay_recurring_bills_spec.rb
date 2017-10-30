@@ -297,7 +297,7 @@ describe PayRecurringBills do
             .to change { pending_bill.reload.status }
             .to(Bill::VOIDED)
 
-          expect(site.active_subscription).to be_a Subscription::Free
+          expect(site.active_subscription).to be_nil
           expect(site).to be_capable_of :free
         end
       end
