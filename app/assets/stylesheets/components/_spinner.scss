@@ -1,0 +1,10 @@
+.spinner {
+  display: none;
+  width: 60px;
+  margin-top: 50px;
+  margin-left: 25%;
+}
+
+.loading .spinner {
+  display: block;
+}
