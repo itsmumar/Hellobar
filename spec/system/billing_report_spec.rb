@@ -70,6 +70,8 @@ describe BillingReport, :freeze do
         '-' * 80,
         '0 successful bills for $0.00',
         '0 failed bills for $0.00',
+        '0 skipped bills for $0.00',
+        '0 bills have been processed',
         '',
         ''
       ]
