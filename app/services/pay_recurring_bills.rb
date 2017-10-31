@@ -2,19 +2,35 @@ class PayRecurringBills
   MIN_RETRY_TIME = 3.days
   MAX_RETRY_TIME = 27.days
 
+  # Find all pending bills which should be processed today
+  # BETWEEN is inclusive on both sides
+  # and equivalent to the expression (min <= expr AND expr <= max)
+  def self.bills
+    Bill
+      .where(status: [Bill::PENDING, Bill::FAILED])
+      .where('DATE(bill_at) BETWEEN ? AND ?', MAX_RETRY_TIME.ago.to_date, Date.current)
+  end
+
   def initialize
-    @report = BillingReport.new(pending_bills.count)
+    @report = BillingReport.new(self.class.bills.count)
   end
 
   def call
     report.start
 
-    pending_bills.find_each do |bill|
+    # find_each is not advised to be used here
+    # as it could lead to endless looping
+    self.class.bills.each do |bill|
       report.count
       handle bill
     end
 
     report.finish
+  rescue Exception => e # rubocop: disable Lint/RescueException
+    # handle `kill` or `Ctrl + C`
+    Raven.capture_exception(e)
+    report.interrupt(e)
+    raise
   ensure
     report.email
   end
@@ -22,11 +38,6 @@ class PayRecurringBills
   private
 
   attr_reader :report
-
-  # Find all pending bills less than 30 days old
-  def pending_bills
-    Bill.where(status: [Bill::PENDING, Bill::FAILED])
-  end
 
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?
@@ -75,8 +86,15 @@ class PayRecurringBills
   end
 
   def expired?(bill)
-    days = days_since_first_billing_attempt(bill)
-    days && days > MAX_RETRY_TIME
+    if (days = days_since_first_billing_attempt(bill))
+      days > MAX_RETRY_TIME
+    else
+      too_old?(bill)
+    end
+  end
+
+  def too_old?(bill)
+    bill.end_date < MAX_RETRY_TIME.ago
   end
 
   def days_since_first_billing_attempt(bill)
