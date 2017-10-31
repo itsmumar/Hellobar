@@ -2,14 +2,21 @@ class PayRecurringBills
   MIN_RETRY_TIME = 3.days
   MAX_RETRY_TIME = 27.days
 
+  # Find all pending bills which should be processed today
+  def self.bills
+    Bill
+      .where(status: [Bill::PENDING, Bill::FAILED])
+      .where('? >= DATE(bill_at) AND DATE(bill_at) > ?', Date.today, MAX_RETRY_TIME.ago.to_date)
+  end
+
   def initialize
-    @report = BillingReport.new(pending_bills.count)
+    @report = BillingReport.new(self.class.bills.count)
   end
 
   def call
     report.start
 
-    pending_bills.find_each do |bill|
+    self.class.bills.find_each do |bill|
       report.count
       handle bill
     end
@@ -22,13 +29,6 @@ class PayRecurringBills
   private
 
   attr_reader :report
-
-  # Find all pending bills which should be processed today
-  def pending_bills
-    Bill
-      .where(status: [Bill::PENDING, Bill::FAILED])
-      .where('? >= bill_at AND bill_at > ?', Time.current, MAX_RETRY_TIME.ago)
-  end
 
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?

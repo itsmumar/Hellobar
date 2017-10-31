@@ -1,4 +1,20 @@
 describe PayRecurringBills do
+  describe '.bills' do
+    let!(:bills) do
+      [
+        create(:bill, bill_at: 26.days.ago),
+        create(:bill, bill_at: 1.day.ago)
+      ]
+    end
+
+    let!(:future_bill) { create(:bill, bill_at: 1.day.from_now) }
+    let!(:expired_bill) { create(:bill, bill_at: 27.days.ago) }
+
+    it 'includes bills within period from 27 days ago till today' do
+      expect(PayRecurringBills.bills).to match_array bills
+    end
+  end
+
   describe '#call', freeze: 30.days.ago do
     let(:report) { BillingReport.new(1) }
     let(:service) { PayRecurringBills.new }
