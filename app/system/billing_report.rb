@@ -7,8 +7,10 @@ class BillingReport
     @log = []
     @amount_successful = 0
     @amount_failed = 0
+    @amount_skipped = 0
     @num_failed = 0
     @num_successful = 0
+    @num_skipped = 0
     @count = 0
     @bills_count = bills_count
   end
@@ -23,8 +25,16 @@ class BillingReport
     info '-' * 80
     info "#{ @num_successful } successful bills for #{ number_to_currency(@amount_successful) }"
     info "#{ @num_failed } failed bills for #{ number_to_currency(@amount_failed) }"
+    info "#{ @num_skipped } skipped bills for #{ number_to_currency(@amount_skipped) }"
+    info "#{ @count } bills have been processed"
     info ''
     info ''
+  end
+
+  def interrupt(e)
+    info '---- INTERRUPT ----'
+    info e.inspect if e
+    finish
   end
 
   def count
@@ -61,6 +71,8 @@ class BillingReport
   end
 
   def skip(bill, last_billing_attempt)
+    @num_skipped += 1
+    @amount_skipped += bill.amount
     info "Not attempting bill #{ bill.id } because last billing attempt was #{ last_billing_attempt.created_at }"
   end
 
