@@ -78,6 +78,21 @@ describe BillingReport, :freeze do
     end
   end
 
+  describe '#interrupt' do
+    specify do
+      expect { report.interrupt(nil) }.to log [
+        '---- INTERRUPT ----',
+        '-' * 80,
+        '0 successful bills for $0.00',
+        '0 failed bills for $0.00',
+        '0 skipped bills for $0.00',
+        '0 bills have been processed',
+        '',
+        ''
+      ]
+    end
+  end
+
   describe '#count' do
     specify do
       expect { 1500.times { report.count } }.to log [
@@ -139,6 +154,17 @@ describe BillingReport, :freeze do
     specify do
       expect { report.void(bill) }.to log [
         "Voiding bill #{ bill.id } because subscription or site not found"
+      ]
+    end
+  end
+
+  describe '#downgrade' do
+    let(:bill) { create :bill }
+
+    specify do
+      expect { report.downgrade(bill) }.to log [
+        "Voiding outdated bill #{ bill.id }",
+        "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
       ]
     end
   end
