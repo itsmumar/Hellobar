@@ -6,7 +6,7 @@ class PayRecurringBills
   def self.bills
     Bill
       .where(status: [Bill::PENDING, Bill::FAILED])
-      .where('? >= DATE(bill_at) AND DATE(bill_at) > ?', Date.today, MAX_RETRY_TIME.ago.to_date)
+      .where('? >= DATE(bill_at) AND DATE(bill_at) > ?', Date.current, MAX_RETRY_TIME.ago.to_date)
   end
 
   def initialize
