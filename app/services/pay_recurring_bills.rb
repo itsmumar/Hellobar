@@ -27,7 +27,7 @@ class PayRecurringBills
   def pending_bills
     Bill
       .where(status: [Bill::PENDING, Bill::FAILED])
-      .where('? >= bill_at AND bill_at > ?', Time.current, Time.current - MAX_RETRY_TIME)
+      .where('? >= bill_at AND bill_at > ?', Time.current, MAX_RETRY_TIME.ago)
   end
 
   def handle(bill)
