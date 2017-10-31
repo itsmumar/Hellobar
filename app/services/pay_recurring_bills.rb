@@ -3,10 +3,12 @@ class PayRecurringBills
   MAX_RETRY_TIME = 27.days
 
   # Find all pending bills which should be processed today
+  # BETWEEN is inclusive on both sides
+  # and equivalent to the expression (min <= expr AND expr <= max)
   def self.bills
     Bill
       .where(status: [Bill::PENDING, Bill::FAILED])
-      .where('? >= DATE(bill_at) AND DATE(bill_at) > ?', Date.current, MAX_RETRY_TIME.ago.to_date)
+      .where('DATE(bill_at) BETWEEN ? AND ?', MAX_RETRY_TIME.ago.to_date, Date.current)
   end
 
   def initialize
@@ -23,6 +25,7 @@ class PayRecurringBills
 
     report.finish
   rescue Exception => e # rubocop: disable Lint/RescueException
+    # handle `kill` or `Ctrl + C`
     Raven.capture_exception(e)
     report.interrupt(e)
     raise

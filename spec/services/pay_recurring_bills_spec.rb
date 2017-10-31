@@ -2,13 +2,13 @@ describe PayRecurringBills do
   describe '.bills' do
     let!(:bills) do
       [
-        create(:bill, bill_at: 26.days.ago),
+        create(:bill, bill_at: 27.days.ago),
         create(:bill, bill_at: 1.day.ago)
       ]
     end
 
     let!(:future_bill) { create(:bill, bill_at: 1.day.from_now) }
-    let!(:expired_bill) { create(:bill, bill_at: 27.days.ago) }
+    let!(:expired_bill) { create(:bill, bill_at: 28.days.ago) }
 
     it 'includes bills within period from 27 days ago till today' do
       expect(PayRecurringBills.bills).to match_array bills
@@ -320,7 +320,7 @@ describe PayRecurringBills do
         before { change_subscription('pro') }
         let(:pending_bill) { site.bills.pending.last }
 
-        xit 'voids failed bills on 27th day from first attempt' do
+        it 'tries to charge 10 times every 3rd day' do
           stub_cyber_source :purchase, success?: false
 
           travel_to pending_bill.bill_at
@@ -330,27 +330,24 @@ describe PayRecurringBills do
             .from(Bill::PENDING)
             .to(Bill::FAILED)
 
-          travel_to 3.days.from_now
+          (1..26).each do |nth|
+            travel_to pending_bill.bill_at + nth.day
+            service.call
+          end
+          expect(pending_bill.billing_attempts.failed.count).to eql 9
 
-          expect { service.call }
-            .to change { pending_bill.billing_attempts.failed.count }
-            .by(1)
+          travel_to pending_bill.bill_at + 27.days
+          service.call
 
-          travel_to 2.days.from_now
+          expect(pending_bill.billing_attempts.failed.count).to eql 10
 
+          travel_to pending_bill.bill_at + 28.days
+          expect(PayRecurringBills.bills).to be_empty
+
+          travel_to pending_bill.bill_at + 30.days
+          expect(report).not_to receive(:count)
           expect { service.call }
             .not_to change { pending_bill.billing_attempts.failed.count }
-
-          travel_to 22.days.from_now
-
-          expect { service.call }
-            .to change { pending_bill.billing_attempts.failed.count }
-
-          travel_to 1.day.from_now
-
-          expect(site.active_subscription).to be_nil
-          expect(site.current_subscription).to be_a Subscription::Free
-          expect(site).to be_capable_of :free
         end
       end
     end
