@@ -32,7 +32,13 @@ describe RedeemReferralForSender do
           .not_to change { site.reload.active_subscription }
 
         # 1 month is paid and 1 month is given by referral
-        expect(site.active_subscription.active_until).to eql 2.months.from_now
+        # it is like this because of this:
+        # irb(main):011:0> '2017-10-31'.to_date + 1.month + 1.month
+        # => Sat, 30 Dec 2017
+        # irb(main):012:0> '2017-10-31'.to_date + 2.months
+        # => Sun, 31 Dec 2017
+        expect(site.active_subscription.active_until)
+          .to eql site.active_paid_bill.start_date + 1.month + 1.month
       end
     end
   end
