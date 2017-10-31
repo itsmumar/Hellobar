@@ -18,7 +18,9 @@ class PayRecurringBills
   def call
     report.start
 
-    self.class.bills.find_each do |bill|
+    # find_each is not advised to be used here
+    # as it could lead to endless looping
+    self.class.bills.each do |bill|
       report.count
       handle bill
     end
