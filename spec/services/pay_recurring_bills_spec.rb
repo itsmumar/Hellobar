@@ -196,8 +196,20 @@ describe PayRecurringBills do
 
         specify do
           expect(report).to receive(:exception).with(exception)
+          expect(report).to receive(:interrupt).with(exception)
 
           expect { service.call }.to raise_error exception
+        end
+
+        context 'when killed with a SignalException' do
+          let(:exception) { Exception.new('kill') }
+
+          specify do
+            expect(report).not_to receive(:exception)
+            expect(report).to receive(:interrupt).with(exception)
+
+            expect { service.call }.to raise_error exception
+          end
         end
       end
     end

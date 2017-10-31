@@ -31,6 +31,12 @@ class BillingReport
     info ''
   end
 
+  def interrupt(e)
+    info '---- INTERRUPT ----'
+    info e.inspect if e
+    finish
+  end
+
   def count
     @count += 1
     info "#{ @count } bills processed..." if !@count.zero? && @count % 500 == 0

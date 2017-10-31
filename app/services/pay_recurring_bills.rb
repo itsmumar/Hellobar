@@ -22,6 +22,10 @@ class PayRecurringBills
     end
 
     report.finish
+  rescue Exception => e # rubocop: disable Lint/RescueException
+    Raven.capture_exception(e)
+    report.interrupt(e)
+    raise
   ensure
     report.email
   end
