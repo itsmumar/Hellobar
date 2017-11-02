@@ -4,7 +4,8 @@ describe PayRecurringBills do
       [
         create(:bill, bill_at: 1.year.ago),
         create(:bill, bill_at: 27.days.ago),
-        create(:bill, bill_at: 1.day.ago)
+        create(:bill, bill_at: 1.day.ago),
+        create(:bill, bill_at: Time.current)
       ]
     end
 
