@@ -42,4 +42,26 @@ describe IntercomGateway do
       intercom.tag_users tag, []
     end
   end
+
+  describe '#find_user' do
+    it 'returns `nil` if user is not found at Intercom' do
+      user_id = 66
+
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 404
+
+      expect(intercom.find_user(user_id)).to eq nil
+    end
+  end
+
+  describe '#delete_user' do
+    it 'sends users.delete request to Intercom' do
+      user_id = 66
+      user = instance_double User, id: user_id
+
+      stub_request(:delete, "#{ url }/users/#{ user_id }")
+
+      intercom.delete_user user
+    end
+  end
 end

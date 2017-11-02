@@ -13,6 +13,18 @@ class IntercomGateway
     client.tags.tag(name: tag, users: users.map { |u| { user_id: u.id } })
   end
 
+  def find_user user_id
+    client.users.find user_id: user_id
+  rescue Intercom::ResourceNotFound
+    nil
+  end
+
+  def delete_user intercom_user
+    client.users.delete intercom_user
+  rescue Intercom::ResourceNotFound
+    nil
+  end
+
   private
 
   def client
