@@ -1,4 +1,16 @@
 describe User do
+  describe '#to_s via Rails initializer' do
+    it 'includes `id:nil` for non-persisted records' do
+      expect(User.new.to_s).to include 'id:nil'
+    end
+
+    it 'includes record ID for persisted records' do
+      user = create :user
+
+      expect(user.to_s).to include "id:#{ user.id }"
+    end
+  end
+
   describe 'validations' do
     it 'cannot have the same email as someone in the Rails database' do
       email = 'hoogaboo@gmail.com'
