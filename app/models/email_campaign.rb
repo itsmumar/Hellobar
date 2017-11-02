@@ -1,4 +1,4 @@
-class EmailCampaign < ActiveRecord::Base
+class EmailCampaign < ApplicationRecord
   NEW = 'new'.freeze
   SENT = 'sent'.freeze
   STATUSES = [NEW, SENT].freeze

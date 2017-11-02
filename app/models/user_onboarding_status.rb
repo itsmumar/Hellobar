@@ -1,4 +1,4 @@
-class UserOnboardingStatus < ActiveRecord::Base
+class UserOnboardingStatus < ApplicationRecord
   belongs_to :user
 
   scope :with_status, ->(status) { where(status_id: STATUSES[status]) }

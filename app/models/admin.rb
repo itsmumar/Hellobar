@@ -1,4 +1,4 @@
-class Admin < ActiveRecord::Base
+class Admin < ApplicationRecord
   LOCKDOWN_KEY_EXPIRY = 2.hours
   MAX_ACCESS_TOKENS = 10
   MAX_LOGIN_ATTEMPTS = 10

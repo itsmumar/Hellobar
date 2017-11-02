@@ -1,6 +1,6 @@
 require 'uri'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   DEFAULT_UPGRADE_STYLES = {
     'offer_bg_color' => '#ffffb6',
     'offer_text_color' => '#000000',

@@ -1,4 +1,4 @@
-class Condition < ActiveRecord::Base
+class Condition < ApplicationRecord
   serialize :value
 
   # class name: Hello::Segments::User key

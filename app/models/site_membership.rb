@@ -1,4 +1,4 @@
-class SiteMembership < ActiveRecord::Base
+class SiteMembership < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :user

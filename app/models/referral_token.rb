@@ -1,4 +1,4 @@
-class ReferralToken < ActiveRecord::Base
+class ReferralToken < ApplicationRecord
   belongs_to :tokenizable, polymorphic: true
 
   validates :token, uniqueness: true
