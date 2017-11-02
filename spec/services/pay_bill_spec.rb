@@ -91,6 +91,13 @@ describe PayBill do
       specify { expect { service.call }.to change(bill, :status).to Bill::PAID }
       specify { expect { service.call }.not_to make_gateway_call(:purchase) }
       specify { expect { service.call }.not_to change { BillingAttempt.successful.count } }
+
+      it 'creates a bill for next period' do
+        expect { service.call }
+          .to change { subscription.bills.count }
+          .by(1)
+          .and change { subscription.bills.pending.last }
+      end
     end
 
     context 'without credit card' do
