@@ -79,7 +79,8 @@ class IntercomAnalytics
   end
 
   def changed_subscription(site:, user:)
-    subscription = site.current_subscription
+    subscription = site.current_subscription || Subscription::Free.new
+
     track(
       event_name: 'changed-subscription',
       user_id: user.id,
@@ -97,7 +98,7 @@ class IntercomAnalytics
   end
 
   def tag_users(tag, users)
-    return if users.blank?
+    return if users.blank? || tag.blank?
 
     intercom.tags.tag(name: tag, users: users.map { |u| { user_id: u.id } })
   end
