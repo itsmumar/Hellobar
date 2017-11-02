@@ -1,4 +1,4 @@
-class Rule < ActiveRecord::Base
+class Rule < ApplicationRecord
   MATCH_ON = {
     all: 'all',
     any: 'any'

@@ -1,4 +1,4 @@
-class Coupon < ActiveRecord::Base
+class Coupon < ApplicationRecord
   REFERRAL_LABEL = 'for_referrals'.freeze
   REFERRAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount]
 

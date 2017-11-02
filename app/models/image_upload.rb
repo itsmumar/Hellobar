@@ -1,4 +1,4 @@
-class ImageUpload < ActiveRecord::Base
+class ImageUpload < ApplicationRecord
   STYLES = {
     original: '2000x2000>',
     large: '1500x1500>',

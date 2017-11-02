@@ -1,4 +1,4 @@
-class Identity < ActiveRecord::Base
+class Identity < ApplicationRecord
   belongs_to :site
 
   has_many :contact_lists, dependent: :nullify

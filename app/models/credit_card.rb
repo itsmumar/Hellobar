@@ -1,4 +1,4 @@
-class CreditCard < ActiveRecord::Base
+class CreditCard < ApplicationRecord
   include ActiveMerchant::Billing::CreditCardMethods
 
   # rubocop: disable Rails/HasManyOrHasOneDependent

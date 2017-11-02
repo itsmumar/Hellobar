@@ -1,6 +1,6 @@
 require 'discount_calculator'
 
-class Subscription < ActiveRecord::Base
+class Subscription < ApplicationRecord
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
