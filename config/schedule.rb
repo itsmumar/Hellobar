@@ -6,15 +6,15 @@ set :output, standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log'
 env :PATH, ENV['PATH']
 
 # All times are in UTC
-every :friday, at: '2:00pm', roles: [:cron] do
+every :friday, at: '3:00pm', roles: [:cron] do
   rake 'internal_metrics:email_weekly'
 end
 
-every :day, at: '1:00pm', roles: [:cron] do
+every :day, at: '2:00pm', roles: [:cron] do
   rake 'billing:run'
 end
 
-every :monday, at: '2:00pm', roles: [:cron] do
+every :monday, at: '2:30pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
 end
 
