@@ -1,8 +1,8 @@
 class CreateSiteElement
-  def initialize(params, current_user)
-    @site_element = SiteElement.new(params)
+  def initialize(params, site, current_user)
+    @site_element = site.site_elements.build(params)
     @current_user = current_user
-    @site = site_element.site
+    @site = site
   end
 
   def call

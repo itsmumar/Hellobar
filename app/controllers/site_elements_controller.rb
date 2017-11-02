@@ -42,7 +42,7 @@ class SiteElementsController < ApplicationController
   end
 
   def create
-    site_element = CreateSiteElement.new(site_element_params, current_user).call
+    site_element = CreateSiteElement.new(site_element_params, @site, current_user).call
     flash[:success] = message_to_clear_cache
     render json: site_element, serializer: SiteElementSerializer
   end
