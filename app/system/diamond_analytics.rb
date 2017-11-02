@@ -106,7 +106,7 @@ class DiamondAnalytics
   end
 
   def changed_subscription(site:, user:)
-    subscription = site.current_subscription
+    subscription = site.current_subscription || Subscription::Free.new
 
     track(
       event: 'Changed Subscription',
