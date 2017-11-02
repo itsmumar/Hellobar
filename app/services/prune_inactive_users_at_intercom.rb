@@ -1,4 +1,4 @@
-class PruneInactiveIntercomUsers
+class PruneInactiveUsersAtIntercom
   PRUNING_THRESHOLD = 3.days
 
   def initialize inactivity_threshold:

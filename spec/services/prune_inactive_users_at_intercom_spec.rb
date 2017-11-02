@@ -1,4 +1,4 @@
-describe PruneInactiveIntercomUsers do
+describe PruneInactiveUsersAtIntercom do
   describe '#call' do
     let(:intercom_url) { 'https://api.intercom.io' }
     let(:inactivity_threshold) { 10.days }
@@ -42,7 +42,7 @@ describe PruneInactiveIntercomUsers do
 
       expect_any_instance_of(IntercomGateway).to receive(:delete_user)
 
-      expect(PruneInactiveIntercomUsers.new(opts).call).to eq [inactive]
+      expect(PruneInactiveUsersAtIntercom.new(opts).call).to eq [inactive]
     end
   end
 end
