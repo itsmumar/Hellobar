@@ -70,6 +70,23 @@ describe BillingReport, :freeze do
         '-' * 80,
         '0 successful bills for $0.00',
         '0 failed bills for $0.00',
+        '0 skipped bills for $0.00',
+        '0 bills have been processed',
+        '',
+        ''
+      ]
+    end
+  end
+
+  describe '#interrupt' do
+    specify do
+      expect { report.interrupt(nil) }.to log [
+        '---- INTERRUPT ----',
+        '-' * 80,
+        '0 successful bills for $0.00',
+        '0 failed bills for $0.00',
+        '0 skipped bills for $0.00',
+        '0 bills have been processed',
         '',
         ''
       ]
@@ -101,7 +118,7 @@ describe BillingReport, :freeze do
     describe '#cannot_pay' do
       specify do
         expect { report.cannot_pay }.to log [
-          "#{ attempting_msg } Skipped: no credit card available"
+          "#{ attempting_msg } Cannot pay the bill"
         ]
       end
     end
@@ -137,6 +154,17 @@ describe BillingReport, :freeze do
     specify do
       expect { report.void(bill) }.to log [
         "Voiding bill #{ bill.id } because subscription or site not found"
+      ]
+    end
+  end
+
+  describe '#downgrade' do
+    let(:bill) { create :bill }
+
+    specify do
+      expect { report.downgrade(bill) }.to log [
+        "Voiding outdated bill #{ bill.id }",
+        "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
       ]
     end
   end

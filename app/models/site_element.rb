@@ -1,4 +1,4 @@
-class SiteElement < ActiveRecord::Base
+class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze

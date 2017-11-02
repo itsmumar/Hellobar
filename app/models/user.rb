@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   acts_as_paranoid
 
   include UserValidator
@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   def self.search_all_versions_for_email(email)
     return if email.blank?
 
-    find_by_email(email) || find_and_create_by_referral(email)
+    find_by(email: email) || find_and_create_by_referral(email)
   end
 
   def self.find_and_create_by_referral(email)

@@ -84,6 +84,17 @@ describe TrackEvent, :freeze do
 
       fire_event :changed_subscription, site: site, user: owner
     end
+
+    context 'without current_subscription' do
+      before { site.current_subscription.destroy }
+
+      it 'does not raise error' do
+        expect(intercom).to receive_message_chain(:events, :create)
+        expect(intercom).to receive_message_chain(:tags, :tag)
+        expect(diamond).to receive(:track).twice
+        fire_event :changed_subscription, site: site, user: owner
+      end
+    end
   end
 
   describe '"created_bar" event' do

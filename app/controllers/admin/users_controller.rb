@@ -8,7 +8,7 @@ class Admin::UsersController < AdminController
       users = User.search_by_username(q).includes(:authentications)
 
       if q =~ /\.js$/
-        site = Site.find_by_script(q)
+        site = Site.by_script(q)
         users += site.owners if site
       else
         users += User.search_by_site_url(q).includes(:authentications)

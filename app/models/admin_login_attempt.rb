@@ -1,2 +1,2 @@
-class AdminLoginAttempt < ActiveRecord::Base
+class AdminLoginAttempt < ApplicationRecord
 end

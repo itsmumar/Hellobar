@@ -1,4 +1,4 @@
-class CouponUse < ActiveRecord::Base
+class CouponUse < ApplicationRecord
   belongs_to :bill
   belongs_to :coupon
 

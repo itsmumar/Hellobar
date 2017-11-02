@@ -1,4 +1,4 @@
-class ContactList < ActiveRecord::Base
+class ContactList < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :site

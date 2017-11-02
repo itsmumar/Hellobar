@@ -7,8 +7,10 @@ class BillingReport
     @log = []
     @amount_successful = 0
     @amount_failed = 0
+    @amount_skipped = 0
     @num_failed = 0
     @num_successful = 0
+    @num_skipped = 0
     @count = 0
     @bills_count = bills_count
   end
@@ -23,8 +25,16 @@ class BillingReport
     info '-' * 80
     info "#{ @num_successful } successful bills for #{ number_to_currency(@amount_successful) }"
     info "#{ @num_failed } failed bills for #{ number_to_currency(@amount_failed) }"
+    info "#{ @num_skipped } skipped bills for #{ number_to_currency(@amount_skipped) }"
+    info "#{ @count } bills have been processed"
     info ''
     info ''
+  end
+
+  def interrupt(e)
+    info '---- INTERRUPT ----'
+    info e.inspect if e
+    finish
   end
 
   def count
@@ -45,17 +55,24 @@ class BillingReport
     @attempt = nil
   end
 
-  def cannot_pay
+  def cannot_pay(message = ' Cannot pay the bill')
     @amount_failed += @bill.amount
     @num_failed += 1
-    info(@attempt + ' Skipped: no credit card available')
+    info(@attempt + message)
   end
 
   def void(bill)
     info "Voiding bill #{ bill.id } because subscription or site not found"
   end
 
+  def downgrade(bill)
+    info "Voiding outdated bill #{ bill.id }"
+    info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
+  end
+
   def skip(bill, last_billing_attempt)
+    @num_skipped += 1
+    @amount_skipped += bill.amount
     info "Not attempting bill #{ bill.id } because last billing attempt was #{ last_billing_attempt.created_at }"
   end
 

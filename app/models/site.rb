@@ -1,6 +1,6 @@
 require 'uri'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   DEFAULT_UPGRADE_STYLES = {
     'offer_bg_color' => '#ffffb6',
     'offer_text_color' => '#000000',
@@ -102,7 +102,7 @@ class Site < ActiveRecord::Base
     where(url: ["https://#{ host || url }", "http://#{ host || url }"])
   end
 
-  def self.find_by_script(script_embed)
+  def self.by_script(script_embed)
     target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
 
     (Site.maximum(:id) || 1).downto(1) do |i|

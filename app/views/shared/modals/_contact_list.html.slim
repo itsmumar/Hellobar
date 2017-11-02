@@ -75,6 +75,8 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
       .contact-list-delete-link
         input type="hidden" id="contact_list_site_elements_count" name="contact_list[site_elements_count]" value="0"
 
+      = image_tag 'spinner.gif', class: 'spinner'
+
       footer
         a.button.cancel Cancel
         a.delete-confirm.hidden Delete this contact list

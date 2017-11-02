@@ -1,4 +1,4 @@
-class Autofill < ActiveRecord::Base
+class Autofill < ApplicationRecord
   belongs_to :site, touch: true
 
   validates :site, presence: true

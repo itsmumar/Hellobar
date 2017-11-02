@@ -48,10 +48,6 @@ Layout/AlignHash:
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
-Security/MarshalLoad:
-  Exclude:
-    - 'lib/grand_central_api.rb'
-
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
 Layout/IndentArray:
@@ -119,38 +115,26 @@ Rails/RequestReferer:
 Rails/ApplicationRecord:
   Enabled: false
 
-Rails/DynamicFindBy:
-  Whitelist:
-    - find_by_sql
-    - find_by_email
-    - find_by_script
-
-# TODO: issue XOHB-1599
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: strict, flexible
-Rails/Date:
-  Exclude:
-    - 'app/controllers/sites_controller.rb'
-    - 'app/helpers/email_digest_helper.rb'
-    - 'app/helpers/sites_helper.rb'
-    - 'lib/hello/api_performance.rb'
-    - 'spec/lib/hello/api_performance_spec.rb'
-
 #### END RAILS
 
 
 #### BEGIN METRICS
 
 Metrics/AbcSize:
-  Max: 60 # ideally 16
+  Max: 49 # ideally 16
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 1000 # ideally 25
+  Max: 50 # ideally 25
+  Exclude:
+    - 'spec/**/*'
+    - 'app/views/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/backend.rake'
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 188 # ideally 100
+  Max: 178 # ideally 100
   Exclude:
     - 'app/models/site.rb'
     - 'app/models/site_element.rb'
@@ -163,22 +147,18 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 1246 # ideally 120
+  Max: 546 # ideally 120
   IgnoreCopDirectives: true
 
 Metrics/MethodLength:
-  Max: 82 # ideally 10
+  Max: 32 # ideally 10
   CountComments: false
 
 Metrics/ModuleLength:
-  Max: 187 # ideally 10
+  Max: 176 # ideally 10
   CountComments: false
 
-Metrics/ParameterLists:
-  Exclude:
-    - 'lib/hello/data_api_helper.rb'
-
 Metrics/PerceivedComplexity:
-  Max: 18 # ideally 7
+  Max: 14 # ideally 7
 
 #### END METRICS

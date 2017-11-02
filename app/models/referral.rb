@@ -1,4 +1,4 @@
-class Referral < ActiveRecord::Base
+class Referral < ApplicationRecord
   FOLLOWUP_INTERVAL = 5.days
 
   enum state: %i[sent signed_up installed]

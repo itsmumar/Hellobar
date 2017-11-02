@@ -1,4 +1,4 @@
-class BillingAttempt < ActiveRecord::Base
+class BillingAttempt < ApplicationRecord
   SUCCESSFUL = 'successful'.freeze
   FAILED = 'failed'.freeze
   PENDING = 'pending'.freeze

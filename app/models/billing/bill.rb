@@ -1,4 +1,4 @@
-class Bill < ActiveRecord::Base
+class Bill < ApplicationRecord
   PENDING = 'pending'.freeze
   PAID = 'paid'.freeze
   VOIDED = 'voided'.freeze
