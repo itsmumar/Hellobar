@@ -117,5 +117,7 @@ IntercomRails.config do |config|
   #
   # If you'd like to hide default launcher button uncomment this line
   # config.hide_default_launcher = true
+
+  # Display Messenger for logged out users
   config.include_for_logged_out_users = true
 end
