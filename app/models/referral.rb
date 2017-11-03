@@ -1,7 +1,10 @@
 class Referral < ApplicationRecord
   FOLLOWUP_INTERVAL = 5.days
 
-  enum state: %i[sent signed_up installed]
+  SENT = 'sent'.freeze
+  SIGNED_UP = 'signed_up'.freeze
+  INSTALLED = 'installed'.freeze
+  STATES = [SENT, SIGNED_UP, INSTALLED].freeze
 
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
