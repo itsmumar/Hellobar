@@ -9,6 +9,10 @@ class WelcomeController < ApplicationController
     set_site_url
   end
 
+  def display_intercom?
+    true
+  end
+
   private
 
   def set_site_url

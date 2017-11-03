@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
     head :not_found
   end
 
+  def display_intercom?
+    false
+  end
+
   def access_token
     @access_token ||= Digest::SHA256.hexdigest(['hellobar', remote_ip, user_agent, access_cookie, 'a776b'].join)
   end
