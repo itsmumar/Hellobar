@@ -116,17 +116,6 @@ IntercomRails.config do |config|
   # config.inbox.custom_activator = '.intercom'
   #
   # If you'd like to hide default launcher button uncomment this line
-  config.hide_default_launcher = true
+  # config.hide_default_launcher = true
   config.include_for_logged_out_users = true
 end
-
-# This is not cool, but Intercom don't provide an ability to do this in other way
-module IntercomRails::ScriptTagPatch
-  def intercom_settings
-    settings = super
-    settings[:hide_default_launcher] = !controller.display_intercom?
-    settings
-  end
-end
-
-IntercomRails::ScriptTag.send(:prepend, IntercomRails::ScriptTagPatch)
