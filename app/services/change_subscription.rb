@@ -7,6 +7,8 @@ class ChangeSubscription
   end
 
   def call
+    return DowngradeSiteToFree.new(site).call if downgrade_to_free?
+
     change_or_update_subscription.tap do
       regenerate_script
     end
@@ -120,5 +122,9 @@ class ChangeSubscription
 
     Analytics.track(:site, site.id, :change_sub, props)
     TrackEvent.new(:changed_subscription, site: site, user: site.owners.first).call
+  end
+
+  def downgrade_to_free?
+    subscription_class == Subscription::Free
   end
 end
