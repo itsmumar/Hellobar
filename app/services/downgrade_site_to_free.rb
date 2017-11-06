@@ -5,8 +5,9 @@ class DowngradeSiteToFree
 
   def call
     void_pending_bills
-    create_free_subscription unless currently_on_free?
-    enable_branding_on_all_bars
+    create_free_subscription.tap do
+      enable_branding_on_all_bars
+    end
   end
 
   private
@@ -14,7 +15,7 @@ class DowngradeSiteToFree
   attr_reader :site
 
   def currently_on_free?
-    site.free?
+    site.current_subscription&.free?
   end
 
   def void_pending_bills
@@ -22,6 +23,7 @@ class DowngradeSiteToFree
   end
 
   def create_free_subscription
+    return site.current_subscription if currently_on_free?
     Subscription::Free.create!(site: site)
   end
 
