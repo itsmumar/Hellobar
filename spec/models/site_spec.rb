@@ -30,6 +30,14 @@ describe Site do
     expect(new_site).to be_persisted
   end
 
+  it 'destroys the subscription when site is destroyed' do
+    site = create :site, :pro
+
+    site.destroy
+
+    expect(site.subscriptions.with_deleted.last).to be_deleted
+  end
+
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
       create(:site_membership, :admin, site: site)
