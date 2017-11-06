@@ -11,7 +11,7 @@ describe RedeemReferralForRecipient do
   end
 
   context 'when can redeem the referral' do
-    let!(:referral) { create(:referral, recipient: recipient, state: :signed_up) }
+    let!(:referral) { create(:referral, recipient: recipient, state: Referral::SIGNED_UP) }
 
     it 'updates referral' do
       expect { service.call }
@@ -53,7 +53,7 @@ describe RedeemReferralForRecipient do
   end
 
   context 'when referral is not in state :signed_up' do
-    let!(:referral) { create(:referral, recipient: recipient, state: :sent) }
+    let!(:referral) { create(:referral, recipient: recipient, state: Referral::SENT) }
 
     it 'does nothing' do
       expect { service.call }
@@ -64,7 +64,7 @@ describe RedeemReferralForRecipient do
   end
 
   context 'when referral is already accepted' do
-    let!(:referral) { create(:referral, recipient: recipient, state: :installed) }
+    let!(:referral) { create(:referral, recipient: recipient, state: Referral::INSTALLED) }
 
     it 'does nothing' do
       expect { service.call }
@@ -75,7 +75,7 @@ describe RedeemReferralForRecipient do
   end
 
   context 'when there is no referral for recipient' do
-    let!(:referral) { create(:referral, state: :signed_up) }
+    let!(:referral) { create(:referral, state: Referral::SIGNED_UP) }
 
     it 'does nothing' do
       expect { service.call }

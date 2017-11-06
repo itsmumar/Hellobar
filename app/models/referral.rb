@@ -79,7 +79,7 @@ class Referral < ApplicationRecord
   # this gives you a prettier way to test for equality
   #   i.e: referral.state.signed_up? || referral.state.instelled?
   def state
-    ActiveSupport::StringInquirer.new(super).freeze
+    ActiveSupport::StringInquirer.new(super.to_s).freeze
   end
 
   private
