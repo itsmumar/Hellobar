@@ -2,7 +2,7 @@ describe Subscription do
   it { is_expected.to validate_presence_of :schedule }
   it { is_expected.to validate_presence_of :site }
 
-  it 'it soft-deletes when object is being destroyed', :freeze do
+  it 'soft-deletes when object is being destroyed', :freeze do
     subscription = create :subscription
     subscription.destroy
 
