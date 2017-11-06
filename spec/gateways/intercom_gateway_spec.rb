@@ -1,6 +1,9 @@
 describe IntercomGateway do
   let(:intercom) { IntercomGateway.new }
   let(:url) { 'https://api.intercom.io' }
+  let(:user_id) { 66 }
+  let(:intercom_id) { 'id' }
+  let(:user_attributes) { Hash['type' => 'user', 'id' => intercom_id, 'user_id' => user_id] }
 
   describe '#track' do
     it 'sends track event request to Intercom' do
@@ -8,7 +11,7 @@ describe IntercomGateway do
 
       event = {
         event_name: 'name',
-        user_id: 7
+        user_id: user_id
       }
 
       intercom.track event
@@ -19,7 +22,7 @@ describe IntercomGateway do
     it 'sends create user request to Intercom' do
       stub_request(:post, "#{ url }/users")
 
-      user = instance_double User, id: 5, email: 'me@example.org'
+      user = instance_double User, id: user_id, email: 'me@example.org'
 
       intercom.create_user user
     end
@@ -31,7 +34,7 @@ describe IntercomGateway do
     it 'sends tags request to Intercom' do
       stub_request(:post, "#{ url }/tags")
 
-      user = instance_double User, id: 5
+      user = instance_double User, id: user_id
 
       intercom.tag_users tag, [user]
     end
@@ -44,9 +47,17 @@ describe IntercomGateway do
   end
 
   describe '#find_user' do
-    it 'returns `nil` if user is not found at Intercom' do
-      user_id = 66
+    it 'sends GET request to Intercom' do
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 200, body: user_attributes.to_json
 
+      intercom_user = intercom.find_user user_id
+
+      expect(intercom_user).to be_an Intercom::User
+      expect(intercom_user.user_id).to eql user_id
+    end
+
+    it 'returns `nil` if user is not found at Intercom' do
       stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
         .to_return status: 404
 
@@ -56,12 +67,12 @@ describe IntercomGateway do
 
   describe '#delete_user' do
     it 'sends users.delete request to Intercom' do
-      user_id = 66
-      user = instance_double User, id: user_id
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 200, body: user_attributes.to_json
 
-      stub_request(:delete, "#{ url }/users/#{ user_id }")
+      stub_request(:delete, "#{ url }/users/#{ intercom_id }")
 
-      intercom.delete_user user
+      intercom.delete_user user_id
     end
   end
 end
