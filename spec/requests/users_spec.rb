@@ -1,4 +1,4 @@
-describe 'User requests' do
+describe 'Users requests' do
   let(:user) { create :user, :with_site }
 
   context 'when unauthenticated' do
@@ -150,6 +150,7 @@ describe 'User requests' do
       before do
         allow_any_instance_of(StaticScript).to receive(:generate).and_return(true)
         allow_any_instance_of(StaticScript).to receive(:destroy).and_return(true)
+        allow_any_instance_of(IntercomGateway).to receive(:delete_user)
       end
 
       it 'responds with a redirect to get_started path' do

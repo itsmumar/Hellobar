@@ -104,14 +104,18 @@ describe RefundBill do
   end
 
   context 'when user has canceled his account' do
-    before { allow_any_instance_of(StaticScript).to receive(:destroy) }
     before do
+      allow_any_instance_of(StaticScript).to receive(:destroy)
+      allow_any_instance_of(IntercomGateway).to receive(:delete_user)
+
       DestroyUser.new(user).call
+
       bill.reload
     end
 
-    it 'creates refund bill' do
+    it 'creates a refund bill' do
       service.call
+
       expect(bill.refund).to be_a Bill::Refund
     end
   end
