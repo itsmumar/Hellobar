@@ -4,12 +4,13 @@ class DestroyUser
   end
 
   def call
-    Site.no_touching do # TODO: remove when site callbacks are gone
+    Site.transaction do
       downgrade_subscriptions
       destroy_credit_cards
-      destroy_own_sites
+      destroy_owned_sites
       user.update! status: User::DELETED
       user.destroy!
+      intercom.delete_user user.id
     end
   end
 
@@ -32,7 +33,7 @@ class DestroyUser
     user.credit_cards.each(&:destroy!)
   end
 
-  def destroy_own_sites
+  def destroy_owned_sites
     SiteMembership.where(user_id: user.id, role: 'owner').each do |membership|
       next membership.destroy! unless membership.site
 
@@ -48,5 +49,9 @@ class DestroyUser
   def promote_first_user_to_owner(membership)
     first_site_user = membership.site.site_memberships.where.not(user_id: user.id).first
     first_site_user.update role: 'owner'
+  end
+
+  def intercom
+    IntercomGateway.new
   end
 end
