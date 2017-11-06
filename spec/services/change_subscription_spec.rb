@@ -303,6 +303,23 @@ describe ChangeSubscription, :freeze do
             end
           end
         end
+
+        it 'sends an event to Analytics' do
+          props = {
+            to_subscription: 'Free',
+            to_schedule: 'monthly',
+            from_subscription: 'Pro',
+            from_schedule: 'monthly'
+          }
+          expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
+          change_subscription('free')
+        end
+
+        it 'sends an event to Intercom' do
+          expect { change_subscription('free') }
+            .to have_enqueued_job(SendEventToIntercomJob)
+            .with('changed_subscription', site: site, user: user)
+        end
       end
 
       context 'when downgrading to Free from Enterprise' do

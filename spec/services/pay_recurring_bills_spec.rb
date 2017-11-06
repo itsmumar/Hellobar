@@ -135,9 +135,9 @@ describe PayRecurringBills do
           expect(report).to receive(:downgrade)
           expect(report).not_to receive(:attempt)
 
-          expect(ChangeSubscription)
+          expect(DowngradeSiteToFree)
             .to receive_service_call
-            .with(bill_without_credit_card.site, subscription: 'free')
+            .with(bill_without_credit_card.site)
 
           expect { service.call }
             .to change { bill_without_credit_card.reload.status }
