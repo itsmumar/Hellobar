@@ -140,10 +140,17 @@ div#user_profile
 
       div.site_section
         div.title Subscription History
+
         - if site.deleted?
-          div= "Deleted on #{site.deleted_at.strftime('%D')}"
-        - site.subscriptions.reverse.each do |sub|
           div
-            | Changed to #{sub.values[:name]} on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
+            | Site <strong>deleted</strong> on #{ site.deleted_at.strftime('%D') }
+
+        - site.subscriptions.with_deleted.reverse.each do |sub|
+          div
+            | Changed to <strong>#{ sub.values[:name] }</strong> on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
+
+            - if sub.deleted?
+              | (subscription deleted on #{ sub.deleted_at.strftime('%D') })
+
         div
-          | Created on #{site.created_at.strftime('%D')}
+          | Site created on #{site.created_at.strftime('%D')}
