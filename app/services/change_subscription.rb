@@ -125,7 +125,7 @@ class ChangeSubscription
   end
 
   def downgrading_to_free?
-    subscription_class == Subscription::Free
+    subscription_class == Subscription::Free && old_subscription
   end
 
   def downgrade_site_to_free
