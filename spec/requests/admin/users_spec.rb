@@ -105,7 +105,10 @@ describe 'Admin::Users requests' do
   describe 'DELETE admin_user_path' do
     let(:user) { create(:user) }
 
-    before { stub_current_admin(admin) }
+    before do
+      stub_current_admin(admin)
+      allow_any_instance_of(IntercomGateway).to receive(:delete_user)
+    end
 
     it 'allows the admin to (soft) destroy a user' do
       delete admin_user_path(user)
