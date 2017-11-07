@@ -32,7 +32,7 @@ describe PayBill do
     end
 
     context 'when site had problems with payment' do
-      let!(:failed_bill) { create :bill, :problem, site: bill.site }
+      let!(:failed_bill) { create :bill, :failed, site: bill.site }
 
       it 'voids problem bills' do
         expect { service.call }
@@ -70,8 +70,8 @@ describe PayBill do
       end
     end
 
-    context 'when bill.status is :void' do
-      let(:bill) { create :bill, :void, subscription: subscription }
+    context 'when bill.status is :voided' do
+      let(:bill) { create :bill, :voided, subscription: subscription }
 
       it_behaves_like 'doing nothing'
     end

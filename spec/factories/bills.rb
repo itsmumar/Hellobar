@@ -51,14 +51,14 @@ FactoryGirl.define do
     end
 
     trait :paid do
-      status :paid
+      status Bill::PAID
       after :create do |bill|
         create :billing_attempt, :success, bill: bill, credit_card: bill.credit_card
         bill.reload
       end
     end
 
-    trait :void do
+    trait :voided do
       status Bill::VOIDED
     end
 
@@ -66,7 +66,7 @@ FactoryGirl.define do
       status Bill::PENDING
     end
 
-    trait :problem do
+    trait :failed do
       status Bill::FAILED
     end
 

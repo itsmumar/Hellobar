@@ -26,7 +26,7 @@ describe 'Bills requests' do
       end
 
       context 'when bill is failed' do
-        let!(:bill) { create :bill, :problem, site: site }
+        let!(:bill) { create :bill, :failed, site: site }
 
         it 'responds with :not_found' do
           expect { get bill_path(bill) }.to raise_error ActiveRecord::RecordNotFound
@@ -53,7 +53,7 @@ describe 'Bills requests' do
       end
 
       context 'when bill with problem' do
-        let!(:bill) { create :bill, :problem, site: site }
+        let!(:bill) { create :bill, :failed, site: site }
 
         it 'responds with success' do
           put pay_bill_path(bill)
@@ -63,7 +63,7 @@ describe 'Bills requests' do
       end
 
       context 'when cannot pay bill' do
-        let!(:bill) { create :bill, :problem, site: site }
+        let!(:bill) { create :bill, :failed, site: site }
         let(:credit_card) { bill.credit_card }
 
         before { stub_cyber_source :purchase, success?: false }
