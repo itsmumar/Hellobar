@@ -58,11 +58,17 @@ class PayRecurringBills
 
   def pay(bill)
     bill = PayBill.new(bill).call
+
     if bill.paid?
       report.success
     else
-      report.fail bill.billing_attempts.last&.response
+      handle_failed_attempt bill
     end
+  end
+
+  def handle_failed_attempt(bill)
+    report.fail bill.billing_attempts.last&.response
+    BillingMailer.could_not_charge(bill).deliver_later
   end
 
   def void(bill)

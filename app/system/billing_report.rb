@@ -49,6 +49,9 @@ class BillingReport
     @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription&.site&.url || 'NO SITE' } for #{ number_to_currency(bill.amount) }..."
     @bill = bill
     yield
+  rescue PayBill::MissingCreditCard
+    info @attempt + " ERROR: no credit card. Sending notification to the owners"
+    BillingMailer.no_credit_card(bill).deliver_later
   rescue StandardError => e
     exception(e)
     Raven.capture_exception(e)

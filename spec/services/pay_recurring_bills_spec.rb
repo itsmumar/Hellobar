@@ -190,6 +190,12 @@ describe PayRecurringBills do
           expect { service.call }
             .to change { bill.reload.status }.to Bill::FAILED
         end
+
+        it 'notifies owners' do
+          expect { service.call }
+            .to have_enqueued_job
+            .with('BillingMailer', 'could_not_charge', 'deliver_now', bill)
+        end
       end
 
       context 'when exception' do
@@ -212,6 +218,21 @@ describe PayRecurringBills do
 
             expect { service.call }.to raise_error exception
           end
+        end
+      end
+
+      context 'when PayBill::MissingCreditCard' do
+        let(:exception) { PayBill::MissingCreditCard.new }
+        before { expect(PayBill).to receive_service_call.and_raise exception }
+
+        specify do
+          expect { service.call }.not_to raise_error
+        end
+
+        specify do
+          expect { service.call }
+            .to have_enqueued_job
+            .with('BillingMailer', 'no_credit_card', 'deliver_now', bill)
         end
       end
     end
