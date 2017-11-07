@@ -35,7 +35,13 @@ class Bill < ApplicationRecord
   before_validation :set_base_amount, :check_amount
 
   STATUSES.each do |status|
+    # define .pending, .paid, .voided, and .failed scopes
     scope status, -> { where(status: status) }
+
+    # define #pending?, #paid?, #voided?, #failed?
+    define_method status + '?' do
+      self.status == status
+    end
   end
 
   scope :recurring, -> { where(type: Recurring) }
@@ -50,9 +56,6 @@ class Bill < ApplicationRecord
 
   validates :subscription, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
-
-  # defines #pending? #paid? #voided? #failed?
-  delegate(*STATUSES.map { |status| status + '?' }, to: :status)
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
@@ -69,12 +72,6 @@ class Bill < ApplicationRecord
 
     self[:status] = value
     self.status_set_at = Time.current
-  end
-
-  # this gives you a prettier way to test for equality
-  #   i.e: bill.status.paid? || bill.status.voided?
-  def status
-    ActiveSupport::StringInquirer.new(super).freeze
   end
 
   def problem_reason

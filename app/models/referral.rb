@@ -21,12 +21,14 @@ class Referral < ApplicationRecord
 
   after_create :create_referral_token
 
-  # defines #sent? #signed_up? #installed?
-  delegate(*STATES.map { |state| state + '?' }, to: :state)
-
-  # defines #.sent #.signed_up #.installed
   STATES.each do |state|
+    # define .sent .signed_up .installed
     scope state, -> { where(state: state) }
+
+    # define #sent? #signed_up? #installed?
+    define_method state + '?' do
+      self.state == state
+    end
   end
 
   def self.redeemable_for_site(site)
@@ -74,12 +76,6 @@ class Referral < ApplicationRecord
 
   def redeemed_by_sender?
     state == INSTALLED && available_to_sender == false && redeemed_by_sender_at.present?
-  end
-
-  # this gives you a prettier way to test for equality
-  #   i.e: referral.state.signed_up? || referral.state.instelled?
-  def state
-    ActiveSupport::StringInquirer.new(super.to_s).freeze
   end
 
   private
