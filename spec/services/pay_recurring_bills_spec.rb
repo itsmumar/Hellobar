@@ -220,21 +220,6 @@ describe PayRecurringBills do
           end
         end
       end
-
-      context 'when PayBill::MissingCreditCard' do
-        let(:exception) { PayBill::MissingCreditCard.new }
-        before { expect(PayBill).to receive_service_call.and_raise exception }
-
-        specify do
-          expect { service.call }.not_to raise_error
-        end
-
-        specify do
-          expect { service.call }
-            .to have_enqueued_job
-            .with('BillingMailer', 'no_credit_card', 'deliver_now', bill)
-        end
-      end
     end
 
     context 'subscription lifecycle simulation', freeze: '2017-01-01 10:04 UTC' do

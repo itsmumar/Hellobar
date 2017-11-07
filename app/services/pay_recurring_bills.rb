@@ -51,7 +51,7 @@ class PayRecurringBills
       if bill.can_pay?
         pay bill
       else
-        report.cannot_pay
+        cannot_pay(bill)
       end
     end
   end
@@ -69,6 +69,11 @@ class PayRecurringBills
   def handle_failed_attempt(bill)
     report.fail bill.billing_attempts.last&.response
     BillingMailer.could_not_charge(bill).deliver_later
+  end
+
+  def cannot_pay(bill)
+    report.cannot_pay
+    BillingMailer.no_credit_card(bill).deliver_later
   end
 
   def void(bill)
