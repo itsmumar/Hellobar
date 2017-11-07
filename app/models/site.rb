@@ -16,6 +16,8 @@ class Site < ApplicationRecord
     'offer_font_family_name' => 'Open Sans'
   }.freeze
 
+  acts_as_paranoid
+
   # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
@@ -27,7 +29,7 @@ class Site < ApplicationRecord
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
   has_many :contact_lists, -> { order 'name' }, dependent: :destroy
-  has_many :subscriptions, -> { order 'id' }
+  has_many :subscriptions, -> { order 'id' }, dependent: :destroy
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
@@ -37,8 +39,6 @@ class Site < ApplicationRecord
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
   has_many :email_campaigns, dependent: :destroy
-
-  acts_as_paranoid
 
   scope :preload_for_script, lambda {
     preload(

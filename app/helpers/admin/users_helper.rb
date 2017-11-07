@@ -13,7 +13,9 @@ module Admin::UsersHelper
   end
 
   def bills_for(site)
-    site.bills.reorder(id: :desc).recurring
+    site.subscriptions.with_deleted.flat_map do |subscription|
+      subscription.bills.recurring.reorder(id: :desc)
+    end
   end
 
   def subscriptions
