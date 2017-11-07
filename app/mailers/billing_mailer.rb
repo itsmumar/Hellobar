@@ -9,7 +9,7 @@ class BillingMailer < ApplicationMailer
 
     mail_to_owners(
       @site,
-      subject: default_i18n_subject(card_description: @credit_card.description)
+      subject: "We could not charge your #{ @credit_card.description } for your Hello Bar subscription"
     )
   end
 
@@ -17,7 +17,10 @@ class BillingMailer < ApplicationMailer
     @subscription = bill.subscription
     @site = bill.site
 
-    mail_to_owners(@site)
+    mail_to_owners(
+      @site,
+      subject: 'No credit card on file to renew your Hello Bar subscription'
+    )
   end
 
   private

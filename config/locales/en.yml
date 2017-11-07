@@ -58,10 +58,3 @@ en:
               blank: You must select who will see this in the "targeting" section
             contact_list:
               blank: You must select a contact list to sync with in the "goals" section
-
-  billing_mailer:
-    could_not_charge:
-      subject: We could not charge your %{card_description} for your Hello Bar subscription
-
-    no_credit_card:
-      subject: No credit card on file to renew your Hello Bar subscription
