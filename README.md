@@ -184,7 +184,10 @@ Coverage of Project:
 teaspoon --suite=project --coverage=project
 ```
 
+## Do not 
 
+* don’t use `around`; use `before` and `after` instead
+* don’t use `travel_to`, use `Timecop.travel` instead
 
 ## Development Workflow
 

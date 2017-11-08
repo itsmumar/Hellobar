@@ -107,41 +107,43 @@ describe BillingReport, :freeze do
       "Attempting to bill #{ bill.id }: #{ bill.subscription.site.url } for $#{ bill.amount.to_i }.00..."
     end
 
-    around do |block|
-      report.attempt(bill) do
-        block.call
-      end
-    end
-
     describe '#cannot_pay' do
       specify do
-        expect { report.cannot_pay }.to log [
-          "#{ attempting_msg } Cannot pay the bill"
-        ]
+        report.attempt(bill) do
+          expect { report.cannot_pay }.to log [
+            "#{ attempting_msg } Cannot pay the bill"
+          ]
+        end
       end
     end
 
     describe '#fail' do
       specify do
-        expect { report.fail 'some message' }.to log [
-          "#{ attempting_msg } Failed: some message"
-        ]
+        report.attempt(bill) do
+          expect { report.fail 'some message' }.to log [
+            "#{ attempting_msg } Failed: some message"
+          ]
+        end
       end
     end
 
     describe '#success' do
       specify do
-        expect { report.success }.to log [
-          "#{ attempting_msg } OK"
-        ]
+        report.attempt(bill) do
+          expect { report.success }.to log [
+            "#{ attempting_msg } OK"
+          ]
+        end
       end
     end
 
     context 'when exception occurs' do
       specify do
-        expect { report.attempt(bill) { raise 'error' } }
-          .to log(["#{ attempting_msg } ERROR", anything])
-          .and raise_error('error')
+        report.attempt(bill) do
+          expect { report.attempt(bill) { raise 'error' } }
+            .to log(["#{ attempting_msg } ERROR", anything])
+            .and raise_error('error')
+        end
       end
     end
   end
