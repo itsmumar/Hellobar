@@ -1,6 +1,7 @@
 describe BillingReport, :freeze do
   let(:bills_count) { 999 }
   let(:report) { BillingReport.new(bills_count) }
+  let(:bill) { create :bill }
 
   before { allow(report).to receive(:puts) }
 
@@ -18,8 +19,6 @@ describe BillingReport, :freeze do
   end
 
   describe '#email' do
-    let(:bill) { create :bill }
-
     before do
       report.start
       report.attempt(bill) do
@@ -104,7 +103,6 @@ describe BillingReport, :freeze do
   end
 
   context 'within #attempt block' do
-    let(:bill) { create :bill }
     let(:attempting_msg) do
       "Attempting to bill #{ bill.id }: #{ bill.subscription.site.url } for $#{ bill.amount.to_i }.00..."
     end
@@ -149,8 +147,6 @@ describe BillingReport, :freeze do
   end
 
   describe '#void' do
-    let(:bill) { create :bill }
-
     specify do
       expect { report.void(bill) }.to log [
         "Voiding bill #{ bill.id } because subscription or site not found"
@@ -159,8 +155,6 @@ describe BillingReport, :freeze do
   end
 
   describe '#downgrade' do
-    let(:bill) { create :bill }
-
     specify do
       expect { report.downgrade(bill) }.to log [
         "Voiding outdated bill #{ bill.id }",

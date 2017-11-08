@@ -170,7 +170,7 @@ describe ChangeSubscription, :freeze do
           it 'uses new credit card if provided' do
             expect(failed_bill.reload.credit_card).to eql credit_card
 
-            travel_to site.current_subscription.active_until + 1.day do
+            Timecop.travel site.current_subscription.active_until + 1.day do
               change_subscription('pro', 'monthly', new_credit_card: new_credit_card)
               expect(failed_bill.reload.credit_card).to eql new_credit_card
             end
@@ -214,7 +214,7 @@ describe ChangeSubscription, :freeze do
 
         it 'never expires' do
           change_subscription('pro_managed')
-          travel_to 10.years.from_now do
+          Timecop.travel 10.years.from_now do
             expect(site.current_subscription).to be_instance_of Subscription::ProManaged
             expect(site).to be_capable_of :pro_managed
           end
@@ -298,7 +298,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now + 1.day do
+            Timecop.travel 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -343,7 +343,7 @@ describe ChangeSubscription, :freeze do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now + 1.day do
+            Timecop.travel 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end

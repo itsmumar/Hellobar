@@ -52,15 +52,15 @@ describe PayRecurringBills do
         ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
         expect(site).to be_capable_of :pro
 
-        travel_to '2017-07-28 13:00 UTC' do
+        Timecop.travel '2017-07-28 13:00 UTC' do
           service.call
         end
 
-        travel_to '2017-07-31 00:00 UTC' do
+        Timecop.travel '2017-07-31 00:00 UTC' do
           expect(site).to be_capable_of :pro
         end
 
-        travel_to '2017-08-01 11:00 UTC' do
+        Timecop.travel '2017-08-01 11:00 UTC' do
           expect(site).to be_capable_of :pro
         end
       end
@@ -233,7 +233,7 @@ describe PayRecurringBills do
       let(:last_bill) { site.bills.last }
 
       def travel_to_next_billing_date
-        travel_to 1.month.from_now + 1.day
+        Timecop.travel(1.month.from_now + 1.day)
       end
 
       def bills
@@ -271,7 +271,7 @@ describe PayRecurringBills do
           end
 
           context 'a month later' do
-            before { travel_to 1.month.from_now }
+            before { Timecop.travel 1.month.from_now }
 
             it 'still on Pro' do
               expect(site).to be_capable_of :pro
@@ -325,27 +325,29 @@ describe PayRecurringBills do
         it 'tries to charge 10 times every 3rd day' do
           stub_cyber_source :purchase, success?: false
 
-          travel_to pending_bill.bill_at
-
-          expect { service.call }
-            .to change { pending_bill.reload.status }
-            .from(Bill::PENDING)
-            .to(Bill::FAILED)
+          Timecop.travel pending_bill.bill_at do
+            expect { service.call }
+              .to change { pending_bill.reload.status }
+              .from(Bill::PENDING)
+              .to(Bill::FAILED)
+          end
 
           (1..26).each do |nth|
-            travel_to pending_bill.bill_at + nth.day
-            service.call
+            Timecop.travel pending_bill.bill_at + nth.day do
+              service.call
+            end
           end
           expect(pending_bill.billing_attempts.failed.count).to eql 9
 
-          travel_to pending_bill.bill_at + 27.days
-          service.call
+          Timecop.travel pending_bill.bill_at + 27.days do
+            service.call
+          end
 
           expect(pending_bill.billing_attempts.failed.count).to eql 10
 
-          travel_to pending_bill.bill_at + 30.days
-
-          service.call
+          Timecop.travel pending_bill.bill_at + 30.days do
+            service.call
+          end
 
           expect(pending_bill.reload).to be_voided
         end

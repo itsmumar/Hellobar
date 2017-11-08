@@ -85,7 +85,7 @@ describe Subscription::Capabilities do
   it 'stays at pro capabilities until bill period is over' do
     change_subscription('pro', credit_card, 'yearly')
     expect(site).to be_capable_of :pro
-    travel_to 2.years.from_now do
+    Timecop.travel 2.years.from_now do
       expect(site).to be_capable_of :free
     end
   end

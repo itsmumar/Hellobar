@@ -33,7 +33,7 @@ describe AddTrialSubscription, :freeze do
 
       it 'reverts back to free' do
         expect(site.current_subscription).to be_a Subscription::Pro
-        travel_to 7.days.from_now do
+        Timecop.travel 7.days.from_now do
           expect(site.current_subscription).to be_a Subscription::Free
         end
       end

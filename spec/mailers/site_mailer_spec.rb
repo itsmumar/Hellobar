@@ -50,10 +50,10 @@ describe SiteMailer do
     end
 
     context 'when history is too short' do
-      it 'displays n/a' do
+      it 'displays n/a', :freeze do
         # Travel to one day past the delivery date to ensure it's picking up the
         # mocked data regardless of when the test runs
-        travel_to(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
+        Timecop.travel(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
           expect(mail.body.encoded).to match('n/a')
         end
       end

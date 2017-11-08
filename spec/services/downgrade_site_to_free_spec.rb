@@ -1,4 +1,4 @@
-describe DowngradeSiteToFree do
+describe DowngradeSiteToFree, :freeze do
   let(:site) { create :site, :with_rule }
   let!(:site_element) { create :site_element, show_branding: false, site: site }
   let(:credit_card) { create :credit_card }
@@ -7,7 +7,7 @@ describe DowngradeSiteToFree do
   before do
     stub_cyber_source :purchase
     ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
-    travel_to site.active_subscription.active_until + 1.day
+    Timecop.travel site.active_subscription.active_until + 1.day
   end
 
   it 'voids pending bills' do
