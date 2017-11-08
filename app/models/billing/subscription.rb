@@ -84,7 +84,7 @@ class Subscription < ApplicationRecord
 
   def expired?
     return false if amount&.zero? # a free subscription never expires
-    !last_paid_bill || last_paid_bill.end_date < Time.current
+    !last_paid_bill || last_paid_bill.end_date < Date.current
   end
 
   def mark_user_onboarding_as_bought_subscription!
