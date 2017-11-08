@@ -99,9 +99,10 @@ describe RefundBill do
     end
   end
 
-  context 'when user has cancelled his account' do
+  context 'when user has canceled his account' do
     before do
       allow_any_instance_of(StaticScript).to receive(:destroy)
+      allow_any_instance_of(IntercomGateway).to receive(:delete_user)
 
       DestroyUser.new(user).call
 

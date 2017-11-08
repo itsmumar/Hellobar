@@ -29,9 +29,9 @@ describe SendEventToIntercomJob do
       context 'with message "User Not Found"' do
         let(:message) { 'User Not Found' }
 
-        it 'calls IntercomAnalytics#create_user and retries the job' do
-          expect(analytics)
-            .to receive_message_chain(:intercom, :users, :create).with(user_id: user.id, email: user.email)
+        it 'calls IntercomAnalytics#created_user and retries the job' do
+          expect(analytics).to receive :created_user
+
           expect { perform }.to have_enqueued_job(SendEventToIntercomJob)
         end
       end
@@ -41,6 +41,7 @@ describe SendEventToIntercomJob do
   describe '.perform_later' do
     it 'adds the job to the queue Settings.low_priority_queue' do
       job.perform_later('event')
+
       expect(enqueued_jobs.last[:queue]).to eq 'hb3_test_lowpriority'
     end
   end

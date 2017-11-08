@@ -1,8 +1,12 @@
-describe ChartDataSerializer, freeze: '2017-01-10' do
+describe ChartDataSerializer do
   let(:site_statistics) { create :site_statistics, views: Array.new(3, 1) }
   let(:type) { :total }
   let(:days) {}
   let(:serializer) { ChartDataSerializer.new(site_statistics, days: days, type: type) }
+
+  before do
+    travel_to Time.zone.parse '2017-01-10 13:00'
+  end
 
   describe '#as_json' do
     context 'with days limit' do

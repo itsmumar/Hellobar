@@ -1,4 +1,4 @@
-describe 'Subscription requests' do
+describe 'Subscriptions requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
 

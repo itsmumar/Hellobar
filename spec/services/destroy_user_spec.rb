@@ -3,11 +3,20 @@ describe DestroyUser do
   let!(:credit_card) { create :credit_card, user: user }
   let!(:sites) { create_list :site, 2, user: user }
   let(:destroy_user) { DestroyUser.new(user) }
+  let(:intercom) { IntercomGateway.new }
+  let(:intercom_url) { 'https://api.intercom.io' }
+  let(:intercom_id) { 'intercom_id' }
+  let(:user_attributes) { Hash['type' => 'user', 'id' => intercom_id, 'user_id' => user.id] }
 
   before do
     stub_cyber_source :purchase
 
     allow_any_instance_of(StaticScript).to receive(:destroy)
+
+    stub_request(:get, "#{ intercom_url }/users?user_id=#{ user.id }")
+      .to_return status: 200, body: user_attributes.to_json
+
+    stub_request(:delete, "#{ intercom_url }/users/#{ intercom_id }")
 
     sites.each do |site|
       ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
