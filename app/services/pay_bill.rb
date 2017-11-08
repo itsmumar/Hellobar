@@ -13,6 +13,7 @@ class PayBill
 
     set_final_amount
     pay_bill
+    create_bill_for_next_period
     bill
   end
 
@@ -41,7 +42,6 @@ class PayBill
   def process_successful_response(response)
     create_billing_attempt(response)
     bill.update! authorization_code: response.authorization, status: Bill::PAID
-    create_bill_for_next_period
     fix_failed_bills
     regenerate_script
   end
@@ -81,6 +81,9 @@ class PayBill
   end
 
   def create_bill_for_next_period
+    return if bill.subscription.amount.zero?
+    return unless bill.paid?
+
     CreateBillForNextPeriod.new(bill).call
   end
 

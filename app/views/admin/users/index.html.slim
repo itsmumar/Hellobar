@@ -18,7 +18,7 @@ div.row
           th Credit Cards
           th Registered
           th Logins
-          th Last login
+          th Latest login
           th
 
         - @users.each do |user|
@@ -51,7 +51,8 @@ div.row
 
             td= user.created_at.strftime("%b %d, %Y")
             td= user.sign_in_count
-            td= user.last_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
+            td
+              = user.current_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
             td
               - if user.deleted?
                 | Deleted

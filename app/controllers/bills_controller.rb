@@ -1,7 +1,7 @@
 class BillsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action :set_bill_and_site
+  before_action :set_bill_site_subscription
   before_action :check_permissions
   before_action :dont_allow_probem_bill, only: :show
 
@@ -26,9 +26,10 @@ class BillsController < ApplicationController
 
   private
 
-  def set_bill_and_site
+  def set_bill_site_subscription
     @bill = Bill.find(params[:id])
     @site = Site.unscoped.find(@bill.site_id)
+    @subscription = @bill.subscription
   end
 
   def check_permissions

@@ -1,7 +1,8 @@
 describe 'Bills requests' do
-  let(:site) { create :site }
-  let(:user) { create :user, site: site }
-  let!(:bill) { create :bill, site: site }
+  let(:user) { create :user }
+  let(:site) { create :site, :pro, user: user }
+  let(:subscription) { site.current_subscription }
+  let!(:bill) { create :bill, subscription: subscription }
 
   context 'when unauthenticated' do
     describe 'GET :index' do
@@ -26,7 +27,7 @@ describe 'Bills requests' do
       end
 
       context 'when bill is failed' do
-        let!(:bill) { create :bill, :failed, site: site }
+        let!(:bill) { create :bill, :failed, subscription: subscription }
 
         it 'responds with :not_found' do
           expect { get bill_path(bill) }.to raise_error ActiveRecord::RecordNotFound
@@ -53,7 +54,7 @@ describe 'Bills requests' do
       end
 
       context 'when bill with problem' do
-        let!(:bill) { create :bill, :failed, site: site }
+        let!(:bill) { create :bill, :failed, subscription: subscription }
 
         it 'responds with success' do
           put pay_bill_path(bill)
@@ -63,7 +64,7 @@ describe 'Bills requests' do
       end
 
       context 'when cannot pay bill' do
-        let!(:bill) { create :bill, :failed, site: site }
+        let!(:bill) { create :bill, :failed, subscription: subscription }
         let(:credit_card) { bill.credit_card }
 
         before { stub_cyber_source :purchase, success?: false }

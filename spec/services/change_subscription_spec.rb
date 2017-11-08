@@ -193,6 +193,34 @@ describe ChangeSubscription, :freeze do
         end
       end
 
+      context 'when upgrading to ProManaged' do
+        it 'changes subscription and capabilities' do
+          expect { change_subscription('pro_managed') }
+            .to change { site.reload.current_subscription }
+
+          expect(site.current_subscription).to be_instance_of Subscription::ProManaged
+          expect(site).to be_capable_of :pro_managed
+        end
+
+        it 'pays bill' do
+          expect(PayBill).to receive_service_call
+          change_subscription('pro_managed')
+        end
+
+        it 'does not create pending bill for next period' do
+          expect { change_subscription('pro_managed') }
+            .not_to change { site.reload.bills.pending }
+        end
+
+        it 'never expires' do
+          change_subscription('pro_managed')
+          travel_to 10.years.from_now do
+            expect(site.current_subscription).to be_instance_of Subscription::ProManaged
+            expect(site).to be_capable_of :pro_managed
+          end
+        end
+      end
+
       context 'when upgrading to Pro from FreePlus' do
         before { change_subscription('free_plus') }
 
@@ -274,6 +302,23 @@ describe ChangeSubscription, :freeze do
               expect(site).to be_capable_of :free
             end
           end
+        end
+
+        it 'sends an event to Analytics' do
+          props = {
+            to_subscription: 'Free',
+            to_schedule: 'monthly',
+            from_subscription: 'Pro',
+            from_schedule: 'monthly'
+          }
+          expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
+          change_subscription('free')
+        end
+
+        it 'sends an event to Intercom' do
+          expect { change_subscription('free') }
+            .to have_enqueued_job(SendEventToIntercomJob)
+            .with('changed_subscription', site: site, user: user)
         end
       end
 

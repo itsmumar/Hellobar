@@ -2,6 +2,14 @@ describe Subscription do
   it { is_expected.to validate_presence_of :schedule }
   it { is_expected.to validate_presence_of :site }
 
+  it 'soft-deletes when object is being destroyed', :freeze do
+    subscription = create :subscription
+    subscription.destroy
+
+    expect(subscription.reload).to be_deleted
+    expect(subscription.deleted_at).to eq Time.current
+  end
+
   describe '.paid scope' do
     let!(:paid_subscription) { create(:subscription, :pro) }
     let!(:unpaid_subscription) { create(:subscription, :pro) }
