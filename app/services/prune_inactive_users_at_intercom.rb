@@ -36,8 +36,8 @@ class PruneInactiveUsersAtIntercom
     inactive_sites.each.with_object([]) do |site, users|
       site.owners.each do |owner|
         next if owner.paying_subscription?
-        next if owner.updated_at > @inactivity_threshold.ago
-        next if owner.sites.any? { |s| s.updated_at > @inactivity_threshold.ago }
+        next if owner.updated_at > inactivity_threshold.ago
+        next if owner.sites.any? { |s| s.updated_at > inactivity_threshold.ago }
         next if owner.sites.any?(&:script_installed?)
 
         users << owner
@@ -48,8 +48,8 @@ class PruneInactiveUsersAtIntercom
   def inactive_sites
     Site
       .script_not_installed
-      .where('updated_at < ?', @inactivity_threshold.ago)
-      .where('updated_at > ?', (@inactivity_threshold + PRUNING_THRESHOLD).ago)
+      .where('updated_at < ?', inactivity_threshold.ago)
+      .where('updated_at > ?', (inactivity_threshold + PRUNING_THRESHOLD).ago)
   end
 
   def intercom
