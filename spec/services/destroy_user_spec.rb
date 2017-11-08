@@ -8,9 +8,9 @@ describe DestroyUser do
   let(:intercom_id) { 'intercom_id' }
   let(:user_attributes) { Hash['type' => 'user', 'id' => intercom_id, 'user_id' => user.id] }
 
-  before { stub_cyber_source :purchase }
-
   before do
+    stub_cyber_source :purchase
+
     allow_any_instance_of(StaticScript).to receive(:destroy)
 
     stub_request(:get, "#{ intercom_url }/users?user_id=#{ user.id }")
@@ -25,13 +25,31 @@ describe DestroyUser do
 
   describe '#call' do
     it 'downgrades subscriptions' do
-      expect(sites.flat_map(&:current_subscription))
+      expect(sites.flat_map(&:subscriptions))
         .to match_array [instance_of(Subscription::Pro), instance_of(Subscription::Pro)]
 
       destroy_user.call
 
-      expect(sites.flat_map(&:current_subscription))
-        .to match_array [instance_of(Subscription::Free), instance_of(Subscription::Free)]
+      subscriptions = sites.flat_map do |site|
+        site.subscriptions.with_deleted
+      end
+
+      expect(subscriptions).to match_array [
+        instance_of(Subscription::Pro),
+        instance_of(Subscription::Pro),
+        instance_of(Subscription::Free),
+        instance_of(Subscription::Free)
+      ]
+    end
+
+    it 'soft-deletes subscriptions' do
+      current_subscriptions = sites.flat_map(&:current_subscription)
+
+      destroy_user.call
+
+      current_subscriptions.each do |subscription|
+        expect(subscription.reload).to be_deleted
+      end
     end
 
     it 'destroys credit cards' do

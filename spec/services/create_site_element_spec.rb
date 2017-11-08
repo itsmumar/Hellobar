@@ -2,7 +2,7 @@ describe CreateSiteElement do
   let(:user) { create :user }
   let(:site) { create :site, :with_rule, user: user }
   let(:params) { Hash[element_subtype: 'call', rule_id: site.rules.ids.first] }
-  let(:service) { CreateSiteElement.new params, user }
+  let(:service) { CreateSiteElement.new params, site, user }
 
   it 'persists site element' do
     expect { service.call }.to change(SiteElement, :count).by(1)

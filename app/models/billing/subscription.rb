@@ -7,6 +7,8 @@ class Subscription < ApplicationRecord
 
   ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
 
+  acts_as_paranoid
+
   belongs_to :credit_card
   belongs_to :site, touch: true
   belongs_to :user

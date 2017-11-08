@@ -31,15 +31,21 @@ class RefundBill
     response = make_refund_request
 
     if response.success?
-      create_success_refund_bill(response) { cancel_subscription }
+      Bill.transaction do
+        create_paid_refund_bill response.authorization
+        cancel_subscription
+      end
     else
       create_failed_refund_bill
     end
   end
 
   def cancel_subscription
+    return unless bill.subscription
     bill.subscription.bills.pending.each(&:voided!)
+
     return unless bill.site&.current_subscription
+
     ChangeSubscription.new(bill.site, subscription: 'free').call
   end
 
@@ -55,21 +61,17 @@ class RefundBill
     @successful_billing_attempt ||= bill.successful_billing_attempt
   end
 
-  def create_success_refund_bill(response)
-    attributes = { status: Bill::PAID, authorization_code: response.authorization }
-
-    create_refund_bill!(attributes).tap do |refund_bill|
-      yield refund_bill
-    end
+  def create_paid_refund_bill authorization_code
+    create_refund_bill! status: Bill::PAID, authorization_code: authorization_code
   end
 
   def create_failed_refund_bill
-    create_refund_bill!(status: Bill::VOIDED)
+    create_refund_bill! status: Bill::VOIDED
   end
 
   def create_refund_bill!(status:, authorization_code: nil)
     Bill::Refund.create!(
-      subscription: bill.subscription,
+      subscription_id: bill.subscription_id,
       amount: amount,
       description: 'Refund due to customer service request',
       bill_at: Time.current,

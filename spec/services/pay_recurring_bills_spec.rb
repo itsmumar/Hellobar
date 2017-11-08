@@ -2,16 +2,18 @@ describe PayRecurringBills do
   describe '.bills' do
     let!(:bills) do
       [
+        create(:bill, bill_at: 1.year.ago),
         create(:bill, bill_at: 27.days.ago),
-        create(:bill, bill_at: 1.day.ago)
+        create(:bill, bill_at: 1.day.ago),
+        create(:bill, bill_at: Time.current)
       ]
     end
 
     let!(:future_bill) { create(:bill, bill_at: 1.day.from_now) }
-    let!(:expired_bill) { create(:bill, bill_at: 28.days.ago) }
 
     it 'includes bills within period from 27 days ago till today' do
       expect(PayRecurringBills.bills).to match_array bills
+      expect(PayRecurringBills.bills).not_to include future_bill
     end
   end
 
@@ -133,9 +135,9 @@ describe PayRecurringBills do
           expect(report).to receive(:downgrade)
           expect(report).not_to receive(:attempt)
 
-          expect(ChangeSubscription)
+          expect(DowngradeSiteToFree)
             .to receive_service_call
-            .with(bill_without_credit_card.site, subscription: 'free')
+            .with(bill_without_credit_card.site)
 
           expect { service.call }
             .to change { bill_without_credit_card.reload.status }
@@ -341,13 +343,11 @@ describe PayRecurringBills do
 
           expect(pending_bill.billing_attempts.failed.count).to eql 10
 
-          travel_to pending_bill.bill_at + 28.days
-          expect(PayRecurringBills.bills).to be_empty
-
           travel_to pending_bill.bill_at + 30.days
-          expect(report).not_to receive(:count)
-          expect { service.call }
-            .not_to change { pending_bill.billing_attempts.failed.count }
+
+          service.call
+
+          expect(pending_bill.reload).to be_voided
         end
       end
     end

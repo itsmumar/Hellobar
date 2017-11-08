@@ -48,7 +48,7 @@ class Bill < ApplicationRecord
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
   scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
 
-  validates :subscription, presence: true
+  validates :subscription_id, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   # defines #pending? #paid? #voided? #failed?

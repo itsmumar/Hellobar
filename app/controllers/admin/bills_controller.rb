@@ -1,7 +1,8 @@
 class Admin::BillsController < AdminController
   def show
     @bill = Bill.find(params[:id])
-    @site = Site.with_deleted.find(@bill.site_id)
+    @subscription = Subscription.with_deleted.find @bill.subscription_id
+    @site = Site.with_deleted.find @subscription.site_id
     @credit_card = @bill.paid_with_credit_card
     render 'bills/show', layout: 'receipt'
   end
