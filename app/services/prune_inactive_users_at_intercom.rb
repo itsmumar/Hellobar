@@ -24,9 +24,9 @@ class PruneInactiveUsersAtIntercom
   def log user
     info = "Deleting User##{ user.id } at Intercom (#{ user.email }, " \
       "#{ user.sites.count } site(s), subscriptions: " \
-      "#{ user.subscriptions.active.map(&:type).join(', ') }, " \
-      "user updated_at: #{ user.updated_at }, " \
-      "sites updated_at: #{ user.sites.map(&:updated_at).sort.join(', ') })"
+      "#{ user.subscriptions.map(&:type).join(', ') }, " \
+      "user updated_at: #{ user.updated_at.to_date }, " \
+      "sites updated_at: #{ user.sites.map(&:updated_at).map(&:to_date).sort.join(', ') })"
 
     puts info unless Rails.env.test? # rubocop:disable Rails/Output
   end
