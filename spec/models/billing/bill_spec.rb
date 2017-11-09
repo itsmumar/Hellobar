@@ -1,4 +1,9 @@
 describe Bill do
+  specify('is pending by default') { expect(Bill.new).to be_pending }
+  specify('could be paid') { expect(build(:bill, :paid)).to be_paid }
+  specify('could be failed') { expect(build(:bill, :failed)).to be_failed }
+  specify('could be voided') { expect(build(:bill, :voided)).to be_voided }
+
   describe '#can_pay?' do
     subject { bill.can_pay? }
     let(:credit_card) { create :credit_card }

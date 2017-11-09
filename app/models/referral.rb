@@ -1,7 +1,10 @@
 class Referral < ApplicationRecord
   FOLLOWUP_INTERVAL = 5.days
 
-  enum state: %i[sent signed_up installed]
+  SENT = 'sent'.freeze
+  SIGNED_UP = 'signed_up'.freeze
+  INSTALLED = 'installed'.freeze
+  STATES = [SENT, SIGNED_UP, INSTALLED].freeze
 
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
@@ -17,6 +20,16 @@ class Referral < ApplicationRecord
   validate :ensure_email_available, on: :create
 
   after_create :create_referral_token
+
+  STATES.each do |state|
+    # define .sent .signed_up .installed
+    scope state, -> { where(state: state) }
+
+    # define #sent? #signed_up? #installed?
+    define_method state + '?' do
+      self.state == state
+    end
+  end
 
   def self.redeemable_for_site(site)
     possible_recipient_ids = site.owners.pluck(:id)
@@ -54,15 +67,15 @@ class Referral < ApplicationRecord
   end
 
   def accepted?
-    state != 'sent'
+    state != SENT
   end
 
   def redeemable_by_sender?
-    state == 'installed' && available_to_sender == true && redeemed_by_sender_at.blank?
+    state == INSTALLED && available_to_sender == true && redeemed_by_sender_at.blank?
   end
 
   def redeemed_by_sender?
-    state == 'installed' && available_to_sender == false && redeemed_by_sender_at.present?
+    state == INSTALLED && available_to_sender == false && redeemed_by_sender_at.present?
   end
 
   private

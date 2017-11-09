@@ -2,6 +2,10 @@ describe Referral do
   let(:user) { create(:user) }
   let(:referral) { user.sent_referrals.build }
 
+  specify('is sent by default') { expect(Referral.new).to be_sent }
+  specify('could be signed_up') { expect(build(:referral, :signed_up)).to be_signed_up }
+  specify('could be installed') { expect(build(:referral, :installed)).to be_installed }
+
   it 'has no body set by default' do
     expect(referral.body).to be_nil
   end

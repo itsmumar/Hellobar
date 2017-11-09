@@ -171,7 +171,7 @@ describe PayRecurringBills do
       include_examples 'pay bill'
 
       context 'when bill had payment problem before' do
-        let!(:bill) { create :bill, :problem }
+        let!(:bill) { create :bill, :failed }
 
         specify do
           expect { service.call }
