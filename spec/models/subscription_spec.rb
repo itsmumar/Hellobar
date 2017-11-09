@@ -265,8 +265,12 @@ describe Subscription do
 
       specify { expect(bill.subscription).not_to be_expired }
 
-      context 'and period has ended' do
-        specify { travel_to((1.month + 1.day).from_now) { expect(bill.subscription).to be_expired } }
+      context 'and period has ended', :freeze do
+        specify do
+          Timecop.travel(1.month.from_now + 1.day) do
+            expect(bill.subscription).to be_expired
+          end
+        end
       end
 
       context 'and not paid' do
@@ -282,7 +286,11 @@ describe Subscription do
       specify { expect(bill.subscription).not_to be_expired }
 
       context 'and period has ended' do
-        specify { travel_to(1.year.from_now) { expect(bill.subscription).not_to be_expired } }
+        specify do
+          Timecop.travel(1.year.from_now) do
+            expect(bill.subscription).not_to be_expired
+          end
+        end
       end
     end
   end
