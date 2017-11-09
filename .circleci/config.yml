@@ -8,15 +8,14 @@ jobs:
         - production
 
     docker:
-      - image: hellobarcom/base:2.3.4
+      - image: hellobarcom/base:chrome
         environment:
           DISPLAY: :99
+          RAILS_ENV: test
 
       - image: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
-
-      - image: selenium/standalone-chrome:3.1.0
 
     parallelism: 2
     working_directory: /tmp/hellobar_new
@@ -64,66 +63,66 @@ jobs:
             cp .circleci/database.yml config/database.yml
             cp config/secrets.yml.example config/secrets.yml
 
-      - run:
-          name: Yarn install
-          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
-
-      - save_cache:
-          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
-          paths:
-            - editor/node_modules
-            - editor/.yarn
-            - ~/.config/yarn
-
-      - run:
-          name: Bower install
-          command: cd editor && bower install --allow-root
-
-      - save_cache:
-          key: bower-cache-{{ checksum "editor/bower.json" }}
-          paths:
-            - editor/bower_components
-
-      - run:
-          name: Build Ember application (editor)
-          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
-
-      - save_cache:
-          key: editor-assets-cache-{{ .Revision }}
-          paths:
-            - editor/dist/assets
+#      - run:
+#          name: Yarn install
+#          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
+#
+#      - save_cache:
+#          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
+#          paths:
+#            - editor/node_modules
+#            - editor/.yarn
+#            - ~/.config/yarn
+#
+#      - run:
+#          name: Bower install
+#          command: cd editor && bower install --allow-root
+#
+#      - save_cache:
+#          key: bower-cache-{{ checksum "editor/bower.json" }}
+#          paths:
+#            - editor/bower_components
+#
+#      - run:
+#          name: Build Ember application (editor)
+#          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
+#
+#      - save_cache:
+#          key: editor-assets-cache-{{ .Revision }}
+#          paths:
+#            - editor/dist/assets
 
       - run:
           name: Setup database
           command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
-
-      - run:
-          name: Run Brakeman
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
-
-      - run:
-          name: Run Rubocop
-          when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
-
-      - run:
-          name: Run JSHint
-          when: always
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
-
-      - run:
-          name: Run unit tests
-          when: always
-          environment:
-            CODECOV_FLAG: unit
-          command: |
-            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
-            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
-
-      - run:
-          name: Run teaspoon tests
-          when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
+#
+#      - run:
+#          name: Run Brakeman
+#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
+#
+#      - run:
+#          name: Run Rubocop
+#          when: always
+#          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
+#
+#      - run:
+#          name: Run JSHint
+#          when: always
+#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
+#
+#      - run:
+#          name: Run unit tests
+#          when: always
+#          environment:
+#            CODECOV_FLAG: unit
+#          command: |
+#            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
+#            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
+#
+#      - run:
+#          name: Run teaspoon tests
+#          when: always
+#          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
