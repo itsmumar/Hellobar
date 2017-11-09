@@ -8,7 +8,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.strategy = [:truncation, reset_ids: false, pre_count: true]
   end
 
