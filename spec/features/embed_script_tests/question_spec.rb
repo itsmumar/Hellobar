@@ -21,8 +21,8 @@ feature 'Site with a question modal', :js do
     # force capybara to wait until iframe is loaded
     page.has_xpath?('.//iframe[@id="random-container"]')
 
-    page.driver.switch_to_frame('random-container-0')
-
-    expect(page).to have_content(element.question)
+    within_frame('random-container-0') do
+      expect(page).to have_content(element.question)
+    end
   end
 end

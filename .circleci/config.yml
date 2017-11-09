@@ -16,6 +16,8 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: root
 
+      - image: selenium/standalone-chrome:3.1.0
+
     parallelism: 2
     working_directory: /tmp/hellobar_new
     steps:
