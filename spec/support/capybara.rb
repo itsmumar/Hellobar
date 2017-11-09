@@ -12,4 +12,4 @@ Capybara::Webkit.configure do |config|
 end
 
 # Wait a little longer than the default 2 seconds for Ajax requests to finish
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 10
