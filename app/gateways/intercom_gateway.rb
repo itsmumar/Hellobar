@@ -22,9 +22,9 @@ class IntercomGateway
   def delete_user user_id
     intercom_user = find_user user_id
 
+    return unless intercom_user
+
     client.users.delete intercom_user
-  rescue Intercom::ResourceNotFound
-    nil
   end
 
   private

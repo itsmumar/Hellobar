@@ -5,9 +5,6 @@ describe PruneInactiveUsersAtIntercom do
     let(:opts) { Hash[inactivity_threshold: inactivity_threshold] }
 
     it 'sends delete user requests to Intercom for inactive users' do
-      # create data in the past
-      travel_to((inactivity_threshold - 1.day).ago)
-
       active = create :user, first_name: 'Free Active'
       inactive = create :user, first_name: 'Free Inactive'
       inactive_pro = create :user, first_name: 'Pro'
@@ -30,19 +27,16 @@ describe PruneInactiveUsersAtIntercom do
 
       create :bill, :pro, :paid, subscription: inactive_pro.subscriptions.first
 
-      # verify in the present day
-      travel_to((inactivity_threshold + 1.day).from_now)
+      # verify in the future
+      Timecop.travel(inactivity_threshold.from_now + 1.day) do
+        active.sites.first.touch
+        active_site.touch
 
-      active.sites.first.touch
-      active_site.touch
+        expect_any_instance_of(IntercomGateway).to receive(:delete_user)
+          .with(inactive.id)
 
-      expect_any_instance_of(IntercomGateway).to receive(:find_user)
-        .with(inactive.id)
-        .and_return inactive
-
-      expect_any_instance_of(IntercomGateway).to receive(:delete_user)
-
-      expect(PruneInactiveUsersAtIntercom.new(opts).call).to eq [inactive]
+        expect(PruneInactiveUsersAtIntercom.new(opts).call).to eq [inactive]
+      end
     end
   end
 end

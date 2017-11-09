@@ -15,10 +15,9 @@ class PruneInactiveUsersAtIntercom
 
   def prune_inactive_users
     inactive_users.uniq.each do |user|
-      next unless (intercom_user = intercom.find_user(user.id))
-
       log user
-      intercom.delete_user intercom_user
+
+      intercom.delete_user user.id
     end
   end
 
