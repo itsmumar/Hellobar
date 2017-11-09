@@ -154,6 +154,13 @@ bundle exec rspec spec
 ```
 
 
+### Rails specs "donts"
+
+* don’t use `around`; use `before` and `after` instead
+* don’t use `travel_to`, use `Timecop.travel` instead
+
+
+
 ## Javascript specs
 
 Teaspoon runs the `*_spec.js` files in `spec/javascripts/`.
@@ -184,10 +191,6 @@ Coverage of Project:
 teaspoon --suite=project --coverage=project
 ```
 
-## Do not 
-
-* don’t use `around`; use `before` and `after` instead
-* don’t use `travel_to`, use `Timecop.travel` instead
 
 ## Development Workflow
 

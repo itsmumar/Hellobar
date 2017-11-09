@@ -74,5 +74,12 @@ describe IntercomGateway do
 
       intercom.delete_user user_id
     end
+
+    it 'does not send delete request to Intercom if user is not found' do
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 404
+
+      intercom.delete_user user_id
+    end
   end
 end
