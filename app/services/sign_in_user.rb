@@ -18,8 +18,10 @@ class SignInUser
   delegate :session, to: :request
 
   def find_or_create_user
-    if (user = find_user)
-      update_authentication(user, omniauth_hash) if should_update_authentication?(user)
+    if user
+      update_user
+      create_authentication if should_create_authentication?
+      update_authentication if should_update_authentication?
       [user, redirect_url_for_existing_user]
     else
       create_user
@@ -34,8 +36,14 @@ class SignInUser
     continue_create_site_path if session[:new_site_url]
   end
 
-  def should_update_authentication?(user)
-    user.present? && user.oauth_user?
+  def should_update_authentication?
+    authentication.present? && user.present?
+  end
+
+  def should_create_authentication?
+    authentication.nil? && user.present? &&
+      omniauth_hash.credentials.present? &&
+      omniauth_hash.provider == 'google_oauth2'
   end
 
   def cookies
@@ -43,11 +51,11 @@ class SignInUser
   end
 
   def omniauth_hash
-    request.env['omniauth.auth']
+    @omniauth_hash ||= request.env['omniauth.auth']
   end
 
-  def find_user
-    by_email || by_uid
+  def user
+    @user ||= by_email || by_uid
   end
 
   def by_email
@@ -62,21 +70,35 @@ class SignInUser
       .find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider })
   end
 
-  def update_authentication(user, omniauth_hash)
-    authentication = user.authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
+  def update_authentication
+    return unless omniauth_hash.credentials && user.persisted?
 
+    authentication.update(
+      refresh_token: omniauth_hash.credentials.refresh_token,
+      access_token: omniauth_hash.credentials.token,
+      expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
+    )
+  end
+
+  def create_authentication
+    return unless omniauth_hash.credentials && user.persisted?
+
+    user.authentications.create!(
+      refresh_token: omniauth_hash.credentials.refresh_token,
+      access_token: omniauth_hash.credentials.token,
+      expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
+    )
+  end
+
+  def update_user
     user.first_name = omniauth_hash.info.first_name if omniauth_hash.info.first_name.present?
     user.last_name = omniauth_hash.info.last_name if omniauth_hash.info.last_name.present?
-
-    if omniauth_hash.credentials && user.persisted?
-      authentication.update(
-        refresh_token: omniauth_hash.credentials.refresh_token,
-        access_token: omniauth_hash.credentials.token,
-        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
-      )
-    end
-
     user.save!
+  end
+
+  def authentication
+    @authentication ||=
+      user.authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
   end
 
   def create_user
