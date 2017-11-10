@@ -12,12 +12,13 @@ describe Users::OmniauthCallbacksController do
     )
   end
 
+  let(:credentials) { double(refresh_token: 'refresh_token', token: 'token', expires_at: Time.current.to_i) }
+
   describe 'POST google_oauth2' do
     let(:send_request) { post :google_oauth2 }
 
     context 'when user exists' do
       let(:user) { create(:user) }
-      let(:credentials) { double('credentials') }
       let(:uid) { 'abc123' }
 
       before do
@@ -34,7 +35,6 @@ describe Users::OmniauthCallbacksController do
 
       context 'and has authentications' do
         let!(:authentication) { create(:authentication, user: user, uid: uid) }
-        let(:credentials) { double(refresh_token: 'refresh_token', token: 'token', expires_at: Time.current.to_i) }
 
         it 'updates authentication tokens' do
           expect { send_request }
