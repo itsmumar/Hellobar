@@ -52,6 +52,22 @@ describe RefundBill do
     expect(bill.site.current_subscription).to be_a Subscription::Free
   end
 
+  it 'sets REFUNDED status on bill' do
+    expect { refund_bill.call }
+      .to change { bill.reload.refunded? }
+      .from(false)
+      .to(true)
+  end
+
+  context 'when refunded partially' do
+    let(:amount) { 1 }
+
+    it 'does not set REFUNDED status on bill' do
+      expect { refund_bill.call }
+        .not_to change { bill.reload.status }
+    end
+  end
+
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 

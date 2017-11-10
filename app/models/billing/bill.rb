@@ -3,7 +3,8 @@ class Bill < ApplicationRecord
   PAID = 'paid'.freeze
   VOIDED = 'voided'.freeze
   FAILED = 'failed'.freeze
-  STATUSES = [PENDING, PAID, VOIDED, FAILED].freeze
+  REFUNDED = 'refunded'.freeze
+  STATUSES = [PENDING, PAID, VOIDED, FAILED, REFUNDED].freeze
 
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
@@ -127,10 +128,14 @@ class Bill < ApplicationRecord
     update! status: FAILED
   end
 
+  def refunded!
+    update! status: REFUNDED
+  end
+
   private
 
   def can_status_be_changed?(value)
-    value == VOIDED || [PENDING, FAILED].include?(status)
+    value == VOIDED || value == REFUNDED || [PENDING, FAILED].include?(status)
   end
 
   def set_base_amount
