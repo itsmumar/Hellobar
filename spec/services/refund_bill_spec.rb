@@ -24,7 +24,7 @@ describe RefundBill do
     expect(latest_refund.refunded_billing_attempt).to eql bill.successful_billing_attempt
     expect(latest_refund.discount).to be 0
     expect(latest_refund.base_amount).to eql(-bill.amount.to_i)
-    expect(latest_refund.status).to eql Bill::PAID
+    expect(latest_refund.status).to eql Bill::REFUNDED
   end
 
   it 'calls gateway.refund' do
@@ -50,22 +50,6 @@ describe RefundBill do
   it 'cancels current subscription' do
     expect { refund_bill.call }.to change(bill.subscription.bills.pending, :count).to 0
     expect(bill.site.current_subscription).to be_a Subscription::Free
-  end
-
-  it 'sets REFUNDED status on bill' do
-    expect { refund_bill.call }
-      .to change { bill.reload.refunded? }
-      .from(false)
-      .to(true)
-  end
-
-  context 'when refunded partially' do
-    let(:amount) { 1 }
-
-    it 'does not set REFUNDED status on bill' do
-      expect { refund_bill.call }
-        .not_to change { bill.reload.status }
-    end
   end
 
   context 'when cybersource failed' do

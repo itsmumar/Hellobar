@@ -135,7 +135,7 @@ class Bill < ApplicationRecord
   private
 
   def can_status_be_changed?(value)
-    value == VOIDED || value == REFUNDED || [PENDING, FAILED].include?(status)
+    value == VOIDED || [PENDING, FAILED].include?(status)
   end
 
   def set_base_amount
