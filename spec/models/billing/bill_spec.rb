@@ -206,4 +206,15 @@ describe Bill do
       expect(bill.estimated_amount).to eql((bill.amount - 10).to_f)
     end
   end
+
+  Bill::STATUSES.each do |status|
+    describe "##{ status }!" do
+      let(:bill) { create :bill }
+
+      specify do
+        bill.send "#{ status }!"
+        expect(bill.status).to eql status
+      end
+    end
+  end
 end
