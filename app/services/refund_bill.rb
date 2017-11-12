@@ -33,7 +33,6 @@ class RefundBill
     if response.success?
       Bill.transaction do
         create_paid_refund_bill response.authorization
-        update_bill_status
         cancel_subscription
       end
     else
@@ -48,11 +47,6 @@ class RefundBill
     return unless bill.site&.current_subscription
 
     ChangeSubscription.new(bill.site, subscription: 'free').call
-  end
-
-  def update_bill_status
-    return unless fully_paid?
-    bill.refunded!
   end
 
   def fully_paid?
