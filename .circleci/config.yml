@@ -23,29 +23,29 @@ jobs:
     steps:
       - checkout
 
-#      - restore_cache:
-#          keys:
-#            - bundle-cache-{{ checksum "Gemfile.lock" }}
-#            - bundle-cache
-#
-#      - restore_cache:
-#          keys:
-#            - bower-cache-{{ checksum "editor/bower.json" }}
-#            - bower-cache
-#
-#      - restore_cache:
-#          keys:
-#            - yarn-cache-{{ checksum "editor/yarn.lock" }}
-#            - yarn-cache
-#
-#      - restore_cache:
-#          keys:
-#            - editor-assets-cache-{{ .Revision }}
-#
-#      - restore_cache:
-#          keys:
-#            - tmp-cache-{{ .Branch }}
-#            - tmp-cache
+      - restore_cache:
+          keys:
+            - bundle-cache-{{ checksum "Gemfile.lock" }}
+            - bundle-cache
+
+      - restore_cache:
+          keys:
+            - bower-cache-{{ checksum "editor/bower.json" }}
+            - bower-cache
+
+      - restore_cache:
+          keys:
+            - yarn-cache-{{ checksum "editor/yarn.lock" }}
+            - yarn-cache
+
+      - restore_cache:
+          keys:
+            - editor-assets-cache-{{ .Revision }}
+
+      - restore_cache:
+          keys:
+            - tmp-cache-{{ .Branch }}
+            - tmp-cache
 
       - run: env
 
@@ -68,30 +68,30 @@ jobs:
           name: Yarn install
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
-#      - save_cache:
-#          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
-#          paths:
-#            - editor/node_modules
-#            - editor/.yarn
-#            - ~/.config/yarn
+      - save_cache:
+          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
+          paths:
+            - editor/node_modules
+            - editor/.yarn
+            - ~/.config/yarn
 
       - run:
           name: Bower install
           command: cd editor && bower install --allow-root
 
-#      - save_cache:
-#          key: bower-cache-{{ checksum "editor/bower.json" }}
-#          paths:
-#            - editor/bower_components
+      - save_cache:
+          key: bower-cache-{{ checksum "editor/bower.json" }}
+          paths:
+            - editor/bower_components
 
       - run:
           name: Build Ember application (editor)
           command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
 
-#      - save_cache:
-#          key: editor-assets-cache-{{ .Revision }}
-#          paths:
-#            - editor/dist/assets
+      - save_cache:
+          key: editor-assets-cache-{{ .Revision }}
+          paths:
+            - editor/dist/assets
 
       - run:
           name: Setup database
@@ -134,11 +134,11 @@ jobs:
             TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
             xvfb-run -a bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
-#      - save_cache:
-#          key: tmp-cache-{{ .Branch }}
-#          paths:
-#            - /tmp/hellobar_new/tmp/cache
-#            - /tmp/hellobar_new/tmp/script
+      - save_cache:
+          key: tmp-cache-{{ .Branch }}
+          paths:
+            - /tmp/hellobar_new/tmp/cache
+            - /tmp/hellobar_new/tmp/script
 
       - store_artifacts:
           path: /tmp/hellobar_new/tmp/coverage
