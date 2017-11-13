@@ -10,8 +10,8 @@ class RefundBill
   end
 
   def call
-    check_refund_amount!
     raise InvalidRefund, 'Cannot refund an unpaid bill' unless bill.paid?
+    check_refund_amount!
     refund
   end
 
