@@ -12,7 +12,7 @@ feature 'Takeover with image', js: true do
     page.has_xpath?('.//iframe[@id="random-container"]')
 
     within_frame 'random-container-0' do
-      expect(page.find('.uploaded-image')['src']).to have_content(element.image_large_url)
+      expect(page.find('.uploaded-image', visible: false)['src']).to have_content(element.image_large_url)
     end
   end
 
@@ -28,7 +28,7 @@ feature 'Takeover with image', js: true do
       page.has_xpath?('.//iframe[@id="random-container"]')
 
       within_frame 'random-container-0' do
-        expect(page.find('.uploaded-image')['src']).to have_content(element.image_large_url)
+        expect(page.find('.uploaded-image', visible: false)['src']).to have_content(element.image_large_url)
       end
     end
   end

@@ -25,7 +25,12 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    StaticScriptAssets.precompile
-    GenerateStaticScriptModules.new.call
+    # precompile modules if it hasn't been compiled
+    begin
+      StaticScriptAssets.digest_path('modules.js')
+    rescue Sprockets::FileNotFound
+      StaticScriptAssets.precompile
+      GenerateStaticScriptModules.new.call
+    end
   end
 end

@@ -12,7 +12,7 @@ feature 'Theme with default image', js: true do
     page.has_xpath?('.//iframe[@id="random-container"]')
 
     within_frame 'random-container-0' do
-      expect(page.find('.uploaded-image')['src']).to have_content(theme.image['default_url'])
+      expect(page.find('.uploaded-image', visible: false)['src']).to have_content(theme.image['default_url'])
     end
   end
 
@@ -34,7 +34,7 @@ feature 'Theme with default image', js: true do
     page.has_xpath?('.//iframe[@id="random-container"]')
 
     within_frame 'random-container-0' do
-      expect(page.find('.uploaded-image')['src']).to have_content(element.image_url)
+      expect(page.find('.uploaded-image', visible: false)['src']).to have_content(element.image_url)
     end
   end
 end
