@@ -63,34 +63,34 @@ jobs:
             cp .circleci/database.yml config/database.yml
             cp config/secrets.yml.example config/secrets.yml
 
-#      - run:
-#          name: Yarn install
-#          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
-#
-#      - save_cache:
-#          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
-#          paths:
-#            - editor/node_modules
-#            - editor/.yarn
-#            - ~/.config/yarn
-#
-#      - run:
-#          name: Bower install
-#          command: cd editor && bower install --allow-root
-#
-#      - save_cache:
-#          key: bower-cache-{{ checksum "editor/bower.json" }}
-#          paths:
-#            - editor/bower_components
-#
-#      - run:
-#          name: Build Ember application (editor)
-#          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
-#
-#      - save_cache:
-#          key: editor-assets-cache-{{ .Revision }}
-#          paths:
-#            - editor/dist/assets
+      - run:
+          name: Yarn install
+          command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
+
+      - save_cache:
+          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
+          paths:
+            - editor/node_modules
+            - editor/.yarn
+            - ~/.config/yarn
+
+      - run:
+          name: Bower install
+          command: cd editor && bower install --allow-root
+
+      - save_cache:
+          key: bower-cache-{{ checksum "editor/bower.json" }}
+          paths:
+            - editor/bower_components
+
+      - run:
+          name: Build Ember application (editor)
+          command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
+
+      - save_cache:
+          key: editor-assets-cache-{{ .Revision }}
+          paths:
+            - editor/dist/assets
 
       - run:
           name: Setup database
