@@ -12,6 +12,7 @@ jobs:
         environment:
           DISPLAY: :99
           RAILS_ENV: test
+          DISABLE_SPRING: true
 
       - image: mysql
         environment:

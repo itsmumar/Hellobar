@@ -25,6 +25,7 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
+    StaticScriptAssets.precompile
     GenerateStaticScriptModules.new.call
   end
 end
