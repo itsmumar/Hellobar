@@ -49,6 +49,10 @@ module FeatureHelper
     find('input[name="commit"]').click
   end
 
+  def mouseleave
+    page.execute_script 'document.body.dispatchEvent(new MouseEvent("mouseleave"))'
+  end
+
   private
 
   def scroll_and_click(link_label, scroll_class)

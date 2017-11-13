@@ -11,7 +11,7 @@ feature 'element with exit intent', js: true do
     expect(page).to have_selector('#random-container', visible: false)
 
     # trigger blur event
-    page.find('body').trigger('blur')
+    page.execute_script 'window.onblur && window.onblur()'
     expect(page).to have_selector('#random-container', visible: true)
   end
 
@@ -23,9 +23,9 @@ feature 'element with exit intent', js: true do
     expect(page).to have_selector('#random-container', visible: false)
 
     # mouse enter then wait a sufficient amount of time then mouse exit
-    page.find('body').trigger('mouseenter')
+    page.find('body').hover
     sleep(2.5)
-    page.find('body').trigger('mouseleave')
+    mouseleave
     expect(page).to have_selector('#random-container', visible: true)
   end
 end

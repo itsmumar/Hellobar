@@ -15,7 +15,7 @@ feature 'Site with a closable slider', :js do
       expect(page).to have_selector '.icon-close'
 
       # hide the slider
-      find('.icon-close').trigger 'click'
+      find('.icon-close').click
     end
 
     # HACK: switch to parent frame
@@ -27,7 +27,7 @@ feature 'Site with a closable slider', :js do
     expect(page).to have_selector '#pull-down .hellobar-arrow'
 
     # show the slider again
-    find('#pull-down .hellobar-arrow').trigger 'click'
+    find('#pull-down .hellobar-arrow').click
 
     expect(page).to have_selector '#random-container'
     expect(page).to have_selector 'iframe.hb-animateIn'

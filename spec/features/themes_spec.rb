@@ -22,7 +22,7 @@ feature 'Users can select a design theme for SiteElements', :js do
 
     # select the theme
     within "div[data-theme-id='#{ theme_id }']" do
-      find('a', visible: false).trigger 'click'
+      find('a', visible: false).click
     end
 
     click_on 'Content'
