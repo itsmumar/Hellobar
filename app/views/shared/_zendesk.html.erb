@@ -1,3 +1,4 @@
+<%- if Rails.env.production? %>
 <!--Start of Zendesk Chat Script-->
 <script type="text/javascript">
   window.$zopim||(function(d,s){var z=$zopim=function(c){
@@ -8,3 +9,4 @@
       type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
 </script>
 <!--End of Zendesk Chat Script-->
+<%- end %>
