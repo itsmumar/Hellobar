@@ -1,1 +1,1 @@
-AmplitudeAPI.api_key = Settings.amplitude_token
+AmplitudeAPI.api_key = Settings.amplitude_api_key
