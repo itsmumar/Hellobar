@@ -2,7 +2,7 @@ class PostToSlack
   include HTTParty
   base_uri 'https://hooks.slack.com/services/'
 
-  def initialize(level = :info, channel, text:)
+  def initialize(channel, level: :info, text:)
     raise 'invalid level' unless level.in?(%i[success error info])
 
     @channel = Settings.slack_channels.fetch(channel.to_s)

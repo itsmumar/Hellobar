@@ -16,7 +16,7 @@ class BillingReport
   end
 
   def start
-    info Time.current.to_s
+    info "#{ Rails.env }: #{ Time.current }"
     info '-' * 80
     info "Found #{ @bills_count } pending bills..."
   end
@@ -45,7 +45,7 @@ class BillingReport
   def attempt(bill)
     @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription&.site&.url || 'NO SITE' } for #{ number_to_currency(bill.amount) }..."
     @bill = bill
-    yield
+    yield self
   rescue StandardError => e
     exception(e)
     Raven.capture_exception(e)
@@ -79,13 +79,13 @@ class BillingReport
   def fail(msg)
     @amount_failed += @bill.amount
     @num_failed += 1
-    info("#{ @attempt } Failed: #{ msg }")
+    info("#{ @attempt } Failed: #{ msg }", :error)
   end
 
   def success
     @amount_successful += @bill.amount
     @num_successful += 1
-    info(@attempt + ' OK')
+    info(@attempt + ' OK', :success)
   end
 
   def email
@@ -107,14 +107,19 @@ class BillingReport
 
   private
 
-  def info(msg)
+  def info(msg, level = :info)
     log << msg
+    post_to_slack msg, level if Settings.slack_channels['billing'].present?
     BillingLogger.info msg
     puts msg # rubocop:disable Rails/Output
   end
 
+  def post_to_slack(msg, level = :info)
+    PostToSlack.new(:billing, level: level, text: msg).call
+  end
+
   def exception(e)
-    info @attempt + ' ERROR' if @attempt.present?
-    info "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| l.rjust(2) }.join("\n  ") }"
+    info @attempt + ' ERROR', :error if @attempt.present?
+    info "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| l.rjust(2) }.join("\n  ") }", :error
   end
 end
