@@ -19,6 +19,8 @@ feature 'Trial User', js: true do
     visit site_path(@site)
     expect(page).to have_content('Your subscription has not been renewed')
     find('.show-downgrade-modal').click
+
+    find('.downgrade-site-modal') # wait for modal
     click_link('Downgrade')
 
     expect(page).to have_content('Want More Power?')
