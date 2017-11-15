@@ -190,6 +190,12 @@ describe PayRecurringBills do
           expect { service.call }
             .to change { bill.reload.status }.to Bill::FAILED
         end
+
+        it 'notifies owners' do
+          expect { service.call }
+            .to have_enqueued_job
+            .with('BillingMailer', 'could_not_charge', 'deliver_now', bill)
+        end
       end
 
       context 'when exception' do

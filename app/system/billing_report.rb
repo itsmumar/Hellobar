@@ -8,9 +8,11 @@ class BillingReport
     @amount_successful = 0
     @amount_failed = 0
     @amount_skipped = 0
+    @amount_downgraded = 0
     @num_failed = 0
     @num_successful = 0
     @num_skipped = 0
+    @num_downgraded = 0
     @count = 0
     @bills_count = bills_count
   end
@@ -26,6 +28,7 @@ class BillingReport
     info "#{ @num_successful } successful bills for #{ number_to_currency(@amount_successful) }"
     info "#{ @num_failed } failed bills for #{ number_to_currency(@amount_failed) }"
     info "#{ @num_skipped } skipped bills for #{ number_to_currency(@amount_skipped) }"
+    info "#{ @num_downgraded } downgraded bills for #{ number_to_currency(@amount_downgraded) }"
     info "#{ @count } bills have been processed"
     info ''
     info ''
@@ -66,6 +69,8 @@ class BillingReport
   end
 
   def downgrade(bill)
+    @amount_downgraded += 1
+    @num_downgraded += 1
     info "Voiding outdated bill #{ bill.id }"
     info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
   end

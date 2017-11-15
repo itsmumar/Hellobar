@@ -75,6 +75,7 @@ describe BillingReport, :freeze do
         '0 successful bills for $0.00',
         '0 failed bills for $0.00',
         '0 skipped bills for $0.00',
+        '0 downgraded bills for $0.00',
         '0 bills have been processed',
         '',
         ''
@@ -90,6 +91,7 @@ describe BillingReport, :freeze do
         '0 successful bills for $0.00',
         '0 failed bills for $0.00',
         '0 skipped bills for $0.00',
+        '0 downgraded bills for $0.00',
         '0 bills have been processed',
         '',
         ''
@@ -139,6 +141,15 @@ describe BillingReport, :freeze do
             "#{ attempting_msg } OK"
           ])
         end
+      end
+    end
+
+    describe '#downgrade' do
+      specify do
+        expect { report.downgrade(bill) }.to log [
+          "Voiding outdated bill #{ bill.id }",
+          "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
+        ]
       end
     end
 
