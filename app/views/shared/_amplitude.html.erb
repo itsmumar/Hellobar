@@ -1,4 +1,4 @@
-<% if Rails.env.production? -%>
+<% if Rails.env.development? -%>
     <script type="text/javascript">
       (function(e,t){var n=e.amplitude||{_q:[],_iq:{}};var r=t.createElement("script")
       ;r.type="text/javascript";r.async=true
@@ -23,6 +23,17 @@
           ;if(!n._iq.hasOwnProperty(e)){n._iq[e]={_q:[]};v(n._iq[e])}return n._iq[e]}
         ;e.amplitude=n})(window,document);
 
-      amplitude.getInstance().init("f9895453b9b759d6411755853a7571ef");
+      amplitude.getInstance().init("f9895453b9b759d6411755853a7571ef", null, {
+        forceHttps: true,
+        includeReferrer: true,
+        includeUtm: true
+      });
+
+      <%- if current_user.present? %>
+      var amplitudeUser = <%== AmplitudeSerializer.new(current_user).to_json %>;
+      amplitude.getInstance().setUserId(amplitudeUser.user_id);
+      amplitude.getInstance().setUserProperties(amplitudeUser);
+      <%- end %>
+
     </script>
 <% end -%>

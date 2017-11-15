@@ -5,7 +5,7 @@ class TrackEvent
   end
 
   def call
-    return if Rails.env.test? || Rails.env.development?
+    return unless Rails.env.production?
     track_with_intercom
     track_with_amplitude
     track_with_diamond
