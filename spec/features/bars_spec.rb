@@ -217,7 +217,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content('Background Color')
 
-    expect(first('.color-select-block input').value).to eql color
+    expect(first('.color-select-block input').value.upcase).to eql color
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

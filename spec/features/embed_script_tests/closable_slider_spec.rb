@@ -18,9 +18,6 @@ feature 'Site with a closable slider', :js do
       find('.icon-close').click
     end
 
-    # HACK: switch to parent frame
-    page.find('body').click
-
     # iframe is hidden
     expect(page).to have_selector '#random-container', visible: false
     expect(page).to have_selector 'iframe.hb-animateOut'
