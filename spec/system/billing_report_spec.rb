@@ -5,6 +5,8 @@ describe BillingReport, :freeze do
 
   before { allow(report).to receive(:puts) }
 
+  before { allow(Settings).to receive(:slack_channels).and_return 'billing' => 'key' }
+
   matcher :log do |logs|
     supports_block_expectations
 
