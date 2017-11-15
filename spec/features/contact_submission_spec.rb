@@ -5,7 +5,7 @@ feature 'Contact Submission' do
 
   scenario 'page has correct content' do
     visit '/contact'
-    expect(page).to have_content("WE'D LIKE TO HEAR WHAT'S ON YOUR MIND")
+    expect(page).to have_content("We'd like to hear what's on your mind")
   end
 
   scenario 'user can create' do

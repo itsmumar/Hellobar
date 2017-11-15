@@ -56,9 +56,6 @@ feature 'Autofills management' do
       expect(page).to have_content populate_selector
 
       click_on 'Destroy'
-
-      expect(page.accept_confirm)
-        .to eql 'Are you sure?'
     end
 
     expect(page).not_to have_content new_name
