@@ -79,13 +79,13 @@ class BillingReport
   def fail(msg)
     @amount_failed += @bill.amount
     @num_failed += 1
-    info("#{ @attempt } Failed: #{ msg }", :error)
+    info("#{ @attempt } Failed: #{ msg }")
   end
 
   def success
     @amount_successful += @bill.amount
     @num_successful += 1
-    info(@attempt + ' OK', :success)
+    info(@attempt + ' OK')
   end
 
   def email
@@ -107,19 +107,19 @@ class BillingReport
 
   private
 
-  def info(msg, level = :info)
+  def info(msg)
     log << msg
-    post_to_slack msg, level if Settings.slack_channels['billing'].present?
+    post_to_slack msg if Settings.slack_channels['billing'].present?
     BillingLogger.info msg
     puts msg # rubocop:disable Rails/Output
   end
 
-  def post_to_slack(msg, level = :info)
-    PostToSlack.new(:billing, level: level, text: msg).call
+  def post_to_slack(msg)
+    PostToSlack.new(:billing, text: msg).call
   end
 
   def exception(e)
-    info @attempt + ' ERROR', :error if @attempt.present?
-    info "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| l.rjust(2) }.join("\n  ") }", :error
+    info @attempt + ' ERROR' if @attempt.present?
+    info "#{ e.class }: #{ e.message }\n  #{ e.backtrace.collect { |l| l.rjust(2) }.join("\n  ") }"
   end
 end

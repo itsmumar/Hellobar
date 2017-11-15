@@ -8,16 +8,12 @@ describe BillingReport, :freeze do
   matcher :log do |logs|
     supports_block_expectations
 
-    chain :as do |level|
-      @level = level
-    end
-
     match do |block|
       @level ||= :info
 
       logs.each do |l|
         allow(BillingLogger).to receive(:info).with(l)
-        expect(PostToSlack).to receive_service_call.with(:billing, level: @level, text: l)
+        expect(PostToSlack).to receive_service_call.with(:billing, text: l)
         allow(report).to receive(:puts).with(l)
       end
       block.call
@@ -131,7 +127,7 @@ describe BillingReport, :freeze do
         report.attempt(bill) do
           expect { report.fail 'some message' }.to log([
             "#{ attempting_msg } Failed: some message"
-          ]).as :error
+          ])
         end
       end
     end
@@ -141,7 +137,7 @@ describe BillingReport, :freeze do
         report.attempt(bill) do
           expect { report.success }.to log([
             "#{ attempting_msg } OK"
-          ]).as :success
+          ])
         end
       end
     end
@@ -150,7 +146,7 @@ describe BillingReport, :freeze do
       specify do
         report.attempt(bill) do
           expect { report.attempt(bill) { raise 'error' } }
-            .to log(["#{ attempting_msg } ERROR", anything]).as(:error)
+            .to log(["#{ attempting_msg } ERROR", anything])
             .and raise_error('error')
         end
       end
