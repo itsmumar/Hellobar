@@ -18,7 +18,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'invited-member',
       user_id: user.id,
-      metadata: { site_url: site.url }
+      event_properties: { site_url: site.url }
     )
   end
 
@@ -26,7 +26,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-site',
       user_id: user.id,
-      metadata: { url: site.url }
+      event_properties: { url: site.url }
     )
   end
 
@@ -34,7 +34,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'installed-script',
       user_id: user.id,
-      metadata: { url: site.url }
+      event_properties: { url: site.url }
     )
   end
 
@@ -42,7 +42,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'uninstalled-script',
       user_id: user.id,
-      metadata: { url: site.url }
+      event_properties: { url: site.url }
     )
   end
 
@@ -50,7 +50,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-contact-list',
       user_id: user.id,
-      metadata: { site_url: contact_list.site.url }
+      event_properties: { site_url: contact_list.site.url }
     )
   end
 
@@ -58,7 +58,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-bar',
       user_id: user.id,
-      metadata: { bar_type: site_element.type, goal: site_element.element_subtype }
+      event_properties: { bar_type: site_element.type, goal: site_element.element_subtype }
     )
   end
 
@@ -68,7 +68,7 @@ class AmplitudeAnalytics
     track(
       event_type: 'changed-subscription',
       user_id: user.id,
-      metadata: { subscription: subscription.name, schedule: subscription.schedule }
+      event_properties: { subscription: subscription.name, schedule: subscription.schedule }
     )
   end
 
