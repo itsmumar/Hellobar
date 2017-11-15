@@ -30,4 +30,3 @@ Capybara.register_driver :mobile_chrome do |app|
 end
 
 Capybara.javascript_driver = :headless_chrome
-Capybara.default_driver = :headless_chrome

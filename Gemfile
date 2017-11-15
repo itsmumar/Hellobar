@@ -152,8 +152,6 @@ end
 group :development, :test do
   gem 'capybara'
   gem 'capybara-webkit'
-  gem 'chromedriver-helper'
-  gem 'selenium-webdriver'
 
   gem 'factory_girl_rails'
   gem 'rspec-rails'
@@ -171,6 +169,9 @@ group :development, :test do
 end
 
 group :test do
+  gem 'chromedriver-helper'
+  gem 'selenium-webdriver'
+
   # Fake ip-api.com server for specs (Geolocation)
   gem 'capybara_discoball'
 
