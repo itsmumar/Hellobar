@@ -23,17 +23,16 @@
           ;if(!n._iq.hasOwnProperty(e)){n._iq[e]={_q:[]};v(n._iq[e])}return n._iq[e]}
         ;e.amplitude=n})(window,document);
 
-      amplitude.getInstance().init(<%== Settings.amplitude_api_key.to_json %>, null, {
+      <%- if current_user.present? %>
+      var amplitudeUser = <%== AmplitudeSerializer.new(current_user).to_json %>;
+      amplitude.getInstance().init(<%== Settings.amplitude_api_key.to_json %>, amplitudeUser.user_id, {
         forceHttps: true,
+        includeGclid: true,
         includeReferrer: true,
         includeUtm: true
       });
-
-      <%- if current_user.present? %>
-      var amplitudeUser = <%== AmplitudeSerializer.new(current_user).to_json %>;
       amplitude.getInstance().setUserId(amplitudeUser.user_id);
       amplitude.getInstance().setUserProperties(amplitudeUser);
       <%- end %>
-
     </script>
 <% end -%>
