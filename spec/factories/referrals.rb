@@ -5,5 +5,13 @@ FactoryGirl.define do
     site
     state 'signed_up'
     body 'Some text...'
+
+    trait :signed_up do
+      state Referral::SIGNED_UP
+    end
+
+    trait :installed do
+      state Referral::INSTALLED
+    end
   end
 end

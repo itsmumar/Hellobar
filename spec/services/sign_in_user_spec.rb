@@ -73,6 +73,15 @@ describe SignInUser do
           .to match [instance_of(User), '/sites/new?url=new_site_url']
       end
     end
+
+    context 'when authentication not found' do
+      before { authentication.destroy }
+
+      it 'creates new authentication' do
+        expect { service.call }
+          .to change { user.authentications.count }.by(1)
+      end
+    end
   end
 
   context 'when user is trying to login with a different Google account' do

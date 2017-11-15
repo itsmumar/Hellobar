@@ -62,8 +62,18 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'sends an event to Intercom' do
+      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
+
       expect { service.call }
         .to have_enqueued_job(SendEventToIntercomJob)
+        .with('changed_subscription', site: site, user: user)
+    end
+
+    it 'sends an event to Amplitude' do
+      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
+
+      expect { service.call }
+        .to have_enqueued_job(SendEventToAmplitudeJob)
         .with('changed_subscription', site: site, user: user)
     end
 
@@ -316,8 +326,18 @@ describe ChangeSubscription, :freeze do
         end
 
         it 'sends an event to Intercom' do
+          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
+
           expect { change_subscription('free') }
             .to have_enqueued_job(SendEventToIntercomJob)
+            .with('changed_subscription', site: site, user: user)
+        end
+
+        it 'sends an event to Intercom' do
+          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
+
+          expect { service.call }
+            .to have_enqueued_job(SendEventToAmplitudeJob)
             .with('changed_subscription', site: site, user: user)
         end
       end

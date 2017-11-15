@@ -10,6 +10,7 @@ describe TrackEvent, :freeze do
   let(:site) { create :site, :pro, :with_rule, user: owner }
 
   before do
+    allow(Rails.env).to receive(:production?).and_return(true) # emulate production
     allow(Intercom::Client).to receive(:new).and_return(intercom)
     allow(Diamond::Client).to receive(:new).and_return(diamond)
     allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
@@ -37,6 +38,7 @@ describe TrackEvent, :freeze do
         timestamp: owner.created_at.to_f
       )
 
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
       fire_event :signed_up, user: owner
     end
   end
@@ -82,6 +84,8 @@ describe TrackEvent, :freeze do
         }
       )
 
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
+
       fire_event :changed_subscription, site: site, user: owner
     end
 
@@ -92,6 +96,8 @@ describe TrackEvent, :freeze do
         expect(intercom).to receive_message_chain(:events, :create)
         expect(intercom).to receive_message_chain(:tags, :tag)
         expect(diamond).to receive(:track).twice
+        expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
+
         fire_event :changed_subscription, site: site, user: owner
       end
     end
@@ -122,6 +128,8 @@ describe TrackEvent, :freeze do
         }
       )
 
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
+
       fire_event :created_bar, site_element: site_element, user: owner
     end
   end
@@ -150,6 +158,8 @@ describe TrackEvent, :freeze do
         }
       )
 
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
+
       fire_event :created_contact_list, contact_list: contact_list, user: owner
     end
   end
@@ -176,6 +186,8 @@ describe TrackEvent, :freeze do
         }
       )
 
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
+
       fire_event :created_site, site: site, user: owner
     end
   end
@@ -201,6 +213,8 @@ describe TrackEvent, :freeze do
           site_url: site.url
         }
       )
+
+      expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
 
       fire_event :invited_member, site: site, user: owner
     end

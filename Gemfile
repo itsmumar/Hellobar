@@ -111,7 +111,8 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
-# Sending analytics data to intercom.com
+# Sending analytics data to intercom.com & amplitude
+gem 'amplitude-api'
 gem 'intercom'
 gem 'intercom-rails'
 

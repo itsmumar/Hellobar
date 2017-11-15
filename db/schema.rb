@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 20171106160953) do
     t.datetime "redeemed_by_recipient_at"
     t.integer  "site_id",                  limit: 4
     t.boolean  "available_to_sender",                       default: false
-    t.integer  "state",                    limit: 4,        default: 0
+    t.string   "state",                    limit: 20,       default: "sent", null: false
   end
 
   add_index "referrals", ["sender_id"], name: "index_referrals_on_sender_id", using: :btree

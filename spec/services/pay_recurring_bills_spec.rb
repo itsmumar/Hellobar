@@ -171,7 +171,7 @@ describe PayRecurringBills do
       include_examples 'pay bill'
 
       context 'when bill had payment problem before' do
-        let!(:bill) { create :bill, :problem }
+        let!(:bill) { create :bill, :failed }
 
         specify do
           expect { service.call }
@@ -189,6 +189,12 @@ describe PayRecurringBills do
 
           expect { service.call }
             .to change { bill.reload.status }.to Bill::FAILED
+        end
+
+        it 'notifies owners' do
+          expect { service.call }
+            .to have_enqueued_job
+            .with('BillingMailer', 'could_not_charge', 'deliver_now', bill)
         end
       end
 

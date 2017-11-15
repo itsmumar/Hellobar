@@ -17,6 +17,7 @@ html
     = render 'shared/crazy_egg'
     = render 'shared/google_analytics'
     = render 'shared/segment'
+    = render 'shared/amplitude'
 
     header.global-header
       = render "shared/header"
@@ -31,7 +32,6 @@ html
         = render "shared/prompt"
         == yield
 
-    / deprecated JS implementation of shared/flash
     = render "shared/alert_template"
     = render "shared/modals/downgrade_modal"
     = render "shared/modals/upgrade_modal"

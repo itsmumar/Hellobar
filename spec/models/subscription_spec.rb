@@ -312,7 +312,7 @@ describe Subscription do
       expect(subscription.active_bills).to be_empty
 
       # Add a bill during time, but void
-      create(:bill, :void, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
+      create(:bill, :voided, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
       expect(subscription.active_bills).to be_empty
 
       # Add an active bill
