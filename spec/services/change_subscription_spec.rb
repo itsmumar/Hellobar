@@ -62,7 +62,7 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'sends an event to Intercom' do
-      allow(Rails.env).to receive(:test?).and_return(false) # emulate production/edge/etc.
+      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
       expect { service.call }
         .to have_enqueued_job(SendEventToIntercomJob)
@@ -70,7 +70,7 @@ describe ChangeSubscription, :freeze do
     end
 
     it 'sends an event to Amplitude' do
-      allow(Rails.env).to receive(:test?).and_return(false) # emulate production/edge/etc.
+      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
       expect { service.call }
         .to have_enqueued_job(SendEventToAmplitudeJob)
@@ -326,7 +326,7 @@ describe ChangeSubscription, :freeze do
         end
 
         it 'sends an event to Intercom' do
-          allow(Rails.env).to receive(:test?).and_return(false) # emulate production/edge/etc.
+          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
           expect { change_subscription('free') }
             .to have_enqueued_job(SendEventToIntercomJob)
@@ -334,7 +334,7 @@ describe ChangeSubscription, :freeze do
         end
 
         it 'sends an event to Intercom' do
-          allow(Rails.env).to receive(:test?).and_return(false) # emulate production/edge/etc.
+          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
           expect { service.call }
             .to have_enqueued_job(SendEventToAmplitudeJob)
