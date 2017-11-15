@@ -74,6 +74,7 @@ feature 'Adding and editing bars', :js do
       create :contact_list, site: user.sites.first
 
       login(user)
+      visit root_path
 
       click_on 'Create New'
 
@@ -161,6 +162,7 @@ feature 'Adding and editing bars', :js do
     phone_number = '+12025550144'
 
     login(user)
+    visit root_path
 
     click_button('Create New')
 
@@ -236,7 +238,7 @@ feature 'Adding and editing bars', :js do
 
     within('.step-wrapper') do
       click_on 'Text'
-      find('.questions .toggle-on').click
+      find('.questions .toggle-off').click
 
       expect(page).to have_content 'QUESTION'
     end
