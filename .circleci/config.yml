@@ -96,34 +96,34 @@ jobs:
       - run:
           name: Setup database
           command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
-#
-#      - run:
-#          name: Run Brakeman
-#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
-#
-#      - run:
-#          name: Run Rubocop
-#          when: always
-#          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
-#
-#      - run:
-#          name: Run JSHint
-#          when: always
-#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
-#
-#      - run:
-#          name: Run unit tests
-#          when: always
-#          environment:
-#            CODECOV_FLAG: unit
-#          command: |
-#            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
-#            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
-#
-#      - run:
-#          name: Run teaspoon tests
-#          when: always
-#          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
+
+      - run:
+          name: Run Brakeman
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
+
+      - run:
+          name: Run Rubocop
+          when: always
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
+
+      - run:
+          name: Run JSHint
+          when: always
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
+
+      - run:
+          name: Run unit tests
+          when: always
+          environment:
+            CODECOV_FLAG: unit
+          command: |
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
+
+      - run:
+          name: Run teaspoon tests
+          when: always
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then RAILS_ENV=test SUITE=default xvfb-run -a bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
@@ -132,7 +132,7 @@ jobs:
             CODECOV_FLAG: integration
           command: |
             TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
-            xvfb-run -a bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
           key: v1-tmp-cache-{{ .Branch }}
