@@ -14,7 +14,7 @@
 
       / spam catcher (since this is an open form)
       .hidden= text_field_tag :blank
-      = text_field_tag "contact_submission[name]", current_user.try(:name), placeholder: "Your name", required: true
-      = email_field_tag "contact_submission[email]", current_user.try(:email), placeholder: "Your email address", required: true
+      = text_field_tag "contact_submission[name]", current_user&.name, placeholder: "Your name", required: true
+      = email_field_tag "contact_submission[email]", current_user&.email, placeholder: "Your email address", required: true
       = text_area_tag "contact_submission[message]", nil, placeholder: "What can we help you with?", required: true
       = submit_tag "Send Message", class: "button", data: { disable_with: "Sending..." }, id: "contact_submission_submit_btn"

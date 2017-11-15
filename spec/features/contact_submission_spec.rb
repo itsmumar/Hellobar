@@ -5,12 +5,14 @@ feature 'Contact Submission' do
 
   scenario 'page has correct content' do
     visit '/contact'
-    expect(page).to have_content("We'd like to hear what's on your mind")
+    expect(page).to have_content("WE'D LIKE TO HEAR WHAT'S ON YOUR MIND")
   end
 
   scenario 'user can create' do
     user = login
+
     visit '/contact'
+
     fill_in 'contact_submission[name]', with: 'Homer Simpson'
     fill_in 'contact_submission[message]', with: 'Test'
     find('#contact_submission_submit_btn').click

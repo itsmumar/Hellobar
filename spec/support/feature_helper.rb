@@ -23,7 +23,6 @@ module FeatureHelper
     end
 
     login_as user, scope: :user, run_callbacks: false
-    visit '/'
     user
   end
 
