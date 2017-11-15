@@ -69,7 +69,7 @@ class BillingReport
   end
 
   def downgrade(bill)
-    @amount_downgraded += @bill.amount
+    @amount_downgraded += bill.amount
     @num_downgraded += 1
     info "Voiding outdated bill #{ bill.id }"
     info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
