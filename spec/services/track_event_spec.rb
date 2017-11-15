@@ -10,7 +10,7 @@ describe TrackEvent, :freeze do
   let(:site) { create :site, :pro, :with_rule, user: owner }
 
   before do
-    allow(Rails.env).to receive(:test?).and_return(false) # emulate production/edge/etc.
+    allow(Rails.env).to receive(:production?).and_return(true) # emulate production
     allow(Intercom::Client).to receive(:new).and_return(intercom)
     allow(Diamond::Client).to receive(:new).and_return(diamond)
     allow(Settings).to receive(:diamond_endpoint).and_return(diamond_endpoint)
