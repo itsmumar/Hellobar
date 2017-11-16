@@ -8,7 +8,7 @@ jobs:
         - production
 
     docker:
-      - image: hellobarcom/base:chrome
+      - image: hellobarcom/base:2.3.4.1
         environment:
           DISPLAY: :99
           RAILS_ENV: test
