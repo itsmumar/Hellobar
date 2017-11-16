@@ -121,6 +121,8 @@ class BillingReport
 
   def post_to_slack(msg)
     PostToSlack.new(:billing, text: msg).call
+  rescue => e
+    puts 'could not post to slack' # rubocop:disable Rails/Output
   end
 
   def exception(e)
