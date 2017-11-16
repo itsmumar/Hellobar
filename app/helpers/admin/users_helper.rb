@@ -13,8 +13,8 @@ module Admin::UsersHelper
   end
 
   def bills_for(site)
-    site.subscriptions.with_deleted.flat_map do |subscription|
-      subscription.bills.recurring.reorder(id: :desc)
+    Subscription.unscoped do
+      site.bills.recurring.reorder(id: :desc)
     end
   end
 
@@ -23,8 +23,11 @@ module Admin::UsersHelper
   end
 
   def subscription_name(bill)
-    return "#{ bill.subscription.values[:name] } (trial)" if bill.subscription.trial_end_date
-    bill.subscription.values[:name]
+    Subscription.unscoped do
+      name_and_id = "#{ bill.subscription.values[:name] } ##{ bill.subscription.id }"
+      return "#{ name_and_id } (trial)" if bill.subscription.trial_end_date
+      name_and_id
+    end
   end
 
   def bill_duration(bill)

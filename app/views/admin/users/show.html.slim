@@ -147,7 +147,7 @@ div#user_profile
 
         - site.subscriptions.with_deleted.reverse.each do |sub|
           div
-            | Changed to <strong>#{ sub.values[:name] }</strong> on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
+            | Changed to <strong>#{ sub.values[:name] } ##{ sub.id }</strong> on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
 
             - if sub.deleted?
               | (subscription deleted on #{ sub.deleted_at.strftime('%D') })
