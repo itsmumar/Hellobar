@@ -20,6 +20,7 @@ feature 'Trial User', js: true do
     expect(page).to have_content('Your subscription has not been renewed')
     find('.show-downgrade-modal').click
 
+    sleep 1
     click_link('Downgrade')
 
     expect(page).to have_content('Want More Power?')

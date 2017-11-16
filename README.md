@@ -125,16 +125,9 @@ https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+fo
 
 ## Running specs
 
-Currently we use Chrome --headless for all our feature specs
+Currently we use Chrome --headless for all our feature & teaspoon specs
 
 `brew install chromedriver`
-
-But for teaspoon we still need capybara-webkit.
-
-So you need to have QT version 5.5+ installed locally. Installation instructions can be found here:
-
-https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
-
 
 ### Rails specs
 

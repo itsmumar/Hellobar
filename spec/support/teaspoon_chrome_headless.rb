@@ -8,14 +8,14 @@ module Teaspoon
         driver = build_driver
         driver.navigate.to(url)
         ::Selenium::WebDriver::Wait.new(driver_options).until do
-          done = driver.execute_script("return window.Teaspoon && window.Teaspoon.finished")
-          driver.execute_script("return window.Teaspoon && window.Teaspoon.getMessages() || []").each do |line|
-            runner.process("#{line}\n")
+          done = driver.execute_script('return window.Teaspoon && window.Teaspoon.finished')
+          driver.execute_script('return window.Teaspoon && window.Teaspoon.getMessages() || []').each do |line|
+            runner.process("#{ line }\n")
           end
           done
         end
       ensure
-        driver.quit if driver
+        driver&.quit
       end
 
       def build_driver
