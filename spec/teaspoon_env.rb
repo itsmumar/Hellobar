@@ -3,7 +3,8 @@
 require 'teaspoon/jasmine/framework'
 Teaspoon::Jasmine::Framework.register_version '2.6', 'jasmine/2.6.js', dependencies: ['teaspoon-jasmine2.js']
 
-class Selenium::WebDriver::Driver
+require 'selenium/webdriver'
+module ::Selenium::WebDriver
   def self.for(browser, opts = {})
     capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
       chromeOptions: { args: %w[headless disable-gpu no-sandbox window-size=1920,1080] }
