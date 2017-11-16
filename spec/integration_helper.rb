@@ -25,7 +25,7 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    # precompile modules if it hasn't been compiled
+    # precompile modules.js if it hasn't been compiled
     begin
       StaticScriptAssets.digest_path('modules.js')
     rescue Sprockets::FileNotFound
