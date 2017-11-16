@@ -24,27 +24,27 @@ jobs:
 
       - restore_cache:
           keys:
-            - bundle-cache-{{ checksum "Gemfile.lock" }}
-            - bundle-cache
+            - bundle-cache-v1-{{ checksum "Gemfile.lock" }}
+            - bundle-cache-v1
 
       - restore_cache:
           keys:
-            - bower-cache-{{ checksum "editor/bower.json" }}
-            - bower-cache
+            - bower-cache-v1-{{ checksum "editor/bower.json" }}
+            - bower-cache-v1
 
       - restore_cache:
           keys:
-            - yarn-cache-{{ checksum "editor/yarn.lock" }}
-            - yarn-cache
+            - yarn-cache-v1-{{ checksum "editor/yarn.lock" }}
+            - yarn-cache-v1
 
       - restore_cache:
           keys:
-            - editor-assets-cache-{{ .Revision }}
+            - editor-assets-cache-v1-{{ .Revision }}
 
       - restore_cache:
           keys:
-            - tmp-cache-{{ .Branch }}
-            - tmp-cache
+            - tmp-cache-v1-{{ .Branch }}
+            - tmp-cache-v1
 
       - run: env
 
@@ -53,7 +53,7 @@ jobs:
           command: bundle install --path vendor/bundle
 
       - save_cache:
-          key: bundle-cache-{{ checksum "Gemfile.lock" }}
+          key: bundle-cache-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -68,7 +68,7 @@ jobs:
           command: cd editor && yarn install --cache-folder .yarn --frozen-lockfile
 
       - save_cache:
-          key: yarn-cache-{{ checksum "editor/yarn.lock" }}
+          key: yarn-cache-v1-{{ checksum "editor/yarn.lock" }}
           paths:
             - editor/node_modules
             - editor/.yarn
@@ -79,7 +79,7 @@ jobs:
           command: cd editor && bower install --allow-root
 
       - save_cache:
-          key: bower-cache-{{ checksum "editor/bower.json" }}
+          key: bower-cache-v1-{{ checksum "editor/bower.json" }}
           paths:
             - editor/bower_components
 
@@ -88,7 +88,7 @@ jobs:
           command: if [ -e editor/dist/assets/editor.css ]; then echo "Skip"; else cd editor && ember build --environment=production; fi
 
       - save_cache:
-          key: editor-assets-cache-{{ .Revision }}
+          key: editor-assets-cache-v1-{{ .Revision }}
           paths:
             - editor/dist/assets
 
@@ -134,7 +134,7 @@ jobs:
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
-          key: tmp-cache-{{ .Branch }}
+          key: tmp-cache-v1-{{ .Branch }}
           paths:
             - /tmp/hellobar_new/tmp/cache
             - /tmp/hellobar_new/tmp/script
