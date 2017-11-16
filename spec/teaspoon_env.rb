@@ -3,17 +3,7 @@
 require 'teaspoon/jasmine/framework'
 Teaspoon::Jasmine::Framework.register_version '2.6', 'jasmine/2.6.js', dependencies: ['teaspoon-jasmine2.js']
 
-require 'selenium/webdriver'
-module ::Selenium::WebDriver
-  def self.for(browser, opts = {})
-    capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-      chromeOptions: { args: %w[headless disable-gpu no-sandbox window-size=1920,1080] }
-    )
-
-    return Selenium::WebDriver::Chrome::Driver.new(desired_capabilities: capabilities) if browser == :chrome_headless
-    super
-  end
-end
+require_relative 'support/teaspoon_chrome_headless'
 
 Teaspoon.configure do |config|
   config.mount_at = '/teaspoon'
@@ -21,8 +11,7 @@ Teaspoon.configure do |config|
   config.asset_paths = ['spec/javascripts', 'spec/javascripts/stylesheets']
   config.fixture_paths = ['spec/javascripts/fixtures']
 
-  config.driver = :selenium
-  config.driver_options = { client_driver: :chrome_headless }
+  config.driver = :chrome_headless
 
   # SUITES
   #
