@@ -151,9 +151,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'capybara'
-  gem 'capybara-webkit'
-
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'teaspoon-jasmine'
@@ -170,6 +167,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'capybara'
   gem 'chromedriver-helper'
   gem 'selenium-webdriver'
 
