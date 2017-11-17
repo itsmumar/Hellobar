@@ -31,7 +31,6 @@ class FetchContacts
   def request
     {
       table_name: table_name,
-      index_name: 'ts-index', # use secondary index
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },

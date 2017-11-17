@@ -26,7 +26,7 @@ describe FetchContacts do
     let!(:request) do
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
         .with(
-          body: %r{"TableName":"development_contacts".+"IndexName":"ts-index".+"Limit":#{ limit }},
+          body: %r{"TableName":"development_contacts".+"Limit":#{ limit }},
           headers: { 'X-Amz-Target' => 'DynamoDB_20120810.Query' }
         ).and_return(body: body.to_json)
     end
