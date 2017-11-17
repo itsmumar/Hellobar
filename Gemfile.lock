@@ -202,9 +202,6 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-webkit (1.14.0)
-      capybara (>= 2.3.0, < 2.14.0)
-      json
     capybara_discoball (0.0.2)
       capybara (~> 2.7)
     childprocess (0.8.0)
@@ -658,7 +655,6 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capybara
-  capybara-webkit
   capybara_discoball
   chromedriver-helper
   codecov
