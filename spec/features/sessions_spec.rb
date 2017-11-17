@@ -69,6 +69,7 @@ feature 'User can sign in', js: true do
 
   scenario 'and sign out' do
     login
+    visit root_path
 
     find('.header-user-wrapper .dropdown-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click

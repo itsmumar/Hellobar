@@ -74,6 +74,7 @@ feature 'Adding and editing bars', :js do
       create :contact_list, site: user.sites.first
 
       login(user)
+      visit root_path
 
       click_on 'Create New'
 
@@ -83,10 +84,10 @@ feature 'Adding and editing bars', :js do
       click_on 'Goals'
 
       @phone_field = find('.item-block[data-field-type="builtin-phone"]')
-      @phone_field.find('.hellobar-icon-check-mark').trigger('click') if @phone_field[:class].include?('is-selected')
+      @phone_field.find('.hellobar-icon-check-mark').click if @phone_field[:class].include?('is-selected')
 
       @name_field = find('.item-block[data-field-type="builtin-name"]')
-      @name_field.find('.hellobar-icon-check-mark').trigger('click') if @name_field[:class].include?('is-selected')
+      @name_field.find('.hellobar-icon-check-mark').click if @name_field[:class].include?('is-selected')
     end
 
     scenario 'only built-in-email enabled' do
@@ -99,7 +100,7 @@ feature 'Adding and editing bars', :js do
 
     scenario 'built-in-phone enabled' do
       @phone_field.hover
-      @phone_field.find('.hellobar-icon-check-mark').trigger('click')
+      @phone_field.find('.hellobar-icon-check-mark').click
       click_button 'Save & Publish'
       expect(page).to have_content('Summary')
       se = SiteElement.last
@@ -109,7 +110,7 @@ feature 'Adding and editing bars', :js do
 
     scenario 'built-in-name enabled' do
       @name_field.hover
-      @name_field.find('.hellobar-icon-check-mark').trigger('click')
+      @name_field.find('.hellobar-icon-check-mark').click
       click_button 'Save & Publish'
       expect(page).to have_content('Summary')
       se = SiteElement.last
@@ -119,9 +120,9 @@ feature 'Adding and editing bars', :js do
 
     scenario 'only multiple built-in fields enabled' do
       @name_field.hover
-      @name_field.find('.hellobar-icon-check-mark').trigger('click')
+      @name_field.find('.hellobar-icon-check-mark').click
       @phone_field.hover
-      @phone_field.find('.hellobar-icon-check-mark').trigger('click')
+      @phone_field.find('.hellobar-icon-check-mark').click
       click_button 'Save & Publish'
       expect(page).to have_content('Summary')
       se = SiteElement.last
@@ -161,6 +162,7 @@ feature 'Adding and editing bars', :js do
     phone_number = '+12025550144'
 
     login(user)
+    visit root_path
 
     click_button('Create New')
 
@@ -206,7 +208,7 @@ feature 'Adding and editing bars', :js do
 
       # make sure the color is set there by clicking to show the dropdown
       # and then hide it
-      2.times { first('.color-select-wrapper').trigger 'click' }
+      2.times { first('.color-select-wrapper').click }
     end
 
     click_link 'Next'
@@ -217,7 +219,7 @@ feature 'Adding and editing bars', :js do
 
     expect(page).to have_content('Background Color')
 
-    expect(first('.color-select-block input').value).to eql color
+    expect(first('.color-select-block input').value.upcase).to eql color
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end
@@ -236,7 +238,7 @@ feature 'Adding and editing bars', :js do
 
     within('.step-wrapper') do
       click_on 'Text'
-      find('.questions .toggle-on').trigger 'click'
+      find('.questions .toggle-off').click
 
       expect(page).to have_content 'QUESTION'
     end

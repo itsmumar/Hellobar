@@ -12,4 +12,9 @@ module ContactListFeatureHelper
       modal.connect
     end
   end
+
+  def stub_provider(provider)
+    allow(ServiceProvider::Adapters.fetch(provider))
+      .to receive(:new).and_wrap_original { |identity| TestProvider.new(identity) }
+  end
 end

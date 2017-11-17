@@ -31,7 +31,6 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
 
     page.find('a', text: '+').click
 
-    expect(page).not_to have_content('URL')
     expect(page.has_css?('select.condition-segment > option[value="UrlCondition"]')).to eq(false)
   end
 
@@ -51,7 +50,7 @@ feature 'Hide the URL Condition from the Rule Modal', :js do
     page.find('a', text: 'Edit.').click
 
     expect(page).to have_content 'EDIT RULE'
-    expect(page).to have_content('URL')
+
     expect(page.has_css?('select.condition-segment > option[value="UrlCondition"]')).to eq(true)
   end
 end

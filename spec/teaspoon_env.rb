@@ -3,15 +3,15 @@
 require 'teaspoon/jasmine/framework'
 Teaspoon::Jasmine::Framework.register_version '2.6', 'jasmine/2.6.js', dependencies: ['teaspoon-jasmine2.js']
 
+require_relative 'support/teaspoon_chrome_headless'
+
 Teaspoon.configure do |config|
   config.mount_at = '/teaspoon'
   config.root = nil
   config.asset_paths = ['spec/javascripts', 'spec/javascripts/stylesheets']
   config.fixture_paths = ['spec/javascripts/fixtures']
 
-  config.driver = :capybara_webkit
-
-  Capybara::Webkit.configure(&:block_unknown_urls)
+  config.driver = :chrome_headless
 
   # SUITES
   #

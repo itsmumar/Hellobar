@@ -70,7 +70,12 @@ feature 'Update Profile', js: true do
       fill_in 'Email', with: 'mynewemail@email.com'
       fill_in 'New Password', with: 'abc123abc'
       fill_in 'Repeat Password', with: 'abc123abc'
+
       click_button 'Save & Update'
+
+      expect(page.accept_confirm)
+        .to eql 'After you add a password, you will no longer be able to login through Google.'
+
       expect(page).to have_content('Your settings have been updated.')
     end
   end

@@ -125,10 +125,9 @@ https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+fo
 
 ## Running specs
 
-To run specs locally you need to have QT version 5.5+ installed locally. Installation instructions can be found here:
+Currently we use Chrome --headless for all our feature & teaspoon specs
 
-https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
-
+`brew install chromedriver`
 
 ### Rails specs
 

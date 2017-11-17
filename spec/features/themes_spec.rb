@@ -20,10 +20,7 @@ feature 'Users can select a design theme for SiteElements', :js do
 
     expect(page).to have_content 'Themes'
 
-    # select the theme
-    within "div[data-theme-id='#{ theme_id }']" do
-      find('a', visible: false).trigger 'click'
-    end
+    find("div[data-theme-id='#{ theme_id }']").click
 
     click_on 'Content'
 
@@ -81,7 +78,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         page.has_xpath?('.//iframe[@id="random-container"]') # force capybara to wait until iframe is loaded
         sleep 2
         within_frame 'random-container-0' do
-          expect(find('.uploaded-image')[:src]).to eql ImageUpload.last.url
+          expect(find('.uploaded-image', visible: false)[:src]).to include ImageUpload.last.url
         end
       end
     end

@@ -10,7 +10,9 @@ feature 'Contact Submission' do
 
   scenario 'user can create' do
     user = login
+
     visit '/contact'
+
     fill_in 'contact_submission[name]', with: 'Homer Simpson'
     fill_in 'contact_submission[message]', with: 'Test'
     find('#contact_submission_submit_btn').click

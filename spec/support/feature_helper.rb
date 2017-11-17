@@ -23,7 +23,6 @@ module FeatureHelper
     end
 
     login_as user, scope: :user, run_callbacks: false
-    visit '/'
     user
   end
 
@@ -47,6 +46,10 @@ module FeatureHelper
 
   def submit_form
     find('input[name="commit"]').click
+  end
+
+  def mouseleave
+    page.execute_script 'document.body.dispatchEvent(new MouseEvent("mouseleave"))'
   end
 
   private

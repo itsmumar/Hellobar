@@ -24,8 +24,9 @@ feature 'iContact Integration', :js, :contact_list_feature do
 
   scenario 'when valid' do
     connect
-    expect(page.find('#contact_list_embed_code').value).to eql embed_code
     expect(page).to have_content 'Syncing contacts with iContact'
+    page.find('#edit-contact-list').click
+    expect(page.find('#contact_list_embed_code').value).to eql embed_code
   end
 
   private

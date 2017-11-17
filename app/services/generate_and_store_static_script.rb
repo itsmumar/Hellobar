@@ -8,7 +8,7 @@ class GenerateAndStoreStaticScript
   def call
     site.update_column(:script_attempted_to_generate_at, Time.current)
 
-    GenerateStaticScriptModules.new.call if Rails.env.development? || Rails.env.test?
+    GenerateStaticScriptModules.new.call if Rails.env.development?
 
     if store_site_scripts_locally?
       store_locally

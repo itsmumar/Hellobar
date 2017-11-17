@@ -6,6 +6,7 @@ describe GenerateAndStoreStaticScript do
   let(:service) { described_class.new(site) }
 
   before do
+    allow(Rails.env).to receive(:development?).and_return true
     allow(Settings).to receive(:store_site_scripts_locally).and_return false
     allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
     expect(GenerateStaticScriptModules).to receive_service_call

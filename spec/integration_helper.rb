@@ -17,16 +17,20 @@ RSpec.configure do |config|
     allow(FetchContactListTotals).to receive(:new).with(instance_of(Site), id: instance_of(String)).and_return(double(call: 0))
     allow(FetchContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: {}))
 
-    allow(ServiceProvider).to receive(:adapter).and_wrap_original do |original_method, key|
-      original_provider = original_method.call(key)
-      TestProvider.config = original_provider.config
-      TestProvider
-    end
-
     OmniAuth.config.add_mock(provider)
   end
 
   config.before type: :feature do
     allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(SiteStatistics.new)
+  end
+
+  config.before :suite do
+    # precompile modules.js if it hasn't been compiled
+    begin
+      StaticScriptAssets.digest_path('modules.js')
+    rescue Sprockets::FileNotFound
+      StaticScriptAssets.precompile
+      GenerateStaticScriptModules.new.call
+    end
   end
 end

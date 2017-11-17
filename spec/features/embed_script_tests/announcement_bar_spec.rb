@@ -15,13 +15,13 @@ feature 'Site with a closable announcement topbar', :js do
       expect(page).to have_selector '.icon-close'
 
       # hide the bar
-      find('.icon-close').trigger 'click'
+      find('.icon-close').click
     end
 
     expect(page).to have_selector '#random-container', visible: false
 
     # show the bar again
-    find('#pull-down').trigger 'click'
+    find('#pull-down').click
 
     expect(page).to have_selector '#random-container'
   end
