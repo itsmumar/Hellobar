@@ -25,13 +25,23 @@ class FetchContacts
   end
 
   def response
-    dynamo_db.query request
+    dynamo_db.query limit.present? ? limited_request : unlimited_request
   end
 
-  def request
+  def unlimited_request
     {
       table_name: table_name,
-      index_name: 'ts-index', # use secondary index
+      key_condition_expression: 'lid = :lidValue',
+      expression_attribute_values: { ':lidValue' => contact_list.id },
+      expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
+      projection_expression: 'email,n,ts,#s,#e'
+    }
+  end
+
+  def limited_request
+    {
+      table_name: table_name,
+      index_name: 'ts-index',
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
