@@ -62,7 +62,7 @@ class RefundBill
   end
 
   def create_paid_refund_bill authorization_code
-    create_refund_bill! status: Bill::PAID, authorization_code: authorization_code
+    create_refund_bill! status: Bill::REFUNDED, authorization_code: authorization_code
   end
 
   def create_failed_refund_bill

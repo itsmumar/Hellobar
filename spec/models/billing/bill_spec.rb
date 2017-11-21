@@ -3,6 +3,7 @@ describe Bill do
   specify('could be paid') { expect(build(:bill, :paid)).to be_paid }
   specify('could be failed') { expect(build(:bill, :failed)).to be_failed }
   specify('could be voided') { expect(build(:bill, :voided)).to be_voided }
+  specify('could be refunded') { expect(build(:refund_bill, :refunded)).to be_refunded }
 
   describe '#can_pay?' do
     subject { bill.can_pay? }
@@ -203,6 +204,17 @@ describe Bill do
 
     it 'returns discounted amount' do
       expect(bill.estimated_amount).to eql((bill.amount - 10).to_f)
+    end
+  end
+
+  Bill::STATUSES.each do |status|
+    describe "##{ status }!" do
+      let(:bill) { create :bill }
+
+      specify do
+        bill.send "#{ status }!"
+        expect(bill.status).to eql status
+      end
     end
   end
 end

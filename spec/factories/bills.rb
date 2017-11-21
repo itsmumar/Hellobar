@@ -35,6 +35,10 @@ FactoryGirl.define do
       type 'Bill::Refund'
       refunded_bill { create :bill, :pro, subscription: subscription }
       refunded_billing_attempt { refunded_bill.billing_attempts.last }
+
+      trait :refunded do
+        status Bill::REFUNDED
+      end
     end
 
     trait :pro do

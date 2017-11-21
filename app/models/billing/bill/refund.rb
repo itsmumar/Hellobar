@@ -7,5 +7,11 @@ class Bill
     def check_amount
       raise InvalidBillingAmount, "Amount must be negative. It was #{ amount.to_f }" if amount > 0
     end
+
+    private
+
+    def can_status_be_changed?(value)
+      super || value == REFUNDED
+    end
   end
 end
