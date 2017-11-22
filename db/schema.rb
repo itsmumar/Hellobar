@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171112084842) do
+ActiveRecord::Schema.define(version: 20171121203058) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -248,7 +248,6 @@ ActiveRecord::Schema.define(version: 20171112084842) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "element_subtype",                  limit: 191,                              null: false
-    t.string   "target_segment",                   limit: 255
     t.boolean  "closable",                                          default: false
     t.boolean  "show_border",                                       default: false
     t.string   "background_color",                 limit: 255,      default: "eb593c"
@@ -260,7 +259,6 @@ ActiveRecord::Schema.define(version: 20171112084842) do
     t.string   "link_text",                        limit: 5000,     default: "Click Here"
     t.text     "headline",                         limit: 16777215
     t.string   "size",                             limit: 255,      default: "large"
-    t.string   "target",                           limit: 255
     t.string   "text_color",                       limit: 255,      default: "ffffff"
     t.string   "texture",                          limit: 255,      default: "none"
     t.boolean  "paused",                                            default: false
