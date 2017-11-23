@@ -13,6 +13,7 @@ gem 'aws-sdk-sqs'
 gem 'devise'
 gem 'jwt'
 gem 'omniauth'
+gem 'rack-cors'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'

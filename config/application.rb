@@ -56,5 +56,15 @@ module Hellobar
       authentication: :plain,
       domain: Settings.host
     }
+
+    # Configure CORS
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins Settings.campaigns_url
+
+        resource '/api/*', headers: :any,
+          methods: %i[get post delete put patch options head]
+      end
+    end
   end
 end
