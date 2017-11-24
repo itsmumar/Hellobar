@@ -17,9 +17,10 @@ feature 'Payment modal interaction', :js do
 
       click_link('Change plan or billing schedule')
       find('.different-plan').click
-      basic_plan = find('.package-block.basic')
-      basic_plan.find('.button').click
 
+      within '.package-block.basic' do
+        find('.button', text: 'Choose Plan').click
+      end
       expect(page).to have_content "until #{ end_date.strftime('%-m-%-d-%Y') }"
     end
   end
@@ -41,8 +42,9 @@ feature 'Payment modal interaction', :js do
       visit edit_site_path(site)
 
       page.find('footer .show-upgrade-modal').click
-      pro_plan = page.find('.package-block.pro')
-      pro_plan.find('.button').click
+      within '.package-block.pro' do
+        find('.button', text: 'Choose Plan').click
+      end
 
       expect(page).to have_content 'Pro SELECT BILLING'
       expect(page.find('#anually-billing', visible: false)).to be_checked
