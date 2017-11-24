@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :campaigns, only: :index
+
     get :authenticate, to: 'authentications#create'
   end
 

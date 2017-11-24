@@ -1,6 +1,6 @@
-describe 'JWT API authentication' do
+describe 'api/authentications requests' do
   describe 'GET #create' do
-    describe 'when not logged in' do
+    context 'when not logged in' do
       it 'redirects to the root path' do
         get api_authenticate_path
 
@@ -8,7 +8,7 @@ describe 'JWT API authentication' do
       end
     end
 
-    describe 'when logged in' do
+    context 'when logged in' do
       it 'redirects to callback url with token and site_id in query params' do
         site = create :site
         user = create :user, site: site
