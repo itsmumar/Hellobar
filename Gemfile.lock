@@ -421,6 +421,7 @@ GEM
     psych (2.2.4)
     public_suffix (3.0.0)
     rack (1.6.8)
+    rack-cors (1.0.2)
     rack-protection (1.5.3)
       rack
     rack-ssl-enforcer (0.2.8)
@@ -711,6 +712,7 @@ DEPENDENCIES
   pry-nav
   psych
   public_suffix
+  rack-cors
   rack-ssl-enforcer
   rails (= 4.2.8)
   rails-html-sanitizer

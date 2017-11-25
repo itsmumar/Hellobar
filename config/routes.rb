@@ -21,6 +21,10 @@ Rails.application.routes.draw do
         post :update_status
       end
     end
+
+    resources :campaigns, only: :index
+
+    get :authenticate, to: 'authentications#create'
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
