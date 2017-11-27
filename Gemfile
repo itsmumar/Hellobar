@@ -36,7 +36,7 @@ gem 'omniauth-verticalresponse', github: 'Hello-bar/omniauth-verticalresponse'
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
-gem 'createsend', github: 'Hello-bar/createsend-ruby' # CampaignMonitor
+gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
