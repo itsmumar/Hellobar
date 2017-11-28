@@ -29,6 +29,10 @@ class Subscription
         true
       end
 
+      def precise_geolocation_targeting?
+        true
+      end
+
       def max_site_elements
         Float::INFINITY
       end
