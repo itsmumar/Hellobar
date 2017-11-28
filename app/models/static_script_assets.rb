@@ -27,6 +27,10 @@ module StaticScriptAssets
 
   mattr_reader(:manifest) { Sprockets::Manifest.new(env, 'tmp/script') }
 
+  class << self
+    delegate :compile, to: :manifest
+  end
+
   module_function
 
   def precompile

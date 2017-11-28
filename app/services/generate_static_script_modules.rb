@@ -1,4 +1,6 @@
 class GenerateStaticScriptModules
+  MODULES_FILENAME = 'modules.js'.freeze
+
   def call
     compile
     if store_site_scripts_locally?
@@ -13,12 +15,14 @@ class GenerateStaticScriptModules
   attr_reader :site, :compress, :script_content
 
   def compile
-    @script_content ||=
+    @script_content ||= begin
+      StaticScriptAssets.compile(MODULES_FILENAME)
       if compress_script?
-        StaticScriptAssets.render_compressed('modules.js')
+        StaticScriptAssets.render_compressed(MODULES_FILENAME)
       else
-        StaticScriptAssets.render('modules.js')
+        StaticScriptAssets.render(MODULES_FILENAME)
       end
+    end
   end
 
   def store_locally
@@ -38,7 +42,7 @@ class GenerateStaticScriptModules
   end
 
   def filename
-    @filename ||= StaticScriptAssets.digest_path('modules.js')
+    @filename ||= StaticScriptAssets.digest_path(MODULES_FILENAME)
   end
 
   def store_site_scripts_locally?
