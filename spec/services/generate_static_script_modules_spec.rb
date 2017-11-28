@@ -25,7 +25,7 @@ describe GenerateStaticScriptModules do
 
     it 'creates file in public/generated_scripts' do
       expect(file).to receive(:puts).with(script_content)
-      expect(File).to receive(:open).with(pathname_end_with('public/generated_scripts/modules-hexdigest.js'), 'w').and_yield(file)
+      expect(File).to receive(:open).with(pathname_ending_with('public/generated_scripts/modules-hexdigest.js'), 'w').and_yield(file)
       service.call
     end
   end
