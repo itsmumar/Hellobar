@@ -4,3 +4,5 @@ RSpec::Matchers.define :pathname_ending_with do |expected|
     expect(actual.to_s).to end_with(expected)
   end
 end
+
+RSpec::Matchers.alias_matcher :be_a_pathname_ending_with, :pathname_ending_with
