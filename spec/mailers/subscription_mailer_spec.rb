@@ -2,8 +2,16 @@ describe SubscriptionMailer do
   describe '.downgrade_to_free' do
     let(:site) { create :site, :with_user }
     let(:user) { site.users.first }
+    let(:previous_subscription) { site.current_subscription }
+    let(:credit_card) { create :credit_card }
 
-    subject { SubscriptionMailer.downgrade_to_free(site, user) }
+    subject { SubscriptionMailer.downgrade_to_free(site, user, previous_subscription) }
+
+    before do
+      stub_cyber_source :purchase
+      ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
+      Timecop.travel site.active_subscription.active_until + 1.day
+    end
 
     it 'set to be delivered to user\'s email' do
       expect(subject).to deliver_to(user.email)

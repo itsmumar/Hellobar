@@ -7,10 +7,13 @@ class DowngradeSiteToFree
     void_pending_bills
     enable_branding_on_all_bars
 
-    return if currently_on_free?
+    return site.current_subscription if site.current_subscription&.free?
 
-    create_free_subscription
-    send_notification
+    previous_subscription = site.current_subscription
+
+    create_free_subscription.tap do
+      send_notification(previous_subscription)
+    end
   end
 
   private
@@ -33,9 +36,9 @@ class DowngradeSiteToFree
     site.site_elements.update_all show_branding: true
   end
 
-  def send_notification
+  def send_notification(previous_subscription)
     site.users.each do |user|
-      SubscriptionMailer.downgrade_to_free(site, user).deliver_later
+      SubscriptionMailer.downgrade_to_free(site, user, previous_subscription).deliver_later
     end
   end
 end
