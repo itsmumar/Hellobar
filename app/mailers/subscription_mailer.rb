@@ -10,7 +10,7 @@ class SubscriptionMailer < ApplicationMailer
 
     mail(
       to: user.email,
-      subject: "Your Hello Bar subscription for #{site.url} have been downgraded to Free",
+      subject: "Your Hello Bar subscription for #{ site.url } have been downgraded to Free",
       layout: 'user_mailer'
     )
   end
