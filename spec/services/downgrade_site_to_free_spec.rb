@@ -1,5 +1,5 @@
 describe DowngradeSiteToFree, :freeze do
-  let(:site) { create :site, :with_rule }
+  let(:site) { create :site, :with_user, :with_rule }
   let!(:site_element) { create :site_element, show_branding: false, site: site }
   let(:credit_card) { create :credit_card }
   let(:service) { DowngradeSiteToFree.new(site) }
@@ -40,12 +40,26 @@ describe DowngradeSiteToFree, :freeze do
       .not_to have_enqueued_job(GenerateStaticScriptJob)
   end
 
+  it 'sends notifications to all owners' do
+    site.users.each do |user|
+      expect(SubscriptionMailer).to receive(:downgrade_to_free).with(site, user).and_call_original
+    end
+
+    service.call
+  end
+
   context 'when already on Free' do
     before { service.call }
 
     it 'does not create Free subscription' do
       expect { service.call }
         .not_to change { site.current_subscription }
+    end
+
+    it 'does not notify anybody' do
+      expect(SubscriptionMailer).not_to receive(:downgrade_to_free)
+
+      service.call
     end
   end
 end

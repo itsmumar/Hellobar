@@ -149,6 +149,8 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'slackistrano'
+
+  gem 'letter_opener'
 end
 
 group :development, :test do
