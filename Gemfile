@@ -155,8 +155,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'teaspoon-jasmine'
-  gem 'fuubar'
-  gem 'rspec-instafail', require: false
 
   # Debugging
   gem 'pry'
@@ -179,6 +177,8 @@ group :test do
 
   # Spec formatters
   gem 'rspec_junit_formatter'
+  gem 'fuubar'
+  gem 'rspec-instafail', require: false
 
   # Code coverage metrics
   gem 'codecov', require: false
