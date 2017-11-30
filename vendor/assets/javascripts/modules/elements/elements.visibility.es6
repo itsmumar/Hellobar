@@ -80,11 +80,6 @@ hellobar.defineModule('elements.visibility',
      * @returns {boolean}
      */
     function shouldShowElement(siteElementModel) {
-      function shouldHideElementConsideringTypeAndScreenWidth() {
-        // A topbar is the only style which is displayed on all screen sizes
-        return (siteElementModel.type !== 'Bar' && environment.isMobileWidth(siteElementModel));
-      }
-
       // Treat hidden elements *DIFFERENTLY* -- i.e. show them (even though
       // the visibility control cookie is *set*) *but* show them minimized
       // Bars & Sliders & Alerts only
@@ -102,7 +97,6 @@ hellobar.defineModule('elements.visibility',
       // and it hasn't been changed since then and the user has not specified
       // that we show it regardless
       if ((!checkVisibilityControlCookies(siteElementModel) && !updatedSinceLastVisit(siteElementModel))
-        || shouldHideElementConsideringTypeAndScreenWidth()
         || nonMobileClickToCall(siteElementModel)) {
         return false;
       } else {
