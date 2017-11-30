@@ -18,8 +18,11 @@ RSpec.configure do |config|
       page.save_screenshot png_path, width: 1000, height: 800
 
       # Save corresponding HTML
-      File.open(html_path, 'w') { |file| file.write(page.body) }
-      puts "\nFAILED SPEC: #{ meta[:description] }\nSaving screenshot: #{ png_path }\n"
+      page.save_page html_path
+
+      puts "\nFAILED SPEC: #{ meta[:description] }"
+      puts "Saving screenshot: #{ png_path }\n"
+      puts "Saving HTML: #{ html_path }\n"
     end
   end
 end
