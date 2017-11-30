@@ -86,7 +86,7 @@ hellobar.defineModule('elements.relevance',
       // (collecting emails is considered more valuable than clicking links
       // for example)
       return possibleSiteElements.email ||
-        environment.isMobileDevice() && possibleSiteElements.call || // consider 'call' elements only on mobile devices
+        (environment.isMobileDevice() && possibleSiteElements.call) || // consider 'call' elements only on mobile devices
         possibleSiteElements.social ||
         possibleSiteElements.traffic ||
         possibleSiteElements.announcement;
