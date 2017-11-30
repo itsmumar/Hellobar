@@ -176,9 +176,9 @@ group :test do
   gem 'capybara_discoball'
 
   # Spec formatters
-  gem 'rspec_junit_formatter'
   gem 'fuubar'
   gem 'rspec-instafail', require: false
+  gem 'rspec_junit_formatter'
 
   # Code coverage metrics
   gem 'codecov', require: false
