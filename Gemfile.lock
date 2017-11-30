@@ -272,6 +272,9 @@ GEM
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.18)
     formatador (0.2.5)
+    fuubar (2.2.0)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     gibbon (2.2.4)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -480,6 +483,8 @@ GEM
     rspec-expectations (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
+    rspec-instafail (1.0.0)
+      rspec
     rspec-mocks (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
@@ -672,6 +677,7 @@ DEPENDENCIES
   email_spec
   factory_girl_rails
   faraday
+  fuubar
   gibbon
   guard
   guard-rspec
@@ -722,6 +728,7 @@ DEPENDENCIES
   roadie-rails
   rotp
   rqrcode
+  rspec-instafail
   rspec-rails
   rspec-retry
   rspec_junit_formatter

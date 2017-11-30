@@ -155,6 +155,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'teaspoon-jasmine'
+  gem 'fuubar'
+  gem 'rspec-instafail', require: false
 
   # Debugging
   gem 'pry'
