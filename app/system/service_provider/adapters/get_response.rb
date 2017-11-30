@@ -47,7 +47,7 @@ module ServiceProvider::Adapters
       return if tags.blank?
 
       contacts = fetch_latest_contacts(20)
-      subscribers = FetchContacts.new(contact_list, limit: 10).call
+      subscribers = FetchContacts::Latest.new(contact_list, limit: 10).call
 
       find_union(contacts, subscribers).each do |contact|
         process_response client.post "contacts/#{ contact['contactId'] }", tags: tags

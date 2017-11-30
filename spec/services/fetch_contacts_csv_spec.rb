@@ -5,9 +5,9 @@ describe FetchContactsCSV, :freeze do
 
   describe '#call' do
     before do
-      expect(FetchContacts)
+      expect(FetchContacts::All)
         .to receive_service_call
-        .with(contact_list, limit: nil)
+        .with(contact_list)
         .and_return contacts
     end
 

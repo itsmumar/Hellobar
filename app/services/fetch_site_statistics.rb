@@ -12,7 +12,11 @@ class FetchSiteStatistics
 
   def call
     statistics.clear # clear the results in case we are calling this service object a second time
-    site_elements.each { |site_element| process site_element }
+    site_elements.each do |site_element|
+      process(site_element) do |item|
+        statistics << enhance_record(site_element, item)
+      end
+    end
     statistics
   end
 
@@ -20,15 +24,9 @@ class FetchSiteStatistics
 
   attr_reader :site, :days_limit, :site_element_ids
 
-  def process(site_element)
+  def process(site_element, &block)
     request = request_for(site_element.id)
-    process_response site_element, dynamo_db_for(site_element).query(request)
-  end
-
-  def process_response(site_element, response)
-    response.each do |item|
-      statistics << enhance_record(site_element, item)
-    end
+    dynamo_db.query(request, &block)
   end
 
   def statistics
@@ -92,7 +90,7 @@ class FetchSiteStatistics
     yday.days.since(Date.new(year) - 1)
   end
 
-  def dynamo_db_for(site_element)
-    DynamoDB.new(cache_key: "#{ site_element.cache_key }/#{ days_limit }")
+  def dynamo_db
+    @dynamo_db ||= DynamoDB.new
   end
 end

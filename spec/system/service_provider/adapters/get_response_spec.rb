@@ -75,7 +75,7 @@ describe ServiceProvider::Adapters::GetResponse do
       allow_request :get, :contacts
       allow_request :post, :contact
 
-      expect(FetchContacts).to receive_service_call
+      expect(FetchContacts::Latest).to receive_service_call
         .with(contact_list, limit: 10)
         .and_return [email: 'example@email.com']
     end

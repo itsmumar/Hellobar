@@ -7,7 +7,7 @@ class FetchContactListTotals
   # @return [Hash] contact_list.id => total
   def call
     return {} if contact_list_ids.blank?
-    reduce process DynamoDB.new(cache_key: cache_key).batch_get_item(request)
+    reduce process DynamoDB.new.batch_get_item(request)
   end
 
   private
@@ -22,10 +22,6 @@ class FetchContactListTotals
     response.fetch(table_name, []).inject({}) do |result, item|
       result.update item['lid'].to_i => item['t'].to_i
     end
-  end
-
-  def cache_key
-    site.cache_key
   end
 
   def request

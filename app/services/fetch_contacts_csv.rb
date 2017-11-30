@@ -17,6 +17,6 @@ class FetchContactsCSV
   attr_reader :contact_list
 
   def fetch_contacts
-    FetchContacts.new(contact_list, limit: nil).call
+    FetchContacts::All.new(contact_list).call
   end
 end

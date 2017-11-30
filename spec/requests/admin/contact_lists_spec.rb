@@ -9,7 +9,7 @@ describe 'Admin::ContactLists requests' do
   before do
     stub_current_admin(admin)
 
-    allow_any_instance_of(FetchContacts).to receive(:call).and_return([
+    allow_any_instance_of(FetchContacts::Latest).to receive(:call).and_return([
       { email: email, status: status, subscribed_at: Time.current }
     ])
   end

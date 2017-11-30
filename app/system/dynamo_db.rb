@@ -29,17 +29,28 @@ class DynamoDB
     end
   end
 
-  def initialize(cache_key: nil, expires_in: DEFAULT_TTL)
-    @cache_key = cache_key
+  def initialize(expires_in: DEFAULT_TTL)
     @expires_in = expires_in
   end
 
-  def query(request)
-    cache { send_query(request) }
+  def query(request, fetch_all: true, &block)
+    unless block_given?
+      return to_enum(__method__, request, fetch_all: fetch_all)
+    end
+
+    pending_request = request.dup
+    while pending_request
+      response = cache(pending_request) { send_query(pending_request) }
+      (response&.items || []).each(&block)
+
+      pending_request = fetch_all &&
+                        response&.last_evaluated_key &&
+                        pending_request.merge(exclusive_start_key: response.last_evaluated_key)
+    end
   end
 
   def batch_get_item(request)
-    cache { send_batch_get_item(request) }
+    cache(request) { send_batch_get_item(request) }
   end
 
   def update_item params
@@ -49,17 +60,14 @@ class DynamoDB
 
   private
 
-  def cache
-    return yield unless cache_key
-
-    Rails.cache.fetch cache_key, expires_in: expires_in do
+  def cache(request)
+    Rails.cache.fetch cache_key(request), expires_in: expires_in do
       yield
     end
   end
 
-  def cache_key
-    return unless @cache_key
-    [CACHE_KEY_PREFIX, @cache_key].join('/')
+  def cache_key(request)
+    [CACHE_KEY_PREFIX, Digest::MD5.hexdigest(request.inspect)].join('/')
   end
 
   def send_batch_get_item(request)
@@ -68,8 +76,7 @@ class DynamoDB
   end
 
   def send_query(request)
-    response = send_request(:query, request)
-    response&.items || []
+    send_request(:query, request)
   end
 
   def send_request(method, request)
