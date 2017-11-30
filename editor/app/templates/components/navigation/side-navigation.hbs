@@ -44,22 +44,20 @@
       {{/if}}
     </div>
   </li>
-  {{#if shouldShowMobileDesktopSwitch}}
-    <li class="toggle-mobile">
-      <a {{action 'toggleMobile'}}>
-        <i class="icon-desktop"></i>
-        <i class="icon-mobile"></i>
-      </a>
+  <li class="toggle-mobile">
+    <a {{action 'toggleMobile'}}>
+      <i class="icon-desktop"></i>
+      <i class="icon-mobile"></i>
+    </a>
 
-      <div class="caption">
-        {{#if isMobile}}
-          Desktop
-        {{else}}
-          Mobile
-        {{/if}}
-      </div>
-    </li>
-  {{/if}}
+    <div class="caption">
+      {{#if isMobile}}
+        Desktop
+      {{else}}
+        Mobile
+      {{/if}}
+    </div>
+  </li>
   <li class="close-editor">
     <a {{action "closeEditor"}}>
       <i class="icon-close"></i>
