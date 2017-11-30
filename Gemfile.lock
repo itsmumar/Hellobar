@@ -413,6 +413,8 @@ GEM
       yard (~> 0.9)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
+    pry-rails (0.3.6)
+      pry (>= 0.10.4)
     psych (2.2.4)
     public_suffix (3.0.0)
     rack (1.6.8)
@@ -705,6 +707,7 @@ DEPENDENCIES
   pry
   pry-doc
   pry-nav
+  pry-rails
   psych
   public_suffix
   rack-cors
