@@ -88,6 +88,12 @@ export default Ember.Service.extend({
       });
       this.set('model.settings.fields_to_collect', fields);
     }
+
+    if (this.get('model.type') === 'Takeover') {
+      this.set('model.image_style', 'large');
+    } else {
+      this.set('model.image_style', 'medium');
+    }
   }.observes('model.type'),
 
   // ------ Template handling
