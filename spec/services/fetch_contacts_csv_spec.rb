@@ -1,11 +1,11 @@
 describe FetchContactsCSV, :freeze do
   let(:contact_list) { create :contact_list }
   let(:service) { FetchContactsCSV.new(contact_list) }
-  let(:contacts) { [email: 'email@example.com', name: 'name', subscribed_at: Time.current] }
+  let(:contacts) { [Contact.new(email: 'email@example.com', name: 'name', subscribed_at: Time.current)] }
 
   describe '#call' do
     before do
-      expect(FetchContacts::All)
+      expect(FetchAllContacts)
         .to receive_service_call
         .with(contact_list)
         .and_return contacts

@@ -47,7 +47,7 @@ module ServiceProvider::Adapters
       return if tags.blank?
 
       contacts = fetch_latest_contacts(20)
-      subscribers = FetchContacts::Latest.new(contact_list, limit: 10).call
+      subscribers = FetchLatestContacts.new(contact_list, limit: 10).call
 
       find_union(contacts, subscribers).each do |contact|
         process_response client.post "contacts/#{ contact['contactId'] }", tags: tags
@@ -74,7 +74,7 @@ module ServiceProvider::Adapters
 
       contacts.each do |contact|
         subscribers.map do |subscriber|
-          found_contacts << contact if subscriber[:email] == contact['email']
+          found_contacts << contact if subscriber.email == contact['email']
         end
 
         break if found_contacts.count >= count

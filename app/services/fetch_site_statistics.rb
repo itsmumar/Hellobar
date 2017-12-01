@@ -13,7 +13,7 @@ class FetchSiteStatistics
   def call
     statistics.clear # clear the results in case we are calling this service object a second time
     site_elements.each do |site_element|
-      process(site_element) do |item|
+      dynamo_db.query_each(request_for(site_element.id)) do |item|
         statistics << enhance_record(site_element, item)
       end
     end
@@ -23,11 +23,6 @@ class FetchSiteStatistics
   private
 
   attr_reader :site, :days_limit, :site_element_ids
-
-  def process(site_element, &block)
-    request = request_for(site_element.id)
-    dynamo_db.query(request, &block)
-  end
 
   def statistics
     @statistics ||= SiteStatistics.new

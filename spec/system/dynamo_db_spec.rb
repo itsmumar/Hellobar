@@ -99,10 +99,10 @@ describe DynamoDB do
 
   describe '#query' do
     let(:params) { Hash[table_name: table_name] }
-    let(:query) { dynamo_db.query(params).to_a }
+    let(:query) { dynamo_db.query(params) }
 
     it 'returns enumerable of items' do
-      expect(query.to_a).to eql items
+      expect(query).to eql items
     end
 
     it 'tries to fetch from the Rails cache without querying DynamoDB' do

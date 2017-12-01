@@ -7,7 +7,7 @@ describe DownloadContactListJob do
     let(:perform) { job.new.perform(user, contact_list) }
 
     it 'calls ContactsMailer#csv_export' do
-      expect(FetchContacts::All).to receive_service_call.and_return({})
+      expect(FetchAllContacts).to receive_service_call.and_return([])
       expect(ContactsMailer).to receive(:csv_export).and_call_original
       perform
     end

@@ -44,19 +44,19 @@ table.contacts-table
     - @subscribers.each_with_index do |subscriber, index|
       tr
         td= index + 1
-        td= subscriber[:email]
-        td= subscriber[:name]
+        td= subscriber.email
+        td= subscriber.name
 
         - if @contact_list.service_provider
           td
-            - if subscriber[:status].blank? || subscriber[:status] == 'unsynced'
+            - if subscriber.status.blank? || subscriber.status == 'unsynced'
               = 'Unsynced'
-            - elsif subscriber[:status] == 'synced'
+            - elsif subscriber.status == 'synced'
               = 'Sent'
-            - elsif subscriber[:status] == 'error'
-              abbr title=subscriber[:error] Error
+            - elsif subscriber.status == 'error'
+              abbr title=subscriber.error Error
 
-        td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
+        td= subscriber.subscribed_at.try(:strftime, "%b %d, %Y")
 
     - if @subscribers.empty?
       tr

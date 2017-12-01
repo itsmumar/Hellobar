@@ -1,13 +1,18 @@
-class FetchContacts::Latest < FetchContacts::Base
+class FetchLatestContacts
   def initialize(contact_list, limit: 100)
-    super(contact_list)
-
+    @contact_list = contact_list
     @limit = limit
+  end
+
+  def call
+    fetch.map do |record|
+      Contact.from_dynamo_db(record)
+    end
   end
 
   private
 
-  attr_reader :limit
+  attr_reader :contact_list, :limit
 
   def build_request
     {
@@ -20,5 +25,17 @@ class FetchContacts::Latest < FetchContacts::Base
       limit: limit,
       scan_index_forward: false # sort results in reverse chronological order
     }
+  end
+
+  def fetch
+    dynamo_db.query_enum(build_request, fetch_all: false)
+  end
+
+  def table_name
+    DynamoDB.contacts_table_name
+  end
+
+  def dynamo_db
+    DynamoDB.new
   end
 end

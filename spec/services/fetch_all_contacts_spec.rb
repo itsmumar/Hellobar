@@ -1,4 +1,4 @@
-describe FetchContacts::All do
+describe FetchAllContacts do
   subject { described_class.new(contact_list) }
   let(:contact_list) { create :contact_list }
 
@@ -34,31 +34,27 @@ describe FetchContacts::All do
 
     let(:expected_result) do
       [
-        {
-          email: 'j.black@gmail.com',
-          name: 'John Black',
-          subscribed_at: Time.zone.at(1512077546),
-          status: '',
-          error: ''
-        },
-        {
-          email: 'abc123@gmail.com',
-          name: '',
-          subscribed_at: Time.zone.at(1512077321),
-          status: 'error',
-          error: 'Email is blacklisted'
-        }
+        Contact.new(email: 'j.black@gmail.com',
+                    name: 'John Black',
+                    subscribed_at: Time.zone.at(1512077546),
+                    status: '',
+                    error: ''),
+        Contact.new(email: 'abc123@gmail.com',
+                    name: '',
+                    subscribed_at: Time.zone.at(1512077321),
+                    status: 'error',
+                    error: 'Email is blacklisted')
       ]
     end
 
-    let(:dynamodb_client) { instance_double(DynamoDB, query: dynamodb_records.to_enum(:each)) }
+    let(:dynamodb_client) { instance_double(DynamoDB, query_enum: dynamodb_records.to_enum(:each)) }
 
     before do
       allow(DynamoDB).to receive(:new).and_return(dynamodb_client)
     end
 
     it 'fetches data from DynamoDB' do
-      expect(dynamodb_client).to receive(:query).with(dynamodb_request, fetch_all: true)
+      expect(dynamodb_client).to receive(:query_enum).with(dynamodb_request)
 
       subject.call
     end

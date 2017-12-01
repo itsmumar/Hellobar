@@ -33,11 +33,15 @@ class DynamoDB
     @expires_in = expires_in
   end
 
-  def query(request, fetch_all: true, &block)
-    unless block_given?
-      return to_enum(__method__, request, fetch_all: fetch_all)
-    end
-
+  # Executes query and calls the block given with each item from the response.
+  #
+  # @param request [Hash] dynamo DB query (@see http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html)
+  # @param fetch_all [Boolean] specifies whether all items should be fetched or just the first page (true by default).
+  #
+  # @yield [record] Gives fetched records to the block 1 by 1.
+  # @yieldparam record [Hash] record fetches from DynamoDB.
+  #
+  def query_each(request, fetch_all: true, &block)
     pending_request = request.dup
     while pending_request
       response = cache(pending_request) { send_query(pending_request) }
@@ -47,6 +51,16 @@ class DynamoDB
                         response&.last_evaluated_key &&
                         pending_request.merge(exclusive_start_key: response.last_evaluated_key)
     end
+  end
+
+  # Executes query and return an enumerator (@see #query_each for the list of arguments)
+  def query_enum(*args)
+    to_enum(:query_each, *args)
+  end
+
+  # Executes query and returns an array (@see #query_each for the list of arguments).
+  def query(*args)
+    query_enum(*args).to_a
   end
 
   def batch_get_item(request)
