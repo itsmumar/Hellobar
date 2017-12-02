@@ -1,0 +1,7 @@
+p Hello!
+
+p Your #{@previous_subscription.name} subscription for the site #{link_to(@site.url, @site.url)} has been automatically downgraded to a Free subscription due to an unpaid bill.
+
+p You can upgrade to Pro/Enterprise at any point by visiting your site's page:
+
+p= link_to edit_site_url(@site), edit_site_url(@site)
