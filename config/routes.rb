@@ -138,20 +138,23 @@ Rails.application.routes.draw do
     resources :credit_cards, only: [:destroy]
 
     resources :users, only: %i[index show destroy] do
-      resources :sites, only: [:update] do
-        member do
-          post :regenerate
-          put :add_free_days
-        end
+    end
 
-        resources :contact_lists, only: [:index]
+    resources :sites, only: [:show, :update] do
+      member do
+        post :regenerate
+        put :add_free_days
       end
 
       resources :bills, only: [:show] do
-        put 'void'
-        put 'pay'
-        put 'refund'
+        member do
+          put 'void'
+          put 'pay'
+          put 'refund'
+        end
       end
+
+      resources :contact_lists, only: [:index]
     end
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown

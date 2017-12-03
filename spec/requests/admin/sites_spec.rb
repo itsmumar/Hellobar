@@ -1,11 +1,54 @@
 describe 'Admin::Sites requests' do
   let!(:admin) { create(:admin) }
-  let(:site) { create(:site, :with_user) }
+  let(:site) { create(:site, :free_subscription, :with_user) }
   let!(:user) { site.owners.first }
   before(:each) { stub_current_admin(admin) }
 
-  context 'PUT admin_user_site_path' do
-    let(:update) { put admin_user_site_path(site, user_id: site.owners.first), params }
+  context 'GET admin_site_path' do
+    before do
+      get admin_site_path(site)
+    end
+
+    it 'responds with success' do
+      expect(response).to be_success
+    end
+
+    it 'shows the specified site' do
+      within('.site-title') do
+        expect(page).to have_content(site.url)
+      end
+    end
+
+    it 'shows the billing history' do
+      within('.site_section.billing_history') do
+        expect(page).to have_content('Billing History')
+        expect(page).to have_selector('table tr', count: 1)
+      end
+    end
+
+    it 'shows the subscription history' do
+      within('.site_section.subscription_history') do
+        expect(page).to have_content('Subscription History')
+        expect(page).to have_selector('table tr', count: 1)
+      end
+    end
+
+    context 'when site is shared' do
+      before do
+        create(:site_membership, site: site)
+      end
+
+      it 'shows all site users' do
+        within('.site_section.site_users') do
+          expect(page).to have_content('Shared By')
+          expect(page).to have_selector('table tr', count: 2)
+        end
+      end
+    end
+  end
+
+  context 'PUT admin_site_path' do
+    let(:update) { put admin_site_path(site), params }
 
     context 'when updating subscription' do
       let(:params) { { subscription: { subscription: 'ProComped', schedule: 'monthly' } } }
@@ -110,8 +153,8 @@ describe 'Admin::Sites requests' do
     end
   end
 
-  describe 'POST regenerate_admin_user_site_path' do
-    let(:regenerate) { post regenerate_admin_user_site_path(user_id: user, id: site) }
+  describe 'POST regenerate_admin_site_path' do
+    let(:regenerate) { post regenerate_admin_site_path(id: site) }
 
     before { allow(StaticScriptAssets).to receive(:render).and_return '$INJECT_DATA;$INJECT_MODULES' }
 
@@ -156,7 +199,7 @@ describe 'Admin::Sites requests' do
     let(:current_bill) { current_subscription.bills.first }
 
     let(:add_free_days) do
-      put add_free_days_admin_user_site_path(site, user_id: site.owners.first), params
+      put add_free_days_admin_site_path(site), params
     end
 
     context 'with a paid subscription' do
@@ -203,7 +246,7 @@ describe 'Admin::Sites requests' do
       it 'sets flash message' do
         add_free_days
         expect(flash[:error]).to eql 'Invalid number of days'
-        expect(response).to redirect_to admin_user_path(user.id)
+        expect(response).to redirect_to admin_site_path(site.id)
       end
     end
 
@@ -211,7 +254,7 @@ describe 'Admin::Sites requests' do
       it 'sets flash message' do
         add_free_days
         expect(flash[:error]).to eql 'Could not add trial days to a free subscription'
-        expect(response).to redirect_to admin_user_path(user.id)
+        expect(response).to redirect_to admin_site_path(site.id)
       end
     end
   end
