@@ -140,7 +140,7 @@ Rails.application.routes.draw do
     resources :users, only: %i[index show destroy] do
     end
 
-    resources :sites, only: [:show, :update] do
+    resources :sites, only: %i[show update] do
       member do
         post :regenerate
         put :add_free_days
