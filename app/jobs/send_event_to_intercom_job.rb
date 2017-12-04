@@ -1,7 +1,7 @@
 class SendEventToIntercomJob < ApplicationJob
   rescue_from Intercom::ResourceNotFound do |exception|
-    handle_user_not_found(*arguments) if exception.message == 'User Not Found'
-    raise exception
+    raise exception unless exception.message == 'User Not Found'
+    handle_user_not_found(*arguments)
   end
 
   def perform(event, options = {})
