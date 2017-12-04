@@ -3,7 +3,7 @@ class SendEventToIntercomJob < ApplicationJob
     if exception.message == 'User Not Found'
       handle_user_not_found(*arguments)
     else
-      Raven.capture_exception exception
+      raise exception
     end
   end
 
