@@ -38,7 +38,7 @@ class SendEmailCampaign
     {
       body: email_campaign.body,
       contactListId: contact_list.id,
-      emailCampaignId: email_campaign.id,
+      campaignId: email_campaign.id,
       environment: Rails.env,
       fromEmail: email_campaign.from_email,
       fromName: email_campaign.from_name,
