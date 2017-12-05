@@ -7,7 +7,7 @@ describe SendEmailCampaign do
       message_hash = {
         body: email_campaign.body,
         contactListId: contact_list.id,
-        emailCampaignId: email_campaign.id,
+        campaignId: email_campaign.id,
         environment: 'test',
         fromEmail: email_campaign.from_email,
         fromName: email_campaign.from_name,
