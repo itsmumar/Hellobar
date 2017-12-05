@@ -1,12 +1,12 @@
 class Admin::BillsController < AdminController
   def show
-    load_data
+    @bill, @site, @subscription = load_data
     @credit_card = @bill.paid_with_credit_card
     render 'bills/show', layout: 'receipt'
   end
 
   def void
-    load_data
+    @bill, @subscription, @site = load_data
     @bill.voided!
     flash[:success] = "Voided bill due on #{ @bill.due_at.strftime('%D') } for #{ @bill.amount }."
 
@@ -14,7 +14,7 @@ class Admin::BillsController < AdminController
   end
 
   def pay
-    load_data
+    @bill, @subscription, @site = load_data
     PayBill.new(@bill).call
     flash[:success] = 'Bill is successfully paid'
 
@@ -22,7 +22,7 @@ class Admin::BillsController < AdminController
   end
 
   def refund
-    load_data
+    @bill, @subscription, @site = load_data
     begin
       amount = params[:bill_recurring][:amount].to_f
       RefundBill.new(@bill, amount: amount).call
@@ -37,8 +37,10 @@ class Admin::BillsController < AdminController
   private
 
   def load_data
-    @bill = Bill.find(params[:id])
-    @subscription = @bill.subscription
-    @site = Site.find(params[:site_id])
+    bill = Bill.find(params[:id])
+    subscription = bill.subscription
+    site = Site.find(params[:site_id])
+
+    [bill, subscription, site]
   end
 end

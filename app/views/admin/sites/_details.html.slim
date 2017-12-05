@@ -106,7 +106,7 @@
                   br
 
                 - if !bill.voided? && bill.amount == 0
-                  = link_to "void", admin_site_bill_void_path(site, bill), method: :put, data: { confirm: "Void this bill?" }
+                  = link_to "void", void_admin_site_bill_path(site, bill), method: :put, data: { confirm: "Void this bill?" }
                   br
 
                 - if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0
