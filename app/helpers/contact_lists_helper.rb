@@ -26,4 +26,15 @@ module ContactListsHelper
       '<small>Storing contacts in</small><span>Hello Bar</span>'
     end
   end
+
+  def contact_status(contact)
+    case true
+    when contact.synched?
+      'Sent'
+    when contact.unsynched?
+      'Unsynced'
+    when contact.error?
+      content_tag :abbr, 'Error', title: contact.error
+    end
+  end
 end

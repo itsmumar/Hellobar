@@ -42,14 +42,13 @@ class DynamoDB
   # @yieldparam record [Hash] record fetches from DynamoDB.
   #
   def query_each(request, fetch_all: true, &block)
-    pending_request = request.dup
-    while pending_request
-      response = cache(pending_request) { send_query(pending_request) }
+    loop do
+      response = cache(request) { send_query(request) }
       (response&.items || []).each(&block)
 
-      pending_request = fetch_all &&
-                        response&.last_evaluated_key &&
-                        pending_request.merge(exclusive_start_key: response.last_evaluated_key)
+      break unless fetch_all && response&.last_evaluated_key
+
+      request = request.merge(exclusive_start_key: response.last_evaluated_key)
     end
   end
 

@@ -48,13 +48,7 @@ table.contacts-table
         td= subscriber.name
 
         - if @contact_list.service_provider
-          td
-            - if subscriber.status.blank? || subscriber.status == 'unsynced'
-              = 'Unsynced'
-            - elsif subscriber.status == 'synced'
-              = 'Sent'
-            - elsif subscriber.status == 'error'
-              abbr title=subscriber.error Error
+          td= contact_status(subscriber)
 
         td= subscriber.subscribed_at.try(:strftime, "%b %d, %Y")
 

@@ -1,11 +1,13 @@
 class Contact
-  attr_accessor :lid, :email, :name, :subscribed_at, :status, :error
+  SYNCED = 'synced'
+  UNSYCHED = 'unsynced'
+  ERROR = 'error'
 
-  def initialize(attributes)
-    attributes.each do |key, value|
-      send("#{ key }=", value)
-    end
-  end
+  STATUSES = [SYNCED, UNSYCHED, ERROR]
+
+  include ActiveModel::Model
+
+  attr_accessor :lid, :email, :name, :subscribed_at, :status, :error
 
   def self.from_dynamo_db(record)
     new(lid: record['lid'],
@@ -18,5 +20,17 @@ class Contact
 
   def ==(other)
     other.class == self.class && other.lid == lid && other.email == email
+  end
+
+  def unsynched?
+    status.blank? || status == UNSYCHED
+  end
+
+  def synched?
+    status == SYNCED
+  end
+
+  def error?
+    status == ERROR
   end
 end
