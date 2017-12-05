@@ -1,9 +1,9 @@
 class Contact
-  SYNCED = 'synced'
-  UNSYCHED = 'unsynced'
-  ERROR = 'error'
+  SYNCED = 'synced'.freeze
+  UNSYNCED = 'unsynced'.freeze
+  ERROR = 'error'.freeze
 
-  STATUSES = [SYNCED, UNSYCHED, ERROR]
+  STATUSES = [SYNCED, UNSYNCED, ERROR].freeze
 
   include ActiveModel::Model
 
@@ -22,11 +22,11 @@ class Contact
     other.class == self.class && other.lid == lid && other.email == email
   end
 
-  def unsynched?
-    status.blank? || status == UNSYCHED
+  def unsynced?
+    status.blank? || status == UNSYNCED
   end
 
-  def synched?
+  def synced?
     status == SYNCED
   end
 

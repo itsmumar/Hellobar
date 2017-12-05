@@ -28,12 +28,11 @@ module ContactListsHelper
   end
 
   def contact_status(contact)
-    case true
-    when contact.synched?
+    if contact.synced?
       'Sent'
-    when contact.unsynched?
+    elsif contact.unsynced?
       'Unsynced'
-    when contact.error?
+    elsif contact.error?
       content_tag :abbr, 'Error', title: contact.error
     end
   end
