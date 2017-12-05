@@ -34,9 +34,9 @@ describe 'ContactList requests' do
       before do
         allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
-        allow_any_instance_of(FetchContacts).to receive(:call).and_return([
-          { email: 'user@example.com', status: 'synced' },
-          { email: 'john@example.com', status: 'error' }
+        allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([
+          Contact.new(email: 'user@example.com', status: 'synced'),
+          Contact.new(email: 'john@example.com', status: 'error')
         ])
       end
 

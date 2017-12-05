@@ -3,7 +3,6 @@ describe DynamoDB do
   let(:table_name) { 'table' }
   let(:id) { 5 }
   let(:expires_in) { 1.hour }
-  let(:cache_key) { 'cache_key' }
   let(:items) { [Hash['foo' => 'foo', 'bar' => 'bar']] }
   let(:count) { items.size }
 
@@ -50,7 +49,7 @@ describe DynamoDB do
     )
   end
 
-  let(:dynamo_db) { DynamoDB.new cache_key: cache_key, expires_in: expires_in }
+  let(:dynamo_db) { DynamoDB.new expires_in: expires_in }
 
   before do
     allow(Aws::DynamoDB::Client).to receive(:new).and_return client
@@ -100,16 +99,16 @@ describe DynamoDB do
 
   describe '#query' do
     let(:params) { Hash[table_name: table_name] }
-    let(:query) { dynamo_db.query params }
+    let(:query) { dynamo_db.query(params) }
 
-    it 'returns array of items' do
+    it 'returns enumerable of items' do
       expect(query).to eql items
     end
 
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
       expect(Aws::DynamoDB::Client).not_to receive :new
       expect(Rails.cache).to receive(:fetch)
-        .with "DynamoDB/#{ cache_key }", expires_in: expires_in
+        .with(/DynamoDB\/\w+/, expires_in: expires_in)
 
       query
     end
@@ -173,7 +172,7 @@ describe DynamoDB do
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
       expect(Aws::DynamoDB::Client).not_to receive :new
       expect(Rails.cache).to receive(:fetch)
-        .with "DynamoDB/#{ cache_key }", expires_in: expires_in
+        .with(/DynamoDB\/\w+/, expires_in: expires_in)
 
       batch_get_item
     end
