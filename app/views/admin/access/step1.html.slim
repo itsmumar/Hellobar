@@ -3,8 +3,9 @@ div.row
   div.col-md-4
     h1 Admin
 
-    = simple_form_for :new_admin, url: '/admin/access' do |f|
-      = f.input :login_email, label: 'Email address', input_html: { name: :login_email }
+    = simple_form_for :admin_session, url: '/admin/access' do |f|
+      = f.input :email, label: 'Email address'
+      = f.input :password
       = f.button :submit, 'Continue', class: 'btn btn-primary'
 
   div.col-md-4

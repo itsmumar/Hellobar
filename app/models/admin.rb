@@ -65,10 +65,18 @@ class Admin < ApplicationRecord
     def unlock_all!
       Admin.update_all(login_attempts: 0, locked: 0)
     end
+
+    def otp_enabled?
+      Rails.env.production?
+    end
   end
 
   def logout!
     update_attribute(:session_token, '')
+  end
+
+  def otp_enabled?
+    self.class.otp_enabled?
   end
 
   def needs_otp_code?
@@ -79,27 +87,21 @@ class Admin < ApplicationRecord
     authentication_policy.generate_otp
   end
 
-  # Validates the access_token, password and otp_code
-  # Makes sure not locked
-  # Save entered_otp, so next time user won't see the barcode rendered again.
-  # Also increases the login_attempts and locks it down if reaches MAX_LOGIN_ATTEMPTS
-  # If this is a valid login then we call login!. Returns true if everything
-  # is valid, false otherwise
-  def validate_login(password, entered_otp)
-    update_attribute(:login_attempts, login_attempts + 1)
-    update_attribute(:authentication_code, entered_otp)
-
-    lock! if login_attempts > MAX_LOGIN_ATTEMPTS
-    return false if locked? ||
-                    !valid_authentication_otp?(entered_otp) ||
-                    password_hashed != encrypt_password(password)
-
-    login!
-    true
+  def validate_password!(password)
+    if password_hashed == encrypt_password(password)
+      update_attribute(:login_attempts, 0)
+      true
+    else
+      increment(:login_attempts)
+      lock! if login_attempts >= MAX_LOGIN_ATTEMPTS
+      false
+    end
   end
 
-  def valid_authentication_otp?(otp)
-    authentication_policy.otp_valid?(otp)
+  def validate_otp!(otp)
+    return true unless otp_enabled?
+
+    update_attribute(:authentication_code, otp) if authentication_policy.otp_valid?(otp)
   end
 
   def reset_password!(unencrypted_password)
@@ -120,14 +122,8 @@ class Admin < ApplicationRecord
     )
   end
 
-  # Reset login_attempts, session_token and session_last_active
   def login!
-    return false if locked?
-
-    update_attributes(
-      login_attempts: 0,
-      session_token: hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join(''))
-    )
+    generate_new_session!
     session_heartbeat!
   end
 
@@ -168,6 +164,10 @@ class Admin < ApplicationRecord
 
   def set_default_password
     self.password = initial_password if new_record? && password_hashed.blank?
+  end
+
+  def generate_new_session!
+    update_attribute(:session_token, hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join('')))
   end
 
   def generate_rotp_secret_base!

@@ -159,8 +159,9 @@ Rails.application.routes.draw do
     get 'reset_password', to: 'access#reset_password'
     post 'reset_password', to: 'access#do_reset_password'
     get 'access', to: 'access#step1', as: :access
-    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     post 'access', to: 'access#process_step1'
+    get 'otp', to: 'access#step2', as: :otp
+    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     get 'locked', to: 'access#locked', as: :locked
   end
 

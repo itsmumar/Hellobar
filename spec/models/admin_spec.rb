@@ -1,5 +1,6 @@
 describe Admin do
-  let!(:admin) { create :admin }
+  let(:password) { 'asdqwe!!' }
+  let!(:admin) { create(:admin, password: password) }
 
   it 'can create a new record from email and initial password' do
     admin = Admin.make!('newadmin@polymathic.me', '5553211234')
@@ -74,37 +75,106 @@ describe Admin do
     end
   end
 
-  describe 'validate_login' do
-    it 'locks the admin if attempting to log in too many times' do
-      admin.update_attribute(:login_attempts, Admin::MAX_LOGIN_ATTEMPTS)
-      expect(admin).not_to be_locked
+  describe '#validate_password!' do
+    context 'when valid password given' do
+      it 'returns true' do
+        expect(admin.validate_password!(password)).to be_truthy
+      end
 
-      admin.validate_login('password', '123')
+      it 'resets login_attempts counter' do
+        admin.increment(:login_attempts)
+        admin.validate_password!(password)
 
-      expect(admin).to be_locked
-      expect(admin.login_attempts).to eq(Admin::MAX_LOGIN_ATTEMPTS + 1)
+        expect(admin.login_attempts).to eq(0)
+      end
     end
 
-    it 'returns false if locked' do
-      allow(admin).to receive(:locked?).and_return(true)
-      expect(admin.validate_login('password', admin.initial_password)).to be_falsey
+    context 'when invalid password given' do
+      let(:invalid_password) { 'p@ssword' }
+
+      it 'returns false' do
+        expect(admin.validate_password!(invalid_password)).to be_falsey
+      end
+
+      it 'increments login_attempts counter' do
+        expect { admin.validate_password!(invalid_password) }.to change { admin.login_attempts }.by(1)
+      end
+
+      context 'when login_attempts exceeds the limit' do
+        before do
+          admin.update_attribute(:login_attempts, Admin::MAX_LOGIN_ATTEMPTS - 1)
+        end
+
+        it 'locks the account' do
+          expect { admin.validate_password!(invalid_password) }.to change { admin.locked? }.to(true)
+        end
+      end
+    end
+  end
+
+  describe '#validate_otp!' do
+    let(:otp) { 123 }
+    let(:otp_valid) { true }
+    let(:policy) { instance_double(AdminAuthenticationPolicy, otp_valid?: otp_valid) }
+
+    before do
+      allow(AdminAuthenticationPolicy).to receive(:new).with(admin).and_return(policy)
     end
 
-    it 'returns false if otp is not valid' do
-      allow(admin).to receive(:needs_otp_code?).and_return(true)
-      allow_any_instance_of(AdminAuthenticationPolicy).to receive(:otp_valid?).and_return(false)
-      expect(admin.validate_login('password', 'notthecode')).to be_falsey
+    context 'when OTP is enabled' do
+      before do
+        allow(admin).to receive(:otp_enabled?).and_return(true)
+      end
+
+      context 'when given OTP is valid' do
+        it 'returns true' do
+          expect(admin.validate_otp!(otp)).to be_truthy
+        end
+
+        it 'updates authentication_code' do
+          expect { admin.validate_otp!(otp) }.to change { admin.authentication_code }
+        end
+      end
+
+      context 'when given OTP is invalid' do
+        let(:otp_valid) { false }
+
+        it 'returns false' do
+          expect(admin.validate_otp!(otp)).to be_falsey
+        end
+
+        it 'does not update authentication_code' do
+          expect { admin.validate_otp!(otp) }.not_to change { admin.authentication_code }
+        end
+      end
     end
 
-    it 'returns false if the wrong password is used' do
-      expect(admin.validate_login('notthepassword', admin.initial_password)).to be_falsey
-    end
+    context 'when OTP is disabled' do
+      before do
+        allow(admin).to receive(:otp_enabled?).and_return(false)
+      end
 
-    it 'logs the admin in if all params are valid' do
-      allow(admin).to receive(:needs_otp_code?).and_return(true)
-      allow(admin).to receive(:valid_authentication_otp?).with('123').and_return(true)
-      expect(admin).to receive(:login!)
-      expect(admin.validate_login('password', '123')).to be_truthy
+      context 'when given OTP is valid' do
+        it 'returns true' do
+          expect(admin.validate_otp!(otp)).to be_truthy
+        end
+
+        it 'does not update authentication_code' do
+          expect { admin.validate_otp!(otp) }.not_to change { admin.authentication_code }
+        end
+      end
+
+      context 'when given OTP is invalid' do
+        let(:otp_valid) { false }
+
+        it 'returns true' do
+          expect(admin.validate_otp!(otp)).to be_truthy
+        end
+
+        it 'does not update authentication_code' do
+          expect { admin.validate_otp!(otp) }.not_to change { admin.authentication_code }
+        end
+      end
     end
   end
 
@@ -115,17 +185,17 @@ describe Admin do
       .to change(admin, :password_hashed)
   end
 
-  it 'login! logs the admin in' do
-    admin.update_attributes(login_attempts: 2, session_token: '')
+  describe '#login!' do
+    it 'generates session_token' do
+      admin.login!
+      expect(admin.session_token).to be_present
+    end
 
-    expect(admin).to receive(:session_heartbeat!)
+    it 'updates existing session_token' do
+      admin.login!
 
-    admin.login!
-    admin.reload
-
-    expect(admin.login_attempts).to eq(0)
-    expect(admin.session_token).not_to be_blank
-    expect(admin.authentication_code).to be_blank
+      expect { admin.login! }.to change { admin.session_token }
+    end
   end
 
   describe '#unlock!' do
