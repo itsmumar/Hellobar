@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :campaigns, only: %i[index create update]
+    resources :campaigns, except: %i[new edit delete]
 
     get :authenticate, to: 'authentications#create'
   end

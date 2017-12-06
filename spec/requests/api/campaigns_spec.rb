@@ -1,6 +1,7 @@
 describe 'api/campaigns requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
+  let(:headers) { api_headers_for_site_user site, user }
 
   describe 'get #index' do
     let(:params) { Hash[format: :json] }
@@ -32,8 +33,6 @@ describe 'api/campaigns requests' do
       it 'returns campaigns for the site in the JSON format' do
         campaign = create :email_campaign, site: site
 
-        headers = api_headers_for_site_user site, user
-
         get api_campaigns_path, { format: :json }, headers
 
         expect(response).to be_successful
@@ -45,6 +44,17 @@ describe 'api/campaigns requests' do
         expect(campaigns.first[:body]).to eq campaign.body
         expect(campaigns.first[:contact_list]).to be_present
       end
+    end
+  end
+
+  describe 'get #show' do
+    let!(:email_campaign) { create(:email_campaign, site: site) }
+
+    it 'returns the campaign' do
+      get api_campaign_path(email_campaign), { format: :json }, headers
+
+      expect(response).to be_successful
+      expect(json[:contact_list]).to be_present
     end
   end
 
@@ -63,7 +73,6 @@ describe 'api/campaigns requests' do
     end
 
     it 'returns newly created campaign' do
-      headers = api_headers_for_site_user site, user
       post api_campaigns_path, params, headers
 
       expect(response).to be_successful
@@ -77,7 +86,6 @@ describe 'api/campaigns requests' do
       end
 
       it 'returns errors JSON' do
-        headers = api_headers_for_site_user site, user
         post api_campaigns_path, params, headers
 
         expect(response).not_to be_successful
@@ -97,7 +105,6 @@ describe 'api/campaigns requests' do
     end
 
     it 'returns updated campaign' do
-      headers = api_headers_for_site_user site, user
       put api_campaign_path(email_campaign), params, headers
 
       expect(response).to be_successful
@@ -110,7 +117,6 @@ describe 'api/campaigns requests' do
       end
 
       it 'returns errors JSON' do
-        headers = api_headers_for_site_user site, user
         put api_campaign_path(email_campaign), params, headers
 
         expect(response).not_to be_successful

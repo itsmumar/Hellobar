@@ -10,6 +10,11 @@ class Api::CampaignsController < ApplicationController
       each_serializer: EmailCampaignSerializer
   end
 
+  def show
+    email_campaign = @current_site.email_campaigns.find params[:id]
+    render json: EmailCampaignSerializer.new(email_campaign)
+  end
+
   def create
     email_campaign = @current_site.email_campaigns.build email_campaign_params
 
