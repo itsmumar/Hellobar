@@ -45,7 +45,7 @@
             div= number_field 'free_days', 'count', value: 1, min: 1
             = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
-    - if site.site_memberships.any?
+    - if site.site_memberships.with_deleted.any?
       div.site_section.site_users
         div.title Shared By
 
@@ -53,9 +53,9 @@
           tr
             th Email
             th Permissions
-          - site.site_memberships.each do |site_membership|
+          - site.site_memberships.with_deleted.each do |site_membership|
             tr
-              td= link_to site_membership.user.email, admin_user_path(site_membership.user)
+              td= link_to User.with_deleted.find_by(site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
               td= site_membership.role
 
     - unless bills_for(site).empty?
