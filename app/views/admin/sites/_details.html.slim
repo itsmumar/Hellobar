@@ -4,13 +4,15 @@
       h3
         = link_to site_title(site), admin_site_path(site)
 
+      = link_to 'Visit site', site.url.html_safe, target: '_blank'
+
       - unless site.deleted?
         = link_to 'Contact Lists', admin_site_contact_lists_path(site), target: "_blank"
-        a.subscription_link data-siteid=site.id change plan
+        a.subscription_link data-siteid=site.id Change plan
         - if site.current_subscription.paid?
-          a.free_days_link data-siteid=site.id add free days
+          a.free_days_link data-siteid=site.id Add free days
         a.regenerate_link data-url=regenerate_admin_site_path(site)
-          | regenerate script
+          | Regenerate script
 
     = form_for site, url: admin_site_path(site), method: :put, html: {class: "form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
       = f.hidden_field :id, value: site.id
