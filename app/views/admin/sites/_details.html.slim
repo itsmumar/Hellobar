@@ -45,9 +45,10 @@
             div= number_field 'free_days', 'count', value: 1, min: 1
             = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
-    - if site.users.count > 1
+    - if site.site_memberships.any?
       div.site_section.site_users
         div.title Shared By
+
         table
           tr
             th Email
