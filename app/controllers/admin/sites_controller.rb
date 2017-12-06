@@ -1,4 +1,8 @@
 class Admin::SitesController < AdminController
+  def show
+    site
+  end
+
   def update
     begin
       site.update_attributes(site_params) if params.key?(:site)
@@ -13,7 +17,7 @@ class Admin::SitesController < AdminController
       raise if Rails.env.test?
     end
 
-    redirect_to admin_user_path(params[:user_id])
+    redirect_to admin_site_path(params[:id])
   end
 
   def regenerate
@@ -34,10 +38,10 @@ class Admin::SitesController < AdminController
   def add_free_days
     AddFreeDays.new(site, params[:free_days][:count]).call
     flash[:success] = "#{ params[:free_days][:count] } free days have been added."
-    redirect_to admin_user_path(params[:user_id])
+    redirect_to admin_site_path(params[:id])
   rescue AddFreeDays::Error => e
     flash[:error] = e.message
-    redirect_to admin_user_path(params[:user_id])
+    redirect_to admin_site_path(params[:id])
   end
 
   private

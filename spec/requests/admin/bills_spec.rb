@@ -2,7 +2,7 @@ describe 'Admin::Bills requests' do
   context 'when unauthenticated' do
     describe 'GET :show' do
       it 'responds with a redirect to the login page' do
-        get admin_user_bill_path user_id: 1, id: 1
+        get admin_site_bill_path site_id: 1, id: 1
 
         expect(response).to be_a_redirect
         expect(response.location).to include '/admin/access'
@@ -20,25 +20,25 @@ describe 'Admin::Bills requests' do
 
     describe 'GET #show' do
       it 'allows admins to see a bill' do
-        get admin_user_bill_path(user_id: user.id, id: bill)
+        get admin_site_bill_path(site_id: site.id, id: bill)
         expect(response).to be_success
       end
     end
 
     describe 'PUT #void' do
       it 'voids a bill' do
-        put admin_user_bill_void_path(user_id: user, bill_id: bill)
+        put void_admin_site_bill_path(site_id: site, id: bill)
 
-        expect(response).to redirect_to admin_user_path(user)
+        expect(response).to redirect_to admin_site_path(site)
         expect(bill.reload).to be_voided
       end
     end
 
     describe 'PUT #pay' do
       it 'pays a bill' do
-        put admin_user_bill_pay_path(user_id: user, bill_id: bill)
+        put pay_admin_site_bill_path(site_id: site, id: bill)
 
-        expect(response).to redirect_to admin_user_path(user)
+        expect(response).to redirect_to admin_site_path(site)
         expect(bill.reload).to be_paid
       end
     end
@@ -53,25 +53,25 @@ describe 'Admin::Bills requests' do
 
       it 'refunds a bill' do
         expect {
-          put admin_user_bill_refund_path(user_id: user, bill_id: bill), params
+          put refund_admin_site_bill_path(site_id: site, id: bill), params
         }.to change(Bill::Refund, :count).by 1
 
-        expect(response).to redirect_to admin_user_path(user)
+        expect(response).to redirect_to admin_site_path(site)
       end
 
       context 'when failed' do
         let(:params) do
           {
-            bill_id: bill,
+            id: bill,
             bill_recurring: { amount: -100 }
           }
         end
 
         it 'returns refund error' do
           expect {
-            put admin_user_bill_refund_path(user_id: user, bill_id: bill), params
+            put refund_admin_site_bill_path(site_id: site, id: bill), params
           }.not_to change(Bill::Refund, :count)
-          expect(response).to redirect_to admin_user_path(user)
+          expect(response).to redirect_to admin_site_path(site)
         end
       end
     end

@@ -32,13 +32,14 @@ div.row
               ul
                 - user.sites.with_deleted.each do |site|
                   li
-                    = link_to site.normalized_url.html_safe, site.url, target: "_blank"
+                    = link_to site.url, admin_site_path(site)
                     - if site.deleted?
                       '  (Deleted)
                     - elsif !site.free?
                       '  (#{site.current_subscription.values[:name]})
                     - if site.users.count > 1
                       ' (shared)
+                    = link_to " [visit site]", site.url.html_safe, target: "_blank"
             td
               ul
                 - user.credit_cards.each do |credit_card|
