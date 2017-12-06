@@ -1,12 +1,13 @@
 class Api::CampaignsController < Api::ApplicationController
+  before_action :find_campaign, only: %i[show update send_out]
+
   def index
     render json: @current_site.email_campaigns,
       each_serializer: EmailCampaignSerializer
   end
 
   def show
-    email_campaign = @current_site.email_campaigns.find params[:id]
-    render json: EmailCampaignSerializer.new(email_campaign)
+    render json: EmailCampaignSerializer.new(@email_campaign)
   end
 
   def create
@@ -21,17 +22,24 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def update
-    email_campaign = @current_site.email_campaigns.find(params[:id])
-
-    if email_campaign.update(email_campaign_params)
-      render json: EmailCampaignSerializer.new(email_campaign)
+    if @email_campaign.update(email_campaign_params)
+      render json: EmailCampaignSerializer.new(@email_campaign)
     else
-      render json: { errors: email_campaign.errors.full_messages },
+      render json: { errors: @email_campaign.errors.full_messages },
         status: :unprocessable_entity
     end
   end
 
+  def send_out
+    SendEmailCampaign.new(@email_campaign).call
+    render json: { message: 'Email Campaign successfully sent.' }
+  end
+
   private
+
+  def find_campaign
+    @email_campaign = @current_site.email_campaigns.find(params[:id])
+  end
 
   def email_campaign_params
     params

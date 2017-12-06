@@ -103,4 +103,21 @@ describe 'api/campaigns requests' do
       end
     end
   end
+
+  describe 'post #send_out' do
+    let(:email_campaign) { create(:email_campaign, site: site) }
+
+    it 'responds with success' do
+      post send_out_api_campaign_path(email_campaign), { format: :json }, headers
+
+      expect(response).to be_successful
+      expect(json).to include(message: 'Email Campaign successfully sent.')
+    end
+
+    it 'calls SendEmailCampaign service' do
+      expect(SendEmailCampaign).to receive_service_call.with(email_campaign)
+
+      post send_out_api_campaign_path(email_campaign), { format: :json }, headers
+    end
+  end
 end
