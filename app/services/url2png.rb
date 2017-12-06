@@ -10,7 +10,7 @@ class Url2png
 
   private
 
-  attr_reader :query_string, :options, :protocol
+  attr_reader :options, :protocol
 
   def token
     Digest::MD5.hexdigest(query_string + secret)
@@ -21,10 +21,11 @@ class Url2png
   end
 
   def query_string
-    options.reverse_merge(custom_css_url: css_url, ttl: 7.days.to_i)
+    options
+      .reverse_merge(custom_css_url: css_url, ttl: 7.days.to_i)
       .compact
       .sort
-      .map { |k, v| "#{ CGI::escape(k.to_s) }=#{ CGI::escape(v.to_s) }" }
+      .map { |k, v| "#{ CGI.escape(k.to_s) }=#{ CGI.escape(v.to_s) }" }
       .join('&')
   end
 
