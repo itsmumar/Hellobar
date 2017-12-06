@@ -1,14 +1,18 @@
 #site_details
   div.site-block
     div.site-title
-      h3 = site_title(site)
+      h3
+        = link_to site_title(site), admin_site_path(site)
+
+      = link_to 'Visit site', site.url.html_safe, target: '_blank'
+
       - unless site.deleted?
         = link_to 'Contact Lists', admin_site_contact_lists_path(site), target: "_blank"
-        a.subscription_link data-siteid=site.id change plan
+        a.subscription_link data-siteid=site.id Change plan
         - if site.current_subscription.paid?
-          a.free_days_link data-siteid=site.id add free days
+          a.free_days_link data-siteid=site.id Add free days
         a.regenerate_link data-url=regenerate_admin_site_path(site)
-          | regenerate script
+          | Regenerate script
 
     = form_for site, url: admin_site_path(site), method: :put, html: {class: "form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
       = f.hidden_field :id, value: site.id
@@ -41,17 +45,22 @@
             div= number_field 'free_days', 'count', value: 1, min: 1
             = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
-    - if site.users.count > 1
+    - if site.site_memberships.with_deleted.any?
       div.site_section.site_users
         div.title Shared By
+
         table
           tr
             th Email
             th Permissions
-          - site.site_memberships.each do |site_membership|
+            th Additional info
+          - site.site_memberships.with_deleted.each do |site_membership|
             tr
-              td= link_to site_membership.user.email, admin_user_path(site_membership.user)
+              td= link_to User.with_deleted.find_by(site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
               td= site_membership.role
+              td
+                = " (user deleted)" unless site_membership.user
+                = " (site membership deleted)" if site_membership.deleted?
 
     - unless bills_for(site).empty?
       div.site_section
