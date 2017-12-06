@@ -1,7 +1,9 @@
 #site_details
   div.site-block
     div.site-title
-      h3 = site_title(site)
+      h3
+        = link_to site_title(site), admin_site_path(site)
+
       - unless site.deleted?
         = link_to 'Contact Lists', admin_site_contact_lists_path(site), target: "_blank"
         a.subscription_link data-siteid=site.id change plan
