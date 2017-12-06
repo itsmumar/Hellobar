@@ -74,25 +74,16 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }") : ''
+    return '' unless object.site
+    proxied_url2png(url: object.site.url)
   end
 
   def site_preview_image_mobile
-    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }&viewport=320x568") : ''
+    return '' unless object.site
+    proxied_url2png(url: object.site.url, viewport: '320x568')
   end
 
-  def proxied_url2png(params)
-    '/proxy/https/' + url2png(params).sub(/^https:\/\//, '')
-  end
-
-  def url2png(params)
-    css_url = "http://#{ Settings.host }/stylesheets/hide_bar.css"
-    # Include CSS to hide any Hello Bar already there
-    params += "&custom_css_url=#{ ERB::Util.url_encode(css_url) }"
-    # Cache for 7 days
-    params += "&ttl=#{ 7 * 24 * 60 * 60 }"
-    # Calculate the token
-    token = Digest::MD5.hexdigest("#{ params }#{ Settings.url2png_api_secret }")
-    "https://api.url2png.com/v6/#{ Settings.url2png_api_key }/#{ token }/png/#{ params }"
+  def proxied_url2png(options)
+    '/proxy/https/' + Url2png.new(options).call
   end
 end
