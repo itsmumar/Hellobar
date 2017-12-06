@@ -1,4 +1,4 @@
-class Api::CampaignsController < Api::BaseController
+class Api::CampaignsController < Api::ApplicationController
   def index
     render json: @current_site.email_campaigns,
       each_serializer: EmailCampaignSerializer

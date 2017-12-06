@@ -6,44 +6,23 @@ describe 'api/campaigns requests' do
   describe 'get #index' do
     let(:params) { Hash[format: :json] }
 
-    context 'when there is no JWT token in the request headers' do
-      it 'returns :unauthorized' do
-        get api_campaigns_path, params
+    it 'returns campaigns for the site in the JSON format' do
+      campaign = create :email_campaign, site: site
 
-        expect(response).not_to be_successful
-        expect(response.code).to eql '401'
-      end
+      get api_campaigns_path, { format: :json }, headers
+
+      expect(response).to be_successful
+
+      campaigns = json[:campaigns]
+
+      expect(campaigns.first[:id]).to eq campaign.id
+      expect(campaigns.first[:name]).to eq campaign.name
+      expect(campaigns.first[:body]).to eq campaign.body
+      expect(campaigns.first[:contact_list]).to be_present
     end
 
-    context 'when the JWT token cannot be decoded' do
-      it 'returns :unauthorized' do
-        # token generated for user_id: 1, site_id: 1 in development environment
-        # (using different secret, making it invalid)
-        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJzaXRlX2lkIjoxfQ.2GwzO9nJ8ajnpN_AZfsNgrFsCox9VaM6GfCsoUCy6Ys'
-        headers = Hash['Authorization' => "Bearer #{ token }"]
-
-        get api_campaigns_path, params, headers
-
-        expect(response).not_to be_successful
-        expect(response.code).to eql '401'
-      end
-    end
-
-    context 'when the JWT token is correct' do
-      it 'returns campaigns for the site in the JSON format' do
-        campaign = create :email_campaign, site: site
-
-        get api_campaigns_path, { format: :json }, headers
-
-        expect(response).to be_successful
-
-        campaigns = json[:campaigns]
-
-        expect(campaigns.first[:id]).to eq campaign.id
-        expect(campaigns.first[:name]).to eq campaign.name
-        expect(campaigns.first[:body]).to eq campaign.body
-        expect(campaigns.first[:contact_list]).to be_present
-      end
+    include_examples 'JWT authentication' do
+      let(:url) { api_campaigns_path }
     end
   end
 

@@ -1,4 +1,4 @@
-class Api::BaseController < ApplicationController
+class Api::ApplicationController < ApplicationController
   abstract!
 
   before_action :authenticate_request!
