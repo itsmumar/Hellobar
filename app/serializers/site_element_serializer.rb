@@ -92,7 +92,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     # Cache for 7 days
     params += "&ttl=#{ 7 * 24 * 60 * 60 }"
     # Calculate the token
-    token = Digest::MD5.hexdigest("#{ params }SC10DF8C7E0FE8")
-    "https://api.url2png.com/v6/P52EBC321291EF/#{ token }/png/#{ params }"
+    token = Digest::MD5.hexdigest("#{ params }#{ Settings.url2png_api_secret }")
+    "https://api.url2png.com/v6/#{ Settings.url2png_api_key }/#{ token }/png/#{ params }"
   end
 end
