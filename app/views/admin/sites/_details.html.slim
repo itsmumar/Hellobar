@@ -45,23 +45,6 @@
             div= number_field 'free_days', 'count', value: 1, min: 1
             = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
 
-    - if site.site_memberships.with_deleted.any?
-      div.site_section.site_users
-        div.title Shared By
-
-        table
-          tr
-            th Email
-            th Permissions
-            th Additional info
-          - site.site_memberships.with_deleted.each do |site_membership|
-            tr
-              td= link_to User.with_deleted.find_by(site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
-              td= site_membership.role
-              td
-                = " (user deleted)" unless site_membership.user
-                = " (site membership deleted)" if site_membership.deleted?
-
     - unless bills_for(site).empty?
       div.site_section
         div.title
@@ -81,7 +64,7 @@
             th Receipt
             th Actions
             th Bill Duration
-            th Paid at
+            th Status set at
             th Extra days
 
           - bills_for(site).each do |bill, refunds|
@@ -149,3 +132,22 @@
 
       div
         | Site created on #{site.created_at.strftime('%D')}
+
+
+    - if site.site_memberships.with_deleted.any?
+      div.site_section.site_users
+        div.title Shared By
+
+        table
+          tr
+            th Email
+            th Permissions
+            th Additional info
+
+          - site.site_memberships.with_deleted.each do |site_membership|
+            tr
+              td= link_to User.with_deleted.find_by(id: site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
+              td= site_membership.role
+              td
+                = " (user deleted)" unless site_membership.user
+                = " (site membership deleted)" if site_membership.deleted?
