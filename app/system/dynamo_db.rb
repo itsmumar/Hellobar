@@ -43,10 +43,14 @@ class DynamoDB
   #
   def query_each(request, fetch_all: true, &block)
     loop do
-      response = cache(request) { send_query(request) }
-      (response&.items || []).each(&block)
+      items, last_evaluated_key =
+        cache(request) do
+          response = send_query(request)
+          [response&.items, response&.last_evaluated_key]
+        end
 
-      break unless fetch_all && response&.last_evaluated_key
+      items&.each(&block)
+      break unless fetch_all && last_evaluated_key
 
       request = request.merge(exclusive_start_key: response.last_evaluated_key)
     end
