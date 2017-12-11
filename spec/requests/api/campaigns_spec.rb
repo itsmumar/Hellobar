@@ -3,6 +3,10 @@ describe 'api/campaigns requests' do
   let(:user) { create :user, site: site }
   let(:headers) { api_headers_for_site_user site, user }
 
+  before do
+    allow_any_instance_of(DynamoDB).to receive(:query).and_return({})
+  end
+
   describe 'get #index' do
     let(:params) { Hash[format: :json] }
 
@@ -19,6 +23,7 @@ describe 'api/campaigns requests' do
       expect(campaigns.first[:name]).to eq campaign.name
       expect(campaigns.first[:body]).to eq campaign.body
       expect(campaigns.first[:contact_list]).to be_present
+      expect(campaigns.first[:statistics]).to be_present
     end
 
     include_examples 'JWT authentication' do
@@ -34,6 +39,7 @@ describe 'api/campaigns requests' do
 
       expect(response).to be_successful
       expect(json[:contact_list]).to be_present
+      expect(json[:statistics]).to be_present
     end
   end
 
