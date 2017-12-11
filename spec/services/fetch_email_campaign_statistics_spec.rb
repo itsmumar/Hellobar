@@ -5,7 +5,7 @@ describe FetchEmailCampaignStatistics do
   describe '#call' do
     let(:dynamodb_request) do
       {
-        table_name: 'development_email_statistics',
+        table_name: 'test_email_statistics',
         key_condition_expression: 'id = :id',
         expression_attribute_values: { ':id' => email_campaign.id }
       }
@@ -39,15 +39,17 @@ describe FetchEmailCampaignStatistics do
 
     let(:initial_statistics) do
       {
+        'rejected' => 0,
+        'sent' => 0,
         'processed' => 0,
         'deferred' => 0,
+        'dropped' => 0,
         'delivered' => 0,
+        'bounced' => 0,
         'opened' => 0,
         'clicked' => 0,
-        'bounced' => 0,
-        'dropped' => 0,
-        'reported' => 0,
         'unsubscribed' => 0,
+        'reported' => 0,
         'group_unsubscribed' => 0,
         'group_resubscribed' => 0
       }

@@ -12,7 +12,7 @@ class FetchEmailCampaignStatistics
   attr_reader :email_campaign
 
   def normalize(statistics)
-    return {} unless statistics.present?
+    return {} if statistics.blank?
 
     statistics.each_with_object({}) do |(key, value), result|
       result[key] = value.to_i unless key == 'type'
@@ -42,16 +42,17 @@ class FetchEmailCampaignStatistics
 
   def initial_statistics
     {
+      'rejected' => 0,
       'sent' => 0,
       'processed' => 0,
       'deferred' => 0,
+      'dropped' => 0,
       'delivered' => 0,
+      'bounced' => 0,
       'opened' => 0,
       'clicked' => 0,
-      'bounced' => 0,
-      'dropped' => 0,
-      'reported' => 0,
       'unsubscribed' => 0,
+      'reported' => 0,
       'group_unsubscribed' => 0,
       'group_resubscribed' => 0
     }
