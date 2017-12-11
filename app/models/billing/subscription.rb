@@ -46,12 +46,16 @@ class Subscription < ApplicationRecord
     amount != 0 && credit_card.nil? && active_bills.paid.free.any?
   end
 
-  def period
-    monthly? ? 1.month : 1.year
-  end
-
   def monthly?
     schedule == MONTHLY
+  end
+
+  def yearly?
+    schedule == YEARLY
+  end
+
+  def period
+    monthly? ? 1.month : 1.year
   end
 
   def trial_period

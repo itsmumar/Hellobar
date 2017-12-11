@@ -100,6 +100,22 @@ describe Subscription do
     end
   end
 
+  describe '#monthly? / #yearly?' do
+    specify 'monthly subscriptions are monthly' do
+      subscription = build_stubbed :subscription, :monthly
+
+      expect(subscription).to be_monthly
+      expect(subscription).not_to be_yearly
+    end
+
+    specify 'yearly subscriptions are yearly' do
+      subscription = build_stubbed :subscription, :yearly
+
+      expect(subscription).not_to be_monthly
+      expect(subscription).to be_yearly
+    end
+  end
+
   describe '#period' do
     context 'when monthly' do
       let(:subscription) { build(:subscription, schedule: 'monthly') }
