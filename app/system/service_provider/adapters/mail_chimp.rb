@@ -1,4 +1,6 @@
 module ServiceProvider::Adapters
+  HELLO_BAR_SOURCE = 'Hello Bar'.freeze
+
   class MailChimp < Base
     configure do |config|
       config.client_id = Settings.identity_providers['mailchimp']['client_id']
@@ -36,11 +38,11 @@ module ServiceProvider::Adapters
 
       { email_address: email }.tap do |body|
         body[:status] = double_optin ? 'pending' : 'subscribed'
+        body[:merge_fields] = { SOURCE: HELLO_BAR_SOURCE }
 
         if name.present?
           first_name, last_name = name.split(' ', 2)
 
-          body[:merge_fields] = {}
           body[:merge_fields][:FNAME] = first_name if first_name.present?
           body[:merge_fields][:LNAME] = last_name if last_name.present?
         end
