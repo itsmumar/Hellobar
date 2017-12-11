@@ -8,7 +8,7 @@ describe InternalMetricsMailer, freeze: '2017-12-10 23:00 UTC' do
       # uninstalled site
       create :site, created_at: 1.week.ago
 
-      bill = create :bill, :pro, :paid, subscription: site.current_subscription,
+      create :bill, :pro, :paid, subscription: site.current_subscription,
         created_at: 1.week.ago, bill_at: 1.week.ago
 
       expect(mail.subject).to include '2 new sites'
