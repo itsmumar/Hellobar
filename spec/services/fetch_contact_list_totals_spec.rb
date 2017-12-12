@@ -9,7 +9,7 @@ describe FetchContactListTotals do
     let!(:request) do
       body = {
         'Responses' => {
-          'development_contacts' => [
+          'test_contacts' => [
             { 'lid' => { 'N': contact_list.id }, 't' => { 'N': contacts_count } }
           ]
         }
@@ -17,7 +17,7 @@ describe FetchContactListTotals do
 
       stub_request(:post, 'https://dynamodb.us-east-1.amazonaws.com/')
         .with(
-          body: /"RequestItems":{"development_contacts"/,
+          body: /"RequestItems":{"test_contacts"/,
           headers: { 'X-Amz-Target' => 'DynamoDB_20120810.BatchGetItem' }
         ).and_return(body: body.to_json)
     end

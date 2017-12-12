@@ -6,16 +6,8 @@ class DynamoDB
   attr_reader :expires_in
 
   def self.contacts_table_name
-    case Rails.env
-    when 'staging'
-      'staging_contacts'
-    when 'production'
-      'contacts'
-    when 'edge'
-      'edge_contacts'
-    else # development / test
-      'development_contacts'
-    end
+    return 'contacts' if Rails.env.production?
+    "#{ Rails.env }_contacts"
   end
 
   def self.email_statictics_table_name
@@ -24,14 +16,9 @@ class DynamoDB
   end
 
   def self.visits_table_name
-    case Rails.env
-    when 'staging'
-      'staging_over_time'
-    when 'production'
-      'over_time'
-    else # edge / development / test
-      'edge_over_time2'
-    end
+    return 'over_time' if Rails.env.production?
+    return "#{ Rails.env }_over_time" if Rails.env.staging?
+    'edge_over_time2'
   end
 
   def initialize(expires_in: DEFAULT_TTL)

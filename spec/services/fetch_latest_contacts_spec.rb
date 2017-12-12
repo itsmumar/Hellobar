@@ -6,7 +6,7 @@ describe FetchLatestContacts do
   describe '#call', freeze: true do
     let(:dynamodb_request) do
       {
-        table_name: 'development_contacts',
+        table_name: 'test_contacts',
         index_name: 'ts-index',
         key_condition_expression: 'lid = :lidValue',
         expression_attribute_values: { ':lidValue' => contact_list.id },
