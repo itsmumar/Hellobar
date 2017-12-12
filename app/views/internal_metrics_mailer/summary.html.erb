@@ -1,4 +1,4 @@
-<p>Report from <%= @metrics.two_weeks_ago %> to <%= @metrics.last_week %></p>
+<p>Report from <%= @metrics.beginning_of_last_week %> to <%= @metrics.beginning_of_current_week %></p>
 
 <p>Created sites: <%= number_with_delimiter(@metrics.sites.size) %></p>
 
@@ -11,20 +11,20 @@
 <ul>
 <li>
   Pro (Monthly): <%= number_with_delimiter(@metrics.pro_monthly.size) %>
-  (<%= number_to_currency(@metrics.pro_monthly.inject(0) { |s, b| s + b.amount }) %>)
+  (<%= number_to_currency(@metrics.pro_monthly.sum(&:amount)) %>)
 </li>
 <li>
   Pro (Yearly): <%= number_with_delimiter(@metrics.pro_yearly.size) %>
-  (<%= number_to_currency(@metrics.pro_yearly.inject(0) { |s, b| s + b.amount }) %>)
+  (<%= number_to_currency(@metrics.pro_yearly.sum(&:amount)) %>)
 </li>
 <li>
   Enterprise (Monthly): <%= number_with_delimiter(@metrics.enterprise_monthly.size) %>
-  (<%= number_to_currency(@metrics.enterprise_monthly.inject(0) { |s, b| s + b.amount }) %>)
+  (<%= number_to_currency(@metrics.enterprise_monthly.sum(&:amount)) %>)
 </li>
 <li>
   Enterprise (Yearly): <%= number_with_delimiter(@metrics.enterprise_yearly.size) %>
-  (<%= number_to_currency(@metrics.enterprise_yearly.inject(0) { |s, b| s + b.amount }) %>)
+  (<%= number_to_currency(@metrics.enterprise_yearly.sum(&:amount)) %>)
 </li>
 </ul>
 
-<p>Numbers above do not take refunds, voids nor canceled subscriptions into consideration, i.e. it is the most optimistic look at revenue.</p>
+<p>Numbers above do not take refunds, voids nor canceled subscriptions into consideration, i.e. it is the most optimistic look at the revenue.</p>

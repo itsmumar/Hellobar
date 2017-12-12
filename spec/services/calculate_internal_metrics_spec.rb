@@ -3,8 +3,8 @@ describe CalculateInternalMetrics, freeze: '2017-12-10 23:00 UTC' do
 
   describe '#call' do
     it 'is about 1 week period' do
-      expect(metrics.last_week).to eq Date.parse('2017-12-05')
-      expect(metrics.two_weeks_ago).to eq Date.parse('2017-11-28')
+      expect(metrics.beginning_of_current_week).to eq Date.parse('2017-12-04')
+      expect(metrics.beginning_of_last_week).to eq Date.parse('2017-11-27')
     end
 
     it 'includes sites created in the 1 week period' do

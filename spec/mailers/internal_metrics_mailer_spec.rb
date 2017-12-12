@@ -12,7 +12,7 @@ describe InternalMetricsMailer, freeze: '2017-12-10 23:00 UTC' do
         created_at: 1.week.ago, bill_at: 1.week.ago
 
       expect(mail.subject).to include '2 new sites'
-      expect(mail.subject).to include '50.0% install'
+      expect(mail.subject).to include '50.00% install'
       expect(mail.subject).to include '$15.00'
       expect(mail.to).to eq ['dev@hellobar.com']
       expect(mail.from).to eq ['contact@hellobar.com']

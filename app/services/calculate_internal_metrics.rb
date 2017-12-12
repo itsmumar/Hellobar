@@ -7,8 +7,8 @@ class CalculateInternalMetrics
 
   def calculate_internal_metrics
     OpenStruct.new(
-      last_week: last_week,
-      two_weeks_ago: two_weeks_ago,
+      beginning_of_current_week: beginning_of_current_week,
+      beginning_of_last_week: beginning_of_last_week,
       sites: sites,
       installed_sites: installed_sites,
       revenue: revenue,
@@ -22,16 +22,16 @@ class CalculateInternalMetrics
     )
   end
 
-  def last_week
-    @last_week ||= Date.commercial(Date.current.year, Date.current.cweek, 2)
+  def beginning_of_current_week
+    @beginning_of_current_week ||= Date.commercial(Date.current.year, Date.current.cweek, 1)
   end
 
-  def two_weeks_ago
-    @two_weeks_ago ||= last_week - 1.week
+  def beginning_of_last_week
+    @beginning_of_last_week ||= beginning_of_current_week - 1.week
   end
 
   def sites
-    @sites ||= Site.where('created_at >= ? and created_at <= ?', two_weeks_ago, last_week)
+    @sites ||= Site.where('created_at >= ? and created_at < ?', beginning_of_last_week, beginning_of_current_week)
   end
 
   def installed_sites
@@ -40,8 +40,8 @@ class CalculateInternalMetrics
 
   def revenue
     @revenue ||=
-      Bill.where('created_at >= ? AND created_at <= ? AND status = ? AND amount > 0',
-        two_weeks_ago, last_week, Bill::PAID)
+      Bill.paid.where('created_at >= ? AND created_at < ?',
+        beginning_of_last_week, beginning_of_current_week)
   end
 
   def revenue_sum
