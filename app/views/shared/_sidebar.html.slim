@@ -30,9 +30,9 @@
           i.icon-views
           | Autofills
 
-    - if current_site.capabilities.email_campaigns?
+    - if current_site.capabilities.campaigns?
       li
-        = active_link_to site_email_campaigns_path(current_site) do
+        = active_link_to site_campaigns_path(current_site) do
           i.icon-content
           | Email Campaigns
 

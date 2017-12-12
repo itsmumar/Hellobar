@@ -1,4 +1,4 @@
-class EmailCampaignSerializer < ActiveModel::Serializer
+class CampaignSerializer < ActiveModel::Serializer
   attributes :id, :name, :body, :subject,
     :from_email, :from_name, :sent_at, :site_id, :status, :statistics
 

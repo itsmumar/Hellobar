@@ -1,4 +1,4 @@
-class Api::EmailCampaignsController < ApplicationController
+class Api::Internal::CampaignsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   before_action :authenticate
@@ -6,8 +6,8 @@ class Api::EmailCampaignsController < ApplicationController
   respond_to :json
 
   def update_status
-    email_campaign.update(
-      status: email_campaign_params[:status],
+    campaign.update(
+      status: campaign_params[:status],
       sent_at: Time.current
     )
 
@@ -16,12 +16,12 @@ class Api::EmailCampaignsController < ApplicationController
 
   private
 
-  def email_campaign_params
-    params.require(:email_campaign).permit :status
+  def campaign_params
+    params.require(:campaign).permit :status
   end
 
-  def email_campaign
-    @email_campaign ||= EmailCampaign.find params[:id]
+  def campaign
+    @campaign ||= Campaign.find params[:id]
   end
 
   def authenticate

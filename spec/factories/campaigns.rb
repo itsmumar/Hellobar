@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :email_campaign do
+  factory :campaign do
     site
     contact_list
     sequence(:name) { |i| "Email Campaign #{ i }" }

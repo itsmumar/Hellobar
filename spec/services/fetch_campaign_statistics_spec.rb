@@ -1,13 +1,13 @@
-describe FetchEmailCampaignStatistics do
-  subject { described_class.new(email_campaign) }
-  let(:email_campaign) { create :email_campaign }
+describe FetchCampaignStatistics do
+  subject { described_class.new(campaign) }
+  let(:campaign) { create :campaign }
 
   describe '#call' do
     let(:dynamodb_request) do
       {
         table_name: 'test_email_statistics',
         key_condition_expression: 'id = :id',
-        expression_attribute_values: { ':id' => email_campaign.id }
+        expression_attribute_values: { ':id' => campaign.id }
       }
     end
 

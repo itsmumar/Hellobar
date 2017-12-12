@@ -29,7 +29,7 @@ class Subscription
         true
       end
 
-      def email_campaigns?
+      def campaigns?
         true
       end
     end

@@ -1,6 +1,6 @@
-class FetchEmailCampaignStatistics
-  def initialize(email_campaign)
-    @email_campaign = email_campaign
+class FetchCampaignStatistics
+  def initialize(campaign)
+    @campaign = campaign
   end
 
   def call
@@ -9,7 +9,7 @@ class FetchEmailCampaignStatistics
 
   private
 
-  attr_reader :email_campaign
+  attr_reader :campaign
 
   def normalize(statistics)
     return {} if statistics.blank?
@@ -24,7 +24,7 @@ class FetchEmailCampaignStatistics
     {
       table_name: table_name,
       key_condition_expression: 'id = :id',
-      expression_attribute_values: { ':id' => email_campaign.id }
+      expression_attribute_values: { ':id' => campaign.id }
     }
   end
 
