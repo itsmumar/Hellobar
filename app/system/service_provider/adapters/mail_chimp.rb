@@ -1,7 +1,7 @@
 module ServiceProvider::Adapters
-  HELLO_BAR_SOURCE = 'Hello Bar'.freeze
-
   class MailChimp < Base
+    HELLO_BAR_SOURCE = 'Hello Bar'.freeze
+
     configure do |config|
       config.client_id = Settings.identity_providers['mailchimp']['client_id']
       config.secret = Settings.identity_providers['mailchimp']['secret']
