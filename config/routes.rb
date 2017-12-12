@@ -22,7 +22,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :campaigns, except: %i[new edit delete]
+    resources :campaigns, except: %i[new edit delete] do
+      member do
+        post :send_out
+      end
+    end
     resources :contact_lists, only: %i[index]
 
     get :authenticate, to: 'authentications#create'

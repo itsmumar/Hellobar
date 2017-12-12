@@ -16,4 +16,8 @@ class EmailCampaign < ApplicationRecord
   validates :subject, presence: true
   validates :body, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
+
+  def statistics
+    FetchEmailCampaignStatistics.new(self).call
+  end
 end

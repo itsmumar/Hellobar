@@ -67,6 +67,6 @@ class Admin::SitesController < AdminController
   end
 
   def site
-    @site ||= Site.find(params[:id])
+    @site ||= Site.with_deleted.find(params[:id])
   end
 end

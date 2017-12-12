@@ -172,3 +172,9 @@
   clear: both;
   content: '';
 }
+
+/*-----------  Social Styling  -----------*/
+
+#hellobar-slider .hb-social-wrapper {
+  margin-bottom: 0;
+}

@@ -18,6 +18,11 @@ class DynamoDB
     end
   end
 
+  def self.email_statictics_table_name
+    return 'email_statistics' if Rails.env.production?
+    "#{ Rails.env }_email_statistics"
+  end
+
   def self.visits_table_name
     case Rails.env
     when 'staging'
