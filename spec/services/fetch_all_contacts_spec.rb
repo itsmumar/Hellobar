@@ -5,7 +5,7 @@ describe FetchAllContacts do
   describe '#call', freeze: true do
     let(:dynamodb_request) do
       {
-        table_name: 'development_contacts',
+        table_name: 'test_contacts',
         key_condition_expression: 'lid = :lidValue',
         expression_attribute_values: { ':lidValue' => contact_list.id },
         expression_attribute_names: { '#s' => 'status', '#e' => 'error' },

@@ -55,40 +55,49 @@ describe DynamoDB do
     allow(Aws::DynamoDB::Client).to receive(:new).and_return client
   end
 
+  def string_inquirer(string)
+    ActiveSupport::StringInquirer.new(string)
+  end
+
   describe '.contacts_table_name' do
     it 'returns appropriate table name for the staging environment' do
-      expect(Rails).to receive(:env).and_return 'staging'
+      allow(Rails).to receive(:env).and_return string_inquirer('staging')
       expect(DynamoDB.contacts_table_name).to eq 'staging_contacts'
     end
 
     it 'returns appropriate table name for the production environment' do
-      expect(Rails).to receive(:env).and_return 'production'
+      allow(Rails).to receive(:env).and_return string_inquirer('production')
       expect(DynamoDB.contacts_table_name).to eq 'contacts'
     end
 
     it 'returns appropriate table name for the edge environment' do
-      expect(Rails).to receive(:env).and_return 'edge'
+      allow(Rails).to receive(:env).and_return string_inquirer('edge')
       expect(DynamoDB.contacts_table_name).to eq 'edge_contacts'
     end
 
-    it 'returns appropriate table name for the test environment' do
+    it 'returns appropriate table name for the development environment' do
+      allow(Rails).to receive(:env).and_return string_inquirer('development')
       expect(DynamoDB.contacts_table_name).to eq 'development_contacts'
+    end
+
+    it 'returns appropriate table name for the test environment' do
+      expect(DynamoDB.contacts_table_name).to eq 'test_contacts'
     end
   end
 
   describe '.visits_table_name' do
     it 'returns appropriate table name for the staging environment' do
-      expect(Rails).to receive(:env).and_return 'staging'
+      allow(Rails).to receive(:env).and_return string_inquirer('staging')
       expect(DynamoDB.visits_table_name).to eq 'staging_over_time'
     end
 
     it 'returns appropriate table name for the production environment' do
-      expect(Rails).to receive(:env).and_return 'production'
+      allow(Rails).to receive(:env).and_return string_inquirer('production')
       expect(DynamoDB.visits_table_name).to eq 'over_time'
     end
 
     it 'returns appropriate table name for the edge environment' do
-      expect(Rails).to receive(:env).and_return 'edge'
+      allow(Rails).to receive(:env).and_return string_inquirer('edge')
       expect(DynamoDB.visits_table_name).to eq 'edge_over_time2'
     end
 
