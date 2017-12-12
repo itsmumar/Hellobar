@@ -20,9 +20,7 @@ class InternalMetricsMailer < ApplicationMailer
   private
 
   def to
-    return DEV_RECIPIENTS unless Rails.env.production?
-
-    RECIPIENTS
+    Rails.env.production? ? RECIPIENTS : DEV_RECIPIENTS
   end
 
   def subject
