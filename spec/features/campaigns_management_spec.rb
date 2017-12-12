@@ -38,7 +38,7 @@ feature 'Campaigns management' do
       fill_in 'campaign_body', with: body
     end
 
-    click_on 'Create campaign'
+    click_on 'Create Campaign'
 
     within '.email-campaign' do
       expect(page).to have_content name
@@ -54,7 +54,7 @@ feature 'Campaigns management' do
       fill_in 'campaign_name', with: new_name
     end
 
-    click_on 'Update campaign'
+    click_on 'Update Campaign'
 
     expect(page).to have_content new_name
     expect(page).to have_content campaign_subject
