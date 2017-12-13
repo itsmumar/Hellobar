@@ -1,9 +1,10 @@
 describe SendTestEmailForCampaign do
+  let(:campaign) { build_stubbed :campaign }
+  let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
+  let(:service) { SendTestEmailForCampaign.new(campaign, contacts) }
+
   describe '#call' do
     it 'calls SendSnsNotification with appropriate message' do
-      campaign = build_stubbed :campaign
-      contacts = [{ email: 'email@example.com', name: 'Name' }]
-
       message_hash = {
         body: campaign.body,
         contacts: contacts,
@@ -22,7 +23,16 @@ describe SendTestEmailForCampaign do
           )
         )
 
-      SendTestEmailForCampaign.new(campaign, contacts).call
+      service.call
+    end
+
+    context 'without contacts' do
+      let(:contacts) { [{}, nil] }
+
+      it 'does not call SendSnsNotification' do
+        expect(SendSnsNotification).not_to receive_service_call
+        service.call
+      end
     end
   end
 end

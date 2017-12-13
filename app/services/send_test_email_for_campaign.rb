@@ -1,10 +1,11 @@
 class SendTestEmailForCampaign
   def initialize campaign, contacts
     @campaign = campaign
-    @contacts = contacts
+    @contacts = contacts.select(&:present?)
   end
 
   def call
+    return if contacts.blank?
     send_sns_notification
   end
 
