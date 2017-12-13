@@ -162,7 +162,7 @@ describe 'api/campaigns requests' do
 
     it 'calls SendTestEmailForCampaign service' do
       expect(SendTestEmailForCampaign).to receive_service_call.with(campaign, contacts)
-      post send_test_email_api_campaign_path(campaign), params, headers
+      post send_out_test_email_api_campaign_path(campaign), params, headers
       expect(response).to be_successful
       expect(json).to include(message: 'Test email successfully sent.')
     end
