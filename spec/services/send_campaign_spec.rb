@@ -1,29 +1,29 @@
-describe SendEmailCampaign do
+describe SendCampaign do
   describe '#call' do
     it 'calls SendSnsNotification with appropriate message' do
       contact_list = build_stubbed :contact_list
-      email_campaign = build_stubbed :email_campaign, contact_list: contact_list
+      campaign = build_stubbed :campaign, contact_list: contact_list
 
       message_hash = {
-        body: email_campaign.body,
+        body: campaign.body,
         contactListId: contact_list.id,
-        campaignId: email_campaign.id,
+        campaignId: campaign.id,
         environment: 'test',
-        fromEmail: email_campaign.from_email,
-        fromName: email_campaign.from_name,
-        subject: email_campaign.subject
+        fromEmail: campaign.from_email,
+        fromName: campaign.from_name,
+        subject: campaign.subject
       }
 
       expect(SendSnsNotification).to receive_service_call
         .with(
           a_hash_including(
             topic_arn: a_string_matching(/arn:aws:sns:.+_latest/),
-            subject: a_string_matching('sendEmailCampaign'),
+            subject: a_string_matching('sendCampaign'),
             message_hash: message_hash
           )
         )
 
-      SendEmailCampaign.new(email_campaign).call
+      SendCampaign.new(campaign).call
     end
   end
 end

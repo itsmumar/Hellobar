@@ -38,7 +38,7 @@ class Site < ApplicationRecord
 
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
-  has_many :email_campaigns, dependent: :destroy
+  has_many :campaigns, dependent: :destroy
 
   scope :preload_for_script, lambda {
     preload(

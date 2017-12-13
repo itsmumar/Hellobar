@@ -1,4 +1,4 @@
-<%= simple_form_for([current_site, @email_campaign]) do |f| %>
+<%= simple_form_for([current_site, @campaign]) do |f| %>
 
   <div class="form-inputs">
     <%= f.association :contact_list, prompt: 'Select a contact list...', collection: @contact_lists %>
@@ -21,7 +21,7 @@
 
   <div class="form-actions">
     <%= f.button :submit %>
-    <%= link_to 'Cancel', site_email_campaigns_path(current_site), class: 'button' %>
+    <%= link_to 'Cancel', site_campaigns_path(current_site), class: 'button' %>
   </div>
 
 <% end %>

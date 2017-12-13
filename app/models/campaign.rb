@@ -1,4 +1,4 @@
-class EmailCampaign < ApplicationRecord
+class Campaign < ApplicationRecord
   NEW = 'new'.freeze
   SENT = 'sent'.freeze
   STATUSES = [NEW, SENT].freeze
@@ -18,6 +18,6 @@ class EmailCampaign < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   def statistics
-    FetchEmailCampaignStatistics.new(self).call
+    FetchCampaignStatistics.new(self).call
   end
 end

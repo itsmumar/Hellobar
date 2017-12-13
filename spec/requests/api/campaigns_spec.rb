@@ -23,7 +23,7 @@ describe 'api/campaigns requests' do
     let(:params) { Hash[format: :json] }
 
     it 'returns campaigns for the site in the JSON format' do
-      campaign = create :email_campaign, site: site
+      campaign = create :campaign, site: site
 
       get api_campaigns_path, { format: :json }, headers
 
@@ -60,10 +60,10 @@ describe 'api/campaigns requests' do
   end
 
   describe 'get #show' do
-    let!(:email_campaign) { create(:email_campaign, site: site) }
+    let!(:campaign) { create(:campaign, site: site) }
 
     it 'returns the campaign' do
-      get api_campaign_path(email_campaign), { format: :json }, headers
+      get api_campaign_path(campaign), { format: :json }, headers
 
       expect(response).to be_successful
       expect(json[:contact_list]).to be_present
@@ -74,13 +74,13 @@ describe 'api/campaigns requests' do
   describe 'post #create' do
     let(:contact_list) { create :contact_list }
 
-    let(:email_campaign) do
-      attributes_for(:email_campaign, contact_list_id: contact_list.id)
+    let(:campaign) do
+      attributes_for(:campaign, contact_list_id: contact_list.id)
     end
 
     let(:params) do
       {
-        email_campaign: email_campaign,
+        campaign: campaign,
         format: :json
       }
     end
@@ -89,13 +89,13 @@ describe 'api/campaigns requests' do
       post api_campaigns_path, params, headers
 
       expect(response).to be_successful
-      expect(json).to include email_campaign.except(:contact_list_id)
+      expect(json).to include campaign.except(:contact_list_id)
       expect(json[:contact_list]).to be_present
     end
 
     context 'with invalid params' do
       let(:params) do
-        { email_campaign: { name: 'Name' }, format: :json }
+        { campaign: { name: 'Name' }, format: :json }
       end
 
       it 'returns errors JSON' do
@@ -108,17 +108,17 @@ describe 'api/campaigns requests' do
   end
 
   describe 'put #update' do
-    let(:email_campaign) { create(:email_campaign, site: site) }
+    let(:campaign) { create(:campaign, site: site) }
 
     let(:params) do
       {
-        email_campaign: { name: 'Updated' },
+        campaign: { name: 'Updated' },
         format: :json
       }
     end
 
     it 'returns updated campaign' do
-      put api_campaign_path(email_campaign), params, headers
+      put api_campaign_path(campaign), params, headers
 
       expect(response).to be_successful
       expect(json).to include(name: 'Updated')
@@ -126,11 +126,11 @@ describe 'api/campaigns requests' do
 
     context 'with invalid params' do
       let(:params) do
-        { email_campaign: { name: '' }, format: :json }
+        { campaign: { name: '' }, format: :json }
       end
 
       it 'returns errors JSON' do
-        put api_campaign_path(email_campaign), params, headers
+        put api_campaign_path(campaign), params, headers
 
         expect(response).not_to be_successful
         expect(json[:errors]).to be_present
@@ -139,19 +139,19 @@ describe 'api/campaigns requests' do
   end
 
   describe 'post #send_out' do
-    let(:email_campaign) { create(:email_campaign, site: site) }
+    let(:campaign) { create(:campaign, site: site) }
 
     it 'responds with success' do
-      post send_out_api_campaign_path(email_campaign), { format: :json }, headers
+      post send_out_api_campaign_path(campaign), { format: :json }, headers
 
       expect(response).to be_successful
-      expect(json).to include(message: 'Email Campaign successfully sent.')
+      expect(json).to include(message: 'Campaign successfully sent.')
     end
 
-    it 'calls SendEmailCampaign service' do
-      expect(SendEmailCampaign).to receive_service_call.with(email_campaign)
+    it 'calls SendCampaign service' do
+      expect(SendCampaign).to receive_service_call.with(campaign)
 
-      post send_out_api_campaign_path(email_campaign), { format: :json }, headers
+      post send_out_api_campaign_path(campaign), { format: :json }, headers
     end
   end
 end

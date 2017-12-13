@@ -16,12 +16,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :email_campaigns, only: [] do
-      member do
-        post :update_status
-      end
-    end
-
     resources :campaigns, except: %i[new edit delete] do
       member do
         post :send_out
@@ -30,6 +24,14 @@ Rails.application.routes.draw do
     resources :contact_lists, only: %i[index]
 
     get :authenticate, to: 'authentications#create'
+
+    scope module: 'internal' do
+      resources :campaigns, only: [] do
+        member do
+          post :update_status
+        end
+      end
+    end
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
@@ -76,7 +78,7 @@ Rails.application.routes.draw do
 
     resources :autofills, except: :show
 
-    resources :email_campaigns, except: :destroy do
+    resources :campaigns, except: :destroy do
       member do
         post :send_out
       end

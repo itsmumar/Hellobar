@@ -1,6 +1,6 @@
-class SendEmailCampaign
-  def initialize email_campaign
-    @email_campaign = email_campaign
+class SendCampaign
+  def initialize campaign
+    @campaign = campaign
   end
 
   def call
@@ -9,9 +9,9 @@ class SendEmailCampaign
 
   private
 
-  attr_reader :email_campaign
+  attr_reader :campaign
 
-  delegate :contact_list, to: :email_campaign
+  delegate :contact_list, to: :campaign
 
   def send_sns_notification
     SendSnsNotification.new(notification).call
@@ -26,23 +26,23 @@ class SendEmailCampaign
   end
 
   def topic_arn
-    Settings.sns['lambda_send_email_campaign']
+    Settings.sns['lambda_send_campaign']
   end
 
   def notification_subject
-    "sendEmailCampaign() for EmailCampaign#id #{ email_campaign.id } and " \
+    "sendCampaign() for Campaign#id #{ campaign.id } and " \
     "ContactList##{ contact_list.id }"
   end
 
   def message_hash
     {
-      body: email_campaign.body,
+      body: campaign.body,
       contactListId: contact_list.id,
-      campaignId: email_campaign.id,
+      campaignId: campaign.id,
       environment: Rails.env,
-      fromEmail: email_campaign.from_email,
-      fromName: email_campaign.from_name,
-      subject: email_campaign.subject
+      fromEmail: campaign.from_email,
+      fromName: campaign.from_name,
+      subject: campaign.subject
     }
   end
 end

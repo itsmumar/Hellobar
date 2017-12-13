@@ -95,7 +95,7 @@ class Subscription
       false
     end
 
-    def email_campaigns?
+    def campaigns?
       false
     end
 
