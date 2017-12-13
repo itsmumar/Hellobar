@@ -19,19 +19,4 @@ describe 'api/campaigns requests' do
       expect(campaign.sent_at).to eq Time.current
     end
   end
-
-  describe 'POST #send_test_email' do
-    include_examples 'Token authentication' do
-      let(:request) { post send_test_email_api_campaign_path(1), format: :json }
-    end
-
-    let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
-    let(:params) { Hash[contacts: contacts, format: :json] }
-
-    it 'calls SendTestEmailForCampaign service' do
-      expect(SendTestEmailForCampaign).to receive_service_call.with(campaign, contacts)
-      post send_test_email_api_campaign_path(campaign), params, headers
-      expect(response).to be_successful
-    end
-  end
 end

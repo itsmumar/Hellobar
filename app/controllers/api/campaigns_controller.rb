@@ -1,5 +1,5 @@
 class Api::CampaignsController < Api::ApplicationController
-  before_action :find_campaign, only: %i[show update send_out]
+  before_action :find_campaign, only: %i[show update send_out send_test_email]
 
   def index
     render json: @current_site.campaigns,
@@ -33,6 +33,11 @@ class Api::CampaignsController < Api::ApplicationController
   def send_out
     SendCampaign.new(@campaign).call
     render json: { message: 'Campaign successfully sent.' }
+  end
+
+  def send_test_email
+    SendTestEmailForCampaign.new(@campaign, params[:contacts]).call
+    render json: { message: 'Test email successfully sent.' }
   end
 
   private

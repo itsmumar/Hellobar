@@ -154,4 +154,17 @@ describe 'api/campaigns requests' do
       post send_out_api_campaign_path(campaign), { format: :json }, headers
     end
   end
+
+  describe 'post #send_test_email' do
+    let!(:campaign) { create(:campaign, site: site) }
+    let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
+    let(:params) { Hash[contacts: contacts, format: :json] }
+
+    it 'calls SendTestEmailForCampaign service' do
+      expect(SendTestEmailForCampaign).to receive_service_call.with(campaign, contacts)
+      post send_test_email_api_campaign_path(campaign), params, headers
+      expect(response).to be_successful
+      expect(json).to include(message: 'Test email successfully sent.')
+    end
+  end
 end
