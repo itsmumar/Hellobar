@@ -7,7 +7,7 @@ env :PATH, ENV['PATH']
 
 # All times are in UTC
 every :friday, at: '3:00pm', roles: [:cron] do
-  rake 'internal_metrics:email_weekly'
+  rake 'internal_metrics:summary'
 end
 
 every :day, at: '2:00pm', roles: [:cron] do

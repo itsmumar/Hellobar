@@ -54,6 +54,19 @@ FactoryGirl.define do
       end
     end
 
+    trait :enterprise do
+      amount { Subscription::Enterprise.defaults[:monthly_amount] }
+      subscription { create :subscription, :enterprise }
+
+      after :create do |bill|
+        create :billing_attempt, :success,
+          bill: bill, response: 'authorization',
+          credit_card: bill.credit_card
+
+        bill.reload
+      end
+    end
+
     trait :paid do
       status Bill::PAID
       after :create do |bill|
