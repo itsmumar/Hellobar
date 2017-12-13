@@ -18,7 +18,7 @@ describe SendCampaign do
         .with(
           a_hash_including(
             topic_arn: a_string_matching(/arn:aws:sns:.+_latest/),
-            subject: a_string_matching('sendEmailCampaign'),
+            subject: a_string_matching('sendCampaign'),
             message_hash: message_hash
           )
         )

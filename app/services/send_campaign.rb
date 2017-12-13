@@ -30,7 +30,7 @@ class SendCampaign
   end
 
   def notification_subject
-    "sendEmailCampaign() for Campaign#id #{ campaign.id } and " \
+    "sendCampaign() for Campaign#id #{ campaign.id } and " \
     "ContactList##{ contact_list.id }"
   end
 
