@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :campaigns, only: [] do
         member do
           post :update_status
+          post :send_test_email
         end
       end
     end

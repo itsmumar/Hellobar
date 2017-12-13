@@ -5,6 +5,11 @@ class Api::Internal::CampaignsController < ApplicationController
 
   respond_to :json
 
+  def send_test_email
+    SendTestEmailForCampaign.new(campaign, params[:contacts]).call
+    head :ok
+  end
+
   def update_status
     campaign.update(
       status: campaign_params[:status],
