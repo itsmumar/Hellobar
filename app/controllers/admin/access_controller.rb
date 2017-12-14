@@ -1,5 +1,7 @@
 class Admin::AccessController < AdminController
-  skip_before_action :require_admin, only: %i[step1 process_step1 process_step2 lockdown]
+  skip_before_action :require_admin, only: %i[step1 process_step1 step2 process_step2 lockdown]
+  before_action :ensure_not_logged_in!, only: %i[step1 process_step1 step2 process_step2]
+  before_action :ensure_otp_enabled!, only: %i[step2 process_step2]
 
   def do_reset_password
     error =
@@ -31,36 +33,59 @@ class Admin::AccessController < AdminController
   end
 
   def process_step1
-    return redirect_to(admin_path) if current_admin
-    return redirect_to(admin_access_path) if params[:login_email].blank?
-    email = params[:login_email]
+    return redirect_to(admin_access_path) if admin_params[:email].blank?
 
-    session[:admin_access_email] = email
+    Admin.record_login_attempt(admin_params[:email], remote_ip, user_agent, access_cookie)
+    admin = Admin.find_by(email: admin_params[:email])
 
-    Admin.record_login_attempt(email, remote_ip, user_agent, access_cookie)
+    if admin.blank?
+      render_invalid_credentials
 
-    if (@admin = Admin.find_by(email: email))
-      process_login(@admin)
-    else
-      # Always render step2 - this way attackers don't know if the login email is valid or not
-      render :step2
+      return
     end
+
+    if admin.validate_password!(admin_params[:password])
+      if Admin.otp_enabled?
+        session[:login_admin] = admin.id
+        redirect_to admin_otp_path
+      else
+        login_admin!(admin)
+      end
+
+      return
+    end
+
+    if admin.locked?
+      redirect_to admin_locked_path
+
+      return
+    end
+
+    render_invalid_credentials
+  end
+
+  def step2
+    @admin = Admin.find(session[:login_admin])
   end
 
   def process_step2
-    return redirect_to(admin_access_path) if session[:admin_access_email].blank?
-    email = session[:admin_access_email]
+    @admin = session[:login_admin] && Admin.find(session[:login_admin])
 
-    @admin = Admin.find_by(email: email)
+    if @admin.blank?
+      redirect_to admin_access_path
+      return
+    end
 
-    return render :step2 unless @admin
-    return redirect_to admin_locked_path if @admin.locked?
+    if @admin.locked?
+      redirect_to admin_locked_path
 
-    if @admin.validate_login(params[:admin_password], params[:otp])
-      session[:admin_token] = @admin.session_token
-      redirect_to admin_path
+      return
+    end
+
+    if @admin.validate_otp!(admin_params[:otp])
+      login_admin!(@admin)
     else
-      flash.now[:error] = 'Invalid OTP or password or too many attempts'
+      flash.now[:error] = 'Invalid OTP'
       render :step2
     end
   end
@@ -76,9 +101,28 @@ class Admin::AccessController < AdminController
 
   private
 
-  def process_login(admin)
-    return redirect_to admin_locked_path if admin.locked?
-    @admin = admin
-    render :step2
+  def admin_params
+    params.require(:admin_session).permit(:email, :password, :otp)
+  end
+
+  def ensure_not_logged_in!
+    return true unless current_admin
+    redirect_to admin_path
+  end
+
+  def ensure_otp_enabled!
+    return true if Admin.otp_enabled?
+    redirect_to admin_access_path
+  end
+
+  def render_invalid_credentials
+    flash.now[:error] = 'Invalid email or password'
+    render :step1
+  end
+
+  def login_admin!(admin)
+    admin.login!
+    session[:admin_token] = admin.session_token
+    redirect_to admin_path
   end
 end
