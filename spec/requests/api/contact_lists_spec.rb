@@ -20,7 +20,9 @@ describe 'api/contact_lists requests' do
     end
 
     include_examples 'JWT authentication' do
-      let(:url) { api_contact_lists_path }
+      def request(headers)
+        get api_campaigns_path, { format: :json }, headers
+      end
     end
   end
 end

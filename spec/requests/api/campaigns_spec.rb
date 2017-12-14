@@ -22,6 +22,12 @@ describe 'api/campaigns requests' do
   describe 'get #index' do
     let(:params) { Hash[format: :json] }
 
+    include_examples 'JWT authentication' do
+      def request(headers)
+        get api_campaigns_path, { format: :json }, headers
+      end
+    end
+
     it 'returns campaigns for the site in the JSON format' do
       campaign = create :campaign, site: site
 
@@ -62,6 +68,12 @@ describe 'api/campaigns requests' do
   describe 'get #show' do
     let!(:campaign) { create(:campaign, site: site) }
 
+    include_examples 'JWT authentication' do
+      def request(headers)
+        get api_campaign_path(campaign), { format: :json }, headers
+      end
+    end
+
     it 'returns the campaign' do
       get api_campaign_path(campaign), { format: :json }, headers
 
@@ -83,6 +95,12 @@ describe 'api/campaigns requests' do
         campaign: campaign,
         format: :json
       }
+    end
+
+    include_examples 'JWT authentication' do
+      def request(headers)
+        post api_campaigns_path, params, headers
+      end
     end
 
     it 'returns newly created campaign' do
@@ -117,6 +135,12 @@ describe 'api/campaigns requests' do
       }
     end
 
+    include_examples 'JWT authentication' do
+      def request(headers)
+        put api_campaign_path(campaign), params, headers
+      end
+    end
+
     it 'returns updated campaign' do
       put api_campaign_path(campaign), params, headers
 
@@ -141,6 +165,12 @@ describe 'api/campaigns requests' do
   describe 'post #send_out' do
     let(:campaign) { create(:campaign, site: site) }
 
+    include_examples 'JWT authentication' do
+      def request(headers)
+        post send_out_api_campaign_path(campaign), { format: :json }, headers
+      end
+    end
+
     it 'responds with success' do
       post send_out_api_campaign_path(campaign), { format: :json }, headers
 
@@ -152,6 +182,25 @@ describe 'api/campaigns requests' do
       expect(SendCampaign).to receive_service_call.with(campaign)
 
       post send_out_api_campaign_path(campaign), { format: :json }, headers
+    end
+  end
+
+  describe 'post #send_test_email' do
+    let!(:campaign) { create(:campaign, site: site) }
+    let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
+    let(:params) { Hash[contacts: contacts, format: :json] }
+
+    include_examples 'JWT authentication' do
+      def request(headers)
+        post send_out_test_email_api_campaign_path(campaign), params, headers
+      end
+    end
+
+    it 'calls SendTestEmailForCampaign service' do
+      expect(SendTestEmailForCampaign).to receive_service_call.with(campaign, contacts)
+      post send_out_test_email_api_campaign_path(campaign), params, headers
+      expect(response).to be_successful
+      expect(json).to include(message: 'Test email successfully sent.')
     end
   end
 end

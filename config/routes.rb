@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :campaigns, except: %i[new edit delete] do
       member do
         post :send_out
+        post :send_out_test_email
       end
     end
     resources :contact_lists, only: %i[index]
