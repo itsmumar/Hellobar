@@ -1,7 +1,7 @@
 describe SiteElement do
   let(:element) { create(:site_element, :traffic) }
   let(:contact_list) { create(:contact_list) }
-  let(:site) { create(:site) }
+  let(:site) { element.site }
 
   def stub_capability(site, capability, value = true)
     allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
@@ -225,20 +225,36 @@ describe SiteElement do
   end
 
   describe '#toggle_paused!' do
-    let(:site_element) { create(:site_element, :traffic) }
-
     it 'toggles an element from paused to unpaused' do
       expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(false).to(true)
+        element.toggle_paused!
+      }.to change(element, :paused?).from(false).to(true)
     end
 
     it 'toggles an element from unpaused to paused' do
-      site_element.update_attribute :paused, true
+      element.update_attribute :paused, true
 
       expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(true).to(false)
+        element.toggle_paused!
+      }.to change(element, :paused?).from(true).to(false)
+    end
+
+    context 'when site is downgraded to free subscription' do
+      before do
+        create(:subscription, :pro, site: site, user: site.users.first, schedule: :monthly)
+        element.rule.conditions << create(:condition, rule: element.rule)
+        DowngradeSiteToFree.new(site).call
+      end
+
+      it 'pauses active site' do
+        expect { element.toggle_paused! }.to change(element, :paused?).from(false).to(true)
+      end
+
+      it 'raise an error when toggling paused site' do
+        element.update_attribute :paused, true
+
+        expect { element.toggle_paused! }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 

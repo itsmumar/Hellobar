@@ -162,7 +162,7 @@ class SiteElement < ApplicationRecord
   end
 
   def toggle_paused!
-    update paused: !paused?
+    update! paused: !paused?
   end
 
   def short_subtype
@@ -275,7 +275,7 @@ class SiteElement < ApplicationRecord
   end
 
   def subscription_for_custom_targeting
-    return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
+    return if paused? || !custom_targeting? || site.capabilities.custom_targeted_bars?
     errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
   end
 
