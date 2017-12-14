@@ -110,7 +110,7 @@ describe 'SiteElements requests' do
         before do
           allow_any_instance_of(SiteElement).to receive(:toggle_paused!) do |record|
             record.errors.add(:site, 'is invalid')
-            raise ActiveRecord::RecordInvalid.new(record)
+            raise ActiveRecord::RecordInvalid, record
           end
         end
 
