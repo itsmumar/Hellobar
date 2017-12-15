@@ -1,4 +1,6 @@
 class FetchCampaignStatistics
+  TTL = 55.seconds # frontend refreshes every 60s
+
   def initialize(campaign)
     @campaign = campaign
   end
@@ -37,7 +39,7 @@ class FetchCampaignStatistics
   end
 
   def dynamo_db
-    DynamoDB.new
+    DynamoDB.new expires_in: TTL
   end
 
   def initial_statistics

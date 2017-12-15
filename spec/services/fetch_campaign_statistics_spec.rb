@@ -58,7 +58,9 @@ describe FetchCampaignStatistics do
     let(:dynamodb_client) { instance_double(DynamoDB, query: dynamodb_records) }
 
     before do
-      allow(DynamoDB).to receive(:new).and_return(dynamodb_client)
+      allow(DynamoDB).to receive(:new)
+        .with(expires_in: FetchCampaignStatistics::TTL)
+        .and_return(dynamodb_client)
     end
 
     it 'fetches data from DynamoDB' do
