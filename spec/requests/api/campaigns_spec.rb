@@ -1,6 +1,9 @@
 describe 'api/campaigns requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
+  let(:campaign) { create :campaign, site: site }
+  let(:contact_list) { campaign.contact_list }
+
   let(:headers) { api_headers_for_site_user site, user }
 
   let(:statistics) do
@@ -15,13 +18,27 @@ describe 'api/campaigns requests' do
     }
   end
 
+  let(:recipients_count) { 3 }
+  let(:recipients_response) do
+    {
+      DynamoDB.contacts_table_name => [
+        {
+          'lid' => contact_list.id,
+          't' => recipients_count
+        }
+      ]
+    }
+  end
+
   before do
-    allow_any_instance_of(DynamoDB).to receive(:query).and_return([statistics])
+    allow_any_instance_of(DynamoDB).to receive(:query)
+      .and_return([statistics])
+
+    allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
+      .and_return recipients_response
   end
 
   describe 'get #index' do
-    let(:params) { Hash[format: :json] }
-
     include_examples 'JWT authentication' do
       def request(headers)
         get api_campaigns_path, { format: :json }, headers
@@ -29,8 +46,6 @@ describe 'api/campaigns requests' do
     end
 
     it 'returns campaigns for the site in the JSON format' do
-      campaign = create :campaign, site: site
-
       get api_campaigns_path, { format: :json }, headers
 
       expect(response).to be_successful
@@ -42,6 +57,7 @@ describe 'api/campaigns requests' do
       expect(campaigns.first[:body]).to eq campaign.body
       expect(campaigns.first[:contact_list]).to be_present
       expect(campaigns.first[:statistics]).to eql(
+        'recipients' => recipients_count,
         'rejected' => 1,
         'sent' => 1,
         'processed' => 1,
@@ -59,15 +75,9 @@ describe 'api/campaigns requests' do
         'id' => 1
       )
     end
-
-    include_examples 'JWT authentication' do
-      let(:url) { api_campaigns_path }
-    end
   end
 
   describe 'get #show' do
-    let!(:campaign) { create(:campaign, site: site) }
-
     include_examples 'JWT authentication' do
       def request(headers)
         get api_campaign_path(campaign), { format: :json }, headers
@@ -126,8 +136,6 @@ describe 'api/campaigns requests' do
   end
 
   describe 'put #update' do
-    let(:campaign) { create(:campaign, site: site) }
-
     let(:params) do
       {
         campaign: { name: 'Updated' },
@@ -163,8 +171,6 @@ describe 'api/campaigns requests' do
   end
 
   describe 'post #send_out' do
-    let(:campaign) { create(:campaign, site: site) }
-
     include_examples 'JWT authentication' do
       def request(headers)
         post send_out_api_campaign_path(campaign), { format: :json }, headers
@@ -186,7 +192,6 @@ describe 'api/campaigns requests' do
   end
 
   describe 'post #send_test_email' do
-    let!(:campaign) { create(:campaign, site: site) }
     let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
     let(:params) { Hash[contacts: contacts, format: :json] }
 
