@@ -1,6 +1,7 @@
 describe FetchCampaignStatistics do
   subject { described_class.new(campaign) }
   let(:campaign) { create :campaign }
+  let(:recipients_count) { 3 }
 
   describe '#call' do
     let(:dynamodb_request) do
@@ -27,6 +28,7 @@ describe FetchCampaignStatistics do
 
     let(:expected_result) do
       {
+        'recipients' => recipients_count,
         'opened' => 1,
         'rejected' => 1,
         'delivered' => 1,
@@ -39,6 +41,7 @@ describe FetchCampaignStatistics do
 
     let(:initial_statistics) do
       {
+        'recipients' => 0,
         'rejected' => 0,
         'sent' => 0,
         'processed' => 0,
@@ -58,6 +61,10 @@ describe FetchCampaignStatistics do
     let(:dynamodb_client) { instance_double(DynamoDB, query: dynamodb_records) }
 
     before do
+      expect(FetchContactListTotals).to receive_service_call
+        .with(campaign.site, id: campaign.contact_list_id)
+        .and_return recipients_count
+
       allow(DynamoDB).to receive(:new)
         .with(expires_in: FetchCampaignStatistics::TTL)
         .and_return(dynamodb_client)
