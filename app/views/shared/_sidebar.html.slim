@@ -32,7 +32,7 @@
 
     - if current_site.capabilities.campaigns?
       li
-        = active_link_to site_campaigns_path(current_site) do
+        = active_link_to Settings.campaigns_url do
           i.icon-content
           | Campaigns
 
