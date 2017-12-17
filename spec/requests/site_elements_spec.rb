@@ -93,13 +93,35 @@ describe 'SiteElements requests' do
     describe 'PUT #toggle_paused' do
       it 'responds with success' do
         put site_site_element_toggle_paused_path(site, element)
-        expect(response).to redirect_to site_site_elements_path(site)
+        expect(response.status).to eq(200)
+      end
+
+      it 'toggle site element status' do
+        put site_site_element_toggle_paused_path(site, element)
         expect(element.reload).to be_paused
       end
 
       it 'regenerates script' do
         expect { put site_site_element_toggle_paused_path(site, element) }
           .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+      end
+
+      context 'when site element returns validation error' do
+        before do
+          allow_any_instance_of(SiteElement).to receive(:toggle_paused!) do |record|
+            record.errors.add(:site, 'is invalid')
+            raise ActiveRecord::RecordInvalid, record
+          end
+        end
+
+        it 'respond with errors' do
+          put site_site_element_toggle_paused_path(site, element)
+
+          expect(response.status).to eq(422)
+
+          expect(json[:errors]).to match site: ['is invalid']
+          expect(json[:full_error_messages]).to match_array ['Site is invalid']
+        end
       end
     end
 
