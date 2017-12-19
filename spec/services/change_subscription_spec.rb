@@ -80,9 +80,9 @@ describe ChangeSubscription, :freeze do
     context 'without credit card' do
       let(:credit_card) { nil }
 
-      it 'raises PayBill::Error' do
+      it 'raises PayBill::MissingCreditCard' do
         expect { service.call }
-          .to raise_error PayBill::Error, 'could not pay bill without credit card'
+          .to raise_error PayBill::MissingCreditCard, 'Could not pay bill without credit card'
       end
     end
 

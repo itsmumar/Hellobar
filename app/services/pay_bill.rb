@@ -27,7 +27,7 @@ class PayBill
 
   def pay_bill
     return bill.paid! if bill.amount.zero?
-    raise MissingCreditCard, 'could not pay bill without credit card' unless credit_card
+    raise MissingCreditCard, 'Could not pay bill without credit card' unless bill.can_pay?
 
     response = gateway.purchase(bill.amount, credit_card)
 

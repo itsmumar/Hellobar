@@ -22,6 +22,9 @@ class BillsController < ApplicationController
       flash[:success] = 'Your bill has been successfully paid. Thank you!'
       redirect_to site_path(@bill.site)
     end
+  rescue PayBill::MissingCreditCard => e
+    flash[:alert] = e.message
+    redirect_to edit_site_path(@bill.site, should_update_card: true, anchor: 'problem-bill')
   end
 
   private
