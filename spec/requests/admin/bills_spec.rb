@@ -35,11 +35,34 @@ describe 'Admin::Bills requests' do
     end
 
     describe 'PUT #pay' do
-      it 'pays a bill' do
-        put pay_admin_site_bill_path(site_id: site, id: bill)
+      let(:bill) { create :bill, :pro }
 
-        expect(response).to redirect_to admin_site_path(site)
-        expect(bill.reload).to be_paid
+      context 'when charge is successful' do
+        before do
+          stub_cyber_source :purchase
+        end
+
+        it 'pays a bill' do
+          put pay_admin_site_bill_path(site_id: site, id: bill)
+
+          expect(request.flash[:success]).to be_present
+          expect(response).to redirect_to admin_site_path(site)
+          expect(bill.reload).to be_paid
+        end
+      end
+
+      context 'when charge is unsuccessful' do
+        before do
+          stub_cyber_source :purchase, success?: false
+        end
+
+        it 'does not pay the bill' do
+          put pay_admin_site_bill_path(site_id: site, id: bill)
+
+          expect(request.flash[:error]).to be_present
+          expect(response).to redirect_to admin_site_path(site)
+          expect(bill.reload).to be_failed
+        end
       end
     end
 
