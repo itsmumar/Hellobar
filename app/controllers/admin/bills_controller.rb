@@ -16,7 +16,12 @@ class Admin::BillsController < AdminController
   def pay
     @bill, @subscription, @site = load_data
     PayBill.new(@bill).call
-    flash[:success] = 'Bill is successfully paid'
+
+    if @bill.paid?
+      flash[:success] = 'Bill is successfully paid'
+    else
+      flash[:error] = 'Could not pay the bill'
+    end
 
     redirect_to admin_site_path(@site)
   end
