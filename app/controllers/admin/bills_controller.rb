@@ -24,6 +24,9 @@ class Admin::BillsController < AdminController
     end
 
     redirect_to admin_site_path(@site)
+  rescue PayBill::MissingCreditCard => e
+    flash[:error] = e.message
+    redirect_to admin_site_path(@site)
   end
 
   def refund
