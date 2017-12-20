@@ -2,10 +2,10 @@ class ContentUpgradesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability
-  before_action :load_content_upgrade, only: %i[show edit update destroy]
+  before_action :load_content_upgrade, only: %i[show edit update destroy toggle_paused]
 
   def index
-    @content_upgrades = @site.site_elements.active_content_upgrades.order(created_at: :desc)
+    @content_upgrades = @site.site_elements.content_upgrades.order(created_at: :desc)
     @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym) if params[:sort]
     @content_upgrades = @content_upgrades.reverse if params[:desc].eql?('true')
   end
@@ -85,6 +85,11 @@ class ContentUpgradesController < ApplicationController
   def destroy
     @content_upgrade.destroy!
     flash[:success] = 'Your content upgrade has been deleted.'
+    redirect_to site_content_upgrades_path(@site.id)
+  end
+
+  def toggle_paused
+    @content_upgrade.toggle_paused!
     redirect_to site_content_upgrades_path(@site.id)
   end
 
