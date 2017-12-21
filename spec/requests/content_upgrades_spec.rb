@@ -160,5 +160,33 @@ describe 'Content upgrade requests' do
         expect(response).to be_successful
       end
     end
+
+    describe 'PUT :toggle_paused' do
+      let(:content_upgrade) { create :content_upgrade, site: site }
+
+      it 'pause content upgrade' do
+        expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
+          .to change { content_upgrade.reload.paused }.from(false).to(true)
+      end
+
+      it 'redirects to index' do
+        put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+        expect(response).to redirect_to site_content_upgrades_path(site)
+      end
+
+      context 'when already paused' do
+        let(:content_upgrade) { create :content_upgrade, site: site, paused: true }
+        
+        it 'unpause content upgrade' do
+          expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
+            .to change { content_upgrade.reload.paused }.from(true).to(false)
+        end
+
+        it 'redirects to index' do
+          put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+          expect(response).to redirect_to site_content_upgrades_path(site)
+        end
+      end
+    end
   end
 end
