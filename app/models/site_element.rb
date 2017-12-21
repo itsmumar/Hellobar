@@ -58,6 +58,7 @@ class SiteElement < ApplicationRecord
   scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
   scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
   scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
+  scope :content_upgrades, -> { where("type = 'ContentUpgrade'") }
   scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }

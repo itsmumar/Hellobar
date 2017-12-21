@@ -71,6 +71,9 @@ Rails.application.routes.draw do
     get 'site_elements/new/*path', to: 'site_elements#new'
 
     resources :content_upgrades do
+      member do
+        put :toggle_paused
+      end
       collection do
         get :style_editor
         post :update_styles
