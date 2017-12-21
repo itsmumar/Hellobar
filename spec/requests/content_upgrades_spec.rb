@@ -176,7 +176,7 @@ describe 'Content upgrade requests' do
 
       context 'when already paused' do
         let(:content_upgrade) { create :content_upgrade, site: site, paused: true }
-        
+
         it 'unpause content upgrade' do
           expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
             .to change { content_upgrade.reload.paused }.from(true).to(false)
