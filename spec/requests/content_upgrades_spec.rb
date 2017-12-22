@@ -169,6 +169,12 @@ describe 'Content upgrade requests' do
           .to change { content_upgrade.reload.paused }.from(false).to(true)
       end
 
+      it 'regenerates script' do
+        expect {
+          put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+        }.to have_enqueued_job(GenerateStaticScriptJob)
+      end
+
       it 'redirects to index' do
         put toggle_paused_site_content_upgrade_path(site, content_upgrade)
         expect(response).to redirect_to site_content_upgrades_path(site)
@@ -180,6 +186,12 @@ describe 'Content upgrade requests' do
         it 'unpause content upgrade' do
           expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
             .to change { content_upgrade.reload.paused }.from(true).to(false)
+        end
+
+        it 'regenerates script' do
+          expect {
+            put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+          }.to have_enqueued_job(GenerateStaticScriptJob)
         end
 
         it 'redirects to index' do
