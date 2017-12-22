@@ -90,6 +90,7 @@ class ContentUpgradesController < ApplicationController
 
   def toggle_paused
     @content_upgrade.toggle_paused!
+    @site.script.generate
     redirect_to site_content_upgrades_path(@site.id)
   end
 
