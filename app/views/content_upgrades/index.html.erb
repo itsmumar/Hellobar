@@ -33,9 +33,9 @@
  <td><a href="<%= content_upgrade.content_upgrade_download_link %>" target="_blank">View PDF</a></td>
  <td><%= l content_upgrade.created_at, format: :long %></td>
  <%- if content_upgrade.paused? %>
-  <td><%= link_to 'Unpause', toggle_paused_site_content_upgrade_path(@site, content_upgrade), method: :put, data: { confirm: 'Are you sure you want to pause this?' } %></td>
+  <td><%= link_to 'Unpause', toggle_paused_site_content_upgrade_path(@site, content_upgrade), method: :put, data: { confirm: 'Are you sure you want to unpause this?' } %></td>
  <% else %>
-  <td><%= link_to 'Pause', toggle_paused_site_content_upgrade_path(@site, content_upgrade), method: :put, data: { confirm: 'Are you sure you want to unpause this?' } %></td>
+  <td><%= link_to 'Pause', toggle_paused_site_content_upgrade_path(@site, content_upgrade), method: :put, data: { confirm: 'Are you sure you want to pause this?' } %></td>
  <% end %>
  <td><%= link_to 'Delete', site_content_upgrade_path(@site, content_upgrade), method: :delete, data: { confirm: 'Are you sure you want to delete this?' } %></td>
 </tr>
