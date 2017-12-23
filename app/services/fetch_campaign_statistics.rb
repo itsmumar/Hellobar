@@ -72,9 +72,9 @@ class FetchCampaignStatistics
   end
 
   def recipients
-   {
-     'recipients' => recipients_count
-   }
+    {
+      'recipients' => recipients_count
+    }
   end
 
   def recipients_count
