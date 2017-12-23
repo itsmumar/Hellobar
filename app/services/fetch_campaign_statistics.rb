@@ -19,6 +19,7 @@ class FetchCampaignStatistics
     statistics = normalize(fetch.first)
 
     initial_statistics
+      .merge(recipients)
       .merge(statistics)
   end
 
@@ -53,7 +54,7 @@ class FetchCampaignStatistics
 
   def initial_statistics
     {
-      'recipients' => recipients,
+      'recipients' => 0,
       'rejected' => 0,
       'sent' => 0,
       'processed' => 0,
@@ -71,14 +72,16 @@ class FetchCampaignStatistics
   end
 
   def recipients
-    if campaign.sent?
-      0
-    else
-      recipients_count
-    end
+   {
+     'recipients' => recipients_count
+   }
   end
 
   def recipients_count
-    FetchContactListTotals.new(site, id: contact_list_id).call
+    if campaign.sent?
+      0
+    else
+      FetchContactListTotals.new(site, id: contact_list_id).call
+    end
   end
 end
