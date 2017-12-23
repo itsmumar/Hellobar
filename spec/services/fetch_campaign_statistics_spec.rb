@@ -61,23 +61,35 @@ describe FetchCampaignStatistics do
     let(:dynamodb_client) { instance_double(DynamoDB, query: dynamodb_records) }
 
     before do
-      expect(FetchContactListTotals).to receive_service_call
-        .with(campaign.site, id: campaign.contact_list_id)
-        .and_return recipients_count
-
       allow(DynamoDB).to receive(:new)
         .with(expires_in: FetchCampaignStatistics::TTL)
         .and_return(dynamodb_client)
     end
 
-    it 'fetches data from DynamoDB' do
-      expect(dynamodb_client).to receive(:query).with(dynamodb_request)
+    context 'with a new campaign' do
+      before do
+        expect(FetchContactListTotals).to receive_service_call
+          .with(campaign.site, id: campaign.contact_list_id)
+          .and_return recipients_count
+      end
 
-      subject.call
+      it 'fetches data from DynamoDB' do
+        expect(dynamodb_client).to receive(:query).with(dynamodb_request)
+
+        subject.call
+      end
+
+      it 'returns transformed DynamoDB data' do
+        expect(subject.call).to eq initial_statistics.merge(expected_result)
+      end
     end
 
-    it 'returns transformed DynamoDB data' do
-      expect(subject.call).to eq initial_statistics.merge(expected_result)
+    context 'with sent campaign' do
+      let(:campaign) { create :campaign, status: Campaign::SENT }
+
+      it 'returns recipients from DynamoDB' do
+        expect(subject.call).to include('recipients' => 0)
+      end
     end
   end
 end

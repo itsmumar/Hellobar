@@ -20,4 +20,8 @@ class Campaign < ApplicationRecord
   def statistics
     FetchCampaignStatistics.new(self).call
   end
+
+  def sent?
+    status == SENT
+  end
 end

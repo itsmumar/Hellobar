@@ -6,9 +6,7 @@ class FetchCampaignStatistics
   end
 
   def call
-    initial_statistics
-      .merge(normalize(fetch.first))
-      .merge(recipients)
+    fetch_statistics
   end
 
   private
@@ -16,6 +14,13 @@ class FetchCampaignStatistics
   attr_reader :campaign
 
   delegate :site, :contact_list_id, to: :campaign
+
+  def fetch_statistics
+    statistics = normalize(fetch.first)
+
+    initial_statistics
+      .merge(statistics)
+  end
 
   def normalize(statistics)
     return {} if statistics.blank?
@@ -48,7 +53,7 @@ class FetchCampaignStatistics
 
   def initial_statistics
     {
-      'recipients' => 0,
+      'recipients' => recipients,
       'rejected' => 0,
       'sent' => 0,
       'processed' => 0,
@@ -66,9 +71,11 @@ class FetchCampaignStatistics
   end
 
   def recipients
-    {
-      'recipients' => recipients_count
-    }
+    if campaign.sent?
+      0
+    else
+      recipients_count
+    end
   end
 
   def recipients_count
