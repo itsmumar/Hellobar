@@ -33,7 +33,7 @@ module Hellobar
     # directory that we need. This way we have more control over load
     # order and have a convenient place to put other initialization
     # code (config, etc.)
-    config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
+    config.autoload_paths += Dir[config.root.join('app', 'models', 'validators')]
 
     # Action Mailer
     config.action_mailer.default_url_options = { host: Settings.host }

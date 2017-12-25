@@ -1,8 +1,5 @@
 class Subscription
   class ProComped < Subscription
-    class Capabilities < Pro::Capabilities
-    end
-
     class << self
       def defaults
         {
@@ -18,3 +15,4 @@ class Subscription
     end
   end
 end
+require 'subscription/pro_comped/capabilities'
