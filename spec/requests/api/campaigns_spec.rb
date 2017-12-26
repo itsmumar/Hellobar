@@ -221,8 +221,10 @@ describe 'api/campaigns requests' do
 
     it 'calls SendTestEmailForCampaign service' do
       expect { delete api_campaign_path(campaign), params, headers }
-        .to change { Campaign.count }.by(-1)
-        .and change { Campaign.deleted.count }.by(1)
+        .to change { Campaign.count }
+        .by(-1)
+        .and change { Campaign.deleted.count }
+        .by(1)
 
       expect(response).to be_successful
       expect(json).to include(message: 'Campaign successfully deleted.')
