@@ -1,5 +1,5 @@
 class Api::CampaignsController < Api::ApplicationController
-  before_action :find_campaign, only: %i[show update send_out send_out_test_email]
+  before_action :find_campaign, except: %i[index create]
 
   def index
     render json: @current_site.campaigns,
@@ -38,6 +38,11 @@ class Api::CampaignsController < Api::ApplicationController
   def send_out_test_email
     SendTestEmailForCampaign.new(@campaign, params[:contacts]).call
     render json: { message: 'Test email successfully sent.' }
+  end
+
+  def destroy
+    @campaign.destroy
+    render json: { message: 'Campaign successfully deleted.' }
   end
 
   private

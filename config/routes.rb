@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :campaigns, except: %i[new edit delete] do
+    resources :campaigns, except: %i[new edit] do
       member do
         post :send_out
         post :send_out_test_email
