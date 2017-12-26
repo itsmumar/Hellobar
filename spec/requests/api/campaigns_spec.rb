@@ -208,4 +208,26 @@ describe 'api/campaigns requests' do
       expect(json).to include(message: 'Test email successfully sent.')
     end
   end
+
+  describe 'delete #destroy' do
+    let!(:campaign) { create :campaign, site: site }
+    let(:params) { Hash[format: :json] }
+
+    include_examples 'JWT authentication' do
+      def request(headers)
+        delete api_campaign_path(campaign), params, headers
+      end
+    end
+
+    it 'calls SendTestEmailForCampaign service' do
+      expect { delete api_campaign_path(campaign), params, headers }
+        .to change { Campaign.count }
+        .by(-1)
+        .and change { Campaign.deleted.count }
+        .by(1)
+
+      expect(response).to be_successful
+      expect(json).to include(message: 'Campaign successfully deleted.')
+    end
+  end
 end
