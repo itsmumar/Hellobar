@@ -1,15 +1,13 @@
 class Subscription
-  class FreePlus < Free
-    class Capabilities < Free::Capabilities
-      def max_site_elements
-        Float::INFINITY
-      end
+  class Free < Subscription
+    def free?
+      true
     end
 
     class << self
       def defaults
         {
-          name: 'Free Plus',
+          name: 'Free',
           label: 'FREE',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
@@ -21,3 +19,5 @@ class Subscription
     end
   end
 end
+
+require 'subscription/free/capabilities'
