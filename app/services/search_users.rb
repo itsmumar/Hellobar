@@ -1,11 +1,13 @@
 class SearchUsers
+  PER_PAGE = 24
+
   def initialize(params)
     @page = params[:page]
     @q = params[:q].to_s.strip
   end
 
   def call
-    all || paginate(search)
+    paginate search || all
   end
 
   private
@@ -13,34 +15,37 @@ class SearchUsers
   attr_reader :q, :page
 
   def paginate(users)
-    Kaminari.paginate_array(users.uniq).page(page).per(24)
+    users.page(page).per(PER_PAGE)
   end
 
   def search
-    by_script || by_credit_card || by_site_url_and_username
+    users = by_script || by_credit_card || by_site_url_and_username
+    Kaminari.paginate_array(users.uniq) if users
   end
 
   def all
-    return if q.present?
-    User.page(page).per(24).includes(:authentications)
-  end
-
-  def by_username
-    scope.where('email like ?', "%#{ q }%")
+    scope.includes(:authentications)
   end
 
   def by_script
     return unless q =~ /\.js$/
 
-    if (site = Site.by_script(q))
-      site.owners.with_deleted
-    else
-      []
-    end
+    target_hash = q.gsub(/^.*\//, '').gsub(/\.js$/, '')
+
+    site = Site.with_deleted.find_by(
+      'SHA1(CONCAT(:prefix, id, :suffix)) = :hash',
+      **StaticScript.hash_content, hash: target_hash
+    )
+    site&.owners&.with_deleted
   end
 
   def by_site_url_and_username
+    return if q.blank?
     by_site_url + by_username
+  end
+
+  def by_username
+    scope.where('email like ?', "%#{ q }%")
   end
 
   def by_site_url
