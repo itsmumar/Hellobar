@@ -12,7 +12,8 @@ describe BillingMailer do
     let(:mail) { BillingMailer.could_not_charge(bill) }
 
     it 'renders the headers' do
-      expect(mail.subject).to eq('We could not charge your Visa ending in 1111 for your Hello Bar subscription')
+      expect(mail.subject)
+        .to eq("We could not charge your Visa ending in #{ credit_card.last_digits } for your Hello Bar subscription")
       expect(mail.to).to eq([owner1.email])
       expect(mail.cc).to eq([owner2.email])
       expect(mail.from).to eq(['contact@hellobar.com'])

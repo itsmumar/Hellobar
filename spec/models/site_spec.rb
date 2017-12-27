@@ -202,18 +202,6 @@ describe Site do
     end
   end
 
-  describe '#find_by_script' do
-    it 'should return the site if the script name matches' do
-      site = create(:site)
-      expect(Site.by_script(site.script_name)).to eq(site)
-    end
-
-    it 'should return nil if no site exists with that script' do
-      allow(Site).to receive(:maximum).and_return(10) # so that it doesn't run forever
-      expect(Site.by_script('foo')).to be_nil
-    end
-  end
-
   describe '#script_url' do
     it 'is delegated to #script' do
       expect(site.script).to receive(:url)
