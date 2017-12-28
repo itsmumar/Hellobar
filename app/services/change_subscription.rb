@@ -102,7 +102,7 @@ class ChangeSubscription
   end
 
   def subscription_class
-    Subscription.const_get(billing_params[:subscription].camelize)
+    Subscription.const_get(billing_params[:subscription].to_s.camelize)
   end
 
   def track_subscription_change(subscription)

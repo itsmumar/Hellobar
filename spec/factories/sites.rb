@@ -45,30 +45,44 @@ FactoryGirl.define do
 
     trait :free_subscription do
       after(:create) do |site, evaluator|
-        subscription = create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
-        create(:bill, :paid, subscription: subscription)
+        create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
+      end
+    end
+
+    trait :with_paid_bill do
+      after(:create) do |site, evaluator|
+        subscription = create(:subscription, evaluator.subscription_plan, site: site,
+                                                                          user: site.users.first,
+                                                                          schedule: evaluator.schedule)
+
+        bill = CalculateBill.new(subscription, bills: site.bills).call
+        bill.paid!
+        bill.save
       end
     end
 
     trait :pro do
-      after(:create) do |site, evaluator|
-        subscription = create(:subscription, :pro, site: site, user: site.users.first, schedule: evaluator.schedule)
-        create(:bill, :paid, subscription: subscription)
+      transient do
+        subscription_plan :pro
       end
+
+      with_paid_bill
     end
 
     trait :enterprise do
-      after(:create) do |site, evaluator|
-        subscription = create(:subscription, :enterprise, site: site, user: site.users.first, schedule: evaluator.schedule)
-        create(:bill, :paid, subscription: subscription)
+      transient do
+        subscription_plan :enterprise
       end
+
+      with_paid_bill
     end
 
     trait :pro_managed do
-      after(:create) do |site, evaluator|
-        subscription = create(:subscription, :pro_managed, site: site, user: site.users.first, schedule: evaluator.schedule)
-        create(:bill, :paid, subscription: subscription)
+      transient do
+        subscription_plan :pro_managed
       end
+
+      with_paid_bill
     end
 
     trait :past_due_site do

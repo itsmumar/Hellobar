@@ -95,12 +95,16 @@ FactoryGirl.define do
       element_subtype 'social/like_on_facebook'
     end
 
-    trait :closable do
-      closable true
-
-      before :create do |site_element, evaluator|
+    trait :with_pro_site do
+      before(:create) do |site_element, _|
         site_element.rule.site = create(:site, :pro)
       end
+    end
+
+    trait :closable do
+      with_pro_site
+
+      closable true
     end
 
     trait :with_custom_fields do

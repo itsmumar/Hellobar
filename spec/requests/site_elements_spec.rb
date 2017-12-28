@@ -214,7 +214,8 @@ describe 'SiteElements requests' do
     end
 
     describe 'PUT #update' do
-      let(:element) { create :bar, closable: false, site: site }
+      let(:site) { create :site, :pro, :with_rule, :installed, user: user }
+      let(:element) { create(:bar, site: site, closable: false) }
       let(:params) { Hash[closable: true] }
 
       before do
