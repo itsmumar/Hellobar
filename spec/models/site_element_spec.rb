@@ -63,17 +63,17 @@ describe SiteElement do
     end
 
     shared_examples 'capability validation' do |capability, attribute, error|
-      context "when capabilities allows #{capability}" do
+      context "when capabilities allows #{ capability }" do
         before do
-          stub_capability(element.site, "#{capability}?", true)
+          stub_capability(element.site, "#{ capability }?", true)
         end
 
-        it "accept #{capability} for paused element" do
+        it "accept #{ capability } for paused element" do
           element.update(paused: true)
           expect(element.errors[attribute]).not_to include(error)
         end
 
-        it "accept #{capability} for unpaused element" do
+        it "accept #{ capability } for unpaused element" do
           element.update(paused: false)
           expect(element.errors[attribute]).not_to include(error)
         end
@@ -84,12 +84,12 @@ describe SiteElement do
           stub_capability(element.site, :closable?, false)
         end
 
-        it "accept #{capability} for paused element" do
+        it "accept #{ capability } for paused element" do
           element.update(paused: true)
           expect(element.errors[attribute]).not_to include(error)
         end
 
-        it "rejects #{capability} for unpaused element" do
+        it "rejects #{ capability } for unpaused element" do
           element.update(paused: false)
           expect(element.errors[attribute]).to include(error)
         end
@@ -101,10 +101,7 @@ describe SiteElement do
         element.closable = true
       end
 
-      include_examples 'capability validation',
-                       :closable,
-                       :site,
-                       'subscription does not support closable elements. Upgrade subscription.'
+      include_examples 'capability validation', :closable, :site, 'subscription does not support closable elements. Upgrade subscription.'
     end
 
     describe '#custom_targeting' do
@@ -112,10 +109,7 @@ describe SiteElement do
         element.rule.conditions << build(:condition, :url_includes, rule: element.rule)
       end
 
-      include_examples 'capability validation',
-                       :custom_targeted_bars,
-                       :site,
-                       'subscription does not support custom targeting. Upgrade subscription.'
+      include_examples 'capability validation', :custom_targeted_bars, :site, 'subscription does not support custom targeting. Upgrade subscription.'
     end
 
     describe '#precise_geolocation_targeting' do
@@ -123,10 +117,7 @@ describe SiteElement do
         element.rule.conditions << build(:condition, :city, rule: element.rule)
       end
 
-      include_examples 'capability validation',
-                       :precise_geolocation_targeting,
-                       :site,
-                       'subscription does not support precise geolocation targeting. Upgrade subscription.'
+      include_examples 'capability validation', :precise_geolocation_targeting, :site, 'subscription does not support precise geolocation targeting. Upgrade subscription.'
     end
 
     describe '#thank_you_text' do
@@ -138,10 +129,7 @@ describe SiteElement do
             element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
           end
 
-          include_examples 'capability validation',
-                           :custom_thank_you_text,
-                           :thank_you_text,
-                           'subscription does not support custom thank you text. Upgrade subscription.'
+          include_examples 'capability validation', :custom_thank_you_text, :thank_you_text, 'subscription does not support custom thank you text. Upgrade subscription.'
 
           it 'requires custom thank_you_text' do
             stub_capability(element.site, :custom_thank_you_text?, true)
@@ -184,10 +172,7 @@ describe SiteElement do
             element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
           end
 
-          include_examples 'capability validation',
-                           :after_submit_redirect,
-                           :redirect_url,
-                           'subscription does not support custom redirect URL. Upgrade subscription.'
+          include_examples 'capability validation', :after_submit_redirect, :redirect_url, 'subscription does not support custom redirect URL. Upgrade subscription.'
 
           it 'requires custom redirect_url' do
             stub_capability(element.site, :after_submit_redirect?, true)
