@@ -44,10 +44,27 @@ describe 'Admin::Users requests' do
       let(:q) { site.script_name }
 
       it_behaves_like 'success response'
+
+      context 'when deleted' do
+        before { user.destroy }
+        it_behaves_like 'success response'
+      end
     end
 
     context 'when finding users by credit card' do
-      let(:q) { user.credit_cards.last.last_digits }
+      let!(:q) { user.credit_cards.last.last_digits }
+
+      it_behaves_like 'success response'
+
+      context 'when deleted' do
+        before { user.destroy }
+        it_behaves_like 'success response'
+      end
+    end
+
+    context 'when finding deleted users by url' do
+      let(:q) { site.url }
+      before { user.destroy }
 
       it_behaves_like 'success response'
     end

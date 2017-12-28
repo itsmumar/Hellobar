@@ -191,11 +191,17 @@ class User < ApplicationRecord
 
   def self.search_by_site_url url
     domain = NormalizeURI[url]&.domain
-    domain ? User.joins(:sites).where('url LIKE ?', "%#{ domain }%") : User.none
+    if domain
+      where(
+        id: SiteMembership.with_deleted.joins(:site).where('url LIKE ?', "%#{ domain }%").select(:user_id)
+      )
+    else
+      none
+    end
   end
 
   def self.search_by_username(username)
-    User.with_deleted.where('email like ?', "%#{ username }%")
+    with_deleted.where('email like ?', "%#{ username }%")
   end
 
   def was_referred?
