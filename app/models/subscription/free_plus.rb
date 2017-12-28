@@ -1,16 +1,9 @@
 class Subscription
-  class Free < Subscription
-    def free?
-      true
-    end
-
-    class Capabilities < Subscription::Capabilities
-    end
-
+  class FreePlus < Free
     class << self
       def defaults
         {
-          name: 'Free',
+          name: 'Free Plus',
           label: 'FREE',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
@@ -22,3 +15,5 @@ class Subscription
     end
   end
 end
+
+require 'subscription/free_plus/capabilities'
