@@ -97,7 +97,7 @@ FactoryGirl.define do
 
     trait :with_pro_site do
       before(:create) do |site_element, _|
-        site_element.rule.site = create(:site, :pro)
+        site_element.rule.update!(site: create(:site, :pro))
       end
     end
 
