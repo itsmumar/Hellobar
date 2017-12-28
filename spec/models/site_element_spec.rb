@@ -72,7 +72,7 @@ describe SiteElement do
 
           element.save
 
-          expect(element.errors['settings.redirect_url']).to include('is a pro feature')
+          expect(element.errors[:redirect_url]).to include('subscription does not support custom redirect URL. Upgrade subscription.')
         end
 
         it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -81,7 +81,7 @@ describe SiteElement do
 
           element.save
 
-          expect(element.errors['settings.redirect_url']).to include('cannot be blank')
+          expect(element.errors[:redirect_url]).to include('can\'t be blank')
         end
 
         it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -90,14 +90,14 @@ describe SiteElement do
 
           element.save
 
-          expect(element.errors['settings.redirect_url']).to be_empty
+          expect(element.errors[:redirect_url]).to be_empty
         end
       end
 
       context 'when subtype is not email' do
         it "doesn't care about redirect url" do
           element.save
-          expect(element.errors['settings.redirect_url']).to be_empty
+          expect(element.errors[:redirect_url]).to be_empty
         end
       end
     end
@@ -164,7 +164,7 @@ describe SiteElement do
 
         element.save
 
-        expect(element.errors['settings.redirect_url']).to include('is a pro feature')
+        expect(element.errors[:redirect_url]).to include('subscription does not support custom redirect URL. Upgrade subscription.')
       end
 
       it 'requires a redirect url if after_email_submit_action is :redirect' do
@@ -173,7 +173,7 @@ describe SiteElement do
 
         element.save
 
-        expect(element.errors['settings.redirect_url']).to include('cannot be blank')
+        expect(element.errors[:redirect_url]).to include('can\'t be blank')
       end
 
       it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
@@ -182,14 +182,14 @@ describe SiteElement do
 
         element.save
 
-        expect(element.errors['settings.redirect_url']).to be_empty
+        expect(element.errors[:redirect_url]).to be_empty
       end
     end
 
     context 'when subtype is not email' do
       it "doesn't care about redirect url" do
         element.save
-        expect(element.errors['settings.redirect_url']).to be_empty
+        expect(element.errors[:redirect_url]).to be_empty
       end
     end
   end
@@ -204,7 +204,7 @@ describe SiteElement do
 
         element.save
 
-        expect(element.errors['custom_thank_you_text']).to include('is a pro feature')
+        expect(element.errors[:site]).to include('subscription does not support custom thank you text. Upgrade subscription.')
       end
 
       it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
@@ -213,13 +213,13 @@ describe SiteElement do
 
         element.save
 
-        expect(element.errors['custom_thank_you_text']).to include('cannot be blank')
+        expect(element.errors[:thank_you_text]).to include('can\'t be blank')
       end
 
       it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
         stub_capability(element.site, :custom_thank_you_text?, true)
         element.save
-        expect(element.errors['custom_thank_you_text']).to be_empty
+        expect(element.errors[:thank_you_text]).to be_empty
       end
     end
   end

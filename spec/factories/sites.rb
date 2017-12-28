@@ -45,25 +45,29 @@ FactoryGirl.define do
 
     trait :free_subscription do
       after(:create) do |site, evaluator|
-        create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
+        subscription = create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:bill, :paid, subscription: subscription)
       end
     end
 
     trait :pro do
       after(:create) do |site, evaluator|
-        create(:subscription, :pro, site: site, user: site.users.first, schedule: evaluator.schedule)
+        subscription = create(:subscription, :pro, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:bill, :paid, subscription: subscription)
       end
     end
 
     trait :enterprise do
       after(:create) do |site, evaluator|
-        create(:subscription, :enterprise, site: site, user: site.users.first, schedule: evaluator.schedule)
+        subscription = create(:subscription, :enterprise, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:bill, :paid, subscription: subscription)
       end
     end
 
     trait :pro_managed do
       after(:create) do |site, evaluator|
-        create(:subscription, :pro_managed, site: site, user: site.users.first, schedule: evaluator.schedule)
+        subscription = create(:subscription, :pro_managed, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:bill, :paid, subscription: subscription)
       end
     end
 

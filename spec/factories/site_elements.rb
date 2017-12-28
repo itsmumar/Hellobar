@@ -97,6 +97,10 @@ FactoryGirl.define do
 
     trait :closable do
       closable true
+
+      before :create do |site_element, evaluator|
+        site_element.rule.site = create(:site, :pro)
+      end
     end
 
     trait :with_custom_fields do
