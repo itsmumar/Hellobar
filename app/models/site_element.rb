@@ -292,7 +292,7 @@ class SiteElement < ApplicationRecord
   def ensure_custom_thank_you_text_allowed
     return if paused? || !custom_thank_you? || site.capabilities.custom_thank_you_text?
 
-    errors.add(:site, 'subscription does not support custom thank you text. Upgrade subscription.')
+    errors.add(:thank_you_text, 'subscription does not support custom thank you text. Upgrade subscription.')
   end
 
   def ensure_custom_thank_you_text_configured
