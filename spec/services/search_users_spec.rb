@@ -13,7 +13,8 @@ describe SearchUsers do
 
   shared_context 'with deleted users' do
     before do
-      users.each(&:destroy)
+      allow_any_instance_of(IntercomGateway).to receive(:delete_user)
+      users.each { |u| DestroyUser.new(u).call }
     end
 
     context 'with deleted users' do
@@ -34,7 +35,6 @@ describe SearchUsers do
     let(:q) { '' }
     let(:expected) { users }
 
-    include_context 'with deleted users'
     it_behaves_like 'paginator'
 
     it 'returns all users' do
