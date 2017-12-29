@@ -68,26 +68,43 @@ describe User do
     end
   end
 
-  describe '.find_and_create_by_referral' do
-    it 'returns nil if there are no referrals for the email' do
-      no_user = User.find_and_create_by_referral('asd')
+  describe '.find_or_create_temporary_user' do
+    let(:email) { 'donald.duck@disney.com' }
 
-      expect(no_user).to be_nil
+    subject { User.find_or_create_temporary_user(email) }
+
+    it 'creates a new user' do
+      expect { subject }.to change { User.count }.by(1)
     end
 
-    it 'returns a temporary user with the email that was found' do
-      user = create(:user)
-      email_to_invite = 'hello@email.com'
+    it 'returns a user' do
+      expect(subject).to be_a(User)
+    end
 
-      Referrals::Create.run(
-        sender: user,
-        params: { email: email_to_invite },
-        send_emails: false
-      )
+    it 'uses given email' do
+      expect(subject.email).to eq(email)
+    end
 
-      user = User.find_and_create_by_referral(email_to_invite)
+    it 'sets TEMPORARY status' do
+      expect(subject.status).to eq(User::TEMPORARY)
+    end
 
-      expect(user.status).to eql(User::TEMPORARY)
+    it 'sets random password' do
+      expect(subject.password).to be_present
+    end
+
+    context 'when temporary user already exists' do
+      let!(:existing_user) { User.find_or_create_temporary_user(email) }
+
+      subject { User.find_or_create_temporary_user(email) }
+
+      it 'does not create a new user' do
+        expect { subject }.not_to change { User.count }
+      end
+
+      it 'returns an existing user' do
+        expect(subject).to eq(existing_user)
+      end
     end
   end
 
@@ -280,27 +297,6 @@ describe User do
     it 'catches bcrypt errors when using old hellobar passwords' do
       user.encrypted_password = old_password
       expect(user.valid_password?('wrong password')).to be(false)
-    end
-  end
-
-  describe '.search_all_versions_for_email' do
-    it 'returns nil when email is blank' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-
-      expect(User.search_all_versions_for_email('')).to be_nil
-    end
-
-    it 'first queries by email' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-      expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
-
-      User.search_all_versions_for_email('email@email.com')
-    end
-
-    it 'returns a new user if a referred user' do
-      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY) }
-
-      User.search_all_versions_for_email('email@email.com')
     end
   end
 end
