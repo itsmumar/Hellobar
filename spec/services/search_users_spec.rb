@@ -84,7 +84,7 @@ describe SearchUsers do
     include_context 'with deleted users'
     it_behaves_like 'paginator'
 
-    it 'returns users with matched script' do
+    it 'returns users with matched url' do
       expect(service.call).to match_array(expected)
     end
   end
@@ -97,8 +97,16 @@ describe SearchUsers do
     include_context 'with deleted users'
     it_behaves_like 'paginator'
 
-    it 'returns users with matched script' do
+    it 'returns users with matched email' do
       expect(service.call).to match_array(expected)
+    end
+
+    context 'with complete username' do
+      let(:q) { user.email }
+
+      it 'returns users with matched email' do
+        expect(service.call).to match_array(expected)
+      end
     end
   end
 end
