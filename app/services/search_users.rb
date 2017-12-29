@@ -52,9 +52,11 @@ class SearchUsers
     domain = NormalizeURI[q]&.domain
 
     if domain
-      user_ids = SiteMembership.with_deleted
-                   .joins('INNER JOIN sites ON sites.id = site_memberships.site_id')
-                   .where('url LIKE ?', "%#{ domain }%").select(:user_id)
+      user_ids =
+        SiteMembership
+        .with_deleted.joins('INNER JOIN sites ON sites.id = site_memberships.site_id')
+        .where('url LIKE ?', "%#{ domain }%").select(:user_id)
+      
       scope.where(id: user_ids)
     else
       User.none
