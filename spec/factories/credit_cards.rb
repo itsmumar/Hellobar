@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :credit_card do
-    number '4111 1111 1111 1111'
+    sequence(:number) { |i| "4111 1111 1111 111#{ i }" }
     month 12
     year { Date.current.year + 1 }
     first_name 'John'
