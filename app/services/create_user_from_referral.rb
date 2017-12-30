@@ -6,7 +6,7 @@ class CreateUserFromReferral
   end
 
   def call
-    token_record = ReferralToken.find_by!(token: token)
+    token_record = find_token
 
     case token_record.tokenizable
     when Referral
@@ -18,10 +18,14 @@ class CreateUserFromReferral
 
   private
 
+  def find_token
+    ReferralToken.find_by!(token: token)
+  end
+
   def handle_referral(referall)
     # invite has been already used
     raise ActiveRecord::RecordNotFound unless referall.sent?
 
-    User.find_or_create_temporary_user(referall.email)
+    CreateTemporaryUser.new(referall.email).call
   end
 end

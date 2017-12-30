@@ -2,9 +2,10 @@ describe CreateUserFromReferral do
   subject { CreateUserFromReferral.new(token) }
 
   let(:user) { instance_double(User) }
+  let(:create_user_service) { instance_double(CreateTemporaryUser, call: user) }
 
   before do
-    allow(User).to receive(:find_or_create_temporary_user).and_return(user)
+    allow(CreateTemporaryUser).to receive(:new).and_return(create_user_service)
   end
 
   context 'when personal token given' do
@@ -12,7 +13,8 @@ describe CreateUserFromReferral do
     let(:token) { referral.referral_token.token }
 
     it 'finds or creates user by referral email' do
-      expect(User).to receive(:find_or_create_temporary_user).with(referral.email)
+      expect(CreateTemporaryUser).to receive(:new).with(referral.email)
+      expect(create_user_service).to receive(:call)
 
       subject.call
     end
