@@ -25,7 +25,7 @@ describe CreateTemporaryUser do
     end
 
     context 'when temporary user already exists' do
-      let!(:existing_user) { User.find_or_create_temporary_user(email) }
+      let!(:existing_user) { CreateTemporaryUser.new(email).call }
 
       it 'does not create a new user' do
         expect { subject }.not_to change { User.count }

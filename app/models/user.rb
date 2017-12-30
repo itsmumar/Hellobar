@@ -63,18 +63,6 @@ class User < ApplicationRecord
   DELETED = 'deleted'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
 
-  def self.find_or_create_temporary_user(email)
-    user = User.find_by(email: email, status: TEMPORARY)
-    return user if user
-
-    password = Devise.friendly_token[9, 20]
-
-    User.create email: email,
-                status: TEMPORARY,
-                password: password,
-                password_confirmation: password
-  end
-
   def can_view_exit_intent_modal?
     user_upgrade_policy.should_show_exit_intent_modal?
   end

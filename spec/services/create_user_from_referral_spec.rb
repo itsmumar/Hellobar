@@ -29,7 +29,7 @@ describe CreateUserFromReferral do
     let(:token) { sender.referral_token.token }
 
     it 'does not try to find or create a user' do
-      expect(User).not_to receive(:find_or_create_temporary_user)
+      expect(CreateTemporaryUser).not_to receive(:new)
 
       subject.call
     end
