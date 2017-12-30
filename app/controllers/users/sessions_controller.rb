@@ -6,8 +6,12 @@ class Users::SessionsController < Devise::SessionsController
 
     @user = User.find_by(email: email)
 
-    if @user && (auth = @user.authentications.first)
-      redirect_to "/auth/#{ auth.provider }"
+    if @user
+      if (auth = @user.authentications.first)
+        redirect_to "/auth/#{ auth.provider }"
+      else
+        render :find_email
+      end
     else
       cookies.delete(:login_email)
       redirect_to new_user_session_path, alert: "Email doesn't exist."
