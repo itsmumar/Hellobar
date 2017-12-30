@@ -34,8 +34,8 @@ describe CreateUserFromReferral do
       subject.call
     end
 
-    it 'returns falsey' do
-      expect(subject.call).to be_falsey
+    it 'returns nil' do
+      expect(subject.call).to be_nil
     end
   end
 
