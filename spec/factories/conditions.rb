@@ -79,5 +79,11 @@ FactoryGirl.define do
       operand 'is'
       value 'hellobar'
     end
+
+    trait :city do
+      segment 'LocationCityCondition'
+      operand 'is'
+      value 'London'
+    end
   end
 end
