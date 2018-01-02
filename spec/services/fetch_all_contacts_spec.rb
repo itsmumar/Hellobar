@@ -28,6 +28,9 @@ describe FetchAllContacts do
           'ts' => 1512077321,
           'status' => 'error',
           'error' => 'Email is blacklisted'
+        },
+        {
+          'email' => 'total'
         }
       ]
     end
