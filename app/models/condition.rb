@@ -26,6 +26,7 @@ class Condition < ApplicationRecord
   }.freeze
 
   MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
+  PRECISE_SEGMENTS = %w[LocationRegionCondition LocationCityCondition].freeze
 
   # stored value: displayed value
   OPERANDS = {
@@ -113,6 +114,10 @@ class Condition < ApplicationRecord
         Time.zone.now.formatted_offset
       end
     end
+  end
+
+  def precise?
+    PRECISE_SEGMENTS.include?(segment)
   end
 
   private

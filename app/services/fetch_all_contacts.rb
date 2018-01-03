@@ -4,14 +4,18 @@ class FetchAllContacts
   end
 
   def call
-    fetch.map do |record|
-      Contact.from_dynamo_db(record)
-    end
+    remove_total_record(contacts)
   end
 
   private
 
   attr_reader :contact_list
+
+  def contacts
+    fetch.map do |record|
+      Contact.from_dynamo_db(record)
+    end
+  end
 
   def build_request
     {
@@ -25,6 +29,10 @@ class FetchAllContacts
 
   def fetch
     dynamo_db.query_enum(build_request)
+  end
+
+  def remove_total_record(contacts)
+    contacts.reject { |contact| contact.email == 'total' }
   end
 
   def table_name

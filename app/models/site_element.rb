@@ -50,9 +50,13 @@ class SiteElement < ApplicationRecord
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
   validate :site_is_capable_of_creating_element, unless: :persisted?
-  validate :redirect_has_url, if: :email?
-  validate :validate_thank_you_text, if: :email?
-  validate :subscription_for_custom_targeting
+  validate :ensure_custom_targeting_allowed
+  validate :ensure_precise_geolocation_targeting_allowed
+  validate :ensure_closable_allowed
+  validate :ensure_custom_thank_you_text_allowed, if: :email?
+  validate :ensure_custom_thank_you_text_configured, if: :email?
+  validate :ensure_custom_redirect_url_allowed, if: :email?
+  validate :ensure_custom_redirect_url_configured, if: :email?
 
   scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
   scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
@@ -219,6 +223,14 @@ class SiteElement < ApplicationRecord
     after_email_submit_action == :redirect
   end
 
+  def custom_thank_you?
+    after_email_submit_action == :custom_thank_you_text
+  end
+
+  def redirect_url
+    settings['redirect_url']
+  end
+
   def announcement?
     element_subtype == 'announcement'
   end
@@ -251,33 +263,54 @@ class SiteElement < ApplicationRecord
     errors.add(:site, 'is currently at its limit to create site elements')
   end
 
-  def redirect_has_url
-    return unless after_email_submit_action == :redirect
-
-    if !site.capabilities.after_submit_redirect?
-      errors.add('settings.redirect_url', 'is a pro feature')
-    elsif settings['redirect_url'].blank?
-      errors.add('settings.redirect_url', 'cannot be blank')
-    end
-  end
-
-  def validate_thank_you_text
-    return unless after_email_submit_action == :custom_thank_you_text
-
-    if !site.capabilities.custom_thank_you_text?
-      errors.add('custom_thank_you_text', 'is a pro feature')
-    elsif self[:thank_you_text].blank?
-      errors.add('custom_thank_you_text', 'cannot be blank')
-    end
-  end
-
   def custom_targeting?
     rule&.conditions&.any?
   end
 
-  def subscription_for_custom_targeting
+  def precise_geolocation_targeting?
+    rule&.conditions&.any?(&:precise?)
+  end
+
+  def ensure_closable_allowed
+    return if paused? || !closable? || site.capabilities.closable?
+
+    errors.add(:site, 'subscription does not support closable elements. Upgrade subscription.')
+  end
+
+  def ensure_custom_targeting_allowed
     return if paused? || !custom_targeting? || site.capabilities.custom_targeted_bars?
+
     errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
+  end
+
+  def ensure_precise_geolocation_targeting_allowed
+    return if paused? || !precise_geolocation_targeting? || site.capabilities.precise_geolocation_targeting?
+
+    errors.add(:site, 'subscription does not support precise geolocation targeting. Upgrade subscription.')
+  end
+
+  def ensure_custom_thank_you_text_allowed
+    return if paused? || !custom_thank_you? || site.capabilities.custom_thank_you_text?
+
+    errors.add(:thank_you_text, 'subscription does not support custom thank you text. Upgrade subscription.')
+  end
+
+  def ensure_custom_thank_you_text_configured
+    return if !custom_thank_you? || thank_you_text.present?
+
+    errors.add(:thank_you_text, :blank)
+  end
+
+  def ensure_custom_redirect_url_allowed
+    return if paused? || !email_redirect? || site.capabilities.after_submit_redirect?
+
+    errors.add(:redirect_url, 'subscription does not support custom redirect URL. Upgrade subscription.')
+  end
+
+  def ensure_custom_redirect_url_configured
+    return if !email_redirect? || redirect_url.present?
+
+    errors.add(:redirect_url, :blank)
   end
 
   def nullify_image_upload_reference
