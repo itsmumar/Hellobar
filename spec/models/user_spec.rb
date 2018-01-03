@@ -68,29 +68,6 @@ describe User do
     end
   end
 
-  describe '.find_and_create_by_referral' do
-    it 'returns nil if there are no referrals for the email' do
-      no_user = User.find_and_create_by_referral('asd')
-
-      expect(no_user).to be_nil
-    end
-
-    it 'returns a temporary user with the email that was found' do
-      user = create(:user)
-      email_to_invite = 'hello@email.com'
-
-      Referrals::Create.run(
-        sender: user,
-        params: { email: email_to_invite },
-        send_emails: false
-      )
-
-      user = User.find_and_create_by_referral(email_to_invite)
-
-      expect(user.status).to eql(User::TEMPORARY)
-    end
-  end
-
   describe '#can_view_exit_intent_modal?' do
     let!(:user) { create(:user) }
     let!(:site) { create(:site, :with_rule) }
@@ -280,27 +257,6 @@ describe User do
     it 'catches bcrypt errors when using old hellobar passwords' do
       user.encrypted_password = old_password
       expect(user.valid_password?('wrong password')).to be(false)
-    end
-  end
-
-  describe '.search_all_versions_for_email' do
-    it 'returns nil when email is blank' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-
-      expect(User.search_all_versions_for_email('')).to be_nil
-    end
-
-    it 'first queries by email' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-      expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
-
-      User.search_all_versions_for_email('email@email.com')
-    end
-
-    it 'returns a new user if a referred user' do
-      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY) }
-
-      User.search_all_versions_for_email('email@email.com')
     end
   end
 end

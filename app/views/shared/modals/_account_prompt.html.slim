@@ -1,6 +1,6 @@
 script id='account-prompt-modal-template' type='text/x-handlebars-template'
   .modal-wrapper
-    = form_for current_user, html: {class: "modal-block"} do |f|
+    = form_for current_user, html: {class: "modal-block"}, url: user_path do |f|
       header
         h5 Wait! You're almost done!
 
@@ -13,7 +13,7 @@ script id='account-prompt-modal-template' type='text/x-handlebars-template'
         .thirds-wrapper
           .thirds
             label Email
-            input type='email' placeholder='name@email.com' name="user[email]" id="user_email"
+            input type='email' placeholder='name@email.com' name="user[email]" id="user_email" value="#{ current_user.email }"
 
           .thirds
             label Password
@@ -33,10 +33,10 @@ script id='alternate-account-prompt-modal-template' type='text/x-handlebars-temp
   .modal-wrapper
     = form_for current_user, html: {class: "modal-block"} do |f|
       header class="{{headerClass}}"
-        h5 
+        h5
           i.icon-alert
-          | To install Hello Bar on {{siteURL}} you must 
-          strong create a free account 
+          | To install Hello Bar on {{siteURL}} you must
+          strong create a free account
           | below
 
       .account-prompt-modal
@@ -49,9 +49,9 @@ script id='alternate-account-prompt-modal-template' type='text/x-handlebars-temp
             input type='email' placeholder='name@email.com' name="user[email]" id="user_email"
 
           .thirds
-            label 
-              | Password 
-              small 
+            label
+              | Password
+              small
                 | (8 or more characters)
             input type='password' placeholder='••••••' name="user[password]" id="user_password"
 
