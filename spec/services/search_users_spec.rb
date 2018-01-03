@@ -1,5 +1,5 @@
 describe SearchUsers do
-  let(:users) do
+  let!(:users) do
     [
       create(:user, :with_site, :with_credit_card),
       create(:user, :with_site, :with_credit_card),
@@ -71,7 +71,7 @@ describe SearchUsers do
     include_context 'with deleted users'
     it_behaves_like 'paginator'
 
-    it 'returns users with matched script' do
+    it 'returns users with matched credit card' do
       expect(service.call).to match_array(expected)
     end
   end
@@ -103,6 +103,17 @@ describe SearchUsers do
 
     context 'with complete username' do
       let(:q) { user.email }
+
+      it 'returns users with matched email' do
+        expect(service.call).to match_array(expected)
+      end
+    end
+
+    context 'when email include "\d{4}"' do
+      let(:email) { "user12345@gmail.com" }
+      let!(:user) { create(:user, :with_site, :with_credit_card, email: email) }
+      let(:q) { email }
+      let(:expected) { [user] }
 
       it 'returns users with matched email' do
         expect(service.call).to match_array(expected)
