@@ -110,7 +110,7 @@ describe SearchUsers do
     end
 
     context 'when email include "\d{4}"' do
-      let(:email) { "user12345@gmail.com" }
+      let(:email) { 'user12345@gmail.com' }
       let!(:user) { create(:user, :with_site, :with_credit_card, email: email) }
       let(:q) { email }
       let(:expected) { [user] }
