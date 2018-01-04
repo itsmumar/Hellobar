@@ -39,7 +39,7 @@ describe ServiceProvider::Adapters::MailChimp do
       {
         email_address: email,
         status: 'pending',
-        merge_fields: { FNAME: first_name, LNAME: last_name }
+        merge_fields: { SOURCE: 'Hello Bar', FNAME: first_name, LNAME: last_name }
       }
     end
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body.to_json }

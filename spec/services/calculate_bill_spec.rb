@@ -7,8 +7,8 @@ describe CalculateBill do
     let(:bill) { service.call }
 
     context 'with any refunds' do
-      let(:site) { create :site, :pro }
-      let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }
+      let(:site) { create(:site) }
+      let!(:active_bill) { create :bill, :paid, subscription: create(:subscription, :pro, site: site) }
       let(:subscription) { create :subscription, :enterprise }
 
       before do
@@ -67,7 +67,7 @@ describe CalculateBill do
   end
 
   context 'without active paid bills', :freeze do
-    let(:site) { create :site, :pro }
+    let(:site) { create :site }
     let(:subscription) { create :subscription, :enterprise }
     let(:bill) { service.call }
 

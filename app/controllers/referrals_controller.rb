@@ -1,5 +1,8 @@
 class ReferralsController < ApplicationController
   before_action :authenticate_user!, except: [:accept]
+  before_action :require_no_user, only: [:accept]
+
+  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 
   def new
     @referral = current_user.sent_referrals.build
@@ -38,16 +41,11 @@ class ReferralsController < ApplicationController
   end
 
   def accept
-    token = ReferralToken.find_by(token: params[:token])
+    user = CreateUserFromReferral.new(params[:token]).call
+    sign_in(user) if user
+    session[:referral_token] = params[:token]
+    flash[:success] = I18n.t('referral.flash.accepted')
 
-    if current_user.blank? && token.present?
-      session[:referral_token] = params[:token]
-      flash[:success] = I18n.t('referral.flash.accepted')
-
-      # else
-      # Either they're already in the app, in which case the referral doesn't apply,
-      # or the token is wrong. In both cases, just redirect them.
-    end
     redirect_to root_path
   end
 
@@ -55,5 +53,9 @@ class ReferralsController < ApplicationController
 
   def referral_params
     params.require(:referral).permit(:email, :body, :site_id)
+  end
+
+  def redirect_to_root
+    redirect_to root_url
   end
 end

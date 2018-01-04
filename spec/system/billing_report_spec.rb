@@ -5,12 +5,17 @@ describe BillingReport, :freeze do
 
   before { allow(report).to receive(:puts) }
 
+  before { allow(Settings).to receive(:slack_channels).and_return 'billing' => 'key' }
+
   matcher :log do |logs|
     supports_block_expectations
 
     match do |block|
+      @level ||= :info
+
       logs.each do |l|
         allow(BillingLogger).to receive(:info).with(l)
+        expect(PostToSlack).to receive_service_call.with(:billing, text: l)
         allow(report).to receive(:puts).with(l)
       end
       block.call
@@ -20,6 +25,8 @@ describe BillingReport, :freeze do
 
   describe '#email' do
     before do
+      allow_any_instance_of(PostToSlack).to receive(:call)
+
       report.start
       report.attempt(bill) do
         report.fail 'error'
@@ -30,7 +37,7 @@ describe BillingReport, :freeze do
     let(:subject) { "#{ Time.current.strftime('%Y-%m-%d') } - 999 bills processed for $10.00 with 1 failures" }
     let(:body) do
       [
-        '  ' + Time.current.to_s,
+        '  test: ' + Time.current.to_s,
         '  --------------------------------------------------------------------------------',
         '  Found 999 pending bills...',
         "  Attempting to bill #{ bill.id }: #{ bill.site.url } for $10.00... Failed: error",
@@ -56,7 +63,7 @@ describe BillingReport, :freeze do
   describe '#start' do
     specify do
       expect { report.start }.to log [
-        Time.current.to_s,
+        'test: ' + Time.current.to_s,
         '-' * 80,
         'Found 999 pending bills...'
       ]
@@ -122,9 +129,9 @@ describe BillingReport, :freeze do
     describe '#fail' do
       specify do
         report.attempt(bill) do
-          expect { report.fail 'some message' }.to log [
+          expect { report.fail 'some message' }.to log([
             "#{ attempting_msg } Failed: some message"
-          ]
+          ])
         end
       end
     end
@@ -132,9 +139,9 @@ describe BillingReport, :freeze do
     describe '#success' do
       specify do
         report.attempt(bill) do
-          expect { report.success }.to log [
+          expect { report.success }.to log([
             "#{ attempting_msg } OK"
-          ]
+          ])
         end
       end
     end

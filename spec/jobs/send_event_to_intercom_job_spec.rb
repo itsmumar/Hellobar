@@ -22,8 +22,7 @@ describe SendEventToIntercomJob do
       end
 
       it 'calls IntercomAnalytics#create_user and retries the job' do
-        expect(Raven).to receive(:capture_exception)
-        perform
+        expect { perform }.to raise_error(Intercom::ResourceNotFound)
       end
 
       context 'with message "User Not Found"' do

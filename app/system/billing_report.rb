@@ -18,7 +18,7 @@ class BillingReport
   end
 
   def start
-    info Time.current.to_s
+    info "#{ Rails.env }: #{ Time.current }"
     info '-' * 80
     info "Found #{ @bills_count } pending bills..."
   end
@@ -48,7 +48,7 @@ class BillingReport
   def attempt(bill)
     @attempt = "Attempting to bill #{ bill.id }: #{ bill.subscription&.site&.url || 'NO SITE' } for #{ number_to_currency(bill.amount) }..."
     @bill = bill
-    yield
+    yield self
   rescue StandardError => e
     exception(e)
     Raven.capture_exception(e)
@@ -69,7 +69,7 @@ class BillingReport
   end
 
   def downgrade(bill)
-    @amount_downgraded += 1
+    @amount_downgraded += bill.amount
     @num_downgraded += 1
     info "Voiding outdated bill #{ bill.id }"
     info "Downgrading site ##{ bill.site.id } #{ bill.site.url }"
@@ -114,8 +114,15 @@ class BillingReport
 
   def info(msg)
     log << msg
+    post_to_slack msg if Settings.slack_channels['billing'].present?
     BillingLogger.info msg
     puts msg # rubocop:disable Rails/Output
+  end
+
+  def post_to_slack(msg)
+    PostToSlack.new(:billing, text: msg).call
+  rescue StandardError
+    nil
   end
 
   def exception(e)

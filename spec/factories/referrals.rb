@@ -3,7 +3,7 @@ FactoryGirl.define do
     sequence(:email) { |i| "referral#{ i }@hellobar.com" }
     sender factory: :user
     site
-    state 'signed_up'
+    state 'sent'
     body 'Some text...'
 
     trait :signed_up do

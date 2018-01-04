@@ -6,40 +6,55 @@ class DynamoDB
   attr_reader :expires_in
 
   def self.contacts_table_name
-    case Rails.env
-    when 'staging'
-      'staging_contacts'
-    when 'production'
-      'contacts'
-    when 'edge'
-      'edge_contacts'
-    else # development / test
-      'development_contacts'
-    end
+    return 'contacts' if Rails.env.production?
+    "#{ Rails.env }_contacts"
+  end
+
+  def self.email_statictics_table_name
+    return 'email_statistics' if Rails.env.production?
+    "#{ Rails.env }_email_statistics"
   end
 
   def self.visits_table_name
-    case Rails.env
-    when 'staging'
-      'staging_over_time'
-    when 'production'
-      'over_time'
-    else # edge / development / test
-      'edge_over_time2'
-    end
+    return 'over_time' if Rails.env.production?
+    return "#{ Rails.env }_over_time" if Rails.env.staging?
+    'edge_over_time2'
   end
 
-  def initialize(cache_key: nil, expires_in: DEFAULT_TTL)
-    @cache_key = cache_key
+  def initialize(expires_in: DEFAULT_TTL)
     @expires_in = expires_in
   end
 
-  def query(request)
-    cache { send_query(request) }
+  # Executes query and calls the block given with each item from the response.
+  #
+  # @param request [Hash] dynamo DB query (@see http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html)
+  # @param fetch_all [Boolean] specifies whether all items should be fetched or just the first page (true by default).
+  #
+  # @yield [record] Gives fetched records to the block 1 by 1.
+  # @yieldparam record [Hash] record fetches from DynamoDB.
+  #
+  def query_each(request, fetch_all: true, &block)
+    loop do
+      items, last_evaluated_key = cached_query(request)
+      items&.each(&block)
+      break unless fetch_all && last_evaluated_key
+
+      request = request.merge(exclusive_start_key: last_evaluated_key)
+    end
+  end
+
+  # Executes query and return an enumerator (@see #query_each for the list of arguments)
+  def query_enum(*args)
+    to_enum(:query_each, *args)
+  end
+
+  # Executes query and returns an array (@see #query_each for the list of arguments).
+  def query(*args)
+    query_enum(*args).to_a
   end
 
   def batch_get_item(request)
-    cache { send_batch_get_item(request) }
+    cache(request) { send_batch_get_item(request) }
   end
 
   def update_item params
@@ -49,17 +64,21 @@ class DynamoDB
 
   private
 
-  def cache
-    return yield unless cache_key
+  def cached_query(request)
+    cache(request) do
+      response = send_query(request)
+      [response&.items, response&.last_evaluated_key]
+    end
+  end
 
-    Rails.cache.fetch cache_key, expires_in: expires_in do
+  def cache(request)
+    Rails.cache.fetch cache_key(request), expires_in: expires_in do
       yield
     end
   end
 
-  def cache_key
-    return unless @cache_key
-    [CACHE_KEY_PREFIX, @cache_key].join('/')
+  def cache_key(request)
+    [CACHE_KEY_PREFIX, Digest::MD5.hexdigest(request.inspect)].join('/')
   end
 
   def send_batch_get_item(request)
@@ -68,8 +87,7 @@ class DynamoDB
   end
 
   def send_query(request)
-    response = send_request(:query, request)
-    response&.items || []
+    send_request(:query, request)
   end
 
   def send_request(method, request)

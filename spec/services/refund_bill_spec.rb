@@ -24,7 +24,7 @@ describe RefundBill do
     expect(latest_refund.refunded_billing_attempt).to eql bill.successful_billing_attempt
     expect(latest_refund.discount).to be 0
     expect(latest_refund.base_amount).to eql(-bill.amount.to_i)
-    expect(latest_refund.status).to eql Bill::PAID
+    expect(latest_refund.status).to eql Bill::REFUNDED
   end
 
   it 'calls gateway.refund' do

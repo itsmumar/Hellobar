@@ -24,16 +24,6 @@ class SiteMailer < ActionMailer::Base
     )
   end
 
-  def site_script_not_installed(site, user)
-    @site = site
-    @user = user
-
-    roadie_mail(
-      to: user.email,
-      subject: 'One final step and your Hello bar is live'
-    )
-  end
-
   private
 
   def fetch_site_statistics

@@ -16,9 +16,21 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :email_campaigns, only: [] do
+    resources :campaigns, except: %i[new edit] do
       member do
-        post :update_status
+        post :send_out
+        post :send_out_test_email
+      end
+    end
+    resources :contact_lists, only: %i[index]
+
+    get :authenticate, to: 'authentications#create'
+
+    scope module: 'internal' do
+      resources :campaigns, only: [] do
+        member do
+          post :update_status
+        end
       end
     end
   end
@@ -59,6 +71,9 @@ Rails.application.routes.draw do
     get 'site_elements/new/*path', to: 'site_elements#new'
 
     resources :content_upgrades do
+      member do
+        put :toggle_paused
+      end
       collection do
         get :style_editor
         post :update_styles
@@ -66,12 +81,6 @@ Rails.application.routes.draw do
     end
 
     resources :autofills, except: :show
-
-    resources :email_campaigns, except: :destroy do
-      member do
-        post :send_out
-      end
-    end
 
     resources :image_uploads, only: [:create]
 
@@ -134,20 +143,23 @@ Rails.application.routes.draw do
     resources :credit_cards, only: [:destroy]
 
     resources :users, only: %i[index show destroy] do
-      resources :sites, only: [:update] do
-        member do
-          post :regenerate
-          put :add_free_days
-        end
+    end
 
-        resources :contact_lists, only: [:index]
+    resources :sites, only: %i[show update] do
+      member do
+        post :regenerate
+        put :add_free_days
       end
 
       resources :bills, only: [:show] do
-        put 'void'
-        put 'pay'
-        put 'refund'
+        member do
+          put 'void'
+          put 'pay'
+          put 'refund'
+        end
       end
+
+      resources :contact_lists, only: [:index]
     end
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
@@ -155,8 +167,9 @@ Rails.application.routes.draw do
     get 'reset_password', to: 'access#reset_password'
     post 'reset_password', to: 'access#do_reset_password'
     get 'access', to: 'access#step1', as: :access
-    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     post 'access', to: 'access#process_step1'
+    get 'otp', to: 'access#step2', as: :otp
+    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     get 'locked', to: 'access#locked', as: :locked
   end
 

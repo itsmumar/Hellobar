@@ -23,19 +23,10 @@ describe Users::SessionsController do
     end
 
     context 'the user email is found' do
-      it 'renders the set_password page for temporary users' do
-        user = User.new status: User::TEMPORARY
-        allow(User).to receive(:search_all_versions_for_email) { user }
-
-        post :find_email, user: { email: 'hello@email.com' }
-
-        expect(response).to render_template('users/forgot_emails/set_password')
-      end
-
       it 'redirects users to login via OAuth if they have a Google account' do
         google_auth = double('authentication', provider: 'google')
         user = double('user', status: 'active', authentications: [google_auth])
-        allow(User).to receive(:search_all_versions_for_email) { user }
+        allow(User).to receive(:find_by) { user }
 
         post :find_email, user: { email: 'hello@email.com' }
 
@@ -43,11 +34,11 @@ describe Users::SessionsController do
       end
 
       it 'renders the find_email template if an email/password user' do
-        allow(User).to receive(:search_all_versions_for_email) { User.new }
+        allow(User).to receive(:find_by) { User.new }
 
         post :find_email, user: { email: 'hello@email.com' }
 
-        expect(response).to render_template('users/sessions/find_email')
+        expect(response).to render_template
       end
     end
   end

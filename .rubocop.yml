@@ -134,7 +134,7 @@ Metrics/BlockLength:
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 178 # ideally 100
+  Max: 185 # ideally 100
   Exclude:
     - 'app/models/site.rb'
     - 'app/models/site_element.rb'

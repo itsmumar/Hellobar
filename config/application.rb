@@ -33,7 +33,7 @@ module Hellobar
     # directory that we need. This way we have more control over load
     # order and have a convenient place to put other initialization
     # code (config, etc.)
-    config.autoload_paths += Dir[config.root.join('app', 'models', '**/')]
+    config.autoload_paths += Dir[config.root.join('app', 'models', 'validators')]
 
     # Action Mailer
     config.action_mailer.default_url_options = { host: Settings.host }
@@ -56,5 +56,15 @@ module Hellobar
       authentication: :plain,
       domain: Settings.host
     }
+
+    # Configure CORS
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins Settings.campaigns_url
+
+        resource '/api/*', headers: :any,
+          methods: %i[get post delete put patch options head]
+      end
+    end
   end
 end

@@ -9,14 +9,14 @@ describe 'Admin::ContactLists requests' do
   before do
     stub_current_admin(admin)
 
-    allow_any_instance_of(FetchContacts).to receive(:call).and_return([
-      { email: email, status: status, subscribed_at: Time.current }
+    allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([
+      Contact.new(email: email, status: status, subscribed_at: Time.current)
     ])
   end
 
   describe 'GET admin_user_site_contact_lists_path' do
     it 'allows admins to see contact lists of the site' do
-      get admin_user_site_contact_lists_path(user_id: user, site_id: site)
+      get admin_site_contact_lists_path(site_id: site)
 
       expect(response).to be_success
       expect(response.body).to include contact_list.name

@@ -3,8 +3,15 @@ class StaticScript
 
   attr_reader :site
 
+  def self.hash_content
+    {
+      prefix: 'bar',
+      suffix: 'cat'
+    }
+  end
+
   def self.hash_id(id)
-    Digest::SHA1.hexdigest("bar#{ id }cat")
+    Digest::SHA1.hexdigest(hash_content[:prefix] + id.to_s + hash_content[:suffix])
   end
 
   def initialize(site)

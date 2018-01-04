@@ -2,9 +2,15 @@ FactoryGirl.define do
   factory :subscription do
     site
     user nil
-    schedule :monthly
+    schedule Subscription::MONTHLY
     association :credit_card, factory: :credit_card
     amount 0.0
+
+    trait :monthly
+
+    trait :yearly do
+      schedule Subscription::YEARLY
+    end
 
     trait :free do
       amount 0.0

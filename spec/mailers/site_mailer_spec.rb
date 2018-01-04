@@ -59,19 +59,4 @@ describe SiteMailer do
       end
     end
   end
-
-  describe '.site_script_not_installed' do
-    let(:mail) { SiteMailer.site_script_not_installed(site, user) }
-
-    it 'renders headers' do
-      expect(mail).to deliver_to(user.email)
-      expect(mail).to have_subject('One final step and your Hello bar is live')
-      expect(mail).to deliver_from('Hello Bar <contact@hellobar.com>')
-    end
-
-    it 'renders body' do
-      expect(mail.body.encoded).to match 'Start using Hello Bar!'
-      expect(mail.body.encoded).to match 'collecting emails'
-    end
-  end
 end

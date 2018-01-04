@@ -38,7 +38,7 @@ class Site < ApplicationRecord
 
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
-  has_many :email_campaigns, dependent: :destroy
+  has_many :campaigns, dependent: :destroy
 
   scope :preload_for_script, lambda {
     preload(
@@ -100,16 +100,6 @@ class Site < ApplicationRecord
   def self.protocol_ignored_url(url)
     host = normalize_url(url).normalized_host if url.include?('http')
     where(url: ["https://#{ host || url }", "http://#{ host || url }"])
-  end
-
-  def self.by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
-
-    (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by(id: i) if StaticScript.hash_id(i) == target_hash
-    end
-
-    nil
   end
 
   def self.by_url_for(user, url:)

@@ -1,7 +1,7 @@
 describe SiteElement do
   let(:element) { create(:site_element, :traffic) }
   let(:contact_list) { create(:contact_list) }
-  let(:site) { create(:site) }
+  let(:site) { element.site }
 
   def stub_capability(site, capability, value = true)
     allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
@@ -62,42 +62,147 @@ describe SiteElement do
       end
     end
 
-    describe '#redirect_has_url' do
+    shared_examples 'capability validation' do |capability, attribute, error|
+      context "when capabilities allows #{ capability }" do
+        before do
+          stub_capability(element.site, "#{ capability }?", true)
+        end
+
+        it "accept #{ capability } for paused element" do
+          element.update(paused: true)
+          expect(element.errors[attribute]).not_to include(error)
+        end
+
+        it "accept #{ capability } for unpaused element" do
+          element.update(paused: false)
+          expect(element.errors[attribute]).not_to include(error)
+        end
+      end
+
+      context 'when capabilities denies closable' do
+        before do
+          stub_capability(element.site, :closable?, false)
+        end
+
+        it "accept #{ capability } for paused element" do
+          element.update(paused: true)
+          expect(element.errors[attribute]).not_to include(error)
+        end
+
+        it "rejects #{ capability } for unpaused element" do
+          element.update(paused: false)
+          expect(element.errors[attribute]).to include(error)
+        end
+      end
+    end
+
+    describe '#closable' do
+      before do
+        element.closable = true
+      end
+
+      include_examples 'capability validation', :closable, :site, 'subscription does not support closable elements. Upgrade subscription.'
+    end
+
+    describe '#custom_targeting' do
+      before do
+        element.rule.conditions << build(:condition, :url_includes, rule: element.rule)
+      end
+
+      include_examples 'capability validation', :custom_targeted_bars, :site, 'subscription does not support custom targeting. Upgrade subscription.'
+    end
+
+    describe '#precise_geolocation_targeting' do
+      before do
+        element.rule.conditions << build(:condition, :city, rule: element.rule)
+      end
+
+      include_examples 'capability validation', :precise_geolocation_targeting, :site, 'subscription does not support precise geolocation targeting. Upgrade subscription.'
+    end
+
+    describe '#thank_you_text' do
       context 'when subtype is email' do
         let(:element) { create(:site_element, :email) }
 
-        it 'requires a the correct capabilities' do
-          stub_capability(element.site, :after_submit_redirect?, false)
-          element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+        context 'when after_email_submit_action is custom thank you' do
+          before do
+            element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
+          end
 
-          element.save
+          include_examples 'capability validation', :custom_thank_you_text, :thank_you_text, 'subscription does not support custom thank you text. Upgrade subscription.'
 
-          expect(element.errors['settings.redirect_url']).to include('is a pro feature')
+          it 'requires custom thank_you_text' do
+            stub_capability(element.site, :custom_thank_you_text?, true)
+
+            element.save
+
+            expect(element.errors[:thank_you_text]).to include('can\'t be blank')
+          end
         end
 
-        it 'requires a redirect url if after_email_submit_action is :redirect' do
-          stub_capability(element.site, :after_submit_redirect?, true)
-          element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+        context 'when after_email_submit_action is not custom thank you' do
+          before do
+            element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
+          end
 
+          it 'does not require custom thank_you_text' do
+            stub_capability(element.site, :custom_thank_you_text?, true)
+
+            element.save
+
+            expect(element.errors[:thank_you_text]).to be_empty
+          end
+        end
+      end
+
+      context 'when subtype is not email' do
+        it "doesn't care about thank you text" do
           element.save
+          expect(element.errors[:thank_you_text]).to be_empty
+        end
+      end
+    end
 
-          expect(element.errors['settings.redirect_url']).to include('cannot be blank')
+    describe '#redirect_url' do
+      context 'when subtype is email' do
+        let(:element) { create(:site_element, :email) }
+
+        context 'when after_email_submit_action is custom redirect' do
+          before do
+            element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+          end
+
+          include_examples 'capability validation', :after_submit_redirect, :redirect_url, 'subscription does not support custom redirect URL. Upgrade subscription.'
+
+          it 'requires custom redirect_url' do
+            stub_capability(element.site, :after_submit_redirect?, true)
+            element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
+
+            element.save
+
+            expect(element.errors[:redirect_url]).to include('can\'t be blank')
+          end
         end
 
-        it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-          stub_capability(element.site, :after_submit_redirect?, true)
-          element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
+        context 'when after_email_submit_action is not custom thank you' do
+          before do
+            element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
+          end
 
-          element.save
+          it 'does not require custom redirect_url' do
+            stub_capability(element.site, :after_submit_redirect?, true)
 
-          expect(element.errors['settings.redirect_url']).to be_empty
+            element.save
+
+            expect(element.errors[:redirect_url]).to be_empty
+          end
         end
       end
 
       context 'when subtype is not email' do
         it "doesn't care about redirect url" do
           element.save
-          expect(element.errors['settings.redirect_url']).to be_empty
+          expect(element.errors[:redirect_url]).to be_empty
         end
       end
     end
@@ -154,91 +259,37 @@ describe SiteElement do
     end
   end
 
-  describe '#redirect_has_url' do
-    let(:element) { create(:site_element, :email) }
-
-    context 'when subtype is email' do
-      it 'requires a the correct capabilities' do
-        stub_capability(element.site, :after_submit_redirect?, false)
-        element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
-
-        element.save
-
-        expect(element.errors['settings.redirect_url']).to include('is a pro feature')
-      end
-
-      it 'requires a redirect url if after_email_submit_action is :redirect' do
-        stub_capability(element.site, :after_submit_redirect?, true)
-        element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:redirect]
-
-        element.save
-
-        expect(element.errors['settings.redirect_url']).to include('cannot be blank')
-      end
-
-      it "doesn't require a redirect url if after_email_submit_action is not :redirect" do
-        stub_capability(element.site, :after_submit_redirect?, true)
-        element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:show_default_message]
-
-        element.save
-
-        expect(element.errors['settings.redirect_url']).to be_empty
-      end
-    end
-
-    context 'when subtype is not email' do
-      it "doesn't care about redirect url" do
-        element.save
-        expect(element.errors['settings.redirect_url']).to be_empty
-      end
-    end
-  end
-
-  describe '#has_thank_you_text' do
-    let(:element) { create(:site_element, :email) }
-
-    context 'when subtype is email' do
-      it 'requires a the correct capabilities' do
-        stub_capability(element.site, :custom_thank_you_text?, false)
-        element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
-
-        element.save
-
-        expect(element.errors['custom_thank_you_text']).to include('is a pro feature')
-      end
-
-      it 'requires thank you text if after_email_submit_action is :custom_thank_you_text' do
-        stub_capability(element.site, :custom_thank_you_text?, true)
-        element.settings['after_email_submit_action'] = SiteElement::AFTER_EMAIL_ACTION_MAP.invert[:custom_thank_you_text]
-
-        element.save
-
-        expect(element.errors['custom_thank_you_text']).to include('cannot be blank')
-      end
-
-      it "doesn't require thank you text if after_email_submit_action is not :custom_thank_you_text" do
-        stub_capability(element.site, :custom_thank_you_text?, true)
-        element.save
-        expect(element.errors['custom_thank_you_text']).to be_empty
-      end
-    end
-  end
-
   describe '#toggle_paused!' do
-    let(:site_element) { create(:site_element, :traffic) }
-
     it 'toggles an element from paused to unpaused' do
       expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(false).to(true)
+        element.toggle_paused!
+      }.to change(element, :paused?).from(false).to(true)
     end
 
     it 'toggles an element from unpaused to paused' do
-      site_element.update_attribute :paused, true
+      element.update_attribute :paused, true
 
       expect {
-        site_element.toggle_paused!
-      }.to change(site_element, :paused?).from(true).to(false)
+        element.toggle_paused!
+      }.to change(element, :paused?).from(true).to(false)
+    end
+
+    context 'when site is downgraded to free subscription' do
+      before do
+        create(:subscription, :pro, site: site, user: site.users.first, schedule: :monthly)
+        element.rule.conditions << create(:condition, rule: element.rule)
+        DowngradeSiteToFree.new(site).call
+      end
+
+      it 'pauses active site' do
+        expect { element.toggle_paused! }.to change(element, :paused?).from(false).to(true)
+      end
+
+      it 'raise an error when toggling paused site' do
+        element.update_attribute :paused, true
+
+        expect { element.toggle_paused! }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 

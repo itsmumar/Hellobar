@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171106160953) do
+ActiveRecord::Schema.define(version: 20171212173440) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -103,6 +103,24 @@ ActiveRecord::Schema.define(version: 20171106160953) do
   add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
   add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
+  create_table "campaigns", force: :cascade do |t|
+    t.integer  "site_id",         limit: 4,                     null: false
+    t.integer  "contact_list_id", limit: 4,                     null: false
+    t.string   "name",            limit: 255,                   null: false
+    t.string   "from_name",       limit: 255,                   null: false
+    t.string   "from_email",      limit: 255,                   null: false
+    t.string   "subject",         limit: 255,                   null: false
+    t.text     "body",            limit: 65535,                 null: false
+    t.string   "status",          limit: 20,    default: "new", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "sent_at"
+  end
+
+  add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
+  add_index "campaigns", ["site_id"], name: "index_campaigns_on_site_id", using: :btree
+
   create_table "conditions", force: :cascade do |t|
     t.integer  "rule_id",    limit: 4
     t.string   "segment",    limit: 255,      null: false
@@ -167,24 +185,6 @@ ActiveRecord::Schema.define(version: 20171106160953) do
 
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
-  create_table "email_campaigns", force: :cascade do |t|
-    t.integer  "site_id",         limit: 4,                     null: false
-    t.integer  "contact_list_id", limit: 4,                     null: false
-    t.string   "name",            limit: 255,                   null: false
-    t.string   "from_name",       limit: 255,                   null: false
-    t.string   "from_email",      limit: 255,                   null: false
-    t.string   "subject",         limit: 255,                   null: false
-    t.text     "body",            limit: 65535,                 null: false
-    t.string   "status",          limit: 20,    default: "new", null: false
-    t.datetime "deleted_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "sent_at"
-  end
-
-  add_index "email_campaigns", ["deleted_at"], name: "index_email_campaigns_on_deleted_at", using: :btree
-  add_index "email_campaigns", ["site_id"], name: "index_email_campaigns_on_site_id", using: :btree
-
   create_table "identities", force: :cascade do |t|
     t.integer  "site_id",     limit: 4
     t.string   "provider",    limit: 255
@@ -248,7 +248,6 @@ ActiveRecord::Schema.define(version: 20171106160953) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "element_subtype",                  limit: 191,                              null: false
-    t.string   "target_segment",                   limit: 255
     t.boolean  "closable",                                          default: false
     t.boolean  "show_border",                                       default: false
     t.string   "background_color",                 limit: 255,      default: "eb593c"
@@ -260,7 +259,6 @@ ActiveRecord::Schema.define(version: 20171106160953) do
     t.string   "link_text",                        limit: 5000,     default: "Click Here"
     t.text     "headline",                         limit: 16777215
     t.string   "size",                             limit: 255,      default: "large"
-    t.string   "target",                           limit: 255
     t.string   "text_color",                       limit: 255,      default: "ffffff"
     t.string   "texture",                          limit: 255,      default: "none"
     t.boolean  "paused",                                            default: false

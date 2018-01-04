@@ -49,21 +49,77 @@ describe ReferralsController do
 
   describe 'GET :accept' do
     let(:user) { nil }
-    let(:token) { create(:referral_token).token }
+    let(:token) { 'abc123=' }
+    let(:new_user) { create(:user, :temporary) }
+    let(:create_user_service) { instance_double(CreateUserFromReferral) }
 
-    it 'sets the session variable when given a valid token' do
-      get :accept, token: token
-
-      expect(response.status).to redirect_to(root_path)
-      expect(session[:referral_token]).not_to be_nil
-      expect(session[:referral_token]).to eql(token)
+    before do
+      allow(CreateUserFromReferral).to receive(:new).and_return(create_user_service)
     end
 
-    it 'does not set the session variable when given an ivalid token' do
-      get :accept, token: 'wrong'
+    context 'when user is signed in' do
+      let(:user) { create(:user) }
 
-      expect(response.status).to redirect_to(root_path)
-      expect(session[:referral_token]).to be_nil
+      it 'redirects to new_site_path' do
+        get :accept, token: token
+
+        expect(response.status).to redirect_to(new_site_path)
+      end
+    end
+
+    context 'when given a valid token' do
+      before do
+        allow(create_user_service).to receive(:call).and_return(new_user)
+      end
+
+      it 'calls CreateUserFromReferral service object' do
+        expect(CreateUserFromReferral).to receive(:new).with(token)
+        expect(create_user_service).to receive(:call)
+
+        get :accept, token: token
+      end
+
+      it 'sets the session variable' do
+        get :accept, token: token
+
+        expect(session[:referral_token]).to eql(token)
+      end
+
+      it 'signs in a new user' do
+        expect(controller).to receive(:sign_in).with(new_user)
+
+        get :accept, token: token
+      end
+
+      it 'redirects to root_path' do
+        get :accept, token: token
+
+        expect(response.status).to redirect_to(root_path)
+      end
+    end
+
+    context 'when given an invalid token' do
+      before do
+        allow(create_user_service).to receive(:call).and_raise(ActiveRecord::RecordNotFound)
+      end
+
+      it 'does not set the session variable' do
+        get :accept, token: token
+
+        expect(session[:referral_token]).to be_nil
+      end
+
+      it 'does not sign in any user' do
+        expect(controller).not_to receive(:sign_in)
+
+        get :accept, token: token
+      end
+
+      it 'redirects to root_path' do
+        get :accept, token: token
+
+        expect(response.status).to redirect_to(root_path)
+      end
     end
   end
 

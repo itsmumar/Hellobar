@@ -3,7 +3,6 @@ describe DynamoDB do
   let(:table_name) { 'table' }
   let(:id) { 5 }
   let(:expires_in) { 1.hour }
-  let(:cache_key) { 'cache_key' }
   let(:items) { [Hash['foo' => 'foo', 'bar' => 'bar']] }
   let(:count) { items.size }
 
@@ -50,46 +49,55 @@ describe DynamoDB do
     )
   end
 
-  let(:dynamo_db) { DynamoDB.new cache_key: cache_key, expires_in: expires_in }
+  let(:dynamo_db) { DynamoDB.new expires_in: expires_in }
 
   before do
     allow(Aws::DynamoDB::Client).to receive(:new).and_return client
   end
 
+  def string_inquirer(string)
+    ActiveSupport::StringInquirer.new(string)
+  end
+
   describe '.contacts_table_name' do
     it 'returns appropriate table name for the staging environment' do
-      expect(Rails).to receive(:env).and_return 'staging'
+      allow(Rails).to receive(:env).and_return string_inquirer('staging')
       expect(DynamoDB.contacts_table_name).to eq 'staging_contacts'
     end
 
     it 'returns appropriate table name for the production environment' do
-      expect(Rails).to receive(:env).and_return 'production'
+      allow(Rails).to receive(:env).and_return string_inquirer('production')
       expect(DynamoDB.contacts_table_name).to eq 'contacts'
     end
 
     it 'returns appropriate table name for the edge environment' do
-      expect(Rails).to receive(:env).and_return 'edge'
+      allow(Rails).to receive(:env).and_return string_inquirer('edge')
       expect(DynamoDB.contacts_table_name).to eq 'edge_contacts'
     end
 
-    it 'returns appropriate table name for the test environment' do
+    it 'returns appropriate table name for the development environment' do
+      allow(Rails).to receive(:env).and_return string_inquirer('development')
       expect(DynamoDB.contacts_table_name).to eq 'development_contacts'
+    end
+
+    it 'returns appropriate table name for the test environment' do
+      expect(DynamoDB.contacts_table_name).to eq 'test_contacts'
     end
   end
 
   describe '.visits_table_name' do
     it 'returns appropriate table name for the staging environment' do
-      expect(Rails).to receive(:env).and_return 'staging'
+      allow(Rails).to receive(:env).and_return string_inquirer('staging')
       expect(DynamoDB.visits_table_name).to eq 'staging_over_time'
     end
 
     it 'returns appropriate table name for the production environment' do
-      expect(Rails).to receive(:env).and_return 'production'
+      allow(Rails).to receive(:env).and_return string_inquirer('production')
       expect(DynamoDB.visits_table_name).to eq 'over_time'
     end
 
     it 'returns appropriate table name for the edge environment' do
-      expect(Rails).to receive(:env).and_return 'edge'
+      allow(Rails).to receive(:env).and_return string_inquirer('edge')
       expect(DynamoDB.visits_table_name).to eq 'edge_over_time2'
     end
 
@@ -100,16 +108,16 @@ describe DynamoDB do
 
   describe '#query' do
     let(:params) { Hash[table_name: table_name] }
-    let(:query) { dynamo_db.query params }
+    let(:query) { dynamo_db.query(params) }
 
-    it 'returns array of items' do
+    it 'returns enumerable of items' do
       expect(query).to eql items
     end
 
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
       expect(Aws::DynamoDB::Client).not_to receive :new
       expect(Rails.cache).to receive(:fetch)
-        .with "DynamoDB/#{ cache_key }", expires_in: expires_in
+        .with(/DynamoDB\/\w+/, expires_in: expires_in)
 
       query
     end
@@ -173,7 +181,7 @@ describe DynamoDB do
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
       expect(Aws::DynamoDB::Client).not_to receive :new
       expect(Rails.cache).to receive(:fetch)
-        .with "DynamoDB/#{ cache_key }", expires_in: expires_in
+        .with(/DynamoDB\/\w+/, expires_in: expires_in)
 
       batch_get_item
     end

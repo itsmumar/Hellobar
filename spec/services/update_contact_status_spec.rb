@@ -15,7 +15,7 @@ describe UpdateContactStatus do
         expect(dynamo_db).to receive(:update_item)
           .with(
             a_hash_including(
-              table_name: 'development_contacts',
+              table_name: 'test_contacts',
               attribute_updates: {
                 status: {
                   value: status,
@@ -37,7 +37,7 @@ describe UpdateContactStatus do
         expect(dynamo_db).to receive(:update_item)
           .with(
             a_hash_including(
-              table_name: 'development_contacts',
+              table_name: 'test_contacts',
               attribute_updates: {
                 status: {
                   value: status,

@@ -69,11 +69,7 @@ class SiteElementsController < ApplicationController
   def toggle_paused
     @site_element.toggle_paused!
     @site.script.generate
-
-    respond_to do |format|
-      format.js { head :ok }
-      format.html { redirect_to site_site_elements_path(site_id: @site) }
-    end
+    head :ok
   end
 
   private

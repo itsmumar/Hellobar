@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/Hello-bar/createsend-ruby.git
-  revision: b1cc5b1a833affd374d9edb1fdd0710d62f388cc
-  specs:
-    createsend (4.1.1)
-      hashie (~> 3.0)
-      httparty (~> 0.14)
-      json (>= 1.0)
-
-GIT
   remote: https://github.com/Hello-bar/omniauth-constantcontact2.git
   revision: ba9860968b50dd9dd29dbe692ee6ecafc3a591b2
   specs:
@@ -232,6 +223,10 @@ GEM
       currencies (~> 0.4.2)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
+    createsend (4.1.2)
+      hashie (~> 3.0)
+      httparty (~> 0.14)
+      json (>= 1.0)
     css_parser (1.5.0)
       addressable
     currencies (0.4.2)
@@ -272,6 +267,9 @@ GEM
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.18)
     formatador (0.2.5)
+    fuubar (2.2.0)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     gibbon (2.2.4)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -308,7 +306,7 @@ GEM
     hashdiff (0.3.2)
     hashie (3.5.6)
     htmlentities (4.3.4)
-    httparty (0.15.5)
+    httparty (0.15.6)
       multi_xml (>= 0.5.2)
     httpi (2.4.2)
       rack
@@ -418,9 +416,12 @@ GEM
       yard (~> 0.9)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
+    pry-rails (0.3.6)
+      pry (>= 0.10.4)
     psych (2.2.4)
     public_suffix (3.0.0)
     rack (1.6.8)
+    rack-cors (1.0.2)
     rack-protection (1.5.3)
       rack
     rack-ssl-enforcer (0.2.8)
@@ -479,6 +480,8 @@ GEM
     rspec-expectations (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
+    rspec-instafail (1.0.0)
+      rspec
     rspec-mocks (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.6.0)
@@ -662,7 +665,7 @@ DEPENDENCIES
   connection_pool
   countries
   country_select!
-  createsend!
+  createsend
   dalli
   database_cleaner
   devise
@@ -671,6 +674,7 @@ DEPENDENCIES
   email_spec
   factory_girl_rails
   faraday
+  fuubar
   gibbon
   guard
   guard-rspec
@@ -709,8 +713,10 @@ DEPENDENCIES
   pry
   pry-doc
   pry-nav
+  pry-rails
   psych
   public_suffix
+  rack-cors
   rack-ssl-enforcer
   rails (= 4.2.8)
   rails-html-sanitizer
@@ -720,6 +726,7 @@ DEPENDENCIES
   roadie-rails
   rotp
   rqrcode
+  rspec-instafail
   rspec-rails
   rspec-retry
   rspec_junit_formatter

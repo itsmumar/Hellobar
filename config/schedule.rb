@@ -7,7 +7,7 @@ env :PATH, ENV['PATH']
 
 # All times are in UTC
 every :friday, at: '3:00pm', roles: [:cron] do
-  rake 'internal_metrics:email_weekly'
+  rake 'internal_metrics:summary'
 end
 
 every :day, at: '2:00pm', roles: [:cron] do
@@ -16,10 +16,6 @@ end
 
 every :monday, at: '2:30pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
-end
-
-every 4.days, at: '11:00am', roles: [:cron] do
-  rake 'mailing:send_site_script_not_installed'
 end
 
 every 24.hours, at: '12:00pm', roles: [:cron] do

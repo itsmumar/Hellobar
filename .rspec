@@ -1,3 +1,4 @@
 --color
 --require rails_helper
---format d
+--require rspec/instafail
+--format Fuubar

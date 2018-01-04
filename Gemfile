@@ -11,7 +11,9 @@ gem 'aws-sdk-sqs'
 
 # Authentication / authorization
 gem 'devise'
+gem 'jwt'
 gem 'omniauth'
+gem 'rack-cors'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
@@ -34,7 +36,7 @@ gem 'omniauth-verticalresponse', github: 'Hello-bar/omniauth-verticalresponse'
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
-gem 'createsend', github: 'Hello-bar/createsend-ruby' # CampaignMonitor
+gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
@@ -58,7 +60,6 @@ gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
-gem 'jwt'
 gem 'loofah', '2.0.3' # loofah 2.1.1 is buggy; see https://github.com/flavorjones/loofah/pull/123#issuecomment-334369283
 gem 'mustache'
 gem 'rails-html-sanitizer'
@@ -159,6 +160,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
+  gem 'pry-rails'
 
   # Spring preloader
   gem 'spring'
@@ -175,6 +177,8 @@ group :test do
   gem 'capybara_discoball'
 
   # Spec formatters
+  gem 'fuubar'
+  gem 'rspec-instafail', require: false
   gem 'rspec_junit_formatter'
 
   # Code coverage metrics

@@ -1,5 +1,5 @@
 describe UpdateSiteElement do
-  let!(:element) { create :bar, :email }
+  let!(:element) { create(:bar, :email, :with_pro_site) }
   let(:headline) { 'Updated headline' }
   let(:params) do
     {

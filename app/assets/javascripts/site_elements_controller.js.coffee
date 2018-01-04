@@ -131,22 +131,24 @@ $ ->
     siteID = $element.attr('data-site-id')
     elementId = $element.attr('data-element-id')
 
-    $row.data('active', !$row.data('active'))
-
-    # assume successful change for faster user feedback
-    if $row.data('active')
-      $element.html('<i class="icon-pause"></i>Pause')
-    else
-      $element.html('<i class="icon-play"></i>Unpause')
-
-    renderBars()
-
     $.ajax
       type: 'PUT'
       url: "/sites/#{siteID}/site_elements/#{elementId}/toggle_paused"
+      success: (response) ->
+        $row.data('active', !$row.data('active'))
+
+        if $row.data('active')
+          $element.html('<i class="icon-pause"></i>Pause')
+        else
+          $element.html('<i class="icon-play"></i>Unpause')
+
+        renderBars()
       error: (xhr, status, error) ->
-        # toggle the class and text back to original and render any error
-        console.log "Unexpected error: #{error}"
+        if xhr.status == 422
+          new UpgradeAccountModal(site: window.site, upgradeBenefit: 'unpause bar with Pro-Features').open()
+        else
+          # toggle the class and text back to original and render any error
+          console.log "Unexpected error: #{error}"
 
   #-----------  Delete Rule  -----------#
 
