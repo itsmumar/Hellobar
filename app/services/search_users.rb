@@ -7,7 +7,7 @@ class SearchUsers
   end
 
   def call
-    paginate search || all
+    paginate(search)
   end
 
   private
@@ -19,8 +19,11 @@ class SearchUsers
   end
 
   def search
-    users = by_script || by_credit_card || by_site_url_and_username
-    Kaminari.paginate_array(users.uniq) if users
+    users = by_script
+    users = by_credit_card if users.blank?
+    users = by_site_url_and_username if users.blank?
+    users = all if users.blank?
+    users
   end
 
   def all
@@ -41,7 +44,7 @@ class SearchUsers
 
   def by_site_url_and_username
     return if q.blank?
-    by_site_url + by_username
+    Kaminari.paginate_array((by_site_url + by_username).uniq)
   end
 
   def by_username
