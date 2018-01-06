@@ -76,8 +76,6 @@ export default Ember.Component.extend({
     return selectedOption || options[0];
   }.property('model.rule_id', 'ruleOptions'),
 
-  isTopBarStyle: Ember.computed.equal('model.type', 'Bar'),
-
   rulePopUpOptions: function (ruleData, isNewRule) {
     const that = this;
 

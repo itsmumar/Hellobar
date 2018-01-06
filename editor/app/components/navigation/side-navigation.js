@@ -22,10 +22,6 @@ export default Ember.Component.extend({
    */
   style: true,
 
-  shouldShowMobileDesktopSwitch: function() {
-    return this.get('style') === 'Bar' && this.get('goal') !== 'call';
-  }.property('goal', 'style'),
-
   tagName: 'nav',
 
   classNames: ['step-navigation', 'links-wrapper'],

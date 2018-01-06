@@ -12,20 +12,18 @@
       </div>
     {{/if}}
 
-    {{#if isTopBarStyle}}
-      {{#if shouldShowMobileVisitorsPreset}}
-        <div class="step-link-block active" {{action 'select' 'Mobile Visitors'}}>
-          <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
-          <h6>
-            Mobile Visitors
-            {{#if cannotTarget}}
-              <span class="button paid">PAID</span>
-            {{/if}}
-          </h6>
+    {{#if shouldShowMobileVisitorsPreset}}
+      <div class="step-link-block active" {{action 'select' 'Mobile Visitors'}}>
+        <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+        <h6>
+          Mobile Visitors
+          {{#if cannotTarget}}
+            <span class="button paid">PAID</span>
+          {{/if}}
+        </h6>
 
-          <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
-        </div>
-      {{/if}}
+        <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+      </div>
     {{/if}}
 
     {{#if shouldShowHomepageVisitorsPreset}}
