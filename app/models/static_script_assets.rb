@@ -27,15 +27,15 @@ module StaticScriptAssets
 
   mattr_reader(:manifest) { Sprockets::Manifest.new(env, 'tmp/script') }
 
-  class << self
-    delegate :compile, to: :manifest
-  end
-
   module_function
 
   def precompile
     manifest.clobber
     with_js_compressor { manifest.compile('*.js', '*.es6', '*.css', '*.html') }
+  end
+
+  def compile_if_missed(path)
+    with_js_compressor { manifest.compile(path) } unless manifest.assets[path]
   end
 
   def with_js_compressor
