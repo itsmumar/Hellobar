@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171212173440) do
+ActiveRecord::Schema.define(version: 20180108195620) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -266,7 +266,6 @@ ActiveRecord::Schema.define(version: 20171212173440) do
     t.text     "settings",                         limit: 16777215
     t.boolean  "show_branding",                                     default: true
     t.integer  "contact_list_id",                  limit: 4
-    t.string   "display_when",                     limit: 255,      default: "immediately"
     t.string   "thank_you_text",                   limit: 255
     t.boolean  "pushes_page_down",                                  default: true
     t.boolean  "remains_at_top",                                    default: true
