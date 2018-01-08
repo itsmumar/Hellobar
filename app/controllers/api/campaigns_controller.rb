@@ -16,7 +16,7 @@ class Api::CampaignsController < Api::ApplicationController
     if campaign.save
       render json: CampaignSerializer.new(campaign)
     else
-      render json: { errors: campaign.errors.full_messages },
+      render json: { errors: campaign.errors.messages },
         status: :unprocessable_entity
     end
   end
@@ -25,7 +25,7 @@ class Api::CampaignsController < Api::ApplicationController
     if @campaign.update(campaign_params)
       render json: CampaignSerializer.new(@campaign)
     else
-      render json: { errors: @campaign.errors.full_messages },
+      render json: { errors: @campaign.errors.messages },
         status: :unprocessable_entity
     end
   end
