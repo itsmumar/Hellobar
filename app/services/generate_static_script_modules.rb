@@ -16,7 +16,7 @@ class GenerateStaticScriptModules
 
   def compile
     @script_content ||= begin
-      StaticScriptAssets.compile(MODULES_FILENAME)
+      StaticScriptAssets.compile_if_missed(MODULES_FILENAME)
       if compress_script?
         StaticScriptAssets.render_compressed(MODULES_FILENAME)
       else

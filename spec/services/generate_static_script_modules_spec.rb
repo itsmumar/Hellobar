@@ -6,12 +6,12 @@ describe GenerateStaticScriptModules do
   before do
     allow(StaticScriptAssets).to receive(:render_compressed).and_return(compressed_script)
     allow(StaticScriptAssets).to receive(:render).and_return(script_content)
-    allow(StaticScriptAssets).to receive(:compile)
+    allow(StaticScriptAssets).to receive(:compile_if_missed)
   end
 
   shared_examples 'common' do
     it 'compiles modules.js' do
-      expect(StaticScriptAssets).to receive(:compile).with('modules.js')
+      expect(StaticScriptAssets).to receive(:compile_if_missed).with('modules.js')
       service.call
     end
   end
