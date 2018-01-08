@@ -501,7 +501,10 @@ hellobar.defineModule('elements.class',
       updateStyleFor(reset) {
         var element = this;
         var contentDocument = element.w.contentDocument;
-        var hbModal = contentDocument.getElementById('hellobar-modal') || contentDocument.getElementById('hellobar-takeover');
+        var hbElement =
+          contentDocument.getElementById('hellobar-modal') ||
+          contentDocument.getElementById('hellobar-takeover') ||
+          contentDocument.getElementById('hellobar-slider');
 
         if (reset) {
           this.w.style.position = "";
@@ -512,14 +515,14 @@ hellobar.defineModule('elements.class',
           this.w.style.top = "";
           this.w.style["-webkit-transform"] = "";
 
-          hbModal.style.position = "";
-          hbModal.style.overflowY = "";
-          hbModal.style.maxHeight = "";
-          hbModal.style.height = "";
-          hbModal.style.top = "";
-          hbModal.style.left = "";
-          hbModal.style.transform = "";
-          hbModal.style.width = "";
+          hbElement.style.position = "";
+          hbElement.style.overflowY = "";
+          hbElement.style.maxHeight = "";
+          hbElement.style.height = "";
+          hbElement.style.top = "";
+          hbElement.style.left = "";
+          hbElement.style.transform = "";
+          hbElement.style.width = "";
         } else {
           if (this.type == 'Slider') {
             element.w.style.position = "fixed";
@@ -535,19 +538,19 @@ hellobar.defineModule('elements.class',
             element.w.style.top = "0";
             element.w.style["-webkit-transform"] = "scale(0.9)";
 
-            if (hbModal != undefined && hbModal != null) {
-              hbModal.style.position = "absolute";
-              hbModal.style.overflowY = "scroll";
-              hbModal.style.maxHeight = "100%";
-              hbModal.style.height = "100%";
-              hbModal.style.top = "0";
-              hbModal.style.left = "0";
-              hbModal.style.transform = "none";
-              hbModal.style.width = "100%";
+            if (hbElement != undefined && hbElement != null) {
+              hbElement.style.position = "absolute";
+              hbElement.style.overflowY = "scroll";
+              hbElement.style.maxHeight = "100%";
+              hbElement.style.height = "100%";
+              hbElement.style.top = "0";
+              hbElement.style.left = "0";
+              hbElement.style.transform = "none";
+              hbElement.style.width = "100%";
             }
           }, 500);
 
-          hbModal.scrollIntoView();
+          hbElement.scrollIntoView();
           contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
           window.scrollTo(0, window.innerHeight / 2);
         }
