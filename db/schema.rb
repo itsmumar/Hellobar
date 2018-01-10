@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180108195620) do
+ActiveRecord::Schema.define(version: 20180110082627) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -104,7 +104,6 @@ ActiveRecord::Schema.define(version: 20180108195620) do
   add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "campaigns", force: :cascade do |t|
-    t.integer  "site_id",         limit: 4,                     null: false
     t.integer  "contact_list_id", limit: 4,                     null: false
     t.string   "name",            limit: 255,                   null: false
     t.string   "from_name",       limit: 255,                   null: false
@@ -119,7 +118,6 @@ ActiveRecord::Schema.define(version: 20180108195620) do
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
-  add_index "campaigns", ["site_id"], name: "index_campaigns_on_site_id", using: :btree
 
   create_table "conditions", force: :cascade do |t|
     t.integer  "rule_id",    limit: 4
