@@ -1,5 +1,7 @@
 class Subscription
   class ProComped < Subscription
+    autoload :Capabilities, 'subscription/free_plus/capabilities'
+
     class << self
       def defaults
         {
@@ -15,4 +17,3 @@ class Subscription
     end
   end
 end
-require 'subscription/pro_comped/capabilities'
