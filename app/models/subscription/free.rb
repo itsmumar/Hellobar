@@ -1,5 +1,7 @@
 class Subscription
   class Free < Subscription
+    autoload :Capabilities, 'subscription/free/capabilities'
+
     def free?
       true
     end
@@ -19,5 +21,3 @@ class Subscription
     end
   end
 end
-
-require 'subscription/free/capabilities'
