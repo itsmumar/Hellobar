@@ -1,4 +1,4 @@
-class Api::Internal::CampaignsController < Api::InternalController
+class Api::Internal::CampaignsController < Api::Internal::ApplicationController
   def update_status
     campaign.update(
       status: campaign_params[:status],

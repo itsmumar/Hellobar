@@ -1,4 +1,4 @@
-class Api::Internal::SitesController < Api::InternalController
+class Api::Internal::SitesController < Api::Internal::ApplicationController
   def update_install_type
     site.update_column :install_type, site_install_type_params[:install_type]
 

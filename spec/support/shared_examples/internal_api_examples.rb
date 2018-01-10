@@ -2,7 +2,7 @@ shared_examples 'Token authentication' do
   # expects `request` is defined
 
   context 'when there is no Authorization token in the request headers' do
-    let(:headers) { Hash.new }
+    let(:headers) { nil }
 
     it 'returns :unauthorized' do
       request

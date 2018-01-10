@@ -1,8 +1,10 @@
-class Api::InternalController < Api::ApplicationController
-  skip_before_action :authenticate_request!
-  skip_before_action :verify_authenticity_token
+class Api::Internal::ApplicationController < ApplicationController
+  abstract!
 
+  skip_before_action :verify_authenticity_token
   before_action :authenticate
+
+  respond_to :json
 
   private
 
