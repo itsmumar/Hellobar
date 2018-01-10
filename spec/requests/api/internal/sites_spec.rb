@@ -1,8 +1,8 @@
-describe 'api/sites requests' do
+describe 'api/internal/sites requests' do
   describe 'POST #update_install_type' do
     context 'when unauthenticated' do
       it 'responds with :unauthorized' do
-        post update_install_type_api_site_path(1), format: :json
+        post update_install_type_api_internal_site_path(1), format: :json
 
         expect(response).to be_unauthorized
       end
@@ -16,7 +16,7 @@ describe 'api/sites requests' do
       let(:headers) { Hash['Authorization' => "Token token=#{ token }"] }
 
       it 'updates install_type param' do
-        post update_install_type_api_site_path(site), params, headers
+        post update_install_type_api_internal_site_path(site), params, headers
 
         expect(response).to be_successful
         expect(site.reload.install_type).to eq install_type
@@ -27,7 +27,7 @@ describe 'api/sites requests' do
   describe 'POST #update_static_script_installation' do
     context 'when unauthenticated' do
       it 'responds with :unauthorized' do
-        post update_static_script_installation_api_site_path(1), format: :json
+        post update_static_script_installation_api_internal_site_path(1), format: :json
 
         expect(response).to be_unauthorized
       end
@@ -40,7 +40,7 @@ describe 'api/sites requests' do
       let(:headers) { Hash['Authorization' => "Token token=#{ token }"] }
 
       it 'sets site script as installed', :freeze do
-        post update_static_script_installation_api_site_path(site), params, headers
+        post update_static_script_installation_api_internal_site_path(site), params, headers
 
         expect(response).to be_successful
         expect(site.reload.script_installed_at).to eq Time.current

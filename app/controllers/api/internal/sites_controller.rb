@@ -1,10 +1,4 @@
-class Api::SitesController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
-  before_action :authenticate
-
-  respond_to :json
-
+class Api::Internal::SitesController < Api::InternalController
   def update_install_type
     site.update_column :install_type, site_install_type_params[:install_type]
 
@@ -12,7 +6,10 @@ class Api::SitesController < ApplicationController
   end
 
   def update_static_script_installation
-    UpdateStaticScriptInstallation.new(site, installed: site_installed_params[:installed]).call
+    UpdateStaticScriptInstallation.new(
+      site,
+      installed: site_installed_params[:installed]
+    ).call
 
     head :ok
   end
@@ -29,11 +26,5 @@ class Api::SitesController < ApplicationController
 
   def site
     @site ||= Site.find params[:id]
-  end
-
-  def authenticate
-    authenticate_or_request_with_http_token do |token, _options|
-      token == Settings.api_token
-    end
   end
 end
