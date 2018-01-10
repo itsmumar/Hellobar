@@ -1,6 +1,6 @@
 class Subscription
   class Pro < Subscription
-    autoload :Capabilities, 'subscription/free_plus/capabilities'
+    autoload :Capabilities, 'subscription/pro/capabilities'
 
     class << self
       def defaults
