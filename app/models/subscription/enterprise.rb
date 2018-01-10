@@ -17,4 +17,3 @@ class Subscription
     end
   end
 end
-
