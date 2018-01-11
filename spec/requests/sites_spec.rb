@@ -29,7 +29,7 @@ describe 'Sites requests' do
         post install_check_site_path(site)
 
         expect(response).to be_successful
-        expect(JSON.parse(response.body)['id']).to eq site.id
+        expect(JSON.parse(response.body)['script_installed']).to be_truthy
       end
     end
 
