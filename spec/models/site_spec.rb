@@ -86,24 +86,20 @@ describe Site do
     end
   end
 
-  describe '#pro_managed_subscription?' do
+  describe '#pro_managed?' do
     it 'returns true if the site has a ProManaged subscription' do
-      site = build_stubbed :site
-      subscription = build_stubbed :subscription, :pro_managed
+      site = create :site
+      create :subscription, :pro_managed, site: site
 
-      expect(site).to receive(:subscriptions).and_return [subscription]
-
-      expect(site).to be_pro_managed_subscription
+      expect(site).to be_pro_managed
     end
 
     it 'returns false if the site does not have a ProManaged subscription' do
-      site = build_stubbed :site
-      free = build_stubbed :subscription, :free
-      pro = build_stubbed :subscription, :pro
+      site = create :site
+      create :subscription, :free, site: site
+      create :subscription, :pro, site: site
 
-      expect(site).to receive(:subscriptions).and_return [free, pro]
-
-      expect(site).not_to be_pro_managed_subscription
+      expect(site).not_to be_pro_managed
     end
   end
 
