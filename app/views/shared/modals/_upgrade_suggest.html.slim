@@ -1,3 +1,6 @@
+- # do not render it for pro managed sites since it takes a lot of time for huge sites
+- return if current_site&.pro_managed?
+
 - if current_user.try(:can_view_upgrade_suggest_modal?) && ab_variation("Upgrade Pop-up for Active Users 2016-08") == "pop_up"
   script id='upgrade-suggest-modal-template' type='text/x-handlebars-template' data={ 'user-id' => current_user.id }
     .modal-wrapper

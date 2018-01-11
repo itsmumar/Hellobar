@@ -84,13 +84,9 @@ describe ApplicationController, '#require_pro_managed_subscription' do
   end
 
   it 'redirects a user without a ProManaged subscription' do
-    user = build_stubbed :user
-    site = build_stubbed :site
-    subscription = build_stubbed :subscription, :pro
+    site = create :site
+    create :subscription, :pro, site: site
 
-    expect(site).to receive(:subscriptions).and_return [subscription]
-
-    allow(controller).to receive(:current_user).and_return user
     allow(controller).to receive(:current_site).and_return site
 
     get :index
@@ -99,13 +95,9 @@ describe ApplicationController, '#require_pro_managed_subscription' do
   end
 
   it 'does not redirect a user with ProManaged subscription' do
-    user = build_stubbed :user
-    site = build_stubbed :site
-    subscription = build_stubbed :subscription, :pro_managed
+    site = create :site
+    create :subscription, :pro_managed, site: site
 
-    expect(site).to receive(:subscriptions).and_return [subscription]
-
-    allow(controller).to receive(:current_user).and_return user
     allow(controller).to receive(:current_site).and_return site
 
     get :index
