@@ -133,14 +133,14 @@ class Site < ApplicationRecord
     subscriptions.offset(1).last
   end
 
-  def pro_managed_subscription?
-    subscriptions.any? { |s| s.class == Subscription::ProManaged }
-  end
-
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
       current_subscription.free?
+  end
+
+  def pro_managed?
+    current_subscription.is_a? Subscription::ProManaged
   end
 
   # in case of downgrade user can have e.g Pro capabilities with Free subscription

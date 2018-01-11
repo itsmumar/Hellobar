@@ -105,7 +105,9 @@ class User < ApplicationRecord
   end
 
   def paying_subscription?
-    subscriptions.active.any? { |subscription| subscription.capabilities.acts_as_paid_subscription? }
+    subscriptions.active.any? do |subscription|
+      subscription.capabilities.acts_as_paid_subscription?
+    end
   end
 
   def onboarding_status_setter
