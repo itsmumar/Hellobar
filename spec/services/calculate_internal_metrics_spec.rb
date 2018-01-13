@@ -39,6 +39,14 @@ describe CalculateInternalMetrics, freeze: '2017-12-05 23:00 UTC' do
       expect(metrics.still_installed_sites).to match_array [site]
     end
 
+    it 'includes installation churn' do
+      create :site, created_at: 1.week.ago, script_installed_at: 4.days.ago
+      create :site, created_at: 1.week.ago, script_installed_at: 4.days.ago,
+        script_uninstalled_at: 3.days.ago
+
+      expect(metrics.installation_churn).to eql 0.5
+    end
+
     it 'includes Pro revenue from the 1 week period' do
       site = create :site, :installed, :pro, created_at: 1.week.ago
       bill = create :bill, :pro, :paid, subscription: site.current_subscription,
