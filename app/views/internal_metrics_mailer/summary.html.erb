@@ -1,14 +1,14 @@
-<p>Report from <%= @metrics.beginning_of_last_week %> to <%= @metrics.beginning_of_current_week %></p>
+<p>Report for users/sites created from <%= @metrics.beginning_of_last_week %> (inc) to <%= @metrics.beginning_of_current_week %> (excl)</p>
 
-<p>Registered users: <%= number_with_delimiter(@metrics.users.size) %></p>
+<p>Newly registered users: <%= number_with_delimiter(@metrics.users.size) %></p>
 
-<p>Created sites: <%= number_with_delimiter(@metrics.sites.size) %></p>
+<p>Newly created sites: <%= number_with_delimiter(@metrics.sites.size) %></p>
 
-<p>Sites which installed the script: <%= number_with_delimiter(@metrics.installed_sites.size) %>
+<p>Newly created sites which installed the script: <%= number_with_delimiter(@metrics.installed_sites.size) %>
 (<%= number_to_percentage((@metrics.installed_sites.size.to_f / @metrics.sites.size) * 100, precision: 1) %> conversion)
 </p>
 
-<p>Sites with still installed script: <%= number_with_delimiter(@metrics.still_installed_sites.size) %>
+<p>Newly created sites with still installed script: <%= number_with_delimiter(@metrics.still_installed_sites.size) %>
 (<%= number_to_percentage((@metrics.still_installed_sites.size.to_f / @metrics.sites.size) * 100, precision: 1) %> conversion)
 </p>
 
