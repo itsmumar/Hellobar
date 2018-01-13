@@ -7,6 +7,13 @@ describe CalculateInternalMetrics, freeze: '2017-12-10 23:00 UTC' do
       expect(metrics.beginning_of_last_week).to eq Date.parse('2017-11-27')
     end
 
+    it 'includes users registered in the 1 week period' do
+      user = create :user, created_at: 1.week.ago
+      create :user, created_at: 2.weeks.ago
+
+      expect(metrics.users).to match_array [user]
+    end
+
     it 'includes sites created in the 1 week period' do
       site = create :site, created_at: 1.week.ago
       create :site, created_at: 2.weeks.ago

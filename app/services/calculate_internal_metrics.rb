@@ -9,6 +9,7 @@ class CalculateInternalMetrics
     OpenStruct.new(
       beginning_of_current_week: beginning_of_current_week,
       beginning_of_last_week: beginning_of_last_week,
+      users: users,
       sites: sites,
       installed_sites: installed_sites,
       revenue: revenue,
@@ -28,6 +29,10 @@ class CalculateInternalMetrics
 
   def beginning_of_last_week
     @beginning_of_last_week ||= beginning_of_current_week - 1.week
+  end
+
+  def users
+    @users ||= User.where('created_at >= ? and created_at < ?', beginning_of_last_week, beginning_of_current_week)
   end
 
   def sites
