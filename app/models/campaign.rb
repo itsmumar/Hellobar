@@ -5,7 +5,7 @@ class Campaign < ApplicationRecord
 
   acts_as_paranoid
 
-  belongs_to :site
+  has_one :site, through: :contact_list, dependent: :nullify
   belongs_to :contact_list
 
   validates :site, presence: true
