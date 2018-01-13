@@ -21,12 +21,12 @@ describe CalculateInternalMetrics, freeze: '2017-12-10 23:00 UTC' do
       expect(metrics.sites).to match_array [site]
     end
 
-    it 'includes installed sites' do
+    it 'includes still installed sites' do
       site = create :site, :installed, created_at: 1.week.ago
       uninstalled_site = create :site, created_at: 1.week.ago
 
       expect(metrics.sites).to match_array [site, uninstalled_site]
-      expect(metrics.installed_sites).to match_array [site]
+      expect(metrics.still_installed_sites).to match_array [site]
     end
 
     it 'includes Pro revenue from the 1 week period' do

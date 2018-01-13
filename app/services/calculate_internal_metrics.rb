@@ -11,7 +11,7 @@ class CalculateInternalMetrics
       beginning_of_last_week: beginning_of_last_week,
       users: users,
       sites: sites,
-      installed_sites: installed_sites,
+      still_installed_sites: still_installed_sites,
       revenue: revenue,
       revenue_sum: revenue_sum,
       pro: pro,
@@ -39,8 +39,8 @@ class CalculateInternalMetrics
     @sites ||= Site.where('created_at >= ? and created_at < ?', beginning_of_last_week, beginning_of_current_week)
   end
 
-  def installed_sites
-    @installed_sites ||= sites.select(&:script_installed?)
+  def still_installed_sites
+    @still_installed_sites ||= sites.select(&:script_installed?)
   end
 
   def revenue
