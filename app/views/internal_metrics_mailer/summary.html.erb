@@ -4,6 +4,10 @@
 
 <p>Created sites: <%= number_with_delimiter(@metrics.sites.size) %></p>
 
+<p>Sites which installed the script: <%= number_with_delimiter(@metrics.installed_sites.size) %>
+(<%= number_to_percentage((@metrics.installed_sites.size.to_f / @metrics.sites.size) * 100, precision: 1) %> conversion)
+</p>
+
 <p>Sites with still installed script: <%= number_with_delimiter(@metrics.still_installed_sites.size) %>
 (<%= number_to_percentage((@metrics.still_installed_sites.size.to_f / @metrics.sites.size) * 100, precision: 1) %> conversion)
 </p>
