@@ -41,5 +41,9 @@ staging:
   <<: *default_settings
   app_name: Hello Bar (Staging)
 
+edge:
+  <<: *default_settings
+  app_name: Hello Bar (Edge)
+
 production:
   <<: *default_settings
