@@ -1,10 +1,18 @@
-describe CalculateInternalMetrics, freeze: '2017-12-10 23:00 UTC' do
+# Freeze on a Tuesday
+describe CalculateInternalMetrics, freeze: '2017-12-05 23:00 UTC' do
   let(:metrics) { CalculateInternalMetrics.new.call }
 
   describe '#call' do
     it 'is about 1 week period' do
       expect(metrics.beginning_of_current_week).to eq Date.parse('2017-12-04')
       expect(metrics.beginning_of_last_week).to eq Date.parse('2017-11-27')
+    end
+
+    it 'includes users registered in the 1 week period' do
+      user = create :user, created_at: 1.week.ago
+      create :user, created_at: 2.weeks.ago
+
+      expect(metrics.users).to match_array [user]
     end
 
     it 'includes sites created in the 1 week period' do
@@ -15,11 +23,28 @@ describe CalculateInternalMetrics, freeze: '2017-12-10 23:00 UTC' do
     end
 
     it 'includes installed sites' do
+      site = create :site, created_at: 1.week.ago,
+        script_installed_at: 6.days.ago,
+        script_uninstalled_at: 5.days.ago
+
+      expect(metrics.installed_sites).to match_array [site]
+    end
+
+    it 'includes still installed sites' do
       site = create :site, :installed, created_at: 1.week.ago
-      uninstalled_site = create :site, created_at: 1.week.ago
+      uninstalled_site = create :site, created_at: 1.week.ago,
+        script_uninstalled_at: 5.days.ago
 
       expect(metrics.sites).to match_array [site, uninstalled_site]
-      expect(metrics.installed_sites).to match_array [site]
+      expect(metrics.still_installed_sites).to match_array [site]
+    end
+
+    it 'includes installation churn' do
+      create :site, created_at: 1.week.ago, script_installed_at: 4.days.ago
+      create :site, created_at: 1.week.ago, script_installed_at: 4.days.ago,
+        script_uninstalled_at: 3.days.ago
+
+      expect(metrics.installation_churn).to eql 0.5
     end
 
     it 'includes Pro revenue from the 1 week period' do

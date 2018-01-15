@@ -9,8 +9,11 @@ class CalculateInternalMetrics
     OpenStruct.new(
       beginning_of_current_week: beginning_of_current_week,
       beginning_of_last_week: beginning_of_last_week,
+      users: users,
       sites: sites,
       installed_sites: installed_sites,
+      still_installed_sites: still_installed_sites,
+      installation_churn: installation_churn,
       revenue: revenue,
       revenue_sum: revenue_sum,
       pro: pro,
@@ -30,12 +33,28 @@ class CalculateInternalMetrics
     @beginning_of_last_week ||= beginning_of_current_week - 1.week
   end
 
+  def users
+    @users ||= User.where('created_at >= ? and created_at < ?', beginning_of_last_week, beginning_of_current_week)
+  end
+
   def sites
     @sites ||= Site.where('created_at >= ? and created_at < ?', beginning_of_last_week, beginning_of_current_week)
   end
 
   def installed_sites
-    @installed_sites ||= sites.select(&:script_installed?)
+    @installed_sites ||= sites.select { |site| site.script_installed_at.present? }
+  end
+
+  def still_installed_sites
+    @still_installed_sites ||= sites.select(&:script_installed?)
+  end
+
+  def installation_churn
+    installed_size = installed_sites.size
+    still_installed_size = still_installed_sites.size
+
+    @installation_churn ||=
+      (installed_size - still_installed_size) / installed_size.to_f
   end
 
   def revenue

@@ -78,7 +78,8 @@ class DynamoDB
   end
 
   def cache_key(request)
-    [CACHE_KEY_PREFIX, Digest::MD5.hexdigest(request.inspect)].join('/')
+    # make sure hexdigest identical for similar requests
+    [CACHE_KEY_PREFIX, Digest::MD5.hexdigest(request.to_json)].join('/')
   end
 
   def send_batch_get_item(request)
