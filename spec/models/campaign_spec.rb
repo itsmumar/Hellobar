@@ -22,4 +22,20 @@ describe Campaign do
     expect(campaign).to be_deleted
     expect(campaign.deleted_at).to eq Time.current
   end
+
+  describe '#archived!' do
+    subject(:campaign) { create(:campaign) }
+
+    before do
+      campaign.archived!
+    end
+
+    it 'updates status' do
+      expect(campaign).to be_archived
+    end
+
+    it 'updates archived_at' do
+      expect(campaign.archived_at).to be_present
+    end
+  end
 end

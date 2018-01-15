@@ -209,6 +209,27 @@ describe 'api/campaigns requests' do
     end
   end
 
+  describe 'post #archive' do
+    include_examples 'JWT authentication' do
+      def request(headers)
+        post archive_api_campaign_path(campaign), { format: :json }, headers
+      end
+    end
+
+    it 'archives the campaign' do
+      expect_any_instance_of(Campaign).to receive(:archived!)
+
+      post archive_api_campaign_path(campaign), { format: :json }, headers
+    end
+
+    it 'returns updated campaign' do
+      post archive_api_campaign_path(campaign), { format: :json }, headers
+
+      expect(response).to be_successful
+      expect(json[:archived_at]).to be_present
+    end
+  end
+
   describe 'delete #destroy' do
     let!(:campaign) { create :campaign, site: site }
     let(:params) { Hash[format: :json] }

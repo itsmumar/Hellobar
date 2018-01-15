@@ -1,7 +1,8 @@
 class Campaign < ApplicationRecord
   NEW = 'new'.freeze
   SENT = 'sent'.freeze
-  STATUSES = [NEW, SENT].freeze
+  ARCHIVED = 'archived'.freeze
+  STATUSES = [NEW, SENT, ARCHIVED].freeze
 
   acts_as_paranoid
 
@@ -23,5 +24,13 @@ class Campaign < ApplicationRecord
 
   def sent?
     status == SENT
+  end
+
+  def archived!
+    update(status: ARCHIVED, archived_at: Time.current)
+  end
+
+  def archived?
+    status == ARCHIVED
   end
 end

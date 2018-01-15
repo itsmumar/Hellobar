@@ -40,6 +40,11 @@ class Api::CampaignsController < Api::ApplicationController
     render json: { message: 'Test email successfully sent.' }
   end
 
+  def archive
+    @campaign.archived!
+    render json: CampaignSerializer.new(@campaign)
+  end
+
   def destroy
     @campaign.destroy
     render json: { message: 'Campaign successfully deleted.' }
