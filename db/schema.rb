@@ -410,6 +410,15 @@ ActiveRecord::Schema.define(version: 20180116072910) do
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "whitelabels", force: :cascade do |t|
+    t.string   "domain",     limit: 255,                 null: false
+    t.string   "subdomain",  limit: 255,                 null: false
+    t.string   "status",     limit: 20,  default: "new", null: false
+    t.integer  "site_id",    limit: 4,                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
