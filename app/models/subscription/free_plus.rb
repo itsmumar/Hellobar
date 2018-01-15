@@ -1,5 +1,7 @@
 class Subscription
   class FreePlus < Free
+    autoload :Capabilities, 'subscription/free_plus/capabilities'
+
     class << self
       def defaults
         {
@@ -15,5 +17,3 @@ class Subscription
     end
   end
 end
-
-require 'subscription/free_plus/capabilities'

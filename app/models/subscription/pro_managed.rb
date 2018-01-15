@@ -1,5 +1,7 @@
 class Subscription
   class ProManaged < Subscription
+    autoload :Capabilities, 'subscription/pro_managed/capabilities'
+
     class << self
       def defaults
         {
@@ -15,4 +17,3 @@ class Subscription
     end
   end
 end
-require 'subscription/pro_managed/capabilities'
