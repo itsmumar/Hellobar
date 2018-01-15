@@ -28,6 +28,11 @@ describe SendCampaign do
       service.call
     end
 
+    it 'updates campaign\'s status' do
+      service.call
+      expect(campaign.status).to eq(Campaign::SENT)
+    end
+
     it 'updates campaign\'s sent_at' do
       service.call
       expect(campaign.sent_at).to be_present
