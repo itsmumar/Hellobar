@@ -92,6 +92,10 @@ class User < ApplicationRecord
       sites.script_not_installed.any?
   end
 
+  def pro_managed?
+    sites.any?(&:pro_managed?)
+  end
+
   def active?
     status == ACTIVE
   end
