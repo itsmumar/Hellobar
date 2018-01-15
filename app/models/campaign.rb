@@ -1,4 +1,7 @@
 class Campaign < ApplicationRecord
+  class InvalidStateError < StandardError
+  end
+
   NEW = 'new'.freeze
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
@@ -22,12 +25,18 @@ class Campaign < ApplicationRecord
     FetchCampaignStatistics.new(self).call
   end
 
+  def sent!
+    update!(status: SENT, sent_at: Time.current)
+  end
+
   def sent?
     status == SENT
   end
 
   def archived!
-    update(status: ARCHIVED, archived_at: Time.current)
+    raise(InvalidStateError) unless sent?
+
+    update!(status: ARCHIVED, archived_at: Time.current)
   end
 
   def archived?

@@ -216,17 +216,42 @@ describe 'api/campaigns requests' do
       end
     end
 
-    it 'archives the campaign' do
-      expect_any_instance_of(Campaign).to receive(:archived!)
+    context 'when campaign can be archived' do
+      before do
+        campaign.sent!
+      end
 
-      post archive_api_campaign_path(campaign), { format: :json }, headers
+      it 'archives the campaign' do
+        expect_any_instance_of(Campaign).to receive(:archived!)
+
+        post archive_api_campaign_path(campaign), { format: :json }, headers
+      end
+
+      it 'replies with success status' do
+        post archive_api_campaign_path(campaign), { format: :json }, headers
+
+        expect(response).to be_successful
+      end
+
+      it 'returns updated campaign' do
+        post archive_api_campaign_path(campaign), { format: :json }, headers
+
+        expect(json[:archived_at]).to be_present
+      end
     end
 
-    it 'returns updated campaign' do
-      post archive_api_campaign_path(campaign), { format: :json }, headers
+    context 'when campaign can not be archived' do
+      it 'replies with error status' do
+        post archive_api_campaign_path(campaign), { format: :json }, headers
 
-      expect(response).to be_successful
-      expect(json[:archived_at]).to be_present
+        expect(response).not_to be_successful
+      end
+
+      it 'returns error' do
+        post archive_api_campaign_path(campaign), { format: :json }, headers
+
+        expect(json[:error]).to eq('forbidden')
+      end
     end
   end
 
