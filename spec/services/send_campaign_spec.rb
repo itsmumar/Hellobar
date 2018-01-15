@@ -1,9 +1,11 @@
 describe SendCampaign do
+  subject(:service) { SendCampaign.new(campaign) }
+
+  let(:contact_list) { create(:contact_list) }
+  let(:campaign) { create(:campaign, contact_list: contact_list) }
+
   describe '#call' do
     it 'calls SendSnsNotification with appropriate message' do
-      contact_list = build_stubbed :contact_list
-      campaign = build_stubbed :campaign, contact_list: contact_list
-
       message_hash = {
         body: campaign.body,
         contactListId: contact_list.id,
@@ -23,7 +25,27 @@ describe SendCampaign do
           )
         )
 
-      SendCampaign.new(campaign).call
+      service.call
+    end
+
+    it 'updates campaign\'s sent_at' do
+      service.call
+      expect(campaign.sent_at).to be_present
+    end
+
+    context 'when campaign has been already sent' do
+      before do
+        campaign.update(sent_at: 1.day.ago)
+      end
+
+      it 'does not call SendSnsNotification' do
+        expect(SendSnsNotification).not_to receive_service_call
+        service.call
+      end
+
+      it 'does not update campaign\'s sent_at' do
+        expect { service.call }.not_to change { campaign.reload.sent_at }
+      end
     end
   end
 end

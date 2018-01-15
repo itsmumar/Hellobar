@@ -32,7 +32,7 @@ class Api::CampaignsController < Api::ApplicationController
 
   def send_out
     SendCampaign.new(@campaign).call
-    render json: { message: 'Campaign successfully sent.' }
+    render json: CampaignSerializer.new(@campaign)
   end
 
   def send_out_test_email
