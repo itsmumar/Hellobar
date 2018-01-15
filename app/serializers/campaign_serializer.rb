@@ -4,4 +4,8 @@ class CampaignSerializer < ActiveModel::Serializer
     :contact_list_id, :status, :statistics
 
   has_one :contact_list
+
+  def site_id
+    object.site.id
+  end
 end

@@ -199,4 +199,7 @@ group :production, :staging, :edge do
   # Loggly
   gem 'lograge'
   gem 'syslogger'
+
+  # New Relic
+  gem 'newrelic_rpm'
 end

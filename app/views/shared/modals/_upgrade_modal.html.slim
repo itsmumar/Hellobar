@@ -1,3 +1,6 @@
+- # do not render it for pro managed sites since it takes a lot of time for huge sites
+- return if current_site&.pro_managed?
+
 script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
   .modal-wrapper

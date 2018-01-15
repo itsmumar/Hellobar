@@ -101,7 +101,7 @@ class SitesController < ApplicationController
   def install_check
     CheckStaticScriptInstallation.new(@site).call
 
-    render json: @site
+    render json: { script_installed: @site.script_installed? }
   end
 
   private
