@@ -1,6 +1,5 @@
 class Campaign < ApplicationRecord
-  class InvalidTransition < StandardError
-  end
+  InvalidTransition = Class.new(StandardError)
 
   NEW = 'new'.freeze
   SENDING = 'sending'.freeze

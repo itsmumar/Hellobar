@@ -53,9 +53,11 @@ describe Campaign do
     context 'when campaign can not be archived' do
       subject(:campaign) { create(:campaign, :new) }
 
+      let(:error) { Campaign::InvalidTransition }
+      let(:message) { Campaign::INVALID_TRANSITION_TO_ARCHIVED }
+
       it 'raises an error' do
-        expect { campaign.archived! }.to
-          raise_error(Campaign::InvalidTransition, Campaign::INVALID_TRANSITION_TO_ARCHIVED)
+        expect { campaign.archived! }.to raise_error(error, message)
       end
     end
   end
