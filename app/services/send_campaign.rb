@@ -17,7 +17,7 @@ class SendCampaign
   delegate :contact_list, to: :campaign
 
   def send_campaign!
-    # Method update_all return the number of updated records. So it guarantees that only single
+    # Method #update_all returns the number of updated records. So it guarantees that only single
     # process/thread could update the record in DB and only single notification would be sent.
     Campaign.where(id: campaign.id, sent_at: nil).update_all(sent_at: Time.current, status: Campaign::SENT) > 0
   end
