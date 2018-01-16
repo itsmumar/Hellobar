@@ -250,7 +250,7 @@ describe 'api/campaigns requests' do
       it 'returns error' do
         post archive_api_campaign_path(campaign), { format: :json }, headers
 
-        expect(json[:error]).to eq('forbidden')
+        expect(json[:error]).to eq(Campaign::INVALID_TRANSITION_TO_ARCHIVED)
       end
     end
   end

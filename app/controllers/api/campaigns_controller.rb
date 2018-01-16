@@ -1,6 +1,8 @@
 class Api::CampaignsController < Api::ApplicationController
   before_action :find_campaign, except: %i[index create]
 
+  rescue_from Campaign::InvalidTransition, with: :handle_error
+
   def index
     render json: @current_site.campaigns,
       each_serializer: CampaignSerializer
@@ -43,8 +45,6 @@ class Api::CampaignsController < Api::ApplicationController
   def archive
     @campaign.archived!
     render json: CampaignSerializer.new(@campaign)
-  rescue Campaign::InvalidTransition
-    error_response(:forbidden)
   end
 
   def destroy
@@ -62,5 +62,9 @@ class Api::CampaignsController < Api::ApplicationController
     params
       .require(:campaign)
       .permit :contact_list_id, :name, :from_name, :from_email, :subject, :body
+  end
+
+  def handle_error(exception)
+    render json: { error: exception.message }, status: :unprocessable_entity
   end
 end
