@@ -4,7 +4,7 @@ class SendCampaign
   end
 
   def call
-    return unless send_campaign!
+    return unless sending_campaign!
 
     reload_campaign
     send_sns_notification
@@ -16,10 +16,10 @@ class SendCampaign
 
   delegate :contact_list, to: :campaign
 
-  def send_campaign!
+  def sending_campaign!
     # Method #update_all returns the number of updated records. So it guarantees that only single
     # process/thread could update the record in DB and only single notification would be sent.
-    Campaign.where(id: campaign.id, sent_at: nil).update_all(sent_at: Time.current, status: Campaign::SENT) > 0
+    Campaign.where(id: campaign.id, status: Campaign::NEW).update_all(status: Campaign::SENDING) > 0
   end
 
   def reload_campaign

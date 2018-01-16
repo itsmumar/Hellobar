@@ -30,26 +30,17 @@ describe SendCampaign do
 
     it 'updates campaign\'s status' do
       service.call
-      expect(campaign.status).to eq(Campaign::SENT)
-    end
-
-    it 'updates campaign\'s sent_at' do
-      service.call
-      expect(campaign.sent_at).to be_present
+      expect(campaign.status).to eq(Campaign::SENDING)
     end
 
     context 'when campaign has been already sent' do
       before do
-        campaign.update(sent_at: 1.day.ago)
+        campaign.update(status: Campaign::SENDING)
       end
 
       it 'does not call SendSnsNotification' do
         expect(SendSnsNotification).not_to receive_service_call
         service.call
-      end
-
-      it 'does not update campaign\'s sent_at' do
-        expect { service.call }.not_to change { campaign.reload.sent_at }
       end
     end
   end
