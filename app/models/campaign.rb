@@ -1,7 +1,8 @@
 class Campaign < ApplicationRecord
   NEW = 'new'.freeze
+  SENDING = 'sending'.freeze
   SENT = 'sent'.freeze
-  STATUSES = [NEW, SENT].freeze
+  STATUSES = [NEW, SENDING, SENT].freeze
 
   acts_as_paranoid
 

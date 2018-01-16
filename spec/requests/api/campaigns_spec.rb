@@ -177,11 +177,11 @@ describe 'api/campaigns requests' do
       end
     end
 
-    it 'responds with success' do
+    it 'returns updated campaign' do
       post send_out_api_campaign_path(campaign), { format: :json }, headers
 
       expect(response).to be_successful
-      expect(json).to include(message: 'Campaign successfully sent.')
+      expect(json[:status]).to eq(Campaign::SENDING)
     end
 
     it 'calls SendCampaign service' do
