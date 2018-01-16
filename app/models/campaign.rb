@@ -1,11 +1,13 @@
 class Campaign < ApplicationRecord
-  class InvalidStateError < StandardError
+  class InvalidTransition < StandardError
   end
 
   NEW = 'new'.freeze
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
   STATUSES = [NEW, SENT, ARCHIVED].freeze
+
+  INVALID_TRANSITION_TO_ARCHIVED = "Campaign can't be archived until it's sent.".freeze
 
   acts_as_paranoid
 
@@ -34,7 +36,7 @@ class Campaign < ApplicationRecord
   end
 
   def archived!
-    raise(InvalidStateError) unless sent?
+    raise(InvalidTransition, INVALID_TRANSITION_TO_ARCHIVED) unless sent?
 
     update!(status: ARCHIVED, archived_at: Time.current)
   end

@@ -43,7 +43,7 @@ class Api::CampaignsController < Api::ApplicationController
   def archive
     @campaign.archived!
     render json: CampaignSerializer.new(@campaign)
-  rescue Campaign::InvalidStateError
+  rescue Campaign::InvalidTransition
     error_response(:forbidden)
   end
 

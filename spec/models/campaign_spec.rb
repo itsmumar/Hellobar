@@ -54,7 +54,8 @@ describe Campaign do
       subject(:campaign) { create(:campaign, :new) }
 
       it 'raises an error' do
-        expect { campaign.archived! }.to raise_error(Campaign::InvalidStateError)
+        expect { campaign.archived! }.to
+          raise_error(Campaign::InvalidTransition, Campaign::INVALID_TRANSITION_TO_ARCHIVED)
       end
     end
   end
