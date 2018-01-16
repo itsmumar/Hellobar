@@ -16,7 +16,7 @@ to <%= @metrics.beginning_of_current_week %> (excl)</p>
 </p>
 
 <p>Newly created sites installation churn:
-<%= number_to_percentage(@metrics.installation_churn, precision: 1) %>
+<%= number_to_percentage(@metrics.installation_churn * 100, precision: 1) %>
 </p>
 
 <p>New revenue (new subscriptions or upgrades):

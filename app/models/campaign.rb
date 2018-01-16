@@ -3,9 +3,10 @@ class Campaign < ApplicationRecord
   end
 
   NEW = 'new'.freeze
+  SENDING = 'sending'.freeze
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
-  STATUSES = [NEW, SENT, ARCHIVED].freeze
+  STATUSES = [NEW, SENDING, SENT, ARCHIVED].freeze
 
   INVALID_TRANSITION_TO_ARCHIVED = "Campaign can't be archived until it's sent.".freeze
 

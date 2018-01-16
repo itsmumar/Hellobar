@@ -84,6 +84,7 @@ class SignInUser
     return unless omniauth_hash.credentials && user.persisted?
 
     user.authentications.create!(
+      provider: omniauth_hash.provider,
       refresh_token: omniauth_hash.credentials.refresh_token,
       access_token: omniauth_hash.credentials.token,
       expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)

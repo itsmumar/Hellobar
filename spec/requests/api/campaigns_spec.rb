@@ -181,7 +181,7 @@ describe 'api/campaigns requests' do
       post send_out_api_campaign_path(campaign), { format: :json }, headers
 
       expect(response).to be_successful
-      expect(json[:sent_at]).to be_present
+      expect(json[:status]).to eq(Campaign::SENDING)
     end
 
     it 'calls SendCampaign service' do

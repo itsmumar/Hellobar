@@ -81,6 +81,16 @@ describe SignInUser do
         expect { service.call }
           .to change { user.authentications.count }.by(1)
       end
+
+      it 'creates authentication with proper attributes' do
+        service.call
+        authentication = user.authentications.last
+
+        expect(authentication.provider).to eq(omniauth_hash.provider)
+        expect(authentication.refresh_token).to eq(omniauth_hash.credentials.refresh_token)
+        expect(authentication.access_token).to eq(omniauth_hash.credentials.token)
+        expect(authentication.expires_at).to be_present
+      end
     end
   end
 
