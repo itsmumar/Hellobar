@@ -9,13 +9,6 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
     resources :settings, only: :index
 
-    resources :sites, only: [] do
-      member do
-        post :update_install_type
-        post :update_static_script_installation
-      end
-    end
-
     resources :campaigns, except: %i[new edit] do
       member do
         post :send_out
@@ -26,10 +19,17 @@ Rails.application.routes.draw do
 
     get :authenticate, to: 'authentications#create'
 
-    scope module: 'internal' do
+    namespace :internal do
       resources :campaigns, only: [] do
         member do
           post :update_status
+        end
+      end
+
+      resources :sites, only: [] do
+        member do
+          post :update_install_type
+          post :update_static_script_installation
         end
       end
     end
