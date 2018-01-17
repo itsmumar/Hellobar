@@ -36,6 +36,6 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
   end
 
   def num_days_improve_data
-    365
+    180
   end
 end
