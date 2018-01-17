@@ -1,13 +1,13 @@
 if defined?(NewRelic)
   module DynamoDB::NewRelicTracer
     def send_request(method, request)
-      callback = Proc.new do |result, metrics, elapsed|
+      callback = proc do |_result, _metrics, elapsed|
         if request[:key_condition_expression]
           NewRelic::Agent::Datastores.notice_statement(request[:key_condition_expression], elapsed)
         end
       end
 
-      response = NewRelic::Agent::Datastores.wrap(self.class.name, method, request[:table_name], callback) do
+      NewRelic::Agent::Datastores.wrap(self.class.name, method, request[:table_name], callback) do
         super
       end
     end
