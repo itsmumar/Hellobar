@@ -39,7 +39,7 @@ class SitesController < ApplicationController
         session[:current_site] = @site.id
 
         @totals = site_statistics
-        @recent_elements = @site.site_elements.recent(5)
+        @recent_elements = @site.site_elements.active.recent(5)
       end
 
       format.json { render json: @site }
