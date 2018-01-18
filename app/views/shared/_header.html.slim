@@ -42,7 +42,7 @@
             div Enjoying Hello Bar Pro?
         - elsif current_site.free? && current_site.active_subscription
           a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
-            | #{ pluralize(current_site.active_subscription.days_left, 'day') } left of #{ current_site.active_subscription.name } subscription
+            | #{ pluralize(current_site.active_subscription.days_left, 'day') } left of #{ current_site.active_subscription.name } features
 
     .dropdown-wrapper.no-hover
       = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
