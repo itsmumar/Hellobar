@@ -3,10 +3,6 @@ class AmplitudeAnalytics
     public_send event.underscore.to_sym, **args
   end
 
-  def created_user(user:)
-    track user
-  end
-
   def signed_up(user:)
     track(
       event_type: 'signed-up',
