@@ -103,14 +103,14 @@ describe SiteElementsHelper do
 
       before do
         expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [element.id])
-        .and_return(SiteStatistics.new(element_stats))
+          .to receive_service_call
+          .with(rule.site, site_element_ids: [element.id])
+          .and_return(SiteStatistics.new(element_stats))
 
         expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [other_element.id])
-        .and_return(SiteStatistics.new(other_element_stats))
+          .to receive_service_call
+          .with(rule.site, site_element_ids: [other_element.id])
+          .and_return(SiteStatistics.new(other_element_stats))
       end
 
       context 'when element performs better than other' do
