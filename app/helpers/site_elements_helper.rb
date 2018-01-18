@@ -31,7 +31,7 @@ module SiteElementsHelper
       message << " #{ number_to_percentage(lift * 100, precision: 1) }" unless lift.infinite?
       message << ' better than'
     elsif group_conversion_rate > conversion_rate
-      lift = (group_conversion_rate - conversion_rate) / conversion_rate
+      lift = (group_conversion_rate - conversion_rate) / group_conversion_rate
       message << " #{ number_to_percentage(lift * 100, precision: 1) }" unless lift.infinite?
       message << ' worse than'
     else
