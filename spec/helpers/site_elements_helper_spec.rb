@@ -84,28 +84,61 @@ describe SiteElementsHelper do
       end
     end
 
-    it 'shows the conversion rate relative to other elements of the same type' do
-      rule = create(:rule)
-      element = create(:site_element, :twitter, rule: rule)
-      other_element = create(:site_element, :twitter, rule: rule)
+    describe 'conversion rate relative to other elements of the same type' do
+      let(:rule) { create(:rule) }
+      let(:element) { create(:site_element, :twitter, rule: rule) }
+      let(:other_element) { create(:site_element, :twitter, rule: rule) }
 
-      records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
-      ]
-      expect(FetchSiteStatistics)
+      let(:total_views) { 10 }
+
+      let(:element_stats) do
+        [create(:site_statistics_record, views: 10, conversions: element_conversions, site_element_id: element.id)]
+      end
+
+      let(:other_element_stats) do
+        [create(:site_statistics_record, views: 10, conversions: other_conversions, site_element_id: element.id)]
+      end
+
+      subject(:message) { helper.activity_message_for_conversion(element, element.related_site_elements) }
+
+      before do
+        expect(FetchSiteStatistics)
         .to receive_service_call
         .with(rule.site, site_element_ids: [element.id])
-        .and_return(SiteStatistics.new(records))
+        .and_return(SiteStatistics.new(element_stats))
 
-      records = [
-        create(:site_statistics_record, views: 10, conversions: 1, site_element_id: other_element.id)
-      ]
-      expect(FetchSiteStatistics)
+        expect(FetchSiteStatistics)
         .to receive_service_call
         .with(rule.site, site_element_ids: [other_element.id])
-        .and_return(SiteStatistics.new(records))
+        .and_return(SiteStatistics.new(other_element_stats))
+      end
 
-      expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
+      context 'when element performs better than other' do
+        let(:element_conversions) { 5 }
+        let(:other_conversions) { 1 }
+
+        it 'states that element is converting better' do
+          expect(message).to match(%r{converting 400.0% better than your other social bars})
+        end
+      end
+
+      context 'when element performs worse than other' do
+        let(:element_conversions) { 1 }
+        let(:other_conversions) { 5 }
+
+        it 'states that element is converting worse' do
+          expect(message).to match(%r{converting 80.0% worse than your other social bars})
+        end
+      end
+
+      context 'when element performs the same as other' do
+        let(:element_conversions) { 3 }
+        let(:other_conversions) { 3 }
+
+        it 'states that element is converting exactly the same as others' do
+          expect(message).to match(/converting exactly as well as your other social bars/)
+        end
+      end
     end
 
     it "doesn't show a percentage when comparing against other bars with no conversions" do
