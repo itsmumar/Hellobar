@@ -84,6 +84,17 @@ describe Subscription do
     end
   end
 
+  describe '.days_left' do
+    it 'returns number of days before active subscription ends' do
+      end_date = 4.weeks.from_now
+      first_bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
+      create(:bill, status: :paid, start_date: 1.week.ago, end_date: end_date, subscription: first_bill.subscription)
+      days_left = (end_date.to_date - Date.current).to_i
+
+      expect(first_bill.subscription.days_left).to eql days_left
+    end
+  end
+
   describe '.estimated_price' do
     before { allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12) }
     before { allow_any_instance_of(Subscription).to receive(:amount).and_return(13) }
