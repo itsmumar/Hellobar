@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       member do
         post :send_out
         post :send_out_test_email
+        post :archive
       end
     end
     resources :contact_lists, only: %i[index]
