@@ -6,7 +6,7 @@ ignore(/editor/, /public/, /app\/assets\/editor\/editor/)
 
 # This group allows to skip running RuboCop when RSpec failed
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: 'bin/rspec', failed_mode: :focus do
+  guard :rspec, cmd: 'bin/spring rspec', failed_mode: :focus do
     require 'guard/rspec/dsl'
     dsl = Guard::RSpec::Dsl.new(self)
 
