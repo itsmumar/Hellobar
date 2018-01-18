@@ -179,7 +179,7 @@ group :test do
   # Spec formatters
   gem 'fuubar'
   gem 'rspec-instafail', require: false
-  gem 'rspec_junit_formatter'
+  gem 'rspec_junit_formatter', require: false
 
   # Code coverage metrics
   gem 'codecov', require: false
