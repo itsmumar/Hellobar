@@ -64,7 +64,7 @@ class AmplitudeAnalytics
       user_id: user.id,
       event_properties: {
         site_url: contact_list.site.url,
-        current_subscription: site.current_subscription&.name
+        current_subscription: contact_list.site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -77,7 +77,7 @@ class AmplitudeAnalytics
       event_properties: {
         bar_type: site_element.type,
         goal: site_element.element_subtype,
-        current_subscription: site.current_subscription&.name
+        current_subscription: site_element.site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
