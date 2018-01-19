@@ -1,8 +1,10 @@
 describe AmplitudeAnalytics do
   describe '#fire_event' do
     let!(:user) { create :user }
-    let!(:first_site) { create :site, user: user }
-    let!(:second_site) { create :site, user: user }
+    let(:first_site) { create :site, user: user }
+    let(:second_site) { create :site, user: user }
+    let(:site_element) { create :site_element, site: first_site }
+    let!(:sites) { [first_site, second_site] }
 
     let(:views) { [2, 3, 4, 5, 6] }
     let(:conversions) { [1, 2, 3, 4, 5] }
@@ -39,6 +41,8 @@ describe AmplitudeAnalytics do
         #{ NormalizeURI[second_site.url].domain }.+
         total_views.+#{ total_views }.+
         total_conversions.+#{ total_conversions }.+
+        sites_count.+#{ sites.size }.+
+        site_elements_count.+#{ user.site_elements.size }.+
       }x
 
       stub_request(:post, 'https://api.amplitude.com/httpapi')

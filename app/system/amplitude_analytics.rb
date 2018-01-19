@@ -103,7 +103,9 @@ class AmplitudeAnalytics
       additional_domains: user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', '),
       contact_lists: user.contact_lists.count,
       total_views: user.sites.map { |site| site.statistics.views }.sum,
-      total_conversions: user.sites.map { |site| site.statistics.conversions }.sum
+      total_conversions: user.sites.map { |site| site.statistics.conversions }.sum,
+      sites_count: user.sites.count,
+      site_elements_count: user.site_elements.count
     }
   end
 end
