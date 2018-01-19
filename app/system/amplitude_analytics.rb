@@ -14,7 +14,10 @@ class AmplitudeAnalytics
     track(
       event_type: 'invited-member',
       user_id: user.id,
-      event_properties: { site_url: site.url }
+      event_properties: {
+        site_url: site.url
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -22,7 +25,10 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-site',
       user_id: user.id,
-      event_properties: { url: site.url }
+      event_properties: {
+        url: site.url
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -30,7 +36,10 @@ class AmplitudeAnalytics
     track(
       event_type: 'installed-script',
       user_id: user.id,
-      event_properties: { url: site.url }
+      event_properties: {
+        url: site.url
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -38,7 +47,10 @@ class AmplitudeAnalytics
     track(
       event_type: 'uninstalled-script',
       user_id: user.id,
-      event_properties: { url: site.url }
+      event_properties: {
+        url: site.url
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -46,7 +58,10 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-contact-list',
       user_id: user.id,
-      event_properties: { site_url: contact_list.site.url }
+      event_properties: {
+        site_url: contact_list.site.url
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -54,7 +69,11 @@ class AmplitudeAnalytics
     track(
       event_type: 'created-bar',
       user_id: user.id,
-      event_properties: { bar_type: site_element.type, goal: site_element.element_subtype }
+      event_properties: {
+        bar_type: site_element.type,
+        goal: site_element.element_subtype
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -64,7 +83,11 @@ class AmplitudeAnalytics
     track(
       event_type: 'changed-subscription',
       user_id: user.id,
-      event_properties: { subscription: subscription.name, schedule: subscription.schedule }
+      event_properties: {
+        subscription: subscription.name,
+        schedule: subscription.schedule
+      },
+      user_properties: user_properties(user)
     )
   end
 
@@ -73,5 +96,14 @@ class AmplitudeAnalytics
   def track(params)
     event = AmplitudeAPI::Event.new({ time: Time.current }.merge(params))
     AmplitudeAPI.track(event)
+  end
+
+  def user_properties user
+    {
+      additional_domains: user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', '),
+      contact_lists: user.contact_lists.count,
+      total_views: user.sites.map { |site| site.statistics.views }.sum,
+      total_conversions: user.sites.map { |site| site.statistics.conversions }.sum
+    }
   end
 end
