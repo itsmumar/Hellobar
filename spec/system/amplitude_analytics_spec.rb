@@ -1,7 +1,7 @@
 describe AmplitudeAnalytics do
   describe '#fire_event' do
     let!(:user) { create :user }
-    let(:first_site) { create :site, user: user }
+    let(:first_site) { create :site, :free_subscription, user: user }
     let(:second_site) { create :site, user: user }
     let(:site_element) { create :site_element, site: first_site }
     let!(:sites) { [first_site, second_site] }
@@ -35,6 +35,9 @@ describe AmplitudeAnalytics do
       request_body_regexp = %r{
         event_type.+#{ event_type }.+
         user_id.+#{ user.id }.+
+        event_properties.+
+        url.+#{ NormalizeURI[first_site.url].domain }.+
+        current_subscription.+#{ first_site.current_subscription.name }.+
         user_properties.+
         additional_domains.+
         #{ NormalizeURI[first_site.url].domain }.+

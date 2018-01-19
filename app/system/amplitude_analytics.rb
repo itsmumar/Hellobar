@@ -15,7 +15,8 @@ class AmplitudeAnalytics
       event_type: 'invited-member',
       user_id: user.id,
       event_properties: {
-        site_url: site.url
+        site_url: site.url,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -26,7 +27,8 @@ class AmplitudeAnalytics
       event_type: 'created-site',
       user_id: user.id,
       event_properties: {
-        url: site.url
+        url: site.url,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -37,7 +39,8 @@ class AmplitudeAnalytics
       event_type: 'installed-script',
       user_id: user.id,
       event_properties: {
-        url: site.url
+        url: site.url,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -48,7 +51,8 @@ class AmplitudeAnalytics
       event_type: 'uninstalled-script',
       user_id: user.id,
       event_properties: {
-        url: site.url
+        url: site.url,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -59,7 +63,8 @@ class AmplitudeAnalytics
       event_type: 'created-contact-list',
       user_id: user.id,
       event_properties: {
-        site_url: contact_list.site.url
+        site_url: contact_list.site.url,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
@@ -71,7 +76,8 @@ class AmplitudeAnalytics
       user_id: user.id,
       event_properties: {
         bar_type: site_element.type,
-        goal: site_element.element_subtype
+        goal: site_element.element_subtype,
+        current_subscription: site.current_subscription&.name
       },
       user_properties: user_properties(user)
     )
