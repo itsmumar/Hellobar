@@ -26,7 +26,13 @@ class CalculateInternalMetrics
   end
 
   def beginning_of_current_week
-    @beginning_of_current_week ||= Date.commercial(Date.current.year, Date.current.cweek, 1)
+    # metrics for USA, to match QuickSight data, so week starts on a Sunday
+    Date.beginning_of_week = :sunday
+
+    Date.current.beginning_of_week.tap do
+      # Revert back to Monday
+      Date.beginning_of_week = :monday
+    end
   end
 
   def beginning_of_last_week
