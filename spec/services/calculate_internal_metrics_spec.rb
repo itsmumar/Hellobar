@@ -1,11 +1,17 @@
 # Freeze on a Tuesday
-describe CalculateInternalMetrics, freeze: '2017-12-05 23:00 UTC' do
+describe CalculateInternalMetrics, freeze: '2017-12-05 15:00 UTC' do
   let(:metrics) { CalculateInternalMetrics.new.call }
 
   describe '#call' do
-    it 'is about 1 week period' do
-      expect(metrics.beginning_of_current_week).to eq Date.parse('2017-12-04')
-      expect(metrics.beginning_of_last_week).to eq Date.parse('2017-11-27')
+    it 'is about 1 week period from Sunday to Sunday' do
+      expect(metrics.beginning_of_last_week).to eq Date.parse('2017-11-26')
+      expect(metrics.beginning_of_current_week).to eq Date.parse('2017-12-03')
+    end
+
+    it 'does not mess with the default `Date.beginning_of_week`' do
+      metrics
+
+      expect(Date.beginning_of_week).to eql :monday
     end
 
     it 'includes users registered in the 1 week period' do
