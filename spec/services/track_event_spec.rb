@@ -1,13 +1,10 @@
 describe TrackEvent, :freeze do
-  def fire_event(event, **options)
-    TrackEvent.new(event, **options).call
-  end
-
   let(:intercom) { instance_double(Intercom::Client) }
   let(:diamond) { instance_double(Diamond::Client) }
   let(:diamond_endpoint) { 'http://foo.bar/hbprod' }
   let(:owner) { create :user }
   let(:site) { create :site, :pro, :with_rule, user: owner }
+  let(:site_statistics) { double 'Site Statistics', views: [1], conversions: [1] }
 
   before do
     allow(Rails.env).to receive(:production?).and_return(true) # emulate production
@@ -17,6 +14,9 @@ describe TrackEvent, :freeze do
 
     # skip A/B assignment
     allow_any_instance_of(User).to receive(:add_to_onboarding_campaign)
+
+    allow(FetchSiteStatistics).to receive_message_chain(:new, :call)
+      .and_return site_statistics
   end
 
   around { |example| perform_enqueued_jobs(&example) }
@@ -106,7 +106,7 @@ describe TrackEvent, :freeze do
   describe '"created_bar" event' do
     let!(:site_element) { create :site_element, site: site }
 
-    it 'sends "created-bar" to intercom and diamond' do
+    it 'sends "created-bar" event to intercom, diamond and amplitude' do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'created-bar',
         user_id: owner.id,
@@ -218,5 +218,11 @@ describe TrackEvent, :freeze do
 
       fire_event :invited_member, site: site, user: owner
     end
+  end
+
+  private
+
+  def fire_event(event, **options)
+    TrackEvent.new(event, **options).call
   end
 end
