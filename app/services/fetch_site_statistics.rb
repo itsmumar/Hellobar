@@ -13,20 +13,22 @@ class FetchSiteStatistics
   end
 
   def call
-    Rails.cache.fetch(cache_key, expires_in: CACHE_TTL) do
-      statistics = SiteStatistics.new
-      site_elements.each do |site_element|
-        dynamo_db.query_each(request_for(site_element.id)) do |item|
-          statistics << enhance_record(site_element, item)
-        end
-      end
-      statistics
-    end
+    cache { fetch_statistic }
   end
 
   private
 
   attr_reader :site, :days_limit, :site_element_ids
+
+  def fetch_statistic
+    statistics = SiteStatistics.new
+    site_elements.each do |site_element|
+      dynamo_db.query_each(request_for(site_element.id)) do |item|
+        statistics << enhance_record(site_element, item)
+      end
+    end
+    statistics
+  end
 
   def request_for(id)
     {
@@ -89,7 +91,11 @@ class FetchSiteStatistics
     @dynamo_db ||= DynamoDB.new
   end
 
+  def cache
+    Rails.cache.fetch(cache_key, expires_in: CACHE_TTL) { yield }
+  end
+
   def cache_key
-    @cache_key ||= Digest::MD5.hexdigest({ site: site.id, elements: site_elements.map(&:id) }.to_json)
+    @cache_key ||= "site_statistics/#{ Digest::MD5.hexdigest([site.id, site_elements.map(&:id)].to_json) }"
   end
 end

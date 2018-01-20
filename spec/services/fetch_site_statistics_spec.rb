@@ -55,5 +55,22 @@ describe FetchSiteStatistics do
       expect(service.call.views).to eql records.sum(&:views)
       expect(service.call.conversions).to eql records.sum(&:conversions)
     end
+
+    describe 'caching' do
+      it 'fetch data only once' do
+        5.times do
+          service.call
+        end
+
+        expect(request).to have_been_made.once
+      end
+
+      it 'returns the same data from cache' do
+        first_result = service.call
+        second_result = service.call
+
+        expect(first_result).to eq(second_result)
+      end
+    end
   end
 end
