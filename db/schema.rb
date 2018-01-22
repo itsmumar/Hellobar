@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116072910) do
+ActiveRecord::Schema.define(version: 20180122141300) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -411,10 +411,11 @@ ActiveRecord::Schema.define(version: 20180116072910) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "whitelabels", force: :cascade do |t|
-    t.string   "domain",     limit: 255,                 null: false
-    t.string   "subdomain",  limit: 255,                 null: false
-    t.string   "status",     limit: 20,  default: "new", null: false
-    t.integer  "site_id",    limit: 4,                   null: false
+    t.string   "domain",            limit: 255,                 null: false
+    t.string   "subdomain",         limit: 255,                 null: false
+    t.string   "status",            limit: 20,  default: "new", null: false
+    t.integer  "site_id",           limit: 4,                   null: false
+    t.integer  "domain_identifier", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
