@@ -47,6 +47,7 @@ gem 'verticalresponse'
 # Mailing
 gem 'pony'
 gem 'roadie-rails'
+gem 'sendgrid-ruby'
 
 # Billing
 gem 'activemerchant', '~> 1.65.0'
