@@ -8,6 +8,11 @@ class Api::WhitelabelsController < Api::ApplicationController
     render json: site.whitelabel
   end
 
+  def destroy
+    site.whitelabel&.destroy!
+    head :ok
+  end
+
   private
 
   def site

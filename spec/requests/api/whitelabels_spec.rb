@@ -80,4 +80,17 @@ describe 'api/whitelabels requests' do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:whitelabel) { create :whitelabel, site: site }
+
+    it 'destroys the whitelabel' do
+      delete api_site_whitelabel_path(site.id), params, headers
+
+      expect(response).to be_successful
+
+      expect { Whitelabel.find(whitelabel.id) }
+        .to raise_exception ActiveRecord::RecordNotFound
+    end
+  end
 end
