@@ -23,6 +23,8 @@ class SitesController < ApplicationController
     if current_user
       create_for_logged_in_user
     else
+      session[:new_site_url] = @site.url
+      session[:promotional_code] = params[:promotional_code]
       validate_and_redirect_to_google_auth
     end
   end

@@ -3,6 +3,7 @@ require 'integration_helper'
 feature 'User can sign up', :js do
   given(:email) { 'bob@lawblog.com' }
   given(:user) { create :user, email: email }
+  given(:coupon) { create :coupon, :promotional }
 
   before do
     allow_any_instance_of(SiteElementSerializer)
@@ -16,7 +17,7 @@ feature 'User can sign up', :js do
       .to receive(:call).and_return('function hellobar(){}')
   end
 
-  scenario 'through oauth' do
+  scenario 'through oauth, without coupon code' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
@@ -32,6 +33,24 @@ feature 'User can sign up', :js do
       find('.dropdown-wrapper').click
       expect(page).to have_content('Sign Out')
     end
+
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+
+  scenario 'through oauth, using promotional code to have free Pro trial' do
+    OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
+    visit root_path
+
+    fill_in 'site[url]', with: 'mewgle.com'
+    fill_in 'promotional_code', with: coupon.label
+
+    click_on 'sign-up-button'
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
+
+    expect(page).to have_content 'Enjoying Hello Bar Pro?'
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

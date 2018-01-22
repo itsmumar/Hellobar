@@ -2,6 +2,9 @@ class Coupon < ApplicationRecord
   REFERRAL_LABEL = 'for_referrals'.freeze
   REFERRAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount]
 
+  PROMOTIONAL_LABEL = 'NEILPATELHB2017'.freeze
+  PROMOTIONAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount] * 2
+
   has_many :coupon_uses, dependent: :destroy
 
   validates :label, presence: true
@@ -11,5 +14,9 @@ class Coupon < ApplicationRecord
 
   def self.for_referrals
     internal.find_by(label: REFERRAL_LABEL)
+  end
+
+  def self.promotional
+    find_by label: PROMOTIONAL_LABEL
   end
 end
