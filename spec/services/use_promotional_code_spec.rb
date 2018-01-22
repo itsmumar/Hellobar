@@ -30,6 +30,12 @@ describe UsePromotionalCode do
 
         UsePromotionalCode.new(site, coupon.label).call
       end
+
+      it 'creates CouponUse' do
+        expect { UsePromotionalCode.new(site, coupon.label).call }
+          .to change { CouponUse.for_site(site).count }
+          .by(1)
+      end
     end
   end
 end
