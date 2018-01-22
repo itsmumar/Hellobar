@@ -7,65 +7,17 @@ describe Whitelabel do
 
   it { is_expected.to validate_presence_of :site }
 
-  context 'domain/subdomain validations' do
-    let!(:site) { create :site }
+  it { is_expected.to allow_value('hellobar.com').for :domain }
+  it { is_expected.to allow_value('abc.cdefg').for :domain }
+  it { is_expected.to allow_value('Iñtërnâtiônàlizæt.iøn').for :domain }
 
-    %w[abc.cdefg Iñtërnâtiônàlizæt.iøn].each do |domain|
-      it "allows #{ domain } as domain" do
-        subdomain = "email.#{ domain }"
-        whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
+  it { is_expected.not_to allow_value('word').for :domain }
+  it { is_expected.not_to allow_value('email@me.com').for :domain }
+  it { is_expected.not_to allow_value('%!%$#G@').for :domain }
+  it { is_expected.not_to allow_value('http://www.cnn.com/').for :domain }
+  it { is_expected.not_to allow_value('www.cnn.com/').for :domain }
+  it { is_expected.not_to allow_value('www.cnn.com?').for :domain }
 
-        expect(whitelabel).to be_valid
-      end
-    end
-
-    it 'does not allow domain to be used as subdomain' do
-      subdomain = domain = 'hellobar.com'
-
-      whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
-
-      expect(whitelabel).not_to be_valid
-      expect(whitelabel.errors[:subdomain]).to be_present
-    end
-
-    it 'does not allow a domain which is not a part of subdomain' do
-      domain = 'hellobar.com'
-      subdomain = 'email.someone.com'
-
-      whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
-
-      expect(whitelabel).not_to be_valid
-      expect(whitelabel.errors[:domain]).to be_present
-    end
-
-    it 'does not allow improper domains' do
-      domain = 'hellobar'
-      subdomain = 'email.hellobar.com'
-
-      whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
-
-      expect(whitelabel).not_to be_valid
-      expect(whitelabel.errors[:domain]).to be_present
-    end
-
-    it 'does not allow urls as domains' do
-      domain = 'https://www.hellobar.com'
-      subdomain = 'email.hellobar.com'
-
-      whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
-
-      expect(whitelabel).not_to be_valid
-      expect(whitelabel.errors[:domain]).to be_present
-    end
-
-    it 'does not allow hosts with paths as domains' do
-      domain = 'hellobar.com/faq'
-      subdomain = 'email.hellobar.com'
-
-      whitelabel = Whitelabel.new site: site, subdomain: subdomain, domain: domain
-
-      expect(whitelabel).not_to be_valid
-      expect(whitelabel.errors[:domain]).to be_present
-    end
-  end
+  it { is_expected.to allow_value('Iñtërnâtiônàlizætiøn').for :subdomain }
+  it { is_expected.to allow_value('email').for :subdomain }
 end
