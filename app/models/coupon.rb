@@ -2,7 +2,7 @@ class Coupon < ApplicationRecord
   REFERRAL_LABEL = 'for_referrals'.freeze
   REFERRAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount]
 
-  PROMOTIONAL_LABEL = 'NEILPATELHB2017'.freeze
+  PROMOTIONAL_LABEL = 'hellobar101'.freeze
   PROMOTIONAL_AMOUNT = Subscription::Pro.defaults[:monthly_amount] * 2
 
   has_many :coupon_uses, dependent: :destroy

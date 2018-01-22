@@ -8,10 +8,11 @@ class CreateSite
     end
   end
 
-  def initialize(site, current_user, referral_token)
+  def initialize(site, current_user, session)
     @site = site
     @current_user = current_user
-    @referral_token = referral_token
+    @referral_token = session[:referral_token]
+    @promotional_code = session.delete(:promotional_code)
   end
 
   def call
@@ -21,11 +22,16 @@ class CreateSite
     handle_referral_token
     detect_install_type
     change_subscription
+    use_promo_code
   end
 
   private
 
-  attr_reader :site, :current_user, :referral_token
+  attr_reader :site, :current_user, :referral_token, :promotional_code
+
+  def use_promo_code
+    UsePromotionalCode.new(site, current_user, promotional_code).call
+  end
 
   def change_subscription
     ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call

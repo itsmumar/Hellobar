@@ -1,18 +1,22 @@
 class UsePromotionalCode
-  def initialize site, promotional_code
+  def initialize site, user, promotional_code
     @site = site
+    @user = user
     @promotional_code = promotional_code
   end
 
   def call
     return unless valid_promotional_code?
 
-    add_trial_subscription
+    CouponUse.transaction do
+      bill = add_trial_subscription
+      CouponUse.create!(bill: bill, coupon: coupon)
+    end
   end
 
   private
 
-  attr_reader :site, :promotional_code
+  attr_reader :site, :user, :promotional_code
 
   def valid_promotional_code?
     coupon
