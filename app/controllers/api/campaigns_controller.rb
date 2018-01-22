@@ -63,8 +63,4 @@ class Api::CampaignsController < Api::ApplicationController
       .require(:campaign)
       .permit :contact_list_id, :name, :from_name, :from_email, :subject, :body
   end
-
-  def handle_error(exception)
-    render json: { error: exception.message }, status: :unprocessable_entity
-  end
 end
