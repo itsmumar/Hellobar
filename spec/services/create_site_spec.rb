@@ -4,7 +4,7 @@ describe CreateSite do
   let(:promotional_code) { '' }
   let(:user) { create :user }
   let(:session) { Hash[referral_token: referral_token, promotional_code: promotional_code] }
-  let(:service) { CreateSite.new(site, user, session) }
+  let(:service) { CreateSite.new(site, user, **session) }
 
   it 'persists site' do
     expect { service.call }.to change(Site, :count).by(1)

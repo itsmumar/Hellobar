@@ -8,7 +8,7 @@ class CreateSite
     end
   end
 
-  def initialize(site, current_user, referral_token, promotional_code)
+  def initialize(site, current_user, referral_token:, promotional_code:)
     @site = site
     @current_user = current_user
     @referral_token = referral_token
