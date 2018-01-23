@@ -96,6 +96,6 @@ class FetchSiteStatistics
   end
 
   def cache_key
-    @cache_key ||= "site_statistics/#{site.id}/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
+    @cache_key ||= "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
   end
 end
