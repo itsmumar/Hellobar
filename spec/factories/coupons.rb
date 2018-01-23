@@ -5,5 +5,11 @@ FactoryGirl.define do
     public false
 
     trait :referral
+
+    trait :promotional do
+      label Coupon::PROMOTIONAL_LABEL
+      trial_period 30
+      public true
+    end
   end
 end

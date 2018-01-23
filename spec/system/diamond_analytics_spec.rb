@@ -297,4 +297,22 @@ describe DiamondAnalytics do
       end
     end
   end
+
+  describe '#used_promo_code' do
+    subject { analytics.used_promo_code(code: 'code', user: user) }
+
+    it 'tracks the created bar event' do
+      expect(tracker).to receive(:track).with(
+        event: 'Used Promo Code',
+        identities: {
+          user_id: user.id,
+          user_email: user.email
+        },
+        timestamp: Time.current.to_i,
+        properties: { code: 'code' }
+      )
+
+      subject
+    end
+  end
 end

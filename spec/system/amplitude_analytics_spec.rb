@@ -1,6 +1,7 @@
 describe AmplitudeAnalytics do
+  let!(:user) { create :user }
+
   describe '#fire_event' do
-    let!(:user) { create :user }
     let(:first_site) { create :site, :free_subscription, user: user }
     let(:second_site) { create :site, user: user }
     let(:site_element) { create :site_element, site: first_site }
@@ -53,6 +54,28 @@ describe AmplitudeAnalytics do
         .to_return(status: 200)
 
       AmplitudeAnalytics.new.fire_event event_type, event_properties
+    end
+  end
+
+  describe '#used_promo_code', :freeze do
+    let(:analytics) { AmplitudeAnalytics.new }
+    let(:event) { double 'event' }
+
+    it 'tracks the created bar event' do
+      expect(AmplitudeAPI::Event)
+        .to receive(:new)
+        .with(
+          event_type: 'used-promo-code',
+          user_id: user.id,
+          time: Time.current,
+          event_properties: { code: 'code' },
+          user_properties: instance_of(Hash)
+        )
+        .and_return event
+
+      expect(AmplitudeAPI).to receive(:track).with(event)
+
+      analytics.fire_event 'used_promo_code', code: 'code', user: user
     end
   end
 end

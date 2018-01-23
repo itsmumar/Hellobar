@@ -51,9 +51,13 @@ FactoryGirl.define do
 
     trait :with_paid_bill do
       after(:create) do |site, evaluator|
-        subscription = create(:subscription, evaluator.subscription_plan, site: site,
-                                                                          user: site.users.first,
-                                                                          schedule: evaluator.schedule)
+        subscription = create(
+          :subscription,
+          evaluator.subscription_plan,
+          site: site,
+          user: site.users.first,
+          schedule: evaluator.schedule
+        )
 
         bill = CalculateBill.new(subscription, bills: site.bills).call
         bill.paid!

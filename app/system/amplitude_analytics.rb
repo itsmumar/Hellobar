@@ -97,6 +97,17 @@ class AmplitudeAnalytics
     )
   end
 
+  def used_promo_code(code:, user:)
+    track(
+      event_type: 'used-promo-code',
+      user_id: user.id,
+      event_properties: {
+        code: code
+      },
+      user_properties: user_properties(user)
+    )
+  end
+
   private
 
   def track(params)

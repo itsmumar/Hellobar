@@ -8,6 +8,11 @@ h1.subheadline= "Enter your URL below to get started"
     button#sign-up-button type="submit"
       | Log in with Google
 
+    .promotional-code-wrapper
+      p
+        | Enter promotional code (if you have one):
+        input.promotional-code type="text" name="promotional_code" placeholder="Code" value=session[:promotional_code]
+
     .clear
 
   - if flash[:error]
