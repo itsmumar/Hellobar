@@ -1,6 +1,7 @@
 class Api::WhitelabelsController < Api::ApplicationController
   def create
-    whitelabel = Whitelabel.create! whitelabel_params
+    whitelabel = CreateWhitelabel.new(site: site, params: whitelabel_params).call
+
     render json: whitelabel, status: :created
   end
 
@@ -20,6 +21,6 @@ class Api::WhitelabelsController < Api::ApplicationController
   end
 
   def whitelabel_params
-    params.require(:whitelabel).permit :domain, :subdomain, :site_id
+    params.require(:whitelabel).permit :domain, :subdomain
   end
 end

@@ -16,15 +16,50 @@ describe 'api/whitelabels requests' do
     end
 
     context 'when created successfully' do
-      it 'returns whitelabel with :created http status' do
+      let(:api_url) { 'https://api.sendgrid.com/v3' }
+      let(:api_params) do
+        {
+          domain: domain,
+          subdomain: subdomain,
+          default: false,
+          automatic_security: true,
+          custom_spf: false
+        }
+      end
+
+      let(:domain_identifier) { 199 }
+      let(:dns_record) do
+        {
+          'cname' => 'cname',
+          'validated' => false
+        }
+      end
+
+      let(:api_response) do
+        {
+          id: domain_identifier,
+          dns: [dns_record]
+        }
+      end
+
+      before do
+        stub_request(:post, "#{ api_url }/whitelabel/domains")
+          .with(body: api_params)
+          .to_return status: 201, body: api_response.to_json
+      end
+
+      it 'creates whitelabel at SendGrid and returns :created with whitelabel' do
         post api_site_whitelabel_path(site),
           params.merge(whitelabel: whitelabel_params),
           headers
 
         expect(response).to be_successful
         expect(response.code.to_i).to eql 201
+
         expect(json[:domain]).to eql domain
         expect(json[:subdomain]).to eql subdomain
+        expect(json[:domain_identifier]).to eql domain_identifier
+        expect(json[:dns_records]).to eql [dns_record]
       end
     end
 
