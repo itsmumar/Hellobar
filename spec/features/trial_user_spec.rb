@@ -23,7 +23,12 @@ feature 'Trial User', js: true do
     sleep 1
     click_link('Downgrade')
 
-    expect(page).to have_content('Want More Power?')
+    expect(page).to have_content('90 days left of Pro features')
     expect(@site.reload.current_subscription).to be_a(Subscription::Free)
+
+    Timecop.travel(91.days.from_now) do
+      visit site_path(@site)
+      expect(page).to have_content('Want More Power?')
+    end
   end
 end

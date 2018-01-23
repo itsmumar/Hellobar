@@ -72,6 +72,10 @@ class Subscription < ApplicationRecord
     site.active_paid_bill&.end_date
   end
 
+  def days_left
+    (active_until.to_date - Date.current).to_i
+  end
+
   def capabilities
     if expired?
       Free::Capabilities.new(self, site)
