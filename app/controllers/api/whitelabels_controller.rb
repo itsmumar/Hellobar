@@ -10,8 +10,9 @@ class Api::WhitelabelsController < Api::ApplicationController
   end
 
   def destroy
-    site.whitelabel&.destroy!
-    head :ok
+    DestroyWhitelabel.new(site: site).call
+
+    head :no_content
   end
 
   private

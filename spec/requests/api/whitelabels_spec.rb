@@ -3,6 +3,7 @@ describe 'api/whitelabels requests' do
   let(:user) { create :user, site: site }
   let(:headers) { api_headers_for_site_user site, user }
   let(:params) { Hash[format: :json] }
+  let(:api_url) { 'https://api.sendgrid.com/v3' }
 
   describe 'POST #create' do
     let(:domain) { 'hellobar.com' }
@@ -16,7 +17,6 @@ describe 'api/whitelabels requests' do
     end
 
     context 'when created successfully' do
-      let(:api_url) { 'https://api.sendgrid.com/v3' }
       let(:api_params) do
         {
           domain: domain,
@@ -118,6 +118,12 @@ describe 'api/whitelabels requests' do
 
   describe 'DELETE #destroy' do
     let!(:whitelabel) { create :whitelabel, site: site }
+    let(:url) { "#{ api_url }/whitelabel/domains/#{ whitelabel.domain_identifier }" }
+
+    before do
+      stub_request(:delete, url)
+        .to_return status: 204
+    end
 
     it 'destroys the whitelabel' do
       delete api_site_whitelabel_path(site.id), params, headers
