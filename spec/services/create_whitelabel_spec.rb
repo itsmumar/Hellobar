@@ -82,7 +82,7 @@ describe CreateWhitelabel do
       expect(whitelabel.domain).to eql domain
       expect(whitelabel.domain_identifier).to eql domain_identifier
       expect(whitelabel.subdomain).to eql subdomain
-      expect(whitelabel.dns_records).to eql [dns_record]
+      expect(whitelabel.dns).to eql [dns_record]
     end
   end
 end

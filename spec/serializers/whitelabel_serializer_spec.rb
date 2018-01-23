@@ -10,7 +10,7 @@ describe WhitelabelSerializer do
       status: whitelabel.status,
       site_id: whitelabel.site_id,
       domain_identifier: whitelabel.domain_identifier,
-      dns_records: whitelabel.dns_records
+      dns: whitelabel.dns
     )
   end
 end

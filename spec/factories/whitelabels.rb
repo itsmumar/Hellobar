@@ -7,6 +7,6 @@ FactoryGirl.define do
 
     site
 
-    dns_records [{ cname: 'cname', valid: false }]
+    dns [{ cname: 'cname', valid: false }]
   end
 end

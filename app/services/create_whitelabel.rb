@@ -55,10 +55,10 @@ class CreateWhitelabel
 
   def assign_domain_identifier_and_dns_records
     domain_identifier = sendgrid_response_body['id']
-    dns_records = sendgrid_response_body['dns']
+    dns = sendgrid_response_body['dns']
 
     whitelabel.domain_identifier = domain_identifier
-    whitelabel.dns_records = dns_records
+    whitelabel.dns = dns
   end
 
   def save_whitelabel

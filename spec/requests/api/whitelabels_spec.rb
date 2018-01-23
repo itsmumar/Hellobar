@@ -59,7 +59,7 @@ describe 'api/whitelabels requests' do
         expect(json[:domain]).to eql domain
         expect(json[:subdomain]).to eql subdomain
         expect(json[:domain_identifier]).to eql domain_identifier
-        expect(json[:dns_records]).to eql [dns_record]
+        expect(json[:dns]).to eql [dns_record]
       end
     end
 

@@ -21,12 +21,12 @@ describe Whitelabel do
   it { is_expected.to allow_value('Iñtërnâtiônàlizætiøn').for :subdomain }
   it { is_expected.to allow_value('email').for :subdomain }
 
-  it 'has `dns_records` attr_accessor' do
-    dns_records = ['record']
+  it 'has `dns` attr_accessor' do
+    dns = ['record']
     whitelabel = build :whitelabel
 
-    whitelabel.dns_records = dns_records
+    whitelabel.dns = dns
 
-    expect(whitelabel.dns_records).to eql dns_records
+    expect(whitelabel.dns).to eql dns
   end
 end
