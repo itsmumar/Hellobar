@@ -8,7 +8,9 @@ describe WhitelabelSerializer do
       domain: whitelabel.domain,
       subdomain: whitelabel.subdomain,
       status: whitelabel.status,
-      site_id: whitelabel.site_id
+      site_id: whitelabel.site_id,
+      domain_identifier: whitelabel.domain_identifier,
+      dns_records: whitelabel.dns_records
     )
   end
 end

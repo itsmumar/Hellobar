@@ -14,6 +14,8 @@ class Whitelabel < ApplicationRecord
 
   validate :domain_correctness
 
+  attr_accessor :dns_records
+
   private
 
   def domain_correctness
