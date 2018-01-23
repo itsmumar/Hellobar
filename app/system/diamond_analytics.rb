@@ -137,6 +137,15 @@ class DiamondAnalytics
     end
   end
 
+  def used_promo_code(code:, user:)
+    track(
+      event: 'Used Promo Code',
+      user_id: user.id,
+      created_at: Time.current.to_i,
+      metadata: { code: code }
+    )
+  end
+
   private
 
   def track(args)

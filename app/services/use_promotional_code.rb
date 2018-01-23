@@ -12,6 +12,8 @@ class UsePromotionalCode
       bill = add_trial_subscription
       CouponUse.create!(bill: bill, coupon: coupon)
     end
+
+    TrackEvent.new(:used_promo_code, user: user, code: @promotional_code).call
   end
 
   private

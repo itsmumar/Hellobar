@@ -1,4 +1,6 @@
 describe UsePromotionalCode do
+  let(:user) { create :user }
+
   describe '#call' do
     let(:site) { double 'Site' }
 
@@ -6,7 +8,7 @@ describe UsePromotionalCode do
       it 'does not add trial days' do
         expect(AddTrialSubscription).not_to receive_service_call
 
-        UsePromotionalCode.new(site, nil).call
+        UsePromotionalCode.new(site, user, nil).call
       end
     end
 
@@ -16,25 +18,37 @@ describe UsePromotionalCode do
 
         expect(AddTrialSubscription).not_to receive_service_call
 
-        UsePromotionalCode.new(site, '123').call
+        UsePromotionalCode.new(site, user, '123').call
       end
     end
 
     context 'when promotional code is correct' do
-      it 'adds trial days to current subscription' do
-        coupon = create :coupon, :promotional
+      let(:user) { create :user }
+      let(:site) { create :site, user: user }
+      let(:coupon) { create :coupon, :promotional }
+      let(:bill) { create :bill, site: site }
 
+      it 'adds trial days to current subscription' do
         expect(AddTrialSubscription)
           .to receive_service_call
-          .with site, hash_including(subscription: 'pro')
+          .with(site, hash_including(subscription: 'pro'))
+          .and_return(bill)
 
-        UsePromotionalCode.new(site, coupon.label).call
+        UsePromotionalCode.new(site, user, coupon.label).call
       end
 
       it 'creates CouponUse' do
-        expect { UsePromotionalCode.new(site, coupon.label).call }
-          .to change { CouponUse.for_site(site).count }
+        expect { UsePromotionalCode.new(site, user, coupon.label).call }
+          .to change { site.coupon_uses.count }
           .by(1)
+      end
+
+      it 'tracks "used-promo-code" event' do
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:used_promo_code, user: user, code: coupon.label)
+
+        UsePromotionalCode.new(site, user, coupon.label).call
       end
     end
   end
