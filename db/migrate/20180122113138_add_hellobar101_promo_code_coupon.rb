@@ -2,7 +2,7 @@ class AddHellobar101PromoCodeCoupon < ActiveRecord::Migration
   def up
     Coupon.create!(
       label: 'hellobar101',
-      amount: Subscription::Pro.defaults[:monthly_amount] * 1,
+      trial_period: 30,
       public: true
     )
   end

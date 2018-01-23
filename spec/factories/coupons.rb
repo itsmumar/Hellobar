@@ -8,8 +8,7 @@ FactoryGirl.define do
 
     trait :promotional do
       label Coupon::PROMOTIONAL_LABEL
-      amount Coupon::PROMOTIONAL_AMOUNT
-
+      trial_period 30
       public true
     end
   end

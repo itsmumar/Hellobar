@@ -33,7 +33,7 @@ class UsePromotionalCode
   def subscription_params
     {
       subscription: 'pro',
-      trial_period: 60
+      trial_period: coupon.trial_period
     }
   end
 end

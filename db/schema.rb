@@ -156,11 +156,12 @@ ActiveRecord::Schema.define(version: 20180122113138) do
   add_index "coupon_uses", ["coupon_id"], name: "fk_rails_f2d61c8f47", using: :btree
 
   create_table "coupons", force: :cascade do |t|
-    t.string   "label",      limit: 255,                                         null: false
-    t.decimal  "amount",                 precision: 7, scale: 2,                 null: false
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
-    t.boolean  "public",                                         default: false, null: false
+    t.string   "label",        limit: 255,                                         null: false
+    t.decimal  "amount",                   precision: 7, scale: 2,                 null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
+    t.boolean  "public",                                           default: false, null: false
+    t.integer  "trial_period", limit: 4,                           default: 0,     null: false
   end
 
   create_table "credit_cards", force: :cascade do |t|
