@@ -45,7 +45,7 @@ class ValidateWhitelabel
   def add_validation_results_to_errors
     return unless validation_results
 
-    validation_results.each do |_, result|
+    validation_results.each_value do |result|
       whitelabel.errors.add :domain, result['reason']
     end
   end

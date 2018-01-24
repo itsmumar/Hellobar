@@ -15,6 +15,12 @@ class Api::WhitelabelsController < Api::ApplicationController
     head :no_content
   end
 
+  def validate
+    whitelabel = ValidateWhitelabel.new(whitelabel: site.whitelabel).call
+
+    render json: whitelabel, status: :ok
+  end
+
   private
 
   def site

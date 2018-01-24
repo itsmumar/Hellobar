@@ -25,7 +25,11 @@ Rails.application.routes.draw do
     resources :contact_lists, only: %i[index]
 
     resources :sites, only: [] do
-      resource :whitelabel, only: %i[create show destroy]
+      resource :whitelabel, only: %i[create show destroy] do
+        member do
+          post :validate
+        end
+      end
     end
 
     # Used by Lambda functions

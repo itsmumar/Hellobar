@@ -134,4 +134,72 @@ describe 'api/whitelabels requests' do
         .to raise_exception ActiveRecord::RecordNotFound
     end
   end
+
+  describe 'POST #validate' do
+    let!(:whitelabel) { create :whitelabel, site: site }
+    let(:url) { "#{ api_url }/whitelabel/domains/#{ whitelabel.domain_identifier }/validate" }
+
+    context 'when validation succeeds' do
+      let(:api_response) do
+        {
+          id: whitelabel.domain_identifier,
+          valid: true
+        }
+      end
+
+      before do
+        stub_request(:post, url)
+          .to_return status: 200, body: api_response.to_json
+      end
+
+      it 'validates the whitelabel' do
+        post validate_api_site_whitelabel_path(site.id), params, headers
+
+        expect(response).to be_successful
+
+        expect(Whitelabel.find(whitelabel.id).status).to eql Whitelabel::VALID
+      end
+    end
+
+    context 'when validation fails' do
+      let(:api_response) do
+        {
+          id: whitelabel.domain_identifier,
+          valid: false,
+          validation_results: {
+            mail_cname: {
+              valid: false,
+              reason: 'Expected CNAME to match'
+            },
+            dkim1: {
+              valid: false,
+              reason: 'Expected CNAME to match'
+            },
+            dkim2: {
+              valid: false,
+              reason: 'Expected CNAME to match'
+            }
+          }
+        }
+      end
+
+      before do
+        stub_request(:post, url)
+          .to_return status: 200, body: api_response.to_json
+      end
+
+      it 'invalidates the whitelabel' do
+        post validate_api_site_whitelabel_path(site.id), params, headers
+
+        expect(response).not_to be_successful
+
+        errors = json['errors']
+
+        expect(errors[:base]).to include 'Validation failed'
+        expect(errors[:domain]).to include 'Expected CNAME to match'
+
+        expect(Whitelabel.find(whitelabel.id).status).to eql Whitelabel::INVALID
+      end
+    end
+  end
 end
