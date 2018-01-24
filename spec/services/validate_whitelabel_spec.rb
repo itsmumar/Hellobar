@@ -66,7 +66,10 @@ describe ValidateWhitelabel do
         }.to raise_exception ActiveRecord::RecordInvalid, /Validation failed/
 
         expect(whitelabel.status).to eql Whitelabel::INVALID
-        expect(whitelabel.dns).to eql validation_failed_results.deep_stringify_keys
+
+        expect(whitelabel.errors.messages).to be_present
+        expect(whitelabel.errors.messages[:base]).to include 'Validation failed'
+        expect(whitelabel.errors.messages[:domain]).to include 'Expected CNAME to match'
       end
     end
 

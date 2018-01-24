@@ -35,10 +35,23 @@ class ValidateWhitelabel
       invalidate_whitelabel
 
       whitelabel.errors.add :base, 'Validation failed'
-      whitelabel.dns = sendgrid_response_body['validation_results']
+
+      add_validation_results_to_errors
 
       raise_exception
     end
+  end
+
+  def add_validation_results_to_errors
+    return unless validation_results
+
+    validation_results.each do |_, result|
+      whitelabel.errors.add :domain, result['reason']
+    end
+  end
+
+  def validation_results
+    sendgrid_response_body['validation_results']
   end
 
   def validate_whitelabel
