@@ -92,6 +92,15 @@ class IntercomAnalytics
     tag_users subscription.name, site.owners
   end
 
+  def used_promo_code(code:, user:)
+    track(
+      event_name: 'used-promo-code',
+      user_id: user.id,
+      created_at: Time.current.to_i,
+      metadata: { code: code }
+    )
+  end
+
   private
 
   delegate :track, :create_user, :tag_users, to: :intercom

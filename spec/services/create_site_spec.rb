@@ -1,8 +1,10 @@
 describe CreateSite do
   let(:site) { build :site }
   let(:referral_token) { '' }
+  let(:promotional_code) { '' }
   let(:user) { create :user }
-  let(:service) { CreateSite.new(site, user, referral_token) }
+  let(:session) { Hash[referral_token: referral_token, promotional_code: promotional_code] }
+  let(:service) { CreateSite.new(site, user, **session) }
 
   it 'persists site' do
     expect { service.call }.to change(Site, :count).by(1)
@@ -50,6 +52,14 @@ describe CreateSite do
   it 'regenerates script' do
     expect { service.call }
       .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+  end
+
+  it 'calls UsePromotionalCode service' do
+    expect(UsePromotionalCode)
+      .to receive_service_call
+      .with(site, user, promotional_code)
+
+    service.call
   end
 
   context 'when URL is already in use by user' do
