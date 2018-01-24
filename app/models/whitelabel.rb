@@ -1,7 +1,8 @@
 class Whitelabel < ApplicationRecord
   NEW = 'new'.freeze
   VALID = 'valid'.freeze
-  STATUSES = [NEW, VALID].freeze
+  INVALID = 'invalid'.freeze
+  STATUSES = [NEW, VALID, INVALID].freeze
 
   DOMAIN_REGEXP = /.+\..+/
 
@@ -15,6 +16,14 @@ class Whitelabel < ApplicationRecord
   validate :domain_correctness
 
   attr_accessor :dns
+
+  def valid!
+    update! status: VALID
+  end
+
+  def invalid!
+    update! status: INVALID
+  end
 
   private
 

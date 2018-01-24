@@ -29,4 +29,24 @@ describe Whitelabel do
 
     expect(whitelabel.dns).to eql dns
   end
+
+  describe '#valid!' do
+    it 'updates `status` to :valid' do
+      whitelabel = create :whitelabel
+
+      whitelabel.valid!
+
+      expect(whitelabel.status).to eql Whitelabel::VALID
+    end
+  end
+
+  describe '#invalid!' do
+    it 'updates `status` to :invalid' do
+      whitelabel = create :whitelabel
+
+      whitelabel.invalid!
+
+      expect(whitelabel.status).to eql Whitelabel::INVALID
+    end
+  end
 end
