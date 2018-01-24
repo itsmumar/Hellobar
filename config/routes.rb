@@ -6,8 +6,13 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :user_state, only: :show
+    # Used by Ember.js
     resources :settings, only: :index
+
+    resources :user_state, only: :show
+
+    # Used by Vue.js
+    get :authenticate, to: 'authentications#create'
 
     resources :campaigns, except: %i[new edit] do
       member do
@@ -16,10 +21,18 @@ Rails.application.routes.draw do
         post :archive
       end
     end
+
     resources :contact_lists, only: %i[index]
 
-    get :authenticate, to: 'authentications#create'
+    resources :sites, only: [] do
+      resource :whitelabel, only: %i[create show destroy] do
+        member do
+          post :validate
+        end
+      end
+    end
 
+    # Used by Lambda functions
     namespace :internal do
       resources :campaigns, only: [] do
         member do

@@ -18,6 +18,8 @@ class Site < ApplicationRecord
 
   acts_as_paranoid
 
+  has_one :whitelabel, dependent: :destroy
+
   # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
