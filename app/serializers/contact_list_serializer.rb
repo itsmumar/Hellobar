@@ -8,7 +8,8 @@ class ContactListSerializer < ActiveModel::Serializer
     :provider_name,
     :provider_token,
     :site_elements_count,
-    :site_id
+    :site_id,
+    :subscribers_count
   )
 
   def errors
@@ -17,5 +18,9 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def provider_token
     object&.identity&.provider || '0'
+  end
+
+  def subscribers_count
+    context && context[object.id]
   end
 end
