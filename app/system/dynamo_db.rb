@@ -21,7 +21,8 @@ class DynamoDB
     'edge_over_time2'
   end
 
-  def initialize(expires_in: DEFAULT_TTL)
+  def initialize(expires_in: DEFAULT_TTL, cache_context: nil)
+    @cache_context = cache_context
     @expires_in = expires_in
   end
 
@@ -62,6 +63,16 @@ class DynamoDB
     response || {}
   end
 
+  def put_item params
+    response = send_request :put_item, params
+    response || {}
+  end
+
+  def delete_item params
+    response = send_request :delete_item, params
+    response || {}
+  end
+
   private
 
   def cached_query(request)
@@ -79,7 +90,11 @@ class DynamoDB
 
   def cache_key(request)
     # make sure hexdigest identical for similar requests
-    [CACHE_KEY_PREFIX, Digest::MD5.hexdigest(request.to_json)].join('/')
+    [
+      CACHE_KEY_PREFIX,
+      @cache_context,
+      Digest::MD5.hexdigest(request.to_json)
+    ].compact.join('/')
   end
 
   def send_batch_get_item(request)

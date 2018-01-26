@@ -21,7 +21,7 @@ class FetchLatestContacts
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
-      projection_expression: 'email,n,ts,#s,#e',
+      projection_expression: 'email,n,ts,lid,#s,#e',
       limit: limit,
       scan_index_forward: false # sort results in reverse chronological order
     }
@@ -36,6 +36,6 @@ class FetchLatestContacts
   end
 
   def dynamo_db
-    DynamoDB.new
+    DynamoDB.new(cache_context: contact_list.cache_key)
   end
 end
