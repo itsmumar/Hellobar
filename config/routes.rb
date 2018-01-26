@@ -16,7 +16,15 @@ Rails.application.routes.draw do
         post :archive
       end
     end
-    resources :contact_lists, only: %i[index]
+
+    resources :contact_lists, only: :index do
+      resources :subscribers, only: :index do
+        collection do
+          delete :destroy, to: :destroy
+          patch :update, to: :update
+        end
+      end
+    end
 
     get :authenticate, to: 'authentications#create'
 
