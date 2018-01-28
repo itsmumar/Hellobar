@@ -4,12 +4,13 @@ class FilterCampaigns
     sent: 'Sent',
     archived: 'Archived',
     deleted: 'Deleted'
-  }.with_indifferent_access.freeze
+  }.freeze
 
   DEFAULT_FILTER = :draft
 
   def initialize(params)
-    @params = params
+    @filter = params[:filter].try(:to_sym)
+    @filter = DEFAULT_FILTER unless FILTERS[@filter]
   end
 
   def call
@@ -18,11 +19,7 @@ class FilterCampaigns
 
   private
 
-  attr_reader :params
-
-  def filter
-    @filter ||= FILTERS.key?(params[:filter]) ? params[:filter] : DEFAULT_FILTER
-  end
+  attr_reader :filter
 
   def scope_for(filter)
     Campaign.public_send(filter)
