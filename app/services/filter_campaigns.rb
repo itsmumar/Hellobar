@@ -21,7 +21,7 @@ class FilterCampaigns
   attr_reader :params
 
   def filter
-    @filter ||= FILTERS.has_key?(params[:filter]) ? params[:filter] : DEFAULT_FILTER
+    @filter ||= FILTERS.key?(params[:filter]) ? params[:filter] : DEFAULT_FILTER
   end
 
   def scope_for(filter)
