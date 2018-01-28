@@ -24,8 +24,12 @@ class FilterCampaigns
     @filter ||= FILTERS.has_key?(params[:filter]) ? params[:filter] : DEFAULT_FILTER
   end
 
+  def scope_for(filter)
+    Campaign.public_send(filter)
+  end
+
   def fetch_campaigns
-    @campaigns ||= Campaign.send(filter).to_a
+    @campaigns ||= scope_for(filter).to_a
   end
 
   def build_filters
@@ -36,7 +40,7 @@ class FilterCampaigns
         key: key,
         title: title,
         active: active,
-        count: active ? fetch_campaigns.size : Campaign.send(key).count
+        count: active ? fetch_campaigns.size : scope_for(key).count
       }
     end
   end
