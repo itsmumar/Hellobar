@@ -1,5 +1,5 @@
 describe FilterCampaigns do
-  subject(:service) { FilterCampaigns.new({ filter: filter }) }
+  subject(:service) { FilterCampaigns.new(filter: filter) }
 
   let!(:campaign1) { create(:campaign, status: Campaign::NEW) }
   let!(:campaign2) { create(:campaign, status: Campaign::NEW) }
