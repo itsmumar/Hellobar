@@ -2,8 +2,8 @@ class SendEventToIntercomJob < ApplicationJob
   def perform(event, options = {})
     IntercomAnalytics.new.fire_event event, options
   rescue Intercom::ResourceNotFound => e
-    raise e unless e.message == 'User Not Found'
-    handle_user_not_found(options[:user])
+    handle_user_not_found(options[:user]) if e.message == 'User Not Found'
+    raise e # let SQS do its job
   end
 
   private
@@ -16,6 +16,5 @@ class SendEventToIntercomJob < ApplicationJob
   def handle_user_not_found(user)
     return unless user
     IntercomAnalytics.new.created_user user: user
-    retry_job
   end
 end

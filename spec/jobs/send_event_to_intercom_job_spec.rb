@@ -30,8 +30,7 @@ describe SendEventToIntercomJob do
 
         it 'calls IntercomAnalytics#created_user and retries the job' do
           expect(analytics).to receive :created_user
-
-          expect { perform }.to have_enqueued_job(SendEventToIntercomJob)
+          expect { perform }.to raise_error(Intercom::ResourceNotFound)
         end
       end
     end
