@@ -75,6 +75,23 @@ describe 'api/campaigns requests' do
         'id' => 1
       )
     end
+
+    describe 'filters' do
+      let(:expected_filters) do
+        [
+          { 'key' => 'draft', 'title' => 'Draft', 'active' => true, 'count' => 1 },
+          { 'key' => 'sent', 'title' => 'Sent', 'active' => false, 'count' => 0 },
+          { 'key' => 'archived', 'title' => 'Archived', 'active' => false, 'count' => 0 },
+          { 'key' => 'deleted', 'title' => 'Deleted', 'active' => false, 'count' => 0 }
+        ]
+      end
+
+      it 'returns the list of available filters' do
+        get api_campaigns_path, { format: :json }, headers
+
+        expect(json[:filters]).to eq(expected_filters)
+      end
+    end
   end
 
   describe 'get #show' do
