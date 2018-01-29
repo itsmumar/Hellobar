@@ -4,8 +4,7 @@ class Api::CampaignsController < Api::ApplicationController
   rescue_from Campaign::InvalidTransition, with: :handle_error
 
   def index
-    render json: @current_site.campaigns,
-      each_serializer: CampaignSerializer
+    render json: FilterCampaigns.new(params).call, serializer: CampaignsSerializer
   end
 
   def show
