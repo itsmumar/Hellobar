@@ -17,8 +17,6 @@ hellobar.defineModule('elements.class',
       'hellobar-takeover': 'takeover'
     };
 
-    let iosFocusInterval = null;
-
     class SiteElement {
 
       constructor(props) {
@@ -277,7 +275,11 @@ hellobar.defineModule('elements.class',
           container.style.right = 0;
         } else {
           if (type === 'Bar') {
-            container.style.maxHeight = (element.clientHeight + 8) + 'px';
+            var height = element.clientHeight;
+            if (typeof element.classList === 'undefined' || element.classList.contains('bar-top')) {
+              height += 8;
+            }
+            container.style.maxHeight = height + 'px';
           } else if (type === 'Slider') {
             var containerWidth = window.innerWidth;
             var newWidth = Math.min(maxSliderSize + 24, containerWidth - 24);
@@ -469,16 +471,8 @@ hellobar.defineModule('elements.class',
         var element = this;
 
         this.keyboardActive = true;
-
-        if (this.type == "Bar") {
-          iosFocusInterval = setTimeout(function () {
-            window.scrollTo(0, element.w.offsetTop);
-          }, 500);
-        }
-        else if (this.type == "Slider" || this.type == "Takeover" || this.type == "Modal") {
-          this.scrollListener = this.iosOnScroll.bind(this)
-          window.addEventListener('scroll', this.scrollListener);
-        }
+        this.scrollListener = this.iosOnScroll.bind(this);
+        window.addEventListener('scroll', this.scrollListener);
       }
 
       iosKeyboardHide(e) {
@@ -489,15 +483,7 @@ hellobar.defineModule('elements.class',
         if (this.scrollListener) {
           window.removeEventListener('scroll', this.scrollListener);
           window.cancelAnimationFrame(this.animationRequestId);
-        }
-
-        if (iosFocusInterval) {
-          clearInterval(iosFocusInterval);
-          iosFocusInterval = null;
-        }
-
-        if (this.type == "Takeover" || this.type == "Modal" || this.type == "Slider") {
-          window.requestAnimationFrame(this.resetStyles.bind(this))
+          window.requestAnimationFrame(this.resetStyles.bind(this));
         }
       }
 
@@ -506,28 +492,34 @@ hellobar.defineModule('elements.class',
 
         this.animationRequestId = window.requestAnimationFrame(function() {
           if (element.keyboardActive) {
-            var viewportHeight = null;
-            if (window.innerHeight > window.innerWidth) {
-              // portrait mode
-              viewportHeight = window.innerHeight * 0.66
-            } else {
-              // landscape mode
-              viewportHeight = window.innerHeight * 0.50
-            }
-
             element.w.style.position = "absolute";
-            element.w.style.height = viewportHeight + "px";
-            element.w.style.maxHeight = viewportHeight + "px";
             element.w.style.top = window.pageYOffset + "px";
+
+            if (element.type !== "Bar") {
+              var viewportHeight = null;
+              if (window.innerHeight > window.innerWidth) {
+                // portrait mode
+                viewportHeight = window.innerHeight * 0.66;
+              } else {
+                // landscape mode
+                viewportHeight = window.innerHeight * 0.50;
+              }
+
+              element.w.style.height = viewportHeight + "px";
+              element.w.style.maxHeight = viewportHeight + "px";
+            }
           }
         });
       }
 
       resetStyles() {
         this.w.style.position = "";
-        this.w.style.height = ""
-        this.w.style.maxHeight = ""
         this.w.style.top = "";
+
+        if (this.type !== "Bar") {
+          this.w.style.height = ""
+          this.w.style.maxHeight = ""
+        }
       }
 
       // Necessary convenience method for saying this
