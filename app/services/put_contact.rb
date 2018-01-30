@@ -53,13 +53,13 @@ class PutContact
   def delete_old_record
     return if new_record?
     return if email == old_record['email']
-    dynamo_db.delete_item({
+    dynamo_db.delete_item(
       key: {
         lid: contact_list.id,
         email: email
       },
       table_name: table_name
-    })
+    )
   end
 
   def new_record?

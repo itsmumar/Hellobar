@@ -21,6 +21,6 @@ class ContactListSerializer < ActiveModel::Serializer
   end
 
   def subscribers_count
-    context && context[object.id]
+    context && context[object.id] # rubocop: disable Style/SafeNavigation
   end
 end

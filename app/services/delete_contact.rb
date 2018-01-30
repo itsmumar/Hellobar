@@ -19,11 +19,11 @@ class DeleteContact
   end
 
   def delete
-    response = dynamo_db.delete_item({
+    response = dynamo_db.delete_item(
       key: key,
       return_values: 'ALL_OLD',
       table_name: table_name
-    })
+    )
     @old_record = response.attributes
   end
 
