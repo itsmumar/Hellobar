@@ -1,4 +1,4 @@
-class DeleteContact
+class DeleteSubscriber
   def initialize contact_list, email
     @contact_list = contact_list
     @email = email

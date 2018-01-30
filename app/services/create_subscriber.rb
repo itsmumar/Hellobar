@@ -1,4 +1,4 @@
-class PutContact
+class CreateSubscriber
   def initialize contact_list, params
     @contact_list = contact_list
     @email = params.fetch(:email)

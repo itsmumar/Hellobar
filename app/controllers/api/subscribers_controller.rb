@@ -4,17 +4,17 @@ class Api::SubscribersController < Api::ApplicationController
   end
 
   def create
-    subscriber = PutContact.new(contact_list, subscriber_params).call
+    subscriber = CreateSubscriber.new(contact_list, subscriber_params).call
     render json: subscriber
   end
 
   def update
-    subscriber = UpdateContact.new(contact_list, params[:email], subscriber_params).call
+    subscriber = UpdateSubscriber.new(contact_list, params[:email], subscriber_params).call
     render json: subscriber
   end
 
   def destroy
-    DeleteContact.new(contact_list, params[:email]).call
+    DeleteSubscriber.new(contact_list, params[:email]).call
     render json: FetchLatestContacts.new(contact_list).call
   end
 
