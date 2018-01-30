@@ -356,19 +356,6 @@ ActiveRecord::Schema.define(version: 20180130063235) do
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
 
-  create_table "subscribers", force: :cascade do |t|
-    t.integer  "contact_list_id", limit: 4
-    t.string   "email",           limit: 255,              null: false
-    t.string   "name",            limit: 255,              null: false
-    t.string   "status",          limit: 255, default: "", null: false
-    t.string   "error",           limit: 255, default: "", null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-  end
-
-  add_index "subscribers", ["contact_list_id", "created_at"], name: "index_subscribers_on_contact_list_id_and_created_at", using: :btree
-  add_index "subscribers", ["contact_list_id", "email"], name: "index_subscribers_on_contact_list_id_and_email", unique: true, using: :btree
-
   create_table "subscriptions", force: :cascade do |t|
     t.integer  "user_id",              limit: 4
     t.integer  "site_id",              limit: 4
