@@ -4,13 +4,14 @@ describe AmplitudeAnalytics do
   describe '#fire_event' do
     let(:first_site) { create :site, :free_subscription, user: user }
     let(:second_site) { create :site, user: user }
+    let(:third_site) { create :site, user: user }
     let(:site_element) { create :site_element, site: first_site }
-    let!(:sites) { [first_site, second_site] }
+    let!(:sites) { [first_site, second_site, third_site] }
 
     let(:views) { [2, 3, 4, 5, 6] }
     let(:conversions) { [1, 2, 3, 4, 5] }
-    let(:total_views) { views.sum * 2 }
-    let(:total_conversions) { conversions.sum * 2 }
+    let(:total_views) { views.sum * 3 }
+    let(:total_conversions) { conversions.sum * 3 }
 
     before do
       create :contact_list, site: first_site
@@ -23,6 +24,11 @@ describe AmplitudeAnalytics do
       expect(FetchSiteStatistics)
         .to receive_service_call
         .with(second_site, days_limit: 7)
+        .and_return(create(:site_statistics, views: views, conversions: conversions))
+
+      expect(FetchSiteStatistics)
+        .to receive_service_call
+        .with(third_site, days_limit: 7)
         .and_return(create(:site_statistics, views: views, conversions: conversions))
     end
 
@@ -40,9 +46,11 @@ describe AmplitudeAnalytics do
         url.+#{ NormalizeURI[first_site.url].domain }.+
         current_subscription.+#{ first_site.current_subscription.name }.+
         user_properties.+
-        additional_domains.+
+        primary_domain.+
         #{ NormalizeURI[first_site.url].domain }.+
+        additional_domains.+
         #{ NormalizeURI[second_site.url].domain }.+
+        #{ NormalizeURI[third_site.url].domain }.+
         total_views.+#{ total_views }.+
         total_conversions.+#{ total_conversions }.+
         sites_count.+#{ sites.size }.+
