@@ -23,7 +23,7 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def update
-    if @campaign.update(campaign_params)
+    if UpdateCampaign.new(@campaign, campaign_params).call
       render json: CampaignSerializer.new(@campaign)
     else
       render json: { errors: @campaign.errors.messages },
