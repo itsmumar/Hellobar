@@ -115,7 +115,6 @@ class AmplitudeAnalytics
     AmplitudeAPI.track(event)
   end
 
-
   def domains_for(user)
     user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact
   end
