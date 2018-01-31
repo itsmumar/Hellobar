@@ -4,6 +4,8 @@ class FetchSiteStatistics
   # let's take some synthetic date
   MAX_DAYS = 5 * 365
 
+  CACHE_TTL = 1.hour
+
   def initialize(site, days_limit: MAX_DAYS, site_element_ids: nil)
     @site = site
     @days_limit = days_limit
@@ -11,21 +13,21 @@ class FetchSiteStatistics
   end
 
   def call
-    statistics.clear # clear the results in case we are calling this service object a second time
-    site_elements.each do |site_element|
-      dynamo_db.query_each(request_for(site_element.id)) do |item|
-        statistics << enhance_record(site_element, item)
-      end
-    end
-    statistics
+    cache { fetch_statistic }
   end
 
   private
 
   attr_reader :site, :days_limit, :site_element_ids
 
-  def statistics
-    @statistics ||= SiteStatistics.new
+  def fetch_statistic
+    statistics = SiteStatistics.new
+    site_elements.each do |site_element|
+      dynamo_db.query_each(request_for(site_element.id)) do |item|
+        statistics << enhance_record(site_element, item)
+      end
+    end
+    statistics
   end
 
   def request_for(id)
@@ -87,5 +89,13 @@ class FetchSiteStatistics
 
   def dynamo_db
     @dynamo_db ||= DynamoDB.new
+  end
+
+  def cache
+    Rails.cache.fetch(cache_key, expires_in: CACHE_TTL) { yield }
+  end
+
+  def cache_key
+    @cache_key ||= "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
   end
 end

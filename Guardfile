@@ -6,13 +6,12 @@ ignore(/editor/, /public/, /app\/assets\/editor\/editor/)
 
 # This group allows to skip running RuboCop when RSpec failed
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: 'bin/rspec', failed_mode: :focus do
+  guard :rspec, cmd: 'bin/spring rspec -f doc', failed_mode: :focus do
     require 'guard/rspec/dsl'
     dsl = Guard::RSpec::Dsl.new(self)
 
     # RSpec files
     rspec = dsl.rspec
-    watch(rspec.spec_helper) { rspec.spec_dir }
     watch(rspec.spec_support) { rspec.spec_dir }
     watch(rspec.spec_files)
 
@@ -33,7 +32,6 @@ group :red_green_refactor, halt_on_fail: true do
     end
 
     # Rails config changes
-    watch(rails.spec_helper)     { rspec.spec_dir }
     watch(rails.app_controller)  { "#{ rspec.spec_dir }/controllers" }
 
     # Capybara features specs

@@ -23,6 +23,10 @@ class Campaign < ApplicationRecord
   validates :body, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
+  scope :draft, -> { where(status: [NEW, SENDING]) }
+  scope :sent, -> { where(status: [SENT]) }
+  scope :archived, -> { where(status: [ARCHIVED]) }
+
   def statistics
     FetchCampaignStatistics.new(self).call
   end

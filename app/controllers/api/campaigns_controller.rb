@@ -4,8 +4,7 @@ class Api::CampaignsController < Api::ApplicationController
   rescue_from Campaign::InvalidTransition, with: :handle_error
 
   def index
-    render json: @current_site.campaigns,
-      each_serializer: CampaignSerializer
+    render json: FilterCampaigns.new(params).call, serializer: CampaignsSerializer
   end
 
   def show
@@ -62,9 +61,5 @@ class Api::CampaignsController < Api::ApplicationController
     params
       .require(:campaign)
       .permit :contact_list_id, :name, :from_name, :from_email, :subject, :body
-  end
-
-  def handle_error(exception)
-    render json: { error: exception.message }, status: :unprocessable_entity
   end
 end

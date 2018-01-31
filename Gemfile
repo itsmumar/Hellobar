@@ -47,6 +47,7 @@ gem 'verticalresponse'
 # Mailing
 gem 'pony'
 gem 'roadie-rails'
+gem 'sendgrid-ruby'
 
 # Billing
 gem 'activemerchant', '~> 1.65.0'
@@ -179,7 +180,7 @@ group :test do
   # Spec formatters
   gem 'fuubar'
   gem 'rspec-instafail', require: false
-  gem 'rspec_junit_formatter'
+  gem 'rspec_junit_formatter', require: false
 
   # Code coverage metrics
   gem 'codecov', require: false
