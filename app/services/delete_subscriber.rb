@@ -1,5 +1,5 @@
 class DeleteSubscriber
-  def initialize contact_list, email
+  def initialize(contact_list, email)
     @contact_list = contact_list
     @email = email
   end
@@ -21,6 +21,7 @@ class DeleteSubscriber
   def delete
     response = dynamo_db.delete_item(
       key: key,
+      return_consumed_capacity: 'TOTAL',
       return_values: 'ALL_OLD',
       table_name: table_name
     )
@@ -30,29 +31,11 @@ class DeleteSubscriber
   def update_totals
     return unless deleted?
 
-    dynamo_db.update_item(
-      key: totals_key,
-      attribute_updates: {
-        t: {
-          value: -1,
-          action: 'ADD'
-        }
-      },
-      return_values: 'NONE',
-      return_consumed_capacity: 'TOTAL',
-      table_name: table_name
-    )
+    UpdateSubscribersCounter.new(contact_list.id, value: -1).call
   end
 
   def deleted?
     old_record.present?
-  end
-
-  def totals_key
-    {
-      lid: contact_list.id,
-      email: 'total'
-    }
   end
 
   def key

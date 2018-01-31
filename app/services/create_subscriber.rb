@@ -1,5 +1,5 @@
 class CreateSubscriber
-  def initialize contact_list, params
+  def initialize(contact_list, params)
     @contact_list = contact_list
     @email = params.fetch(:email)
     @name = params.fetch(:name)
@@ -8,7 +8,6 @@ class CreateSubscriber
   def call
     create
     update_totals
-    delete_old_record
     update_contact_list_cache
     attributes
   end
@@ -36,41 +35,11 @@ class CreateSubscriber
   def update_totals
     return unless new_record?
 
-    dynamo_db.update_item(
-      key: totals_key,
-      attribute_updates: {
-        t: {
-          value: 1,
-          action: 'ADD'
-        }
-      },
-      return_values: 'NONE',
-      return_consumed_capacity: 'TOTAL',
-      table_name: table_name
-    )
-  end
-
-  def delete_old_record
-    return if new_record?
-    return if email == old_record['email']
-    dynamo_db.delete_item(
-      key: {
-        lid: contact_list.id,
-        email: email
-      },
-      table_name: table_name
-    )
+    UpdateSubscribersCounter.new(contact_list.id, value: 1).call
   end
 
   def new_record?
     old_record.blank?
-  end
-
-  def totals_key
-    {
-      lid: contact_list.id,
-      email: 'total'
-    }
   end
 
   def attributes
