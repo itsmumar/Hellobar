@@ -18,12 +18,7 @@ Rails.application.routes.draw do
     end
 
     resources :contact_lists, only: :index do
-      resources :subscribers, only: :index do
-        collection do
-          delete :destroy, to: :destroy
-          patch :update, to: :update
-        end
-      end
+      resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
     end
 
     get :authenticate, to: 'authentications#create'
