@@ -115,9 +115,16 @@ class AmplitudeAnalytics
     AmplitudeAPI.track(event)
   end
 
-  def user_properties user
+  def domains_for(user)
+    user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact
+  end
+
+  def user_properties(user)
+    primary_domain, *additional_domains = domains_for(user)
+
     {
-      additional_domains: user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', '),
+      primary_domain: primary_domain,
+      additional_domains: additional_domains.join(', '),
       contact_lists: user.contact_lists.count,
       total_views: user.sites.map { |site| site.statistics.views }.sum,
       total_conversions: user.sites.map { |site| site.statistics.conversions }.sum,

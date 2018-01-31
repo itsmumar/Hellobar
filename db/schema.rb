@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180122141300) do
+ActiveRecord::Schema.define(version: 20180130063235) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20180122141300) do
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
 
   create_table "authentications", force: :cascade do |t|
-    t.integer  "user_id",       limit: 4
+    t.integer  "user_id",       limit: 4,   null: false
     t.string   "provider",      limit: 255, null: false
     t.string   "uid",           limit: 191
     t.datetime "created_at"
