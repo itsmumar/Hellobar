@@ -9,13 +9,14 @@ describe FetchAllContacts do
         key_condition_expression: 'lid = :lidValue',
         expression_attribute_values: { ':lidValue' => contact_list.id },
         expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
-        projection_expression: 'email,n,ts,#s,#e'
+        projection_expression: 'email,n,ts,lid,#s,#e'
       }
     end
 
     let(:dynamodb_records) do
       [
         {
+          'lid' => '1',
           'email' => 'j.black@gmail.com',
           'n' => 'John Black',
           'ts' => 1512077546,
@@ -23,6 +24,7 @@ describe FetchAllContacts do
           'error' => ''
         },
         {
+          'lid' => '2',
           'email' => 'abc123@gmail.com',
           'n' => '',
           'ts' => 1512077321,
@@ -37,12 +39,14 @@ describe FetchAllContacts do
 
     let(:expected_result) do
       [
-        Contact.new(email: 'j.black@gmail.com',
+        Contact.new(lid: 1,
+                    email: 'j.black@gmail.com',
                     name: 'John Black',
                     subscribed_at: Time.zone.at(1512077546),
                     status: '',
                     error: ''),
-        Contact.new(email: 'abc123@gmail.com',
+        Contact.new(lid: 2,
+                    email: 'abc123@gmail.com',
                     name: '',
                     subscribed_at: Time.zone.at(1512077321),
                     status: 'error',
