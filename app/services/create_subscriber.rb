@@ -25,7 +25,6 @@ class CreateSubscriber
       item: attributes,
       return_consumed_capacity: 'TOTAL',
       return_values: 'ALL_OLD',
-      return_item_collection_metrics: 'SIZE',
       table_name: table_name
     )
 
