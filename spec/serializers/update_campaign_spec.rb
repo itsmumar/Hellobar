@@ -8,13 +8,17 @@ describe UpdateCampaign do
       let(:campaign) { create(:campaign) }
 
       it 'updates the campaign' do
-        expect(campaign).to receive(:update)
+        expect(campaign).to receive(:update!)
 
         service.call
       end
 
-      it 'returns truthy value' do
-        expect(service.call).to be_truthy
+      context 'with invalid attributes' do
+        let(:attributes) { { name: '' } }
+
+        it 'raises error' do
+          expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
+        end
       end
     end
 

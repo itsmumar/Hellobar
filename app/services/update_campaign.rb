@@ -18,6 +18,6 @@ class UpdateCampaign
   end
 
   def update_campaign
-    campaign.update(attributes)
+    campaign.update!(attributes)
   end
 end
