@@ -19,7 +19,6 @@ describe CreateSubscriber do
       },
       return_consumed_capacity: 'TOTAL',
       return_values: 'ALL_OLD',
-      return_item_collection_metrics: 'SIZE',
       table_name: 'test_contacts'
     ).and_return(response)
 

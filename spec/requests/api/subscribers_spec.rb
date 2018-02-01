@@ -21,8 +21,7 @@ describe 'api/subscribers requests' do
       query_enum: subscribers,
       update_item: Aws::DynamoDB::Types::UpdateItemOutput.new,
       put_item: Aws::DynamoDB::Types::PutItemOutput.new,
-      delete_item: Aws::DynamoDB::Types::DeleteItemOutput.new
-    )
+      delete_item: Aws::DynamoDB::Types::DeleteItemOutput.new)
   end
 
   before do
