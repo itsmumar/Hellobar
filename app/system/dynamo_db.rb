@@ -58,19 +58,16 @@ class DynamoDB
     cache(request) { send_batch_get_item(request) }
   end
 
-  def update_item params
-    response = send_request :update_item, params
-    response || {}
+  def update_item(params)
+    send_request(:update_item, params) || {}
   end
 
-  def put_item params
-    response = send_request :put_item, params
-    response || {}
+  def put_item(params)
+    send_request(:put_item, params) || {}
   end
 
-  def delete_item params
-    response = send_request :delete_item, params
-    response || {}
+  def delete_item(params)
+    send_request(:delete_item, params) || {}
   end
 
   private
@@ -83,7 +80,7 @@ class DynamoDB
   end
 
   def cache(request)
-    Rails.cache.fetch cache_key(request), expires_in: expires_in do
+    Rails.cache.fetch(cache_key(request), expires_in: expires_in) do
       yield
     end
   end
