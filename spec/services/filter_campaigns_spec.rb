@@ -1,11 +1,13 @@
 describe FilterCampaigns do
-  subject(:service) { FilterCampaigns.new(filter: filter) }
+  subject(:service) { FilterCampaigns.new(site, filter: filter) }
 
-  let!(:campaign1) { create(:campaign, status: Campaign::NEW) }
-  let!(:campaign2) { create(:campaign, status: Campaign::NEW) }
-  let!(:campaign3) { create(:campaign, status: Campaign::SENDING) }
-  let!(:campaign4) { create(:campaign, status: Campaign::SENT) }
-  let!(:campaign5) { create(:campaign, status: Campaign::ARCHIVED) }
+  let(:site) { create(:site) }
+
+  let!(:campaign1) { create(:campaign, site: site, status: Campaign::NEW) }
+  let!(:campaign2) { create(:campaign, site: site, status: Campaign::NEW) }
+  let!(:campaign3) { create(:campaign, site: site, status: Campaign::SENDING) }
+  let!(:campaign4) { create(:campaign, site: site, status: Campaign::SENT) }
+  let!(:campaign5) { create(:campaign, site: site, status: Campaign::ARCHIVED) }
 
   let(:all_campaigns) do
     [campaign1, campaign2, campaign3, campaign4, campaign5]

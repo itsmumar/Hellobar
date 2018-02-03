@@ -4,7 +4,7 @@ describe 'api/campaigns requests' do
   let(:campaign) { create :campaign, site: site }
   let(:contact_list) { campaign.contact_list }
 
-  let(:headers) { api_headers_for_site_user site, user }
+  let(:headers) { api_headers_for_user(user) }
 
   let(:statistics) do
     {
@@ -39,14 +39,16 @@ describe 'api/campaigns requests' do
   end
 
   describe 'get #index' do
+    let(:path) { api_site_campaigns_path(site.id) }
+
     include_examples 'JWT authentication' do
       def request(headers)
-        get api_campaigns_path, { format: :json }, headers
+        get(path, { format: :json }, headers)
       end
     end
 
     it 'returns campaigns for the site in the JSON format' do
-      get api_campaigns_path, { format: :json }, headers
+      get(path, { format: :json }, headers)
 
       expect(response).to be_successful
 
@@ -87,7 +89,7 @@ describe 'api/campaigns requests' do
       end
 
       it 'returns the list of available filters' do
-        get api_campaigns_path, { format: :json }, headers
+        get(path, { format: :json }, headers)
 
         expect(json[:filters]).to eq(expected_filters)
       end
@@ -95,14 +97,16 @@ describe 'api/campaigns requests' do
   end
 
   describe 'get #show' do
+    let(:path) { api_site_campaign_path(site.id, campaign) }
+
     include_examples 'JWT authentication' do
       def request(headers)
-        get api_campaign_path(campaign), { format: :json }, headers
+        get(path, { format: :json }, headers)
       end
     end
 
     it 'returns the campaign' do
-      get api_campaign_path(campaign), { format: :json }, headers
+      get(path, { format: :json }, headers)
 
       expect(response).to be_successful
       expect(json[:contact_list]).to be_present
@@ -111,6 +115,7 @@ describe 'api/campaigns requests' do
   end
 
   describe 'post #create' do
+    let(:path) { api_site_campaigns_path(site.id) }
     let(:contact_list) { create :contact_list }
 
     let(:campaign) do
@@ -126,12 +131,12 @@ describe 'api/campaigns requests' do
 
     include_examples 'JWT authentication' do
       def request(headers)
-        post api_campaigns_path, params, headers
+        post(path, params, headers)
       end
     end
 
     it 'returns newly created campaign' do
-      post api_campaigns_path, params, headers
+      post(path, params, headers)
 
       expect(response).to be_successful
       expect(json).to include campaign.except(:contact_list_id)
@@ -144,7 +149,7 @@ describe 'api/campaigns requests' do
       end
 
       it 'returns errors JSON' do
-        post api_campaigns_path, params, headers
+        post(path, params, headers)
 
         expect(response).not_to be_successful
         expect(json[:errors]).to be_present
@@ -153,6 +158,8 @@ describe 'api/campaigns requests' do
   end
 
   describe 'put #update' do
+    let(:path) { api_site_campaign_path(site.id, campaign) }
+
     let(:params) do
       {
         campaign: { name: 'Updated' },
@@ -162,12 +169,12 @@ describe 'api/campaigns requests' do
 
     include_examples 'JWT authentication' do
       def request(headers)
-        put api_campaign_path(campaign), params, headers
+        put(path, params, headers)
       end
     end
 
     it 'returns updated campaign' do
-      put api_campaign_path(campaign), params, headers
+      put(path, params, headers)
 
       expect(response).to be_successful
       expect(json).to include(name: 'Updated')
@@ -179,7 +186,7 @@ describe 'api/campaigns requests' do
       end
 
       it 'returns errors JSON' do
-        put api_campaign_path(campaign), params, headers
+        put(path, params, headers)
 
         expect(response).not_to be_successful
         expect(json[:errors]).to be_present
@@ -188,14 +195,16 @@ describe 'api/campaigns requests' do
   end
 
   describe 'post #send_out' do
+    let(:path) { send_out_api_site_campaign_path(site.id, campaign) }
+
     include_examples 'JWT authentication' do
       def request(headers)
-        post send_out_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
       end
     end
 
     it 'returns updated campaign' do
-      post send_out_api_campaign_path(campaign), { format: :json }, headers
+      post(path, { format: :json }, headers)
 
       expect(response).to be_successful
       expect(json[:status]).to eq(Campaign::SENDING)
@@ -204,32 +213,38 @@ describe 'api/campaigns requests' do
     it 'calls SendCampaign service' do
       expect(SendCampaign).to receive_service_call.with(campaign)
 
-      post send_out_api_campaign_path(campaign), { format: :json }, headers
+      post(path, { format: :json }, headers)
     end
   end
 
   describe 'post #send_test_email' do
+    let(:path) { send_out_test_email_api_site_campaign_path(site.id, campaign) }
+
     let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
     let(:params) { Hash[contacts: contacts, format: :json] }
 
     include_examples 'JWT authentication' do
       def request(headers)
-        post send_out_test_email_api_campaign_path(campaign), params, headers
+        post(path, params, headers)
       end
     end
 
     it 'calls SendTestEmailForCampaign service' do
       expect(SendTestEmailForCampaign).to receive_service_call.with(campaign, contacts)
-      post send_out_test_email_api_campaign_path(campaign), params, headers
+
+      post(path, params, headers)
+
       expect(response).to be_successful
       expect(json).to include(message: 'Test email successfully sent.')
     end
   end
 
   describe 'post #archive' do
+    let(:path) { archive_api_site_campaign_path(site.id, campaign) }
+
     include_examples 'JWT authentication' do
       def request(headers)
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
       end
     end
 
@@ -241,17 +256,17 @@ describe 'api/campaigns requests' do
       it 'archives the campaign' do
         expect_any_instance_of(Campaign).to receive(:archived!)
 
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
       end
 
       it 'replies with success status' do
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
 
         expect(response).to be_successful
       end
 
       it 'returns updated campaign' do
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
 
         expect(json[:archived_at]).to be_present
       end
@@ -259,13 +274,13 @@ describe 'api/campaigns requests' do
 
     context 'when campaign can not be archived' do
       it 'replies with error status' do
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
 
         expect(response).not_to be_successful
       end
 
       it 'returns error' do
-        post archive_api_campaign_path(campaign), { format: :json }, headers
+        post(path, { format: :json }, headers)
 
         expect(json[:error]).to eq(Campaign::INVALID_TRANSITION_TO_ARCHIVED)
       end
@@ -273,17 +288,19 @@ describe 'api/campaigns requests' do
   end
 
   describe 'delete #destroy' do
+    let(:path) { api_site_campaign_path(site.id, campaign) }
+
     let!(:campaign) { create :campaign, site: site }
     let(:params) { Hash[format: :json] }
 
     include_examples 'JWT authentication' do
       def request(headers)
-        delete api_campaign_path(campaign), params, headers
+        delete(path, params, headers)
       end
     end
 
     it 'calls SendTestEmailForCampaign service' do
-      expect { delete api_campaign_path(campaign), params, headers }
+      expect { delete(path, params, headers) }
         .to change { Campaign.count }
         .by(-1)
         .and change { Campaign.deleted.count }

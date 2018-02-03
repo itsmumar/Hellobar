@@ -24,7 +24,7 @@ class Api::WhitelabelsController < Api::ApplicationController
   private
 
   def site
-    @site ||= Site.find params[:site_id]
+    @site ||= Site.find(params[:site_id])
   end
 
   def whitelabel_params

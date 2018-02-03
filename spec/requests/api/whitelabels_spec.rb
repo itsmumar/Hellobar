@@ -1,7 +1,7 @@
 describe 'api/whitelabels requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
-  let(:headers) { api_headers_for_site_user site, user }
+  let(:headers) { api_headers_for_user(user) }
   let(:params) { Hash[format: :json] }
   let(:api_url) { 'https://api.sendgrid.com/v3' }
 
