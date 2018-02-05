@@ -8,10 +8,10 @@ class Api::ContactListsController < Api::ApplicationController
   private
 
   def site
-    @site ||= Site.find(params[:site_id])
+    @site ||= current_user.sites.find(params[:site_id])
   end
 
   def subscriber_totals
-    @subscriber_totals ||= FetchContactListTotals.new(@current_site).call
+    @subscriber_totals ||= FetchContactListTotals.new(site).call
   end
 end
