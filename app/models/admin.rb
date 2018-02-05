@@ -116,6 +116,7 @@ class Admin < ApplicationRecord
       subject: 'Your password has been reset',
       body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
         Not me, lock it down -> #{ lockdown_url }
+
 "
     )
   end
