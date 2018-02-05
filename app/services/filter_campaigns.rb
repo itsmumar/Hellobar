@@ -8,7 +8,8 @@ class FilterCampaigns
 
   DEFAULT_FILTER = :draft
 
-  def initialize(params)
+  def initialize(site, params)
+    @site = site
     @filter = params[:filter].try(:to_sym)
     @filter = DEFAULT_FILTER unless FILTERS[@filter]
   end
@@ -19,10 +20,10 @@ class FilterCampaigns
 
   private
 
-  attr_reader :filter
+  attr_reader :site, :filter
 
   def scope_for(filter)
-    Campaign.public_send(filter)
+    site.campaigns.public_send(filter)
   end
 
   def fetch_campaigns
