@@ -3,6 +3,8 @@ describe 'api/contact_lists requests' do
   let(:user) { create :user, site: site }
   let(:headers) { api_headers_for_user(user) }
 
+  before { allow(FetchContactListTotals).to receive_service_call }
+
   describe 'GET #index' do
     let(:params) { { format: :json } }
     let(:path) { api_site_contact_lists_path(site.id) }

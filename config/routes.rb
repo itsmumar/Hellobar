@@ -23,7 +23,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :contact_lists, only: %i[index]
+      resources :contact_lists, only: %i[index] do
+        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
+      end
 
       resource :whitelabel, only: %i[create show destroy] do
         member do

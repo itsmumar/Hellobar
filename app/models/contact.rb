@@ -10,7 +10,7 @@ class Contact
   attr_accessor :lid, :email, :name, :subscribed_at, :status, :error
 
   def self.from_dynamo_db(record)
-    new(lid: record['lid'],
+    new(lid: record['lid'].to_i,
         email: record['email'],
         name: record['n'],
         subscribed_at: record['ts'].present? && Time.zone.at(record['ts'].to_i),
