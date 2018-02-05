@@ -8,7 +8,7 @@ class Bill < ApplicationRecord
 
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
-      super "Can not change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
+      super "Cannot change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
     end
   end
 

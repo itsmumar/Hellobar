@@ -50,7 +50,7 @@ describe Campaign do
       expect(campaign.archived_at).to be_present
     end
 
-    context 'when campaign can not be archived' do
+    context 'when campaign cannot be archived' do
       subject(:campaign) { create(:campaign, :new) }
 
       let(:error) { Campaign::InvalidTransition }

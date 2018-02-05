@@ -257,7 +257,7 @@ describe 'api/campaigns requests' do
       end
     end
 
-    context 'when campaign can not be archived' do
+    context 'when campaign cannot be archived' do
       it 'replies with error status' do
         post archive_api_campaign_path(campaign), { format: :json }, headers
 

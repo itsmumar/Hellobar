@@ -45,10 +45,10 @@ describe CyberSourceGateway do
     context 'when original_transaction_id is nil' do
       it 'raises error' do
         expect { gateway.refund(9.99, '') }
-          .to raise_error 'Can not refund without original transaction ID'
+          .to raise_error 'Cannot refund without original transaction ID'
 
         expect { gateway.refund(9.99, nil) }
-          .to raise_error 'Can not refund without original transaction ID'
+          .to raise_error 'Cannot refund without original transaction ID'
       end
     end
   end
