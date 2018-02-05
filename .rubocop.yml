@@ -80,16 +80,19 @@ Style/WordArray:
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
 
+Style/MethodMissing:
+  Exclude:
+    - app/system/settings.rb
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
 Layout/SpaceInsideStringInterpolation:
   EnforcedStyle: space
 
 Naming/FileName:
   Exclude:
     - Guardfile
-
-Style/MethodMissing:
-  Exclude:
-    - app/system/settings.rb
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false
@@ -114,6 +117,15 @@ Rails/RequestReferer:
 # TODO enable when using Rails 5
 Rails/ApplicationRecord:
   Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - staging
+    - edge
+
 
 #### END RAILS
 
@@ -157,6 +169,8 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 176 # ideally 10
   CountComments: false
+  Exclude:
+    - app/helpers/site_elements_helper.rb
 
 Metrics/PerceivedComplexity:
   Max: 14 # ideally 7

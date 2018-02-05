@@ -12,9 +12,7 @@ class User < ApplicationRecord
   after_save :track_temporary_status_change
   after_create :create_referral_token
   after_create :add_to_onboarding_campaign
-
-  # rubocop: disable Rails/HasManyOrHasOneDependent
-  has_one :referral_token, as: :tokenizable, dependent: :destroy
+  has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
   has_many :credit_cards, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
@@ -24,16 +22,16 @@ class User < ApplicationRecord
   has_many :authentications, dependent: :destroy
 
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id',
-    dependent: :destroy
+    dependent: :destroy, inverse_of: :recipient
 
   has_many :sent_referrals, class_name: 'Referral',
-    foreign_key: 'sender_id', dependent: :destroy
+    foreign_key: 'sender_id', dependent: :destroy, inverse_of: :sender
 
   has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) },
-    class_name: 'UserOnboardingStatus', dependent: :destroy
+    class_name: 'UserOnboardingStatus', dependent: :destroy, inverse_of: :user
 
   has_one :current_onboarding_status, -> { order 'created_at DESC' },
-    class_name: 'UserOnboardingStatus'
+    class_name: 'UserOnboardingStatus', inverse_of: :user
 
   scope :join_current_onboarding_status, lambda {
     joins(:onboarding_statuses)

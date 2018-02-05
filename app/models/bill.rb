@@ -21,11 +21,9 @@ class Bill < ApplicationRecord
       super "Amount was: #{ amount&.to_f.inspect }"
     end
   end
-
-  # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :subscription, inverse_of: :bills
   belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
-  has_many :billing_attempts, -> { order 'id' }, dependent: :destroy
+  has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
   has_one :credit_card, -> { with_deleted }, through: :subscription

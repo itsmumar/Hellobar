@@ -16,6 +16,12 @@ class SiteMembershipsController < ApplicationController
     end
   end
 
+  def show
+  end
+
+  def edit
+  end
+
   def update
     if @site_membership.update(site_membership_params)
       render json: @site_membership

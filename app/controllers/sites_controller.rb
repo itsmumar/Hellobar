@@ -10,6 +10,9 @@ class SitesController < ApplicationController
 
   layout :determine_layout
 
+  def index
+  end
+
   def new
     @site = Site.new(url: params[:url])
 
@@ -27,6 +30,9 @@ class SitesController < ApplicationController
       session[:promotional_code] = params[:promotional_code]
       validate_and_redirect_to_google_auth
     end
+  end
+
+  def edit
   end
 
   def show

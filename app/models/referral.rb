@@ -9,11 +9,11 @@ class Referral < ApplicationRecord
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
 
-  belongs_to :sender, class_name: 'User'
-  belongs_to :recipient, class_name: 'User'
+  belongs_to :sender, class_name: 'User', inverse_of: :sent_referrals
+  belongs_to :recipient, class_name: 'User', inverse_of: :received_referral
   belongs_to :site
 
-  has_one :referral_token, as: :tokenizable, dependent: :destroy
+  has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
 
   validates :sender_id, presence: true
   validates :email, presence: true, format: { with: Devise.email_regexp }

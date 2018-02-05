@@ -4,9 +4,16 @@ module SiteElementsHelper
   def activity_message_for_conversion(site_element, related_site_elements)
     message = ''
     message = activity_message_append_number_of_units(site_element, message)
+
     unless related_site_elements.empty?
-      message = activity_message_append_conversion_text(site_element, related_site_elements, message)
+      message =
+        activity_message_append_conversion_text(
+          site_element,
+          related_site_elements,
+          message
+        )
     end
+
     message
   end
 
@@ -18,8 +25,15 @@ module SiteElementsHelper
 
   def activity_message_append_conversion_text(site_element, related_site_elements, message)
     unless [site_elements_group_conversion_rate(related_site_elements), site_element.conversion_rate].any?(&:infinite?)
-      message = activity_message_append_comparison_text(site_element, site_element.conversion_rate, site_elements_group_conversion_rate(related_site_elements), message)
+      message =
+        activity_message_append_comparison_text(
+          site_element,
+          site_element.conversion_rate,
+          site_elements_group_conversion_rate(related_site_elements),
+          message
+        )
     end
+
     message = activity_message_append_significance_text(site_element, related_site_elements, message)
     message
   end
