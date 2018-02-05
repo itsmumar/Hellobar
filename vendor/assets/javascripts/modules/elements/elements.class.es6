@@ -17,8 +17,6 @@ hellobar.defineModule('elements.class',
       'hellobar-takeover': 'takeover'
     };
 
-    let iosFocusInterval = null;
-
     class SiteElement {
 
       constructor(props) {
@@ -277,7 +275,11 @@ hellobar.defineModule('elements.class',
           container.style.right = 0;
         } else {
           if (type === 'Bar') {
-            container.style.maxHeight = (element.clientHeight + 8) + 'px';
+            var height = element.clientHeight;
+            if (typeof element.classList === 'undefined' || element.classList.contains('bar-top')) {
+              height += 8;
+            }
+            container.style.maxHeight = height + 'px';
           } else if (type === 'Slider') {
             var containerWidth = window.innerWidth;
             var newWidth = Math.min(maxSliderSize + 24, containerWidth - 24);
@@ -468,93 +470,56 @@ hellobar.defineModule('elements.class',
         e.preventDefault();
         var element = this;
 
-        if (this.type == "Bar") {
-          iosFocusInterval = setTimeout(function () {
-            window.scrollTo(0, element.w.offsetTop);
-          }, 500);
-        }
-        else if (this.type == "Slider") {
-          this.w.style.position = "fixed";
-          iosFocusInterval = setInterval(function () {
-            element.w.style.left = window.pageXOffset + "px";
-            element.w.style.top = window.pageYOffset + "px";
-          }, 200);
-        }
-        else if (this.type == "Takeover" || this.type == "Modal") {
-          this.updateStyleFor(false);
-        }
+        this.keyboardActive = true;
+        this.scrollListener = this.iosOnScroll.bind(this);
+        window.addEventListener('scroll', this.scrollListener);
       }
 
       iosKeyboardHide(e) {
         e.preventDefault();
 
-        if (iosFocusInterval != null) {
-          clearInterval(iosFocusInterval);
-          iosFocusInterval = null;
-        }
+        this.keyboardActive = false;
 
-        if (this.type == "Takeover" || this.type == "Modal" || this.type == "Slider") {
-          this.updateStyleFor(true);
+        if (this.scrollListener) {
+          window.removeEventListener('scroll', this.scrollListener);
+          window.cancelAnimationFrame(this.animationRequestId);
+          window.requestAnimationFrame(this.resetStyles.bind(this));
         }
       }
 
-      updateStyleFor(reset) {
+      iosOnScroll(e) {
         var element = this;
-        var contentDocument = element.w.contentDocument;
-        var hbElement =
-          contentDocument.getElementById('hellobar-modal') ||
-          contentDocument.getElementById('hellobar-takeover') ||
-          contentDocument.getElementById('hellobar-slider');
 
-        if (reset) {
-          this.w.style.position = "";
-          this.w.style.height = "";
-          this.w.style.maxHeight = "";
-          this.w.style.width = "";
-          this.w.style.left = "";
-          this.w.style.top = "";
-          this.w.style["-webkit-transform"] = "";
-
-          hbElement.style.position = "";
-          hbElement.style.overflowY = "";
-          hbElement.style.maxHeight = "";
-          hbElement.style.height = "";
-          hbElement.style.top = "";
-          hbElement.style.left = "";
-          hbElement.style.transform = "";
-          hbElement.style.width = "";
-        } else {
-          if (this.type == 'Slider') {
-            element.w.style.position = "fixed";
-          } else {
+        this.animationRequestId = window.requestAnimationFrame(function() {
+          if (element.keyboardActive) {
             element.w.style.position = "absolute";
-          }
+            element.w.style.top = window.pageYOffset + "px";
 
-          iosFocusInterval = setInterval(function () {
-            element.w.style.height = window.innerHeight + "px";
-            element.w.style.maxHeight = window.innerHeight + "px";
-            element.w.style.width = window.innerWidth + "px";
-            element.w.style.left = "0";
-            element.w.style.top = "0";
-            element.w.style["-webkit-transform"] = "scale(0.9)";
+            if (element.type !== "Bar") {
+              var viewportHeight = null;
+              if (window.innerHeight > window.innerWidth) {
+                // portrait mode
+                viewportHeight = window.innerHeight * 0.66;
+              } else {
+                // landscape mode
+                viewportHeight = window.innerHeight * 0.50;
+              }
 
-            if (hbElement != undefined && hbElement != null) {
-              hbElement.style.position = "absolute";
-              hbElement.style.overflowY = "scroll";
-              hbElement.style.maxHeight = "100%";
-              hbElement.style.height = "100%";
-              hbElement.style.top = "0";
-              hbElement.style.left = "0";
-              hbElement.style.transform = "none";
-              hbElement.style.width = "100%";
+              element.w.style.height = viewportHeight + "px";
+              element.w.style.maxHeight = viewportHeight + "px";
             }
-          }, 500);
+          }
+        });
+      }
 
-          hbElement.scrollIntoView();
-          contentDocument.getElementsByClassName('hb-content-wrapper')[0].scrollIntoView();
-          window.scrollTo(0, window.innerHeight / 2);
+      resetStyles() {
+        this.w.style.position = "";
+        this.w.style.top = "";
+
+        if (this.type !== "Bar") {
+          this.w.style.height = ""
+          this.w.style.maxHeight = ""
         }
-        return false;
       }
 
       // Necessary convenience method for saying this
