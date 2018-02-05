@@ -31,21 +31,19 @@ class Campaign < ApplicationRecord
     FetchCampaignStatistics.new(self).call
   end
 
-  def sent!
-    update!(status: SENT, sent_at: Time.current)
+  STATUSES.each do |key|
+    define_method("#{ key }?") do
+      status == key
+    end
   end
 
-  def sent?
-    status == SENT
+  def sent!
+    update!(status: SENT, sent_at: Time.current)
   end
 
   def archived!
     raise(InvalidTransition, INVALID_TRANSITION_TO_ARCHIVED) unless sent?
 
     update!(status: ARCHIVED, archived_at: Time.current)
-  end
-
-  def archived?
-    status == ARCHIVED
   end
 end
