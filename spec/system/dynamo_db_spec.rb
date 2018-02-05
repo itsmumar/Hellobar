@@ -39,12 +39,32 @@ describe DynamoDB do
     )
   end
 
+  let(:put_item_output) do
+    Aws::DynamoDB::Types::PutItemOutput.new(
+      attributes: {
+        id: id
+      },
+      consumed_capacity: consumed_capacity
+    )
+  end
+
+  let(:delete_item_output) do
+    Aws::DynamoDB::Types::DeleteItemOutput.new(
+      attributes: {
+        id: id
+      },
+      consumed_capacity: consumed_capacity
+    )
+  end
+
   let(:client) do
     Aws::DynamoDB::Client.new(
       stub_responses: {
         query: query_output,
         batch_get_item: batch_get_item_output,
-        update_item: update_item_output
+        update_item: update_item_output,
+        put_item: put_item_output,
+        delete_item: delete_item_output
       }
     )
   end
@@ -223,6 +243,40 @@ describe DynamoDB do
       }
 
       response = dynamo_db.update_item params
+
+      expect(response.attributes).to eq id: id
+      expect(response.consumed_capacity.table_name).to eq table_name
+      expect(response.consumed_capacity.capacity_units).to eq capacity_units
+    end
+  end
+
+  describe '#delete_item' do
+    it 'sends #delete_item request to DynamoDB' do
+      params = {
+        key: {
+          id: id
+        },
+        table_name: table_name
+      }
+
+      response = dynamo_db.delete_item params
+
+      expect(response.attributes).to eq id: id
+      expect(response.consumed_capacity.table_name).to eq table_name
+      expect(response.consumed_capacity.capacity_units).to eq capacity_units
+    end
+  end
+
+  describe '#put_item' do
+    it 'sends #put_item request to DynamoDB' do
+      params = {
+        item: {
+          email: 'email@example.com'
+        },
+        table_name: table_name
+      }
+
+      response = dynamo_db.put_item params
 
       expect(response.attributes).to eq id: id
       expect(response.consumed_capacity.table_name).to eq table_name
