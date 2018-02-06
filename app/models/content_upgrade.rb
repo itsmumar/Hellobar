@@ -45,6 +45,6 @@ class ContentUpgrade < SiteElement
   end
 
   def display_title
-    content_upgrade_title.present? ? content_upgrade_title : offer_headline
+    content_upgrade_title.presence || offer_headline
   end
 end

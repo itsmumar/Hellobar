@@ -2,7 +2,6 @@ json.ignore_nil!
 json.cache! site_element do
   json.extract! site_element,
     :id,
-
     :answer1,
     :answer1response,
     :answer1caption,
@@ -13,9 +12,7 @@ json.cache! site_element do
     :answer2link_text,
     :use_question,
     :question,
-
     :contact_list_id,
-
     :use_default_image,
     :image_url,
     :image_large_url,
@@ -55,9 +52,7 @@ json.cache! site_element do
     :wiggle_button,
     :wordpress_bar_id,
     :blocks,
-
     :fonts,
-
     # alert bar
     :sound,
     :notification_delay,

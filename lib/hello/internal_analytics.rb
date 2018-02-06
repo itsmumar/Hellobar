@@ -54,7 +54,7 @@ module Hello
           name            = registered_test['name']
           values          = registered_test['values']
           index           = registered_test['index']
-          weights         = registered_test['weights'].present? ? registered_test['weights'] : []
+          weights         = registered_test['weights'].presence || []
           user_start_date = registered_test['user_start_date']
           register_test(name, values, index, weights, user_start_date)
         end

@@ -4,9 +4,7 @@ namespace :billing do
     lock_file_path = Rails.root.join('tmp', 'billing.lock')
     lock_file = File.open(lock_file_path, File::RDWR | File::CREAT, 0644)
     result = lock_file.flock(File::LOCK_EX | File::LOCK_NB)
-    if result == false
-      raise 'Could not get lock, process already running likely..'
-    end
+    raise 'Could not get lock, process already running likely..' if result == false
     # Write this Process ID
     lock_file.write(Process.pid.to_s)
     lock_file.fdatasync

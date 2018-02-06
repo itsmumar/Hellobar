@@ -14,7 +14,7 @@ class Subscription < ApplicationRecord
   belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
   has_many :active_bills, -> { merge(Bill.active) }, class_name: 'Bill', inverse_of: :subscription
-  has_one :last_paid_bill, -> { paid.order end_date: :desc }, class_name: 'Bill'
+  has_one :last_paid_bill, -> { paid.order end_date: :desc }, class_name: 'Bill', inverse_of: :subscription
 
   after_initialize :set_initial_values
   after_create :mark_user_onboarding_as_bought_subscription!

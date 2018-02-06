@@ -12,7 +12,6 @@ describe RuleSerializer do
       match: rule.match,
       description: rule.to_sentence,
       editable: true,
-
       conditions: [{
         id: condition.id,
         rule_id: rule.id,

@@ -111,14 +111,15 @@ class Admin < ApplicationRecord
 
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Settings.host)
 
+    body = "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
+        Not me, lock it down -> #{ lockdown_url }
+
+    "
+
     Pony.mail(
       to: email,
       subject: 'Your password has been reset',
-      body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
-
-        Not me, lock it down -> #{ lockdown_url }
-
-"
+      body: body
     )
   end
 

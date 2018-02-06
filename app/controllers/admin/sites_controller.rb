@@ -23,9 +23,7 @@ class Admin::SitesController < AdminController
   def regenerate
     site = Site.find_by(id: params[:id])
 
-    if site.nil?
-      return render(json: { message: 'Site was not found' }, status: 404)
-    end
+    return render(json: { message: 'Site was not found' }, status: 404) if site.nil?
 
     begin
       GenerateAndStoreStaticScript.new(site).call
