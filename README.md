@@ -209,7 +209,7 @@ https://crossover.atlassian.net/wiki/display/XOHB/Development+workflow
 
 ## Site script installation in development
 
-We have a Lambda function checking if the site script is installed. It sends a POST request to the Rails app
+We have Lambda function checking if the site script is installed. It sends a POST request to the Rails app
 with appropriate value. Since there is no way to make AWS Lambda communicate with your locally installed
 application, the only way to mark a script as installed is to update it from the console:
 
