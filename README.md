@@ -122,6 +122,16 @@ Compiling custom icons into a font file:
 https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+font+file
 
 
+## Testing generated site scripts
+
+Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
+
+You can specify `id` param for the exact site you want: `http://localhost:3000/test_sites/133`
+
+If you are working on css/js of script you might want to fully regenerate script on every reload.
+Use the `fresh` param then: `http://localhost:3000/test_site?fresh`
+
+
 
 ## Running specs
 
@@ -153,7 +163,7 @@ bundle exec rspec spec
 ```
 
 
-### Rails specs "donts"
+### Rails specs "don'ts"
 
 * don’t use `around`; use `before` and `after` instead
 * don’t use `travel_to`, use `Timecop.travel` instead
@@ -197,9 +207,21 @@ https://crossover.atlassian.net/wiki/display/XOHB/Development+workflow
 
 
 
+## Site script installation in development
+
+We have a Lambda function checking if the site script is installed. It sends a POST request to the Rails app
+with appropriate value. Since there is no way to make AWS Lambda communicate with your locally installed
+application, the only way to mark a script as installed is to update it from the console:
+
+```ruby
+Site.first.update_column :script_installed_at, Time.current
+```
+
+
 ## Deployments
 
-To do a production deploy from **master**:
+In order to do deployments, your public ssh key needs to be added to the appropriate server(s) first.
+Then to do a production deploy from **master**:
 
 ```
 cap production deploy
@@ -258,16 +280,6 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ```
 
 
-## Testing generated site scripts
-
-Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
-
-#### Options
-
-You can specify `id` param to exact site you need: `http://localhost:3000/test_sites/133`
-
-If you are working on css/js of script you might want to fully regenerate script on every reload
-just use `fresh` param then: `http://localhost:3000/test_site?fresh`
 
 ## Live testing/QA info
 
