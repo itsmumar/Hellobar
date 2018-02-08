@@ -1,21 +1,15 @@
 class FilterCampaigns
-  FILTERS = {
-    draft: 'Draft',
-    sent: 'Sent',
-    archived: 'Archived',
-    deleted: 'Deleted'
-  }.freeze
+  FILTERS = %i[sent drafts archived].freeze
+  DEFAULT_FILTER = :sent
 
-  DEFAULT_FILTER = :draft
-
-  def initialize(site, params)
+  def initialize site, params = {}
     @site = site
-    @filter = params[:filter].try(:to_sym)
-    @filter = DEFAULT_FILTER unless FILTERS[@filter]
+    @filter = params[:filter]&.to_sym
+    @filter = DEFAULT_FILTER unless @filter.in? FILTERS
   end
 
   def call
-    { campaigns: fetch_campaigns, filters: build_filters }
+    [campaigns, statistics]
   end
 
   private
@@ -26,20 +20,13 @@ class FilterCampaigns
     site.campaigns.public_send(filter)
   end
 
-  def fetch_campaigns
+  def campaigns
     @campaigns ||= scope_for(filter).to_a
   end
 
-  def build_filters
-    FILTERS.map do |key, title|
-      active = key == filter
-
-      {
-        key: key,
-        title: title,
-        active: active,
-        count: active ? fetch_campaigns.size : scope_for(key).count
-      }
+  def statistics
+    FILTERS.each.with_object(total: site.campaigns.size) do |filter, stats|
+      stats[filter] = scope_for(filter).size
     end
   end
 end

@@ -79,6 +79,7 @@ class FetchCampaignStatistics
 
   def recipients_count
     if campaign.sent?
+      # this number will be updated from `email_statistics` DynamoDB table
       0
     else
       FetchContactListTotals.new(site, id: contact_list_id).call
