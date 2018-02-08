@@ -1,7 +1,7 @@
 describe 'api/campaigns requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
-  let(:campaign) { create :campaign, site: site }
+  let(:campaign) { create :campaign, :archived, site: site }
   let(:contact_list) { campaign.contact_list }
 
   let(:headers) { api_headers_for_site_user site, user }
@@ -38,16 +38,18 @@ describe 'api/campaigns requests' do
       .and_return recipients_response
   end
 
-  describe 'get #index' do
+  describe 'GET #index' do
     include_examples 'JWT authentication' do
       def request(headers)
         get api_campaigns_path, { format: :json }, headers
       end
     end
 
-    it 'returns campaigns for the site in the JSON format' do
-      get api_campaigns_path, { format: :json }, headers
+    before do
+      get api_campaigns_path(filter: 'archived'), { format: :json }, headers
+    end
 
+    it 'returns campaigns for the site' do
       expect(response).to be_successful
 
       campaigns = json[:campaigns]
@@ -76,25 +78,19 @@ describe 'api/campaigns requests' do
       )
     end
 
-    describe 'filters' do
-      let(:expected_filters) do
-        [
-          { 'key' => 'draft', 'title' => 'Draft', 'active' => true, 'count' => 1 },
-          { 'key' => 'sent', 'title' => 'Sent', 'active' => false, 'count' => 0 },
-          { 'key' => 'archived', 'title' => 'Archived', 'active' => false, 'count' => 0 },
-          { 'key' => 'deleted', 'title' => 'Deleted', 'active' => false, 'count' => 0 }
-        ]
-      end
+    it 'returns campaigns statistics' do
+      statistics = {
+        total: 1,
+        sent: 0,
+        drafts: 0,
+        archived: 1
+      }
 
-      it 'returns the list of available filters' do
-        get api_campaigns_path, { format: :json }, headers
-
-        expect(json[:filters]).to eq(expected_filters)
-      end
+      expect(json[:statistics]).to eq statistics.deep_stringify_keys
     end
   end
 
-  describe 'get #show' do
+  describe 'GET #show' do
     include_examples 'JWT authentication' do
       def request(headers)
         get api_campaign_path(campaign), { format: :json }, headers
@@ -110,7 +106,7 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'post #create' do
+  describe 'POST #create' do
     let(:contact_list) { create :contact_list }
 
     let(:campaign) do
@@ -152,7 +148,9 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'put #update' do
+  describe 'PUT #update' do
+    let(:campaign) { create :campaign, :new, site: site }
+
     let(:params) do
       {
         campaign: { name: 'Updated' },
@@ -187,7 +185,9 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'post #send_out' do
+  describe 'POST #send_out' do
+    let(:campaign) { create :campaign, :new, site: site }
+
     include_examples 'JWT authentication' do
       def request(headers)
         post send_out_api_campaign_path(campaign), { format: :json }, headers
@@ -208,7 +208,7 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'post #send_test_email' do
+  describe 'POST #send_test_email' do
     let(:contacts) { [{ email: 'email@example.com', name: 'Name' }] }
     let(:params) { Hash[contacts: contacts, format: :json] }
 
@@ -226,7 +226,7 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'post #archive' do
+  describe 'POST #archive' do
     include_examples 'JWT authentication' do
       def request(headers)
         post archive_api_campaign_path(campaign), { format: :json }, headers
@@ -272,7 +272,7 @@ describe 'api/campaigns requests' do
     end
   end
 
-  describe 'delete #destroy' do
+  describe 'DELETE #destroy' do
     let!(:campaign) { create :campaign, site: site }
     let(:params) { Hash[format: :json] }
 
