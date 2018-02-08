@@ -14,7 +14,7 @@ describe 'api/authentications requests' do
         user = create(:user, site: site)
         token = JsonWebToken.encode(user_id: user.id)
         callback_url = 'http://localhost'
-        redirect_url = "#{ callback_url }?token=#{ token }"
+        redirect_url = "#{ callback_url }?token=#{ token }&site_id=#{ site.id }"
 
         login_as user, scope: :user, run_callbacks: false
 
