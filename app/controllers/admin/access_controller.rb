@@ -64,6 +64,9 @@ class Admin::AccessController < AdminController
     render_invalid_credentials
   end
 
+  def step1
+  end
+
   def step2
     @admin = Admin.find(session[:login_admin])
   end

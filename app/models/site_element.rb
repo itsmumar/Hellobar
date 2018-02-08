@@ -39,7 +39,7 @@ class SiteElement < ApplicationRecord
 
   belongs_to :rule, touch: true
   belongs_to :contact_list
-  belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy
+  belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy, inverse_of: :site_elements
   belongs_to :theme
   belongs_to :font
 
@@ -180,9 +180,7 @@ class SiteElement < ApplicationRecord
         BAR_TYPES.each_key do |subtype|
           if TEMPLATE_NAMES.include?(subtype)
             types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            if types.include?(type)
-              templates << "#{ type.downcase }_#{ subtype }"
-            end
+            templates << "#{ type.downcase }_#{ subtype }" if types.include?(type)
           else
             templates << "#{ type.downcase }_#{ subtype }"
           end

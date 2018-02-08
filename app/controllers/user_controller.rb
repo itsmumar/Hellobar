@@ -23,6 +23,9 @@ class UserController < ApplicationController
     end
   end
 
+  def edit
+  end
+
   def update
     active_before_update = @user.active?
 

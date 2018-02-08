@@ -19,8 +19,6 @@ class Site < ApplicationRecord
   acts_as_paranoid
 
   has_one :whitelabel, dependent: :destroy
-
-  # rubocop: disable Rails/HasManyOrHasOneDependent
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules
@@ -30,8 +28,8 @@ class Site < ApplicationRecord
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
-  has_many :contact_lists, -> { order 'name' }, dependent: :destroy
-  has_many :subscriptions, -> { order 'id' }, dependent: :destroy
+  has_many :contact_lists, -> { order 'name' }, dependent: :destroy, inverse_of: :site
+  has_many :subscriptions, -> { order 'id' }, dependent: :destroy, inverse_of: :site
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site

@@ -212,13 +212,10 @@ describe 'Admin::Sites requests' do
         expect { add_free_days }
           .to change { next_bill.reload.start_date }
           .by(10.days) \
-
           .and change { next_bill.reload.end_date }
           .by(10.days) \
-
           .and change { next_bill.reload.bill_at }
           .by(10.days) \
-
           .and change { current_bill.reload.end_date }
           .by(10.days)
       end
@@ -234,7 +231,6 @@ describe 'Admin::Sites requests' do
         expect { add_free_days }
           .to change { current_bill.reload.end_date }
           .by(10.days) \
-
           .and change { current_subscription.reload.trial_end_date }
           .by(10.days)
       end

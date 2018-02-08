@@ -101,7 +101,7 @@ class Condition < ApplicationRecord
   end
 
   def segment_data
-    Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
+    Hello::Segments::USER.find { |s| s[:key] == segment_key } || {}
   end
 
   def timezone_offset

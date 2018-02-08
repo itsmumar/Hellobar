@@ -30,9 +30,7 @@ class CyberSourceGateway < ActiveMerchant::Billing::CyberSourceGateway
     amount = amount_in_dollars.to_f * 100
     check_amount!(amount)
 
-    if original_transaction_id.blank?
-      raise 'Can not refund without original transaction ID'
-    end
+    raise 'Cannot refund without original transaction ID' if original_transaction_id.blank?
 
     super(amount, original_transaction_id)
   end

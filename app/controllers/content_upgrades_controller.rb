@@ -23,6 +23,10 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade.caption = 'Almost there! Please complete this form and click the button below to gain instant access.'
   end
 
+  def show
+    render :show
+  end
+
   def edit
     @styles = @site.content_upgrade_styles
   end

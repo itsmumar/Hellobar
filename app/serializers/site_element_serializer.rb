@@ -1,33 +1,33 @@
 class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id,
-
+    #
     # settings
     :type, :element_subtype, :settings, :view_condition, :phone_number,
     :phone_country_code, :blocks, :email_redirect,
-
+    #
     # text
     :headline, :caption, :content, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
     :preset_rule_name, :disclaimer, :offer_text, :offer_headline,
-
+    #
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
-
+    #
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
     :animated, :wiggle_button, :theme, :theme_id,
-
+    #
     # image
     :image_url, :image_large_url, :image_modal_url, :image_style,
     :image_placement, :active_image_id, :image_file_name, :use_default_image,
     :image_opacity,
-
+    #
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
-
+    #
     # alert type
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
-
+    #
     # other
     :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
     :open_in_new_window, :placement, :default_email_thank_you_text

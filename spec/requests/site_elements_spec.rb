@@ -177,12 +177,12 @@ describe 'SiteElements requests' do
     end
 
     describe 'GET #new' do
-      def get_new # rubocop: disable Naming/AccessorMethodName
+      def send_request
         get new_site_site_element_path site, format: :json
       end
 
       it 'defaults the font_id to the column default' do
-        get_new
+        send_request
 
         default_font_id = SiteElement.columns_hash['font_id'].default
 
@@ -193,7 +193,7 @@ describe 'SiteElements requests' do
         let!(:subscription) { create(:subscription, :pro, :paid, site: site) }
 
         it 'defaults branding to false if pro' do
-          get_new
+          send_request
           expect(json).to include show_branding: false
         end
       end
@@ -202,12 +202,12 @@ describe 'SiteElements requests' do
         let!(:subscription) { create(:subscription, :free, site: site) }
 
         it 'defaults branding to true' do
-          get_new
+          send_request
           expect(json).to include show_branding: true
         end
 
         it 'sets `theme_id` to `autodetect`' do
-          get_new
+          send_request
           expect(json).to include theme_id: 'autodetect'
         end
       end

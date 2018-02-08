@@ -20,26 +20,6 @@ AllCops:
 
 #### BEGIN STYLES
 
-Style/Documentation:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/MethodDefParentheses:
-  Enabled: false
-
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
-Style/NumericLiterals:
-  Enabled: false
-
 Layout/AlignHash:
   Enabled: false
 
@@ -58,6 +38,49 @@ Layout/IndentArray:
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Layout/SpaceInsideStringInterpolation:
+  EnforcedStyle: space
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - Guardfile
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/MethodMissing:
+  Exclude:
+    - app/system/settings.rb
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
 # Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
 # SupportedOctalStyles: zero_with_o, zero_only
 Style/NumericLiteralPrefix:
@@ -68,52 +91,41 @@ Style/NumericLiteralPrefix:
 Style/RegexpLiteral:
   Enabled: false
 
-Style/EmptyMethod:
-  EnforcedStyle: expanded
-
-Style/BlockDelimiters:
-  EnforcedStyle: braces_for_chaining
-
 Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
   # smaller than a certain size.  The rule is only applied to arrays
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
 
-Layout/SpaceInsideStringInterpolation:
-  EnforcedStyle: space
-
-Naming/FileName:
-  Exclude:
-    - Guardfile
-
-Style/MethodMissing:
-  Exclude:
-    - app/system/settings.rb
-
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
 #### END STYLES
+
 
 #### BEGIN RAILS
 
-# TODO: enable after updating rails/rspec
-Rails/HttpPositionalArguments:
+# TODO enable when using Rails 5
+Rails/ApplicationRecord:
   Enabled: false
 
-# Configuration parameters: Blacklist.
-# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
-Rails/SkipsModelValidations:
+# TODO: enable after updating rails/rspec
+Rails/HttpPositionalArguments:
   Enabled: false
 
 # SupportedStyles: referer, referrer
 Rails/RequestReferer:
   EnforcedStyle: referrer
 
-# TODO enable when using Rails 5
-Rails/ApplicationRecord:
+# Configuration parameters: Blacklist.
+# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
+Rails/SkipsModelValidations:
   Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - staging
+    - edge
 
 #### END RAILS
 
@@ -157,6 +169,8 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 176 # ideally 10
   CountComments: false
+  Exclude:
+    - app/helpers/site_elements_helper.rb
 
 Metrics/PerceivedComplexity:
   Max: 14 # ideally 7
