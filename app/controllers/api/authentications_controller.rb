@@ -11,7 +11,7 @@ class Api::AuthenticationsController < ApplicationController
   private
 
   def redirect_url
-    "#{ params[:callback_url] }?token=#{ token }"
+    "#{ params[:callback_url] }?token=#{ token }&site_id=#{ current_site.id }"
   end
 
   def token
