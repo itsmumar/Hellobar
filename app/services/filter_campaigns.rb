@@ -25,7 +25,7 @@ class FilterCampaigns
   end
 
   def statistics
-    FILTERS.each.with_object(Hash[total: site.campaigns.size]) do |filter, stats|
+    FILTERS.each.with_object(total: site.campaigns.size) do |filter, stats|
       stats[filter] = scope_for(filter).size
     end
   end
