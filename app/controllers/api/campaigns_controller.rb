@@ -19,14 +19,9 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def create
-    campaign = @current_site.campaigns.build campaign_params
-
-    if campaign.save
-      render json: CampaignSerializer.new(campaign)
-    else
-      render json: { errors: campaign.errors.messages },
-        status: :unprocessable_entity
-    end
+    campaign = @current_site.campaigns.build(campaign_params)
+    campaign.save!
+    render json: CampaignSerializer.new(campaign)
   end
 
   def update
