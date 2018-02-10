@@ -11,10 +11,10 @@ class Api::AuthenticationsController < ApplicationController
   private
 
   def redirect_url
-    "#{ params[:callback_url] }?site_id=#{ current_site.id }&token=#{ token }"
+    "#{ params[:callback_url] }?token=#{ token }&site_id=#{ current_site.id }"
   end
 
   def token
-    JsonWebToken.encode Hash[user_id: current_user.id, site_id: current_site.id]
+    JsonWebToken.encode(user_id: current_user.id)
   end
 end

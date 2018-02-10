@@ -2,7 +2,7 @@ describe 'api/subscribers requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
   let(:contact_list) { create :contact_list, site: site }
-  let(:headers) { api_headers_for_site_user site, user }
+  let(:headers) { api_headers_for_user(user) }
   let(:params) { Hash[format: :json] }
 
   let(:subscribers) do
@@ -42,7 +42,7 @@ describe 'api/subscribers requests' do
         .with(query, fetch_all: false)
         .and_return({})
 
-      get api_contact_list_subscribers_path(contact_list),
+      get api_site_contact_list_subscribers_path(site, contact_list),
         params,
         headers
 
@@ -54,7 +54,7 @@ describe 'api/subscribers requests' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'email@example.com'] }
 
     def send_request
-      post api_contact_list_subscribers_path(contact_list),
+      post api_site_contact_list_subscribers_path(site, contact_list),
         params.merge(subscriber: subscriber_params),
         headers
     end
@@ -110,7 +110,7 @@ describe 'api/subscribers requests' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'newemail@example.com'] }
 
     def send_request
-      patch api_contact_list_subscriber_path(contact_list, email: email),
+      patch api_site_contact_list_subscriber_path(site, contact_list, email: email),
         params.merge(email: email, subscriber: subscriber_params),
         headers
     end
@@ -221,7 +221,7 @@ describe 'api/subscribers requests' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'newemail@example.com'] }
 
     def send_request
-      delete api_contact_list_subscriber_path(contact_list, email: email),
+      delete api_site_contact_list_subscriber_path(site, contact_list, email: email),
         params.merge(email: email, subscriber: subscriber_params),
         headers
     end

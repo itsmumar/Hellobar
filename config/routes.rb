@@ -14,23 +14,29 @@ Rails.application.routes.draw do
     # Used by Vue.js
     get :authenticate, to: 'authentications#create'
 
-    resources :campaigns, except: %i[new edit] do
-      member do
-        post :send_out
-        post :send_out_test_email
-        post :archive
-      end
-    end
-
-    resources :contact_lists, only: %i[index] do
-      resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
-    end
-
     resources :sites, only: [] do
+      resources :campaigns, except: %i[new edit] do
+        member do
+          post :send_out
+          post :send_out_test_email
+          post :archive
+        end
+      end
+
+      resources :contact_lists, only: %i[index] do
+        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
+      end
+
       resource :whitelabel, only: %i[create show destroy] do
         member do
           post :validate
         end
+      end
+    end
+
+    resources :users, only: [] do
+      collection do
+        get :current
       end
     end
 

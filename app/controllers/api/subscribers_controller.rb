@@ -20,8 +20,12 @@ class Api::SubscribersController < Api::ApplicationController
 
   private
 
+  def site
+    @site ||= current_user.sites.find(params[:site_id])
+  end
+
   def contact_list
-    @contact_list ||= @current_site.contact_lists.find(params[:contact_list_id])
+    @contact_list ||= site.contact_lists.find(params[:contact_list_id])
   end
 
   def subscriber_params
