@@ -4,7 +4,7 @@ class Api::CampaignsController < Api::ApplicationController
   rescue_from Campaign::InvalidTransition, with: :handle_error
 
   def index
-    campaigns, statistics = FilterCampaigns.new(@current_site, params).call
+    campaigns, statistics = FilterCampaigns.new(site, params).call
 
     data = {
       campaigns: campaigns.map { |campaign| CampaignSerializer.new(campaign) },
@@ -19,7 +19,7 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def create
-    campaign = @current_site.campaigns.build(campaign_params)
+    campaign = site.campaigns.build(campaign_params)
     campaign.save!
     render json: CampaignSerializer.new(campaign)
   end
@@ -51,8 +51,12 @@ class Api::CampaignsController < Api::ApplicationController
 
   private
 
+  def site
+    @site ||= current_user.sites.find(params[:site_id])
+  end
+
   def find_campaign
-    @campaign = @current_site.campaigns.find(params[:id])
+    @campaign = site.campaigns.find(params[:id])
   end
 
   def campaign_params
