@@ -15,37 +15,43 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def show
-    render json: CampaignSerializer.new(@campaign)
+    render json: @campaign
   end
 
   def create
     campaign = site.campaigns.build(campaign_params)
     campaign.save!
-    render json: CampaignSerializer.new(campaign)
+
+    render json: campaign
   end
 
   def update
     UpdateCampaign.new(@campaign, campaign_params).call
-    render json: CampaignSerializer.new(@campaign)
+
+    render json: @campaign
   end
 
   def send_out
     SendCampaign.new(@campaign).call
-    render json: CampaignSerializer.new(@campaign)
+
+    render json: @campaign
   end
 
   def send_out_test_email
     SendTestEmailForCampaign.new(@campaign, params[:contacts]).call
+
     render json: { message: 'Test email successfully sent.' }
   end
 
   def archive
     @campaign.archived!
-    render json: CampaignSerializer.new(@campaign)
+
+    render json: @campaign
   end
 
   def destroy
     @campaign.destroy
+
     render json: { message: 'Campaign successfully deleted.' }
   end
 
