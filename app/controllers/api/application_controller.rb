@@ -43,7 +43,7 @@ class Api::ApplicationController < ApplicationController
   end
 
   def handle_error(exception)
-    render json: { error: exception.message },
+    render json: { errors: [exception.message] },
       status: :unprocessable_entity
   end
 end
