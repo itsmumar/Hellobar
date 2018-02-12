@@ -7,6 +7,7 @@ class ValidateWhitelabel
     validate_at_sendgrid
     validate_sendgrid_response
     parse_validation_result
+    whitelabel
   end
 
   private
