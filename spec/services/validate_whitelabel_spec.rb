@@ -74,15 +74,23 @@ describe ValidateWhitelabel do
     end
 
     context 'when validation succeeds' do
-      it 'marks whitelabel as valid' do
+      before do
         stub_request(:post, url)
           .to_return status: 200, body: validation_succeeded_api_response.to_json
+      end
 
+      it 'marks whitelabel as valid' do
         expect {
           ValidateWhitelabel.new(whitelabel: whitelabel).call
         }.not_to raise_exception
 
         expect(whitelabel).to be_valid
+      end
+
+      it 'returns whitelabel' do
+        result = ValidateWhitelabel.new(whitelabel: whitelabel).call
+
+        expect(result).to eql whitelabel
       end
     end
   end
