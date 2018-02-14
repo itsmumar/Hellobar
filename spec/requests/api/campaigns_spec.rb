@@ -154,7 +154,7 @@ describe 'api/campaigns requests' do
   end
 
   describe 'PUT #update' do
-    let(:campaign) { create :campaign, :new, site: site }
+    let(:campaign) { create :campaign, :draft, site: site }
     let(:path) { api_site_campaign_path(site.id, campaign) }
 
     let(:params) do
@@ -192,7 +192,7 @@ describe 'api/campaigns requests' do
   end
 
   describe 'POST #send_out' do
-    let(:campaign) { create :campaign, :new, site: site }
+    let(:campaign) { create :campaign, :draft, site: site }
     let(:path) { send_out_api_site_campaign_path(site.id, campaign) }
 
     include_examples 'JWT authentication' do

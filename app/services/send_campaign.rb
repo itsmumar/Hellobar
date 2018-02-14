@@ -19,7 +19,9 @@ class SendCampaign
   def sending_campaign!
     # Method #update_all returns the number of updated records. So it guarantees that only single
     # process/thread could update the record in DB and only single notification would be sent.
-    Campaign.where(id: campaign.id, status: Campaign::NEW).update_all(status: Campaign::SENDING) > 0
+    Campaign
+      .where(id: campaign.id, status: Campaign::DRAFT)
+      .update_all(status: Campaign::SENDING) > 0
   end
 
   def reload_campaign
