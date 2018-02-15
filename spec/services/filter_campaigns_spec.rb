@@ -1,18 +1,19 @@
 describe FilterCampaigns do
   let(:site) { create :site }
 
-  let(:new_campaign) { create :campaign, :new, site: site }
-  let(:another_new_campaign) { create :campaign, :new, site: site }
+  let(:draft_campaign) { create :campaign, :draft, site: site }
+  let(:another_draft_campaign) { create :campaign, :draft, site: site }
   let(:sending_campaign) { create :campaign, :sending, site: site }
   let(:sent_campaign) { create :campaign, :sent, site: site }
   let(:archived_campaign) { create :campaign, :archived, site: site }
 
   let!(:all_campaigns) do
-    [new_campaign, another_new_campaign, sending_campaign, sent_campaign, archived_campaign]
+    [draft_campaign, another_draft_campaign,
+     sending_campaign, sent_campaign, archived_campaign]
   end
 
   let(:drafts) do
-    [new_campaign, another_new_campaign, sending_campaign]
+    [draft_campaign, another_draft_campaign, sending_campaign]
   end
 
   let(:sent) do

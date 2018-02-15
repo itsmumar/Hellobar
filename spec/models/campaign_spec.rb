@@ -24,7 +24,7 @@ describe Campaign do
   end
 
   describe '#sent!' do
-    subject(:campaign) { create(:campaign, :new) }
+    subject(:campaign) { create(:campaign, :draft) }
 
     it 'updates status' do
       campaign.sent!
@@ -51,7 +51,7 @@ describe Campaign do
     end
 
     context 'when campaign cannot be archived' do
-      subject(:campaign) { create(:campaign, :new) }
+      subject(:campaign) { create(:campaign, :draft) }
 
       let(:error) { Campaign::InvalidTransition }
       let(:message) { Campaign::INVALID_TRANSITION_TO_ARCHIVED }

@@ -1,11 +1,11 @@
 class Campaign < ApplicationRecord
   InvalidTransition = Class.new(StandardError)
 
-  NEW = 'new'.freeze
+  DRAFT = 'draft'.freeze
   SENDING = 'sending'.freeze
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
-  STATUSES = [NEW, SENDING, SENT, ARCHIVED].freeze
+  STATUSES = [DRAFT, SENDING, SENT, ARCHIVED].freeze
 
   INVALID_TRANSITION_TO_ARCHIVED = "Campaign can't be archived until it's sent.".freeze
 
@@ -23,7 +23,7 @@ class Campaign < ApplicationRecord
   validates :body, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
-  scope :drafts, -> { where(status: [NEW, SENDING]) }
+  scope :drafts, -> { where(status: [DRAFT, SENDING]) }
   scope :sent, -> { where(status: [SENT]) }
   scope :archived, -> { where(status: [ARCHIVED]) }
 
