@@ -1,7 +1,7 @@
 class AddSubmittedAtToDynamoDbCampaignsTable < ActiveRecord::Migration
-  TABLE_NAME = 'campaigns'.freeze
-
   def up
+    puts "migrating `#{ table_name }`"
+
     i = 0
     scan_campaigns do |campaign|
       i += 1
@@ -18,15 +18,21 @@ class AddSubmittedAtToDynamoDbCampaignsTable < ActiveRecord::Migration
 
   private
 
+  def table_name
+    return 'campaigns' if Rails.env.production?
+    "#{ Rails.env }_campaigns"
+  end
+
   def scan_campaigns
-    request = { table_name: TABLE_NAME, projection_expression: 'email,campaign_id' }
+    request = { table_name: table_name, projection_expression: 'email,campaign_id' }
 
     loop do
       response = dynamo.scan(request)
-      campaigns, last_evaluated_key = response.items, response.last_evaluated_key
+      campaign_recipients, last_evaluated_key =
+        response.items, response.last_evaluated_key
 
-      campaigns.each do |campaign|
-        yield campaign
+      campaign_recipients.each do |campaign_recipient|
+        yield campaign_recipient
       end
 
       break unless last_evaluated_key
@@ -44,7 +50,7 @@ class AddSubmittedAtToDynamoDbCampaignsTable < ActiveRecord::Migration
         ':t' => timestamp(record).to_i
       },
       update_expression: 'SET #S = :t',
-      table_name: TABLE_NAME
+      table_name: table_name
     )
   end
 
@@ -54,7 +60,7 @@ class AddSubmittedAtToDynamoDbCampaignsTable < ActiveRecord::Migration
   end
 
   def fetch_campaign(campaign_id)
-    @campaigns ||= Hash.new { |h, id| h[id] = Campaign.find_by(id: id) }
+    @campaigns ||= Hash.new { |h, id| h[id] = Campaign.unscoped.find_by(id: id) }
     @campaigns[campaign_id]
   end
 
