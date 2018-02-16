@@ -85,7 +85,7 @@ describe FetchCampaignStatistics do
     end
 
     context 'with sent campaign' do
-      let(:campaign) { create :campaign, status: Campaign::SENT }
+      let(:campaign) { create :campaign, :sent }
 
       it 'returns recipients from DynamoDB' do
         expect(subject.call).to include('recipients' => 0)

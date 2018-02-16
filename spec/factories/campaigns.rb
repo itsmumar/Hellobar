@@ -11,8 +11,8 @@ FactoryGirl.define do
     subject 'Hello'
     body 'Test Campaign'
 
-    trait :new do
-      status Campaign::NEW
+    trait :draft do
+      status Campaign::DRAFT
     end
 
     trait :sending do
