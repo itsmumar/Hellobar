@@ -89,6 +89,8 @@ class @RuleModal extends Modal
       # replace the markup of the condition based on new data
       $condition.html($updatedCondition.html())
 
+      ruleModal._removeUrlCondition()
+
   _updateConditionMarkup: ($condition, conditionData) ->
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
