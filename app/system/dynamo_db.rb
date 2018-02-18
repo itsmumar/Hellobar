@@ -54,6 +54,10 @@ class DynamoDB
     query_enum(*args).to_a
   end
 
+  def scan(params)
+    send_request(:scan, params) || {}
+  end
+
   def batch_get_item(request)
     cache(request) { send_batch_get_item(request) }
   end
