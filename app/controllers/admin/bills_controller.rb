@@ -45,9 +45,9 @@ class Admin::BillsController < AdminController
   private
 
   def load_data
-    bill = Bill.find(params[:id])
-    subscription = bill.subscription
-    site = Site.find(params[:site_id])
+    bill = Bill.unscoped.find(params[:id])
+    subscription = Subscription.unscoped { bill.subscription }
+    site = Site.unscoped.find(params[:site_id])
 
     [bill, subscription, site]
   end
