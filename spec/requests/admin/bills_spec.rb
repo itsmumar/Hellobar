@@ -29,7 +29,7 @@ describe 'Admin::Bills requests' do
           DestroySite.new(site).call
         end
 
-        it 'responds with a redirect to the login page' do
+        it 'responds with success' do
           get admin_site_bill_path(site_id: site.id, id: bill)
           expect(response).to be_success
         end
