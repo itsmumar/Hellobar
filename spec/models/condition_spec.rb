@@ -11,7 +11,7 @@ describe Condition do
         rule: create(:rule),
         operand: 'is',
         value: ['/foo', '/bar', ''],
-        segment: 'UrlCondition'
+        segment: 'UrlPathCondition'
       )
 
       expect(condition).to be_valid
@@ -93,16 +93,6 @@ describe Condition do
   end
 
   describe '#to_sentence' do
-    context 'is a UrlCondition' do
-      it 'calls #url_condition_sentence' do
-        condition = create :condition, :url
-
-        expect(condition).to be_persisted
-        expect(condition).to receive(:multiple_condition_sentence) { 'right' }
-        expect(condition.to_sentence).to eql('right')
-      end
-    end
-
     context 'is a UrlPathCondition' do
       it 'calls #url_condition_sentence' do
         condition = create :condition, :url_path
@@ -156,67 +146,13 @@ describe Condition do
   end
 
   describe '#normalize_url_condition' do
-    context 'is not a UrlCondition' do
+    context 'is not a UrlPathCondition' do
       it 'should do nothing to the value' do
         value = 'https://google.com'
         condition = build :condition, :referrer, value: value
 
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq value
-      end
-    end
-
-    context 'is a UrlCondition' do
-      it 'should do nothing if url is already absolute (http)' do
-        url = 'http://google.com'
-        condition = build(:condition, :url, value: url)
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq url
-      end
-
-      it 'should do nothing if url is already absolute (https)' do
-        url = 'https://google.com'
-        condition = build(:condition, :url, value: url)
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq url
-      end
-
-      it 'should do nothing if url is a relative path' do
-        path = '/about'
-        condition = build(:condition, :url, value: path)
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq path
-      end
-
-      it 'should prepend a / if url is relative' do
-        condition = build(:condition, :url, value: 'about')
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about')
-      end
-
-      it 'should prepend a / if url is relative and has an extension' do
-        condition = build(:condition, :url, value: 'about.html')
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about.html')
-      end
-
-      it 'should prepend http:// if url is absolute' do
-        host = 'about.com'
-        condition = build(:condition, :url, value: host)
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq "http://#{ host }"
-      end
-
-      it 'should normalize values in an array' do
-        host = 'hey.hellobar.com'
-        path = 'about.html'
-
-        condition = build(:condition, :url, value: [host, path])
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq(["http://#{ host }", "/#{ path }"])
       end
     end
 

@@ -106,7 +106,7 @@ describe SiteElement do
 
     describe '#custom_targeting' do
       before do
-        element.rule.conditions << build(:condition, :url_includes, rule: element.rule)
+        element.rule.conditions << build(:condition, :url_path_includes, rule: element.rule)
       end
 
       include_examples 'capability validation', :custom_targeted_bars, :site, 'subscription does not support custom targeting. Upgrade subscription.'

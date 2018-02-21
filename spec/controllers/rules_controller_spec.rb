@@ -182,7 +182,7 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            '0' => condition_hash(:url_includes)
+            '0' => condition_hash(:url_path_includes)
           }
         }
 
@@ -191,7 +191,7 @@ describe RulesController do
           expect(rule_obj['conditions']).to eq([{
             'id' => id,
             'rule_id' => rule.id,
-            'segment' => 'UrlCondition',
+            'segment' => 'UrlPathCondition',
             'operand' => 'includes',
             'value' => ['/asdf']
           }])
@@ -204,14 +204,14 @@ describe RulesController do
         put :update, site_id: site, id: rule, rule: {
           name: 'new rule name',
           conditions_attributes: {
-            '0' => condition_hash(:url_includes),
+            '0' => condition_hash(:url_path_includes),
             '1' => condition_hash(:date_before)
           }
         }
 
         JSON.parse(response.body).tap do |rule_obj|
           segments = rule_obj['conditions'].collect { |c| c['segment'] }
-          expect(segments).to match_array %w[DateCondition UrlCondition]
+          expect(segments).to match_array %w[DateCondition UrlPathCondition]
         end
       end
 
@@ -219,7 +219,7 @@ describe RulesController do
         stub_current_user owner
 
         # add a rule to remove
-        rule.conditions << create(:condition, :url_includes)
+        rule.conditions << create(:condition, :url_path_includes)
         condition = rule.reload.conditions.first
 
         # remove it

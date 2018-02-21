@@ -81,8 +81,6 @@ hellobar.defineModule('visitor',
         setVisitorData('rd', '');
         setVisitorData('pp', '');
       }
-      // Set the page URL
-      setVisitorData('pu', format.normalizeUrl(document.location + '', false));
 
       // Set the page path
       setVisitorData('pup', format.normalizeUrl(document.location.pathname, true));

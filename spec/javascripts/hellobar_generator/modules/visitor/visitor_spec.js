@@ -53,9 +53,9 @@ describe('Module visitor', function () {
     expect(module.getData('nv')).toEqual(jasmine.any(Number));
   });
 
-  it('visitor module provides page URL and path', function () {
-    expect(module.getData('pu')).toEqual(jasmine.any(String));
+  it('visitor module provides page URL path and query', function () {
     expect(module.getData('pup')).toEqual(jasmine.any(String));
+    expect(module.getData('pq')).toEqual(jasmine.any(Object));
   });
 
   it('visitor module provides all data as object', function () {
