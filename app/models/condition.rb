@@ -15,7 +15,6 @@ class Condition < ApplicationRecord
     'ReferrerCondition' => 'rf',
     'ReferrerDomainCondition' => 'rd',
     'TimeCondition' => 'tc',
-    'UrlCondition' => 'pu',
     'UrlPathCondition' => 'pup',
     'UrlQueryCondition' => 'pq',
     'UTMCampaignCondition' => 'ad_ca',
@@ -25,7 +24,7 @@ class Condition < ApplicationRecord
     'UTMTermCondition' => 'ad_te'
   }.freeze
 
-  MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
+  MULTIPLE_CHOICE_SEGMENTS = %w[UrlPathCondition LocationCountryCondition].freeze
   PRECISE_SEGMENTS = %w[LocationRegionCondition LocationCityCondition].freeze
 
   # stored value: displayed value
@@ -164,7 +163,6 @@ class Condition < ApplicationRecord
       'ReferrerCondition'         => %w[is is_not includes does_not_include],
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
-      'UrlCondition'              => %w[is is_not includes does_not_include],
       'UrlPathCondition'          => %w[is is_not includes does_not_include],
       'UrlQueryCondition'         => %w[is is_not includes does_not_include],
       'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
@@ -184,7 +182,7 @@ class Condition < ApplicationRecord
   end
 
   def normalize_url_condition
-    return if segment != 'UrlCondition' && segment != 'UrlPathCondition'
+    return if segment != 'UrlPathCondition'
 
     if value.is_a?(String)
       self.value = normalize_url(value)

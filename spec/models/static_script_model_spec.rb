@@ -294,7 +294,7 @@ describe StaticScriptModel do
 
     before do
       site.rules.first.update conditions: [
-        create(:condition, :url), create(:condition, :date_between), create(:condition, :time_before)
+        create(:condition, :url_path), create(:condition, :date_between), create(:condition, :time_before)
       ]
     end
 
