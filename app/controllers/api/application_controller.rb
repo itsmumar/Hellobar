@@ -4,9 +4,9 @@ class Api::ApplicationController < ApplicationController
   prepend_before_action :authenticate_request!
   skip_before_action :verify_authenticity_token
 
+  rescue_from StandardError, with: :render_error
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  rescue_from StandardError, with: :render_error
 
   respond_to :json
 

@@ -63,7 +63,7 @@ describe 'api/whitelabels requests' do
       end
     end
 
-    context 'when there is an error' do
+    context 'when there is validation error' do
       it 'returns error code and serialized errors' do
         post api_site_whitelabel_path(site),
           params.merge(whitelabel: whitelabel_params.except(:subdomain)),
@@ -72,6 +72,20 @@ describe 'api/whitelabels requests' do
         expect(response).not_to be_successful
         expect(response.code.to_i).to eql 422
         expect(json[:errors][:subdomain]).to be_present
+      end
+    end
+
+    context 'when there is unexpected error' do
+      it 'returns error code and error message' do
+        allow(CreateWhitelabel).to receive(:new).and_raise('Exception!!!')
+
+        post api_site_whitelabel_path(site),
+          params.merge(whitelabel: whitelabel_params),
+          headers
+
+        expect(response).not_to be_successful
+        expect(response.code.to_i).to eql 500
+        expect(json[:errors]).to eql ['Exception!!!']
       end
     end
   end
