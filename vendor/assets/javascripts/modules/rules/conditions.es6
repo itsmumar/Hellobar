@@ -50,7 +50,7 @@ hellobar.defineModule('rules.conditions',
     // Value is the value to sanitize
     // Input is the users value condition
     function sanitizeConditionValue(segment, value, input) {
-      if (segment === 'pu' || segment === 'pp' || segment === 'pup') {
+      if (segment === 'pp' || segment === 'pup') {
         var relative = /^\//.test(input);
         value = format.normalizeUrl(value, relative);
       }
@@ -147,9 +147,7 @@ hellobar.defineModule('rules.conditions',
     // value
     function getSegmentValue(segmentName) {
       // Convert long names to short names
-      if (segmentName === 'url')
-        segmentName = 'pu';
-      else if (segmentName === 'device')
+      if (segmentName === 'device')
         segmentName = 'dv';
       else if (segmentName === 'country')
         segmentName = 'co';
