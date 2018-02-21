@@ -49,7 +49,7 @@ namespace :site do
     namespace :install_check do
       desc 'Install check for recently uninstalled sites'
       task recently_uninstalled: :environment do
-        # around 4K; we can deal with them at one go every day
+        # around 2-4K; we can deal with them at one go every day
         Site.script_recently_uninstalled.find_each do |site|
           CheckStaticScriptInstallation.new(site).call
         end
@@ -57,8 +57,16 @@ namespace :site do
 
       desc 'Install check for uninstalled sites recently modified'
       task uninstalled_but_recently_modified: :environment do
-        # around 2K; we can deal with them at one go every day
+        # up to 2K; we can deal with them at one go every day
         Site.script_uninstalled_but_recently_modified.find_each do |site|
+          CheckStaticScriptInstallation.new(site).call
+        end
+      end
+
+      desc 'Install check for recently created sites with uninstalled script'
+      task recently_created_not_installed: :environment do
+        # up to 5K; we can deal with them at one go every day
+        Site.recently_created.script_not_installed.find_each do |site|
           CheckStaticScriptInstallation.new(site).call
         end
       end
