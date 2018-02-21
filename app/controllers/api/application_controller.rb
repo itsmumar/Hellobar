@@ -6,6 +6,7 @@ class Api::ApplicationController < ApplicationController
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from StandardError, with: :render_error
 
   respond_to :json
 
@@ -45,5 +46,10 @@ class Api::ApplicationController < ApplicationController
   def handle_error(exception)
     render json: { errors: [exception.message] },
       status: :unprocessable_entity
+  end
+
+  def render_error(exception)
+    render json: { errors: [exception.message] },
+      status: :internal_server_error
   end
 end
