@@ -142,7 +142,7 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'app/views/**/*'
     - 'config/**/*'
-    - 'lib/tasks/backend.rake'
+    - 'lib/tasks/*.rake'
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
