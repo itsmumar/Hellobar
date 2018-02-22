@@ -4,6 +4,7 @@ class Api::ApplicationController < ApplicationController
   prepend_before_action :authenticate_request!
   skip_before_action :verify_authenticity_token
 
+  rescue_from StandardError, with: :render_error
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
@@ -45,5 +46,10 @@ class Api::ApplicationController < ApplicationController
   def handle_error(exception)
     render json: { errors: [exception.message] },
       status: :unprocessable_entity
+  end
+
+  def render_error(exception)
+    render json: { errors: [exception.message] },
+      status: :internal_server_error
   end
 end
