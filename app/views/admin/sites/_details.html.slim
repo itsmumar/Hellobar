@@ -65,6 +65,7 @@
             th Actions
             th Bill Duration
             th Status set at
+            th Credit Card
             th Extra days
 
           - bills_for(site).each do |bill, refunds|
@@ -113,6 +114,8 @@
                 = bill_duration(bill)
               td
                 = bill.status_set_at&.strftime('%D')
+              td
+                = bill.credit_card&.last_digits
               td
                 = bill_extra_days(bill)
 

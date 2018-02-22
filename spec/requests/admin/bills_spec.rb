@@ -23,6 +23,17 @@ describe 'Admin::Bills requests' do
         get admin_site_bill_path(site_id: site.id, id: bill)
         expect(response).to be_success
       end
+
+      context 'with deleted site' do
+        before do
+          DestroySite.new(site).call
+        end
+
+        it 'responds with success' do
+          get admin_site_bill_path(site_id: site.id, id: bill)
+          expect(response).to be_success
+        end
+      end
     end
 
     describe 'PUT #void' do
