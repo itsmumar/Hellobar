@@ -35,6 +35,7 @@ module ServiceProvider::Adapters
     private
 
     def process_response(response)
+      return if response.body.blank?
       JSON.parse response.body
     end
   end
