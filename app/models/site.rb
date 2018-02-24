@@ -62,6 +62,10 @@ class Site < ApplicationRecord
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
+  def self.recently_created
+    where('created_at > ?', 30.days.ago)
+  end
+
   def self.script_installed
     where(
       'script_installed_at IS NOT NULL ' \
