@@ -64,6 +64,7 @@ describe ServiceProvider::Adapters::GetResponse do
         campaign: {
           campaignId: '4567456'
         },
+        tags: [{tagId: 'id1'}, {tagId: 'id2'}],
         email: 'example@email.com',
         name: 'FirstName LastName'
       }
@@ -72,12 +73,7 @@ describe ServiceProvider::Adapters::GetResponse do
     let!(:subscribe_request) { allow_request :post, :subscribe, body: body }
 
     before do
-      allow_request :get, :contacts
       allow_request :post, :contact
-
-      expect(FetchLatestContacts).to receive_service_call
-        .with(contact_list, limit: 10)
-        .and_return [Contact.new(email: 'example@email.com')]
     end
 
     it 'sends subscribe request' do

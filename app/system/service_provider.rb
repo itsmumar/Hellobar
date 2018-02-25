@@ -40,9 +40,7 @@ class ServiceProvider
 
     params = { email: email, name: name, tags: existing_tags, double_optin: double_optin }
 
-    adapter.subscribe(remote_list_id, params).tap do
-      adapter.assign_tags(contact_list) if adapter.is_a?(ServiceProvider::Adapters::GetResponse)
-    end
+    adapter.subscribe(remote_list_id, params)
   end
 
   private
