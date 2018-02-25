@@ -64,7 +64,7 @@ describe ServiceProvider::Adapters::GetResponse do
         campaign: {
           campaignId: '4567456'
         },
-        tags: [{tagId: 'id1'}, {tagId: 'id2'}],
+        tags: [{ tagId: 'id1' }, { tagId: 'id2' }],
         email: 'example@email.com',
         name: 'FirstName LastName'
       }
