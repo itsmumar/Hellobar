@@ -48,10 +48,10 @@ GIT
 
 GIT
   remote: https://github.com/morgoth/paperclip.git
-  revision: d53818356375fc2fb5f341ee81354afa7fab012f
+  revision: eebe6c32bd7409aa780f16542129ecd0d8e2b235
   branch: aws-sdk-s3
   specs:
-    paperclip (5.1.0)
+    paperclip (5.2.1)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       cocaine (~> 0.5.5)
@@ -311,7 +311,7 @@ GEM
     httpi (2.4.2)
       rack
       socksify
-    i18n (0.9.1)
+    i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     infusionsoft (1.2.0)
     intercom (3.5.21)
@@ -357,7 +357,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_portile2 (2.3.0)
-    minitest (5.10.3)
+    minitest (5.11.3)
     multi_json (1.12.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -605,7 +605,7 @@ GEM
     timecop (0.9.1)
     typhoeus (1.0.2)
       ethon (>= 0.9.0)
-    tzinfo (1.2.4)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uglifier (3.1.7)
       execjs (>= 0.3.0, < 3)
