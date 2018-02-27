@@ -1,3 +1,5 @@
 class CurrentUserSerializer < UserSerializer
-  attributes :email, :sites
+  attributes :email
+
+  has_many :sites
 end
