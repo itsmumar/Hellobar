@@ -9,11 +9,16 @@ class SiteSerializer < ActiveModel::Serializer
 
   def contact_lists
     object.contact_lists.map do |list|
-      {
+      list_attributes = {
         id: list.id,
         name: list.name,
         provider_name: list.provider_name
       }
+
+      subscribers_count = list_subscribers_count(list.id)
+      list_attributes[:subscribers_count] = subscribers_count if subscribers_count
+
+      list_attributes
     end
   end
 
@@ -57,5 +62,11 @@ class SiteSerializer < ActiveModel::Serializer
 
   def script_installed
     object.script_installed?
+  end
+
+  private
+
+  def list_subscribers_count(list_id)
+    context && context[:list_totals] && context[:list_totals][list_id]
   end
 end

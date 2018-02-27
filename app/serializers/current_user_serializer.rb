@@ -1,5 +1,9 @@
 class CurrentUserSerializer < UserSerializer
-  attributes :email
+  attributes :email, :sites
 
-  has_many :sites
+  def sites
+    object.sites.map do |site|
+      SiteSerializer.new(site, context: context)
+    end
+  end
 end

@@ -37,6 +37,18 @@ describe SiteSerializer do
         }
       ]
     end
+
+    context 'when totals are passed to the context' do
+      let(:subscribers_count) { 5 }
+      let(:context) { { list_totals: { contact_list.id => subscribers_count } } }
+      let(:serialized_site) { SiteSerializer.new(site, scope: user, context: context) }
+
+      it 'returns subscribers_count attribute' do
+        expect(serializable_hash).to include(contact_lists: [
+          hash_including(subscribers_count: subscribers_count)
+        ])
+      end
+    end
   end
 
   context 'with current_subscription' do
