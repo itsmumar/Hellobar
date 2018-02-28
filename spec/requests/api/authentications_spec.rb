@@ -5,7 +5,7 @@ describe 'api/authentications requests' do
         post(api_authenticate_path, {},
           Rack::Cors::HTTP_ORIGIN => Settings.campaigns_url)
 
-        expect(response.status).to be 403
+        expect(response.status).to be 401
       end
     end
 
@@ -13,7 +13,7 @@ describe 'api/authentications requests' do
       it 'redirects to the root path' do
         post(api_authenticate_path, {}, Rack::Cors::HTTP_ORIGIN => '')
 
-        expect(response.status).to be 403
+        expect(response.status).to be 401
       end
     end
 

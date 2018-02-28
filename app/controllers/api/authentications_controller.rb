@@ -8,7 +8,7 @@ class Api::AuthenticationsController < ApplicationController
              serializer: CurrentUserSerializer,
              context: serializer_context
     else
-      head 403
+      head :unauthorized
     end
   end
 
@@ -35,6 +35,6 @@ class Api::AuthenticationsController < ApplicationController
   end
 
   def ensure_cors_request
-    return head 403 unless env[Rack::Cors::ENV_KEY]&.hit?
+    return head :unauthorized unless env[Rack::Cors::ENV_KEY]&.hit?
   end
 end
