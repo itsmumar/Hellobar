@@ -6,7 +6,7 @@ FactoryGirl.define do
       schedule :monthly
     end
 
-    url { generate(:random_uniq_url) }
+    sequence(:url) { |i| "http://url-#{ i }.net" }
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?

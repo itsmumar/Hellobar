@@ -6,7 +6,8 @@ FactoryGirl.define do
 
     first_name 'FirstName'
     last_name 'LastName'
-    email { generate(:email) }
+
+    sequence(:email) { |i| "user#{ i }@hellobar.com" }
     password 'password'
 
     after :create do |user, evaluator|
