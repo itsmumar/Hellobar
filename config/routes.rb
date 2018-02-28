@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
 
     # Used by Vue.js
-    get :authenticate, to: 'authentications#show'
+    post :authenticate, controller: :authentications
 
     resources :sites, only: [] do
       resources :campaigns, except: %i[new edit] do

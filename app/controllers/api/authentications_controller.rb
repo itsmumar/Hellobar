@@ -1,5 +1,8 @@
 class Api::AuthenticationsController < ApplicationController
-  def show
+  skip_before_action :verify_authenticity_token
+  before_action :ensure_using_cors
+
+  def authenticate
     if current_user && current_site
       render json: current_user,
              serializer: CurrentUserSerializer,
@@ -29,5 +32,9 @@ class Api::AuthenticationsController < ApplicationController
         memo.merge!(FetchContactListTotals.new(site).call)
       end
     end
+  end
+
+  def ensure_using_cors
+    return head 403 unless env[Rack::Cors::ENV_KEY]&.hit?
   end
 end
