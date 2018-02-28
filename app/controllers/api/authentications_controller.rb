@@ -1,6 +1,6 @@
 class Api::AuthenticationsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :ensure_using_cors
+  before_action :ensure_cors_request
 
   def authenticate
     if current_user && current_site
@@ -34,7 +34,7 @@ class Api::AuthenticationsController < ApplicationController
     end
   end
 
-  def ensure_using_cors
+  def ensure_cors_request
     return head 403 unless env[Rack::Cors::ENV_KEY]&.hit?
   end
 end
