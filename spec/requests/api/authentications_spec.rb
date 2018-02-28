@@ -2,7 +2,16 @@ describe 'api/authentications requests' do
   describe 'GET #create' do
     context 'when not logged in' do
       it 'redirects to the root path' do
-        get(api_authenticate_path)
+        post(api_authenticate_path, {},
+          Rack::Cors::HTTP_ORIGIN => Settings.campaigns_url)
+
+        expect(response.status).to be 403
+      end
+    end
+
+    context 'when HTTP_ORIGIN is missing' do
+      it 'redirects to the root path' do
+        post(api_authenticate_path, {}, Rack::Cors::HTTP_ORIGIN => '')
 
         expect(response.status).to be 403
       end
@@ -22,8 +31,10 @@ describe 'api/authentications requests' do
       it 'redirects to callback url with token and site_id in query params' do
         expect(FetchContactListTotals).to receive_service_call.and_return({})
 
-        get(api_authenticate_path)
+        post(api_authenticate_path, {},
+          Rack::Cors::HTTP_ORIGIN => Settings.campaigns_url)
 
+        expect(response).to be_success
         expect(json[:email]).to eql user.email
         expect(json[:first_name]).to eql user.first_name
         expect(json[:last_name]).to eql user.last_name
