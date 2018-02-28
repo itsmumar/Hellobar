@@ -17,9 +17,7 @@ module FeatureHelper
   def login(user = nil)
     user ||= create(:user)
 
-    if user.sites.blank?
-      create :site, user: user
-    end
+    create(:site, user: user) if user.sites.blank?
 
     login_as user, scope: :user, run_callbacks: false
     user
