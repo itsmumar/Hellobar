@@ -14,7 +14,9 @@ class UpdateCampaign
   attr_reader :campaign, :attributes
 
   def ensure_campaign_is_editable!
-    raise(ActiveRecord::RecordInvalid, campaign) unless campaign.draft?
+    return if campaign.draft?
+    campaign.errors.add :base, 'is not editable'
+    raise(ActiveRecord::RecordInvalid, campaign)
   end
 
   def update_campaign
