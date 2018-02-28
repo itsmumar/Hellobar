@@ -63,7 +63,8 @@ module Hellobar
         origins Settings.campaigns_url
 
         resource '/api/*', headers: :any,
-          methods: %i[get post delete put patch options head]
+          methods: %i[get post delete put patch options head],
+          credentials: true
       end
     end
   end

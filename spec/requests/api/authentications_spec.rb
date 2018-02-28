@@ -4,23 +4,32 @@ describe 'api/authentications requests' do
       it 'redirects to the root path' do
         get(api_authenticate_path)
 
-        expect(response).to redirect_to(root_path)
+        expect(response.status).to be 403
       end
     end
 
     context 'when logged in' do
-      it 'redirects to callback url with token and site_id in query params' do
-        site = create(:site)
-        user = create(:user, site: site)
-        token = JsonWebToken.encode(user_id: user.id)
-        callback_url = 'http://localhost'
-        redirect_url = "#{ callback_url }?token=#{ token }&site_id=#{ site.id }"
+      let(:site) { create :site }
+      let(:user) { create :user, site: site }
+      let(:params) { { format: :json } }
+      let(:headers) { api_headers_for_user(user) }
+      let(:token) { JsonWebToken.encode(user_id: user.id) }
 
+      before do
         login_as user, scope: :user, run_callbacks: false
+      end
 
-        get(api_authenticate_path, callback_url: callback_url)
+      it 'redirects to callback url with token and site_id in query params' do
+        expect(FetchContactListTotals).to receive_service_call.and_return({})
 
-        expect(response).to redirect_to(redirect_url)
+        get(api_authenticate_path)
+
+        expect(json[:email]).to eql user.email
+        expect(json[:first_name]).to eql user.first_name
+        expect(json[:last_name]).to eql user.last_name
+        expect(json[:site_id]).to eql site.id
+        expect(json[:sites]).to be_present
+        expect(json[:token]).to eql token
       end
     end
   end

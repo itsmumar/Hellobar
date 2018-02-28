@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :user_state, only: :show
 
     # Used by Vue.js
-    get :authenticate, to: 'authentications#create'
+    get :authenticate, to: 'authentications#show'
 
     resources :sites, only: [] do
       resources :campaigns, except: %i[new edit] do
@@ -31,12 +31,6 @@ Rails.application.routes.draw do
         member do
           post :validate
         end
-      end
-    end
-
-    resources :users, only: [] do
-      collection do
-        get :current
       end
     end
 
