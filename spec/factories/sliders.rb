@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :slider, parent: :site_element, class: 'Slider' do
     type 'Slider'
     placement 'top-left'

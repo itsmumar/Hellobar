@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :site_element, class: 'Bar' do
     transient do
       site nil

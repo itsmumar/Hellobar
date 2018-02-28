@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :coupon do
     label Coupon::REFERRAL_LABEL
     amount Coupon::REFERRAL_AMOUNT

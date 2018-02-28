@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :takeover, parent: :site_element, class: 'Takeover' do
     type 'Takeover'
     placement nil

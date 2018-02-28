@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :billing_attempt do
     status BillingAttempt::SUCCESSFUL
 

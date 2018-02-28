@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :embed_code, class: String do
     skip_create
     provider 'my_emma'

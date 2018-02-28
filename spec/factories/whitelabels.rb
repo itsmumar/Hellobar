@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :whitelabel do
     domain 'hellobar.com'
     subdomain 'email'

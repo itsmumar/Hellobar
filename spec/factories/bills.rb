@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :bill, class: 'Bill::Recurring' do
     amount 10
     subscription
