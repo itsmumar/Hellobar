@@ -24,7 +24,7 @@ module Hellobar
     config.active_record.raise_in_transactional_callbacks = true
 
     # Require Settings early on in the boot process
-    require Rails.root.join('app', 'system', 'settings')
+    require Rails.root.join('app', 'core', 'settings')
 
     # We'll handle our own errors
     config.exceptions_app = routes
