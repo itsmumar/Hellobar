@@ -161,7 +161,6 @@ feature 'Adding and editing bars', :js do
     user = membership.user
     phone_number = '+12025550144'
 
-
     sign_in user
 
     click_button('Create New')
