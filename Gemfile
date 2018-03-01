@@ -61,7 +61,7 @@ gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
-gem 'loofah', '2.0.3' # loofah 2.1.1 is buggy; see https://github.com/flavorjones/loofah/pull/123#issuecomment-334369283
+gem 'loofah'
 gem 'mustache'
 gem 'rails-html-sanitizer'
 gem 'sassc-rails'
