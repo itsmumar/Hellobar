@@ -58,12 +58,14 @@ module Hellobar
     }
 
     # Configure CORS
+    # https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins Settings.campaigns_url
 
         resource '/api/*', headers: :any,
-          methods: %i[get post delete put patch options head]
+          methods: %i[get post delete put patch options head],
+          credentials: true
       end
     end
   end
