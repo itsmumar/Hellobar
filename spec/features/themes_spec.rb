@@ -1,8 +1,8 @@
 require 'integration_helper'
 
 feature 'Users can select a design theme for SiteElements', :js do
-  given(:user) { create(:user) }
-  given(:site) { create(:site, user: user) }
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
   given(:subtype) { 'Modal' }
   given(:theme_id) { 'blue-autumn' }
   given(:themes) { Theme.where(type: 'generic') }
@@ -11,7 +11,8 @@ feature 'Users can select a design theme for SiteElements', :js do
   given(:image) { Rails.root.join('spec', 'fixtures', 'images', 'coupon.png').to_s }
 
   background do
-    login user
+    sign_in user
+
     visit url
   end
 
@@ -77,7 +78,9 @@ feature 'Users can select a design theme for SiteElements', :js do
         attach_file 'dz-image', image
 
         page.has_xpath?('.//iframe[@id="random-container"]') # force capybara to wait until iframe is loaded
+
         sleep 2
+
         within_frame 'random-container-0' do
           expect(find('.uploaded-image', visible: false)[:src]).to include ImageUpload.last.url
         end

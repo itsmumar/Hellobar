@@ -1,8 +1,8 @@
 require 'integration_helper'
 
 feature 'Autofills management' do
-  given(:user) { create :user }
-  given(:site) { create :site, user: user }
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
   given(:name) { 'Email rule' }

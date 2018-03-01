@@ -73,7 +73,7 @@ feature 'Adding and editing bars', :js do
       user.upgrade_suggest_modal_last_shown_at = Time.current
       create :contact_list, site: user.sites.first
 
-      login(user)
+      sign_in user
       visit root_path
 
       click_on 'Create New'
@@ -161,8 +161,8 @@ feature 'Adding and editing bars', :js do
     user = membership.user
     phone_number = '+12025550144'
 
-    login(user)
-    visit root_path
+
+    sign_in user
 
     click_button('Create New')
 
@@ -225,12 +225,16 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'User can edit a site element' do
-    @user = login
+    user = create :user, :with_site
 
-    site = @user.sites.first
+    site = user.sites.first
     site.rules << create(:rule)
-    create(:site_element, rule: site.rules.first)
+
+    create :site_element, rule: site.rules.first
+
     site.reload
+
+    sign_in user
 
     visit edit_site_site_element_path(site, site.site_elements.last)
 
