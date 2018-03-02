@@ -155,6 +155,7 @@ end
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'teaspoon', github: 'jejacks0n/teaspoon'
   gem 'teaspoon-jasmine'
 
   # Debugging

@@ -47,6 +47,15 @@ GIT
       omniauth-oauth2
 
 GIT
+  remote: https://github.com/jejacks0n/teaspoon.git
+  revision: 8be60fe2a9445cec58687ae3fb0b73f60fb0c691
+  specs:
+    teaspoon (1.1.5)
+      railties (>= 3.2.5, < 6)
+    teaspoon-jasmine (2.4.1)
+      teaspoon (>= 1.0.0)
+
+GIT
   remote: https://github.com/morgoth/paperclip.git
   revision: eebe6c32bd7409aa780f16542129ecd0d8e2b235
   branch: aws-sdk-s3
@@ -592,10 +601,6 @@ GEM
       net-ssh (>= 2.8.0)
     statistics2 (0.54)
     syslogger (1.6.4)
-    teaspoon (1.1.5)
-      railties (>= 3.2.5, < 6)
-    teaspoon-jasmine (2.3.4)
-      teaspoon (>= 1.0.0)
     temple (0.8.0)
     terminal-notifier-guard (1.7.0)
     thin (1.7.2)
@@ -757,6 +762,7 @@ DEPENDENCIES
   sprockets
   sprockets-es6
   syslogger
+  teaspoon!
   teaspoon-jasmine
   terminal-notifier-guard
   thin
