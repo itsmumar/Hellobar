@@ -8,7 +8,7 @@ jobs:
         - production
 
     docker:
-      - image: hellobarcom/base:2.3.4.1
+      - image: hellobarcom/base:2.3.4.2
         environment:
           DISPLAY: :99
           RAILS_ENV: test
