@@ -172,6 +172,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'chromedriver-helper'
   gem 'selenium-webdriver'
 
   # Fake ip-api.com server for specs (Geolocation)
