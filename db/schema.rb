@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302082315) do
+ActiveRecord::Schema.define(version: 20180302181450) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 20180302082315) do
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
 
   create_table "emails", force: :cascade do |t|
+    t.integer  "site_id",    limit: 4
     t.string   "from_name",  limit: 255,   null: false
     t.string   "from_email", limit: 255,   null: false
     t.string   "subject",    limit: 255,   null: false

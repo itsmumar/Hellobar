@@ -1,4 +1,5 @@
 class Email < ApplicationRecord
+  belongs_to :site
   has_one :campaign, inverse_of: :email # rubocop:disable Rails/HasManyOrHasOneDependent
 
   validates :from_name, presence: true

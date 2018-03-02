@@ -32,6 +32,8 @@ Rails.application.routes.draw do
           post :validate
         end
       end
+
+      resources :emails, except: %i[new edit]
     end
 
     # Used by Lambda functions
