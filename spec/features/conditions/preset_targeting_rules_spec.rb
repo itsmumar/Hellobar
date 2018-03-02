@@ -1,14 +1,15 @@
 require 'integration_helper'
 
 feature 'Users can use site element targeting rule presets', :js do
-  given(:free_options)   { ['Everyone'] }
-  given(:paid_options)   { ['Mobile Visitors', 'Homepage Visitors'] }
-  given(:custom_option)  { 'Custom Rule' }
-  given(:saved_option)   { 'Show to a saved targeting rule' }
-  given(:site)           { @user.sites.first }
+  given(:free_options) { ['Everyone'] }
+  given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }
+  given(:custom_option) { 'Custom Rule' }
+  given(:saved_option) { 'Show to a saved targeting rule' }
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
 
-  before do
-    @user = login
+  background do
+    sign_in user
 
     site.create_default_rules
 
@@ -19,7 +20,7 @@ feature 'Users can use site element targeting rule presets', :js do
   end
 
   feature 'Free subscription sites' do
-    before do
+    background do
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
@@ -42,22 +43,23 @@ feature 'Users can use site element targeting rule presets', :js do
   end
 
   feature 'Pro subscription sites' do
-    given(:custom_rule)        { create(:rule) }
+    given(:custom_rule) { create(:rule) }
     given(:first_select_input) { first('select')['id'] }
-    given(:default_option)     { 'Choose a saved rule...' }
+    given(:default_option) { 'Choose a saved rule...' }
+    given(:credit_card) { create(:credit_card, user: user) }
 
-    before { stub_cyber_source :purchase }
+    background do
+      stub_cyber_source :purchase
 
-    before do
-      credit_card = create(:credit_card, user: @user)
       ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
+
       site.rules << custom_rule
     end
 
     scenario 'The user can select any rule preset' do
-      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
 
       (free_options + paid_options).each do |text|
         find('div.step-link-block', text: text).click
@@ -75,7 +77,7 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
-      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
       find('a', text: 'CHANGE TARGET AUDIENCE').click
       find('h6', text: custom_option).click
       find('a', text: '+').click

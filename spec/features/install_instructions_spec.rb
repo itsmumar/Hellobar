@@ -4,7 +4,7 @@ feature 'Install Instructions', js: true do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
 
-  before do
+  background do
     sign_in user
   end
 
