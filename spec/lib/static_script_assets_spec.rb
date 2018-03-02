@@ -110,9 +110,9 @@ describe StaticScriptAssets do
       context 'and syntax error' do
         let(:file) { 'with_syntax_error.js' }
 
-        it 'raises ExecJS::ProgramError' do
+        it 'raises Uglifier::Error' do
           expect { rendered }
-            .to raise_error ExecJS::Error, 'SyntaxError: Unexpected character \'#\''
+            .to raise_error Uglifier::Error, 'Unexpected character \'#\''
         end
       end
     end
