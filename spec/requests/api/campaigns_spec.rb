@@ -115,7 +115,7 @@ describe 'api/campaigns requests' do
     let(:contact_list) { create :contact_list }
 
     let(:campaign) do
-      attributes_for(:campaign, contact_list_id: contact_list.id)
+      attributes_for(:campaign, contact_list_id: contact_list.id).merge(attributes_for(:email))
     end
 
     let(:params) do
