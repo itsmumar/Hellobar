@@ -9,18 +9,8 @@ end
 module FeatureHelper
   def sign_in(user)
     login_as user, scope: :user, run_callbacks: false
+
     visit '/'
-    user
-  end
-
-  # Deprecated. Use sign_in(user) instead
-  def login(user = nil)
-    user ||= create(:user)
-
-    create(:site, user: user) if user.sites.blank?
-
-    login_as user, scope: :user, run_callbacks: false
-    user
   end
 
   def the_onboarding_campaigns_run

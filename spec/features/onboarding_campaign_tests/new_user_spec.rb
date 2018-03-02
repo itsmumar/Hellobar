@@ -2,12 +2,17 @@ require 'integration_helper'
 require 'email_integration_helper'
 
 feature 'New User Onboarding email campaigns' do
-  given!(:user) { login }
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
+
   given(:email) { 'someone@somewhere.com' }
-  given(:invitee) { User.find_or_invite_by_email(email, user.sites.first) }
+  given(:invitee) { User.find_or_invite_by_email(email, site) }
 
   before do
+    sign_in user
+
     allow_any_instance_of(UserOnboardingStatusSetter).to receive(:in_campaign_ab_test?).and_return(true)
+
     record_mailer_gateway_request_history!
   end
 

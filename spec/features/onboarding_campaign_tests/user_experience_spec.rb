@@ -10,7 +10,13 @@ feature 'One User In all onboarding Campaigns' do
 
   let(:start)      { Time.zone.now }
   let(:start_date) { start.to_date }
-  let!(:user) { login }
+
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
+
+  background do
+    sign_in user
+  end
 
   def transition_user_through_onboarding(operating_user)
     repeatedly_time_travel_and_run_onboarding_campaigns(2)
@@ -41,9 +47,12 @@ feature 'One User In all onboarding Campaigns' do
   end
 
   feature 'users excluded from the onboarding campaign a/b tests' do
-    let(:excluded_user) do
+    given(:excluded_user) { create :user, :with_site }
+
+    background do
       allow_any_instance_of(UserOnboardingStatusSetter).to receive(:in_campaign_ab_test?).and_return(false)
-      login
+
+      sign_in excluded_user
     end
 
     scenario 'do not receive email from the campaigns' do
