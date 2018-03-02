@@ -106,7 +106,7 @@ GEM
       activesupport (>= 2.2.2)
     active_link_to (1.0.2)
       actionpack
-    active_model_serializers (0.9.6)
+    active_model_serializers (0.9.7)
       activemodel (>= 3.2)
     activejob (4.2.10)
       activesupport (= 4.2.10)
@@ -650,7 +650,7 @@ DEPENDENCIES
   active_campaign
   active_hash
   active_link_to
-  active_model_serializers
+  active_model_serializers (~> 0.9.6)
   activemerchant (~> 1.65.0)
   addressable
   amplitude-api

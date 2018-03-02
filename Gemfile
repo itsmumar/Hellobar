@@ -78,7 +78,7 @@ gem 'mysql2'
 gem 'paperclip', github: 'morgoth/paperclip', branch: 'aws-sdk-s3'
 
 # JSON
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.9.6'
 gem 'jbuilder'
 
 # Real-time error reporting
