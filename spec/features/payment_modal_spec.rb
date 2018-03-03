@@ -107,7 +107,7 @@ feature 'Payment modal interaction', :js do
       fill_in 'credit_card[city]', with: form.city
       fill_in 'credit_card[state]', with: form.state
       fill_in 'credit_card[zip]', with: form.zip
-      select 'United States of America', match: :first, from: 'credit_card[country]'
+      select 'United States', match: :first, from: 'credit_card[country]'
       page.find('.submit').click
     end
   end
