@@ -138,7 +138,7 @@ GEM
       typhoeus (~> 1.0.2)
     arel (6.0.4)
     ast (2.4.0)
-    autoprefixer-rails (8.0.0)
+    autoprefixer-rails (8.1.0)
       execjs
     avatar (0.2.0)
     aws-partitions (1.68.0)
@@ -489,7 +489,7 @@ GEM
     roadie-rails (1.2.1)
       railties (>= 3.0, < 5.2)
       roadie (~> 3.1)
-    rotp (3.3.0)
+    rotp (3.3.1)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
     rspec (3.7.0)
@@ -548,7 +548,7 @@ GEM
       sprockets (> 2.11)
       sprockets-rails
       tilt
-    selenium-webdriver (3.9.0)
+    selenium-webdriver (3.10.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
     sendgrid-ruby (5.2.0)
