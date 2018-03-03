@@ -1,12 +1,18 @@
 require 'integration_helper'
 
 feature 'Payment modal interaction', :js do
-  given(:user) { login }
+  given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
-  given(:credit_card) { create(:credit_card, user: user) }
+  given(:credit_card) { create :credit_card, user: user }
+
+  background do
+    sign_in user
+  end
 
   context 'pro subscription' do
-    before { stub_cyber_source :purchase }
+    background do
+      stub_cyber_source :purchase
+    end
 
     scenario "downgrade to free from pro should say when it's active until" do
       ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
@@ -26,11 +32,11 @@ feature 'Payment modal interaction', :js do
   end
 
   context 'free subscription' do
-    before { stub_cyber_source :store, :purchase }
+    background do
+      stub_cyber_source :store, :purchase
 
-    before do
       create :rule, site: site
-      create(:subscription, :free, site: site, credit_card: credit_card)
+      create :subscription, :free, site: site, credit_card: credit_card
 
       allow_any_instance_of(SiteElementSerializer)
         .to receive(:proxied_url2png).and_return('')
@@ -101,7 +107,7 @@ feature 'Payment modal interaction', :js do
       fill_in 'credit_card[city]', with: form.city
       fill_in 'credit_card[state]', with: form.state
       fill_in 'credit_card[zip]', with: form.zip
-      select 'United States of America', match: :first, from: 'credit_card[country]'
+      select 'United States', match: :first, from: 'credit_card[country]'
       page.find('.submit').click
     end
   end

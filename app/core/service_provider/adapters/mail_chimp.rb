@@ -29,8 +29,8 @@ module ServiceProvider::Adapters
     private
 
     def raw_lists
-      raw_lists = client.lists.retrieve(params: { count: 100 })['lists']
-      raw_lists.presence || []
+      response = client.lists.retrieve(params: { count: 100 })
+      response.body['lists'].presence || []
     end
 
     def prepare_params(subscriber_params)

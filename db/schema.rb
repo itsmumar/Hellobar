@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221145817) do
+ActiveRecord::Schema.define(version: 20180228154712) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -243,6 +243,29 @@ ActiveRecord::Schema.define(version: 20180221145817) do
   end
 
   add_index "rules", ["site_id"], name: "index_rules_on_site_id", using: :btree
+
+  create_table "sequence_steps", force: :cascade do |t|
+    t.integer  "delay",           limit: 4,   default: 0, null: false
+    t.integer  "sequence_id",     limit: 4,               null: false
+    t.integer  "executable_id",   limit: 4,               null: false
+    t.string   "executable_type", limit: 255,             null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sequence_steps", ["executable_type", "executable_id"], name: "index_sequence_steps_on_executable_type_and_executable_id", using: :btree
+  add_index "sequence_steps", ["sequence_id"], name: "index_sequence_steps_on_sequence_id", using: :btree
+
+  create_table "sequences", force: :cascade do |t|
+    t.string   "name",            limit: 255, null: false
+    t.integer  "contact_list_id", limit: 4,   null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sequences", ["contact_list_id"], name: "index_sequences_on_contact_list_id", using: :btree
 
   create_table "site_elements", force: :cascade do |t|
     t.datetime "created_at"

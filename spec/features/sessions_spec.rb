@@ -87,8 +87,9 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'and sign out' do
-    login
-    visit root_path
+    user = create :user, :with_site
+
+    sign_in user
 
     find('.header-user-wrapper .dropdown-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click
@@ -98,7 +99,6 @@ feature 'User can sign in', js: true do
 
   scenario 'user with no sites can sign out' do
     user = create :user
-
     login_as user, scope: :user, run_callbacks: false
 
     visit root_path

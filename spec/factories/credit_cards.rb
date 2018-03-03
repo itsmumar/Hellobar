@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :credit_card do
     sequence(:number) { |i| "4111 1111 1111 111#{ i }" }
     month 12

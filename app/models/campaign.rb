@@ -11,6 +11,9 @@ class Campaign < ApplicationRecord
 
   acts_as_paranoid
 
+  # TODO: remember to move this relation to the Email model
+  has_many :sequence_steps, as: :executable, dependent: :destroy, inverse_of: :executable
+
   has_one :site, through: :contact_list, dependent: :nullify
   belongs_to :contact_list
 

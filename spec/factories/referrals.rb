@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :referral do
     sequence(:email) { |i| "referral#{ i }@hellobar.com" }
     sender factory: :user

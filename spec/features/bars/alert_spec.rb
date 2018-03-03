@@ -7,7 +7,8 @@ feature 'Adding Alert bar', :js do
 
   before do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
-    login user
+
+    sign_in user
   end
 
   scenario 'new user can create an alert bar' do

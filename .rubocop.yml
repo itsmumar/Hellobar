@@ -71,7 +71,7 @@ Style/MethodDefParentheses:
 
 Style/MethodMissing:
   Exclude:
-    - app/system/settings.rb
+    - app/core/settings.rb
 
 # Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
 # SupportedStyles: predicate, comparison

@@ -506,7 +506,7 @@ describe SiteElement do
   end
 
   describe 'sanitized attributes' do
-    let(:text) { '<p><span style="color: rgb(1,1,1); font-family: \'Times New Roman\', Times, serif;"></span></p>' }
+    let(:text) { '<p><span style="color: rgb(1,1,1);font-family: \'Times New Roman\', Times, serif;"></span></p>' }
 
     describe '#link_text=' do
       it 'does not remove style' do

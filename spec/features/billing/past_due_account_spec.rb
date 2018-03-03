@@ -7,7 +7,7 @@ feature 'Billing. Past due account', :js do
   given!(:credit_card) { bill.credit_card }
 
   before do
-    login user
+    sign_in user
   end
 
   scenario 'displays notification about outstanding bill' do

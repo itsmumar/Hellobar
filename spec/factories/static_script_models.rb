@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :static_script_rule, class: Hash do
     skip_create
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :referral_token do
     tokenizable factory: :user
   end

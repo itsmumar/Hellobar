@@ -1,5 +1,6 @@
 RSpec.configure do |config|
   config.include Warden::Test::Helpers
+
   config.after(:each, type: :feature) do
     Warden.test_reset!
   end
@@ -8,19 +9,8 @@ end
 module FeatureHelper
   def sign_in(user)
     login_as user, scope: :user, run_callbacks: false
+
     visit '/'
-    user
-  end
-
-  # Deprecated. Use sign_in(user) instead
-  def login(user = nil)
-    user ||= create(:user)
-    if user.sites.blank?
-      user.sites.create(url: generate(:random_uniq_url)) # Setup a site so that it goes directly to summary page
-    end
-
-    login_as user, scope: :user, run_callbacks: false
-    user
   end
 
   def the_onboarding_campaigns_run

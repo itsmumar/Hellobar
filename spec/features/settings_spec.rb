@@ -1,17 +1,19 @@
 require 'integration_helper'
 
 feature 'Manage Settings', :js do
-  before { stub_cyber_source :purchase }
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
+  given!(:rule) { site.create_default_rules }
+  given(:credit_card) { create :credit_card, user: user }
 
-  before do
-    @user = login
-    @site = @user.sites.first
-    @rule = @site.create_default_rules
+  background do
+    stub_cyber_source :purchase
 
-    credit_card = create(:credit_card, user: @user)
-    ChangeSubscription.new(@site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
+    sign_in user
 
-    visit edit_site_path(@site)
+    ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
+
+    visit edit_site_path(site)
   end
 
   scenario 'it allows adding new custom invoice address' do
@@ -21,7 +23,7 @@ feature 'Manage Settings', :js do
 
     click_button('Save & Update')
 
-    visit edit_site_path(@site)
+    visit edit_site_path(site)
 
     expect(page).to have_content('my cool address')
   end

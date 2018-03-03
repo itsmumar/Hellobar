@@ -6,6 +6,7 @@ class ContactList < ApplicationRecord
 
   has_many :site_elements, dependent: :destroy
   has_many :campaigns, dependent: :destroy
+  has_many :sequences, dependent: :destroy
 
   store :data, coder: Hash
 

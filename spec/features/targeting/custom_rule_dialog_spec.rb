@@ -3,11 +3,10 @@ require 'integration_helper'
 feature 'Targeting. Custom rule dialog', :js do
   given(:user) { create(:user) }
   given(:site) { create(:site, :with_rule, user: user) }
-
-  before { create :subscription, :pro, :paid, site: site }
+  given!(:subscription) { create :subscription, :pro, :paid, site: site }
 
   before do
-    login user
+    sign_in user
   end
 
   scenario 'cancel button should close dialog' do
@@ -16,12 +15,14 @@ feature 'Targeting. Custom rule dialog', :js do
     within '.goal-block.contacts' do
       click_on 'Select This Goal'
     end
+
     click_on 'Continue'
     click_on 'Targeting'
     find('.change-selection').click
     find('h6', text: 'Custom Rule').click
 
     expect(page.all('.show-modal.rules-modal').count).to be 1
+
     click_on 'Cancel'
     expect(page.all('.show-modal.rules-modal').count).to be 0
   end

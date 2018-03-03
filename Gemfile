@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.10'
 
 # AWS
 gem 'aws-sdk-cloudwatch'
@@ -61,7 +61,7 @@ gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
-gem 'loofah', '2.0.3' # loofah 2.1.1 is buggy; see https://github.com/flavorjones/loofah/pull/123#issuecomment-334369283
+gem 'loofah'
 gem 'mustache'
 gem 'rails-html-sanitizer'
 gem 'sassc-rails'
@@ -78,7 +78,7 @@ gem 'mysql2'
 gem 'paperclip', github: 'morgoth/paperclip', branch: 'aws-sdk-s3'
 
 # JSON
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.9.6'
 gem 'jbuilder'
 
 # Real-time error reporting
@@ -153,8 +153,9 @@ group :development do
 end
 
 group :development, :test do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'rspec-rails'
+  gem 'teaspoon', github: 'jejacks0n/teaspoon'
   gem 'teaspoon-jasmine'
 
   # Debugging
@@ -171,7 +172,6 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'chromedriver-helper'
   gem 'selenium-webdriver'
 
   # Fake ip-api.com server for specs (Geolocation)
