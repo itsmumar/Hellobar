@@ -275,7 +275,7 @@ GEM
     fuubar (2.2.0)
       rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
-    gibbon (2.2.4)
+    gibbon (3.2.0)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
     globalid (0.4.1)
