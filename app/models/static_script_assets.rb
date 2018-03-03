@@ -1,5 +1,5 @@
 module StaticScriptAssets
-  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+  mattr_reader(:uglifier) { Uglifier.new(harmony: true, output: { inline_script: true, comments: :none }) }
 
   mattr_reader(:jbuilder) do
     ActionController::Base.new.view_context.tap do |context|
