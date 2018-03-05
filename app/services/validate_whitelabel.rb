@@ -1,6 +1,7 @@
 class ValidateWhitelabel
   ERRORS = 'errors'.freeze
   MESSAGE = 'message'.freeze
+  VALID = 'valid'.freeze
   REASON = 'reason'.freeze
   VALIDATION_RESULTS = 'validation_results'.freeze
   VALIDATION_FAILED = 'Validation failed'.freeze
@@ -52,8 +53,8 @@ class ValidateWhitelabel
   def add_validation_results_to_errors
     return unless validation_results
 
-    validation_results.each_value do |result|
-      whitelabel.errors.add(:domain, result[REASON]) if result[REASON].present?
+    validation_results.values.reject { |result| result[VALID] }.each do |result|
+      whitelabel.errors.add(:domain, result[REASON])
     end
   end
 
