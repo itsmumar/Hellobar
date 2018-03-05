@@ -11,8 +11,8 @@ describe ValidateWhitelabel do
     let(:validation_failed_results) do
       {
         mail_cname: {
-          valid: false,
-          reason: 'Expected CNAME to match'
+          valid: true,
+          reason: nil
         },
         dkim1: {
           valid: false,
@@ -70,6 +70,7 @@ describe ValidateWhitelabel do
         expect(whitelabel.errors.messages).to be_present
         expect(whitelabel.errors.messages[:base]).to include 'Validation failed'
         expect(whitelabel.errors.messages[:domain]).to include 'Expected CNAME to match'
+        expect(whitelabel.errors.messages[:domain].size).to eq(2)
       end
     end
 
