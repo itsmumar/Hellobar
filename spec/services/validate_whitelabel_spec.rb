@@ -72,9 +72,6 @@ describe ValidateWhitelabel do
         expect(whitelabel.errors.messages[:domain]).to include 'Expected CNAME to match'
         expect(whitelabel.errors.messages[:domain].size).to eq(2)
       end
-
-      it 'skips blank error messages from the response' do
-      end
     end
 
     context 'when validation succeeds' do
