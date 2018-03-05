@@ -1,4 +1,10 @@
 class ValidateWhitelabel
+  ERRORS = 'errors'.freeze
+  MESSAGE = 'message'.freeze
+  REASON = 'reason'.freeze
+  VALIDATION_RESULTS = 'validation_results'.freeze
+  VALIDATION_FAILED = 'Validation failed'.freeze
+
   def initialize whitelabel:
     @whitelabel = whitelabel
   end
@@ -23,7 +29,7 @@ class ValidateWhitelabel
   def validate_sendgrid_response
     return if sendgrid_response.status_code.to_i == 200
 
-    error = sendgrid_response_body['errors'].first['message']
+    error = sendgrid_response_body[ERRORS].first[MESSAGE]
 
     whitelabel.errors.add :base, error
     raise_exception
@@ -35,7 +41,7 @@ class ValidateWhitelabel
     else
       invalidate_whitelabel
 
-      whitelabel.errors.add :base, 'Validation failed'
+      whitelabel.errors.add :base, VALIDATION_FAILED
 
       add_validation_results_to_errors
 
@@ -47,12 +53,12 @@ class ValidateWhitelabel
     return unless validation_results
 
     validation_results.each_value do |result|
-      whitelabel.errors.add :domain, result['reason']
+      whitelabel.errors.add(:domain, result[REASON]) if result[REASON].present?
     end
   end
 
   def validation_results
-    sendgrid_response_body['validation_results']
+    sendgrid_response_body[VALIDATION_RESULTS]
   end
 
   def validate_whitelabel
