@@ -28,8 +28,6 @@ class Campaign < ApplicationRecord
   scope :archived, -> { where(status: [ARCHIVED]) }
   scope :with_emails, -> { includes(:email) }
 
-  delegate :from_name, :from_email, :subject, :body, to: :email, allow_nil: true
-
   def statistics
     FetchCampaignStatistics.new(self).call
   end

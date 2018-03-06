@@ -10,7 +10,9 @@ class Api::EmailsController < Api::ApplicationController
   end
 
   def create
-    site.emails.create!(email_params)
+    @email = site.emails.build(email_params)
+    @email.save!
+
     render json: @email
   end
 
