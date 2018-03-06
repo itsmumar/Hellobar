@@ -19,7 +19,8 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def create
-    @campaign = CreateCampaign.new(site, campaign_params).call
+    @campaign = site.campaigns.build(campaign_params)
+    @campaign.save!
 
     render json: @campaign
   end
