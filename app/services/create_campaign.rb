@@ -7,6 +7,7 @@ class CreateCampaign
   def call
     campaign = site.campaigns.build(attributes)
     campaign.save!
+    campaign
   end
 
   private
