@@ -103,7 +103,6 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
   after :finished, 'tag_release:github'
-  after :finished, 'trigger_automated_qa_tests'
 
   desc 'Starts maintenance mode'
   task :start_maintenance do
@@ -211,28 +210,6 @@ namespace :tag_release do
       strategy.git 'remote update'
       strategy.git "branch -f #{ fetch :stage } #{ current_revision }"
       strategy.git "push -f origin #{ fetch :stage }"
-    end
-  end
-end
-
-desc 'Run automated QA tests after edge and production deployments'
-task :trigger_automated_qa_tests do
-  run_locally do
-    stage = fetch :stage
-
-    if !dry_run? && %i[edge production].include?(stage)
-      info "Trigger automated QA tests on #{ stage }"
-
-      execute <<~CMD
-        curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
-             -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
-             --header "Content-Type: application/json" \
-             --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
-      CMD
-    else
-      info 'Skipping automated QA tests'
-
-      next
     end
   end
 end
