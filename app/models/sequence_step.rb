@@ -6,7 +6,7 @@ class SequenceStep < ApplicationRecord
   belongs_to :executable, polymorphic: true
   belongs_to :sequence
 
-  validates :delay, presence: true
+  validates :delay, presence: true, numericality: { only_integer: true }
   validates :executable, presence: true
   validates :executable_type, inclusion: { in: VALID_EXECUTABLE_TYPES }
 end
