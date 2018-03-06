@@ -58,8 +58,8 @@ describe 'api/campaigns requests' do
 
       expect(campaigns.first[:id]).to eq campaign.id
       expect(campaigns.first[:name]).to eq campaign.name
-      expect(campaigns.first[:body]).to eq campaign.body
       expect(campaigns.first[:contact_list]).to be_present
+      expect(campaigns.first[:email]).to be_present
       expect(campaigns.first[:statistics]).to eql(
         'recipients' => recipients_count,
         'rejected' => 1,
@@ -113,9 +113,10 @@ describe 'api/campaigns requests' do
   describe 'POST #create' do
     let(:path) { api_site_campaigns_path(site.id) }
     let(:contact_list) { create :contact_list }
+    let(:email) { create(:email) }
 
     let(:campaign) do
-      attributes_for(:campaign, contact_list_id: contact_list.id).merge(attributes_for(:email))
+      attributes_for(:campaign, contact_list_id: contact_list.id, email_id: email.id)
     end
 
     let(:params) do

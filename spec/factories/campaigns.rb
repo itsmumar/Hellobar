@@ -6,7 +6,7 @@ FactoryBot.define do
 
     sequence(:name) { |i| "Campaign #{ i }" }
 
-    email
+    email { create :email, site: site }
 
     trait :draft do
       status Campaign::DRAFT
