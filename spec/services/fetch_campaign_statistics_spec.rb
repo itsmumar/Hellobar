@@ -28,8 +28,8 @@ describe FetchCampaignStatistics do
 
     let(:expected_result) do
       {
+        'subscribers' => recipients_count,
         'recipients' => 0,
-        'recipients_total' => recipients_count,
         'opened' => 1,
         'rejected' => 1,
         'delivered' => 1,

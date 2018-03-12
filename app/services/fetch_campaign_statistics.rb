@@ -19,8 +19,8 @@ class FetchCampaignStatistics
     statistics = normalize(fetch.first)
 
     initial_statistics
-      .merge(recipients_total)
       .merge(statistics)
+      .merge(subscribers_count)
   end
 
   def normalize(statistics)
@@ -71,9 +71,9 @@ class FetchCampaignStatistics
     }
   end
 
-  def recipients_total
+  def subscribers_count
     {
-      'recipients_total' => FetchContactListTotals.new(site, id: contact_list_id).call
+      'subscribers' => FetchContactListTotals.new(site, id: contact_list_id).call
     }
   end
 end
