@@ -28,7 +28,8 @@ describe FetchCampaignStatistics do
 
     let(:expected_result) do
       {
-        'recipients' => recipients_count,
+        'subscribers' => recipients_count,
+        'recipients' => 0,
         'opened' => 1,
         'rejected' => 1,
         'delivered' => 1,
@@ -81,14 +82,6 @@ describe FetchCampaignStatistics do
 
       it 'returns transformed DynamoDB data' do
         expect(subject.call).to eq initial_statistics.merge(expected_result)
-      end
-    end
-
-    context 'with sent campaign' do
-      let(:campaign) { create :campaign, :sent }
-
-      it 'returns recipients from DynamoDB' do
-        expect(subject.call).to include('recipients' => 0)
       end
     end
   end
