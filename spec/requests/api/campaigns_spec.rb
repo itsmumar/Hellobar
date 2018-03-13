@@ -8,6 +8,7 @@ describe 'api/campaigns requests' do
 
   let(:statistics) do
     {
+      'recipients' => 2,
       'opened' => 1,
       'rejected' => 1,
       'delivered' => 1,
@@ -61,7 +62,8 @@ describe 'api/campaigns requests' do
       expect(campaigns.first[:body]).to eq campaign.body
       expect(campaigns.first[:contact_list]).to be_present
       expect(campaigns.first[:statistics]).to eql(
-        'recipients' => recipients_count,
+        'subscribers' => recipients_count,
+        'recipients' => 2,
         'rejected' => 1,
         'sent' => 1,
         'processed' => 1,
