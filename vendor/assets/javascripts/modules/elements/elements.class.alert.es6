@@ -164,6 +164,7 @@ hellobar.defineModule('elements.class.alert',
     class Audio {
       constructor(iframe, model) {
         this._domNode = iframe.contentDocument.getElementsByTagName('audio')[0];
+        this._domNode.volume = 0.3
         this._model = model;
       }
 
