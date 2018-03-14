@@ -33,7 +33,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :emails, except: %i[new edit]
+      resources :emails, only: %i[create show update]
     end
 
     # Used by Lambda functions

@@ -1,10 +1,6 @@
 class Api::EmailsController < Api::ApplicationController
   before_action :find_email, except: %i[index create]
 
-  def index
-    render json: site.emails.to_a, each_serializer: EmailSerializer
-  end
-
   def show
     render json: @email
   end
@@ -19,11 +15,6 @@ class Api::EmailsController < Api::ApplicationController
   def update
     @email.update!(email_params)
     render json: @email
-  end
-
-  def destroy
-    @email.destroy
-    render json: { message: 'Email successfully deleted.' }
   end
 
   private

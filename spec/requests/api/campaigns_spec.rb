@@ -59,7 +59,7 @@ describe 'api/campaigns requests' do
       expect(campaigns.first[:id]).to eq campaign.id
       expect(campaigns.first[:name]).to eq campaign.name
       expect(campaigns.first[:contact_list]).to be_present
-      expect(campaigns.first[:email]).to be_present
+      expect(campaigns.first[:email_id]).to be_present
       expect(campaigns.first[:statistics]).to eql(
         'recipients' => recipients_count,
         'rejected' => 1,
