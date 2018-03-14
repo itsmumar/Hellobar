@@ -18,7 +18,6 @@ describe FetchCampaignStatistics do
           'opened' => BigDecimal(1),
           'rejected' => BigDecimal(1),
           'delivered' => BigDecimal(1),
-          'processed' => BigDecimal(1),
           'sent' => BigDecimal(1),
           'id' => BigDecimal(1),
           'type' => 'campaigns'
@@ -33,7 +32,6 @@ describe FetchCampaignStatistics do
         'opened' => 1,
         'rejected' => 1,
         'delivered' => 1,
-        'processed' => 1,
         'sent' => 1,
         'id' => 1,
         'type' => 'campaigns'
@@ -45,7 +43,6 @@ describe FetchCampaignStatistics do
         'recipients' => 0,
         'rejected' => 0,
         'sent' => 0,
-        'processed' => 0,
         'deferred' => 0,
         'dropped' => 0,
         'delivered' => 0,
