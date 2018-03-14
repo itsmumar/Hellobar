@@ -12,7 +12,6 @@ describe 'api/campaigns requests' do
       'opened' => 1,
       'rejected' => 1,
       'delivered' => 1,
-      'processed' => 1,
       'sent' => 1,
       'id' => 1,
       'type' => 'campaigns'
@@ -66,7 +65,6 @@ describe 'api/campaigns requests' do
         'recipients' => 2,
         'rejected' => 1,
         'sent' => 1,
-        'processed' => 1,
         'deferred' => 0,
         'dropped' => 0,
         'delivered' => 1,

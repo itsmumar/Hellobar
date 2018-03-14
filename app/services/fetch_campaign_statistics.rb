@@ -57,7 +57,6 @@ class FetchCampaignStatistics
       'recipients' => 0,
       'rejected' => 0,
       'sent' => 0,
-      'processed' => 0,
       'deferred' => 0,
       'dropped' => 0,
       'delivered' => 0,
