@@ -3,6 +3,7 @@ class AttachEmailsToSites < ActiveRecord::Migration
     add_column :emails, :site_id, :integer, after: :id
 
     Campaign.reset_column_information
+    Email.reset_column_information
 
     Campaign.unscoped.each do |campaign|
       campaign.email.update!(site_id: campaign.contact_list.site_id)
