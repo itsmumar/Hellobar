@@ -1,5 +1,5 @@
 class Api::EmailsController < Api::ApplicationController
-  before_action :find_email, except: %i[index create]
+  before_action :find_email, except: %i[create]
 
   def show
     render json: @email
