@@ -17,7 +17,7 @@ class FilterCampaigns
   attr_reader :site, :filter
 
   def scope_for(filter)
-    site.campaigns.public_send(filter)
+    site.campaigns.with_emails.public_send(filter)
   end
 
   def campaigns

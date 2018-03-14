@@ -6,7 +6,7 @@ class UpdateCampaign
 
   def call
     ensure_campaign_is_editable!
-    update_campaign
+    update_campaign!
   end
 
   private
@@ -19,7 +19,7 @@ class UpdateCampaign
     raise(ActiveRecord::RecordInvalid, campaign)
   end
 
-  def update_campaign
+  def update_campaign!
     campaign.update!(attributes)
   end
 end

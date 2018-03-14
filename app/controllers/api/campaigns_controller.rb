@@ -19,10 +19,10 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   def create
-    campaign = site.campaigns.build(campaign_params)
-    campaign.save!
+    @campaign = site.campaigns.build(campaign_params)
+    @campaign.save!
 
-    render json: campaign
+    render json: @campaign
   end
 
   def update
@@ -68,6 +68,6 @@ class Api::CampaignsController < Api::ApplicationController
   def campaign_params
     params
       .require(:campaign)
-      .permit :contact_list_id, :name, :from_name, :from_email, :subject, :body
+      .permit :contact_list_id, :email_id, :name
   end
 end

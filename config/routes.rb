@@ -32,6 +32,8 @@ Rails.application.routes.draw do
           post :validate
         end
       end
+
+      resources :emails, only: %i[create show update]
     end
 
     # Used by Lambda functions

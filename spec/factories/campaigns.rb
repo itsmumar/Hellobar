@@ -6,10 +6,7 @@ FactoryBot.define do
 
     sequence(:name) { |i| "Campaign #{ i }" }
 
-    from_name 'Hello Bar'
-    from_email 'dev@hellobar.com'
-    subject 'Hello'
-    body 'Test Campaign'
+    email { create :email, site: site }
 
     trait :draft do
       status Campaign::DRAFT
