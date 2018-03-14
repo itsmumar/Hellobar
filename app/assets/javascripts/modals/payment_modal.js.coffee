@@ -128,6 +128,9 @@ class @PaymentModal extends Modal
             isFree: @_isFree()
             siteName: @options.site.display_name
 
+          if typeof(ga) == 'function' && data?.site?.current_subscription
+            ga('send', 'event', 'Subscriptions', data.status, data.site.current_subscription.name)
+
           new PaymentConfirmationModal(options).open()
           @close()
         error: (xhr, status, error) =>
