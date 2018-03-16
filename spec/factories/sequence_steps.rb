@@ -4,8 +4,6 @@ FactoryBot.define do
 
     association :sequence
 
-    executable factory: :campaign
-
-    trait :campaign
+    executable factory: :email
   end
 end

@@ -27,6 +27,10 @@ Rails.application.routes.draw do
         resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
       end
 
+      resources :sequences, except: %i[new edit] do
+        resources :steps, except: %i[new edit], controller: 'sequence_steps'
+      end
+
       resource :whitelabel, only: %i[create show destroy] do
         member do
           post :validate
