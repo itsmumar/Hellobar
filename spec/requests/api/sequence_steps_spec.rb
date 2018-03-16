@@ -28,11 +28,13 @@ describe 'api/sequence_steps' do
       expect(json[:sequence_steps].size).to eq(steps.size)
 
       steps.each do |step|
-        expected_attributes = step.attributes.symbolize_keys.slice(:id,
-                                                                   :sequence_id,
-                                                                   :delay,
-                                                                   :executable_type,
-                                                                   :executable_id)
+        expected_attributes = step.attributes.symbolize_keys.slice(
+          :id,
+          :sequence_id,
+          :delay,
+          :executable_type,
+          :executable_id
+        )
 
         expect(json[:sequence_steps]).to include(expected_attributes)
       end
