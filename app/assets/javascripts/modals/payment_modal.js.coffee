@@ -129,7 +129,7 @@ class @PaymentModal extends Modal
             siteName: @options.site.display_name
 
           if typeof(ga) == 'function' && data?.site?.current_subscription
-            ga('send', 'event', 'Subscriptions', data.status, data.site.current_subscription.name)
+            ga('send', 'event', 'Subscription', data.status, data.site.current_subscription.name)
 
           new PaymentConfirmationModal(options).open()
           @close()
