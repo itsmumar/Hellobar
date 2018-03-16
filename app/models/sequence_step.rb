@@ -1,5 +1,5 @@
 class SequenceStep < ApplicationRecord
-  VALID_EXECUTABLE_TYPES = [Campaign.name, Email.name].freeze
+  VALID_EXECUTABLE_TYPES = [Email.name].freeze
 
   acts_as_paranoid
 

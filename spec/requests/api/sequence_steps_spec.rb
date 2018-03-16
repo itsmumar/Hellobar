@@ -58,10 +58,10 @@ describe 'api/sequence_steps' do
 
   describe 'POST #create' do
     let(:path) { api_site_sequence_steps_path(site.id, sequence.id) }
-    let(:campaign) { create(:campaign, contact_list: contact_list) }
+    let(:email) { create(:email) }
 
     let(:step_params) do
-      attributes_for(:sequence_step, executable_type: campaign.class.name, executable_id: campaign.id)
+      attributes_for(:sequence_step, executable_type: email.class.name, executable_id: email.id)
     end
 
     let(:params) do
