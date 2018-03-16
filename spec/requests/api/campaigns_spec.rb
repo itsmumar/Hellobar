@@ -12,7 +12,7 @@ describe 'api/campaigns requests' do
       'opened' => 1,
       'rejected' => 1,
       'delivered' => 1,
-      'sent' => 1,
+      'submitted' => 1,
       'id' => 1,
       'type' => 'campaigns'
     }

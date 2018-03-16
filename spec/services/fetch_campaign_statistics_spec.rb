@@ -18,7 +18,7 @@ describe FetchCampaignStatistics do
           'opened' => BigDecimal(1),
           'rejected' => BigDecimal(1),
           'delivered' => BigDecimal(1),
-          'sent' => BigDecimal(1),
+          'submitted' => BigDecimal(1),
           'id' => BigDecimal(1),
           'type' => 'campaigns'
         }
