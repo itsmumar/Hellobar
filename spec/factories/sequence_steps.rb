@@ -6,6 +6,8 @@ FactoryBot.define do
 
     executable factory: :campaign
 
-    trait :campaign
+    trait :email do
+      executable factory: :email
+    end
   end
 end
