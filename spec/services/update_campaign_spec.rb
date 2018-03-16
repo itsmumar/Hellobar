@@ -8,9 +8,10 @@ describe UpdateCampaign do
       let(:campaign) { create(:campaign) }
 
       it 'updates the campaign' do
-        expect(campaign).to receive(:update!)
-
         service.call
+
+        expect(campaign).to be_persisted
+        expect(campaign.name).to eq('New Campaign')
       end
 
       context 'with invalid attributes' do

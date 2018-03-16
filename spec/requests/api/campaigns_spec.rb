@@ -8,10 +8,10 @@ describe 'api/campaigns requests' do
 
   let(:statistics) do
     {
+      'recipients' => 2,
       'opened' => 1,
       'rejected' => 1,
       'delivered' => 1,
-      'processed' => 1,
       'sent' => 1,
       'id' => 1,
       'type' => 'campaigns'
@@ -58,13 +58,13 @@ describe 'api/campaigns requests' do
 
       expect(campaigns.first[:id]).to eq campaign.id
       expect(campaigns.first[:name]).to eq campaign.name
-      expect(campaigns.first[:body]).to eq campaign.body
       expect(campaigns.first[:contact_list]).to be_present
+      expect(campaigns.first[:email_id]).to be_present
       expect(campaigns.first[:statistics]).to eql(
-        'recipients' => recipients_count,
+        'subscribers' => recipients_count,
+        'recipients' => 2,
         'rejected' => 1,
         'sent' => 1,
-        'processed' => 1,
         'deferred' => 0,
         'dropped' => 0,
         'delivered' => 1,
@@ -113,9 +113,10 @@ describe 'api/campaigns requests' do
   describe 'POST #create' do
     let(:path) { api_site_campaigns_path(site.id) }
     let(:contact_list) { create :contact_list }
+    let(:email) { create(:email) }
 
     let(:campaign) do
-      attributes_for(:campaign, contact_list_id: contact_list.id)
+      attributes_for(:campaign, contact_list_id: contact_list.id, email_id: email.id)
     end
 
     let(:params) do

@@ -19,8 +19,8 @@ class FetchCampaignStatistics
     statistics = normalize(fetch.first)
 
     initial_statistics
-      .merge(recipients)
       .merge(statistics)
+      .merge(subscribers_count)
   end
 
   def normalize(statistics)
@@ -57,7 +57,6 @@ class FetchCampaignStatistics
       'recipients' => 0,
       'rejected' => 0,
       'sent' => 0,
-      'processed' => 0,
       'deferred' => 0,
       'dropped' => 0,
       'delivered' => 0,
@@ -71,18 +70,9 @@ class FetchCampaignStatistics
     }
   end
 
-  def recipients
+  def subscribers_count
     {
-      'recipients' => recipients_count
+      'subscribers' => FetchContactListTotals.new(site, id: contact_list_id).call
     }
-  end
-
-  def recipients_count
-    if campaign.sent?
-      # this number will be updated from `email_statistics` DynamoDB table
-      0
-    else
-      FetchContactListTotals.new(site, id: contact_list_id).call
-    end
   end
 end

@@ -86,7 +86,6 @@ hellobar.defineModule('elements.visibility',
       if ((siteElementModel.type === 'Bar' || siteElementModel.type === 'Slider' || siteElementModel.type === 'Alert')
         && !checkVisibilityControlCookies(siteElementModel) // with a visibility cookie set (user hid it)
         && !updatedSinceLastVisit(siteElementModel) // not updated since last visit
-        && !shouldHideElementConsideringTypeAndScreenWidth() // eligible for mobile
         && !nonMobileClickToCall(siteElementModel)) { // something
         // show, but in a hidden (minimized) state
         siteElementModel.view_condition = 'stay-hidden';

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228154712) do
+ActiveRecord::Schema.define(version: 20180302181450) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -104,18 +104,15 @@ ActiveRecord::Schema.define(version: 20180228154712) do
   add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "campaigns", force: :cascade do |t|
-    t.integer  "contact_list_id", limit: 4,                       null: false
-    t.string   "name",            limit: 255,                     null: false
-    t.string   "from_name",       limit: 255,                     null: false
-    t.string   "from_email",      limit: 255,                     null: false
-    t.string   "subject",         limit: 255,                     null: false
-    t.text     "body",            limit: 65535,                   null: false
-    t.string   "status",          limit: 20,    default: "draft", null: false
+    t.integer  "contact_list_id", limit: 4,                     null: false
+    t.string   "name",            limit: 255,                   null: false
+    t.string   "status",          limit: 20,  default: "draft", null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "sent_at"
     t.datetime "archived_at"
+    t.integer  "email_id",        limit: 4
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
@@ -184,6 +181,17 @@ ActiveRecord::Schema.define(version: 20180228154712) do
   end
 
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
+
+  create_table "emails", force: :cascade do |t|
+    t.integer  "site_id",    limit: 4,     null: false
+    t.string   "from_name",  limit: 255,   null: false
+    t.string   "from_email", limit: 255,   null: false
+    t.string   "subject",    limit: 255,   null: false
+    t.text     "body",       limit: 65535, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
 
   create_table "identities", force: :cascade do |t|
     t.integer  "site_id",     limit: 4

@@ -7,13 +7,13 @@ describe SendCampaign do
   describe '#call' do
     it 'calls SendSnsNotification with appropriate message' do
       message_hash = {
-        body: campaign.body,
+        body: campaign.email.body,
         contactListId: contact_list.id,
         campaignId: campaign.id,
         environment: 'test',
-        fromEmail: campaign.from_email,
-        fromName: campaign.from_name,
-        subject: campaign.subject
+        fromEmail: campaign.email.from_email,
+        fromName: campaign.email.from_name,
+        subject: campaign.email.subject
       }
 
       expect(SendSnsNotification).to receive_service_call
