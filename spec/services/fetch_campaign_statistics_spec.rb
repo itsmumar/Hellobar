@@ -32,7 +32,7 @@ describe FetchCampaignStatistics do
         'opened' => 1,
         'rejected' => 1,
         'delivered' => 1,
-        'sent' => 1,
+        'submitted' => 1,
         'id' => 1,
         'type' => 'campaigns'
       }
@@ -42,7 +42,7 @@ describe FetchCampaignStatistics do
       {
         'recipients' => 0,
         'rejected' => 0,
-        'sent' => 0,
+        'submitted' => 0,
         'deferred' => 0,
         'dropped' => 0,
         'delivered' => 0,

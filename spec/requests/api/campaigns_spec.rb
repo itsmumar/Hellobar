@@ -64,7 +64,7 @@ describe 'api/campaigns requests' do
         'subscribers' => recipients_count,
         'recipients' => 2,
         'rejected' => 1,
-        'sent' => 1,
+        'submitted' => 1,
         'deferred' => 0,
         'dropped' => 0,
         'delivered' => 1,
