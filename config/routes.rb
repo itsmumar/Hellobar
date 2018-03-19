@@ -175,6 +175,7 @@ Rails.application.routes.draw do
 
       resources :bills, only: [:show] do
         member do
+          get 'receipt'
           put 'void'
           put 'pay'
           put 'refund'

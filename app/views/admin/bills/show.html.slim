@@ -1,0 +1,29 @@
+dl
+  = bill_attribute 'ID', @bill.id
+  = bill_attribute 'Subscription', subscription_name(@bill)
+
+  = bill_attribute 'Amount' do
+    = @bill.amount
+    - if @bill.refund
+      br
+      | (#{@bill.refund.amount}) Refunded
+      span.refund_status
+        |  (#{@bill.refund.status})
+
+  = bill_attribute 'Status' do
+    span= @bill.status
+    - if @bill.failed?
+      span.glyphicon.glyphicon-question-sign< title=@bill.problem_reason data-toggle="tooltip" data-placement="bottom"
+
+  = bill_attribute 'Due At', @bill.due_at.strftime('%D')
+
+  = bill_attribute 'Receipt' do
+    - if @bill.paid? && @bill.amount != 0
+      = link_to("view", receipt_admin_site_bill_path(@site, @bill), target: '_blank')
+
+  = bill_attribute 'Actions', bill_actions(@bill, @site)
+  = bill_attribute 'Bill Duration', bill_duration(@bill)
+  = bill_attribute 'Status set at', @bill.status_set_at&.strftime('%D')
+  = bill_attribute 'Credit Card', credit_card_information(@credit_card)
+  = bill_attribute 'Extra days', bill_extra_days(@bill)
+  = bill_attribute 'Coupons', bill_coupons(@bill)

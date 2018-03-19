@@ -71,7 +71,7 @@
 
           - bills_for(site).each do |bill, refunds|
             tr
-              td= bill.id
+              td= link_to(bill.id, admin_site_bill_path(site, bill))
               td= subscription_name(bill)
               td
                 = bill.amount
@@ -91,26 +91,9 @@
               td= bill.due_at.strftime('%D')
               td
                 - if bill.paid? && bill.amount != 0
-                  = link_to("view", admin_site_bill_path(site, bill))
+                  = link_to("view", receipt_admin_site_bill_path(site, bill), target: '_blank')
               td
-                - if bill.pending? || bill.failed?
-                  = link_to "pay", pay_admin_site_bill_path(site, bill), method: :put, data: { confirm: "Pay this bill?" }
-                  '  or
-                  = link_to "void", void_admin_site_bill_path(site, bill), method: :put, data: { confirm: "Void this bill?" }
-                  br
-
-                - if !bill.voided? && bill.amount == 0
-                  = link_to "void", void_admin_site_bill_path(site, bill), method: :put, data: { confirm: "Void this bill?" }
-                  br
-
-                - if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0
-                  a.refund_link data-id=bill.id refund
-                  = form_for bill, url: refund_admin_site_bill_path(site, bill), method: :put, html: {class: "hidden"} do |f|
-                    = f.label "Refund Amount: "
-                    br
-                    = f.text_field :amount, value: bill.amount
-                    br
-                    = f.submit "Refund", data: { confirm: "Refund this bill?" }
+                = bill_actions(bill, site)
               td
                 = bill_duration(bill)
               td
