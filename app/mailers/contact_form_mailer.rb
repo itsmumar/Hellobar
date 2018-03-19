@@ -6,7 +6,7 @@ class ContactFormMailer < ApplicationMailer
   def generic_message(message, user, site)
     @message = message
     @website = site&.url
-    preview = message.to_s[0, 50]
+    preview = message.to_s.strip[0, 50]
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -17,7 +17,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def guest_message(name:, email:, message:)
-    preview = message.to_s[0, 50]
+    preview = message.to_s.strip[0, 50]
 
     params = {
       subject: "Contact Form: #{ preview }",
