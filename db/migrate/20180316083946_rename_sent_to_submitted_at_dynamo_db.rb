@@ -5,6 +5,7 @@ class RenameSentToSubmittedAtDynamoDb < ActiveRecord::Migration
     i = 0
     scan_table do |record|
       i += 1
+      next unless record.has_key? 'sent'
       rename_column('sent', 'submitted', record)
       puts "#{ i } records are processed" if (i % 1000).zero?
     end
