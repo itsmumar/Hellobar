@@ -44,23 +44,23 @@ module Admin::BillsHelper
     actions = []
 
     if bill.pending? || bill.failed?
-      actions << link_to("pay",
-                         pay_admin_site_bill_path(site, bill),
-                         method: :put, data: { confirm: "Pay this bill?" })
+      actions << link_to('pay',
+        pay_admin_site_bill_path(site, bill),
+        method: :put, data: { confirm: 'Pay this bill?' })
 
-      actions << link_to("void",
-                         void_admin_site_bill_path(site, bill),
-                         method: :put,
-                         data: { confirm: "Void this bill?" })
+      actions << link_to('void',
+        void_admin_site_bill_path(site, bill),
+        method: :put,
+        data: { confirm: 'Void this bill?' })
     end
 
     if !bill.voided? && bill.amount == 0
-      actions << link_to("void",
-                         void_admin_site_bill_path(site, bill),
-                         method: :put, data: { confirm: "Void this bill?" })
+      actions << link_to('void',
+        void_admin_site_bill_path(site, bill),
+        method: :put, data: { confirm: 'Void this bill?' })
     end
 
-    if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0
+    if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0 # rubocop:disable Style/IfUnlessModifier
       actions << render('admin/bills/refund_form', bill: bill, site: site)
     end
 
@@ -70,12 +70,12 @@ module Admin::BillsHelper
   def bill_attribute(label, value = nil, &block)
     value = capture(&block) if !value && block_given?
 
-    if value.present?
-      safe_join([
-        content_tag('dt', label),
-        content_tag('dd', value)
-      ])
-    end
+    return if value.blank?
+
+    safe_join([
+      content_tag('dt', label),
+      content_tag('dd', value)
+    ])
   end
 
   def credit_card_information(credit_card)
@@ -90,7 +90,7 @@ module Admin::BillsHelper
         tag(:br),
         credit_card.billing_address.city,
         tag(:br),
-        "#{credit_card.billing_address.state} #{credit_card.billing_address.zip}"
+        "#{ credit_card.billing_address.state } #{ credit_card.billing_address.zip }"
       ])
     end
 
