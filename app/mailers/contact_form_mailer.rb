@@ -1,4 +1,6 @@
 class ContactFormMailer < ApplicationMailer
+  WHITESPACE = ' '.freeze
+
   layout 'no_signature'
   default to: 'support@hellobar.com',
           from: 'Hello Bar <contact@hellobar.com>'
@@ -6,7 +8,7 @@ class ContactFormMailer < ApplicationMailer
   def generic_message(message, user, site)
     @message = message
     @website = site&.url
-    preview = message.to_s.strip[0, 50]
+    preview = normalize_for_subject(message)
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -17,7 +19,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def guest_message(name:, email:, message:)
-    preview = message.to_s.strip[0, 50]
+    preview = normalize_for_subject(message)
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -54,5 +56,11 @@ class ContactFormMailer < ApplicationMailer
     }
 
     mail params
+  end
+
+  private
+
+  def normalize_for_subject(value)
+    value.to_s.gsub(/\s/, WHITESPACE).strip.squeeze(WHITESPACE)
   end
 end
