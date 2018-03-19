@@ -8,7 +8,7 @@ class ContactFormMailer < ApplicationMailer
   def generic_message(message, user, site)
     @message = message
     @website = site&.url
-    preview = normalize_for_subject(message)[0, 50]
+    preview = build_preview(message)
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -19,7 +19,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def guest_message(name:, email:, message:)
-    preview = normalize_for_subject(message)[0, 50]
+    preview = build_preview(message)
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -60,7 +60,8 @@ class ContactFormMailer < ApplicationMailer
 
   private
 
-  def normalize_for_subject(value)
-    value.to_s.gsub(/\s/, WHITESPACE).strip.squeeze(WHITESPACE)
+  def build_preview(value)
+    # removes line-endings and unreadable symbols and truncate message
+    value.to_s.gsub(/\s/, WHITESPACE).strip.squeeze(WHITESPACE)[0, 50]
   end
 end

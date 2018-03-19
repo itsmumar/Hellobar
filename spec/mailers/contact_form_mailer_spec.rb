@@ -3,7 +3,7 @@ describe ContactFormMailer do
     context 'when message has leading or trailing line ending' do
       let(:message) { "\r\nmessage \r\n one more line\r\n" }
 
-      let(:expected_subject) { "Contact Form: message one more line" }
+      let(:expected_subject) { 'Contact Form: message one more line' }
 
       it 'cuts it off when build subject' do
         expect(mail.subject).to eq expected_subject
@@ -13,7 +13,7 @@ describe ContactFormMailer do
     context 'when message is very long' do
       let(:message) { 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit leo in velit.' }
 
-      let(:expected_subject) { "Contact Form: Lorem ipsum dolor sit amet, consectetur adipiscing" }
+      let(:expected_subject) { 'Contact Form: Lorem ipsum dolor sit amet, consectetur adipiscing' }
 
       it 'includes only 50 first chars to subject' do
         expect(mail.subject).to eq expected_subject
