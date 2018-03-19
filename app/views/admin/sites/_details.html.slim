@@ -67,6 +67,7 @@
             th Status set at
             th Credit Card
             th Extra days
+            th Coupons
 
           - bills_for(site).each do |bill, refunds|
             tr
@@ -118,6 +119,8 @@
                 = bill.credit_card&.last_digits
               td
                 = bill_extra_days(bill)
+              td
+                = bill_coupons(bill)
 
     div.site_section.subscription_history
       div.title Subscription History

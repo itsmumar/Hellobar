@@ -1,4 +1,6 @@
 module Admin::UsersHelper
+  COUPONS_SEPARATOR = ', '.freeze
+
   def bill_extra_days(bill)
     return trial_days(bill) if bill.subscription.trial_end_date
 
@@ -34,6 +36,10 @@ module Admin::UsersHelper
     "#{ us_short_datetime(bill.start_date) }-#{ us_short_datetime(bill.end_date) }"
   end
 
+  def bill_coupons(bill)
+    bill.coupon_uses.map { |cu| cu.coupon&.label }.compact.join(COUPONS_SEPARATOR)
+  end
+
   # rubocop: disable Rails/OutputSafety
   def site_info_or_form(site)
     if site.invoice_information.present?
@@ -67,6 +73,14 @@ module Admin::UsersHelper
     trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date })" if site.current_subscription&.trial_end_date
     subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
     "#{ site.url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name(site) }"
+  end
+
+  def referral_recipient_link(referral)
+    referral.recipient ? link_to(referral.email, admin_user_path(referral.recipient_id)) : referral.email
+  end
+
+  def referral_sender_link(referral)
+    link_to(referral.sender.email, admin_user_path(referral.sender.id))
   end
 
   private
