@@ -8,7 +8,7 @@ class ContactFormMailer < ApplicationMailer
   def generic_message(message, user, site)
     @message = message
     @website = site&.url
-    preview = normalize_for_subject(message)
+    preview = normalize_for_subject(message)[0, 50]
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -19,7 +19,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def guest_message(name:, email:, message:)
-    preview = normalize_for_subject(message)
+    preview = normalize_for_subject(message)[0, 50]
 
     params = {
       subject: "Contact Form: #{ preview }",
