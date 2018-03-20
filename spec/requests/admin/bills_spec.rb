@@ -14,12 +14,12 @@ describe 'Admin::Bills requests' do
     let!(:admin) { create(:admin) }
     before { stub_current_admin(admin) }
 
-    let!(:user) { create :user }
-    let!(:site) { create :site, user: user }
     let!(:bill) { create :bill, :pro, :paid }
+    let!(:site) { bill.subscription.site }
+    let!(:user) { site.users.first }
 
     describe 'GET #show' do
-      it 'allows admins to see a bill' do
+      it 'allows admins to see a bill details' do
         get admin_site_bill_path(site_id: site.id, id: bill)
         expect(response).to be_success
       end
@@ -31,6 +31,24 @@ describe 'Admin::Bills requests' do
 
         it 'responds with success' do
           get admin_site_bill_path(site_id: site.id, id: bill)
+          expect(response).to be_success
+        end
+      end
+    end
+
+    describe 'GET #receipt' do
+      it 'allows admins to see a bill receipt' do
+        get receipt_admin_site_bill_path(site_id: site.id, id: bill)
+        expect(response).to be_success
+      end
+
+      context 'with deleted site' do
+        before do
+          DestroySite.new(site).call
+        end
+
+        it 'responds with success' do
+          get receipt_admin_site_bill_path(site_id: site.id, id: bill)
           expect(response).to be_success
         end
       end

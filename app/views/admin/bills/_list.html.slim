@@ -1,0 +1,50 @@
+table
+  tr
+    th ID
+    th Subscription
+    th Amount
+    th Status
+    th Due At
+    th Receipt
+    th Actions
+    th Bill Duration
+    th Status set at
+    th Credit Card
+    th Extra days
+    th Coupons
+
+  - bills.each do |bill|
+    tr
+      td= link_to(bill.id, admin_site_bill_path(site, bill))
+      td= subscription_name(bill)
+      td
+        = bill.amount
+        - if user && context_for_trial(user, bill)
+          span.refund_status
+            |  #{context_for_trial(user, bill)}
+        - if bill.refund
+          br
+          | (#{bill.refund.amount}) Refunded
+          span.refund_status
+            |  (#{bill.refund.status})
+      td
+        span= bill.status
+        - if bill.failed?
+          span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
+
+      td= bill.due_at.strftime('%D')
+      td
+        - if bill.paid? && bill.amount != 0
+          = link_to("view", receipt_admin_site_bill_path(site, bill), target: '_blank')
+      td
+        = bill_actions(bill, site)
+      td
+        = bill_duration(bill)
+      td
+        = bill.status_set_at&.strftime('%D')
+      td
+        = bill.credit_card&.last_digits
+      td
+        = bill_extra_days(bill)
+      td
+        = bill_coupons(bill)

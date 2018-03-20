@@ -1,0 +1,13 @@
+table
+  tr
+    th Email
+    th Permissions
+    th Additional info
+
+  - site.site_memberships.with_deleted.each do |site_membership|
+    tr
+      td= link_to User.with_deleted.find_by(id: site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
+      td= site_membership.role
+      td
+        = " (user deleted)" unless site_membership.user
+        = " (site membership deleted)" if site_membership.deleted?

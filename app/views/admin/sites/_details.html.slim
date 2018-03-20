@@ -1,49 +1,6 @@
 #site_details
   div.site-block
-    div.site-title
-      h3
-        = link_to site_title(site), admin_site_path(site)
-
-      = link_to 'Visit site', site.url.html_safe, target: '_blank'
-
-      - unless site.deleted?
-        = link_to 'Contact Lists', admin_site_contact_lists_path(site), target: "_blank"
-        a.subscription_link data-siteid=site.id Change plan
-        - if site.current_subscription.paid?
-          a.free_days_link data-siteid=site.id Add free days
-        a.regenerate_link data-url=regenerate_admin_site_path(site)
-          | Regenerate script
-
-    = form_for site, url: admin_site_path(site), method: :put, html: {class: "form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
-      = f.hidden_field :id, value: site.id
-      table
-        tr
-          th Plan
-          th Schedule
-        = fields_for :subscription do |sf|
-          tr
-            td
-              - subscriptions.each do |sub|
-                div
-                  = sf.radio_button 'subscription', sub.name.demodulize, checked: site.current_subscription.is_a?(sub)
-                  = sf.label "#{sub.defaults[:name]}"
-            td
-              - Subscription::SCHEDULES.each do |name|
-                div
-                  = sf.radio_button 'schedule', name, checked: site.current_subscription&.schedule == name
-                  = sf.label "#{name.capitalize}"
-              div= sf.label "Trial period in days.  Leave blank for no trial."
-              div= sf.number_field 'trial_period'
-              = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
-
-    = form_for site, url: add_free_days_admin_site_path(site), method: :put, html: {class: "free_days_site_form form hidden"}, data: { "site-id" => site.id } do |f|
-      = f.hidden_field :id, value: site.id
-      table
-        tr
-          td
-            div= f.label 'Free days'
-            div= number_field 'free_days', 'count', value: 1, min: 1
-            = f.submit 'Submit', data: { confirm: 'Add free days to this site?' }
+    = render 'admin/sites/header', site: site
 
     - unless bills_for(site).empty?
       div.site_section
@@ -54,56 +11,7 @@
 
       div.site_section.billing_history
         div.title Billing History
-        table
-          tr
-            th ID
-            th Subscription
-            th Amount
-            th Status
-            th Due At
-            th Receipt
-            th Actions
-            th Bill Duration
-            th Status set at
-            th Credit Card
-            th Extra days
-            th Coupons
-
-          - bills_for(site).each do |bill, refunds|
-            tr
-              td= link_to(bill.id, admin_site_bill_path(site, bill))
-              td= subscription_name(bill)
-              td
-                = bill.amount
-                - if user && context_for_trial(user, bill)
-                  span.refund_status
-                    |  #{context_for_trial(user, bill)}
-                - if bill.refund
-                  br
-                  | (#{bill.refund.amount}) Refunded
-                  span.refund_status
-                    |  (#{bill.refund.status})
-              td
-                span= bill.status
-                - if bill.failed?
-                  span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
-
-              td= bill.due_at.strftime('%D')
-              td
-                - if bill.paid? && bill.amount != 0
-                  = link_to("view", receipt_admin_site_bill_path(site, bill), target: '_blank')
-              td
-                = bill_actions(bill, site)
-              td
-                = bill_duration(bill)
-              td
-                = bill.status_set_at&.strftime('%D')
-              td
-                = bill.credit_card&.last_digits
-              td
-                = bill_extra_days(bill)
-              td
-                = bill_coupons(bill)
+        = render 'admin/bills/list', bills: bills_for(site), site: site, user: user
 
     div.site_section.subscription_history
       div.title Subscription History
@@ -122,21 +30,7 @@
       div
         | Site created on #{site.created_at.strftime('%D')}
 
-
     - if site.site_memberships.with_deleted.any?
       div.site_section.site_users
         div.title Shared By
-
-        table
-          tr
-            th Email
-            th Permissions
-            th Additional info
-
-          - site.site_memberships.with_deleted.each do |site_membership|
-            tr
-              td= link_to User.with_deleted.find_by(id: site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
-              td= site_membership.role
-              td
-                = " (user deleted)" unless site_membership.user
-                = " (site membership deleted)" if site_membership.deleted?
+        = render 'admin/sites/site_users', site: site

@@ -67,17 +67,6 @@ module Admin::BillsHelper
     safe_join(actions, ' or ')
   end
 
-  def bill_attribute(label, value = nil, &block)
-    value = capture(&block) if !value && block_given?
-
-    return if value.blank?
-
-    safe_join([
-      content_tag('dt', label),
-      content_tag('dd', value)
-    ])
-  end
-
   def credit_card_information(credit_card)
     return unless credit_card
 
