@@ -10,3 +10,6 @@ div#user_profile
 
   - @user.sites.with_deleted.each do |site|
     = render 'admin/sites/details', site: site, user: @user
+
+  = render 'sent_referrals', referrals: @user.sent_referrals
+  = render 'received_referral', referral: @user.received_referral

@@ -1,0 +1,15 @@
+- if referrals.present?
+  div.user_section.sent_referrals
+    div.title Sent invitations
+    table
+      thead
+        tr
+          th Sent at
+          th Status
+          th Receiver
+      tbody
+        - referrals.each do |referral|
+          tr
+            td= referral.created_at.strftime('%D')
+            td= referral.state
+            td= referral_recipient_link(referral)

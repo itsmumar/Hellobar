@@ -1,39 +1,4 @@
 module Admin::UsersHelper
-  def bill_extra_days(bill)
-    return trial_days(bill) if bill.subscription.trial_end_date
-
-    expected_start_date = bill.end_date - bill.subscription.period
-    difference = (expected_start_date - bill.start_date) / 1.day
-    difference.zero? ? '' : difference.round
-  end
-
-  def trial_days(bill)
-    period = bill.subscription.trial_period / 1.day
-    period.round
-  end
-
-  def bills_for(site)
-    Subscription.unscoped do
-      site.bills.recurring.reorder(id: :desc)
-    end
-  end
-
-  def subscriptions
-    Subscription::ALL
-  end
-
-  def subscription_name(bill)
-    Subscription.unscoped do
-      name_and_id = "#{ bill.subscription.values[:name] } ##{ bill.subscription.id }"
-      return "#{ name_and_id } (trial)" if bill.subscription.trial_end_date
-      name_and_id
-    end
-  end
-
-  def bill_duration(bill)
-    "#{ us_short_datetime(bill.start_date) }-#{ us_short_datetime(bill.end_date) }"
-  end
-
   # rubocop: disable Rails/OutputSafety
   def site_info_or_form(site)
     if site.invoice_information.present?
@@ -67,6 +32,14 @@ module Admin::UsersHelper
     trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date })" if site.current_subscription&.trial_end_date
     subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
     "#{ site.url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name(site) }"
+  end
+
+  def referral_recipient_link(referral)
+    referral.recipient ? link_to(referral.email, admin_user_path(referral.recipient_id)) : referral.email
+  end
+
+  def referral_sender_link(referral)
+    link_to(referral.sender.email, admin_user_path(referral.sender.id))
   end
 
   private

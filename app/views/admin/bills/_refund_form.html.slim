@@ -1,0 +1,7 @@
+a.refund_link data-id=bill.id refund
+= form_for bill, url: refund_admin_site_bill_path(site, bill), method: :put, html: {class: "hidden"} do |f|
+  = f.label "Refund Amount: "
+  br
+  = f.text_field :amount, value: bill.amount
+  br
+  = f.submit "Refund", data: { confirm: "Refund this bill?" }

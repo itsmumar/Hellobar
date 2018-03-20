@@ -1,0 +1,18 @@
+#bill_details
+  div.bill_section.bill_details
+    div.title Bill Details
+    = render 'admin/bills/list', bills: [@bill], site: @site, user: nil
+
+  div.bill_section.site_details
+    div.title Site Details
+    = render 'admin/sites/header', site: @site
+
+  - if @credit_card
+    div.bill_section.credit_card
+      div.title Credit Card
+      = credit_card_information(@credit_card)
+
+  - if @site.site_memberships.with_deleted.any?
+    div.bill_section.users
+      div.title Shared by
+      = render 'admin/sites/site_users', site: @site

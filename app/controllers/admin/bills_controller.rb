@@ -2,6 +2,11 @@ class Admin::BillsController < AdminController
   def show
     @bill, @subscription, @site = load_data
     @credit_card = @bill.paid_with_credit_card
+  end
+
+  def receipt
+    @bill, @subscription, @site = load_data
+    @credit_card = @bill.paid_with_credit_card
     render 'bills/show', layout: 'receipt'
   end
 
