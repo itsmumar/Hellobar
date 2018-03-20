@@ -1,5 +1,5 @@
 class ContactFormMailer < ApplicationMailer
-  WHITESPACE = ' '.freeze
+  SPACE = ' '.freeze
 
   layout 'no_signature'
   default to: 'support@hellobar.com',
@@ -62,6 +62,6 @@ class ContactFormMailer < ApplicationMailer
 
   def build_preview(value)
     # removes line-endings and unreadable symbols and truncate message
-    value.to_s.gsub(/\s/, WHITESPACE).strip.squeeze(WHITESPACE)[0, 50]
+    value.to_s.gsub(/\s/, SPACE).strip.squeeze(SPACE)[0, 50]
   end
 end
