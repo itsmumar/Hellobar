@@ -6,9 +6,9 @@ class TrackEvent
 
   def call
     return unless Rails.env.production?
+
     track_with_intercom
     track_with_amplitude
-    track_with_diamond
   end
 
   private
@@ -17,10 +17,6 @@ class TrackEvent
 
   def track_with_intercom
     SendEventToIntercomJob.perform_later event.to_s, args
-  end
-
-  def track_with_diamond
-    SendEventToDiamondAnalyticsJob.perform_later event.to_s, args
   end
 
   def track_with_amplitude
