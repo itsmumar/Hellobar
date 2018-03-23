@@ -22,21 +22,17 @@ class CreateSiteElement
 
   def track_creation
     TrackEvent.new(:created_bar, site_element: site_element, user: current_user).call
-    analytics_track_site_element_creation!
     onboarding_track_site_element_creation!
-  end
-
-  def analytics_track_site_element_creation!
-    Analytics.track(
-      :site, site.id, 'Created Site Element',
-      site_element_id: site_element.id,
-      type: site_element.element_subtype,
-      style: site_element.type.to_s.downcase
-    )
   end
 
   def onboarding_track_site_element_creation!
     site.owners.each do |user|
+      # lets cheat the onboarding nonsense; moved here from the deleted TrackingController
+      # we are moving `create_a_bar` drip campaign mailer to Intercom
+      # and we will just delete `configure_your_bar` one
+      # https://crossover.atlassian.net/browse/XOHB-2550
+      user.onboarding_status_setter.selected_goal!
+
       user.onboarding_status_setter.created_element!
     end
   end

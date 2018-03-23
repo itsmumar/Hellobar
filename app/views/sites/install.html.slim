@@ -1,8 +1,3 @@
-- unless show_account_prompt?
-  javascript:
-    InternalTracking.track_current_person("install_page_viewed")
-
-
 .installation-page#install_page data-site-id=@site.id
   header
     h1 Install Hello Bar Script
@@ -13,7 +8,7 @@
 
   - install_help = install_help_data(@site)
   - if @site.had_wordpress_bars?
-    .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "old_hellobar_install"}.to_json
+    .reveal-wrapper.activated
       i.icon-edit
       .reveal-title I upgraded my site from the old Hello Bar
       p.reveal-subtext
@@ -33,7 +28,7 @@
         p That's it! You'll never need to update the code on your site again.
 
   - elsif install_help
-    .reveal-wrapper.track-click.activated data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_help_#{@site.install_type}"}.to_json
+    .reveal-wrapper.activated
       i.icon-edit
       .reveal-title I use #{install_help[0]} to manage my site
       p= "It looks like you use #{install_help[0]} to manage your site. Follow our guide to get up and running quickly."
@@ -46,7 +41,7 @@
         p Your install code is -
         pre= "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
 
-  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "install_myself"}.to_json
+  .reveal-wrapper
     i.icon-installmyself
     .reveal-title I can install code myself
     p If you know HTML and can edit your site, our install only takes one line of code.
@@ -56,7 +51,7 @@
       pre= "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>"
       p That's it! You'll never need to update the code on your site again.
 
-  div class=["reveal-wrapper", "track-click", @site.install_type == "wordpress" ? "activated" : ""] data-tracking-event="install_page_clicked" data-tracking-props={install_button: "wordpress"}.to_json
+  div class=["reveal-wrapper", @site.install_type == "wordpress" ? "activated" : ""]
     i.icon-wordpress
     .reveal-title I use WordPress
     p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
@@ -76,7 +71,7 @@
         | Try reading these&nbsp;
         = link_to "helpful instructions for installing plugins on WordPress", "http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation"
 
-  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "email_my_dev"}.to_json
+  .reveal-wrapper
     i.icon-contacts
     .reveal-title Email my Web Developer
     p If someone else manages your website, we can email them the instructions for you.
@@ -102,7 +97,7 @@
 
         = submit_tag "Send", class: "button"
 
-  .reveal-wrapper.track-click data-tracking-event="install_page_clicked" data-tracking-props={install_button: "i_need_help"}.to_json
+  .reveal-wrapper
     i.icon-support
     .reveal-title I need help!
     p Still not sure what to do? Let us help!

@@ -16,18 +16,6 @@ describe CreateSiteElement do
     service.call
   end
 
-  it 'calls Analytics.track' do
-    allow(Analytics).to receive(:track)
-    site_element = service.call
-
-    expect(Analytics).to have_received(:track).with(
-      :site, site.id, 'Created Site Element',
-      site_element_id: site_element.id,
-      type: site_element.element_subtype,
-      style: site_element.type.to_s.downcase
-    )
-  end
-
   it 'calls UserOnboardingStatusSetter' do
     status_setter = double('UserOnboardingStatusSetter')
     expect(UserOnboardingStatusSetter)

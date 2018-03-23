@@ -5,7 +5,6 @@ class WelcomeController < ApplicationController
 
   def index
     @last_logged_in_user = User.find_by(email: cookies[:login_email])
-    Analytics.track(*current_person_type_and_id, 'Homepage')
     set_site_url
   end
 

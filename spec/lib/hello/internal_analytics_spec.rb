@@ -46,22 +46,6 @@ describe Hello::InternalAnalytics do
         object.ab_variation('Example Test', user)
       end
 
-      it 'tracks a visitor prop if no user is available, but cookies are' do
-        cookies[:vid] = 'visitor_id'
-        allow(object).to receive(:cookies) { cookies }
-
-        expect(Analytics).to receive(:track).with(:visitor, 'visitor_id', 'Example Test', anything)
-
-        object.ab_variation('Example Test')
-      end
-
-      it 'uses current_user if available and no explicit user is passed' do
-        allow(object).to receive(:current_user) { user }
-
-        expect(Analytics).to receive(:track).with(:user, user.id, 'Example Test', anything)
-        object.ab_variation('Example Test')
-      end
-
       it 'records the value index in cookie if cookies are availble' do
         cookies[:vid] = 'visitor_id'
         allow(object).to receive(:cookies) { cookies }

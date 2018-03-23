@@ -19,15 +19,6 @@ describe DeliverUserOnboardingCampaign do
           .from(nil).to(0)
       end
 
-      it 'tracks event' do
-        expect(Analytics)
-          .to receive(:track).with(:user, user.id, 'Sent Email',
-            'Email Template' => 'create_a_bar',
-            'Campaign Name' => 'CreateABarCampaign')
-
-        service.call
-      end
-
       context 'when campaign has been already sent' do
         before { user.current_onboarding_status.update sequence_delivered_last: 0 }
 
@@ -38,11 +29,6 @@ describe DeliverUserOnboardingCampaign do
 
         it 'does not send email' do
           expect { service.call }.not_to have_enqueued_job
-        end
-
-        it 'does not track event' do
-          expect(Analytics).not_to receive(:track)
-          service.call
         end
       end
     end

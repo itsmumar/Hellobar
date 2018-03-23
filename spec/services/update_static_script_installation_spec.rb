@@ -17,12 +17,6 @@ describe UpdateStaticScriptInstallation do
         service.call
       end
 
-      it 'tracks the install event' do
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
-
-        service.call
-      end
-
       it 'sends the install event to analytics' do
         expect(TrackEvent).to receive_service_call
           .with(:installed_script, site: site, user: site.owners.first)
@@ -41,7 +35,6 @@ describe UpdateStaticScriptInstallation do
       let(:service) { UpdateStaticScriptInstallation.new site, installed: false }
 
       it 'does nothing' do
-        expect(Analytics).not_to receive(:track).with(:site, site.id, 'Uninstalled')
         expect(TrackEvent).not_to receive_service_call
 
         service.call
@@ -61,12 +54,6 @@ describe UpdateStaticScriptInstallation do
         expect { service.call }.to change {
           site.reload.script_uninstalled_at
         }.to Time.current
-      end
-
-      it 'tracks the uninstall event' do
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
-
-        service.call
       end
 
       it 'sends the uninstall event to analytics' do
@@ -91,7 +78,6 @@ describe UpdateStaticScriptInstallation do
       end
 
       it 'does not send tracking events' do
-        expect(Analytics).not_to receive(:track).with(:site, site.id, 'Installed')
         expect(TrackEvent).not_to receive_service_call
 
         service.call

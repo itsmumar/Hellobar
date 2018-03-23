@@ -50,8 +50,6 @@ class SubscriptionsController < ApplicationController
 
   def change_subscription(credit_card)
     bill = ChangeSubscription.new(@site, params[:billing], credit_card).call
-    BillSerializer.new(bill).tap do |serializer|
-      Analytics.track(*current_person_type_and_id, 'Upgraded') if serializer.upgrade?
-    end
+    BillSerializer.new(bill)
   end
 end

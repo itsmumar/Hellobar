@@ -34,7 +34,6 @@ describe GenerateAndStoreStaticScript do
 
   context 'when store locally' do
     let(:file) { double('file') }
-    before { allow(Analytics).to receive(:track) }
     before { allow(Settings).to receive(:store_site_scripts_locally).and_return true }
 
     it 'does not compress script' do

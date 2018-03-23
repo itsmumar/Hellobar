@@ -15,7 +15,6 @@
 # Couldn't get 'require_tree .' to ignore the dashboard directory, so I opted to indivdually list the local js assets you needed here
 
 #= require admin_metrics
-#= require internal_tracking
 
 #= require modal
 #= require chart
@@ -32,7 +31,6 @@
 #= require enforce_restrictions_initializer
 #= require flash_message_initializer
 #= require install_check
-#= require tracking_events
 #= require user_edit
 #= require referrals
 #= require images

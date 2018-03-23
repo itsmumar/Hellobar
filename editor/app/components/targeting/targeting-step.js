@@ -1,4 +1,4 @@
-/* globals InternalTracking, UpgradeAccountModal, RuleModal */
+/* globals UpgradeAccountModal, RuleModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
@@ -46,15 +46,6 @@ export default Ember.Component.extend({
 
   associateRuleToModel(rule) {
     this.get('modelLogic').setRule(rule);
-  },
-
-  trackUpgrade() {
-    if (this.get('applicationSettings.settings.track_editor_flow')) {
-      InternalTracking.track_current_person('Editor Flow', {
-        step: 'Choose Targeting Type - Converted to Pro',
-        ui: this.get('targetingUiVariant') ? 'variant' : 'original'
-      });
-    }
   },
 
   canTarget: function () {
@@ -126,7 +117,6 @@ export default Ember.Component.extend({
       site: that.get('model.site'),
       successCallback() {
         that.set('model.site.capabilities', this.site.capabilities);
-        that.send('trackUpgrade');
       },
       upgradeBenefit: 'create custom-targeted rules'
     };

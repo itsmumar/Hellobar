@@ -110,14 +110,7 @@ describe 'Subscriptions requests' do
       context 'when subscription type is changed' do
         let!(:previous_subscription) { create :subscription, :free, site: site }
 
-        it 'tracks upgrade event in analytics' do
-          expect(Analytics).to receive(:track).with(
-            :site, site.id, :change_sub,
-            to_subscription: 'Pro', to_schedule: 'monthly',
-            from_subscription: 'Free', from_schedule: 'monthly'
-          )
-          expect(Analytics).to receive(:track).with(:user, user.id, 'Upgraded')
-
+        it 'changes the subscription' do
           expect { put subscription_path(params) }
             .to change { site.current_subscription }
         end

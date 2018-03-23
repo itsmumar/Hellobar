@@ -40,8 +40,4 @@ module EmailDigestHelper
     till = end_date.strftime(end_date_format)
     "#{ from } - #{ till }"
   end
-
-  def tracker_param(*args)
-    Hello::TrackingParam.encode_tracker(*args)
-  end
 end

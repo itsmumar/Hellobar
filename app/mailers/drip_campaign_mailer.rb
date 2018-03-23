@@ -10,6 +10,7 @@ class DripCampaignMailer < ApplicationMailer
     mail to: user.email
   end
 
+  # TODO: remove this email
   def configure_your_bar(user)
     @user = user
     mail to: user.email

@@ -144,7 +144,6 @@ class SitesController < ApplicationController
       promotional_code: session[:promotional_code]
     ).call
 
-    Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
     redirect_to new_site_site_element_path(@site)
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:error] = e.record.errors.full_messages
