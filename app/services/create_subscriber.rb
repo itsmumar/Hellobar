@@ -47,7 +47,7 @@ class CreateSubscriber
       email: email,
       n: name,
       ts: Time.current.to_i
-    }
+    }.reject { |_k, v| v.blank? }
   end
 
   def table_name
