@@ -23,7 +23,7 @@ nav.tabs-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
   .add-site-wrapper
-    = link_to "Add New Site", new_site_path, class: ["button", "track-click"], data: {tracking_event: "edit_site_new_site_clicked"}
+    = link_to "Add New Site", new_site_path, class: "button"
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.free?
