@@ -141,7 +141,6 @@ module Hello
       return nil unless ab_test_passes_time_constraints?(test_name)
       ab_test = ab_test(test_name)
       value_index, status = ab_variation_index_without_setting(test_name, user)
-      value = nil
 
       user ||= current_user if defined?(current_user)
 
@@ -152,15 +151,9 @@ module Hello
         elsif user.blank?
           raise 'Cookies or user must be present for A/B test'
         end
-
-        # Get the value
-        value = ab_test[:values][value_index]
-      else
-        # Just get the value
-        value = ab_test[:values][value_index]
       end
 
-      value
+      ab_test[:values][value_index]
     end
 
     def visitor_id
