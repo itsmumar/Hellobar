@@ -21,6 +21,7 @@ describe CreateSiteElement do
     expect(UserOnboardingStatusSetter)
       .to receive(:new).with(user, anything, anything).and_return(status_setter)
 
+    expect(status_setter).to receive(:selected_goal!)
     expect(status_setter).to receive(:created_element!)
     service.call
   end
