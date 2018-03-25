@@ -44,4 +44,31 @@ describe CreateSubscriber do
       ts: Time.current.to_i
     )
   end
+
+  context 'when name is blank' do
+    let(:params) { { email: 'email@example.com', name: '' } }
+
+    it 'filters it out' do
+      expect(dynamo).to receive(:put_item).with(
+        item: {
+          lid: contact_list.id,
+          email: params[:email],
+          ts: Time.current.to_i
+        },
+        return_consumed_capacity: 'TOTAL',
+        return_values: 'ALL_OLD',
+        table_name: 'test_contacts'
+      ).and_return(response)
+
+      service.call
+    end
+
+    it 'returns new record without a name', :freeze do
+      expect(service.call).to eql(
+        lid: contact_list.id,
+        email: params[:email],
+        ts: Time.current.to_i
+      )
+    end
+  end
 end
