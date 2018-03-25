@@ -32,21 +32,6 @@ describe CreateUser do
     service.call
   end
 
-  it 'tracks events with Analytics' do
-    allow_any_instance_of(UserOnboardingStatusSetter)
-      .to receive(:ab_variation_or_nil).and_return(nil)
-
-    expect(Analytics)
-      .to receive(:track)
-      .with(:user, anything, 'Signed Up', {})
-
-    expect(Analytics)
-      .to receive(:track)
-      .with(:user, anything, 'Completed Signup', email: original_email)
-
-    service.call
-  end
-
   context 'when the user is trying to login with a different Google account' do
     let(:service) { CreateUser.new(omniauth_hash, 'user2@eample.com', {}) }
 

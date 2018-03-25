@@ -51,28 +51,10 @@ describe SettingsSerializer do
     end
   end
 
-  describe '#track_editor_flow' do
-    context 'when user has a site but has no bars yet' do
-      it 'returns true' do
-        expect(serializer.track_editor_flow).to be_truthy
-      end
-    end
-
-    context 'when user has a site but has no bars yet' do
-      let!(:site) { create :site, :with_rule }
-
-      before { create :site_element, site: site }
-
-      it 'returns false' do
-        expect(serializer.track_editor_flow).to be_falsey
-      end
-    end
-  end
-
   describe '#serializable_hash' do
     it 'has expected structure' do
       expect(serializer.serializable_hash).to include(
-        :current_user, :geolocation_url, :track_editor_flow,
+        :current_user, :geolocation_url,
         :available_themes, :available_fonts, :country_codes
       )
     end

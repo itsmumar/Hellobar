@@ -1,5 +1,4 @@
 class HeartbeatController < ApplicationController
-  skip_before_action :record_tracking_param
   skip_after_action :store_last_requested_path
 
   def index

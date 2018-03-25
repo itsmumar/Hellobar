@@ -32,8 +32,6 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(@user)
 
         cookies.permanent[:login_email] = email
-        # Record log in
-        Analytics.track(*current_person_type_and_id, 'Logged In', ip: request.remote_ip)
 
         redirect_to after_sign_in_path_for(@user)
       else

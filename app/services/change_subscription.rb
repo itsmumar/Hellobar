@@ -120,7 +120,6 @@ class ChangeSubscription
 
     BillingLogger.change_subscription(site, props)
 
-    Analytics.track(:site, site.id, :change_sub, props)
     TrackEvent.new(:changed_subscription, site: site, user: site.owners.first).call
   end
 

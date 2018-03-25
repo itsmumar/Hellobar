@@ -13,10 +13,6 @@ class @Modal
       @$modal.trigger("open")
     ), 0
 
-    # Track the open if possible
-    if @modalName && @source
-      InternalTracking.track_current_person(@modalName, { source: @source })
-
   close: ->
     @$modal.removeClass('show-modal')
 

@@ -8,8 +8,6 @@ class CreateUser
   def call
     create_user.tap do |user|
       TrackEvent.new(:signed_up, user: user).call
-      Analytics.track(:user, user.id, 'Signed Up', track_options)
-      Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
     end
   end
 

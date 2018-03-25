@@ -7,7 +7,6 @@ export default Ember.Component.extend({
 
   theming: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
-  internalTracking: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
 
   currentThemeIsGeneric: Ember.computed.alias('theming.currentThemeIsGeneric'),
@@ -72,11 +71,6 @@ export default Ember.Component.extend({
 
       } else {
         // New Contact List
-        this.get('internalTracking').track('Editor Flow', {
-          step: 'Contact List Settings',
-          goal: this.get('model.element_subtype')
-        });
-
         new ContactListModal({
           siteID,
           saveURL: `/sites/${siteID}/contact_lists.json`,

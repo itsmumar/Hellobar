@@ -50,17 +50,6 @@ describe ChangeSubscription, :freeze do
       end
     end
 
-    it 'sends an event to Analytics' do
-      props = {
-        to_subscription: 'Pro',
-        to_schedule: 'yearly',
-        from_subscription: 'Free',
-        from_schedule: 'monthly'
-      }
-      expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
-      service.call
-    end
-
     it 'sends an event to Intercom' do
       allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
@@ -312,17 +301,6 @@ describe ChangeSubscription, :freeze do
               expect(site).to be_capable_of :free
             end
           end
-        end
-
-        it 'sends an event to Analytics' do
-          props = {
-            to_subscription: 'Free',
-            to_schedule: 'monthly',
-            from_subscription: 'Pro',
-            from_schedule: 'monthly'
-          }
-          expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
-          change_subscription('free')
         end
 
         it 'sends an event to Intercom' do

@@ -1,4 +1,4 @@
-/* globals siteID, ContactListModal, formatE164, InternalTracking, EditorErrorsModal */
+/* globals siteID, ContactListModal, formatE164, EditorErrorsModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
@@ -110,14 +110,6 @@ export default Ember.Route.extend({
         this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.set('saveSubmitted', true);
         this.set('saveCount', this.get('saveCount') + 1);
-        if (this.controller.get('applicationSettings.track_editor_flow')) {
-          InternalTracking.track_current_person('Editor Flow', {
-            step: 'Save Bar',
-            goal: this.currentModel.element_subtype,
-            style: this.currentModel.type,
-            save_attempts: this.get('saveCount')
-          });
-        }
 
         const ajaxParams = window.barID ? {
           url: `/sites/${window.siteID}/site_elements/${window.barID}.json`,
@@ -136,14 +128,6 @@ export default Ember.Route.extend({
           data: JSON.stringify(this.currentModel),
 
           success: () => {
-            if (this.controller.get('applicationSettings.track_editor_flow')) {
-              InternalTracking.track_current_person('Editor Flow', {
-                step: 'Completed',
-                goal: this.currentModel.element_subtype,
-                style: this.currentModel.type,
-                save_attempts: this.get('saveCount')
-              });
-            }
             if (this.controller.get('model.site.site_elements_count') === 0) {
               window.location = `/sites/${window.siteID}`;
             } else {

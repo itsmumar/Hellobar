@@ -35,7 +35,6 @@ class UpdateStaticScriptInstallation
 
     RedeemReferralForRecipient.new(site).call
 
-    Analytics.track(:site, site.id, 'Installed')
     track_script_installation
   end
 
@@ -43,7 +42,6 @@ class UpdateStaticScriptInstallation
     # update_column so that we don't trigger site script regeneration
     site.update_column :script_uninstalled_at, Time.current
 
-    Analytics.track(:site, site.id, 'Uninstalled')
     track_script_uninstallation
   end
 

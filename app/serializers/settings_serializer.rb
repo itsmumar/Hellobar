@@ -1,5 +1,5 @@
 class SettingsSerializer < ActiveModel::Serializer
-  attributes :current_user, :geolocation_url, :track_editor_flow,
+  attributes :current_user, :geolocation_url,
     :available_themes, :available_fonts, :country_codes
 
   def available_themes
@@ -16,10 +16,6 @@ class SettingsSerializer < ActiveModel::Serializer
 
   def geolocation_url
     Settings.geolocation_url
-  end
-
-  def track_editor_flow
-    user&.sites&.count == 1 && user&.site_elements&.count == 0
   end
 
   def country_codes

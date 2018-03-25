@@ -36,15 +36,6 @@ describe ApplicationController do
       end
     end
   end
-
-  describe 'record_tracking_param' do
-    it 'records the tracking param' do
-      allow(controller).to receive(:params).and_return(trk: 'asdf')
-      expect(Hello::TrackingParam).to receive(:track).with('asdf')
-
-      controller.record_tracking_param
-    end
-  end
 end
 
 describe ApplicationController, '#require_no_user' do

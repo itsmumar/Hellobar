@@ -27,13 +27,6 @@ export default Ember.Component.extend({
 
   actions: {
     selectGoal (routeName) {
-      if (this.get('siteID')) {
-        $.ajax({
-          method: 'POST',
-          url: `/sites/${this.get('siteID')}/track_selected_goal`
-        });
-      }
-
       this.get('router').transitionTo(routeName);
     }
   }

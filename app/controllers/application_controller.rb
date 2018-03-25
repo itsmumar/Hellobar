@@ -8,8 +8,6 @@ class ApplicationController < ActionController::Base
   helper_method :access_token, :current_admin, :impersonated_user,
     :current_site, :visitor_id, :ab_variation, :ab_variation_or_nil
 
-  before_action :record_tracking_param
-  before_action :track_h_visit
   before_action :set_raven_context
   after_action :store_last_requested_path
 
@@ -97,24 +95,6 @@ class ApplicationController < ActionController::Base
         current_user.sites.first
       end
     end
-  end
-
-  def record_tracking_param
-    Hello::TrackingParam.track(params[:trk]) if params[:trk]
-  end
-
-  def track_h_visit
-    return unless params[:hbt]
-
-    track_params = { h_type: params[:hbt] }
-    if params[:sid] # If site element is given, attach the site element id and site id
-      site_element = SiteElement.where(id: params[:sid]).first
-      if site_element
-        track_params[:site_element_id] = site_element.id
-        track_params[:site_id] = site_element.site.id if site_element.site
-      end
-    end
-    Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
   end
 
   def set_raven_context

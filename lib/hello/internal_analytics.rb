@@ -141,7 +141,6 @@ module Hello
       return nil unless ab_test_passes_time_constraints?(test_name)
       ab_test = ab_test(test_name)
       value_index, status = ab_variation_index_without_setting(test_name, user)
-      value = nil
 
       user ||= current_user if defined?(current_user)
 
@@ -152,18 +151,9 @@ module Hello
         elsif user.blank?
           raise 'Cookies or user must be present for A/B test'
         end
-
-        # Get the value
-        value = ab_test[:values][value_index]
-
-        # Track it
-        Analytics.track(*current_person_type_and_id(user), test_name, value: value)
-      else
-        # Just get the value
-        value = ab_test[:values][value_index]
       end
 
-      value
+      ab_test[:values][value_index]
     end
 
     def visitor_id
@@ -171,7 +161,6 @@ module Hello
 
       unless cookies[VISITOR_ID_COOKIE]
         cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{ Time.current.to_f }_#{ request.remote_ip }_#{ request.env['HTTP_USER_AGENT'] }_#{ rand(1000) }_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
-        Analytics.track(*current_person_type_and_id, 'First Visit', ip: request.remote_ip)
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash
       cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
@@ -190,8 +179,6 @@ module Hello
       if user
         # See if a we have an unassociated visitor ID
         if user_id_from_cookie == USER_ID_NOT_SET_YET
-          # Associate it with the visitor
-          Analytics.alias(visitor_id, user.id)
           # Mark it as associated
           cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH] + user.id.to_s
         end

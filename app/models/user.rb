@@ -6,10 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
   # devise :omniauthable, :omniauth_providers => [:google_oauth2]
 
-  after_initialize :check_if_temporary
   before_save :clear_invite_token
   after_save :disconnect_oauth, if: :oauth_user?
-  after_save :track_temporary_status_change
   after_create :create_referral_token
   after_create :add_to_onboarding_campaign
   has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
@@ -126,16 +124,6 @@ class User < ApplicationRecord
   def role_for_site(site)
     return unless (membership = site_memberships.find_by(site: site))
     membership.role.to_sym
-  end
-
-  def track_temporary_status_change
-    return unless @was_temporary && !temporary?
-    Analytics.track(:user, id, 'Completed Signup', email: email)
-    @was_temporary = false
-  end
-
-  def check_if_temporary
-    @was_temporary = temporary?
   end
 
   def add_to_onboarding_campaign

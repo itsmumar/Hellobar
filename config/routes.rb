@@ -83,8 +83,6 @@ Rails.application.routes.draw do
 
     get 'team'
 
-    post :track_selected_goal, to: 'tracking#track_selected_goal'
-
     resource :wordpress_plugin, controller: :wordpress_plugin
 
     put 'site_elements/:id/toggle_paused', to: 'site_elements#toggle_paused', as: :site_element_toggle_paused
@@ -195,10 +193,6 @@ Rails.application.routes.draw do
     post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     get 'locked', to: 'access#locked', as: :locked
   end
-
-  post '/track/current_person/did/:event' => 'tracking#track_current_person'
-  post '/track/:type/:id/did/:event' => 'tracking#track'
-  get '/pixel.gif' => 'tracking#pixel', :as => :tracking_pixel
 
   get '/install' => 'sites#install_redirect'
 
