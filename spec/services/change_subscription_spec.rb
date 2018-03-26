@@ -318,6 +318,11 @@ describe ChangeSubscription, :freeze do
             .to have_enqueued_job(SendEventToAmplitudeJob)
             .with('changed_subscription', site: site, user: user)
         end
+
+        it 'returns a bill' do
+          bill = change_subscription('free')
+          expect(bill).to be_a(Bill)
+        end
       end
 
       context 'when downgrading to Free from Enterprise' do
