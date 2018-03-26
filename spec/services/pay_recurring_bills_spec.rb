@@ -138,6 +138,7 @@ describe PayRecurringBills do
           expect(DowngradeSiteToFree)
             .to receive_service_call
             .with(bill_without_credit_card.site)
+            .and_return(build(:subscription))
 
           expect { service.call }
             .to change { bill_without_credit_card.reload.status }
