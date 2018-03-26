@@ -130,5 +130,9 @@ class ChangeSubscription
   def downgrade_site_to_free
     subscription = DowngradeSiteToFree.new(site).call
     track_subscription_change(subscription)
+
+    # since the service has to return a bill
+    # let's just return an new one
+    subscription.bills.new
   end
 end
