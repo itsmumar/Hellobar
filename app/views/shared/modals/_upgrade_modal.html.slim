@@ -47,7 +47,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         / Pro Package
         .package-block.pro
           .package-title
-            .package-name Pro
+            .package-name = Subscription.pro_or_growth_for(current_user).defaults[:name]
             .package-price.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}/mo
             .package-price.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}/year
 
