@@ -11,16 +11,16 @@ describe Subscription do
   end
 
   describe '.pro_or_growth_for' do
-    context 'when user signed up before 01/04/2018' do
-      let(:user) { build :user, created_at: '01/03/2018' }
+    context 'when user signed up before 2018-04-01' do
+      let(:user) { build :user, created_at: '2018-03-31' }
 
       it 'returns Pro' do
         expect(Subscription.pro_or_growth_for(user)).to be Subscription::Pro
       end
     end
 
-    context 'when user signed up after 01/04/2018' do
-      let(:user) { build :user, created_at: '01/04/2018' }
+    context 'when user signed up after 2018-04-01' do
+      let(:user) { build :user, created_at: '2018-04-01' }
 
       it 'returns Growth' do
         expect(Subscription.pro_or_growth_for(user)).to be Subscription::Growth

@@ -44,10 +44,7 @@ feature 'Payment modal interaction', :js do
         .to receive(:ab_variation).and_return('original')
     end
 
-    context 'before 2018-04-01' do
-      before(:each) { Timecop.freeze('2018-03-31T00:00 UTC') }
-      after(:each)  { Timecop.return }
-
+    context 'before 2018-04-01', freeze: '2018-03-31T00:00 UTC' do
       scenario 'upgrade to pro from free' do
         visit edit_site_path(site)
 
