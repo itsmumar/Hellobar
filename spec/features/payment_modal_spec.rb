@@ -71,10 +71,7 @@ feature 'Payment modal interaction', :js do
       end
     end
 
-    context 'after 2018-04-01' do
-      before(:each) { Timecop.freeze('2018-04-01T00:00 UTC') }
-      after(:each)  { Timecop.return }
-
+    context 'after 2018-04-01', freeze: '2018-04-01T00:00 UTC' do
       scenario 'upgrade to growth from free' do
         visit edit_site_path(site)
 
@@ -89,12 +86,12 @@ feature 'Payment modal interaction', :js do
         fill_payment_form
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE GROWTH PLAN!"
-        expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
-        expect(page).to have_text 'You will be billed $149.00 every year.'
+        expect(page).to have_text 'Your card ending in 1111 has been charged $289.00.'
+        expect(page).to have_text 'You will be billed $289.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
 
         page.find('a', text: 'OK').click
-        expect(page).to have_content 'is on the Pro plan'
+        expect(page).to have_content 'is on the Growth plan'
       end
     end
 
