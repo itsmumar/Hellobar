@@ -5,6 +5,7 @@ class Subscription
     class << self
       def defaults
         {
+          type: 'pro_managed',
           name: 'Pro Managed',
           label: 'MNG',
           monthly_amount: 0.0,

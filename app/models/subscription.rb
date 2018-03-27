@@ -1,11 +1,12 @@
 require 'discount_calculator'
 
 class Subscription < ApplicationRecord
+  NEW_PRO_AFTER = '01/04/2018'.to_date.freeze
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
 
-  ALL = [Free, FreePlus, Pro, ProComped, ProManaged, Enterprise].freeze
+  ALL = [Free, FreePlus, NewPro, Pro, ProComped, ProManaged, Enterprise].freeze
 
   acts_as_paranoid
 
@@ -27,6 +28,14 @@ class Subscription < ApplicationRecord
   validates :site, presence: true, associated: true
 
   class << self
+    def pro_for(user)
+      if user.created_at >= NEW_PRO_AFTER
+        Subscription::NewPro
+      else
+        Pro
+      end
+    end
+
     def defaults
       {}
     end

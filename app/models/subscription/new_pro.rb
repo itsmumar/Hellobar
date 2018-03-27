@@ -1,15 +1,15 @@
 class Subscription
-  class Pro < Subscription
+  class NewPro < Pro
     autoload :Capabilities, 'subscription/pro/capabilities'
 
     class << self
       def defaults
         {
-          type: 'pro',
+          type: 'new_pro',
           name: 'Pro',
           label: 'PRO',
-          monthly_amount: 15.0,
-          yearly_amount: 149.0,
+          monthly_amount: 29.0,
+          yearly_amount: 289.0,
           visit_overage: 250_000, # after this many visits in a month
           # visit_overage_amount: 25_000, # every X visitors
           visit_overage_amount: 5.00, # $$$
