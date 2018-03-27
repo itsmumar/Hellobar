@@ -48,8 +48,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         .package-block.pro
           .package-title
             .package-name Pro
-            .package-price.monthly #{subscription_cost(Subscription.pro_for(current_user), :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription.pro_for(current_user), :yearly)}/year
+            .package-price.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}/year
 
           .package-features
 
@@ -71,7 +71,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                 span.info-plus Target bars by device, location, URL, or traffic source
 
             .package-status
-              = choose_plan_button(Subscription.pro_for(current_user).new)
+              = choose_plan_button(Subscription.pro_or_growth_for(current_user).new)
               .email-links
                 - if current_site
                   - current_site.owners.each do |owner|

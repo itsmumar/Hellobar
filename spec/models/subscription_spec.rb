@@ -10,20 +10,20 @@ describe Subscription do
     expect(subscription.deleted_at).to eq Time.current
   end
 
-  describe '.pro_for' do
+  describe '.pro_or_growth_for' do
     context 'when user signed up before 01/04/2018' do
       let(:user) { build :user, created_at: '01/03/2018' }
 
       it 'returns Pro' do
-        expect(Subscription.pro_for(user)).to be Subscription::Pro
+        expect(Subscription.pro_or_growth_for(user)).to be Subscription::Pro
       end
     end
 
     context 'when user signed up after 01/04/2018' do
       let(:user) { build :user, created_at: '01/04/2018' }
 
-      it 'returns NewPro' do
-        expect(Subscription.pro_for(user)).to be Subscription::NewPro
+      it 'returns Growth' do
+        expect(Subscription.pro_or_growth_for(user)).to be Subscription::Growth
       end
     end
   end
