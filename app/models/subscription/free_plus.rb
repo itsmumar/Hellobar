@@ -5,6 +5,7 @@ class Subscription
     class << self
       def defaults
         {
+          type: 'free_plus',
           name: 'Free Plus',
           label: 'FREE',
           monthly_amount: 0.0,

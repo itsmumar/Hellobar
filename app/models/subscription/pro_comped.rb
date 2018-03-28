@@ -5,6 +5,7 @@ class Subscription
     class << self
       def defaults
         {
+          type: 'pro_comped',
           name: 'Pro Comped',
           label: 'CMP',
           monthly_amount: 0.0,

@@ -44,26 +44,52 @@ feature 'Payment modal interaction', :js do
         .to receive(:ab_variation).and_return('original')
     end
 
-    scenario 'upgrade to pro from free' do
-      visit edit_site_path(site)
+    context 'before 2018-04-01', freeze: '2018-03-31T00:00 UTC' do
+      scenario 'upgrade to pro from free' do
+        visit edit_site_path(site)
 
-      page.find('footer .show-upgrade-modal').click
-      within '.package-block.pro' do
-        find('.button', text: 'Choose Plan').click
+        page.find('footer .show-upgrade-modal').click
+        within '.package-block.pro' do
+          find('.button', text: 'Choose Plan').click
+        end
+
+        expect(page).to have_content 'Pro SELECT BILLING'
+        expect(page.find('#anually-billing', visible: false)).to be_checked
+
+        fill_payment_form
+
+        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE PRO PLAN!"
+        expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
+        expect(page).to have_text 'You will be billed $149.00 every year.'
+        expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
+
+        page.find('a', text: 'OK').click
+        expect(page).to have_content 'is on the Pro plan'
       end
+    end
 
-      expect(page).to have_content 'Pro SELECT BILLING'
-      expect(page.find('#anually-billing', visible: false)).to be_checked
+    context 'after 2018-04-01', freeze: '2018-04-01T00:00 UTC' do
+      scenario 'upgrade to growth from free' do
+        visit edit_site_path(site)
 
-      fill_payment_form
+        page.find('footer .show-upgrade-modal').click
+        within '.package-block.pro' do
+          find('.button', text: 'Choose Plan').click
+        end
 
-      expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE PRO PLAN!"
-      expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
-      expect(page).to have_text 'You will be billed $149.00 every year.'
-      expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
+        expect(page).to have_content 'Growth SELECT BILLING'
+        expect(page.find('#anually-billing', visible: false)).to be_checked
 
-      page.find('a', text: 'OK').click
-      expect(page).to have_content 'is on the Pro plan'
+        fill_payment_form
+
+        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE GROWTH PLAN!"
+        expect(page).to have_text 'Your card ending in 1111 has been charged $289.00.'
+        expect(page).to have_text 'You will be billed $289.00 every year.'
+        expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
+
+        page.find('a', text: 'OK').click
+        expect(page).to have_content 'is on the Growth plan'
+      end
     end
 
     scenario 'trying to remove branding triggers the Pro Upgrade popup' do
