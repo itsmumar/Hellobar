@@ -5,6 +5,7 @@ class InternalMetricsMailer < ApplicationMailer
     mailmanager@hellobar.com
     swzrainey@gmail.com
     lindsey@hellobar.com
+    keith@neilpatel.com
   ].freeze
 
   DEV_RECIPIENTS = %w[dev@hellobar.com].freeze
