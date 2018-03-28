@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316083946) do
+ActiveRecord::Schema.define(version: 20180328081654) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -260,6 +260,7 @@ ActiveRecord::Schema.define(version: 20180316083946) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",            limit: 255
   end
 
   add_index "sequence_steps", ["executable_type", "executable_id"], name: "index_sequence_steps_on_executable_type_and_executable_id", using: :btree
