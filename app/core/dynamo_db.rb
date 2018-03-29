@@ -21,6 +21,16 @@ class DynamoDB
     'edge_over_time2'
   end
 
+  def self.sequence_recipients_table_name
+    return 'sequence_recipients' if Rails.env.production?
+    "#{ Rails.env }_sequence_recipients"
+  end
+
+  def self.queues_table_name
+    return 'queues' if Rails.env.production?
+    "#{ Rails.env }_queues"
+  end
+
   def initialize(expires_in: DEFAULT_TTL, cache_context: nil)
     @cache_context = cache_context
     @expires_in = expires_in
