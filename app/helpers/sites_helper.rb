@@ -41,9 +41,9 @@ module SitesHelper
   end
 
   def subscription_days_left(site)
-    if site.free? && site.active_subscription
-      days = pluralize(site.active_subscription.days_left, 'day')
-      "#{ days } left of #{ site.active_subscription.name } features"
-    end
+    return unless site.free? || site.active_subscription
+
+    days = pluralize(site.active_subscription.days_left, 'day')
+    "#{ days } left of #{ site.active_subscription.name } features"
   end
 end
