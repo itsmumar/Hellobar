@@ -31,7 +31,8 @@ class RedeemReferralForSender
   end
 
   def add_free_days_or_trial(period = 1.month)
-    AddFreeDaysOrTrialSubscription.new(site, period).call
+    subscription = Subscription.pro_or_growth_for(referral.sender).name
+    AddFreeDaysOrTrialSubscription.new(site, period, subscription: subscription).call
   end
 
   def use_referral(bill)
