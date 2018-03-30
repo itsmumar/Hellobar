@@ -54,20 +54,23 @@ class ExecuteSequenceTriggers
   end
 
   def enqueue_sequence_step_execution(step, scheduled_at)
+    job = {
+      type: SEQUENCE_TYPE,
+      identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
+      step_id: step.id,
+      email: email,
+      executable_type: EMAIL_EXECUTABLE_TYPE,
+      scheduled_at: scheduled_at,
+      email_subject: step.executable.subject,
+      email_body: step.executable.body,
+      email_from_name: step.executable.from_name,
+      email_from_email: step.executable.from_email
+    }
+
+    job[:name] = name if name.present?
+
     dynamo_db.put_item(
-      item: {
-        type: SEQUENCE_TYPE,
-        identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
-        step_id: step.id,
-        email: email,
-        name: name,
-        executable_type: EMAIL_EXECUTABLE_TYPE,
-        scheduled_at: scheduled_at,
-        email_subject: step.executable.subject,
-        email_body: step.executable.body,
-        email_from_name: step.executable.from_name,
-        email_from_email: step.executable.from_email
-      },
+      item: job,
       return_consumed_capacity: 'TOTAL',
       return_values: 'NONE',
       table_name: DynamoDB.queues_table_name

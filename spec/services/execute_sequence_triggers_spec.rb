@@ -63,6 +63,36 @@ describe ExecuteSequenceTriggers do
     service.call
   end
 
+  context 'when name is nil' do
+    let(:name) { nil }
+
+    it 'does not send name to DynamoDB' do
+      sequence.steps.each do |step|
+        scheduled_at = Time.current.to_i + step.delay
+
+        expect(dynamo_db).to receive(:put_item).with(
+          item: {
+            type: 'sequence',
+            identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
+            step_id: step.id,
+            email: email,
+            executable_type: 'email',
+            scheduled_at: scheduled_at,
+            email_subject: step.executable.subject,
+            email_body: step.executable.body,
+            email_from_name: step.executable.from_name,
+            email_from_email: step.executable.from_email
+          },
+          return_consumed_capacity: 'TOTAL',
+          return_values: 'NONE',
+          table_name: 'test_queues'
+        )
+      end
+
+      service.call
+    end
+  end
+
   it 'increases `recipients` counter in email statistics for each step' do
     sequence.steps.each do |step|
       expect(dynamo_db).to receive(:update_item).with(
