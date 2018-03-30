@@ -60,6 +60,7 @@ class ExecuteSequenceTriggers
         identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
         step_id: step.id,
         email: email,
+        name: name,
         executable_type: EMAIL_EXECUTABLE_TYPE,
         scheduled_at: scheduled_at,
         email_subject: step.executable.subject,

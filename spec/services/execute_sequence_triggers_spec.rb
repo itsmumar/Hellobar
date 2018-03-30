@@ -46,6 +46,7 @@ describe ExecuteSequenceTriggers do
           identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
           step_id: step.id,
           email: email,
+          name: name,
           executable_type: 'email',
           scheduled_at: scheduled_at,
           email_subject: step.executable.subject,
