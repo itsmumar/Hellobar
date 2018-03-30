@@ -31,7 +31,7 @@ describe UsePromotionalCode do
       it 'adds trial days to current subscription' do
         expect(AddTrialSubscription)
           .to receive_service_call
-          .with(site, hash_including(subscription: 'pro'))
+          .with(site, hash_including(subscription: 'growth'))
           .and_return(bill)
 
         UsePromotionalCode.new(site, user, coupon.label).call

@@ -21,10 +21,10 @@ describe RedeemReferralForRecipient do
         .to(true)
     end
 
-    it 'changes subscription to trial pro', :freeze do
+    it 'changes subscription to trial growth', :freeze do
       expect { service.call }
         .to change { site.current_subscription }
-        .to instance_of(Subscription::Pro)
+        .to instance_of(Subscription::Growth)
 
       expect(site.current_subscription.trial_end_date).to eql 1.month.from_now
     end

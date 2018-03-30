@@ -1,5 +1,5 @@
 class AddFreeDaysOrTrialSubscription
-  def initialize(site, period, subscription: 'pro')
+  def initialize(site, period, subscription: 'growth')
     @site = site
     @subscription = site&.active_subscription
     @subscription_type = subscription
