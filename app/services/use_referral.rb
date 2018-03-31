@@ -15,7 +15,7 @@ class UseReferral
   attr_reader :bill, :referral, :site
 
   def create_coupon_use
-    CouponUse.create(bill: bill, coupon: referral_coupon)
+    CouponUse.create!(bill: bill, coupon: referral_coupon)
   end
 
   def referral_coupon
