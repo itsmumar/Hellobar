@@ -24,6 +24,7 @@ class SubscribeContact
     provider.subscribe email: email, name: name
 
     update_status :synced
+    execute_sequence_triggers
   rescue ServiceProvider::InvalidSubscriberError => e
     update_status :error, error: e.to_s
   rescue StandardError => e
@@ -34,6 +35,10 @@ class SubscribeContact
 
   def update_status status, error: nil
     UpdateContactStatus.new(contact_list.id, email, status, error: error).call
+  end
+
+  def execute_sequence_triggers
+    ExecuteSequenceTriggers.new(email, name, contact_list).call
   end
 
   def raven_log(exception)
