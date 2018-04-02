@@ -18,17 +18,17 @@
 
       - if site.deleted?
         div
-          | Site <strong>deleted</strong> on #{ site.deleted_at.strftime('%D') }
+          | Site <strong>deleted</strong> on #{ site.deleted_at.strftime('%F') }
 
       - site.subscriptions.with_deleted.reverse.each do |sub|
         div
-          | Changed to <strong>#{ sub.values[:name] } ##{ sub.id }</strong> on #{sub.created_at.strftime('%D')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.to_date })" : ''}
+          | Changed to <strong>#{ sub.values[:name] } ##{ sub.id }</strong> on #{sub.created_at.strftime('%F')} #{ sub.trial_end_date ? "(trial ends #{ sub.trial_end_date.strftime('%F') })" : ''}
 
           - if sub.deleted?
-            | (subscription deleted on #{ sub.deleted_at.strftime('%D') })
+            | (subscription deleted on #{ sub.deleted_at.strftime('%F') })
 
       div
-        | Site created on #{site.created_at.strftime('%D')}
+        | Site created on #{site.created_at.strftime('%F')}
 
     - if site.site_memberships.with_deleted.any?
       div.site_section.site_users

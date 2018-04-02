@@ -49,7 +49,7 @@ module Admin::UsersHelper
     " (#{ site.active_subscription.values[:name] } is still active)"
   end
 
-  def us_short_datetime(datetime)
-    datetime.to_date.to_s(:us_short)
+  def format_date_iso(datetime)
+    datetime.to_date.strftime('%F')
   end
 end

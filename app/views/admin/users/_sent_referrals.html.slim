@@ -10,6 +10,6 @@
       tbody
         - referrals.each do |referral|
           tr
-            td= referral.created_at.strftime('%D')
+            td= referral.created_at.strftime('%F')
             td= referral.state
             td= referral_recipient_link(referral)
