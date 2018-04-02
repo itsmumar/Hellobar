@@ -95,6 +95,7 @@ gem 'public_suffix'
 gem 'abanalyzer'
 gem 'active_hash'
 gem 'avatar'
+gem 'bootsnap', require: false
 gem 'dalli'
 gem 'elif'
 gem 'hashie'
