@@ -31,7 +31,7 @@ div.site-title
               = sf.radio_button 'schedule', name, checked: site.current_subscription&.schedule == name
               = sf.label "#{name.capitalize}"
           div= sf.label "Trial period in days.  Leave blank for no trial."
-          div= sf.number_field 'trial_period', disabled: !site.current_subscription.paid?
+          div= sf.number_field 'trial_period', disabled: !site.current_subscription&.paid?
           = f.submit "Submit", data: { confirm: "Change this sites subscription?" }
 
 = form_for site, url: add_free_days_admin_site_path(site), method: :put, html: {class: "free_days_site_form form hidden"}, data: { "site-id" => site.id } do |f|
