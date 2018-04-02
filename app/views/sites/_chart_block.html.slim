@@ -7,15 +7,15 @@
     .chart-overview
       - case type
       - when :total
-        = link_to 'Get More Views', new_site_site_element_path(site)
+        = link_to 'Get More Views', new_site_site_element_path(site), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
       - when :email
-        = link_to 'Collect Emails', new_site_site_element_path(site, anchor: '/interstitial/email')
+        = link_to 'Collect Emails', new_site_site_element_path(site, anchor: '/interstitial/email'), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
       - when :traffic
-        = link_to 'Get Traffic', new_site_site_element_path(site, anchor: '/interstitial/traffic')
+        = link_to 'Get Traffic', new_site_site_element_path(site, anchor: '/interstitial/traffic'), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
       - when :social
-        = link_to 'Increase Social Marketing', new_site_site_element_path(site, anchor: '/interstitial/social')
+        = link_to 'Increase Social Marketing', new_site_site_element_path(site, anchor: '/interstitial/social'), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
       - when :call
-        = link_to 'Talk to Your Visitors', new_site_site_element_path(site, anchor: '/interstitial/call')
+        = link_to 'Talk to Your Visitors', new_site_site_element_path(site, anchor: '/interstitial/call'), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
 
 - else
   div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
