@@ -1,7 +1,7 @@
 describe SiteSerializer do
   let(:site) { create :site }
   let(:user) { build_stubbed :user }
-  let(:serialized_site) { SiteSerializer.new(site, scope: user) }
+  let(:serialized_site) { SiteSerializer.new(site, scope: { user: user }) }
   let(:serializable_hash) { serialized_site.serializable_hash }
 
   before { allow(site).to receive(:script_installed?).and_return true }
@@ -40,8 +40,8 @@ describe SiteSerializer do
 
     context 'when totals are passed to the context' do
       let(:subscribers_count) { 5 }
-      let(:context) { { list_totals: { contact_list.id => subscribers_count } } }
-      let(:serialized_site) { SiteSerializer.new(site, scope: user, context: context) }
+      let(:scope) { { list_totals: { user: user, contact_list.id => subscribers_count } } }
+      let(:serialized_site) { SiteSerializer.new(site, scope: scope) }
 
       it 'returns subscribers_count attribute' do
         expect(serializable_hash).to include(contact_lists: [

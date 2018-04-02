@@ -6,7 +6,7 @@ class CreditCardsController < ApplicationController
     subscription_credit_card_id = @site.current_subscription.credit_card_id if @site
 
     response = {
-      credit_cards: ActiveModel::ArraySerializer.new(current_user.credit_cards).as_json,
+      credit_cards: current_user.credit_cards.map { |credit_card| CreditCardSerializer.new(credit_card).as_json },
       current_credit_card_id: subscription_credit_card_id
     }
 

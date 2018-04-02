@@ -2,7 +2,7 @@ class Api::SequenceStepsController < Api::ApplicationController
   before_action :find_step, except: %i[index create]
 
   def index
-    render json: sequence.steps.to_a, each_serializer: SequenceStepSerializer
+    render json: sequence.steps.to_a, each_serializer: SequenceStepSerializer, adapter: :json
   end
 
   def show

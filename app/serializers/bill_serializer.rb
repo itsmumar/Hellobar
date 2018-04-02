@@ -7,11 +7,15 @@ class BillSerializer < ActiveModel::Serializer
 
   def upgrade?
     return true unless object.site.previous_subscription
+
     Subscription::Comparison.new(object.site.previous_subscription, object.subscription).upgrade?
   end
+
   alias is_upgrade upgrade?
 
   def old_subscription
+    return unless object.site.previous_subscription
+
     SubscriptionSerializer.new(object.site.previous_subscription)
   end
 end

@@ -57,7 +57,7 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def view_billing
-    scope && Permissions.view_bills?(scope, object)
+    scope && scope[:user] && Permissions.view_bills?(scope[:user], object)
   end
 
   def script_installed
@@ -67,6 +67,6 @@ class SiteSerializer < ActiveModel::Serializer
   private
 
   def list_subscribers_count(list_id)
-    context && context[:list_totals] && context[:list_totals][list_id]
+    scope && scope[:list_totals] && scope[:list_totals][list_id]
   end
 end

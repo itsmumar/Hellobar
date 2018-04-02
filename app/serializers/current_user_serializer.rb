@@ -3,15 +3,15 @@ class CurrentUserSerializer < UserSerializer
 
   def sites
     object.sites.map do |site|
-      SiteSerializer.new(site, context: context)
+      SiteSerializer.new(site, scope: scope)
     end
   end
 
   def site_id
-    context && context[:site_id]
+    scope && scope[:site_id]
   end
 
   def token
-    context && context[:token]
+    scope && scope[:token]
   end
 end
