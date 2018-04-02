@@ -30,7 +30,7 @@ describe Admin::UsersHelper do
 
       duration = helper.bill_duration(bill)
 
-      expect(duration).to eq('7/1/15-7/31/15')
+      expect(duration).to eq('2015-07-01 - 2015-07-31')
     end
   end
 
