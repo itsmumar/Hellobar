@@ -12,15 +12,28 @@ describe SubscribeContact do
       .with(contact_list.identity, contact_list)
       .and_return provider
 
+    allow(provider).to receive(:subscribe)
     allow(contact).to receive(:contact_list).and_return(contact_list)
+
+    allow(UpdateContactStatus).to receive_service_call
+    allow(ExecuteSequenceTriggers).to receive_service_call
+  end
+
+  it 'calls subscribe on provider' do
+    expect(provider).to receive(:subscribe).with(email: email, name: name)
+    service.call
   end
 
   context 'when subscription is successful' do
     it 'updates contact status' do
-      expect(provider).to receive(:subscribe).with(email: email, name: name)
-
       expect(UpdateContactStatus).to receive_service_call
         .with(contact_list.id, email, :synced, error: nil)
+
+      service.call
+    end
+
+    it 'executes email sequence triggers' do
+      expect(ExecuteSequenceTriggers).to receive_service_call.with(email, name, contact_list)
 
       service.call
     end

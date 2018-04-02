@@ -39,4 +39,11 @@ module SitesHelper
   def bill_estimated_amount(bill)
     number_to_currency(bill.estimated_amount)
   end
+
+  def subscription_days_left(site)
+    return unless site.free? || site.active_subscription
+
+    days = pluralize(site.active_subscription.days_left, 'day')
+    "#{ days } left of #{ site.active_subscription.name } features"
+  end
 end
