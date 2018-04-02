@@ -33,7 +33,7 @@ module Admin::BillsHelper
   end
 
   def bill_duration(bill)
-    "#{ format_date_iso(bill.start_date) } - #{ format_date_iso(bill.end_date) }"
+    "#{ format_date(bill.start_date) } - #{ format_date(bill.end_date) }"
   end
 
   def bill_coupons(bill)

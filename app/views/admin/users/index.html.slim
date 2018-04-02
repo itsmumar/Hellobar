@@ -50,7 +50,7 @@ div.row
                     - else
                       = '(token removed)'
 
-            td= user.created_at.strftime('%F')
+            td= format_date(user.created_at)
             td= user.sign_in_count
             td
               = user.current_sign_in_at

@@ -49,7 +49,7 @@ module Admin::UsersHelper
     " (#{ site.active_subscription.values[:name] } is still active)"
   end
 
-  def format_date_iso(datetime)
-    datetime.to_date.strftime('%F')
+  def format_date(datetime, format = '%F')
+    datetime&.strftime(format)
   end
 end
