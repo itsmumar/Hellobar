@@ -1,4 +1,4 @@
-class FetchContactListTotals
+class FetchSiteContactListTotals
   def initialize(site, id: nil)
     @site = site
     @id = id
