@@ -2,7 +2,7 @@ class BillSerializer < ActiveModel::Serializer
   attributes :amount, :bill_at, :end_date, :status, :is_upgrade, :old_subscription, :site
 
   def site
-    SiteSerializer.new(object.site)
+    SiteSerializer.new(object.site).as_json
   end
 
   def upgrade?
@@ -16,6 +16,6 @@ class BillSerializer < ActiveModel::Serializer
   def old_subscription
     return unless object.site.previous_subscription
 
-    SubscriptionSerializer.new(object.site.previous_subscription)
+    SubscriptionSerializer.new(object.site.previous_subscription).as_json
   end
 end

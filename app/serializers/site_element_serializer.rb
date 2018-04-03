@@ -50,7 +50,7 @@ class SiteElementSerializer < ActiveModel::Serializer
   def rule
     return unless object.rule
 
-    RuleSerializer.new(object.rule)
+    RuleSerializer.new(object.rule).as_json
   end
 
   def preset_rule_name
@@ -66,13 +66,13 @@ class SiteElementSerializer < ActiveModel::Serializer
   def site
     return unless object.site
 
-    SiteSerializer.new(object.site, scope: scope)
+    SiteSerializer.new(object.site, scope: scope).as_json
   end
 
   def theme
     return unless object.theme
 
-    ThemeSerializer.new(object.theme, scope: scope)
+    ThemeSerializer.new(object.theme, scope: scope).as_json
   end
 
   def theme_id

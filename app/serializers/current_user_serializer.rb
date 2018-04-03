@@ -3,7 +3,7 @@ class CurrentUserSerializer < UserSerializer
 
   def sites
     object.sites.map do |site|
-      SiteSerializer.new(site, scope: scope)
+      SiteSerializer.new(site, scope: scope).as_json
     end
   end
 
