@@ -43,7 +43,7 @@ table
       td
         = bill.status_set_at&.strftime('%D')
       td
-        = bill.credit_card&.last_digits
+        = bill.used_credit_card&.last_digits
       td
         = bill_extra_days(bill)
       td

@@ -99,7 +99,15 @@ class Bill < ApplicationRecord
   end
 
   def successful_billing_attempt
-    billing_attempts.successful.first
+    @successful_billing_attempt ||= billing_attempts.successful.first
+  end
+
+  def last_billing_attempt
+    @last_billing_attempt ||= billing_attempts.order(:id).last
+  end
+
+  def used_credit_card
+    (successful_billing_attempt || last_billing_attempt || subscription)&.credit_card
   end
 
   def calculate_discount
