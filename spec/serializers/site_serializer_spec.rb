@@ -54,7 +54,7 @@ describe SiteSerializer do
   context 'with current_subscription' do
     let!(:subscription) { create :subscription, site: site }
 
-    before { allow(SubscriptionSerializer).to receive(:new).and_return :subscription }
+    before { allow(SubscriptionSerializer).to receive_message_chain(:new, :as_json).and_return :subscription }
 
     it 'serializes subscription' do
       expect(serializable_hash).to include current_subscription: :subscription
