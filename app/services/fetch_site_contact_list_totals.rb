@@ -46,6 +46,6 @@ class FetchSiteContactListTotals
 
   def dynamo_db
     # `unscoped` is used because default scope on `Site#contact_lists` association doesn't allow to override the order
-    DynamoDB.new(cache_context: site.contact_lists.unscoped.order(:updated_at).last.cache_key)
+    DynamoDB.new(cache_context: site.contact_lists.reorder(:updated_at).last.cache_key)
   end
 end
