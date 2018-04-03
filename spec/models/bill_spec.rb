@@ -254,7 +254,7 @@ describe Bill do
         create(:billing_attempt, :success, bill: bill, response: 'authorization')
       end
 
-      it 'return credit card of that attempt' do
+      it 'returns credit card of that attempt' do
         expect(bill.used_credit_card).to eq(successful_attempt.credit_card)
       end
     end
@@ -268,14 +268,14 @@ describe Bill do
         create(:billing_attempt, :failed, bill: bill)
       end
 
-      it 'return credit card of last attempt' do
+      it 'returns credit card of last attempt' do
         expect(bill.used_credit_card).to eq(failed_attempt2.credit_card)
       end
     end
 
     context 'when there is no attempts' do
-      it 'return credit card of subscription' do
-        expect(bill.used_credit_card).to eq(credit_card)
+      it 'returns nil' do
+        expect(bill.used_credit_card).to be_nil
       end
     end
   end
