@@ -88,7 +88,7 @@ class FetchSiteStatistics
   end
 
   def dynamo_db
-    @dynamo_db ||= DynamoDB.new
+    @dynamo_db ||= DynamoDB.new(cache_context: site.cache_key)
   end
 
   def cache
@@ -96,6 +96,6 @@ class FetchSiteStatistics
   end
 
   def cache_key
-    @cache_key ||= "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
+    @cache_key ||= "site_statistics/#{ site.cache_key }/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
   end
 end

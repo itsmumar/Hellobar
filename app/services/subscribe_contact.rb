@@ -8,6 +8,7 @@ class SubscribeContact
 
   def call
     update_contact_list_cache
+    update_site_cache
     subscribe
   end
 
@@ -18,6 +19,11 @@ class SubscribeContact
   # it updates cache_key and causes cached things to be updated
   def update_contact_list_cache
     contact_list.touch
+  end
+
+  # it updates cache_key and causes cached things to be updated
+  def update_site_cache
+    contact_list.site.touch
   end
 
   def subscribe
