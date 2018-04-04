@@ -12,6 +12,10 @@ class AmplitudeAnalyticsAdapter
     # do nothing
   end
 
+  def untag_users(*)
+    # do nothing
+  end
+
   private
 
   def send_event(attributes)

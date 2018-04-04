@@ -42,9 +42,12 @@ describe CreateSite do
 
   it 'calls TrackEvent with :created_site and :changed_subscription events' do
     expect(TrackEvent)
-      .to receive_service_call.with(:created_site, site: site, user: user)
+      .to receive_service_call
+      .with(:created_site, site: site, user: user)
+
     expect(TrackEvent)
-      .to receive_service_call.with(:changed_subscription, site: site, user: user)
+      .to receive_service_call
+      .with(:changed_subscription, subscription: instance_of(Subscription::Free), user: user)
 
     service.call
   end

@@ -69,12 +69,13 @@ describe AnalyticsProvider do
 
   describe '#created_contact_list' do
     let(:event) { 'created-contact-list' }
-    let(:contact_list) { create :site_element }
+    let(:contact_list) { create :contact_list, :mailchimp }
 
     it 'tracks "created-contact-list"' do
       expect(adapter)
         .to receive(:track)
         .with(event: event, user: user, params: {
+          identity: 'mailchimp',
           site_url: contact_list.site.url
         })
 
@@ -91,10 +92,13 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: event, user: user, params: {
           bar_type: site_element.type,
-          goal: site_element.element_subtype
+          goal: site_element.element_subtype,
+          site_url: site_element.site.url
         })
 
-      track(event, user: user, site_element: site_element)
+      track(event,
+        user: user,
+        site_element: site_element)
     end
   end
 
@@ -109,11 +113,14 @@ describe AnalyticsProvider do
       expect(adapter)
         .to receive(:track)
         .with(event: event, user: user, params: {
+          amount: subscription.amount,
           subscription: subscription.name,
-          schedule: subscription.schedule
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0
         })
 
-      track(event, user: user, site: site)
+      track(event, user: user, subscription: subscription)
     end
 
     it 'tags users with "Paid" and "Subscription.name" tags' do
@@ -127,21 +134,25 @@ describe AnalyticsProvider do
 
       expect(adapter).to receive(:track)
 
-      track(event, user: user, site: site)
+      track(event, user: user, subscription: subscription)
     end
   end
 
   describe '#used_promo_code' do
     let(:event) { 'used-promo-code' }
+    let(:site) { create :site }
+    let(:coupon) { create :coupon }
 
     it 'tracks "created-bar"' do
       expect(adapter)
         .to receive(:track)
         .with(event: event, user: user, params: {
-          code: 'promo'
+          code: coupon.label,
+          trial_days: coupon.trial_period,
+          site_url: site.url
         })
 
-      track(event, user: user, code: 'promo')
+      track(event, user: user, site: site, coupon: coupon)
     end
   end
 end

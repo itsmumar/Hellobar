@@ -43,10 +43,16 @@ describe UsePromotionalCode do
           .by(1)
       end
 
-      it 'tracks "used-promo-code" event' do
+      it 'tracks "changed-subscription" and "used-promo-code" event' do
         expect(TrackEvent)
           .to receive_service_call
-          .with(:used_promo_code, user: user, code: coupon.label)
+          .with(:changed_subscription,
+            subscription: instance_of(Subscription::Growth),
+            user: user)
+
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:used_promo_code, user: user, coupon: coupon, site: site)
 
         UsePromotionalCode.new(site, user, coupon.label).call
       end

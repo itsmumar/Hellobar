@@ -55,7 +55,9 @@ describe ChangeSubscription, :freeze do
 
       expect { service.call }
         .to have_enqueued_job(SendEventToIntercomJob)
-        .with('changed_subscription', site: site, user: user)
+        .with('changed_subscription',
+          subscription: instance_of(Subscription::Pro),
+          user: user)
     end
 
     it 'sends an event to Amplitude' do
@@ -63,7 +65,9 @@ describe ChangeSubscription, :freeze do
 
       expect { service.call }
         .to have_enqueued_job(SendEventToAmplitudeJob)
-        .with('changed_subscription', site: site, user: user)
+        .with('changed_subscription',
+          subscription: instance_of(Subscription::Pro),
+          user: user)
     end
 
     context 'without credit card' do
@@ -308,7 +312,9 @@ describe ChangeSubscription, :freeze do
 
           expect { change_subscription('free') }
             .to have_enqueued_job(SendEventToIntercomJob)
-            .with('changed_subscription', site: site, user: user)
+            .with('changed_subscription',
+              subscription: instance_of(Subscription::Free),
+              user: user)
         end
 
         it 'sends an event to Intercom' do
@@ -316,7 +322,9 @@ describe ChangeSubscription, :freeze do
 
           expect { service.call }
             .to have_enqueued_job(SendEventToAmplitudeJob)
-            .with('changed_subscription', site: site, user: user)
+            .with('changed_subscription',
+              subscription: instance_of(Subscription::Pro),
+              user: user)
         end
 
         it 'returns a bill' do

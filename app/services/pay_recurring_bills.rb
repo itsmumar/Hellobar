@@ -60,6 +60,7 @@ class PayRecurringBills
     bill = PayBill.new(bill).call
 
     if bill.paid?
+      track_event(bill)
       report.success
     else
       handle_failed_attempt bill
@@ -119,5 +120,13 @@ class PayRecurringBills
   def days_since_billing_attempt(attempt)
     return unless attempt
     (Time.current.to_date - attempt.created_at.to_date) * 1.day
+  end
+
+  def track_event(bill)
+    TrackEvent.new(
+      :auto_renewed_subscription,
+      subscription: bill.subscription,
+      user: bill.credit_card&.user || bill.site.owners.first
+    ).call
   end
 end

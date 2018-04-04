@@ -120,7 +120,11 @@ class ChangeSubscription
 
     BillingLogger.change_subscription(site, props)
 
-    TrackEvent.new(:changed_subscription, site: site, user: site.owners.first).call
+    TrackEvent.new(
+      :changed_subscription,
+      subscription: subscription,
+      user: credit_card&.user || site.owners.first
+    ).call
   end
 
   def downgrading_to_free?

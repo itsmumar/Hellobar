@@ -20,6 +20,8 @@ describe PayRecurringBills do
   describe '#call', freeze: 30.days.ago do
     let(:report) { BillingReport.new(1) }
     let(:service) { PayRecurringBills.new }
+    let(:subscription) { build_stubbed :subscription }
+    let(:site) { create :site, :with_user }
 
     before { allow(BillingReport).to receive(:new).and_return(report) }
 
@@ -30,7 +32,17 @@ describe PayRecurringBills do
 
     shared_examples 'pay bill' do
       specify do
-        expect(PayBill).to receive_service_call.and_return(double(paid?: true))
+        bill = double(
+          paid?: true,
+          subscription: subscription,
+          credit_card: nil,
+          site: site
+        )
+
+        expect(PayBill)
+          .to receive_service_call
+          .and_return(bill)
+
         service.call
       end
     end
