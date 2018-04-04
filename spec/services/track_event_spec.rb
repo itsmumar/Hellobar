@@ -22,7 +22,8 @@ describe TrackEvent, :freeze do
       expect(intercom).to receive_message_chain(:events, :create).with(
         event_name: 'signed-up',
         user_id: owner.id,
-        created_at: Time.current.to_i
+        created_at: Time.current.to_i,
+        metadata: {}
       )
 
       expect(AmplitudeAPI).to receive(:track).with(instance_of(AmplitudeAPI::Event))
