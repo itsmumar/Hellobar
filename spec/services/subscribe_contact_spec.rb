@@ -12,11 +12,11 @@ describe SubscribeContact do
       .with(contact_list.identity, contact_list)
       .and_return provider
 
+    allow(provider).to receive(:subscribe)
     allow(contact).to receive(:contact_list).and_return(contact_list)
 
-    allow(provider).to receive(:subscribe)
-
     allow(UpdateContactStatus).to receive_service_call
+    allow(ExecuteSequenceTriggers).to receive_service_call
   end
 
   context 'when subscription is successful' do
@@ -39,6 +39,12 @@ describe SubscribeContact do
 
     it 'updates site.cache_key' do
       expect { service.call }.to change { contact_list.site.cache_key }
+    end
+
+    it 'executes email sequence triggers' do
+      expect(ExecuteSequenceTriggers).to receive_service_call.with(email, name, contact_list)
+
+      service.call
     end
   end
 

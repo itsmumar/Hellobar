@@ -7,6 +7,8 @@ section
     - if @site.current_subscription.currently_on_trial?
       |  Trial
     '  plan.
+    - if @site.free? && @site.active_subscription
+      = "(#{subscription_days_left(@site)})"
     - if Permissions.view_bills?(current_user, @site)
       - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
         - if @next_bill
