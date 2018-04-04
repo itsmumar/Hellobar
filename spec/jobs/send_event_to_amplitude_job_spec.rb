@@ -1,4 +1,4 @@
-describe SendEventToIntercomJob do
+describe SendEventToAmplitudeJob do
   let(:job) { described_class }
 
   describe '#perform' do
@@ -13,10 +13,10 @@ describe SendEventToIntercomJob do
       allow_any_instance_of(IntercomGateway).to receive(:create_user)
     end
 
-    it 'uses IntercomAnalyticsAdapter' do
+    it 'uses AmplitudeAnalyticsAdapter' do
       expect(AnalyticsProvider)
         .to receive(:new)
-        .with(instance_of(IntercomAnalyticsAdapter))
+        .with(instance_of(AmplitudeAnalyticsAdapter))
 
       perform
     end
@@ -27,31 +27,6 @@ describe SendEventToIntercomJob do
         .with('signed_up', user: user, site: site)
 
       perform
-    end
-
-    context 'when Intercom::ResourceNotFound is raised' do
-      let(:message) { 'Tag Not Found' }
-
-      before do
-        allow(analytics)
-          .to receive(:fire_event)
-          .with('signed_up', anything)
-          .once
-          .and_raise(Intercom::ResourceNotFound, message)
-      end
-
-      it 'raise error' do
-        expect { perform }.to raise_error(Intercom::ResourceNotFound)
-      end
-
-      context 'with message "User Not Found"' do
-        let(:message) { 'User Not Found' }
-
-        it 'calls IntercomGateway#create_user and raise error' do
-          expect_any_instance_of(IntercomGateway).to receive :create_user
-          expect { perform }.to raise_error(Intercom::ResourceNotFound)
-        end
-      end
     end
   end
 
