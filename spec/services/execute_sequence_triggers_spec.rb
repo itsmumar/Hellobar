@@ -2,7 +2,8 @@ describe ExecuteSequenceTriggers do
   subject(:service) { described_class.new(email, name, contact_list) }
 
   let(:name) { 'Ralph' }
-  let(:email) { 'r.schwarz@gmail.com' }
+  let(:email) { 'r.Schwarz@gmail.com' }
+  let(:normalized_email) { 'r.schwarz@gmail.com' }
   let(:contact_list) { create(:contact_list) }
 
   let(:sequence) { create(:sequence, contact_list: contact_list) }
@@ -23,7 +24,7 @@ describe ExecuteSequenceTriggers do
       expect(dynamo_db).to receive(:put_item).with(
         item: {
           step_id: step.id,
-          email: email,
+          email: normalized_email,
           created_at: created_at,
           scheduled_at: scheduled_at
         },
@@ -43,9 +44,9 @@ describe ExecuteSequenceTriggers do
       expect(dynamo_db).to receive(:put_item).with(
         item: {
           type: 'sequence',
-          identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
+          identifier: "#{ normalized_email }_#{ step.id }_#{ scheduled_at }",
           step_id: step.id,
-          email: email,
+          email: normalized_email,
           name: name,
           executable_type: 'email',
           scheduled_at: scheduled_at,
@@ -73,9 +74,9 @@ describe ExecuteSequenceTriggers do
         expect(dynamo_db).to receive(:put_item).with(
           item: {
             type: 'sequence',
-            identifier: "#{ email }_#{ step.id }_#{ scheduled_at }",
+            identifier: "#{ normalized_email }_#{ step.id }_#{ scheduled_at }",
             step_id: step.id,
-            email: email,
+            email: normalized_email,
             executable_type: 'email',
             scheduled_at: scheduled_at,
             email_subject: step.executable.subject,

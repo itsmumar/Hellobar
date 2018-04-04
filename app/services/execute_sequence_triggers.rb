@@ -5,7 +5,7 @@ class ExecuteSequenceTriggers
 
   def initialize(email, name, contact_list)
     @contact_list = contact_list
-    @email = email
+    @email = email.downcase
     @name = name
   end
 
