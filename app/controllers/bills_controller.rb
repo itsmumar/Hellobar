@@ -15,7 +15,7 @@ class BillsController < ApplicationController
 
     if @bill.failed?
       flash[:alert] =
-        "There was a problem while charging your credit card ending in #{ @bill.credit_card.last_digits }. " \
+        "There was a problem while charging your credit card ending in #{ @bill.subscription.credit_card.last_digits }. " \
         'You can fix this by adding another credit card'
       redirect_to edit_site_path(@bill.site, should_update_card: true, anchor: 'problem-bill')
     else

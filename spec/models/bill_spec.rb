@@ -18,13 +18,13 @@ describe Bill do
     end
 
     context 'with deleted credit card' do
-      before { bill.credit_card.destroy }
+      before { bill.subscription.credit_card.destroy }
 
       specify { expect(subject).to be_falsey }
     end
 
     context 'without credit card token' do
-      before { bill.credit_card.update token: nil }
+      before { bill.subscription.credit_card.update token: nil }
 
       specify { expect(subject).to be_falsey }
     end
@@ -224,7 +224,7 @@ describe Bill do
       let(:bill) { create(:bill, :with_attempt) }
 
       let!(:last_attempt) do
-        create(:billing_attempt, :success, bill: bill, response: 'authorization', credit_card: bill.credit_card)
+        create(:billing_attempt, :success, bill: bill, response: 'authorization', credit_card: bill.subscription.credit_card)
       end
 
       it 'returns the most recent billing attempt' do

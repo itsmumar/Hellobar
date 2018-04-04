@@ -27,7 +27,7 @@ class Bill < ApplicationRecord
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
 
-  delegate :site_id, :credit_card, to: :subscription
+  delegate :site_id, to: :subscription
 
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
@@ -77,7 +77,7 @@ class Bill < ApplicationRecord
   end
 
   def can_pay?
-    return unless credit_card
+    return unless (credit_card = subscription.credit_card)
 
     !credit_card.deleted? && credit_card.token.present?
   end

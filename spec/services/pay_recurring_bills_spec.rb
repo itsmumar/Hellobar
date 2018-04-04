@@ -117,7 +117,7 @@ describe PayRecurringBills do
     context 'with bill which has no payment method' do
       let!(:bill_without_credit_card) { create :bill }
 
-      before { bill_without_credit_card.credit_card.destroy }
+      before { bill_without_credit_card.subscription.credit_card.destroy }
 
       specify do
         expect(report).to receive(:cannot_pay)

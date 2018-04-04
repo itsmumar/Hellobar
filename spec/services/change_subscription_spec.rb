@@ -167,11 +167,11 @@ describe ChangeSubscription, :freeze do
           end
 
           it 'uses new credit card if provided' do
-            expect(failed_bill.reload.credit_card).to eql credit_card
+            expect(failed_bill.reload.subscription.credit_card).to eql credit_card
 
             Timecop.travel site.current_subscription.active_until + 1.day do
               change_subscription('pro', 'monthly', new_credit_card: new_credit_card)
-              expect(failed_bill.reload.credit_card).to eql new_credit_card
+              expect(failed_bill.reload.subscription.credit_card).to eql new_credit_card
             end
           end
         end
