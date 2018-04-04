@@ -1,5 +1,7 @@
 describe SubscribeContact do
-  let(:contact_list) { create :contact_list, :mailchimp }
+  # 1.minute.ago is required to test cache invalidation
+  let(:contact_list) { create(:contact_list, :mailchimp, updated_at: 1.minute.ago) }
+  let(:site_element) { create(:site_element, :email, contact_list: contact_list, updated_at: 1.minute.ago) }
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
   let(:name) { 'FirstName LastName' }
@@ -37,8 +39,8 @@ describe SubscribeContact do
       expect { service.call }.to change { contact_list.cache_key }
     end
 
-    it 'updates site.cache_key' do
-      expect { service.call }.to change { contact_list.site.cache_key }
+    it 'updates site_element.cache_key' do
+      expect { service.call }.to change { site_element.reload.cache_key }
     end
 
     it 'executes email sequence triggers' do
