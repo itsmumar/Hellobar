@@ -26,9 +26,8 @@ class Bill < ApplicationRecord
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
-  has_one :credit_card, -> { with_deleted }, through: :subscription
 
-  delegate :site_id, to: :subscription
+  delegate :site_id, :credit_card, to: :subscription
 
   before_save :check_amount
   before_validation :set_base_amount, :check_amount

@@ -8,7 +8,8 @@ describe Bill do
   describe '#can_pay?' do
     subject { bill.can_pay? }
     let(:credit_card) { create :credit_card }
-    let!(:bill) { create :bill, credit_card: credit_card }
+    let(:subscription) { create(:subscription, credit_card: credit_card) }
+    let!(:bill) { create :bill, subscription: subscription }
 
     context 'without credit card' do
       let(:credit_card) { nil }

@@ -1,5 +1,9 @@
 FactoryBot.define do
   factory :bill, class: 'Bill::Recurring' do
+    transient do
+      credit_card nil
+    end
+
     amount 10
     subscription
     type 'Bill::Recurring'
@@ -20,8 +24,8 @@ FactoryBot.define do
       subscription { create :subscription, :pro }
       status Bill::FAILED
 
-      after :create do |bill|
-        create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
+      after :create do |bill, evaluator|
+        create :billing_attempt, :failed, bill: bill, credit_card: evaluator.credit_card
         bill.reload
       end
     end
@@ -45,10 +49,10 @@ FactoryBot.define do
       amount { Subscription::Pro.defaults[:monthly_amount] }
       subscription { create :subscription, :pro }
 
-      after :create do |bill|
+      after :create do |bill, evaluator|
         create :billing_attempt, :success,
           bill: bill, response: 'authorization',
-          credit_card: bill.credit_card
+          credit_card: evaluator.credit_card
 
         bill.reload
       end
@@ -58,10 +62,10 @@ FactoryBot.define do
       amount { Subscription::Enterprise.defaults[:monthly_amount] }
       subscription { create :subscription, :enterprise }
 
-      after :create do |bill|
+      after :create do |bill, evaluator|
         create :billing_attempt, :success,
           bill: bill, response: 'authorization',
-          credit_card: bill.credit_card
+          credit_card: evaluator.credit_card
 
         bill.reload
       end
@@ -69,8 +73,8 @@ FactoryBot.define do
 
     trait :paid do
       status Bill::PAID
-      after :create do |bill|
-        create :billing_attempt, :success, bill: bill, credit_card: bill.credit_card
+      after :create do |bill, evaluator|
+        create :billing_attempt, :success, bill: bill, credit_card: evaluator.credit_card
         bill.reload
       end
     end
@@ -88,8 +92,8 @@ FactoryBot.define do
     end
 
     trait :with_attempt do
-      after :create do |bill|
-        create :billing_attempt, :failed, bill: bill, credit_card: bill.credit_card
+      after :create do |bill, evaluator|
+        create :billing_attempt, :failed, bill: bill, credit_card: evaluator.credit_card
       end
     end
   end
