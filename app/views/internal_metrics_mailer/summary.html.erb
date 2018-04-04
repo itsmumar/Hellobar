@@ -33,11 +33,11 @@ to <%= @metrics.beginning_of_current_week %> (excl)</p>
 </li>
 <li>
   Growth (Monthly): <%= number_with_delimiter(@metrics.growth_monthly.size) %>
-  (<%= number_to_currency(@metrics.pro_monthly.sum(&:amount)) %>)
+  (<%= number_to_currency(@metrics.growth_monthly.sum(&:amount)) %>)
 </li>
 <li>
   Growth (Yearly): <%= number_with_delimiter(@metrics.growth_yearly.size) %>
-  (<%= number_to_currency(@metrics.pro_yearly.sum(&:amount)) %>)
+  (<%= number_to_currency(@metrics.growth_yearly.sum(&:amount)) %>)
 </li>
 <li>
   Enterprise (Monthly): <%= number_with_delimiter(@metrics.enterprise_monthly.size) %>
