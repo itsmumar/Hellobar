@@ -25,7 +25,7 @@ describe 'api/sequence_steps' do
     it 'returns sequences for the site' do
       expect(response).to be_successful
 
-      expect(json[:sequence_steps].size).to eq(steps.size)
+      expect(json.size).to eq(steps.size)
 
       steps.each do |step|
         expected_attributes = step.attributes.symbolize_keys.slice(
@@ -36,7 +36,7 @@ describe 'api/sequence_steps' do
           :executable_id
         )
 
-        expect(json[:sequence_steps]).to include(expected_attributes)
+        expect(json).to include(expected_attributes)
       end
     end
   end
