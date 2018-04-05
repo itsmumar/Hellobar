@@ -1,4 +1,4 @@
-class FetchContactListTotals
+class FetchSiteContactListTotals
   def initialize(site, id: nil)
     @site = site
     @id = id
@@ -45,6 +45,6 @@ class FetchContactListTotals
   end
 
   def dynamo_db
-    DynamoDB.new(cache_context: site.contact_lists.order(:updated_at).last.cache_key)
+    DynamoDB.new(cache_context: site.contact_lists.reorder(:updated_at).last.cache_key)
   end
 end

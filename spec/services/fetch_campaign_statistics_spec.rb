@@ -66,7 +66,7 @@ describe FetchCampaignStatistics do
 
     context 'with a new campaign' do
       before do
-        expect(FetchContactListTotals).to receive_service_call
+        expect(FetchSiteContactListTotals).to receive_service_call
           .with(campaign.site, id: campaign.contact_list_id)
           .and_return recipients_count
       end
