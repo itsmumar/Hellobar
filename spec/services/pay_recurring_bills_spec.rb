@@ -181,6 +181,18 @@ describe PayRecurringBills do
           .to change { bill.reload.status }.to Bill::PAID
       end
 
+      it 'tracks auto_renewed_subscription event' do
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:auto_renewed_subscription, anything)
+
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:paid_bill, anything)
+
+        service.call
+      end
+
       include_examples 'pay bill'
 
       context 'when bill had payment problem before' do

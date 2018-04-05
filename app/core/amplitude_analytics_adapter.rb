@@ -36,8 +36,13 @@ class AmplitudeAnalyticsAdapter
       contact_lists: user.contact_lists.count,
       total_views: user.sites.map { |site| site.statistics.views }.sum,
       total_conversions: user.sites.map { |site| site.statistics.conversions }.sum,
+      total_subscribers: proc { |user| user.sites.map { |site| total_subscrubers(site) }.sum }
       sites_count: user.sites.count,
       site_elements_count: user.site_elements.count
     }
+  end
+
+  def total_subscribers(site)
+    FetchContactListTotals.new(site).call.values.sum
   end
 end
