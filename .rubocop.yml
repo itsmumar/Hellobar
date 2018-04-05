@@ -152,6 +152,7 @@ Metrics/ClassLength:
     - 'app/models/site_element.rb'
     - 'app/models/static_script_model.rb'
     - 'app/models/user.rb'
+    - 'app/core/analytics_provider.rb'
 
 Metrics/CyclomaticComplexity:
   Max: 17 # ideally 6
