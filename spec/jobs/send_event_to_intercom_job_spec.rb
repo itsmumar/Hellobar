@@ -36,7 +36,7 @@ describe SendEventToIntercomJob do
         allow(analytics)
           .to receive(:fire_event)
           .with('signed_up', anything)
-          .once
+          .twice
           .and_raise(Intercom::ResourceNotFound, message)
       end
 
