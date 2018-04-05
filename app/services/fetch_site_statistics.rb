@@ -92,10 +92,10 @@ class FetchSiteStatistics
   end
 
   def cache
-    Rails.cache.fetch(bunch_cache_key, expires_in: CACHE_TTL) { yield }
+    Rails.cache.fetch(all_site_statistics_cache_key, expires_in: CACHE_TTL) { yield }
   end
 
-  def bunch_cache_key
+  def all_site_statistics_cache_key
     "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:cache_key).to_json) }"
   end
 end
