@@ -19,6 +19,28 @@ describe AnalyticsProvider do
     end
   end
 
+  describe '#auto_renewed_subscription' do
+    let(:event) { 'auto-renewed-subscription' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { site.current_subscription }
+
+    before { allow(adapter).to receive(:tag_users) }
+
+    it 'tracks "auto-renewed-subscription"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          amount: subscription.amount,
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0
+        })
+
+      track(event, user: user, subscription: subscription)
+    end
+  end
+
   describe '#invited_member' do
     let(:event) { 'invited-member' }
 
@@ -31,6 +53,145 @@ describe AnalyticsProvider do
     end
   end
 
+  describe '#paid_bill' do
+    let(:event) { 'paid-bill' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { site.current_subscription }
+
+    before { allow(adapter).to receive(:tag_users) }
+
+    it 'tracks "paid-bill"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          amount: subscription.amount,
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0
+        })
+
+      track(event, user: user, subscription: subscription)
+    end
+  end
+
+  describe '#used_sender_referral_coupon' do
+    let(:event) { 'used-sender-referral-coupon' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { site.current_subscription }
+
+    it 'tracks "used-sender-referral-coupon"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0
+        })
+
+      track(event, user: user, subscription: subscription)
+    end
+  end
+
+  describe '#used_recipient_referral_coupon' do
+    let(:event) { 'used-recipient-referral-coupon' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { site.current_subscription }
+
+    it 'tracks "used-recipient-referral-coupon"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0
+        })
+
+      track(event, user: user, subscription: subscription)
+    end
+  end
+
+  describe '#added_free_days' do
+    let(:event) { 'added-free-days' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { site.current_subscription }
+
+    before { allow(adapter).to receive(:tag_users) }
+
+    it 'tracks "added-free-days"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          site_url: site.url,
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          free_days: 10
+        })
+
+      track(event, user: user, subscription: subscription, free_days: 10)
+    end
+  end
+
+  describe '#downgraded_site' do
+    let(:event) { 'downgraded-site' }
+    let(:site) { create :site, :pro }
+    let(:subscription) { DowngradeSiteToFree.new(site).call }
+
+    let!(:previous_subscription) { site.current_subscription }
+
+    before { allow(adapter).to receive(:tag_users) }
+    before { allow(adapter).to receive(:untag_users) }
+
+    it 'tracks "downgraded-site"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          site_url: site.url
+        })
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'tags owners with "Free" and "Downgraded" tags' do
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Free', anything)
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Downgraded', anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'untags owners of "Paid" and "Subscription.name" tags' do
+      expect(adapter)
+        .to receive(:untag_users)
+        .with(previous_subscription.name, anything)
+
+      expect(adapter)
+        .to receive(:untag_users)
+        .with('Paid', anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+  end
+
   describe '#created_site' do
     let(:event) { 'created-site' }
 
@@ -40,6 +201,18 @@ describe AnalyticsProvider do
         .with(event: event, user: user, params: { url: site.url })
 
       track(event, user: user, site: site)
+    end
+  end
+
+  describe '#added_credit_card' do
+    let(:event) { 'added-credit-card' }
+
+    it 'tracks "added-credit-card"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {})
+
+      track(event, user: user)
     end
   end
 

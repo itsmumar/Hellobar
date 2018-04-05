@@ -17,6 +17,8 @@ class RedeemReferralForSender
     else
       add_free_days_or_trial_and_use_referral
     end
+
+    track_event
   end
 
   private
@@ -63,9 +65,8 @@ class RedeemReferralForSender
   def track_event
     TrackEvent.new(
       :used_sender_referral_coupon,
-      user: subscription.owners.first,
-      subscription: subscription,
-      previous_subscription: previous_subscription
+      user: referral.sender,
+      subscription: site.current_subscription
     ).call
   end
 end

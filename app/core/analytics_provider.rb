@@ -195,6 +195,36 @@ class AnalyticsProvider
     untag_users 'Paid', site.owners
   end
 
+  def used_sender_referral_coupon(subscription:, user:)
+    site = subscription.site
+
+    track(
+      event: 'used-sender-referral-coupon',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription: subscription.name,
+        schedule: subscription.schedule,
+        trial_days: subscription.trial_period || 0
+      }
+    )
+  end
+
+  def used_recipient_referral_coupon(subscription:, user:)
+    site = subscription.site
+
+    track(
+      event: 'used-recipient-referral-coupon',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription: subscription.name,
+        schedule: subscription.schedule,
+        trial_days: subscription.trial_period || 0
+      }
+    )
+  end
+
   private
 
   def track(event:, user:, params: {})
