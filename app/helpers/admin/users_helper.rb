@@ -51,7 +51,7 @@ module Admin::UsersHelper
     " (#{ site.active_subscription.values[:name] } is still active for #{ days })"
   end
 
-  def us_short_datetime(datetime)
-    datetime.to_date.to_s(:us_short)
+  def format_date(datetime, format = '%F')
+    datetime&.strftime(format)
   end
 end
