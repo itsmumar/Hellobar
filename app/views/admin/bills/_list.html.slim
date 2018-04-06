@@ -37,7 +37,7 @@ table
         - if bill.failed?
           span.glyphicon.glyphicon-question-sign< title=bill.problem_reason data-toggle="tooltip" data-placement="bottom"
 
-      td= bill.due_at.strftime('%D')
+      td= format_date(bill.due_at)
       td
         - if bill.paid? && bill.amount != 0
           = link_to("view", receipt_admin_site_bill_path(site, bill), target: '_blank')
@@ -46,7 +46,7 @@ table
       td
         = bill_duration(bill)
       td
-        = bill.status_set_at&.strftime('%D')
+        = format_date(bill.status_set_at)
       td
         = bill.credit_card&.last_digits
       td

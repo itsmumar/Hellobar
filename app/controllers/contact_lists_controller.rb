@@ -14,7 +14,7 @@ class ContactListsController < ApplicationController
     end
 
     @contact_lists = @site.contact_lists
-    @contact_list_totals = FetchContactListTotals.new(@site).call
+    @contact_list_totals = FetchSiteContactListTotals.new(@site).call
   end
 
   def create
@@ -43,7 +43,7 @@ class ContactListsController < ApplicationController
       format.html do
         @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
         @subscribers = FetchLatestContacts.new(@contact_list).call
-        @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
+        @total_subscribers = FetchSiteContactListTotals.new(@site, id: params[:id]).call
       end
       format.json { render json: @contact_list }
     end

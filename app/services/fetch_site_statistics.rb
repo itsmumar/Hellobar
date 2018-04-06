@@ -23,7 +23,7 @@ class FetchSiteStatistics
   def fetch_statistic
     statistics = SiteStatistics.new
     site_elements.each do |site_element|
-      dynamo_db.query_each(request_for(site_element.id)) do |item|
+      dynamo_db_for(site_element).query_each(request_for(site_element.id)) do |item|
         statistics << enhance_record(site_element, item)
       end
     end
@@ -87,15 +87,15 @@ class FetchSiteStatistics
     yday.days.since(Date.new(year) - 1)
   end
 
-  def dynamo_db
-    @dynamo_db ||= DynamoDB.new
+  def dynamo_db_for(site_element)
+    DynamoDB.new(cache_context: site_element.cache_key)
   end
 
   def cache
-    Rails.cache.fetch(cache_key, expires_in: CACHE_TTL) { yield }
+    Rails.cache.fetch(all_site_statistics_cache_key, expires_in: CACHE_TTL) { yield }
   end
 
-  def cache_key
-    @cache_key ||= "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:id).to_json) }"
+  def all_site_statistics_cache_key
+    "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:cache_key).to_json) }"
   end
 end

@@ -50,10 +50,10 @@ div.row
                     - else
                       = '(token removed)'
 
-            td= user.created_at.strftime("%b %d, %Y")
+            td= format_date(user.created_at)
             td= user.sign_in_count
             td
-              = user.current_sign_in_at.try(:strftime, "%b %d, %Y at %l:%M %p")
+              = user.current_sign_in_at
             td
               - if user.deleted?
                 | Deleted
