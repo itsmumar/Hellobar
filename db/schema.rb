@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180330093700) do
+ActiveRecord::Schema.define(version: 20180405150343) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20180330093700) do
     t.string   "authorization_code",          limit: 255
     t.integer  "refunded_billing_attempt_id", limit: 4
     t.string   "status",                      limit: 20,                           default: "pending", null: false
+    t.integer  "chargeback_id",               limit: 4
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
