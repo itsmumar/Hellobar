@@ -61,7 +61,8 @@ IntercomRails.config do |config|
     contact_lists: proc { |user| user.contact_lists.count },
     total_views: proc { |user| user.sites.map { |site| site.statistics.views }.sum },
     total_conversions: proc { |user| user.sites.map { |site| site.statistics.conversions }.sum },
-    total_subscribers: proc { |user| user.sites.to_a.sum { |s| FetchContactListTotals.new(s).call.values.sum || 0 } }
+    total_subscribers: proc { |user| user.sites.to_a.sum { |s| FetchContactListTotals.new(s).call.values.sum || 0 } },
+    managed_sites: proc { |user| user.site_ids }
   }
 
   # == Current company method/variable
