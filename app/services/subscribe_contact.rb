@@ -7,7 +7,7 @@ class SubscribeContact
   end
 
   def call
-    update_contact_list_cache
+    invalidate_cache
     subscribe
   end
 
@@ -16,8 +16,9 @@ class SubscribeContact
   attr_reader :email, :name, :contact_list, :provider
 
   # it updates cache_key and causes cached things to be updated
-  def update_contact_list_cache
+  def invalidate_cache
     contact_list.touch
+    contact_list.site_elements.each(&:touch)
   end
 
   def subscribe

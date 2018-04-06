@@ -1,7 +1,7 @@
-describe FetchContactListTotals do
+describe FetchSiteContactListTotals do
   let!(:contact_list) { create :contact_list, site: site }
   let!(:site) { create :site }
-  let(:service) { FetchContactListTotals.new(site) }
+  let(:service) { described_class.new(site) }
 
   describe '#call' do
     let(:contacts_count) { 10 }
