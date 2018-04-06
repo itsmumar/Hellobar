@@ -113,14 +113,14 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#added_free_days' do
-    let(:event) { 'added-free-days' }
+  describe '#granted_free_days' do
+    let(:event) { 'granted-free-days' }
     let(:site) { create :site, :pro }
     let(:subscription) { site.current_subscription }
 
     before { allow(adapter).to receive(:tag_users) }
 
-    it 'tracks "added-free-days"' do
+    it 'tracks "granted-free-days"' do
       expect(adapter)
         .to receive(:track)
         .with(event: event, user: user, params: {

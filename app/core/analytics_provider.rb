@@ -139,9 +139,9 @@ class AnalyticsProvider
     )
   end
 
-  def added_free_days(subscription:, free_days:, user:)
+  def granted_free_days(subscription:, free_days:, user:)
     track(
-      event: 'added-free-days',
+      event: 'granted-free-days',
       user: user,
       params: {
         site_url: subscription.site.url,
