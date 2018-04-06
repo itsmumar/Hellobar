@@ -210,9 +210,13 @@ describe AnalyticsProvider do
     it 'tracks "added-credit-card"' do
       expect(adapter)
         .to receive(:track)
-        .with(event: event, user: user, params: {})
+        .with(event: event, user: user, params: {
+          site_url: site.url,
+          subscription: 'Free',
+          schedule: 'monthly'
+        })
 
-      track(event, user: user)
+      track(event, user: user, site: site)
     end
   end
 

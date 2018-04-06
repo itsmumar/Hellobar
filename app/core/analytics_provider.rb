@@ -171,10 +171,17 @@ class AnalyticsProvider
     tag_users subscription.name, site.owners
   end
 
-  def added_credit_card(user:)
+  def added_credit_card(user:, site:)
+    subscription = site.current_subscription || Subscription::Free.new
+
     track(
       event: 'added-credit-card',
-      user: user
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription: subscription.name,
+        schedule: subscription.schedule
+      }
     )
   end
 
