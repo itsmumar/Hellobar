@@ -52,7 +52,7 @@ describe ChargebackBill do
     end
 
     it 'does not create a chargeback record' do
-      expect { service.call rescue nil }.not_to change { Bill::Chargeback.count }
+      expect { service.call rescue nil }.not_to change { Bill::Chargeback.count } # rubocop:disable Style/RescueModifier
     end
 
     it 'raises error' do
