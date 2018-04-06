@@ -123,6 +123,7 @@ class ChangeSubscription
     TrackEvent.new(
       :changed_subscription,
       subscription: subscription,
+      previous_subscription: old_subscription,
       user: credit_card&.user || site.owners.first
     ).call
   end

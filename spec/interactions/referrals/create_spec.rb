@@ -39,7 +39,7 @@ describe Referrals::Create do
   it 'tracks "referred_friend" event' do
     expect(TrackEvent)
       .to receive_service_call
-      .with(:referred_friend, { user: user, referral: instance_of(Referral)})
+      .with(:referred_friend, user: user, referral: instance_of(Referral))
 
     Referrals::Create.run(
       sender: user,

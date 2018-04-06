@@ -56,6 +56,7 @@ class AddTrialSubscription
     TrackEvent.new(
       :changed_subscription,
       subscription: bill.subscription,
+      previous_subscription: site.previous_subscription,
       user: site.owners.first
     ).call
   end

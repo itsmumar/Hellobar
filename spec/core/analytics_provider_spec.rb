@@ -134,64 +134,6 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#downgraded_site' do
-    let(:event) { 'downgraded-site' }
-    let(:site) { create :site, :pro }
-    let(:subscription) { DowngradeSiteToFree.new(site).call }
-
-    let!(:previous_subscription) { site.current_subscription }
-
-    before { allow(adapter).to receive(:tag_users) }
-    before { allow(adapter).to receive(:untag_users) }
-
-    it 'tracks "downgraded-site"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: event, user: user, params: {
-          site_url: site.url
-        })
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-
-    it 'tags owners with "Free" and "Downgraded" tags' do
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Free', anything)
-
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Downgraded', anything)
-
-      expect(adapter).to receive(:track)
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-
-    it 'untags owners of "Paid" and "Subscription.name" tags' do
-      expect(adapter)
-        .to receive(:untag_users)
-        .with(previous_subscription.name, anything)
-
-      expect(adapter)
-        .to receive(:untag_users)
-        .with('Paid', anything)
-
-      expect(adapter).to receive(:track)
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-  end
-
   describe '#created_site' do
     let(:event) { 'created-site' }
 
@@ -281,10 +223,17 @@ describe AnalyticsProvider do
 
   describe '#changed_subscription' do
     let(:event) { 'changed-subscription' }
-    let(:site) { create :site, :pro }
+    let(:site) { create :site, :enterprise }
+    let(:credit_card) { create :credit_card }
     let(:subscription) { site.current_subscription }
+    let(:previous_subscription) { site.previous_subscription }
+
+    before do
+      ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
+    end
 
     before { allow(adapter).to receive(:tag_users) }
+    before { allow(adapter).to receive(:untag_users) }
 
     it 'tracks "changed-subscription"' do
       expect(adapter)
@@ -297,7 +246,10 @@ describe AnalyticsProvider do
           trial_days: 0
         })
 
-      track(event, user: user, subscription: subscription)
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
     end
 
     it 'tags users with "Paid" and "Subscription.name" tags' do
@@ -311,7 +263,42 @@ describe AnalyticsProvider do
 
       expect(adapter).to receive(:track)
 
-      track(event, user: user, subscription: subscription)
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'untags owners of "Subscription.name" tags' do
+      expect(adapter)
+        .to receive(:untag_users)
+        .with('Enterprise', anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    context 'when downgrading to Free' do
+      before do
+        DowngradeSiteToFree.new(site).call
+      end
+
+      it 'untags owners of "Paid" tag' do
+        expect(adapter)
+          .to receive(:untag_users)
+          .with('Paid', anything)
+
+        expect(adapter).to receive(:track)
+
+        track(event,
+          user: user,
+          subscription: subscription,
+          previous_subscription: previous_subscription)
+      end
     end
   end
 

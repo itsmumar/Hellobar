@@ -47,7 +47,10 @@ describe CreateSite do
 
     expect(TrackEvent)
       .to receive_service_call
-      .with(:changed_subscription, subscription: instance_of(Subscription::Free), user: user)
+      .with(:changed_subscription,
+        subscription: instance_of(Subscription::Free),
+        previous_subscription: nil,
+        user: user)
 
     service.call
   end

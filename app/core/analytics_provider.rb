@@ -108,7 +108,7 @@ class AnalyticsProvider
     )
   end
 
-  def changed_subscription(subscription:, user:)
+  def changed_subscription(subscription:, previous_subscription:, user:)
     site = subscription.site
 
     track(
@@ -125,6 +125,11 @@ class AnalyticsProvider
 
     tag_users 'Paid', site.owners unless subscription.amount.zero?
     tag_users subscription.name, site.owners
+
+    return unless previous_subscription
+
+    untag_users previous_subscription.name, site.owners
+    untag_users 'Paid', site.owners if subscription.amount.zero?
   end
 
   def used_promo_code(site:, coupon:, user:)
@@ -183,23 +188,6 @@ class AnalyticsProvider
         schedule: subscription.schedule
       }
     )
-  end
-
-  def downgraded_site(subscription:, previous_subscription:, user:)
-    site = subscription.site
-
-    track(
-      event: 'downgraded-site',
-      user: user,
-      params: {
-        site_url: site.url
-      }
-    )
-
-    tag_users 'Downgraded', site.owners
-    tag_users 'Free', site.owners
-    untag_users previous_subscription.name, site.owners
-    untag_users 'Paid', site.owners
   end
 
   def used_sender_referral_coupon(subscription:, user:)

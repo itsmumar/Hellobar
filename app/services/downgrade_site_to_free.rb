@@ -11,9 +11,8 @@ class DowngradeSiteToFree
 
     previous_subscription = site.current_subscription
 
-    create_free_subscription.tap do |subscription|
+    create_free_subscription.tap do
       send_notification(previous_subscription)
-      track_event(subscription, previous_subscription)
     end
   end
 
@@ -43,14 +42,5 @@ class DowngradeSiteToFree
         .downgrade_to_free(site, user, previous_subscription)
         .deliver_later
     end
-  end
-
-  def track_event(subscription, previous_subscription)
-    TrackEvent.new(
-      :downgraded_site,
-      user: site.owners.first,
-      subscription: subscription,
-      previous_subscription: previous_subscription
-    ).call
   end
 end

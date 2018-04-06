@@ -57,7 +57,8 @@ describe RedeemReferralForRecipient do
         .with(
           :changed_subscription,
           user: recipient,
-          subscription: instance_of(Subscription::Growth)
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
         )
 
       expect(TrackEvent)

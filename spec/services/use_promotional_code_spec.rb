@@ -48,6 +48,7 @@ describe UsePromotionalCode do
           .to receive_service_call
           .with(:changed_subscription,
             subscription: instance_of(Subscription::Growth),
+            previous_subscription: nil,
             user: user)
 
         expect(TrackEvent)

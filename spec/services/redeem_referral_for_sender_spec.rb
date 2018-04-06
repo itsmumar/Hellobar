@@ -60,7 +60,8 @@ describe RedeemReferralForSender do
         .with(
           :changed_subscription,
           user: referral.sender,
-          subscription: instance_of(Subscription::Growth)
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
         )
 
       expect(TrackEvent).to receive_service_call.with(
