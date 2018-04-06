@@ -232,6 +232,17 @@ class AnalyticsProvider
     )
   end
 
+  def referred_friend(referral:, user:)
+    track(
+      event: 'referred-friend',
+      user: user,
+      params: {
+        email: referral.email,
+        site_url: referral.site.url
+      }
+    )
+  end
+
   private
 
   def track(event:, user:, params: {})

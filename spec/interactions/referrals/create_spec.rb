@@ -35,4 +35,16 @@ describe Referrals::Create do
       send_emails: false
     )
   end
+
+  it 'tracks "referred_friend" event' do
+    expect(TrackEvent)
+      .to receive_service_call
+      .with(:referred_friend, { user: user, referral: instance_of(Referral)})
+
+    Referrals::Create.run(
+      sender: user,
+      params: { email: 'tj@hellobar.com', body: 'test body' },
+      send_emails: false
+    )
+  end
 end

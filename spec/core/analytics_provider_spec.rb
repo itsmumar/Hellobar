@@ -332,4 +332,20 @@ describe AnalyticsProvider do
       track(event, user: user, site: site, coupon: coupon)
     end
   end
+
+  describe '#referred_friend' do
+    let(:event) { 'referred-friend' }
+    let(:referral) { create :referral, site: site }
+
+    it 'tracks "referred-friend"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          email: referral.email,
+          site_url: site.url
+        })
+
+      track(event, user: user, referral: referral)
+    end
+  end
 end
