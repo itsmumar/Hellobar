@@ -50,6 +50,27 @@ describe RedeemReferralForRecipient do
         .to have_enqueued_job(ActionMailer::DeliveryJob)
         .with('ReferralsMailer', 'successful', 'deliver_now', referral, recipient)
     end
+
+    it 'tracks used_recipient_referral_coupon event' do
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :changed_subscription,
+          user: recipient,
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
+        )
+
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :used_recipient_referral_coupon,
+          user: recipient,
+          subscription: instance_of(Subscription::Growth)
+        )
+
+      service.call
+    end
   end
 
   context 'when referral is not in state :signed_up' do

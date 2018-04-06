@@ -46,6 +46,24 @@ describe IntercomGateway do
     end
   end
 
+  describe '#untag_users' do
+    let(:tag) { 'tag' }
+
+    it 'removes tags' do
+      stub_request(:post, "#{ url }/tags")
+
+      user = instance_double User, id: user_id
+
+      intercom.untag_users tag, [user]
+    end
+
+    it 'does nothing if there are no users to tag' do
+      expect_any_instance_of(Intercom::Client).not_to receive :tags
+
+      intercom.untag_users tag, []
+    end
+  end
+
   describe '#find_user' do
     it 'sends GET request to Intercom' do
       stub_request(:get, "#{ url }/users?user_id=#{ user_id }")

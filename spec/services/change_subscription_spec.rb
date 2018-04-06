@@ -55,7 +55,10 @@ describe ChangeSubscription, :freeze do
 
       expect { service.call }
         .to have_enqueued_job(SendEventToIntercomJob)
-        .with('changed_subscription', site: site, user: user)
+        .with('changed_subscription',
+          subscription: instance_of(Subscription::Pro),
+          previous_subscription: instance_of(Subscription::Free),
+          user: user)
     end
 
     it 'sends an event to Amplitude' do
@@ -63,7 +66,10 @@ describe ChangeSubscription, :freeze do
 
       expect { service.call }
         .to have_enqueued_job(SendEventToAmplitudeJob)
-        .with('changed_subscription', site: site, user: user)
+        .with('changed_subscription',
+          subscription: instance_of(Subscription::Pro),
+          previous_subscription: instance_of(Subscription::Free),
+          user: user)
     end
 
     context 'without credit card' do
@@ -308,15 +314,21 @@ describe ChangeSubscription, :freeze do
 
           expect { change_subscription('free') }
             .to have_enqueued_job(SendEventToIntercomJob)
-            .with('changed_subscription', site: site, user: user)
+            .with('changed_subscription',
+              subscription: instance_of(Subscription::Free),
+              previous_subscription: instance_of(Subscription::Pro),
+              user: user)
         end
 
-        it 'sends an event to Intercom' do
+        it 'sends an event to Amplitude' do
           allow(Rails.env).to receive(:production?).and_return(true) # emulate production
 
           expect { service.call }
             .to have_enqueued_job(SendEventToAmplitudeJob)
-            .with('changed_subscription', site: site, user: user)
+            .with('changed_subscription',
+              subscription: instance_of(Subscription::Pro),
+              previous_subscription: instance_of(Subscription::Pro),
+              user: user)
         end
 
         it 'returns a bill' do

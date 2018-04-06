@@ -17,6 +17,8 @@ class RedeemReferralForSender
     else
       add_free_days_or_trial_and_use_referral
     end
+
+    track_event
   end
 
   private
@@ -40,7 +42,7 @@ class RedeemReferralForSender
   end
 
   def mark_failed_bill_as_paid
-    if subscription.period == 1.month
+    if subscription.monthly?
       last_failed_bill.paid!
       CreateBillForNextPeriod.new(last_failed_bill).call
     else
@@ -58,5 +60,13 @@ class RedeemReferralForSender
   def last_failed_bill
     return if subscription.blank?
     @last_failed_bill ||= subscription.bills.failed.last
+  end
+
+  def track_event
+    TrackEvent.new(
+      :used_sender_referral_coupon,
+      user: referral.sender,
+      subscription: site.current_subscription
+    ).call
   end
 end

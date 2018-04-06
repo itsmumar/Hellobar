@@ -7,7 +7,9 @@ class CreateCreditCard
 
   def call
     validate_form!
-    create_credit_card
+    create_credit_card.tap do |credit_card|
+      track_event(credit_card)
+    end
   end
 
   private
@@ -40,5 +42,13 @@ class CreateCreditCard
   # which is why we use the generic userXXX@hellobar.com format
   def email_for_cybersource
     "user#{ user&.id || 'NA' }@hellobar.com"
+  end
+
+  def track_event(credit_card)
+    TrackEvent.new(
+      :added_credit_card,
+      user: credit_card.user,
+      site: site
+    ).call
   end
 end

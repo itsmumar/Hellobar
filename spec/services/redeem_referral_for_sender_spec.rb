@@ -53,6 +53,25 @@ describe RedeemReferralForSender do
           .to eql site.active_paid_bill.start_date + 1.month + 1.month
       end
     end
+
+    it 'tracks used_sender_referral_coupon event' do
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :changed_subscription,
+          user: referral.sender,
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
+        )
+
+      expect(TrackEvent).to receive_service_call.with(
+        :used_sender_referral_coupon,
+        user: referral.sender,
+        subscription: instance_of(Subscription::Growth)
+      )
+
+      service.call
+    end
   end
 
   context 'when referral is not available to sender' do
