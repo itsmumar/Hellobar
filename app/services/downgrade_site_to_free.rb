@@ -38,7 +38,9 @@ class DowngradeSiteToFree
 
   def send_notification(previous_subscription)
     site.users.each do |user|
-      SubscriptionMailer.downgrade_to_free(site, user, previous_subscription).deliver_later
+      SubscriptionMailer
+        .downgrade_to_free(site, user, previous_subscription)
+        .deliver_later
     end
   end
 end

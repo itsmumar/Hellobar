@@ -34,6 +34,7 @@ class PayBill
     BillingLogger.charge(bill, response.success?)
     if response.success?
       process_successful_response(response)
+      track_event(bill)
     else
       process_unsuccessful_response(response)
     end
@@ -89,6 +90,14 @@ class PayBill
 
   def fix_failed_bills
     bill.site.bills_with_payment_issues.each(&:voided!)
+  end
+
+  def track_event(bill)
+    TrackEvent.new(
+      :paid_bill,
+      subscription: bill.subscription,
+      user: bill.credit_card&.user || bill.site.owners.first
+    ).call
   end
 
   def gateway

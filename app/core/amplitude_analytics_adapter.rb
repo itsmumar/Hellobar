@@ -12,6 +12,10 @@ class AmplitudeAnalyticsAdapter
     # do nothing
   end
 
+  def untag_users(*)
+    # do nothing
+  end
+
   private
 
   def send_event(attributes)
@@ -32,8 +36,14 @@ class AmplitudeAnalyticsAdapter
       contact_lists: user.contact_lists.count,
       total_views: user.sites.map { |site| site.statistics.views }.sum,
       total_conversions: user.sites.map { |site| site.statistics.conversions }.sum,
+      total_subscribers: user.sites.map { |site| total_subscribers(site) }.sum,
       sites_count: user.sites.count,
-      site_elements_count: user.site_elements.count
+      site_elements_count: user.site_elements.count,
+      managed_sites: user.site_ids
     }
+  end
+
+  def total_subscribers(site)
+    FetchContactListTotals.new(site).call.values.sum
   end
 end
