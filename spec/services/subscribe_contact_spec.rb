@@ -1,5 +1,7 @@
 describe SubscribeContact do
-  let(:contact_list) { create :contact_list, :mailchimp }
+  # 1.minute.ago is required to test cache invalidation
+  let(:contact_list) { create(:contact_list, :mailchimp, updated_at: 1.minute.ago) }
+  let(:site_element) { create(:site_element, :email, contact_list: contact_list, updated_at: 1.minute.ago) }
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
   let(:name) { 'FirstName LastName' }
@@ -12,15 +14,37 @@ describe SubscribeContact do
       .with(contact_list.identity, contact_list)
       .and_return provider
 
+    allow(provider).to receive(:subscribe)
     allow(contact).to receive(:contact_list).and_return(contact_list)
+
+    allow(UpdateContactStatus).to receive_service_call
+    allow(ExecuteSequenceTriggers).to receive_service_call
   end
 
   context 'when subscription is successful' do
-    it 'updates contact status' do
+    it 'calls subscribe on provider instance' do
       expect(provider).to receive(:subscribe).with(email: email, name: name)
 
+      service.call
+    end
+
+    it 'updates contact status' do
       expect(UpdateContactStatus).to receive_service_call
         .with(contact_list.id, email, :synced, error: nil)
+
+      service.call
+    end
+
+    it 'updates contact_list.cache_key' do
+      expect { service.call }.to change { contact_list.cache_key }
+    end
+
+    it 'updates site_element.cache_key' do
+      expect { service.call }.to change { site_element.reload.cache_key }
+    end
+
+    it 'executes email sequence triggers' do
+      expect(ExecuteSequenceTriggers).to receive_service_call.with(email, name, contact_list)
 
       service.call
     end

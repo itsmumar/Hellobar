@@ -1,7 +1,7 @@
 require 'discount_calculator'
 
 class Subscription < ApplicationRecord
-  NEW_PRO_START_DATE = Time.zone.parse('2018-04-01T00:00 UTC').freeze
+  GROWTH_START_DATE = Time.zone.parse('2018-04-01T00:00 UTC').freeze
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
@@ -29,7 +29,7 @@ class Subscription < ApplicationRecord
 
   class << self
     def pro_or_growth_for(user)
-      if user.created_at >= NEW_PRO_START_DATE
+      if user.created_at >= GROWTH_START_DATE
         Subscription::Growth
       else
         Pro

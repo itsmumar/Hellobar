@@ -1,9 +1,14 @@
 class SendEventToIntercomJob < ApplicationJob
+  USER_NOT_FOUND = 'User Not Found'.freeze
+
   def perform(event, options = {})
-    IntercomAnalytics.new.fire_event event, options
+    provider.fire_event event, options
   rescue Intercom::ResourceNotFound => e
-    handle_user_not_found(options[:user]) if e.message == 'User Not Found'
-    raise e # let SQS do its job
+    raise e unless e.message == USER_NOT_FOUND
+
+    handle_user_not_found(options[:user])
+    # retry it 1st time without exception
+    provider.fire_event event, options
   end
 
   private
@@ -15,6 +20,10 @@ class SendEventToIntercomJob < ApplicationJob
   # also user's info will be update there
   def handle_user_not_found(user)
     return unless user
-    IntercomAnalytics.new.created_user user: user
+    IntercomGateway.new.create_user user
+  end
+
+  def provider
+    AnalyticsProvider.new(IntercomAnalyticsAdapter.new)
   end
 end

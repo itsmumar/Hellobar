@@ -17,6 +17,7 @@ class AddFreeDays
       update_paid_subscription
     end
 
+    track_event
     current_bill
   end
 
@@ -72,5 +73,16 @@ class AddFreeDays
     else
       duration_or_days.to_i.days
     end
+  end
+
+  def track_event
+    bill = current_bill
+
+    TrackEvent.new(
+      :added_free_days,
+      subscription: bill.subscription,
+      user: bill.credit_card&.user || bill.site.owners.first,
+      free_days: duration / 1.day
+    ).call
   end
 end

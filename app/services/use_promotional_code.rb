@@ -13,7 +13,7 @@ class UsePromotionalCode
       CouponUse.create!(bill: bill, coupon: coupon)
     end
 
-    TrackEvent.new(:used_promo_code, user: user, code: @promotional_code).call
+    TrackEvent.new(:used_promo_code, user: user, coupon: coupon, site: site).call
   end
 
   private
@@ -34,7 +34,7 @@ class UsePromotionalCode
 
   def subscription_params
     {
-      subscription: 'pro',
+      subscription: 'growth',
       trial_period: coupon.trial_period
     }
   end

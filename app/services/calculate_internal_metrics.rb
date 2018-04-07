@@ -16,8 +16,11 @@ class CalculateInternalMetrics
       installation_churn: installation_churn,
       revenue: revenue,
       revenue_sum: revenue_sum,
+      growth: growth,
       pro: pro,
       enterprise: enterprise,
+      growth_monthly: growth_monthly,
+      growth_yearly: growth_yearly,
       pro_monthly: pro_monthly,
       pro_yearly: pro_yearly,
       enterprise_monthly: enterprise_monthly,
@@ -72,6 +75,10 @@ class CalculateInternalMetrics
     @pro ||= revenue.select { |bill| bill.subscription&.type =~ /Pro/ }
   end
 
+  def growth
+    @growth ||= revenue.select { |bill| bill.subscription&.type =~ /Growth/ }
+  end
+
   def enterprise
     @enterprise ||= revenue.select { |bill| bill.subscription&.type =~ /Enterprise/ }
   end
@@ -82,6 +89,14 @@ class CalculateInternalMetrics
 
   def pro_yearly
     @pro_yearly ||= pro.select { |bill| bill.subscription&.yearly? }
+  end
+
+  def growth_monthly
+    @growth_monthly ||= growth.select { |bill| bill.subscription&.monthly? }
+  end
+
+  def growth_yearly
+    @growth_yearly ||= growth.select { |bill| bill.subscription&.yearly? }
   end
 
   def enterprise_monthly

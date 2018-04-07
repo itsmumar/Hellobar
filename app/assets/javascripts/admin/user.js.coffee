@@ -52,3 +52,7 @@ $ ->
           alert(data.message)
       }
     )
+
+  $(".edit_site_form input[id^=subscription_subscription]").change (e) ->
+    paid = /^(Pro|Growth|Enterprise)$/.test($(e.target).val())
+    $(e.target).closest("form").find("#subscription_trial_period").prop("disabled", !paid)

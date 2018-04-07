@@ -21,10 +21,10 @@ describe RedeemReferralForRecipient do
         .to(true)
     end
 
-    it 'changes subscription to trial pro', :freeze do
+    it 'changes subscription to trial growth', :freeze do
       expect { service.call }
         .to change { site.current_subscription }
-        .to instance_of(Subscription::Pro)
+        .to instance_of(Subscription::Growth)
 
       expect(site.current_subscription.trial_end_date).to eql 1.month.from_now
     end
@@ -49,6 +49,27 @@ describe RedeemReferralForRecipient do
       expect { service.call }
         .to have_enqueued_job(ActionMailer::DeliveryJob)
         .with('ReferralsMailer', 'successful', 'deliver_now', referral, recipient)
+    end
+
+    it 'tracks used_recipient_referral_coupon event' do
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :changed_subscription,
+          user: recipient,
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
+        )
+
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :used_recipient_referral_coupon,
+          user: recipient,
+          subscription: instance_of(Subscription::Growth)
+        )
+
+      service.call
     end
   end
 

@@ -46,10 +46,12 @@ module Admin::UsersHelper
 
   def active_subscription_name(site)
     return unless site.active_subscription && site.current_subscription.class != site.active_subscription.class
-    " (#{ site.active_subscription.values[:name] } is still active)"
+
+    days = pluralize(site.active_subscription.days_left, 'day')
+    " (#{ site.active_subscription.values[:name] } is still active for #{ days })"
   end
 
-  def us_short_datetime(datetime)
-    datetime.to_date.to_s(:us_short)
+  def format_date(datetime, format = '%F')
+    datetime&.strftime(format)
   end
 end

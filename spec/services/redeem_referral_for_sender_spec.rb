@@ -12,12 +12,24 @@ describe RedeemReferralForSender do
     end
 
     context 'and site is on Free subscription', :freeze do
-      it 'adds trial Pro subscription' do
-        expect { service.call }
-          .to change { site.reload.active_subscription }
-          .to instance_of(Subscription::Pro)
+      context 'when sender signed up before Subscription::GROWTH_START_DATE', freeze: '2018-03-31T00:00 UTC' do
+        it 'adds trial Pro subscription' do
+          expect { service.call }
+            .to change { site.reload.active_subscription }
+            .to instance_of(Subscription::Pro)
 
-        expect(site.active_subscription.trial_end_date).to eql 1.month.from_now
+          expect(site.active_subscription.trial_end_date).to eql 1.month.from_now
+        end
+      end
+
+      context 'when sender signed up after Subscription::GROWTH_START_DATE', freeze: '2018-04-1T00:00 UTC' do
+        it 'adds trial Growth subscription' do
+          expect { service.call }
+            .to change { site.reload.active_subscription }
+            .to instance_of(Subscription::Growth)
+
+          expect(site.active_subscription.trial_end_date).to eql 1.month.from_now
+        end
       end
     end
 
@@ -25,7 +37,7 @@ describe RedeemReferralForSender do
       let(:credit_card) { create :credit_card }
 
       before { stub_cyber_source :purchase }
-      before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
+      before { ChangeSubscription.new(site, { subscription: 'growth' }, credit_card).call }
 
       it 'adds free days', :freeze do
         expect { service.call }
@@ -40,6 +52,25 @@ describe RedeemReferralForSender do
         expect(site.active_subscription.active_until)
           .to eql site.active_paid_bill.start_date + 1.month + 1.month
       end
+    end
+
+    it 'tracks used_sender_referral_coupon event' do
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :changed_subscription,
+          user: referral.sender,
+          subscription: instance_of(Subscription::Growth),
+          previous_subscription: nil
+        )
+
+      expect(TrackEvent).to receive_service_call.with(
+        :used_sender_referral_coupon,
+        user: referral.sender,
+        subscription: instance_of(Subscription::Growth)
+      )
+
+      service.call
     end
   end
 
@@ -63,7 +94,7 @@ describe RedeemReferralForSender do
     before { stub_cyber_source :purchase }
 
     context 'when subscription schedule is monthly' do
-      before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
+      before { ChangeSubscription.new(site, { subscription: 'growth' }, credit_card).call }
       before { site.bills.last.failed! }
 
       let!(:failed_bill) { Bill.failed.last }
@@ -87,7 +118,7 @@ describe RedeemReferralForSender do
 
     context 'when subscription schedule is yearly' do
       before do
-        params = { subscription: 'pro', schedule: 'yearly' }
+        params = { subscription: 'growth', schedule: 'yearly' }
         ChangeSubscription.new(site, params, credit_card).call
       end
       before { site.bills.last.failed! }

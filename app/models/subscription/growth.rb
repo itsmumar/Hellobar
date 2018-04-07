@@ -7,7 +7,7 @@ class Subscription
         {
           type: 'growth',
           name: 'Growth',
-          label: 'GROWTH',
+          label: 'GRW',
           monthly_amount: 29.0,
           yearly_amount: 289.0,
           visit_overage: 250_000, # after this many visits in a month
