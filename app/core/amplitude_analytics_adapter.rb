@@ -44,6 +44,6 @@ class AmplitudeAnalyticsAdapter
   end
 
   def total_subscribers(site)
-    FetchContactListTotals.new(site).call.values.sum
+    FetchSiteContactListTotals.new(site).call.values.sum
   end
 end
