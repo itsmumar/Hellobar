@@ -96,7 +96,7 @@ class PayBill
     TrackEvent.new(
       :paid_bill,
       subscription: bill.subscription,
-      user: bill.credit_card&.user || bill.site.owners.first
+      user: bill.subscription&.user || bill.site.owners.first
     ).call
   end
 

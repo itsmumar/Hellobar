@@ -126,7 +126,7 @@ class PayRecurringBills
     TrackEvent.new(
       :auto_renewed_subscription,
       subscription: bill.subscription,
-      user: bill.credit_card&.user || bill.site.owners.first
+      user: bill.subscription&.user || bill.site.owners.first
     ).call
   end
 end

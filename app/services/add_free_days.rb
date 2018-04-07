@@ -81,7 +81,7 @@ class AddFreeDays
     TrackEvent.new(
       :added_free_days,
       subscription: bill.subscription,
-      user: bill.credit_card&.user || bill.site.owners.first,
+      user: bill.subscription&.user || bill.site.owners.first,
       free_days: duration / 1.day
     ).call
   end
