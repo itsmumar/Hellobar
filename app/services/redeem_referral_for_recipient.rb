@@ -12,6 +12,7 @@ class RedeemReferralForRecipient
       update_subscription
       redeem_for_sender
     end
+    track_event
     send_success_email_to_sender
   end
 
@@ -46,5 +47,13 @@ class RedeemReferralForRecipient
 
   def send_success_email_to_sender
     ReferralsMailer.successful(referral, recipient).deliver_later
+  end
+
+  def track_event
+    TrackEvent.new(
+      :used_recipient_referral_coupon,
+      user: recipient,
+      subscription: site.current_subscription
+    ).call
   end
 end

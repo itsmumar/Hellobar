@@ -29,7 +29,7 @@ describe 'api/authentications requests' do
       end
 
       it 'redirects to callback url with token and site_id in query params' do
-        expect(FetchContactListTotals).to receive_service_call.and_return({})
+        expect(FetchSiteContactListTotals).to receive_service_call.and_return({})
 
         post(api_authenticate_path, {},
           Rack::Cors::HTTP_ORIGIN => Settings.campaigns_url)

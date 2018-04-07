@@ -30,7 +30,7 @@ class Api::AuthenticationsController < ApplicationController
   def list_totals
     @subscriber_totals ||= begin
       current_user.sites.each_with_object({}) do |site, memo|
-        memo.merge!(FetchContactListTotals.new(site).call)
+        memo.merge!(FetchSiteContactListTotals.new(site).call)
       end
     end
   end
