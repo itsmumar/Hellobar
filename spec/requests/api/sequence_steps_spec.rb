@@ -31,6 +31,7 @@ describe 'api/sequence_steps' do
         expected_attributes = step.attributes.symbolize_keys.slice(
           :id,
           :sequence_id,
+          :name,
           :delay,
           :executable_type,
           :executable_id
@@ -57,6 +58,7 @@ describe 'api/sequence_steps' do
 
       expect(response).to be_successful
       expect(json[:id]).to eq(step.id)
+      expect(json[:name]).to eq(step.name)
       expect(json[:delay]).to eq(step.delay)
       expect(json[:executable_type]).to eq(step.executable_type)
       expect(json[:executable_id]).to eq(step.executable_id)
