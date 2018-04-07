@@ -13,6 +13,12 @@ class IntercomGateway
     client.tags.tag(name: tag, users: users.map { |u| { user_id: u.id } })
   end
 
+  def untag_users tag, users
+    return if users.blank? || tag.blank?
+
+    client.tags.untag(name: tag, users: users.map { |u| { user_id: u.id } })
+  end
+
   def find_user user_id
     client.users.find user_id: user_id
   rescue Intercom::ResourceNotFound

@@ -8,7 +8,9 @@ class AddTrialSubscription
   def call
     raise 'wrong trial period' if duration > 90.days || duration < 1.day
     void_active_free_bill
-    create_trial_subscription
+    create_trial_subscription.tap do |bill|
+      track_event(bill)
+    end
   end
 
   private
@@ -48,5 +50,14 @@ class AddTrialSubscription
     else
       duration_or_days.to_i.days
     end
+  end
+
+  def track_event(bill)
+    TrackEvent.new(
+      :changed_subscription,
+      subscription: bill.subscription,
+      previous_subscription: site.previous_subscription,
+      user: site.owners.first
+    ).call
   end
 end
