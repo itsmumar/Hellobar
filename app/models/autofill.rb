@@ -1,5 +1,5 @@
 class Autofill < ApplicationRecord
-  belongs_to :site, touch: true
+  belongs_to :site
 
   validates :site, presence: true
   validates :name, presence: true
