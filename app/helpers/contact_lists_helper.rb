@@ -1,4 +1,6 @@
 module ContactListsHelper
+  DELETED = 'DELETED'.freeze
+
   def options_for_provider_select
     providers_array = ServiceProvider::Adapters.enabled.map do |adapter|
       [
@@ -18,9 +20,9 @@ module ContactListsHelper
   end
 
   def contact_list_title(contact_list)
-    title = "#{contact_list.name} (id: #{contact_list.id})"
-    title << " - #{content_tag(:b, 'DELETED')}" if contact_list.deleted?
-    title.html_safe
+    title = "#{ contact_list.name } (id: #{ contact_list.id })"
+    title << " - #{ content_tag(:b, DELETED) }" if contact_list.deleted?
+    title.html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def contact_list_sync_details(contact_list)
