@@ -2,7 +2,7 @@ describe 'Admin::Bills requests' do
   context 'when unauthenticated' do
     describe 'GET :show' do
       it 'responds with a redirect to the login page' do
-        get admin_site_bill_path site_id: 1, id: 1
+        get admin_bill_path id: 1
 
         expect(response).to be_a_redirect
         expect(response.location).to include '/admin/access'
@@ -20,7 +20,7 @@ describe 'Admin::Bills requests' do
 
     describe 'GET #show' do
       it 'allows admins to see a bill details' do
-        get admin_site_bill_path(site_id: site.id, id: bill)
+        get admin_bill_path(bill)
         expect(response).to be_success
       end
 
@@ -30,7 +30,7 @@ describe 'Admin::Bills requests' do
         end
 
         it 'responds with success' do
-          get admin_site_bill_path(site_id: site.id, id: bill)
+          get admin_bill_path(bill)
           expect(response).to be_success
         end
       end
@@ -38,7 +38,7 @@ describe 'Admin::Bills requests' do
 
     describe 'GET #receipt' do
       it 'allows admins to see a bill receipt' do
-        get receipt_admin_site_bill_path(site_id: site.id, id: bill)
+        get receipt_admin_bill_path(bill)
         expect(response).to be_success
       end
 
@@ -48,7 +48,7 @@ describe 'Admin::Bills requests' do
         end
 
         it 'responds with success' do
-          get receipt_admin_site_bill_path(site_id: site.id, id: bill)
+          get receipt_admin_bill_path(bill)
           expect(response).to be_success
         end
       end
@@ -56,7 +56,7 @@ describe 'Admin::Bills requests' do
 
     describe 'PUT #void' do
       it 'voids a bill' do
-        put void_admin_site_bill_path(site_id: site, id: bill)
+        put void_admin_bill_path(bill)
 
         expect(response).to redirect_to admin_site_path(site)
         expect(bill.reload).to be_voided
@@ -72,7 +72,7 @@ describe 'Admin::Bills requests' do
         end
 
         it 'pays a bill' do
-          put pay_admin_site_bill_path(site_id: site, id: bill)
+          put pay_admin_bill_path(bill)
 
           expect(request.flash[:success]).to be_present
           expect(response).to redirect_to admin_site_path(site)
@@ -86,7 +86,7 @@ describe 'Admin::Bills requests' do
         end
 
         it 'does not pay the bill' do
-          put pay_admin_site_bill_path(site_id: site, id: bill)
+          put pay_admin_bill_path(bill)
 
           expect(request.flash[:error]).to be_present
           expect(response).to redirect_to admin_site_path(site)
@@ -105,7 +105,7 @@ describe 'Admin::Bills requests' do
 
       it 'refunds a bill' do
         expect {
-          put refund_admin_site_bill_path(site_id: site, id: bill), params
+          put refund_admin_bill_path(bill), params
         }.to change(Bill::Refund, :count).by 1
 
         expect(response).to redirect_to admin_site_path(site)
@@ -121,7 +121,7 @@ describe 'Admin::Bills requests' do
 
         it 'returns refund error' do
           expect {
-            put refund_admin_site_bill_path(site_id: site, id: bill), params
+            put refund_admin_bill_path(bill), params
           }.not_to change(Bill::Refund, :count)
           expect(response).to redirect_to admin_site_path(site)
         end

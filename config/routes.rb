@@ -171,16 +171,16 @@ Rails.application.routes.draw do
         put :add_free_days
       end
 
-      resources :bills, only: [:show] do
-        member do
-          get 'receipt'
-          put 'void'
-          put 'pay'
-          put 'refund'
-        end
-      end
-
       resources :contact_lists, only: [:index]
+    end
+
+    resources :bills, only: [:show] do
+      member do
+        get 'receipt'
+        put 'void'
+        put 'pay'
+        put 'refund'
+      end
     end
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
