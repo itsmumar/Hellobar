@@ -40,7 +40,7 @@ class Condition < ApplicationRecord
     less_than: 'is less than'
   }.with_indifferent_access.freeze
 
-  belongs_to :rule, inverse_of: :conditions, touch: true
+  belongs_to :rule, inverse_of: :conditions
 
   before_validation :clear_blank_values
   before_validation :format_string_values
