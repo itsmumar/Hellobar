@@ -174,7 +174,7 @@ Rails.application.routes.draw do
       resources :contact_lists, only: [:index]
     end
 
-    resources :bills, only: [:index, :show] do
+    resources :bills, only: %i[index show] do
       member do
         get 'receipt'
         put 'void'
