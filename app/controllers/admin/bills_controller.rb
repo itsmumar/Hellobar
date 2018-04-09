@@ -1,4 +1,10 @@
 class Admin::BillsController < AdminController
+  BILLS_TO_SHOW = 20
+
+  def index
+    @bills = Bill.order('id desc').limit(BILLS_TO_SHOW)
+  end
+
   def show
     @bill, @subscription, @site = load_data
     @credit_card = @bill.paid_with_credit_card

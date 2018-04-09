@@ -40,7 +40,7 @@ module Admin::BillsHelper
     bill.coupon_uses.map { |cu| cu.coupon&.label }.compact.join(COUPONS_SEPARATOR)
   end
 
-  def bill_actions(bill, site)
+  def bill_actions(bill)
     actions = []
 
     if bill.pending? || bill.failed?
@@ -61,7 +61,7 @@ module Admin::BillsHelper
     end
 
     if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0 # rubocop:disable Style/IfUnlessModifier
-      actions << render('admin/bills/refund_form', bill: bill, site: site)
+      actions << render('admin/bills/refund_form', bill: bill)
     end
 
     safe_join(actions, ' or ')

@@ -37,7 +37,7 @@ table
         - if bill.paid? && bill.amount != 0
           = link_to("view", receipt_admin_bill_path(bill), target: '_blank')
       td
-        = bill_actions(bill, site)
+        = bill_actions(bill)
       td
         = bill_duration(bill)
       td
