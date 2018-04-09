@@ -114,7 +114,7 @@ describe 'Admin::Users requests' do
 
       delete admin_unimpersonate_user_path
 
-      expect(response).to redirect_to admin_users_path
+      expect(response).to redirect_to admin_user_path(user.id)
       expect(session[:impersonated_user]).to be_nil
     end
   end
