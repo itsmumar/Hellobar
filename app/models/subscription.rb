@@ -11,7 +11,7 @@ class Subscription < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :credit_card
-  belongs_to :site, touch: true
+  belongs_to :site
   belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
   has_many :active_bills, -> { merge(Bill.active) }, class_name: 'Bill', inverse_of: :subscription

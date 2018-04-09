@@ -37,7 +37,7 @@ class SiteElement < ApplicationRecord
   TEMPLATE_NAMES = %w[traffic_growth].freeze
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
-  belongs_to :rule, touch: true
+  belongs_to :rule
   belongs_to :contact_list
   belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy, inverse_of: :site_elements
   belongs_to :theme

@@ -96,6 +96,7 @@ class FetchSiteStatistics
   end
 
   def all_site_statistics_cache_key
-    "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:cache_key).to_json) }"
+    key = [site, site.site_elements.reorder(:updated_at).last]
+    ActiveSupport::Cache.expand_cache_key key, "site_statistics/#{ days_limit }"
   end
 end
