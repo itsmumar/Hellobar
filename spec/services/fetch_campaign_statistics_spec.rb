@@ -67,8 +67,8 @@ describe FetchCampaignStatistics do
     context 'with a new campaign' do
       before do
         expect(FetchSiteContactListTotals).to receive_service_call
-          .with(campaign.site, id: campaign.contact_list_id)
-          .and_return recipients_count
+          .with(campaign.site, [campaign.contact_list_id])
+          .and_return(campaign.contact_list_id => recipients_count)
       end
 
       it 'fetches data from DynamoDB' do

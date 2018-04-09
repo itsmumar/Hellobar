@@ -72,7 +72,7 @@ class FetchCampaignStatistics
 
   def subscribers_count
     {
-      'subscribers' => FetchSiteContactListTotals.new(site, id: contact_list_id).call
+      'subscribers' => FetchSiteContactListTotals.new(site, [contact_list_id]).call[contact_list_id]
     }
   end
 end
