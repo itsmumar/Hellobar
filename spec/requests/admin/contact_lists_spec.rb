@@ -1,6 +1,6 @@
 describe 'Admin::ContactLists requests' do
   let(:admin) { create(:admin) }
-  let(:site) { create(:site, :with_user) }
+  let(:site) { create(:site, :with_user, :free_subscription) }
   let!(:user) { site.owners.last }
   let!(:contact_list) { create :contact_list, site: site }
   let(:email) { 'user@example.com' }
@@ -9,9 +9,11 @@ describe 'Admin::ContactLists requests' do
   before do
     stub_current_admin(admin)
 
-    allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([
+    allow(FetchLatestContacts).to receive_message_chain(:new, :call).and_return([
       Contact.new(email: email, status: status, subscribed_at: Time.current)
     ])
+
+    allow(FetchSiteContactListTotals).to receive_message_chain(:new, :call).and_return(Hash.new { 0 })
   end
 
   describe 'GET admin_user_site_contact_lists_path' do
