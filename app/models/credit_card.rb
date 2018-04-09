@@ -3,7 +3,7 @@ class CreditCard < ApplicationRecord
 
   belongs_to :user
   has_many :subscriptions, dependent: :nullify, inverse_of: :credit_card
-  has_many :billing_attempts, dependent: :nullify, inverse_of: :credit_card
+  has_many :billing_attempts, inverse_of: :credit_card
 
   acts_as_paranoid
 

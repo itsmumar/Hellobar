@@ -106,7 +106,8 @@ class Bill < ApplicationRecord
   end
 
   def used_credit_card
-    (successful_billing_attempt || last_billing_attempt)&.credit_card
+    credit_card_id = (successful_billing_attempt || last_billing_attempt)&.credit_card_id
+    credit_card_id && CreditCard.unscoped.find(credit_card_id)
   end
 
   def calculate_discount
