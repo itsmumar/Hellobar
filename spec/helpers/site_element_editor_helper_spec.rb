@@ -16,6 +16,8 @@ describe SiteElementEditorHelper do
         expect(helper.render_interstitial?).to eq false
       end
     end
+
+    context 'skipping the onboarding interstitial' do
       let(:params) { { skip_interstitial: true } }
 
       it 'should not render the interstitial' do
