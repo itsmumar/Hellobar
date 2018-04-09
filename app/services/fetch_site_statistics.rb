@@ -96,7 +96,7 @@ class FetchSiteStatistics
   end
 
   def all_site_statistics_cache_key
-    ActiveSupport::Cache
-      .expand_cache_key [site, site.site_elements], "site_statistics/#{ days_limit }"
+    key = [site, site.site_elements.reorder(:updated_at).last]
+    ActiveSupport::Cache.expand_cache_key key, "site_statistics/#{ days_limit }"
   end
 end
