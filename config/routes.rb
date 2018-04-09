@@ -160,7 +160,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :credit_cards, only: [:destroy]
+    resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
     end

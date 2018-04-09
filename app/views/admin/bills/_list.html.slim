@@ -43,7 +43,7 @@ table
       td
         = format_date(bill.status_set_at)
       td
-        = bill.credit_card&.last_digits
+        = bill.credit_card && link_to(bill.credit_card&.last_digits, admin_credit_card_path(bill.credit_card))
       td
         = bill_extra_days(bill)
       td
