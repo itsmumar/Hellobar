@@ -3,6 +3,7 @@ table
     th Email
     th Permissions
     th Additional info
+    th Actions
 
   - site.site_memberships.with_deleted.each do |site_membership|
     tr
@@ -11,3 +12,6 @@ table
       td
         = " (user deleted)" unless site_membership.user
         = " (site membership deleted)" if site_membership.deleted?
+      td
+        - unless site_membership.user.deleted?
+          = link_to 'Impersonate User', admin_impersonate_user_path(site_membership.user), :method => :post
