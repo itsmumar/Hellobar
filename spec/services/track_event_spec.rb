@@ -8,9 +8,6 @@ xdescribe TrackEvent, :freeze do
     allow(Rails.env).to receive(:production?).and_return(true) # emulate production
     allow(Intercom::Client).to receive(:new).and_return(intercom)
 
-    # skip A/B assignment
-    allow_any_instance_of(User).to receive(:add_to_onboarding_campaign)
-
     allow(FetchSiteStatistics).to receive_message_chain(:new, :call)
       .and_return site_statistics
   end
