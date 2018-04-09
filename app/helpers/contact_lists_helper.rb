@@ -17,6 +17,12 @@ module ContactListsHelper
     [['In Hello Bar only', 0]] + providers_array
   end
 
+  def contact_list_title(contact_list)
+    title = "#{contact_list.name} (id: #{contact_list.id})"
+    title << " - #{content_tag(:b, 'DELETED')}" if contact_list.deleted?
+    title.html_safe
+  end
+
   def contact_list_sync_details(contact_list)
     if contact_list.data['remote_name'].present?
       "<small>Syncing contacts with</small><span>#{ contact_list.provider_name } list \"#{ contact_list.data['remote_name'] }\"</span>"

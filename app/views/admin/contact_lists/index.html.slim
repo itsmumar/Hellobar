@@ -2,7 +2,7 @@
 
   .contact-list
 
-    h4= "#{contact_list.name} (id: #{contact_list.id})"
+    h4= contact_list_title(contact_list)
     h5
       ' Synced to:
       = contact_list&.identity&.provider || "Hello Bar"
