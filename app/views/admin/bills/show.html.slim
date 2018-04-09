@@ -3,6 +3,10 @@
     div.title Bill Details
     = render 'admin/bills/list', bills: [@bill], site: @site, user: nil
 
+  div.bill_section.billing_attempts
+    div.title Attempts
+    = render 'admin/bills/attempts', billing_attempts: @bill.billing_attempts
+
   div.bill_section.site_details
     div.title Site Details
     = render 'admin/sites/header', site: @site
