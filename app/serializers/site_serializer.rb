@@ -3,9 +3,7 @@ class SiteSerializer < ActiveModel::Serializer
 
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :script_installed, :site_elements_count
-  attributes :view_billing, :timezone
-
-  has_many :rules, serializer: RuleSerializer
+  attributes :view_billing, :timezone, :rules
 
   def contact_lists
     object.contact_lists.map do |list|
@@ -46,7 +44,7 @@ class SiteSerializer < ActiveModel::Serializer
 
   def current_subscription
     if object.current_subscription.present?
-      SubscriptionSerializer.new(object.current_subscription)
+      SubscriptionSerializer.new(object.current_subscription).as_json
     else
       {}
     end
@@ -57,16 +55,20 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def view_billing
-    scope && Permissions.view_bills?(scope, object)
+    scope && scope[:user] && Permissions.view_bills?(scope[:user], object)
   end
 
   def script_installed
     object.script_installed?
   end
 
+  def rules
+    object.rules.map { |rule| RuleSerializer.new(rule).as_json }
+  end
+
   private
 
   def list_subscribers_count(list_id)
-    context && context[:list_totals] && context[:list_totals][list_id]
+    scope && scope[:list_totals] && scope[:list_totals][list_id]
   end
 end

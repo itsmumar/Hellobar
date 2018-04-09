@@ -6,7 +6,7 @@ class Api::AuthenticationsController < ApplicationController
     if current_user && current_site
       render json: current_user,
              serializer: CurrentUserSerializer,
-             context: serializer_context
+             scope: serializer_context
     else
       head :unauthorized
     end
@@ -20,6 +20,7 @@ class Api::AuthenticationsController < ApplicationController
 
   def serializer_context
     {
+      user: current_user,
       list_totals: list_totals,
       site_id: current_site.id,
       token: token

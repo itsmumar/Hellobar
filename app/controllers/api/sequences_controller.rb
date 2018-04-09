@@ -6,7 +6,7 @@ class Api::SequencesController < Api::ApplicationController
   end
 
   def show
-    render json: @sequence
+    render json: @sequence, serializer: SequenceSerializer
   end
 
   def create

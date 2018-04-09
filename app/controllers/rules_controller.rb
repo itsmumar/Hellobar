@@ -16,7 +16,7 @@ class RulesController < ApplicationController
       @site.script.generate
       render json: rule
     else
-      render json: rule.nested_error_messages, status: :unprocessable_entity
+      render json: { rules: rule.nested_error_messages }, status: :unprocessable_entity
     end
   end
 
@@ -27,7 +27,7 @@ class RulesController < ApplicationController
       @site.script.generate
       render json: rule
     else
-      render json: rule.nested_error_messages, status: :unprocessable_entity
+      render json: { rules: rule.nested_error_messages }, status: :unprocessable_entity
     end
   end
 
@@ -40,7 +40,7 @@ class RulesController < ApplicationController
       @site.script.generate
       render nothing: true, status: :ok
     else
-      render json: rule.nested_error_messages, status: :unprocessable_entity
+      render json: { rules: rule.nested_error_messages }, status: :unprocessable_entity
     end
   end
 

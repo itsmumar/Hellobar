@@ -4,7 +4,7 @@ class Api::UserStateController < ApplicationController
   def show
     user = User.find(params[:id])
 
-    render json: ApiSerializer::UserStateSerializer.new(user).to_json
+    render json: user, serializer: ApiSerializer::UserStateSerializer
   end
 
   private

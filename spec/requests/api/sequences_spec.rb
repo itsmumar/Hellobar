@@ -24,10 +24,10 @@ describe 'api/sequences' do
     it 'returns sequences for the site' do
       expect(response).to be_successful
 
-      expect(json[:sequences].size).to eq(sequences.size)
+      expect(json.size).to eq(sequences.size)
 
       sequences.each do |sequence|
-        expect(json[:sequences]).to include(sequence.attributes.symbolize_keys.slice(:id, :name, :contact_list_id))
+        expect(json).to include(sequence.attributes.symbolize_keys.slice(:id, :name, :contact_list_id))
       end
     end
   end
