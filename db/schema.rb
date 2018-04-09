@@ -260,6 +260,7 @@ ActiveRecord::Schema.define(version: 20180330093700) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",            limit: 255
   end
 
   add_index "sequence_steps", ["executable_type", "executable_id"], name: "index_sequence_steps_on_executable_type_and_executable_id", using: :btree
