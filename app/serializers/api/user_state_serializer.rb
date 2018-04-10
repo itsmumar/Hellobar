@@ -3,9 +3,8 @@ class ApiSerializer
     attributes :user, :sites, :site_memberships, :rules, :site_elements, :credit_cards
 
     def rules
-      rules = sites.map(&:rules).flatten
-
-      ActiveModel::ArraySerializer.new(rules)
+      rules = user.sites.map(&:rules).flatten
+      rules.map { |rule| RuleSerializer.new(rule).as_json }
     end
 
     def user
