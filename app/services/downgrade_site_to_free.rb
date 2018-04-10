@@ -6,6 +6,7 @@ class DowngradeSiteToFree
   def call
     void_pending_bills
     enable_branding_on_all_bars
+    regenerate_script
 
     return site.current_subscription if site.current_subscription&.free?
 
@@ -19,6 +20,10 @@ class DowngradeSiteToFree
   private
 
   attr_reader :site
+
+  def regenerate_script
+    site.script.generate
+  end
 
   def currently_on_free?
     site.current_subscription&.free?
