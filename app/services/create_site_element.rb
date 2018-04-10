@@ -7,8 +7,6 @@ class CreateSiteElement
 
   def call
     site_element.save!
-    site_element.rule.touch
-    site_element.site.touch
     track_creation
     generate_script
     site_element
