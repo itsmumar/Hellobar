@@ -41,6 +41,7 @@ class StaticScript
   end
 
   def generate
+    refresh_cache
     GenerateStaticScriptJob.perform_later site
   end
 
@@ -49,6 +50,14 @@ class StaticScript
   end
 
   private
+
+  # forces site.cache_key to be updated
+  #
+  # @see StaticScriptModel#to_json
+  # @see _static_script_model.json.jbuilder
+  def refresh_cache
+    site.touch
+  end
 
   def cdn_url_for(path)
     File.join(cdn_domain, path)

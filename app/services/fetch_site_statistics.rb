@@ -6,10 +6,10 @@ class FetchSiteStatistics
 
   CACHE_TTL = 1.hour
 
-  def initialize(site, days_limit: MAX_DAYS, site_element_ids: nil)
+  def initialize(site, days_limit: MAX_DAYS)
     @site = site
     @days_limit = days_limit
-    @site_element_ids = site_element_ids
+    @site_elements ||= site.site_elements
   end
 
   def call
@@ -18,7 +18,7 @@ class FetchSiteStatistics
 
   private
 
-  attr_reader :site, :days_limit, :site_element_ids
+  attr_reader :site, :days_limit, :site_elements
 
   def fetch_statistic
     statistics = SiteStatistics.new
@@ -40,15 +40,6 @@ class FetchSiteStatistics
       return_consumed_capacity: 'TOTAL',
       limit: days_limit
     }
-  end
-
-  def site_elements
-    @site_elements ||=
-      if site_element_ids.present?
-        site.site_elements.where(id: site_element_ids)
-      else
-        site.site_elements
-      end
   end
 
   def table_name
@@ -96,6 +87,7 @@ class FetchSiteStatistics
   end
 
   def all_site_statistics_cache_key
-    "site_statistics/#{ site.id }/#{ Digest::MD5.hexdigest(site_elements.map(&:cache_key).to_json) }"
+    key = [site, site.site_elements.reorder(:updated_at).last]
+    ActiveSupport::Cache.expand_cache_key key, "site_statistics/#{ days_limit }"
   end
 end

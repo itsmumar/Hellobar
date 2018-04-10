@@ -19,10 +19,10 @@ class SubscriptionsController < ApplicationController
     end
 
     credit_card = CreateCreditCard.new(@site, current_user, params).call
-    changed_subscription = change_subscription(credit_card)
+    bill = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json { render json: changed_subscription }
+      format.json { render json: bill, serializer: BillSerializer }
     end
   end
 
@@ -31,10 +31,10 @@ class SubscriptionsController < ApplicationController
     load_site
 
     credit_card = current_user.credit_cards.find params[:credit_card_id]
-    changed_subscription = change_subscription(credit_card)
+    bill = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json { render json: changed_subscription }
+      format.json { render json: bill, serializer: BillSerializer }
     end
   end
 
@@ -49,7 +49,6 @@ class SubscriptionsController < ApplicationController
   end
 
   def change_subscription(credit_card)
-    bill = ChangeSubscription.new(@site, params[:billing], credit_card).call
-    BillSerializer.new(bill)
+    ChangeSubscription.new(@site, params[:billing], credit_card).call
   end
 end

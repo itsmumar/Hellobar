@@ -8,7 +8,8 @@ describe Bill do
   describe '#can_pay?' do
     subject { bill.can_pay? }
     let(:credit_card) { create :credit_card }
-    let!(:bill) { create :bill, credit_card: credit_card }
+    let(:subscription) { create(:subscription, credit_card: credit_card) }
+    let!(:bill) { create :bill, subscription: subscription }
 
     context 'without credit card' do
       let(:credit_card) { nil }
@@ -17,13 +18,13 @@ describe Bill do
     end
 
     context 'with deleted credit card' do
-      before { bill.credit_card.destroy }
+      before { bill.subscription.credit_card.destroy }
 
       specify { expect(subject).to be_falsey }
     end
 
     context 'without credit card token' do
-      before { bill.credit_card.update token: nil }
+      before { bill.subscription.credit_card.update token: nil }
 
       specify { expect(subject).to be_falsey }
     end
@@ -224,6 +225,68 @@ describe Bill do
       specify do
         bill.send "#{ status }!"
         expect(bill.status).to eql status
+      end
+    end
+  end
+
+  describe '#last_billing_attempt' do
+    context 'when there are several attempts' do
+      let(:bill) { create(:bill, :with_attempt) }
+
+      let!(:last_attempt) do
+        create(:billing_attempt, :success, bill: bill, response: 'authorization', credit_card: bill.subscription.credit_card)
+      end
+
+      it 'returns the most recent billing attempt' do
+        expect(bill.last_billing_attempt).to eq(last_attempt)
+      end
+    end
+  end
+
+  context 'when there is no any attempts' do
+    let(:bill) { create(:bill) }
+
+    it 'returns nil' do
+      expect(bill.last_billing_attempt).to be_nil
+    end
+  end
+
+  describe '#used_credit_card' do
+    let(:credit_card) { create(:credit_card) }
+    let(:subscription) { create(:subscription, credit_card: credit_card) }
+    let(:bill) { create(:bill, subscription: subscription) }
+
+    context 'when there is successful attempt' do
+      let!(:failed_attempt) do
+        create(:billing_attempt, :failed, bill: bill)
+      end
+
+      let!(:successful_attempt) do
+        create(:billing_attempt, :success, bill: bill, response: 'authorization')
+      end
+
+      it 'returns credit card of that attempt' do
+        expect(bill.used_credit_card).to eq(successful_attempt.credit_card)
+      end
+    end
+
+    context 'when there is no successful attempt' do
+      let!(:failed_attempt) do
+        create(:billing_attempt, :failed, bill: bill)
+      end
+
+      let!(:failed_attempt2) do
+        create(:billing_attempt, :failed, bill: bill)
+      end
+
+      it 'returns credit card of last attempt' do
+        expect(bill.used_credit_card).to eq(failed_attempt2.credit_card)
+      end
+    end
+
+    context 'when there is no attempts' do
+      it 'returns nil' do
+        expect(bill.used_credit_card).to be_nil
       end
     end
   end

@@ -23,12 +23,6 @@ describe UpdateStaticScriptInstallation do
 
         service.call
       end
-
-      it 'creates onboarding status :installed_script' do
-        expect { service.call }.to change(UserOnboardingStatus, :count).by 1
-        expect(UserOnboardingStatus.last.status_id)
-          .to eql UserOnboardingStatus::STATUSES[:installed_script]
-      end
     end
 
     context 'and is set to uninstalled' do
@@ -61,10 +55,6 @@ describe UpdateStaticScriptInstallation do
           .with(:uninstalled_script, site: site, user: site.owners.first)
 
         service.call
-      end
-
-      it 'changes user onboarding status' do
-        expect { service.call }.to change(UserOnboardingStatus, :count).by 1
       end
     end
 

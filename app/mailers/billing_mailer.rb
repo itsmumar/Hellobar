@@ -5,7 +5,7 @@ class BillingMailer < ApplicationMailer
     @bill = bill
     @site = bill.site
     @subscription = bill.subscription
-    @credit_card = bill.credit_card
+    @credit_card = bill.subscription.credit_card
 
     mail_to_owners(
       @site,

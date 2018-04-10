@@ -29,4 +29,12 @@ module ApplicationHelper
   def filtered_timezone_list
     ActiveSupport::TimeZone.all.uniq(&:tzinfo)
   end
+
+  def serialize_current_user
+    UserSerializer.new(current_user).to_json
+  end
+
+  def serialize_current_site
+    current_site ? SiteSerializer.new(current_site, scope: { user: current_user }).to_json : {}
+  end
 end

@@ -45,6 +45,6 @@ html
         new AccountPromptModal().open();
 
     javascript:
-      var currentUser = #{{UserSerializer.new(current_user).to_json}};
+      var currentUser = #{{serialize_current_user}};
       var siteID = "#{@site.try(:id)}";
-      var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
+      var site = #{{serialize_current_site}};

@@ -11,14 +11,13 @@ class Subscription < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :credit_card
-  belongs_to :site, touch: true
+  belongs_to :site
   belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
   has_many :active_bills, -> { merge(Bill.active) }, class_name: 'Bill', inverse_of: :subscription
   has_one :last_paid_bill, -> { paid.order end_date: :desc }, class_name: 'Bill', inverse_of: :subscription
 
   after_initialize :set_initial_values
-  after_create :mark_user_onboarding_as_bought_subscription!
 
   scope :paid, -> { joins(:bills).merge(Bill.paid.active) }
   scope :active, -> { paid.merge(Bill.without_refunds.without_chargebacks) }
@@ -104,11 +103,6 @@ class Subscription < ApplicationRecord
   def expired?
     return false if amount&.zero? # a free subscription never expires
     !last_paid_bill || last_paid_bill.end_date < Date.current
-  end
-
-  def mark_user_onboarding_as_bought_subscription!
-    return unless capabilities.acts_as_paid_subscription? && (user || site)
-    (user || site.owners.unscoped.first)&.onboarding_status_setter&.bought_subscription!
   end
 
   def <=> other

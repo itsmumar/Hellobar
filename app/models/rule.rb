@@ -6,7 +6,7 @@ class Rule < ApplicationRecord
 
   acts_as_paranoid
 
-  belongs_to :site, touch: true, inverse_of: :rules
+  belongs_to :site, inverse_of: :rules
   has_many :site_elements, dependent: :destroy
   has_many :active_site_elements, -> { merge(SiteElement.active) }, class_name: 'SiteElement', inverse_of: :rule
   has_many :conditions, dependent: :destroy, inverse_of: :rule

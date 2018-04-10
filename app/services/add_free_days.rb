@@ -11,11 +11,9 @@ class AddFreeDays
     raise Error, 'Invalid number of days' if duration < 1
     raise Error, 'Could not add trial days to a free subscription' unless active_subscription&.paid?
 
-    if active_subscription.currently_on_trial?
-      update_trial_subscription
-    else
-      update_paid_subscription
-    end
+    update_current_bill
+    create_or_update_next_bill
+    update_trial_end_date if active_subscription.currently_on_trial?
 
     track_event
     current_bill
@@ -24,16 +22,6 @@ class AddFreeDays
   private
 
   attr_reader :site, :duration
-
-  def update_paid_subscription
-    update_current_bill
-    update_next_bill
-  end
-
-  def update_trial_subscription
-    update_current_bill
-    update_trial_end_date
-  end
 
   def update_trial_end_date
     active_subscription.update(
@@ -45,6 +33,14 @@ class AddFreeDays
     current_bill.update!(
       end_date: current_bill.end_date + duration
     )
+  end
+
+  def create_or_update_next_bill
+    next_bill ? update_next_bill : create_next_bill
+  end
+
+  def create_next_bill
+    CreateBillForNextPeriod.new(current_bill).call
   end
 
   def update_next_bill
@@ -81,7 +77,7 @@ class AddFreeDays
     TrackEvent.new(
       :added_free_days,
       subscription: bill.subscription,
-      user: bill.credit_card&.user || bill.site.owners.first,
+      user: bill.subscription&.user || bill.site.owners.first,
       free_days: duration / 1.day
     ).call
   end

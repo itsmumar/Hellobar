@@ -101,7 +101,7 @@ describe PayBill do
     end
 
     context 'without credit card' do
-      before { bill.credit_card = nil }
+      let(:credit_card) { nil }
 
       it 'raises PayBill::MissingCreditCard' do
         expect { service.call }
@@ -110,7 +110,7 @@ describe PayBill do
     end
 
     context 'without credit card token' do
-      before { bill.credit_card.update token: nil }
+      before { bill.subscription.credit_card.update token: nil }
 
       it 'raises PayBill::MissingCreditCard' do
         expect { service.call }

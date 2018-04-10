@@ -26,6 +26,7 @@ class Admin::SitesController < AdminController
     return render(json: { message: 'Site was not found' }, status: 404) if site.nil?
 
     begin
+      site.touch # refresh cache
       GenerateAndStoreStaticScript.new(site).call
       render json: { message: 'Site regenerated' }, status: 200
     rescue RuntimeError
