@@ -69,7 +69,6 @@ module StaticScriptAssets
   end
 
   def render_model(model)
-    jbuilder.controller.perform_caching = !model.preview_is_active
     jbuilder.render model.to_partial_path, model: model
   end
 end
