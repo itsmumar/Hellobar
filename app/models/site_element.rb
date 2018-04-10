@@ -246,7 +246,11 @@ class SiteElement < ApplicationRecord
   end
 
   def statistics
-    @statistics ||= FetchSiteStatistics.new(site, site_element_ids: [id]).call
+    @statistics ||=
+      begin
+        statistics = FetchSiteStatistics.new(site).call
+        statistics.for_element(id)
+      end
   end
 
   private

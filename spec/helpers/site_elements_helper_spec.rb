@@ -92,11 +92,10 @@ describe SiteElementsHelper do
       let(:total_views) { 10 }
 
       let(:element_stats) do
-        [create(:site_statistics_record, views: 10, conversions: element_conversions, site_element_id: element.id)]
-      end
-
-      let(:other_element_stats) do
-        [create(:site_statistics_record, views: 10, conversions: other_conversions, site_element_id: element.id)]
+        [
+          create(:site_statistics_record, views: 10, conversions: element_conversions, site_element_id: element.id),
+          create(:site_statistics_record, views: 10, conversions: other_conversions, site_element_id: other_element.id)
+        ]
       end
 
       subject(:message) { helper.activity_message_for_conversion(element, element.related_site_elements) }
@@ -104,13 +103,10 @@ describe SiteElementsHelper do
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call
-          .with(rule.site, site_element_ids: [element.id])
+          .exactly(2)
+          .times
+          .with(rule.site)
           .and_return(SiteStatistics.new(element_stats))
-
-        expect(FetchSiteStatistics)
-          .to receive_service_call
-          .with(rule.site, site_element_ids: [other_element.id])
-          .and_return(SiteStatistics.new(other_element_stats))
       end
 
       context 'when element performs better than other' do
@@ -147,19 +143,14 @@ describe SiteElementsHelper do
       other_element = create(:site_element, :twitter, rule: rule)
 
       records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
-      ]
-      expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [element.id])
-        .and_return(SiteStatistics.new(records))
-
-      records = [
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
         create(:site_statistics_record, views: 10, conversions: 0, site_element_id: other_element.id)
       ]
       expect(FetchSiteStatistics)
         .to receive_service_call
-        .with(rule.site, site_element_ids: [other_element.id])
+        .exactly(2)
+        .times
+        .with(rule.site)
         .and_return(SiteStatistics.new(records))
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements))
