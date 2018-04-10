@@ -1,13 +1,5 @@
 def record_mailer_gateway_request_history!
   @email_history = Hash.new { |hash, key| hash[key] = Hash.new { |h, k| h[k] = [] } }
-
-  allow(DripCampaignMailer).to receive(:create_a_bar) { |user|
-    @email_history[Date.current][user.email] << 'CreateABar'
-  }.and_return(double(deliver_later: true))
-
-  allow(DripCampaignMailer).to receive(:configure_your_bar) { |user|
-    @email_history[Date.current][user.email] << 'ConfigureYourBar'
-  }.and_return(double(deliver_later: true))
 end
 
 def day_from_current_spec_description

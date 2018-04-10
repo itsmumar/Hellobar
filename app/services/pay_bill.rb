@@ -5,7 +5,7 @@ class PayBill
   def initialize(bill)
     raise Error, 'cannot pay a refund' if bill.is_a?(Bill::Refund)
     @bill = bill
-    @credit_card = bill.credit_card
+    @credit_card = bill.subscription.credit_card
   end
 
   def call
@@ -96,7 +96,7 @@ class PayBill
     TrackEvent.new(
       :paid_bill,
       subscription: bill.subscription,
-      user: bill.credit_card&.user || bill.site.owners.first
+      user: bill.subscription&.user || bill.site.owners.first
     ).call
   end
 

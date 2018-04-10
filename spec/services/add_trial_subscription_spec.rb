@@ -22,6 +22,16 @@ describe AddTrialSubscription, :freeze do
       expect(site).to be_capable_of :pro
     end
 
+    it 'creates pending bill for next period' do
+      bill = service.call
+
+      next_bill = site.bills.order(:id).last
+
+      expect(next_bill).to be_pending
+      expect(next_bill.amount).to eq(site.current_subscription.amount)
+      expect(next_bill.bill_at).to eq(bill.end_date - 3.days)
+    end
+
     it 'changes capabilities to pro' do
       expect { service.call }
         .to change { site.capabilities }
