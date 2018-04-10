@@ -10,6 +10,8 @@ class UpdateSiteElement
     SiteElement.transaction do
       @element = copy_element_and_change_type if type_should_change?
       element.update!(params)
+      element.rule.touch
+      element.site.touch
       destroy_previous_image_if_necessary
     end
     generate_script
