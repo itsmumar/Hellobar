@@ -52,14 +52,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if current_user.should_send_to_new_site_element_path?
-      new_site_site_element_path(current_user.sites.script_not_installed.last)
+    if current_user.sites.count == 1 && current_user.site_elements.empty?
+      new_site_site_element_path(current_user.sites.last)
 
     elsif current_user.sites.any?
       # Use last site viewed if available
       s = cookies[:lsv] && current_user.sites.where(id: cookies[:lsv]).first
       stored_location_for(resource) || site_path(s || current_user.sites.last)
-
     else
       new_site_path
     end
