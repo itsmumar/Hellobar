@@ -43,6 +43,6 @@ class Api::SequenceStepsController < Api::ApplicationController
   end
 
   def sequence_step_params
-    params.require(:sequence_step).permit(:delay, :executable_type, :executable_id)
+    params.require(:sequence_step).permit(:name, :delay, :executable_type, :executable_id)
   end
 end

@@ -77,6 +77,11 @@ describe StaticScript do
   end
 
   describe '#generate' do
+    it 'touches site in order to refresh cache' do
+      expect(site).to receive :touch
+      script.generate
+    end
+
     it 'enqueues GenerateStaticScriptJob' do
       expect { script.generate }.to have_enqueued_job GenerateStaticScriptJob
     end
