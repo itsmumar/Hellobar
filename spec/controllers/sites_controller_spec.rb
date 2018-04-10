@@ -240,7 +240,7 @@ describe SitesController do
       stub_current_user(user)
       expect(FetchSiteStatistics)
         .to receive_service_call
-        .with(site, site_element_ids: [site_element.id])
+        .with(site)
         .and_return(statistics)
 
       expect(FetchSiteStatistics)
