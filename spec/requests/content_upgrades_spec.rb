@@ -45,7 +45,7 @@ describe 'Content upgrade requests' do
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call
-          .with(site, site_element_ids: [site_element.id])
+          .with(site)
           .and_return(SiteStatistics.new)
       end
 
