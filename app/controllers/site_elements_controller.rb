@@ -9,7 +9,7 @@ class SiteElementsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity_error
 
   def show
-    render json: @site_element, serializer: SiteElementSerializer
+    render json: @site_element, serializer: SiteElementSerializer, scope: serializer_scope
   end
 
   def index
@@ -31,7 +31,7 @@ class SiteElementsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @site_element, serializer: SiteElementSerializer }
+      format.json { render json: @site_element, serializer: SiteElementSerializer, scope: serializer_scope }
     end
   end
 
@@ -149,5 +149,9 @@ class SiteElementsController < ApplicationController
       :url, :url_to_like, :url_to_plus_one, :url_to_share, :url_to_tweet,
       :use_location_for_url
     ]
+  end
+
+  def serializer_scope
+    { user: current_user }
   end
 end
