@@ -1,6 +1,6 @@
 class Email < ApplicationRecord
   belongs_to :site
-  has_one :campaign, inverse_of: :email # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_one :campaign, inverse_of: :email
   has_many :sequence_steps, as: :executable, dependent: :destroy, inverse_of: :executable
 
   validates :from_name, presence: true

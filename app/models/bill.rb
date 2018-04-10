@@ -26,7 +26,6 @@ class Bill < ApplicationRecord
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
-  has_one :credit_card, -> { with_deleted }, through: :subscription
 
   delegate :site_id, to: :subscription
 
@@ -78,7 +77,7 @@ class Bill < ApplicationRecord
   end
 
   def can_pay?
-    return unless credit_card
+    return unless (credit_card = subscription.credit_card)
 
     !credit_card.deleted? && credit_card.token.present?
   end
@@ -100,6 +99,15 @@ class Bill < ApplicationRecord
 
   def successful_billing_attempt
     billing_attempts.successful.first
+  end
+
+  def last_billing_attempt
+    billing_attempts.order(:id).last
+  end
+
+  def used_credit_card
+    credit_card_id = (successful_billing_attempt || last_billing_attempt)&.credit_card_id
+    credit_card_id && CreditCard.unscoped.find(credit_card_id)
   end
 
   def calculate_discount

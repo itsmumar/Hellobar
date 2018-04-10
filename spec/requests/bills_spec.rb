@@ -65,7 +65,7 @@ describe 'Bills requests' do
 
       context 'when cannot pay bill' do
         let!(:bill) { create :bill, :failed, subscription: subscription }
-        let(:credit_card) { bill.credit_card }
+        let(:credit_card) { bill.subscription.credit_card }
 
         before { stub_cyber_source :purchase, success?: false }
 

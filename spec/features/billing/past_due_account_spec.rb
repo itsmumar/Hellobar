@@ -4,7 +4,7 @@ feature 'Billing. Past due account', :js do
   given(:user) { create(:user) }
   given(:site) { create(:site, :with_rule, :pro, user: user) }
   given!(:bill) { create(:past_due_bill, subscription: site.current_subscription) }
-  given!(:credit_card) { bill.credit_card }
+  given!(:credit_card) { bill.subscription.credit_card }
 
   before do
     sign_in user
