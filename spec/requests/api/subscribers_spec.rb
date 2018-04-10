@@ -18,7 +18,6 @@ describe 'api/subscribers requests' do
 
   let(:dynamo_client) do
     instance_double(DynamoDB,
-      query_enum: subscribers,
       update_item: Aws::DynamoDB::Types::UpdateItemOutput.new,
       put_item: Aws::DynamoDB::Types::PutItemOutput.new,
       delete_item: Aws::DynamoDB::Types::DeleteItemOutput.new)
@@ -26,21 +25,14 @@ describe 'api/subscribers requests' do
 
   before do
     allow(DynamoDB).to receive(:new).and_return(dynamo_client)
+    allow(FetchContacts).to receive_message_chain(:new, :call).and_return(items: subscribers)
   end
 
   describe 'GET #index' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'email@example.com'] }
 
     it 'responds with success' do
-      query = hash_including(
-        expression_attribute_values: { ':lidValue' => contact_list.id },
-        projection_expression: 'email,n,ts,lid,#s,#e'
-      )
-
-      expect(dynamo_client)
-        .to receive(:query_enum)
-        .with(query, fetch_all: false)
-        .and_return({})
+      expect(FetchContacts).to receive_service_call(:new, :call).with(contact_list)
 
       get api_site_contact_list_subscribers_path(site, contact_list),
         params,

@@ -14,7 +14,7 @@ RSpec.configure do |config|
   config.before contact_list_feature: true do
     stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
     allow_any_instance_of(FetchAllContacts).to receive(:call).and_return([])
-    allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([])
+    allow_any_instance_of(FetchContacts).to receive(:call).and_return(items: [])
 
     allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site), instance_of(Array)).and_return(double(call: Hash.new { 0 }))
     allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: Hash.new { 0 }))
