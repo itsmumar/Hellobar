@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   include SitesHelper
 
-  before_action :authenticate_user!, except: :create
+  before_action :authenticate_user!
   before_action :load_site, except: %i[index new create]
   before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
@@ -21,14 +21,7 @@ class SitesController < ApplicationController
 
   def create
     @site = Site.new(site_params)
-    cookies.permanent[:registration_url] = @site.url
-
-    if current_user
-      create_for_logged_in_user
-    else
-      session[:new_site_url] = @site.url
-      validate_and_redirect_to_google_auth
-    end
+    create_site
   end
 
   def edit
@@ -135,7 +128,7 @@ class SitesController < ApplicationController
     params[:action] == 'preview_script' ? false : 'application'
   end
 
-  def create_for_logged_in_user
+  def create_site
     CreateSite.new(@site, current_user, referral_token: session[:referral_token]).call
 
     redirect_to new_site_site_element_path(@site)

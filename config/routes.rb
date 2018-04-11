@@ -59,6 +59,8 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
 
+  resources :registrations, only: %i[new create]
+
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
     get '/users/forgot_email', to: 'users/forgot_emails#new', as: :new_forgot_email
