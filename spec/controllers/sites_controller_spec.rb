@@ -65,7 +65,6 @@ describe SitesController do
 
       it 'can create a new site and is set as the owner' do
         expect(DetectInstallType).to receive_service_call
-        expect(UsePromotionalCode).to receive_service_call
 
         expect {
           post :create, site: { url: 'newzombo.com' }

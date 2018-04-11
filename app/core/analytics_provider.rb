@@ -132,18 +132,6 @@ class AnalyticsProvider
     untag_users 'Paid', site.owners if subscription.amount.zero?
   end
 
-  def used_promo_code(site:, coupon:, user:)
-    track(
-      event: 'used-promo-code',
-      user: user,
-      params: {
-        code: coupon.label,
-        trial_days: coupon.trial_period,
-        site_url: site.url
-      }
-    )
-  end
-
   def granted_free_days(subscription:, free_days:, user:)
     track(
       event: 'granted-free-days',
