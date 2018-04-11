@@ -21,7 +21,7 @@ class CalculateBill
   attr_reader :bills, :subscription
 
   def active_paid_bills
-    @active_paid_bills ||= bills.paid.active.without_refunds
+    @active_paid_bills ||= bills.paid.active.without_refunds.without_chargebacks
   end
 
   def last_subscription

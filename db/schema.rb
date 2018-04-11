@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20180411113315) do
     t.string   "authorization_code",          limit: 255
     t.integer  "refunded_billing_attempt_id", limit: 4
     t.string   "status",                      limit: 20,                           default: "pending", null: false
+    t.integer  "chargeback_id",               limit: 4
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree

@@ -20,13 +20,18 @@ table
       td
         = bill.amount
         - if user && context_for_trial(user, bill)
-          span.refund_status
+          span.trial_status
             |  #{context_for_trial(user, bill)}
         - if bill.refund
           br
           | (#{bill.refund.amount}) Refunded
           span.refund_status
             |  (#{bill.refund.status})
+        - if bill.chargeback
+          br
+          | (#{bill.chargeback.amount}) Chargedback
+          span.chargeback_status
+            |  (#{bill.chargeback.status})
       td
         span= bill.status
         - if bill.failed?

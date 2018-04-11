@@ -4,7 +4,8 @@ class Bill < ApplicationRecord
   VOIDED = 'voided'.freeze
   FAILED = 'failed'.freeze
   REFUNDED = 'refunded'.freeze
-  STATUSES = [PENDING, PAID, VOIDED, FAILED, REFUNDED].freeze
+  CHARGEDBACK = 'chargedback'.freeze
+  STATUSES = [PENDING, PAID, VOIDED, FAILED, REFUNDED, CHARGEDBACK].freeze
 
   class StatusAlreadySet < StandardError
     def initialize(bill, status)
@@ -23,6 +24,7 @@ class Bill < ApplicationRecord
   end
   belongs_to :subscription, inverse_of: :bills
   belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
+  belongs_to :chargeback, inverse_of: :chargedback_bill, class_name: 'Bill::Chargeback'
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
@@ -36,7 +38,12 @@ class Bill < ApplicationRecord
     # define .pending, .paid, .voided, and .failed scopes
     scope status, -> { where(status: status) }
 
-    # define #pending?, #paid?, #voided?, #failed?
+    # define #pending!, #paid!, #voided!, #failed!, #chargedback!
+    define_method status + '!' do
+      update! status: status
+    end
+
+    # define #pending?, #paid?, #voided?, #failed?, #chargedback?
     define_method status + '?' do
       self.status == status
     end
@@ -50,6 +57,7 @@ class Bill < ApplicationRecord
   scope :not_voided, -> { where.not(status: VOIDED) }
   scope :active, -> { not_voided.where('DATE(bills.start_date) <= :now AND DATE(bills.end_date) >= :now', now: Date.current) }
   scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
+  scope :without_chargebacks, -> { where(chargeback_id: nil).where.not(type: Bill::Chargeback) }
   scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
 
   validates :subscription_id, presence: true
@@ -116,26 +124,6 @@ class Bill < ApplicationRecord
 
   def estimated_amount
     (base_amount || amount) - calculate_discount
-  end
-
-  def pending!
-    update! status: PENDING
-  end
-
-  def paid!
-    update! status: PAID
-  end
-
-  def voided!
-    update! status: VOIDED
-  end
-
-  def failed!
-    update! status: FAILED
-  end
-
-  def refunded!
-    update! status: REFUNDED
   end
 
   private

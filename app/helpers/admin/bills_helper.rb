@@ -60,8 +60,11 @@ module Admin::BillsHelper
         method: :put, data: { confirm: 'Void this bill?' })
     end
 
-    if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0 # rubocop:disable Style/IfUnlessModifier
+    if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
       actions << render('admin/bills/refund_form', bill: bill, site: site)
+      actions << link_to('chargeback',
+        chargeback_admin_site_bill_path(site, bill),
+        method: :put, data: { confirm: 'Chargeback this bill?' })
     end
 
     safe_join(actions, ' or ')

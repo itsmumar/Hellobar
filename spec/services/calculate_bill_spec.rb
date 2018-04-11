@@ -21,6 +21,20 @@ describe CalculateBill do
       end
     end
 
+    context 'with any chargebacks' do
+      let(:site) { create(:site) }
+      let!(:active_bill) { create(:bill, :paid, subscription: create(:subscription, :pro, site: site)) }
+      let(:subscription) { create(:subscription, :enterprise) }
+
+      before do
+        ChargebackBill.new(active_bill).call
+      end
+
+      it 'does not consider them' do
+        expect(bill.amount).to eql subscription.amount
+      end
+    end
+
     context 'when upgrading' do
       let(:site) { create :site, :pro }
       let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }

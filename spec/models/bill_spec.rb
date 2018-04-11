@@ -44,6 +44,16 @@ describe Bill do
     end
   end
 
+  describe '.without_chargebacks' do
+    let!(:bill) { create :bill }
+    let!(:bill_to_chargeback) { create :bill, :paid }
+
+    it 'returns bills which have not been refunded' do
+      ChargebackBill.new(bill_to_chargeback).call
+      expect(Bill.without_chargebacks).not_to include bill_to_chargeback
+    end
+  end
+
   describe 'callbacks' do
     it 'sets the base amount before saving' do
       expect(create(:bill, amount: 10).base_amount).to eq(10)
