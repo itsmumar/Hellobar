@@ -302,24 +302,6 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#used_promo_code' do
-    let(:event) { 'used-promo-code' }
-    let(:site) { create :site }
-    let(:coupon) { create :coupon }
-
-    it 'tracks "created-bar"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: event, user: user, params: {
-          code: coupon.label,
-          trial_days: coupon.trial_period,
-          site_url: site.url
-        })
-
-      track(event, user: user, site: site, coupon: coupon)
-    end
-  end
-
   describe '#referred_friend' do
     let(:event) { 'referred-friend' }
     let(:referral) { create :referral, site: site }

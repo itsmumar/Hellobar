@@ -27,7 +27,6 @@ class SitesController < ApplicationController
       create_for_logged_in_user
     else
       session[:new_site_url] = @site.url
-      session[:promotional_code] = params[:promotional_code]
       validate_and_redirect_to_google_auth
     end
   end
@@ -137,12 +136,7 @@ class SitesController < ApplicationController
   end
 
   def create_for_logged_in_user
-    CreateSite.new(
-      @site,
-      current_user,
-      referral_token: session[:referral_token],
-      promotional_code: session[:promotional_code]
-    ).call
+    CreateSite.new(@site, current_user, referral_token: session[:referral_token]).call
 
     redirect_to new_site_site_element_path(@site)
   rescue ActiveRecord::RecordInvalid => e

@@ -40,7 +40,7 @@ class Site < ApplicationRecord
   has_many :autofills, dependent: :destroy
   has_many :campaigns, dependent: :destroy, through: :contact_lists
   has_many :sequences, dependent: :destroy, through: :contact_lists
-  has_many :coupon_uses, dependent: :destroy, through: :bills
+  has_many :coupon_uses, through: :bills
   has_many :emails, dependent: :destroy
 
   scope :preload_for_script, lambda {

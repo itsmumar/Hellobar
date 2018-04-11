@@ -10,12 +10,4 @@ describe Coupon do
       expect(Coupon.for_referrals).to eq coupon
     end
   end
-
-  describe '.promotional' do
-    it 'returns coupon for promotional' do
-      coupon = create :coupon, :promotional
-
-      expect(Coupon.promotional).to eq coupon
-    end
-  end
 end
