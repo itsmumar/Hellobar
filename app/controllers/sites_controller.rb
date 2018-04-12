@@ -140,18 +140,6 @@ class SitesController < ApplicationController
     return redirect_to site_path(e.existing_site)
   end
 
-  def validate_and_redirect_to_google_auth
-    if !@site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-      redirect_to root_path
-    elsif params[:source] == 'landing' && Site.by_url(@site.url).any?
-      redirect_to new_user_session_path(existing_url: @site.url)
-    else
-      session[:new_site_url] = @site.url
-      redirect_to '/auth/google_oauth2'
-    end
-  end
-
   def load_top_performers
     @top_performers = {}
     all_elements = @site.site_elements.sort_by { |e| -1 * e.conversion_percentage }
