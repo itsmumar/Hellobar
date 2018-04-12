@@ -1,13 +1,13 @@
 class RegistrationsController < ApplicationController
   layout 'static'
+  before_action :build_site, :build_user
 
   def new
-    build_user
-    build_site
   end
 
   def create
-    build_user
+    cookies.permanent[:registration_url] = @site.url
+    session[:new_site_url] = @site.url
 
     if params[:signup_with_email]
       signup_with_email
@@ -63,7 +63,6 @@ class RegistrationsController < ApplicationController
   def signup_with_google
     return unless validate_url
 
-    session[:new_site_url] = @site.url
     redirect_to oauth_login_path(action: 'google_oauth2')
   end
 end
