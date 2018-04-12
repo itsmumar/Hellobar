@@ -21,8 +21,9 @@ feature 'User sign ups with a referral token', :js do
     background do
       visit accept_referrals_path(token: referral_token.token)
 
-      fill_in 'site[url]', with: 'hellobar.com'
+      fill_in 'site_url', with: 'hellobar.com'
       click_on 'sign-up-button'
+      first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"
     end
@@ -50,8 +51,9 @@ feature 'User sign ups with a referral token', :js do
     background do
       visit accept_referrals_path(token: referral_token.token)
 
-      fill_in 'site[url]', with: 'hellobar.com'
+      fill_in 'site_url', with: 'hellobar.com'
       click_on 'sign-up-button'
+      first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"
 
