@@ -75,7 +75,7 @@ class AddFreeDays
     bill = current_bill
 
     TrackEvent.new(
-      :added_free_days,
+      :granted_free_days,
       subscription: bill.subscription,
       user: bill.subscription&.user || bill.site.owners.first,
       free_days: duration / 1.day
