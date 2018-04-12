@@ -30,33 +30,6 @@ describe SitesController do
       allow(UploadToS3).to receive(:new).and_return(upload_to_s3)
     end
 
-    context 'when no user is logged-in' do
-      it 'redirects to oauth login' do
-        post :create, site: { url: 'temporary-site.com' }
-        expect(response).to redirect_to('/auth/google_oauth2')
-      end
-
-      it 'redirects to the landing page with an error if site is not valid' do
-        post :create, site: { url: 'not a valid url' }
-
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'redirects to the landing page with an error if site is an email address' do
-        post :create, site: { url: 'asdf@mail.com' }
-
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'redirects to login page if base URL has already been taken' do
-        post :create, site: { url: "#{ site.url }/path" }, source: 'landing'
-
-        expect(response).to redirect_to(new_user_session_path(existing_url: site.url))
-      end
-    end
-
     context 'existing user' do
       let(:user) { create(:user, :with_site) }
       let(:site) { user.sites.last }
