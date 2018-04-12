@@ -18,6 +18,6 @@ class WelcomeController < ApplicationController
   end
 
   def stored_url
-    session[:new_site_url]
+    session[:new_site_url] || cookies[:registration_url]
   end
 end
