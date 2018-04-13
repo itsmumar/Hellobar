@@ -60,6 +60,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
 
   resources :registrations, only: %i[new create]
+  get '/users/sign_up', to: 'registrations#new'
+  post '/users/sign_up', to: 'registrations#create'
 
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
