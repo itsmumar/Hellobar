@@ -45,8 +45,8 @@ feature 'User can sign up', :js do
 
     click_on 'sign-up-button'
 
-    fill_in 'user[email]', with: 'email@example.com'
-    fill_in 'user[password]', with: 'password123'
+    fill_in 'registration_form[email]', with: 'email@example.com'
+    fill_in 'registration_form[password]', with: 'password123'
 
     first('[name=signup_with_email]').click
 
