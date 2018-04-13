@@ -39,6 +39,8 @@ class RegistrationsController < ApplicationController
 
     @form.user.save!
     CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
+    cookies.permanent[:login_email] = @form.user.email
+
     sign_in(@form.user)
     redirect_to new_site_site_element_path(@form.site)
   rescue ActiveRecord::RecordInvalid => e
