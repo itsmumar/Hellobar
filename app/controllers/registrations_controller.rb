@@ -8,7 +8,6 @@ class RegistrationsController < ApplicationController
   def create
     @form = RegistrationForm.new(params)
 
-    cookies.permanent[:registration_url] = @form.site_url
     session[:new_site_url] = @form.site_url
 
     if params[:signup_with_email]
