@@ -1,10 +1,10 @@
-= simple_form_for(@user, url: registrations_path, method: :post) do |f|
+= simple_form_for(@form, url: registrations_path, method: :post) do |f|
   = render 'shared/flash'
 
   h1 Create free account
 
-  = text_field_tag :site_url, params[:site_url]
-  = f.input_field :email, placeholder: 'Your Email', autofocus: true
+  = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true
+  = f.input_field :email, placeholder: 'Your Email'
   = f.input_field :password, placeholder: 'Password'
   = f.button :submit, 'Create free account', class: 'button', name: 'signup_with_email'
 
@@ -16,7 +16,7 @@
   .devise-links
     = link_to 'Already a user? Sign in', login_path, class: 'clear-last-logged-in'
     br
-    - if @user.email.present?
+    - if @form.email.present?
       = link_to 'Not you?', '#', class: 'clear-last-logged-in', id: 'not-you'
     - else
       = link_to 'Forgot email?', new_forgot_email_path
