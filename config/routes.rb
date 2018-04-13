@@ -59,7 +59,6 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
 
-  resources :registrations, only: %i[new create]
   get '/users/sign_up', to: 'registrations#new'
   post '/users/sign_up', to: 'registrations#create'
 
