@@ -14,7 +14,7 @@
   = f.button :submit, 'Use your Google account', class: 'button', name: 'signup_with_google'
 
   .devise-links
-    = link_to 'Already a user? Sign in', login_path, class: 'clear-last-logged-in'
+    = link_to 'Already a user? Sign in', new_user_session_path, class: 'clear-last-logged-in'
     br
     - if @form.email.present?
       = link_to 'Not you?', '#', class: 'clear-last-logged-in', id: 'not-you'
