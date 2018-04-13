@@ -44,7 +44,7 @@ class RegistrationsController < ApplicationController
     sign_in(@form.user)
     redirect_to new_site_site_element_path(@form.site)
   rescue ActiveRecord::RecordInvalid => e
-    flash[:error] = e.record.errors.full_messages.to_sentence
+    flash.now[:error] = e.record.errors.full_messages.to_sentence
     render :new
   end
 
