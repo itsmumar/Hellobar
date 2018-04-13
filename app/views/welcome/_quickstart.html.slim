@@ -2,7 +2,7 @@ h1.headline= "Convert more visitors into customers with Hello Bar"
 h1.subheadline= "Enter your URL below to get started"
 
 .quickstart-wrapper
-  = form_tag new_registration_path, method: :get do
+  = form_tag users_sign_up_path, method: :get do
     input type="text" name="site_url" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
     button#sign-up-button type="submit"
       | Create free account
