@@ -1,0 +1,14 @@
+table
+  tr
+    th ID
+    th Status
+    th Created At
+    th Credit Card
+
+  - billing_attempts.each do |attempt|
+    tr
+      td= attempt.id
+      td= attempt.status
+      td= attempt.created_at
+      td= attempt.credit_card && link_to(attempt.credit_card&.last_digits, admin_credit_card_path(attempt.credit_card))
+

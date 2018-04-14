@@ -1,0 +1,12 @@
+#credit_card
+  div.credit_card_section.user_details
+    div.title User
+    = link_to @credit_card.user.email, admin_user_path(@credit_card.user)
+
+  div.credit_card_section.credit_card_details
+    div.title Credit Card Details
+    = credit_card_information(@credit_card)
+
+  div.credit_card_section.credit_card_bills
+    div.title Bills
+    = render 'admin/bills/list', bills: @bills, user: @credit_card.user

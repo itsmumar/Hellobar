@@ -40,30 +40,30 @@ module Admin::BillsHelper
     bill.coupon_uses.map { |cu| cu.coupon&.label }.compact.join(COUPONS_SEPARATOR)
   end
 
-  def bill_actions(bill, site)
+  def bill_actions(bill)
     actions = []
 
     if bill.pending? || bill.failed?
       actions << link_to('pay',
-        pay_admin_site_bill_path(site, bill),
+        pay_admin_bill_path(bill),
         method: :put, data: { confirm: 'Pay this bill?' })
 
       actions << link_to('void',
-        void_admin_site_bill_path(site, bill),
+        void_admin_bill_path(bill),
         method: :put,
         data: { confirm: 'Void this bill?' })
     end
 
     if !bill.voided? && bill.amount == 0
       actions << link_to('void',
-        void_admin_site_bill_path(site, bill),
+        void_admin_bill_path(bill),
         method: :put, data: { confirm: 'Void this bill?' })
     end
 
     if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
-      actions << render('admin/bills/refund_form', bill: bill, site: site)
+      actions << render('admin/bills/refund_form', bill: bill)
       actions << link_to('chargeback',
-        chargeback_admin_site_bill_path(site, bill),
+        chargeback_admin_bill_path(bill),
         method: :put, data: { confirm: 'Chargeback this bill?' })
     end
 

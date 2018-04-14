@@ -27,7 +27,7 @@ class SearchUsers
   end
 
   def all
-    User.all.includes(:authentications)
+    User.all.includes(:authentications).order('id desc')
   end
 
   def by_script
@@ -39,7 +39,7 @@ class SearchUsers
       'SHA1(CONCAT(:prefix, id, :suffix)) = :hash',
       **StaticScript.hash_content, hash: target_hash
     )
-    site&.owners&.with_deleted
+    site&.owners&.with_deleted&.order('id desc')
   end
 
   def by_site_url_and_username
@@ -48,7 +48,7 @@ class SearchUsers
   end
 
   def by_username
-    scope.where('email like ?', "%#{ q }%")
+    scope.where('email like ?', "%#{ q }%").order('id desc')
   end
 
   def by_site_url
@@ -60,7 +60,7 @@ class SearchUsers
         .with_deleted.joins('INNER JOIN sites ON sites.id = site_memberships.site_id')
         .where('url LIKE ?', "%#{ domain }%").select(:user_id)
 
-      scope.where(id: user_ids)
+      scope.where(id: user_ids).order('id desc')
     else
       User.none
     end
@@ -69,7 +69,7 @@ class SearchUsers
   def by_credit_card
     return unless q =~ /\d{4}/
     user_ids = CreditCard.with_deleted.where('credit_cards.number like ?', "%-#{ q }%").uniq.select(:user_id)
-    scope.where(id: user_ids)
+    scope.where(id: user_ids).order('id desc')
   end
 
   def scope

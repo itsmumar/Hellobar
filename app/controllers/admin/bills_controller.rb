@@ -1,4 +1,10 @@
 class Admin::BillsController < AdminController
+  BILLS_TO_SHOW = 200
+
+  def index
+    @bills = Bill.order('id desc').limit(BILLS_TO_SHOW)
+  end
+
   def show
     @bill, @subscription, @site = load_data
     @credit_card = @bill.paid_with_credit_card
@@ -60,7 +66,7 @@ class Admin::BillsController < AdminController
   def load_data
     bill = Bill.unscoped.find(params[:id])
     subscription = Subscription.unscoped { bill.subscription }
-    site = Site.unscoped.find(params[:site_id])
+    site = Site.unscoped.find(bill.site_id)
 
     [bill, subscription, site]
   end

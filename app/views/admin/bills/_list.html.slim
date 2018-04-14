@@ -15,7 +15,7 @@ table
 
   - bills.each do |bill|
     tr
-      td= link_to(bill.id, admin_site_bill_path(site, bill))
+      td= link_to(bill.id, admin_bill_path(bill))
       td= subscription_name(bill)
       td
         = bill.amount
@@ -40,15 +40,15 @@ table
       td= format_date(bill.due_at)
       td
         - if bill.paid? && bill.amount != 0
-          = link_to("view", receipt_admin_site_bill_path(site, bill), target: '_blank')
+          = link_to("view", receipt_admin_bill_path(bill), target: '_blank')
       td
-        = bill_actions(bill, site)
+        = bill_actions(bill)
       td
         = bill_duration(bill)
       td
         = format_date(bill.status_set_at)
       td
-        = bill.used_credit_card&.last_digits
+        = bill.used_credit_card && link_to(bill.used_credit_card&.last_digits, admin_credit_card_path(bill.used_credit_card))
       td
         = bill_extra_days(bill)
       td

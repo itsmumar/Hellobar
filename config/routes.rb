@@ -160,7 +160,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :credit_cards, only: [:destroy]
+    resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
     end
@@ -171,17 +171,17 @@ Rails.application.routes.draw do
         put :add_free_days
       end
 
-      resources :bills, only: [:show] do
-        member do
-          get 'receipt'
-          put 'void'
-          put 'pay'
-          put 'refund'
-          put 'chargeback'
-        end
-      end
-
       resources :contact_lists, only: [:index]
+    end
+
+    resources :bills, only: %i[index show] do
+      member do
+        get 'receipt'
+        put 'void'
+        put 'pay'
+        put 'refund'
+        put 'chargeback'
+      end
     end
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown

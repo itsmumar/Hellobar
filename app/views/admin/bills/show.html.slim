@@ -1,11 +1,14 @@
-#bill_details
+#bills
+  div.bill_section.site_details
+    = render 'admin/sites/header', site: @site
+
   div.bill_section.bill_details
     div.title Bill Details
     = render 'admin/bills/list', bills: [@bill], site: @site, user: nil
 
-  div.bill_section.site_details
-    div.title Site Details
-    = render 'admin/sites/header', site: @site
+  div.bill_section.billing_attempts
+    div.title Attempts
+    = render 'admin/bills/attempts', billing_attempts: @bill.billing_attempts
 
   - if @credit_card
     div.bill_section.credit_card

@@ -25,7 +25,12 @@ class Admin::UsersController < AdminController
   end
 
   def unimpersonate
-    session.delete(:impersonated_user)
-    redirect_to admin_users_path
+    user_id = session.delete(:impersonated_user)
+
+    if user_id
+      redirect_to admin_user_path(user_id)
+    else
+      redirect_to admin_users_path
+    end
   end
 end
