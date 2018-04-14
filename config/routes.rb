@@ -180,6 +180,7 @@ Rails.application.routes.draw do
         put 'void'
         put 'pay'
         put 'refund'
+        put 'chargeback'
       end
     end
 

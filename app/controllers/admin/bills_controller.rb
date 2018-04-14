@@ -53,6 +53,14 @@ class Admin::BillsController < AdminController
     redirect_to admin_site_path(@site)
   end
 
+  def chargeback
+    @bill, @subscription, @site = load_data
+    ChargebackBill.new(@bill).call
+    flash[:success] = 'Chargeback successful.'
+
+    redirect_to admin_site_path(@site)
+  end
+
   private
 
   def load_data

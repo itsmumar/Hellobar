@@ -169,6 +169,13 @@ describe 'Admin::Sites requests' do
         expect(json).to match message: 'Site regenerated'
       end
 
+      it 'refreshes site.updated_at' do
+        Timecop.travel 1.second.from_now # otherwise updated_at won't be updated
+
+        expect { regenerate }.to change { site.reload.updated_at }
+        expect(json).to match message: 'Site regenerated'
+      end
+
       context 'when regenerating script fails' do
         before { expect(RenderStaticScript).to receive_service_call.and_raise RuntimeError }
 

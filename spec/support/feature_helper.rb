@@ -13,10 +13,6 @@ module FeatureHelper
     visit '/'
   end
 
-  def the_onboarding_campaigns_run
-    DeliverOnboardingCampaigns.new.call
-  end
-
   def wait_for_ajax
     Timeout.timeout(2) do
       loop until finished_all_ajax_requests?

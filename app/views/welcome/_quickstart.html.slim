@@ -6,12 +6,7 @@ h1.subheadline= "Enter your URL below to get started"
     input type="hidden" name="source" value="landing"
     input type="text" name="site[url]" placeholder="Your website URL" value=@site_url autofocus=('autofocus' unless local_assigns[:noautofocus] && noautofocus == true)
     button#sign-up-button type="submit"
-      | Log in with Google
-
-    .promotional-code-wrapper
-      p
-        | Enter promotional code (if you have one):
-        input.promotional-code type="text" name="promotional_code" placeholder="Code" value=session[:promotional_code]
+      | Create free account
 
     .clear
 

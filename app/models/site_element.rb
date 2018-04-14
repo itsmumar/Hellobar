@@ -37,7 +37,7 @@ class SiteElement < ApplicationRecord
   TEMPLATE_NAMES = %w[traffic_growth].freeze
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
-  belongs_to :rule, touch: true
+  belongs_to :rule
   belongs_to :contact_list
   belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy, inverse_of: :site_elements
   belongs_to :theme
@@ -246,7 +246,11 @@ class SiteElement < ApplicationRecord
   end
 
   def statistics
-    @statistics ||= FetchSiteStatistics.new(site, site_element_ids: [id]).call
+    @statistics ||=
+      begin
+        statistics = FetchSiteStatistics.new(site).call
+        statistics.for_element(id)
+      end
   end
 
   private

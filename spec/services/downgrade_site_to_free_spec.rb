@@ -35,9 +35,9 @@ describe DowngradeSiteToFree, :freeze do
       .to(true)
   end
 
-  it 'does not regenerate script' do
+  it 'regenerates script' do
     expect { service.call }
-      .not_to have_enqueued_job(GenerateStaticScriptJob)
+      .to have_enqueued_job(GenerateStaticScriptJob)
   end
 
   it 'sends notifications to all owners' do

@@ -25,7 +25,9 @@ class AddTrialSubscription
   def create_trial_subscription
     Subscription.transaction do
       subscription = subscription_class.create!(site: site, trial_end_date: duration.from_now)
-      create_bill subscription
+      create_bill(subscription).tap do |bill|
+        CreateBillForNextPeriod.new(bill).call
+      end
     end
   end
 

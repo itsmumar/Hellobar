@@ -48,25 +48,31 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def rule
-    RuleSerializer.new(object.rule)
+    return unless object.rule
+
+    RuleSerializer.new(object.rule).as_json
   end
 
   def preset_rule_name
     return '' unless object.rule
 
-    if rule.editable
+    if object.rule.editable
       'Saved'
     else
-      rule.name
+      object.rule.name
     end
   end
 
   def site
-    SiteSerializer.new(object.site, scope: scope)
+    return unless object.site
+
+    SiteSerializer.new(object.site, scope: scope).as_json
   end
 
   def theme
-    ThemeSerializer.new(object.theme, scope: scope)
+    return unless object.theme
+
+    ThemeSerializer.new(object.theme, scope: scope).as_json
   end
 
   def theme_id

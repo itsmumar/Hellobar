@@ -86,24 +86,28 @@ class AnalyticsProvider
   end
 
   def created_contact_list(contact_list:, user:)
+    return if !contact_list || contact_list.deleted?
+
     track(
       event: 'created-contact-list',
       user: user,
       params: {
         identity: contact_list.identity&.provider,
-        site_url: contact_list.site.url
+        site_url: contact_list.site&.url
       }
     )
   end
 
   def created_bar(site_element:, user:)
+    return if !site_element || site_element.deleted?
+
     track(
       event: 'created-bar',
       user: user,
       params: {
         bar_type: site_element.type,
         goal: site_element.element_subtype,
-        site_url: site_element.site.url
+        site_url: site_element.site&.url
       }
     )
   end
@@ -116,7 +120,7 @@ class AnalyticsProvider
       user: user,
       params: {
         amount: subscription.amount,
-        site_url: site.url,
+        site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
         trial_days: subscription.trial_period || 0
@@ -132,24 +136,12 @@ class AnalyticsProvider
     untag_users 'Paid', site.owners if subscription.amount.zero?
   end
 
-  def used_promo_code(site:, coupon:, user:)
-    track(
-      event: 'used-promo-code',
-      user: user,
-      params: {
-        code: coupon.label,
-        trial_days: coupon.trial_period,
-        site_url: site.url
-      }
-    )
-  end
-
   def granted_free_days(subscription:, free_days:, user:)
     track(
       event: 'granted-free-days',
       user: user,
       params: {
-        site_url: subscription.site.url,
+        site_url: subscription.site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
         free_days: free_days
@@ -165,7 +157,7 @@ class AnalyticsProvider
       user: user,
       params: {
         amount: subscription.amount,
-        site_url: site.url,
+        site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
         trial_days: subscription.trial_period || 0
@@ -183,7 +175,7 @@ class AnalyticsProvider
       event: 'added-credit-card',
       user: user,
       params: {
-        site_url: site.url,
+        site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule
       }
@@ -197,7 +189,7 @@ class AnalyticsProvider
       event: 'used-sender-referral-coupon',
       user: user,
       params: {
-        site_url: site.url,
+        site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
         trial_days: subscription.trial_period || 0
@@ -212,7 +204,7 @@ class AnalyticsProvider
       event: 'used-recipient-referral-coupon',
       user: user,
       params: {
-        site_url: site.url,
+        site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
         trial_days: subscription.trial_period || 0
@@ -226,7 +218,7 @@ class AnalyticsProvider
       user: user,
       params: {
         email: referral.email,
-        site_url: referral.site.url
+        site_url: referral.site&.url
       }
     )
   end

@@ -2,7 +2,7 @@ module Admin::BillsHelper
   COUPONS_SEPARATOR = ', '.freeze
 
   def bill_extra_days(bill)
-    return trial_days(bill) if bill.subscription.trial_end_date
+    return trial_days(bill) if bill.subscription.trial_end_date && !bill.pending?
 
     expected_start_date = bill.end_date - bill.subscription.period
     difference = (expected_start_date - bill.start_date) / 1.day
@@ -27,7 +27,7 @@ module Admin::BillsHelper
   def subscription_name(bill)
     Subscription.unscoped do
       name_and_id = "#{ bill.subscription.values[:name] } ##{ bill.subscription.id }"
-      return "#{ name_and_id } (trial)" if bill.subscription.trial_end_date
+      return "#{ name_and_id } (trial)" if bill.subscription.trial_end_date && !bill.pending?
       name_and_id
     end
   end
@@ -60,8 +60,11 @@ module Admin::BillsHelper
         method: :put, data: { confirm: 'Void this bill?' })
     end
 
-    if bill.paid? && !bill.instance_of?(Bill::Refund) && bill.amount != 0 # rubocop:disable Style/IfUnlessModifier
+    if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
       actions << render('admin/bills/refund_form', bill: bill)
+      actions << link_to('chargeback',
+        chargeback_admin_bill_path(bill),
+        method: :put, data: { confirm: 'Chargeback this bill?' })
     end
 
     safe_join(actions, ' or ')

@@ -40,7 +40,7 @@ class Site < ApplicationRecord
   has_many :autofills, dependent: :destroy
   has_many :campaigns, dependent: :destroy, through: :contact_lists
   has_many :sequences, dependent: :destroy, through: :contact_lists
-  has_many :coupon_uses, dependent: :destroy, through: :bills
+  has_many :coupon_uses, through: :bills
   has_many :emails, dependent: :destroy
 
   scope :preload_for_script, lambda {
@@ -187,7 +187,7 @@ class Site < ApplicationRecord
   end
 
   def active_paid_bill
-    bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
+    bills.paid.active.without_refunds.without_chargebacks.reorder(end_date: :desc, id: :desc).first
   end
 
   def active_subscription

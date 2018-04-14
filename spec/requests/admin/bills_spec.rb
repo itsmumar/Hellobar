@@ -127,5 +127,17 @@ describe 'Admin::Bills requests' do
         end
       end
     end
+
+    describe 'PUT #chargeback' do
+      it 'calls ChargebackBill' do
+        expect { put chargeback_admin_bill_path(bill) }.to change(Bill::Chargeback, :count).by 1
+      end
+
+      it 'redirects to site page' do
+        put chargeback_admin_bill_path(bill)
+
+        expect(response).to redirect_to admin_site_path(site)
+      end
+    end
   end
 end

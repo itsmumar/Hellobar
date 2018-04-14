@@ -9,7 +9,6 @@ class User < ApplicationRecord
   before_save :clear_invite_token
   after_save :disconnect_oauth, if: :oauth_user?
   after_create :create_referral_token
-  after_create :add_to_onboarding_campaign
   has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
   has_many :credit_cards, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
@@ -24,26 +23,6 @@ class User < ApplicationRecord
 
   has_many :sent_referrals, class_name: 'Referral',
     foreign_key: 'sender_id', dependent: :destroy, inverse_of: :sender
-
-  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) },
-    class_name: 'UserOnboardingStatus', dependent: :destroy, inverse_of: :user
-
-  has_one :current_onboarding_status, -> { order 'created_at DESC' },
-    class_name: 'UserOnboardingStatus', inverse_of: :user
-
-  scope :join_current_onboarding_status, lambda {
-    joins(:onboarding_statuses)
-      .where("user_onboarding_statuses.created_at =
-              (SELECT MAX(user_onboarding_statuses.created_at)
-                      FROM user_onboarding_statuses
-                      WHERE user_onboarding_statuses.user_id = users.id)")
-      .group('users.id')
-  }
-
-  scope :onboarding_sequence_before, lambda { |sequence_index|
-    where("user_onboarding_statuses.sequence_delivered_last < #{ sequence_index } OR
-           user_onboarding_statuses.sequence_delivered_last IS NULL")
-  }
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
 
@@ -81,13 +60,6 @@ class User < ApplicationRecord
     sign_in_count == 1 && site_elements.empty?
   end
 
-  def should_send_to_new_site_element_path?
-    return false unless current_onboarding_status
-
-    %i[new selected_goal].include?(current_onboarding_status.status_name) &&
-      sites.script_not_installed.any?
-  end
-
   def pro_managed?
     sites.any?(&:pro_managed?)
   end
@@ -110,10 +82,6 @@ class User < ApplicationRecord
     end
   end
 
-  def onboarding_status_setter
-    @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, paying_subscription?, onboarding_statuses)
-  end
-
   def send_devise_notification(notification, reset_password_token = nil, *_args)
     case notification
     when :reset_password_instructions
@@ -124,11 +92,6 @@ class User < ApplicationRecord
   def role_for_site(site)
     return unless (membership = site_memberships.find_by(site: site))
     membership.role.to_sym
-  end
-
-  def add_to_onboarding_campaign
-    onboarding_status_setter.new_user!
-    onboarding_status_setter.created_site!
   end
 
   def valid_password?(password)

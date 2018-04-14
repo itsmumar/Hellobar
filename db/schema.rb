@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180330093700) do
+ActiveRecord::Schema.define(version: 20180411113315) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20180330093700) do
     t.string   "authorization_code",          limit: 255
     t.integer  "refunded_billing_attempt_id", limit: 4
     t.string   "status",                      limit: 20,                           default: "pending", null: false
+    t.integer  "chargeback_id",               limit: 4
   end
 
   add_index "bills", ["refund_id"], name: "index_bills_on_refund_id", using: :btree
@@ -153,12 +154,11 @@ ActiveRecord::Schema.define(version: 20180330093700) do
   add_index "coupon_uses", ["coupon_id"], name: "fk_rails_f2d61c8f47", using: :btree
 
   create_table "coupons", force: :cascade do |t|
-    t.string   "label",        limit: 255,                                         null: false
-    t.decimal  "amount",                   precision: 7, scale: 2,                 null: false
-    t.datetime "created_at",                                                       null: false
-    t.datetime "updated_at",                                                       null: false
-    t.boolean  "public",                                           default: false, null: false
-    t.integer  "trial_period", limit: 4,                           default: 0,     null: false
+    t.string   "label",      limit: 255,                                         null: false
+    t.decimal  "amount",                 precision: 7, scale: 2,                 null: false
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
+    t.boolean  "public",                                         default: false, null: false
   end
 
   create_table "credit_cards", force: :cascade do |t|
@@ -260,6 +260,7 @@ ActiveRecord::Schema.define(version: 20180330093700) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",            limit: 255
   end
 
   add_index "sequence_steps", ["executable_type", "executable_id"], name: "index_sequence_steps_on_executable_type_and_executable_id", using: :btree
@@ -405,15 +406,6 @@ ActiveRecord::Schema.define(version: 20180330093700) do
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
   add_index "subscriptions", ["credit_card_id"], name: "index_subscriptions_on_credit_card_id", using: :btree
   add_index "subscriptions", ["site_id"], name: "index_subscriptions_on_site_id", using: :btree
-
-  create_table "user_onboarding_statuses", force: :cascade do |t|
-    t.integer  "user_id",                 limit: 4
-    t.integer  "status_id",               limit: 4
-    t.integer  "sequence_delivered_last", limit: 4
-    t.datetime "created_at"
-  end
-
-  add_index "user_onboarding_statuses", ["user_id"], name: "index_user_onboarding_statuses_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                               limit: 191, default: "",       null: false

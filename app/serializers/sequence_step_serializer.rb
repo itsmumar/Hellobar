@@ -1,3 +1,3 @@
 class SequenceStepSerializer < ActiveModel::Serializer
-  attributes :id, :sequence_id, :delay, :executable_type, :executable_id
+  attributes :id, :name, :sequence_id, :delay, :executable_id, :executable_type
 end

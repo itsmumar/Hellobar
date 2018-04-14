@@ -16,16 +16,6 @@ describe CreateSiteElement do
     service.call
   end
 
-  it 'calls UserOnboardingStatusSetter' do
-    status_setter = double('UserOnboardingStatusSetter')
-    expect(UserOnboardingStatusSetter)
-      .to receive(:new).with(user, anything, anything).and_return(status_setter)
-
-    expect(status_setter).to receive(:selected_goal!)
-    expect(status_setter).to receive(:created_element!)
-    service.call
-  end
-
   it 'regenerates script' do
     expect { service.call }
       .to have_enqueued_job(GenerateStaticScriptJob).with(site)
