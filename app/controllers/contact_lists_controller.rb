@@ -43,7 +43,7 @@ class ContactListsController < ApplicationController
       format.html do
         @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
         @subscribers = FetchLatestContacts.new(@contact_list).call
-        @total_subscribers = FetchSiteContactListTotals.new(@site, id: params[:id]).call
+        @total_subscribers = fetch_subscribers_count(params[:id])
       end
       format.json { render json: @contact_list }
     end
@@ -96,6 +96,10 @@ class ContactListsController < ApplicationController
 
   def load_contact_list
     @contact_list = @site.contact_lists.find(params[:id])
+  end
+
+  def fetch_subscribers_count(contact_list_id)
+    FetchSiteContactListTotals.new(@site, [contact_list_id]).call[contact_list_id]
   end
 
   def omniauth_error?

@@ -16,8 +16,8 @@ RSpec.configure do |config|
     allow_any_instance_of(FetchAllContacts).to receive(:call).and_return([])
     allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([])
 
-    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site), id: instance_of(String)).and_return(double(call: 0))
-    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: {}))
+    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site), instance_of(Array)).and_return(double(call: Hash.new { 0 }))
+    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: Hash.new { 0 }))
 
     OmniAuth.config.add_mock(provider)
   end

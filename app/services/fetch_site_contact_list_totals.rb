@@ -1,26 +1,27 @@
 class FetchSiteContactListTotals
-  def initialize(site, id: nil)
+  def initialize(site, contact_list_ids = nil)
     @site = site
-    @id = id
+    @contact_list_ids = contact_list_ids || site.contact_lists.ids
   end
 
   # @return [Hash] contact_list.id => total
   def call
     return {} if contact_list_ids.blank?
-    reduce process dynamo_db.batch_get_item(request)
+
+    reduce(fetch)
   end
 
   private
 
-  attr_reader :site, :id
+  attr_reader :site, :contact_list_ids
 
-  def reduce(result)
-    id.present? ? result.fetch(id.to_i, 0) : result
+  def fetch
+    dynamo_db.batch_get_item(request)
   end
 
-  def process(response)
-    response.fetch(table_name, []).inject({}) do |result, item|
-      result.update item['lid'].to_i => item['t'].to_i
+  def reduce(response)
+    response.fetch(table_name, []).each_with_object(Hash.new { 0 }) do |item, result|
+      result[item['lid'].to_i] = item['t'].to_i
     end
   end
 
@@ -34,10 +35,6 @@ class FetchSiteContactListTotals
       },
       return_consumed_capacity: 'TOTAL'
     }
-  end
-
-  def contact_list_ids
-    @contact_list_ids ||= site.contact_lists.ids
   end
 
   def table_name

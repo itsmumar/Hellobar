@@ -1,4 +1,6 @@
 module ContactListsHelper
+  DELETED = 'DELETED'.freeze
+
   def options_for_provider_select
     providers_array = ServiceProvider::Adapters.enabled.map do |adapter|
       [
@@ -15,6 +17,12 @@ module ContactListsHelper
     end
 
     [['In Hello Bar only', 0]] + providers_array
+  end
+
+  def contact_list_title(contact_list)
+    title = "#{ contact_list.name } (id: #{ contact_list.id })"
+    title << " - #{ DELETED }" if contact_list.deleted?
+    title
   end
 
   def contact_list_sync_details(contact_list)

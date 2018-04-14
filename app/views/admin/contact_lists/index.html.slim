@@ -1,11 +1,18 @@
+div.site-title
+  h3
+    = link_to site_title(@site), admin_site_path(@site)
+
 - @contact_lists.each do |contact_list|
 
   .contact-list
 
-    h4= "#{contact_list.name} (id: #{contact_list.id})"
+    h4= contact_list_title(contact_list)
     h5
       ' Synced to:
       = contact_list&.identity&.provider || "Hello Bar"
+    h5
+      ' Total subscribers count:
+      = @subscribers_count[contact_list.id]
 
     - if @contacts[contact_list.id].any?
 
