@@ -1,5 +1,5 @@
 class Admin::BillsController < AdminController
-  BILLS_TO_SHOW = 20
+  BILLS_TO_SHOW = 200
 
   def index
     @bills = Bill.order('id desc').limit(BILLS_TO_SHOW)
