@@ -3,6 +3,10 @@
 
   h1 Create free account
 
+  - if @form.existing_site_url?
+    = render 'shared/existing_site_warning'
+    = f.hidden_field :ignore_existing_site
+
   = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
   = f.input_field :email, placeholder: 'Your Email'
   = f.input_field :password, placeholder: 'Password'

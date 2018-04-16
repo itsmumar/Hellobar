@@ -1,14 +1,19 @@
 class RegistrationsController < ApplicationController
   layout 'static'
 
+  rescue_from ActiveRecord::RecordInvalid, with: :render_errors
+
   def new
     @form = RegistrationForm.new(params)
+    @form.ignore_existing_site = @form.existing_site_url?
   end
 
   def create
     @form = RegistrationForm.new(params)
 
     session[:new_site_url] = @form.site_url
+
+    return unless validate_url
 
     if params[:signup_with_email]
       signup_with_email
@@ -26,8 +31,8 @@ class RegistrationsController < ApplicationController
       return false
     end
 
-    if Site.by_url(@form.site_url).any?
-      redirect_to new_user_session_path(existing_url: @form.site_url)
+    if @form.existing_site_url? && !@form.ignore_existing_site
+      render :new
       return false
     end
 
@@ -35,21 +40,20 @@ class RegistrationsController < ApplicationController
   end
 
   def signup_with_email
-    return unless validate_url
+    @form.validate!
 
-    @form.user.save!
     CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
-
     sign_in(@form.user)
+
     redirect_to new_site_site_element_path(@form.site)
-  rescue ActiveRecord::RecordInvalid => e
-    flash.now[:error] = e.record.errors.full_messages.to_sentence
-    render :new
   end
 
   def signup_with_google
-    return unless validate_url
-
     redirect_to oauth_login_path(action: 'google_oauth2')
+  end
+
+  def render_errors(exception)
+    flash.now[:error] = exception.record.errors.full_messages.to_sentence
+    render :new
   end
 end
