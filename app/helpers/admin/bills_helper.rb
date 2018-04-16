@@ -24,11 +24,12 @@ module Admin::BillsHelper
     Subscription::ALL
   end
 
-  def subscription_name(bill)
+  def subscription_link(bill)
     Subscription.unscoped do
-      name_and_id = "#{ bill.subscription.values[:name] } ##{ bill.subscription.id }"
-      return "#{ name_and_id } (trial)" if bill.subscription.trial_end_date && !bill.pending?
-      name_and_id
+      subscription = bill.subscription
+      title = "#{ subscription.values[:name] } ##{ subscription.id }"
+      title += ' (trial)' if subscription.trial_end_date && !bill.pending?
+      link_to title, admin_subscription_path(subscription)
     end
   end
 

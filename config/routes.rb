@@ -184,6 +184,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :subscriptions, only: %i[index show] do
+      collection do
+        get :ended_trial
+        get 'filter/:type', action: 'filter_by_type', as: :filter_by_type
+      end
+    end
+
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
     get 'logout', to: 'access#logout_admin', as: :logout
     get 'reset_password', to: 'access#reset_password'
