@@ -13,7 +13,6 @@ class Users::SessionsController < Devise::SessionsController
         render :find_email
       end
     else
-      cookies.delete(:login_email)
       redirect_to new_user_session_path, alert: "Email doesn't exist."
     end
   end
@@ -30,8 +29,6 @@ class Users::SessionsController < Devise::SessionsController
 
       if @user.valid_password?(user_params[:password])
         sign_in(@user)
-
-        cookies.permanent[:login_email] = email
 
         redirect_to after_sign_in_path_for(@user)
       else

@@ -12,14 +12,6 @@ describe Users::SessionsController do
 
         expect(response).to redirect_to(new_user_session_path)
       end
-
-      it 'deletes the login_email cookie if the email doesnt exist' do
-        request.cookies['login_email'] = 'hello@email.com'
-
-        post :find_email, user: { email: 'hello@email.com' }
-
-        expect(response.cookies['login_email']).to be_nil
-      end
     end
 
     context 'the user email is found' do

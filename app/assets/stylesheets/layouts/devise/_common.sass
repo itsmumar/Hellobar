@@ -37,6 +37,12 @@
       margin-top: 0.75em
       @extend %red-button
       @include antialiased(false)
+      &.gray
+        border-color: $grayDarker !important
+        background: $grayDarker !important
+
+        &:hover
+          background-color: darken($grayDarker, 5%) !important
 
     p a
       color: $blue

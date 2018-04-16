@@ -149,7 +149,9 @@ class UserController < ApplicationController
   def user_params
     filtered = filter_password_params_if_optional
 
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+    params
+      .require(:user)
+      .permit(:email, :first_name, :last_name, :password, :password_confirmation, :timezone)
   rescue ActionController::ParameterMissing => e
     filtered ? {} : raise(e)
   end

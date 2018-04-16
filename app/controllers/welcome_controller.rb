@@ -4,7 +4,6 @@ class WelcomeController < ApplicationController
   before_action :require_no_user, only: %i[index]
 
   def index
-    @last_logged_in_user = User.find_by(email: cookies[:login_email])
     set_site_url
   end
 
@@ -18,6 +17,6 @@ class WelcomeController < ApplicationController
   end
 
   def stored_url
-    session[:new_site_url] || cookies[:registration_url]
+    session[:new_site_url]
   end
 end

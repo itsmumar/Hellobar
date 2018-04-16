@@ -1,7 +1,6 @@
 class CreateUser
-  def initialize(omniauth_hash, original_email = nil, track_options = {})
+  def initialize(omniauth_hash, track_options = {})
     @omniauth_hash = omniauth_hash
-    @original_email = original_email
     @track_options = track_options
   end
 
@@ -15,12 +14,9 @@ class CreateUser
 
   delegate :info, to: :omniauth_hash
 
-  attr_reader :omniauth_hash, :original_email, :track_options
+  attr_reader :omniauth_hash, :track_options
 
   def create_user
-    # the user is trying to login with a different Google account
-    raise_invalid_error if different_google_email?
-
     update_attributes_and_save find_temporary_user || initialize_user
   end
 
@@ -45,15 +41,5 @@ class CreateUser
     user.status = User::ACTIVE
     user.save!
     user
-  end
-
-  def different_google_email?
-    original_email.present? && info.email != original_email
-  end
-
-  def raise_invalid_error
-    user = User.new
-    user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-    raise ActiveRecord::RecordInvalid, user
   end
 end

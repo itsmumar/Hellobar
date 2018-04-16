@@ -31,15 +31,10 @@ describe SignInUser do
   it 'creates a new user' do
     expect(CreateUser)
       .to receive_service_call
-      .with(omniauth_hash, nil, ip: '', url: nil)
+      .with(omniauth_hash, ip: '', url: nil)
       .and_return build(:user)
 
     service.call
-  end
-
-  it 'stores email to cookie' do
-    service.call
-    expect(request.cookie_jar[:login_email]).to eql 'user@example.com'
   end
 
   context 'when new_site_url presents in session' do
@@ -91,18 +86,6 @@ describe SignInUser do
         expect(authentication.access_token).to eq(omniauth_hash.credentials.token)
         expect(authentication.expires_at).to be_present
       end
-    end
-  end
-
-  context 'when user is trying to login with a different Google account' do
-    before { request.cookies[:login_email] = 'anotheruser@example.com' }
-
-    it 'raises ActiveRecord::RecordInvalid' do
-      expect { service.call }
-        .to raise_error(
-          ActiveRecord::RecordInvalid,
-          'Validation failed: Please log in with your anotheruser@example.com Google email'
-        )
     end
   end
 end
