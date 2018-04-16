@@ -14,8 +14,8 @@
   = f.button :submit, 'Use your Google account', class: 'button', name: 'signup_with_google'
 
   .devise-links
-    = link_to 'Already a user? Sign in', new_user_session_path, class: 'clear-last-logged-in'
+    = link_to 'Already a user? Sign in', new_user_session_path
     br
     = link_to 'Forgot email?', new_forgot_email_path
     br
-    = link_to 'Forgot your password?', new_user_password_path, class: 'clear-last-logged-in'
+    = link_to 'Forgot your password?', new_user_password_path

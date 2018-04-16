@@ -21,7 +21,7 @@ describe CreateUser do
     )
   end
 
-  let(:service) { CreateUser.new(omniauth_hash, original_email, {}) }
+  let(:service) { CreateUser.new(omniauth_hash, {}) }
 
   it 'creates User' do
     expect { service.call }.to change(User, :count).by(1)
@@ -30,17 +30,5 @@ describe CreateUser do
   it 'tracks :signed_up event' do
     expect(TrackEvent).to receive_service_call.with(:signed_up, user: instance_of(User))
     service.call
-  end
-
-  context 'when the user is trying to login with a different Google account' do
-    let(:service) { CreateUser.new(omniauth_hash, 'user2@eample.com', {}) }
-
-    specify do
-      expect { service.call }
-        .to raise_error(
-          ActiveRecord::RecordInvalid,
-          'Validation failed: Please log in with your user2@eample.com Google email'
-        )
-    end
   end
 end

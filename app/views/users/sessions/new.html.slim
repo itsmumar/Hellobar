@@ -1,5 +1,3 @@
-- resource.email = cookies[:login_email] if resource.email.blank?
-
 = simple_form_for(resource, as: resource_name, url: find_email_path, method: :post) do |f|
 
   = render 'shared/flash'
@@ -20,11 +18,9 @@
   = f.button :submit, "Continue", :class => "button"
 
   .devise-links
-    - if resource.email.present?
-      = link_to "Not you?", "#", class: 'clear-last-logged-in', id: 'not-you'
-    - else
+    - if resource.email.blank?
       = link_to "Forgot email?", new_forgot_email_path
+      br
+    = link_to "Forgot your password?", new_user_password_path
     br
-    = link_to "Forgot your password?", new_user_password_path, class: 'clear-last-logged-in'
-    br
-    = link_to "Sign up for a New Hello Bar Account", users_sign_up_path, class: 'clear-last-logged-in'
+    = link_to "Sign up for a New Hello Bar Account", users_sign_up_path
