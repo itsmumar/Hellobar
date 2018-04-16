@@ -4,10 +4,6 @@
   value: "'Open Sans',sans-serif"
   google_font: 'Open+Sans'
 -
-  id: proxima
-  name: Proxima Nova
-  value: "'proxima-nova',sans-serif"
--
   id: helvetica
   name: Helvetica
   value: Helvetica,sans-serif
