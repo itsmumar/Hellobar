@@ -545,7 +545,8 @@ hellobar.defineModule('elements.class',
 
       loadFonts() {
         this.fonts.forEach(font => {
-          cdn.addCss('https://fonts.googleapis.com/css?family=' + font, this.w.contentDocument);
+          var googleFont = font.replace(/^\'(.+)\'$/, '$1')
+          cdn.addCss('https://fonts.googleapis.com/css?family=' + googleFont, this.w.contentDocument);
         })
       }
 
