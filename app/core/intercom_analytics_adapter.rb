@@ -14,7 +14,7 @@ class IntercomAnalyticsAdapter
     intercom.untag_users tag, users
   rescue Intercom::ResourceNotFound => e
     raise e unless e.message == IntercomAnalyticsAdapter::USER_NOT_FOUND
-    insure_users_existing(users)
+    ensure_users_exist(users)
 
     intercom.untag_users tag, users
   end
@@ -23,14 +23,14 @@ class IntercomAnalyticsAdapter
     intercom.tag_users tag, users
   rescue Intercom::ResourceNotFound => e
     raise e unless e.message == IntercomAnalyticsAdapter::USER_NOT_FOUND
-    insure_users_existing(users)
+    ensure_users_exist(users)
 
     intercom.tag_users tag, users
   end
 
   private
 
-  def insure_users_existing(users)
+  def ensure_users_exist(users)
     users.each { |user| intercom.create_user user }
   end
 
