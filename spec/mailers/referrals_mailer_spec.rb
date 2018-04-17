@@ -42,7 +42,7 @@ describe ReferralsMailer do
     let(:user) { create :user }
     let(:mail) { ReferralsMailer.successful referral, user }
 
-    let(:subject) { 'You Just Got a Free Bonus Month of Hello Bar Pro!' }
+    let(:subject) { 'You Just Got a Free Bonus Month of Hello Bar Growth!' }
 
     it 'renders the headers' do
       expect(mail.subject).to eq subject
@@ -53,7 +53,7 @@ describe ReferralsMailer do
     it 'renders the body' do
       expect(mail.body.encoded).to match referral.sender.first_name
       expect(mail.body.encoded).to match user.name
-      expect(mail.body.encoded).to match 'https://hellobar.com/referrals/new'
+      expect(mail.body.encoded).to match "#{ Settings.host }/referrals/new"
     end
   end
 end
