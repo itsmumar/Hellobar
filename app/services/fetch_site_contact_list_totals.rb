@@ -1,7 +1,7 @@
 class FetchSiteContactListTotals
   def initialize(site, contact_list_ids = nil)
     @site = site
-    @contact_list_ids = (contact_list_ids || site.contact_lists.ids).map(&:to_i)
+    @contact_list_ids = (contact_list_ids || site.contact_lists.ids).compact.map(&:to_i)
   end
 
   # @return [Hash] contact_list.id => total
