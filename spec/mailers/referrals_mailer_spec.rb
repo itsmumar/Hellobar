@@ -42,7 +42,7 @@ describe ReferralsMailer do
     let(:user) { create :user }
     let(:mail) { ReferralsMailer.successful referral, user }
 
-    let(:subject) { 'You Just Got a Free Bonus Month of Hello Bar Pro!' }
+    let(:subject) { 'You Just Got a Free Bonus Month of Hello Bar Growth!' }
 
     it 'renders the headers' do
       expect(mail.subject).to eq subject

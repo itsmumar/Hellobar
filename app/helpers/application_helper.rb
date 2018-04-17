@@ -37,4 +37,9 @@ module ApplicationHelper
   def serialize_current_site
     current_site ? SiteSerializer.new(current_site, scope: { user: current_user }).to_json : {}
   end
+
+  def pro_or_growth(user = nil)
+    user ||= current_user if defined? current_user
+    @pro_or_growth ||= Subscription.pro_or_growth_for(user).defaults[:name]
+  end
 end
