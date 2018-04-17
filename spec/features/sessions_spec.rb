@@ -20,9 +20,35 @@ feature 'User can sign up', :js do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit root_path
 
-    fill_in 'site[url]', with: 'mewgle.com'
+    fill_in 'site_url', with: 'mewgle.com'
 
     click_on 'sign-up-button'
+
+    first('[name=signup_with_google]').click
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
+
+    within('.header-user-wrapper') do
+      find('.dropdown-wrapper').click
+      expect(page).to have_content('Sign Out')
+    end
+
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+
+  scenario 'with email/password' do
+    visit root_path
+
+    fill_in 'site_url', with: 'mewgle.com'
+
+    click_on 'sign-up-button'
+
+    fill_in 'registration_form[email]', with: 'email@example.com'
+    fill_in 'registration_form[password]', with: 'password123'
+
+    first('[name=signup_with_email]').click
 
     expect(page).to have_content "I'll create it later"
 

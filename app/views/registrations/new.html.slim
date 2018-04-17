@@ -1,0 +1,25 @@
+= simple_form_for(@form, url: users_sign_up_path, method: :post) do |f|
+  = render 'shared/flash'
+
+  h1 Create free account
+
+  - if @form.existing_site_url?
+    = render 'shared/existing_site_warning'
+    = f.hidden_field :ignore_existing_site
+
+  = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
+  = f.input_field :email, placeholder: 'Your Email'
+  = f.input_field :password, placeholder: 'Password'
+  = f.button :submit, 'Create free account', class: 'button gray', name: 'signup_with_email'
+
+  .strike
+    span OR
+
+  = f.button :submit, 'Use your Google account', class: 'button', name: 'signup_with_google'
+
+  .devise-links
+    = link_to 'Already a user? Sign in', new_user_session_path
+    br
+    = link_to 'Forgot email?', new_forgot_email_path
+    br
+    = link_to 'Forgot your password?', new_user_password_path

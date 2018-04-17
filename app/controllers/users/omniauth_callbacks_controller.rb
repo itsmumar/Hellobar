@@ -23,7 +23,6 @@ class Users::OmniauthCallbacksController < ApplicationController
   private
 
   def show_invalid_credentials_error(invalid)
-    cookies.delete(:login_email)
     flash[:error] = invalid.record.errors.full_messages.uniq.join('. ') << '.'
     redirect_to root_path
   end

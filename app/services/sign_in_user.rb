@@ -5,9 +5,7 @@ class SignInUser
   end
 
   def call
-    find_or_create_user.tap do |user, _|
-      store_email_in_cookie(user)
-    end
+    find_or_create_user
   end
 
   private
@@ -104,11 +102,7 @@ class SignInUser
 
   def create_user
     track_options = { ip: request.remote_ip, url: session[:new_site_url] }
-    user = CreateUser.new(omniauth_hash, cookies[:login_email], track_options).call
+    user = CreateUser.new(omniauth_hash, track_options).call
     [user, redirect_url_for_new_user]
-  end
-
-  def store_email_in_cookie(user)
-    cookies.permanent[:login_email] = user.email
   end
 end
