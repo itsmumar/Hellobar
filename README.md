@@ -38,16 +38,18 @@ Setup the `secrets.yml` file:
 
 `cp config/secrets.yml.example config/secrets.yml`
 
+You can run your application locally on `localhost:3000` or via
+`local.hellobar.com` vhost as this domain has been setup to resolve to
+`127.0.0.1`.
 
-It is advised to run the application locally using the `local.hellobar.com` vhost/domain as this domain has been setup to resolve to `127.0.0.1`.
+Credentials in config/secrets.yml.example are setup to handle both cases.
 
-You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
-and add new or use existing Google OAuth credentials to be able to log in.
+In case you want to run the app locally on a different domain/port you need to
+visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
+and add new Google OAuth credentials to be able to log in.
 
-`google_auth_id` and `google_auth_secret` entries should be added into `config/secrets.yml`.
 
-
-Here's the list of additional settings in `secrets.yml`, which might need to be set in your local development environment:
+Here's the list of additional settings in `secrets.yml`, which might be needed to be set in your local development environment:
 * `aws_access_key_id`
 * `aws_secret_access_key`
 * `deliver_emails`

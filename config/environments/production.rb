@@ -77,5 +77,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enforce SSL
-  config.middleware.use Rack::SslEnforcer, only_hosts: [Settings.host]
+  config.middleware.use Rack::SslEnforcer, only_hosts: [Settings.host, 'app.hellobar.com']
 end

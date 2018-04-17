@@ -46,7 +46,7 @@ FactoryBot.define do
       thank_you_headline 'thank_you_headline'
       thank_you_subheading 'thank_you_subheading'
       thank_you_cta 'thank_you_cta'
-      thank_you_url 'http://www.hellobar.com/'
+      thank_you_url 'https://www.hellobar.com/'
     end
 
     trait :click_to_call do
@@ -150,7 +150,7 @@ FactoryBot.define do
         'placement' => 'bar-top', 'show_border' => false, 'show_branding' => true, 'size' => 'large', 'text_color' => 'ffffff',
         'texture' => 'none', 'theme_id' => 'classic', 'type' => 'Bar', 'view_condition' => 'immediately', 'wiggle_button' => false,
         'blocks' => [], 'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',
-        'branding_url' => "http://www.hellobar.com?sid=#{ id }", 'closable' => false,
+        'branding_url' => "https://www.hellobar.com?sid=#{ id }", 'closable' => false,
         'contact_list_id' => contact_list_id, 'email_redirect' => false, 'hide_destination' => true, 'id' => id,
         'open_in_new_window' => false, 'primary_color' => 'eb593c', 'pushes_page_down' => true,
         'remains_at_top' => true, 'secondary_color' => '000000',
