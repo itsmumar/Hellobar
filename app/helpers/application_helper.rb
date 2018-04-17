@@ -39,7 +39,7 @@ module ApplicationHelper
   end
 
   def pro_or_growth(user = nil)
-    user ||= current_user if defined? current_user
+    user ||= current_user
     @pro_or_growth ||= Subscription.pro_or_growth_for(user).defaults[:name]
   end
 end
