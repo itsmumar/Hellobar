@@ -91,7 +91,7 @@ hellobar.defineModule('elements.collecting',
 
               if (siteElementModel.use_free_email_default_msg) {
                 // Hijack the submit button and turn it into a link
-                const linkUrl = `http://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
+                const linkUrl = `https://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
                 btnTextHolder.textContent = 'Click Here';
                 btnElement.href = linkUrl;
                 btnElement.setAttribute('target', '_parent');
