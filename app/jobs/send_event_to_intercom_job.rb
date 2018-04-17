@@ -1,10 +1,8 @@
 class SendEventToIntercomJob < ApplicationJob
-  USER_NOT_FOUND = 'User Not Found'.freeze
-
   def perform(event, options = {})
     provider.fire_event event, options
   rescue Intercom::ResourceNotFound => e
-    raise e unless e.message == USER_NOT_FOUND
+    raise e unless e.message == IntercomAnalyticsAdapter::USER_NOT_FOUND
 
     handle_user_not_found(options[:user])
     # retry it 1st time without exception
