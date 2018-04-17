@@ -9,6 +9,11 @@ hellobar.defineModule('tracking.internal',
 
     // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
     function send(path, itemID, params, callback) {
+      if (preview.isActive()) {
+        callback && callback();
+        return;
+      }
+
       // Build the URL
       var url = '/' + path + '/' + obfID(site.siteId());
       if (itemID) {
@@ -48,7 +53,6 @@ hellobar.defineModule('tracking.internal',
 
       img.src = hi(url);
     }
-
 
     // Returns the URL for the backend server (e.g. "hi.hellobar.com").
     function hi(url) {
