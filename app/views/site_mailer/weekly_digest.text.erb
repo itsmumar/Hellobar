@@ -16,7 +16,7 @@ Your performance this week for <%= @site.url %>
 Get more conversions by visiting <%= site_site_elements_url(@site) %>
 
 <% if @site.free? %>
-  Get 4x more <%= @conversion_header.downcase %> by upgrading to Pro!
+  Get 4x more <%= @conversion_header.downcase %> by upgrading to <%= pro_or_growth(@user) %>!
   * Brand it as your bar!  No Hello Bar logo in your bar.  It's all yours!
   * Remove Ads! Increase your results by removing ads.
   * Targeted messages! Show different messages to different users.
