@@ -176,7 +176,7 @@ feature 'Adding and editing bars', :js do
 
     click_on 'Save & Publish'
 
-    expect(page).to have_content('Get Free Pro') # waits for next page load
+    expect(page).to have_content('Get Free Growth') # waits for next page load
     element = SiteElement.last
 
     expect(element.phone_number).to eql(phone_number)
