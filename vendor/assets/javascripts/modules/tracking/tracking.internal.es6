@@ -9,7 +9,7 @@ hellobar.defineModule('tracking.internal',
 
     // Sends data to the tracking server (e.g. which siteElements viewed, if a rule was performed, etc)
     function send(path, itemID, params, callback) {
-      if (isTrackingDisabled()) {
+      if (preview.isActive()) {
         callback && callback();
         return;
       }
@@ -52,17 +52,6 @@ hellobar.defineModule('tracking.internal',
       }
 
       img.src = hi(url);
-    }
-
-    function disableTrackingIfRequired(queryString) {
-      if (queryString.match(/hb_ignore/i)) {
-        var bool = !!queryString.match(/hb_ignore=true/i);
-        storage.setValue('disableTracking', bool, 5 * 365);
-      }
-    }
-
-    function isTrackingDisabled() {
-      return preview.isActive() || format.asBool(storage.getValue('disableTracking'));
     }
 
     // Returns the URL for the backend server (e.g. "hi.hellobar.com").
@@ -163,7 +152,6 @@ hellobar.defineModule('tracking.internal',
       configuration: () => configuration,
       initialize (configurator) {
         configurator && configurator(configuration);
-        disableTrackingIfRequired(location.search);
       },
       send
     };
