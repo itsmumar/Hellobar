@@ -20,14 +20,14 @@ describe Condition do
 
     context 'the operand is NOT "between"' do
       it 'is NOT valid when the value is a non-String object' do
-        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+        condition = Condition.new segment: 'DeviceCondition', operand: 'is',
           value: ['array'], rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is a String' do
-        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+        condition = Condition.new segment: 'DeviceCondition', operand: 'is',
           value: 'string', rule: Rule.new
 
         expect(condition).to be_valid

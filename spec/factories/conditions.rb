@@ -71,13 +71,13 @@ FactoryBot.define do
     trait :utm_source do
       segment 'UTMSourceCondition'
       operand 'is'
-      value 'hellobar'
+      value ['hellobar']
     end
 
     trait :city do
       segment 'LocationCityCondition'
       operand 'is'
-      value 'London'
+      value ['London']
     end
   end
 end

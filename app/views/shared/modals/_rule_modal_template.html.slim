@@ -115,20 +115,20 @@ script#condition-partial type="text/x-handlebars-template"
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
         .choice-wrapper.referrer-domain-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="url" value="{{value}}"
-        .choice-wrapper.utm-source-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.utm-campaign-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.utm-medium-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.utm-content-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.utm-term-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "utm-source-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "utm-campaign-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "utm-medium-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "utm-content-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "utm-term-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
         .choice-wrapper.string-choice
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
-        .choice-wrapper.location-city-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "location-city-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
 
         = render layout: "shared/modals/multiple_choice_wrapper",
                  locals: {class_name: "location-country-choice select-wrapper"} do |name|
@@ -149,8 +149,9 @@ script#condition-partial type="text/x-handlebars-template"
           .select-wrapper.time-select.timezone
             - timezones = [["Use visitor's timezone", "visitor"]] + time_zone_options
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(timezones), { disabled: true, class: 'value' }
-        .choice-wrapper.location-region-choice
-          input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}"
+
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "location-region-choice"} do |name, value|
+          input.value name=name value=value type="text" disabled="disabled"
 
         = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-choice"}  do |name, value|
           input.value name=name value=value type="url"  placeholder="/specific_path"

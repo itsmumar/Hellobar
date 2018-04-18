@@ -24,7 +24,11 @@ class Condition < ApplicationRecord
     'UTMTermCondition' => 'ad_te'
   }.freeze
 
-  MULTIPLE_CHOICE_SEGMENTS = %w[UrlPathCondition LocationCountryCondition].freeze
+  MULTIPLE_CHOICE_SEGMENTS = %w[
+    UrlPathCondition LocationCountryCondition LocationRegionCondition LocationCityCondition
+    UTMCampaignCondition UTMContentCondition UTMMediumCondition UTMSourceCondition UTMTermCondition
+  ].freeze
+
   PRECISE_SEGMENTS = %w[LocationRegionCondition LocationCityCondition].freeze
 
   # stored value: displayed value
