@@ -16,11 +16,6 @@ $ ->
     event.preventDefault()
     deliverPasswordReset(this)
 
-  $(".refund_link").click ->
-    $(@).hide()
-    $("#edit_bill_recurring_" + $(@).data("id")).toggleClass("hidden")
-    $(@).closest("tr").toggleClass( "hilight" )
-
   $(".subscription_link").click ->
     siteId = $(@).data("siteid")
     $(".edit_site_form[data-site-id='" + siteId + "']").toggleClass("hidden")

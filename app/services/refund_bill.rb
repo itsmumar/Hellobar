@@ -3,10 +3,9 @@ class RefundBill
   class MissingCreditCard < StandardError; end
 
   # @param [Bill::Recurring] bill
-  # @param [Float] amount, default bill.amount
-  def initialize(bill, amount: bill.amount)
+  def initialize(bill)
     @bill = bill
-    @amount = amount.abs * -1 # Refunds are always negative
+    @amount = bill.amount.abs * -1 # Refunds are always negative
   end
 
   def call
@@ -23,7 +22,6 @@ class RefundBill
 
   # Check that we're not refunding more than they paid
   def check_refund_amount!
-    raise InvalidRefund, 'Cannot refund more than paid amount' if fully_paid?
     raise InvalidRefund, 'Refund amount cannot be 0' if amount.zero?
   end
 
@@ -47,14 +45,6 @@ class RefundBill
     return unless bill.site&.current_subscription
 
     ChangeSubscription.new(bill.site, subscription: 'free').call
-  end
-
-  def fully_paid?
-    (bill.amount + amount + previous_refunds) < 0
-  end
-
-  def previous_refunds
-    successful_billing_attempt.refunds.sum(:amount)
   end
 
   def successful_billing_attempt

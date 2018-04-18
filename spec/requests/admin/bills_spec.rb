@@ -112,10 +112,11 @@ describe 'Admin::Bills requests' do
       end
 
       context 'when failed' do
+        let!(:bill) { create :bill, :pro }
+
         let(:params) do
           {
-            id: bill,
-            bill_recurring: { amount: -100 }
+            id: bill
           }
         end
 
