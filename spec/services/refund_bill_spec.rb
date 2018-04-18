@@ -5,7 +5,7 @@ describe RefundBill do
   let(:credit_card) { create :credit_card, user: user }
   let(:subscription) { create :subscription, :pro, site: site, credit_card: credit_card }
   let(:bill) { create :bill, :pro, subscription: subscription }
-  let!(:refund_bill) { RefundBill.new(bill, amount: amount) }
+  let!(:refund_bill) { RefundBill.new(bill) }
   let(:latest_refund) { Bill::Refund.last }
   let(:latest_billing_attempt) { BillingAttempt.last }
 
@@ -38,15 +38,6 @@ describe RefundBill do
     expect(latest_refund.authorization_code).to eql 'code'
   end
 
-  it 'allows partialy refunds' do
-    RefundBill.new(bill, amount: 1).call
-    RefundBill.new(bill, amount: 1).call
-    RefundBill.new(bill, amount: bill.amount - 2).call
-
-    expect { RefundBill.new(bill, amount: 1).call }
-      .to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
-  end
-
   it 'cancels current subscription' do
     expect { refund_bill.call }.to change(bill.subscription.bills.pending, :count).to 0
     expect(bill.site.current_subscription).to be_a Subscription::Free
@@ -74,16 +65,8 @@ describe RefundBill do
     end
   end
 
-  context 'when refund amount is more than paid amount' do
-    let(:amount) { 100 }
-
-    it 'raises InvalidRefund' do
-      expect { refund_bill.call }.to raise_error RefundBill::InvalidRefund, 'Cannot refund more than paid amount'
-    end
-  end
-
   context 'when refund amount is 0' do
-    let(:amount) { 0 }
+    let(:bill) { create :bill, :pro, subscription: subscription, amount: 0 }
 
     it 'raises InvalidRefund' do
       expect { refund_bill.call }.to raise_error RefundBill::InvalidRefund, 'Refund amount cannot be 0'
@@ -91,7 +74,7 @@ describe RefundBill do
   end
 
   context 'when refund amount is less than bill amount' do
-    let(:amount) { bill.amount / 2 }
+    let(:bill) { create :bill, :pro, subscription: subscription, amount: 10 }
 
     it 'refunds successfully' do
       refund_bill.call

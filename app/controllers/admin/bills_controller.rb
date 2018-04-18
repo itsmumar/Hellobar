@@ -43,9 +43,8 @@ class Admin::BillsController < AdminController
   def refund
     @bill, @subscription, @site = load_data
     begin
-      amount = params[:bill_recurring][:amount].to_f
-      RefundBill.new(@bill, amount: amount).call
-      flash[:success] = "Refund successful: Refunded #{ amount } of #{ @bill.amount }."
+      RefundBill.new(@bill).call
+      flash[:success] = "Refund successful: Refunded #{ @bill.amount }."
     rescue RefundBill::InvalidRefund, RefundBill::MissingCreditCard, Bill::InvalidBillingAmount => e
       flash[:error] = "Refund error: #{ e.message }"
     end

@@ -61,7 +61,10 @@ module Admin::BillsHelper
     end
 
     if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
-      actions << render('admin/bills/refund_form', bill: bill)
+      actions << link_to('refund',
+        refund_admin_bill_path(bill),
+        method: :put, data: { confirm: 'Refund this bill?' })
+
       actions << link_to('chargeback',
         chargeback_admin_bill_path(bill),
         method: :put, data: { confirm: 'Chargeback this bill?' })
