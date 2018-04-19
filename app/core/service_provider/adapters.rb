@@ -43,7 +43,6 @@ class ServiceProvider
     register :convert_kit, Adapters::ConvertKit
     register :drip, Adapters::Drip
     register :get_response_api, Adapters::GetResponse
-    register :icontact, Adapters::IContact
     register :infusionsoft, Adapters::Infusionsoft
     register :iterable, Adapters::Iterable
     register :mad_mimi_api, Adapters::MadMimi

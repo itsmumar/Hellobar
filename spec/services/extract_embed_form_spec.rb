@@ -57,42 +57,6 @@ describe ExtractEmbedForm do
     end
   end
 
-  context 'when embed is a script (icontact)' do
-    let(:embed_code) { build :embed_code, provider: 'icontact' }
-
-    before do
-      stub_request(
-        :get, 'http://app.icontact.com/icp/loadsignup.php/form.js?c=1450422&f=564&l=7290'
-      ).and_return(webmock_fixture('icontact_form.txt'))
-    end
-
-    it 'has form' do
-      expect(form.form).to be_a Nokogiri::XML::Element
-      expect(form.form.name).to eql 'form'
-    end
-
-    it 'has inputs' do
-      expect(form.inputs).to match(
-        'redirect' => 'http://www.hellobar.com/emailsignup/icontact/success',
-        'errorredirect' => 'http://www.hellobar.com/emailsignup/icontact/error',
-        'fields_email' => '',
-        'fields_fname' => '',
-        'fields_lname' => '',
-        'listid' => '10108',
-        'specialid:10108' => 'O2D3',
-        'clientid' => '1450422',
-        'formid' => '564',
-        'reallistid' => '1',
-        'doubleopt' => '0',
-        'Submit' => 'Submit'
-      )
-    end
-
-    it 'has action_url' do
-      expect(form.action_url).to eql 'http://app.icontact.com/icp/signup.php'
-    end
-  end
-
   context 'when embed code contains "#load_check a" element (my emma js)' do
     let(:embed_code) { build :embed_code, provider: 'my_emma_js' }
 
