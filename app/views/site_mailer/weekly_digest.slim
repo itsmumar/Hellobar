@@ -135,6 +135,6 @@ tr.lightGrey
               tr
                 td.alignCenter style="font-size: 15px; padding: 15px 0; font-weight: lighter; color: #222222;"
                   span style="line-height: 24px; height: 24px; margin-right: 10px;"
-                    | Get all the pro features for $15/mo
+                    | Get all the #{ pro_or_growth(@user) } features for #{ pro_or_growth_price(@user) }/mo
                   = link_to "Start using Hello Bar #{ pro_or_growth(@user) }", edit_site_url(@site), class: 'button largeButton'
   td

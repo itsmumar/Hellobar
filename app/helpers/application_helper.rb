@@ -42,4 +42,13 @@ module ApplicationHelper
     user ||= current_user
     @pro_or_growth ||= Subscription.pro_or_growth_for(user).defaults[:name]
   end
+
+  def pro_or_growth_price(user = nil)
+    user ||= current_user
+    @pro_or_growth_price ||=
+      number_to_currency(
+        Subscription.pro_or_growth_for(user).defaults[:monthly_amount],
+        precision: 0
+      )
+  end
 end
