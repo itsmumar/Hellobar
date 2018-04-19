@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 describe AmplitudeSerializer do
   let!(:user) { create :user }
   let!(:site) { create :site, user: user, url: 'яндекс.рф' }
