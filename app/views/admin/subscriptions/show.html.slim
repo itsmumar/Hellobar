@@ -1,0 +1,7 @@
+#subscriptions
+  div.subscription_section.site_details
+    = render 'admin/sites/header', site: @subscription.site
+
+  div.subscription_section.subscription_details
+    div.title Subscription Details
+    = render 'list', subscriptions: [@subscription]

@@ -1,0 +1,27 @@
+- if subscriptions.empty?
+  h3
+    i none found
+
+- else
+  table.table.admin-subscriptions
+    tr
+      th ID
+      th Type
+      th Trial ends
+      th Last Paid Bill
+      th Bill Amount
+      th Site
+      th Credit Card
+      th User
+
+    - subscriptions.each do |subscription|
+      tr
+        td
+          = link_to subscription.id, admin_subscription_path(subscription)
+        td= subscription.name
+        td= subscription.trial_end_date
+        td= subscription.last_paid_bill && link_to(subscription.last_paid_bill.id, admin_bill_path(subscription.last_paid_bill))
+        td= subscription.last_paid_bill&.amount
+        td= link_to subscription.site.url, admin_site_path(subscription.site)
+        td= subscription.credit_card && link_to(subscription.credit_card.last_digits, admin_credit_card_path(subscription.credit_card))
+        td= subscription_owner_link(subscription)
