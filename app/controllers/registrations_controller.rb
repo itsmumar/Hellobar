@@ -16,7 +16,6 @@ class RegistrationsController < ApplicationController
     return unless validate_url
 
     if params[:signup_with_email]
-      @form = RegistrationForm.new(params)
       signup_with_email
     else
       signup_with_google
@@ -26,7 +25,7 @@ class RegistrationsController < ApplicationController
   private
 
   def validate_url
-    unless @form.site.valid?
+    unless @form.valid?
       flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
       redirect_to users_sign_up_path(site_url: @form.site_url)
       return false
