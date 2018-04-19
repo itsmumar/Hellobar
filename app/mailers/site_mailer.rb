@@ -8,6 +8,8 @@ class SiteMailer < ActionMailer::Base
 
   before_filter :set_weekly_dates
 
+  layout 'site_mailer'
+
   def weekly_digest(site, user)
     @site = site
     @user = user

@@ -1,7 +1,6 @@
 class ContactFormMailer < ApplicationMailer
   SPACE = ' '.freeze
 
-  layout 'no_signature'
   default to: 'support@hellobar.com',
           from: 'Hello Bar <contact@hellobar.com>'
 

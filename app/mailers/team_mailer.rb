@@ -1,5 +1,4 @@
 class TeamMailer < ApplicationMailer
-  layout 'user_mailer'
   default from: 'Hello Bar <contact@hellobar.com>'
 
   def invite(site_membership)
