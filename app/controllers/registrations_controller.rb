@@ -25,7 +25,7 @@ class RegistrationsController < ApplicationController
   private
 
   def validate_url
-    unless @form.valid?
+    unless @form.site.valid?
       flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
       redirect_to users_sign_up_path(site_url: @form.site_url)
       return false

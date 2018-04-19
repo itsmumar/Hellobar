@@ -2,7 +2,10 @@ class URLValidator < ActiveModel::EachValidator
   URL_REGEXP = /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
 
   def validate_each(record, attribute, value)
-    record.errors.add(attribute, "can't be blank") if value.blank?
+    if value.blank?
+      record.errors.add(attribute, "can't be blank")
+      return
+    end
 
     record.errors.add(attribute, 'is invalid') if invalid_url?(value)
   rescue Addressable::URI::InvalidURIError

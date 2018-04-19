@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 describe Site do
   let(:site) { create(:site, :with_user, :with_rule) }
   let(:pro_site) { create(:site, :pro) }
@@ -205,25 +207,29 @@ describe Site do
     end
   end
 
-  describe '.normalized_url' do
-    def normalized_url(url)
-      Site.new(url: url).normalized_url
+  describe '.host' do
+    def host(url)
+      Site.new(url: url).host
     end
 
     it 'removes www' do
-      expect(normalized_url('http://www.cnn.com')).to eq('www.cnn.com')
+      expect(host('http://www.cnn.com')).to eq('www.cnn.com')
     end
 
-    it 'removes www from other parts of the url' do
-      expect(normalized_url('cnnwww.com/')).to eq('cnnwww.com')
+    it 'does not remove www from other parts of the url' do
+      expect(host('cnnwww.com/')).to eq('cnnwww.com')
     end
 
-    it 'removes the www1 subdomain' do
-      expect(normalized_url('www1.abc.com/')).to eq('www1.abc.com')
+    it 'does not removes the www1 subdomain' do
+      expect(host('www1.abc.com/')).to eq('www1.abc.com')
     end
 
     it 'returns nil if invalid' do
-      expect(normalized_url('http://')).to be_nil
+      expect(host('http://')).to be_nil
+    end
+
+    it 'does not encodes non-unicode characters' do
+      expect(host('яндекс.рф')).to eq('яндекс.рф')
     end
   end
 

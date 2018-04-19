@@ -53,7 +53,6 @@ class Site < ApplicationRecord
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
   scope :by_url, ->(url) { protocol_ignored_url(url) }
 
-  before_validation :normalize_url
   before_validation :generate_read_write_keys
 
   validates :url, url: true
@@ -105,8 +104,7 @@ class Site < ApplicationRecord
   end
 
   def self.protocol_ignored_url(url)
-    normalized_url = Addressable::URI.heuristic_parse(url)
-    host = normalized_url.normalized_host
+    host = Addressable::URI.heuristic_parse(url).normalized_host
     where(url: ["https://#{ host || url }", "http://#{ host || url }"])
   rescue Addressable::URI::InvalidURIError
     none
@@ -114,6 +112,24 @@ class Site < ApplicationRecord
 
   def self.by_url_for(user, url:)
     by_url(url).joins(:users).find_by(users: { id: user.id })
+  end
+
+  def url=(value)
+    super(Addressable::URI.heuristic_parse(value)&.normalized_site)
+  rescue Addressable::URI::InvalidURIError
+    super(value)
+  end
+
+  def display_url
+    Addressable::URI.parse(url).display_uri.to_s || url
+  rescue Addressable::URI::InvalidURIError
+    nil
+  end
+
+  def host
+    Addressable::URI.parse(url).display_uri.host || url
+  rescue Addressable::URI::InvalidURIError
+    nil
   end
 
   def statistics
@@ -171,12 +187,6 @@ class Site < ApplicationRecord
     site_elements.where.not(wordpress_bar_id: nil).any?
   end
 
-  def normalized_url
-    Addressable::URI.heuristic_parse(url).normalized_host || url
-  rescue Addressable::URI::InvalidURIError
-    nil
-  end
-
   def update_content_upgrade_styles!(style_params)
     update_attribute(:settings, settings.merge('content_upgrade' => style_params))
   end
@@ -198,14 +208,6 @@ class Site < ApplicationRecord
   end
 
   private
-
-  def normalize_url
-    return if url.blank?
-    normalized_url = Addressable::URI.heuristic_parse(url)
-    self.url = "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
-  rescue Addressable::URI::InvalidURIError
-    nil
-  end
 
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if read_key.blank?

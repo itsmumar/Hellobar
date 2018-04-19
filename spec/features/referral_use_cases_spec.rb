@@ -78,8 +78,8 @@ feature 'User sign ups with a referral token', :js do
 
       visit referrals_path
 
-      find('#referral_site_id').select random_sender_site.normalized_url
-      expect(page).to have_content "Applied to #{ random_sender_site.normalized_url }"
+      find('#referral_site_id').select random_sender_site.host
+      expect(page).to have_content "Applied to #{ random_sender_site.host }"
       expect(CouponUse.count).to eql 2
 
       expect(random_sender_site).to be_capable_of :pro

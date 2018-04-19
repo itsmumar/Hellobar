@@ -7,8 +7,6 @@ class RegistrationForm
 
   attr_reader :user, :site
 
-  validates :site_url, presence: true, url: true
-
   def initialize(params)
     super(params[:registration_form])
 

@@ -11,10 +11,10 @@ describe SitesController do
       expect(assigns[:site]).not_to be_nil
     end
 
-    it 'sets the url if present from the params' do
+    it 'sets normalized site url (with scheme) if present from the params' do
       get :new, url: 'site.com'
 
-      expect(assigns[:site].url).to eql('site.com')
+      expect(assigns[:site].url).to eql('http://site.com')
     end
 
     it 'flashes a notice if the url is present in the params' do

@@ -6,7 +6,7 @@ describe ContactsMailer do
     let(:attachment) { mail.attachments[0] }
 
     let(:subject) do
-      url = contact_list.site.normalized_url
+      url = contact_list.site.host
       "#{ url }: Your CSV export is ready #{ contact_list.name.parameterize }.zip"
     end
 
