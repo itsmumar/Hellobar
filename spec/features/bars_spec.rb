@@ -17,7 +17,7 @@ feature 'Adding and editing bars', :js do
 
     visit root_path
 
-    fill_in 'site_url', with: 'mewgle.com'
+    fill_in 'registration_form[site_url]', with: 'mewgle.com'
     click_button 'sign-up-button'
     first('[name=signup_with_google]').click
 
@@ -188,7 +188,7 @@ feature 'Adding and editing bars', :js do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
     visit root_path
 
-    fill_in 'site_url', with: 'mewgle.com'
+    fill_in 'registration_form[site_url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
     first('[name=signup_with_google]').click
