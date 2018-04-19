@@ -1,4 +1,4 @@
-class SiteMailer < ActionMailer::Base
+class SiteMailer < ApplicationMailer
   include Roadie::Rails::Mailer
   include EmailDigestHelper
 
