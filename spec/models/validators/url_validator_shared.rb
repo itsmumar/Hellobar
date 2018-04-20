@@ -22,6 +22,9 @@ shared_examples 'an object with a valid url' do
       1234
       me@notaurl.com
       ftp://warez.dfnet.org
+      http://*.site.com
+      http://my_site.com
+      http://.site.com
     ]
 
     urls.each do |url|
