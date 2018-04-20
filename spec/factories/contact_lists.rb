@@ -41,11 +41,6 @@ FactoryBot.define do
       identity { create :identity, :get_response_api, site: site }
     end
 
-    trait :icontact do
-      identity { create :identity, :icontact, site: site }
-      data { Hash['embed_code' => build(:embed_code, provider: 'icontact')] }
-    end
-
     trait :infusionsoft do
       identity { create :identity, :infusionsoft, site: site }
     end

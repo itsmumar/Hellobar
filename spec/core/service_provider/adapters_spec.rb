@@ -10,7 +10,6 @@ describe ServiceProvider::Adapters do
       convert_kit: ServiceProvider::Adapters::ConvertKit,
       drip: ServiceProvider::Adapters::Drip,
       get_response_api: ServiceProvider::Adapters::GetResponse,
-      icontact: ServiceProvider::Adapters::IContact,
       infusionsoft: ServiceProvider::Adapters::Infusionsoft,
       iterable: ServiceProvider::Adapters::Iterable,
       mad_mimi_api: ServiceProvider::Adapters::MadMimi,
