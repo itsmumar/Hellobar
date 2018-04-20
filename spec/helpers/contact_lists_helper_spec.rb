@@ -22,7 +22,6 @@ describe ContactListsHelper, type: :helper do
         ['ConvertKit', :convert_kit, options(requires_api_key: true)],
         ['Drip', :drip, options(oauth: true)],
         ['GetResponse', :get_response_api, options(requires_api_key: true)],
-        ['iContact', :icontact, options(requires_embed_code: true)],
         ['Infusionsoft', :infusionsoft, options(requires_app_url: true, requires_api_key: true)],
         ['Iterable', :iterable, options(requires_api_key: true)],
         ['MadMimi', :mad_mimi_api, options(requires_api_key: true, requires_username: true)],
