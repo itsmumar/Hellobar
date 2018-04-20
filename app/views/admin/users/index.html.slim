@@ -33,7 +33,7 @@ div.row
               ul
                 - user.sites.with_deleted.each do |site|
                   li
-                    = link_to site.url, admin_site_path(site)
+                    = link_to site.display_url, admin_site_path(site)
                     - if site.deleted?
                       '  (Deleted)
                     - elsif !site.free?

@@ -1,7 +1,7 @@
 section
   label Plan
   p
-    = @site.normalized_url
+    = @site.host
     '  is on the
     = @site.current_subscription.values[:name]
     - if @site.current_subscription.currently_on_trial?

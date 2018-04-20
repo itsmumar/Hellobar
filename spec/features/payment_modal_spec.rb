@@ -58,7 +58,7 @@ feature 'Payment modal interaction', :js do
 
         fill_payment_form
 
-        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE PRO PLAN!"
+        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE PRO PLAN!"
         expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
         expect(page).to have_text 'You will be billed $149.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
@@ -82,7 +82,7 @@ feature 'Payment modal interaction', :js do
 
         fill_payment_form
 
-        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.normalized_url.upcase } TO THE GROWTH PLAN!"
+        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
         expect(page).to have_text 'Your card ending in 1111 has been charged $289.00.'
         expect(page).to have_text 'You will be billed $289.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
@@ -102,7 +102,7 @@ feature 'Payment modal interaction', :js do
       find('.step-style').click
       find('.toggle-showing-branding .toggle-on').click
 
-      expect(page).to have_content "Upgrade #{ site.normalized_url } to remove branding"
+      expect(page).to have_content "Upgrade #{ site.host } to remove branding"
     end
 
     scenario 'trying to enable bar hiding triggers the Pro Upgrade popup' do
@@ -115,7 +115,7 @@ feature 'Payment modal interaction', :js do
       find('.step-style').click
       find('.toggle-hiding .toggle-off').click
 
-      expect(page).to have_content "Upgrade #{ site.normalized_url } to allow hiding a bar"
+      expect(page).to have_content "Upgrade #{ site.host } to allow hiding a bar"
     end
 
     def date_format(date)
