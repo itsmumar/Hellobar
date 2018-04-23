@@ -31,7 +31,7 @@ class Api::SubscribersController < Api::ApplicationController
   def pagination_params
     {
       key: params[:key],
-      forward: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:forward])
+      forward: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:forward]) || false
     }
   end
 
