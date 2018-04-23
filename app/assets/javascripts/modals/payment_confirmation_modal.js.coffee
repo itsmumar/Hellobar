@@ -48,13 +48,13 @@ class @PaymentConfirmationModal extends Modal
       billingSchedule += " Your next bill will be on #{moment(bill.bill_at).format("MMM Do, YYYY")}." if bill.status == "pending"
 
     {
-      planName: subscription.type
+      planName: subscription.name
       billingSchedule: billingSchedule
       chargeDescription: chargeDescription
       isPaidPlan: !@options.isFree
       siteName: @options.siteName
       isUpgrade: @options.data.is_upgrade
-      oldPlanName: if old_subscription then old_subscription.type else ""
-      showProFeatures: subscription.type == "pro" || subscription.type == "growth" || subscription.type == "enterprise"
+      oldPlanName: if old_subscription then old_subscription.name else ""
+      showPaidFeatures: subscription.type == "pro" || subscription.type == "growth" || subscription.type == "enterprise"
       showEnterpriseFeatures: subscription.type == "enterprise"
     }

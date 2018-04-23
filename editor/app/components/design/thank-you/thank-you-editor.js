@@ -14,17 +14,17 @@ export default Ember.Component.extend({
       value: 0,
       key: 'default_message',
       label: 'Show default message',
-      isPro: false
+      isPaid: false
     }, {
       value: 1,
       key: 'custom_message',
       label: 'Show a custom message',
-      isPro: !this.get('model.site.capabilities.custom_thank_you_text')
+      isPaid: !this.get('model.site.capabilities.custom_thank_you_text')
     }, {
       value: 2,
       key: 'redirect',
       label: 'Redirect the visitor to a url',
-      isPro: !this.get('model.site.capabilities.after_submit_redirect')
+      isPaid: !this.get('model.site.capabilities.after_submit_redirect')
     }];
   }.property('model.site.capabilities.custom_thank_you_text', 'model.site.capabilities.after_submit_redirect'),
 
@@ -70,7 +70,7 @@ export default Ember.Component.extend({
         };
         return map[selection.key] || '';
       }
-      if (selection.isPro) {
+      if (selection.isPaid) {
         new UpgradeAccountModal({
           site: this.get('model.site'),
           upgradeBenefit: chooseUpgradeBenefit(),

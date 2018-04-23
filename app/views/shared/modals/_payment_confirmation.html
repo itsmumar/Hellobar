@@ -10,10 +10,10 @@
       </header>
 
       <div class="payment-confirmation-modal">
-        {{#if showProFeatures}}
+        {{#if showPaidFeatures}}
           <div class="package-block pro">
             <div class="package-title">
-              <div class="package-name">Pro</div>
+              <div class="package-name">{{planName}}</div>
             </div>
             <div class="package-features">
               <ul>
@@ -36,7 +36,7 @@
             </div>
             <div class="package-features">
               <ul>
-                <li>All the benefits of Pro</li>
+                <li>All the benefits of {{planName}}</li>
                 <li>Future improvements</li>
                 <li>Unlimited visits</li>
                 <li>Enterprise integrations</li>

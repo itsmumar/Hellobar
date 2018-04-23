@@ -3,6 +3,7 @@ class SiteMailer < ActionMailer::Base
   include EmailDigestHelper
 
   add_template_helper(EmailDigestHelper)
+  add_template_helper(ApplicationHelper)
 
   default from: 'Hello Bar <contact@hellobar.com>'
 

@@ -43,10 +43,10 @@
     li
       = active_link_to new_referral_path() do
         i.icon-tip
-        | Get Free Pro
+        | Get Free #{ pro_or_growth }
     li
       = link_to('http://support.hellobar.com/', target: '_blank') do
         i.icon-support
         | Help
 
-  = button_to "Create New", new_site_site_element_path(:site_id => current_site), :class => "button", :method => :get, "data-prompt-upgrade" => current_site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
+  = button_to 'Create New', new_site_site_element_path(site_id: current_site), class: 'button', method: :get, 'data-prompt-upgrade' => current_site.capabilities.at_site_element_limit?, 'data-upgrade-benefit' => 'create more bars'

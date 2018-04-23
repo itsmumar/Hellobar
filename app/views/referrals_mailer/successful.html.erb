@@ -6,14 +6,14 @@
 <p>
   Actually, two "congratulations" are in order:
   Both you and your friend <%= @user.name %>
-  get a free bonus month of Hello Bar Pro,
+  get a free bonus month of Hello Bar <%= pro_or_growth(@referral.sender) %>,
   because your friend set up Hello Bar and it's now live.
   Way to go!
 </p>
 
 <p>
   Both of you not only saved money, but also have a full month to
-  squeeze lots of benefits out of your Pro account.
+  squeeze lots of benefits out of your <%= pro_or_growth(@referral.sender) %> account.
 </p>
 
 <p>

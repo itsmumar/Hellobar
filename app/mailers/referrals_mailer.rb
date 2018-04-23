@@ -1,4 +1,6 @@
 class ReferralsMailer < ApplicationMailer
+  helper(ApplicationHelper)
+
   layout 'blank'
   default from: 'Hello Bar <contact@hellobar.com>'
 
@@ -29,10 +31,14 @@ class ReferralsMailer < ApplicationMailer
     @user = user
 
     params = {
-      subject: 'You Just Got a Free Bonus Month of Hello Bar Pro!',
+      subject: "You Just Got a Free Bonus Month of Hello Bar #{ pro_or_growth }!",
       to: referral.sender.email
     }
 
     mail params
+  end
+
+  def pro_or_growth
+    Subscription.pro_or_growth_for(@referral.sender).defaults[:name]
   end
 end

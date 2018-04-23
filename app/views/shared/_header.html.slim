@@ -16,7 +16,7 @@
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
         - if current_site.free?
-          = content_tag 'a', 'Hello Bar PRO', class: 'show-upgrade-modal floating-button', data: { source: 'Hello Bar PRO' }
+          = content_tag 'a', "Hello Bar #{ pro_or_growth }", class: 'show-upgrade-modal floating-button', data: { source: "Hello Bar #{ pro_or_growth }" }
         h6= current_user.sites.count <= 1 ? 'Sites' : 'Switch Sites'
 
         ul
@@ -39,13 +39,13 @@
 
         - elsif current_site.current_subscription.try(:currently_on_trial?)
           a.button.show-payment-modal data={ source: "Add payment to trial" }
-            div Enjoying Hello Bar Pro?
+            div Enjoying Hello Bar #{ pro_or_growth }?
         - elsif current_site.free? && current_site.active_subscription
           a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
             = subscription_days_left(current_site)
 
     .dropdown-wrapper.no-hover
-      = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
+      = image_tag gravatar_url_for(current_user), class: 'user-avatar'
       span.user-name= display_name_for_user(current_user)
       span.caret
         = image_tag('caret-down.svg')
@@ -70,4 +70,4 @@
       span.caret
         = image_tag('caret-down.svg')
       .dropdown-block
-        = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+        = active_link_to 'Sign Out', destroy_user_session_path, method: :delete

@@ -12,7 +12,7 @@
           | with the same amount of traffic
         .header-footer-block
           .header
-            | Upgrade to Hello Bar Pro and make your bars more effective:
+            | Upgrade to Hello Bar #{ pro_or_growth } and make your bars more effective:
           .footer
             ul
               li
@@ -27,4 +27,4 @@
               li
                 .bullet &bull;
                 | Custom thank-you messages
-            = choose_plan_button(Subscription::Pro.new, 'Upgrade Your Hello Bar')
+            = choose_pro_or_growth_button('Upgrade Your Hello Bar')
