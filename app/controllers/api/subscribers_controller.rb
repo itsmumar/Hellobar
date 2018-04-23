@@ -28,8 +28,15 @@ class Api::SubscribersController < Api::ApplicationController
     @contact_list ||= site.contact_lists.find(params[:contact_list_id])
   end
 
+  def pagination_params
+    {
+      key: params[:key],
+      forward: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:forward])
+    }
+  end
+
   def fetch_subscribers
-    FetchContacts.new(contact_list, page_size: params[:page_size], key: params[:key], forward: params[:forward]).call
+    FetchContacts.new(contact_list, pagination_params).call
   end
 
   def subscriber_params
