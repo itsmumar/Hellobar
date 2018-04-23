@@ -8,7 +8,7 @@
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
 class FetchContacts
-  PAGE_SIZE = 5
+  PAGE_SIZE = 100
   INDEX_NAME = 'ts-index'.freeze
 
   def initialize(contact_list, key: nil, forward: false)
