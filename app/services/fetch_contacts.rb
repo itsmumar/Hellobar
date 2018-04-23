@@ -2,8 +2,8 @@
 #
 #   contact_list = OpenStruct.new(id: 24, cache_key: 24)
 #   last_page = FetchContacts.new(contact_list).call #=> { items: [...], first_page: {}, ... }
-#   last_page_1 = FetchContacts.new(contact_list, last_page[:prev_page]).call
-#   last_page_2 = FetchContacts.new(contact_list, last_page_1[:prev_page]).call
+#   last_page_1 = FetchContacts.new(contact_list, last_page[:previous_page]).call
+#   last_page_2 = FetchContacts.new(contact_list, last_page_1[:previous_page]).call
 #   last_page_1x = FetchContacts.new(contact_list, last_page_2[:next_page]).call
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
@@ -25,7 +25,7 @@ class FetchContacts
       first_page: first_page_params,
       last_page: last_page_params,
       next_page: next_page_params,
-      prev_page: prev_page_params
+      previous_page: previous_page_params
     }
   end
 
@@ -79,7 +79,7 @@ class FetchContacts
     }
   end
 
-  def prev_page_params
+  def previous_page_params
     return if first_page? || response.items.blank?
 
     first_item = forward ? response.items.first : response.items.last
