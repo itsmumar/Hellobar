@@ -40,7 +40,7 @@ describe 'ContactList requests' do
       before do
         allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
-        allow(FetchContacts).to receive_message_chain(:new, :call).and_return(items: contacts)
+        allow(FetchSubscribers).to receive_message_chain(:new, :call).and_return(items: contacts)
       end
 
       it 'responds with success and displays syncing statuses' do

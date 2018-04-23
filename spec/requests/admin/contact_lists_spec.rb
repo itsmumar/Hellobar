@@ -10,7 +10,7 @@ describe 'Admin::ContactLists requests' do
   before do
     stub_current_admin(admin)
 
-    allow(FetchContacts).to receive_message_chain(:new, :call).and_return(items: contacts)
+    allow(FetchSubscribers).to receive_message_chain(:new, :call).and_return(items: contacts)
 
     allow(FetchSiteContactListTotals).to receive_message_chain(:new, :call).and_return(Hash.new { 0 })
   end

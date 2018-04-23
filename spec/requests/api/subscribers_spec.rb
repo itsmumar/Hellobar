@@ -25,14 +25,14 @@ describe 'api/subscribers requests' do
 
   before do
     allow(DynamoDB).to receive(:new).and_return(dynamo_client)
-    allow(FetchContacts).to receive_message_chain(:new, :call).and_return(items: subscribers)
+    allow(FetchSubscribers).to receive_message_chain(:new, :call).and_return(items: subscribers)
   end
 
   describe 'GET #index' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'email@example.com'] }
 
     it 'responds with success' do
-      expect(FetchContacts).to receive_service_call(:new, :call).with(contact_list)
+      expect(FetchSubscribers).to receive_service_call(:new, :call).with(contact_list, { key: nil, forward: false })
 
       get api_site_contact_list_subscribers_path(site, contact_list),
         params,

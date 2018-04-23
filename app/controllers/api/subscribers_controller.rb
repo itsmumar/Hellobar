@@ -36,7 +36,7 @@ class Api::SubscribersController < Api::ApplicationController
   end
 
   def fetch_subscribers
-    FetchContacts.new(contact_list, pagination_params).call
+    FetchSubscribers.new(contact_list, pagination_params).call
   end
 
   def subscriber_params

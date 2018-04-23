@@ -1,13 +1,13 @@
 # Example:
 #
 #   contact_list = OpenStruct.new(id: 24, cache_key: 24)
-#   last_page = FetchContacts.new(contact_list).call #=> { items: [...], first_page: {}, ... }
-#   last_page_1 = FetchContacts.new(contact_list, last_page[:previous_page]).call
-#   last_page_2 = FetchContacts.new(contact_list, last_page_1[:previous_page]).call
-#   last_page_1x = FetchContacts.new(contact_list, last_page_2[:next_page]).call
+#   last_page = FetchSubscribers.new(contact_list).call #=> { items: [...], first_page: {}, ... }
+#   last_page_1 = FetchSubscribers.new(contact_list, last_page[:previous_page]).call
+#   last_page_2 = FetchSubscribers.new(contact_list, last_page_1[:previous_page]).call
+#   last_page_1x = FetchSubscribers.new(contact_list, last_page_2[:next_page]).call
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
-class FetchContacts
+class FetchSubscribers
   PAGE_SIZE = 100
   INDEX_NAME = 'ts-index'.freeze
 
