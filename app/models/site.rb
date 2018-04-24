@@ -58,10 +58,10 @@ class Site < ApplicationRecord
   before_validation :generate_read_write_keys
 
   validates :url, url: true
-  validates :terms_and_conditions_url, :privacy_policy_url, url: true
+  validates :terms_and_conditions_url, :privacy_policy_url, url: true, on: :update_privacy
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
-  validates :communication_types, presence: true
+  validates :communication_types, presence: true, on: :update_privacy
 
   store :settings, coder: JSON
 
@@ -123,7 +123,7 @@ class Site < ApplicationRecord
   end
 
   def communication_types
-    self[:communication_types].split(',')
+    self[:communication_types]&.split(',')
   end
 
   def url=(value)

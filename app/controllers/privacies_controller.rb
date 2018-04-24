@@ -8,7 +8,8 @@ class PrivaciesController < ApplicationController
   end
 
   def update
-    @site.update! site_params
+    @site.assign_attributes site_params
+    @site.save! context: :update_privacy
     redirect_to edit_site_privacy_path(@site)
   end
 
