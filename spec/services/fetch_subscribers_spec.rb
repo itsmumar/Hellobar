@@ -58,11 +58,11 @@ describe FetchSubscribers do
       end
 
       it 'includes next_page' do
-        expect(service.call[:next_page]).to eq({ forward: false, key: subscribers[1].key })
+        expect(service.call[:next_page]).to eq(forward: false, key: subscribers[1].key)
       end
 
       it 'includes last_page' do
-        expect(service.call[:last_page]).to eq({ forward: true })
+        expect(service.call[:last_page]).to eq(forward: true)
       end
 
       it 'does not include previous_page' do
@@ -96,19 +96,19 @@ describe FetchSubscribers do
       end
 
       it 'includes next_page' do
-        expect(service.call[:next_page]).to eq({ forward: false, key: subscribers[3].key })
+        expect(service.call[:next_page]).to eq(forward: false, key: subscribers[3].key)
       end
 
       it 'includes last_page' do
-        expect(service.call[:last_page]).to eq({ forward: true })
+        expect(service.call[:last_page]).to eq(forward: true)
       end
 
       it 'includes previous_page' do
-        expect(service.call[:previous_page]).to eq({ forward: true, key: subscribers[2].key })
+        expect(service.call[:previous_page]).to eq(forward: true, key: subscribers[2].key)
       end
 
       it 'includes first_page' do
-        expect(service.call[:first_page]).to eq({ forward: false })
+        expect(service.call[:first_page]).to eq(forward: false)
       end
 
       context 'when there are no more records' do
@@ -144,11 +144,11 @@ describe FetchSubscribers do
       end
 
       it 'includes previous_page' do
-        expect(service.call[:previous_page]).to eq({ forward: true, key: subscribers[4].key })
+        expect(service.call[:previous_page]).to eq(forward: true, key: subscribers[4].key)
       end
 
       it 'includes first_page' do
-        expect(service.call[:first_page]).to eq({ forward: false })
+        expect(service.call[:first_page]).to eq(forward: false)
       end
 
       context 'when there are no more records' do
@@ -174,19 +174,19 @@ describe FetchSubscribers do
       end
 
       it 'includes next_page' do
-        expect(service.call[:next_page]).to eq({ forward: false, key: subscribers[3].key })
+        expect(service.call[:next_page]).to eq(forward: false, key: subscribers[3].key)
       end
 
       it 'includes last_page' do
-        expect(service.call[:last_page]).to eq({ forward: true })
+        expect(service.call[:last_page]).to eq(forward: true)
       end
 
       it 'includes previous_page' do
-        expect(service.call[:previous_page]).to eq({ forward: true, key: subscribers[2].key })
+        expect(service.call[:previous_page]).to eq(forward: true, key: subscribers[2].key)
       end
 
       it 'includes first_page' do
-        expect(service.call[:first_page]).to eq({ forward: false })
+        expect(service.call[:first_page]).to eq(forward: false)
       end
 
       context 'when there are no more records' do
