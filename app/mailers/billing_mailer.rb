@@ -1,6 +1,4 @@
 class BillingMailer < ApplicationMailer
-  layout 'user_mailer'
-
   def could_not_charge(bill)
     @bill = bill
     @site = bill.site

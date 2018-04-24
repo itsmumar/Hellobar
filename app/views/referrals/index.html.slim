@@ -28,7 +28,7 @@
                     = render partial: 'redeem', locals: { referral: ref }
                 - elsif ref.redeemed_by_sender?
                   - site = Site.unscoped.find(ref.site_id)
-                  span Applied to #{site.normalized_url}
+                  span Applied to #{site.host}
                 - else
                   span Not yet
     = paginate @referrals

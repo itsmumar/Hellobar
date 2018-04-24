@@ -40,7 +40,10 @@ class Referral < ApplicationRecord
   end
 
   def set_standard_body
-    self.body = I18n.t('referral.standard_body', name: sender.name)
+    pro_or_growth = Subscription.pro_or_growth_for(sender).defaults[:name]
+
+    self.body =
+      I18n.t('referral.standard_body', name: sender.name, pro_or_growth: pro_or_growth)
   end
 
   def set_site_if_only_one

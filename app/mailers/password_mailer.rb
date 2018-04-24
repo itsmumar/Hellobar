@@ -1,5 +1,4 @@
 class PasswordMailer < ApplicationMailer
-  layout 'user_mailer'
   default from: 'Hello Bar <support@hellobar.com>'
 
   def reset(user, reset_password_token)

@@ -1,7 +1,6 @@
 class ContactFormMailer < ApplicationMailer
   SPACE = ' '.freeze
 
-  layout 'no_signature'
   default to: 'support@hellobar.com',
           from: 'Hello Bar <contact@hellobar.com>'
 
@@ -46,7 +45,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def contact_developer(developer_email, site, user)
-    @site_url = site.normalized_url
+    @site_url = site.host
     @script_url = site.script_url
     @user_email = user.email
 

@@ -39,7 +39,7 @@ class SiteSerializer < ActiveModel::Serializer
   end
 
   def display_name
-    object.normalized_url
+    object.host
   end
 
   def current_subscription

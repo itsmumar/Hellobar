@@ -91,7 +91,7 @@ describe ContactSubmissionsController do
         post email_developer_contact_submission_path, params
 
         expect(last_email_sent)
-          .to have_subject "Please install Hello Bar on #{ site.normalized_url }"
+          .to have_subject "Please install Hello Bar on #{ site.host }"
       end
 
       it 'redirects to site_path with success message' do

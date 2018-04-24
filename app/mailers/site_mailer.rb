@@ -1,12 +1,15 @@
-class SiteMailer < ActionMailer::Base
+class SiteMailer < ApplicationMailer
   include Roadie::Rails::Mailer
   include EmailDigestHelper
 
   add_template_helper(EmailDigestHelper)
+  add_template_helper(ApplicationHelper)
 
   default from: 'Hello Bar <contact@hellobar.com>'
 
   before_filter :set_weekly_dates
+
+  layout 'site_mailer'
 
   def weekly_digest(site, user)
     @site = site

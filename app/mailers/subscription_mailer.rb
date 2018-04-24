@@ -1,6 +1,4 @@
 class SubscriptionMailer < ApplicationMailer
-  layout 'user_mailer'
-
   default from: 'Hello Bar <contact@hellobar.com>'
 
   def downgrade_to_free(site, user, previous_subscription)

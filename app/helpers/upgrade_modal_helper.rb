@@ -5,4 +5,8 @@ module UpgradeModalHelper
       copy
     end
   end
+
+  def choose_pro_or_growth_button(copy = 'Choose Plan')
+    choose_plan_button Subscription.pro_or_growth_for(current_user).new, copy
+  end
 end
