@@ -50,7 +50,7 @@
       span.caret
         = image_tag('caret-down.svg')
       .dropdown-block
-        = active_link_to 'User Settings', profile_path()
+        = active_link_to 'Settings', profile_path()
         - if current_site.free?
           a.show-upgrade-modal.floating-button data-source='Header Drop-down' Upgrade Plan
         - else

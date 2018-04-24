@@ -296,4 +296,13 @@ describe Site do
       expect(site.statistics).to be statistics
     end
   end
+
+  describe '#communication_types' do
+    it 'returns array of strings' do
+      site.communication_types = Site::COMMUNICATION_TYPES.map(&:to_s)
+      expect(site.communication_types).to eql Site::COMMUNICATION_TYPES.map(&:to_s)
+
+      expect(site[:communication_types]).to eql Site::COMMUNICATION_TYPES.join(',')
+    end
+  end
 end

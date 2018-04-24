@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180419093305) do
+ActiveRecord::Schema.define(version: 20180424080035) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -382,6 +382,9 @@ ActiveRecord::Schema.define(version: 20180419093305) do
     t.text     "invoice_information",             limit: 16777215
     t.datetime "selected_goal_clicked_at"
     t.text     "settings",                        limit: 16777215
+    t.string   "privacy_policy_url",              limit: 255
+    t.string   "terms_and_conditions_url",        limit: 255
+    t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

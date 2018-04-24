@@ -1,6 +1,8 @@
 require 'uri'
 
 class Site < ApplicationRecord
+  COMMUNICATION_TYPES = %i[newsletter promotional partnership product research]
+
   DEFAULT_UPGRADE_STYLES = {
     'offer_bg_color' => '#ffffb6',
     'offer_text_color' => '#000000',
@@ -56,8 +58,10 @@ class Site < ApplicationRecord
   before_validation :generate_read_write_keys
 
   validates :url, url: true
+  validates :terms_and_conditions_url, :privacy_policy_url, url: true
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
+  validates :communication_types, presence: true
 
   store :settings, coder: JSON
 
@@ -112,6 +116,14 @@ class Site < ApplicationRecord
 
   def self.by_url_for(user, url:)
     by_url(url).joins(:users).find_by(users: { id: user.id })
+  end
+
+  def communication_types=(value)
+    super(value.select(&:presence).join(','))
+  end
+
+  def communication_types
+    self[:communication_types].split(',')
   end
 
   def url=(value)
