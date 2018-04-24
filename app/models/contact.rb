@@ -33,4 +33,12 @@ class Contact
   def error?
     status == ERROR
   end
+
+  def key
+    {
+      lid: lid,
+      email: email,
+      ts: subscribed_at.to_i
+    }
+  end
 end
