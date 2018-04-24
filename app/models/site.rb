@@ -1,7 +1,7 @@
 require 'uri'
 
 class Site < ApplicationRecord
-  COMMUNICATION_TYPES = %i[newsletter promotional partnership product research]
+  COMMUNICATION_TYPES = %i[newsletter promotional partnership product research].freeze
 
   DEFAULT_UPGRADE_STYLES = {
     'offer_bg_color' => '#ffffb6',
