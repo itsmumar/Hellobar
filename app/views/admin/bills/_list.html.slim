@@ -16,7 +16,7 @@ table
   - bills.each do |bill|
     tr
       td= link_to(bill.id, admin_bill_path(bill))
-      td= subscription_name(bill)
+      td= subscription_link(bill)
       td
         = bill.amount
         - if user && context_for_trial(user, bill)

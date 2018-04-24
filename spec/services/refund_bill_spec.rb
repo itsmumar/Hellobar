@@ -21,7 +21,6 @@ describe RefundBill do
     expect(latest_refund.bill_at).to eql Time.current
     expect(latest_refund.start_date).to eql Time.current
     expect(latest_refund.end_date).to eql bill.end_date
-    expect(latest_refund.refunded_billing_attempt).to eql bill.successful_billing_attempt
     expect(latest_refund.discount).to be 0
     expect(latest_refund.base_amount).to eql(-bill.amount.to_i)
     expect(latest_refund.status).to eql Bill::REFUNDED

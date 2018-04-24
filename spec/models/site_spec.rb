@@ -205,40 +205,29 @@ describe Site do
     end
   end
 
-  describe '.normalize_url' do
-    it 'should remove www' do
-      expect(Site.normalize_url('http://www.cnn.com').host).to eq('www.cnn.com')
+  describe '.host' do
+    def host(url)
+      Site.new(url: url).host
     end
 
-    it 'should not remove www from other parts of the url' do
-      expect(Site.normalize_url('cnnwww.com/').host).to eq('cnnwww.com')
+    it 'removes www' do
+      expect(host('http://www.cnn.com')).to eq('www.cnn.com')
     end
 
-    it 'should not remove the www1 subdomain' do
-      expect(Site.normalize_url('www1.abc.com/').host).to eq('www1.abc.com')
+    it 'does not remove www from other parts of the url' do
+      expect(host('cnnwww.com/')).to eq('cnnwww.com')
     end
 
-    it 'should normalize to http' do
-      expect(Site.normalize_url('https://cnn.com').scheme).to eq('https')
-    end
-  end
-
-  describe '#normalized_url' do
-    it 'returns shorter URLs for different sites' do
-      site = Site.new(url: 'http://asdf.com')
-      expect(site.normalized_url).to eq('asdf.com')
-
-      site = Site.new(url: 'http://www.asdf.com')
-      expect(site.normalized_url).to eq('www.asdf.com')
-
-      site = Site.new(url: 'http://cs.horelement.bike')
-      expect(site.normalized_url).to eq('cs.horelement.bike')
+    it 'does not removes the www1 subdomain' do
+      expect(host('www1.abc.com/')).to eq('www1.abc.com')
     end
 
-    it 'returns the site URL if normalized_url returns nil' do
-      site = Site.new(url: 'https://ca-staging-uk')
+    it 'returns nil if invalid' do
+      expect(host('http://')).to be_nil
+    end
 
-      expect(site.normalized_url).to eql('ca-staging-uk')
+    it 'does not encodes non-unicode characters' do
+      expect(host('яндекс.рф')).to eq('яндекс.рф')
     end
   end
 

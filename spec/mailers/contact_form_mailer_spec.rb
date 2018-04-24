@@ -102,7 +102,7 @@ describe ContactFormMailer do
     let(:mail) { ContactFormMailer.contact_developer developer_email, site, user }
 
     let(:subject) do
-      "Please install Hello Bar on #{ site.normalized_url }"
+      "Please install Hello Bar on #{ site.host }"
     end
 
     it 'renders the headers' do
@@ -112,7 +112,7 @@ describe ContactFormMailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match(site.normalized_url)
+      expect(mail.body.encoded).to match(site.host)
       expect(mail.body.encoded).to match(%(src="#{ site.script_url }"))
       expect(mail.body.encoded).to match(user.email)
     end

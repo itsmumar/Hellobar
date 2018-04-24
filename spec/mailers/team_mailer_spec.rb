@@ -15,7 +15,7 @@ describe TeamMailer do
 
     it 'renders the body' do
       expect(mail.body.encoded).to include new_user_session_url
-      expect(mail.body.encoded).to include site.normalized_url
+      expect(mail.body.encoded).to include site.host
     end
 
     context 'when user is an oauth user' do
@@ -38,7 +38,7 @@ describe TeamMailer do
       end
 
       it 'renders the body' do
-        expect(mail.body.encoded).to include site.normalized_url
+        expect(mail.body.encoded).to include site.host
         expect(mail.body.encoded).to include oauth_login_url(action: 'google_oauth2')
         expect(mail.body.encoded).to include invite_user_url(invite_token: user.invite_token)
       end

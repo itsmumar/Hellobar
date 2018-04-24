@@ -1,0 +1,8 @@
+#subscriptions
+  div.row
+    div.col-md-12
+      h1 Subscriptions
+      = subscription_filters
+      = render 'list', subscriptions: @subscriptions
+
+  = paginate @subscriptions

@@ -47,10 +47,6 @@ FactoryBot.define do
       api_key 'api-key'
     end
 
-    trait :icontact do
-      provider 'icontact'
-    end
-
     trait :infusionsoft do
       provider 'infusionsoft'
     end
