@@ -19,6 +19,7 @@ feature 'Adding and editing bars', :js do
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
     click_button 'sign-up-button'
+    check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
     expect(page).to have_content 'Are you sure you want to add the site'
@@ -191,6 +192,7 @@ feature 'Adding and editing bars', :js do
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
     click_button 'sign-up-button'
 
+    check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
     expect(page).to have_content 'SELECT YOUR GOAL'

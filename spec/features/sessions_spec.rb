@@ -24,6 +24,7 @@ feature 'User can sign up', :js do
 
     click_on 'sign-up-button'
 
+    check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
     expect(page).to have_content "I'll create it later"
@@ -47,6 +48,7 @@ feature 'User can sign up', :js do
 
     fill_in 'registration_form[email]', with: 'email@example.com'
     fill_in 'registration_form[password]', with: 'password123'
+    check 'registration_form[accept_terms_and_conditions]'
 
     first('[name=signup_with_email]').click
 

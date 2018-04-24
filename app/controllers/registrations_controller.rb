@@ -31,6 +31,12 @@ class RegistrationsController < ApplicationController
       return false
     end
 
+    unless @form.accept_terms_and_conditions
+      flash[:error] = 'Your must accept Terms of Use and Privacy Policy.'
+      render :new
+      return false
+    end
+
     if @form.existing_site_url? && !@form.ignore_existing_site
       render :new
       return false
