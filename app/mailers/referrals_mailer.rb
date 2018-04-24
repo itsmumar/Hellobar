@@ -1,4 +1,6 @@
 class ReferralsMailer < ApplicationMailer
+  helper ApplicationHelper
+
   default from: 'Hello Bar <contact@hellobar.com>'
 
   def invite(referral)
