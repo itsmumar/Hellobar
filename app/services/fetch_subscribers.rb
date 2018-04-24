@@ -2,9 +2,9 @@
 #
 #   contact_list = OpenStruct.new(id: 24, cache_key: 24)
 #   last_page = FetchSubscribers.new(contact_list).call #=> { items: [...], first_page: {}, ... }
-#   last_page_1 = FetchSubscribers.new(contact_list, last_page[:previous_page]).call
-#   last_page_2 = FetchSubscribers.new(contact_list, last_page_1[:previous_page]).call
-#   last_page_1x = FetchSubscribers.new(contact_list, last_page_2[:next_page]).call
+#   last_page_1 = FetchSubscribers.new(contact_list, last_page[:next_page]).call
+#   last_page_2 = FetchSubscribers.new(contact_list, last_page_1[:next_page]).call
+#   last_page_1x = FetchSubscribers.new(contact_list, last_page_2[:previous_page]).call
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
 class FetchSubscribers
@@ -56,7 +56,7 @@ class FetchSubscribers
     return if first_page?
 
     {
-      forward: true
+      forward: false
     }
   end
 
@@ -64,23 +64,12 @@ class FetchSubscribers
     return if last_page?
 
     {
-      forward: false
+      forward: true
     }
   end
 
   def next_page_params
     return if last_page? || response.items.blank?
-
-    last_item = forward ? response.items.last : response.items.first
-
-    {
-      key: serialize_key(last_item),
-      forward: true
-    }
-  end
-
-  def previous_page_params
-    return if first_page? || response.items.blank?
 
     first_item = forward ? response.items.first : response.items.last
 
@@ -90,12 +79,23 @@ class FetchSubscribers
     }
   end
 
+  def previous_page_params
+    return if first_page? || response.items.blank?
+
+    last_item = forward ? response.items.last : response.items.first
+
+    {
+      key: serialize_key(last_item),
+      forward: true
+    }
+  end
+
   def last_page?
-    (backward && !key) || (forward && !response.last_evaluated_key)
+    (forward && !key) || (backward && !response.last_evaluated_key)
   end
 
   def first_page?
-    (forward && !key) || (backward && !response.last_evaluated_key)
+    (backward && !key) || (forward && !response.last_evaluated_key)
   end
 
   def table_name
