@@ -13,7 +13,7 @@ jobs:
           DISPLAY: :99
           RAILS_ENV: test
 
-      - image: mysql/5.7
+      - image: mysql/mysql-server:5.7
         environment:
           MYSQL_ROOT_PASSWORD: root
 
