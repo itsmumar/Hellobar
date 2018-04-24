@@ -32,7 +32,7 @@ describe 'api/subscribers requests' do
     let(:subscriber_params) { Hash[name: 'Name', email: 'email@example.com'] }
 
     it 'responds with success' do
-      expect(FetchSubscribers).to receive_service_call(:new, :call).with(contact_list, { key: nil, forward: false })
+      expect(FetchSubscribers).to receive_service_call(:new, :call).with(contact_list, key: nil, forward: false)
 
       get api_site_contact_list_subscribers_path(site, contact_list),
         params,
