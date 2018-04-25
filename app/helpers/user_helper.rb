@@ -33,4 +33,9 @@ module UserHelper
       "I agree to the Hello Bar #{ terms_of_use_link } & #{ privacy_policy_link }".html_safe # rubocop:disable Rails/OutputSafety
     end
   end
+
+  def display_terms_and_condition_updated?
+    effective_date = Date.parse(Settings.new_terms_and_conditions_effective_date)
+    current_user.created_at < effective_date
+  end
 end
