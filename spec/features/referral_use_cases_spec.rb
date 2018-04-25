@@ -23,6 +23,7 @@ feature 'User sign ups with a referral token', :js do
 
       fill_in 'registration_form[site_url]', with: 'hellobar.com'
       click_on 'sign-up-button'
+      check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"
@@ -53,6 +54,7 @@ feature 'User sign ups with a referral token', :js do
 
       fill_in 'registration_form[site_url]', with: 'hellobar.com'
       click_on 'sign-up-button'
+      check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"

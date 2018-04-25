@@ -28,4 +28,18 @@ module UserHelper
       ])
     end
   end
+
+  def terms_of_use_link
+    link_to 'Terms of Use', terms_of_use_url, target: '_blank'
+  end
+
+  def privacy_policy_link
+    link_to 'Privacy Policy', privacy_policy_url, target: '_blank'
+  end
+
+  def accept_terms_and_conditions_label
+    content_tag :span, class: 'terms-and-conditions' do
+      "I agree to the Hello Bar #{ terms_of_use_link } & #{ privacy_policy_link }".html_safe # rubocop:disable Rails/OutputSafety
+    end
+  end
 end
