@@ -16,7 +16,7 @@ feature 'Autofills management' do
   end
 
   scenario 'Adding, listing, editing and destroying an autofill' do
-    visit root_path
+    visit site_path site
 
     click_on 'Autofills'
 

@@ -1,6 +1,6 @@
 class ReferralsController < ApplicationController
   before_action :authenticate_user!, except: [:accept]
-  before_action :require_no_authentication, only: [:accept]
+  before_action :require_no_user, only: [:accept]
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 
@@ -46,7 +46,7 @@ class ReferralsController < ApplicationController
     session[:referral_token] = params[:token]
     flash[:success] = I18n.t('referral.flash.accepted')
 
-    redirect_to root_path
+    redirect_to users_sign_up_path
   end
 
   private

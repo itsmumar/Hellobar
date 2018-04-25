@@ -39,6 +39,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless current_site.pro_managed?
   end
 
+  def require_no_user
+    return unless current_user
+
+    after_sign_in_path_for(current_user)
+  end
+
   def after_sign_in_path_for(resource)
     if current_user.sites.count == 1 && current_user.site_elements.empty?
       new_site_site_element_path(current_user.sites.last)
