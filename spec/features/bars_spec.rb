@@ -77,8 +77,6 @@ feature 'Adding and editing bars', :js do
       sign_in user
       visit root_path
 
-      click_on 'Create New'
-
       find('.goal-block.contacts').click_on(select_goal_label)
       click_button 'Continue'
 
@@ -164,8 +162,6 @@ feature 'Adding and editing bars', :js do
 
     sign_in user
 
-    click_button('Create New')
-
     find('.goal-block.call').click_on(select_goal_label)
 
     all('input')[0].set('Hello from Hello Bar')
@@ -186,7 +182,7 @@ feature 'Adding and editing bars', :js do
     color = 'AABBCC'
 
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
     check 'registration_form[accept_terms_and_conditions]'
