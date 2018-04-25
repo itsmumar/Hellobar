@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   def require_no_user
     return unless current_user
 
-    after_sign_in_path_for(current_user)
+    redirect_to after_sign_in_path_for(current_user)
   end
 
   def after_sign_in_path_for(resource)
