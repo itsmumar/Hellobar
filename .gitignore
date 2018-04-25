@@ -19,6 +19,10 @@ public/integration
 public/image_uploads
 public/content_upgrades
 
+# Ignore uploads in tests
+public/test_image_uploads
+public/test_content_upgrades
+
 # Ignore tmp/scratch/editor files
 *.sublime-*
 npm-debug.log
