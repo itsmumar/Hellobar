@@ -96,6 +96,8 @@ feature 'User can sign in', js: true do
 
     sign_in user
 
+    click_on "I'll create it later - take me back"
+
     find('.header-user-wrapper .dropdown-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click
 

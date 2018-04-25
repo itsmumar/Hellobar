@@ -39,18 +39,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless current_site.pro_managed?
   end
 
-  def require_no_user
-    return unless current_user
-
-    if current_user.sites.empty?
-      redirect_to new_site_path
-    elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
-      redirect_to new_site_site_element_path(current_site)
-    else
-      redirect_to site_path(current_site)
-    end
-  end
-
   def after_sign_in_path_for(resource)
     if current_user.sites.count == 1 && current_user.site_elements.empty?
       new_site_site_element_path(current_user.sites.last)

@@ -1,6 +1,6 @@
 class ReferralsController < ApplicationController
   before_action :authenticate_user!, except: [:accept]
-  before_action :require_no_user, only: [:accept]
+  before_action :require_no_authentication, only: [:accept]
 
   rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_root
 

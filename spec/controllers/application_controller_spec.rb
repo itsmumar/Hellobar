@@ -38,33 +38,6 @@ describe ApplicationController do
   end
 end
 
-describe ApplicationController, '#require_no_user' do
-  controller do
-    before_action :require_no_user
-
-    def index
-      render nothing: true
-    end
-  end
-
-  let(:user) { create :user, :with_site }
-
-  it 'redirects a logged in user to the dashboard of their most recent site' do
-    allow(controller).to receive(:current_user).and_return(user)
-    dashboard_path = site_path(user.sites.first)
-
-    get :index
-
-    expect(response).to redirect_to(dashboard_path)
-  end
-
-  it 'does not redirect a non logged in user' do
-    get :index
-
-    expect(response).not_to be_redirect
-  end
-end
-
 describe ApplicationController, '#require_pro_managed_subscription' do
   controller do
     before_action :require_pro_managed_subscription
