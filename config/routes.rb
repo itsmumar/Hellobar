@@ -215,7 +215,7 @@ Rails.application.routes.draw do
 
   get '/heartbeat' => 'heartbeat#index'
   get '/login', to: redirect('/users/sign_in')
-  get '/signup', to: redirect('/')
+  get '/signup', to: redirect('/users/sign_up')
 
   get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
 
@@ -225,10 +225,10 @@ Rails.application.routes.draw do
 
   get 'get-started', to: redirect('/')
 
-  root 'welcome#index'
-
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
+
+  root to: redirect('/users/sign_in')
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end
