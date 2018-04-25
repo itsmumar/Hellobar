@@ -37,4 +37,8 @@ module UserHelper
   def display_terms_and_condition_updated?
     current_user.created_at < User::NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE
   end
+
+  def display_referral_announcement?(site)
+    current_user.was_referred? && site.free?
+  end
 end
