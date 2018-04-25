@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE = Date.new(2018, 4, 26)
+
   acts_as_paranoid
 
   include UserValidator

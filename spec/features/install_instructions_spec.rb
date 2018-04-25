@@ -3,7 +3,7 @@ require 'integration_helper'
 feature 'Install Instructions', js: true do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
-  given(:terms_and_conditions_effective_date) { Date.parse(Settings.new_terms_and_conditions_effective_date) }
+  given(:terms_and_conditions_effective_date) { User::NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE }
 
   background do
     sign_in user
