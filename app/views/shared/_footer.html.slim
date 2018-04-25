@@ -1,7 +1,7 @@
 = active_link_to 'Sign In', new_user_session_path
-= active_link_to 'Terms of Use', terms_of_use_path
-= active_link_to 'Privacy Policy', privacy_policy_path
-= active_link_to 'Help', 'https://support.hellobar.com'
+= terms_of_use_link
+= privacy_policy_link
+= link_to 'Support', 'https://support.hellobar.com', target: '_blank'
 
 span.copyright
   | &copy; Hello Bar&nbsp;

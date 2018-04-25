@@ -206,9 +206,6 @@ Rails.application.routes.draw do
   end
 
   get '/install' => 'sites#install_redirect'
-
-  get '/terms-of-use' => 'pages#terms_of_use'
-  get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get '/heartbeat' => 'heartbeat#index'
