@@ -223,8 +223,6 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: redirect('/')
-
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
 
