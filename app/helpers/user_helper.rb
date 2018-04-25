@@ -21,11 +21,11 @@ module UserHelper
   end
 
   def terms_of_use_link
-    link_to 'Terms of Use', terms_of_use_path, target: '_blank'
+    link_to 'Terms of Use', terms_of_use_url, target: '_blank'
   end
 
   def privacy_policy_link
-    link_to 'Privacy Policy', privacy_policy_path, target: '_blank'
+    link_to 'Privacy Policy', privacy_policy_url, target: '_blank'
   end
 
   def accept_terms_and_conditions_label
