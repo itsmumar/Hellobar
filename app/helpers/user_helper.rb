@@ -19,4 +19,13 @@ module UserHelper
     url << (url.include?('?') ? '&' : '?')
     url << 'd=mm'
   end
+
+  def google_sign_in_button
+    content_tag :button, type: :submit, class: 'button google-sign-in-button', name: 'signup_with_google' do
+      safe_join([
+        content_tag(:i, nil, class: 'icon'),
+        content_tag(:span, 'Use your Google account', class: 'label')
+      ])
+    end
+  end
 end

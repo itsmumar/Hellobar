@@ -15,7 +15,7 @@
   .strike
     span OR
 
-  = f.button :submit, 'Use your Google account', class: 'button', name: 'signup_with_google'
+  = google_sign_in_button
 
   .devise-links
     = link_to 'Already a user? Sign in', new_user_session_path
