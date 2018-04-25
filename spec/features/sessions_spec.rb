@@ -18,7 +18,7 @@ feature 'User can sign up', :js do
 
   scenario 'through oauth' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
 
@@ -40,7 +40,7 @@ feature 'User can sign up', :js do
   end
 
   scenario 'with email/password' do
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
 

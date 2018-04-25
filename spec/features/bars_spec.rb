@@ -15,7 +15,7 @@ feature 'Adding and editing bars', :js do
   scenario 'new user can create a site element' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
 
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
     click_button 'sign-up-button'
