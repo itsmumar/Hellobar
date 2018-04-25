@@ -16,6 +16,12 @@ feature 'Install Instructions', js: true do
     expect(page).to have_content(site.script_url)
   end
 
+  scenario 'user does not see announcement message on install page when sign up without reference' do
+    visit site_install_path(Site.last)
+
+    expect(page).not_to have_content('Thanks for signing up! You’re currently on a free plan, in order to activate your 30 day trial of our Growth Plan')
+  end
+
   context 'when user sign up before effective date' do
     given(:user) { create(:user, :with_site, created_at: terms_and_conditions_effective_date - 1.day) }
 
