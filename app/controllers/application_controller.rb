@@ -42,7 +42,13 @@ class ApplicationController < ActionController::Base
   def require_no_user
     return unless current_user
 
-    redirect_to after_sign_in_path_for(current_user)
+    if current_user.sites.empty?
+      redirect_to new_site_path
+    elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
+      redirect_to new_site_site_element_path(current_site)
+    else
+      redirect_to site_path(current_site)
+    end
   end
 
   def after_sign_in_path_for(resource)

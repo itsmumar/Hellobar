@@ -221,7 +221,7 @@ Rails.application.routes.draw do
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
 
-  root to: redirect('/users/sign_in')
+  root 'pages#index'
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end
