@@ -58,6 +58,10 @@ feature 'Users can use site element targeting rule presets', :js do
       site.rules << custom_rule
     end
 
+    background do
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
+    end
+
     scenario 'The user can select any rule preset' do
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
 

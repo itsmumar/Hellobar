@@ -22,8 +22,6 @@ feature 'User can sign up', :js do
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
 
-    click_on 'sign-up-button'
-
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
@@ -43,8 +41,6 @@ feature 'User can sign up', :js do
     visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
-
-    click_on 'sign-up-button'
 
     fill_in 'registration_form[email]', with: 'email@example.com'
     fill_in 'registration_form[password]', with: 'password123'
