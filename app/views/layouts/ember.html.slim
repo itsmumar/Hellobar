@@ -3,6 +3,8 @@ html
   head
     title Hello Bar
 
+    = render "shared/gtm_script"
+
     link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
 
     - if defined?(preview_script_path)
@@ -18,6 +20,8 @@ html
     = csrf_meta_tags
 
   body#hb-editor.loading
+    = render "shared/gtm_noscript"
+
     = render "shared/modals/contact_list"
 
     = render "shared/modals/contact_list"
@@ -29,8 +33,6 @@ html
     = render "shared/modals/payment_modal"
     = render "shared/modals/delay_tooltip"
     = render "shared/modals/payment_confirmation"
-
-    = render 'shared/analytics'
 
     = render 'shared/modals/rule_modal_template'
     = render 'shared/alert_template'

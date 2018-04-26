@@ -32,6 +32,10 @@ module SitesHelper
     current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase] }
   end
 
+  def sorted_sites
+    current_user.sites.sort_by { |s| s.host || '' }
+  end
+
   def bill_due_at(bill)
     bill.due_at.strftime('%-m-%-d-%Y')
   end
