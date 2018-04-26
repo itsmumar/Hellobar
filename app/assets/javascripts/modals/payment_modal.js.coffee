@@ -130,7 +130,7 @@ class @PaymentModal extends Modal
 
           if window?.dataLayer?.push && typeof(window.dataLayer.push) == 'function' && data?.site?.current_subscription
             window.dataLayer.push
-              event: 'paymentSuccess'
+              event: 'paymentSuccessful'
               category: 'Subscription'
               action: data.status
               label: data.site.current_subscription.name
