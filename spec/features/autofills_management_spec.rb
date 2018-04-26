@@ -1,4 +1,4 @@
-feature 'Autofills management' do
+feature 'Autofills management', :js do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
@@ -53,7 +53,9 @@ feature 'Autofills management' do
       expect(page).to have_content listen_selector
       expect(page).to have_content populate_selector
 
-      click_on 'Destroy'
+      accept_alert do
+        click_on 'Destroy'
+      end
     end
 
     expect(page).not_to have_content new_name
