@@ -50,10 +50,8 @@ class ApplicationController < ActionController::Base
       new_site_path
     elsif current_user.sites.count == 1 && current_user.site_elements.empty?
       new_site_site_element_path(current_site)
-    elsif stored_location_for(resource).present?
-      stored_location_for(resource)
     else
-      site_path(current_site)
+      stored_location_for(resource).presence || site_path(current_site)
     end
   end
 
