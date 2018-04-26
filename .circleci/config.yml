@@ -113,7 +113,7 @@ jobs:
       - run:
           name: Run unit tests
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec rspec --tag ~@type:feature --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --format progress; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec rspec --tag ~@type:feature --profile 10 -r rspec_junit_formatter --out test-results/rspec.xml --format RspecJunitFormatter --format progress; else echo "skip"; fi
 
       - run:
           name: Run teaspoon tests
@@ -123,7 +123,7 @@ jobs:
       - run:
           name: Run feature tests
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rspec --tag @type:feature --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --format progress; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rspec --tag @type:feature --profile 10 -r rspec_junit_formatter --out test-results/rspec.xml --format RspecJunitFormatter --format progress; else echo "skip"; fi
 
       - save_cache:
           key: tmp-cache-v3-{{ .Branch }}
