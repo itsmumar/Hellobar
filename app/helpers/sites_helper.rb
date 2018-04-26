@@ -28,8 +28,8 @@ module SitesHelper
     site_membership.try(:role) || :none
   end
 
-  def sites_for_team_view(user = current_user, site = current_site)
-    current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase] }
+  def sites_for_team_view(user = current_user, target_site = current_site)
+    user.sites.sort_by { |site| [site == target_site ? 0 : 1, site.url.downcase] }
   end
 
   def sorted_sites
