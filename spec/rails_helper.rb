@@ -38,7 +38,6 @@ RSpec.configure do |config|
   config.include ServiceProviderHelper, type: :service_provider
 
   config.before(:each) do
-    allow(StaticScriptAssets).to receive(:digest_path).and_return('modules-hexdigest.js')
     Rails.cache.clear
   end
 

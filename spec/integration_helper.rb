@@ -27,12 +27,21 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    # precompile modules.js if it hasn't been compiled
+    # precompile static script assets
     begin
       StaticScriptAssets.digest_path('modules.js')
     rescue Sprockets::FileNotFound
+      puts 'precompiling static script assets...'
       StaticScriptAssets.precompile
+      puts 'finished precompiling static script assets'
+    end
+
+    # precompile modules.js separately (if they don't exist)
+    path = Rails.root.join('public', 'generated_scripts', StaticScriptAssets.digest_path('modules.js'))
+    unless File.exist? path
+      puts 'precompiling modules.js...'
       GenerateStaticScriptModules.new.call
+      puts 'finished precompiling modules.js'
     end
   end
 end
