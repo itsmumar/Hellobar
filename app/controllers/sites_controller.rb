@@ -71,7 +71,7 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    GenerateStaticScriptModules.new.call if Rails.env.test? || Rails.env.development?
+    GenerateStaticScriptModules.new.call if Rails.env.development?
     render js: render_script(preview: true)
   end
 
