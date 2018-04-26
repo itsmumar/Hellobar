@@ -41,4 +41,8 @@ module UserHelper
   def display_referral_announcement?(site)
     current_user.was_referred? && site.free?
   end
+
+  def embed_analytics?
+    Rails.env.production? && !current_user&.pro_managed?
+  end
 end
