@@ -90,7 +90,8 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'and sign out' do
-    user = create :user, :with_site
+    site = create :site, elements: [:email]
+    user = create :user, site: site
 
     sign_in user
 
