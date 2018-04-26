@@ -1,11 +1,3 @@
-RSpec.configure do |config|
-  config.include Warden::Test::Helpers
-
-  config.after(:each, type: :feature) do
-    Warden.test_reset!
-  end
-end
-
 module FeatureHelper
   def sign_in(user)
     login_as user, scope: :user, run_callbacks: false

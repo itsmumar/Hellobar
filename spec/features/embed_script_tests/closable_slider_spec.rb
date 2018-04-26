@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Site with a closable slider', :js do
   given(:site_element) { create :slider, :closable }
 

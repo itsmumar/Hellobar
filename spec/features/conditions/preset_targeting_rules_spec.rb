@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Users can use site element targeting rule presets', :js do
   given(:free_options) { ['Everyone'] }
   given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }

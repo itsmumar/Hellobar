@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Theme with default image', js: true do
   scenario 'shows the default image' do
     theme_yaml = YAML.load_file('spec/support/themes.yml')

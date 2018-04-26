@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'User sign ups with a referral token', :js do
   given(:email) { 'user@example.com' }
   given(:sender) { create :user }

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Alert bar injection', :js do
   given!(:site_element) { create :alert, :traffic }
   given(:site) { site_element.site }

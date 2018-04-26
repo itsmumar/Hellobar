@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Contact Submission' do
   given(:user) { create :user, :with_site }
 

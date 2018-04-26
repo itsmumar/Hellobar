@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Render the country select for the Rule modal', :js do
   extend FeatureHelper
 

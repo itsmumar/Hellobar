@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'element with exit intent', js: true do
   let(:element) { create(:site_element, view_condition: 'exit-intent') }
 

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Update Profile', js: true do
   context 'is not an oauth user' do
     given(:user) { create :user, :with_site }

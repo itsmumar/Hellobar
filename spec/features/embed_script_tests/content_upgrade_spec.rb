@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Content upgrades', :js do
   given!(:content_upgrade) { create(:content_upgrade, offer_headline: 'Offer 123') }
   given(:site) { content_upgrade.site }
