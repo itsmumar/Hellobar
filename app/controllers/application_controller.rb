@@ -42,25 +42,18 @@ class ApplicationController < ActionController::Base
   def require_no_user
     return unless current_user
 
-    if current_user.sites.empty?
-      redirect_to new_site_path
-    elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
-      redirect_to new_site_site_element_path(current_site)
-    else
-      redirect_to site_path(current_site)
-    end
+    redirect_to after_sign_in_path_for(current_user)
   end
 
   def after_sign_in_path_for(resource)
-    if current_user.sites.count == 1 && current_user.site_elements.empty?
-      new_site_site_element_path(current_user.sites.last)
-
-    elsif current_user.sites.any?
-      # Use last site viewed if available
-      s = cookies[:lsv] && current_user.sites.where(id: cookies[:lsv]).first
-      stored_location_for(resource) || site_path(s || current_user.sites.last)
-    else
+    if current_user.sites.empty?
       new_site_path
+    elsif current_user.sites.count == 1 && current_user.site_elements.empty?
+      new_site_site_element_path(current_site)
+    elsif stored_location_for(resource).present?
+      stored_location_for(resource)
+    else
+      site_path(current_site)
     end
   end
 
@@ -87,13 +80,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_site
-    @current_site ||= begin
-      if current_user && session[:current_site]
-        current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
+    @current_site ||=
+      if current_user && session[:current_site].present?
+        current_user.sites.where(id: session[:current_site]).first || current_user.sites.last
+      elsif current_user && cookies[:lsv].present?
+        current_user.sites.where(id: cookies[:lsv]).first || current_user.sites.last
       elsif current_user
-        current_user.sites.first
+        current_user.sites.last
       end
-    end
   end
 
   def set_raven_context
