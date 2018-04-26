@@ -33,4 +33,12 @@ module UserHelper
       "I agree to the Hello Bar #{ terms_of_use_link } & #{ privacy_policy_link }".html_safe # rubocop:disable Rails/OutputSafety
     end
   end
+
+  def display_terms_and_condition_updated?
+    current_user.created_at < User::NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE
+  end
+
+  def display_referral_announcement?(site)
+    current_user.was_referred? && site.free?
+  end
 end
