@@ -3,22 +3,23 @@ feature 'Users can use site element targeting rule presets', :js do
   given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }
   given(:custom_option) { 'Custom Rule' }
   given(:saved_option) { 'Show to a saved targeting rule' }
-  given(:user) { create :user, :with_site }
-  given(:site) { user.sites.first }
 
   background do
-    sign_in user
-
-    site.create_default_rules
-
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
 
     stub_out_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
-  feature 'Free subscription sites' do
+  context 'Free subscription sites' do
+    given!(:user) { create :user, :with_site }
+    given(:site) { user.sites.first }
+
     background do
+      sign_in user
+
+      site.create_default_rules
+
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
@@ -40,23 +41,22 @@ feature 'Users can use site element targeting rule presets', :js do
     end
   end
 
-  feature 'Pro subscription sites' do
+  context 'Pro subscription sites' do
+    given(:site) { create :site, :with_user, :pro }
+    given(:user) { site.owners.last }
     given(:custom_rule) { create(:rule) }
-    given(:first_select_input) { first('select')['id'] }
-    given(:default_option) { 'Choose a saved rule...' }
     given(:credit_card) { create(:credit_card, user: user) }
 
     background do
-      stub_cyber_source :purchase
+      # sign_in user
+      login_as user, scope: :user, run_callbacks: false
 
-      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
+      site.create_default_rules
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
 
       site.rules << custom_rule
-    end
 
-    background do
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
