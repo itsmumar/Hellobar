@@ -130,8 +130,6 @@ describe SitesController do
     it 'renders static script' do
       stub_current_user(user)
 
-      expect(GenerateStaticScriptModules).to receive_service_call
-
       options = {
         templates: SiteElement.all_templates,
         no_rules: true,
