@@ -16,3 +16,33 @@
 
     &.active
       font-weight: $fontWeightBold
+
+  form
+    .button
+      padding: 0.5em 1.25em
+      font-size: 1.1em
+
+    .google-sign-in-button
+      margin: 0
+      padding: 0
+
+      display: flex
+
+      .icon-wrapper
+        display: inline-block
+        padding: 0.5em 1em
+        border-right: 1px solid #fff
+
+        .icon
+          display: inline-block
+          width: 1.2em
+          height: 1.2em
+          margin: 0
+
+          background-image: image-url('btn_google.svg')
+          background-size: 1.2em 1.2em
+
+      .label
+        flex: 1
+        align-self: center
+        text-align: center

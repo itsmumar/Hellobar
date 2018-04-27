@@ -23,8 +23,10 @@ module UserHelper
   def google_sign_in_button
     content_tag :button, type: :submit, class: 'button google-sign-in-button', name: 'signup_with_google' do
       safe_join([
-        content_tag(:i, nil, class: 'icon'),
-        content_tag(:span, 'Use your Google account', class: 'label')
+        content_tag(:span, class: 'icon-wrapper') do
+          content_tag(:i, nil, class: 'icon')
+        end,
+        content_tag(:span, 'Use Google account', class: 'label')
       ])
     end
   end
