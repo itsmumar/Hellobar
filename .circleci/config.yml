@@ -103,7 +103,7 @@ jobs:
       - run:
           name: Run Rubocop
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec rubocop; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
       - run:
           name: Run JSHint
@@ -113,17 +113,25 @@ jobs:
       - run:
           name: Run unit tests
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec rspec --tag ~@type:feature --profile 10 -r rspec_junit_formatter --out test-results/rspec.xml --format RspecJunitFormatter --format progress; else echo "skip"; fi
+          environment:
+            CODECOV_FLAG: unit
+          command: |
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
           name: Run teaspoon tests
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
 
       - run:
           name: Run feature tests
           when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rspec --tag @type:feature --profile 10 -r rspec_junit_formatter --out test-results/rspec.xml --format RspecJunitFormatter --format progress; else echo "skip"; fi
+          environment:
+            CODECOV_FLAG: integration
+          command: |
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - save_cache:
           key: tmp-cache-v3-{{ .Branch }}
