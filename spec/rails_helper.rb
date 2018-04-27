@@ -23,8 +23,6 @@ ActiveRecord::Migration.maintain_test_schema!
 
 ActiveMerchant::Billing::Base.mode = :test
 
-SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
-
 RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 

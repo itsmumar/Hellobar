@@ -1,3 +1,5 @@
+SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
+
 module FeatureHelper
   def sign_in(user)
     login_as user, scope: :user, run_callbacks: false
