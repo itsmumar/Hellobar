@@ -41,7 +41,7 @@ RSpec.configure do |config|
   config.include RequestSpecHelper, type: :request
   config.include ServiceProviderHelper, type: :service_provider
   config.include Warden::Test::Helpers
-  config.include FeatureHelper
+  config.include FeatureHelper, type: :feature
   config.include ContactListFeatureHelper, :contact_list_feature
 
   OmniAuth.config.test_mode = true
