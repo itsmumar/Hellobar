@@ -20,17 +20,6 @@ module UserHelper
     url << 'd=mm'
   end
 
-  def google_sign_in_button
-    content_tag :button, type: :submit, class: 'button google-sign-in-button', name: 'signup_with_google' do
-      safe_join([
-        content_tag(:span, class: 'icon-wrapper') do
-          content_tag(:i, nil, class: 'icon')
-        end,
-        content_tag(:span, 'Use Google account', class: 'label')
-      ])
-    end
-  end
-
   def terms_of_use_link
     link_to 'Terms of Use', terms_of_use_url, target: '_blank'
   end

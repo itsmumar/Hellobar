@@ -23,24 +23,22 @@
       font-size: 1.1em
 
     .google-sign-in-button
+      display: flex
       margin: 0
       padding: 0
 
-      display: flex
+      border: none
 
-      .icon-wrapper
+      .icon
         display: inline-block
-        padding: 0.5em 1em
-        border-right: 1px solid #fff
+        margin: 0
+        padding: 1.3em 1.5em
 
-        .icon
-          display: inline-block
-          width: 1.2em
-          height: 1.2em
-          margin: 0
-
-          background-image: image-url('btn_google.svg')
-          background-size: 1.2em 1.2em
+        background-image: image-url('btn_google.svg')
+        background-size: 1.2em
+        background-repeat: no-repeat
+        background-position: 50% 48%
+        border-right: 1px solid white
 
       .label
         flex: 1
