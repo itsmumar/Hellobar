@@ -128,7 +128,7 @@ class @PaymentModal extends Modal
             isFree: @_isFree()
             siteName: @options.site.display_name
 
-          if window?.dataLayer?.push && typeof(window.dataLayer.push) == 'function' && data?.site?.current_subscription
+          if window?.dataLayer?.push && data?.site?.current_subscription
             window.dataLayer.push
               event: 'paymentSuccessful'
               category: 'Subscription'
