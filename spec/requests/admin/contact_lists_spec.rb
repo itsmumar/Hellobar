@@ -21,6 +21,12 @@ describe 'Admin::ContactLists requests' do
 
       expect(response).to be_success
       expect(response.body).to include contact_list.name
+    end
+
+    it 'allows admins to see contact lists subscribers' do
+      get admin_site_contact_list_path(site_id: site, id: contact_list.id)
+
+      expect(response).to be_success
       expect(response.body).to include email
       expect(response.body).to include status
     end
