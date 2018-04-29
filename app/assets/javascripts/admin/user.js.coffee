@@ -4,8 +4,6 @@ deliverPasswordReset = (ahref) ->
   $.ajax
     method: 'POST'
     url: $link.attr('href')
-    data:
-      user: { email: $link.data('user-email') }
     success: ->
       $link.text('Sent!')
 

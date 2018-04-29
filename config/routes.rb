@@ -166,6 +166,9 @@ Rails.application.routes.draw do
     resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
+      member do
+        post :reset_password
+      end
     end
 
     resources :sites, only: %i[show update] do

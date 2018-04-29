@@ -33,4 +33,11 @@ class Admin::UsersController < AdminController
       redirect_to admin_users_path
     end
   end
+
+  def reset_password
+    @user = User.with_deleted.find(params[:id])
+    @user.send_reset_password_instructions
+
+    head :ok
+  end
 end
