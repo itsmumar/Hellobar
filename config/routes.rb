@@ -174,7 +174,7 @@ Rails.application.routes.draw do
         put :add_free_days
       end
 
-      resources :contact_lists, only: [:index]
+      resources :contact_lists, only: %i[index show]
     end
 
     resources :bills, only: %i[index show] do

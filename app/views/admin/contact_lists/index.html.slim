@@ -1,34 +1,28 @@
-div.site-title
-  h3
-    = link_to site_title(@site), admin_site_path(@site)
+#site_details
+  div.site-title
+    h3
+      = link_to site_title(@site), admin_site_path(@site)
 
-- @contact_lists.each do |contact_list|
+  div.site_section
+    div.title Contact Lists
 
-  .contact-list
-
-    h4= contact_list_title(contact_list)
-    h5
-      ' Synced to:
-      = contact_list&.identity&.provider || "Hello Bar"
-    h5
-      ' Total subscribers count:
-      = @subscribers_count[contact_list.id]
-
-    - if @contacts[contact_list.id].any?
-
-      table.table.table-striped.contacts
+    table
+      tr
+        th ID
+        th Name
+        th Created at
+        th Deleted at
+        th Synced to
+        th Subscribers count
+        th
+      - @contact_lists.each do |contact_list|
         tr
-          th colspan=5
-            | Latest contacts
+          td= contact_list.id
+          td= contact_list.name
+          td= format_date(contact_list.created_at)
+          td= format_date(contact_list.deleted_at)
+          td= contact_list&.identity&.provider || "Hello Bar"
+          td= @subscribers_count[contact_list.id]
+          td= link_to 'Subscribers', admin_site_contact_list_path(@site, contact_list)
 
-        - @contacts[contact_list.id].each do |contact|
-          tr
-            td= contact.email
-            td= contact.name
-            td= contact.subscribed_at
-            td= contact.status
-            td.error= simple_format contact.error
 
-    - else
-
-      p No contacts.
