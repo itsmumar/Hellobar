@@ -38,6 +38,8 @@ class Admin::UsersController < AdminController
     @user = User.with_deleted.find(params[:id])
     @user.send_reset_password_instructions
 
-    head :ok
+    flash[:success] = 'Password reset instruction has been sent to user\'s email'
+
+    redirect_to admin_user_path(@user)
   end
 end

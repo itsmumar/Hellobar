@@ -1,18 +1,5 @@
-deliverPasswordReset = (ahref) ->
-  $link = $(ahref)
-
-  $.ajax
-    method: 'POST'
-    url: $link.attr('href')
-    success: ->
-      $link.text('Sent!')
-
 $ ->
   $('[data-toggle="tooltip"]').tooltip()
-
-  $('a#reset_password').on 'click', (event) ->
-    event.preventDefault()
-    deliverPasswordReset(this)
 
   $(".subscription_link").click ->
     siteId = $(@).data("siteid")
