@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 // GLOBALS: isValidNumber function
 const isValidNumber = window.isValidNumber;
-const maxCookieDuration = 10000
+const maxCookieDuration = 10000;
 
 /**
  * @class ModelValidation
@@ -67,7 +67,7 @@ export default Ember.Service.extend({
           return 'Cookie Duration should not exceed 10000';
         }
 
-        return null
+        return null;
       }
     }]);
 
@@ -80,7 +80,7 @@ export default Ember.Service.extend({
           return 'Success Cookie Duration should not exceed 10000';
         }
 
-        return null
+        return null;
       }
     }]);
 
