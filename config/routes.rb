@@ -189,7 +189,9 @@ Rails.application.routes.draw do
 
     resources :subscriptions, only: %i[index show] do
       collection do
+        get :trial
         get :ended_trial
+        get :deleted
         get 'filter/:type', action: 'filter_by_type', as: :filter_by_type
       end
     end
