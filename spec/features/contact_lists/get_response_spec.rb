@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'GetResponse Integration', :js, :contact_list_feature do
   let(:provider) { 'get_response_api' }
 

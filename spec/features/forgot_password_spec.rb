@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Forgot password', :js do
   given(:email) { 'bob@lawblog.com' }
   given!(:user) { create :user, email: email }

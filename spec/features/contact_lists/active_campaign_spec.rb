@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'ActiveCampaign Integration', :js, :contact_list_feature do
   let(:provider) { 'active_campaign' }
 

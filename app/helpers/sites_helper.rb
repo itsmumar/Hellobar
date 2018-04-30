@@ -14,13 +14,13 @@ module SitesHelper
   def install_help_data(site)
     case site.install_type
     when 'weebly'
-      ['Weebly', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
+      ['Weebly', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
     when 'squarespace'
-      ['Squarespace', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
+      ['Squarespace', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
     when 'shopify'
-      ['Shopify', 'http://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
+      ['Shopify', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
     when 'blogspot'
-      ['Blogger', 'http://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
+      ['Blogger', 'https://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
     end
   end
 
@@ -28,8 +28,8 @@ module SitesHelper
     site_membership.try(:role) || :none
   end
 
-  def sites_for_team_view
-    current_user.sites.sort_by { |site| [site == current_site ? 0 : 1, site.url.downcase] }
+  def sites_for_team_view(user = current_user, target_site = current_site)
+    user.sites.sort_by { |site| [site == target_site ? 0 : 1, site.url.downcase] }
   end
 
   def sorted_sites

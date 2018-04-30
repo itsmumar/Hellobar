@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 describe 'Admin::CreditCard requests' do
   context 'when unauthenticated' do
     describe 'DELETE :destroy' do

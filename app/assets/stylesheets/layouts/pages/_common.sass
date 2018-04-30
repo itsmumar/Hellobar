@@ -1,7 +1,6 @@
 /*-----------  Static Pages  -----------*/
 
 [id^="pages-"],
-[id^="welcome-"],
 [id^="registrations-"],
 [id^="sessions-"],
 [id^="passwords-"],
@@ -94,46 +93,3 @@
       p
         width: 100%
         font-size: 1em
-
-  /*-----------  Quickstart  -----------*/
-
-  .quickstart-wrapper
-    width: 67%
-    margin: 1em auto
-    padding: 1em
-    border-radius: $radiusLg
-    background-color: $grayLightest
-    @include clearfix()
-
-    input,
-    button
-      margin: 0 !important
-      padding-top: 0 !important
-      font-size: 1.25em !important
-      padding-bottom: 0 !important
-      border-width: 2px !important
-      border-color: $red !important
-      padding: 0.75em 1em !important
-      border-style: solid !important
-
-    input
-      float: left
-      width: 62% !important
-      color: $red !important
-      border-right-width: 0px !important
-      border-radius: $radiusSm 0 0 $radiusSm !important
-      &::placeholder
-        color: $red !important
-
-    button
-      float: right
-      width: 38% !important
-      color: $white !important
-      padding-left: 0 !important
-      padding-right: 0 !important
-      background-color: $red !important
-      border-radius: 0 $radiusSm $radiusSm 0 !important
-      transition: all 0.15s ease-out 0s
-
-      &:hover
-        background-color: darken($red, 5%) !important

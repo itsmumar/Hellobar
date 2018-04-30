@@ -208,16 +208,11 @@ Rails.application.routes.draw do
   end
 
   get '/install' => 'sites#install_redirect'
-
-  get '/use-cases' => 'pages#use_cases'
-  get '/amazon' => 'pages#use_cases'
-  get '/terms-of-use' => 'pages#terms_of_use'
-  get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get '/heartbeat' => 'heartbeat#index'
   get '/login', to: redirect('/users/sign_in')
-  get '/signup', to: redirect('/')
+  get '/signup', to: redirect('/users/sign_up')
 
   get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
 
@@ -225,12 +220,10 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: redirect('/')
-
-  root 'welcome#index'
-
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
+
+  root 'pages#index'
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end

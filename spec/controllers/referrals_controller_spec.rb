@@ -94,7 +94,7 @@ describe ReferralsController do
       it 'redirects to root_path' do
         get :accept, token: token
 
-        expect(response.status).to redirect_to(root_path)
+        expect(response.status).to redirect_to(users_sign_up_path)
       end
     end
 

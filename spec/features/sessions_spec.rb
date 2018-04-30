@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'User can sign up', :js do
   given(:email) { 'bob@lawblog.com' }
   given(:user) { create :user, email: email }
@@ -18,11 +16,9 @@ feature 'User can sign up', :js do
 
   scenario 'through oauth' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
-
-    click_on 'sign-up-button'
 
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
@@ -40,11 +36,9 @@ feature 'User can sign up', :js do
   end
 
   scenario 'with email/password' do
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
-
-    click_on 'sign-up-button'
 
     fill_in 'registration_form[email]', with: 'email@example.com'
     fill_in 'registration_form[password]', with: 'password123'
@@ -96,7 +90,8 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'and sign out' do
-    user = create :user, :with_site
+    site = create :site, elements: [:email]
+    user = create :user, site: site
 
     sign_in user
 

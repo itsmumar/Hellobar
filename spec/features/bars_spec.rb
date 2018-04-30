@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Adding and editing bars', :js do
   given(:select_goal_label) { 'Select This Goal' }
   given(:email) { 'bob@lawblog.com' }
@@ -15,10 +13,9 @@ feature 'Adding and editing bars', :js do
   scenario 'new user can create a site element' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: user.email })
 
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
-    click_button 'sign-up-button'
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
@@ -66,19 +63,18 @@ feature 'Adding and editing bars', :js do
   end
 
   context 'Collect Email goal' do
+    let(:user) { create :user }
+    let(:site) { create :site, :with_rule, user: user }
+
     before do
       allow_any_instance_of(ApplicationController)
         .to receive(:ab_variation).and_return('variant')
 
-      membership = create(:site_membership, :with_site_rule)
-      user = membership.user
-      user.upgrade_suggest_modal_last_shown_at = Time.current
-      create :contact_list, site: user.sites.first
+      create :contact_list, site: site
 
       sign_in user
-      visit root_path
 
-      click_on 'Create New'
+      visit new_site_site_element_path(site)
 
       find('.goal-block.contacts').click_on(select_goal_label)
       click_button 'Continue'
@@ -159,13 +155,13 @@ feature 'Adding and editing bars', :js do
   end
 
   scenario 'User can set phone number for click to call' do
-    membership = create(:site_membership, :with_site_rule)
-    user = membership.user
+    user = create(:user)
+    site = create(:site, :with_rule, user: user)
     phone_number = '+12025550144'
 
     sign_in user
 
-    click_button('Create New')
+    visit new_site_site_element_path(site)
 
     find('.goal-block.call').click_on(select_goal_label)
 
@@ -187,11 +183,9 @@ feature 'Adding and editing bars', :js do
     color = 'AABBCC'
 
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
-    visit root_path
+    visit users_sign_up_path
 
     fill_in 'registration_form[site_url]', with: 'mewgle.com'
-    click_button 'sign-up-button'
-
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 

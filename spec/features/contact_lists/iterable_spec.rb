@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Iterable integration', :js, :contact_list_feature do
   let(:provider) { 'iterable' }
 

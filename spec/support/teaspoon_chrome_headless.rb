@@ -20,7 +20,7 @@ module Teaspoon
 
       def build_driver
         capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome(
-          chromeOptions: { args: %w[headless disable-gpu no-sandbox window-size=1920,1080] }
+          chromeOptions: { args: %w[headless disable-gpu no-sandbox window-size=1600,1200] }
         )
 
         ::Selenium::WebDriver::Chrome::Driver.new(desired_capabilities: capabilities)

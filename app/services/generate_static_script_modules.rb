@@ -3,6 +3,7 @@ class GenerateStaticScriptModules
 
   def call
     compile
+
     if store_site_scripts_locally?
       store_locally
     else

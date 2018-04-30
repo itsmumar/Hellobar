@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Webhooks Integration', :js, :contact_list_feature do
   let(:provider) { 'webhooks' }
 

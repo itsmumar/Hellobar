@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Takeover with image', js: true do
   scenario 'shows large image' do
     element = create(:takeover, image_placement: 'bottom')
