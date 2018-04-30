@@ -24,6 +24,16 @@ class BillingAttempt < ApplicationRecord
     end
   end
 
+  ACTIONS.each do |action|
+    # define .charge, .refund and .chargeback scopes
+    scope action, -> { where(action: action) }
+
+    # define #charge?, #refund?, #chargeback?
+    define_method("#{ action }?") do
+      self.action == action
+    end
+  end
+
   validates :status, presence: true, inclusion: { in: STATUSES }
   validates :action, presence: true, inclusion: { in: ACTIONS }
 

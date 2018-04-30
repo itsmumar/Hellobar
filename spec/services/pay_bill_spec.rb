@@ -10,7 +10,7 @@ describe PayBill do
     specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount, any_args) }
     specify { expect { service.call }.to change(bill, :status).to Bill::PAID }
     specify { expect { service.call }.to change { BillingAttempt.successful.count }.to 1 }
-    specify { expect { service.call }.to change { BillingAttempt.successful.count }.to 1 }
+    specify { expect { service.call }.to change { BillingAttempt.charge.count }.to 1 }
 
     it 'creates pending bill for next period', :freeze do
       expect { service.call }.to change { subscription.bills.pending.last }.from(nil)
