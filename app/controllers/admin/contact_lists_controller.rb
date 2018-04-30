@@ -7,7 +7,7 @@ class Admin::ContactListsController < AdminController
 
   def show
     @contact_list = ContactList.with_deleted.find(params[:id])
-    @site = @contact_list.site
+    @site = Site.with_deleted.find(@contact_list.site_id)
     @subscribers = FetchSubscribers.new(@contact_list, pagination_params).call
     @total_subscribers = FetchSiteContactListTotals.new(@site, [@contact_list.id]).call[@contact_list.id]
   end
