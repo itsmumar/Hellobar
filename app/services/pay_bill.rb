@@ -75,6 +75,7 @@ class PayBill
   def create_billing_attempt(response)
     BillingAttempt.create!(
       bill: bill,
+      action: BillingAttempt::CHARGE,
       credit_card: credit_card,
       status: response.success? ? BillingAttempt::SUCCESSFUL : BillingAttempt::FAILED,
       response: response.success? ? response.authorization : response.message
