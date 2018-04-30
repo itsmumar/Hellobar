@@ -44,7 +44,7 @@ describe ChargebackBill do
     end
 
     it 'does not create a new BillingAttempt record' do
-      expect { service.call rescue nil }.not_to change { BillingAttempt.count }  # rubocop:disable Style/RescueModifier
+      expect { service.call rescue nil }.not_to change { BillingAttempt.count } # rubocop:disable Style/RescueModifier
     end
 
     it 'raises error' do
@@ -64,7 +64,7 @@ describe ChargebackBill do
     end
 
     it 'does not create a new BillingAttempt record' do
-      expect { service.call rescue nil }.not_to change { BillingAttempt.count }  # rubocop:disable Style/RescueModifier
+      expect { service.call rescue nil }.not_to change { BillingAttempt.count } # rubocop:disable Style/RescueModifier
     end
 
     it 'raises error' do
