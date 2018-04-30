@@ -14,15 +14,12 @@
         th Deleted at
         th Synced to
         th Subscribers count
-        th
+
       - @contact_lists.each do |contact_list|
         tr
-          td= contact_list.id
-          td= contact_list.name
+          td= link_to contact_list.id, admin_contact_list_path(contact_list)
+          td= link_to contact_list.name, admin_contact_list_path(contact_list)
           td= format_date(contact_list.created_at)
           td= format_date(contact_list.deleted_at)
           td= contact_list&.identity&.provider || "Hello Bar"
           td= @subscribers_count[contact_list.id]
-          td= link_to 'Subscribers', admin_site_contact_list_path(@site, contact_list)
-
-
