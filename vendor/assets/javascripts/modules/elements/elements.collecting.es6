@@ -1,5 +1,6 @@
 hellobar.defineModule('elements.collecting',
-  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal', 'elements.conversion', 'elements.gdpr'],
+  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal',
+    'elements.conversion', 'elements.gdpr'],
   function (preview, format, dom, site, sanitizing, bus, trackingInternal, elementsConversion, elementsGDPR) {
 
     /**
