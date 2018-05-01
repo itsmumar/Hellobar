@@ -34,13 +34,19 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
     return value;
   }
 
+  function render(templateName, context) {
+    const html = getTemplateByName(templateName);
+    return renderTemplate(html, context);
+  }
+
   return {
     configuration: () => configuration,
     inspect: () => ({
       allTemplates: () => templates
     }),
     getTemplateByName,
-    renderTemplate
+    renderTemplate,
+    render
   };
 
 });
