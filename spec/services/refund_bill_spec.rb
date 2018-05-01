@@ -26,6 +26,10 @@ describe RefundBill do
     expect(latest_refund.status).to eql Bill::REFUNDED
   end
 
+  it 'creates a new BillingAttempt record' do
+    expect { refund_bill.call }.to change(BillingAttempt.refund.successful, :count).by(1)
+  end
+
   it 'calls gateway.refund' do
     expect { refund_bill.call }
       .to make_gateway_call(:refund)
