@@ -11,6 +11,7 @@ json.cache_if! !model.preview_is_active, model do
     :templates,
     :branding_templates,
     :content_upgrade_template,
+    :gdpr_template,
     :geolocation_url,
     :hb_backend_host,
     :site_write_key,

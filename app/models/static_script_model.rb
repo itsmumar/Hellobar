@@ -104,6 +104,10 @@ class StaticScriptModel
     [{ name: 'contentupgrade', markup: render_asset('contentupgrade/contentupgrade.html') }]
   end
 
+  def gdpr_template
+    [{ name: 'gdpr', markup: render_asset('gdpr/checkboxes.html') }]
+  end
+
   def geolocation_url
     Settings.geolocation_url
   end

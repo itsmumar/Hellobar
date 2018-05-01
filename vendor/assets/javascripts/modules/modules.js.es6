@@ -80,6 +80,10 @@
           each(data.content_upgrade_template, function (template) {
             configuration.addTemplate(template.name, template.markup);
           });
+
+          each(data.gdpr_template, function (template) {
+            configuration.addTemplate(template.name, template.markup);
+          });
         });
 
         configure('geolocation', function (configuration) {
