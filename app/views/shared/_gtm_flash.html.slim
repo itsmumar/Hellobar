@@ -1,0 +1,6 @@
+// GTM events in flash messages
+- if event = flash.delete(:event)
+  javascript:
+    if (window.dataLayer) {
+      window.dataLayer.push({ event: 'GAEvent', category: 'Signup', action: '#{ event[:name] }' })
+    }

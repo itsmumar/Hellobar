@@ -1,5 +1,9 @@
+= render "shared/gtm_flash"
+
+// regular flash messages
 - flash.each do |key, message|
   - next unless message.present?
+
   .flash-block class=key
     i.icon-close
     - if message.is_a?(Array)
