@@ -10,3 +10,4 @@
 //= require ./elements.intents
 //= require ./elements.relevance
 //= require ./elements.visibility
+//= require ./elements.gdpr
