@@ -12,8 +12,6 @@
   font-variant: normal;
   text-transform: none;
   font-family: 'icomoon';
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
 }
 
 .icon-close:before {
@@ -50,6 +48,8 @@ html, body {
   font-size: 14px;
   font-family: 'Open Sans', 'Helvetica', sans-serif;
   overflow: hidden;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 form {
@@ -190,8 +190,6 @@ form {
 
 .hb-text-wrapper .hb-secondary-text {
   margin-top: 5px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
 }
 
 /*-----------  Inputs  -----------*/
