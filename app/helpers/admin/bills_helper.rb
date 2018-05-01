@@ -16,7 +16,7 @@ module Admin::BillsHelper
 
   def bills_for(site)
     Subscription.unscoped do
-      site.bills.recurring.reorder(id: :desc)
+      site.bills.reorder(id: :desc)
     end
   end
 

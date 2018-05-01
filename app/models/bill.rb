@@ -47,7 +47,6 @@ class Bill < ApplicationRecord
     end
   end
 
-  scope :recurring, -> { where(type: Recurring) }
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }

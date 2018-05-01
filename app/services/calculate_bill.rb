@@ -62,7 +62,7 @@ class CalculateBill
   end
 
   def make_bill
-    Bill::Recurring.new(subscription: subscription) do |bill|
+    Bill.new(subscription: subscription) do |bill|
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
       bill.bill_at = Time.current

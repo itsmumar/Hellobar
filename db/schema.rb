@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501123604) do
+ActiveRecord::Schema.define(version: 20180501131156) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -80,7 +80,6 @@ ActiveRecord::Schema.define(version: 20180501123604) do
 
   create_table "bills", force: :cascade do |t|
     t.integer  "subscription_id",      limit: 4
-    t.string   "type",                 limit: 191
     t.decimal  "amount",                           precision: 7,  scale: 2
     t.string   "description",          limit: 255
     t.boolean  "grace_period_allowed",                                      default: true
@@ -95,10 +94,10 @@ ActiveRecord::Schema.define(version: 20180501123604) do
     t.string   "status",               limit: 20,                           default: "pending", null: false
   end
 
+  add_index "bills", ["bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
   add_index "bills", ["status", "bill_at"], name: "index_bills_on_status_and_bill_at", using: :btree
+  add_index "bills", ["subscription_id", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
   add_index "bills", ["subscription_id", "status", "bill_at"], name: "index_bills_on_subscription_id_and_status_and_bill_at", using: :btree
-  add_index "bills", ["subscription_id", "type", "bill_at"], name: "index_bills_on_subscription_id_and_type_and_bill_at", using: :btree
-  add_index "bills", ["type", "bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
 
   create_table "campaigns", force: :cascade do |t|
     t.integer  "contact_list_id", limit: 4,                     null: false

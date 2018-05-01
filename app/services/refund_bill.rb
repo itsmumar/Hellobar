@@ -2,7 +2,7 @@ class RefundBill
   class InvalidRefund < StandardError; end
   class MissingCreditCard < StandardError; end
 
-  # @param [Bill::Recurring] bill
+  # @param [Bill] bill
   def initialize(bill)
     @bill = bill
     @amount = bill.amount.abs * -1 # Refunds are always negative

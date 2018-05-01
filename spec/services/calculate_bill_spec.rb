@@ -42,7 +42,7 @@ describe CalculateBill do
       let!(:reduced_amount) { subscription.amount - site.current_subscription.amount }
 
       it 'returns bill with reduced amount' do
-        expect(bill).to be_a(Bill::Recurring)
+        expect(bill).to be_a(Bill)
         expect(bill.amount).to eql reduced_amount
         expect(bill.grace_period_allowed).to be_falsey
         expect(bill.bill_at).to eql Time.current
@@ -70,7 +70,7 @@ describe CalculateBill do
       let(:subscription) { create :subscription, :pro }
 
       it 'returns bill with full amount' do
-        expect(bill).to be_a(Bill::Recurring)
+        expect(bill).to be_a(Bill)
         expect(bill.amount).to eql subscription.amount
         expect(bill.grace_period_allowed).to be_truthy
         expect(bill.bill_at).to eql active_bill.end_date
@@ -86,7 +86,7 @@ describe CalculateBill do
     let(:bill) { service.call }
 
     it 'returns bill with full amount' do
-      expect(bill).to be_a(Bill::Recurring)
+      expect(bill).to be_a(Bill)
       expect(bill.amount).to eql subscription.amount
       expect(bill.grace_period_allowed).to be_falsey
       expect(bill.bill_at).to eql Time.current
