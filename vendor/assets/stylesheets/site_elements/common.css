@@ -694,3 +694,37 @@ a.barlinkred {
 .paid-account .free-only, .free-account .paid-only {
   display: none !important;
 }
+
+/* GDPR */
+.gdpr-consent-form {
+  padding-left: 45px;
+}
+
+.gdpr-consent-form p {
+  font-size: 16px;
+  line-height: 25px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.gdpr-consent-form p:last-child {
+  margin-bottom: 30px;
+}
+
+.gdpr-consent-form label {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+}
+
+.gdpr-consent-form input {
+  margin: 6px 10px 0 0;
+}
+
+.gdpr-consent-form span {
+  flex: 94%;
+}
+
+.gdpr-consent-form a {
+  color: inherit;
+}

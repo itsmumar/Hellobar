@@ -119,3 +119,7 @@
 #hellobar-modal.mobile .hb-logo-wrapper {
   margin: 2em auto 0;
 }
+
+#hellobar-modal.mobile .gdpr-consent-form {
+  padding-left: 15px;
+}
