@@ -16,6 +16,9 @@ class UserController < ApplicationController
     attr_hash = user_params.merge!(status: User::ACTIVE)
     if @user.update(attr_hash)
       sign_in @user, event: :authentication
+
+      flash[:event] = { name: 'signup-invitation' }
+
       redirect_to after_sign_in_path_for(@user)
     else
       flash[:error] = @user.errors.full_messages.uniq.join('. ') << '.'

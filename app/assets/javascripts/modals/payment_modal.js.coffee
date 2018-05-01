@@ -133,7 +133,7 @@ class @PaymentModal extends Modal
               event: 'GAEvent'
               category: 'Subscription'
               action: data.status
-              label: data.site.current_subscription.name
+              label: data.site.current_subscription.name + '-' + data.site.current_subscription.schedule
 
           new PaymentConfirmationModal(options).open()
           @close()
