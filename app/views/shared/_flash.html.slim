@@ -1,12 +1,12 @@
 // regular flash messages
-- flash.each do |key, message|
-  - next if key == :event # skip GTM events in flash messages
-  - next unless message.present?
+- %i[success notice alert error].each do |key|
+  - if flash[key].present?
+    - message = flash[key]
 
-  .flash-block class=key
-    i.icon-close
-    - if message.is_a?(Array)
-      - message.each do |msg|
-        div= sanitize(msg, attributes: %w{ href target style })
-    - else
-      = sanitize(message, attributes: %w{ href target style })
+    .flash-block class=key
+      i.icon-close
+      - if message.is_a?(Array)
+        - message.each do |msg|
+          div= sanitize(msg, attributes: %w{ href target style })
+      - else
+        = sanitize(message, attributes: %w{ href target style })
