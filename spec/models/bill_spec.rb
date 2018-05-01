@@ -3,7 +3,6 @@ describe Bill do
   specify('could be paid') { expect(build(:bill, :paid)).to be_paid }
   specify('could be failed') { expect(build(:bill, :failed)).to be_failed }
   specify('could be voided') { expect(build(:bill, :voided)).to be_voided }
-  specify('could be refunded') { expect(build(:refund_bill, :refunded)).to be_refunded }
 
   describe '#can_pay?' do
     subject { bill.can_pay? }
@@ -30,28 +29,6 @@ describe Bill do
     end
 
     specify { expect(subject).to be_truthy }
-  end
-
-  describe '.without_refunds' do
-    let!(:bill) { create :bill }
-    let!(:bill_to_refund) { create :bill, :paid }
-
-    before { stub_cyber_source :refund }
-
-    it 'returns bills which have not been refunded' do
-      RefundBill.new(bill_to_refund).call
-      expect(Bill.without_refunds).not_to include bill_to_refund
-    end
-  end
-
-  describe '.without_chargebacks' do
-    let!(:bill) { create :bill }
-    let!(:bill_to_chargeback) { create :bill, :paid }
-
-    it 'returns bills which have not been refunded' do
-      ChargebackBill.new(bill_to_chargeback).call
-      expect(Bill.without_chargebacks).not_to include bill_to_chargeback
-    end
   end
 
   describe 'callbacks' do

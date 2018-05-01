@@ -23,8 +23,6 @@ class Bill < ApplicationRecord
     end
   end
   belongs_to :subscription, inverse_of: :bills
-  belongs_to :refund, inverse_of: :refunded_bill, class_name: 'Bill::Refund'
-  belongs_to :chargeback, inverse_of: :chargedback_bill, class_name: 'Bill::Chargeback'
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
@@ -55,10 +53,8 @@ class Bill < ApplicationRecord
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
   scope :not_voided, -> { where.not(status: VOIDED) }
+  scope :not_pending, -> { where.not(status: PENDING) }
   scope :active, -> { not_voided.where('DATE(bills.start_date) <= :now AND DATE(bills.end_date) >= :now', now: Date.current) }
-  scope :without_refunds, -> { where(refund_id: nil).where.not(type: Bill::Refund) }
-  scope :without_chargebacks, -> { where(chargeback_id: nil).where.not(type: Bill::Chargeback) }
-  scope :paid_or_failed, -> { where(status: [PAID, FAILED]) }
 
   validates :subscription_id, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
@@ -128,8 +124,8 @@ class Bill < ApplicationRecord
 
   private
 
-  def can_status_be_changed?(value)
-    value == VOIDED || [PENDING, FAILED].include?(status)
+  def can_status_be_changed?(new_value)
+    [VOIDED, REFUNDED, CHARGEDBACK].include?(new_value) || [PENDING, FAILED].include?(status)
   end
 
   def set_base_amount

@@ -22,16 +22,12 @@ table
         - if user && context_for_trial(user, bill)
           span.trial_status
             |  #{context_for_trial(user, bill)}
-        - if bill.refund
+        - if bill.refunded?
           br
-          | (#{bill.refund.amount}) Refunded
-          span.refund_status
-            |  (#{bill.refund.status})
-        - if bill.chargeback
+          | (-#{bill.amount}) Refunded
+        - if bill.chargedback?
           br
-          | (#{bill.chargeback.amount}) Chargedback
-          span.chargeback_status
-            |  (#{bill.chargeback.status})
+          | (-#{bill.amount}) Chargedback
       td
         span= bill.status
         - if bill.failed?

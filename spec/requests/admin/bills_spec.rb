@@ -106,7 +106,7 @@ describe 'Admin::Bills requests' do
       it 'refunds a bill' do
         expect {
           put refund_admin_bill_path(bill), params
-        }.to change(Bill::Refund, :count).by 1
+        }.to change(Bill.refunded, :count).by 1
 
         expect(response).to redirect_to admin_site_path(site)
       end
@@ -123,7 +123,7 @@ describe 'Admin::Bills requests' do
         it 'returns refund error' do
           expect {
             put refund_admin_bill_path(bill), params
-          }.not_to change(Bill::Refund, :count)
+          }.not_to change(Bill.refunded, :count)
           expect(response).to redirect_to admin_site_path(site)
         end
       end
@@ -131,7 +131,7 @@ describe 'Admin::Bills requests' do
 
     describe 'PUT #chargeback' do
       it 'calls ChargebackBill' do
-        expect { put chargeback_admin_bill_path(bill) }.to change(Bill::Chargeback, :count).by 1
+        expect { put chargeback_admin_bill_path(bill) }.to change(Bill.chargedback, :count).by 1
       end
 
       it 'redirects to site page' do

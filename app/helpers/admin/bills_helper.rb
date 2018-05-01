@@ -61,7 +61,7 @@ module Admin::BillsHelper
         method: :put, data: { confirm: 'Void this bill?' })
     end
 
-    if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
+    if bill.paid? && bill.amount > 0
       actions << link_to('refund',
         refund_admin_bill_path(bill),
         method: :put, data: { confirm: 'Refund this bill?' })

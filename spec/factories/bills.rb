@@ -29,17 +29,6 @@ FactoryBot.define do
     factory :recurring_bill, class: 'Bill::Recurring' do
     end
 
-    factory :refund_bill, class: 'Bill::Refund' do
-      amount(-10)
-      subscription
-      type 'Bill::Refund'
-      refunded_bill { create :bill, :pro, subscription: subscription }
-
-      trait :refunded do
-        status Bill::REFUNDED
-      end
-    end
-
     trait :pro do
       amount { Subscription::Pro.defaults[:monthly_amount] }
       subscription { create :subscription, :pro }

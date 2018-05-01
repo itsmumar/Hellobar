@@ -51,43 +51,6 @@ describe Subscription do
     end
   end
 
-  describe '.active scope' do
-    context 'with paid bill' do
-      let(:pro) { create(:subscription, :pro, :with_bill) }
-      let(:free) { create(:subscription, :free, :with_bill) }
-      let(:free_plus) { create(:subscription, :free_plus, :with_bill) }
-      let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
-      let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
-      let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
-
-      let!(:active_subscriptions) do
-        [pro, free, free_plus, enterprise, pro_managed, pro_comped]
-      end
-
-      it 'returns subscriptions' do
-        expect(Subscription.active).to match_array active_subscriptions
-      end
-
-      context 'and refunded bill' do
-        before { stub_cyber_source :refund }
-
-        it 'returns no subscriptions' do
-          RefundBill.new(pro.bills.first).call
-          expect(Subscription.active).not_to include pro.reload
-        end
-      end
-    end
-
-    context 'with pending bill' do
-      let!(:active_subscription) { create(:subscription, :pro) }
-      before { create(:recurring_bill, :pending, subscription: active_subscription) }
-
-      it 'returns no subscriptions' do
-        expect(Subscription.active).to be_empty
-      end
-    end
-  end
-
   describe '.active_until' do
     it 'gets the max date that the subscription is paid till' do
       end_date = 4.weeks.from_now
