@@ -1,7 +1,6 @@
-= render "shared/gtm_flash"
-
 // regular flash messages
 - flash.each do |key, message|
+  - next if key == :event # skip GTM events in flash messages
   - next unless message.present?
 
   .flash-block class=key
