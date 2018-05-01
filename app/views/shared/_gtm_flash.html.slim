@@ -1,6 +1,8 @@
 // GTM events in flash messages
-- if event = flash.delete(:event)
+- if flash[:event].present?
+  - action = flash[:event]['name']
+
   javascript:
     if (window.dataLayer) {
-      window.dataLayer.push({ event: 'GAEvent', action: '#{ event[:name] }' })
+      window.dataLayer.push({ event: 'GAEvent', action: '#{ action }' })
     }
