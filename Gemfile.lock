@@ -452,7 +452,6 @@ GEM
     rack-cors (1.0.2)
     rack-protection (1.5.4)
       rack
-    rack-ssl-enforcer (0.2.9)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.10)
@@ -746,7 +745,6 @@ DEPENDENCIES
   psych
   public_suffix
   rack-cors
-  rack-ssl-enforcer
   rails (= 4.2.10)
   rails-html-sanitizer
   rake (~> 10.3.2)
