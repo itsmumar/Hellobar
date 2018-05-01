@@ -2,5 +2,5 @@
 - if event = flash.delete(:event)
   javascript:
     if (window.dataLayer) {
-      window.dataLayer.push({ event: 'GAEvent', category: 'Signup', action: '#{ event[:name] }' })
+      window.dataLayer.push({ event: 'GAEvent', action: '#{ event[:name] }' })
     }
