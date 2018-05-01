@@ -108,6 +108,14 @@
           });
         });
 
+        configure('elements.gdpr', function (configuration) {
+          configuration.settings({
+            gdpr_consent: data.gdpr_consent,
+            privacy_policy_url: data.privacy_policy_url,
+            terms_and_conditions_url: data.terms_and_conditions_url
+          });
+        });
+
         configure('elements', function (configuration) {
           configuration.elementCSS(data.hellobar_element_css).autoRun(true);
         });

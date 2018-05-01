@@ -1,6 +1,10 @@
 hellobar.defineModule('elements.gdpr',
   ['base.templating', 'base.site', 'base.dom'],
   function (templating, site, dom) {
+    const configuration = hellobar.createModuleConfiguration({
+      settings: 'object'
+    });
+
     function validate (targetSiteElement) {
       const checkboxes = targetSiteElement
         .querySelectorAll('[name="hb-gdpr-terms-checkbox"], [name="hb-gdpr-consent-checkbox"]');
@@ -33,13 +37,14 @@ hellobar.defineModule('elements.gdpr',
     }
 
     function displayCheckboxes (siteElement, formElement, targetSiteElement, callback) {
-      const template = templating.render('gdpr', siteElement)
+      const template = templating.render('gdpr', configuration.settings())
       targetSiteElement.innerHTML = template;
 
       render(siteElement, targetSiteElement, callback);
     }
 
     return {
+      configuration: () => configuration,
       displayCheckboxes
     };
   });
