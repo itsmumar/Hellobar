@@ -17,7 +17,7 @@ class Url2png
   end
 
   def css_url
-    "http://#{ Settings.host }/stylesheets/hide_bar.css"
+    "https://#{ Settings.host }/stylesheets/hide_bar.css"
   end
 
   def query_string

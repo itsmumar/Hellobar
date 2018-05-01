@@ -1,8 +1,4 @@
-require 'integration_helper'
-
 feature 'Render the country select for the Rule modal', :js do
-  extend FeatureHelper
-
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
   given(:credit_card) { create :credit_card, user: user }

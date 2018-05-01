@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Targeting. Custom rule dialog', :js do
   given(:user) { create(:user) }
   given(:site) { create(:site, :with_rule, user: user) }

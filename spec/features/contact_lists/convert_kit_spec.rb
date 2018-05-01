@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'ConvertKit integration', :js, :contact_list_feature do
   let(:provider) { 'convert_kit' }
 

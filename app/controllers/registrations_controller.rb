@@ -26,7 +26,13 @@ class RegistrationsController < ApplicationController
 
   def validate_url
     unless @form.site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      flash.now[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      render :new
+      return false
+    end
+
+    unless @form.accept_terms_and_conditions
+      flash.now[:error] = 'Your must accept Terms of Use and Privacy Policy.'
       render :new
       return false
     end

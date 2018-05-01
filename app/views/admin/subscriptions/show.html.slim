@@ -1,6 +1,6 @@
 #subscriptions
   div.subscription_section.site_details
-    = render 'admin/sites/header', site: @subscription.site
+    = render 'admin/sites/header', site: subscription_site(@subscription)
 
   div.subscription_section.subscription_details
     div.title Subscription Details

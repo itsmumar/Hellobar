@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Manage Settings', :js do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }

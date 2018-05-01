@@ -20,7 +20,7 @@ describe ApplicationController do
       expect(controller.current_site).to eq(site)
     end
 
-    it "returns user's first site if site stored in session is not available or doesn't belong to user" do
+    it "returns user's last site if site stored in session is not available" do
       user = stub_current_user(current_user)
       session[:current_site] = create(:site).id
 
@@ -47,11 +47,11 @@ describe ApplicationController, '#require_no_user' do
     end
   end
 
-  let(:user) { create :user, :with_site }
+  let(:user) { create :user, :with_site, :with_email_bar }
 
   it 'redirects a logged in user to the dashboard of their most recent site' do
     allow(controller).to receive(:current_user).and_return(user)
-    dashboard_path = site_path(user.sites.first)
+    dashboard_path = site_path(user.sites.last)
 
     get :index
 

@@ -1,3 +1,46 @@
 #registrations-new, #registrations-create
   h1
     font-size: 2em
+
+  .devise-links
+    text-align: center
+
+  .terms-and-conditions
+    font-size: 0.8em
+
+  a
+    color: $red
+
+    &:hover
+      color: darken($red, 15%)
+
+    &.active
+      font-weight: $fontWeightBold
+
+  form
+    .button
+      padding: 0.5em 1.25em
+      font-size: 1.1em
+
+    .google-sign-in-button
+      display: flex
+      margin: 0
+      padding: 0
+
+      border: none
+
+      .icon
+        display: inline-block
+        margin: 0
+        padding: 1.3em 1.5em
+
+        background-image: image-url('btn_google.svg')
+        background-size: 1.2em
+        background-repeat: no-repeat
+        background-position: 50% 48%
+        border-right: 1px solid white
+
+      .label
+        flex: 1
+        align-self: center
+        text-align: center

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 describe 'Autofills requests' do
   context 'when unauthenticated' do
     describe 'GET :index' do

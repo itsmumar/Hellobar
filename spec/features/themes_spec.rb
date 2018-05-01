@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Users can select a design theme for SiteElements', :js do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }

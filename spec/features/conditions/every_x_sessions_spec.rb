@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Every x number of sessions condition', js: true do
   let(:element) { create(:site_element) }
 

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Site with a closable announcement topbar', :js do
   given(:element) { create :bar, :closable }
 

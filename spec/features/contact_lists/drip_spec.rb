@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Drip Integration', :js, :contact_list_feature do
   let(:provider) { 'drip' }
 

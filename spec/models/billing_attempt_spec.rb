@@ -1,4 +1,9 @@
 describe BillingAttempt do
+  it { is_expected.to validate_presence_of(:status) }
+  it { is_expected.to validate_inclusion_of(:status).in_array(BillingAttempt::STATUSES) }
+  it { is_expected.to validate_presence_of(:action) }
+  it { is_expected.to validate_inclusion_of(:action).in_array(BillingAttempt::ACTIONS) }
+
   it 'should be read-only' do
     b = BillingAttempt.create
     b.response = 'different'
