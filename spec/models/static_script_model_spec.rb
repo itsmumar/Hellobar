@@ -434,4 +434,38 @@ describe StaticScriptModel do
       end
     end
   end
+
+  describe '#gdpr_template' do
+    it 'returns array of templates' do
+      expect(model.gdpr_template)
+        .to match_array(
+          [{ name: 'gdpr', markup: a_string_matching(/context\.gdpr_consent/) }]
+        )
+    end
+  end
+
+  describe '#gdpr_consent' do
+    let(:site) do
+      create :site,
+        communication_types: %w[newsletter promotional partnership product research]
+    end
+
+    it 'returns consent sentence' do
+      expect(model.gdpr_consent)
+        .to eql 'I consent to occasionally receive newsletter, promotional, ' \
+                'partnership, product/service, and market research emails.'
+    end
+  end
+
+  describe '#terms_and_conditions_url' do
+    let(:site) { create :site, terms_and_conditions_url: 'http://google.com/terms' }
+
+    specify { expect(model.terms_and_conditions_url) .to eql 'http://google.com/terms' }
+  end
+
+  describe '#privacy_policy_url' do
+    let(:site) { create :site, privacy_policy_url: 'http://google.com/policy' }
+
+    specify { expect(model.privacy_policy_url) .to eql 'http://google.com/policy' }
+  end
 end
