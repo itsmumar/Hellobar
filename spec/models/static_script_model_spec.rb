@@ -385,6 +385,7 @@ describe StaticScriptModel do
         hellobar_container_css templates branding_templates content_upgrade_template
         geolocation_url hb_backend_host site_write_key external_tracking hellobar_element_css
         content_upgrades content_upgrades_styles autofills script_is_installed_properly rules
+        gdpr_consent gdpr_template
       ]
     end
 
