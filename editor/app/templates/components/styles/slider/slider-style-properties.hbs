@@ -15,10 +15,12 @@
     Allow to hide a slider
   </label>
 
+  {{#if isEmailSubtype}}
   <label class="toggle-gdpr">
     {{common/checkboxes/toggle-switch switch=model.enable_gdpr}}
     GDPR Compliant
   </label>
+  {{/if}}
 
   <label>Placement</label>
 
