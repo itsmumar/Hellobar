@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Hello Bar Integration', :js, :contact_list_feature do
   let(:provider) { '0' }
 

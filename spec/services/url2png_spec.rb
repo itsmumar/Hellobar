@@ -11,8 +11,8 @@ describe Url2png do
   describe '#call' do
     it 'returns URL to url2png.com with all params' do
       expect(url).to eql 'api.url2png.com/v6/PXXX/' \
-                         'a39f2dd2023bc3c175a8f010b5808ade/png/' \
-                         '?custom_css_url=http%3A%2F%2Flocalhost' \
+                         '0f771cd37ea00f9338850913601177a3/png/' \
+                         '?custom_css_url=https%3A%2F%2Flocalhost' \
                          '%2Fstylesheets%2Fhide_bar.css&' \
                          'ttl=604800&url=http%3A%2F%2Fexample.com&viewport=320x568'
     end

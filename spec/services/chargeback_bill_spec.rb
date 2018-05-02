@@ -2,7 +2,7 @@ describe ChargebackBill do
   subject(:service) { described_class.new(bill) }
 
   # let(:subscription) { create(:subscription, :pro) }
-  let(:bill) { create(:bill, :pro, :paid) }
+  let!(:bill) { create(:bill, :pro, :paid) }
 
   before do
     allow(ChangeSubscription).to receive_service_call
@@ -17,6 +17,10 @@ describe ChargebackBill do
       service.call
 
       expect(bill.chargeback).to be_present
+    end
+
+    it 'creates a new BillingAttempt record' do
+      expect { service.call }.to change(BillingAttempt.chargeback.successful, :count).by(1)
     end
 
     it 'downgrades subscription to free' do
@@ -39,6 +43,10 @@ describe ChargebackBill do
       service.call rescue nil # rubocop:disable Style/RescueModifier
     end
 
+    it 'does not create a new BillingAttempt record' do
+      expect { service.call rescue nil }.not_to change { BillingAttempt.count } # rubocop:disable Style/RescueModifier
+    end
+
     it 'raises error' do
       expect { service.call }.to raise_error(error)
     end
@@ -53,6 +61,10 @@ describe ChargebackBill do
 
     it 'does not create a chargeback record' do
       expect { service.call rescue nil }.not_to change { Bill::Chargeback.count } # rubocop:disable Style/RescueModifier
+    end
+
+    it 'does not create a new BillingAttempt record' do
+      expect { service.call rescue nil }.not_to change { BillingAttempt.count } # rubocop:disable Style/RescueModifier
     end
 
     it 'raises error' do

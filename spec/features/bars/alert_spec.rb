@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Adding Alert bar', :js do
   given(:email) { 'bob@lawblog.com' }
   given(:site) { create :site, :with_user, :with_rule, :pro_managed }

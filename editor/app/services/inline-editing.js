@@ -6,7 +6,7 @@ import defaultBlocks from './inline-editing.blocks';
 import geolocationHelper from './inline-editing.geolocation-helper';
 
 // Froala Editor license key
-const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
+const froalaKey = 'UA9B8E7A3dC3E3A2B10B6B5D5E4E3A2C-7KC1KXDF1INBh1KPe2TK==';
 
 /**
  * Simple model adapter that performs basic inline editing data management

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Visit click to call on desktop browser', js: true do
   scenario "doesn't show the site element" do
     element = create(:modal, element_subtype: 'call', phone_number: '(555)-555-5555')

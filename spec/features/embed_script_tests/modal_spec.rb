@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Site with a modal', :js do
   let(:site_element) { create(:modal) }
 

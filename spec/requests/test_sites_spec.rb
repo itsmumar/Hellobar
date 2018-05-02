@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 describe 'test_sites requests' do
   describe 'GET :show' do
     let!(:site) { create :site }

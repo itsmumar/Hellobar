@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Autofills', :js do
   given!(:site_element) { create :bar, :email }
   given(:site) { site_element.site }

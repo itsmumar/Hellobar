@@ -1,13 +1,10 @@
 class PagesController < ApplicationController
+  before_action :require_no_user
+
   layout 'static'
 
-  def use_cases
-  end
-
-  def terms_of_use
-  end
-
-  def privacy_policy
+  def index
+    redirect_to new_user_session_path
   end
 
   def logout_confirmation

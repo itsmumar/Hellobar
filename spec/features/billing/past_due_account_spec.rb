@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Billing. Past due account', :js do
   given(:user) { create(:user) }
   given(:site) { create(:site, :with_rule, :pro, user: user) }

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Days since last visit condition', js: true do
   def set_lv_cookie(page, days)
     page.execute_script("

@@ -23,7 +23,6 @@ shared_examples 'an object with a valid url' do
       me@notaurl.com
       ftp://warez.dfnet.org
       http://*.site.com
-      http://my_site.com
       http://.site.com
     ]
 
@@ -41,6 +40,7 @@ shared_examples 'an object with a valid url' do
       http://zombo.com
       http://horse.bike
       http://madam-e.ru
+      http://my_site.com
       http://ec2-174-129-140-89.compute-1.amazonaws.com
       http://xn--d1acpjx3f.xn--p1ai/%D0%BF%D0%BE%D0%B8%D1%81%D0%BA
     ]

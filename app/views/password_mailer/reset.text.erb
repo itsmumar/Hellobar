@@ -6,6 +6,5 @@ If you need to reset your password please follow the link below:
 
 <%= edit_user_password_url(reset_password_token: @reset_password_token) %>
 
-This link will expire soon.
-If this link does not work you'll need to generate
-a new link at https://www.hellobar.com/forgot
+This link will expire soon. If this link does not work you'll need to generate
+a new one at <%= new_user_password_url %>

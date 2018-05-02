@@ -21,7 +21,9 @@ module Admin::SubscriptionsHelper
       ]
     end
 
+    filters << ['Trial', trial_admin_subscriptions_path]
     filters << ['Ended trial', ended_trial_admin_subscriptions_path]
+    filters << ['Deleted', deleted_admin_subscriptions_path]
 
     items = filters.map do |title, path|
       css = [:presentation]
@@ -34,5 +36,20 @@ module Admin::SubscriptionsHelper
     content_tag :ul, class: %w[nav nav-tabs] do
       safe_join(items)
     end
+  end
+
+  def subscription_site(subscription)
+    subscription.site_id && Site.with_deleted.where(id: subscription.site_id).first
+  end
+
+  def subscription_site_link(subscription)
+    site = subscription_site(subscription)
+    return unless site
+
+    link_to site.url, admin_site_path(site)
+  end
+
+  def subscription_history_link(subscription)
+    link_to "#{ subscription.values[:name] } ##{ subscription.id }", admin_subscription_path(subscription)
   end
 end
