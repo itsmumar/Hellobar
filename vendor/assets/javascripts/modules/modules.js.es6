@@ -91,7 +91,10 @@
         });
 
         !isPreviewMode() && configure('tracking.internal', function (configuration) {
-          configuration.backendHost(data.hb_backend_host).siteWriteKey(data.site_write_key);
+          configuration
+            .backendHost(data.hb_backend_host)
+            .trackingHost(data.tracking_host)
+            .siteWriteKey(data.site_write_key);
         });
 
         !isPreviewMode() && hasCapability('external_tracking') && configure('tracking.external', function (configuration) {

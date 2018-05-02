@@ -4,6 +4,7 @@ hellobar.defineModule('tracking.internal',
 
     const configuration = hellobar.createModuleConfiguration({
       backendHost: 'string',
+      trackingHost: 'string',
       siteWriteKey: 'string'
     });
 
@@ -56,7 +57,12 @@ hellobar.defineModule('tracking.internal',
 
     // Returns the URL for the backend server (e.g. "hi.hellobar.com").
     function hi(url) {
-      return (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + configuration.backendHost() + url;
+      var host = configuration.backendHost();
+      if (url.match(/^\/c\//i) && configuration.trackingHost()) {
+        host = configuration.trackingHost();
+      }
+
+      return (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + host + url;
     }
 
     function paramsToString(params) {
