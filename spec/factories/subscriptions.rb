@@ -42,7 +42,7 @@ FactoryBot.define do
 
     trait :with_bill do
       after :create do |subscription|
-        create(:recurring_bill, :paid, subscription: subscription)
+        create(:bill, :paid, subscription: subscription)
         subscription.reload
       end
     end

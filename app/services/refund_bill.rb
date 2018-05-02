@@ -2,7 +2,7 @@ class RefundBill
   class InvalidRefund < StandardError; end
   class MissingCreditCard < StandardError; end
 
-  # @param [Bill::Recurring] bill
+  # @param [Bill] bill
   def initialize(bill)
     @bill = bill
     @amount = bill.amount.abs * -1 # Refunds are always negative
@@ -30,18 +30,17 @@ class RefundBill
 
     if response.success?
       Bill.transaction do
-        create_success_refund_bill(response.authorization).tap do |bill|
-          create_billing_attempt(bill)
-          cancel_subscription
-        end
+        transition_bill_status
+        create_success_billing_attempt(bill, response.authorization)
+        cancel_subscription
       end
     else
-      Bill.transaction do
-        create_failed_refund_bill.tap do |bill|
-          create_billing_attempt(bill)
-        end
-      end
+      create_failed_billing_attempt(bill)
     end
+  end
+
+  def transition_bill_status
+    bill.refunded!
   end
 
   def cancel_subscription
@@ -53,36 +52,18 @@ class RefundBill
     ChangeSubscription.new(bill.site, subscription: 'free').call
   end
 
-  def successful_billing_attempt
-    @successful_billing_attempt ||= bill.successful_billing_attempt
+  def create_success_billing_attempt(bill, authorization_code)
+    create_billing_attempt(bill, BillingAttempt::SUCCESSFUL, authorization_code)
   end
 
-  def create_success_refund_bill authorization_code
-    create_refund_bill! status: Bill::REFUNDED, authorization_code: authorization_code
+  def create_failed_billing_attempt(bill)
+    create_billing_attempt(bill, BillingAttempt::FAILED)
   end
 
-  def create_failed_refund_bill
-    create_refund_bill! status: Bill::VOIDED
-  end
-
-  def create_refund_bill!(status:, authorization_code: nil)
-    Bill::Refund.create!(
-      subscription_id: bill.subscription_id,
-      amount: amount,
-      description: 'Refund due to customer service request',
-      bill_at: Time.current,
-      start_date: Time.current,
-      end_date: bill.end_date,
-      refunded_bill: bill,
-      status: status,
-      authorization_code: authorization_code
-    )
-  end
-
-  def create_billing_attempt(bill)
+  def create_billing_attempt(bill, status, authorization_code = nil)
     bill.billing_attempts.create!(
-      response: bill.authorization_code,
-      status: bill.refunded? ? BillingAttempt::SUCCESSFUL : BillingAttempt::FAILED,
+      response: authorization_code,
+      status: status,
       action: BillingAttempt::REFUND
     )
   end
