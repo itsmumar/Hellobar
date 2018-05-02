@@ -67,7 +67,7 @@ describe AddTrialSubscription, :freeze do
 
     context 'when error is raised during transaction' do
       it 'does not create neither a subscription nor a bill' do
-        expect(Bill::Recurring).to receive(:create!).and_raise(StandardError)
+        expect(Bill).to receive(:create!).and_raise(StandardError)
         expect { service.call }
           .to raise_error(StandardError)
           .and change(Subscription, :count)
