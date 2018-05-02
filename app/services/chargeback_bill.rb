@@ -5,7 +5,7 @@ class ChargebackBill
 
   def call
     Bill.transaction do
-      switch_bill_status!
+      transition_bill_status
       create_billing_attempt(bill)
       cancel_subscription
     end
@@ -17,7 +17,7 @@ class ChargebackBill
 
   delegate :subscription, to: :bill
 
-  def switch_bill_status!
+  def transition_bill_status
     bill.chargedback!
   end
 

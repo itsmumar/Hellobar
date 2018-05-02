@@ -30,7 +30,7 @@ class RefundBill
 
     if response.success?
       Bill.transaction do
-        switch_bill_status!
+        transition_bill_status
         create_success_billing_attempt(bill, response.authorization)
         cancel_subscription
       end
@@ -39,7 +39,7 @@ class RefundBill
     end
   end
 
-  def switch_bill_status!
+  def transition_bill_status
     bill.refunded!
   end
 
