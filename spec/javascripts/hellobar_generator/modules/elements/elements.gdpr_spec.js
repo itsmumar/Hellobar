@@ -18,9 +18,7 @@ describe('Module elements.gdpr', function () {
 
 
     dependencies['base.templating'].render.and.returnValue("-TEMPLATE-");
-  });
 
-  it('successfully creates and removes elements', function () {
     var html = `
       <div id="hellobar-modal">
         <div class="hb-text-wrapper">
@@ -35,8 +33,15 @@ describe('Module elements.gdpr', function () {
     `;
 
     document.body.insertAdjacentHTML('beforeend', html);
+  });
 
+  afterEach(function () {
+    document.body.querySelector('#hellobar-modal').remove();
+  })
+
+  it('displays gdpr form', function () {
     var siteElement = {
+      enable_gdpr: true,
       contentDocument () {
         return document.body.querySelector('#hellobar-modal')
       },
@@ -57,4 +62,22 @@ describe('Module elements.gdpr', function () {
     expect(callback).toHaveBeenCalled();
   });
 
+  it('does not display gdpr form if gdpr is not enabled', function () {
+    var siteElement = {
+      enable_gdpr: false,
+      contentDocument () {
+        return document.body.querySelector('#hellobar-modal')
+      },
+
+      model () {
+        return this
+      }
+    };
+
+    var targetSiteElement = document.body.querySelector('.hb-headline-text');
+    var callback = jasmine.createSpy('callback');
+
+    module.displayCheckboxes(siteElement, targetSiteElement, callback);
+    expect(callback).toHaveBeenCalled();
+  });
 });
