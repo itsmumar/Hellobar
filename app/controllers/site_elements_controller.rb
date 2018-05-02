@@ -119,7 +119,7 @@ class SiteElementsController < ApplicationController
       :thank_you_text, :theme_id, :type, :use_question,
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
-      :trigger_icon_color,
+      :trigger_icon_color, :enable_gdpr,
       { settings: settings_keys },
       blocks: blocks_keys
     )
