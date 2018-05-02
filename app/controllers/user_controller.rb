@@ -17,7 +17,7 @@ class UserController < ApplicationController
     if @user.update(attr_hash)
       sign_in @user, event: :authentication
 
-      flash[:event] = { name: 'signup-invitation' }
+      flash[:event] = { category: 'Signup', action: 'signup-invitation' }
 
       redirect_to after_sign_in_path_for(@user)
     else
