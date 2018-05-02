@@ -122,6 +122,25 @@ describe FetchEmailStatistics do
         }
       end
 
+      let(:initial_statistics) do
+        {
+          'recipients' => 0,
+          'rejected' => 0,
+          'submitted' => 0,
+          'deferred' => 0,
+          'dropped' => 0,
+          'delivered' => 0,
+          'bounced' => 0,
+          'opened' => 0,
+          'clicked' => 0,
+          'unsubscribed' => 0,
+          'reported' => 0,
+          'group_unsubscribed' => 0,
+          'group_resubscribed' => 0,
+          'scheduled' => 0
+        }
+      end
+
       before do
         expect(FetchSiteContactListTotals).to receive_service_call
           .with(sequence_step.site, [sequence_step.contact_list_id])

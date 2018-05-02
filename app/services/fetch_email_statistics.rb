@@ -69,7 +69,9 @@ class FetchEmailStatistics
       'reported' => 0,
       'group_unsubscribed' => 0,
       'group_resubscribed' => 0
-    }
+    }.tap do |initial_values|
+      initial_values['scheduled'] = 0 if subject.is_a?(SequenceStep)
+    end
   end
 
   def subscribers_count
