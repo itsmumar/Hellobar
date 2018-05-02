@@ -11,5 +11,6 @@ elsif Rails.env.development?
   Paperclip::Attachment.default_options[:path] = ':rails_root/public/:class/:id_partition/:style.:extension'
   Paperclip::Attachment.default_options[:url] = '/:class/:id_partition/:style.:extension'
 else # Test
-  Paperclip::Attachment.default_options[:path] = ':rails_root/tmp/test_:class/:id_partition/:style.:extension'
+  Paperclip::Attachment.default_options[:path] = ':rails_root/public/test_:class/:id_partition/:style.:extension'
+  Paperclip::Attachment.default_options[:url] = '/test_:class/:id_partition/:style.:extension'
 end

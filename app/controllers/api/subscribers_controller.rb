@@ -1,6 +1,6 @@
 class Api::SubscribersController < Api::ApplicationController
   def index
-    render json: FetchLatestContacts.new(contact_list).call
+    render json: fetch_subscribers
   end
 
   def create
@@ -15,7 +15,7 @@ class Api::SubscribersController < Api::ApplicationController
 
   def destroy
     DeleteSubscriber.new(contact_list, params[:email]).call
-    render json: FetchLatestContacts.new(contact_list).call
+    render json: fetch_subscribers
   end
 
   private
@@ -26,6 +26,17 @@ class Api::SubscribersController < Api::ApplicationController
 
   def contact_list
     @contact_list ||= site.contact_lists.find(params[:contact_list_id])
+  end
+
+  def pagination_params
+    {
+      key: params[:key],
+      forward: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:forward]) || false
+    }
+  end
+
+  def fetch_subscribers
+    FetchSubscribers.new(contact_list, pagination_params).call
   end
 
   def subscriber_params

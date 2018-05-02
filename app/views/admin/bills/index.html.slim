@@ -3,3 +3,5 @@
     div.col-md-12
       h1 Bills
       = render 'admin/bills/list', bills: @bills, user: nil
+
+  = paginate @bills

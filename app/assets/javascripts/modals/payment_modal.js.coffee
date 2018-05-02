@@ -130,10 +130,10 @@ class @PaymentModal extends Modal
 
           if window?.dataLayer?.push && data?.site?.current_subscription
             window.dataLayer.push
-              event: 'paymentSuccessful'
+              event: 'GAEvent'
               category: 'Subscription'
               action: data.status
-              label: data.site.current_subscription.name
+              label: data.site.current_subscription.name + '-' + data.site.current_subscription.schedule
 
           new PaymentConfirmationModal(options).open()
           @close()

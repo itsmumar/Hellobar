@@ -74,7 +74,7 @@ section
                 - if bill.is_a?(Bill::Refund)
                   |  (Refund)
               td= "Hello Bar #{bill.subscription.values[:name]}"
-              td= bill.used_credit_card.description
+              td= bill.used_credit_card&.description
               td
                 - if bill.failed?
                   - if params[:should_update_card] || !bill.can_pay?

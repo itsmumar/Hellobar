@@ -17,7 +17,8 @@ describe DynamoDB do
     Aws::DynamoDB::Types::QueryOutput.new(
       items: items,
       consumed_capacity: consumed_capacity,
-      count: count
+      count: count,
+      last_evaluated_key: nil
     )
   end
 
@@ -130,6 +131,10 @@ describe DynamoDB do
     let(:params) { Hash[table_name: table_name] }
     let(:query) { dynamo_db.query(params) }
 
+    before do
+      allow(Rails.cache).to receive(:fetch).and_yield
+    end
+
     it 'returns enumerable of items' do
       expect(query).to eql items
     end
@@ -137,7 +142,7 @@ describe DynamoDB do
     it 'tries to fetch from the Rails cache without querying DynamoDB' do
       expect(Aws::DynamoDB::Client).not_to receive :new
       expect(Rails.cache).to receive(:fetch)
-        .with(/DynamoDB\/\w+/, expires_in: expires_in)
+        .with(/DynamoDB\/\w+/, expires_in: expires_in).and_return(query_output)
 
       query
     end

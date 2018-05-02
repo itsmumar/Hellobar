@@ -30,11 +30,17 @@ class RefundBill
 
     if response.success?
       Bill.transaction do
-        create_paid_refund_bill response.authorization
-        cancel_subscription
+        create_success_refund_bill(response.authorization).tap do |bill|
+          create_billing_attempt(bill)
+          cancel_subscription
+        end
       end
     else
-      create_failed_refund_bill
+      Bill.transaction do
+        create_failed_refund_bill.tap do |bill|
+          create_billing_attempt(bill)
+        end
+      end
     end
   end
 
@@ -51,7 +57,7 @@ class RefundBill
     @successful_billing_attempt ||= bill.successful_billing_attempt
   end
 
-  def create_paid_refund_bill authorization_code
+  def create_success_refund_bill authorization_code
     create_refund_bill! status: Bill::REFUNDED, authorization_code: authorization_code
   end
 
@@ -70,6 +76,14 @@ class RefundBill
       refunded_bill: bill,
       status: status,
       authorization_code: authorization_code
+    )
+  end
+
+  def create_billing_attempt(bill)
+    bill.billing_attempts.create!(
+      response: bill.authorization_code,
+      status: bill.refunded? ? BillingAttempt::SUCCESSFUL : BillingAttempt::FAILED,
+      action: BillingAttempt::REFUND
     )
   end
 

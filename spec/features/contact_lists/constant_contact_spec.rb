@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Constant Contact Integration', :js, :contact_list_feature do
   let(:provider) { 'constantcontact' }
 

@@ -42,7 +42,7 @@ class ContactListsController < ApplicationController
     respond_to do |format|
       format.html do
         @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
-        @subscribers = FetchLatestContacts.new(@contact_list).call
+        @subscribers = FetchSubscribers.new(@contact_list).call[:items]
         @total_subscribers = fetch_subscribers_count(@contact_list.id)
       end
       format.json { render json: @contact_list }

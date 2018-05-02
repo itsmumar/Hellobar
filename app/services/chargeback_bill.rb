@@ -5,7 +5,8 @@ class ChargebackBill
 
   def call
     Bill.transaction do
-      create_chargeback_record!
+      bill = create_chargeback_record!
+      create_billing_attempt(bill)
       cancel_subscription
     end
   end
@@ -26,6 +27,13 @@ class ChargebackBill
       end_date: bill.end_date,
       chargedback_bill: bill,
       status: Bill::CHARGEDBACK
+    )
+  end
+
+  def create_billing_attempt(bill)
+    bill.billing_attempts.create!(
+      status: BillingAttempt::SUCCESSFUL,
+      action: BillingAttempt::CHARGEBACK
     )
   end
 

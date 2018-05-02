@@ -23,6 +23,7 @@ class Subscription < ApplicationRecord
   scope :active, -> { paid.merge(Bill.without_refunds.without_chargebacks) }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
   scope :ended_trial, -> { where('trial_end_date is not null AND trial_end_date < ?', Time.current) }
+  scope :trial, -> { where('trial_end_date is not null AND trial_end_date > ?', Time.current) }
 
   validates :schedule, presence: true, inclusion: { in: SCHEDULES }
   validates :site, presence: true, associated: true
