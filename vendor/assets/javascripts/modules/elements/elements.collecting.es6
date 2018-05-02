@@ -159,7 +159,6 @@ hellobar.defineModule('elements.collecting',
       if (validateEmail(email)) {
         elementsGDPR.displayCheckboxes(
           siteElement,
-          formElement,
           targetSiteElement,
           () => {
             collectEmail(

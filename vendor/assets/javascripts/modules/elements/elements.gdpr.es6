@@ -36,7 +36,7 @@ hellobar.defineModule('elements.gdpr',
       }
     }
 
-    function displayCheckboxes (siteElement, formElement, targetSiteElement, callback) {
+    function displayCheckboxes (siteElement, targetSiteElement, callback) {
       const template = templating.render('gdpr', configuration.settings())
       targetSiteElement.innerHTML = template;
 
