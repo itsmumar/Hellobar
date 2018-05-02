@@ -1,8 +1,9 @@
 // GTM events in flash messages
 - if flash[:event].present?
-  - action = flash[:event]['name']
+  - category = flash[:event]['category']
+  - action = flash[:event]['action']
 
   javascript:
     if (window.dataLayer) {
-      window.dataLayer.push({ event: 'GAEvent', action: '#{ action }' })
+      window.dataLayer.push({ event: 'GAEvent', category: '#{ category }', action: '#{ action }' })
     }

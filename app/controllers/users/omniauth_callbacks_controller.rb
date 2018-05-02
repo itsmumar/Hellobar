@@ -7,7 +7,7 @@ class Users::OmniauthCallbacksController < ApplicationController
 
     sign_in user, event: :authentication
 
-    flash[:event] = { name: 'signup-google' } if user.new?
+    flash[:event] = { category: 'Signup', action: 'signup-google' } if user.new?
 
     redirect_to redirect_url || after_sign_in_path_for(user)
   end
