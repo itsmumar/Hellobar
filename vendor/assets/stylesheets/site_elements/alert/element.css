@@ -49,6 +49,7 @@
 
 #hellobar-slider .hb-secondary-text {
   font-size: 0.85em;
+  margin-bottom: 8px;
 }
 
 /*-----------  Call to Acton Button  -----------*/
@@ -171,6 +172,13 @@
   display: block;
   clear: both;
   content: '';
+}
+
+/*----------- Inputs -----------*/
+
+#hellobar-slider .hb-input-wrapper .hb-input-block input {
+  font-size: 11px;
+  height: 30px;
 }
 
 /*-----------  Social Styling  -----------*/

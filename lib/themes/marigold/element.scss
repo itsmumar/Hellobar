@@ -154,8 +154,7 @@
   .image-background .hb-image-wrapper.background {
     width: 45%;
 
-    & ~ .slider-content,
-    & ~ .hb-content-wrapper {
+    & ~ .slider-content {
       margin-left: 45%;
     }
   }
