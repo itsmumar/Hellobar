@@ -444,6 +444,12 @@ describe StaticScriptModel do
     end
   end
 
+  describe '#gdpr_enabled' do
+    it 'returns site.gdpr_enabled?' do
+      expect(model.gdpr_enabled).to be site.gdpr_enabled?
+    end
+  end
+
   describe '#gdpr_consent' do
     let(:site) do
       create :site,
