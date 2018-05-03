@@ -36,10 +36,6 @@ module SitesHelper
     current_user.sites.sort_by { |s| s.host || '' }
   end
 
-  def bill_due_at(bill)
-    bill.due_at.strftime('%-m-%-d-%Y')
-  end
-
   def bill_estimated_amount(bill)
     number_to_currency(bill.estimated_amount)
   end
