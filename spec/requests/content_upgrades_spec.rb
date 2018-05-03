@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 describe 'Content upgrade requests' do
   let(:user) { create :user }
   let(:site) { create :site, :with_rule, user: user }

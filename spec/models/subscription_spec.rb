@@ -33,57 +33,20 @@ describe Subscription do
     let!(:unpaid_subscription) { create(:subscription, :pro) }
 
     before do
-      create(:recurring_bill, :pending, subscription: unpaid_subscription)
+      create(:bill, :pending, subscription: unpaid_subscription)
     end
 
     context 'when today is between bill start and end date' do
       it 'returns paid subscriptions with paid bills' do
-        create(:recurring_bill, :paid, subscription: paid_subscription)
+        create(:bill, :paid, subscription: paid_subscription)
         expect(Subscription.paid).to match_array [paid_subscription]
       end
     end
 
     context 'when bill is outdated' do
       it 'returns no subscriptions' do
-        create(:recurring_bill, :paid, subscription: paid_subscription, start_date: 1.month.ago, end_date: 1.day.ago)
+        create(:bill, :paid, subscription: paid_subscription, start_date: 1.month.ago, end_date: 1.day.ago)
         expect(Subscription.paid).to be_empty
-      end
-    end
-  end
-
-  describe '.active scope' do
-    context 'with paid bill' do
-      let(:pro) { create(:subscription, :pro, :with_bill) }
-      let(:free) { create(:subscription, :free, :with_bill) }
-      let(:free_plus) { create(:subscription, :free_plus, :with_bill) }
-      let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
-      let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
-      let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
-
-      let!(:active_subscriptions) do
-        [pro, free, free_plus, enterprise, pro_managed, pro_comped]
-      end
-
-      it 'returns subscriptions' do
-        expect(Subscription.active).to match_array active_subscriptions
-      end
-
-      context 'and refunded bill' do
-        before { stub_cyber_source :refund }
-
-        it 'returns no subscriptions' do
-          RefundBill.new(pro.bills.first).call
-          expect(Subscription.active).not_to include pro.reload
-        end
-      end
-    end
-
-    context 'with pending bill' do
-      let!(:active_subscription) { create(:subscription, :pro) }
-      before { create(:recurring_bill, :pending, subscription: active_subscription) }
-
-      it 'returns no subscriptions' do
-        expect(Subscription.active).to be_empty
       end
     end
   end

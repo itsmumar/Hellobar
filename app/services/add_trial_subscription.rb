@@ -32,7 +32,7 @@ class AddTrialSubscription
   end
 
   def create_bill(subscription)
-    Bill::Recurring.create!(subscription: subscription) do |bill|
+    Bill.create!(subscription: subscription) do |bill|
       bill.status = :paid
       bill.amount = 0
       bill.grace_period_allowed = false

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE = Date.new(2018, 4, 26)
+
   acts_as_paranoid
 
   include UserValidator
@@ -77,7 +79,7 @@ class User < ApplicationRecord
   end
 
   def paying_subscription?
-    subscriptions.active.any? do |subscription|
+    subscriptions.paid.any? do |subscription|
       subscription.capabilities.acts_as_paid_subscription?
     end
   end

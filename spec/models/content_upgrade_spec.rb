@@ -1,14 +1,14 @@
 describe ContentUpgrade do
-  let(:model) { build :content_upgrade }
+  let(:model) { build :content_upgrade, id: 1 }
 
   specify { expect(model).to have_attached_file :content_upgrade_pdf }
   specify { expect(model).to validate_attachment_presence(:content_upgrade_pdf) }
   specify { expect(model).to validate_attachment_content_type(:content_upgrade_pdf).allowing('application/pdf') }
 
-  describe '.content_upgrade_download_link' do
+  describe '.content_upgrade_download_link', :freeze do
     it 'returns url to attached file' do
       expect(model.content_upgrade_download_link)
-        .to match '/system/content_upgrades/content_upgrade_pdfs//original/content_upgrade.pdf'
+        .to match "/test_content_upgrades/000/000/001/original.pdf?#{ Time.current.to_i }"
     end
   end
 

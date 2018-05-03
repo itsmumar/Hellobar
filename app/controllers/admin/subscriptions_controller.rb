@@ -8,13 +8,23 @@ class Admin::SubscriptionsController < AdminController
     render :index
   end
 
+  def trial
+    @subscriptions = paginate(scope.trial)
+    render :index
+  end
+
   def ended_trial
     @subscriptions = paginate(scope.ended_trial)
     render :index
   end
 
+  def deleted
+    @subscriptions = paginate(scope.deleted)
+    render :index
+  end
+
   def show
-    @subscription = Subscription.find(params[:id])
+    @subscription = Subscription.with_deleted.find(params[:id])
   end
 
   private

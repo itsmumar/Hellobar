@@ -46,11 +46,13 @@ class DynamoDB
   #
   def query_each(request, fetch_all: true, &block)
     loop do
-      items, last_evaluated_key = cached_query(request)
-      items&.each(&block)
-      break unless fetch_all && last_evaluated_key
+      response = raw_query(request)
+      break unless response
 
-      request = request.merge(exclusive_start_key: last_evaluated_key)
+      response.items&.each(&block)
+      break unless fetch_all && response.last_evaluated_key
+
+      request = request.merge(exclusive_start_key: response.last_evaluated_key)
     end
   end
 
@@ -84,14 +86,19 @@ class DynamoDB
     send_request(:delete_item, params) || {}
   end
 
-  private
-
-  def cached_query(request)
+  def raw_query(request)
     cache(request) do
       response = send_query(request)
-      [response&.items, response&.last_evaluated_key]
+
+      next unless response
+
+      # response data is wrapped into OpenStruct in order to prevent exception:
+      #   can't dump anonymous class #<Class:0x007fbf40972de8>
+      OpenStruct.new(items: response.items, last_evaluated_key: response.last_evaluated_key)
     end
   end
+
+  private
 
   def cache(request)
     Rails.cache.fetch(cache_key(request), expires_in: expires_in) do

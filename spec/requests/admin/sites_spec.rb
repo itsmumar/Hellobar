@@ -72,7 +72,7 @@ describe 'Admin::Sites requests' do
         let(:site) { create(:site, :with_user, :pro, schedule: :yearly) }
         let(:params) { { subscription: { subscription: 'Enterprise', schedule: 'monthly' } } }
 
-        before { create(:recurring_bill, :paid, subscription: site.current_subscription) }
+        before { create(:bill, :paid, subscription: site.current_subscription) }
 
         it 'raises error' do
           update

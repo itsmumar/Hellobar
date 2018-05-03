@@ -11,7 +11,7 @@ describe SubscriptionMailer do
     end
 
     it 'has correct subject' do
-      expect(subject).to have_subject("Your Hello Bar subscription for #{ site.url } have been downgraded to Free")
+      expect(subject).to have_subject("Your Hello Bar subscription for #{ site.url } has been downgraded to Free")
     end
 
     it 'is sent from hello bar contact email' do

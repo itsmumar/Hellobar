@@ -22,7 +22,7 @@
 
       - site.subscriptions.with_deleted.reverse.each do |sub|
         div
-          | Changed to <strong>#{ sub.values[:name] } ##{ sub.id }</strong> on #{ format_date(sub.created_at) } #{ sub.trial_end_date ? "(trial ends #{ format_date(sub.trial_end_date) })" : ''}
+          | Changed to <strong>#{ subscription_history_link(sub) }</strong> on #{ format_date(sub.created_at) } #{ sub.trial_end_date ? "(trial ends #{ format_date(sub.trial_end_date) })" : ''}
 
           - if sub.deleted?
             | (subscription deleted on #{ format_date(sub.deleted_at) })

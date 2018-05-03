@@ -26,7 +26,13 @@ class RegistrationsController < ApplicationController
 
   def validate_url
     unless @form.site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      flash.now[:error] = 'Your URL is not valid. Please double-check it and try again.'
+      render :new
+      return false
+    end
+
+    unless @form.accept_terms_and_conditions
+      flash.now[:error] = 'Your must accept Terms of Use and Privacy Policy.'
       render :new
       return false
     end
@@ -44,6 +50,8 @@ class RegistrationsController < ApplicationController
 
     CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
     sign_in(@form.user)
+
+    flash[:event] = { category: 'Signup', action: 'signup-email' }
 
     redirect_to new_site_site_element_path(@form.site)
   end

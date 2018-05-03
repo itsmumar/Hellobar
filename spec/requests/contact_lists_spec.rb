@@ -30,14 +30,17 @@ describe 'ContactList requests' do
 
     describe 'GET :show' do
       let(:contact_list) { create :contact_list, :aweber, site: site }
+      let(:contacts) do
+        [
+          Contact.new(email: 'user@example.com', status: 'synced'),
+          Contact.new(email: 'john@example.com', status: 'error')
+        ]
+      end
 
       before do
         allow_any_instance_of(DynamoDB).to receive(:batch_get_item)
           .and_return('development_contacts' => [contact_list.id.to_s => 1])
-        allow_any_instance_of(FetchLatestContacts).to receive(:call).and_return([
-          Contact.new(email: 'user@example.com', status: 'synced'),
-          Contact.new(email: 'john@example.com', status: 'error')
-        ])
+        allow(FetchSubscribers).to receive_message_chain(:new, :call).and_return(items: contacts)
       end
 
       it 'responds with success and displays syncing statuses' do

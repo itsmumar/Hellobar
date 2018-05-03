@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'User sign ups with a referral token', :js do
   given(:email) { 'user@example.com' }
   given(:sender) { create :user }
@@ -22,7 +20,7 @@ feature 'User sign ups with a referral token', :js do
       visit accept_referrals_path(token: referral_token.token)
 
       fill_in 'registration_form[site_url]', with: 'hellobar.com'
-      click_on 'sign-up-button'
+      check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"
@@ -52,7 +50,7 @@ feature 'User sign ups with a referral token', :js do
       visit accept_referrals_path(token: referral_token.token)
 
       fill_in 'registration_form[site_url]', with: 'hellobar.com'
-      click_on 'sign-up-button'
+      check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
       click_on "I'll create it later - take me back"
@@ -100,6 +98,25 @@ feature 'User sign ups with a referral token', :js do
     def logout
       find('.header-user-wrapper .dropdown-wrapper').click
       find(:xpath, "//a[@href='/users/sign_out']").click
+    end
+  end
+
+  context 'when recipient signed up but does not install the script' do
+    background do
+      visit accept_referrals_path(token: referral_token.token)
+
+      fill_in 'registration_form[site_url]', with: 'hellobar.com'
+      click_on 'Create free account'
+      check 'registration_form[accept_terms_and_conditions]'
+      first('[name=signup_with_google]').click
+
+      click_on "I'll create it later - take me back"
+    end
+
+    scenario 'recipient sees announcement message on install page' do
+      visit site_install_path(Site.last)
+
+      expect(page).to have_content('Thanks for signing up! You’re currently on a free plan, in order to activate your 30 day trial of our Growth Plan')
     end
   end
 end

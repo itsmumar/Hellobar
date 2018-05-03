@@ -1,5 +1,5 @@
 class URLValidator < ActiveModel::EachValidator
-  URL_REGEXP = /^https?:\/\/([a-z0-9][a-z0-9\-]*)(\.[a-z0-9][a-z0-9\-]*)*(:[0-9]{1,5})?(\/.*)*$/ix
+  URL_REGEXP = /^https?:\/\/([a-z0-9][a-z0-9_\-]*)(\.[a-z0-9][a-z0-9_\-]*)*(:[0-9]{1,5})?(\/.*)*$/ix
 
   def validate_each(record, attribute, value)
     if value.blank?

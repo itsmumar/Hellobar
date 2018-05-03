@@ -165,6 +165,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :contact_lists, only: %i[show]
+
     resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
@@ -176,7 +178,7 @@ Rails.application.routes.draw do
         put :add_free_days
       end
 
-      resources :contact_lists, only: [:index]
+      resources :contact_lists, only: %i[index]
     end
 
     resources :bills, only: %i[index show] do
@@ -191,7 +193,9 @@ Rails.application.routes.draw do
 
     resources :subscriptions, only: %i[index show] do
       collection do
+        get :trial
         get :ended_trial
+        get :deleted
         get 'filter/:type', action: 'filter_by_type', as: :filter_by_type
       end
     end
@@ -208,16 +212,11 @@ Rails.application.routes.draw do
   end
 
   get '/install' => 'sites#install_redirect'
-
-  get '/use-cases' => 'pages#use_cases'
-  get '/amazon' => 'pages#use_cases'
-  get '/terms-of-use' => 'pages#terms_of_use'
-  get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get '/heartbeat' => 'heartbeat#index'
   get '/login', to: redirect('/users/sign_in')
-  get '/signup', to: redirect('/')
+  get '/signup', to: redirect('/users/sign_up')
 
   get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
 
@@ -225,12 +224,10 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: redirect('/')
-
-  root 'welcome#index'
-
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
+
+  root 'pages#index'
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end

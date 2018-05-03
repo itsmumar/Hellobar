@@ -10,12 +10,17 @@
   = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
   = f.input_field :email, placeholder: 'Your Email'
   = f.input_field :password, placeholder: 'Password'
+  = f.label :accept_terms_and_conditions, accept_terms_and_conditions_label do
+    = f.check_box :accept_terms_and_conditions
+    = accept_terms_and_conditions_label
   = f.button :submit, 'Create free account', class: 'button gray', name: 'signup_with_email'
 
   .strike
     span OR
 
-  = f.button :submit, 'Use your Google account', class: 'button', name: 'signup_with_google'
+  button type="submit" class="button google-sign-in-button" name="signup_with_google"
+    i.icon
+    span.label Use Google Account
 
   .devise-links
     = link_to 'Already a user? Sign in', new_user_session_path

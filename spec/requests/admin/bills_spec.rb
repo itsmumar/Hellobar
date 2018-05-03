@@ -97,16 +97,11 @@ describe 'Admin::Bills requests' do
 
     describe 'PUT #refund' do
       before { stub_cyber_source :refund }
-      let(:params) do
-        {
-          bill_recurring: { amount: 10 }
-        }
-      end
 
       it 'refunds a bill' do
         expect {
-          put refund_admin_bill_path(bill), params
-        }.to change(Bill::Refund, :count).by 1
+          put refund_admin_bill_path(bill)
+        }.to change(Bill.refunded, :count).by 1
 
         expect(response).to redirect_to admin_site_path(site)
       end
@@ -114,16 +109,10 @@ describe 'Admin::Bills requests' do
       context 'when failed' do
         let!(:bill) { create :bill, :pro }
 
-        let(:params) do
-          {
-            id: bill
-          }
-        end
-
         it 'returns refund error' do
           expect {
-            put refund_admin_bill_path(bill), params
-          }.not_to change(Bill::Refund, :count)
+            put refund_admin_bill_path(bill)
+          }.not_to change(Bill.refunded, :count)
           expect(response).to redirect_to admin_site_path(site)
         end
       end
@@ -131,7 +120,7 @@ describe 'Admin::Bills requests' do
 
     describe 'PUT #chargeback' do
       it 'calls ChargebackBill' do
-        expect { put chargeback_admin_bill_path(bill) }.to change(Bill::Chargeback, :count).by 1
+        expect { put chargeback_admin_bill_path(bill) }.to change(Bill.chargedback, :count).by 1
       end
 
       it 'redirects to site page' do

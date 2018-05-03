@@ -1,4 +1,4 @@
-describe ExecuteSequenceTriggers do
+describe ExecuteSequenceTriggers, :freeze do
   subject(:service) { described_class.new(email, name, contact_list) }
 
   let(:name) { 'Ralph' }

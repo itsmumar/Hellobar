@@ -5,7 +5,8 @@ class ChargebackBill
 
   def call
     Bill.transaction do
-      create_chargeback_record!
+      transition_bill_status
+      create_billing_attempt(bill)
       cancel_subscription
     end
   end
@@ -16,16 +17,14 @@ class ChargebackBill
 
   delegate :subscription, to: :bill
 
-  def create_chargeback_record!
-    Bill::Chargeback.create!(
-      subscription_id: bill.subscription_id,
-      amount: -bill.amount,
-      description: 'Chargeback',
-      bill_at: Time.current,
-      start_date: Time.current,
-      end_date: bill.end_date,
-      chargedback_bill: bill,
-      status: Bill::CHARGEDBACK
+  def transition_bill_status
+    bill.chargedback!
+  end
+
+  def create_billing_attempt(bill)
+    bill.billing_attempts.create!(
+      status: BillingAttempt::SUCCESSFUL,
+      action: BillingAttempt::CHARGEBACK
     )
   end
 

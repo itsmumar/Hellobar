@@ -14,7 +14,7 @@ class CreateBillForNextPeriod
   attr_reader :bill
 
   def create_bill_for_next_period
-    Bill::Recurring.create!(
+    Bill.create!(
       subscription: bill.subscription,
       amount: bill.subscription.amount,
       description: "#{ bill.subscription.monthly? ? 'Monthly' : 'Yearly' } Renewal",

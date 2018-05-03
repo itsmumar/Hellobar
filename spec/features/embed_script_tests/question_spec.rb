@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Site with a question modal', :js do
   let(:element) do
     create(:modal,

@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Geolocation', :js do
   given!(:site_element) { create :bar, :geolocation }
   given(:site) { site_element.site }

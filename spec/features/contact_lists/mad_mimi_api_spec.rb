@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'MadMimi api Integration', :js, :contact_list_feature do
   let(:provider) { 'mad_mimi_api' }
 

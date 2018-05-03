@@ -110,11 +110,11 @@ class PayRecurringBills
   end
 
   def days_since_first_billing_attempt(bill)
-    days_since_billing_attempt bill.billing_attempts.first
+    days_since_billing_attempt bill.billing_attempts.charge.first
   end
 
   def days_since_last_billing_attempt(bill)
-    days_since_billing_attempt bill.billing_attempts.last
+    days_since_billing_attempt bill.billing_attempts.charge.last
   end
 
   def days_since_billing_attempt(attempt)

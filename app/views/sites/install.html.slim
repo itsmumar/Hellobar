@@ -1,3 +1,6 @@
+= render 'shared/terms_and_conditions_prompt'
+= render 'shared/referral_announcement_prompt', site: @site
+
 .installation-page#install_page data-site-id=@site.id
   header
     h1 Install Hello Bar Script
@@ -69,7 +72,7 @@
       p
         strong Need More Help?
         | Try reading these&nbsp;
-        = link_to "helpful instructions for installing plugins on WordPress", "http://support.hellobar.com/how-do-i-manually-upload-a-wordpress-plugin/"
+        = link_to "helpful instructions for installing plugins on WordPress", "https://support.hellobar.com/how-do-i-manually-upload-a-wordpress-plugin/"
 
   .reveal-wrapper
     i.icon-contacts

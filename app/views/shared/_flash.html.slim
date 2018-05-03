@@ -1,9 +1,12 @@
-- flash.each do |key, message|
-  - next unless message.present?
-  .flash-block class=key
-    i.icon-close
-    - if message.is_a?(Array)
-      - message.each do |msg|
-        div= sanitize(msg, attributes: %w{ href target style })
-    - else
-      = sanitize(message, attributes: %w{ href target style })
+// regular flash messages
+- %i[success notice alert error].each do |key|
+  - if flash[key].present?
+    - message = flash[key]
+
+    .flash-block class=key
+      i.icon-close
+      - if message.is_a?(Array)
+        - message.each do |msg|
+          div= sanitize(msg, attributes: %w{ href target style })
+      - else
+        = sanitize(message, attributes: %w{ href target style })
