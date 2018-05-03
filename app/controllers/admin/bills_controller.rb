@@ -1,6 +1,11 @@
 class Admin::BillsController < AdminController
   def index
-    @bills = Bill.order('id desc').page(params[:page])
+    @bills = Bill.order(id: :desc).page(params[:page])
+  end
+
+  def filter_by_status
+    @bills = Bill.order(id: :desc).where(status: params[:status]).page(params[:page])
+    render :index
   end
 
   def show

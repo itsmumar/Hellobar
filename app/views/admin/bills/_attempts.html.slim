@@ -11,6 +11,6 @@ table
       td= attempt.id
       td= attempt.action
       td= attempt.status
-      td= attempt.created_at
+      td.date= attempt.created_at
       td= attempt.credit_card && link_to(attempt.credit_card&.last_digits, admin_credit_card_path(attempt.credit_card))
 
