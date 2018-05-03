@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501131156) do
+ActiveRecord::Schema.define(version: 20180503073324) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -377,7 +377,6 @@ ActiveRecord::Schema.define(version: 20180501131156) do
     t.datetime "script_uninstalled_at"
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
-    t.datetime "selected_goal_clicked_at"
     t.text     "settings",                        limit: 16777215
   end
 
