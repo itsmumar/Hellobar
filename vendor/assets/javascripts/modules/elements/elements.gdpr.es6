@@ -40,7 +40,7 @@ hellobar.defineModule('elements.gdpr',
       const template = templating.render('gdpr', configuration.settings())
       targetSiteElement.innerHTML = template;
 
-      if (siteElement.enable_gdpr) {
+      if (siteElement.model().enable_gdpr) {
         render(siteElement, targetSiteElement, callback);
       } else {
         callback();
