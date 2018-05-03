@@ -80,20 +80,6 @@ describe CalculateInternalMetrics, freeze: '2017-12-05 15:00 UTC' do
       expect(metrics.revenue_sum).to eq bill.amount
     end
 
-    it 'includes revenue from refunded bills (perhaps it should not)' do
-      site = create :site, :installed, :pro, created_at: 1.week.ago
-      bill = create :bill, :pro, :paid, subscription: site.current_subscription,
-        created_at: 1.week.ago, bill_at: 1.week.ago
-
-      create :refund_bill, :refunded, amount: -bill.amount,
-        subscription: site.current_subscription, created_at: 1.week.ago,
-        bill_at: 1.week.ago
-
-      expect(metrics.revenue).to match_array [bill]
-      expect(metrics.pro).to match_array [bill]
-      expect(metrics.revenue_sum).to eq bill.amount
-    end
-
     it 'includes revenue from downgraded subscriptions (perhaps it should not)' do
       site = create :site, :installed, :pro, created_at: 1.week.ago
       bill = create :bill, :pro, :paid, subscription: site.current_subscription,

@@ -1,0 +1,39 @@
+#site_details
+  div.site-title
+    h3
+      = link_to site_title(@site), admin_site_path(@site)
+
+
+  .contact-list
+    h4= contact_list_title(@contact_list)
+    h5
+      ' Synced to:
+      = @contact_list&.identity&.provider || "Hello Bar"
+    h5
+      ' Total subscribers count:
+      = @total_subscribers
+
+  div.site_section
+    div.title Subscribers
+    - if @subscribers[:items].any?
+
+      table.table.table-striped.contacts
+        tr
+          th Email
+          th Name
+          th Subscribed at
+          th Status
+          th Error
+
+        - @subscribers[:items].each do |subscriber|
+          tr
+            td= subscriber.email
+            td= subscriber.name
+            td= subscriber.subscribed_at
+            td= subscriber.status
+            td.error= simple_format subscriber.error
+
+      = render 'pagination_links'
+    - else
+
+      p No subscribers.

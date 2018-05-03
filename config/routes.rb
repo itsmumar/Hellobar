@@ -163,6 +163,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :contact_lists, only: %i[show]
+
     resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
@@ -174,7 +176,7 @@ Rails.application.routes.draw do
         put :add_free_days
       end
 
-      resources :contact_lists, only: [:index]
+      resources :contact_lists, only: %i[index]
     end
 
     resources :bills, only: %i[index show] do

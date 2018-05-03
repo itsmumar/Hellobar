@@ -196,7 +196,7 @@ class Site < ApplicationRecord
   end
 
   def active_paid_bill
-    bills.paid.active.without_refunds.without_chargebacks.reorder(end_date: :desc, id: :desc).first
+    bills.paid.active.reorder(end_date: :desc, id: :desc).first
   end
 
   def active_subscription

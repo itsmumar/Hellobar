@@ -21,7 +21,7 @@ class CalculateBill
   attr_reader :bills, :subscription
 
   def active_paid_bills
-    @active_paid_bills ||= bills.paid.active.without_refunds.without_chargebacks
+    @active_paid_bills ||= bills.paid.active
   end
 
   def last_subscription
@@ -62,7 +62,7 @@ class CalculateBill
   end
 
   def make_bill
-    Bill::Recurring.new(subscription: subscription) do |bill|
+    Bill.new(subscription: subscription) do |bill|
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
       bill.bill_at = Time.current
