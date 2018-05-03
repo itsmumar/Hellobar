@@ -51,6 +51,11 @@ describe 'Site Privacy requests' do
         expect(site.terms_and_conditions_url).to eql 'http://google.com/terms'
       end
 
+      it 'generates static script' do
+        expect { update }
+          .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+      end
+
       context 'when invalid' do
         def update
           put site_privacy_path site, site: {
