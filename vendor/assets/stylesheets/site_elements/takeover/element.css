@@ -109,7 +109,7 @@
 
 #hellobar-takeover .gdpr-consent-form {
   margin: 0 auto;
-  max-width: 15em;
+  max-width: 500px;
 }
 
 #hellobar-takeover .gdpr-consent-form p {
@@ -136,7 +136,7 @@
 }
 
 #hellobar-takeover.mobile .gdpr-consent-form {
-  max-width: 9em;
+  max-width: 350px;
 }
 
 #hellobar-takeover.mobile .gdpr-consent-form p {
