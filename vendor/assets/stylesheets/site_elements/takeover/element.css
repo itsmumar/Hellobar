@@ -105,7 +105,7 @@
 
 #hellobar-takeover .gdpr-consent-form {
   margin: 0 auto;
-  max-width: 14em;
+  max-width: 15em;
 }
 
 #hellobar-takeover .gdpr-consent-form p {
@@ -115,6 +115,10 @@
 
 #hellobar-takeover .gdpr-consent-form p:last-child {
   margin-bottom: 45px;
+}
+
+#hellobar-takeover .gdpr-consent-form input {
+  margin: 9px 13px 0 0;
 }
 
 /*-----------  State: Mobile  -----------*/
