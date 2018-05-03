@@ -20,9 +20,9 @@ class ChangeSubscription
 
   def change_or_update_subscription
     if same_subscription?
-      update_credit_card
+      [update_credit_card, 'credit-card-updated']
     else
-      change_subscription
+      [change_subscription, 'changed']
     end
   end
 
