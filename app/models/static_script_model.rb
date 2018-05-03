@@ -110,7 +110,7 @@ class StaticScriptModel
   end
 
   def gdpr_template
-    [{ name: 'gdpr', markup: render_asset('gdpr/checkboxes.html') }]
+    [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
   end
 
   def gdpr_consent
