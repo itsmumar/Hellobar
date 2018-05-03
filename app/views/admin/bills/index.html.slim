@@ -2,6 +2,7 @@
   div.row
     div.col-md-12
       h1 Bills
+      = bill_filters
       = render 'admin/bills/list', bills: @bills, user: nil
 
   = paginate @bills

@@ -180,6 +180,10 @@ Rails.application.routes.draw do
     end
 
     resources :bills, only: %i[index show] do
+      collection do
+        get 'filter/:status', action: 'filter_by_status', as: :filter_by_status
+      end
+
       member do
         get 'receipt'
         put 'void'
