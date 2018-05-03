@@ -170,15 +170,6 @@
   border-radius: 3px;
 }
 
-/*-----------  State: Multiline  -----------*/
-
-/*#hellobar-bar.multiline .hb-text-wrapper,
-#hellobar-bar.multiline .hb-input-wrapper {
-  display: block;
-  max-width: 100%;
-  text-align: center;
-}*/
-
 /*-----------  State: Bottom  -----------*/
 
 #hellobar-bar.bar-bottom {
@@ -227,7 +218,6 @@
 #hellobar-bar.regular .hb-input-wrapper .hb-input-block input {
   line-height: 195%;
 }
-
 
 /*-----------  Size: X-Large -----------*/
 
@@ -397,4 +387,18 @@
     -webkit-transform: translateX(-1px) rotate(0);
     transform: translateX(-1px) rotate(0);
   }
+}
+
+/*-----------  GDPR  -----------*/
+
+#hellobar-bar .gdpr-consent-form {
+  display: flex;
+  font-size: 13px;
+  max-width: 800px;
+}
+
+#hellobar-bar .gdpr-consent-form p {
+  align-items: flext-start;
+  flex: 45%;
+  margin: 3px 10px 6px 0;
 }
