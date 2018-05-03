@@ -51,4 +51,8 @@ module ApplicationHelper
         precision: 0
       )
   end
+
+  def format_date(datetime, format = '%F')
+    datetime&.strftime(format)
+  end
 end
