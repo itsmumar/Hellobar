@@ -181,6 +181,13 @@
   height: 30px;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-slider .gdpr-consent-form p {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
 /*-----------  Social Styling  -----------*/
 
 #hellobar-slider .hb-social-wrapper {

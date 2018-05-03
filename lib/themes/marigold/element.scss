@@ -161,11 +161,24 @@
 
   #hellobar-slider {
     .hb-image-wrapper.background ~ .slider-content {
-      padding: 16px 13px 18px 16px;
+      padding: 10px 10px 10px 13px;
     }
 
     .hb-text-wrapper {
       padding: 0;
+    }
+
+    .hb-cta-style-button .hb-text-holder {
+      padding: 0;
+    }
+
+    .gdpr-consent-form {
+      font-size: 11px;
+      padding-left: 0;
+
+      p {
+        margin-bottom: 1px;
+      }
     }
   }
 }
