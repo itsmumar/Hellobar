@@ -4,7 +4,7 @@ class UserController < ApplicationController
   before_action :load_user, only: %i[edit update destroy]
 
   def new
-    load_user_from_invitation
+    @user = User.where(invite_token: invitation_token, status: User::TEMPORARY).first
     return if @user.present? && !@user.invite_token_expired?
 
     flash[:error] = 'This invitation token has expired. Please request the owner to issue you a new invitation.'
@@ -12,18 +12,15 @@ class UserController < ApplicationController
   end
 
   def create
-    load_user_from_invitation
-    attr_hash = user_params.merge!(status: User::ACTIVE)
-    if @user.update(attr_hash)
-      sign_in @user, event: :authentication
+    @user = CreateUserFromInvitation.new(invitation_token, user_params).call
 
-      flash[:event] = { category: 'Signup', action: 'signup-invitation' }
+    sign_in @user, event: :authentication
 
-      redirect_to after_sign_in_path_for(@user)
-    else
-      flash[:error] = @user.errors.full_messages.uniq.join('. ') << '.'
-      render 'new'
-    end
+    flash[:event] = { category: 'Signup', action: 'signup-invitation' }
+    redirect_to after_sign_in_path_for(@user)
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:error] = e.record.errors.full_messages.uniq.join('. ') << '.'
+    render 'new'
   end
 
   def edit
@@ -96,11 +93,8 @@ class UserController < ApplicationController
 
   private
 
-  def load_user_from_invitation
-    token = params[:token] || params[:invite_token] || params.dig(:user, :invite_token)
-    return unless token
-
-    @user = User.where(invite_token: token, status: User::TEMPORARY).first
+  def invitation_token
+    params[:token] || params[:invite_token] || params.dig(:user, :invite_token)
   end
 
   def update_timezones_on_sites(user)
