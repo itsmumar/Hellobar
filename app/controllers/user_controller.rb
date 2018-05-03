@@ -12,7 +12,7 @@ class UserController < ApplicationController
   end
 
   def create
-    @user = CreateUserFromInvitation.new(invitation_token, user_params).call
+    @user = CreateUserFromInvitation.new(invitation_token, create_user_params).call
 
     sign_in @user, event: :authentication
 
@@ -151,5 +151,11 @@ class UserController < ApplicationController
       .permit(:email, :first_name, :last_name, :password, :password_confirmation, :timezone)
   rescue ActionController::ParameterMissing => e
     filtered ? {} : raise(e)
+  end
+
+  def create_user_params
+    params
+      .require(:user)
+      .permit(:email, :first_name, :last_name, :password, :password_confirmation, :timezone)
   end
 end

@@ -19,10 +19,10 @@ class SubscriptionsController < ApplicationController
     end
 
     credit_card = CreateCreditCard.new(@site, current_user, params).call
-    bill, action = change_subscription(credit_card)
+    bill = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json { render json: bill, serializer: BillSerializer, scope: { action: action } }
+      format.json { render json: bill, serializer: BillSerializer }
     end
   end
 

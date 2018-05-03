@@ -29,7 +29,7 @@ describe SignInUser do
   let(:last_user) { User.last }
 
   it 'creates a new user' do
-    expect(CreateUser)
+    expect(CreateUserFromOauth)
       .to receive_service_call
       .with(omniauth_hash, ip: '', url: nil)
       .and_return build(:user)

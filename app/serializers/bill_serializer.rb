@@ -15,7 +15,6 @@ class BillSerializer < ActiveModel::Serializer
   end
 
   def upgrade?
-    return false unless scope[:action] == 'changed'
     return true unless object.site.previous_subscription
 
     Subscription::Comparison.new(object.site.previous_subscription, object.subscription).upgrade?
@@ -27,9 +26,5 @@ class BillSerializer < ActiveModel::Serializer
     return unless object.site.previous_subscription
 
     SubscriptionSerializer.new(object.site.previous_subscription).as_json
-  end
-
-  def action
-    scope[:action]
   end
 end
