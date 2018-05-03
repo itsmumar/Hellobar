@@ -1,4 +1,4 @@
-/* globals UpgradeAccountModal */
+/* globals UpgradeAccountModal, UpdateGDPRSettingsPromtModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
