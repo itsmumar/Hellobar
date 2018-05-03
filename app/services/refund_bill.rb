@@ -36,6 +36,7 @@ class RefundBill
       end
     else
       create_failed_billing_attempt(bill)
+      raise InvalidRefund, 'Invalid response from payment gateway'
     end
   end
 

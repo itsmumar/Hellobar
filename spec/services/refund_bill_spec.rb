@@ -40,7 +40,7 @@ describe RefundBill do
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 
-    it 'sends event to Raven and return false' do
+    it 'sends event to Raven and raises error' do
       extra = {
         message: 'gateway error',
         bill: bill.id,
@@ -49,7 +49,7 @@ describe RefundBill do
 
       expect(Raven).to receive(:capture_message).with('Unsuccessful refund', extra: extra)
 
-      service.call
+      expect { service.call }.to raise_error RefundBill::InvalidRefund, 'Invalid response from payment gateway'
     end
   end
 
