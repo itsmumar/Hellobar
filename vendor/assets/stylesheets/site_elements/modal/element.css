@@ -111,6 +111,10 @@
   padding-left: 45px;
 }
 
+#hellobar-modal.image-left .gdpr-consent-form {
+  padding-left: 0;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-modal.image-left .hb-image-wrapper, #hellobar-modal.image-right .hb-image-wrapper {
