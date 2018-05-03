@@ -47,6 +47,8 @@ feature 'Payment modal interaction', :js do
         visit edit_site_path(site)
 
         page.find('footer .show-upgrade-modal').click
+        expect(page).to have_content "Upgrade #{ site.host }"
+
         within '.package-block.pro' do
           find('.button', text: 'Choose Plan').click
         end
