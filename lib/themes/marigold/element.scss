@@ -18,17 +18,10 @@
     border-radius: 100px;
   }
 
-  .gdpr-consent-form {
-    padding-left: 0;
-  }
-
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {
     border-radius: 2px;
-
-    .hb-headline-text {
-    }
 
     .hb-cta-style-button {
       font-size: 16px;
@@ -36,6 +29,10 @@
       padding: 15px 30px;
       letter-spacing: 1px;
       display: block;
+    }
+
+    .gdpr-consent-form {
+      padding-left: 5px;
     }
   }
 
@@ -109,6 +106,13 @@
 
     .hb-name-input {
       margin-bottom: 5px;
+    }
+  }
+
+  #hellobar-modal.mobile {
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      padding-left: 24px;
+      padding-right: 24px;
     }
   }
 
