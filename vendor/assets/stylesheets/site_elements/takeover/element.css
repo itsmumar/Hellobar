@@ -101,6 +101,22 @@
   text-transform: uppercase;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-takeover .gdpr-consent-form {
+  margin: 0 auto;
+  max-width: 14em;
+}
+
+#hellobar-takeover .gdpr-consent-form p {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+#hellobar-takeover .gdpr-consent-form p:last-child {
+  margin-bottom: 45px;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-takeover.mobile {
@@ -109,6 +125,14 @@
 
 #hellobar-takeover.mobile .hb-logo-wrapper a {
   font-size: 12px;
+}
+
+#hellobar-takeover.mobile .gdpr-consent-form {
+  max-width: 9em;
+}
+
+#hellobar-takeover.mobile .gdpr-consent-form p {
+  font-size: 16px;
 }
 
 /*-----------  Old IE Fixes  -----------*/

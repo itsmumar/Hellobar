@@ -698,10 +698,10 @@ a.barlinkred {
   display: none !important;
 }
 
-/* GDPR */
+/*----------- GDPR -----------*/
 .gdpr-consent-form p {
   font-size: 16px;
-  line-height: 25px;
+  line-height: 155%;
   margin-bottom: 10px;
   text-align: left;
 }

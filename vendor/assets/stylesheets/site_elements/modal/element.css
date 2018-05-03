@@ -105,7 +105,8 @@
   font-size: 13px;
 }
 
-/* GDPR */
+/*----------- GDPR -----------*/
+
 #hellobar-modal .gdpr-consent-form {
   padding-left: 45px;
 }
