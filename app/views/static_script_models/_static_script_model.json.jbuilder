@@ -23,7 +23,8 @@ json.cache_if! !model.preview_is_active, model do
     :content_upgrades,
     :content_upgrades_styles,
     :autofills,
-    :script_is_installed_properly
+    :script_is_installed_properly,
+    :gdpr_enabled
 
   json.rules model.rules do |rule|
     json.match rule[:match]
