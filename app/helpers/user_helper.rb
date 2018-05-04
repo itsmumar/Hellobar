@@ -20,12 +20,24 @@ module UserHelper
     url << 'd=mm'
   end
 
+  def marketing_site_link(title, path)
+    link_to title, File.join(Settings.marketing_site_url, path), target: '_blank'
+  end
+
+  def blog_link
+    marketing_site_link 'Blog', '/blog'
+  end
+
   def terms_of_use_link
-    link_to 'Terms of Use', "#{ Settings.marketing_site_url }/terms-of-use", target: '_blank'
+    marketing_site_link 'Terms of Use', '/terms-of-use'
   end
 
   def privacy_policy_link
-    link_to 'Privacy Policy', "#{ Settings.marketing_site_url }/privacy-policy", target: '_blank'
+    marketing_site_link 'Privacy Policy', '/privacy-policy'
+  end
+
+  def gdpr_notice_link
+    marketing_site_link 'GDPR Notice', '/gdpr'
   end
 
   def accept_terms_and_conditions_label
