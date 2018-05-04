@@ -10,7 +10,7 @@ feature 'Trial User', :js do
 
   scenario 'shows a button in the header that prompts user to enter payment' do
     visit site_path(site)
-    expect(page).to have_content('Enjoying Hello Bar Growth?')
+    expect(page).to have_content('Enjoying Hello Bar Pro?')
   end
 
   scenario 'allows users to downgrade' do
