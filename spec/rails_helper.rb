@@ -60,25 +60,6 @@ RSpec.configure do |config|
     allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(SiteStatistics.new)
   end
 
-  config.before :suite do
-    # precompile static script assets
-    begin
-      StaticScriptAssets.digest_path('modules.js')
-    rescue Sprockets::FileNotFound
-      puts 'precompiling static script assets...'
-      StaticScriptAssets.precompile
-      puts 'finished precompiling static script assets'
-    end
-
-    # precompile modules.js separately (if they don't exist)
-    path = Rails.root.join('public', 'generated_scripts', StaticScriptAssets.digest_path('modules.js'))
-    unless File.exist? path
-      puts 'precompiling modules.js...'
-      GenerateStaticScriptModules.new.call
-      puts 'finished precompiling modules.js'
-    end
-  end
-
   config.before contact_list_feature: true do
     stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
     allow_any_instance_of(FetchSubscribers).to receive(:call).and_return(items: [])
