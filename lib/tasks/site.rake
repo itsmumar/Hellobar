@@ -28,8 +28,9 @@ namespace :site do
 
       desc 'Regenerate static site scripts for active sites (take 200 least recently regenerated sites)'
       task sample_of_least_recently_regenerated_active_sites: :environment do
-        # Take 200 sites at one go; at 39K active sites it will take a little
-        # bit under 23 hours to regenerate them all (if executed every 7 minutes)
+        # Take 200 sites at one go; it will take ~24 hours to regenerate static
+        # site script for up to 40K installed sites (we have about 30K installed
+        # sites)
         # (#each and not #find_each, to respect #limit)
         Site
           .script_installed

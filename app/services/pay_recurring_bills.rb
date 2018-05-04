@@ -3,8 +3,6 @@ class PayRecurringBills
   MAX_RETRY_TIME = 27.days
 
   # Find all pending bills which should be processed today
-  # BETWEEN is inclusive on both sides
-  # and equivalent to the expression (min <= expr AND expr <= max)
   def self.bills
     Bill
       .where(status: [Bill::PENDING, Bill::FAILED])
