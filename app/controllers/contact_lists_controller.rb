@@ -1,7 +1,7 @@
 class ContactListsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, only: %i[show update destroy download]
+  before_action :load_contact_list, only: %i[show update destroy export]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
@@ -49,8 +49,8 @@ class ContactListsController < ApplicationController
     end
   end
 
-  def download
-    DownloadContactListJob.perform_later(current_user, @contact_list)
+  def export
+    ExportSubscribersJob.perform_later(current_user, @contact_list)
     flash[:success] =
       "We will email you the list of your contacts to #{ current_user.email }." \
       ' At peak times this can take a few minutes'
