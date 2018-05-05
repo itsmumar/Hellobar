@@ -1,8 +1,7 @@
 FactoryBot.define do
-  factory :bill, class: 'Bill::Recurring' do
+  factory :bill do
     amount 10
     subscription
-    type 'Bill::Recurring'
     bill_at { Time.current }
     start_date { Time.current }
     end_date { 1.month.from_now }
@@ -23,20 +22,6 @@ FactoryBot.define do
       after :create do |bill|
         create :billing_attempt, :failed, bill: bill, credit_card: bill.subscription.credit_card
         bill.reload
-      end
-    end
-
-    factory :recurring_bill, class: 'Bill::Recurring' do
-    end
-
-    factory :refund_bill, class: 'Bill::Refund' do
-      amount(-10)
-      subscription
-      type 'Bill::Refund'
-      refunded_bill { create :bill, :pro, subscription: subscription }
-
-      trait :refunded do
-        status Bill::REFUNDED
       end
     end
 

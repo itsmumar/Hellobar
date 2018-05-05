@@ -76,8 +76,9 @@ describe 'Admin::Users requests' do
 
     before do
       stub_current_admin(admin)
-      create :bill, :pro, subscription: site.current_subscription
-      create :refund_bill, subscription: site.current_subscription
+      stub_cyber_source(:purchase, :refund)
+      bill = create(:bill, :pro, :paid, subscription: site.current_subscription)
+      RefundBill.new(bill).call
       site_with_invoice_information = create :site, :pro, user: user, invoice_information: 'foo bar'
       create :bill, :pro, subscription: site_with_invoice_information.current_subscription
     end

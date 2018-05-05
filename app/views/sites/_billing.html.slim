@@ -68,11 +68,13 @@ section
                 - else
                   i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
 
-              td= bill.bill_at.strftime("%-m-%-d-%Y")
+              td= format_date(bill.bill_at)
               td
                 = number_to_currency(bill.amount)
-                - if bill.is_a?(Bill::Refund)
+                - if bill.refunded?
                   |  (Refund)
+                - if bill.chargedback?
+                  |  (Chargeback)
               td= "Hello Bar #{bill.subscription.values[:name]}"
               td= bill.used_credit_card&.description
               td
@@ -89,18 +91,17 @@ section
   - if @site.current_subscription.currently_on_trial? && @site.current_subscription.trial_end_date
     ' This site is on a trial plan.
     a.show-payment-modal.underlined data-source="Please enter payment text"
-      ' Please enter credit card details by #{@site.current_subscription.trial_end_date.strftime('%-m-%-d-%Y')}
+      ' Please enter credit card details by #{format_date(@site.current_subscription.trial_end_date)}
       ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
 
   - if @next_bill && @next_bill.amount > 0
-    small
-      ' Next bill is due on
-      = bill_due_at(@next_bill)
-      '  and will total
-      = bill_estimated_amount(@next_bill)
-      '  for a
-      = @next_bill.subscription.schedule
-      |  subscription.
+    ' Next bill is due on
+    = format_date(@next_bill.due_at)
+    '  and will total
+    = bill_estimated_amount(@next_bill)
+    '  for a
+    = @next_bill.subscription.schedule
+    |  subscription.
 
 - elsif @site.free?
   ul

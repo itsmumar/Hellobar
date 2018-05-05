@@ -16,7 +16,7 @@ module Admin::BillsHelper
 
   def bills_for(site)
     Subscription.unscoped do
-      site.bills.recurring.reorder(id: :desc)
+      site.bills.reorder(id: :desc)
     end
   end
 
@@ -61,7 +61,7 @@ module Admin::BillsHelper
         method: :put, data: { confirm: 'Void this bill?' })
     end
 
-    if bill.paid? && !bill.refund && !bill.chargeback && bill.amount != 0
+    if bill.paid? && bill.amount > 0
       actions << link_to('refund',
         refund_admin_bill_path(bill),
         method: :put, data: { confirm: 'Refund this bill?' })
@@ -91,5 +91,30 @@ module Admin::BillsHelper
     end
 
     safe_join(info)
+  end
+
+  def bill_filters
+    filters = [
+      ['All', admin_bills_path]
+    ]
+
+    Bill::STATUSES.each do |status|
+      filters << [
+        status.humanize,
+        filter_by_status_admin_bills_path(status: status)
+      ]
+    end
+
+    items = filters.map do |title, path|
+      css = [:presentation]
+      css << :active if current_page?(path)
+      content_tag :li, class: css do
+        link_to title, path
+      end
+    end
+
+    content_tag :ul, class: %w[nav nav-tabs] do
+      safe_join(items)
+    end
   end
 end

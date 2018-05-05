@@ -79,7 +79,7 @@ class User < ApplicationRecord
   end
 
   def paying_subscription?
-    subscriptions.active.any? do |subscription|
+    subscriptions.paid.any? do |subscription|
       subscription.capabilities.acts_as_paid_subscription?
     end
   end

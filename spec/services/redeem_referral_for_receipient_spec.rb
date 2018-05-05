@@ -32,7 +32,7 @@ describe RedeemReferralForRecipient do
     it 'calls UseReferral service' do
       expect(UseReferral)
         .to receive_service_call
-        .with(instance_of(Bill::Recurring), referral)
+        .with(instance_of(Bill), referral)
 
       service.call
     end

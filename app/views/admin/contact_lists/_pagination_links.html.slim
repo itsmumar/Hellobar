@@ -1,0 +1,16 @@
+nav.pagination role="navigation" aria-label="pager"
+  - if @subscribers[:first_page].present?
+    span.first>
+      = link_to '&laquo; First'.html_safe, url_for(@subscribers[:first_page])
+
+  - if @subscribers[:previous_page].present?
+    span.prev>
+      = link_to '&lsaquo; Prev'.html_safe, url_for(@subscribers[:previous_page]), rel: 'prev'
+
+  - if @subscribers[:next_page].present?
+    span.next>
+      = link_to 'Next &rsaquo;'.html_safe, url_for(@subscribers[:next_page]), rel: 'next'
+
+  - if @subscribers[:last_page].present?
+    span.last>
+      = link_to 'Last &raquo;'.html_safe, url_for(@subscribers[:last_page])

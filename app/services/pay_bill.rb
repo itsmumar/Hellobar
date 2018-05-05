@@ -3,13 +3,12 @@ class PayBill
   class MissingCreditCard < Error; end
 
   def initialize(bill)
-    raise Error, 'cannot pay a refund' if bill.is_a?(Bill::Refund)
     @bill = bill
     @credit_card = bill.subscription.credit_card
   end
 
   def call
-    return bill if cannot_pay?
+    return bill unless can_be_paid?
 
     set_final_amount
     pay_bill
@@ -21,8 +20,8 @@ class PayBill
 
   attr_reader :bill, :credit_card
 
-  def cannot_pay?
-    !bill.pending? && !bill.failed?
+  def can_be_paid?
+    bill.pending? || bill.failed?
   end
 
   def pay_bill
@@ -64,7 +63,7 @@ class PayBill
   def set_final_amount
     return if bill.base_amount.nil? || bill.amount.zero?
 
-    bill.discount = bill.is_a?(Bill::Refund) ? 0 : calculate_discount
+    bill.discount = calculate_discount
     bill.amount = [bill.base_amount - bill.discount, 0].max
   end
 
