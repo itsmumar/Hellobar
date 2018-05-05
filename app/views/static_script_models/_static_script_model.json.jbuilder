@@ -13,6 +13,7 @@ json.cache_if! !model.preview_is_active, model do
     :content_upgrade_template,
     :geolocation_url,
     :hb_backend_host,
+    :tracking_url,
     :site_write_key,
     :external_tracking,
     :hellobar_element_css,

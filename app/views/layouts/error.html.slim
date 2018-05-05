@@ -3,7 +3,7 @@ html
   head
     title Hello Bar
 
-    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+    = render 'shared/favicon'
 
     = stylesheet_link_tag    "static", :media => "all"
     = javascript_include_tag "static"
