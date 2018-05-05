@@ -112,6 +112,10 @@ class StaticScriptModel
     URI.parse(Settings.tracking_api_url).host
   end
 
+  def tracking_url
+    Settings.tracking_url
+  end
+
   def external_tracking
     return [] unless site&.capabilities&.external_tracking?
 

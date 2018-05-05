@@ -1,8 +1,9 @@
-class FetchCampaignStatistics
+class FetchEmailStatistics
   TTL = 55.seconds # frontend refreshes every 60s
 
-  def initialize(campaign)
-    @campaign = campaign
+  # subject is either Campaign or SequenceStep instance.
+  def initialize(subject)
+    @subject = subject
   end
 
   def call
@@ -11,9 +12,9 @@ class FetchCampaignStatistics
 
   private
 
-  attr_reader :campaign
+  attr_reader :subject
 
-  delegate :site, :contact_list_id, to: :campaign
+  delegate :site, :contact_list_id, to: :subject
 
   def fetch_statistics
     statistics = normalize(fetch.first)
@@ -35,8 +36,9 @@ class FetchCampaignStatistics
   def build_request
     {
       table_name: table_name,
-      key_condition_expression: 'id = :id',
-      expression_attribute_values: { ':id' => campaign.id }
+      key_condition_expression: 'id = :id AND #t = :type',
+      expression_attribute_values: { ':id' => subject.id, ':type' => subject.class.name.underscore },
+      expression_attribute_names: { '#t' => 'type' }
     }
   end
 
@@ -67,7 +69,9 @@ class FetchCampaignStatistics
       'reported' => 0,
       'group_unsubscribed' => 0,
       'group_resubscribed' => 0
-    }
+    }.tap do |initial_values|
+      initial_values['scheduled'] = 0 if subject.is_a?(SequenceStep)
+    end
   end
 
   def subscribers_count
