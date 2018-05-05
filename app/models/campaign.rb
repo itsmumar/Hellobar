@@ -26,7 +26,7 @@ class Campaign < ApplicationRecord
   scope :with_emails, -> { includes(:email) }
 
   def statistics
-    FetchCampaignStatistics.new(self).call
+    FetchEmailStatistics.new(self).call
   end
 
   STATUSES.each do |key|

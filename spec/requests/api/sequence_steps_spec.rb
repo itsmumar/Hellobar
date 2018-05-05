@@ -4,7 +4,31 @@ describe 'api/sequence_steps' do
   let(:contact_list) { create(:contact_list, site: site) }
   let(:sequence) { create(:sequence, contact_list: contact_list) }
 
+  let(:statistics) do
+    {
+      'subscribers' => 5,
+      'recipients' => 3,
+      'rejected' => 1,
+      'submitted' => 2,
+      'deferred' => 0,
+      'dropped' => 0,
+      'delivered' => 1,
+      'bounced' => 0,
+      'opened' => 1,
+      'clicked' => 0,
+      'unsubscribed' => 1,
+      'reported' => 3,
+      'group_unsubscribed' => 0,
+      'group_resubscribed' => 0,
+      'type' => 'sequence_step'
+    }
+  end
+
   let(:headers) { api_headers_for_user(user) }
+
+  before do
+    allow(FetchEmailStatistics).to receive_message_chain(:new, :call).and_return([statistics])
+  end
 
   describe 'GET #index' do
     let!(:steps) { create_list(:sequence_step, 5, sequence: sequence) }
@@ -26,18 +50,8 @@ describe 'api/sequence_steps' do
       expect(response).to be_successful
 
       expect(json.size).to eq(steps.size)
-
-      steps.each do |step|
-        expected_attributes = step.attributes.symbolize_keys.slice(
-          :id,
-          :sequence_id,
-          :name,
-          :delay,
-          :executable_type,
-          :executable_id
-        )
-
-        expect(json).to include(expected_attributes)
+      json.each do |step_json|
+        expect(step_json.keys).to match_array(%w[id name sequence_id delay executable_type executable_id statistics])
       end
     end
   end

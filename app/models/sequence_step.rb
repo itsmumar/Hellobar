@@ -9,4 +9,10 @@ class SequenceStep < ApplicationRecord
   validates :delay, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :executable, presence: true
   validates :executable_type, inclusion: { in: EXECUTABLE_TYPES }
+
+  delegate :site, :contact_list_id, to: :sequence, allow_nil: true
+
+  def statistics
+    FetchEmailStatistics.new(self).call
+  end
 end
