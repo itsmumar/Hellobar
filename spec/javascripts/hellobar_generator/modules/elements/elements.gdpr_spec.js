@@ -2,6 +2,7 @@
 
 describe('Module elements.gdpr', function () {
   var module;
+  var template;
 
   beforeEach(function () {
     hellobar.finalize();
@@ -16,8 +17,14 @@ describe('Module elements.gdpr', function () {
       dependencies: dependencies
     });
 
+    template = `
+      <div class="gdpr-consent-form">
+        <input type="checkbox" name="hb-gdpr-terms-checkbox">
+        <input type="checkbox" name="hb-gdpr-consent-checkbox">
+      </div>
+    `;
 
-    dependencies['base.templating'].render.and.returnValue("-TEMPLATE-");
+    dependencies['base.templating'].render.and.returnValue(template);
 
     var html = `
       <div id="hellobar-modal">
@@ -55,10 +62,15 @@ describe('Module elements.gdpr', function () {
     var callback = jasmine.createSpy('callback');
 
     module.displayCheckboxes(siteElement, targetSiteElement, callback);
+
+    var checkboxes = targetSiteElement
+      .querySelectorAll('[name="hb-gdpr-terms-checkbox"], [name="hb-gdpr-consent-checkbox"]');
+    checkboxes[0].click();
+    checkboxes[1].click();
+
     document.body.querySelector('.hb-cta').click();
 
     expect(document.body.querySelector('.hb-text-holder').textContent).toEqual('Submit');
-    expect(document.body.querySelector('.hb-headline-text').textContent).toEqual('-TEMPLATE-');
     expect(callback).toHaveBeenCalled();
   });
 

@@ -25,7 +25,6 @@ hellobar.defineModule('elements.gdpr',
       btnTextHolder.textContent = 'Submit';
       btnElement.onclick = () => {
         if (validate(targetSiteElement)) {
-          console.log('Submit');
           btnElement.onclick = null;
           callback();
         }
