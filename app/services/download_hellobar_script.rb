@@ -1,7 +1,13 @@
 class DownloadHellobarScript
+  class ScriptNotFound < StandardError
+    def initialize(version)
+      super "hellobar script version #{ version.inspect } couldn't be found"
+    end
+  end
+
   cattr_accessor :logger do
     Logger.new(STDOUT).tap do |logger|
-      logger.formatter = proc { |severity, datetime, progname, msg| "#{ msg }\n" }
+      logger.formatter = proc { |*_, msg| "#{ msg }\n" }
     end
   end
 
@@ -22,23 +28,12 @@ class DownloadHellobarScript
   end
 
   def download
-    logger.info "Downloading #{ filename }..." if logger
+    logger&.info "Downloading #{ filename }..."
 
-    object = s3.get_object(
-      bucket: Settings.s3_bucket,
-      key: filename
-    )
+    response = HTTParty.get(url)
+    raise ScriptNotFound, StaticScript::HELLOBAR_SCRIPT_VERSION unless response.success?
 
-    unzip object.body, &method(:store_locally)
-  end
-
-  def unzip(io)
-    gzipped = Zlib::GzipReader.new(io)
-    yield gzipped.read
-    gzipped.close
-  rescue Zlib::GzipFile::Error
-    io.rewind
-    yield io.read
+    store_locally response.to_s
   end
 
   def store_locally(content)
@@ -49,11 +44,11 @@ class DownloadHellobarScript
     Rails.root.join('public', 'generated_scripts', filename)
   end
 
-  def filename
-    @filename ||= StaticScript::HELLOBAR_SCRIPT_NAME
+  def url
+    "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ filename }"
   end
 
-  def s3
-    Aws::S3::Client.new
+  def filename
+    @filename ||= StaticScript::HELLOBAR_SCRIPT_NAME
   end
 end

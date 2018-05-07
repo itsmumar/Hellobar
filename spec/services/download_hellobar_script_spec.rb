@@ -2,25 +2,27 @@ describe DownloadHellobarScript do
   let(:filename) { StaticScript::HELLOBAR_SCRIPT_NAME }
   let(:script_content) { 'script content' }
 
-  let(:s3_object_body) { StringIO.new(script_content) }
-  let(:s3_object) do
-    instance_double(Aws::S3::Types::GetObjectOutput, body: s3_object_body)
-  end
-  let(:s3) { instance_double(Aws::S3::Client) }
   let(:file) { double(File) }
 
   let(:path) { File.join(StaticScript::SCRIPTS_LOCAL_FOLDER, filename) }
   let(:local_path) { Rails.root.join(path) }
+  let(:url) { "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ filename }" }
 
+  let(:response) { double(to_s: script_content, success?: true) }
   let(:service) { described_class.new }
 
   before do
     DownloadHellobarScript.logger = nil
-    allow(Aws::S3::Client).to receive(:new).and_return(s3)
+
     allow(Rails)
       .to receive_message_chain(:root, :join)
       .with('public', 'generated_scripts', filename)
       .and_return(local_path)
+
+    allow(HTTParty)
+      .to receive(:get)
+      .with(url)
+      .and_return(response)
   end
 
   context 'when file exists' do
@@ -30,6 +32,7 @@ describe DownloadHellobarScript do
 
     it 'does nothing' do
       expect(File).not_to receive(:open)
+      expect(HTTParty).not_to receive(:get)
       service.call
     end
   end
@@ -46,12 +49,28 @@ describe DownloadHellobarScript do
         .with(pathname_ending_with(path), 'wb')
         .and_yield(file)
 
-      expect(s3)
-        .to receive(:get_object)
-        .with(bucket: Settings.s3_bucket, key: filename)
-        .and_return(s3_object)
+      expect(HTTParty)
+        .to receive(:get)
+        .with(url)
+        .and_return(response)
 
       service.call
+    end
+  end
+
+  context 'when file is not found' do
+    before do
+      allow(local_path).to receive(:exist?).and_return(false)
+    end
+
+    let(:response) { double(to_s: script_content, success?: false) }
+
+    it 'raises ScriptNotFound error' do
+      expect { service.call }
+        .to raise_error(
+          DownloadHellobarScript::ScriptNotFound,
+          "hellobar script version #{ StaticScript::HELLOBAR_SCRIPT_VERSION.inspect } couldn't be found"
+        )
     end
   end
 end
