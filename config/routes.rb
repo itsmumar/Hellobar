@@ -114,7 +114,7 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists do
       member do
-        get :download
+        get :export
       end
     end
 

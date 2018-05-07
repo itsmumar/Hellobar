@@ -11,8 +11,7 @@ describe ContactsMailer do
     end
 
     before do
-      expect(FetchContactsCSV)
-        .to receive_service_call.with(contact_list).and_return('csv')
+      expect(ExportSubscribers).to receive_service_call.with(contact_list).and_return('csv')
     end
 
     it 'renders the headers' do

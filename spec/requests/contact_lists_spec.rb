@@ -76,15 +76,15 @@ describe 'ContactList requests' do
       let(:contacts) { [{ email: 'email@example.com', name: 'Name', subscribed_at: Time.current }] }
       let(:total_contacts) { 100 }
 
-      it 'enqueues DownloadContactListJob' do
-        expect { get download_site_contact_list_path(site, contact_list) }
-          .to have_enqueued_job(DownloadContactListJob)
+      it 'enqueues ExportSubscribersJob' do
+        expect { get export_site_contact_list_path(site, contact_list) }
+          .to have_enqueued_job(ExportSubscribersJob)
           .on_queue('hb3_test')
           .with(user, contact_list)
       end
 
       it 'redirects back' do
-        get download_site_contact_list_path(site, contact_list)
+        get export_site_contact_list_path(site, contact_list)
         expect(flash[:success])
           .to eql "We will email you the list of your contacts to #{ user.email }." \
                   ' At peak times this can take a few minutes'
