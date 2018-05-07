@@ -10,7 +10,6 @@ module StaticScriptAssets
   mattr_reader(:env) do
     Sprockets::Environment.new(Rails.root) do |env|
       env.append_path 'vendor/assets/javascripts/modules'
-      env.append_path 'vendor/assets/javascripts/hellobar_script'
       env.append_path 'vendor/assets/stylesheets/site_elements'
 
       env.append_path 'lib/themes/templates'

@@ -5,7 +5,6 @@ feature 'Content upgrades', :js do
 
   before do
     allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
-    expect(GenerateStaticScriptModules).to receive_service_call
   end
 
   scenario 'inserting a single content upgrade' do
