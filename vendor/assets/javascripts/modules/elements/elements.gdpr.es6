@@ -9,7 +9,7 @@ hellobar.defineModule('elements.gdpr',
       const checkboxes = targetSiteElement
         .querySelectorAll('[name="hb-gdpr-terms-checkbox"], [name="hb-gdpr-consent-checkbox"]');
 
-      return !Array.from(checkboxes).find(input => !input.checked)
+      return checkboxes[0].checked && checkboxes[1].checked
     }
 
     function render(siteElement, targetSiteElement, callback) {

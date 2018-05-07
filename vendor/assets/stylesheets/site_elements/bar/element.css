@@ -402,3 +402,12 @@
   flex: 45%;
   margin: 3px 10px 6px 0;
 }
+
+/*-----------  IE11 fixes  -----------*/
+#hellobar-bar .gdpr-consent-form {
+  min-width: 600px;
+}
+
+#hellobar-bar.mobile .gdpr-consent-form {
+  min-width: 360px;
+}
