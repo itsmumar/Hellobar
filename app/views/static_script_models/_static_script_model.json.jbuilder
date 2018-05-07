@@ -32,5 +32,6 @@ json.cache_if! !model.preview_is_active, model do
 end
 
 json.extract! model,
+  :modules_version,
   :version,
   :timestamp
