@@ -47,15 +47,6 @@ GIT
       omniauth-oauth2
 
 GIT
-  remote: https://github.com/jejacks0n/teaspoon.git
-  revision: 8be60fe2a9445cec58687ae3fb0b73f60fb0c691
-  specs:
-    teaspoon (1.1.5)
-      railties (>= 3.2.5, < 6)
-    teaspoon-jasmine (2.4.1)
-      teaspoon (>= 1.0.0)
-
-GIT
   remote: https://github.com/morgoth/paperclip.git
   revision: eebe6c32bd7409aa780f16542129ecd0d8e2b235
   branch: aws-sdk-s3
@@ -309,9 +300,6 @@ GEM
     guard-shell (0.7.1)
       guard (>= 2.0.0)
       guard-compat (~> 1.0)
-    guard-teaspoon (0.8.0)
-      guard (~> 2.2)
-      teaspoon (>= 0.8.0)
     handlebars_assets (0.23.2)
       execjs (~> 2.0)
       sprockets (>= 2.0.0)
@@ -707,7 +695,6 @@ DEPENDENCIES
   guard-rspec
   guard-rubocop
   guard-shell
-  guard-teaspoon
   handlebars_assets
   hashie
   infusionsoft
@@ -777,8 +764,6 @@ DEPENDENCIES
   sprockets
   sprockets-es6
   syslogger
-  teaspoon!
-  teaspoon-jasmine
   terminal-notifier-guard
   thin
   thread

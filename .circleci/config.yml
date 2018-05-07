@@ -120,11 +120,6 @@ jobs:
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
-          name: Run teaspoon tests
-          when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
-
-      - run:
           name: Run feature tests
           when: always
           environment:

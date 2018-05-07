@@ -139,7 +139,6 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-shell'
-  gem 'guard-teaspoon'
   gem 'terminal-notifier-guard'
 
   # Debugging
@@ -155,8 +154,6 @@ end
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails'
-  gem 'teaspoon', github: 'jejacks0n/teaspoon'
-  gem 'teaspoon-jasmine'
 
   # Debugging
   gem 'pry'
