@@ -20,7 +20,7 @@ describe RenderStaticScript do
 
       folder = StaticScript::SCRIPTS_LOCAL_FOLDER
       filename = StaticScript::HELLOBAR_SCRIPT_NAME
-      expect(script).to eql %Q("#{ folder }#{ filename }"; __DATA__)
+      expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
     end
 
     context 'when options[:compress]' do
@@ -44,7 +44,7 @@ describe RenderStaticScript do
 
         folder = StaticScript::SCRIPTS_LOCAL_FOLDER
         filename = StaticScript::HELLOBAR_SCRIPT_NAME
-        expect(script).to eql %Q("#{ folder }#{ filename }"; __DATA__)
+        expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
       end
     end
   end
