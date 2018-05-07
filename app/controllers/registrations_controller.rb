@@ -46,14 +46,15 @@ class RegistrationsController < ApplicationController
   end
 
   def signup_with_email
-    @form.validate!
+    user = CreateUserFromForm.new(@form).call
+    sign_in(user)
 
-    CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
+    site = CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
     sign_in(@form.user)
 
     flash[:event] = { category: 'Signup', action: 'signup-email' }
 
-    redirect_to new_site_site_element_path(@form.site)
+    redirect_to new_site_site_element_path(site)
   end
 
   def signup_with_google
