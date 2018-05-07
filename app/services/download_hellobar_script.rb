@@ -1,7 +1,7 @@
 class DownloadHellobarScript
   class ScriptNotFound < StandardError
-    def initialize(version)
-      super "hellobar script version #{ version.inspect } couldn't be found"
+    def initialize(url)
+      super "hellobar script version #{ url.inspect } couldn't be found"
     end
   end
 
@@ -31,7 +31,7 @@ class DownloadHellobarScript
     logger&.info "Downloading #{ filename }..."
 
     response = HTTParty.get(url)
-    raise ScriptNotFound, StaticScript::HELLOBAR_SCRIPT_VERSION unless response.success?
+    raise ScriptNotFound, url unless response.success?
 
     store_locally response.to_s
   end

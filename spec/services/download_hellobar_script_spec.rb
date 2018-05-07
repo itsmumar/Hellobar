@@ -69,7 +69,7 @@ describe DownloadHellobarScript do
       expect { service.call }
         .to raise_error(
           DownloadHellobarScript::ScriptNotFound,
-          "hellobar script version #{ StaticScript::HELLOBAR_SCRIPT_VERSION.inspect } couldn't be found"
+          "hellobar script version #{ url.inspect } couldn't be found"
         )
     end
   end
