@@ -1,4 +1,6 @@
 class RegistrationsController < ApplicationController
+  before_action :require_no_user
+
   layout 'static'
 
   rescue_from ActiveRecord::RecordInvalid, with: :render_errors
