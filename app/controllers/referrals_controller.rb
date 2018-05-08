@@ -46,7 +46,7 @@ class ReferralsController < ApplicationController
     session[:referral_token] = params[:token]
     flash[:success] = I18n.t('referral.flash.accepted')
 
-    redirect_to users_sign_up_path
+    redirect_to after_sign_in_path_for(user)
   end
 
   private
