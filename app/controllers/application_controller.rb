@@ -45,13 +45,13 @@ class ApplicationController < ActionController::Base
     redirect_to after_sign_in_path_for(current_user)
   end
 
-  def after_sign_in_path_for(resource)
-    if current_user.sites.empty?
+  def after_sign_in_path_for(user)
+    if user.sites.empty?
       new_site_path
-    elsif current_user.sites.count == 1 && current_user.site_elements.empty?
+    elsif user.sites.count == 1 && user.site_elements.empty?
       new_site_site_element_path(current_site)
     else
-      stored_location_for(resource).presence || site_path(current_site)
+      stored_location_for(user).presence || site_path(current_site)
     end
   end
 
