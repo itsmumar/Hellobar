@@ -10,7 +10,7 @@ en:
       not_created: Sorry, but there was a problem while sending this invite. (%{error})
       saved: Saved!
       not_saved: Sorry, but there was a problem saving your change.
-      accepted: Success! Your discount will be applied after you create your first site.
+      accepted: Success! Your discount will be applied after you create your first site and install the Hello Bar script.
     state:
       sent: Sent
       signed_up: Signed up
