@@ -5,6 +5,7 @@ class StaticScriptModel
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
   delegate :autofills, :cache_key, :persisted?, to: :site
+  delegate :terms_and_conditions_url, :privacy_policy_url, to: :site
 
   def initialize(site, options = {})
     @site = site
@@ -102,6 +103,24 @@ class StaticScriptModel
 
   def content_upgrade_template
     [{ name: 'contentupgrade', markup: render_asset('contentupgrade/contentupgrade.html') }]
+  end
+
+  def gdpr_enabled
+    site.gdpr_enabled?
+  end
+
+  def gdpr_template
+    [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
+  end
+
+  def gdpr_consent
+    text_map = {
+      'product' => 'product/service',
+      'research' => 'market research'
+    }
+    sentence = site.communication_types.map { |type| text_map[type] || type }.to_sentence
+
+    "I consent to occasionally receive #{ sentence } emails."
   end
 
   def geolocation_url

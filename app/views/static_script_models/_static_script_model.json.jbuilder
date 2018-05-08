@@ -11,6 +11,10 @@ json.cache_if! !model.preview_is_active, model do
     :templates,
     :branding_templates,
     :content_upgrade_template,
+    :gdpr_template,
+    :gdpr_consent,
+    :terms_and_conditions_url,
+    :privacy_policy_url,
     :geolocation_url,
     :hb_backend_host,
     :tracking_url,
@@ -20,7 +24,8 @@ json.cache_if! !model.preview_is_active, model do
     :content_upgrades,
     :content_upgrades_styles,
     :autofills,
-    :script_is_installed_properly
+    :script_is_installed_properly,
+    :gdpr_enabled
 
   json.rules model.rules do |rule|
     json.match rule[:match]

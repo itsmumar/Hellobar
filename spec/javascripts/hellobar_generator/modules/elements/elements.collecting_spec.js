@@ -15,7 +15,8 @@ describe('Module elements.collecting', function () {
       },
       'base.bus': jasmine.createSpyObj('base.bus', ['trigger']),
       'tracking.internal': jasmine.createSpyObj('tracking.internal', ['send']),
-      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted'])
+      'elements.conversion': jasmine.createSpyObj('elements.conversion', ['converted']),
+      'elements.gdpr': jasmine.createSpyObj('elements.gdpr', ['displayCheckboxes'])
     };
 
     dependencies['base.preview'].isActive.and.returnValue(previewIsActive);

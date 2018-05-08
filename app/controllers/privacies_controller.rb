@@ -10,6 +10,7 @@ class PrivaciesController < ApplicationController
   def update
     @site.assign_attributes site_params
     @site.save! context: :update_privacy
+    @site.script.generate
 
     flash[:success] = 'Your settings have been updated.'
     redirect_to edit_site_privacy_path(@site)

@@ -8,8 +8,7 @@
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
 
-    & ~ .slider-content,
-    & ~ .hb-content-wrapper {
+    & ~ .slider-content {
       margin-left: 30%;
     }
   }
@@ -23,7 +22,13 @@
   #hellobar-takeover {
     border-radius: 2px;
 
-    .hb-headline-text {
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      margin-left: 30%;
+      width: 70%;
+    }
+
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-left: 30%;
     }
 
     .hb-cta-style-button {
@@ -32,6 +37,10 @@
       padding: 15px 30px;
       letter-spacing: 1px;
       display: block;
+    }
+
+    .gdpr-consent-form {
+      padding-left: 5px;
     }
   }
 
@@ -108,39 +117,14 @@
     }
   }
 
-  #hellobar-takeover {
+  #hellobar-modal.mobile {
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      top: 0;
-      left: 0;
-      padding: 0;
-      width: 70%;
-      height: 100%;
-      font-size: 24px;
-      position: fixed;
-      text-align: center;
-      transform: translate(0%, 0%);
-      -o-transform: translate(0%, 0%);
-      -moz-transform: translate(0%, 0%);
-      -webkit-transform: translate(0%, 0%);
-
-      .hb-inner-content {
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        padding: 1em;
-        max-width: 41em;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -webkit-transform: translate(-50%, -50%);
-      }
+      padding-left: 24px;
+      padding-right: 24px;
     }
+  }
 
-    .hb-image-wrapper.background ~ .hb-logo-wrapper {
-      padding-left: 30%;
-    }
-
+  #hellobar-takeover {
     .hb-headline-text {
       font-size: 34px;
       line-height: 48px;
@@ -170,19 +154,31 @@
   .image-background .hb-image-wrapper.background {
     width: 45%;
 
-    & ~ .slider-content,
-    & ~ .hb-content-wrapper {
+    & ~ .slider-content {
       margin-left: 45%;
     }
   }
 
   #hellobar-slider {
     .hb-image-wrapper.background ~ .slider-content {
-      padding: 16px 13px 18px 16px;
+      padding: 10px 10px 10px 13px;
     }
 
     .hb-text-wrapper {
       padding: 0;
+    }
+
+    .hb-cta-style-button .hb-text-holder {
+      padding: 0;
+    }
+
+    .gdpr-consent-form {
+      font-size: 11px;
+      padding-left: 0;
+
+      p {
+        margin-bottom: 1px;
+      }
     }
   }
 }

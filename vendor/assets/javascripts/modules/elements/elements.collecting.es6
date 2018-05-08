@@ -1,6 +1,7 @@
 hellobar.defineModule('elements.collecting',
-  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal', 'elements.conversion'],
-  function (preview, format, dom, site, sanitizing, bus, trackingInternal, elementsConversion) {
+  ['base.preview', 'base.format', 'base.dom', 'base.site', 'base.sanitizing', 'base.bus', 'tracking.internal',
+    'elements.conversion', 'elements.gdpr'],
+  function (preview, format, dom, site, sanitizing, bus, trackingInternal, elementsConversion, elementsGDPR) {
 
     /**
      * Creates a field for collecting information
@@ -71,86 +72,115 @@ hellobar.defineModule('elements.collecting',
       return html;
     }
 
+    function displayThankYouMessage (siteElement, targetSiteElement, thankYouText, thankYouCssClass) {
+      const siteElementContainer = siteElement.contentDocument();
+      const siteElementModel = siteElement.model();
+      let removeElements;
+
+      if ((targetSiteElement != null) && thankYouText) {
+        const btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
+        const btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
+
+        if (siteElementModel.use_free_email_default_msg) {
+          // Hijack the submit button and turn it into a link
+          const linkUrl = `https://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
+          btnTextHolder.textContent = 'Click Here';
+          btnElement.href = linkUrl;
+          btnElement.setAttribute('target', '_parent');
+          btnElement.onclick = null;
+
+          // Remove all the fields
+          removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
+        } else {
+          btnElement.href = 'javascript:void(0)';
+          btnTextHolder.textContent = 'Close';
+          btnElement.addEventListener('click', () => hellobar('elements').findById(siteElement.id).close());
+
+          // Remove the entire email input wrapper including the button
+          removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
+        }
+
+        targetSiteElement.innerHTML = `<span>${thankYouText}</span>`;
+      }
+
+      if (thankYouCssClass) {
+        dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
+      }
+
+      if (removeElements) {
+        for (var i = 0; i < removeElements.length; i++) {
+          dom.hideElement(removeElements[i]);
+        }
+      }
+    }
+
+    function collectEmail (siteElement, email, targetSiteElement, thankYouText, redirect, redirectUrl, thankYouCssClass) {
+      const doRedirect = format.asBool(redirect);
+      let siteElementContainer = siteElement.contentDocument();
+
+      if (!doRedirect) {
+        displayThankYouMessage(siteElement, targetSiteElement, thankYouText, thankYouCssClass)
+      }
+
+      var values = [];
+      values.push(email);
+      var inputs = siteElementContainer.querySelectorAll('input:not(#f-builtin-email)');
+
+      if (inputs) {
+        for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
+          var input = inputs[inputIndex];
+          input && values.push(input.value);
+        }
+      }
+
+      recordEmail(siteElement, values, function () {
+        bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
+
+        if (doRedirect) {
+          window.location.href = redirectUrl;
+        }
+      });
+    }
+
+    function shakeEmailField (emailField) {
+      // Fail
+      dom.shake(emailField.parentNode);
+    }
 
     // This takes the the email field, name field, and target siteElement DOM element.
     // It then checks the validity of the fields and if valid it records the
     // email and then sets the message in the siteElement to "Thank you". If invalid it
     // shakes the email field
-    function submitEmail(siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl, thankYouCssClass) {
+    function submitEmail (siteElement, formElement, targetSiteElement, thankYouText, redirect, redirectUrl, thankYouCssClass) {
       const siteElementModel = siteElement.model();
       const emailField = formElement ? formElement.querySelector('#f-builtin-email') : null;
-      validateEmail(emailField ? emailField.value : '', function () {
-          const doRedirect = format.asBool(redirect);
-          let removeElements;
-          let siteElementContainer = siteElement.contentDocument();
+      const email = emailField ? emailField.value : '';
 
-          if (!doRedirect) {
-            if ((targetSiteElement != null) && thankYouText) {
-              let btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
-              let btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
-
-              if (siteElementModel.use_free_email_default_msg) {
-                // Hijack the submit button and turn it into a link
-                const linkUrl = `https://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
-                btnTextHolder.textContent = 'Click Here';
-                btnElement.href = linkUrl;
-                btnElement.setAttribute('target', '_parent');
-                btnElement.onclick = null;
-
-                // Remove all the fields
-                removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
-              } else {
-                btnElement.href = 'javascript:void(0)';
-                btnTextHolder.textContent = 'Close';
-                btnElement.addEventListener('click', () => hellobar('elements').findById(siteElement.id).close());
-
-                // Remove the entire email input wrapper including the button
-                removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
-              }
-              targetSiteElement.innerHTML = `<span>${thankYouText}</span>`;
-            }
-            if (thankYouCssClass) {
-              dom.addClass(siteElement.getSiteElementDomNode(), thankYouCssClass);
-            }
-
-            if (removeElements) {
-              for (var i = 0; i < removeElements.length; i++) {
-                dom.hideElement(removeElements[i]);
-              }
-            }
+      if (validateEmail(email)) {
+        elementsGDPR.displayCheckboxes(
+          siteElement,
+          targetSiteElement,
+          () => {
+            collectEmail(
+              siteElement,
+              email,
+              targetSiteElement,
+              thankYouText,
+              redirect,
+              redirectUrl,
+              thankYouCssClass
+            );
           }
-          var values = [];
-          values.push(emailField.value);
-          var inputs = siteElementContainer.querySelectorAll('input:not(#f-builtin-email)');
-          if (inputs) {
-            for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
-              var input = inputs[inputIndex];
-              input && values.push(input.value);
-            }
-          }
-          recordEmail(siteElement, values, function () {
-            bus.trigger('hellobar.elements.emailSubmitted', siteElement, values);
+        )
+      } else {
+        shakeEmailField(emailField);
+      }
 
-            if (doRedirect) {
-              window.location.href = redirectUrl;
-            }
-          });
-        },
-        function () {
-          // Fail
-          dom.shake(emailField.parentNode);
-        }
-      );
       return false;
     }
 
-
-    // Called to validate the email. Does not actually submit the email
-    function validateEmail(email, successCallback, failCallback) {
-      if (email && email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/) && !email.match(/,/))
-        successCallback();
-      else
-        failCallback();
+    function validateEmail(email) {
+      return email && email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/) && !email.match(/,/);
     }
 
     // Called to record an email for the rule without validation (also used by submitEmail)

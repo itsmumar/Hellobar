@@ -9,7 +9,6 @@
   font-weight: 400;
   padding: 0.33em 0.5em;
   background-color: #FF0000;
-  -webkit-font-smoothing: antialiased;
 }
 
 #hellobar-bar .hb-logo-wrapper,
@@ -171,15 +170,6 @@
   border-radius: 3px;
 }
 
-/*-----------  State: Multiline  -----------*/
-
-/*#hellobar-bar.multiline .hb-text-wrapper,
-#hellobar-bar.multiline .hb-input-wrapper {
-  display: block;
-  max-width: 100%;
-  text-align: center;
-}*/
-
 /*-----------  State: Bottom  -----------*/
 
 #hellobar-bar.bar-bottom {
@@ -229,7 +219,6 @@
   line-height: 195%;
 }
 
-
 /*-----------  Size: X-Large -----------*/
 
 #hellobar-bar.x-large {
@@ -256,7 +245,6 @@
 
 #hellobar-bar .hb-cta.wiggle {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -moz-osx-font-smoothing: grayscale;
 
   backface-visibility: hidden;
   -o-backface-visibility: hidden;
@@ -399,4 +387,27 @@
     -webkit-transform: translateX(-1px) rotate(0);
     transform: translateX(-1px) rotate(0);
   }
+}
+
+/*-----------  GDPR  -----------*/
+
+#hellobar-bar .gdpr-consent-form {
+  display: flex;
+  font-size: 13px;
+  max-width: 800px;
+}
+
+#hellobar-bar .gdpr-consent-form p {
+  align-items: flext-start;
+  flex: 45%;
+  margin: 3px 10px 6px 0;
+}
+
+/*-----------  IE11 fixes  -----------*/
+#hellobar-bar .gdpr-consent-form {
+  min-width: 600px;
+}
+
+#hellobar-bar.mobile .gdpr-consent-form {
+  min-width: 360px;
 }

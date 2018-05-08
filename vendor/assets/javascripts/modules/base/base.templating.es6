@@ -1,5 +1,4 @@
 hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function (hellobar, preview) {
-
   let templates = {};
 
   const configuration = {
@@ -22,7 +21,8 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
 
   // Parses the value passed in in {{...}} for a template (which basically does an eval on it)
   function parseTemplateVar(value, context) {
-    let siteElement = context && context.siteElement ? context.siteElement : context; // this variable is used in templates when `eval` is called
+    // this variable is used in templates when `eval` is called
+    let siteElement = context && context.siteElement ? context.siteElement : context;
 
     try {
       value = eval(value);
@@ -34,13 +34,19 @@ hellobar.defineModule('base.templating', ['hellobar', 'base.preview'], function 
     return value;
   }
 
+  function render(templateName, context) {
+    const html = getTemplateByName(templateName);
+    return renderTemplate(html, context);
+  }
+
   return {
     configuration: () => configuration,
     inspect: () => ({
       allTemplates: () => templates
     }),
     getTemplateByName,
-    renderTemplate
+    renderTemplate,
+    render
   };
 
 });

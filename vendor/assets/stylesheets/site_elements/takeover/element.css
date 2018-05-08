@@ -12,15 +12,19 @@
 
 #hellobar-takeover .hb-content-wrapper {
   top: 50%;
-  left: 50%;
+  left: 0;
   width: 100%;
   padding: 1em;
-  max-width: 41em;
   position: absolute;
-  transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
+  transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+
+#hellobar-takeover .hb-inner-content {
+  max-width: 41em;
+  margin: 0 auto;
 }
 
 /*-----------  Close Buttons  -----------*/
@@ -101,6 +105,26 @@
   text-transform: uppercase;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-takeover .gdpr-consent-form {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+#hellobar-takeover .gdpr-consent-form p {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+#hellobar-takeover .gdpr-consent-form p:last-child {
+  margin-bottom: 45px;
+}
+
+#hellobar-takeover .gdpr-consent-form input {
+  margin: 9px 13px 0 0;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-takeover.mobile {
@@ -109,6 +133,14 @@
 
 #hellobar-takeover.mobile .hb-logo-wrapper a {
   font-size: 12px;
+}
+
+#hellobar-takeover.mobile .gdpr-consent-form {
+  max-width: 350px;
+}
+
+#hellobar-takeover.mobile .gdpr-consent-form p {
+  font-size: 16px;
 }
 
 /*-----------  Old IE Fixes  -----------*/

@@ -105,6 +105,20 @@
   font-size: 13px;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-modal .gdpr-consent-form {
+  padding-left: 45px;
+}
+
+#hellobar-modal .gdpr-consent-form p {
+  font-size: 16px;
+}
+
+#hellobar-modal.image-left .gdpr-consent-form {
+  padding-left: 0;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-modal.image-left .hb-image-wrapper, #hellobar-modal.image-right .hb-image-wrapper {
@@ -118,4 +132,8 @@
 
 #hellobar-modal.mobile .hb-logo-wrapper {
   margin: 2em auto 0;
+}
+
+#hellobar-modal.mobile .gdpr-consent-form {
+  padding-left: 15px;
 }

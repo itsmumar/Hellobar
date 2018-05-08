@@ -219,6 +219,12 @@ class Site < ApplicationRecord
     @script ||= StaticScript.new(self)
   end
 
+  def gdpr_enabled?
+    communication_types? &&
+      terms_and_conditions_url? &&
+      privacy_policy_url?
+  end
+
   private
 
   def generate_read_write_keys

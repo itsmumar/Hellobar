@@ -186,6 +186,13 @@
   left: 1em;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-slider .gdpr-consent-form p {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-slider.mobile {
