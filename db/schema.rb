@@ -378,6 +378,9 @@ ActiveRecord::Schema.define(version: 20180503073324) do
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
     t.text     "settings",                        limit: 16777215
+    t.string   "privacy_policy_url",              limit: 255
+    t.string   "terms_and_conditions_url",        limit: 255
+    t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
