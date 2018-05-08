@@ -13,7 +13,7 @@ class FetchSubscribers
 
   def initialize(contact_list, key: nil, forward: false)
     @contact_list = contact_list
-    @key = key
+    @key = key&.symbolize_keys
     @forward = forward
   end
 
@@ -116,9 +116,9 @@ class FetchSubscribers
 
   def parse_key(key)
     {
-      email: key['email'],
-      lid: key['lid'].to_i,
-      ts: key['ts'].to_i
+      email: key[:email],
+      lid: key[:lid].to_i,
+      ts: key[:ts].to_i
     }
   end
 
