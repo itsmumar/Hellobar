@@ -378,7 +378,6 @@ ActiveRecord::Schema.define(version: 20180502083059) do
     t.datetime "script_uninstalled_at"
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
-    t.datetime "selected_goal_clicked_at"
     t.text     "settings",                        limit: 16777215
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255

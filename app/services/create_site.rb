@@ -8,12 +8,13 @@ class CreateSite
     end
   end
 
-  def initialize(site, current_user, referral_token:)
+  def initialize(site, user, referral_token:)
     @site = site
-    @current_user = current_user
+    @user = user
     @referral_token = referral_token
   end
 
+  # @return Site
   def call
     check_for_duplicate!
     create_site
@@ -21,11 +22,12 @@ class CreateSite
     handle_referral_token
     detect_install_type
     change_subscription
+    site
   end
 
   private
 
-  attr_reader :site, :current_user, :referral_token
+  attr_reader :site, :user, :referral_token
 
   def change_subscription
     ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call
@@ -36,23 +38,23 @@ class CreateSite
   end
 
   def handle_referral_token
-    Referrals::HandleToken.run(user: current_user, token: referral_token)
+    Referrals::HandleToken.run(user: user, token: referral_token)
   end
 
   def track_site_creation
-    TrackEvent.new(:created_site, site: site, user: current_user).call
+    TrackEvent.new(:created_site, site: site, user: user).call
   end
 
   def create_site
     Site.transaction do
-      site.owners << current_user
+      site.owners << user
       site.save!
       site.create_default_rules
     end
   end
 
   def check_for_duplicate!
-    existing_site = Site.by_url_for(current_user, url: site.url)
+    existing_site = Site.by_url_for(user, url: site.url)
     raise DuplicateURLError, existing_site if existing_site
   end
 end

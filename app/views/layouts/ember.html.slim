@@ -4,8 +4,7 @@ html
     title Hello Bar
 
     = render "shared/gtm_script"
-
-    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+    = render 'shared/favicon'
 
     - if defined?(preview_script_path)
       = javascript_include_tag preview_script_path(@site)

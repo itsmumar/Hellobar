@@ -7,8 +7,7 @@ describe PrepareZippedContacts do
   let(:extracted_content) { extracted_entry.get_input_stream.read }
 
   before do
-    expect(FetchContactsCSV)
-      .to receive_service_call.with(contact_list).and_return(csv_content)
+    expect(ExportSubscribers).to receive_service_call.with(contact_list).and_return(csv_content)
   end
 
   def extract_entry(zip_file)

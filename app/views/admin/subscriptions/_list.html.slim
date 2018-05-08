@@ -20,10 +20,10 @@
         td
           = link_to subscription.id, admin_subscription_path(subscription)
         td= subscription.name
-        td= subscription.trial_end_date
+        td.date= subscription.trial_end_date
         td= subscription.last_paid_bill && link_to(subscription.last_paid_bill.id, admin_bill_path(subscription.last_paid_bill))
         td= subscription.last_paid_bill&.amount
         td= subscription_site_link(subscription)
         td= subscription.credit_card && link_to(subscription.credit_card.last_digits, admin_credit_card_path(subscription.credit_card))
         td= subscription_owner_link(subscription)
-        td= subscription.created_at
+        td.date= subscription.created_at

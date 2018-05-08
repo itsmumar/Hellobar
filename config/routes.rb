@@ -116,7 +116,7 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists do
       member do
-        get :download
+        get :export
       end
     end
 
@@ -170,6 +170,9 @@ Rails.application.routes.draw do
     resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
+      member do
+        post :reset_password
+      end
     end
 
     resources :sites, only: %i[show update] do
@@ -182,6 +185,10 @@ Rails.application.routes.draw do
     end
 
     resources :bills, only: %i[index show] do
+      collection do
+        get 'filter/:status', action: 'filter_by_status', as: :filter_by_status
+      end
+
       member do
         get 'receipt'
         put 'void'

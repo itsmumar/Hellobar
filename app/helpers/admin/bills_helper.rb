@@ -92,4 +92,29 @@ module Admin::BillsHelper
 
     safe_join(info)
   end
+
+  def bill_filters
+    filters = [
+      ['All', admin_bills_path]
+    ]
+
+    Bill::STATUSES.each do |status|
+      filters << [
+        status.humanize,
+        filter_by_status_admin_bills_path(status: status)
+      ]
+    end
+
+    items = filters.map do |title, path|
+      css = [:presentation]
+      css << :active if current_page?(path)
+      content_tag :li, class: css do
+        link_to title, path
+      end
+    end
+
+    content_tag :ul, class: %w[nav nav-tabs] do
+      safe_join(items)
+    end
+  end
 end
