@@ -35,11 +35,18 @@ hellobar.defineModule('elements.gdpr',
       }
     }
 
+    function isAvailable (siteElement) {
+      return siteElement.theme_id !== 'traffic-growth' &&
+        siteElement.model().type !== 'ContentUpgrade'
+    }
+
     function displayCheckboxes (siteElement, targetSiteElement, callback) {
+      if (!targetSiteElement) return callback();
+
       const template = templating.render('gdpr', configuration.settings())
       targetSiteElement.innerHTML = template;
 
-      if (siteElement.model().enable_gdpr) {
+      if (siteElement.model().enable_gdpr && isAvailable(siteElement)) {
         render(siteElement, targetSiteElement, callback);
       } else {
         callback();
