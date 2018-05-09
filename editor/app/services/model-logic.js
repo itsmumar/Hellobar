@@ -1,4 +1,4 @@
-/* globals UpgradeAccountModal */
+/* globals UpgradeAccountModal, UpdateGDPRSettingsPromtModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
@@ -219,6 +219,16 @@ export default Ember.Service.extend({
     }
   }.observes('model.show_branding'),
 
+  promptUpdateGDPRWhenNotEnabled: function () {
+    const isGDPREnabled = this.get('model.site.gdpr_enabled');
+    const enableGDPR = this.get('model.enable_gdpr');
+
+    if (!isGDPREnabled && enableGDPR) {
+      this.set('model.enable_gdpr', false);
+      this.promptUpdateSettings();
+    }
+  }.observes('model.enable_gdpr'),
+
   promptUpgradeWhenEnablingHiding: function () {
     const isClosable = this.get('model.closable');
     const canBeClosable = this.get('model.site.capabilities.closable');
@@ -240,6 +250,9 @@ export default Ember.Service.extend({
       },
       upgradeBenefit: message
     }).open();
-  }
+  },
 
+  promptUpdateSettings() {
+    new UpdateGDPRSettingsPromtModal().open();
+  }
 });

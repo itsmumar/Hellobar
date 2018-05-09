@@ -3,7 +3,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # settings
     :type, :element_subtype, :settings, :view_condition, :phone_number,
-    :phone_country_code, :blocks, :email_redirect,
+    :phone_country_code, :blocks, :email_redirect, :enable_gdpr,
     #
     # text
     :headline, :caption, :content, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,

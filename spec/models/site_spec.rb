@@ -296,4 +296,40 @@ describe Site do
       expect(site.statistics).to be statistics
     end
   end
+
+  describe '#communication_types' do
+    it 'returns array of strings' do
+      site.communication_types = Site::COMMUNICATION_TYPES.map(&:to_s)
+      expect(site.communication_types).to eql Site::COMMUNICATION_TYPES.map(&:to_s)
+
+      expect(site[:communication_types]).to eql Site::COMMUNICATION_TYPES.join(',')
+    end
+  end
+
+  describe '#gdpr_enabled?' do
+    before do
+      site.communication_types = [Site::COMMUNICATION_TYPES.first]
+      site.privacy_policy_url = 'google.com'
+      site.terms_and_conditions_url = 'google.com'
+    end
+
+    context 'when all gdpr-related attributes are present' do
+      specify { expect(site.gdpr_enabled?).to be_truthy }
+    end
+
+    context 'when privacy_policy_url is blank' do
+      before { site.privacy_policy_url = nil }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
+    end
+
+    context 'when terms_and_conditions_url is blank' do
+      before { site.terms_and_conditions_url = nil }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
+    end
+
+    context 'when communication_types is blank' do
+      before { site.communication_types = [] }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
+    end
+  end
 end

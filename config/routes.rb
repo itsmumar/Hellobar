@@ -79,6 +79,8 @@ Rails.application.routes.draw do
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
   resources :sites do
+    resource :privacy, only: %i[edit update]
+
     member do
       put :downgrade
       post :install_check
@@ -114,7 +116,7 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists do
       member do
-        get :download
+        get :export
       end
     end
 

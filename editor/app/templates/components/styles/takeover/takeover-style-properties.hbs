@@ -10,6 +10,13 @@
     Animations
   </label>
 
+  {{#if isEmailSubtype}}
+  <label class="toggle-gdpr">
+    {{common/checkboxes/toggle-switch switch=model.enable_gdpr}}
+    GDPR Compliant
+  </label>
+  {{/if}}
+
   <label>When does it display?
     <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small>
   </label>

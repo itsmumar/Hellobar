@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180503073324) do
+ActiveRecord::Schema.define(version: 20180509063307) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -219,6 +219,8 @@ ActiveRecord::Schema.define(version: 20180503073324) do
     t.datetime "updated_at"
   end
 
+  add_index "referral_tokens", ["tokenizable_id", "tokenizable_type"], name: "index_referral_tokens_on_tokenizable_id_and_tokenizable_type", using: :btree
+
   create_table "referrals", force: :cascade do |t|
     t.integer  "sender_id",                limit: 4
     t.datetime "created_at"
@@ -344,6 +346,7 @@ ActiveRecord::Schema.define(version: 20180503073324) do
     t.string   "thank_you_cta",                    limit: 255
     t.text     "thank_you_url",                    limit: 16777215
     t.integer  "image_opacity",                    limit: 4,        default: 100
+    t.boolean  "enable_gdpr",                                       default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -378,6 +381,9 @@ ActiveRecord::Schema.define(version: 20180503073324) do
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
     t.text     "settings",                        limit: 16777215
+    t.string   "privacy_policy_url",              limit: 255
+    t.string   "terms_and_conditions_url",        limit: 255
+    t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

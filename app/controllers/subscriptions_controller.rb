@@ -26,15 +26,15 @@ class SubscriptionsController < ApplicationController
     end
   end
 
-  # updates subscription
+  # updates subscription or credit card
   def update
     load_site
 
     credit_card = current_user.credit_cards.find params[:credit_card_id]
-    bill = change_subscription(credit_card)
+    bill, action = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json { render json: bill, serializer: BillSerializer }
+      format.json { render json: bill, serializer: BillSerializer, scope: { action: action } }
     end
   end
 

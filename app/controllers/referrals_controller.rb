@@ -6,7 +6,6 @@ class ReferralsController < ApplicationController
 
   def new
     @referral = current_user.sent_referrals.build
-    @referral.set_standard_body
   end
 
   def index
@@ -26,11 +25,15 @@ class ReferralsController < ApplicationController
       flash[:error] = I18n.t('referral.flash.not_created', error: @referral.errors.full_messages.join(','))
       render action: :new
     end
+  rescue Referrals::Create::Error => e
+    @referral = current_user.sent_referrals.build(referral_params)
+    flash[:error] = e.message
+    render action: :new
   end
 
   def update
     @referral = current_user.sent_referrals.find(params[:id])
-    if @referral.update_attributes(referral_params)
+    if @referral.update_attributes(update_referral_params)
       site = Site.unscoped.find_by(id: @referral.site_id)
       RedeemReferralForSender.new(@referral).call if site
       flash[:success] = I18n.t('referral.flash.saved')
@@ -46,13 +49,17 @@ class ReferralsController < ApplicationController
     session[:referral_token] = params[:token]
     flash[:success] = I18n.t('referral.flash.accepted')
 
-    redirect_to users_sign_up_path
+    redirect_to user ? after_sign_in_path_for(user) : users_sign_up_path
   end
 
   private
 
   def referral_params
-    params.require(:referral).permit(:email, :body, :site_id)
+    params.require(:referral).permit(:email)
+  end
+
+  def update_referral_params
+    params.require(:referral).permit(:email, :site_id)
   end
 
   def redirect_to_root

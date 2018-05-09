@@ -12,8 +12,6 @@
   font-variant: normal;
   text-transform: none;
   font-family: 'icomoon';
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
 }
 
 .icon-close:before {
@@ -44,12 +42,17 @@
   -webkit-box-sizing: border-box;
 }
 
-html, body {
+body {
   margin: 0;
   padding: 0;
   font-size: 14px;
   font-family: 'Open Sans', 'Helvetica', sans-serif;
   overflow: hidden;
+
+  /* improve text rendering */
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeLegibility;
 }
 
 form {
@@ -190,8 +193,6 @@ form {
 
 .hb-text-wrapper .hb-secondary-text {
   margin-top: 5px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
 }
 
 /*-----------  Inputs  -----------*/
@@ -246,110 +247,20 @@ form {
 
 /*-----------  Logo  -----------*/
 
-  .hb-logo-wrapper {
-    opacity: 0.3;
-  }
+.hb-logo-wrapper {
+  opacity: 0.3;
+}
 
-  .hb-logo-wrapper:hover {
-    opacity: 0.6;
-  }
+.hb-logo-wrapper:hover {
+  opacity: 0.6;
+}
 
-  .hb-logo-wrapper a {
-    color: #5c5e60;
-    text-decoration: none;
-  }
+.hb-logo-wrapper a {
+  color: #5c5e60;
+  text-decoration: none;
+}
 
-  .hb-logo-wrapper {
-    font-family: 'Open Sans',sans-serif;
-
-    transition: opacity 0.2s ease;
-    -o-transition: opacity 0.2s ease;
-    -ms-transition: opacity 0.2s ease;
-    -moz-transition: opacity 0.2s ease;
-    -webkit-transition: opacity 0.2s ease;
-  }
-
-  .hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.gethb_no_track svg,
-  .hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg, .hb-logo-wrapper.gethb svg {
-    transform: translateY(3px);
-    -o-transform: translateY(3px);
-    -ms-transform: translateY(3px);
-    -moz-transform: translateY(3px);
-    -webkit-transform: translateY(3px);
-  }
-
-  .hb-logo-wrapper .hb-logo-line {
-    display: inline;
-    line-height: 1.15;
-    white-space: nowrap;
-  }
-
-  .hb-logo-wrapper .animated {
-    -webkit-animation: logo-spin 10.5s ease-in-out infinite;
-    -moz-animation: logo-spin 10.5s ease-in-out infinite;
-    animation: logo-spin 10.5s ease-in-out infinite;
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    -ms-transform-style: preserve-3d;
-    -o-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
-  }
-
-  .hb-logo-wrapper .animated:hover {
-    -webkit-animation-play-state: paused;
-    -moz-animation-play-state: paused;
-    animation-play-state: paused;
-  }
-
-  /*pausing animations in IE11 -- it causes issues with iframe rendering*/
-  .hb-paused-animations-ie .hb-logo-wrapper .animated {
-    animation-play-state: paused;
-  }
-
-  @-webkit-keyframes logo-spin {
-    90% {
-      -webkit-transform: rotate3d(0, 1, 0, 0deg);
-    }
-
-    100% {
-        -webkit-transform: rotate3d(0, 1, 0, -180deg);
-    }
-  }
-
-  @-moz-keyframes logo-spin {
-    90% {
-      -moz-transform: rotate3d(0, 1, 0, 0deg);
-    }
-
-    100% {
-      -moz-transform: rotate3d(0, 1, 0, -180deg);
-    }
-  }
-
-  @keyframes logo-spin {
-    90% {
-      -webkit-transform: rotate3d(0, 1, 0, 0deg);
-      -moz-transform: rotate3d(0, 1, 0, 0deg);
-      -ms-transform: rotate3d(0, 1, 0, 0deg);
-      -o-transform: rotate3d(0, 1, 0, 0deg);
-      transform: rotate3d(0, 1, 0, 0deg);
-    }
-
-    100% {
-      -webkit-transform: rotate3d(0, 1, 0, -180deg);
-      -moz-transform: rotate3d(0, 1, 0, -180deg);
-      -ms-transform: rotate3d(0, 1, 0, -180deg);
-      -o-transform: rotate3d(0, 1, 0, -180deg);
-      transform: rotate3d(0, 1, 0, -180deg);
-    }
-  }
-/*.hb-logo-wrapper {
-  opacity: 0.33;
-  margin-top: 2em;
-  font-size: 0.85em;
-  margin-bottom: -1em;
+.hb-logo-wrapper {
   font-family: 'Open Sans',sans-serif;
 
   transition: opacity 0.2s ease;
@@ -359,9 +270,13 @@ form {
   -webkit-transition: opacity 0.2s ease;
 }
 
-.hb-logo-wrapper a {
-  color: #5c5e60;
-  text-decoration: none;
+.hb-logo-wrapper.pb2l svg, .hb-logo-wrapper.powered_by svg, .hb-logo-wrapper.gethb_no_track svg,
+.hb-logo-wrapper.not_using_hb svg, .hb-logo-wrapper.add_hb svg, .hb-logo-wrapper.gethb svg {
+  transform: translateY(3px);
+  -o-transform: translateY(3px);
+  -ms-transform: translateY(3px);
+  -moz-transform: translateY(3px);
+  -webkit-transform: translateY(3px);
 }
 
 .hb-logo-wrapper .hb-logo-line {
@@ -370,27 +285,67 @@ form {
   white-space: nowrap;
 }
 
-.hb-logo-wrapper svg {
-  width: 1.45em;
-  height: 1.25em;
-  fill: #5c5e60;
-
-  backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-
-  transform: translateY(2px);
-  -o-transform: translateY(2px);
-  -ms-transform: translateY(2px);
-  -moz-transform: translateY(2px);
-  -webkit-transform: translateY(2px);
+.hb-logo-wrapper .animated {
+  -webkit-animation: logo-spin 10.5s ease-in-out infinite;
+  -moz-animation: logo-spin 10.5s ease-in-out infinite;
+  animation: logo-spin 10.5s ease-in-out infinite;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
 }
 
-.hb-logo-wrapper:hover {
-  opacity: 0.67;
-}*/
+.hb-logo-wrapper .animated:hover {
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+/*pausing animations in IE11 -- it causes issues with iframe rendering*/
+.hb-paused-animations-ie .hb-logo-wrapper .animated {
+  animation-play-state: paused;
+}
+
+@-webkit-keyframes logo-spin {
+  90% {
+    -webkit-transform: rotate3d(0, 1, 0, 0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate3d(0, 1, 0, -180deg);
+  }
+}
+
+@-moz-keyframes logo-spin {
+  90% {
+    -moz-transform: rotate3d(0, 1, 0, 0deg);
+  }
+
+  100% {
+    -moz-transform: rotate3d(0, 1, 0, -180deg);
+  }
+}
+
+@keyframes logo-spin {
+  90% {
+    -webkit-transform: rotate3d(0, 1, 0, 0deg);
+    -moz-transform: rotate3d(0, 1, 0, 0deg);
+    -ms-transform: rotate3d(0, 1, 0, 0deg);
+    -o-transform: rotate3d(0, 1, 0, 0deg);
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate3d(0, 1, 0, -180deg);
+    -moz-transform: rotate3d(0, 1, 0, -180deg);
+    -ms-transform: rotate3d(0, 1, 0, -180deg);
+    -o-transform: rotate3d(0, 1, 0, -180deg);
+    transform: rotate3d(0, 1, 0, -180deg);
+  }
+}
 
 /*-----------  Social Styling  -----------*/
 
@@ -638,10 +593,6 @@ body .fr-popup .fr-color-set .fr-command > span.fr-sr-only {
   width: 25%;
 }
 
-.hb-editable-block.hb-editable-block-image {
-
-}
-
 .hb-image-holder {
   display: block;
   margin: 0;
@@ -745,4 +696,33 @@ a.barlinkred {
 /*--------- Free/paid displaying support --------*/
 .paid-account .free-only, .free-account .paid-only {
   display: none !important;
+}
+
+/*----------- GDPR -----------*/
+.gdpr-consent-form p {
+  line-height: 155%;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.gdpr-consent-form p:last-child {
+  margin-bottom: 30px;
+}
+
+.gdpr-consent-form label {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+}
+
+.gdpr-consent-form input {
+  margin: 6px 10px 0 0;
+}
+
+.gdpr-consent-form span {
+  flex: 94%;
+}
+
+.gdpr-consent-form a {
+  color: inherit;
 }

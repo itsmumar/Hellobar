@@ -29,3 +29,12 @@ en:
     # prompts:
     #   defaults:
     #     age: 'Select your age'
+
+    options:
+      site:
+        communication_types:
+          newsletter: 'Newsletter (blog articles, annoncements, reports)'
+          promotional: 'Promotional (sales, deals, gifts, offers)'
+          partnership: 'Partnerships (business deals, partnership opportunities)'
+          product: 'Product/service (updates, new or removed)'
+          research: 'Market research (surveys, qual & quant research, feedback, ratings and reviews)'

@@ -22,7 +22,7 @@ nav.tabs-wrapper
 
   .service-actions
     a#edit-contact-list.button Edit
-    a.button href=download_site_contact_list_path(@site, @contact_list) Export CSV
+    a.button href=export_site_contact_list_path(@site, @contact_list) Export CSV
 
 - if @contact_list.service_provider
   .info-block
@@ -60,4 +60,4 @@ table.contacts-table
 - if @total_subscribers > 100
   p
     'Only showing latest 100 subscribers.
-    = link_to 'Download all subscribers', download_site_contact_list_path(@site, @contact_list)
+    = link_to 'Export CSV', export_site_contact_list_path(@site, @contact_list)
