@@ -16,7 +16,7 @@ class ReferralsController < ApplicationController
   def create
     @referral = Referrals::Create.run(
       sender: current_user,
-      params: referral_params,
+      params: referral_params.merge(site_id: current_site.id),
       send_emails: true
     )
     if @referral.valid?
@@ -26,6 +26,10 @@ class ReferralsController < ApplicationController
       flash[:error] = I18n.t('referral.flash.not_created', error: @referral.errors.full_messages.join(','))
       render action: :new
     end
+  rescue Referrals::Create::Error => e
+    @referral = current_user.sent_referrals.build(referral_params)
+    flash[:error] = e.message
+    render action: :new
   end
 
   def update
@@ -52,7 +56,7 @@ class ReferralsController < ApplicationController
   private
 
   def referral_params
-    params.require(:referral).permit(:email, :body, :site_id)
+    params.require(:referral).permit(:email)
   end
 
   def redirect_to_root

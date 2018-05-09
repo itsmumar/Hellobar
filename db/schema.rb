@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180503073324) do
+ActiveRecord::Schema.define(version: 20180509063307) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -218,6 +218,8 @@ ActiveRecord::Schema.define(version: 20180503073324) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "referral_tokens", ["tokenizable_id", "tokenizable_type"], name: "index_referral_tokens_on_tokenizable_id_and_tokenizable_type", using: :btree
 
   create_table "referrals", force: :cascade do |t|
     t.integer  "sender_id",                limit: 4

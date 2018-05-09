@@ -8,6 +8,7 @@ class Referral < ApplicationRecord
 
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
+  scope :in_last_24_hours, -> { where('created_at between ? and ?', 1.day.ago, Time.current) }
 
   belongs_to :sender, class_name: 'User', inverse_of: :sent_referrals
   belongs_to :recipient, class_name: 'User', inverse_of: :received_referral
@@ -20,6 +21,7 @@ class Referral < ApplicationRecord
   validate :ensure_email_available, on: :create
 
   after_create :create_referral_token
+  after_initialize :set_standard_body
 
   STATES.each do |state|
     # define .sent .signed_up .installed
