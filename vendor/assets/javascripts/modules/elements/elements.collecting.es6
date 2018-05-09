@@ -81,18 +81,18 @@ hellobar.defineModule('elements.collecting',
         const btnElement = siteElementContainer.getElementsByClassName('hb-cta')[0];
         const btnTextHolder = btnElement.getElementsByClassName('hb-text-holder')[0];
 
+        btnElement.removeAttribute('onclick');
+
         if (siteElementModel.use_free_email_default_msg) {
           // Hijack the submit button and turn it into a link
           const linkUrl = `https://www.hellobar.com?hbt=emailSubmittedLink&sid=${site.siteId()}`;
           btnTextHolder.textContent = 'Click Here';
           btnElement.href = linkUrl;
           btnElement.setAttribute('target', '_parent');
-          btnElement.onclick = null;
 
           // Remove all the fields
           removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
         } else {
-          btnElement.href = 'javascript:void(0)';
           btnTextHolder.textContent = 'Close';
           btnElement.addEventListener('click', () => hellobar('elements').findById(siteElement.id).close());
 
