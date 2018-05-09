@@ -36,12 +36,12 @@ hellobar.defineModule('elements.gdpr',
     }
 
     function isAvailable (siteElement) {
-      const model = siteElement.model()
+      const model = (siteElement.model && siteElement.model()) || siteElement
       return model.theme_id !== 'traffic-growth' && model.type !== 'ContentUpgrade'
     }
 
     function isEnabled (siteElement) {
-      const model = siteElement.model()
+      const model = (siteElement.model && siteElement.model()) || siteElement
       return model.enable_gdpr
     }
 
