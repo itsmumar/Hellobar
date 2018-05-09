@@ -35,11 +35,23 @@ hellobar.defineModule('elements.gdpr',
       }
     }
 
+    function isAvailable (siteElement) {
+      const model = (siteElement.model && siteElement.model()) || siteElement
+      return model.theme_id !== 'traffic-growth' && model.type !== 'ContentUpgrade'
+    }
+
+    function isEnabled (siteElement) {
+      const model = (siteElement.model && siteElement.model()) || siteElement
+      return model.enable_gdpr
+    }
+
     function displayCheckboxes (siteElement, targetSiteElement, callback) {
+      if (!targetSiteElement) return callback();
+
       const template = templating.render('gdpr', configuration.settings())
       targetSiteElement.innerHTML = template;
 
-      if (siteElement.model().enable_gdpr) {
+      if (isEnabled(siteElement) && isAvailable(siteElement)) {
         render(siteElement, targetSiteElement, callback);
       } else {
         callback();
