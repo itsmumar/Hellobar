@@ -6,14 +6,9 @@ describe Referral do
   specify('could be signed_up') { expect(build(:referral, :signed_up)).to be_signed_up }
   specify('could be installed') { expect(build(:referral, :installed)).to be_installed }
 
-  it 'has no body set by default' do
-    expect(referral.body).to be_nil
-  end
-
-  it 'has a standard body that can be set explicitly' do
-    referral.set_standard_body
-
-    expect(referral.body).to include(user.name)
+  it 'has body set by default' do
+    expect(referral.body)
+      .to eql I18n.t('referral.standard_body', name: user.name, pro_or_growth: 'Growth')
   end
 
   it 'has no site by default' do
