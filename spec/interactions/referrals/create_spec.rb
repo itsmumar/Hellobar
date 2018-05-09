@@ -47,4 +47,19 @@ describe Referrals::Create do
       send_emails: false
     )
   end
+
+  context 'when trying to send 11th invitation' do
+    before { create_list :referral, 10, sender: user }
+
+    it 'raises Error' do
+      expect {
+        Referrals::Create.run(
+          sender: user,
+          params: { email: 'tj@hellobar.com', body: 'test body' },
+          send_emails: false
+        )
+      }.to raise_error Referrals::Create::Error,
+        "Only #{ Referrals::Create::NUMBER_OF_ALLOWED_REFERRALS } invitation is allowed per day"
+    end
+  end
 end
