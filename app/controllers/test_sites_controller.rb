@@ -5,7 +5,7 @@ class TestSitesController < ActionController::Base
 
   def show
     clear_cache if params.key?(:fresh)
-    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
+    @model = StaticScriptModel.new(@site)
     render :show
   end
 
@@ -42,6 +42,7 @@ class TestSitesController < ActionController::Base
   end
 
   def script_content
+    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
     RenderStaticScript.new(@site).call
   end
 end

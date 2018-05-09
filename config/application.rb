@@ -66,6 +66,8 @@ module Hellobar
         resource '/api/*', headers: :any,
           methods: %i[get post delete put patch options head],
           credentials: true
+
+        resource '/test_sites/*', headers: :any, methods: %i[get options] if Rails.env.development?
       end
     end
   end
