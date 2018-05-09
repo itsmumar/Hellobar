@@ -2,7 +2,7 @@ class Referrals::Create < Less::Interaction
   class Error < StandardError
   end
 
-  NUMBER_OF_ALLOWED_REFERRALS = 10
+  MAX_REFERRALS_PER_DAY = 10
 
   expects :sender
   expects :params
@@ -23,8 +23,8 @@ class Referrals::Create < Less::Interaction
   private
 
   def validate_referrals_per_day!
-    return if sender.sent_referrals.in_last_24_hours.count < NUMBER_OF_ALLOWED_REFERRALS
-    raise Error, "Only #{ NUMBER_OF_ALLOWED_REFERRALS } invitations are allowed per day"
+    return if sender.sent_referrals.in_last_24_hours.count < MAX_REFERRALS_PER_DAY
+    raise Error, "Only #{ MAX_REFERRALS_PER_DAY } invitations are allowed per day"
   end
 
   def send_initial_email

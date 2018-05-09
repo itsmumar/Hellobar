@@ -59,7 +59,7 @@ describe Referrals::Create do
           send_emails: false
         )
       }.to raise_error Referrals::Create::Error,
-        "Only #{ Referrals::Create::NUMBER_OF_ALLOWED_REFERRALS } invitations are allowed per day"
+        "Only #{ Referrals::Create::MAX_REFERRALS_PER_DAY } invitations are allowed per day"
     end
   end
 end
