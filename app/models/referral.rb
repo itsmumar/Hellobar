@@ -21,7 +21,6 @@ class Referral < ApplicationRecord
   validate :ensure_email_available, on: :create
 
   after_create :create_referral_token
-  after_initialize :set_standard_body
 
   STATES.each do |state|
     # define .sent .signed_up .installed
@@ -41,11 +40,13 @@ class Referral < ApplicationRecord
     ', possible_recipient_ids, site.id)
   end
 
-  def set_standard_body
-    pro_or_growth = Subscription.pro_or_growth_for(sender).defaults[:name]
+  def body
+    self[:body] ||= begin
+      pro_or_growth = Subscription.pro_or_growth_for(sender).defaults[:name]
 
-    self.body =
-      I18n.t('referral.standard_body', name: sender.name, pro_or_growth: pro_or_growth)
+      self.body =
+        I18n.t('referral.standard_body', name: sender.name, pro_or_growth: pro_or_growth)
+    end
   end
 
   def set_site_if_only_one

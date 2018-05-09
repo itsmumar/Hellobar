@@ -6,7 +6,6 @@ class ReferralsController < ApplicationController
 
   def new
     @referral = current_user.sent_referrals.build
-    @referral.set_standard_body
   end
 
   def index
@@ -16,7 +15,7 @@ class ReferralsController < ApplicationController
   def create
     @referral = Referrals::Create.run(
       sender: current_user,
-      params: referral_params.merge(site_id: current_site.id),
+      params: referral_params,
       send_emails: true
     )
     if @referral.valid?
@@ -34,7 +33,7 @@ class ReferralsController < ApplicationController
 
   def update
     @referral = current_user.sent_referrals.find(params[:id])
-    if @referral.update_attributes(referral_params)
+    if @referral.update_attributes(update_referral_params)
       site = Site.unscoped.find_by(id: @referral.site_id)
       RedeemReferralForSender.new(@referral).call if site
       flash[:success] = I18n.t('referral.flash.saved')
@@ -57,6 +56,10 @@ class ReferralsController < ApplicationController
 
   def referral_params
     params.require(:referral).permit(:email)
+  end
+
+  def update_referral_params
+    params.require(:referral).permit(:email, :site_id)
   end
 
   def redirect_to_root
