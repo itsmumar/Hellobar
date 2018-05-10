@@ -1,4 +1,6 @@
 class SiteElementsController < ApplicationController
+  include ActionView::Helpers::UrlHelper
+
   before_action :authenticate_user!
   before_action :force_trailing_slash, only: %i[new edit]
   before_action :load_site
@@ -78,8 +80,8 @@ class SiteElementsController < ApplicationController
   end
 
   def message_to_clear_cache
-    message = 'It may take a few minutes for Hello Bar to show up on your site. '
-    message << 'You’ll want to <a href="http://www.refreshyourcache.com/en/home" target="_blank" style="text-decoration: underline;">clear your cache</a> to see your updates.'
+    clear_cache_link = link_to 'clearing browser\'s cache', 'https://kb.iu.edu/d/ahic', target: '_blank'
+    "Usually a simple page refresh will show your changes, if not try #{ clear_cache_link  }.".html_safe
   end
 
   def load_site
