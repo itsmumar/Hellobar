@@ -41,6 +41,28 @@ describe Bill do
     expect { Bill.create(amount: -1) }.to raise_error(Bill::InvalidBillingAmount)
   end
 
+  describe 'state machine' do
+    let(:bill) { build(:bill) }
+    let(:authorization_code) { 'abc123=' }
+
+    specify { expect(bill).to transition_from(:pending).to(:paid).on_event(:pay, authorization_code) }
+    specify { expect(bill).to transition_from(:failed).to(:paid).on_event(:pay, authorization_code) }
+
+    specify { expect(bill).to transition_from(:pending).to(:failed).on_event(:fail) }
+    specify { expect(bill).to transition_from(:failed).to(:failed).on_event(:fail) }
+
+    specify { expect(bill).to transition_from(:pending).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:paid).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:voided).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:failed).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:refunded).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:chargedback).to(:voided).on_event(:void) }
+
+    specify { expect(bill).to transition_from(:paid).to(:refunded).on_event(:refund) }
+
+    specify { expect(bill).to transition_from(:paid).to(:chargedback).on_event(:chargeback) }
+  end
+
   it 'should record when the status was set' do
     bill = create(:bill, :pro)
     expect(bill.status_set_at).to be_nil

@@ -12,6 +12,7 @@ require 'paperclip/matchers'
 require 'support/page_object'
 require 'webmock/rspec'
 require 'support/ab_test_config'
+require 'aasm/rspec'
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
 Dir[Rails.root.join('spec', 'models', 'concerns', '**', '*.rb')].each(&method(:require))
