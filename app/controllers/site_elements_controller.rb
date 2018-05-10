@@ -81,7 +81,7 @@ class SiteElementsController < ApplicationController
 
   def message_to_clear_cache
     clear_cache_link = link_to 'clearing browser\'s cache', 'https://kb.iu.edu/d/ahic', target: '_blank'
-    "Usually a simple page refresh will show your changes, if not try #{ clear_cache_link  }.".html_safe
+    "Usually a simple page refresh will show your changes, if not try #{ clear_cache_link }.".html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def load_site
