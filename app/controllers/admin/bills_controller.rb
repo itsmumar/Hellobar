@@ -21,7 +21,7 @@ class Admin::BillsController < AdminController
 
   def void
     @bill, @subscription, @site = load_data
-    @bill.voided!
+    @bill.void!
     flash[:success] = "Voided bill due on #{ @bill.due_at.strftime('%D') } for #{ @bill.amount }."
 
     redirect_to admin_site_path(@site)

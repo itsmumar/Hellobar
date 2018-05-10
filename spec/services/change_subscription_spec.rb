@@ -163,7 +163,7 @@ describe ChangeSubscription, :freeze do
 
           before do
             change_subscription('pro', 'monthly')
-            failed_bill.failed!
+            failed_bill.fail!
           end
 
           it 'pays the failed bill' do

@@ -5,7 +5,7 @@ class PayRecurringBills
   # Find all pending bills which should be processed today
   def self.bills
     Bill
-      .where(status: [Bill::PENDING, Bill::FAILED])
+      .where(status: [Bill::STATE_PENDING, Bill::STATE_FAILED])
       .where('DATE(bill_at) <= ?', Date.current)
   end
 
@@ -46,7 +46,7 @@ class PayRecurringBills
     # Try to bill the person if he/she hasn't been within the last MIN_RETRY_TIME
 
     report.attempt bill do
-      if bill.can_pay?
+      if bill.credit_card_attached?
         pay bill
       else
         cannot_pay(bill)
@@ -77,7 +77,7 @@ class PayRecurringBills
 
   def void(bill)
     report.void bill
-    bill.voided!
+    bill.void!
   end
 
   def skip(bill)
@@ -86,7 +86,7 @@ class PayRecurringBills
 
   def downgrade(bill)
     report.downgrade bill
-    bill.voided!
+    bill.void!
     ChangeSubscription.new(bill.site, subscription: 'free').call
   end
 

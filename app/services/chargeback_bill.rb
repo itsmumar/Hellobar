@@ -18,7 +18,7 @@ class ChargebackBill
   delegate :subscription, to: :bill
 
   def transition_bill_status
-    bill.chargedback!
+    bill.chargeback!
   end
 
   def create_billing_attempt(bill)
@@ -30,7 +30,7 @@ class ChargebackBill
 
   def cancel_subscription
     return unless bill.subscription
-    bill.subscription.bills.pending.each(&:voided!)
+    bill.subscription.bills.pending.each(&:void!)
 
     return unless bill.site&.current_subscription
 

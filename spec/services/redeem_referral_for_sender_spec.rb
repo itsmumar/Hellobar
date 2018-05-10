@@ -95,7 +95,7 @@ describe RedeemReferralForSender do
 
     context 'when subscription schedule is monthly' do
       before { ChangeSubscription.new(site, { subscription: 'growth' }, credit_card).call }
-      before { site.bills.last.failed! }
+      before { site.bills.last.fail! }
 
       let!(:failed_bill) { Bill.failed.last }
 
@@ -121,7 +121,7 @@ describe RedeemReferralForSender do
         params = { subscription: 'growth', schedule: 'yearly' }
         ChangeSubscription.new(site, params, credit_card).call
       end
-      before { site.bills.last.failed! }
+      before { site.bills.last.fail! }
 
       it 'adds one month trial' do
         expect(Raven)

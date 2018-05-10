@@ -1,8 +1,8 @@
 class DeleteVoidedAndPaidFreeBills < ActiveRecord::Migration
   def change
     puts "Found #{ scope.count } free bills"
-    puts "    #{ paid.count } PAID bills to delete"
-    puts "    Found #{ voided.count } VOIDED bills to delete"
+    puts "    #{ paid.count } STATE_PAID bills to delete"
+    puts "    Found #{ voided.count } STATE_VOIDED bills to delete"
     voided.delete_all
     paid.delete_all
   end
@@ -15,10 +15,10 @@ class DeleteVoidedAndPaidFreeBills < ActiveRecord::Migration
   end
 
   def paid
-    scope.where(status: Bill::PAID, type: 'Bill::Recurring')
+    scope.where(status: Bill::STATE_PAID, type: 'Bill::Recurring')
   end
 
   def voided
-    scope.where(status: Bill::VOIDED, type: 'Bill::Recurring')
+    scope.where(status: Bill::STATE_VOIDED, type: 'Bill::Recurring')
   end
 end

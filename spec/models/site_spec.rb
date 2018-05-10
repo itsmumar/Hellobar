@@ -272,7 +272,7 @@ describe Site do
     it 'returns bills that are problem' do
       expect(site.bills_with_payment_issues).to be_empty
       change_subscription('pro')
-      last_bill.failed!
+      last_bill.fail!
       expect(site.bills_with_payment_issues).to match_array [last_bill]
     end
   end
