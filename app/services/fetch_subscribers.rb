@@ -8,13 +8,14 @@
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
 class FetchSubscribers
-  PAGE_SIZE = 100
+  DEAULT_PAGE_SIZE = 100
   INDEX_NAME = 'ts-index'.freeze
 
-  def initialize(contact_list, key: nil, forward: false)
+  def initialize(contact_list, key: nil, forward: false, page_size: DEAULT_PAGE_SIZE)
     @contact_list = contact_list
     @key = key&.symbolize_keys
     @forward = forward
+    @page_size = page_size
   end
 
   def call
@@ -31,7 +32,7 @@ class FetchSubscribers
 
   private
 
-  attr_reader :contact_list, :key, :forward, :response
+  attr_reader :contact_list, :key, :forward, :page_size, :response
 
   def backward
     !forward
@@ -45,7 +46,7 @@ class FetchSubscribers
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
       projection_expression: 'email,n,ts,lid,#s,#e',
-      limit: PAGE_SIZE,
+      limit: page_size,
       scan_index_forward: forward
     }
     query[:exclusive_start_key] = parse_key(key) if key.present?
@@ -56,7 +57,8 @@ class FetchSubscribers
     return if first_page?
 
     {
-      forward: false
+      forward: false,
+      page_size: page_size
     }
   end
 
@@ -64,7 +66,8 @@ class FetchSubscribers
     return if last_page?
 
     {
-      forward: true
+      forward: true,
+      page_size: page_size
     }
   end
 
@@ -75,7 +78,8 @@ class FetchSubscribers
 
     {
       key: serialize_key(first_item),
-      forward: false
+      forward: false,
+      page_size: page_size
     }
   end
 
@@ -86,7 +90,8 @@ class FetchSubscribers
 
     {
       key: serialize_key(last_item),
-      forward: true
+      forward: true,
+      page_size: page_size
     }
   end
 

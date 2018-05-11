@@ -6,7 +6,7 @@ class ExportSubscribers
   def call
     CSV.generate do |csv|
       csv << %w[Email Fields Subscribed\ At]
-      subscribers = FetchSubscribers.new(contact_list).call
+      subscribers = FetchSubscribers.new(contact_list, page_size: nil).call
       loop do
         subscribers[:items].each do |subscriber|
           csv << [subscriber.email, subscriber.name, subscriber.subscribed_at.to_s]
