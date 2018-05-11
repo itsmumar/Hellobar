@@ -35,6 +35,8 @@ class SubscribeContactWorker
   def perform(sqs_msg, contact)
     subscribe(contact)
   rescue StandardError => e
+    Shoryuken.logger.error e
+    Shoryuken.logger.error e.backtrace.join("\n")
     Raven.capture_exception(e, extra: { arguments: [sqs_msg.body, contact], queue_name: sqs_msg.queue_name })
     sqs_msg.delete
   end
