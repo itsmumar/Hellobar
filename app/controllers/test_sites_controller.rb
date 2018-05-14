@@ -46,7 +46,7 @@ class TestSitesController < ActionController::Base
     # and actually it is not necessary on staging/edge/production
     # we skip generating modules and are going to use one from S3
     # e.g. https://my.hellobar.com/modules-a3865d95d1e68a2f017fc3a84a71a5adc12d278f230d94e18134ad546aa7aac5.js
-    GenerateStaticScriptModules.new.call if Rails.env.development?
+    GenerateStaticScriptModules.new.call if Rails.env.development? || Rails.env.test?
     RenderStaticScript.new(@site).call
   end
 end
