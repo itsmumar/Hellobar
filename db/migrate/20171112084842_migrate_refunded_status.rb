@@ -1,9 +1,9 @@
 class MigrateRefundedStatus < ActiveRecord::Migration
   def up
-    Bill::Refund.update_all status: Bill::REFUNDED
+    Bill::Refund.update_all status: Bill::STATE_REFUNDED
   end
 
   def down
-    Bill::Refund.update_all status: Bill::PAID
+    Bill::Refund.update_all status: Bill::STATE_PAID
   end
 end

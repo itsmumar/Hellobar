@@ -43,7 +43,7 @@ class RedeemReferralForSender
 
   def mark_failed_bill_as_paid
     if subscription.monthly?
-      last_failed_bill.paid!
+      last_failed_bill.pay!
       CreateBillForNextPeriod.new(last_failed_bill).call
     else
       Raven.capture_exception(

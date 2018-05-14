@@ -1,7 +1,7 @@
 class DeletePendingFreeBills < ActiveRecord::Migration
   def up
     puts "Found #{ scope.count } free bills"
-    puts "    #{ pending.count } PENDING bills to delete"
+    puts "    #{ pending.count } STATE_PENDING bills to delete"
     pending.delete_all
   end
 
@@ -13,6 +13,6 @@ class DeletePendingFreeBills < ActiveRecord::Migration
   end
 
   def pending
-    scope.where(status: Bill::PENDING, type: 'Bill::Recurring')
+    scope.where(status: Bill::STATE_PENDING, type: 'Bill::Recurring')
   end
 end

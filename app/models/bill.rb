@@ -1,19 +1,41 @@
 class Bill < ApplicationRecord
-  PENDING = 'pending'.freeze
-  PAID = 'paid'.freeze
-  VOIDED = 'voided'.freeze
-  FAILED = 'failed'.freeze
-  REFUNDED = 'refunded'.freeze
-  CHARGEDBACK = 'chargedback'.freeze
-  STATUSES = [PENDING, PAID, VOIDED, FAILED, REFUNDED, CHARGEDBACK].freeze
+  include AASM
 
-  class StatusAlreadySet < StandardError
-    def initialize(bill, status)
-      super "Cannot change status once set. Was #{ bill.status.inspect } trying to set to #{ status.inspect }"
+  aasm column: :status do
+    state :pending, initial: true
+    state :paid
+    state :voided
+    state :failed
+    state :refunded
+    state :chargedback
+
+    event :pay do
+      before do |authorization_code|
+        self.authorization_code = authorization_code
+      end
+
+      transitions from: %i[pending failed], to: :paid
     end
+
+    event :fail do
+      transitions from: %i[pending failed], to: :failed
+    end
+
+    event :void do
+      transitions to: :voided # allow to void bill from any state
+    end
+
+    event :refund do
+      transitions from: :paid, to: :refunded
+    end
+
+    event :chargeback do
+      transitions from: :paid, to: :chargedback
+    end
+
+    after_all_transitions :track_status_set_at
   end
 
-  class InvalidStatus < StandardError; end
   class InvalidBillingAmount < StandardError
     attr_reader :amount
 
@@ -22,6 +44,7 @@ class Bill < ApplicationRecord
       super "Amount was: #{ amount&.to_f.inspect }"
     end
   end
+
   belongs_to :subscription, inverse_of: :bills
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
@@ -32,31 +55,16 @@ class Bill < ApplicationRecord
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  STATUSES.each do |status|
-    # define .pending, .paid, .voided, and .failed scopes
-    scope status, -> { where(status: status) }
-
-    # define #pending!, #paid!, #voided!, #failed!, #chargedback!
-    define_method status + '!' do
-      update! status: status
-    end
-
-    # define #pending?, #paid?, #voided?, #failed?, #chargedback?
-    define_method status + '?' do
-      self.status == status
-    end
-  end
-
   scope :with_amount, -> { where('bills.amount > 0') }
   scope :non_free, -> { where.not(amount: 0) }
   scope :free, -> { where(amount: 0) }
   scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
-  scope :not_voided, -> { where.not(status: VOIDED) }
-  scope :not_pending, -> { where.not(status: PENDING) }
+  scope :not_voided, -> { where.not(status: STATE_VOIDED) }
+  scope :not_pending, -> { where.not(status: STATE_PENDING) }
   scope :active, -> { not_voided.where('DATE(bills.start_date) <= :now AND DATE(bills.end_date) >= :now', now: Date.current) }
 
   validates :subscription_id, presence: true
-  validates :status, presence: true, inclusion: { in: STATUSES }
+  validates :status, presence: true
 
   def during_trial_subscription?
     subscription.amount != 0 && subscription.credit_card.nil? && amount == 0 && paid?
@@ -66,20 +74,11 @@ class Bill < ApplicationRecord
     raise InvalidBillingAmount, amount if !amount || amount < 0
   end
 
-  def status=(value)
-    value = value.to_s
-    return if status == value
-    raise StatusAlreadySet.new(self, status) unless can_status_be_changed?(value)
-
-    self[:status] = value
-    self.status_set_at = Time.current
-  end
-
   def problem_reason
     billing_attempts.last&.response
   end
 
-  def can_pay?
+  def credit_card_attached?
     return unless (credit_card = subscription.credit_card)
 
     !credit_card.deleted? && credit_card.token.present?
@@ -123,11 +122,11 @@ class Bill < ApplicationRecord
 
   private
 
-  def can_status_be_changed?(new_value)
-    [VOIDED, REFUNDED, CHARGEDBACK].include?(new_value) || [PENDING, FAILED].include?(status)
-  end
-
   def set_base_amount
     self.base_amount ||= amount
+  end
+
+  def track_status_set_at
+    self.status_set_at = Time.current
   end
 end

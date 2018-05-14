@@ -71,6 +71,7 @@ gem 'sprockets'
 gem 'sprockets-es6'
 
 # ActiveRecord / Database
+gem 'aasm'
 gem 'kaminari'
 gem 'mysql2'
 

@@ -60,7 +60,7 @@ FactoryBot.define do
         )
 
         bill = CalculateBill.new(subscription, bills: site.bills).call
-        bill.paid!
+        bill.pay!
         bill.save
       end
     end
