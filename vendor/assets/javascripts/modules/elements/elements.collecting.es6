@@ -124,7 +124,7 @@ hellobar.defineModule('elements.collecting',
 
       var values = [];
       values.push(email);
-      var inputs = siteElementContainer.querySelectorAll('input:not(#f-builtin-email)');
+      var inputs = siteElementContainer.querySelectorAll('input:not(#f-builtin-email):not(.hb-gdpr-checkbox)');
 
       if (inputs) {
         for (var inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
