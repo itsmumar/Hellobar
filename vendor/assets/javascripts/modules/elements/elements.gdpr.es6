@@ -26,7 +26,7 @@ hellobar.defineModule('elements.gdpr',
       btnElement.onclick = () => {
         if (validate(targetSiteElement)) {
           btnElement.onclick = null;
-          callback();
+          setTimeout(callback, 200);
         }
       };
 

@@ -113,7 +113,7 @@ class AnalyticsProvider
   end
 
   def changed_subscription(subscription:, previous_subscription:, user:)
-    site = subscription.site
+    site = Site.with_deleted.find(subscription.site_id)
 
     track(
       event: 'changed-subscription',
