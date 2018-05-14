@@ -46,7 +46,7 @@ describe('Module elements.gdpr', function () {
     document.body.querySelector('#hellobar-modal').remove();
   })
 
-  it('displays gdpr form', function () {
+  it('displays gdpr form', function (done) {
     var siteElement = {
       enable_gdpr: true,
       contentDocument () {
@@ -71,7 +71,10 @@ describe('Module elements.gdpr', function () {
     document.body.querySelector('.hb-cta').click();
 
     expect(document.body.querySelector('.hb-text-holder').textContent).toEqual('Submit');
-    expect(callback).toHaveBeenCalled();
+    setTimeout(function () {
+      expect(callback).toHaveBeenCalled();
+      done();
+    }, 500)
   });
 
   it('does not display gdpr form if gdpr is not enabled', function () {
