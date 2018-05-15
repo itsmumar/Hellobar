@@ -96,19 +96,19 @@ jobs:
           name: Setup database
           command: RAILS_ENV=test bundle exec rake db:create db:schema:load db:migrate --trace
 
-#      - run:
-#          name: Run Brakeman
-#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
+      - run:
+          name: Run Brakeman
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then bundle exec brakeman --no-exit-on-warn --no-exit-on-error; else echo "skip"; fi
 
-#      - run:
-#          name: Run Rubocop
-#          when: always
-#          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
+      - run:
+          name: Run Rubocop
+          when: always
+          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then bundle exec rubocop; else echo "skip"; fi
 
-#      - run:
-#          name: Run JSHint
-#          when: always
-#          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
+      - run:
+          name: Run JSHint
+          when: always
+          command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
 
       - run:
           name: Generate modules.js
