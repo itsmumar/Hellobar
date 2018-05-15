@@ -115,14 +115,14 @@ jobs:
           when: always
           command: bundle exec rake site:scripts:precompile_static_assets site:scripts:generate_modules
 
-#      - run:
-#          name: Run unit tests
-#          when: always
-#          environment:
-#            CODECOV_FLAG: unit
-#          command: |
-#            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
-#            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
+      - run:
+          name: Run unit tests
+          when: always
+          environment:
+            CODECOV_FLAG: unit
+          command: |
+            TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep -v features | circleci tests split --split-by=timings)
+            bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
           name: Run teaspoon tests
