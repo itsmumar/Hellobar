@@ -10,11 +10,12 @@ describe GenerateStaticScriptModules do
     allow(StaticScriptAssets).to receive(:render).and_return(script_content)
     allow(StaticScriptAssets).to receive(:compile_if_missed)
 
-    allow(file).to receive(:puts).with(script_content)
     allow(File)
-      .to receive(:open)
-      .with(pathname_ending_with("public/generated_scripts/#{ digest_path }"), 'w')
-      .and_yield(file)
+      .to receive(:write)
+      .with(
+        pathname_ending_with("public/generated_scripts/#{ digest_path }"),
+        script_content
+      )
   end
 
   shared_examples 'common' do
@@ -30,11 +31,12 @@ describe GenerateStaticScriptModules do
     include_examples 'common'
 
     it 'creates file in public/generated_scripts' do
-      expect(file).to receive(:puts).with(script_content)
       expect(File)
-        .to receive(:open)
-        .with(pathname_ending_with("public/generated_scripts/#{ digest_path }"), 'w')
-        .and_yield(file)
+        .to receive(:write)
+        .with(
+          pathname_ending_with("public/generated_scripts/#{ digest_path }"),
+          script_content
+        )
 
       service.call
     end
