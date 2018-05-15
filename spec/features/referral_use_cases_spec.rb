@@ -8,7 +8,6 @@ feature 'User sign ups with a referral token', :js do
 
   before do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
-    allow_any_instance_of(GenerateStaticScriptModules).to receive(:call)
     allow_any_instance_of(RenderStaticScript)
       .to receive(:call).and_return('function hellobar(){}')
 

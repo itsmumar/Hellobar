@@ -30,7 +30,7 @@ class DowngradeSiteToFree
   end
 
   def void_pending_bills
-    site.bills.pending.each(&:voided!)
+    site.bills.pending.each(&:void!)
   end
 
   def create_free_subscription

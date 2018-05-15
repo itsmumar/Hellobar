@@ -17,7 +17,7 @@ FactoryBot.define do
       amount 10
       bill_at { '2014-09-01'.to_date }
       subscription { create :subscription, :pro }
-      status Bill::FAILED
+      status Bill::STATE_FAILED
 
       after :create do |bill|
         create :billing_attempt, :failed, bill: bill, credit_card: bill.subscription.credit_card
@@ -52,7 +52,7 @@ FactoryBot.define do
     end
 
     trait :paid do
-      status Bill::PAID
+      status Bill::STATE_PAID
       after :create do |bill|
         create :billing_attempt, :success, bill: bill, credit_card: bill.subscription.credit_card
         bill.reload
@@ -60,15 +60,15 @@ FactoryBot.define do
     end
 
     trait :voided do
-      status Bill::VOIDED
+      status Bill::STATE_VOIDED
     end
 
     trait :pending do
-      status Bill::PENDING
+      status Bill::STATE_PENDING
     end
 
     trait :failed do
-      status Bill::FAILED
+      status Bill::STATE_FAILED
     end
 
     trait :with_attempt do

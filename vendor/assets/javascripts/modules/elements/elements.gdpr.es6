@@ -21,6 +21,9 @@ hellobar.defineModule('elements.gdpr',
 
       const removeElements = siteElementContainer.querySelectorAll('.hb-input-block, .hb-secondary-text');
 
+      const template = templating.render('gdpr', configuration.settings());
+      targetSiteElement.innerHTML = template;
+
       btnElement.href = 'javascript:void(0)';
       btnTextHolder.textContent = 'Submit';
       btnElement.onclick = () => {
@@ -47,9 +50,6 @@ hellobar.defineModule('elements.gdpr',
 
     function displayCheckboxes (siteElement, targetSiteElement, callback) {
       if (!targetSiteElement) return callback();
-
-      const template = templating.render('gdpr', configuration.settings())
-      targetSiteElement.innerHTML = template;
 
       if (isEnabled(siteElement) && isAvailable(siteElement)) {
         render(siteElement, targetSiteElement, callback);

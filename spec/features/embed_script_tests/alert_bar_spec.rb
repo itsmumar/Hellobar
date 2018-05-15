@@ -4,10 +4,6 @@ feature 'Alert bar injection', :js do
   given!(:subscription) { create :subscription, :pro_managed, site: site }
   given(:last_alert) { Alert.last }
 
-  before do
-    expect(GenerateStaticScriptModules).to receive_service_call
-  end
-
   scenario 'injection functionality' do
     visit test_site_path(id: site.id)
 

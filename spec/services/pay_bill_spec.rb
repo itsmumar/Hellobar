@@ -8,7 +8,7 @@ describe PayBill do
 
   describe '#call' do
     specify { expect { service.call }.to make_gateway_call(:purchase).with(bill.amount, any_args) }
-    specify { expect { service.call }.to change(bill, :status).to Bill::PAID }
+    specify { expect { service.call }.to change { bill.paid? }.to true }
     specify { expect { service.call }.to change { BillingAttempt.charge.successful.count }.to 1 }
 
     it 'creates pending bill for next period', :freeze do
@@ -34,10 +34,7 @@ describe PayBill do
       let!(:failed_bill) { create :bill, :failed, site: bill.site }
 
       it 'voids problem bills' do
-        expect { service.call }
-          .to change { failed_bill.reload.status }
-          .from(Bill::FAILED)
-          .to(Bill::VOIDED)
+        expect { service.call }.to change { failed_bill.reload.voided? }.to true
 
         expect(bill.site.reload.bills_with_payment_issues).to be_empty
       end
@@ -87,7 +84,7 @@ describe PayBill do
           .to receive(:current_discount).and_return(bill.amount)
       end
 
-      specify { expect { service.call }.to change(bill, :status).to Bill::PAID }
+      specify { expect { service.call }.to change { bill.paid? }.to true }
       specify { expect { service.call }.not_to make_gateway_call(:purchase) }
       specify { expect { service.call }.not_to change { BillingAttempt.successful.count } }
 

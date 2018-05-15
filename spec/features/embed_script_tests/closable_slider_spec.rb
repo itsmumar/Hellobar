@@ -18,7 +18,7 @@ feature 'Site with a closable slider', :js do
 
     # iframe is hidden
     expect(page).to have_selector '#random-container', visible: false
-    expect(page).to have_selector 'iframe.hb-animateOut'
+    expect(page).to have_selector 'iframe.hb-animateOut', visible: false
     expect(page).to have_selector '#pull-down .hellobar-arrow'
 
     # show the slider again

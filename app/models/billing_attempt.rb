@@ -1,8 +1,8 @@
 class BillingAttempt < ApplicationRecord
   SUCCESSFUL = 'successful'.freeze
-  FAILED = 'failed'.freeze
-  PENDING = 'pending'.freeze
-  STATUSES = [FAILED, SUCCESSFUL, PENDING].freeze
+  STATE_FAILED = 'failed'.freeze
+  STATE_PENDING = 'pending'.freeze
+  STATUSES = [STATE_FAILED, SUCCESSFUL, STATE_PENDING].freeze
 
   CHARGE = 'charge'.freeze
   REFUND = 'refund'.freeze

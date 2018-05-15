@@ -98,10 +98,10 @@ module Admin::BillsHelper
       ['All', admin_bills_path]
     ]
 
-    Bill::STATUSES.each do |status|
+    Bill.aasm.states.each do |status|
       filters << [
-        status.humanize,
-        filter_by_status_admin_bills_path(status: status)
+        status.name.to_s.humanize,
+        filter_by_status_admin_bills_path(status: status.name)
       ]
     end
 
