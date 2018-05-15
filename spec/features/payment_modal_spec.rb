@@ -21,6 +21,7 @@ feature 'Payment modal interaction', :js do
 
       click_link('Change plan or billing schedule')
       find('.different-plan').click
+      expect(page).to have_selector '.upgrade-account-modal'
 
       within '.package-block.basic' do
         find('.button', text: 'Choose Plan').click

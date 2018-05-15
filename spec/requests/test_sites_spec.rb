@@ -4,7 +4,6 @@ describe 'test_sites requests' do
     let(:script) { "#{ target_site.id } script" }
 
     before do
-      expect(GenerateStaticScriptModules).to receive_service_call
       expect(RenderStaticScript).to receive_service_call.and_return(script)
     end
 
