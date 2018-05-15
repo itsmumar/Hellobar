@@ -13,4 +13,6 @@ Raven.configure do |config|
   # send events ansychronously
   # (in Thin it won't make a difference but it might in Puma)
   config.async = ->(event) { Thread.new { Raven.send_event(event) } }
+
+  config.excluded_exceptions -= %w[ActiveRecord::RecordNotFound]
 end
