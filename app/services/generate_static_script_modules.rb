@@ -31,6 +31,7 @@ class GenerateStaticScriptModules
   end
 
   def store_remotely
+    puts "Uploaded new modules.js version to S3: #{ StaticScriptAssets.digest_path('modules.js') }" # rubocop:disable Rails/Output
     UploadToS3.new(filename, script_content, cache: 1.year).call
   end
 

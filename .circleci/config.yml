@@ -113,7 +113,7 @@ jobs:
       - run:
           name: Generate modules.js
           when: always
-          command: bundle exec rake site:scripts:generate_modules
+          command: bundle exec rake site:scripts:precompile_static_assets site:scripts:generate_modules
 
 #      - run:
 #          name: Run unit tests
