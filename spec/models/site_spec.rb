@@ -243,16 +243,6 @@ describe Site do
     end
   end
 
-  describe '#update_content_upgrade_styles!' do
-    let(:site) { create :site }
-    let(:content_upgrade_styles) { generate :content_upgrade_styles }
-
-    it 'updates settings' do
-      expect { site.update_content_upgrade_styles! content_upgrade_styles }
-        .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
-    end
-  end
-
   describe 'bills_with_payment_issues' do
     let(:user) { create :user }
     let(:site) { create :site, user: user }
