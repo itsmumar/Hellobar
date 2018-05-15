@@ -133,13 +133,13 @@ class Site < ApplicationRecord
   end
 
   def display_url
-    Addressable::URI.parse(url).display_uri.to_s || url
+    display_uri&.to_s || url
   rescue Addressable::URI::InvalidURIError
     nil
   end
 
   def host
-    Addressable::URI.parse(url).display_uri.host || url
+    display_uri&.host || url
   rescue Addressable::URI::InvalidURIError
     nil
   end
@@ -226,6 +226,10 @@ class Site < ApplicationRecord
   end
 
   private
+
+  def display_uri
+    Addressable::URI.parse(url)&.display_uri
+  end
 
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if read_key.blank?
