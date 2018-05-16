@@ -128,12 +128,7 @@ class @PaymentModal extends Modal
             isFree: @_isFree()
             siteName: @options.site.display_name
 
-          if window?.dataLayer?.push && data.is_upgrade
-            window.dataLayer.push
-              event: 'GAEvent'
-              category: 'Subscription'
-              action: 'upgrade'
-              label: data.subscription_name + '-' + data.subscription_schedule
+          @_pushGTMEvents(data)
 
           new PaymentConfirmationModal(options).open()
           @close()
@@ -143,6 +138,27 @@ class @PaymentModal extends Modal
 
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
+
+  _pushGTMEvents: (billData) ->
+    return if !window?.dataLayer?.push || !billData.is_upgrade
+
+    window.dataLayer.push
+      event: 'GAEvent'
+      category: 'Subscription'
+      action: 'upgrade'
+      label: billData.subscription_name + '-' + billData.subscription_schedule
+
+    window.dataLayer.push
+      transactionId: billData.id
+      transactionTotal: billData.amount
+      transactionProducts: [
+        {
+          sku: billData.subscription_name + '-' + billData.subscription_schedule
+          name: billData.subscription_name
+          price: billData.amount
+          quantity: 1
+        }
+      ]
 
   _bindDynamicStateLength: ->
     @$modal.on 'change', '#credit_card_country', (event) =>
