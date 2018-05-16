@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509063307) do
+ActiveRecord::Schema.define(version: 20180516071641) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -137,6 +137,27 @@ ActiveRecord::Schema.define(version: 20180509063307) do
 
   add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree
   add_index "contact_lists", ["site_id"], name: "index_contact_lists_on_site_id", using: :btree
+
+  create_table "content_upgrade_settings", force: :cascade do |t|
+    t.integer  "content_upgrade_id",               limit: 4
+    t.string   "offer_headline",                   limit: 255
+    t.string   "disclaimer",                       limit: 255
+    t.string   "content_upgrade_pdf_file_name",    limit: 255
+    t.string   "content_upgrade_pdf_content_type", limit: 255
+    t.integer  "content_upgrade_pdf_file_size",    limit: 4
+    t.datetime "content_upgrade_pdf_updated_at"
+    t.string   "content_upgrade_title",            limit: 255
+    t.text     "content_upgrade_url",              limit: 65535
+    t.boolean  "thank_you_enabled"
+    t.string   "thank_you_headline",               limit: 255
+    t.string   "thank_you_subheading",             limit: 255
+    t.string   "thank_you_cta",                    limit: 255
+    t.text     "thank_you_url",                    limit: 65535
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
+  add_index "content_upgrade_settings", ["content_upgrade_id"], name: "index_content_upgrade_settings_on_content_upgrade_id", using: :btree
 
   create_table "coupon_uses", force: :cascade do |t|
     t.integer  "coupon_id",  limit: 4, null: false
@@ -380,10 +401,10 @@ ActiveRecord::Schema.define(version: 20180509063307) do
     t.datetime "script_uninstalled_at"
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
-    t.text     "settings",                        limit: 16777215
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255
     t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
+    t.text     "settings",                        limit: 65535
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
