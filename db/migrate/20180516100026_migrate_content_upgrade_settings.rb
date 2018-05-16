@@ -18,6 +18,8 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
     has_attached_file :content_upgrade_pdf,
       s3_headers: { 'Content-Disposition' => 'attachment' },
       path: '/content_upgrades/content_upgrade_pdfs/:id_partition/:style/:filename'
+
+    do_not_validate_attachment_file_type :content_upgrade_pdf
   end
 
   class ContentUpgradeSettingsStub < ActiveRecord::Base
@@ -26,6 +28,8 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
     has_attached_file :content_upgrade_pdf,
       s3_headers: { 'Content-Disposition' => 'attachment' },
       path: '/content_upgrade_settings/content_upgrade_pdfs/:id_partition/:style/:filename'
+
+    do_not_validate_attachment_file_type :content_upgrade_pdf
   end
 
   def up
