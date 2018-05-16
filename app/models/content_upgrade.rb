@@ -28,11 +28,15 @@ class ContentUpgrade < SiteElement
   delegate :name, to: :contact_list, prefix: true, allow_nil: true
 
   delegate :offer_headline, :disclaimer, :content_upgrade_pdf, :content_upgrade_title, :content_upgrade_url,
-    :thank_you_enabled, :thank_you_headline, :thank_you_subheading, :thank_you_cta, :thank_you_url,
+    :thank_you_enabled, :thank_you_enabled?, :thank_you_headline, :thank_you_subheading, :thank_you_cta, :thank_you_url,
     :display_title, :content_upgrade_download_link, to: :content_upgrade_settings, allow_nil: true
 
   def content_upgrade_script_tag
     content = %(window.onload = function() {hellobar("contentUpgrades").show(#{ id });};)
     %(<script id="hb-cu-#{ id }">#{ content }</script>)
+  end
+
+  def content_upgrade_settings
+    super || build_content_upgrade_settings
   end
 end
