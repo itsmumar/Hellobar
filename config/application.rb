@@ -61,7 +61,7 @@ module Hellobar
     # https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins Settings.campaigns_url
+        origins Settings.campaigns_url, Settings.script_url
 
         resource '/api/*', headers: :any,
           methods: %i[get post delete put patch options head],
