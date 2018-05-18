@@ -111,11 +111,6 @@ jobs:
           command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
 
       - run:
-          name: Generate modules.js
-          when: always
-          command: bundle exec rake site:scripts:generate_modules
-
-      - run:
           name: Run unit tests
           when: always
           environment:
