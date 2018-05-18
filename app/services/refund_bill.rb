@@ -41,12 +41,12 @@ class RefundBill
   end
 
   def transition_bill_status
-    bill.refunded!
+    bill.refund!
   end
 
   def cancel_subscription
     return unless bill.subscription
-    bill.subscription.bills.pending.each(&:voided!)
+    bill.subscription.bills.pending.each(&:void!)
 
     return unless bill.site&.current_subscription
 
@@ -58,7 +58,7 @@ class RefundBill
   end
 
   def create_failed_billing_attempt(bill)
-    create_billing_attempt(bill, BillingAttempt::FAILED)
+    create_billing_attempt(bill, BillingAttempt::STATE_FAILED)
   end
 
   def create_billing_attempt(bill, status, authorization_code = nil)

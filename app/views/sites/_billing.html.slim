@@ -79,9 +79,9 @@ section
               td= bill.used_credit_card&.description
               td
                 - if bill.failed?
-                  - if params[:should_update_card] || !bill.can_pay?
+                  - if params[:should_update_card] || !bill.credit_card_attached?
                     a#problem-bill.button.show-payment-modal Update credit card details
-                  - elsif bill.can_pay?
+                  - elsif bill.credit_card_attached?
                     a#problem-bill.button href=pay_bill_path(bill) data-method="put" Charge again
                 - else
                   = link_to bill_path(bill), target: '_blank' do

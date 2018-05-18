@@ -5,7 +5,7 @@ FactoryBot.define do
     trait :success
 
     trait :failed do
-      status BillingAttempt::FAILED
+      status BillingAttempt::STATE_FAILED
       response 'General decline of the card'
     end
   end

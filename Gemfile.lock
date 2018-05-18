@@ -69,6 +69,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (4.12.3)
+      concurrent-ruby (~> 1.0)
     abanalyzer (1.0.0)
       statistics2 (= 0.54)
     actionmailer (4.2.10)
@@ -649,6 +651,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   abanalyzer
   active_campaign
   active_hash

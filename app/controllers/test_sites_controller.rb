@@ -42,7 +42,6 @@ class TestSitesController < ActionController::Base
   end
 
   def script_content
-    Rails.logger.info "[TestSite] Generating static test site for Site##{ @site.id }"
     RenderStaticScript.new(@site).call
   end
 end

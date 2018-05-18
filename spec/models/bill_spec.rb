@@ -4,8 +4,8 @@ describe Bill do
   specify('could be failed') { expect(build(:bill, :failed)).to be_failed }
   specify('could be voided') { expect(build(:bill, :voided)).to be_voided }
 
-  describe '#can_pay?' do
-    subject { bill.can_pay? }
+  describe '#credit_card_attached?' do
+    subject { bill.credit_card_attached? }
     let(:credit_card) { create :credit_card }
     let(:subscription) { create(:subscription, credit_card: credit_card) }
     let!(:bill) { create :bill, subscription: subscription }
@@ -41,23 +41,32 @@ describe Bill do
     expect { Bill.create(amount: -1) }.to raise_error(Bill::InvalidBillingAmount)
   end
 
-  it 'should not let you change the status once set' do
-    bill = create(:bill, :pro)
-    expect(bill.status).to eq Bill::PENDING
-    bill.voided!
-    expect(bill.status).to eq Bill::VOIDED
-    bill.reload
-    expect(bill.status).to eq Bill::VOIDED
-    expect { bill.pending! }.to raise_error(Bill::StatusAlreadySet)
-    expect { bill.paid! }.to raise_error(Bill::StatusAlreadySet)
-    expect { bill.status = Bill::PENDING }.to raise_error(Bill::StatusAlreadySet)
+  describe 'state machine' do
+    let(:bill) { build(:bill) }
+    let(:authorization_code) { 'abc123=' }
+
+    specify { expect(bill).to transition_from(:pending).to(:paid).on_event(:pay, authorization_code) }
+    specify { expect(bill).to transition_from(:failed).to(:paid).on_event(:pay, authorization_code) }
+
+    specify { expect(bill).to transition_from(:pending).to(:failed).on_event(:fail) }
+    specify { expect(bill).to transition_from(:failed).to(:failed).on_event(:fail) }
+
+    specify { expect(bill).to transition_from(:pending).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:paid).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:voided).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:failed).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:refunded).to(:voided).on_event(:void) }
+    specify { expect(bill).to transition_from(:chargedback).to(:voided).on_event(:void) }
+
+    specify { expect(bill).to transition_from(:paid).to(:refunded).on_event(:refund) }
+
+    specify { expect(bill).to transition_from(:paid).to(:chargedback).on_event(:chargeback) }
   end
 
   it 'should record when the status was set' do
     bill = create(:bill, :pro)
-    expect(bill.status).to eq Bill::PENDING
     expect(bill.status_set_at).to be_nil
-    bill.paid!
+    bill.pay!
     expect(bill.status_set_at).to be_within(2).of(Time.current)
   end
 
@@ -192,17 +201,6 @@ describe Bill do
 
     it 'returns discounted amount' do
       expect(bill.estimated_amount).to eql((bill.amount - 10).to_f)
-    end
-  end
-
-  Bill::STATUSES.each do |status|
-    describe "##{ status }!" do
-      let(:bill) { create :bill }
-
-      specify do
-        bill.send "#{ status }!"
-        expect(bill.status).to eql status
-      end
     end
   end
 

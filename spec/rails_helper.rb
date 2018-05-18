@@ -12,6 +12,7 @@ require 'paperclip/matchers'
 require 'support/page_object'
 require 'webmock/rspec'
 require 'support/ab_test_config'
+require 'aasm/rspec'
 
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
 Dir[Rails.root.join('spec', 'models', 'concerns', '**', '*.rb')].each(&method(:require))
@@ -57,15 +58,22 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :feature) do
-    allow_any_instance_of(FetchSiteStatistics).to receive(:call).and_return(SiteStatistics.new)
+    allow_any_instance_of(FetchSiteStatistics)
+      .to receive(:call).and_return(SiteStatistics.new)
   end
 
   config.before contact_list_feature: true do
     stub_out_ab_variations('Upgrade Pop-up for Active Users 2016-08') { 'variant' }
     allow_any_instance_of(FetchSubscribers).to receive(:call).and_return(items: [])
 
-    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site), instance_of(Array)).and_return(double(call: Hash.new { 0 }))
-    allow(FetchSiteContactListTotals).to receive(:new).with(instance_of(Site)).and_return(double(call: Hash.new { 0 }))
+    allow(FetchSiteContactListTotals)
+      .to receive(:new).with(
+        instance_of(Site),
+        instance_of(Array)
+      ).and_return(double(call: Hash.new { 0 }))
+
+    allow(FetchSiteContactListTotals)
+      .to receive(:new).with(instance_of(Site)).and_return(double(call: Hash.new { 0 }))
 
     OmniAuth.config.add_mock(provider)
   end
