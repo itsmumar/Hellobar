@@ -49,11 +49,6 @@ class PayBill
   def process_unsuccessful_response(response)
     create_billing_attempt(response)
     bill.fail!
-    Raven.capture_message 'Unsuccessful charge', extra: {
-      message: response.message,
-      bill: bill.id,
-      amount: bill.amount
-    }
   end
 
   def regenerate_script
