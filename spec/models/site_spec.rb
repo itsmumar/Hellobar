@@ -229,6 +229,12 @@ describe Site do
     it 'does not encodes non-unicode characters' do
       expect(host('яндекс.рф')).to eq('яндекс.рф')
     end
+
+    context 'when url is nil' do
+      it 'returns nil' do
+        expect(host(nil)).to be_nil
+      end
+    end
   end
 
   describe '#had_wordpress_bars?' do
