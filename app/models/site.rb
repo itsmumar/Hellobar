@@ -220,6 +220,16 @@ class Site < ApplicationRecord
       privacy_policy_url?
   end
 
+  def gdpr_consent
+    text_map = {
+      'product' => 'product/service',
+      'research' => 'market research'
+    }
+    sentence = communication_types.map { |type| text_map[type] || type }.to_sentence
+
+    "I consent to occasionally receive #{ sentence } emails."
+  end
+
   private
 
   def display_uri

@@ -118,13 +118,7 @@ class StaticScriptModel
   end
 
   def gdpr_consent
-    text_map = {
-      'product' => 'product/service',
-      'research' => 'market research'
-    }
-    sentence = site.communication_types.map { |type| text_map[type] || type }.to_sentence
-
-    "I consent to occasionally receive #{ sentence } emails."
+    site.gdpr_consent
   end
 
   def geolocation_url

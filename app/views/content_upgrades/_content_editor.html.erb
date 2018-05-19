@@ -35,6 +35,11 @@
       <label for="spam-disclaimer">Spam Disclaimer</label>
       <input name="disclaimer" id="input-spam-disclaimer" type="text" value="<%= @content_upgrade.disclaimer %>">
     </div>
+
+    <div class="field-wrapper">
+      <label for="gdpr-compliant">GDPR Compliant</label>
+      <input name="enable_gdpr" id="gdpr-compliant" type="checkbox" <%= @content_upgrade.enable_gdpr ? 'checked' : ''%>>
+    </div>
   </div>
 
   <div id="content-preview" class="preview-column">
