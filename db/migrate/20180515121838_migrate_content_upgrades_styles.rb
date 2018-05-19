@@ -16,7 +16,7 @@ class MigrateContentUpgradesStyles < ActiveRecord::Migration
     SiteStub.find_each do |site|
       next if site.settings['content_upgrade'].blank?
 
-      styles = site.settings['content_upgrade'].stringify_keys.slice(STYLE_ATTRIBUTES)
+      styles = site.settings['content_upgrade'].stringify_keys.slice(*STYLE_ATTRIBUTES)
       ContentUpgradeStylesStub.create!({ site_id: site.id }.merge(styles))
     end
 
