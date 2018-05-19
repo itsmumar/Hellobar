@@ -1,7 +1,7 @@
 hellobar.defineModule('contentUpgrades',
-  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion',
+  ['hellobar', 'base.templating', 'base.format', 'elements.collecting', 'elements.conversion', 'elements.gdpr',
    'contentUpgrades.class', 'base.bus', 'base.dom', 'elements.data', 'base.cdn'],
-  function (hellobar, templating, format, elementsCollecting, elementsConversion, ContentUpgrade, bus, dom, elementsData, cdn) {
+  function (hellobar, templating, format, elementsCollecting, elementsConversion, gdpr, ContentUpgrade, bus, dom, elementsData, cdn) {
 
     const AB_TEST_FLAG = 'ab';
 
@@ -107,7 +107,11 @@ hellobar.defineModule('contentUpgrades',
       if (siteElement) {
         const siteStyles = configuration.styles() || {};
         var tpl = templating.getTemplateByName('contentupgrade');
-        const content = templating.renderTemplate(tpl, {siteElement: siteElement.model(), siteStyles: siteStyles});
+        const content = templating.renderTemplate(tpl, {
+          siteElement: siteElement.model(),
+          siteStyles: siteStyles,
+          site: gdpr.configuration().settings()
+        });
 
         cdn.addCss('https://fonts.googleapis.com/css?family=' + siteStyles.offer_font_family_name, document);
         if (!node) {
@@ -141,6 +145,17 @@ hellobar.defineModule('contentUpgrades',
       }
     }
 
+    function validateGDPR () {
+      const checkboxes = document.querySelectorAll('.hb-gdpr-checkbox:checked')
+
+      return checkboxes.length === 2
+    }
+
+    function shakeCheckboxes () {
+      const checkboxes = document.querySelector('.hb-gdpr-checkboxes')
+      dom.shake(checkboxes)
+    }
+
     function submit(contentUpgradeId) {
       const siteElement = contentUpgradeById(contentUpgradeId);
       const formElement = document.getElementById('hb-fields-form');
@@ -156,9 +171,13 @@ hellobar.defineModule('contentUpgrades',
         }
       });
 
-      elementsCollecting.submitEmail(
-        siteElement, formElement, targetSiteElement, '', redirect, downloadLink
-      );
+      if (validateGDPR()) {
+        elementsCollecting.submitEmail(
+          siteElement, formElement, targetSiteElement, '', redirect, downloadLink
+        )
+      } else {
+        shakeCheckboxes()
+      }
     }
 
     return {
