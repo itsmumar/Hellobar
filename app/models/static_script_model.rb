@@ -16,6 +16,10 @@ class StaticScriptModel
     StaticScriptAssets.render_model(self)
   end
 
+  def cache_enabled?
+    !preview_is_active && !Rails.env.test?
+  end
+
   def preview_is_active
     preview?
   end

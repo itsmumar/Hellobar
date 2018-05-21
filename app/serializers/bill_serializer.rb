@@ -1,5 +1,5 @@
 class BillSerializer < ActiveModel::Serializer
-  attributes :amount, :bill_at, :end_date, :status, :is_upgrade, :old_subscription, :site
+  attributes :id, :amount, :bill_at, :end_date, :status, :is_upgrade, :old_subscription, :site
   attributes :subscription_name, :subscription_schedule
 
   def subscription_name

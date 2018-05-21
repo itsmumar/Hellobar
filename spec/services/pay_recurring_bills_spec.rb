@@ -91,8 +91,7 @@ describe PayRecurringBills do
       let!(:zero_amount_bill) { create :bill, :free }
 
       specify do
-        expect { service.call }
-          .to change { zero_amount_bill.reload.status }.to(Bill::PAID)
+        expect { service.call }.to change { zero_amount_bill.reload.paid? }.to true
       end
 
       include_examples 'pay bill'
@@ -105,8 +104,7 @@ describe PayRecurringBills do
       specify do
         expect(report).to receive(:void).with(bill_without_site)
 
-        expect { service.call }
-          .to change { bill_without_site.reload.status }.to(Bill::VOIDED)
+        expect { service.call }.to change { bill_without_site.reload.voided? }.to true
       end
 
       include_examples 'do not pay bill'
@@ -152,9 +150,7 @@ describe PayRecurringBills do
             .with(bill_without_credit_card.site)
             .and_return(build(:subscription))
 
-          expect { service.call }
-            .to change { bill_without_credit_card.reload.status }
-            .to(Bill::VOIDED)
+          expect { service.call }.to change { bill_without_credit_card.reload.voided? }.to true
         end
       end
     end
@@ -177,8 +173,7 @@ describe PayRecurringBills do
       specify do
         expect(report).to receive(:success)
 
-        expect { service.call }
-          .to change { bill.reload.status }.to Bill::PAID
+        expect { service.call }.to change { bill.reload.paid? }.to true
       end
 
       it 'tracks auto_renewed_subscription event' do
@@ -199,8 +194,7 @@ describe PayRecurringBills do
         let!(:bill) { create :bill, :failed }
 
         specify do
-          expect { service.call }
-            .to change { bill.reload.status }.to Bill::PAID
+          expect { service.call }.to change { bill.reload.paid? }.to true
         end
 
         include_examples 'pay bill'
@@ -212,8 +206,7 @@ describe PayRecurringBills do
         specify do
           expect(report).to receive(:fail)
 
-          expect { service.call }
-            .to change { bill.reload.status }.to Bill::FAILED
+          expect { service.call }.to change { bill.reload.failed? }.to true
         end
 
         it 'notifies owners' do
@@ -357,10 +350,7 @@ describe PayRecurringBills do
           stub_cyber_source :purchase, success?: false
 
           Timecop.travel pending_bill.bill_at do
-            expect { service.call }
-              .to change { pending_bill.reload.status }
-              .from(Bill::PENDING)
-              .to(Bill::FAILED)
+            expect { service.call }.to change { pending_bill.reload.failed? }.to true
           end
 
           (1..26).each do |nth|

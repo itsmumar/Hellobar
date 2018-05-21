@@ -1,5 +1,14 @@
 describe 'Admin::Bills requests' do
   context 'when unauthenticated' do
+    describe 'GET :index' do
+      it 'responds with a redirect to the login page' do
+        get admin_bills_path
+
+        expect(response).to be_a_redirect
+        expect(response.location).to include '/admin/access'
+      end
+    end
+
     describe 'GET :show' do
       it 'responds with a redirect to the login page' do
         get admin_bill_path id: 1
@@ -17,6 +26,26 @@ describe 'Admin::Bills requests' do
     let!(:bill) { create :bill, :pro, :paid }
     let!(:site) { bill.subscription.site }
     let!(:user) { site.users.first }
+
+    describe 'GET #index' do
+      before do
+        create(:bill)
+        create(:bill, :voided)
+        create(:bill, :failed)
+      end
+
+      it 'allows admins to see a list of bills' do
+        get admin_bills_path
+
+        expect(response).to be_success
+      end
+
+      it 'allows to filter bills by status' do
+        get filter_by_status_admin_bills_path(status: 'voided')
+
+        expect(response).to be_success
+      end
+    end
 
     describe 'GET #show' do
       it 'allows admins to see a bill details' do

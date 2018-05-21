@@ -60,7 +60,7 @@ FactoryBot.define do
         )
 
         bill = CalculateBill.new(subscription, bills: site.bills).call
-        bill.paid!
+        bill.pay!
         bill.save
       end
     end
@@ -68,6 +68,14 @@ FactoryBot.define do
     trait :pro do
       transient do
         subscription_plan :pro
+      end
+
+      with_paid_bill
+    end
+
+    trait :free do
+      transient do
+        subscription_plan :free
       end
 
       with_paid_bill

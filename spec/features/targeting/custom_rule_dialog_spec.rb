@@ -22,6 +22,7 @@ feature 'Targeting. Custom rule dialog', :js do
     expect(page.all('.show-modal.rules-modal').count).to be 1
 
     click_on 'Cancel'
+    page.has_no_selector?('.cancel.button')
     expect(page.all('.show-modal.rules-modal').count).to be 0
   end
 end
