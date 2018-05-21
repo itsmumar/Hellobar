@@ -159,6 +159,25 @@ ActiveRecord::Schema.define(version: 20180516194926) do
 
   add_index "content_upgrade_settings", ["content_upgrade_id"], name: "index_content_upgrade_settings_on_content_upgrade_id", using: :btree
 
+  create_table "content_upgrade_styles", force: :cascade do |t|
+    t.integer  "site_id",                limit: 4
+    t.string   "offer_bg_color",         limit: 255
+    t.string   "offer_text_color",       limit: 255
+    t.string   "offer_link_color",       limit: 255
+    t.string   "offer_border_color",     limit: 255
+    t.string   "offer_border_width",     limit: 255
+    t.string   "offer_border_style",     limit: 255
+    t.string   "offer_border_radius",    limit: 255
+    t.string   "modal_button_color",     limit: 255
+    t.string   "offer_font_size",        limit: 255
+    t.string   "offer_font_weight",      limit: 255
+    t.string   "offer_font_family_name", limit: 255
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "content_upgrade_styles", ["site_id"], name: "index_content_upgrade_styles_on_site_id", using: :btree
+
   create_table "coupon_uses", force: :cascade do |t|
     t.integer  "coupon_id",  limit: 4, null: false
     t.integer  "bill_id",    limit: 4, null: false
@@ -391,7 +410,6 @@ ActiveRecord::Schema.define(version: 20180516194926) do
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255
     t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
-    t.text     "settings",                        limit: 65535
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

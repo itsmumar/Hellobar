@@ -152,18 +152,17 @@ describe 'Content upgrade requests' do
 
     describe 'POST :update_styles' do
       let(:params) do
-        site.content_upgrade_styles.merge(
-          offer_font_size: '32px',
-          offer_font_family: 'Oswald,sans-serif'
-        )
+        {
+          content_upgrade_styles: attributes_for(:content_upgrade_styles, offer_font_size: '32px', offer_font_family_name: 'Oswald')
+        }
       end
 
-      it 'updates site.settings[:content_upgrade]' do
-        expect { post update_styles_site_content_upgrades_path(site), params }
-          .to change { site.reload.content_upgrade_styles[:offer_font_size] }
-          .to('32px')
-          .and change { site.reload.content_upgrade_styles[:offer_font_family_name] }
-          .to('Oswald')
+      it 'updates content_upgrade_styles' do
+        post update_styles_site_content_upgrades_path(site), params
+
+        expect(site.content_upgrade_styles.offer_font_size).to eq('32px')
+        expect(site.content_upgrade_styles.offer_font_family_name).to eq('Oswald')
+        expect(site.content_upgrade_styles.offer_font_family).to eq('Oswald,sans-serif')
 
         expect(response).to be_a_redirect
       end

@@ -229,6 +229,12 @@ describe Site do
     it 'does not encodes non-unicode characters' do
       expect(host('яндекс.рф')).to eq('яндекс.рф')
     end
+
+    context 'when url is nil' do
+      it 'returns nil' do
+        expect(host(nil)).to be_nil
+      end
+    end
   end
 
   describe '#had_wordpress_bars?' do
@@ -240,16 +246,6 @@ describe Site do
     it 'returns false when no site elements are migrated from wordpress' do
       site_element = create(:site_element, wordpress_bar_id: nil)
       expect(site_element.site.had_wordpress_bars?).to be(false)
-    end
-  end
-
-  describe '#update_content_upgrade_styles!' do
-    let(:site) { create :site }
-    let(:content_upgrade_styles) { generate :content_upgrade_styles }
-
-    it 'updates settings' do
-      expect { site.update_content_upgrade_styles! content_upgrade_styles }
-        .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
     end
   end
 
