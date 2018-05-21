@@ -1,7 +1,6 @@
 class ExportSubscribers
-  def initialize(contact_list, sleep_interval = 0)
+  def initialize(contact_list)
     @contact_list = contact_list
-    @sleep_interval = sleep_interval
   end
 
   def call
@@ -15,8 +14,6 @@ class ExportSubscribers
 
         break unless subscribers[:next_page]
 
-        sleep(sleep_interval)
-
         subscribers = FetchSubscribers.new(contact_list, subscribers[:next_page]).call
       end
     end
@@ -24,5 +21,5 @@ class ExportSubscribers
 
   private
 
-  attr_reader :contact_list, :sleep_interval
+  attr_reader :contact_list
 end
