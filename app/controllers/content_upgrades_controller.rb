@@ -64,26 +64,15 @@ class ContentUpgradesController < ApplicationController
   end
 
   def update_styles
-    style_params = params.permit(
-      :offer_bg_color,
-      :offer_text_color,
-      :offer_link_color,
-      :offer_border_color,
-      :offer_border_width,
-      :offer_border_style,
-      :offer_border_radius,
-      :modal_button_color,
-      :offer_font_size,
-      :offer_font_weight,
-      :offer_font_family
-    )
+    @styles = @site.content_upgrade_styles
 
-    offer_font_family_name = ContentUpgrade::AVAILABLE_FONTS.invert.fetch(style_params[:offer_font_family])
-    @site.update_content_upgrade_styles!(style_params.merge(offer_font_family_name: offer_font_family_name))
-    @site.script.generate
-
-    flash[:success] = 'Content Upgrade styles have been saved.'
-    redirect_to site_content_upgrades_path(@site.id)
+    if @styles.update(styles_params)
+      @site.script.generate
+      flash[:success] = 'Content Upgrade styles have been saved.'
+      redirect_to site_content_upgrades_path(@site.id)
+    else
+      render :style_editor
+    end
   end
 
   def destroy
@@ -122,6 +111,22 @@ class ContentUpgradesController < ApplicationController
       content_upgrade_url: params[:content_upgrade_url],
       rule: @site.rules.first
     }.merge(pdf_params)
+  end
+
+  def styles_params
+    params.require(:content_upgrade_styles).permit(
+      :offer_bg_color,
+      :offer_text_color,
+      :offer_link_color,
+      :offer_border_color,
+      :offer_border_width,
+      :offer_border_style,
+      :offer_border_radius,
+      :modal_button_color,
+      :offer_font_size,
+      :offer_font_weight,
+      :offer_font_family_name
+    )
   end
 
   def pdf_params

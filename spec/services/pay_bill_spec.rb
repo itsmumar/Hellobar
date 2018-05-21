@@ -46,16 +46,6 @@ describe PayBill do
       it 'creates failed BillingAttempt' do
         expect { service.call }.to change(BillingAttempt.failed, :count).by 1
       end
-
-      it 'sends event to Raven' do
-        extra = {
-          message: 'gateway error',
-          bill: bill.id,
-          amount: bill.amount
-        }
-        expect(Raven).to receive(:capture_message).with('Unsuccessful charge', extra: extra)
-        service.call
-      end
     end
 
     shared_examples 'doing nothing' do

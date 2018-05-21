@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509063307) do
+ActiveRecord::Schema.define(version: 20180515132522) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -137,6 +137,25 @@ ActiveRecord::Schema.define(version: 20180509063307) do
 
   add_index "contact_lists", ["identity_id"], name: "index_contact_lists_on_identity_id", using: :btree
   add_index "contact_lists", ["site_id"], name: "index_contact_lists_on_site_id", using: :btree
+
+  create_table "content_upgrade_styles", force: :cascade do |t|
+    t.integer  "site_id",                limit: 4
+    t.string   "offer_bg_color",         limit: 255
+    t.string   "offer_text_color",       limit: 255
+    t.string   "offer_link_color",       limit: 255
+    t.string   "offer_border_color",     limit: 255
+    t.string   "offer_border_width",     limit: 255
+    t.string   "offer_border_style",     limit: 255
+    t.string   "offer_border_radius",    limit: 255
+    t.string   "modal_button_color",     limit: 255
+    t.string   "offer_font_size",        limit: 255
+    t.string   "offer_font_weight",      limit: 255
+    t.string   "offer_font_family_name", limit: 255
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "content_upgrade_styles", ["site_id"], name: "index_content_upgrade_styles_on_site_id", using: :btree
 
   create_table "coupon_uses", force: :cascade do |t|
     t.integer  "coupon_id",  limit: 4, null: false
@@ -380,7 +399,6 @@ ActiveRecord::Schema.define(version: 20180509063307) do
     t.datetime "script_uninstalled_at"
     t.string   "install_type",                    limit: 255
     t.text     "invoice_information",             limit: 16777215
-    t.text     "settings",                        limit: 16777215
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255
     t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
