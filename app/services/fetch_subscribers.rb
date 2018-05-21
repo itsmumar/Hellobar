@@ -46,6 +46,7 @@ class FetchSubscribers
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
       projection_expression: 'email,n,ts,lid,#s,#e',
       limit: PAGE_SIZE,
+      return_consumed_capacity: 'TOTAL',
       scan_index_forward: forward
     }
     query[:exclusive_start_key] = parse_key(key) if key.present?
