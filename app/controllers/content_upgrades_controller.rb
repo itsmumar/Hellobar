@@ -101,6 +101,7 @@ class ContentUpgradesController < ApplicationController
       contact_list_id: params[:contact_list_id],
       rule: @site.rules.first,
       content_upgrade_settings_attributes: {
+        id: params[:content_upgrade_settings_id],
         offer_headline: params[:offer_headline],
         disclaimer: params[:disclaimer],
         content_upgrade_title: params[:content_upgrade_title],
