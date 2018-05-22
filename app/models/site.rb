@@ -122,7 +122,7 @@ class Site < ApplicationRecord
   end
 
   def communication_types
-    self[:communication_types]&.split(',')
+    self[:communication_types]&.split(',') || []
   end
 
   def url=(value)

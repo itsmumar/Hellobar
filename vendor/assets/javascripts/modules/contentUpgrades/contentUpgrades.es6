@@ -142,12 +142,18 @@ hellobar.defineModule('contentUpgrades',
       if (siteElement) {
         elementsConversion.clicked(siteElement);
         document.getElementById(`hb-cu-modal-${siteElement.model().id}`).style.display = 'inline';
+
+        if (gdpr.isEnabled(siteElement)) {
+          const checkboxes = document.querySelector('.hb-gdpr-checkboxes');
+          checkboxes.classList.remove('hb-hidden');
+        }
       }
     }
 
-    function validateGDPR () {
-      const checkboxes = document.querySelectorAll('.hb-gdpr-checkbox:checked')
+    function validateGDPR (siteElement) {
+      if (!gdpr.isEnabled(siteElement)) return true;
 
+      const checkboxes = document.querySelectorAll('.hb-cu-modal-container .hb-gdpr-checkbox:checked')
       return checkboxes.length === 2
     }
 
@@ -171,7 +177,7 @@ hellobar.defineModule('contentUpgrades',
         }
       });
 
-      if (validateGDPR()) {
+      if (validateGDPR(siteElement)) {
         elementsCollecting.submitEmail(
           siteElement, formElement, targetSiteElement, '', redirect, downloadLink
         )

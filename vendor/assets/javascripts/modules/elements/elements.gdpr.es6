@@ -60,6 +60,7 @@ hellobar.defineModule('elements.gdpr',
 
     return {
       configuration: () => configuration,
-      displayCheckboxes
+      displayCheckboxes,
+      isEnabled
     };
   });
