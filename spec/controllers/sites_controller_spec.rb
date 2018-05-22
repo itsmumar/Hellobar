@@ -166,7 +166,7 @@ describe SitesController do
       expect(response).to be_success
 
       folder = StaticScript::SCRIPTS_LOCAL_FOLDER
-      filename = StaticScript::HELLOBAR_MODULES_FILENAME
+      filename = HellobarModules.filename
       expect(response.body).to eql %("#{ folder }#{ filename }"; __DATA__)
     end
   end

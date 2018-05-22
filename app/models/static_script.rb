@@ -1,6 +1,4 @@
 class StaticScript
-  HELLOBAR_MODULES_VERSION = File.read('.hellobar-script-version').chomp.freeze
-  HELLOBAR_MODULES_FILENAME = "modules-#{ HELLOBAR_MODULES_VERSION }.js".freeze
   SCRIPTS_LOCAL_FOLDER = '/generated_scripts/'.freeze
 
   attr_reader :site
@@ -33,7 +31,7 @@ class StaticScript
   end
 
   def modules_url
-    cdn_url_for HELLOBAR_MODULES_FILENAME
+    cdn_url_for HellobarModules.filename
   end
 
   def installed?

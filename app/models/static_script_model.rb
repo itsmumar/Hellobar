@@ -29,7 +29,7 @@ class StaticScriptModel
   end
 
   def modules_version
-    StaticScript::HELLOBAR_MODULES_VERSION
+    HellobarModules.version
   end
 
   def timestamp

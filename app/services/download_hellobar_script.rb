@@ -49,6 +49,6 @@ class DownloadHellobarScript
   end
 
   def filename
-    @filename ||= StaticScript::HELLOBAR_MODULES_FILENAME
+    HellobarModules.filename
   end
 end

@@ -1,5 +1,5 @@
 describe DownloadHellobarScript do
-  let(:filename) { StaticScript::HELLOBAR_MODULES_FILENAME }
+  let(:filename) { HellobarModules.filename }
   let(:script_content) { 'script content' }
 
   let(:file) { double(File) }
