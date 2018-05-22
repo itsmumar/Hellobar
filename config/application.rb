@@ -61,13 +61,16 @@ module Hellobar
     # https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins Settings.campaigns_url, Settings.script_url
+        origins Settings.campaigns_url
 
         resource '/api/*', headers: :any,
           methods: %i[get post delete put patch options head],
           credentials: true
 
-        resource '/test_sites/*', headers: :any, methods: %i[get options] if Rails.env.development?
+        if Rails.env.development?
+          resource '/test_sites/*', headers: :any, methods: %i[get options]
+          origins Settings.script_url
+        end
       end
     end
   end
