@@ -19,7 +19,7 @@ describe RenderStaticScript do
         .and_return('$INJECT_MODULES; $INJECT_DATA')
 
       folder = StaticScript::SCRIPTS_LOCAL_FOLDER
-      filename = StaticScript::HELLOBAR_SCRIPT_NAME
+      filename = StaticScript::HELLOBAR_MODULES_FILENAME
       expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
     end
 
@@ -43,7 +43,7 @@ describe RenderStaticScript do
           .and_return '$INJECT_MODULES; $INJECT_DATA'
 
         folder = StaticScript::SCRIPTS_LOCAL_FOLDER
-        filename = StaticScript::HELLOBAR_SCRIPT_NAME
+        filename = StaticScript::HELLOBAR_MODULES_FILENAME
         expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
       end
     end
