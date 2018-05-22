@@ -15,9 +15,17 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
     self.table_name = :site_elements
     self.inheritance_column = :_type
 
+    def self.upload_path
+      if Paperclip::Attachment.default_options[:storage] == :s3
+        '/content_upgrades/content_upgrade_pdfs/:id_partition/:style/:filename'
+      else
+        ':rails_root/public/content_upgrades/:id_partition/:style.:extension'
+      end
+    end
+
     has_attached_file :content_upgrade_pdf,
       s3_headers: { 'Content-Disposition' => 'attachment' },
-      path: '/content_upgrades/content_upgrade_pdfs/:id_partition/:style/:filename'
+      path: upload_path
 
     do_not_validate_attachment_file_type :content_upgrade_pdf
   end
@@ -25,9 +33,17 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
   class ContentUpgradeSettingsStub < ActiveRecord::Base
     self.table_name = :content_upgrade_settings
 
+    def self.upload_path
+      if Paperclip::Attachment.default_options[:storage] == :s3
+        '/content_upgrade_settings/content_upgrade_pdfs/:id_partition/:style/:filename'
+      else
+        ':rails_root/public/content_upgrade_settings/:id_partition/:style.:extension'
+      end
+    end
+
     has_attached_file :content_upgrade_pdf,
       s3_headers: { 'Content-Disposition' => 'attachment' },
-      path: '/content_upgrade_settings/content_upgrade_pdfs/:id_partition/:style/:filename'
+      path: upload_path
 
     do_not_validate_attachment_file_type :content_upgrade_pdf
   end

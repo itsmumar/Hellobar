@@ -18,6 +18,7 @@ public/*bar_test.html
 public/integration
 public/image_uploads
 public/content_upgrades
+public/content_upgrade_settings
 
 # Ignore uploads in tests
 public/test_image_uploads
