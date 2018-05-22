@@ -5,7 +5,7 @@ class StaticScriptModel
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
   delegate :autofills, :cache_key, :persisted?, to: :site
-  delegate :terms_and_conditions_url, :privacy_policy_url, to: :site
+  delegate :terms_and_conditions_url, :privacy_policy_url, :gdpr_consent, to: :site
 
   def initialize(site, options = {})
     @site = site
@@ -115,10 +115,6 @@ class StaticScriptModel
 
   def gdpr_template
     [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
-  end
-
-  def gdpr_consent
-    site.gdpr_consent
   end
 
   def geolocation_url
