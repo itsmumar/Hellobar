@@ -19,7 +19,7 @@ hellobar.defineModule('base.site', ['hellobar'], function (hellobar) {
     siteUrl: function () {
       return configuration.siteUrl();
     },
-    secret: function() {
+    secret: function () {
       return configuration.secret();
     }
   };

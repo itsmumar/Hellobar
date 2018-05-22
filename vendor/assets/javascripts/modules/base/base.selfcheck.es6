@@ -1,6 +1,6 @@
 hellobar.defineModule('base.selfcheck',
-  ['hellobar', 'base.preview', 'base.format', 'base.site'],
-  function (hellobar, preview, format, site) {
+  ['hellobar', 'base.preview', 'base.format', 'base.site', 'base.metainfo'],
+  function (hellobar, preview, format, site, metainfo) {
 
     function getLocation() {
       return window.location;
@@ -15,8 +15,8 @@ hellobar.defineModule('base.selfcheck',
 
     return {
       scriptIsInstalledProperly() {
-        // return true when viewing in preview pane
-        if (preview.isActive()) {
+        // return true when viewing in preview pane or testing env
+        if (metainfo.isTest() || preview.isActive()) {
           return true;
         }
 

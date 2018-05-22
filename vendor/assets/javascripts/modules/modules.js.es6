@@ -46,6 +46,7 @@
       });
 
       configure('base.metainfo', function (configuration) {
+        configuration.environment(data.environment);
         configuration.version(data.version);
         configuration.timestamp(data.timestamp);
       });
@@ -55,7 +56,10 @@
       });
 
       configure('base.site', function (configuration) {
-        configuration.siteId(data.site_id).siteUrl(data.site_url).secret(data.pro_secret);
+        configuration
+          .siteId(data.site_id)
+          .siteUrl(data.site_url)
+          .secret(data.pro_secret);
       });
 
       function initializeProtectedModules() {
@@ -134,7 +138,7 @@
         });
       }
 
-      if (!hellobar('base.environment').isIEXOrLess(8) && data.script_is_installed_properly) {
+      if (!hellobar('base.environment').isIEXOrLess(8) && scriptIsInstalledProperly()) {
         initializeProtectedModules();
       }
 

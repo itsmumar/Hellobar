@@ -24,7 +24,6 @@ json.cache_if! model.cache_enabled?, model do
     :content_upgrades,
     :content_upgrades_styles,
     :autofills,
-    :script_is_installed_properly,
     :gdpr_enabled
 
   json.rules model.rules do |rule|
@@ -37,5 +36,6 @@ json.cache_if! model.cache_enabled?, model do
 end
 
 json.extract! model,
+  :environment,
   :version,
   :timestamp

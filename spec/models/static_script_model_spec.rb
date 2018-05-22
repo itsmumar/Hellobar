@@ -369,18 +369,6 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#script_is_installed_properly' do
-    context 'when test env' do
-      specify { expect(model.script_is_installed_properly).to eql true }
-    end
-
-    context 'when not test env' do
-      before { allow(Rails.env).to receive(:test?).and_return(false) }
-
-      specify { expect(model.script_is_installed_properly).to eql 'scriptIsInstalledProperly()' }
-    end
-  end
-
   describe 'to_json' do
     let(:json) { JSON.parse(model.to_json).deep_symbolize_keys }
 
@@ -389,7 +377,7 @@ describe StaticScriptModel do
         preview_is_active version timestamp capabilities site_id site_url pro_secret
         hellobar_container_css templates branding_templates content_upgrade_template
         geolocation_url hb_backend_host tracking_url site_write_key external_tracking hellobar_element_css
-        content_upgrades content_upgrades_styles autofills script_is_installed_properly rules
+        content_upgrades content_upgrades_styles autofills rules
         gdpr_consent gdpr_template gdpr_enabled
       ]
     end
