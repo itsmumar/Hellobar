@@ -14,6 +14,7 @@ describe FetchSubscribers do
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
       projection_expression: 'email,n,ts,lid,#s,#e',
       limit: 100,
+      return_consumed_capacity: 'TOTAL',
       scan_index_forward: false
     }
   end
