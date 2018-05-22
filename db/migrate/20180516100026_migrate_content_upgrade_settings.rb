@@ -53,8 +53,7 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
       settings = ContentUpgradeSettingsStub.new(content_upgrade_id: content_upgrade.id)
       settings.assign_attributes(content_upgrade.attributes.symbolize_keys.slice(*ATTRIBUTES_TO_MIGRATE))
 
-      attachment = open(content_upgrade.content_upgrade_pdf) rescue nil
-      settings.content_upgrade_pdf = attachment if attachment
+      settings.content_upgrade_pdf = content_upgrade.content_upgrade_pdf if content_upgrade.content_upgrade_pdf.exists?
 
       settings.save!
     end
@@ -65,8 +64,7 @@ class MigrateContentUpgradeSettings < ActiveRecord::Migration
       content_upgrade = ContentUpgradeStub.find(settings.content_upgrade_id)
       content_upgrade.assign_attributes(settings.attributes.symbolize_keys.slice(*ATTRIBUTES_TO_MIGRATE))
 
-      attachment = open(settings.content_upgrade_pdf) rescue nil
-      content_upgrade.content_upgrade_pdf = attachment if attachment
+      content_upgrade.content_upgrade_pdf = settings.content_upgrade_pdf if content_upgrade.content_upgrade_pdf.exists?
 
       content_upgrade.save!
     end
