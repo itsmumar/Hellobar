@@ -1,5 +1,6 @@
 feature 'Content upgrades', :js do
-  given!(:content_upgrade) { create(:content_upgrade, offer_headline: 'Offer 123') }
+  given!(:content_upgrade_settings) { create(:content_upgrade_settings, offer_headline: 'Offer 123') }
+  given!(:content_upgrade) { create(:content_upgrade, content_upgrade_settings: content_upgrade_settings) }
   given(:site) { content_upgrade.site }
   given!(:subscription) { create(:subscription, :pro_managed, site: site) }
 
@@ -23,9 +24,23 @@ feature 'Content upgrades', :js do
   end
 
   scenario 'running an A/B test for content upgrades' do
-    create(:content_upgrade, rule: content_upgrade.rule, offer_headline: 'Test 123')
-    create(:content_upgrade, rule: content_upgrade.rule, offer_headline: 'Test 456')
-    create(:content_upgrade, rule: content_upgrade.rule, offer_headline: 'Test 789')
+    create(
+      :content_upgrade,
+      rule: content_upgrade.rule,
+      content_upgrade_settings: create(:content_upgrade_settings, offer_headline: 'Test 123')
+    )
+
+    create(
+      :content_upgrade,
+      rule: content_upgrade.rule,
+      content_upgrade_settings: create(:content_upgrade_settings, offer_headline: 'Test 456')
+    )
+
+    create(
+      :content_upgrade,
+      rule: content_upgrade.rule,
+      content_upgrade_settings: create(:content_upgrade_settings, offer_headline: 'Test 789')
+    )
 
     visit test_site_path(id: site.id)
 
@@ -35,7 +50,7 @@ feature 'Content upgrades', :js do
       expect(page).to have_selector 'p.hb-cu-offer'
       expect(find('.hb-cu-modal-container', visible: false)).to_not be_visible
 
-      possible_headlines = site.site_elements.active_content_upgrades.pluck(:offer_headline)
+      possible_headlines = site.site_elements.active_content_upgrades.map(&:offer_headline)
       expect(possible_headlines).to include(find('p.hb-cu-offer').text)
 
       find('p.hb-cu-offer').click

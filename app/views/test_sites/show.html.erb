@@ -41,7 +41,7 @@
 
 <section id="content-upgrade-ab-test-container">
   <h1>Content Upgrade A/B test</h1>
-  <div data-hb-cu-ab-test="<%= content_upgrade_tests.pluck(:id).join(',') %>"></div>
+  <div data-hb-cu-ab-test="<%= content_upgrade_test_ids.join(',') %>"></div>
 </section>
 
 <%== script_tag %>
