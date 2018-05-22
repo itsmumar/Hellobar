@@ -44,6 +44,7 @@ class Site < ApplicationRecord
   has_many :sequences, dependent: :destroy, through: :contact_lists
   has_many :coupon_uses, through: :bills
   has_many :emails, dependent: :destroy
+  has_one :content_upgrade_styles, inverse_of: :site
 
   scope :preload_for_script, lambda {
     preload(
@@ -62,8 +63,6 @@ class Site < ApplicationRecord
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
   validates :communication_types, presence: true, on: :update_privacy
-
-  store :settings, coder: JSON
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
@@ -133,13 +132,13 @@ class Site < ApplicationRecord
   end
 
   def display_url
-    Addressable::URI.parse(url).display_uri.to_s || url
+    display_uri&.to_s || url
   rescue Addressable::URI::InvalidURIError
     nil
   end
 
   def host
-    Addressable::URI.parse(url).display_uri.host || url
+    display_uri&.host || url
   rescue Addressable::URI::InvalidURIError
     nil
   end
@@ -199,12 +198,8 @@ class Site < ApplicationRecord
     site_elements.where.not(wordpress_bar_id: nil).any?
   end
 
-  def update_content_upgrade_styles!(style_params)
-    update_attribute(:settings, settings.merge('content_upgrade' => style_params))
-  end
-
   def content_upgrade_styles
-    settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
+    super || build_content_upgrade_styles(ContentUpgradeStyles::DEFAULT_STYLES)
   end
 
   def active_paid_bill
@@ -226,6 +221,10 @@ class Site < ApplicationRecord
   end
 
   private
+
+  def display_uri
+    Addressable::URI.parse(url)&.display_uri
+  end
 
   def generate_read_write_keys
     self.read_key = SecureRandom.uuid if read_key.blank?

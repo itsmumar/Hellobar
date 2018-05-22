@@ -345,14 +345,19 @@ describe StaticScriptModel do
   end
 
   describe '#content_upgrade_styles' do
-    let(:content_upgrade_styles) { generate :content_upgrade_styles }
+    let(:content_upgrade_styles) { attributes_for(:content_upgrade_styles) }
+    let(:font_family) { ContentUpgradeStyles::AVAILABLE_FONTS[content_upgrade_styles[:offer_font_family_name]] }
 
     before do
-      site.update_content_upgrade_styles! content_upgrade_styles
+      site.content_upgrade_styles.update!(content_upgrade_styles)
     end
 
-    it 'returns site.settings[content_upgrades]' do
-      expect(model.content_upgrades_styles).to eql content_upgrade_styles
+    it 'returns styles attributes and font_family' do
+      expect(model.content_upgrades_styles).to include(content_upgrade_styles.stringify_keys)
+    end
+
+    it 'returns offer_font_family' do
+      expect(model.content_upgrades_styles).to include('offer_font_family' => font_family)
     end
   end
 

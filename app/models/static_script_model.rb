@@ -192,7 +192,7 @@ class StaticScriptModel
   end
 
   def content_upgrades_styles
-    site.content_upgrade_styles
+    site.content_upgrade_styles.style_attributes
   end
 
   def script_is_installed_properly
