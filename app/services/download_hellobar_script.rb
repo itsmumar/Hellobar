@@ -16,14 +16,14 @@ class DownloadHellobarScript
   end
 
   def call
-    download if stale? || force
+    download if missing? || force
   end
 
   private
 
   attr_reader :force
 
-  def stale?
+  def missing?
     !local_path.exist?
   end
 
