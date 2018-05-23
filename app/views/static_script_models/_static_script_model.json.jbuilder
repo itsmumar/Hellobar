@@ -37,5 +37,6 @@ end
 
 json.extract! model,
   :environment,
+  :modules_version,
   :version,
   :timestamp

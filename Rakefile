@@ -19,5 +19,5 @@ if %w[development test].include? Rails.env
   end
 
   task(:default).clear
-  task default: %i[spec teaspoon rubocop]
+  task default: %i[spec rubocop]
 end
