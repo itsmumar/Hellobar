@@ -11,10 +11,12 @@ describe('Module base.selfcheck', function () {
             return url;
           }
         },
-        'base.site': jasmine.createSpyObj('base.preview', ['siteUrl'])
+        'base.site': jasmine.createSpyObj('base.preview', ['siteUrl']),
+        'base.metainfo': jasmine.createSpyObj('base.metainfo', ['isTest'])
       };
       dependencies['base.preview'].isActive.and.returnValue(previewIsActive);
       dependencies['base.site'].siteUrl.and.returnValue(siteUrl);
+      dependencies['base.metainfo'].isTest.and.returnValue(false);
       return dependencies;
     }
 
