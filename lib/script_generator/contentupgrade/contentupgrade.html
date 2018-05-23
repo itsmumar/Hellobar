@@ -234,7 +234,7 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
 
           <button class="cta"
                   onclick="hellobar('contentUpgrades').submit({{context.siteElement.id}}); return false;">
-            <div class="hb-text-holder {{context.siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+            <div class="hb-text-holder hb-editable-block hb-editable-block-with-simple-no-link-formatting"
                  data-hb-editable-block="action_link"
                  data-hb-inline-editor-placeholder="Action">
               {{context.siteElement.link_text}}
@@ -269,7 +269,7 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
       <div class="subheading">{{context.siteElement.thank_you_subheading}}</div>
 
       <a class="cta" href="{{context.siteElement.thank_you_url}}">
-        <div class="hb-text-holder {{context.siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}">
+        <div class="hb-text-holder hb-editable-block hb-editable-block-with-simple-no-link-formatting">
           {{context.siteElement.thank_you_cta}}
         </div>
       </a>

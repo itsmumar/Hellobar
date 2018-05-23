@@ -37,5 +37,6 @@ json.cache_if! model.cache_enabled?, model do
 end
 
 json.extract! model,
+  :modules_version,
   :version,
   :timestamp
