@@ -149,12 +149,14 @@ class @PaymentModal extends Modal
       label: billData.subscription_name + '-' + billData.subscription_schedule
 
     window.dataLayer.push
+      event: 'GATransaction'
       transactionId: billData.id
       transactionTotal: billData.amount
       transactionProducts: [
         {
           sku: billData.subscription_name + '-' + billData.subscription_schedule
           name: billData.subscription_name
+          category: billData.subscription_schedule
           price: billData.amount
           quantity: 1
         }

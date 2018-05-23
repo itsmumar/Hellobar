@@ -1,7 +1,7 @@
 class TestSitesController < ActionController::Base
   before_action :load_site
 
-  helper_method :script_tag, :content_upgrades_script_tags, :content_upgrade_tests
+  helper_method :script_tag, :content_upgrades_script_tags, :content_upgrade_test_ids
 
   def show
     clear_cache if params.key?(:fresh)
@@ -29,12 +29,12 @@ class TestSitesController < ActionController::Base
     @site.site_elements.active_content_upgrades
   end
 
-  def content_upgrade_tests
-    content_upgrades.where('offer_headline like ?', 'Test %')
+  def content_upgrade_test_ids
+    ContentUpgradeSettings.where('offer_headline like ?', 'Test %').pluck(:content_upgrade_id)
   end
 
   def content_upgrades_script_tags
-    content_upgrades.where.not('offer_headline like ?', 'Test %').first&.content_upgrade_script_tag
+    content_upgrades.where.not(id: content_upgrade_test_ids).first&.content_upgrade_script_tag
   end
 
   def script_tag

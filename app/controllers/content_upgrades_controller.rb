@@ -17,10 +17,10 @@ class ContentUpgradesController < ApplicationController
     # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
-    @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
     @content_upgrade.link_text = 'Download Now'
     @content_upgrade.headline = 'Enter your email to download this free guide right now.'
     @content_upgrade.caption = 'Almost there! Please complete this form and click the button below to gain instant access.'
+    @content_upgrade.content_upgrade_settings.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
   end
 
   def show
@@ -93,24 +93,26 @@ class ContentUpgradesController < ApplicationController
     {
       type: 'ContentUpgrade',
       element_subtype: 'email',
-      offer_text: params[:offer_text],
-      offer_headline: params[:offer_headline],
       headline: params[:headline],
       caption: params[:caption],
-      disclaimer: params[:disclaimer],
       link_text: params[:link_text],
-      thank_you_enabled: params[:thank_you_enabled].present?,
-      thank_you_headline: params[:thank_you_headline],
-      thank_you_subheading: params[:thank_you_subheading],
-      thank_you_cta: params[:thank_you_cta],
-      thank_you_url: params[:thank_you_url],
       name_placeholder: params[:name_placeholder],
       email_placeholder: params[:email_placeholder],
       contact_list_id: params[:contact_list_id],
-      content_upgrade_title: params[:content_upgrade_title],
-      content_upgrade_url: params[:content_upgrade_url],
-      rule: @site.rules.first
-    }.merge(pdf_params)
+      rule: @site.rules.first,
+      content_upgrade_settings_attributes: {
+        id: params[:content_upgrade_settings_id],
+        offer_headline: params[:offer_headline],
+        disclaimer: params[:disclaimer],
+        content_upgrade_title: params[:content_upgrade_title],
+        content_upgrade_url: params[:content_upgrade_url],
+        thank_you_enabled: params[:thank_you_enabled].present?,
+        thank_you_headline: params[:thank_you_headline],
+        thank_you_subheading: params[:thank_you_subheading],
+        thank_you_cta: params[:thank_you_cta],
+        thank_you_url: params[:thank_you_url]
+      }.merge(pdf_params)
+    }
   end
 
   def styles_params

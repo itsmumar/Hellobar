@@ -17,13 +17,35 @@ describe 'Content upgrade requests' do
 
   context 'when authenticated' do
     let!(:content_upgrade) { create(:content_upgrade, site: site) }
-    let(:pdf_upload) { fixture_file_upload(content_upgrade.content_upgrade_pdf.path) }
+    let(:settings) { content_upgrade.content_upgrade_settings }
+    let(:pdf_upload) { fixture_file_upload(settings.content_upgrade_pdf.path) }
+
     let(:content_upgrade_params) do
-      content_upgrade.attributes.deep_symbolize_keys.merge(
-        site_id: site,
-        content_upgrade: { content_upgrade_pdf: pdf_upload }
+      content_upgrade.attributes.deep_symbolize_keys.slice(
+        :headline,
+        :caption,
+        :link_text,
+        :name_placeholder,
+        :email_placeholder,
+        :contact_list_id
       )
     end
+
+    let(:content_upgrade_settings_params) do
+      settings.attributes.deep_symbolize_keys.slice(
+        :offer_headline,
+        :disclaimer,
+        :content_upgrade_title,
+        :content_upgrade_url,
+        :thank_you_enabled,
+        :thank_you_headline,
+        :thank_you_subheading,
+        :thank_you_cta,
+        :thank_you_url
+      ).merge(content_upgrade: { content_upgrade_pdf: pdf_upload })
+    end
+
+    let(:params) { content_upgrade_params.merge(content_upgrade_settings_params) }
 
     before { login_as user, scope: :user, run_callbacks: false }
 
@@ -65,14 +87,14 @@ describe 'Content upgrade requests' do
     describe 'POST :create' do
       it 'creates a new content upgrade when params are correct' do
         expect {
-          post site_content_upgrades_path(site), content_upgrade_params
+          post site_content_upgrades_path(site), params
         }.to change { ContentUpgrade.count }.by 1
 
         expect(response).to be_a_redirect
       end
 
       it 'does not create a new content upgrade when some params are missing' do
-        params = content_upgrade_params.merge(offer_headline: '')
+        params[:offer_headline] = ''
 
         expect {
           post site_content_upgrades_path(site), params
@@ -96,7 +118,7 @@ describe 'Content upgrade requests' do
       let(:content_upgrade) { create :content_upgrade, site: site }
 
       it 'updates data of an existing content upgrade when params are correct' do
-        params = content_upgrade_params.merge(offer_headline: 'new offer_headline')
+        params[:offer_headline] = 'new offer_headline'
 
         expect {
           patch site_content_upgrade_path(site, content_upgrade), params
@@ -106,7 +128,7 @@ describe 'Content upgrade requests' do
       end
 
       it 'does not update an content upgrade when some params are missing' do
-        params = content_upgrade_params.merge(offer_headline: '')
+        params[:offer_headline] = ''
 
         expect {
           patch site_content_upgrade_path(site, content_upgrade), params
