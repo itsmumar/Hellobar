@@ -34,5 +34,6 @@
     "position_default": "background",
     "position_selectable": false
   },
-  "advanced": true
+  "advanced": true,
+  "disabled": false
 }
