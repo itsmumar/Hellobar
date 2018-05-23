@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180516194926) do
+ActiveRecord::Schema.define(version: 20180523130554) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -250,6 +250,14 @@ ActiveRecord::Schema.define(version: 20180516194926) do
   end
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
+
+  create_table "partners", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "email",      limit: 255
+    t.string   "url",        limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
