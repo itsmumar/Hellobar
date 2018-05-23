@@ -77,7 +77,7 @@
       <input data-field="name" placeholder="First Name">
       <input data-field="email" placeholder="Email">
 
-      <div class="hb-gdpr-checkboxes <%= @content_upgrade.enable_gdpr ? '' : 'hb-hidden' %>">
+      <div class="hb-gdpr-checkboxes <%= @content_upgrade&.enable_gdpr ? '' : 'hb-hidden' %>">
         <label>
           <input type="checkbox" name="hb-gdpr-consent-checkbox" class="hb-gdpr-checkbox">
           <span>
