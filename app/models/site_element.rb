@@ -28,13 +28,9 @@ class SiteElement < ApplicationRecord
     'social/follow_on_pinterest'      => 'Follows',
     'social/share_on_buffer'          => 'Shares',
     'social/share_on_linkedin'        => 'Shares',
-    'question'                        => 'Question',
-
-    # themes type `template`
-    'traffic_growth'                  => 'Emails'
+    'question'                        => 'Question'
   }.freeze
 
-  TEMPLATE_NAMES = %w[traffic_growth].freeze
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
   belongs_to :rule
@@ -175,16 +171,9 @@ class SiteElement < ApplicationRecord
   end
 
   def self.all_templates
-    [].tap do |templates|
-      types.each do |type|
-        BAR_TYPES.each_key do |subtype|
-          if TEMPLATE_NAMES.include?(subtype)
-            types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            templates << "#{ type.downcase }_#{ subtype }" if types.include?(type)
-          else
-            templates << "#{ type.downcase }_#{ subtype }"
-          end
-        end
+    types.flat_map do |type|
+      BAR_TYPES.keys.map do |subtype|
+        "#{ type.downcase }_#{ subtype }"
       end
     end
   end

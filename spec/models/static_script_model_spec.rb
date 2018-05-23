@@ -114,8 +114,7 @@ describe StaticScriptModel do
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
-                "marigold/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\n" \
-                "traffic-growth/container.css\nviolet/container.css"
+                "marigold/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\n"
     end
   end
 
@@ -129,30 +128,21 @@ describe StaticScriptModel do
         %w[call traffic email announcement
            social/tweet_on_twitter social/follow_on_twitter social/like_on_facebook social/plus_one_on_google_plus
            social/pin_on_pinterest social/follow_on_pinterest social/share_on_buffer social/share_on_linkedin
-           question traffic_growth]
+           question]
       end
 
       let(:bar_types) { %w[Bar Modal Slider Takeover ContentUpgrade Alert] }
-      let(:template_names) { %w[traffic_growth] }
 
       def all_templates
         bar_subtypes.flat_map { |subtype|
-          bar_types.map do |type|
-            if template_names.include?(subtype)
-              element_types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-              "#{ type.downcase }_#{ subtype }" if element_types.include?(type)
-            else
-              "#{ type.downcase }_#{ subtype }"
-            end
-          end
+          bar_types.map { |type| "#{ type.downcase }_#{ subtype }" }
         }.compact
       end
 
       before { allow(StaticScriptAssets).to receive(:render).and_return('') }
 
-      context 'for all bar types except traffic_growth template' do
-        let(:bar_subtypes_except_traffic_growth) { bar_subtypes - %w[traffic_growth] }
-        let(:bars_number) { bar_subtypes_except_traffic_growth.count }
+      context 'for all bar types' do
+        let(:bars_number) { bar_subtypes.count }
 
         it 'renders header and footer' do
           templates
@@ -171,17 +161,12 @@ describe StaticScriptModel do
           it 'renders content markup' do
             templates
 
-            bar_subtypes_except_traffic_growth.each do |subtype|
+            bar_subtypes.each do |subtype|
               args = ["#{ subtype.tr('/', '_') }.html", site_id: site.id]
               expect(StaticScriptAssets).to have_received(:render).with(*args).exactly(bars_number).times
             end
           end
         end
-      end
-
-      it 'renders traffic-growth/modal.html for traffic_growth template' do
-        templates
-        expect(StaticScriptAssets).to have_received(:render).with('traffic-growth', 'modal.html', site_id: site.id)
       end
 
       it 'returns array of template names and markups' do
