@@ -1,0 +1,7 @@
+= simple_form_for [:admin, @partner] do |f|
+  = f.input :name
+  = f.input :email
+  = f.input :url
+
+  = f.button :submit, 'Save', class: 'btn btn-primary'
+  =< link_to 'Cancel', admin_partners_path, class: 'btn btn-default'

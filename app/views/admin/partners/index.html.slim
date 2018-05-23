@@ -1,0 +1,31 @@
+div.row
+  div.col-md-12
+
+    h1
+      | Partners
+      = link_to 'Add New Partner', new_admin_partner_path
+
+    - if @partners.empty?
+      h3
+        i none found
+
+    - else
+      table.table.table-striped.partners
+        tr
+          th ID
+          th Name
+          th Email
+          th Website URL
+          th Date Created
+          th
+
+        - @partners.each do |partner|
+          tr
+            td= link_to partner.id, edit_admin_partner_path(partner)
+            td= partner.name
+            td= partner.email
+            td= partner.url
+            td= partner.created_at
+            td
+              = link_to 'Edit', edit_admin_partner_path(partner)
+              =< link_to 'Delete', admin_partner_path(partner), method: :delete

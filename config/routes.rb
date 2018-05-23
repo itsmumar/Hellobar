@@ -207,6 +207,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :partners
+
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
     get 'logout', to: 'access#logout_admin', as: :logout
     get 'reset_password', to: 'access#reset_password'
