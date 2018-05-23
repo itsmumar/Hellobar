@@ -55,6 +55,5 @@
     "position_default": "background",
     "position_selectable": false
   },
-  "advanced": false,
-  "disabled": false
+  "advanced": false
 }

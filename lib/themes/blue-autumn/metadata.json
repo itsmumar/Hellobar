@@ -54,6 +54,5 @@
     "position_default": "left",
     "position_selectable": true
   },
-  "advanced": false,
-  "disabled": false
+  "advanced": false
 }
