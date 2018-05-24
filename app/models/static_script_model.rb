@@ -17,7 +17,7 @@ class StaticScriptModel
   end
 
   def disable_self_check
-    site_url === 'http://mysite.com' ||
+    site_url == 'http://mysite.com' ||
       site.capabilities.disable_script_self_check ||
       !Rails.env.production?
   end
