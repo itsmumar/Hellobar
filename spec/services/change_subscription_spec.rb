@@ -17,7 +17,37 @@ describe ChangeSubscription, :freeze do
     ).call
   end
 
-  describe '.call' do
+  describe '#same_subscription?' do
+    context 'when subscription is changed' do
+      let(:params) { { subscription: 'pro', schedule: 'yearly' } }
+
+      it 'returns false' do
+        expect(service.same_subscription?).to be_falsey
+      end
+    end
+
+    context 'when schedule is changed' do
+      before { change_subscription('pro', 'monthly') }
+
+      let(:params) { { subscription: 'pro', schedule: 'yearly' } }
+
+      it 'returns false' do
+        expect(service.same_subscription?).to be_falsey
+      end
+    end
+
+    context 'when neither subscription nor schedule is changed' do
+      before { change_subscription('pro', 'monthly') }
+
+      let(:params) { { subscription: 'pro', schedule: 'monthly' } }
+
+      it 'returns true' do
+        expect(service.same_subscription?).to be_truthy
+      end
+    end
+  end
+
+  describe '#call' do
     it 'creates a bill for current period' do
       expect { service.call }
         .to change(site.bills.where(bill_at: Time.current), :count).by(1)
