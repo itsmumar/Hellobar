@@ -28,6 +28,10 @@ class StaticScriptModel
     GitUtils.current_commit
   end
 
+  def modules_version
+    HellobarModules.version
+  end
+
   def timestamp
     Time.current
   end
