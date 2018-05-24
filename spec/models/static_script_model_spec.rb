@@ -354,18 +354,6 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#script_is_installed_properly' do
-    context 'when test env' do
-      specify { expect(model.script_is_installed_properly).to eql true }
-    end
-
-    context 'when not test env' do
-      before { allow(Rails.env).to receive(:test?).and_return(false) }
-
-      specify { expect(model.script_is_installed_properly).to eql 'scriptIsInstalledProperly()' }
-    end
-  end
-
   describe 'to_json' do
     let(:json) { JSON.parse(model.to_json).deep_symbolize_keys }
 
@@ -374,8 +362,8 @@ describe StaticScriptModel do
         preview_is_active version modules_version timestamp capabilities site_id site_url pro_secret
         hellobar_container_css templates branding_templates content_upgrade_template
         geolocation_url hb_backend_host tracking_url site_write_key external_tracking hellobar_element_css
-        content_upgrades content_upgrades_styles autofills script_is_installed_properly rules
-        gdpr_consent gdpr_template gdpr_enabled
+        content_upgrades content_upgrades_styles autofills rules
+        gdpr_consent gdpr_template gdpr_enabled disable_self_check
       ]
     end
 
@@ -463,5 +451,45 @@ describe StaticScriptModel do
     let(:site) { create :site, privacy_policy_url: 'http://google.com/policy' }
 
     specify { expect(model.privacy_policy_url) .to eql 'http://google.com/policy' }
+  end
+
+  describe '#disable_self_check' do
+    before { allow(Rails.env).to receive(:production?).and_return true }
+
+    context 'when preview' do
+      let(:options) { { preview: true } }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when site url is mysite.com' do
+      let(:site) { create :site, url: 'http://mysite.com' }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when site has disable_script_self_check capabilities' do
+      let(:site) { create :site, :pro_managed }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when Rails.env is not production || edge || staging' do
+      let(:site) { create :site }
+
+      before { allow(Rails.env).to receive(:production?).and_return false }
+      before { allow(Rails.env).to receive(:edge?).and_return false }
+      before { allow(Rails.env).to receive(:staging?).and_return false }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
   end
 end

@@ -1,1 +1,1 @@
-DownloadHellobarScript.new.call if Rails.env.development? || Rails.env.test?
+DownloadHellobarModules.new.call if Rails.env.development? || Rails.env.test?

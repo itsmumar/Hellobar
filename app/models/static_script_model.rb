@@ -5,7 +5,7 @@ class StaticScriptModel
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
   delegate :autofills, :cache_key, :persisted?, to: :site
-  delegate :terms_and_conditions_url, :privacy_policy_url, to: :site
+  delegate :terms_and_conditions_url, :privacy_policy_url, :gdpr_consent, to: :site
 
   def initialize(site, options = {})
     @site = site
@@ -14,6 +14,13 @@ class StaticScriptModel
 
   def to_json
     StaticScriptAssets.render_model(self)
+  end
+
+  def disable_self_check
+    preview_is_active ||
+      site_url == 'http://mysite.com' ||
+      site.capabilities.disable_script_self_check ||
+      !(Rails.env.production? || Rails.env.edge? || Rails.env.staging?)
   end
 
   def cache_enabled?
@@ -121,16 +128,6 @@ class StaticScriptModel
     [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
   end
 
-  def gdpr_consent
-    text_map = {
-      'product' => 'product/service',
-      'research' => 'market research'
-    }
-    sentence = site.communication_types.map { |type| text_map[type] || type }.to_sentence
-
-    "I consent to occasionally receive #{ sentence } emails."
-  end
-
   def geolocation_url
     Settings.geolocation_url
   end
@@ -185,7 +182,8 @@ class StaticScriptModel
           name_placeholder: content_upgrade.name_placeholder,
           contact_list_id: content_upgrade.contact_list_id,
           download_link: content_upgrade.content_upgrade_download_link,
-          subtype: content_upgrade.short_subtype
+          subtype: content_upgrade.short_subtype,
+          enable_gdpr: content_upgrade.enable_gdpr
         }
       }
     }.inject({}, &:update)
@@ -193,10 +191,6 @@ class StaticScriptModel
 
   def content_upgrades_styles
     site.content_upgrade_styles.style_attributes
-  end
-
-  def script_is_installed_properly
-    Rails.env.test? || 'scriptIsInstalledProperly()'
   end
 
   private
