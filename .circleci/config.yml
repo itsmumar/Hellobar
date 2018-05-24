@@ -41,11 +41,6 @@ jobs:
           keys:
             - editor-assets-cache-v5-{{ .Revision }}
 
-      - restore_cache:
-          keys:
-            - tmp-cache-v5-{{ .Branch }}
-            - tmp-cache-v4
-
       - run: env
 
       - run:
@@ -127,12 +122,6 @@ jobs:
           command: |
             TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
-
-      - save_cache:
-          key: tmp-cache-v5-{{ .Branch }}
-          paths:
-            - /tmp/hellobar_new/tmp/cache
-            - /tmp/hellobar_new/tmp/script
 
       - store_artifacts:
           path: /tmp/hellobar_new/tmp/coverage
