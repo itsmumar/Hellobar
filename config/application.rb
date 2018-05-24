@@ -69,7 +69,7 @@ module Hellobar
 
         if Rails.env.development?
           resource '/test_sites/*', headers: :any, methods: %i[get options]
-          origins Settings.script_url
+          origins Settings.campaigns_url, Settings.script_url
         end
       end
     end
