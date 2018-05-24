@@ -24,7 +24,7 @@ class DownloadHellobarScript
   attr_reader :force
 
   def missing?
-    !local_path.exist?
+    Rails.env.test? || !local_path.exist?
   end
 
   def download
