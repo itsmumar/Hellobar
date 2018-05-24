@@ -296,8 +296,4 @@ class StaticScriptModel
   def render_asset(*path)
     StaticScriptAssets.render(*path, site_id: site_id)
   end
-
-  def specific_env?
-    !Rails.env.production? && !Rails.env.staging? && !Rails.env.edge?
-  end
 end
