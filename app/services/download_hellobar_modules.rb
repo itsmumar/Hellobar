@@ -1,4 +1,4 @@
-class DownloadHellobarScript
+class DownloadHellobarModules
   class ScriptNotFound < StandardError
     def initialize(url)
       super "hellobar script version #{ url.inspect } couldn't be found"

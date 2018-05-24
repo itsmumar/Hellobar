@@ -1,4 +1,4 @@
-describe DownloadHellobarScript do
+describe DownloadHellobarModules do
   let(:filename) { HellobarModules.filename }
   let(:script_content) { 'script content' }
 
@@ -12,7 +12,7 @@ describe DownloadHellobarScript do
   let(:service) { described_class.new }
 
   before do
-    DownloadHellobarScript.logger = nil
+    DownloadHellobarModules.logger = nil
 
     allow(Rails)
       .to receive_message_chain(:root, :join)
@@ -68,7 +68,7 @@ describe DownloadHellobarScript do
     it 'raises ScriptNotFound error' do
       expect { service.call }
         .to raise_error(
-          DownloadHellobarScript::ScriptNotFound,
+          DownloadHellobarModules::ScriptNotFound,
           "hellobar script version #{ url.inspect } couldn't be found"
         )
     end
