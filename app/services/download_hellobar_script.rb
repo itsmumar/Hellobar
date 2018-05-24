@@ -45,7 +45,7 @@ class DownloadHellobarScript
   end
 
   def url
-    "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ filename }"
+    "https://#{ Settings.script_cdn_url }/#{ filename }"
   end
 
   def filename
