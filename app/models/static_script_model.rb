@@ -20,7 +20,7 @@ class StaticScriptModel
     preview_is_active ||
       site_url == 'http://mysite.com' ||
       site.capabilities.disable_script_self_check ||
-      !Rails.env.production?
+      !(Rails.env.production? || Rails.env.edge? || Rails.env.staging?)
   end
 
   def cache_enabled?
@@ -295,5 +295,9 @@ class StaticScriptModel
 
   def render_asset(*path)
     StaticScriptAssets.render(*path, site_id: site_id)
+  end
+
+  def specific_env?
+    !Rails.env.production? && !Rails.env.staging? && !Rails.env.edge?
   end
 end

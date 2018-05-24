@@ -495,10 +495,12 @@ describe StaticScriptModel do
       end
     end
 
-    context 'when Rails.env is not production' do
+    context 'when Rails.env is not production || edge || staging' do
       let(:site) { create :site }
 
       before { allow(Rails.env).to receive(:production?).and_return false }
+      before { allow(Rails.env).to receive(:edge?).and_return false }
+      before { allow(Rails.env).to receive(:staging?).and_return false }
 
       it 'returns true' do
         expect(model.disable_self_check).to be_truthy
