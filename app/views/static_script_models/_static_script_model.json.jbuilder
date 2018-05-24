@@ -36,7 +36,7 @@ json.cache_if! model.cache_enabled?, model do
 end
 
 json.extract! model,
-  :environment,
+  :disable_self_check,
   :modules_version,
   :version,
   :timestamp

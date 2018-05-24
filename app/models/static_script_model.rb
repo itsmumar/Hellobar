@@ -16,8 +16,10 @@ class StaticScriptModel
     StaticScriptAssets.render_model(self)
   end
 
-  def environment
-    Rails.env.to_s
+  def disable_self_check
+    site_url === 'http://mysite.com' ||
+      site.capabilities.disable_script_self_check ||
+      !Rails.env.production?
   end
 
   def cache_enabled?
