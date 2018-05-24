@@ -471,6 +471,14 @@ describe StaticScriptModel do
   describe '#disable_self_check' do
     before { allow(Rails.env).to receive(:production?).and_return true }
 
+    context 'when preview' do
+      let(:options) { { preview: true } }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
     context 'when site url is mysite.com' do
       let(:site) { create :site, url: 'http://mysite.com' }
 
