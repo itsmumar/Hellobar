@@ -1,4 +1,4 @@
-describe DownloadHellobarScript do
+describe DownloadHellobarModules do
   let(:filename) { HellobarModules.filename }
   let(:script_content) { 'script content' }
 
@@ -6,13 +6,13 @@ describe DownloadHellobarScript do
 
   let(:path) { File.join(StaticScript::SCRIPTS_LOCAL_FOLDER, filename) }
   let(:local_path) { Rails.root.join(path) }
-  let(:url) { "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ filename }" }
+  let(:url) { "https://#{ Settings.script_cdn_url }/#{ filename }" }
 
   let(:response) { double(to_s: script_content, success?: true) }
   let(:service) { described_class.new }
 
   before do
-    DownloadHellobarScript.logger = nil
+    DownloadHellobarModules.logger = nil
 
     allow(Rails)
       .to receive_message_chain(:root, :join)
@@ -25,8 +25,9 @@ describe DownloadHellobarScript do
       .and_return(response)
   end
 
-  context 'when file exists' do
+  context 'when not in test env and file exists' do
     before do
+      allow(Rails.env).to receive(:test?).and_return(false)
       allow(local_path).to receive(:exist?).and_return(true)
     end
 
@@ -68,7 +69,7 @@ describe DownloadHellobarScript do
     it 'raises ScriptNotFound error' do
       expect { service.call }
         .to raise_error(
-          DownloadHellobarScript::ScriptNotFound,
+          DownloadHellobarModules::ScriptNotFound,
           "hellobar script version #{ url.inspect } couldn't be found"
         )
     end
