@@ -51,6 +51,14 @@
 
     $('#content-preview .hb-cu-modal').show();
 
+    $('#gdpr-compliant').on('click', function (event) {
+      if (<%= !@site.gdpr_enabled? %>) {
+        event.preventDefault();
+        return new UpdateGDPRSettingsPromtModal().open();
+      }
+
+      $('.hb-gdpr-checkboxes').toggleClass('hb-hidden');
+    });
   });
 </script>
 
@@ -68,6 +76,25 @@
     <div class="form">
       <input data-field="name" placeholder="First Name">
       <input data-field="email" placeholder="Email">
+
+      <div class="hb-gdpr-checkboxes <%= @content_upgrade&.enable_gdpr ? '' : 'hb-hidden' %>">
+        <label>
+          <input type="checkbox" name="hb-gdpr-consent-checkbox" class="hb-gdpr-checkbox">
+          <span>
+          <%= @site.gdpr_consent %>
+        </span>
+        </label>
+
+        <label>
+          <input type="checkbox" name="hb-gdpr-terms-checkbox" class="hb-gdpr-checkbox">
+          <span>
+            I have read and agree to the
+            <a target="_blank" href="<%= @site.privacy_policy_url %>">Privacy Policy</a> and
+            <a target="_blank" href="<%= @site.terms_and_conditions_url %>">Terms and Conditions</a>.
+          </span>
+        </label>
+      </div>
+
       <div data-field="cta" id="modal-button" class="cta">Download Now</div>
     </div>
     <div data-field="disclaimer" class="spam-disclaimer">We hate SPAM and promise to keep your email address safe.</div>

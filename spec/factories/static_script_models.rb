@@ -65,7 +65,8 @@ FactoryBot.define do
           name_placeholder: content_upgrade.name_placeholder,
           contact_list_id: content_upgrade.contact_list_id,
           download_link: content_upgrade.content_upgrade_download_link,
-          subtype: content_upgrade.short_subtype
+          subtype: content_upgrade.short_subtype,
+          enable_gdpr: content_upgrade.enable_gdpr
         }
       }
     end

@@ -122,7 +122,7 @@ class Site < ApplicationRecord
   end
 
   def communication_types
-    self[:communication_types]&.split(',')
+    self[:communication_types]&.split(',') || []
   end
 
   def url=(value)
@@ -218,6 +218,16 @@ class Site < ApplicationRecord
     communication_types? &&
       terms_and_conditions_url? &&
       privacy_policy_url?
+  end
+
+  def gdpr_consent
+    text_map = {
+      'product' => 'product/service',
+      'research' => 'market research'
+    }
+    sentence = communication_types.map { |type| text_map[type] || type }.to_sentence
+
+    "I consent to occasionally receive #{ sentence } emails."
   end
 
   private

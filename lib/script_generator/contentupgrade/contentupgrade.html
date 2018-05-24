@@ -25,6 +25,10 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
   box-shadow: none ! important;
 }
 
+.hb-hidden {
+  display: none;
+}
+
 .hb-cu-modal {
   display: block ! important;
   width: 90% ! important;
@@ -86,6 +90,46 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
   background: white ! important;
   border: 1pt solid #C9D7DD ! important;
   display: block ! important;
+}
+
+.hb-cu-modal input[type=checkbox] {
+  padding: 13px ! important;
+  width: 100% ! important;
+  max-width: 450px ! important;
+  margin: auto ! important;
+  margin-bottom: 15px ! important;
+  font-size: 1.2em ! important;
+  color: #201D1D ! important;
+  background: white ! important;
+  border: 1pt solid #C9D7DD ! important;
+  display: inline ! important;
+}
+
+.hb-cu-modal .hb-gdpr-checkboxes {
+  padding: 0px 67px ! important;
+  margin-bottom: 15px ! important;
+}
+
+.hb-cu-modal .hb-gdpr-checkboxes label {
+  text-align: left;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.hb-cu-modal .hb-gdpr-checkboxes span {
+  flex: 94%;
+}
+
+.hb-cu-modal .hb-gdpr-checkboxes .hb-gdpr-checkbox {
+  padding: 0px ! important;
+  width: auto ! important;
+  margin: 2px 5px 0 0 ! important;
+  font-size: 1.2em ! important;
+  color: #201D1D ! important;
+  background: white ! important;
+  border: 1pt solid #C9D7DD ! important;
+  display: inline ! important;
 }
 
 .hb-cu-modal .cta {
@@ -188,6 +232,24 @@ body .hb-cu-offer a:hover, html .hb-cu-offer a:hover {
         <div id="hb-fields-form">
           <input id="f-builtin-name" class="name" placeholder="{{context.siteElement.name_placeholder}}">
           <input id="f-builtin-email" class="email" placeholder="{{context.siteElement.email_placeholder}}">
+
+          <div class="hb-gdpr-checkboxes hb-hidden">
+            <label>
+              <input type="checkbox" name="hb-gdpr-consent-checkbox" class="hb-gdpr-checkbox">
+              <span>
+              {{context.site.gdpr_consent}}
+            </span>
+            </label>
+
+            <label>
+              <input type="checkbox" name="hb-gdpr-terms-checkbox" class="hb-gdpr-checkbox">
+              <span>
+                I have read and agree to the
+                <a target="_blank" href="{{context.site.privacy_policy_url}}">Privacy Policy</a> and
+                <a target="_blank" href="{{context.site.terms_and_conditions_url}}">Terms and Conditions</a>.
+              </span>
+            </label>
+          </div>
 
           <button class="cta"
                   onclick="hellobar('contentUpgrades').submit({{context.siteElement.id}}); return false;">

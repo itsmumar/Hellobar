@@ -27,7 +27,8 @@ describe 'Content upgrade requests' do
         :link_text,
         :name_placeholder,
         :email_placeholder,
-        :contact_list_id
+        :contact_list_id,
+        :enable_gdpr
       )
     end
 

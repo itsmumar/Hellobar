@@ -100,6 +100,7 @@ class ContentUpgradesController < ApplicationController
       email_placeholder: params[:email_placeholder],
       contact_list_id: params[:contact_list_id],
       rule: @site.rules.first,
+      enable_gdpr: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:enable_gdpr]),
       content_upgrade_settings_attributes: {
         id: params[:content_upgrade_settings_id],
         offer_headline: params[:offer_headline],
