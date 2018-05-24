@@ -45,7 +45,7 @@ describe FetchSiteContactListTotals do
     end
 
     it 'sends query to DynamoDB' do
-      expect(dynamo_db).to receive_message_chain(:batch_get_item).with(request)
+      expect(dynamo_db).to receive_message_chain(:batch_get_item).with(hash_including(request))
       service.call
     end
 

@@ -5,11 +5,6 @@ namespace :site do
       StaticScriptAssets.precompile
     end
 
-    desc 'Generate and upload modules.js to S3'
-    task generate_modules: :environment do
-      GenerateStaticScriptModules.new.call
-    end
-
     namespace :regenerate do
       desc 'Regenerate static site scripts for all non-deleted sites'
       task all: :environment do

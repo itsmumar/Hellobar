@@ -137,7 +137,7 @@ Use the `fresh` param then: `http://localhost:3000/test_site?fresh`
 
 ## Running specs
 
-Currently we use Chrome --headless for all our feature & teaspoon specs
+Currently we use Chrome --headless for all our feature
 
 `brew install chromedriver`
 
@@ -169,38 +169,6 @@ bundle exec rspec spec
 
 * don’t use `around`; use `before` and `after` instead
 * don’t use `travel_to`, use `Timecop.travel` instead
-
-
-
-## Javascript specs
-
-Teaspoon runs the `*_spec.js` files in `spec/javascripts/`.
-
-The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
-
-To run the whole suite of Javascript specs execute:
-
-```
-rake teaspoon
-```
-
-
-Tests are divided into two groups:
-
-* `generator` (tests `hellobar.base.js` and some other files)
-* `project` (tests `assets/javascripts/` files).
-
-To get the coverage of Generator:
-
-```
-teaspoon --suite=generator --coverage=generator
-```
-
-Coverage of Project:
-
-```
-teaspoon --suite=project --coverage=project
-```
 
 
 ## Development Workflow
