@@ -1,4 +1,4 @@
-class DownloadHellobarScript
+class DownloadHellobarModules
   class ScriptNotFound < StandardError
     def initialize(url)
       super "hellobar script version #{ url.inspect } couldn't be found"
@@ -24,7 +24,7 @@ class DownloadHellobarScript
   attr_reader :force
 
   def missing?
-    !local_path.exist?
+    Rails.env.test? || !local_path.exist?
   end
 
   def download
@@ -45,7 +45,7 @@ class DownloadHellobarScript
   end
 
   def url
-    "https://s3.amazonaws.com/#{ Settings.s3_bucket }/#{ filename }"
+    "https://#{ Settings.script_cdn_url }/#{ filename }"
   end
 
   def filename
