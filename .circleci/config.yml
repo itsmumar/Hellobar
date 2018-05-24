@@ -25,17 +25,17 @@ jobs:
       - restore_cache:
           keys:
             - bundle-cache-v5-{{ checksum "Gemfile.lock" }}
-            - bundle-cache-v4
+            - bundle-cache-v5
 
       - restore_cache:
           keys:
             - bower-cache-v5-{{ checksum "editor/bower.json" }}
-            - bower-cache-v4
+            - bower-cache-v5
 
       - restore_cache:
           keys:
             - yarn-cache-v5-{{ checksum "editor/yarn.lock" }}
-            - yarn-cache-v4
+            - yarn-cache-v5
 
       - restore_cache:
           keys:
