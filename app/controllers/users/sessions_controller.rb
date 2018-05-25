@@ -1,6 +1,8 @@
 class Users::SessionsController < Devise::SessionsController
   layout 'static'
 
+  before_action :print_headers
+
   def find_email
     email = params[:user].try(:[], :email)
 
@@ -43,5 +45,9 @@ class Users::SessionsController < Devise::SessionsController
 
   def user_params
     params.require(:user).permit(:email, :password)
+  end
+
+  def print_headers
+    Rails.logger.error(request.headers.inspect)
   end
 end

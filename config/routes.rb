@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :applications, :token_info
+  end
+
   resources :referrals do
     collection do
       get :accept
@@ -54,6 +58,10 @@ Rails.application.routes.draw do
           post :update_static_script_installation
         end
       end
+    end
+
+    namespace :external do
+      get '/me', to: 'user#show'
     end
   end
 
