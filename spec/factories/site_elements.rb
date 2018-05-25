@@ -35,6 +35,7 @@ FactoryBot.define do
       name_placeholder 'name_placeholder'
       email_placeholder 'email_placeholder'
       link_text 'link_text'
+      enable_gdpr true
 
       content_upgrade_settings
     end

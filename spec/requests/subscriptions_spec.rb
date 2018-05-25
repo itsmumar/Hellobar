@@ -41,6 +41,12 @@ describe 'Subscriptions requests' do
         expect(response).to be_successful
       end
 
+      it 'returns is_upgrade = true' do
+        post subscription_path, params
+
+        expect(json[:is_upgrade]).to be_truthy
+      end
+
       context 'when invalid' do
         let(:credit_card_params) { {} }
 
@@ -63,6 +69,34 @@ describe 'Subscriptions requests' do
                 'Verification value can\'t be blank'
               ]
           )
+        end
+
+        context 'when subscription is not changed' do
+          let(:credit_card) { create(:credit_card, user: user) }
+
+          before do
+            ChangeSubscription.new(site, billing_params, credit_card).call
+          end
+
+          it 'returns is_upgrade = false' do
+            post subscription_path, params
+
+            expect(json[:is_upgrade]).to be_falsey
+          end
+        end
+
+        context 'when subscription is not changed but schedule is changed' do
+          let(:credit_card) { create(:credit_card, user: user) }
+
+          before do
+            ChangeSubscription.new(site, billing_params.merge(schedule: 'yearly'), credit_card).call
+          end
+
+          it 'returns is_upgrade = false' do
+            post subscription_path, params
+
+            expect(json[:is_upgrade]).to be_falsey
+          end
         end
       end
 
