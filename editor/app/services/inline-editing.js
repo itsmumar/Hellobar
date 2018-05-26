@@ -2,7 +2,6 @@
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
-import defaultBlocks from './inline-editing.blocks';
 import geolocationHelper from './inline-editing.geolocation-helper';
 
 // Froala Editor license key
@@ -508,23 +507,6 @@ export default Ember.Service.extend({
     } else if (this.simpleModelAdapter) {
       this.simpleModelAdapter.handleContentChange(blockId, content);
     }
-  },
-
-  initializeBlocks(model, themeId) {
-    //const newBlock = (id, text) => ( {id, content: {text: text}} );
-    model.blocks = model.blocks || [];
-    const blocks = defaultBlocks[themeId];
-    _.each(blocks, (defaultBlock) => {
-      const foundModelBlock = _.find(model.blocks, (modelBlock) => modelBlock.id === defaultBlock.id);
-      const clonedDefaultBlock = _.defaultsDeep({isDefault: true}, defaultBlock);
-      if (!foundModelBlock) {
-        model.blocks.push(clonedDefaultBlock);
-      } else {
-        if (foundModelBlock.isDefault) {
-          _.extend(foundModelBlock, clonedDefaultBlock);
-        }
-      }
-    });
   }
 
 });

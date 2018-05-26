@@ -1,14 +1,5 @@
 Rails.application.config.to_prepare do
-  theme_directory = 'lib/themes'
-  template_directory = "#{ theme_directory }/templates"
-  themes = []
-
-  # Collect data for `generic` themes
-  themes += collect_data(theme_directory)
-  # Collect data for `template` themes
-  themes += collect_data(template_directory)
-
-  Theme.data = themes
+  Theme.data = collect_data('lib/themes')
 end
 
 def collect_data(directory)

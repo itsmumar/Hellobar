@@ -15,12 +15,6 @@ module ThemeMacros
         type: 'generic',
         default_theme: true,
         directory: 'spec/fixtures/themes/classic'
-      }, {
-        name: 'Traffic Growth',
-        id: 'traffic-growth',
-        type: 'template',
-        element_types: ['Modal'],
-        directory: 'lib/themes/templates/traffic-growth'
       }]
     end
 

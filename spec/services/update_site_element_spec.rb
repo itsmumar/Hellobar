@@ -98,30 +98,15 @@ describe UpdateSiteElement do
   end
 
   context 'when use_question has been previously set to true' do
-    context 'and theme is a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'traffic-growth' } }
+    let!(:element) { create(:site_element, :email, use_question: true) }
+    let(:params) { { use_question: true, theme_id: 'autodetect' } }
 
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'sets use_question to false' do
-        expect { service.call }.to change(element, :use_question).from(true).to(false)
-      end
+    it 'returns true' do
+      expect(service.call).to be_truthy
     end
 
-    context 'and theme is not a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'autodetect' } }
-
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'does not touch use_question' do
-        expect { service.call }.not_to change(element, :use_question)
-      end
+    it 'does not touch use_question' do
+      expect { service.call }.not_to change(element, :use_question)
     end
   end
 
