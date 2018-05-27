@@ -32,18 +32,6 @@ export default Ember.Component.extend({
     });
   }.property('allThemes', 'elementType'),
 
-  templateThemes: function () {
-    const elementType = this.get('elementType');
-    return _.filter(this.get('allThemes'), (theme) => {
-      return theme.type === 'template' && _.includes(theme.element_types, elementType) && !theme.disabled;
-    });
-  }.property('allThemes', 'elementType'),
-
-  hasAnyTemplateThemes: function() {
-    const templateThemes = this.get('templateThemes');
-    return templateThemes && templateThemes.length > 0;
-  }.property('templateThemes'),
-
   actions: {
     autodetectColors() {
       this.get('theming').setThemeById('autodetect');
