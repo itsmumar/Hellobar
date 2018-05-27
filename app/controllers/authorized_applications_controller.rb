@@ -8,6 +8,6 @@ class AuthorizedApplicationsController < ApplicationController
   def destroy
     @access_token = Doorkeeper::AccessToken.find(params[:id])
     @access_token.update(revoked_at: Time.current)
-    redirect_to authorized_applications_path, notice: I18n.t(:notice, scope: [:doorkeeper, :flash, :authorized_applications, :destroy])
+    redirect_to authorized_applications_path, notice: I18n.t(:notice, scope: %i[doorkeeper flash authorized_applications destroy])
   end
 end
