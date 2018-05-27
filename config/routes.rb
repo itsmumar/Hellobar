@@ -161,6 +161,8 @@ Rails.application.routes.draw do
     post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
   end
 
+  resources :authorized_applications, only: %i[index destroy]
+
   get '/admin', to: 'admin/users#index', as: :admin
 
   namespace :admin do

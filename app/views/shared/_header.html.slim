@@ -55,6 +55,7 @@
           a.show-upgrade-modal.floating-button data-source='Header Drop-down' Upgrade Plan
         - else
           a.show-payment-modal.floating-button data-source='Header Drop-down' Payment Info
+        = link_to 'Authorized Applications', authorized_applications_path
         - if impersonated_user
           = active_link_to "Stop Impersonating", admin_unimpersonate_user_path, method: :delete
         - else
