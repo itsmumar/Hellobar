@@ -107,7 +107,7 @@ describe StaticScriptModel do
 
       expect(model.hellobar_container_css)
         .to eql "bar/container.css\nmodal/container.css\nslider/container.css\n" \
-                "takeover/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
+                "takeover/container.css\nalert/container.css\n" \
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
@@ -128,7 +128,7 @@ describe StaticScriptModel do
            question]
       end
 
-      let(:bar_types) { %w[Bar Modal Slider Takeover ContentUpgrade Alert] }
+      let(:bar_types) { %w[Bar Modal Slider Takeover Alert] }
 
       def all_templates
         bar_subtypes.flat_map { |subtype|
