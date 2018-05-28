@@ -94,9 +94,6 @@ describe StaticScriptModel do
     end
 
     it 'returns css for all kind of containers' do
-      expect(StaticScriptAssets)
-        .to receive(:render).with('container_common.css', site_id: site.id).and_return('container_common.css')
-
       SiteElement.types.each do |type|
         type = type.downcase
         expect(StaticScriptAssets)
@@ -109,7 +106,7 @@ describe StaticScriptModel do
       end
 
       expect(model.hellobar_container_css)
-        .to eql "container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n" \
+        .to eql "bar/container.css\nmodal/container.css\nslider/container.css\n" \
                 "takeover/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
@@ -301,7 +298,7 @@ describe StaticScriptModel do
       before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, filename| filename } }
 
       it 'returns common.css' do
-        expect(model.hellobar_element_css).to eql 'common.css'
+        expect(model.hellobar_element_css).to eql ''
       end
     end
 
@@ -310,8 +307,8 @@ describe StaticScriptModel do
       before { allow(model).to receive(:element_types).and_return ['Bar'] }
       before { allow(model).to receive(:element_themes).and_return [Theme.find('autodetect')] }
 
-      it 'returns common.css, element.css for each bar type and element.css for each theme' do
-        expect(model.hellobar_element_css).to eql "common.css\nbar/element.css\nautodetect/element.css"
+      it 'returns element.css for each bar type and element.css for each theme' do
+        expect(model.hellobar_element_css).to eql "bar/element.css\nautodetect/element.css"
       end
     end
   end

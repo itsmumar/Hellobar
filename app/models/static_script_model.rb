@@ -68,7 +68,6 @@ class StaticScriptModel
 
   def hellobar_container_css
     css = [
-      render_asset('container_common.css'),
       element_types.map { |type| render_asset(type.downcase, 'container.css') },
       element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
@@ -154,7 +153,6 @@ class StaticScriptModel
 
   def hellobar_element_css
     css = [
-      render_asset('common.css'),
       element_types.map { |type| render_asset(type.downcase, 'element.css') },
       element_themes.map { |theme| render_asset(theme.element_css_path) }
     ]
