@@ -83,7 +83,22 @@ namespace :deploy do
     end
   end
 
+  desc 'Check if modules.js exist on S3'
+  task :check_modules do
+    run_locally do
+      require 'httparty'
+      require_relative '../app/core/hellobar_modules'
+      settings = YAML.load_file(File.join(__dir__, '../config/secrets.yml'))
+      stage = fetch(:stage).to_s
+      bucket = settings.dig(stage, 'script_cdn_url')
+      url = "https://#{ bucket }/#{ HellobarModules.filename }"
+      response = HTTParty.get(url)
+      abort "#{ url } not found. Upload #{ HellobarModules.filename } first" unless response.success?
+    end
+  end
+
   # TODO: Move node and bower dependencies to some shared folder
+  before :starting, 'check_modules'
   before 'assets:precompile', 'node:yarn_install'
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
