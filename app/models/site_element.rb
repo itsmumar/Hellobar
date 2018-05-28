@@ -109,7 +109,7 @@ class SiteElement < ApplicationRecord
   end
 
   def self.types
-    [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
+    [Bar, Modal, Slider, Takeover, Alert].map(&:name)
   end
 
   def caption=(value)
