@@ -106,25 +106,8 @@ class StaticScriptModel
     end
   end
 
-  def branding_templates
-    base = Rails.root.join('lib', 'script_generator')
-
-    Dir.glob(base.join('branding', '*.html')).map { |f| Pathname.new(f) }.map do |path|
-      content = render_asset(path.relative_path_from(base))
-      { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
-    end
-  end
-
-  def content_upgrade_template
-    [{ name: 'contentupgrade', markup: render_asset('contentupgrade/contentupgrade.html') }]
-  end
-
   def gdpr_enabled
     site.gdpr_enabled?
-  end
-
-  def gdpr_template
-    [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
   end
 
   def geolocation_url

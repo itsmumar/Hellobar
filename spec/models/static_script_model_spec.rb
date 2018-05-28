@@ -183,33 +183,6 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#branding_templates' do
-    let(:templates) { model.branding_templates }
-    let(:names) { templates.map { |template| template[:name] } }
-    let(:markups) { templates.map { |template| template[:markup] } }
-
-    before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, path| path.basename.sub_ext('').to_s } }
-
-    it 'returns array of template names and markups' do
-      expected = %w[branding_add_hb branding_animated branding_gethb branding_gethb_no_track
-                    branding_not_using_hb branding_original branding_powered_by]
-
-      expect(names).to match_array expected
-      expect(markups).to match_array expected.map { |s| s.sub('branding_', '') }
-    end
-  end
-
-  describe '#content_upgrade_template' do
-    let(:templates) { model.content_upgrade_template }
-
-    before { allow(StaticScriptAssets).to receive(:render).and_return('') }
-
-    it 'returns array of template names and markups' do
-      expect(templates).to match_array [{ name: 'contentupgrade', markup: '' }]
-      expect(StaticScriptAssets).to have_received(:render).with('contentupgrade/contentupgrade.html', site_id: site.id)
-    end
-  end
-
   describe '#geolocation_url' do
     let(:geolocation_url) { 'geolocation_url' }
 
@@ -356,11 +329,11 @@ describe StaticScriptModel do
 
     it 'renders models partial to json' do
       expect(json.keys).to match_array %i[
-        preview_is_active version modules_version timestamp capabilities site_id site_url pro_secret
-        hellobar_container_css templates branding_templates content_upgrade_template
-        geolocation_url hb_backend_host tracking_url site_write_key external_tracking hellobar_element_css
+        preview_is_active version modules_version timestamp capabilities site_id site_url
+        pro_secret hellobar_container_css templates geolocation_url hb_backend_host
+        tracking_url site_write_key external_tracking hellobar_element_css
         content_upgrades content_upgrades_styles autofills rules
-        gdpr_consent gdpr_template gdpr_enabled disable_self_check
+        gdpr_consent gdpr_enabled disable_self_check
       ]
     end
 
@@ -407,15 +380,6 @@ describe StaticScriptModel do
           )
         end
       end
-    end
-  end
-
-  describe '#gdpr_template' do
-    it 'returns array of templates' do
-      expect(model.gdpr_template)
-        .to match_array(
-          [{ name: 'gdpr', markup: a_string_matching(/context\.gdpr_consent/) }]
-        )
     end
   end
 
