@@ -1,8 +1,8 @@
 class CreateSubscriber
   def initialize(contact_list, params)
     @contact_list = contact_list
-    @email = params.fetch(:email)
-    @name = params.fetch(:name)
+    @email = params.fetch(:email)&.downcase
+    @name = params.fetch(:name, nil)
   end
 
   def call
