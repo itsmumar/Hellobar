@@ -29,25 +29,6 @@ class ContactSubmissionsController < ApplicationController
     redirect_to site ? site_path(site) : sites_path
   end
 
-  def new
-    render layout: 'static'
-  end
-
-  def create
-    raise ActionController::RoutingError, 'Not Found' if params[:blank].present? # Spam catcher
-
-    email_params = params.require(:contact_submission).permit(:name, :email, :message)
-
-    if validate_email(email_params[:email])
-      ContactFormMailer.guest_message(**email_params.symbolize_keys).deliver_later
-      flash[:success] = 'Your message has been sent!'
-    else
-      flash[:error] = 'Your email is not valid. Please correct your email first.'
-    end
-
-    redirect_to new_contact_submission_path
-  end
-
   private
 
   def validate_email(email)
