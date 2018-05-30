@@ -16,7 +16,7 @@ class UpdateContactList
   attr_reader :contact_list, :params
 
   def identity
-    if embed_code? || webhooks?
+    if embed_code? || webhooks? || zapier?
       find_or_create_identity
     else
       params[:identity]
@@ -29,6 +29,10 @@ class UpdateContactList
 
   def webhooks?
     params[:provider_token] == 'webhooks'
+  end
+
+  def zapier?
+    params[:provider_token] == 'zapier'
   end
 
   def find_or_create_identity

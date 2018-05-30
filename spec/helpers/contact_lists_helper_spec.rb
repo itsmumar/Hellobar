@@ -29,7 +29,8 @@ describe ContactListsHelper, type: :helper do
         ['Maropost', :maropost, options(requires_account_id: true, requires_api_key: true)],
         ['MyEmma', :my_emma, options(requires_embed_code: true)],
         ['Vertical Response', :verticalresponse, options(oauth: true)],
-        ['Webhooks', :webhooks, options(requires_webhook_url: true)]
+        ['Webhooks', :webhooks, options(requires_webhook_url: true)],
+        ['Zapier', :zapier, options(requires_webhook_url: true)]
       ]
       expect(helper.options_for_provider_select).to match_array expected
     end
