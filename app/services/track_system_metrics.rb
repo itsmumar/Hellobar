@@ -24,7 +24,6 @@ class TrackSystemMetrics
 
   def send_event(attributes)
     event = AmplitudeAPI::Event.new({ time: Time.current }.merge(attributes))
-    binding.pry
     AmplitudeAPI.track(event)
   end
 end
