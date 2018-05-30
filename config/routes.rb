@@ -146,11 +146,8 @@ Rails.application.routes.draw do
 
   get '/auth/:provider/callback', to: 'identities#store'
 
-  resources :contact_submissions, only: [:create]
-
-  %w[email_developer generic_message].each do |sub|
-    post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
-  end
+  post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
+  post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
 
   get '/admin', to: 'admin/users#index', as: :admin
 
