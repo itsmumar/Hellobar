@@ -45,3 +45,7 @@ end
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
 end
+
+every 1.hour, roles: [:cron] do
+  rake 'system_metrics:upload'
+end
