@@ -1,6 +1,4 @@
 class ContactSubmissionsController < ApplicationController
-  before_action :authenticate_user!, except: %i[new create]
-
   include SitesHelper
 
   def email_developer
