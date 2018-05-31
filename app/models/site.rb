@@ -55,6 +55,7 @@ class Site < ApplicationRecord
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
   scope :by_url, ->(url) { protocol_ignored_url(url) }
+  scope :active, -> { script_installed.joins(:site_elements).merge(SiteElement.active) }
 
   before_validation :generate_read_write_keys
 
