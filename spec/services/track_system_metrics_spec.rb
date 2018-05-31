@@ -19,6 +19,8 @@ describe TrackSystemMetrics, :freeze do
   let(:active_sites_number) { 999 }
 
   before do
+    allow(Rails.env).to receive(:production?).and_return true
+
     allow(AmplitudeAPI::Event)
       .to receive(:new)
       .with(event_attributes)

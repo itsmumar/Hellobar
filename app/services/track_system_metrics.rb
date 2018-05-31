@@ -3,6 +3,8 @@ class TrackSystemMetrics
   DEVICE_ID = 'hello-bar'.freeze
 
   def call
+    return unless Rails.env.production?
+
     send_event(
       event_type: EVENT,
       device_id: DEVICE_ID,
