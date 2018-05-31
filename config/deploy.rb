@@ -88,7 +88,7 @@ namespace :deploy do
     run_locally do
       require 'httparty'
       require_relative '../app/core/hellobar_modules'
-      settings = YAML.load_file(File.join(__dir__, '../config/secrets.yml'))
+      settings = YAML.load_file(File.join(__dir__, 'secrets.yml'))
       stage = fetch(:stage).to_s
       bucket = settings.dig(stage, 'script_cdn_url')
       url = "https://#{ bucket }/#{ HellobarModules.filename }"
