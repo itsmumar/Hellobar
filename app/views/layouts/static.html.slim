@@ -5,7 +5,7 @@ html
 
     = render "shared/gtm_script"
     = render 'shared/favicon'
-
+    meta name="viewport" content="width=device-width, initial-scale=1"
     link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
     = stylesheet_link_tag    "static", :media => "all"
@@ -22,7 +22,6 @@ html
     main.global-content id=page_id
       .bounds-wrapper
         .logo-block
-          = link_to 'Hello Bar', root_path
 
         == yield
 

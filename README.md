@@ -209,6 +209,13 @@ To do an edge deploy:
 cap edge deploy BRANCH=other-branch
 ```
 
+### Updating hellobar modules version
+
+In order to deploy a new version of hellobar static script run following: 
+
+```
+rake modules:bump
+```
 
 ## Provisioning a new Hello Bar server
 
