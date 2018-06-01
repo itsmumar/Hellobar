@@ -26,18 +26,6 @@ every 24.hours, at: '1:00pm', roles: [:cron] do
   rake 'referrals:send_followups'
 end
 
-every 1.hour, roles: [:cron] do
-  # Disable all DynamoDB adjusting
-  # rake 'backend:adjust_dynamo_db_capacity[recent_throttled_only]'
-end
-
-# Disabling temporarily for now (due to this code being mostly bollocks and
-# causing unnecessary costs for us) until we optimize it properly and most
-# likely just remove this together with the rake task
-# every 6.hours, roles: [:cron] do
-#   rake 'backend:adjust_dynamo_db_capacity[all]'
-# end
-
 every 7.minutes, roles: [:cron] do
   rake 'site:scripts:regenerate:sample_of_least_recently_regenerated_active_sites'
 end
@@ -56,4 +44,8 @@ end
 
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
+end
+
+every 1.hour, roles: [:cron] do
+  rake 'system_metrics:upload'
 end

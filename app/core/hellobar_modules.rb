@@ -8,4 +8,10 @@ module HellobarModules
   def filename
     "modules-v#{ version }.js"
   end
+
+  def bump!
+    version.to_i.next.tap do |next_version|
+      File.write('.hellobar-modules-version', next_version)
+    end
+  end
 end
