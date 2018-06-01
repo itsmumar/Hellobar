@@ -69,8 +69,6 @@ Rails.application.routes.draw do
             post :subscribe
             post :unsubscribe
           end
-
-          resources :subscribers, only: %i[index]
         end
       end
     end
