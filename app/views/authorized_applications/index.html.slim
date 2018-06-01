@@ -1,5 +1,6 @@
-header.page-header
-  h5 Your authorized applications
+= render 'shared/setting_tabs'
+
+h5.page-header.alt Your authorized applications
 
 #authroized_applications
   - if @access_tokens.present?
