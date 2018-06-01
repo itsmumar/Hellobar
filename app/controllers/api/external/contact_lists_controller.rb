@@ -9,12 +9,12 @@ class Api::External::ContactListsController < Api::External::ApplicationControll
   end
 
   def subscribe
-    ContactListSubscribe.new(contact_list, params).call
+    UpdateContactList.new(contact_list, subscribe_params).call
     render json: contact_list, serializer: ::External::ContactListSerializer
   end
 
   def unsubscribe
-    ContactListUnsubscribe.new(contact_list).call
+    UpdateContactList.new(contact_list, unsubscribe_params).call
     render json: contact_list, serializer: ::External::ContactListSerializer
   end
 
@@ -26,5 +26,21 @@ class Api::External::ContactListsController < Api::External::ApplicationControll
 
   def contact_list
     @contact_list ||= site.contact_lists.find(params[:id])
+  end
+
+  def subscribe_params
+    {
+      provider_token: params[:provider],
+      data: {
+        webhook_url: params[:webhook_url],
+        webhook_method: params[:webhook_method]
+      }
+    }
+  end
+
+  def unsubscribe_params
+    {
+      identity: nil
+    }
   end
 end
