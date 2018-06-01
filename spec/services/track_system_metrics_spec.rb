@@ -27,7 +27,7 @@ describe TrackSystemMetrics, :freeze do
       .and_return amplitude_event
   end
 
-  it 'sends "system-metrics" event to amplitude' do
+  it 'sends `system` event to amplitude' do
     allow(Site).to receive_message_chain(:active, :count).and_return(active_sites_number)
     expect(AmplitudeAPI).to receive(:track).with(amplitude_event)
     service.call

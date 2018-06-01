@@ -1,5 +1,5 @@
 class TrackSystemMetrics
-  EVENT = 'system-metrics'.freeze
+  EVENT = 'system'.freeze
   DEVICE_ID = 'hello-bar'.freeze
 
   def call
