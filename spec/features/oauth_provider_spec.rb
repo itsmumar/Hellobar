@@ -8,13 +8,13 @@ describe 'OAuth provider', :js do
 
     def spin_oauth_client
       Capybara::Discoball.spin(FakeOAuthClient) do |client|
-        app = Doorkeeper::Application.create!({
+        Doorkeeper::Application.create!(
           name: 'TestApp',
           redirect_uri: "#{ client.url }/oauth/callback",
           scopes: 'email',
           uid: FakeOAuthClient::CLIENT_ID,
           secret: FakeOAuthClient::CLIENT_SECRET
-        })
+        )
 
         yield client
       end

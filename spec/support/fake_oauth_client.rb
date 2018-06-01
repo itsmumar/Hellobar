@@ -3,8 +3,8 @@ require 'capybara_discoball'
 
 # Define "fake" ip-api.com geolocation service (which sends hardcoded data)
 class FakeOAuthClient < Sinatra::Base
-  CLIENT_ID = 'fake_client_id'
-  CLIENT_SECRET = 'fake_client_secret'
+  CLIENT_ID = 'fake_client_id'.freeze
+  CLIENT_SECRET = 'fake_client_secret'.freeze
 
   enable :sessions
 
