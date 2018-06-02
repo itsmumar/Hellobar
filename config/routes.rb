@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :applications, :token_info
+  end
+
   resources :referrals do
     collection do
       get :accept
@@ -54,6 +58,10 @@ Rails.application.routes.draw do
           post :update_static_script_installation
         end
       end
+    end
+
+    namespace :external do
+      get '/me', to: 'user#show'
     end
   end
 
@@ -148,6 +156,8 @@ Rails.application.routes.draw do
 
   post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
   post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
+
+  resources :authorized_applications, only: %i[index destroy]
 
   get '/admin', to: 'admin/users#index', as: :admin
 

@@ -1,0 +1,22 @@
+= render 'shared/setting_tabs'
+
+h5.page-header.alt Your authorized applications
+
+#authroized_applications
+  - if @access_tokens.present?
+    table
+      thead
+        tr
+          th Application
+          th Scopes
+          th Authorized at
+          th
+      tbody
+        - @access_tokens.each do |token|
+          tr
+            td= token.application.name
+            td= token.scopes
+            td= token.created_at.to_s
+            td= link_to 'Revoke', authorized_application_path(token), method: :delete, data: { confirm: 'Are you sure?' }
+  - else
+   p Nothing to display

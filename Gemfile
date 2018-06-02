@@ -20,6 +20,9 @@ gem 'rotp'
 gem 'rqrcode'
 gem 'ruby-hmac'
 
+# OAuth provider
+gem 'doorkeeper'
+
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
 gem 'omniauth-constantcontact2', github: 'Hello-bar/omniauth-constantcontact2'
