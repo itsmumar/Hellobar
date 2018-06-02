@@ -9,6 +9,11 @@ module RequestSpecHelper
     Hash['Authorization' => "Bearer #{ token }"]
   end
 
+  def create_oauth_token(user, scopes:)
+    application = Doorkeeper::Application.create!(name: 'App', redirect_uri: 'https://app.con/auth/callback')
+    Doorkeeper::AccessToken.create!(application: application, resource_owner_id: user.id, scopes: scopes).token
+  end
+
   private
 
   def deep_with_indifferent_access(data)
