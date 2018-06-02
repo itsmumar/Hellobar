@@ -101,6 +101,6 @@ class ContactList < ApplicationRecord
     # this point is not the case as the record is already marked as being
     # deleted (thanks, paranoia), so we have to nullify the reference manually
     # https://github.com/rubysherpas/paranoia/issues/413
-    update_attribute :identity_id, nil
+    update_attribute(:identity_id, nil) if persisted?
   end
 end
