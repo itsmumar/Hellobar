@@ -12,13 +12,13 @@ describe TrackSystemMetrics, :freeze do
 
   let(:event_properties) do
     {
-      active_sites_number: active_sites_number,
-      active_users_number: active_users_number
+      active_sites: active_sites,
+      active_users: active_users
     }
   end
 
-  let(:active_sites_number) { 5 }
-  let(:active_users_number) { 6 }
+  let(:active_sites) { 5 }
+  let(:active_users) { 6 }
 
   before do
     allow(Rails.env).to receive(:production?).and_return true
@@ -28,8 +28,8 @@ describe TrackSystemMetrics, :freeze do
       .with(event_attributes)
       .and_return amplitude_event
 
-    allow(Site).to receive_message_chain(:active, :count).and_return(active_sites_number)
-    allow(User).to receive_message_chain(:joins, :merge, :count).and_return(active_users_number)
+    allow(Site).to receive_message_chain(:active, :count).and_return(active_sites)
+    allow(User).to receive_message_chain(:joins, :merge, :count).and_return(active_users)
   end
 
   it 'sends `system` event to amplitude' do
