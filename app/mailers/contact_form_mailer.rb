@@ -17,20 +17,6 @@ class ContactFormMailer < ApplicationMailer
     mail params
   end
 
-  def guest_message(name:, email:, message:)
-    preview = build_preview(message)
-
-    params = {
-      subject: "Contact Form: #{ preview }",
-      from: "#{ name } <#{ email }>"
-    }
-
-    mail(params) do |format|
-      format.text { render plain: message }
-      format.html { render html: message }
-    end
-  end
-
   def forgot_email(site_url:, first_name:, last_name:, email:)
     @site_url = site_url
     @email = email

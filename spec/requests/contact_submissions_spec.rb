@@ -1,63 +1,6 @@
 describe ContactSubmissionsController do
   around { |example| perform_enqueued_jobs(&example) }
 
-  describe 'GET #new' do
-    it 'responds with success' do
-      get new_contact_submission_path
-
-      expect(response).to be_success
-    end
-  end
-
-  describe 'POST #create' do
-    let(:email) { 'kaitlen@hellobar.com' }
-
-    let(:params) do
-      {
-        contact_submission: {
-          email: email,
-          name: 'Kaitlen',
-          message: 'Hi Kaitlen'
-        }
-      }
-    end
-
-    it 'redirects to new_contact_submission_path' do
-      post contact_submissions_path, params
-
-      expect(response).to redirect_to new_contact_submission_path
-    end
-
-    it 'sends email' do
-      expect(ContactFormMailer)
-        .to receive(:guest_message)
-        .with(params[:contact_submission])
-        .and_call_original.twice
-
-      post contact_submissions_path, params
-
-      expect(last_email_sent)
-        .to have_subject "Contact Form: #{ params[:contact_submission][:message][0..50] }"
-    end
-
-    context 'when the spam catcher field "blank" is not blank' do
-      it 'raises an error' do
-        expect { post contact_submissions_path, blank: 'not blank' }
-          .to raise_error(ActionController::RoutingError)
-      end
-    end
-
-    context 'with invalid email' do
-      let(:email) { 'invalid' }
-
-      it 'does not send email' do
-        expect(ContactFormMailer).not_to receive(:guest_message)
-
-        post contact_submissions_path, params
-      end
-    end
-  end
-
   describe 'POST #email_developer' do
     let!(:user) { create :user }
     let!(:site) { create :site, user: user }
