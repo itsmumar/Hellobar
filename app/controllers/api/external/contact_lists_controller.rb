@@ -1,8 +1,6 @@
 class Api::External::ContactListsController < Api::External::ApplicationController
   before_action -> { doorkeeper_authorize! :contact_lists }
 
-  wrap_parameters false
-
   def index
     contact_lists = site.contact_lists.where(identity_id: nil).to_a
     render json: contact_lists.to_a, each_serializer: ::External::ContactListSerializer
