@@ -43,27 +43,6 @@ describe ContactFormMailer do
     include_examples 'subject with message preview'
   end
 
-  describe '#guest_message' do
-    let(:message) { 'message' }
-    let(:email) { 'email@example.com' }
-    let(:name) { 'Name' }
-    let(:mail) { ContactFormMailer.guest_message message: message, name: name, email: email }
-
-    let(:subject) { "Contact Form: #{ message }" }
-
-    it 'renders the headers' do
-      expect(mail.subject).to eq subject
-      expect(mail.to).to eq ['support@hellobar.com']
-      expect(mail.from).to eq [email]
-    end
-
-    it 'renders the body' do
-      expect(mail.body.encoded).to match('message')
-    end
-
-    include_examples 'subject with message preview'
-  end
-
   describe '#forgot_email' do
     let(:params) do
       {

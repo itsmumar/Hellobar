@@ -61,6 +61,8 @@ describe SubscribeContactWorker do
     let(:sqs_msg) { double('sqs_msg', delete: true, body: 'sqs msg body', queue_name: 'a queue') }
     let(:perform) { job.new.perform(sqs_msg, contact) }
 
+    before { allow(Shoryuken.logger).to receive(:error) }
+
     it 'calls on SyncOneContactList' do
       expect(SubscribeContact).to receive_service_call.with(contact)
       perform

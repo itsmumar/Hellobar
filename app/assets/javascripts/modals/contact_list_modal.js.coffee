@@ -438,6 +438,7 @@ class @ContactListModal extends Modal
       )
 
     if value == "0" # user selected "in Hello Bar only"
+      @options.identity = null
       @blocks.hellobarOnly.show()
       @blocks.instructions.hide()
       @blocks.nevermind.hide()
@@ -449,8 +450,11 @@ class @ContactListModal extends Modal
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
+      @options.identity = data if data?.provider
+
       lists = data?.lists
       tags = data?.tags
+
       if data and (lists or tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()
