@@ -51,8 +51,8 @@ Doorkeeper.configure do
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  default_scopes  :email
-  optional_scopes :sites, :contact_lists
+  # default_scopes  []
+  optional_scopes :email, :sites, :contact_lists
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

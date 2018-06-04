@@ -83,6 +83,8 @@ FactoryBot.define do
 
     trait :zapier do
       identity { create :identity, :zapier, site: site }
+
+      data { { webhook_url: 'http://zapier.com', webhook_method: 'POST' } }
     end
 
     trait :embed_code_invalid do
