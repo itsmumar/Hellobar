@@ -17,7 +17,8 @@ class TrackSystemMetrics
   def event_properties
     {
       active_sites: active_sites,
-      active_users: active_users
+      active_users: active_users,
+      active_site_elements: active_site_elements
     }
   end
 
