@@ -16,12 +16,17 @@ class TrackSystemMetrics
 
   def event_properties
     {
-      active_sites_number: active_sites_number
+      active_sites_number: active_sites_number,
+      active_users_number: active_users_number
     }
   end
 
   def active_sites_number
     Site.active.count
+  end
+
+  def active_users_number
+    User.joins(:sites).merge(Site.active).count
   end
 
   def send_event(attributes)
