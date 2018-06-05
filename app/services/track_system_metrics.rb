@@ -19,7 +19,8 @@ class TrackSystemMetrics
       active_sites: active_sites,
       active_users: active_users,
       active_site_elements: active_site_elements,
-      active_paid_subscriptions: active_paid_subscriptions
+      active_paid_subscriptions: active_paid_subscriptions,
+      paying_users: paying_users
     }
   end
 
@@ -37,6 +38,13 @@ class TrackSystemMetrics
 
   def active_paid_subscriptions
     Subscription.paid.merge(Bill.non_free).count
+  end
+
+  def paying_users
+    User
+      .joins(credit_cards: { billing_attempts: { bill: :subscription } })
+      .merge(Subscription.paid.merge(Bill.non_free))
+      .count
   end
 
   def send_event(attributes)

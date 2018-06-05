@@ -6,13 +6,15 @@ describe TrackSystemMetrics, :freeze do
   let(:active_users) { 6 }
   let(:active_site_elements) { 7 }
   let(:active_paid_subscriptions) { 8 }
+  let(:paying_users) { active_users } # uses the same allow stub
 
   let(:event_properties) do
     {
       active_sites: active_sites,
       active_users: active_users,
       active_site_elements: active_site_elements,
-      active_paid_subscriptions: active_paid_subscriptions
+      active_paid_subscriptions: active_paid_subscriptions,
+      paying_users: paying_users
     }
   end
 
