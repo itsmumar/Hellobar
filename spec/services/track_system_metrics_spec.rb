@@ -6,6 +6,7 @@ describe TrackSystemMetrics, :freeze do
   let(:active_users) { 6 }
   let(:active_site_elements) { 7 }
   let(:active_paid_subscriptions) { 8 }
+  let(:active_paid_subscription_average_days) { 30.0 }
   let(:paying_users) { active_users } # uses the same `allow` stub
   let(:pending_bills_sum) { 10000 }
   let(:failed_bills_sum) { 1000 }
@@ -18,6 +19,7 @@ describe TrackSystemMetrics, :freeze do
       active_users: active_users,
       active_site_elements: active_site_elements,
       active_paid_subscriptions: active_paid_subscriptions,
+      active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
@@ -47,6 +49,7 @@ describe TrackSystemMetrics, :freeze do
     allow(User).to receive_message_chain(:joins, :merge, :count).and_return(active_users)
     allow(SiteElement).to receive_message_chain(:joins, :merge, :count).and_return(active_site_elements)
     allow(Subscription).to receive_message_chain(:paid, :merge, :count).and_return(active_paid_subscriptions)
+    allow(Subscription).to receive_message_chain(:paid, :merge, :average).and_return(30.days.ago.to_i)
     allow(Bill).to receive_message_chain(:pending, :sum).and_return(pending_bills_sum)
     allow(Bill).to receive_message_chain(:failed, :sum).and_return(failed_bills_sum)
     allow(Bill).to receive_message_chain(:voided, :where, :sum).and_return(future_voided_bills_sum)

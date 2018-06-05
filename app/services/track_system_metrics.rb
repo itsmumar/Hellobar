@@ -20,6 +20,7 @@ class TrackSystemMetrics
       active_users: active_users,
       active_site_elements: active_site_elements,
       active_paid_subscriptions: active_paid_subscriptions,
+      active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
@@ -42,6 +43,16 @@ class TrackSystemMetrics
 
   def active_paid_subscriptions
     Subscription.paid.merge(Bill.non_free).count
+  end
+
+  def active_paid_subscription_average_days
+    average_timestamp =
+      Subscription
+      .paid
+      .merge(Bill.non_free)
+      .average('UNIX_TIMESTAMP(subscriptions.created_at)').to_i
+
+    (Time.current.to_i - average_timestamp) / (24 * 60 * 60.0)
   end
 
   def paying_users
