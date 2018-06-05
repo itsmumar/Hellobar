@@ -22,7 +22,8 @@ class TrackSystemMetrics
       active_paid_subscriptions: active_paid_subscriptions,
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
-      failed_bills_sum: failed_bills_sum
+      failed_bills_sum: failed_bills_sum,
+      future_voided_bills_sum: future_voided_bills_sum
     }
   end
 
@@ -55,6 +56,10 @@ class TrackSystemMetrics
 
   def failed_bills_sum
     Bill.failed.sum(:amount)
+  end
+
+  def future_voided_bills_sum
+    Bill.voided.where('bills.bill_at > ?', Time.current).sum(:amount)
   end
 
   def send_event(attributes)

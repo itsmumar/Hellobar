@@ -9,6 +9,7 @@ describe TrackSystemMetrics, :freeze do
   let(:paying_users) { active_users } # uses the same allow stub
   let(:pending_bills_sum) { 10000 }
   let(:failed_bills_sum) { 1000 }
+  let(:future_voided_bills_sum) { 3000 }
 
   let(:event_properties) do
     {
@@ -18,7 +19,8 @@ describe TrackSystemMetrics, :freeze do
       active_paid_subscriptions: active_paid_subscriptions,
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
-      failed_bills_sum: failed_bills_sum
+      failed_bills_sum: failed_bills_sum,
+      future_voided_bills_sum: future_voided_bills_sum
     }
   end
 
@@ -45,6 +47,7 @@ describe TrackSystemMetrics, :freeze do
     allow(Subscription).to receive_message_chain(:paid, :merge, :count).and_return(active_paid_subscriptions)
     allow(Bill).to receive_message_chain(:pending, :sum).and_return(pending_bills_sum)
     allow(Bill).to receive_message_chain(:failed, :sum).and_return(failed_bills_sum)
+    allow(Bill).to receive_message_chain(:voided, :where, :sum).and_return(future_voided_bills_sum)
   end
 
   it 'sends `system` event to amplitude' do
