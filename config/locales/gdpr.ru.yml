@@ -1,0 +1,16 @@
+ru:
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " и "
+      last_word_connector: " и "
+  gdpr:
+    consent: Я согласен(а) иногда получать %{topics} по электронной почте.
+    communication_types:
+      newsletter: информационные сообщения
+      promotional: рекламные материалы
+      partnership: парнёрские соглашения
+      product: информацию о продуктах и услугах
+      research: данные исследований рынка
+    agreement: "Я прочитал(а) и принял(а) условия <a target=\"_blank\" href=\"%{privacy_policy_url}\">Политики Конфиденциальности</a> and <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">Оказания Услуг</a>."
+    action: Принять

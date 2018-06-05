@@ -46,4 +46,13 @@ h5.page-header.alt GDPR Compliance
     = form.label :terms_and_conditions_url
     = form.text_field :terms_and_conditions_url
 
-  = form.button :submit, 'Save', class: 'button'
+  h5.site-privacy__subhead Language
+
+  p The GDPR consent text that will be seen on your site elements is not editable but we have translated the text into a number of different languages for you. Please choose the language you would like to display this text in below.
+
+  .site-privacy__column
+    .select-wrapper
+      = form.input :gdpr_consest_language, collection: Site::GDPR_LANGUAGES, label: false, include_blank: false
+
+  .site-privacy__actions
+    = form.button :submit, 'Save', class: 'button'

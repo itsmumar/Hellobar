@@ -18,6 +18,20 @@ class Site < ApplicationRecord
     'offer_font_family_name' => 'Open Sans'
   }.freeze
 
+  GDPR_LANGUAGES = {
+    'English [Default]' => 'en',
+    'Portuguese (Europe)' => 'pt_PT',
+    'Portuguese (Brasil)' => 'pt_BR',
+    'French' => 'fr',
+    'Spanish (Latin America)' => 'sp',
+    'Italian' => 'it',
+    'Polish' => 'pl',
+    'Russian' => 'ru',
+    'German' => 'de',
+    'Greek' => 'gr',
+    'Chinese (Traditional)' => 'cn'
+  }.freeze
+
   acts_as_paranoid
 
   has_one :whitelabel, dependent: :destroy
@@ -222,13 +236,24 @@ class Site < ApplicationRecord
   end
 
   def gdpr_consent
-    text_map = {
-      'product' => 'product/service',
-      'research' => 'market research'
-    }
-    sentence = communication_types.map { |type| text_map[type] || type }.to_sentence
+    topics = communication_types.map do |type|
+      I18n.t("gdpr.communication_types.#{ type }", locale: gdpr_consest_language)
+    end
 
-    "I consent to occasionally receive #{ sentence } emails."
+    topics = topics.to_sentence(locale: gdpr_consest_language)
+
+    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consest_language)
+  end
+
+  def gdpr_agreement
+    I18n.t('gdpr.agreement',
+      locale: gdpr_consest_language,
+      privacy_policy_url: privacy_policy_url,
+      terms_and_conditions_url: terms_and_conditions_url)
+  end
+
+  def gdpr_action
+    I18n.t('gdpr.action', locale: gdpr_consest_language)
   end
 
   private
