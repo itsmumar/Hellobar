@@ -8,6 +8,7 @@ describe TrackSystemMetrics, :freeze do
   let(:active_paid_subscriptions) { 8 }
   let(:paying_users) { active_users } # uses the same allow stub
   let(:pending_bills_sum) { 10000 }
+  let(:failed_bills_sum) { 1000 }
 
   let(:event_properties) do
     {
@@ -16,7 +17,8 @@ describe TrackSystemMetrics, :freeze do
       active_site_elements: active_site_elements,
       active_paid_subscriptions: active_paid_subscriptions,
       paying_users: paying_users,
-      pending_bills_sum: pending_bills_sum
+      pending_bills_sum: pending_bills_sum,
+      failed_bills_sum: failed_bills_sum
     }
   end
 
@@ -42,6 +44,7 @@ describe TrackSystemMetrics, :freeze do
     allow(SiteElement).to receive_message_chain(:joins, :merge, :count).and_return(active_site_elements)
     allow(Subscription).to receive_message_chain(:paid, :merge, :count).and_return(active_paid_subscriptions)
     allow(Bill).to receive_message_chain(:pending, :sum).and_return(pending_bills_sum)
+    allow(Bill).to receive_message_chain(:failed, :sum).and_return(failed_bills_sum)
   end
 
   it 'sends `system` event to amplitude' do

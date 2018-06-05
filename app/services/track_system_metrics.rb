@@ -21,7 +21,8 @@ class TrackSystemMetrics
       active_site_elements: active_site_elements,
       active_paid_subscriptions: active_paid_subscriptions,
       paying_users: paying_users,
-      pending_bills_sum: pending_bills_sum
+      pending_bills_sum: pending_bills_sum,
+      failed_bills_sum: failed_bills_sum
     }
   end
 
@@ -50,6 +51,10 @@ class TrackSystemMetrics
 
   def pending_bills_sum
     Bill.pending.sum(:amount)
+  end
+
+  def failed_bills_sum
+    Bill.failed.sum(:amount)
   end
 
   def send_event(attributes)
