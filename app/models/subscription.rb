@@ -20,7 +20,6 @@ class Subscription < ApplicationRecord
   after_initialize :set_initial_values
 
   scope :paid, -> { joins(:bills).merge(Bill.paid.active).distinct }
-  scope :active, -> { paid.merge(Bill.without_refunds.without_chargebacks) }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
   scope :ended_trial, -> { where('trial_end_date is not null AND trial_end_date < ?', Time.current) }
   scope :trial, -> { where('trial_end_date is not null AND trial_end_date > ?', Time.current) }
