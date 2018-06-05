@@ -18,7 +18,8 @@ class TrackSystemMetrics
     {
       active_sites: active_sites,
       active_users: active_users,
-      active_site_elements: active_site_elements
+      active_site_elements: active_site_elements,
+      active_paid_subscriptions: active_paid_subscriptions
     }
   end
 
@@ -32,6 +33,10 @@ class TrackSystemMetrics
 
   def active_site_elements
     SiteElement.joins(rule: :site).merge(Site.active).count
+  end
+
+  def active_paid_subscriptions
+    Subscription.paid.merge(Bill.non_free).count
   end
 
   def send_event(attributes)

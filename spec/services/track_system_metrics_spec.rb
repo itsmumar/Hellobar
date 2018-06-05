@@ -5,12 +5,14 @@ describe TrackSystemMetrics, :freeze do
   let(:active_sites) { 5 }
   let(:active_users) { 6 }
   let(:active_site_elements) { 7 }
+  let(:active_paid_subscriptions) { 8 }
 
   let(:event_properties) do
     {
       active_sites: active_sites,
       active_users: active_users,
-      active_site_elements: active_site_elements
+      active_site_elements: active_site_elements,
+      active_paid_subscriptions: active_paid_subscriptions
     }
   end
 
@@ -34,6 +36,7 @@ describe TrackSystemMetrics, :freeze do
     allow(Site).to receive_message_chain(:active, :count).and_return(active_sites)
     allow(User).to receive_message_chain(:joins, :merge, :count).and_return(active_users)
     allow(SiteElement).to receive_message_chain(:joins, :merge, :count).and_return(active_site_elements)
+    allow(Subscription).to receive_message_chain(:paid, :merge, :count).and_return(active_paid_subscriptions)
   end
 
   it 'sends `system` event to amplitude' do
