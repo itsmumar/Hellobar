@@ -2,8 +2,9 @@ describe TrackSystemMetrics, :freeze do
   let(:service) { TrackSystemMetrics.new }
   let(:amplitude_event) { instance_double(AmplitudeAPI::Event) }
 
+  let(:installed_sites) { 6 }
   let(:active_sites) { 5 }
-  let(:active_users) { 6 }
+  let(:active_users) { 9 }
   let(:active_site_elements) { 7 }
   let(:active_paid_subscriptions) { 8 }
   let(:active_paid_pro_subscriptions) { 6 }
@@ -18,6 +19,7 @@ describe TrackSystemMetrics, :freeze do
 
   let(:event_properties) do
     {
+      installed_sites: installed_sites,
       active_sites: active_sites,
       active_users: active_users,
       active_site_elements: active_site_elements,
@@ -51,6 +53,7 @@ describe TrackSystemMetrics, :freeze do
       .with(event_attributes)
       .and_return amplitude_event
 
+    allow(Site).to receive_message_chain(:script_installed, :count).and_return(installed_sites)
     allow(Site).to receive_message_chain(:active, :count).and_return(active_sites)
     allow(User).to receive_message_chain(:joins, :merge, :count).and_return(active_users)
     allow(SiteElement).to receive_message_chain(:joins, :merge, :count).and_return(active_site_elements)

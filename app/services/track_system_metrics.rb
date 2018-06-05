@@ -16,6 +16,7 @@ class TrackSystemMetrics
 
   def event_properties
     {
+      installed_sites: installed_sites,
       active_sites: active_sites,
       active_users: active_users,
       active_site_elements: active_site_elements,
@@ -30,6 +31,10 @@ class TrackSystemMetrics
       future_voided_bills_sum: future_voided_bills_sum,
       last_month_voided_bills_sum: last_month_voided_bills_sum
     }
+  end
+
+  def installed_sites
+    Site.script_installed.count
   end
 
   def active_sites
