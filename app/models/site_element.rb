@@ -54,21 +54,21 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_redirect_url_allowed, if: :email?
   validate :ensure_custom_redirect_url_configured, if: :email?
 
-  scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
-  scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
-  scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
-  scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
-  scope :content_upgrades, -> { where("type = 'ContentUpgrade'") }
-  scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
+  scope :paused, -> { where(paused: true).where.not(type: 'ContentUpgrade') }
+  scope :active, -> { where(paused: false).where.not(type: 'ContentUpgrade') }
+  scope :paused_content_upgrades, -> { where(paused: true).where(type: 'ContentUpgrade') }
+  scope :active_content_upgrades, -> { where(paused: false).where(type: 'ContentUpgrade') }
+  scope :content_upgrades, -> { where(type: 'ContentUpgrade') }
+  scope :has_performance, -> { where.not(element_subtype: 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
   scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
-  scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
+  scope :social_subtype, -> { where("site_elements.element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
-  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
+  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order(created_at: :desc).limit(limit).select { |se| se.announcement? || se.converted? } }
   scope :matching_content, ->(*query) { matching(:content, *query) }
   scope :wordpress_bars, -> { where.not(wordpress_bar_id: nil) }
 

@@ -396,7 +396,7 @@ describe ChangeSubscription, :freeze do
       end
 
       context 'when payment fails' do
-        let(:last_bill) { site.reload.current_subscription.bills.with_amount.last }
+        let(:last_bill) { site.reload.current_subscription.bills.non_free.last }
 
         it 'returns problem bill' do
           expect {
