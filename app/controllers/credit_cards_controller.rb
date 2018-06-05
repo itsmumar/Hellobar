@@ -1,8 +1,8 @@
 class CreditCardsController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_site
 
   def index
-    load_site if params[:site_id] # not required for this action
     subscription_credit_card_id = @site.current_subscription.credit_card_id if @site
 
     response = {
@@ -12,6 +12,13 @@ class CreditCardsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: response }
+    end
+  end
+
+  def create
+    credit_card = CreateCreditCard.new(@site, current_user, params).call
+    respond_to do |format|
+      format.json { render json: credit_card }
     end
   end
 end

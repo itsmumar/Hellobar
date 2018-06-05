@@ -3,30 +3,7 @@ class SubscriptionsController < ApplicationController
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
-  # creates a new credit card and updates subscription
-  def create
-    load_site
-
-    unless Permissions.view_bills?(current_user, @site)
-      respond_to do |format|
-        format.json do
-          render json: {
-            errors: ['Contact the account owner to upgrade this site.']
-          }, status: :unprocessable_entity
-        end
-      end
-      return
-    end
-
-    credit_card = CreateCreditCard.new(@site, current_user, params).call
-    same_subscription, bill = change_subscription(credit_card)
-
-    respond_to do |format|
-      format.json { render json: bill, serializer: BillSerializer, scope: { same_subscription: same_subscription } }
-    end
-  end
-
-  # updates subscription or credit card
+  # updates subscription
   def update
     load_site
 
@@ -34,7 +11,9 @@ class SubscriptionsController < ApplicationController
     same_subscription, bill = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json { render json: bill, serializer: BillSerializer, scope: { same_subscription: same_subscription } }
+      format.json {
+        render json: bill, serializer: BillSerializer, scope: { same_subscription: same_subscription }
+      }
     end
   end
 
