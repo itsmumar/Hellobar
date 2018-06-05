@@ -20,6 +20,9 @@ class TrackSystemMetrics
       active_users: active_users,
       active_site_elements: active_site_elements,
       active_paid_subscriptions: active_paid_subscriptions,
+      active_paid_pro_subscriptions: active_paid_pro_subscriptions,
+      active_paid_growth_subscriptions: active_paid_growth_subscriptions,
+      active_paid_enterprise_subscriptions: active_paid_enterprise_subscriptions,
       active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
@@ -43,6 +46,18 @@ class TrackSystemMetrics
 
   def active_paid_subscriptions
     Subscription.paid.merge(Bill.non_free).count
+  end
+
+  def active_paid_pro_subscriptions
+    Subscription.paid.pro.merge(Bill.non_free).count
+  end
+
+  def active_paid_growth_subscriptions
+    Subscription.paid.growth.merge(Bill.non_free).count
+  end
+
+  def active_paid_enterprise_subscriptions
+    Subscription.paid.enterprise.merge(Bill.non_free).count
   end
 
   def active_paid_subscription_average_days
