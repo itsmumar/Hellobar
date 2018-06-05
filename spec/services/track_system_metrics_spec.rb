@@ -6,10 +6,11 @@ describe TrackSystemMetrics, :freeze do
   let(:active_users) { 6 }
   let(:active_site_elements) { 7 }
   let(:active_paid_subscriptions) { 8 }
-  let(:paying_users) { active_users } # uses the same allow stub
+  let(:paying_users) { active_users } # uses the same `allow` stub
   let(:pending_bills_sum) { 10000 }
   let(:failed_bills_sum) { 1000 }
   let(:future_voided_bills_sum) { 3000 }
+  let(:last_month_voided_bills_sum) { future_voided_bills_sum } # uses the same `allow` stub
 
   let(:event_properties) do
     {
@@ -20,7 +21,8 @@ describe TrackSystemMetrics, :freeze do
       paying_users: paying_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
-      future_voided_bills_sum: future_voided_bills_sum
+      future_voided_bills_sum: future_voided_bills_sum,
+      last_month_voided_bills_sum: last_month_voided_bills_sum
     }
   end
 
