@@ -72,7 +72,7 @@ class TrackSystemMetrics
       .merge(Bill.non_free)
       .average('UNIX_TIMESTAMP(subscriptions.created_at)').to_i
 
-    (Time.current.to_i - average_timestamp) / (24 * 60 * 60.0)
+    (Time.current.to_i - average_timestamp) / 1.day.to_f
   end
 
   def paying_users
