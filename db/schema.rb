@@ -294,14 +294,6 @@ ActiveRecord::Schema.define(version: 20180524132956) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
-  create_table "partners", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "email",      limit: 255
-    t.string   "url",        limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
     t.integer  "tokenizable_id",   limit: 4
