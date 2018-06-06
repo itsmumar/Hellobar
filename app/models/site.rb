@@ -23,13 +23,13 @@ class Site < ApplicationRecord
     'Portuguese (Europe)' => 'pt',
     'Portuguese (Brasil)' => 'pt_BR',
     'French' => 'fr',
-    'Spanish (Latin America)' => 'sp',
+    'Spanish (Latin America)' => 'es',
     'Italian' => 'it',
     'Polish' => 'pl',
     'Russian' => 'ru',
     'German' => 'de',
     'Greek' => 'gr',
-    'Chinese (Traditional)' => 'cn'
+    'Chinese (Traditional)' => 'zh-CN'
   }.freeze
 
   acts_as_paranoid
