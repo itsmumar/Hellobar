@@ -140,7 +140,7 @@ Rails.application.routes.draw do
   end
 
   resources :credit_cards, only: %i[index create]
-  resource :subscription, only: %i[create update]
+  resource :subscription, only: %i[update]
   resources :bills, only: :show do
     put :pay, on: :member
   end

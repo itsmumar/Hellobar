@@ -5,9 +5,9 @@ describe 'Subscriptions requests' do
   context 'when unauthenticated' do
     before { create :credit_card, user: user }
 
-    describe 'POST :create' do
+    describe 'POST :update' do
       it 'responds with a redirect to the login page' do
-        post subscription_path
+        put subscription_path
 
         expect(response).to redirect_to(/sign_in/)
       end
