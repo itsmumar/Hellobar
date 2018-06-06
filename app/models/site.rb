@@ -20,7 +20,7 @@ class Site < ApplicationRecord
 
   GDPR_LANGUAGES = {
     'English [Default]' => 'en',
-    'Portuguese (Europe)' => 'pt_PT',
+    'Portuguese (Europe)' => 'pt',
     'Portuguese (Brasil)' => 'pt_BR',
     'French' => 'fr',
     'Spanish (Latin America)' => 'sp',
