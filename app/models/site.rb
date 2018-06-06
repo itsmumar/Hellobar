@@ -18,20 +18,6 @@ class Site < ApplicationRecord
     'offer_font_family_name' => 'Open Sans'
   }.freeze
 
-  GDPR_LANGUAGES = {
-    'English [Default]' => 'en',
-    'Portuguese (Europe)' => 'pt',
-    'Portuguese (Brasil)' => 'pt_BR',
-    'French' => 'fr',
-    'Spanish (Latin America)' => 'es',
-    'Italian' => 'it',
-    'Polish' => 'pl',
-    'Russian' => 'ru',
-    'German' => 'de',
-    'Greek' => 'gr',
-    'Chinese (Traditional)' => 'zh-CN'
-  }.freeze
-
   acts_as_paranoid
 
   has_one :whitelabel, dependent: :destroy
@@ -78,6 +64,7 @@ class Site < ApplicationRecord
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
   validates :communication_types, presence: true, on: :update_privacy
+  validates :gdpr_consent_language, inclusion: { in: I18n.t('gdpr.languages').keys.map(&:to_s) }
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
@@ -237,7 +224,7 @@ class Site < ApplicationRecord
 
   def gdpr_consent
     topics = communication_types.map do |type|
-      I18n.t("gdpr.communication_types.#{ type }", locale: gdpr_consent_language)
+      I18n.t(type, scope: 'gdpr.communication_types', locale: gdpr_consent_language)
     end
 
     topics = topics.to_sentence(locale: gdpr_consent_language)

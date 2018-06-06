@@ -1,5 +1,17 @@
 en:
   gdpr:
+    languages:
+      en: English [Default]
+      pt: Portuguese (Europe)
+      pt_BR: Portuguese (Brasil)
+      fr: French
+      es: Spanish (Latin America)
+      it: Italian
+      pl: Polish
+      ru: Russian
+      de: German
+      el: Greek
+      zh-CN: Chinese (Traditional)
     consent: I consent to occasionally receive %{topics} emails.
     communication_types:
       newsletter: newsletter
