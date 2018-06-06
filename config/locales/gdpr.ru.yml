@@ -12,5 +12,5 @@ ru:
       partnership: парнёрские соглашения
       product: информацию о продуктах и услугах
       research: данные исследований рынка
-    agreement: "Я прочитал(а) и принял(а) условия <a target=\"_blank\" href=\"%{privacy_policy_url}\">Политики Конфиденциальности</a> and <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">Оказания Услуг</a>."
-    action: Принять
+    agreement: "Я прочитал(а) и принял(а) условия <a target=\"_blank\" href=\"%{privacy_policy_url}\">Политики Конфиденциальности</a> а также <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">Условия Оказания Услуг</a>."
+    action: Отправить
