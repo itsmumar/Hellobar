@@ -11,21 +11,13 @@ class SubscriptionsController < ApplicationController
     same_subscription, bill = change_subscription(credit_card)
 
     respond_to do |format|
-      format.json {
+      format.json do
         render json: bill, serializer: BillSerializer, scope: { same_subscription: same_subscription }
-      }
+      end
     end
   end
 
   private
-
-  def record_invalid(e)
-    respond_to do |format|
-      format.json do
-        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
-      end
-    end
-  end
 
   def change_subscription(credit_card)
     subscription_service = ChangeSubscription.new(@site, params[:billing], credit_card)

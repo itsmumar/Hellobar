@@ -33,7 +33,6 @@ class @NewCreditCardModal extends Modal
       @_unbindFormSubmission() # prevent double submissions
       @_clearErrors()
       @$modal.find("a.submit").addClass("cancel")
-
       $form = @$modal.find('form')
 
       $.ajax
@@ -42,11 +41,8 @@ class @NewCreditCardModal extends Modal
         method: 'POST'
         data: $form.serialize()
         success: (data, status, xhr) =>
-          options =
-            package: window.site.current_subscription
-            site: window.site
-            credit_card_id: data.id
-          new PaymentModal(options).open()
+          @_openPaymentForm(data) if @options.open_payment_form
+          displayFlashMessage('Credit card has been successfully created.')
           @close()
 
         error: (xhr, status, error) =>
@@ -55,6 +51,13 @@ class @NewCreditCardModal extends Modal
 
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
+
+  _openPaymentForm: (data) ->
+    options =
+      package: window.site.current_subscription
+      site: window.site
+      credit_card_id: data.id
+    new PaymentModal(options).open()
 
   _bindDynamicStateLength: ->
     @$modal.on 'change', '#credit_card_country', (event) =>
@@ -66,7 +69,7 @@ class @NewCreditCardModal extends Modal
     @$modal.find('#credit_card_country').trigger('change')
 
   _unbindFormSubmission: ->
-    @$modal.find('a.submit').off('click')
+    @$modal.off('click', 'a.submit')
 
   _url: ->
     '/credit_cards/?site_id=' + @options.site.id

@@ -2,6 +2,8 @@ class CreditCardsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
 
+  rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+
   def index
     subscription_credit_card_id = @site.current_subscription.credit_card_id if @site
 
@@ -17,8 +19,6 @@ class CreditCardsController < ApplicationController
 
   def create
     credit_card = CreateCreditCard.new(@site, current_user, params).call
-    respond_to do |format|
-      format.json { render json: credit_card }
-    end
+    render json: credit_card
   end
 end

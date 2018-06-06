@@ -28,10 +28,10 @@ section
     p
       - if @site.current_subscription && @site.current_subscription.credit_card
         = @site.current_subscription.credit_card.number
-        = link_to 'Add or change card', '#', class: 'show-payment-modal', data: {source: "Add or change card"}
       - else
         small
           | (no credit card on file)
+      = link_to 'Add new credit card', '#', class: 'show-new-credit-card-modal'
 
   section
     label Info

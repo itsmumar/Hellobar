@@ -99,7 +99,7 @@ class @PaymentModal extends Modal
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
       event.preventDefault()
-      new NewCreditCardModal(site: @options.site).open()
+      new NewCreditCardModal(site: @options.site, open_payment_form: true).open()
       @close()
 
 
