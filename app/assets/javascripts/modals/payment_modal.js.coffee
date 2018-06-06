@@ -99,9 +99,14 @@ class @PaymentModal extends Modal
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
       event.preventDefault()
-      new NewCreditCardModal(site: @options.site, open_payment_form: true).open()
-      @close()
+      options =
+        site: @options.site
+        package: @options.package
+        open_payment_form: true
 
+      new NewCreditCardModal(options).open()
+
+      @close()
 
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->

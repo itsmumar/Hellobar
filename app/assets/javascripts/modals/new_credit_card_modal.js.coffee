@@ -54,7 +54,7 @@ class @NewCreditCardModal extends Modal
 
   _openPaymentForm: (data) ->
     options =
-      package: window.site.current_subscription
+      package: @options.package
       site: window.site
       credit_card_id: data.id
     new PaymentModal(options).open()
