@@ -237,23 +237,23 @@ class Site < ApplicationRecord
 
   def gdpr_consent
     topics = communication_types.map do |type|
-      I18n.t("gdpr.communication_types.#{ type }", locale: gdpr_consest_language)
+      I18n.t("gdpr.communication_types.#{ type }", locale: gdpr_consent_language)
     end
 
-    topics = topics.to_sentence(locale: gdpr_consest_language)
+    topics = topics.to_sentence(locale: gdpr_consent_language)
 
-    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consest_language)
+    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consent_language)
   end
 
   def gdpr_agreement
     I18n.t('gdpr.agreement',
-      locale: gdpr_consest_language,
+      locale: gdpr_consent_language,
       privacy_policy_url: privacy_policy_url,
       terms_and_conditions_url: terms_and_conditions_url)
   end
 
   def gdpr_action
-    I18n.t('gdpr.action', locale: gdpr_consest_language)
+    I18n.t('gdpr.action', locale: gdpr_consent_language)
   end
 
   private

@@ -294,6 +294,14 @@ ActiveRecord::Schema.define(version: 20180605150704) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "partners", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "email",      limit: 255
+    t.string   "url",        limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
     t.integer  "tokenizable_id",   limit: 4
@@ -453,7 +461,7 @@ ActiveRecord::Schema.define(version: 20180605150704) do
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255
     t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
-    t.string   "gdpr_consest_language",           limit: 10,       default: "en"
+    t.string   "gdpr_consent_language",           limit: 10,       default: "en"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree

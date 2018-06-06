@@ -52,7 +52,7 @@ h5.page-header.alt GDPR Compliance
 
   .site-privacy__column
     .select-wrapper
-      = form.input :gdpr_consest_language, collection: Site::GDPR_LANGUAGES, label: false, include_blank: false
+      = form.input :gdpr_consent_language, collection: Site::GDPR_LANGUAGES, label: false, include_blank: false
 
   .site-privacy__actions
     = form.button :submit, 'Save', class: 'button'

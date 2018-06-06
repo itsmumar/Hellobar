@@ -21,7 +21,7 @@ class PrivaciesController < ApplicationController
   def site_params
     params
       .require(:site)
-      .permit(:privacy_policy_url, :terms_and_conditions_url, :gdpr_consest_language, communication_types: [])
+      .permit(:privacy_policy_url, :terms_and_conditions_url, :gdpr_consent_language, communication_types: [])
   end
 
   def render_errors(exception)
