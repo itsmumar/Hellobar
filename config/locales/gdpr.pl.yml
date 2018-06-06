@@ -13,4 +13,4 @@ pl:
       product: informacji dotyczącej produktów i usług
       research: badań marketingowych
     agreement: "Oświadczam, że zapoznałem się i akceptuję treść <a target=\"_blank\" href=\"%{privacy_policy_url}\">polityki prywatności</a> i <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">regulaminu</a>."
-    action: Zatwierdź
+    action: OK
