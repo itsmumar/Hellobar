@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 20180608132310) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
 
+  create_table "affiliate_information", force: :cascade do |t|
+    t.integer  "user_id",              limit: 4,   null: false
+    t.string   "visitor_identifier",   limit: 255, null: false
+    t.string   "affiliate_identifier", limit: 255, null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  add_index "affiliate_information", ["user_id"], name: "index_affiliate_information_on_user_id", using: :btree
+
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id",       limit: 4,   null: false
     t.string   "provider",      limit: 255, null: false
@@ -513,6 +523,7 @@ ActiveRecord::Schema.define(version: 20180608132310) do
     t.datetime "updated_at"
   end
 
+  add_foreign_key "affiliate_information", "users"
   add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
