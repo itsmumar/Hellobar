@@ -3,6 +3,7 @@ class ContactListSerializer < ActiveModel::Serializer
     :data,
     :double_optin,
     :errors,
+    :hidden,
     :id,
     :name,
     :provider_name,
@@ -17,5 +18,9 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def provider_token
     object&.identity&.provider || '0'
+  end
+
+  def hidden
+    object.service_provider.config.hidden
   end
 end
