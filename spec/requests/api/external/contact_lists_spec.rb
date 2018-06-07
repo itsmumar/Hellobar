@@ -63,7 +63,7 @@ describe 'contact lists API' do
         request
 
         expect(response).not_to be_successful
-        expect(json).to include(error: 'Contact list is already used by other integration.')
+        expect(json).to include(error: 'Contact list is already used by other integration')
       end
     end
   end

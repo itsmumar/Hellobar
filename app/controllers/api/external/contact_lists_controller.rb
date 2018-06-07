@@ -8,7 +8,7 @@ class Api::External::ContactListsController < Api::External::ApplicationControll
 
   def subscribe
     if contact_list.identity
-      render json: { error: 'Contact list is already used by other integration.' }, status: 422
+      render json: { error: 'Contact list is already used by other integration' }, status: 422
       return
     end
 
