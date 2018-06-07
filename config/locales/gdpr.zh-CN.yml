@@ -1,0 +1,16 @@
+zh-CN:
+  support:
+    array:
+      last_word_connector: " 以及 "
+      two_words_connector: " 和 "
+      words_connector: "、"
+  gdpr:
+    consent: 我同意偶爾收到時%{topics}。
+    communication_types:
+      newsletter: 時事通訊
+      promotional: 促銷
+      partnership: 合作關係
+      product: 產品／服務
+      research: 市場研究
+    agreement: "我已閱讀並同意 <a target=\"_blank\" href=\"%{privacy_policy_url}\">隱私政策</a>、<a target=\"_blank\" href=\"%{terms_and_conditions_url}\">條款與條件</a>."
+    action: 提交

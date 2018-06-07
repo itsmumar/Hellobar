@@ -1,0 +1,16 @@
+de:
+  support:
+    array:
+      last_word_connector: " und "
+      two_words_connector: " und "
+      words_connector: ", "
+  gdpr:
+    consent: Ich stimme zu, gelegentlich %{topics}E-Mails zu erhalten.
+    communication_types:
+      newsletter: Newsletter-
+      promotional: Werbe-
+      partnership: Partnerschafts-
+      product: Produkt- / Service-
+      research: Marktforschungs-
+    agreement: "Ich habe die <a target=\"_blank\" href=\"%{privacy_policy_url}\">Datenschutzrichtlinie</a> und die allgemeinen <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">Geschäftsbedingungen</a> gelesen und stimme ihnen zu."
+    action: Einreichen
