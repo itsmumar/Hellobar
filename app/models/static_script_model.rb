@@ -5,7 +5,7 @@ class StaticScriptModel
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
   delegate :autofills, :cache_key, :persisted?, to: :site
-  delegate :terms_and_conditions_url, :privacy_policy_url, :gdpr_consent, to: :site
+  delegate :gdpr_consent, :gdpr_agreement, :gdpr_action, to: :site
 
   def initialize(site, options = {})
     @site = site

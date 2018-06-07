@@ -9,9 +9,10 @@ json.cache_if! model.cache_enabled?, model do
     :site_timezone,
     :hellobar_container_css,
     :templates,
+    :gdpr_enabled,
     :gdpr_consent,
-    :terms_and_conditions_url,
-    :privacy_policy_url,
+    :gdpr_agreement,
+    :gdpr_action,
     :geolocation_url,
     :hb_backend_host,
     :tracking_url,
@@ -20,8 +21,7 @@ json.cache_if! model.cache_enabled?, model do
     :hellobar_element_css,
     :content_upgrades,
     :content_upgrades_styles,
-    :autofills,
-    :gdpr_enabled
+    :autofills
 
   json.rules model.rules do |rule|
     json.match rule[:match]

@@ -332,8 +332,8 @@ describe StaticScriptModel do
         preview_is_active version modules_version timestamp capabilities site_id site_url
         pro_secret hellobar_container_css templates geolocation_url hb_backend_host
         tracking_url site_write_key external_tracking hellobar_element_css
-        content_upgrades content_upgrades_styles autofills rules
-        gdpr_consent gdpr_enabled disable_self_check
+        content_upgrades content_upgrades_styles autofills rules disable_self_check
+        gdpr_enabled gdpr_consent gdpr_agreement gdpr_action
       ]
     end
 
@@ -402,16 +402,23 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#terms_and_conditions_url' do
-    let(:site) { create :site, terms_and_conditions_url: 'http://google.com/terms' }
+  describe '#gdpr_agreement' do
+    let(:site) do
+      create(:site, privacy_policy_url: 'http://mysite.com/privacy', terms_and_conditions_url: 'http://mysite.com/terms')
+    end
 
-    specify { expect(model.terms_and_conditions_url) .to eql 'http://google.com/terms' }
+    it 'returns agreement HTML' do
+      expect(model.gdpr_agreement)
+        .to eql 'I have read and agree to the ' \
+                '<a target="_blank" href="http://mysite.com/privacy">Privacy Policy</a> and ' \
+                '<a target="_blank" href="http://mysite.com/terms">Terms and Conditions</a>.'
+    end
   end
 
-  describe '#privacy_policy_url' do
-    let(:site) { create :site, privacy_policy_url: 'http://google.com/policy' }
-
-    specify { expect(model.privacy_policy_url) .to eql 'http://google.com/policy' }
+  describe '#gdpr_action' do
+    it 'returns action text' do
+      expect(model.gdpr_action).to eql 'Submit'
+    end
   end
 
   describe '#disable_self_check' do

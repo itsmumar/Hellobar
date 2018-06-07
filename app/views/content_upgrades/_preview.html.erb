@@ -88,9 +88,7 @@
         <label>
           <input type="checkbox" name="hb-gdpr-terms-checkbox" class="hb-gdpr-checkbox">
           <span>
-            I have read and agree to the
-            <a target="_blank" href="<%= @site.privacy_policy_url %>">Privacy Policy</a> and
-            <a target="_blank" href="<%= @site.terms_and_conditions_url %>">Terms and Conditions</a>.
+            <%= @site.gdpr_agreement.html_safe %>
           </span>
         </label>
       </div>

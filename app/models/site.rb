@@ -64,6 +64,7 @@ class Site < ApplicationRecord
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
   validates :communication_types, presence: true, on: :update_privacy
+  validates :gdpr_consent_language, inclusion: { in: I18n.t('gdpr.languages').keys.map(&:to_s) }
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
@@ -222,13 +223,24 @@ class Site < ApplicationRecord
   end
 
   def gdpr_consent
-    text_map = {
-      'product' => 'product/service',
-      'research' => 'market research'
-    }
-    sentence = communication_types.map { |type| text_map[type] || type }.to_sentence
+    topics = communication_types.map do |type|
+      I18n.t(type, scope: 'gdpr.communication_types', locale: gdpr_consent_language)
+    end
 
-    "I consent to occasionally receive #{ sentence } emails."
+    topics = topics.to_sentence(locale: gdpr_consent_language)
+
+    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consent_language)
+  end
+
+  def gdpr_agreement
+    I18n.t('gdpr.agreement',
+      locale: gdpr_consent_language,
+      privacy_policy_url: privacy_policy_url,
+      terms_and_conditions_url: terms_and_conditions_url)
+  end
+
+  def gdpr_action
+    I18n.t('gdpr.action', locale: gdpr_consent_language)
   end
 
   private

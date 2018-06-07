@@ -1,0 +1,16 @@
+es:
+  support:
+    array:
+      last_word_connector: " y "
+      two_words_connector: " y "
+      words_connector: ", "
+  gdpr:
+    consent: Acepto recibir ocasionalmente correos electrónicos con %{topics}.
+    communication_types:
+      newsletter: boletines
+      promotional: promocionales
+      partnership: de asociados
+      product: sobre productos/servicios
+      research: de investigación de mercado
+    agreement: "He leído y acepto la <a target=\"_blank\" href=\"%{privacy_policy_url}\">Política de Privacidad</a> y <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">los Términos y Condiciones</a>."
+    action: Enviar
