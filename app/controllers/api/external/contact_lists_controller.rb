@@ -7,6 +7,11 @@ class Api::External::ContactListsController < Api::External::ApplicationControll
   end
 
   def subscribe
+    if contact_list.identity
+      render json: { error: 'Contact list is already used by other integration.' }, status: 422
+      return
+    end
+
     UpdateContactList.new(contact_list, subscribe_params).call
     render json: contact_list, serializer: ::External::ContactListSerializer
   end

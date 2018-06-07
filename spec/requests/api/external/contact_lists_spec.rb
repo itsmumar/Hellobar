@@ -55,6 +55,17 @@ describe 'contact lists API' do
     end
 
     include_examples 'invalid oauth token'
+
+    context 'when contact list is already used' do
+      let(:contact_list) { create(:contact_list, :zapier, site: site) }
+
+      it 'returns error' do
+        request
+
+        expect(response).not_to be_successful
+        expect(json).to include(error: 'Contact list is already used by other integration.')
+      end
+    end
   end
 
   describe 'unsubscribe' do
