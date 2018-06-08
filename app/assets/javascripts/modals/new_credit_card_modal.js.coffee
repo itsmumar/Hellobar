@@ -17,7 +17,8 @@ class @NewCreditCardModal extends Modal
       errors: @options.errors
       package: @options.package
       siteName: @options.site.display_name
-      upgradeBenefit: @options.upgradeBenefit
+      upgradeBenefit: @options.upgradeBenefit,
+      updateSubscription: @options.updateSubscription
     ))
 
   open: ->
@@ -43,6 +44,7 @@ class @NewCreditCardModal extends Modal
         success: (data, status, xhr) =>
           @_openPaymentForm(data) if @options.open_payment_form
           displayFlashMessage('Credit card has been successfully created.')
+          @_updateCreditCardNumbers(data.number)
           @close()
 
         error: (xhr, status, error) =>
@@ -51,6 +53,9 @@ class @NewCreditCardModal extends Modal
 
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
+
+  _updateCreditCardNumbers: (number) ->
+    $('.js-credit-card-number').text(number)
 
   _openPaymentForm: (data) ->
     options =

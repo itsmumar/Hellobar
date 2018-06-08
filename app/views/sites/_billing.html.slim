@@ -26,12 +26,13 @@ section
   section
     label Card
     p
-      - if @site.current_subscription && @site.current_subscription.credit_card
-        = @site.current_subscription.credit_card.number
-      - else
-        small
-          | (no credit card on file)
-      = link_to 'Add new credit card', '#', class: 'show-new-credit-card-modal'
+      span.js-credit-card-number
+        - if @site.current_subscription && @site.current_subscription.credit_card
+          = @site.current_subscription.credit_card.number
+        - else
+          small
+            | (no credit card on file)
+      = link_to 'Add new credit card', '#', class: 'show-new-credit-card-modal', data: { update_subscription: true }
 
   section
     label Info
