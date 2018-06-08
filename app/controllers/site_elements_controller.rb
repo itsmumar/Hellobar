@@ -122,7 +122,7 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr,
-      { settings: settings_keys }
+      settings: settings_keys
     )
   end
 
