@@ -21,6 +21,6 @@ class ContactListSerializer < ActiveModel::Serializer
   end
 
   def hidden
-    object.service_provider.config.hidden
+    object.service_provider&.config&.hidden
   end
 end
