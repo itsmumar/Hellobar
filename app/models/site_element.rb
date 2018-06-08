@@ -79,7 +79,6 @@ class SiteElement < ApplicationRecord
   delegate :conversion_rate, to: :statistics
 
   store :settings, coder: Hash
-  serialize :blocks, Array
 
   after_destroy :nullify_image_upload_reference
 

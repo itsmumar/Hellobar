@@ -93,7 +93,6 @@ export default Ember.Route.extend({
 
     saveSiteElement() {
       const prepareModel = () => {
-        _.each(this.currentModel.blocks, (block) => delete block.isDefault);
         if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
           this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
         }
