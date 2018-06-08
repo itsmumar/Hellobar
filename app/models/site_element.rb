@@ -169,12 +169,13 @@ class SiteElement < ApplicationRecord
   def paused=(value)
     if value
       self.paused_at = Time.current
-    else
-      self.paused_at = nil
+      return
     end
+
+    self.paused_at = nil
   end
 
-  alias_method :paused?, :paused
+  alias paused? paused
 
   def toggle_paused!
     update! paused: !paused?
