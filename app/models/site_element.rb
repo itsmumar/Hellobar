@@ -54,10 +54,10 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_redirect_url_allowed, if: :email?
   validate :ensure_custom_redirect_url_configured, if: :email?
 
-  scope :paused, -> { where(paused: true).where.not(type: 'ContentUpgrade') }
-  scope :active, -> { where(paused: false).where.not(type: 'ContentUpgrade') }
-  scope :paused_content_upgrades, -> { where(paused: true).where(type: 'ContentUpgrade') }
-  scope :active_content_upgrades, -> { where(paused: false).where(type: 'ContentUpgrade') }
+  scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
+  scope :active_content_upgrades, -> { where(paused_at: nil).where(type: 'ContentUpgrade') }
   scope :content_upgrades, -> { where(type: 'ContentUpgrade') }
   scope :has_performance, -> { where.not(element_subtype: 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
@@ -89,7 +89,7 @@ class SiteElement < ApplicationRecord
     created_at
     updated_at
     deleted_at
-    paused
+    paused_at
   ].freeze
 
   QUESTION_DEFAULTS = {
@@ -161,6 +161,20 @@ class SiteElement < ApplicationRecord
   def converted?
     total_conversions > 0
   end
+
+  def paused
+    paused_at.present?
+  end
+
+  def paused=(value)
+    if value
+      self.paused_at = Time.current
+    else
+      self.paused_at = nil
+    end
+  end
+
+  alias_method :paused?, :paused
 
   def toggle_paused!
     update! paused: !paused?

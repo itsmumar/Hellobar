@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180605150704) do
+ActiveRecord::Schema.define(version: 20180608141017) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -373,7 +373,6 @@ ActiveRecord::Schema.define(version: 20180605150704) do
     t.string   "size",               limit: 255,      default: "large"
     t.string   "text_color",         limit: 255,      default: "ffffff"
     t.string   "texture",            limit: 255,      default: "none"
-    t.boolean  "paused",                              default: false
     t.integer  "rule_id",            limit: 4
     t.text     "settings",           limit: 16777215
     t.boolean  "show_branding",                       default: true
@@ -417,6 +416,7 @@ ActiveRecord::Schema.define(version: 20180605150704) do
     t.string   "trigger_icon_color", limit: 255,      default: "ffffff",      null: false
     t.integer  "image_opacity",      limit: 4,        default: 100
     t.boolean  "enable_gdpr",                         default: false
+    t.datetime "paused_at"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
