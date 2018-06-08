@@ -77,7 +77,8 @@ describe ServiceProvider::Adapters do
       [
         ServiceProvider::Adapters::Hellobar,
         ServiceProvider::Adapters::MadMimiForm,
-        ServiceProvider::Adapters::VerticalResponseForm
+        ServiceProvider::Adapters::VerticalResponseForm,
+        ServiceProvider::Adapters::Zapier
       ]
     end
 
