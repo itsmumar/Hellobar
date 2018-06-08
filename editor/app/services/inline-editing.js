@@ -255,10 +255,6 @@ export default Ember.Service.extend({
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
           'insertHR', 'insertLink', '-',
           'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
-        ],
-        'limited': [
-          'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ]
       };
       const htmlAllowedTags = {
@@ -271,14 +267,11 @@ export default Ember.Service.extend({
         'full': [
           'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
           'a', 'br', 'hr', 'table', 'tbody', 'tr', 'th', 'td', 'blockquote'
-        ],
-        'limited': [
-          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
         ]
       };
       const froalaOptions = {
         key: froalaKey,
-        linkStyles: mode === 'limited' ? undefined : linkStyles,
+        linkStyles: linkStyles,
         linkMultipleStyles: false,
         toolbarInline: true,
         toolbarVisibleWithoutSelection: true,
@@ -289,7 +282,7 @@ export default Ember.Service.extend({
         htmlAllowedTags: htmlAllowedTags[mode],
         htmlAllowedEmptyTags: ['span'],
         enter: $.FroalaEditor.ENTER_P,
-        multiLine: mode === 'full',
+        multiLine: true,
         initOnClick: false,
         zIndex: 9888,
         fontFamily: this.get('froalaFonts').fontFamily()
@@ -352,7 +345,6 @@ export default Ember.Service.extend({
       .add(textFroala('simple'))
       .add(textFroala('simple-no-link'))
       .add(textFroala('full'))
-      .add(textFroala('limited'))
       .add(imageFroala());
 
     geolocationHelper.bindEvents($allFroala);
