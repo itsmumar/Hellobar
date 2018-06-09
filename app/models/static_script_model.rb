@@ -45,10 +45,10 @@ class StaticScriptModel
 
   def capabilities
     {
-      no_b: site.capabilities.remove_branding? || preview?,
-      b_variation: branding_variation,
-      preview: preview?
-    }.merge(SiteSerializer.new(site).capabilities)
+      autofills: site.capabilities.autofills?,
+      geolocation_injection: site.capabilities.geolocation_injection?,
+      external_tracking: site.capabilities.external_tracking?
+    }
   end
 
   def pro_secret
@@ -72,7 +72,7 @@ class StaticScriptModel
       element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
 
-    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container")
+    css.flatten.join("\n")
   end
 
   def templates
@@ -131,7 +131,9 @@ class StaticScriptModel
 
   def rules
     return [] if options[:no_rules]
-    site_rules.map { |rule| hash_for_rule(rule) }
+    site_rules
+      .map { |rule| hash_for_rule(rule) }
+      .select { |rule_hash| rule_hash[:site_elements].present? }
   end
 
   def hellobar_element_css
