@@ -15,6 +15,8 @@ json.cache! site_element do
     :contact_list_id,
     :use_default_image,
     :image_url,
+    :image_large_url,
+    :image_modal_url,
     :image_style,
     :image_opacity,
     :open_in_new_window,

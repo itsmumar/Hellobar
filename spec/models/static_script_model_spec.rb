@@ -345,7 +345,9 @@ describe StaticScriptModel do
           expect(site_element).to match(
             hash_including(
               image_style: 'modal',
-              image_url: /modal/
+              image_url: /modal/,
+              image_large_url: /large/,
+              image_modal_url: /modal/
             )
           )
         end
@@ -358,7 +360,9 @@ describe StaticScriptModel do
           expect(site_element).to match(
             hash_including(
               image_style: 'large',
-              image_url: /modal/
+              image_url: /modal/,
+              image_large_url: /large/,
+              image_modal_url: /modal/
             )
           )
         end
