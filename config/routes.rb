@@ -139,8 +139,8 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :credit_cards, only: %i[index]
-  resource :subscription, only: %i[create update]
+  resources :credit_cards, only: %i[index create]
+  resource :subscription, only: %i[update]
   resources :bills, only: :show do
     put :pay, on: :member
   end

@@ -1,0 +1,100 @@
+/*-----------  New Credit Card Modal  -----------*/
+
+.new-credit-card-modal
+
+  .modal-block
+    width: 35em
+
+  .modal-block > header
+    margin: 0
+    border: none
+
+  .modal-block > footer
+    margin-top: 0
+    border-top: none
+
+  .modal-title
+    font-size: 2em
+    @include antialiased()
+
+  .new-credit-card-form
+    text-align: center
+    margin-left: -2.33em
+    margin-right: -2.33em
+    padding: 1em
+    border: 1px solid $grayLighter
+
+    .wrapper
+      @include clearfix()
+
+      /*-----------  Form  -----------*/
+
+      .details-fields
+        text-align: left
+
+        .field-row
+          width: 100%
+
+          > div
+            width: 100%
+            margin-right: 3%
+            font-size: 1.1em
+            @include inline-block()
+
+            &:last-child
+              margin-right: 0
+
+          label
+            @include antialiased(false)
+
+          input
+            margin-bottom: 0em !important
+            padding: 0.55em 0.75em !important
+            border: 1px solid $grayLighter !important
+            &::placeholder
+              color: $grayLight !important
+
+          .cc-name label
+            margin-top: 0
+
+          .cc-number
+            width: 54%
+            position: relative
+
+            input
+              padding-left: 3em !important
+
+            i
+              left: 12px
+              bottom: 2px
+              color: $grayLighter
+              font-size: 1.25em
+              position: absolute
+
+          .cc-expiry
+            width: 23%
+
+          .cc-csv
+            width: 14%
+
+          .cc-city
+            width: 55%
+
+          .cc-state
+            width: 14%
+
+          .cc-zip
+            width: 23%
+
+          .cc-country
+            .select-wrapper
+              margin-bottom: 0 !important
+
+        label
+          font-size: 0.8em !important
+          margin: 1.15em 0 0.4em
+
+        input,
+        select
+          margin-top: 0 !important
+          font-size: 0.85em !important

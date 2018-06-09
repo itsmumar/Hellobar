@@ -1,14 +1,22 @@
 $ ->
+  setTimeout ( ->
+    $('.flash-block').addClass('show')
+  ), 300
 
-  # Remove Flash Messsages
-  if $('.flash-block').length
+  $(document).on 'click', '.flash-block .icon-close', (event) ->
+    flash = $(event.currentTarget).parent('.flash-block')
+    flash.removeClass('show')
     setTimeout ( ->
-      $('.flash-block').addClass('show')
-    ), 300
+      flash.remove()
+    ), 500
 
-    $('.flash-block .icon-close').click (event) ->
-      flash = $(event.currentTarget).parent('.flash-block')
-      flash.removeClass('show')
-      setTimeout ( ->
-        flash.remove()
-      ), 500
+
+@displayFlashMessage = (message, type = 'success') ->
+  div = $('<div class="flash-block"><i class="icon-close"></i></div>')
+  div.addClass(type).append(message).prependTo($('.global-content'))
+  setTimeout ( ->
+    div.addClass('show')
+  ), 100
+  setTimeout ( ->
+    div.removeClass('show')
+  ), 5000
