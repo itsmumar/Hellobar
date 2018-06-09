@@ -49,7 +49,6 @@ json.cache! site_element do
     :view_condition,
     :wiggle_button,
     :wordpress_bar_id,
-    :blocks,
     :fonts,
     # alert bar
     :sound,
