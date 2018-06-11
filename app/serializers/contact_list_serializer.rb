@@ -22,7 +22,7 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def hidden
     provider = object.provider_token || object.identity&.provider
-    adapter = ServiceProvider.adapter(provider) rescue nil # rubocop:disable Style/RescueModifier
+    adapter = ServiceProvider::Adapters.exists?(provider) && ServiceProvider::Adapters.fetch(provider)
     adapter&.config&.hidden
   end
 end
