@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180605150704) do
+ActiveRecord::Schema.define(version: 20180608132310) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -409,7 +409,6 @@ ActiveRecord::Schema.define(version: 20180605150704) do
     t.string   "phone_country_code", limit: 255,      default: "US"
     t.string   "theme_id",           limit: 255
     t.boolean  "use_default_image",                   default: true,          null: false
-    t.text     "blocks",             limit: 16777215
     t.string   "offer_text",         limit: 255
     t.string   "sound",              limit: 255,      default: "none",        null: false
     t.integer  "notification_delay", limit: 4,        default: 10,            null: false

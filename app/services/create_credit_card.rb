@@ -3,18 +3,20 @@ class CreateCreditCard
     @site = site
     @user = user
     @form = PaymentForm.new(params[:credit_card])
+    @update_subscription = params[:update_subscription]
   end
 
   def call
     validate_form!
     create_credit_card.tap do |credit_card|
+      site.current_subscription.update(credit_card_id: credit_card.id) if site.current_subscription && update_subscription
       track_event(credit_card)
     end
   end
 
   private
 
-  attr_reader :site, :user, :form
+  attr_reader :site, :user, :form, :update_subscription
 
   def validate_form!
     raise ActiveRecord::RecordInvalid, form unless form.valid?

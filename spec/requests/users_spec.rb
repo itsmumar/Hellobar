@@ -4,9 +4,9 @@ describe 'Users requests' do
   context 'when unauthenticated' do
     before { create :credit_card, user: user }
 
-    describe 'PUT :update' do
+    describe 'GET :edit' do
       it 'responds with a redirect to the login page' do
-        post subscription_path
+        get profile_path
 
         expect(response).to redirect_to(/sign_in/)
       end

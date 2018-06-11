@@ -117,4 +117,12 @@ class ApplicationController < ActionController::Base
       format.json { render json: { error: error }, status: error }
     end
   end
+
+  def record_invalid(e)
+    respond_to do |format|
+      format.json do
+        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+      end
+    end
+  end
 end

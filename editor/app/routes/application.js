@@ -1,7 +1,6 @@
 /* globals siteID, ContactListModal, formatE164, EditorErrorsModal */
 
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 export default Ember.Route.extend({
 
@@ -93,7 +92,6 @@ export default Ember.Route.extend({
 
     saveSiteElement() {
       const prepareModel = () => {
-        _.each(this.currentModel.blocks, (block) => delete block.isDefault);
         if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
           this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
         }

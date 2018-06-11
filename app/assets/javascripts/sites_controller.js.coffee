@@ -24,6 +24,12 @@ $ ->
       source: $(this).data('source')
     new PaymentModal(options).open()
 
+  $('.show-new-credit-card-modal').click ->
+    new NewCreditCardModal(
+      site: window.site
+      updateSubscription: $(this).data().updateSubscription
+    ).open()
+
   $('.show-upgrade-modal').click ->
     options =
       site: window.site
