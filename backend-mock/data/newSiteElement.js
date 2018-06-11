@@ -75,7 +75,6 @@ module.exports = {
   "view_condition": "immediately",
   "phone_number": null,
   "phone_country_code": "US",
-  "blocks": [],
   "headline": null,
   "caption": null,
   "link_text": "Click Here",

@@ -38,22 +38,9 @@ describe StaticScriptModel do
 
     it 'returns a Hash with capabilities' do
       expected_capabilities = {
-        no_b: site.capabilities.remove_branding?,
-        b_variation: 'animated',
-        preview: false,
-        remove_branding: site_capabilities.remove_branding?,
-        closable: site_capabilities.closable?,
-        custom_targeted_bars: site_capabilities.custom_targeted_bars?,
-        at_site_element_limit: site_capabilities.at_site_element_limit?,
-        custom_thank_you_text: site_capabilities.custom_thank_you_text?,
-        after_submit_redirect: site_capabilities.after_submit_redirect?,
-        content_upgrades: site_capabilities.content_upgrades?,
         autofills: site_capabilities.autofills?,
         geolocation_injection: site_capabilities.geolocation_injection?,
-        external_tracking: site_capabilities.external_tracking?,
-        alert_bars: site_capabilities.alert_bars?,
-        opacity: site_capabilities.opacity?,
-        precise_geolocation_targeting: site_capabilities.precise_geolocation_targeting?
+        external_tracking: site_capabilities.external_tracking?
       }
       expect(capabilities).to match expected_capabilities
     end

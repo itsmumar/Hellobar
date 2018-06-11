@@ -57,10 +57,10 @@ feature 'Payment modal interaction', :js do
         expect(page).to have_content 'Pro SELECT BILLING'
         expect(page.find('#anually-billing', visible: false)).to be_checked
 
-        fill_payment_form
+        page.find('.submit').click
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE PRO PLAN!"
-        expect(page).to have_text 'Your card ending in 1111 has been charged $149.00.'
+        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $149.00."
         expect(page).to have_text 'You will be billed $149.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
 
@@ -81,10 +81,10 @@ feature 'Payment modal interaction', :js do
         expect(page).to have_content 'Growth SELECT BILLING'
         expect(page.find('#anually-billing', visible: false)).to be_checked
 
-        fill_payment_form
+        page.find('.submit').click
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
-        expect(page).to have_text 'Your card ending in 1111 has been charged $289.00.'
+        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $289.00."
         expect(page).to have_text 'You will be billed $289.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
 
@@ -121,21 +121,6 @@ feature 'Payment modal interaction', :js do
 
     def date_format(date)
       date.strftime "%b #{ date.day.ordinalize }, %Y"
-    end
-
-    def fill_payment_form
-      form = create :payment_form
-      select 'New card...', from: 'linked_credit_card_id'
-      fill_in 'credit_card[name]', with: form.name
-      fill_in 'credit_card[number]', with: form.number
-      fill_in 'credit_card[expiration]', with: form.expiration
-      fill_in 'credit_card[verification_value]', with: form.verification_value
-      fill_in 'credit_card[address]', with: form.address
-      fill_in 'credit_card[city]', with: form.city
-      fill_in 'credit_card[state]', with: form.state
-      fill_in 'credit_card[zip]', with: form.zip
-      select 'United States', match: :first, from: 'credit_card[country]'
-      page.find('.submit').click
     end
   end
 end

@@ -408,7 +408,6 @@ ActiveRecord::Schema.define(version: 20180608141017) do
     t.string   "phone_country_code", limit: 255,      default: "US"
     t.string   "theme_id",           limit: 255
     t.boolean  "use_default_image",                   default: true,          null: false
-    t.text     "blocks",             limit: 16777215
     t.string   "offer_text",         limit: 255
     t.string   "sound",              limit: 255,      default: "none",        null: false
     t.integer  "notification_delay", limit: 4,        default: 10,            null: false
