@@ -1,7 +1,6 @@
 class CreateUserFromOauth
-  def initialize(omniauth_hash, track_options = {})
+  def initialize(omniauth_hash)
     @omniauth_hash = omniauth_hash
-    @track_options = track_options
   end
 
   # @return User
@@ -13,7 +12,7 @@ class CreateUserFromOauth
 
   delegate :info, to: :omniauth_hash
 
-  attr_reader :omniauth_hash, :track_options
+  attr_reader :omniauth_hash
 
   def build_user
     update_attributes find_temporary_user || initialize_user
@@ -38,6 +37,7 @@ class CreateUserFromOauth
 
     user.authentications.build(provider: omniauth_hash.provider, uid: omniauth_hash.uid)
     user.status = User::ACTIVE
+
     user
   end
 end

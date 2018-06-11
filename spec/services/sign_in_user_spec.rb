@@ -31,7 +31,7 @@ describe SignInUser do
   it 'creates a new user' do
     expect(CreateUserFromOauth)
       .to receive_service_call
-      .with(omniauth_hash, ip: '', url: nil)
+      .with(omniauth_hash)
       .and_return build(:user)
 
     service.call
