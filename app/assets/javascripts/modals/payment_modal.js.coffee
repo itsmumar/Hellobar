@@ -40,8 +40,6 @@ class @PaymentModal extends Modal
 
     super
 
-  chooseCreditCard: () ->
-
   fetchUserCreditCards: (siteID) ->
     @$modal.trigger('load') # indicate we need to do more work
 
@@ -91,10 +89,14 @@ class @PaymentModal extends Modal
     $(template(creditCards: creditCards))
 
   _bindInteractions: ->
+    @_bindChangeSchedule()
     @_bindNewCreditCard()
     @_bindChangePlan()
     @_bindFormSubmission()
-    @_bindDynamicStateLength()
+
+  _bindChangeSchedule: ->
+    @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
+      @options.package.schedule = event.target.value
 
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
@@ -177,26 +179,8 @@ class @PaymentModal extends Modal
         }
       ]
 
-  _bindDynamicStateLength: ->
-    @$modal.on 'change', '#credit_card_country', (event) =>
-      if event.target.value == 'US'
-        @$modal.find('.cc-state input').attr('maxlength', 2)
-      else
-        @$modal.find('.cc-state input').attr('maxlength', 3)
-
-    @$modal.find('#credit_card_country').trigger('change')
-
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
-
-  _bindLinkedCreditCards: ->
-    @$modal.find('select#linked-credit-card').on 'change', (event) =>
-      $creditCard = $(event.target)
-
-      if @_isUsingLinkedCreditCard()
-        @_hideCreditCardForm()
-      else
-        @_showCreditCardForm()
 
   _isAnnual: ->
     @options.package.schedule == 'yearly'
