@@ -68,5 +68,9 @@ FactoryBot.define do
         create_list :site, evaluator.count, users: [user]
       end
     end
+
+    trait :affiliate do
+      affiliate_information
+    end
   end
 end
