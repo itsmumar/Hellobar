@@ -28,7 +28,7 @@ class ServiceProvider
 
   def adapter
     @adapter ||=
-      if adapter_class < ServiceProvider::Adapters::EmbedCode || adapter_class == ServiceProvider::Adapters::Webhook
+      if adapter_class < ServiceProvider::Adapters::EmbedCode || adapter_class <= ServiceProvider::Adapters::Webhook
         adapter_class.new(contact_list)
       else
         adapter_class.new(identity)

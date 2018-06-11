@@ -19,7 +19,8 @@ describe ServiceProvider::Adapters do
       my_emma: ServiceProvider::Adapters::MyEmma,
       verticalresponse: ServiceProvider::Adapters::VerticalResponse,
       vertical_response: ServiceProvider::Adapters::VerticalResponseForm,
-      webhooks: ServiceProvider::Adapters::Webhook
+      webhooks: ServiceProvider::Adapters::Webhook,
+      zapier: ServiceProvider::Adapters::Zapier
     }
   end
 
@@ -76,7 +77,8 @@ describe ServiceProvider::Adapters do
       [
         ServiceProvider::Adapters::Hellobar,
         ServiceProvider::Adapters::MadMimiForm,
-        ServiceProvider::Adapters::VerticalResponseForm
+        ServiceProvider::Adapters::VerticalResponseForm,
+        ServiceProvider::Adapters::Zapier
       ]
     end
 
