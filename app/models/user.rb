@@ -35,6 +35,7 @@ class User < ApplicationRecord
   validate :oauth_email_change, if: :oauth_user?
 
   delegate :url_helpers, to: 'Rails.application.routes'
+  delegate :affiliate_identifier, to: :affiliate_information, allow_nil: true
 
   attr_accessor :timezone, :is_impersonated
 
