@@ -22,7 +22,9 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def hidden
     provider = object.provider_token || object.identity&.provider
-    adapter = ServiceProvider::Adapters.exists?(provider) && ServiceProvider::Adapters.fetch(provider)
-    adapter&.config&.hidden
+    return unless ServiceProvider::Adapters.exists?(provider)
+
+    adapter = ServiceProvider::Adapters.fetch(provider)
+    adapter.config&.hidden
   end
 end
