@@ -28,11 +28,13 @@ describe SignInUser do
   let(:service) { SignInUser.new(request) }
   let(:last_user) { User.last }
 
-  it 'creates a new user' do
+  it 'creates a new user and stores affiliate information' do
     expect(CreateUserFromOauth)
       .to receive_service_call
       .with(omniauth_hash)
       .and_return build(:user)
+
+    expect(CreateAffiliateInformation).to receive_service_call
 
     service.call
   end

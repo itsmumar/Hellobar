@@ -14,7 +14,7 @@ feature 'User can sign up', :js do
       .to receive(:call).and_return('function hellobar(){}')
   end
 
-  scenario 'through oauth' do
+  scenario 'through OAuth' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
     visit users_sign_up_path
 

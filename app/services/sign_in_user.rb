@@ -102,6 +102,8 @@ class SignInUser
 
   def create_user
     user = CreateUserFromOauth.new(omniauth_hash).call
+    CreateAffiliateInformation.new(user, cookies).call
+
     [user, redirect_url_for_new_user]
   end
 end
