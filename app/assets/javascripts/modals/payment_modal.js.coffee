@@ -97,7 +97,6 @@ class @PaymentModal extends Modal
   _bindChangeSchedule: ->
     @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
       @options.package.schedule = event.target.value
-      console.log(@options.package)
 
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
