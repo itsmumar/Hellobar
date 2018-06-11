@@ -261,7 +261,7 @@ describe SiteElementsHelper do
 
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
-      se.update_attribute(:paused, true)
+      se.pause!
 
       expect(helper.ab_test_icon(se)).to include('icon-abtest')
     end

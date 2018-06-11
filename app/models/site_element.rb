@@ -162,23 +162,32 @@ class SiteElement < ApplicationRecord
     total_conversions > 0
   end
 
-  def paused
+  def pause
+    update(paused_at: Time.current)
+  end
+
+  def pause!
+    update!(paused_at: Time.current)
+  end
+
+  def unpause
+    update(paused_at: nil)
+  end
+
+  def unpause!
+    update!(paused_at: nil)
+  end
+
+  def paused?
     paused_at.present?
   end
 
-  def paused=(value)
-    if value
-      self.paused_at = Time.current
-      return
-    end
-
-    self.paused_at = nil
-  end
-
-  alias paused? paused
-
   def toggle_paused!
-    update! paused: !paused?
+    if paused?
+      unpause!
+    else
+      pause!
+    end
   end
 
   def short_subtype
