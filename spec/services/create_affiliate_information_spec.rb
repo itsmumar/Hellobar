@@ -19,5 +19,12 @@ describe CreateAffiliateInformation do
       expect(info.affiliate_identifier).to eql aid
       expect(info.visitor_identifier).to eql vid
     end
+
+    it 'enqueues ExportSubscribersJob' do
+      expect { CreateAffiliateInformation.new(user, cookies).call }
+        .to have_enqueued_job(StoreConversionAtTapfiliateJob)
+        .on_queue('hb3_test_lowpriority')
+        .with(user)
+    end
   end
 end

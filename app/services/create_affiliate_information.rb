@@ -8,18 +8,21 @@ class CreateAffiliateInformation
     return unless affiliate_cookies_present?
 
     create_affiliate_information
+    store_conversion
+
+    affiliate_information
   end
 
   private
 
-  attr_reader :user, :cookies
+  attr_reader :user, :cookies, :affiliate_information
 
   def affiliate_cookies_present?
     cookies[:tap_aid].present? && cookies[:tap_vid].present?
   end
 
   def create_affiliate_information
-    AffiliateInformation.create! affiliate_params
+    @affiliate_information = AffiliateInformation.create! affiliate_params
   end
 
   def affiliate_params
@@ -28,5 +31,9 @@ class CreateAffiliateInformation
       visitor_identifier: cookies[:tap_vid],
       affiliate_identifier: cookies[:tap_aid]
     }
+  end
+
+  def store_conversion
+    StoreConversionAtTapfiliateJob.perform_later user
   end
 end

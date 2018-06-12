@@ -3,7 +3,7 @@ class TapfiliateGateway
 
   base_uri 'https://api.tapfiliate.com/1.6/conversions/'
 
-  # sign-ups tracking
+  # signups tracking
   def store_conversion user:
     body = {
       visitor_id: user.affiliate_information.visitor_identifier,
