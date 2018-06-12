@@ -122,6 +122,8 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr,
+      :button_border, :button_border_color, :button_border_width,
+      :button_rounded_corners,
       settings: settings_keys
     )
   end

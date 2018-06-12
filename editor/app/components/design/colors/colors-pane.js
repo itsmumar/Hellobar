@@ -19,6 +19,14 @@ export default Ember.Component.extend({
     eyeDropperSelected() {
       this.set('focusedColor', null);
       return false;
+    },
+
+    buttonBorderUpdated(value) {
+      this.set('model.button_border_width', value);
+    },
+
+    buttonCornersUpdated(value) {
+      this.set('model.button_rounded_corners', value);
     }
   }
 

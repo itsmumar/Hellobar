@@ -55,7 +55,11 @@ json.cache! site_element do
     :notification_delay,
     :trigger_color,
     :trigger_icon_color,
-    :enable_gdpr
+    :enable_gdpr,
+    :button_border,
+    :button_border_color,
+    :button_border_width,
+    :button_rounded_corners
 
   json.font site_element.font.try(:value)
 
