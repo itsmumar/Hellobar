@@ -31,9 +31,11 @@ class PayBill
     response = gateway.purchase(bill.amount, credit_card)
 
     BillingLogger.charge(bill, response.success?)
+
     if response.success?
       process_successful_response(response)
       track_event(bill)
+      store_affiliate_commission(bill)
     else
       process_unsuccessful_response(response)
     end
@@ -93,6 +95,12 @@ class PayBill
       subscription: bill.subscription,
       user: bill.subscription&.user || bill.site.owners.first
     ).call
+  end
+
+  def store_affiliate_commission bill
+    return unless Rails.env.production?
+
+    StoreCommissionAtTapfiliateJob.perform_later bill
   end
 
   def gateway
