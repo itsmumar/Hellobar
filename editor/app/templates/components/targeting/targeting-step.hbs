@@ -100,7 +100,7 @@
   </div>
 
   <label>
-    <span>Cookie Duration</span>
+    <span>Don't display to repeat visitors for:</span>
     {{#common/hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user exits your campaign. <br>
@@ -114,11 +114,11 @@
   }}
 
   <label>
-    <span>Success Cookie Duration</span>
+    <span>After a conversion, don't display this bar to that user for:</span>
     {{#common/hints/popup-hint-trigger}}
       <p>The number of days before the optin will display <br>
         again once the user successfully opts in to your <br>
-        campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
+        campaign.</p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.success_duration
