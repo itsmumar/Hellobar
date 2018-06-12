@@ -91,5 +91,9 @@ FactoryBot.define do
     trait :webhooks do
       provider 'webhooks'
     end
+
+    trait :zapier do
+      provider 'webhooks'
+    end
   end
 end

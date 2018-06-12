@@ -8,7 +8,8 @@ describe ContactListsHelper, type: :helper do
         requires_api_key: nil,
         requires_username: nil,
         requires_webhook_url: nil,
-        oauth: nil
+        oauth: nil,
+        hidden: nil
       }.merge(other)
     end
 

@@ -61,7 +61,16 @@ Rails.application.routes.draw do
     end
 
     namespace :external do
-      get '/me', to: 'user#show'
+      get '/me', to: 'user#show', as: :me
+
+      resources :sites, only: %i[index] do
+        resources :contact_lists, only: %i[index] do
+          member do
+            post :subscribe
+            post :unsubscribe
+          end
+        end
+      end
     end
   end
 

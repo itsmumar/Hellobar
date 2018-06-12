@@ -12,6 +12,7 @@ module ContactListsHelper
         requires_api_key: adapter.config.requires_api_key,
         requires_username: adapter.config.requires_username,
         requires_webhook_url: adapter.config.requires_webhook_url,
+        hidden: adapter.config.hidden,
         oauth: adapter.config.oauth
       ]
     end

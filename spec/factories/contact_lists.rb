@@ -81,6 +81,12 @@ FactoryBot.define do
       identity { create :identity, :webhooks, site: site }
     end
 
+    trait :zapier do
+      identity { create :identity, :zapier, site: site }
+
+      data { { webhook_url: 'https://zapier.com', webhook_method: 'POST' } }
+    end
+
     trait :embed_code_invalid do
       identity { create :identity, :mad_mimi_form, site: site }
       data { Hash['embed_code' => '<html><body><iframe><form>Here I am</form></iframe></body></html>'] }
