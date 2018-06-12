@@ -34,6 +34,8 @@ class CreateAffiliateInformation
   end
 
   def store_conversion
+    return unless Rails.env.production?
+
     StoreConversionAtTapfiliateJob.perform_later user
   end
 end
