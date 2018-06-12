@@ -41,7 +41,7 @@ class AnalyticsProvider
   def signed_up(user:)
     params = {}
 
-    user.affiliate_identifier && params[:affiliate_identifier] = user.affiliate_identifier
+    params[:affiliate_identifier] = user.affiliate_identifier if user.affiliate_identifier
 
     track(
       event: 'signed-up',
