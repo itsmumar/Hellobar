@@ -19,6 +19,8 @@ json.cache! site_element do
     :image_modal_url,
     :image_style,
     :image_opacity,
+    :image_overlay_color,
+    :image_overlay_opacity,
     :open_in_new_window,
     :phone_number,
     :primary_color,

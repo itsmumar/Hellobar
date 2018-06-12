@@ -9,15 +9,24 @@ export default Ember.Component.extend({
 
   modelLogic: Ember.inject.service(),
   theming: Ember.inject.service(),
+  palette: Ember.inject.service(),
 
   imageUploadCopy: Ember.computed.oneWay('theming.currentTheme.image.upload_copy'),
   themeHasDefaultImage: Ember.computed.oneWay('theming.themeHasDefaultImage'),
   useThemeImage: Ember.computed.oneWay('theming.useThemeImage'),
   canUseOpacity: Ember.computed.alias('model.site.capabilities.opacity'),
 
+  recentColors: Ember.computed.alias('palette.recentColors'),
+  siteColors: Ember.computed.alias('palette.colorPalette'),
+  focusedColor: Ember.computed.alias('palette.focusedColor'),
+
   imageOpacity: function () {
     return this.get('model.image_opacity');
   }.property('model.image_opacity'),
+
+  imageOverlayOpacity: function () {
+    return this.get('model.image_overlay_opacity');
+  }.property('model.image_overlay_opacity'),
 
   allowImages: Ember.computed('model.type', function () {
       return this.get('model.type') !== "Bar";
@@ -35,6 +44,15 @@ export default Ember.Component.extend({
 
     setImageOpacity(opacity) {
       this.set('model.image_opacity', parseInt(opacity));
+    },
+
+    setImageOverlayOpacity(opacity) {
+      this.set('model.image_overlay_opacity', parseInt(opacity));
+    },
+
+    eyeDropperSelected() {
+      this.set('focusedColor', null);
+      return false;
     }
   }
 
