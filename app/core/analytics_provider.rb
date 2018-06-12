@@ -112,11 +112,19 @@ class AnalyticsProvider
     )
   end
 
-  def changed_subscription(subscription:, previous_subscription:, user:)
+  def upgraded_subscription(params)
+    changed_subscription('upgraded-subscription', params)
+  end
+
+  def downgraded_subscription(params)
+    changed_subscription('downgraded-subscription', params)
+  end
+
+  def changed_subscription(event, subscription:, previous_subscription:, user:)
     site = Site.with_deleted.find(subscription.site_id)
 
     track(
-      event: 'changed-subscription',
+      event: event,
       user: user,
       params: {
         amount: subscription.amount,

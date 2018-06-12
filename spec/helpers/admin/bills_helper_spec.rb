@@ -86,7 +86,7 @@ describe Admin::BillsHelper do
     end
 
     context 'when bill is chargedback' do
-      let(:bill) { create(:bill, :paid, :paid) }
+      let(:bill) { create(:bill, :pro, :paid) }
 
       before do
         stub_cyber_source :refund
