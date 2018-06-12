@@ -38,7 +38,7 @@ class FakeOAuthClient < Sinatra::Base
 
       "current_user: #{ user[:email] }"
     else
-      redirect oauth_client.auth_code.authorize_url(redirect_uri: oauth_callback_url)
+      redirect oauth_client.auth_code.authorize_url(redirect_uri: oauth_callback_url, scope: 'email')
     end
   end
 end

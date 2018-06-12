@@ -19,7 +19,7 @@ class ContactList < ApplicationRecord
   validate :provider_credentials_exist, if: :provider_set?
   validate :embed_code_exists?, if: :embed_code?
   validate :embed_code_valid?, if: :embed_code?
-  validate :webhook_url_valid?, if: :webhook?
+  validate :webhook_url_valid?, if: -> { webhook? || zapier? }
 
   delegate :count, to: :site_elements, prefix: true
 
@@ -48,6 +48,10 @@ class ContactList < ApplicationRecord
 
   def webhook?
     identity&.provider == 'webhooks'
+  end
+
+  def zapier?
+    identity&.provider == 'zapier'
   end
 
   def tags

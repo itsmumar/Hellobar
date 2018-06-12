@@ -34,6 +34,7 @@ en:
     verticalresponse: 'Vertical Response'
     vertical_response: 'Vertical Response'
     webhooks: 'Webhooks'
+    zapier: 'Zapier'
 
   activemodel:
     errors:
