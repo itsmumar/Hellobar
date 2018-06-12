@@ -21,6 +21,8 @@ describe CreateAffiliateInformation do
     end
 
     it 'enqueues ExportSubscribersJob' do
+      allow(Rails.env).to receive(:production?).and_return true
+
       expect { CreateAffiliateInformation.new(user, cookies).call }
         .to have_enqueued_job(StoreConversionAtTapfiliateJob)
         .on_queue('hb3_test_lowpriority')
