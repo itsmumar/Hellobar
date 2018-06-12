@@ -4,4 +4,3 @@ class AffiliateInformation < ApplicationRecord
   validates :visitor_identifier, presence: true
   validates :affiliate_identifier, presence: true
 end
-
