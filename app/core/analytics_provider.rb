@@ -119,28 +119,12 @@ class AnalyticsProvider
     )
   end
 
-  def changed_subscription(subscription:, previous_subscription:, user:)
-    site = Site.with_deleted.find(subscription.site_id)
+  def upgraded_subscription(params)
+    changed_subscription('upgraded-subscription', params)
+  end
 
-    track(
-      event: 'changed-subscription',
-      user: user,
-      params: {
-        amount: subscription.amount,
-        site_url: site&.url,
-        subscription: subscription.name,
-        schedule: subscription.schedule,
-        trial_days: subscription.trial_period || 0
-      }
-    )
-
-    tag_users 'Paid', site.owners unless subscription.amount.zero?
-    tag_users subscription.name, site.owners
-
-    return unless previous_subscription
-
-    untag_users previous_subscription.name, site.owners
-    untag_users 'Paid', site.owners if subscription.amount.zero?
+  def downgraded_subscription(params)
+    changed_subscription('downgraded-subscription', params)
   end
 
   def granted_free_days(subscription:, free_days:, user:)
@@ -241,4 +225,28 @@ class AnalyticsProvider
   end
 
   delegate :tag_users, :untag_users, to: :adapter
+
+  def changed_subscription(event, subscription:, previous_subscription:, user:)
+    site = Site.with_deleted.find(subscription.site_id)
+
+    track(
+      event: event,
+      user: user,
+      params: {
+        amount: subscription.amount,
+        site_url: site&.url,
+        subscription: subscription.name,
+        schedule: subscription.schedule,
+        trial_days: subscription.trial_period || 0
+      }
+    )
+
+    tag_users 'Paid', site.owners unless subscription.amount.zero?
+    tag_users subscription.name, site.owners
+
+    return unless previous_subscription
+
+    untag_users previous_subscription.name, site.owners
+    untag_users 'Paid', site.owners if subscription.amount.zero?
+  end
 end

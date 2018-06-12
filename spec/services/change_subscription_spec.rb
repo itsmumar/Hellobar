@@ -6,8 +6,12 @@ describe ChangeSubscription, :freeze do
   let(:service) { ChangeSubscription.new(site, params, credit_card) }
   let(:last_subscription) { Subscription.last }
 
-  before { stub_cyber_source :purchase }
-  before { change_subscription 'free' }
+  before do
+    stub_cyber_source :purchase
+    change_subscription 'free'
+
+    allow(TrackSubscriptionChange).to receive_message_chain(:new, :call)
+  end
 
   def change_subscription(subscription, schedule = 'monthly', new_credit_card: nil)
     ChangeSubscription.new(
@@ -80,28 +84,6 @@ describe ChangeSubscription, :freeze do
       end
     end
 
-    it 'sends an event to Intercom' do
-      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
-
-      expect { service.call }
-        .to have_enqueued_job(SendEventToIntercomJob)
-        .with('changed_subscription',
-          subscription: instance_of(Subscription::Pro),
-          previous_subscription: instance_of(Subscription::Free),
-          user: user)
-    end
-
-    it 'sends an event to Amplitude' do
-      allow(Rails.env).to receive(:production?).and_return(true) # emulate production
-
-      expect { service.call }
-        .to have_enqueued_job(SendEventToAmplitudeJob)
-        .with('changed_subscription',
-          subscription: instance_of(Subscription::Pro),
-          previous_subscription: instance_of(Subscription::Free),
-          user: user)
-    end
-
     context 'without credit card' do
       let(:credit_card) { nil }
 
@@ -130,6 +112,16 @@ describe ChangeSubscription, :freeze do
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Pro
       end
+
+      it 'tracks subscription change event' do
+        expect(TrackSubscriptionChange).to receive_service_call.with(
+          user,
+          instance_of(Subscription::Free),
+          instance_of(Subscription::Pro)
+        )
+
+        service.call
+      end
     end
 
     context 'upgrade to enterprise' do
@@ -144,6 +136,16 @@ describe ChangeSubscription, :freeze do
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Enterprise
+      end
+
+      it 'tracks subscription change event' do
+        expect(TrackSubscriptionChange).to receive_service_call.with(
+          user,
+          instance_of(Subscription::Free),
+          instance_of(Subscription::Enterprise)
+        )
+
+        service.call
       end
     end
 
@@ -187,6 +189,16 @@ describe ChangeSubscription, :freeze do
             .to change { site.current_subscription.reload.credit_card }
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Pro),
+            instance_of(Subscription::Pro)
+          )
+
+          service.call
+        end
+
         context 'when there is a problem bill' do
           let!(:new_credit_card) { create :credit_card }
           let(:failed_bill) { site.current_subscription.bills.last }
@@ -226,6 +238,16 @@ describe ChangeSubscription, :freeze do
           expect(PayBill).not_to receive_service_call
           expect { change_subscription('free') }.not_to change(Bill, :count)
         end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            nil,
+            instance_of(Subscription::Free)
+          )
+
+          change_subscription('free')
+        end
       end
 
       context 'when upgrading to ProManaged' do
@@ -254,6 +276,16 @@ describe ChangeSubscription, :freeze do
             expect(site).to be_capable_of :pro_managed
           end
         end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Free),
+            instance_of(Subscription::ProManaged)
+          )
+
+          change_subscription('pro_managed')
+        end
       end
 
       context 'when upgrading to Pro from FreePlus' do
@@ -277,6 +309,16 @@ describe ChangeSubscription, :freeze do
           expect(site.previous_subscription.bills.first).to be_voided
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::FreePlus),
+            instance_of(Subscription::Pro)
+          )
+
+          change_subscription('pro')
+        end
+
         context 'and then to Enterprise from Pro' do
           before { change_subscription('pro') }
 
@@ -292,6 +334,16 @@ describe ChangeSubscription, :freeze do
 
           it 'pays bill' do
             expect(PayBill).to receive_service_call
+            change_subscription('enterprise')
+          end
+
+          it 'tracks subscription change event' do
+            expect(TrackSubscriptionChange).to receive_service_call.with(
+              user,
+              instance_of(Subscription::Pro),
+              instance_of(Subscription::Enterprise)
+            )
+
             change_subscription('enterprise')
           end
 
@@ -329,6 +381,16 @@ describe ChangeSubscription, :freeze do
             .by(1)
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Pro),
+            instance_of(Subscription::Free)
+          )
+
+          change_subscription('free')
+        end
+
         context 'when Pro subscription expires' do
           it 'changes capabilities to Free' do
             change_subscription('free')
@@ -337,28 +399,6 @@ describe ChangeSubscription, :freeze do
               expect(site).to be_capable_of :free
             end
           end
-        end
-
-        it 'sends an event to Intercom' do
-          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
-
-          expect { change_subscription('free') }
-            .to have_enqueued_job(SendEventToIntercomJob)
-            .with('changed_subscription',
-              subscription: instance_of(Subscription::Free),
-              previous_subscription: instance_of(Subscription::Pro),
-              user: user)
-        end
-
-        it 'sends an event to Amplitude' do
-          allow(Rails.env).to receive(:production?).and_return(true) # emulate production
-
-          expect { service.call }
-            .to have_enqueued_job(SendEventToAmplitudeJob)
-            .with('changed_subscription',
-              subscription: instance_of(Subscription::Pro),
-              previous_subscription: instance_of(Subscription::Pro),
-              user: user)
         end
 
         it 'returns a bill' do
@@ -381,6 +421,16 @@ describe ChangeSubscription, :freeze do
 
         it 'does not pay bill' do
           expect(PayBill).not_to receive_service_call
+          change_subscription('free')
+        end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Enterprise),
+            instance_of(Subscription::Free)
+          )
+
           change_subscription('free')
         end
 
