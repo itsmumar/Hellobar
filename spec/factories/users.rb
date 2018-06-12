@@ -34,6 +34,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_pro_subscription_and_bill do
+      after(:create) do |user|
+        subscription = create :subscription, :pro, :with_bill, user: user
+        subscription.credit_card.update user_id: user.id
+      end
+    end
+
     trait :with_pro_managed_subscription do
       after(:create) do |user|
         create :subscription, :pro_managed, user: user

@@ -4,5 +4,6 @@ FactoryBot.define do
 
     affiliate_identifier 'aid'
     visitor_identifier 'vid'
+    conversion_identifier '1'
   end
 end
