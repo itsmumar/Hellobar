@@ -39,10 +39,17 @@ class AnalyticsProvider
   end
 
   def signed_up(user:)
+    params = {}
+
+    params[:affiliate_identifier] = user.affiliate_identifier if user.affiliate_identifier
+
     track(
       event: 'signed-up',
-      user: user
+      user: user,
+      params: params
     )
+
+    tag_users('Affiliate', [user]) if user.affiliate_identifier
   end
 
   def invited_member(site:, user:)

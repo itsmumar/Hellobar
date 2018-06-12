@@ -1,3 +1,6 @@
+# Make '#singularize' available here in the Guardfile
+require 'active_support/core_ext/string'
+
 # Only watch a subset of directories
 directories %w[app config lib spec vendor]
 

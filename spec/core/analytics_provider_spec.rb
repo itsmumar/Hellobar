@@ -10,10 +10,25 @@ describe AnalyticsProvider do
   end
 
   describe '#signed_up' do
-    it 'tracks "signed-up"' do
+    it 'tracks "signed-up" without affiliate info' do
       expect(adapter)
         .to receive(:track)
         .with(event: 'signed-up', user: user, params: {})
+
+      track('signed-up', user: user)
+    end
+
+    it 'tracks "signed-up" with affiliate info if present' do
+      affiliate_information = create :affiliate_information, user: user
+      params = { affiliate_identifier: affiliate_information.affiliate_identifier }
+
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'signed-up', user: user, params: params)
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Affiliate', [user])
 
       track('signed-up', user: user)
     end

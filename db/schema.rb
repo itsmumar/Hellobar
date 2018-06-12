@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180608132310) do
+ActiveRecord::Schema.define(version: 20180612094511) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(version: 20180608132310) do
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
+
+  create_table "affiliate_information", force: :cascade do |t|
+    t.integer  "user_id",               limit: 4,   null: false
+    t.string   "visitor_identifier",    limit: 255, null: false
+    t.string   "affiliate_identifier",  limit: 255, null: false
+    t.string   "conversion_identifier", limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "affiliate_information", ["user_id"], name: "index_affiliate_information_on_user_id", using: :btree
 
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id",       limit: 4,   null: false
@@ -513,6 +524,7 @@ ActiveRecord::Schema.define(version: 20180608132310) do
     t.datetime "updated_at"
   end
 
+  add_foreign_key "affiliate_information", "users"
   add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"

@@ -21,7 +21,7 @@ describe CreateUserFromOauth do
     )
   end
 
-  let(:service) { CreateUserFromOauth.new(omniauth_hash, {}) }
+  let(:service) { CreateUserFromOauth.new(omniauth_hash) }
 
   it 'creates user' do
     expect { service.call }.to change(User, :count).by(1)
