@@ -46,6 +46,20 @@ describe StaticScript do
   end
 
   describe '#modules_url' do
+    context 'when Settings.local_modules_url is set and available' do
+      let(:url) { 'http://localhost:9090/modules.bundle.js' }
+
+      before do
+        allow(HellobarModules)
+          .to receive(:local_modules_url)
+          .and_return url
+      end
+
+      it 'returns HellobarModules.local_modules_url' do
+        expect(script.modules_url).to eql url
+      end
+    end
+
     context 'when Settings.store_site_scripts_locally is true' do
       before { allow(Settings).to receive(:store_site_scripts_locally).and_return true }
 
