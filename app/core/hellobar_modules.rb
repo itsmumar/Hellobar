@@ -20,8 +20,6 @@ module HellobarModules
     end
   end
 
-  private
-
   def local_modules_available?
     return if Settings.local_modules_url.blank?
     HTTParty.get(Settings.local_modules_url).success?
