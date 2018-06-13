@@ -209,6 +209,13 @@ To do an edge deploy:
 cap edge deploy BRANCH=other-branch
 ```
 
+### Using live version of hellobar modules from dev server
+In order to use live version from hellobar_modules project do following:
+
+- in `hellobar_modules` directory run the dev server, i.e. `npm run dev`
+- add `local_modules_url: 'http://localhost:9090/modules.bundle.js'` into `config/secrets.yml` (see secrets.yml.example)  
+- enjoy! :)
+
 ### Updating hellobar modules version
 
 In order to deploy a new version of hellobar static script run following: 
