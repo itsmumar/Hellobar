@@ -10,7 +10,7 @@ module HellobarModules
   end
 
   def local_modules_url
-    return if Settings.local_modules_url && !check_local_modules
+    return if Settings.local_modules_url && !local_modules_available?
     Settings.local_modules_url
   end
 
@@ -22,7 +22,7 @@ module HellobarModules
 
   private
 
-  def check_local_modules
+  def local_modules_available?
     HTTParty.get(Settings.local_modules_url).success?
   rescue Errno::ECONNREFUSED
     false
