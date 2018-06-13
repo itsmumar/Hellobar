@@ -10,10 +10,8 @@ module HellobarModules
   end
 
   def local_modules_url
-    @local_modules_url ||=
-      if Settings.local_modules_url && HTTParty.get(Settings.local_modules_url).success?
-        Settings.local_modules_url
-      end
+    return unless Settings.local_modules_url && HTTParty.get(Settings.local_modules_url).success?
+    Settings.local_modules_url
   end
 
   def bump!
