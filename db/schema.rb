@@ -426,8 +426,7 @@ ActiveRecord::Schema.define(version: 20180612203543) do
     t.string   "trigger_icon_color",    limit: 255,      default: "ffffff",      null: false
     t.integer  "image_opacity",         limit: 4,        default: 100
     t.boolean  "enable_gdpr",                            default: false
-    t.datetime "paused_at"
-    t.boolean  "paused",                                 default: false
+    t.datetime "paused_at"                               default: false
     t.string   "image_overlay_color",   limit: 10,       default: "ffffff"
     t.integer  "image_overlay_opacity", limit: 1,        default: 0
   end
