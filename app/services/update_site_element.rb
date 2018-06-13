@@ -27,7 +27,7 @@ class UpdateSiteElement
   def copy_element_and_change_type
     existing_element = element
     element_with_new_type.tap do
-      existing_element.update!(paused: true)
+      existing_element.pause!
     end
   end
 

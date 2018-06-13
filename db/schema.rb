@@ -384,7 +384,6 @@ ActiveRecord::Schema.define(version: 20180612094511) do
     t.string   "size",               limit: 255,      default: "large"
     t.string   "text_color",         limit: 255,      default: "ffffff"
     t.string   "texture",            limit: 255,      default: "none"
-    t.boolean  "paused",                              default: false
     t.integer  "rule_id",            limit: 4
     t.text     "settings",           limit: 16777215
     t.boolean  "show_branding",                       default: true
@@ -427,6 +426,7 @@ ActiveRecord::Schema.define(version: 20180612094511) do
     t.string   "trigger_icon_color", limit: 255,      default: "ffffff",      null: false
     t.integer  "image_opacity",      limit: 4,        default: 100
     t.boolean  "enable_gdpr",                         default: false
+    t.datetime "paused_at"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
