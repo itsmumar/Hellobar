@@ -55,11 +55,6 @@ class AddTrialSubscription
   end
 
   def track_event(bill)
-    TrackEvent.new(
-      :changed_subscription,
-      subscription: bill.subscription,
-      previous_subscription: site.previous_subscription,
-      user: site.owners.first
-    ).call
+    TrackSubscriptionChange.new(site.owners.first, site.previous_subscription, bill.subscription).call
   end
 end

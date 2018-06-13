@@ -53,5 +53,6 @@ class ServiceProvider
     register :verticalresponse, Adapters::VerticalResponse
     register :vertical_response, Adapters::VerticalResponseForm
     register :webhooks, Adapters::Webhook
+    register :zapier, Adapters::Zapier
   end
 end

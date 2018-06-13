@@ -5,7 +5,10 @@ describe AddTrialSubscription, :freeze do
   let(:service) { AddTrialSubscription.new(site, params) }
   let(:last_subscription) { Subscription.last }
 
-  before { ChangeSubscription.new(site, subscription: 'free').call }
+  before do
+    ChangeSubscription.new(site, subscription: 'free').call
+    allow(TrackSubscriptionChange).to receive_message_chain(:new, :call)
+  end
 
   describe '.call' do
     it 'returns paid bill with zero amount' do
@@ -36,6 +39,16 @@ describe AddTrialSubscription, :freeze do
       expect { service.call }
         .to change { site.capabilities }
       expect(site).to be_capable_of :pro
+    end
+
+    it 'tracks subscription change event' do
+      expect(TrackSubscriptionChange).to receive_service_call.with(
+        user,
+        instance_of(Subscription::Free),
+        instance_of(Subscription::Pro)
+      )
+
+      service.call
     end
 
     context 'when trial ends up' do

@@ -3,6 +3,7 @@ class ContactListSerializer < ActiveModel::Serializer
     :data,
     :double_optin,
     :errors,
+    :hidden,
     :id,
     :name,
     :provider_name,
@@ -17,5 +18,13 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def provider_token
     object&.identity&.provider || '0'
+  end
+
+  def hidden
+    provider = object.provider_token || object.identity&.provider
+    return unless ServiceProvider::Adapters.exists?(provider)
+
+    adapter = ServiceProvider::Adapters.fetch(provider)
+    adapter.config&.hidden
   end
 end

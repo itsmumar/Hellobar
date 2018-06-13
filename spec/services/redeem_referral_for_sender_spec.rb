@@ -58,7 +58,7 @@ describe RedeemReferralForSender do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :changed_subscription,
+          :upgraded_subscription,
           user: referral.sender,
           subscription: instance_of(Subscription::Growth),
           previous_subscription: nil

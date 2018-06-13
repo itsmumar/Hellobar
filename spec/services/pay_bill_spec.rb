@@ -30,6 +30,13 @@ describe PayBill do
       expect(bill.authorization_code).to eql 'code'
     end
 
+    it 'stores commission at Tapfiliate for affiliate users' do
+      allow(Rails.env).to receive(:production?).and_return true
+
+      expect { service.call }
+        .to have_enqueued_job(StoreCommissionAtTapfiliateJob).with(bill)
+    end
+
     context 'when site had problems with payment' do
       let!(:failed_bill) { create :bill, :failed, site: bill.site }
 
