@@ -245,7 +245,10 @@ describe AnalyticsProvider do
           subscription: subscription.name,
           schedule: subscription.schedule,
           site_url: site.url,
-          trial_days: 0
+          trial_days: 0,
+          previous_subscription: previous_subscription.name,
+          previous_subscription_amount: previous_subscription.amount,
+          previous_subscription_schedule: previous_subscription.schedule
         })
 
       track(event,

@@ -69,12 +69,12 @@ describe SiteElement do
         end
 
         it "accept #{ capability } for paused element" do
-          element.update(paused: true)
+          element.pause
           expect(element.errors[attribute]).not_to include(error)
         end
 
         it "accept #{ capability } for unpaused element" do
-          element.update(paused: false)
+          element.unpause
           expect(element.errors[attribute]).not_to include(error)
         end
       end
@@ -85,12 +85,12 @@ describe SiteElement do
         end
 
         it "accept #{ capability } for paused element" do
-          element.update(paused: true)
+          element.pause
           expect(element.errors[attribute]).not_to include(error)
         end
 
         it "rejects #{ capability } for unpaused element" do
-          element.update(paused: false)
+          element.unpause
           expect(element.errors[attribute]).to include(error)
         end
       end
@@ -267,7 +267,7 @@ describe SiteElement do
     end
 
     it 'toggles an element from unpaused to paused' do
-      element.update_attribute :paused, true
+      element.pause!
 
       expect {
         element.toggle_paused!
@@ -286,7 +286,7 @@ describe SiteElement do
       end
 
       it 'raise an error when toggling paused site' do
-        element.update_attribute :paused, true
+        element.pause!
 
         expect { element.toggle_paused! }.to raise_error(ActiveRecord::RecordInvalid)
       end
