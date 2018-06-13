@@ -237,7 +237,10 @@ class AnalyticsProvider
         site_url: site&.url,
         subscription: subscription.name,
         schedule: subscription.schedule,
-        trial_days: subscription.trial_period || 0
+        trial_days: subscription.trial_period || 0,
+        previous_subscription: previous_subscription&.name,
+        previous_subscription_amount: previous_subscription&.amount,
+        previous_subscription_schedule: previous_subscription&.schedule
       }
     )
 
