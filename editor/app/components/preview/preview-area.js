@@ -116,6 +116,8 @@ export default Ember.Component.extend({
     'model.image_placement',
     'model.image_opacity',
     'model.image_url',
+    'model.image_overlay_color',
+    'model.image_overlay_opacity',
     'model.link_color',
     'model.link_style',
     'model.link_text',
