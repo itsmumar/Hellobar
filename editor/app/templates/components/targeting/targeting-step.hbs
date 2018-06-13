@@ -109,8 +109,10 @@
   </label>
   {{input value=model.settings.cookie_settings.duration
   placeholder="Cookie Duration"
-  maxlength=5
+  min=0
+  max=10000
   type="number"
+  name="duration"
   }}
 
   <label>
@@ -123,8 +125,10 @@
   </label>
   {{input value=model.settings.cookie_settings.success_duration
   placeholder="Success Cookie Duration"
-  maxlength=5
+  min=0
+  max=10000
   type="number"
+  name="success_duration"
   }}
 
 </div>
