@@ -45,6 +45,12 @@ class SiteElement < ApplicationRecord
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
+  validates :text_field_border_color, hex_color: true
+  validates :text_field_border_width, numericality: { integer: true }
+  validates :text_field_border_radius, numericality: { integer: true }
+  validates :text_field_text_color, hex_color: true
+  validates :text_field_background_color, hex_color: true
+  validates :text_field_opacity, numericality: { integer: true }
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed
