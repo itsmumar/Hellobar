@@ -100,11 +100,10 @@
   </div>
 
   <label>
-    <span>Don't display to repeat visitors for:</span>
+    <span>After user hides the site element, don't display it again to that user for:</span>
     {{#common/hints/popup-hint-trigger}}
-      <p>The number of days before the optin will display <br>
-        again once the user exits your campaign. <br>
-        <strong>Change to 0 to prevent cookies from being set.</strong></p>
+      <p>Number of days before the site element <br>
+        will be displayed again to the user once he hides it.</p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.duration
