@@ -103,7 +103,10 @@
     <span>After user hides the site element, don't display it again to that user for:</span>
     {{#common/hints/popup-hint-trigger}}
       <p>Number of days before the site element <br>
-        will be displayed again to the user once he hides it.</p>
+        will be displayed again to the user once he hides it.<br>
+        Note that when you update a site element, <br>
+        it will be shown again to all users who had previously dismissed it.
+      </p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.duration
@@ -119,7 +122,10 @@
     {{#common/hints/popup-hint-trigger}}
       <p>Number of days before the site element <br>
         will be displayed again to the user once he converts, <br>
-        i.e. submits an email or clicks on a button.</p>
+        i.e. submits an email or clicks on a button. <br>
+        Note that when you update a site element, <br>
+        it will be shown again to all users who had previously dismissed it.
+      </p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.success_duration
