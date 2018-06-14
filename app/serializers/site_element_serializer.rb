@@ -29,7 +29,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
     #
     # other
-    :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
+    :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
