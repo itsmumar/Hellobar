@@ -427,15 +427,13 @@ ActiveRecord::Schema.define(version: 20180613094344) do
     t.integer  "image_opacity",               limit: 4,        default: 100
     t.boolean  "enable_gdpr",                                  default: false
     t.datetime "paused_at"
-    t.string   "image_overlay_color",         limit: 10,       default: "ffffff"
-    t.integer  "image_overlay_opacity",       limit: 1,        default: 0
     t.boolean  "text_field_borderless",                        default: false
     t.string   "text_field_border_color",     limit: 10,       default: "e0e0e0"
     t.integer  "text_field_border_width",     limit: 1,        default: 1
     t.integer  "text_field_border_radius",    limit: 1,        default: 2
     t.string   "text_field_text_color",       limit: 10,       default: "5c5e60"
-    t.integer  "text_field_opacity",          limit: 1,        default: 100
     t.string   "text_field_background_color", limit: 10,       default: "ffffff"
+    t.integer  "text_field_opacity",          limit: 1,        default: 100
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

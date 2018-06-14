@@ -16,28 +16,32 @@
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "067d4d",
-      "font_id": "montserrat"
+      "font_id": "montserrat",
+      "text_field_borderless": false
     },
     "Slider": {
       "background_color": "0fcb80",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "067d4d",
-      "font_id": "montserrat"
+      "font_id": "montserrat",
+      "text_field_borderless": false
     },
     "Modal": {
       "background_color": "0fcb80",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "067d4d",
-      "font_id": "montserrat"
+      "font_id": "montserrat",
+      "text_field_borderless": false
     },
     "Takeover": {
       "background_color": "0fcb80",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "067d4d",
-      "font_id": "montserrat"
+      "font_id": "montserrat",
+      "text_field_borderless": false
     },
     "Alert": {
       "background_color": "0fcb80",
@@ -46,7 +50,8 @@
       "text_color": "ffffff",
       "button_color": "ffffff",
       "link_color": "067d4d",
-      "font_id": "montserrat"
+      "font_id": "montserrat",
+      "text_field_borderless": false
     }
   },
   "image": {

@@ -16,28 +16,32 @@
       "text_color": "43464b",
       "button_color": "f16334",
       "link_color": "FFFFFF",
-      "font_id": "roboto"
+      "font_id": "roboto",
+      "text_field_borderless": false
     },
     "Slider": {
       "background_color": "FFFFFF",
       "text_color": "43464b",
       "button_color": "f16334",
       "link_color": "FFFFFF",
-      "font_id": "roboto"
+      "font_id": "roboto",
+      "text_field_borderless": false
     },
     "Modal": {
       "background_color": "FFFFFF",
       "text_color": "43464b",
       "button_color": "f16334",
       "link_color": "FFFFFF",
-      "font_id": "roboto"
+      "font_id": "roboto",
+      "text_field_borderless": false
     },
     "Takeover": {
       "background_color": "FFFFFF",
       "text_color": "43464b",
       "button_color": "f16334",
       "link_color": "FFFFFF",
-      "font_id": "roboto"
+      "font_id": "roboto",
+      "text_field_borderless": false
     },
     "Alert": {
       "background_color": "ffffff",
@@ -46,7 +50,8 @@
       "text_color": "43464b",
       "button_color": "f16334",
       "link_color": "ffffff",
-      "font_id": "roboto"
+      "font_id": "roboto",
+      "text_field_borderless": false
     }
   },
   "image": {

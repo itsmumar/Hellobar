@@ -17,7 +17,8 @@
       "text_color": "7282B8",
       "button_color": "264AAE",
       "link_color": "FFFFFF",
-      "font_id": "open_sans"
+      "font_id": "open_sans",
+      "text_field_borderless": true
     }
   },
   "image": {

@@ -18,14 +18,16 @@
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
-      "font_id": "oswald"
+      "font_id": "oswald",
+      "text_field_borderless": true
     },
     "Alert": {
       "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
-      "font_id": "oswald"
+      "font_id": "oswald",
+      "text_field_borderless": true
     }
   },
   "image": {
