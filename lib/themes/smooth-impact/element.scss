@@ -119,7 +119,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       }
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       border-radius: 4px;
       display: block;
       font-size: 28px;
@@ -162,7 +162,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
     .hb-secondary-text {
       font-size: 0.8em;
       font-weight: normal;
-      color: white;
       margin: 0 auto;
       text-align: left;
 
@@ -215,7 +214,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
     }
 
     @media screen and (max-height: 700px) {
-      .hb-cta-style-button {
+      .hb-cta {
         padding: 5px 20px 8px;
       }
     }
@@ -298,7 +297,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       .hb-secondary-text {
         font-size: 1.3em;
         font-weight: normal;
-        color: white;
         margin: 0 auto;
         text-align: left;
 
@@ -368,7 +366,7 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         }
       }
 
-      .hb-cta-style-button {
+      .hb-cta {
         border-radius: 2px;
         display: block;
         font-size: 1.1em;

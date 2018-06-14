@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180613094344) do
+ActiveRecord::Schema.define(version: 20180614093710) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -427,6 +427,8 @@ ActiveRecord::Schema.define(version: 20180613094344) do
     t.integer  "image_opacity",               limit: 4,        default: 100
     t.boolean  "enable_gdpr",                                  default: false
     t.datetime "paused_at"
+    t.string   "image_overlay_color",         limit: 10,       default: "ffffff"
+    t.integer  "image_overlay_opacity",       limit: 1,        default: 0
     t.boolean  "text_field_borderless",                        default: false
     t.string   "text_field_border_color",     limit: 10,       default: "e0e0e0"
     t.integer  "text_field_border_width",     limit: 1,        default: 1

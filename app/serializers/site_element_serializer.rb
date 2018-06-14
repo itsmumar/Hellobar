@@ -19,7 +19,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     # image
     :image_url, :image_large_url, :image_modal_url, :image_style,
     :image_placement, :active_image_id, :image_file_name, :use_default_image,
-    :image_opacity,
+    :image_opacity, :image_overlay_color, :image_overlay_opacity,
     #
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
@@ -33,7 +33,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :text_field_text_color, :text_field_background_color, :text_field_opacity,
     #
     # other
-    :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
+    :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
