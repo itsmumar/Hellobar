@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180612094511) do
+ActiveRecord::Schema.define(version: 20180614093710) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -378,7 +378,6 @@ ActiveRecord::Schema.define(version: 20180612094511) do
     t.string   "button_color",       limit: 255,      default: "000000"
     t.string   "font_id",            limit: 255,      default: "open_sans"
     t.string   "link_color",         limit: 255,      default: "ffffff"
-    t.string   "link_style",         limit: 255,      default: "button"
     t.string   "link_text",          limit: 5000,     default: "Click Here"
     t.text     "headline",           limit: 16777215
     t.string   "size",               limit: 255,      default: "large"
