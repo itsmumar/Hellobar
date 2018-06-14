@@ -2,7 +2,7 @@
   <div id="hb-fields-form">
     {{ siteElement.model().settings.fields_to_collect ? siteElement.model().settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return hellobar('elements.collecting').createInputFieldHtml(field, siteElement); }).join('') : '' }}
 
-    <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta hb-cta-style-button {{siteElement.model().wiggle}}"
+    <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta {{siteElement.model().wiggle}}"
             onclick="if (hellobar('base.preview').isActive()) {
                        return false;
                      } else {

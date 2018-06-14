@@ -1,6 +1,6 @@
 <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}
   id="hb-traffic-cta"
-  class="hb-cta hb-cta-style-button {{siteElement.model().wiggle}}"
+  class="hb-cta {{siteElement.model().wiggle}}"
   onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.model().open_in_new_window ? 'true' : 'false'}} };"
   href="{{siteElement.model().settings.url}}"
   target="{{siteElement.model().open_in_new_window ? '_blank' : '_parent'}}"
