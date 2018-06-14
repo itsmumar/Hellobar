@@ -70,4 +70,4 @@ describe CreateSite do
       expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
- end
+end
