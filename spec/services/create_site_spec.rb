@@ -62,4 +62,12 @@ describe CreateSite do
       end
     end
   end
-end
+
+  context 'when URL is invalid' do
+    let(:site) { build(:site, url: 'qqq') }
+
+    it 'raises an error' do
+      expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
+ end

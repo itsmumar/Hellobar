@@ -16,6 +16,7 @@ class CreateSite
 
   # @return Site
   def call
+    validate_site!
     check_for_duplicate!
     create_site
     track_site_creation
@@ -43,6 +44,10 @@ class CreateSite
 
   def track_site_creation
     TrackEvent.new(:created_site, site: site, user: user).call
+  end
+
+  def validate_site!
+    site.validate!
   end
 
   def create_site
