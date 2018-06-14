@@ -109,7 +109,7 @@ export default Ember.Component.extend({
     'model.button_border',
     'model.button_border_color',
     'model.button_border_width',
-    'model.button_rounded_corners',
+    'model.button_border_radius',
     'model.caption',
     'model.content',
     'model.closable',

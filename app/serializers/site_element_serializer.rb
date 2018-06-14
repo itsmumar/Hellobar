@@ -16,7 +16,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
     :animated, :wiggle_button, :theme, :theme_id,
     :button_border, :button_border_color, :button_border_width,
-    :button_rounded_corners,
+    :button_border_radius,
     #
     # image
     :image_url, :image_large_url, :image_modal_url, :image_style,

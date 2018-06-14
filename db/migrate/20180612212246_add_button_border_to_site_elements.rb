@@ -3,6 +3,6 @@ class AddButtonBorderToSiteElements < ActiveRecord::Migration
     add_column :site_elements, :button_border, :boolean, default: false, null: false
     add_column :site_elements, :button_border_color, :string, default: 'ffffff', null: false
     add_column :site_elements, :button_border_width, :integer, default: 0, null: false
-    add_column :site_elements, :button_rounded_corners, :integer, default: 0, null: false
+    add_column :site_elements, :button_border_radius, :integer, default: 0, null: false
   end
 end

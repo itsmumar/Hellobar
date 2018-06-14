@@ -26,7 +26,7 @@ export default Ember.Component.extend({
     },
 
     buttonCornersUpdated(value) {
-      this.set('model.button_rounded_corners', value);
+      this.set('model.button_border_radius', value);
     }
   }
 

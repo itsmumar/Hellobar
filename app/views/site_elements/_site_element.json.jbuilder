@@ -59,7 +59,7 @@ json.cache! site_element do
     :button_border,
     :button_border_color,
     :button_border_width,
-    :button_rounded_corners
+    :button_border_radius
 
   json.font site_element.font.try(:value)
 

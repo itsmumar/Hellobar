@@ -123,7 +123,7 @@ class SiteElementsController < ApplicationController
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr,
       :button_border, :button_border_color, :button_border_width,
-      :button_rounded_corners,
+      :button_border_radius,
       settings: settings_keys
     )
   end
