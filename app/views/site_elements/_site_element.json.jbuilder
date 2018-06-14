@@ -35,7 +35,6 @@ json.cache! site_element do
     :content,
     :image_placement,
     :link_color,
-    :link_style,
     :link_text,
     :name_placeholder,
     :phone_number,
