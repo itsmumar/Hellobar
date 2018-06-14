@@ -121,7 +121,7 @@ class SiteElementsController < ApplicationController
       :thank_you_text, :theme_id, :type, :use_question,
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
-      :trigger_icon_color, :enable_gdpr,
+      :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       settings: settings_keys
     )
   end
