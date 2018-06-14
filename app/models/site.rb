@@ -128,7 +128,7 @@ class Site < ApplicationRecord
   end
 
   def url=(value)
-    super(Addressable::URI.heuristic_parse(value)&.normalized_site)
+    super(Addressable::URI.heuristic_parse(value)&.normalized_site || value)
   rescue Addressable::URI::InvalidURIError
     super(value)
   end
