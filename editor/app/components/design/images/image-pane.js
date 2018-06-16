@@ -33,6 +33,11 @@ export default Ember.Component.extend({
     }
   ),
 
+  backgroundImage: Ember.computed('model.image_placement', function () {
+      return this.get('model.image_placement') === 'background';
+    }
+  ),
+
   actions: {
     selectImagePlacement(imagePlacement) {
       this.set('model.image_placement', imagePlacement.value);
