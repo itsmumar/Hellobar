@@ -47,8 +47,6 @@ class TapfiliateGateway
 
   def commission_comment bill
     subscription = bill.subscription
-    site = subscription.site
-    user = subscription.credit_card.user
 
     "Paid Bill##{ bill.id } for #{ subscription.type } (#{ subscription.schedule })"
   end
