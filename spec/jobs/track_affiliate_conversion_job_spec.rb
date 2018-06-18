@@ -1,4 +1,4 @@
-describe StoreConversionAtTapfiliateJob do
+describe TrackAffiliateConversionJob do
   let(:job) { described_class }
   let(:gateway) { instance_double TapfiliateGateway }
   let(:user) { create :user, :affiliate }
@@ -7,8 +7,7 @@ describe StoreConversionAtTapfiliateJob do
     let(:perform) { job.new.perform user }
 
     it 'calls TapfiliateGateway#store_conversion' do
-      expect(TapfiliateGateway).to receive(:new).and_return gateway
-      expect(gateway).to receive(:store_conversion).with user: user
+      expect(TrackAffiliateConversion).to receive_service_call.with user
 
       perform
     end

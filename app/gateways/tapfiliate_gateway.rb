@@ -13,9 +13,7 @@ class TapfiliateGateway
       amount: 0
     }
 
-    result = post! '/', body
-
-    save_conversion_identifier user, result
+    post! '/', body
   end
 
   # paid bill tracking
@@ -45,14 +43,6 @@ class TapfiliateGateway
       'Content-Type' => 'application/json',
       'Api-Key' => Settings.tapfiliate_api_key
     }
-  end
-
-  def save_conversion_identifier user, result
-    if result.success?
-      user.affiliate_information.update conversion_identifier: result['id']
-    else
-      Rails.logger.info "Tapfiliate error: #{ result['errors'] }"
-    end
   end
 
   def commission_comment bill
