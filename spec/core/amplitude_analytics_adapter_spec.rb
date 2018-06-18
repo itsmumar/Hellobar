@@ -4,7 +4,7 @@ describe AmplitudeAnalyticsAdapter do
   let(:params) { Hash[foo: 'bar'] }
   let(:user_properties) do
     %i[email primary_domain additional_domains contact_lists total_views
-       total_conversions sites_count site_elements_count]
+       total_conversions sites_count site_elements_count affiliate_identifier]
   end
 
   let(:adapter) { AmplitudeAnalyticsAdapter.new }
