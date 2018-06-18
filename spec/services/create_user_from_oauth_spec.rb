@@ -21,19 +21,22 @@ describe CreateUserFromOauth do
     )
   end
 
-  let(:service) { CreateUserFromOauth.new(omniauth_hash) }
+  let(:cookies) { Hash[tap_vid: 'vid', tap_aid: 'aid'] }
+  let(:service) { CreateUserFromOauth.new(omniauth_hash, cookies) }
 
   it 'creates user' do
     expect { service.call }.to change(User, :count).by(1)
   end
 
   it 'calls CreateUser service' do
-    expect(CreateUser).to receive_service_call.with(a_kind_of(User))
+    expect(CreateUser).to receive_service_call.with(a_kind_of(User), cookies)
+
     service.call
   end
 
   it 'returns the user' do
     user = service.call
+
     expect(user).to be_a User
     expect(user).to be_persisted
   end
