@@ -6,7 +6,7 @@ class CreatePartners < ActiveRecord::Migration
       t.string :email
       t.string :website_url
       t.string :affiliate_identifier
-      t.string :plan_id
+      t.string :partner_plan_id
 
       t.timestamps null: false
     end

@@ -3,13 +3,13 @@ class Partner < ActiveRecord::Base
   validates :last_name, presence: true
   validates :email, presence: true, format: { with: Devise.email_regexp }
   validates :website_url, presence: true, url: true
-  validates :plan, presence: true
+  validates :partner_plan, presence: true
 
-  def plan
-    plan_id && PartnerPlan.find(plan_id)
+  def partner_plan
+    partner_plan_id && PartnerPlan.find(partner_plan_id)
   end
 
-  def plan=(value)
-    self.plan_id = value.try(:id)
+  def partner_plan=(value)
+    self.partner_plan_id = value.try(:id)
   end
 end

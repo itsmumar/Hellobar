@@ -38,6 +38,6 @@ class Admin::PartnersController < AdminController
   private
 
   def partner_params
-    params.require(:partner).permit(:first_name, :last_name, :email, :url, :website_url, :affiliate_identifier, :plan_id)
+    params.require(:partner).permit(:first_name, :last_name, :email, :url, :website_url, :affiliate_identifier, :partner_plan_id)
   end
 end

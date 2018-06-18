@@ -5,6 +5,6 @@ FactoryBot.define do
     sequence(:email) { |n| "partner#{ n }@email.com" }
     sequence(:website_url) { |n| "http://partner-site#{ n }.com" }
     sequence(:affiliate_identifier) { |n| "partner#{ n }" }
-    plan { PartnerPlan.all.first }
+    partner_plan { PartnerPlan.all.first }
   end
 end

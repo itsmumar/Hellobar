@@ -4,7 +4,7 @@
   = f.input :email
   = f.input :website_url
   = f.input :affiliate_identifier
-  = f.input :plan_id, collection: PartnerPlan.all
+  = f.input :partner_plan_id, collection: PartnerPlan.all
 
   = f.button :submit, 'Save', class: 'btn btn-primary'
   =< link_to 'Cancel', admin_partners_path, class: 'btn btn-default'

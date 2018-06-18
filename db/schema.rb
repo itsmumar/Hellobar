@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(version: 20180618130554) do
     t.string   "email",                limit: 255
     t.string   "website_url",          limit: 255
     t.string   "affiliate_identifier", limit: 255
-    t.string   "plan_id",              limit: 255
+    t.string   "partner_plan_id",      limit: 255
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
   end
