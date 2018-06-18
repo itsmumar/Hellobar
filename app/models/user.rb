@@ -11,7 +11,10 @@ class User < ApplicationRecord
   before_save :clear_invite_token
   after_save :disconnect_oauth, if: :oauth_user?
   after_create :create_referral_token
+
   has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
+  has_one :affiliate_information
+
   has_many :credit_cards, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
@@ -32,6 +35,7 @@ class User < ApplicationRecord
   validate :oauth_email_change, if: :oauth_user?
 
   delegate :url_helpers, to: 'Rails.application.routes'
+  delegate :affiliate_identifier, to: :affiliate_information, allow_nil: true
 
   attr_accessor :timezone, :is_impersonated
 

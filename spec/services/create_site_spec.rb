@@ -39,17 +39,10 @@ describe CreateSite do
     service.call
   end
 
-  it 'calls TrackEvent with :created_site and :changed_subscription events' do
+  it 'calls TrackEvent with :created_site event' do
     expect(TrackEvent)
       .to receive_service_call
       .with(:created_site, site: site, user: user)
-
-    expect(TrackEvent)
-      .to receive_service_call
-      .with(:changed_subscription,
-        subscription: instance_of(Subscription::Free),
-        previous_subscription: nil,
-        user: user)
 
     service.call
   end
@@ -67,6 +60,14 @@ describe CreateSite do
         expect(error.existing_site).to eql existing_site
         expect(error.message).to eql 'Url is already in use.'
       end
+    end
+  end
+
+  context 'when URL is invalid' do
+    let(:site) { build(:site, url: 'qqq') }
+
+    it 'raises an error' do
+      expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

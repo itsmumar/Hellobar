@@ -46,12 +46,16 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(user)
-    if user.sites.empty?
+    return_url = stored_location_for(user)
+
+    if return_url.present?
+      return_url
+    elsif user.sites.empty?
       new_site_path
     elsif user.sites.count == 1 && user.site_elements.empty?
       new_site_site_element_path(current_site)
     else
-      stored_location_for(user).presence || site_path(current_site)
+      site_path(current_site)
     end
   end
 
@@ -111,6 +115,14 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render html: error, status: error }
       format.json { render json: { error: error }, status: error }
+    end
+  end
+
+  def record_invalid(e)
+    respond_to do |format|
+      format.json do
+        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+      end
     end
   end
 end

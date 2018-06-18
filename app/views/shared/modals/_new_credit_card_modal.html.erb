@@ -1,0 +1,22 @@
+<script id="new-credit-card-modal-template" type="text/x-handlebars-template">
+  <div class="modal-wrapper">
+    <div class="modal-block">
+      <div class="flash-block"><i class="icon-close"></i></div>
+
+      <header>
+        <div class="modal-title">Add new credit card</div>
+      </header>
+
+      <form class="new-credit-card-form" accept-charset="UTF-8">
+        <div class="wrapper">
+          <%= render 'shared/modals/new_credit_card_form' -%>
+        </div>
+      </form>
+
+      <footer>
+        <a class="button cancel">Cancel</a>
+        <a class="button submit">Add</a>
+      </footer>
+    </div>
+  </div>
+</script>

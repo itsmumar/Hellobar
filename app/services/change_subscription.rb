@@ -14,6 +14,11 @@ class ChangeSubscription
     end
   end
 
+  def same_subscription?
+    old_subscription.is_a?(subscription_class) &&
+      billing_params[:schedule] == old_subscription.schedule
+  end
+
   private
 
   attr_reader :site, :credit_card, :billing_params, :old_subscription
@@ -33,11 +38,6 @@ class ChangeSubscription
   def cancel_subscription_if_it_is_free
     return if !old_subscription || old_subscription.paid?
     old_subscription.bills.free.each(&:void!)
-  end
-
-  def same_subscription?
-    old_subscription.is_a?(subscription_class) &&
-      billing_params[:schedule] == old_subscription.schedule
   end
 
   def update_credit_card
@@ -120,12 +120,7 @@ class ChangeSubscription
 
     BillingLogger.change_subscription(site, props)
 
-    TrackEvent.new(
-      :changed_subscription,
-      subscription: subscription,
-      previous_subscription: old_subscription,
-      user: credit_card&.user || site.owners.first
-    ).call
+    TrackSubscriptionChange.new(credit_card&.user || site.owners.first, old_subscription, subscription).call
   end
 
   def downgrading_to_free?

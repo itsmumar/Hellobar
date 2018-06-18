@@ -55,6 +55,7 @@ class Site < ApplicationRecord
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
   scope :by_url, ->(url) { protocol_ignored_url(url) }
+  scope :active, -> { script_installed.joins(:site_elements).merge(SiteElement.active).distinct }
 
   before_validation :generate_read_write_keys
 
@@ -63,6 +64,7 @@ class Site < ApplicationRecord
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
   validates :communication_types, presence: true, on: :update_privacy
+  validates :gdpr_consent_language, inclusion: { in: I18n.t('gdpr.languages').keys.map(&:to_s) }
 
   delegate :installed?, :name, :url, to: :script, prefix: true
 
@@ -122,11 +124,11 @@ class Site < ApplicationRecord
   end
 
   def communication_types
-    self[:communication_types]&.split(',')
+    self[:communication_types]&.split(',') || []
   end
 
   def url=(value)
-    super(Addressable::URI.heuristic_parse(value)&.normalized_site)
+    super(Addressable::URI.heuristic_parse(value)&.normalized_site || value)
   rescue Addressable::URI::InvalidURIError
     super(value)
   end
@@ -218,6 +220,27 @@ class Site < ApplicationRecord
     communication_types? &&
       terms_and_conditions_url? &&
       privacy_policy_url?
+  end
+
+  def gdpr_consent
+    topics = communication_types.map do |type|
+      I18n.t(type, scope: 'gdpr.communication_types', locale: gdpr_consent_language)
+    end
+
+    topics = topics.to_sentence(locale: gdpr_consent_language)
+
+    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consent_language)
+  end
+
+  def gdpr_agreement
+    I18n.t('gdpr.agreement',
+      locale: gdpr_consent_language,
+      privacy_policy_url: privacy_policy_url,
+      terms_and_conditions_url: terms_and_conditions_url)
+  end
+
+  def gdpr_action
+    I18n.t('gdpr.action', locale: gdpr_consent_language)
   end
 
   private

@@ -121,22 +121,9 @@ class SiteElementsController < ApplicationController
       :thank_you_text, :theme_id, :type, :use_question,
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
-      :trigger_icon_color, :enable_gdpr,
-      { settings: settings_keys },
-      blocks: blocks_keys
+      :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
+      settings: settings_keys
     )
-  end
-
-  def blocks_keys
-    [
-      :id,
-      { content: %i[text href] },
-      themes: [
-        :id,
-        :css_classes,
-        { styles: %i[background_color border_color] }
-      ]
-    ]
   end
 
   def settings_keys

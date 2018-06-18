@@ -15,6 +15,7 @@ class BillSerializer < ActiveModel::Serializer
   end
 
   def upgrade?
+    return false if scope[:same_subscription]
     return true unless object.site.previous_subscription
 
     Subscription::Comparison.new(object.site.previous_subscription, object.subscription).upgrade?

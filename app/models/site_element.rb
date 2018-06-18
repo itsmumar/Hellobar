@@ -28,13 +28,9 @@ class SiteElement < ApplicationRecord
     'social/follow_on_pinterest'      => 'Follows',
     'social/share_on_buffer'          => 'Shares',
     'social/share_on_linkedin'        => 'Shares',
-    'question'                        => 'Question',
-
-    # themes type `template`
-    'traffic_growth'                  => 'Emails'
+    'question'                        => 'Question'
   }.freeze
 
-  TEMPLATE_NAMES = %w[traffic_growth].freeze
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
   belongs_to :rule
@@ -49,6 +45,8 @@ class SiteElement < ApplicationRecord
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
+  validates :image_overlay_color, hex_color: true
+  validates :image_overlay_opacity, numericality: true
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed
@@ -58,21 +56,21 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_redirect_url_allowed, if: :email?
   validate :ensure_custom_redirect_url_configured, if: :email?
 
-  scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
-  scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
-  scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
-  scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
-  scope :content_upgrades, -> { where("type = 'ContentUpgrade'") }
-  scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
+  scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
+  scope :active_content_upgrades, -> { where(paused_at: nil).where(type: 'ContentUpgrade') }
+  scope :content_upgrades, -> { where(type: 'ContentUpgrade') }
+  scope :has_performance, -> { where.not(element_subtype: 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
   scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
-  scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
+  scope :social_subtype, -> { where("site_elements.element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
-  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
+  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order(created_at: :desc).limit(limit).select { |se| se.announcement? || se.converted? } }
   scope :matching_content, ->(*query) { matching(:content, *query) }
   scope :wordpress_bars, -> { where.not(wordpress_bar_id: nil) }
 
@@ -83,7 +81,6 @@ class SiteElement < ApplicationRecord
   delegate :conversion_rate, to: :statistics
 
   store :settings, coder: Hash
-  serialize :blocks, Array
 
   after_destroy :nullify_image_upload_reference
 
@@ -93,7 +90,7 @@ class SiteElement < ApplicationRecord
     created_at
     updated_at
     deleted_at
-    paused
+    paused_at
   ].freeze
 
   QUESTION_DEFAULTS = {
@@ -113,7 +110,7 @@ class SiteElement < ApplicationRecord
   end
 
   def self.types
-    [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
+    [Bar, Modal, Slider, Takeover, Alert].map(&:name)
   end
 
   def caption=(value)
@@ -166,8 +163,32 @@ class SiteElement < ApplicationRecord
     total_conversions > 0
   end
 
+  def pause
+    update(paused_at: Time.current)
+  end
+
+  def pause!
+    update!(paused_at: Time.current)
+  end
+
+  def unpause
+    update(paused_at: nil)
+  end
+
+  def unpause!
+    update!(paused_at: nil)
+  end
+
+  def paused?
+    paused_at.present?
+  end
+
   def toggle_paused!
-    update! paused: !paused?
+    if paused?
+      unpause!
+    else
+      pause!
+    end
   end
 
   def short_subtype
@@ -175,16 +196,9 @@ class SiteElement < ApplicationRecord
   end
 
   def self.all_templates
-    [].tap do |templates|
-      types.each do |type|
-        BAR_TYPES.each_key do |subtype|
-          if TEMPLATE_NAMES.include?(subtype)
-            types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            templates << "#{ type.downcase }_#{ subtype }" if types.include?(type)
-          else
-            templates << "#{ type.downcase }_#{ subtype }"
-          end
-        end
+    types.flat_map do |type|
+      BAR_TYPES.keys.map do |subtype|
+        "#{ type.downcase }_#{ subtype }"
       end
     end
   end

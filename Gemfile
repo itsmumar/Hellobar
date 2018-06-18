@@ -20,6 +20,9 @@ gem 'rotp'
 gem 'rqrcode'
 gem 'ruby-hmac'
 
+# OAuth provider
+gem 'doorkeeper'
+
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
 gem 'omniauth-constantcontact2', github: 'Hello-bar/omniauth-constantcontact2'
@@ -140,7 +143,6 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-shell'
-  gem 'guard-teaspoon'
   gem 'terminal-notifier-guard'
 
   # Debugging
@@ -156,8 +158,6 @@ end
 group :development, :test do
   gem 'factory_bot_rails'
   gem 'rspec-rails'
-  gem 'teaspoon', github: 'jejacks0n/teaspoon'
-  gem 'teaspoon-jasmine'
 
   # Debugging
   gem 'pry'

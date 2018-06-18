@@ -55,10 +55,9 @@ class Bill < ApplicationRecord
   before_save :check_amount
   before_validation :set_base_amount, :check_amount
 
-  scope :with_amount, -> { where('bills.amount > 0') }
-  scope :non_free, -> { where.not(amount: 0) }
+  scope :non_free, -> { where('bills.amount > 0') }
   scope :free, -> { where(amount: 0) }
-  scope :due_now, -> { pending.with_amount.where('? >= bill_at', Time.current) }
+  scope :due_now, -> { pending.non_free.where('? >= bill_at', Time.current) }
   scope :not_voided, -> { where.not(status: STATE_VOIDED) }
   scope :not_pending, -> { where.not(status: STATE_PENDING) }
   scope :active, -> { not_voided.where('DATE(bills.start_date) <= :now AND DATE(bills.end_date) >= :now', now: Date.current) }

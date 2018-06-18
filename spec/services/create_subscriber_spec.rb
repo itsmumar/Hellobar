@@ -45,6 +45,20 @@ describe CreateSubscriber do
     )
   end
 
+  context 'when email includes characters in upper case' do
+    let(:params) { { email: 'John.Smith@EMAIL.com' } }
+
+    it 'converts email to lower case' do
+      expect(dynamo).to receive(:put_item).with(hash_including(item: {
+        lid: contact_list.id,
+        email: 'john.smith@email.com',
+        ts: Time.current.to_i
+      })).and_return(response)
+
+      service.call
+    end
+  end
+
   context 'when name is blank' do
     let(:params) { { email: 'email@example.com', name: '' } }
 

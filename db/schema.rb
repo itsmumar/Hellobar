@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180523130554) do
+ActiveRecord::Schema.define(version: 20180614093710) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(version: 20180523130554) do
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
+
+  create_table "affiliate_information", force: :cascade do |t|
+    t.integer  "user_id",               limit: 4,   null: false
+    t.string   "visitor_identifier",    limit: 255, null: false
+    t.string   "affiliate_identifier",  limit: 255, null: false
+    t.string   "conversion_identifier", limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "affiliate_information", ["user_id"], name: "index_affiliate_information_on_user_id", using: :btree
 
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id",       limit: 4,   null: false
@@ -251,6 +262,7 @@ ActiveRecord::Schema.define(version: 20180523130554) do
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
 
+<<<<<<< HEAD
   create_table "partners", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "email",      limit: 255
@@ -259,6 +271,51 @@ ActiveRecord::Schema.define(version: 20180523130554) do
     t.datetime "updated_at",             null: false
   end
 
+=======
+  create_table "oauth_access_grants", force: :cascade do |t|
+    t.integer  "resource_owner_id", limit: 4,     null: false
+    t.integer  "application_id",    limit: 4,     null: false
+    t.string   "token",             limit: 255,   null: false
+    t.integer  "expires_in",        limit: 4,     null: false
+    t.text     "redirect_uri",      limit: 65535, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "revoked_at"
+    t.string   "scopes",            limit: 255
+  end
+
+  add_index "oauth_access_grants", ["application_id"], name: "fk_rails_b4b53e07b8", using: :btree
+  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
+
+  create_table "oauth_access_tokens", force: :cascade do |t|
+    t.integer  "resource_owner_id",      limit: 4
+    t.integer  "application_id",         limit: 4
+    t.string   "token",                  limit: 255,              null: false
+    t.string   "refresh_token",          limit: 255
+    t.integer  "expires_in",             limit: 4
+    t.datetime "revoked_at"
+    t.datetime "created_at",                                      null: false
+    t.string   "scopes",                 limit: 255
+    t.string   "previous_refresh_token", limit: 255, default: "", null: false
+  end
+
+  add_index "oauth_access_tokens", ["application_id"], name: "fk_rails_732cb83ab7", using: :btree
+  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
+  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
+  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
+
+  create_table "oauth_applications", force: :cascade do |t|
+    t.string   "name",         limit: 255,                null: false
+    t.string   "uid",          limit: 255,                null: false
+    t.string   "secret",       limit: 255,                null: false
+    t.text     "redirect_uri", limit: 65535,              null: false
+    t.string   "scopes",       limit: 255,   default: "", null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+
+>>>>>>> master
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
     t.integer  "tokenizable_id",   limit: 4
@@ -324,64 +381,64 @@ ActiveRecord::Schema.define(version: 20180523130554) do
   create_table "site_elements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",    limit: 191,                              null: false
-    t.boolean  "closable",                            default: false
-    t.boolean  "show_border",                         default: false
-    t.string   "background_color",   limit: 255,      default: "eb593c"
-    t.string   "border_color",       limit: 255,      default: "ffffff"
-    t.string   "button_color",       limit: 255,      default: "000000"
-    t.string   "font_id",            limit: 255,      default: "open_sans"
-    t.string   "link_color",         limit: 255,      default: "ffffff"
-    t.string   "link_style",         limit: 255,      default: "button"
-    t.string   "link_text",          limit: 5000,     default: "Click Here"
-    t.text     "headline",           limit: 16777215
-    t.string   "size",               limit: 255,      default: "large"
-    t.string   "text_color",         limit: 255,      default: "ffffff"
-    t.string   "texture",            limit: 255,      default: "none"
-    t.boolean  "paused",                              default: false
-    t.integer  "rule_id",            limit: 4
-    t.text     "settings",           limit: 16777215
-    t.boolean  "show_branding",                       default: true
-    t.integer  "contact_list_id",    limit: 4
-    t.string   "thank_you_text",     limit: 255
-    t.boolean  "pushes_page_down",                    default: true
-    t.boolean  "remains_at_top",                      default: true
-    t.integer  "wordpress_bar_id",   limit: 4
-    t.boolean  "open_in_new_window",                  default: false
-    t.boolean  "animated",                            default: true
-    t.boolean  "wiggle_button",                       default: false
-    t.string   "type",               limit: 255,      default: "Bar"
-    t.text     "caption",            limit: 16777215
-    t.text     "content",            limit: 16777215
-    t.string   "placement",          limit: 255
+    t.string   "element_subtype",       limit: 191,                              null: false
+    t.boolean  "closable",                               default: false
+    t.boolean  "show_border",                            default: false
+    t.string   "background_color",      limit: 255,      default: "eb593c"
+    t.string   "border_color",          limit: 255,      default: "ffffff"
+    t.string   "button_color",          limit: 255,      default: "000000"
+    t.string   "font_id",               limit: 255,      default: "open_sans"
+    t.string   "link_color",            limit: 255,      default: "ffffff"
+    t.string   "link_text",             limit: 5000,     default: "Click Here"
+    t.text     "headline",              limit: 16777215
+    t.string   "size",                  limit: 255,      default: "large"
+    t.string   "text_color",            limit: 255,      default: "ffffff"
+    t.string   "texture",               limit: 255,      default: "none"
+    t.integer  "rule_id",               limit: 4
+    t.text     "settings",              limit: 16777215
+    t.boolean  "show_branding",                          default: true
+    t.integer  "contact_list_id",       limit: 4
+    t.string   "thank_you_text",        limit: 255
+    t.boolean  "pushes_page_down",                       default: true
+    t.boolean  "remains_at_top",                         default: true
+    t.integer  "wordpress_bar_id",      limit: 4
+    t.boolean  "open_in_new_window",                     default: false
+    t.boolean  "animated",                               default: true
+    t.boolean  "wiggle_button",                          default: false
+    t.string   "type",                  limit: 255,      default: "Bar"
+    t.text     "caption",               limit: 16777215
+    t.text     "content",               limit: 16777215
+    t.string   "placement",             limit: 255
     t.datetime "deleted_at"
-    t.string   "view_condition",     limit: 255,      default: "immediately"
-    t.string   "email_placeholder",  limit: 255,      default: "Your email",  null: false
-    t.string   "name_placeholder",   limit: 255,      default: "Your name",   null: false
-    t.string   "image_placement",    limit: 255,      default: "bottom"
-    t.integer  "active_image_id",    limit: 4
-    t.string   "question",           limit: 255
-    t.string   "answer1",            limit: 255
-    t.string   "answer2",            limit: 255
-    t.string   "answer1response",    limit: 255
-    t.string   "answer2response",    limit: 255
-    t.string   "answer1link_text",   limit: 255
-    t.string   "answer2link_text",   limit: 255
-    t.string   "answer1caption",     limit: 255
-    t.string   "answer2caption",     limit: 255
-    t.boolean  "use_question",                        default: false
-    t.string   "phone_number",       limit: 255
-    t.string   "phone_country_code", limit: 255,      default: "US"
-    t.string   "theme_id",           limit: 255
-    t.boolean  "use_default_image",                   default: true,          null: false
-    t.text     "blocks",             limit: 16777215
-    t.string   "offer_text",         limit: 255
-    t.string   "sound",              limit: 255,      default: "none",        null: false
-    t.integer  "notification_delay", limit: 4,        default: 10,            null: false
-    t.string   "trigger_color",      limit: 255,      default: "31b5ff",      null: false
-    t.string   "trigger_icon_color", limit: 255,      default: "ffffff",      null: false
-    t.integer  "image_opacity",      limit: 4,        default: 100
-    t.boolean  "enable_gdpr",                         default: false
+    t.string   "view_condition",        limit: 255,      default: "immediately"
+    t.string   "email_placeholder",     limit: 255,      default: "Your email",  null: false
+    t.string   "name_placeholder",      limit: 255,      default: "Your name",   null: false
+    t.string   "image_placement",       limit: 255,      default: "bottom"
+    t.integer  "active_image_id",       limit: 4
+    t.string   "question",              limit: 255
+    t.string   "answer1",               limit: 255
+    t.string   "answer2",               limit: 255
+    t.string   "answer1response",       limit: 255
+    t.string   "answer2response",       limit: 255
+    t.string   "answer1link_text",      limit: 255
+    t.string   "answer2link_text",      limit: 255
+    t.string   "answer1caption",        limit: 255
+    t.string   "answer2caption",        limit: 255
+    t.boolean  "use_question",                           default: false
+    t.string   "phone_number",          limit: 255
+    t.string   "phone_country_code",    limit: 255,      default: "US"
+    t.string   "theme_id",              limit: 255
+    t.boolean  "use_default_image",                      default: true,          null: false
+    t.string   "offer_text",            limit: 255
+    t.string   "sound",                 limit: 255,      default: "none",        null: false
+    t.integer  "notification_delay",    limit: 4,        default: 10,            null: false
+    t.string   "trigger_color",         limit: 255,      default: "31b5ff",      null: false
+    t.string   "trigger_icon_color",    limit: 255,      default: "ffffff",      null: false
+    t.integer  "image_opacity",         limit: 4,        default: 100
+    t.boolean  "enable_gdpr",                            default: false
+    t.datetime "paused_at"
+    t.string   "image_overlay_color",   limit: 10,       default: "ffffff"
+    t.integer  "image_overlay_opacity", limit: 1,        default: 0
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -418,6 +475,7 @@ ActiveRecord::Schema.define(version: 20180523130554) do
     t.string   "privacy_policy_url",              limit: 255
     t.string   "terms_and_conditions_url",        limit: 255
     t.string   "communication_types",             limit: 255,      default: "newsletter,promotional,partnership,product,research"
+    t.string   "gdpr_consent_language",           limit: 10,       default: "en"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -478,9 +536,12 @@ ActiveRecord::Schema.define(version: 20180523130554) do
     t.datetime "updated_at"
   end
 
+  add_foreign_key "affiliate_information", "users"
   add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "subscriptions", "credit_cards"
 end

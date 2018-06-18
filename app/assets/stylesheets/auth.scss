@@ -1,0 +1,93 @@
+//-----------  External Libraries  -----------//
+
+@import 'normalize';                // CSS Normalization & Resets (http://necolas.github.io/normalize.css)
+
+//-----------  Application Settings  -----------//
+
+@import 'settings/variables';       // Global Variables & Settings
+@import 'settings/mixins';          // Additional Custom Mixins
+@import 'settings/fonts';           // Custom Font & Typeface Settings & Mixins
+
+body {
+  background-color: $grayLightest;
+  font-weight: $fontWeightLight;
+  font-family: "proxima-nova", sans-serif;
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: $red;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+
+  &.btn-primary {
+    background-color: $red;
+    border-color: $red;
+    color: $white;
+
+    &:hover {
+      border-color: darken($red, 5%);
+      background-color: darken($red, 5%);
+    }
+  }
+
+  &.btn-default {
+    background-color: $grayDark;
+    color: $white;
+
+    &:hover {
+      background-color: darken($grayDark, 5%);
+    }
+  }
+}
+
+header {
+  .logo {
+    width: 15rem;
+    height: 3.33rem;
+    margin: 3rem auto;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: image-url('hellobar-logonew.png');
+  }
+}
+
+#container {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+
+  main {
+    min-width: 20rem;
+    min-height: 12rem;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    background: #fff;
+
+    .title {
+      text-align: center;
+    }
+
+    .body {
+      .actions {
+        form {
+          width: 100%;
+          margin-top: 5px;
+
+          .btn {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

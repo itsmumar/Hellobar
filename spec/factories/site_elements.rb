@@ -12,14 +12,6 @@ FactoryBot.define do
 
     rule
 
-    trait :with_blocks do
-      blocks [
-        { 'id' => 'headline_first', 'content' => { 'text' => '<strong>Grow your blog traffic by</strong>' } },
-        { 'id' => 'headline_second', 'content' => { 'text' => '<strong>300%</strong>' } },
-        { 'id' => 'headline_third', 'content' => { 'text' => '<strong>with our free tool</strong>' } }
-      ]
-    end
-
     trait :geolocation do
       headline '<p>
         Country: <span data-hb-geolocation="country"></span>,
@@ -35,6 +27,7 @@ FactoryBot.define do
       name_placeholder 'name_placeholder'
       email_placeholder 'email_placeholder'
       link_text 'link_text'
+      enable_gdpr true
 
       content_upgrade_settings
     end
@@ -136,10 +129,10 @@ FactoryBot.define do
       {
         'animated' => true, 'background_color' => 'eb593c', 'border_color' => 'ffffff', 'button_color' => '000000',
         'email_placeholder' => 'Your email', 'headline' => 'Hello, HelloBar!', 'image_placement' => 'bottom',
-        'link_color' => 'ffffff', 'link_style' => 'button', 'link_text' => 'Click Here', 'name_placeholder' => 'Your name',
+        'link_color' => 'ffffff', 'link_text' => 'Click Here', 'name_placeholder' => 'Your name',
         'placement' => 'bar-top', 'show_border' => false, 'show_branding' => true, 'size' => 'large', 'text_color' => 'ffffff',
         'texture' => 'none', 'theme_id' => 'classic', 'type' => 'Bar', 'view_condition' => 'immediately', 'wiggle_button' => false,
-        'blocks' => [], 'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',
+        'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',
         'branding_url' => "#{ Settings.marketing_site_url }?sid=#{ id }", 'closable' => false,
         'contact_list_id' => contact_list_id, 'email_redirect' => false, 'hide_destination' => true, 'id' => id,
         'open_in_new_window' => false, 'primary_color' => 'eb593c', 'pushes_page_down' => true,

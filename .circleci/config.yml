@@ -25,26 +25,21 @@ jobs:
       - restore_cache:
           keys:
             - bundle-cache-v5-{{ checksum "Gemfile.lock" }}
-            - bundle-cache-v4
+            - bundle-cache-v5
 
       - restore_cache:
           keys:
             - bower-cache-v5-{{ checksum "editor/bower.json" }}
-            - bower-cache-v4
+            - bower-cache-v5
 
       - restore_cache:
           keys:
             - yarn-cache-v5-{{ checksum "editor/yarn.lock" }}
-            - yarn-cache-v4
+            - yarn-cache-v5
 
       - restore_cache:
           keys:
             - editor-assets-cache-v5-{{ .Revision }}
-
-      - restore_cache:
-          keys:
-            - tmp-cache-v5-{{ .Branch }}
-            - tmp-cache-v4
 
       - run: env
 
@@ -111,11 +106,6 @@ jobs:
           command: if [ $CIRCLE_NODE_INDEX = 1 ]; then cd editor && ./node_modules/jshint/bin/jshint app/ && echo "No JSHint errors found."; else echo "skip"; fi
 
       - run:
-          name: Generate modules.js
-          when: always
-          command: bundle exec rake site:scripts:generate_modules
-
-      - run:
           name: Run unit tests
           when: always
           environment:
@@ -125,11 +115,6 @@ jobs:
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
 
       - run:
-          name: Run teaspoon tests
-          when: always
-          command: if [ $CIRCLE_NODE_INDEX = 0 ]; then SUITE=default bundle exec rake teaspoon; else echo "skip"; fi
-
-      - run:
           name: Run feature tests
           when: always
           environment:
@@ -137,12 +122,6 @@ jobs:
           command: |
             TESTFILES=$(circleci tests glob "spec/**/*_spec.rb" | grep features | circleci tests split --split-by=timings)
             bundle exec rspec --profile 10 -r rspec_junit_formatter --format RspecJunitFormatter --out test-results/rspec.xml --format progress -- ${TESTFILES}
-
-      - save_cache:
-          key: tmp-cache-v5-{{ .Branch }}
-          paths:
-            - /tmp/hellobar_new/tmp/cache
-            - /tmp/hellobar_new/tmp/script
 
       - store_artifacts:
           path: /tmp/hellobar_new/tmp/coverage

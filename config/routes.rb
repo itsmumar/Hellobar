@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :applications, :token_info
+  end
+
   resources :referrals do
     collection do
       get :accept
@@ -52,6 +56,19 @@ Rails.application.routes.draw do
         member do
           post :update_install_type
           post :update_static_script_installation
+        end
+      end
+    end
+
+    namespace :external do
+      get '/me', to: 'user#show', as: :me
+
+      resources :sites, only: %i[index] do
+        resources :contact_lists, only: %i[index] do
+          member do
+            post :subscribe
+            post :unsubscribe
+          end
         end
       end
     end
@@ -131,8 +148,8 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :credit_cards, only: %i[index]
-  resource :subscription, only: %i[create update]
+  resources :credit_cards, only: %i[index create]
+  resource :subscription, only: %i[update]
   resources :bills, only: :show do
     put :pay, on: :member
   end
@@ -146,12 +163,10 @@ Rails.application.routes.draw do
 
   get '/auth/:provider/callback', to: 'identities#store'
 
-  resources :contact_submissions, only: [:create]
-  get '/contact', to: 'contact_submissions#new', as: :new_contact_submission
+  post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
+  post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
 
-  %w[email_developer generic_message].each do |sub|
-    post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
-  end
+  resources :authorized_applications, only: %i[index destroy]
 
   get '/admin', to: 'admin/users#index', as: :admin
 

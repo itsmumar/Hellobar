@@ -98,6 +98,10 @@ class Subscription::Capabilities
     false
   end
 
+  def disable_script_self_check
+    false
+  end
+
   def ==(other)
     self.class == other.class &&
       subscription == other.subscription &&

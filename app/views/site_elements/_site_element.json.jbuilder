@@ -19,6 +19,8 @@ json.cache! site_element do
     :image_modal_url,
     :image_style,
     :image_opacity,
+    :image_overlay_color,
+    :image_overlay_opacity,
     :open_in_new_window,
     :phone_number,
     :primary_color,
@@ -26,7 +28,6 @@ json.cache! site_element do
     :remains_at_top,
     :secondary_color,
     :settings,
-    :blocks,
     :animated,
     :background_color,
     :border_color,
@@ -36,7 +37,6 @@ json.cache! site_element do
     :content,
     :image_placement,
     :link_color,
-    :link_style,
     :link_text,
     :name_placeholder,
     :phone_number,
@@ -45,13 +45,11 @@ json.cache! site_element do
     :show_branding,
     :size,
     :text_color,
-    :texture,
     :theme_id,
     :type,
     :view_condition,
     :wiggle_button,
     :wordpress_bar_id,
-    :blocks,
     :fonts,
     # alert bar
     :sound,
@@ -61,12 +59,17 @@ json.cache! site_element do
     :enable_gdpr
 
   json.font site_element.font.try(:value)
-  json.theme site_element.theme.attributes
+
+  json.theme do
+    json.image do
+      json.default_url site_element.theme.image['default_url']
+      json.position_default site_element.theme.image['position_default']
+    end
+  end
+
   json.google_font site_element.font.try(:google_font)
   json.subtype site_element.short_subtype
-  json.hide_destination true
   json.wiggle_wait 0
-  json.tab_side 'right'
   json.email_redirect site_element.email_redirect?
 
   json.thank_you_text SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;')
@@ -85,6 +88,5 @@ json.cache! site_element do
 
   statistics = site_element.statistics
   json.views statistics.views
-  json.conversions statistics.conversions
   json.conversion_rate statistics.conversion_rate
 end

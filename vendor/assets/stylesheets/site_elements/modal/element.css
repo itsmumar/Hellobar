@@ -91,11 +91,11 @@
   margin-top: 15px;
 }
 
-#hellobar-modal .hb-cta-style-button {
+#hellobar-modal .hb-cta {
   padding: 0;
 }
 
-#hellobar-modal .hb-cta-style-button .hb-text-holder {
+#hellobar-modal .hb-cta .hb-text-holder {
   border-radius: inherit;
   padding: 8px 20px;
 }

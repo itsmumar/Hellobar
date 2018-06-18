@@ -74,7 +74,7 @@ class @ContactListModal extends Modal
     else
       @blocks.iconListing.hide()
       @blocks.hellobarOnly.hide()
-      @blocks.selectListing.show()
+      @blocks.selectListing.toggle(!@options.contactList?.hidden)
 
     @_setSideIcon() if initital && listVal != "0"
 
@@ -86,6 +86,7 @@ class @ContactListModal extends Modal
       syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
       remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
       tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
+      zapier           : $("#contact-list-variant-modal-zapier-template").html()
     }
 
   _initializeTemplates: ->
@@ -96,6 +97,7 @@ class @ContactListModal extends Modal
       syncDetails      : Handlebars.compile(@options.templates.syncDetails)
       remoteListSelect : Handlebars.compile(@options.templates.remoteListSelect)
       tagListSelect    : Handlebars.compile(@options.templates.tagListSelect)
+      zapier           : Handlebars.compile(@options.templates.zapier)
 
     @$modal = $(@templates.main({header: @_header()}))
     @$modal.appendTo($("body"))
@@ -112,6 +114,7 @@ class @ContactListModal extends Modal
       remoteListSelect : @$modal.find(".remote-list-select-block")
       hellobarOnly     : @$modal.find(".hellobar-only")
       tagListSelect    : @$modal.find(".tag-select-block")
+      zapier           : @$modal.find(".zapier-block")
 
   _bindInteractions: (object) ->
     @_bindCustomEvents(object)
@@ -380,8 +383,10 @@ class @ContactListModal extends Modal
   _loadContactList: ->
     $.get @options.loadURL, (contactList) =>
       @options.contactList = $.extend(@options.contactList, data: contactList.data,
-                                      name: contactList.name, id: contactList.id,
-                                      provider_token: contactList.provider_token)
+                                                            hidden: contactList.hidden,
+                                                            id: contactList.id,
+                                                            name: contactList.name,
+                                                            provider_token: contactList.provider_token)
       @_setFormValues(contactList)
       @_loadRemoteLists(listData: contactList)
 
@@ -422,7 +427,7 @@ class @ContactListModal extends Modal
       requiresApiKey: option.data('requiresApiKey')
       requiresUsername: option.data('requiresUsername')
       requiresWebhookUrl: option.data('requiresWebhookUrl')
-      canConnect: !option.data('requiresWebhookUrl') && !option.data('requiresEmbedCode')
+      canConnect: option.data() && !option.data('requiresWebhookUrl') && !option.data('requiresEmbedCode')
       webhookIsPost: @options.contactList?.data?.webhook_method == "post"
       contactList: @options.contactList
       cycleDayEnabled: cycle_day_enabled
@@ -437,20 +442,25 @@ class @ContactListModal extends Modal
                                           else 'list'
       )
 
-    if value == "0" # user selected "in Hello Bar only"
-      @blocks.hellobarOnly.show()
+    if value == "0" || value == null # 0 - "Hello Bar only", null - hidden provider
+      @options.identity = null
+      @blocks.hellobarOnly.toggle(value == "0")
       @blocks.instructions.hide()
       @blocks.nevermind.hide()
       @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
       @blocks.tagListSelect.hide()
+      @_renderBlock("zapier", {}).show() if @options.contactList.provider_token == 'zapier'
       return
 
     @$modal.trigger 'load'
 
     $.get("/sites/#{@options.siteID}/identities/#{value}.json", (data) =>
+      @options.identity = data if data?.provider
+
       lists = data?.lists
       tags = data?.tags
+
       if data and (lists or tags) # an identity was found for the selected provider
         @blocks.hellobarOnly.hide()
         @blocks.instructions.hide()

@@ -10,10 +10,25 @@ describe AnalyticsProvider do
   end
 
   describe '#signed_up' do
-    it 'tracks "signed-up"' do
+    it 'tracks "signed-up" without affiliate info' do
       expect(adapter)
         .to receive(:track)
         .with(event: 'signed-up', user: user, params: {})
+
+      track('signed-up', user: user)
+    end
+
+    it 'tracks "signed-up" with affiliate info if present' do
+      affiliate_information = create :affiliate_information, user: user
+      params = { affiliate_identifier: affiliate_information.affiliate_identifier }
+
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'signed-up', user: user, params: params)
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Affiliate', [user])
 
       track('signed-up', user: user)
     end
@@ -221,8 +236,87 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#changed_subscription' do
-    let(:event) { 'changed-subscription' }
+  shared_examples 'change_subscription' do
+    it 'tracks event' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          amount: subscription.amount,
+          subscription: subscription.name,
+          schedule: subscription.schedule,
+          site_url: site.url,
+          trial_days: 0,
+          previous_subscription: previous_subscription.name,
+          previous_subscription_amount: previous_subscription.amount,
+          previous_subscription_schedule: previous_subscription.schedule
+        })
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'tags users with "Paid"' do
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Paid', anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'tags users with new "Subscription.name" tags' do
+      expect(adapter)
+        .to receive(:tag_users)
+        .with(subscription.name, anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+
+    it 'untags owners from previous "Subscription.name" tags' do
+      expect(adapter)
+        .to receive(:untag_users)
+        .with(previous_subscription.name, anything)
+
+      expect(adapter).to receive(:track)
+
+      track(event,
+        user: user,
+        subscription: subscription,
+        previous_subscription: previous_subscription)
+    end
+  end
+
+  describe '#upgraded_subscription' do
+    let(:event) { 'upgraded-subscription' }
+    let(:site) { create :site, :pro }
+    let(:credit_card) { create :credit_card }
+    let(:subscription) { site.current_subscription }
+    let(:previous_subscription) { site.previous_subscription }
+
+    before do
+      stub_cyber_source(:purchase)
+      ChangeSubscription.new(site, { subscription: 'enterprise' }, credit_card).call
+    end
+
+    before { allow(adapter).to receive(:tag_users) }
+    before { allow(adapter).to receive(:untag_users) }
+
+    include_examples 'change_subscription'
+  end
+
+  describe '#downgraded_subscription' do
+    let(:event) { 'upgraded-subscription' }
     let(:site) { create :site, :enterprise }
     let(:credit_card) { create :credit_card }
     let(:subscription) { site.current_subscription }
@@ -235,52 +329,7 @@ describe AnalyticsProvider do
     before { allow(adapter).to receive(:tag_users) }
     before { allow(adapter).to receive(:untag_users) }
 
-    it 'tracks "changed-subscription"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: event, user: user, params: {
-          amount: subscription.amount,
-          subscription: subscription.name,
-          schedule: subscription.schedule,
-          site_url: site.url,
-          trial_days: 0
-        })
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-
-    it 'tags users with "Paid" and "Subscription.name" tags' do
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Paid', anything)
-
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Pro', anything)
-
-      expect(adapter).to receive(:track)
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-
-    it 'untags owners of "Subscription.name" tags' do
-      expect(adapter)
-        .to receive(:untag_users)
-        .with('Enterprise', anything)
-
-      expect(adapter).to receive(:track)
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
+    include_examples 'change_subscription'
 
     context 'when downgrading to Free' do
       before do

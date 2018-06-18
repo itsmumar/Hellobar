@@ -83,22 +83,27 @@ namespace :deploy do
     end
   end
 
-  desc 'Generate and upload modules.js to S3'
-  task :generate_modules do
-    on roles(:cron) do
-      within release_path do
-        execute :rake, "site:scripts:generate_modules RAILS_ENV=#{ fetch :stage }"
-      end
+  desc 'Check if modules.js exist on S3'
+  task :check_modules do
+    run_locally do
+      require 'httparty'
+      require_relative '../app/core/hellobar_modules'
+      settings = YAML.load_file(File.join(__dir__, 'secrets.yml'))
+      stage = fetch(:stage).to_s
+      bucket = settings.dig(stage, 'script_cdn_url')
+      url = "https://#{ bucket }/#{ HellobarModules.filename }"
+      response = HTTParty.get(url)
+      abort "#{ url } not found. Upload #{ HellobarModules.filename } first" unless response.success?
     end
   end
 
   # TODO: Move node and bower dependencies to some shared folder
+  before :starting, 'check_modules'
   before 'assets:precompile', 'node:yarn_install'
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
   after 'assets:precompile', 'ember:move_non_digest_fonts' # TODO: fix fingerprinting on ember fonts
   after 'assets:precompile', 'precompile_static_assets'
-  after 'precompile_static_assets', 'generate_modules'
 
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files

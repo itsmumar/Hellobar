@@ -5,9 +5,9 @@ describe 'Subscriptions requests' do
   context 'when unauthenticated' do
     before { create :credit_card, user: user }
 
-    describe 'POST :create' do
+    describe 'POST :update' do
       it 'responds with a redirect to the login page' do
-        post subscription_path
+        put subscription_path
 
         expect(response).to redirect_to(/sign_in/)
       end
@@ -17,68 +17,6 @@ describe 'Subscriptions requests' do
   context 'when authenticated' do
     before do
       login_as user, scope: :user, run_callbacks: false
-    end
-
-    describe 'POST :create' do
-      before { stub_cyber_source :store, :purchase }
-
-      let(:credit_card_params) { create :payment_form_params }
-      let(:billing_params) { { subscription: 'pro', schedule: 'monthly' } }
-      let(:params) do
-        {
-          site_id: site.id,
-          credit_card: credit_card_params,
-          billing: billing_params,
-          format: :json
-        }
-      end
-
-      it 'creates credit card' do
-        expect {
-          post subscription_path, params
-        }.to change { user.credit_cards.count }.by(1)
-
-        expect(response).to be_successful
-      end
-
-      context 'when invalid' do
-        let(:credit_card_params) { {} }
-
-        it 'responds with errors' do
-          post subscription_path, params
-
-          expect(response).not_to be_successful
-          expect(json).to match(
-            errors:
-              [
-                'Number can\'t be blank',
-                'Expiration can\'t be blank',
-                'Month can\'t be blank',
-                'Year can\'t be blank',
-                'Name can\'t be blank',
-                'City can\'t be blank',
-                'Zip can\'t be blank',
-                'Address can\'t be blank',
-                'Country can\'t be blank',
-                'Verification value can\'t be blank'
-              ]
-          )
-        end
-      end
-
-      context 'for site admin' do
-        let(:admin) { create(:site_membership, :admin, site: site).user }
-
-        before do
-          login_as admin, scope: :user, run_callbacks: false
-        end
-
-        it 'responds with errors' do
-          post subscription_path, params
-
-          expect(response).not_to be_successful
-        end
-      end
     end
 
     describe 'PUT :update' do

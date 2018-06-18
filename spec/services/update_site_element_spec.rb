@@ -81,47 +81,32 @@ describe UpdateSiteElement do
 
       it 'does not pause the original element' do
         expect { service.call }.to raise_error ActiveRecord::RecordInvalid
-        expect(SiteElement.find(element.id).paused).to be_falsey
+        expect(SiteElement.find(element.id).paused?).to be_falsey
       end
 
       context 'when update succeeds but pausing fails' do
         let(:params) { Hash[element_subtype: 'traffic'] }
 
         it 'does not create new element' do
-          allow(element).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(element))
+          allow(element).to receive(:pause!).and_raise(ActiveRecord::RecordInvalid.new(element))
 
           expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
-          expect(element.reload.paused).to be_falsey
+          expect(element.reload.paused?).to be_falsey
         end
       end
     end
   end
 
   context 'when use_question has been previously set to true' do
-    context 'and theme is a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'traffic-growth' } }
+    let!(:element) { create(:site_element, :email, use_question: true) }
+    let(:params) { { use_question: true, theme_id: 'autodetect' } }
 
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'sets use_question to false' do
-        expect { service.call }.to change(element, :use_question).from(true).to(false)
-      end
+    it 'returns true' do
+      expect(service.call).to be_truthy
     end
 
-    context 'and theme is not a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'autodetect' } }
-
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'does not touch use_question' do
-        expect { service.call }.not_to change(element, :use_question)
-      end
+    it 'does not touch use_question' do
+      expect { service.call }.not_to change(element, :use_question)
     end
   end
 

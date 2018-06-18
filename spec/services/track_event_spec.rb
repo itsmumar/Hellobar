@@ -29,12 +29,12 @@ xdescribe TrackEvent, :freeze do
     end
   end
 
-  describe '"changed_subscription" event' do
+  shared_examples 'changed_subscription' do |event|
     let(:tags) { double('tags') }
 
-    it 'sends "changed-subscription" to Intercom and Amplitude, tags owners' do
+    it "sends '#{ event }' event to Intercom and Amplitude, tags owners" do
       expect(intercom).to receive_message_chain(:events, :create).with(
-        event_name: 'changed-subscription',
+        event_name: event,
         user_id: owner.id,
         created_at: Time.current.to_i,
         metadata: { subscription: 'Pro', schedule: 'monthly' }
@@ -60,6 +60,9 @@ xdescribe TrackEvent, :freeze do
       end
     end
   end
+
+  include_examples 'changed_subscription', 'upgraded-subscription'
+  include_examples 'changed_subscription', 'downgraded-subscription'
 
   describe '"created_bar" event' do
     let!(:site_element) { create :site_element, site: site }

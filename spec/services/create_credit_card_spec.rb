@@ -36,6 +36,18 @@ describe CreateCreditCard do
       expect(CreditCard.last.token).to eql '999'
     end
 
+    context 'when update_subscription is true' do
+      let(:site) { create :site, :pro, user: user }
+      let(:params) { { credit_card: payment_form_params, update_subscription: true } }
+
+      it 'updates current subscription' do
+        expect { service.call }
+          .to change { site.current_subscription.reload.credit_card_id }
+
+        expect(site.current_subscription.credit_card_id).to eql CreditCard.last.id
+      end
+    end
+
     context 'when params are invalid' do
       let(:params) { {} }
 

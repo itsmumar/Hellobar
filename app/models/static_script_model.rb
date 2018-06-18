@@ -5,7 +5,7 @@ class StaticScriptModel
 
   delegate :id, :url, :write_key, :rules, to: :site, prefix: true
   delegate :autofills, :cache_key, :persisted?, to: :site
-  delegate :terms_and_conditions_url, :privacy_policy_url, to: :site
+  delegate :gdpr_consent, :gdpr_agreement, :gdpr_action, to: :site
 
   def initialize(site, options = {})
     @site = site
@@ -14,6 +14,13 @@ class StaticScriptModel
 
   def to_json
     StaticScriptAssets.render_model(self)
+  end
+
+  def disable_self_check
+    preview_is_active ||
+      site_url == 'http://mysite.com' ||
+      site.capabilities.disable_script_self_check ||
+      !(Rails.env.production? || Rails.env.edge? || Rails.env.staging?)
   end
 
   def cache_enabled?
@@ -28,16 +35,20 @@ class StaticScriptModel
     GitUtils.current_commit
   end
 
+  def modules_version
+    HellobarModules.version
+  end
+
   def timestamp
     Time.current
   end
 
   def capabilities
     {
-      no_b: site.capabilities.remove_branding? || preview?,
-      b_variation: branding_variation,
-      preview: preview?
-    }.merge(SiteSerializer.new(site).capabilities)
+      autofills: site.capabilities.autofills?,
+      geolocation_injection: site.capabilities.geolocation_injection?,
+      external_tracking: site.capabilities.external_tracking?
+    }
   end
 
   def pro_secret
@@ -57,12 +68,11 @@ class StaticScriptModel
 
   def hellobar_container_css
     css = [
-      render_asset('container_common.css'),
       element_types.map { |type| render_asset(type.downcase, 'container.css') },
       element_themes.map { |theme| render_asset(theme.container_css_path) }
     ]
 
-    css.flatten.join("\n").gsub('hellobar-container', "#{ pro_secret }-container")
+    css.flatten.join("\n")
   end
 
   def templates
@@ -96,35 +106,8 @@ class StaticScriptModel
     end
   end
 
-  def branding_templates
-    base = Rails.root.join('lib', 'script_generator')
-
-    Dir.glob(base.join('branding', '*.html')).map { |f| Pathname.new(f) }.map do |path|
-      content = render_asset(path.relative_path_from(base))
-      { name: 'branding_' + path.basename.sub_ext('').to_s, markup: content }
-    end
-  end
-
-  def content_upgrade_template
-    [{ name: 'contentupgrade', markup: render_asset('contentupgrade/contentupgrade.html') }]
-  end
-
   def gdpr_enabled
     site.gdpr_enabled?
-  end
-
-  def gdpr_template
-    [{ name: 'gdpr', markup: render_asset('gdpr/consent_form.html') }]
-  end
-
-  def gdpr_consent
-    text_map = {
-      'product' => 'product/service',
-      'research' => 'market research'
-    }
-    sentence = site.communication_types.map { |type| text_map[type] || type }.to_sentence
-
-    "I consent to occasionally receive #{ sentence } emails."
   end
 
   def geolocation_url
@@ -148,12 +131,13 @@ class StaticScriptModel
 
   def rules
     return [] if options[:no_rules]
-    site_rules.map { |rule| hash_for_rule(rule) }
+    site_rules
+      .map { |rule| hash_for_rule(rule) }
+      .select { |rule_hash| rule_hash[:site_elements].present? }
   end
 
   def hellobar_element_css
     css = [
-      render_asset('common.css'),
       element_types.map { |type| render_asset(type.downcase, 'element.css') },
       element_themes.map { |theme| render_asset(theme.element_css_path) }
     ]
@@ -181,7 +165,8 @@ class StaticScriptModel
           name_placeholder: content_upgrade.name_placeholder,
           contact_list_id: content_upgrade.contact_list_id,
           download_link: content_upgrade.content_upgrade_download_link,
-          subtype: content_upgrade.short_subtype
+          subtype: content_upgrade.short_subtype,
+          enable_gdpr: content_upgrade.enable_gdpr
         }
       }
     }.inject({}, &:update)
@@ -189,10 +174,6 @@ class StaticScriptModel
 
   def content_upgrades_styles
     site.content_upgrade_styles.style_attributes
-  end
-
-  def script_is_installed_properly
-    Rails.env.test? || 'scriptIsInstalledProperly()'
   end
 
   private

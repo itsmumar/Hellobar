@@ -30,4 +30,8 @@ class Subscription::ProManaged::Capabilities < Subscription::Pro::Capabilities
   def campaigns?
     true
   end
+
+  def disable_script_self_check
+    true
+  end
 end

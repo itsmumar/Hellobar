@@ -157,7 +157,7 @@ module SiteElementsHelper
 
   # rubocop: disable Rails/OutputSafety
   def ab_test_icon(site_element)
-    elements_in_group = site_element.rule.site_elements.select { |se| se.paused == false && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
+    elements_in_group = site_element.rule.site_elements.select { |se| !se.paused? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.sort_by!(&:created_at)
     index = elements_in_group.find_index { |e| e.id == site_element.id }
     # site element is paused, its the only site element in the group, or something wacky is going on
@@ -204,14 +204,7 @@ module SiteElementsHelper
   # rubocop: disable Rails/OutputSafety
   def render_headline(site_element)
     return raw strip_tags(site_element.question) if site_element.use_question?
-
-    # Condering `blocks` field will be present only for `templates`
-    return raw strip_tags(site_element.headline) if site_element.blocks.blank?
-
-    headline_blocks = site_element.blocks.select { |block| block['id'].include?('headline') }
-    headline_blocks.inject(''.html_safe) do |result, block|
-      result.safe_concat strip_tags "#{ block['content']['text'] } "
-    end
+    raw strip_tags(site_element.headline)
   end
   # rubocop: enable Rails/OutputSafety
 

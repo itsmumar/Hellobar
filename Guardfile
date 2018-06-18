@@ -1,3 +1,6 @@
+# Make '#singularize' available here in the Guardfile
+require 'active_support/core_ext/string'
+
 # Only watch a subset of directories
 directories %w[app config lib spec vendor]
 
@@ -58,15 +61,4 @@ guard :shell do
   watch('config/environments/development.rb') { `touch tmp/restart.txt` }
   watch('config/secrets.yml')                 { `touch tmp/restart.txt` }
   watch(%r{^config/initializers/.+\.rb$})     { `touch tmp/restart.txt` }
-end
-
-guard :teaspoon, all_on_start: false, all_after_pass: false do
-  # Implementation files
-  watch(%r{^app/assets/javascripts/(.+).js}) { |m| "#{ m[1] }_spec" }
-
-  # Vendored javascript files
-  watch(%r{^vendor/assets/javascripts/modules/(.*)\.es6}) { |m| "spec/javascripts/hellobar_generator/modules/#{ m[1] }_spec.js" }
-
-  # Specs / Helpers
-  watch(%r{^spec/javascripts/(.*)})
 end

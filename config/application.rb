@@ -66,6 +66,11 @@ module Hellobar
         resource '/api/*', headers: :any,
           methods: %i[get post delete put patch options head],
           credentials: true
+
+        if Rails.env.development?
+          resource '/test_sites/*', headers: :any, methods: %i[get options]
+          origins Settings.campaigns_url, Settings.local_modules_cors_origin
+        end
       end
     end
   end

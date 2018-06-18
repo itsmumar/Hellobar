@@ -109,7 +109,7 @@
       }
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       border-radius: 4px;
       display: block;
       font-size: 28px;
@@ -173,14 +173,13 @@
       .hb-secondary-text {
         font-size: 0.8em;
         font-weight: 400;
-        color: white;
       }
 
       [data-hb-editable-block="caption"] {
         font-size: 1.3em !important;
       }
 
-      .hb-cta-style-button {
+      .hb-cta {
         font-size: 23px;
         padding: 15px 20px;
       }
@@ -190,7 +189,6 @@
       font-size: 0.8em;
       line-height: 1;
       font-weight: 400;
-      color: white;
       max-width: 540px;
       margin: 0 auto;
 
@@ -246,7 +244,7 @@
     }
 
     @media screen and (max-height: 700px) {
-      .hb-cta-style-button {
+      .hb-cta {
         padding: 5px 20px;
       }
     }

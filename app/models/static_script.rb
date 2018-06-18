@@ -31,7 +31,7 @@ class StaticScript
   end
 
   def modules_url
-    cdn_url_for StaticScriptAssets.digest_path('modules.js')
+    HellobarModules.local_modules_url || cdn_url_for(HellobarModules.filename)
   end
 
   def installed?

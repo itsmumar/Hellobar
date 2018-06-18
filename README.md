@@ -137,7 +137,7 @@ Use the `fresh` param then: `http://localhost:3000/test_site?fresh`
 
 ## Running specs
 
-Currently we use Chrome --headless for all our feature & teaspoon specs
+Currently we use Chrome --headless for all our feature
 
 `brew install chromedriver`
 
@@ -169,38 +169,6 @@ bundle exec rspec spec
 
 * don’t use `around`; use `before` and `after` instead
 * don’t use `travel_to`, use `Timecop.travel` instead
-
-
-
-## Javascript specs
-
-Teaspoon runs the `*_spec.js` files in `spec/javascripts/`.
-
-The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
-
-To run the whole suite of Javascript specs execute:
-
-```
-rake teaspoon
-```
-
-
-Tests are divided into two groups:
-
-* `generator` (tests `hellobar.base.js` and some other files)
-* `project` (tests `assets/javascripts/` files).
-
-To get the coverage of Generator:
-
-```
-teaspoon --suite=generator --coverage=generator
-```
-
-Coverage of Project:
-
-```
-teaspoon --suite=project --coverage=project
-```
 
 
 ## Development Workflow
@@ -241,6 +209,20 @@ To do an edge deploy:
 cap edge deploy BRANCH=other-branch
 ```
 
+### Using live version of hellobar modules from dev server
+In order to use live version from hellobar_modules project do following:
+
+- in `hellobar_modules` directory run the dev server, i.e. `npm run dev`
+- add `local_modules_url: 'http://localhost:9090/modules.bundle.js'` into `config/secrets.yml` (see secrets.yml.example)  
+- enjoy! :)
+
+### Updating hellobar modules version
+
+In order to deploy a new version of hellobar static script run following: 
+
+```
+rake modules:bump
+```
 
 ## Provisioning a new Hello Bar server
 

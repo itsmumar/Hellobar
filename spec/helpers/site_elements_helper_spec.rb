@@ -261,7 +261,7 @@ describe SiteElementsHelper do
 
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
-      se.update_attribute(:paused, true)
+      se.pause!
 
       expect(helper.ab_test_icon(se)).to include('icon-abtest')
     end
@@ -367,30 +367,17 @@ describe SiteElementsHelper do
 
   describe '#render_headline' do
     let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
+    let(:slider_element) { create(:site_element, site: site, headline: '<b>Headline</b>') }
+
+    it 'strips tags' do
+      expect(helper.render_headline(slider_element)).to eql 'Headline'
+    end
 
     context 'when use_question' do
       let(:slider_element) { create(:site_element, site: site, use_question: true, question: '<b>Questions?</b>') }
 
       it 'strips tags' do
         expect(helper.render_headline(slider_element)).to eql 'Questions?'
-      end
-    end
-
-    context 'when blocks are empty' do
-      let(:slider_element) { create(:site_element, site: site, headline: '<b>Headline</b>') }
-      it 'strips tags' do
-        expect(helper.render_headline(slider_element)).to eql 'Headline'
-      end
-    end
-
-    context 'when blocks are present' do
-      let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
-      let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
-      let(:slider_element) { create(:slider, site: site) }
-
-      it 'strips tags' do
-        expect(helper.render_headline(element_with_blocks)).to eql 'Grow your blog traffic by 300% with our free tool '
-        expect(helper.render_headline(slider_element)).to eql 'Hello, HelloBar!'
       end
     end
   end

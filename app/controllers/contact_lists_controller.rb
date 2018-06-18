@@ -24,7 +24,7 @@ class ContactListsController < ApplicationController
       identity =
         if params[:identity_id].present?
           @site.identities.find params[:identity_id]
-        elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
+        elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks' || provider_token == 'zapier'
           @site.identities.find_or_create_by!(provider: provider_token)
         elsif Identity.from_session(session)
           @site.identities.from_session(session, provider: provider_token, clear: true)
