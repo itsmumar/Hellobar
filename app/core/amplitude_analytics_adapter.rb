@@ -31,6 +31,7 @@ class AmplitudeAnalyticsAdapter
     primary_domain, *additional_domains = domains_for(user)
 
     {
+      email: user.email,
       primary_domain: primary_domain,
       additional_domains: additional_domains.join(', '),
       contact_lists: user.contact_lists.count,

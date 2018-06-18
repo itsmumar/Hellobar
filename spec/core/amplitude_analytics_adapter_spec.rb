@@ -3,7 +3,7 @@ describe AmplitudeAnalyticsAdapter do
   let(:amplitude_event) { instance_double(AmplitudeAPI::Event) }
   let(:params) { Hash[foo: 'bar'] }
   let(:user_properties) do
-    %i[primary_domain additional_domains contact_lists total_views
+    %i[email primary_domain additional_domains contact_lists total_views
        total_conversions sites_count site_elements_count]
   end
 
@@ -20,7 +20,7 @@ describe AmplitudeAnalyticsAdapter do
         event_type: 'event',
         user_id: user.id,
         event_properties: params,
-        user_properties: hash_including(:primary_domain)
+        user_properties: hash_including(*user_properties)
       }
 
       allow(AmplitudeAPI::Event)
