@@ -60,6 +60,6 @@ class TapfiliateGateway
     site = subscription.site
     user = subscription.credit_card.user
 
-    "Paid Bill##{ bill.id } for #{ subscription.type } (#{ subscription.schedule }) for User##{ user.id } Site##{ site.id }"
+    "Paid Bill##{ bill.id } for #{ subscription.type } (#{ subscription.schedule })"
   end
 end
