@@ -1,5 +1,6 @@
 class Admin::PartnersController < AdminController
   respond_to :html
+  responders :flash
 
   def index
     @partners = Partner.all
@@ -12,8 +13,9 @@ class Admin::PartnersController < AdminController
   end
 
   def create
-    @partner = Partner.new
-    respond_with(@partner.update(partner_params), location: admin_partners_path)
+    @partner = Partner.new(partner_params)
+    @partner.save
+    respond_with(@partner, location: admin_partners_path)
   end
 
   def edit
@@ -23,17 +25,19 @@ class Admin::PartnersController < AdminController
 
   def update
     @partner = Partner.find(params[:id])
-    respond_with(@partner.update(partner_params), location: admin_partners_path)
+    @partner.update(partner_params)
+    respond_with(@partner, location: admin_partners_path)
   end
 
   def destroy
     @partner = Partner.find(params[:id])
-    respond_with(@partner.destroy, location: admin_partners_path)
+    @partner.destroy
+    respond_with(@partner, location: admin_partners_path)
   end
 
   private
 
   def partner_params
-    params.require(:partner).permit(:name, :email, :url)
+    params.require(:partner).permit(:first_name, :last_name, :email, :url, :website_url, :affiliate_identifier, :plan_id)
   end
 end

@@ -13,19 +13,23 @@ div.row
       table.table.table-striped.partners
         tr
           th ID
-          th Name
+          th First Name
+          th Last Name
           th Email
           th Website URL
+          th Affiliate ID
           th Date Created
           th
 
         - @partners.each do |partner|
           tr
             td= link_to partner.id, edit_admin_partner_path(partner)
-            td= partner.name
+            td= partner.first_name
+            td= partner.last_name
             td= partner.email
-            td= partner.url
+            td= partner.website_url
+            td= partner.affiliate_identifier
             td= partner.created_at
             td
               = link_to 'Edit', edit_admin_partner_path(partner)
-              =< link_to 'Delete', admin_partner_path(partner), method: :delete
+              =< link_to 'Delete', admin_partner_path(partner), method: :delete, data: { confirm: 'Are you sure you want to delete this Partner?' }

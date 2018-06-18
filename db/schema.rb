@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180614093710) do
+ActiveRecord::Schema.define(version: 20180618130554) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -262,16 +262,6 @@ ActiveRecord::Schema.define(version: 20180614093710) do
 
   add_index "image_uploads", ["site_id"], name: "index_image_uploads_on_site_id", using: :btree
 
-<<<<<<< HEAD
-  create_table "partners", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "email",      limit: 255
-    t.string   "url",        limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-=======
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false
     t.integer  "application_id",    limit: 4,     null: false
@@ -315,7 +305,17 @@ ActiveRecord::Schema.define(version: 20180614093710) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
->>>>>>> master
+  create_table "partners", force: :cascade do |t|
+    t.string   "first_name",           limit: 255
+    t.string   "last_name",            limit: 255
+    t.string   "email",                limit: 255
+    t.string   "website_url",          limit: 255
+    t.string   "affiliate_identifier", limit: 255
+    t.string   "plan_id",              limit: 255
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
   create_table "referral_tokens", force: :cascade do |t|
     t.string   "token",            limit: 255
     t.integer  "tokenizable_id",   limit: 4
