@@ -6,7 +6,7 @@ describe TrackAffiliateConversionJob do
   describe '#perform' do
     let(:perform) { job.new.perform user }
 
-    it 'calls TapfiliateGateway#store_conversion' do
+    it 'calls TrackAffiliateConversion service object' do
       expect(TrackAffiliateConversion).to receive_service_call.with user
 
       perform

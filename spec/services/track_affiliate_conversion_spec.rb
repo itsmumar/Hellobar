@@ -40,7 +40,7 @@ describe TrackAffiliateConversion do
       end
 
       it 'logs error' do
-        expect(Rails.logger).to receive(:info).with a_string_matching error
+        expect(Rails.logger).to receive(:error).with a_string_matching error
 
         track_conversion.call
       end

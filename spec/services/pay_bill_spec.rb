@@ -34,7 +34,7 @@ describe PayBill do
       allow(Rails.env).to receive(:production?).and_return true
 
       expect { service.call }
-        .to have_enqueued_job(StoreCommissionAtTapfiliateJob).with(bill)
+        .to have_enqueued_job(TrackAffiliateCommissionJob).with(bill)
     end
 
     context 'when site had problems with payment' do

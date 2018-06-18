@@ -20,7 +20,7 @@ class TrackAffiliateConversion
     if result.success?
       user.affiliate_information.update conversion_identifier: result['id']
     else
-      Rails.logger.info "Tapfiliate error: #{ result['errors'] }"
+      Rails.logger.error "Tapfiliate error: #{ result['errors'] }"
     end
   end
 

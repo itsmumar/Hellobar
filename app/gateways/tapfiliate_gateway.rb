@@ -17,16 +17,10 @@ class TapfiliateGateway
   end
 
   # paid bill tracking
-  def store_commission bill:
-    user = bill.subscription&.credit_card&.user
-
-    return if user&.affiliate_information&.conversion_identifier.blank?
-
-    conversion_identifier = user.affiliate_information.conversion_identifier
-
+  def store_commission conversion_identifier:, amount:, comment:
     body = {
-      conversion_sub_amount: bill.amount,
-      comment: commission_comment(bill)
+      conversion_sub_amount: amount,
+      comment: comment
     }
 
     post! "/#{ conversion_identifier }/commissions/", body
@@ -43,11 +37,5 @@ class TapfiliateGateway
       'Content-Type' => 'application/json',
       'Api-Key' => Settings.tapfiliate_api_key
     }
-  end
-
-  def commission_comment bill
-    subscription = bill.subscription
-
-    "Paid Bill##{ bill.id } for #{ subscription.type } (#{ subscription.schedule })"
   end
 end
