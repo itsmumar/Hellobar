@@ -24,19 +24,17 @@ Install all the gems:
 `bundle install`
 
 
-Setup your `database.yml` file:
-
-`cp config/database.yml.example config/database.yml`
-
-
-Setup your local database:
-
-`rake db:setup`
-
-
 Setup the `secrets.yml` file:
 
 `cp config/secrets.yml.example config/secrets.yml`
+
+Setup your `database.yml` file:
+
+`cp config/database.yml.example config/database.yml`
+  
+Setup your local database:
+
+`rake db:setup`
 
 You can run your application locally on `localhost:3000` or via
 `local.hellobar.com` vhost as this domain has been setup to resolve to
@@ -65,9 +63,9 @@ be found at Confluence: https://crossover.atlassian.net/wiki/display/XOHB/System
 ### Front-end
 
 Install `node.js`, `yarn`, and `ImageMagick`:
+Note: You need to install `node@6` so if you have a later version of node, first run `brew install node@6` then `brew unlink node` then `brew link node@6`. Otherwise just run `brew install node`
 
 ```
-brew install node
 brew install yarn
 brew install imagemagick
 ```
@@ -127,6 +125,7 @@ https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+fo
 ## Testing generated site scripts
 
 Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
+(Note: this will show an error if you haven't created a `Site` instance yet)
 
 You can specify `id` param for the exact site you want: `http://localhost:3000/test_sites/133`
 
@@ -299,7 +298,7 @@ From the terminal, go to your root of the app and run following command:
 brakeman
 ```
 
-## Running Hello Bar via Docker
+## Running Hello Bar via Docker (Proceed into this section with caution. It's possibly a bit outdated...)
 
 This section assumes that you are using the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) or have the knowledge to set up the various components on your own.
 
