@@ -18,6 +18,6 @@ class Api::External::SubscribersController < Api::External::ApplicationControlle
   end
 
   def fetch_subscribers
-    FetchSubscribers.new(contact_list).call[:items]
+    FetchSubscribers.new(contact_list, limit: 1).call[:items]
   end
 end
