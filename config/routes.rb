@@ -65,6 +65,8 @@ Rails.application.routes.draw do
 
       resources :sites, only: %i[index] do
         resources :contact_lists, only: %i[index] do
+          resources :subscribers, only: %i[index]
+
           member do
             post :subscribe
             post :unsubscribe
