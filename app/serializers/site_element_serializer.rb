@@ -29,7 +29,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
     #
     # text field styling
-    :text_field_borderless, :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+    :text_field_border_color, :text_field_border_width, :text_field_border_radius,
     :text_field_text_color, :text_field_background_color, :text_field_opacity,
     #
     # other

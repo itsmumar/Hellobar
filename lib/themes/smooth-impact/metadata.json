@@ -19,7 +19,7 @@
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
       "font_id": "oswald",
-      "text_field_borderless": true
+      "text_field_border_width": 0
     },
     "Alert": {
       "background_color": "4A47F2",
@@ -27,7 +27,7 @@
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
       "font_id": "oswald",
-      "text_field_borderless": true
+      "text_field_border_width": 0
     }
   },
   "image": {

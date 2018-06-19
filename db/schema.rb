@@ -429,7 +429,6 @@ ActiveRecord::Schema.define(version: 20180614093710) do
     t.datetime "paused_at"
     t.string   "image_overlay_color",         limit: 10,       default: "ffffff"
     t.integer  "image_overlay_opacity",       limit: 1,        default: 0
-    t.boolean  "text_field_borderless",                        default: false
     t.string   "text_field_border_color",     limit: 10,       default: "e0e0e0"
     t.integer  "text_field_border_width",     limit: 1,        default: 1
     t.integer  "text_field_border_radius",    limit: 1,        default: 2

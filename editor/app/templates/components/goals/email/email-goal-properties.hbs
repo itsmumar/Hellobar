@@ -4,12 +4,6 @@
     {{goals/email/fields/field-list model=model}}
   {{/if}}
 
-  <label class="toggle-text-field-bordeless">
-    {{common/checkboxes/toggle-switch switch=model.text_field_borderless}}
-    Borderless text fields
-  </label>
-
-  {{#unless model.text_field_borderless}}
   <label>Text field border color</label>
   {{design/colors/selection/color-select color=model.text_field_border_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
@@ -17,7 +11,6 @@
   <div class="slider-wrapper">
     {{common/sliders/range-slider min=0 max=10 start=textFieldBorderWidth update="setTextFieldBorderWidth" leftLabel="0" rightLabel="10"}}
   </div>
-  {{/unless}}
 
   <label>Text field text color</label>
   {{design/colors/selection/color-select color=model.text_field_text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
