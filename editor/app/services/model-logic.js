@@ -169,20 +169,10 @@ export default Ember.Service.extend({
   initializeCookieSettings: function () {
     let cookieSettings = this.get('model.settings.cookie_settings');
     if (_.isEmpty(cookieSettings)) {
-      const elementType = this.get('model.type');
-      if (elementType === 'Modal' || elementType === 'Takeover') {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      } else {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      }
-
-      this.set('model.settings.cookie_settings', cookieSettings);
+      this.set('model.settings.cookie_settings', {
+        duration: 10,
+        success_duration: 30
+      });
     }
   }.observes('model'),
 
