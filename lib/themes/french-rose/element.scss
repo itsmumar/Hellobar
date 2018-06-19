@@ -3,14 +3,14 @@
     display: none;
   }
 
-  .hb-cta-style-button {
+  .hb-cta {
     width: 100%;
     text-overflow: ellipsis;
     overflow-x: hidden;
   }
 
   #hellobar-bar {
-    .hb-cta-style-button {
+    .hb-cta {
       border-radius: 0px;
     }
   }
@@ -33,7 +33,7 @@
       -webkit-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 18px;
       min-width: 7em;
       margin-top: 1em;
@@ -55,7 +55,7 @@
       line-height: 20px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 15px;
       min-width: 7em;
       padding: 8px 30px;
@@ -85,7 +85,7 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 18px;
       border-radius: 0px;
     }
@@ -107,7 +107,7 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       border-radius: 0px;
     }
 

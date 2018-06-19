@@ -45,6 +45,8 @@ class SiteElement < ApplicationRecord
   validates :rule, association_exists: true
   validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
+  validates :image_overlay_color, hex_color: true
+  validates :image_overlay_opacity, numericality: true
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed

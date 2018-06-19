@@ -129,7 +129,7 @@ FactoryBot.define do
       {
         'animated' => true, 'background_color' => 'eb593c', 'border_color' => 'ffffff', 'button_color' => '000000',
         'email_placeholder' => 'Your email', 'headline' => 'Hello, HelloBar!', 'image_placement' => 'bottom',
-        'link_color' => 'ffffff', 'link_style' => 'button', 'link_text' => 'Click Here', 'name_placeholder' => 'Your name',
+        'link_color' => 'ffffff', 'link_text' => 'Click Here', 'name_placeholder' => 'Your name',
         'placement' => 'bar-top', 'show_border' => false, 'show_branding' => true, 'size' => 'large', 'text_color' => 'ffffff',
         'texture' => 'none', 'theme_id' => 'classic', 'type' => 'Bar', 'view_condition' => 'immediately', 'wiggle_button' => false,
         'use_question' => false, 'font' => "'Open Sans',sans-serif", 'google_font' => 'Open+Sans',

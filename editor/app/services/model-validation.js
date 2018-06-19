@@ -59,12 +59,12 @@ export default Ember.Service.extend({
     }]);
 
     this.get('validation').add('cookie_settings.duration', [{
-      fieldName: 'url',
+      fieldName: 'duration',
       validator: (model) => {
         const cookieDuration = Number(Ember.get(model, 'settings.cookie_settings.duration'));
 
-        if (cookieDuration > maxCookieDuration) {
-          return 'Cookie Duration should not exceed 10000';
+        if (cookieDuration > maxCookieDuration || cookieDuration < 0) {
+          return 'Cookie Duration should be between 0 and 10000';
         }
 
         return null;
@@ -72,12 +72,12 @@ export default Ember.Service.extend({
     }]);
 
     this.get('validation').add('cookie_settings.success_duration', [{
-      fieldName: 'url',
+      fieldName: 'success_duration',
       validator: (model) => {
         const cookieDuration = Number(Ember.get(model, 'settings.cookie_settings.success_duration'));
 
-        if (cookieDuration > maxCookieDuration) {
-          return 'Success Cookie Duration should not exceed 10000';
+        if (cookieDuration > maxCookieDuration || cookieDuration < 0) {
+          return 'Success Cookie Duration should be between 0 and 10000';
         }
 
         return null;

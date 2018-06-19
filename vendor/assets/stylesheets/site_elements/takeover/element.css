@@ -37,11 +37,11 @@
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar-takeover .hb-cta-style-button {
+#hellobar-takeover .hb-cta {
   padding: 0;
 }
 
-#hellobar-takeover .hb-cta-style-button .hb-text-holder {
+#hellobar-takeover .hb-cta .hb-text-holder {
   border-radius: inherit;
   padding: 12px 40px;
 }
