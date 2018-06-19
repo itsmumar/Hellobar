@@ -62,8 +62,11 @@ be found at Confluence: https://crossover.atlassian.net/wiki/display/XOHB/System
 
 ### Front-end
 
-Install `node.js`, `yarn`, and `ImageMagick`:
-Note: You need to install `node@6` so if you have a later version of node, first run `brew install node@6` then `brew unlink node` then `brew link node@6`. Otherwise just run `brew install node`
+Install `node.js`
+
+You actually need to install `node@6` so if you have a later version of node, first run `brew install node@6` then `brew unlink node` then `brew link node@6`. Otherwise just run `brew install node`
+
+Install `yarn`, and `ImageMagick`
 
 ```
 brew install yarn
