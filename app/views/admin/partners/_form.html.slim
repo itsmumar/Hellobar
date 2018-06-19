@@ -3,7 +3,7 @@
   = f.input :last_name
   = f.input :email
   = f.input :website_url
-  = f.input :affiliate_identifier
+  = f.input :affiliate_identifier, error: true
   = f.input :partner_plan_id, collection: PartnerPlan.all
 
   = f.button :submit, 'Save', class: 'btn btn-primary'

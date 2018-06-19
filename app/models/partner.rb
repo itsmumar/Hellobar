@@ -3,6 +3,7 @@ class Partner < ActiveRecord::Base
   validates :last_name, presence: true
   validates :email, presence: true, format: { with: Devise.email_regexp }
   validates :website_url, presence: true, url: true
+  validates :affiliate_identifier, presence: true, uniqueness: true
   validates :partner_plan, presence: true
 
   def partner_plan

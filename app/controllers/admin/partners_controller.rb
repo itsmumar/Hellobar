@@ -15,6 +15,9 @@ class Admin::PartnersController < AdminController
   def create
     @partner = Partner.new(partner_params)
     @partner.save
+
+    display_errors
+
     respond_with(@partner, location: admin_partners_path)
   end
 
@@ -26,6 +29,9 @@ class Admin::PartnersController < AdminController
   def update
     @partner = Partner.find(params[:id])
     @partner.update(partner_params)
+
+    display_errors
+
     respond_with(@partner, location: admin_partners_path)
   end
 
@@ -39,5 +45,9 @@ class Admin::PartnersController < AdminController
 
   def partner_params
     params.require(:partner).permit(:first_name, :last_name, :email, :url, :website_url, :affiliate_identifier, :partner_plan_id)
+  end
+
+  def display_errors
+    flash.now[:error] = @partner.errors.full_messages.to_sentence unless @partner.valid?
   end
 end
