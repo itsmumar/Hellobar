@@ -8,13 +8,14 @@
 #   last_page_1[:items] == last_page_1x[:items] #=> true
 #
 class FetchSubscribers
-  PAGE_SIZE = 100
+  DEFAULT_PAGE_SIZE = 100
   INDEX_NAME = 'ts-index'.freeze
 
-  def initialize(contact_list, key: nil, forward: false)
+  def initialize(contact_list, key: nil, forward: false, limit: DEFAULT_PAGE_SIZE)
     @contact_list = contact_list
     @key = key&.symbolize_keys
     @forward = forward
+    @limit = limit
   end
 
   def call
@@ -31,7 +32,7 @@ class FetchSubscribers
 
   private
 
-  attr_reader :contact_list, :key, :forward, :response
+  attr_reader :contact_list, :key, :forward, :limit, :response
 
   def backward
     !forward
@@ -45,7 +46,7 @@ class FetchSubscribers
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
       projection_expression: 'email,n,ts,lid,#s,#e',
-      limit: PAGE_SIZE,
+      limit: limit,
       return_consumed_capacity: 'TOTAL',
       scan_index_forward: forward
     }

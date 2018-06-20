@@ -65,6 +65,8 @@ Rails.application.routes.draw do
 
       resources :sites, only: %i[index] do
         resources :contact_lists, only: %i[index] do
+          resources :subscribers, only: %i[index]
+
           member do
             post :subscribe
             post :unsubscribe
@@ -221,6 +223,8 @@ Rails.application.routes.draw do
         get 'filter/:type', action: 'filter_by_type', as: :filter_by_type
       end
     end
+
+    resources :partners
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
     get 'logout', to: 'access#logout_admin', as: :logout
