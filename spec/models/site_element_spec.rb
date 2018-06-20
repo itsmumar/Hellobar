@@ -276,7 +276,7 @@ describe SiteElement do
 
     context 'when site is downgraded to free subscription' do
       before do
-        create(:subscription, :pro, site: site, user: site.users.first, schedule: :monthly)
+        create(:subscription, :pro, site: site, schedule: :monthly)
         element.rule.conditions << create(:condition, rule: element.rule)
         DowngradeSiteToFree.new(site).call
       end

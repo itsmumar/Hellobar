@@ -8,4 +8,4 @@
 
   div.subscription_section.billing_history
     div.title Billing History
-    = render 'admin/bills/list', bills: @subscription.bills, user: @subscription.user
+    = render 'admin/bills/list', bills: @subscription.bills, user: @subscription.credit_card&.user
