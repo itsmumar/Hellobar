@@ -1,15 +1,23 @@
 class CreateUserFromForm
-  def initialize(form)
+  def initialize(form, cookies = {})
     @form = form
+    @cookies = cookies
   end
 
-  # @return User
   def call
-    form.validate!
-    CreateUser.new(form.user).call
+    validate_form
+    create_user
   end
 
   private
 
-  attr_reader :form
+  attr_reader :form, :cookies
+
+  def validate_form
+    form.validate!
+  end
+
+  def create_user
+    CreateUser.new(form.user, cookies).call
+  end
 end

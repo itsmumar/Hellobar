@@ -48,13 +48,11 @@ class RegistrationsController < ApplicationController
   end
 
   def signup_with_email
-    user = CreateUserFromForm.new(@form).call
+    user = CreateUserFromForm.new(@form, cookies).call
     sign_in(user)
 
     site = CreateSite.new(@form.site, @form.user, referral_token: session[:referral_token]).call
     sign_in(@form.user)
-
-    CreateAffiliateInformation.new(user, cookies).call
 
     flash[:event] = { category: 'Signup', action: 'signup-email' }
 

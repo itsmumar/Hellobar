@@ -100,7 +100,7 @@ class PayBill
   def store_affiliate_commission bill
     return unless Rails.env.production?
 
-    StoreCommissionAtTapfiliateJob.perform_later bill
+    TrackAffiliateCommissionJob.perform_later bill
   end
 
   def gateway

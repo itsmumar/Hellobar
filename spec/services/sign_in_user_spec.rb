@@ -6,6 +6,7 @@ describe SignInUser do
       last_name: 'NewLastName'
     }
   end
+
   let(:omniauth_hash) do
     OmniAuth::AuthHash.new(
       provider: 'google_oauth2', uid: '123545',
@@ -28,13 +29,11 @@ describe SignInUser do
   let(:service) { SignInUser.new(request) }
   let(:last_user) { User.last }
 
-  it 'creates a new user and stores affiliate information' do
+  it 'creates a new user' do
     expect(CreateUserFromOauth)
       .to receive_service_call
-      .with(omniauth_hash)
+      .with(omniauth_hash, request.cookie_jar)
       .and_return build(:user)
-
-    expect(CreateAffiliateInformation).to receive_service_call
 
     service.call
   end
