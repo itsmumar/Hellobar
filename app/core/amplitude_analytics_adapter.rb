@@ -31,6 +31,7 @@ class AmplitudeAnalyticsAdapter
     primary_domain, *additional_domains = domains_for(user)
 
     {
+      email: user.email,
       primary_domain: primary_domain,
       additional_domains: additional_domains.join(', '),
       contact_lists: user.contact_lists.count,
@@ -39,7 +40,8 @@ class AmplitudeAnalyticsAdapter
       total_subscribers: user.sites.map { |site| total_subscribers(site) }.sum,
       sites_count: user.sites.count,
       site_elements_count: user.site_elements.count,
-      managed_sites: user.site_ids
+      managed_sites: user.site_ids,
+      affiliate_identifier: user.affiliate_information&.affiliate_identifier
     }
   end
 
