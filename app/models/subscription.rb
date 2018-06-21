@@ -30,6 +30,8 @@ class Subscription < ApplicationRecord
   validates :schedule, presence: true, inclusion: { in: SCHEDULES }
   validates :site, presence: true, associated: true
 
+  delegate :user, to: :credit_card, allow_nil: true
+
   class << self
     def pro_or_growth_for(user)
       if user.created_at >= GROWTH_START_DATE
