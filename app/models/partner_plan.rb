@@ -10,7 +10,7 @@ class PartnerPlan
   end
 
   def subscription_name
-    subscription_type.constantize.new.name
+    subscription_type.humanize
   end
 end
 
