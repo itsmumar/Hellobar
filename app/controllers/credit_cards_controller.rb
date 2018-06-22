@@ -21,7 +21,7 @@ class CreditCardsController < ApplicationController
   def new
     @partner_plan = current_user.affiliate_information&.partner&.partner_plan
 
-    if !@partner_plan
+    unless @partner_plan
       redirect_to after_sign_in_path_for(current_user)
       return
     end
