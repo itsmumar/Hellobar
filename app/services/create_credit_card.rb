@@ -9,7 +9,7 @@ class CreateCreditCard
   def call
     validate_form!
     create_credit_card.tap do |credit_card|
-      site.current_subscription.update(credit_card_id: credit_card.id) if site.current_subscription && update_subscription
+      site.current_subscription.update(credit_card_id: credit_card.id) if update_subscription && site&.current_subscription
       track_event(credit_card)
     end
   end

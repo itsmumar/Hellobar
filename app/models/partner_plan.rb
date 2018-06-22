@@ -8,6 +8,10 @@ class PartnerPlan
   def self.find(id)
     all.find { |plan| plan.id == id }
   end
+
+  def subscription_name
+    subscription_type.constantize.new.name
+  end
 end
 
 PartnerPlan.all = [
