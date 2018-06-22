@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180618130554) do
+ActiveRecord::Schema.define(version: 20180622195641) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -448,6 +448,7 @@ ActiveRecord::Schema.define(version: 20180618130554) do
     t.string   "text_field_text_color",       limit: 10,       default: "5c5e60"
     t.string   "text_field_background_color", limit: 10,       default: "ffffff"
     t.integer  "text_field_opacity",          limit: 1,        default: 100
+    t.boolean  "text_field_transparent",                       default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

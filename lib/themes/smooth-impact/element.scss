@@ -207,7 +207,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       border-radius: 3px;
 
       input {
-        background: transparent;
         padding: 0 0 0 70px;
       }
     }
@@ -346,8 +345,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         font-size: 0.8em;
 
         input {
-          background: transparent;
-          border: none;
           padding: 0 0 0 40px;
           height: 40px;
         }

@@ -18,7 +18,8 @@
       "button_color": "FEF035",
       "link_color": "3B386B",
       "font_id": "kanit",
-      "text_field_border_width": 0
+      "text_field_border_width": 0,
+      "text_field_transparent": true
     }
   },
   "image": {
