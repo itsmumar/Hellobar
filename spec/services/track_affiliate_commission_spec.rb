@@ -15,6 +15,14 @@ describe TrackAffiliateCommission do
       allow(TapfiliateGateway).to receive(:new).and_return gateway
     end
 
+    it 'does nothing when there is no affiliate information' do
+      bill = create :bill, :paid
+
+      expect(gateway).not_to receive :store_commission
+
+      TrackAffiliateCommission.new(bill).call
+    end
+
     context 'when TapfiliateGateway responds with success' do
       it 'sends `store_commission` request to TapfiliateGateway' do
         expect(gateway).to receive(:store_commission)
