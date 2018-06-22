@@ -1,18 +1,23 @@
 class CreateUserFromOauth
-  def initialize(omniauth_hash)
+  def initialize(omniauth_hash, cookies = {})
     @omniauth_hash = omniauth_hash
+    @cookies = cookies
   end
 
   # @return User
   def call
-    CreateUser.new(build_user).call
+    create_user
   end
 
   private
 
   delegate :info, to: :omniauth_hash
 
-  attr_reader :omniauth_hash
+  attr_reader :omniauth_hash, :cookies
+
+  def create_user
+    CreateUser.new(build_user, cookies).call
+  end
 
   def build_user
     update_attributes find_temporary_user || initialize_user

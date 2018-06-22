@@ -1,0 +1,11 @@
+- if @user.affiliate_information.present?
+  .user_section.affiliate-information
+    .title Affiliate signup
+
+    table
+      tr
+        th Affiliate identifier
+        th Visitor identifier
+      tr
+        td= @user.affiliate_information.affiliate_identifier
+        td= @user.affiliate_information.visitor_identifier

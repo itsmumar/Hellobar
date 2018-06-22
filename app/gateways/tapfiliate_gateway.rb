@@ -13,22 +13,14 @@ class TapfiliateGateway
       amount: 0
     }
 
-    result = post! '/', body
-
-    save_conversion_identifier user, result
+    post! '/', body
   end
 
   # paid bill tracking
-  def store_commission bill:
-    user = bill.subscription&.credit_card&.user
-
-    return if user&.affiliate_information&.conversion_identifier.blank?
-
-    conversion_identifier = user.affiliate_information.conversion_identifier
-
+  def store_commission conversion_identifier:, amount:, comment:
     body = {
-      conversion_sub_amount: bill.amount,
-      comment: commission_comment(bill)
+      conversion_sub_amount: amount,
+      comment: comment
     }
 
     post! "/#{ conversion_identifier }/commissions/", body
@@ -45,21 +37,5 @@ class TapfiliateGateway
       'Content-Type' => 'application/json',
       'Api-Key' => Settings.tapfiliate_api_key
     }
-  end
-
-  def save_conversion_identifier user, result
-    if result.success?
-      user.affiliate_information.update conversion_identifier: result['id']
-    else
-      Rails.logger.info "Tapfiliate error: #{ result['errors'] }"
-    end
-  end
-
-  def commission_comment bill
-    subscription = bill.subscription
-    site = subscription.site
-    user = subscription.credit_card.user
-
-    "Paid Bill##{ bill.id } for #{ subscription.type } (#{ subscription.schedule }) for User##{ user.id } Site##{ site.id }"
   end
 end
