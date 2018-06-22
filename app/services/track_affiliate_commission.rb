@@ -4,6 +4,8 @@ class TrackAffiliateCommission
   end
 
   def call
+    return if conversion_identifier.blank?
+
     store_commission
     log_error_if_necessary
   end
@@ -15,8 +17,6 @@ class TrackAffiliateCommission
   delegate :subscription, :amount, to: :bill
 
   def store_commission
-    return if conversion_identifier.blank?
-
     @result = affiliate_gateway.store_commission commission_params
   end
 
