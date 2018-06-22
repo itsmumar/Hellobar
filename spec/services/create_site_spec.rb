@@ -70,4 +70,21 @@ describe CreateSite do
       expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
+
+  context 'when user sign up from affiliate link' do
+    let(:affiliate_identifier) { 'qwe123' }
+    let(:partner_plan) { PartnerPlan.find('growth_60') }
+
+    before do
+      create(:partner, affiliate_identifier: affiliate_identifier, partner_plan: partner_plan)
+      create(:affiliate_information, user: user, affiliate_identifier: affiliate_identifier)
+    end
+
+    it 'creates trials subscription' do
+      expect(ChangeSubscription).not_to receive_service_call
+      expect(AddTrialSubscription).to receive_service_call.with(instance_of(Site), subscription: 'growth', trial_period: 60)
+
+      service.call
+    end
+  end
 end
