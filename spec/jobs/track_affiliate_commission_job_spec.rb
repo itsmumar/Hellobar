@@ -1,4 +1,4 @@
-describe StoreCommissionAtTapfiliateJob do
+describe TrackAffiliateCommissionJob do
   let(:job) { described_class }
   let(:gateway) { instance_double TapfiliateGateway }
   let(:bill) { create :bill }
@@ -6,9 +6,8 @@ describe StoreCommissionAtTapfiliateJob do
   describe '#perform' do
     let(:perform) { job.new.perform bill }
 
-    it 'calls TapfiliateGateway#store_commission' do
-      expect(TapfiliateGateway).to receive(:new).and_return gateway
-      expect(gateway).to receive(:store_commission).with bill: bill
+    it 'calls TrackAffiliateCommission service object' do
+      expect(TrackAffiliateCommission).to receive_service_call.with bill
 
       perform
     end

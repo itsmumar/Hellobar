@@ -24,7 +24,7 @@ describe CreateAffiliateInformation do
       allow(Rails.env).to receive(:production?).and_return true
 
       expect { CreateAffiliateInformation.new(user, cookies).call }
-        .to have_enqueued_job(StoreConversionAtTapfiliateJob)
+        .to have_enqueued_job(TrackAffiliateConversionJob)
         .on_queue('hb3_test_lowpriority')
         .with(user)
     end
