@@ -1,6 +1,7 @@
 class CreditCardsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
+  before_action :load_partner_plan, only: %i[new create]
   skip_before_action :require_credit_card
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
@@ -19,13 +20,6 @@ class CreditCardsController < ApplicationController
   end
 
   def new
-    @partner_plan = current_user.affiliate_information&.partner&.partner_plan
-
-    unless @partner_plan
-      redirect_to after_sign_in_path_for(current_user)
-      return
-    end
-
     @form = PaymentForm.new(params[:credit_card])
 
     render layout: 'static'
@@ -53,5 +47,13 @@ class CreditCardsController < ApplicationController
         render json: { errors: error.record.errors.full_messages }, status: :unprocessable_entity
       end
     end
+  end
+
+  def load_partner_plan
+    @partner_plan = current_user.affiliate_information&.partner&.partner_plan
+
+    return if @partner_plan
+
+    redirect_to after_sign_in_path_for(current_user)
   end
 end
