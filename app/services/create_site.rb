@@ -31,6 +31,19 @@ class CreateSite
   attr_reader :site, :user, :referral_token
 
   def change_subscription
+    if user.sites.count == 1 && user.affiliate_information&.affiliate_identifier
+      partner = Partner.find_by(affiliate_identifier: user.affiliate_information.affiliate_identifier)
+      if partner
+        AddTrialSubscription.new(
+          site,
+          subscription: partner.partner_plan.subscription_type,
+          trial_period: partner.partner_plan.duration
+        ).call
+
+        return
+      end
+    end
+
     ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call
   end
 

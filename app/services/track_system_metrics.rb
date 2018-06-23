@@ -26,6 +26,9 @@ class TrackSystemMetrics
       active_paid_enterprise_subscriptions: active_paid_enterprise_subscriptions,
       active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
+      paying_pro_users: paying_pro_users,
+      paying_growth_users: paying_growth_users,
+      paying_enterprise_users: paying_enterprise_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
       future_voided_bills_sum: future_voided_bills_sum,
@@ -76,10 +79,25 @@ class TrackSystemMetrics
   end
 
   def paying_users
+    paying_users_query.count
+  end
+
+  def paying_pro_users
+    paying_users_query.merge(Subscription.pro).count
+  end
+
+  def paying_growth_users
+    paying_users_query.merge(Subscription.growth).count
+  end
+
+  def paying_enterprise_users
+    paying_users_query.merge(Subscription.enterprise).count
+  end
+
+  def paying_users_query
     User
       .joins(credit_cards: { billing_attempts: { bill: :subscription } })
       .merge(Subscription.paid.merge(Bill.non_free))
-      .count
   end
 
   def pending_bills_sum
