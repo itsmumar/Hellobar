@@ -57,7 +57,6 @@ json.cache! site_element do
     :trigger_color,
     :trigger_icon_color,
     :enable_gdpr,
-    :cta_border,
     :cta_border_color,
     :cta_border_width,
     :cta_border_radius

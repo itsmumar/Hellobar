@@ -106,7 +106,6 @@ export default Ember.Component.extend({
     'model.background_color',
     'model.border_color',
     'model.button_color',
-    'model.cta_border',
     'model.cta_border_color',
     'model.cta_border_width',
     'model.cta_border_radius',
