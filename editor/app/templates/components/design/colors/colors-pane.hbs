@@ -22,24 +22,24 @@
   <label>Button rounded corners</label>
 
   <div class="slider-wrapper">
-    {{common/sliders/range-slider min=0 max=100 start=model.button_border_radius update="buttonCornersUpdated" leftLabel="0" rightLabel="100"}}
+    {{common/sliders/range-slider min=0 max=100 start=model.cta_border_radius update="buttonCornersUpdated" leftLabel="0" rightLabel="100"}}
   </div>
 
   <br/>
 
   <label class="questions">
-    {{common/checkboxes/toggle-switch switch=model.button_border}}
+    {{common/checkboxes/toggle-switch switch=model.cta_border}}
     Button border
   </label>
 
-  {{#if model.button_border}}
+  {{#if model.cta_border}}
     <label>Button border color</label>
-    {{design/colors/selection/color-select color=model.button_border_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
+    {{design/colors/selection/color-select color=model.cta_border_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
     <label>Button border width</label>
 
     <div class="slider-wrapper">
-      {{common/sliders/range-slider min=0 max=8 default=1 start=model.button_border_width update="buttonBorderUpdated" leftLabel="0" rightLabel="8"}}
+      {{common/sliders/range-slider min=0 max=8 default=1 start=model.cta_border_width update="buttonBorderUpdated" leftLabel="0" rightLabel="8"}}
     </div>
   {{/if}}
 </div>

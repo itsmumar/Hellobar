@@ -22,11 +22,11 @@ export default Ember.Component.extend({
     },
 
     buttonBorderUpdated(value) {
-      this.set('model.button_border_width', value);
+      this.set('model.cta_border_width', value);
     },
 
     buttonCornersUpdated(value) {
-      this.set('model.button_border_radius', value);
+      this.set('model.cta_border_radius', value);
     }
   }
 
