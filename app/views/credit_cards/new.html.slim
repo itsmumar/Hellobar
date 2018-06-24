@@ -3,9 +3,10 @@
 
   h1 Billing Information
 
-  .note
-    p You’re signing up for a free #{ @partner_plan.duration } day trial of our #{ @partner_plan.subscription_name } Plan.
-    p Your card will not be charged until your trial period has finished.
+  - if @partner_plan
+    .note
+      p You’re signing up for a free #{ @partner_plan.duration } day trial of our #{ @partner_plan.subscription_name } Plan.
+      p Your card will not be charged until your trial period has finished.
 
   .wrapper
     .details-fields

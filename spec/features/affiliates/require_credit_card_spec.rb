@@ -4,7 +4,11 @@ describe 'Affiliate require credit card' do
 
   before do
     stub_cyber_source(:store)
-    create(:partner, affiliate_identifier: user.affiliate_identifier, require_credit_card: require_credit_card)
+
+    create(:partner, affiliate_identifier: user.affiliate_identifier,
+                     require_credit_card: require_credit_card,
+                     partner_plan_id: 'growth_60')
+
     sign_in user
   end
 
@@ -23,6 +27,7 @@ describe 'Affiliate require credit card' do
     it 'redirect to credit card page' do
       visit root_path
       expect(page).to have_content 'Billing Information'
+      expect(page).to have_content('You’re signing up for a free 60 day trial of our Growth Plan')
     end
 
     context 'when user enters credit card' do

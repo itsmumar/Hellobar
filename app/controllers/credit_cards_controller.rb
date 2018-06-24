@@ -51,9 +51,5 @@ class CreditCardsController < ApplicationController
 
   def load_partner_plan
     @partner_plan = current_user.affiliate_information&.partner&.partner_plan
-
-    return if @partner_plan
-
-    redirect_to after_sign_in_path_for(current_user)
   end
 end
