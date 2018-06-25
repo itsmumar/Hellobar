@@ -11,14 +11,14 @@ describe SiteElement do
   it { is_expected.to validate_numericality_of(:text_field_border_radius).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:text_field_background_opacity).only_integer.is_greater_than_or_equal_to 0 }
 
-  %[background_color border_color button_color link_color text_color
-  image_overlay_color text_field_border_color text_field_text_color
-  text_field_background_color].each do |color_field|
-    %[a xx abc gggggg 12345].each do |invalid_color|
+  %w[background_color border_color button_color link_color text_color
+     image_overlay_color text_field_border_color text_field_text_color
+     text_field_background_color].each do |color_field|
+    %w[a xx abc gggggg 12345].each do |invalid_color|
       it { is_expected.not_to allow_value(invalid_color).for color_field }
     end
 
-    %[111111 fafafa].each do |valid_color|
+    %w[111111 fafafa].each do |valid_color|
       it { is_expected.to allow_value(valid_color).for color_field }
     end
   end

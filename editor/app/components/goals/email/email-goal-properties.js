@@ -30,7 +30,7 @@ export default Ember.Component.extend({
     return this.get('model.text_field_border_radius');
   }.property('model.text_field_border_radius'),
 
-  textFieldOpacity: function () {
+  textFieldBackgroundOpacity: function () {
     return this.get('model.text_field_background_opacity');
   }.property('model.text_field_background_opacity'),
 
@@ -48,7 +48,7 @@ export default Ember.Component.extend({
       this.set('model.text_field_border_radius', parseInt(radius));
     },
 
-    setTextFieldOpacity(opacity) {
+    setTextFieldBackgroundOpacity(opacity) {
       this.set('model.text_field_background_opacity', parseInt(opacity));
     },
 
