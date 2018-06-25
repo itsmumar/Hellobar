@@ -123,7 +123,7 @@ class SiteElementsController < ApplicationController
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       :text_field_border_color, :text_field_border_width, :text_field_border_radius,
-      :text_field_text_color, :text_field_opacity, :text_field_background_color, :text_field_transparent,
+      :text_field_text_color, :text_field_opacity, :text_field_background_color,
       settings: settings_keys
     )
   end

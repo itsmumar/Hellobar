@@ -57,7 +57,6 @@ json.cache! site_element do
     :text_field_text_color,
     :text_field_background_color,
     :text_field_opacity,
-    :text_field_transparent,
     # alert bar
     :sound,
     :notification_delay,
