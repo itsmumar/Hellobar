@@ -161,7 +161,6 @@ export default Ember.Component.extend({
     'model.wiggle_button',
     'model.text_field_border_color',
     'model.text_field_border_width',
-    'model.text_field_border_width',
     'model.text_field_border_radius',
     'model.text_field_text_color',
     'model.text_field_background_color',

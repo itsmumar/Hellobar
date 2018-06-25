@@ -198,10 +198,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         height: 24px;
       }
 
-      background-repeat: no-repeat;
-      background-position: 30px,0;
-      background-size: 25px;
-
       input {
         padding: 0 0 0 70px;
       }
@@ -307,7 +303,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
         appearance: none;
         -moz-appearance: none;
         -webkit-appearance: none;
-        color: white;
         font-size: 1.2em;
 
         &::placeholder {
@@ -333,9 +328,6 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
           height: 16px;
         }
 
-        background-repeat: no-repeat;
-        background-position: 30px,0;
-        background-size: 25px;
         font-size: 0.8em;
 
         input {

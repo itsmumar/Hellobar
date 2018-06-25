@@ -7,6 +7,11 @@
   <label>Text field border color</label>
   {{design/colors/selection/color-select color=model.text_field_border_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
+  <label>Text field border radius (rounded corners)</label>
+  <div class="slider-wrapper">
+    {{common/sliders/range-slider min=0 max=20 start=textFieldBorderRadius update="setTextFieldBorderRadius" leftLabel="0" rightLabel="20"}}
+  </div>
+
   <label>Text field border width</label>
   <div class="slider-wrapper">
     {{common/sliders/range-slider min=0 max=10 start=textFieldBorderWidth update="setTextFieldBorderWidth" leftLabel="0" rightLabel="10"}}
@@ -21,11 +26,6 @@
   <label>Text field background opacity</label>
   <div class="slider-wrapper">
     {{common/sliders/range-slider min=0 max=100 start=textFieldBackgroundOpacity update="setTextFieldBackgroundOpacity" leftLabel="0%" rightLabel="100%"}}
-  </div>
-
-  <label>Text field rounded corners</label>
-  <div class="slider-wrapper">
-    {{common/sliders/range-slider min=0 max=20 start=textFieldBorderRadius update="setTextFieldBorderRadius" leftLabel="0" rightLabel="20"}}
   </div>
 
   <label>Choose your contact list and integration</label>
