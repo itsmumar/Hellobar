@@ -31,8 +31,8 @@ export default Ember.Component.extend({
   }.property('model.text_field_border_radius'),
 
   textFieldOpacity: function () {
-    return this.get('model.text_field_opacity');
-  }.property('model.text_field_opacity'),
+    return this.get('model.text_field_background_opacity');
+  }.property('model.text_field_background_opacity'),
 
   actions: {
 
@@ -49,7 +49,7 @@ export default Ember.Component.extend({
     },
 
     setTextFieldOpacity(opacity) {
-      this.set('model.text_field_opacity', parseInt(opacity));
+      this.set('model.text_field_background_opacity', parseInt(opacity));
     },
 
     eyeDropperSelected() {

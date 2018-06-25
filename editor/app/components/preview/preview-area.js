@@ -165,7 +165,7 @@ export default Ember.Component.extend({
     'model.text_field_border_radius',
     'model.text_field_text_color',
     'model.text_field_background_color',
-    'model.text_field_opacity',
+    'model.text_field_background_opacity',
     'isFullscreen',
     'isMobile'
   ),

@@ -447,7 +447,7 @@ ActiveRecord::Schema.define(version: 20180618130554) do
     t.integer  "text_field_border_radius",    limit: 1,        default: 2
     t.string   "text_field_text_color",       limit: 10,       default: "5c5e60"
     t.string   "text_field_background_color", limit: 10,       default: "ffffff"
-    t.integer  "text_field_opacity",          limit: 1,        default: 100
+    t.integer  "text_field_background_opacity",          limit: 1,        default: 100
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

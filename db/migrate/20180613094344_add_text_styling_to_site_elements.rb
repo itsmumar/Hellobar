@@ -7,7 +7,7 @@ class AddTextStylingToSiteElements < ActiveRecord::Migration
     add_column :site_elements, :text_field_border_radius, :integer, limit: 1, default: 2
     add_column :site_elements, :text_field_text_color, :string, limit: 10, default: '5c5e60'
     add_column :site_elements, :text_field_background_color, :string, limit: 10, default: 'ffffff'
-    add_column :site_elements, :text_field_opacity, :integer, limit: 1, default: 100
+    add_column :site_elements, :text_field_background_opacity, :integer, limit: 1, default: 100
 
     reversible do |dir|
       dir.up do
