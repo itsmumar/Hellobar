@@ -11,7 +11,14 @@ class AddTextStylingToSiteElements < ActiveRecord::Migration
 
     reversible do |dir|
       dir.up do
+        # Borderless themes
         execute "UPDATE site_elements SET text_field_border_width=0 WHERE theme_id in (#{ borderless_themes })"
+
+        # Smooth impact specific styling
+        execute "UPDATE site_elements SET text_field_border_radius=3 WHERE theme_id='smooth-impact'"
+        execute "UPDATE site_elements SET text_field_text_color='ffffff' WHERE theme_id='smooth-impact'"
+        execute "UPDATE site_elements SET text_field_background_color='000000' WHERE theme_id='smooth-impact'"
+        execute "UPDATE site_elements SET text_field_background_opacity=10 WHERE theme_id='smooth-impact'"
       end
     end
   end
