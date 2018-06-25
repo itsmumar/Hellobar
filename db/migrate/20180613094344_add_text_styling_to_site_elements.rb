@@ -22,6 +22,9 @@ class AddTextStylingToSiteElements < ActiveRecord::Migration
 
         # Subtle Facet specific styling
         execute "UPDATE site_elements SET text_field_border_radius=5 WHERE theme_id='subtle-facet'"
+
+        # Arctic Facet specific styling
+        execute "UPDATE site_elements SET text_field_border_radius=5 WHERE theme_id='arctic-facet'"
       end
     end
   end
