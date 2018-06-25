@@ -43,16 +43,20 @@ class SiteElement < ApplicationRecord
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
-  validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
+  validates :background_color, hex_color: true
+  validates :border_color, hex_color: true
+  validates :button_color, hex_color: true
+  validates :link_color, hex_color: true
+  validates :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
   validates :image_overlay_color, hex_color: true
   validates :image_overlay_opacity, numericality: true
   validates :text_field_border_color, hex_color: true
-  validates :text_field_border_width, numericality: { integer: true }
-  validates :text_field_border_radius, numericality: { integer: true }
+  validates :text_field_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :text_field_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :text_field_text_color, hex_color: true
   validates :text_field_background_color, hex_color: true
-  validates :text_field_background_opacity, numericality: { integer: true }
+  validates :text_field_background_opacity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed
