@@ -10,7 +10,7 @@ describe DiscountCalculator do
   end
 
   def create_subscription_for user
-    subscription = create(:subscription, :pro, schedule: :monthly, user: user)
+    subscription = create(:subscription, :pro, schedule: :monthly)
     subscription.credit_card.update(user: user)
     subscription.site.users << user
     subscription
