@@ -29,6 +29,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     # alert type
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
     #
+    # text field styling
+    :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+    :text_field_text_color, :text_field_background_color, :text_field_background_opacity,
+    #
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :open_in_new_window, :placement, :default_email_thank_you_text

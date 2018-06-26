@@ -14,7 +14,6 @@ json.cache_if! model.cache_enabled?, model do
     :gdpr_agreement,
     :gdpr_action,
     :geolocation_url,
-    :hb_backend_host,
     :tracking_url,
     :site_write_key,
     :external_tracking,
