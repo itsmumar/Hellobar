@@ -7,6 +7,9 @@ describe SiteElement do
     allow_any_instance_of(site.capabilities.class).to receive(capability).and_return(value)
   end
 
+  it { is_expected.to validate_numericality_of(:cta_border_width).only_integer.is_greater_than_or_equal_to 0 }
+  it { is_expected.to validate_numericality_of(:cta_border_radius).only_integer.is_greater_than_or_equal_to 0 }
+
   it 'belongs to a site through a rule set' do
     element.rule = nil
     expect(element.site).to be_nil
