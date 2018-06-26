@@ -12,7 +12,6 @@ class Subscription < ApplicationRecord
 
   belongs_to :credit_card
   belongs_to :site
-  belongs_to :user
   has_many :bills, -> { order 'id' }, inverse_of: :subscription
   has_many :active_bills, -> { merge(Bill.active) }, class_name: 'Bill', inverse_of: :subscription
   has_one :last_paid_bill, -> { paid.order end_date: :desc }, class_name: 'Bill', inverse_of: :subscription

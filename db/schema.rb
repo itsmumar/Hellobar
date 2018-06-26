@@ -486,7 +486,6 @@ ActiveRecord::Schema.define(version: 20180623154528) do
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4
     t.integer  "site_id",              limit: 4
     t.string   "type",                 limit: 255
     t.decimal  "amount",                           precision: 7, scale: 2
