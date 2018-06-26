@@ -182,19 +182,6 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#hb_backend_host' do
-    let(:backend_host) { 'hb_backend_host' }
-    let(:backend_api_url) { "https://#{ backend_host }" }
-
-    before do
-      allow(Settings).to receive(:tracking_api_url).and_return backend_api_url
-    end
-
-    it 'returns host' do
-      expect(model.hb_backend_host).to eql backend_host
-    end
-  end
-
   describe '#external_tracking' do
     context 'when site has external tracking capability' do
       let!(:alert) { create(:alert, site: site) }
@@ -316,11 +303,11 @@ describe StaticScriptModel do
 
     it 'renders models partial to json' do
       expect(json.keys).to match_array %i[
-        preview_is_active version modules_version timestamp capabilities site_id site_url
-        pro_secret hellobar_container_css templates geolocation_url hb_backend_host
+        preview_is_active version modules_version timestamp capabilities site_id
+        site_url pro_secret hellobar_container_css templates geolocation_url
         tracking_url site_write_key external_tracking hellobar_element_css
-        content_upgrades content_upgrades_styles autofills rules disable_self_check
-        gdpr_enabled gdpr_consent gdpr_agreement gdpr_action
+        content_upgrades content_upgrades_styles autofills rules
+        disable_self_check gdpr_enabled gdpr_consent gdpr_agreement gdpr_action
       ]
     end
 

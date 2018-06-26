@@ -114,10 +114,6 @@ class StaticScriptModel
     Settings.geolocation_url
   end
 
-  def hb_backend_host
-    URI.parse(Settings.tracking_api_url).host
-  end
-
   def tracking_url
     Settings.tracking_url
   end
