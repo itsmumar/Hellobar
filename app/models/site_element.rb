@@ -59,7 +59,6 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_redirect_url_allowed, if: :email?
   validate :ensure_custom_redirect_url_configured, if: :email?
 
-
   scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
   scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
   scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
