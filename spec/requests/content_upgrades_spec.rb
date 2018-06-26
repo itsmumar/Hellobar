@@ -2,7 +2,7 @@ describe 'Content upgrade requests' do
   let(:user) { create :user }
   let(:site) { create :site, :with_rule, user: user }
   let(:site_element) { site.site_elements.last }
-  let!(:subscription) { create :subscription, :pro_managed, user: user, site: site }
+  let!(:subscription) { create :subscription, :pro_managed, site: site }
 
   context 'when unauthenticated' do
     describe 'GET :index' do

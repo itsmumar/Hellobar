@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180618130554) do
+ActiveRecord::Schema.define(version: 20180620145924) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -489,7 +489,6 @@ ActiveRecord::Schema.define(version: 20180618130554) do
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4
     t.integer  "site_id",              limit: 4
     t.string   "type",                 limit: 255
     t.decimal  "amount",                           precision: 7, scale: 2

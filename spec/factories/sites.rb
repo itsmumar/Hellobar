@@ -45,7 +45,7 @@ FactoryBot.define do
 
     trait :free_subscription do
       after(:create) do |site, evaluator|
-        create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:subscription, :free, site: site, schedule: evaluator.schedule)
       end
     end
 
@@ -55,7 +55,6 @@ FactoryBot.define do
           :subscription,
           evaluator.subscription_plan,
           site: site,
-          user: site.users.first,
           schedule: evaluator.schedule
         )
 
@@ -99,7 +98,7 @@ FactoryBot.define do
 
     trait :past_due_site do
       after(:create) do |site|
-        subscription = create(:subscription, :pro, site: site, user: site.users.first)
+        subscription = create(:subscription, :pro, site: site)
         create(:past_due_bill, subscription: subscription)
       end
     end

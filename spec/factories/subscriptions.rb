@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :subscription do
     site
-    user nil
     schedule Subscription::MONTHLY
     association :credit_card, factory: :credit_card
     amount 0.0
