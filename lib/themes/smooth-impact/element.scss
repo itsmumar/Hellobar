@@ -138,14 +138,19 @@ $phone-input-icon : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy
       -moz-appearance: none;
       -webkit-appearance: none;
 
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.25);
-      }
       &::-webkit-input-placeholder {
-        color: rgba(255, 255, 255, 0.25);
+        color: white;
+        opacity: 0.25;
       }
+
+      &::-moz-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+
       &:-ms-input-placeholder {
-        color: rgba(255, 255, 255, 0.25);
+        color: white;
+        opacity: 0.25;
       }
     }
 
