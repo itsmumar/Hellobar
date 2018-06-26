@@ -383,64 +383,70 @@ ActiveRecord::Schema.define(version: 20180620145924) do
   create_table "site_elements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",       limit: 191,                              null: false
-    t.boolean  "closable",                               default: false
-    t.boolean  "show_border",                            default: false
-    t.string   "background_color",      limit: 255,      default: "eb593c"
-    t.string   "border_color",          limit: 255,      default: "ffffff"
-    t.string   "button_color",          limit: 255,      default: "000000"
-    t.string   "font_id",               limit: 255,      default: "open_sans"
-    t.string   "link_color",            limit: 255,      default: "ffffff"
-    t.string   "link_text",             limit: 5000,     default: "Click Here"
-    t.text     "headline",              limit: 16777215
-    t.string   "size",                  limit: 255,      default: "large"
-    t.string   "text_color",            limit: 255,      default: "ffffff"
-    t.string   "texture",               limit: 255,      default: "none"
-    t.integer  "rule_id",               limit: 4
-    t.text     "settings",              limit: 16777215
-    t.boolean  "show_branding",                          default: true
-    t.integer  "contact_list_id",       limit: 4
-    t.string   "thank_you_text",        limit: 255
-    t.boolean  "pushes_page_down",                       default: true
-    t.boolean  "remains_at_top",                         default: true
-    t.integer  "wordpress_bar_id",      limit: 4
-    t.boolean  "open_in_new_window",                     default: false
-    t.boolean  "animated",                               default: true
-    t.boolean  "wiggle_button",                          default: false
-    t.string   "type",                  limit: 255,      default: "Bar"
-    t.text     "caption",               limit: 16777215
-    t.text     "content",               limit: 16777215
-    t.string   "placement",             limit: 255
+    t.string   "element_subtype",               limit: 191,                              null: false
+    t.boolean  "closable",                                       default: false
+    t.boolean  "show_border",                                    default: false
+    t.string   "background_color",              limit: 255,      default: "eb593c"
+    t.string   "border_color",                  limit: 255,      default: "ffffff"
+    t.string   "button_color",                  limit: 255,      default: "000000"
+    t.string   "font_id",                       limit: 255,      default: "open_sans"
+    t.string   "link_color",                    limit: 255,      default: "ffffff"
+    t.string   "link_text",                     limit: 5000,     default: "Click Here"
+    t.text     "headline",                      limit: 16777215
+    t.string   "size",                          limit: 255,      default: "large"
+    t.string   "text_color",                    limit: 255,      default: "ffffff"
+    t.string   "texture",                       limit: 255,      default: "none"
+    t.integer  "rule_id",                       limit: 4
+    t.text     "settings",                      limit: 16777215
+    t.boolean  "show_branding",                                  default: true
+    t.integer  "contact_list_id",               limit: 4
+    t.string   "thank_you_text",                limit: 255
+    t.boolean  "pushes_page_down",                               default: true
+    t.boolean  "remains_at_top",                                 default: true
+    t.integer  "wordpress_bar_id",              limit: 4
+    t.boolean  "open_in_new_window",                             default: false
+    t.boolean  "animated",                                       default: true
+    t.boolean  "wiggle_button",                                  default: false
+    t.string   "type",                          limit: 255,      default: "Bar"
+    t.text     "caption",                       limit: 16777215
+    t.text     "content",                       limit: 16777215
+    t.string   "placement",                     limit: 255
     t.datetime "deleted_at"
-    t.string   "view_condition",        limit: 255,      default: "immediately"
-    t.string   "email_placeholder",     limit: 255,      default: "Your email",  null: false
-    t.string   "name_placeholder",      limit: 255,      default: "Your name",   null: false
-    t.string   "image_placement",       limit: 255,      default: "bottom"
-    t.integer  "active_image_id",       limit: 4
-    t.string   "question",              limit: 255
-    t.string   "answer1",               limit: 255
-    t.string   "answer2",               limit: 255
-    t.string   "answer1response",       limit: 255
-    t.string   "answer2response",       limit: 255
-    t.string   "answer1link_text",      limit: 255
-    t.string   "answer2link_text",      limit: 255
-    t.string   "answer1caption",        limit: 255
-    t.string   "answer2caption",        limit: 255
-    t.boolean  "use_question",                           default: false
-    t.string   "phone_number",          limit: 255
-    t.string   "phone_country_code",    limit: 255,      default: "US"
-    t.string   "theme_id",              limit: 255
-    t.boolean  "use_default_image",                      default: true,          null: false
-    t.string   "offer_text",            limit: 255
-    t.string   "sound",                 limit: 255,      default: "none",        null: false
-    t.integer  "notification_delay",    limit: 4,        default: 10,            null: false
-    t.string   "trigger_color",         limit: 255,      default: "31b5ff",      null: false
-    t.string   "trigger_icon_color",    limit: 255,      default: "ffffff",      null: false
-    t.integer  "image_opacity",         limit: 4,        default: 100
-    t.boolean  "enable_gdpr",                            default: false
+    t.string   "view_condition",                limit: 255,      default: "immediately"
+    t.string   "email_placeholder",             limit: 255,      default: "Your email",  null: false
+    t.string   "name_placeholder",              limit: 255,      default: "Your name",   null: false
+    t.string   "image_placement",               limit: 255,      default: "bottom"
+    t.integer  "active_image_id",               limit: 4
+    t.string   "question",                      limit: 255
+    t.string   "answer1",                       limit: 255
+    t.string   "answer2",                       limit: 255
+    t.string   "answer1response",               limit: 255
+    t.string   "answer2response",               limit: 255
+    t.string   "answer1link_text",              limit: 255
+    t.string   "answer2link_text",              limit: 255
+    t.string   "answer1caption",                limit: 255
+    t.string   "answer2caption",                limit: 255
+    t.boolean  "use_question",                                   default: false
+    t.string   "phone_number",                  limit: 255
+    t.string   "phone_country_code",            limit: 255,      default: "US"
+    t.string   "theme_id",                      limit: 255
+    t.boolean  "use_default_image",                              default: true,          null: false
+    t.string   "offer_text",                    limit: 255
+    t.string   "sound",                         limit: 255,      default: "none",        null: false
+    t.integer  "notification_delay",            limit: 4,        default: 10,            null: false
+    t.string   "trigger_color",                 limit: 255,      default: "31b5ff",      null: false
+    t.string   "trigger_icon_color",            limit: 255,      default: "ffffff",      null: false
+    t.integer  "image_opacity",                 limit: 4,        default: 100
+    t.boolean  "enable_gdpr",                                    default: false
     t.datetime "paused_at"
-    t.string   "image_overlay_color",   limit: 10,       default: "ffffff"
-    t.integer  "image_overlay_opacity", limit: 1,        default: 0
+    t.string   "image_overlay_color",           limit: 10,       default: "ffffff"
+    t.integer  "image_overlay_opacity",         limit: 1,        default: 0
+    t.string   "text_field_border_color",       limit: 10,       default: "e0e0e0"
+    t.integer  "text_field_border_width",       limit: 1,        default: 1
+    t.integer  "text_field_border_radius",      limit: 1,        default: 2
+    t.string   "text_field_text_color",         limit: 10,       default: "5c5e60"
+    t.string   "text_field_background_color",   limit: 10,       default: "ffffff"
+    t.integer  "text_field_background_opacity", limit: 1,        default: 100
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
