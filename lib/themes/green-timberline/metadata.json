@@ -16,28 +16,32 @@
       "text_color": "292929",
       "button_color": "22b38c",
       "link_color": "FFFFFF",
-      "font_id": "source_pro"
+      "font_id": "source_pro",
+      "cta_border_radius": 7
     },
     "Slider": {
       "background_color": "FFFFFF",
       "text_color": "292929",
       "button_color": "22b38c",
       "link_color": "FFFFFF",
-      "font_id": "source_pro"
+      "font_id": "source_pro",
+      "cta_border_radius": 7
     },
     "Modal": {
       "background_color": "FFFFFF",
       "text_color": "292929",
       "button_color": "22b38c",
       "link_color": "FFFFFF",
-      "font_id": "source_pro"
+      "font_id": "source_pro",
+      "cta_border_radius": 7
     },
     "Takeover": {
       "background_color": "FFFFFF",
       "text_color": "292929",
       "button_color": "22b38c",
       "link_color": "FFFFFF",
-      "font_id": "source_pro"
+      "font_id": "source_pro",
+      "cta_border_radius": 7
     },
     "Alert": {
       "background_color": "ffffff",
@@ -46,7 +50,8 @@
       "text_color": "292929",
       "button_color": "22b38c",
       "link_color": "ffffff",
-      "font_id": "source_pro"
+      "font_id": "source_pro",
+      "cta_border_radius": 7
     }
   },
   "image": {
