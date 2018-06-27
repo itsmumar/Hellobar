@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180627203359) do
+ActiveRecord::Schema.define(version: 20180627212456) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(version: 20180627203359) do
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
+
+  create_table "affiliate_commissions", id: false, force: :cascade do |t|
+    t.integer "identifier", limit: 4, null: false
+    t.integer "bill_id",    limit: 4, null: false
+  end
+
+  add_index "affiliate_commissions", ["identifier", "bill_id"], name: "index_affiliate_commissions_on_identifier_and_bill_id", using: :btree
 
   create_table "affiliate_information", force: :cascade do |t|
     t.integer  "user_id",               limit: 4,   null: false

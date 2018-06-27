@@ -1,7 +1,7 @@
 class TrackAffiliateRefund
   def initialize bill
     @bill = bill
-    @commission_id = bill.tapfiliate_commission_id
+    @commission_id = bill.affiliate_commission&.identifier
   end
 
   def call

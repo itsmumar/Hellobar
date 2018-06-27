@@ -24,12 +24,31 @@ describe TrackAffiliateCommission do
     end
 
     context 'when TapfiliateGateway responds with success' do
-      it 'sends `store_commission` request to TapfiliateGateway' do
-        expect(gateway).to receive(:store_commission)
+      before do
+        allow(gateway)
+          .to receive(:store_commission)
           .with(conversion_identifier: conversion_identifier, amount: amount, comment: a_string_matching(comment))
           .and_return successful_response
 
+        allow(successful_response)
+          .to receive(:[])
+          .with(0)
+          .and_return({ 'id' => 999 })
+      end
+
+      it 'sends `store_commission` request to TapfiliateGateway' do
         track_commission.call
+        expect(gateway).to have_received(:store_commission)
+      end
+
+      it 'creates AffiliateCommission' do
+        expect { track_commission.call }
+          .to change { AffiliateCommission.count }
+          .from(0)
+          .to(1)
+
+        expect(AffiliateCommission.last.identifier).to eql 999
+        expect(AffiliateCommission.last.bill).to eql bill
       end
     end
 

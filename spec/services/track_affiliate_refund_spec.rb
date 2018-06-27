@@ -1,5 +1,5 @@
 describe TrackAffiliateRefund do
-  let(:bill) { create :bill, tapfiliate_commission_id: commission_id }
+  let(:bill) { create :bill }
   let(:gateway) { instance_double TapfiliateGateway }
   let(:successful_response) { double 'Successful response', success?: true }
   let(:erroneous_response) { double 'Erroneous response', success?: false }
@@ -11,7 +11,7 @@ describe TrackAffiliateRefund do
     end
 
     context 'when there is no bill.tapfiliate_commission_id' do
-      let(:commission_id) { nil }
+      let!(:affiliate_commission) { nil }
 
       it 'does nothing' do
         expect(gateway).not_to receive :disapprove_commission
@@ -21,12 +21,12 @@ describe TrackAffiliateRefund do
     end
 
     context 'when there is bill.tapfiliate_commission_id' do
-      let(:commission_id) { 999 }
+      let!(:affiliate_commission) { create :affiliate_commission, bill: bill, identifier: 999 }
 
       it 'sends `disapprove_commission` request to TapfiliateGateway' do
         expect(gateway)
           .to receive(:disapprove_commission)
-          .with(commission_id: commission_id)
+          .with(commission_id: affiliate_commission.identifier)
           .and_return successful_response
 
         TrackAffiliateRefund.new(bill).call
@@ -34,14 +34,14 @@ describe TrackAffiliateRefund do
     end
 
     context 'when Tapfialite responds with an error' do
-      let(:commission_id) { 999 }
+      let!(:affiliate_commission) { create :affiliate_commission, bill: bill, identifier: 999 }
 
       before do
         allow(erroneous_response).to receive(:[]).with('errors').and_return error
 
         expect(gateway)
           .to receive(:disapprove_commission)
-          .with(commission_id: commission_id)
+          .with(commission_id: affiliate_commission.identifier)
           .and_return erroneous_response
       end
 
