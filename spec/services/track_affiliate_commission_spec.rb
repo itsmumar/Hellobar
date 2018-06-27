@@ -33,7 +33,7 @@ describe TrackAffiliateCommission do
         allow(successful_response)
           .to receive(:[])
           .with(0)
-          .and_return({ 'id' => 999 })
+          .and_return('id' => 999)
       end
 
       it 'sends `store_commission` request to TapfiliateGateway' do
