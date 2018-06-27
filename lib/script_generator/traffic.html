@@ -1,13 +1,13 @@
 <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }}
   id="hb-traffic-cta"
-  class="hb-cta {{siteElement.model().wiggle}}"
+  class="{{siteElement.ctaClass()}}"
   onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.model().open_in_new_window ? 'true' : 'false'}} };"
   href="{{siteElement.model().settings.url}}"
   target="{{siteElement.model().open_in_new_window ? '_blank' : '_parent'}}"
-  style="color: #{{siteElement.model().link_color}}; background-color: #{{siteElement.model().secondary_color}}; border-color: #{{siteElement.model().secondary_color}}"
+  style="{{siteElement.ctaStyle()}}"
   {{hellobar('base.format').isExternalURL(siteElement.model().settings.url) ? 'rel="nofollow"' : ''}}
 >
-  <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown && siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+  <div class="{{siteElement.textHolderClass()}}"
        data-hb-editable-block="action_link"
        data-hb-inline-editor-placeholder="Action">
     {{siteElement.model().link_text}}
