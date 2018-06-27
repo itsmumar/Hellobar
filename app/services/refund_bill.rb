@@ -12,6 +12,7 @@ class RefundBill
     raise InvalidRefund, 'Cannot refund an unpaid bill' unless bill.paid?
     check_refund_amount!
     refund
+    TrackAffiliateRefund.new(bill).call
   end
 
   private
