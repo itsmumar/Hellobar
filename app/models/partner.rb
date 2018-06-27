@@ -1,4 +1,6 @@
 class Partner < ActiveRecord::Base
+  belongs_to :affiliate_information, foreign_key: :affiliate_identifier, primary_key: :affiliate_identifier
+
   validates :email, format: { with: Devise.email_regexp, allow_blank: true }
   validates :website_url, url: { allow_blank: true }
   validates :affiliate_identifier, presence: true, uniqueness: true
