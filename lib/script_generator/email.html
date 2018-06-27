@@ -1,22 +1,12 @@
 <div class="hb-input-wrapper">
   <div id="hb-fields-form">
-    {{ siteElement.model().settings.fields_to_collect ? siteElement.model().settings.fields_to_collect.filter(function(field) { return field.is_enabled }).map(function(field) { return hellobar('elements.collecting').createInputFieldHtml(field, siteElement); }).join('') : '' }}
+    {{ siteElement.createInputs() }}
 
-    <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta {{siteElement.model().wiggle}}"
-            onclick="if (hellobar('base.preview').isActive()) {
-                       return false;
-                     } else {
-                       hellobar('elements.collecting').submitEmail({{siteElement.me}},
-                                                    document.getElementById('hb-fields-form'),
-                                                    (document.getElementById('hb_msg_container') || document.getElementsByClassName('hb-headline-text')[0]),
-                                                    {{hellobar('base.format').stringLiteral(siteElement.model().thank_you_text)}},
-                                                    {{siteElement.model().email_redirect}},
-                                                    {{hellobar('base.format').stringLiteral(siteElement.model().settings.redirect_url)}});
-                      return false;
-                    }"
+    <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="{{siteElement.ctaClass()}}"
+           onclick="siteElement.ctaOnClick()"
            href="javascript:void(0)"
-           style="color: #{{siteElement.model().link_color}}; background-color: #{{siteElement.model().secondary_color}}; border-color: #{{siteElement.model().secondary_color}}">
-      <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown && siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+           style="{{siteElement.ctaStyle()}}">
+      <div class="{{siteElement.textHolderClass()}}"
            data-hb-editable-block="action_link"
            data-hb-inline-editor-placeholder="Action">
       {{siteElement.model().link_text}}
