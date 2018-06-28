@@ -160,6 +160,36 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       padding: 48px;
     }
 
+    .hb-headline-text {
+      font-size: 2.1em;
+      margin-bottom: 20px;
+    }
+
+    [data-hb-editable-block="caption"] {
+      font-size: 1.5em;
+      margin: 15px auto;
+    }
+
+    [data-hb-editable-block="content"] {
+      font-size: 1.1em;
+      padding: 0 0 10px;
+    }
+
+    .hb-input-block {
+      &:before {
+        left: 16px;
+        top: 19px;
+        width: 19px;
+        height: 19px;
+      }
+
+      input {
+        font-size: 16px;
+        height: 3.5rem;
+        padding: 0 0 0 45px;
+      }
+    }
+
     .icon-close {
       top: 19px;
       right: 19px;
@@ -250,18 +280,6 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
     }
 
-    .hb-cta {
-      font-size: 28px;
-    }
-
-    .hb-input-block {
-      input {
-        font-size: 17px;
-        height: 6rem;
-        padding: 0 0 0 70px;
-      }
-    }
-
     .hb-headline-text {
       font-size: 2.3em;
       margin-bottom: 20px;
@@ -274,8 +292,20 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     [data-hb-editable-block="content"] {
-      font-size: 1em;
+      font-size: 1.1em;
       padding: 0 0 10px;
+    }
+
+    .hb-input-block {
+      input {
+        font-size: 17px;
+        height: 6rem;
+        padding: 0 0 0 70px;
+      }
+    }
+
+    .hb-cta {
+      font-size: 28px;
     }
 
     .icon-close {
