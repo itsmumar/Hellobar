@@ -141,6 +141,51 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
   }
 
+  #hellobar-bar {
+    .hb-text-wrapper {
+      margin-right: 20px;
+      padding-bottom: 4px;
+    }
+
+    .hb-headline-text {
+      font-size: 1.3em;
+      margin-bottom: 0;
+      text-transform: none;
+    }
+
+    .hb-input-block {
+      &:before {
+        left: 13px;
+        top: 11px;
+        width: 16px;
+        height: 16px;
+      }
+
+      input {
+        font-size: 15px;
+        height: 36px;
+        padding: 0 0 0 36px;
+      }
+    }
+
+    .hb-cta {
+      font-size: 18px;
+      height: 34px;
+      margin-left: 10px;
+
+      .hb-text-holder {
+        padding-top: 6px;
+      }
+    }
+
+    .icon-close {
+      font-size: 15px;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-51%);
+    }
+  }
+
   #hellobar-modal {
     padding: 0;
 
