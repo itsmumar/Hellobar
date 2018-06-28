@@ -29,8 +29,98 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     background-position: top center;
   }
 
+  .hb-headline-text {
+    font-size: 2em;
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  [data-hb-editable-block="caption"] {
+    font-weight: normal;
+    margin: 0 auto;
+    text-align: left;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  [data-hb-editable-block="content"] {
+    font-weight: normal;
+    margin: 0 auto;
+    text-align: left;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .hb-input-block {
+    &:before {
+      background-image: $input-icon;
+      background-repeat: no-repeat;
+      content: "";
+      position: absolute;
+      left: 29px;
+      top: 36px;
+      width: 24px;
+      height: 24px;
+    }
+
+    input {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+
+      &::-webkit-input-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+
+      &::-moz-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+
+      &:-ms-input-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+    }
+  }
+
+  .builtin-email {
+    &:before {
+      background-image: $email-input-icon;
+    }
+  }
+
+  .builtin-phone {
+    &:before {
+      background-image: $phone-input-icon;
+    }
+  }
+
+  .hb-cta {
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 1em;
+    letter-spacing: 2px;
+    padding: 4px 3px;
+    box-shadow: 0px 4px 20px -7px black;
+    max-width: inherit;
+
+    &:hover {
+      opacity: 0.95;
+    }
+  }
+
   .hb-logo-wrapper {
     opacity: 0.6;
+
     svg {
       fill: white;
     }
@@ -74,6 +164,10 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       top: 19px;
       right: 19px;
       font-size: 14px;
+    }
+
+    .hb-cta {
+      font-size: 19px;
     }
   }
 
@@ -157,68 +251,31 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     .hb-cta {
-      display: block;
       font-size: 28px;
-      font-weight: 700;
-      margin-top: 1em;
-      letter-spacing: 2px;
-      padding: 15px 30px 18px;
-      box-shadow: 0px 4px 20px -7px black;
-
-      &:hover {
-        opacity: 1;
-      }
     }
 
-    .hb-input-block input {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-
-      &::-webkit-input-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-
-      &::-moz-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-
-      &:-ms-input-placeholder {
-        color: white;
-        opacity: 0.25;
+    .hb-input-block {
+      input {
+        font-size: 17px;
+        height: 6rem;
+        padding: 0 0 0 70px;
       }
     }
 
     .hb-headline-text {
-      font-size: 2.1em;
-      text-align: left;
-      text-transform: uppercase;
-      font-weight: 700;
+      font-size: 2.3em;
       margin-bottom: 20px;
     }
 
-    .hb-secondary-text {
-      font-size: 0.8em;
-      font-weight: normal;
-      margin: 0 auto;
-      text-align: left;
-
-      &:empty {
-        display: none;
-      }
-    }
-
-    .hb-input-block input {
-      font-size: .7em;
-      height: 6rem;
-    }
-
     [data-hb-editable-block="caption"] {
-      padding: 10px 0;
-      font-size: 1.3em;
+      font-size: 1.5em;
       margin: 20px auto;
+      padding: 10px 0;
+    }
+
+    [data-hb-editable-block="content"] {
+      font-size: 1em;
+      padding: 0 0 10px;
     }
 
     .icon-close {
@@ -227,45 +284,16 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       right: 40px;
     }
 
-    .hb-input-block {
-      &:before {
-        background-image: $input-icon;
-        background-repeat: no-repeat;
-        content: "";
-        position: absolute;
-        left: 29px;
-        top: 36px;
-        width: 24px;
-        height: 24px;
-      }
-
-      input {
-        padding: 0 0 0 70px;
-      }
-    }
-
     @media screen and (max-height: 700px) {
       .hb-cta {
         padding: 5px 20px 8px;
-      }
-    }
-
-    .builtin-email {
-      &:before {
-        background-image: $email-input-icon;
-      }
-    }
-
-    .builtin-phone {
-      &:before {
-        background-image: $phone-input-icon;
       }
     }
   }
 
   #hellobar-slider {
     .slider-content {
-      padding: 25px 25px 40px;
+      padding: 25px 25px 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -285,97 +313,58 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
     }
 
-    .hb-headline-text {
-      font-size: 2em;
-      text-align: left;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    .hb-secondary-text {
-      font-size: 1.3em;
-      font-weight: normal;
-      margin: 0 auto;
-      text-align: left;
-
-      &:empty {
-        display: none;
-      }
-    }
-
     .hb-text-wrapper {
       margin-bottom: 15px;
     }
 
-    .hb-input-block input {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      font-size: 1.2em;
+    .hb-headline-text {
+      font-size: 1.5em;
+    }
 
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.25);
-      }
-      &::-webkit-input-placeholder {
-        color: rgba(255, 255, 255, 0.25);
-      }
-      &:-ms-input-placeholder {
-        color: rgba(255, 255, 255, 0.25);
-      }
+    [data-hb-editable-block="caption"] {
+      font-size: 1.2em;
     }
 
     .hb-input-block {
       &:before {
-        background-image: $input-icon;
-        background-repeat: no-repeat;
-        content: "";
-        position: absolute;
         left: 16px;
         top: 13px;
         width: 16px;
         height: 16px;
       }
 
-      font-size: 0.8em;
-
       input {
-        padding: 0 0 0 40px;
+        font-size: 13px;
         height: 40px;
-      }
-    }
-
-    .builtin-email {
-      &:before {
-        background-image: $email-input-icon;
-      }
-    }
-
-    .builtin-phone {
-      &:before {
-        background-image: $phone-input-icon;
+        padding: 0 0 0 40px;
       }
     }
 
     .hb-cta {
-      border-radius: 2px;
-      display: block;
-      font-size: 1.1em;
-      font-weight: 700;
-      margin-top: 12px;
-      letter-spacing: 2px;
-      padding: 4px 3px;
-      box-shadow: 0px 4px 20px -7px black;
-      max-width: inherit;
+      font-size: 17px;
     }
-  }
 
-  #hellobar-slider.image-background {
-    .slider-content {
-      margin-left: 43%;
+    .hb-logo-wrapper {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      text-align: center;
+      margin-bottom: 15px;
+    }
 
-      &:after {
-        left: 43%;
+    .icon-close {
+      font-size: 12px;
+      top: 14px;
+      right: 14px;
+    }
+
+    &.image-background {
+      .slider-content {
+        margin-left: 43%;
+
+        &:after {
+          left: 43%;
+        }
       }
     }
   }
@@ -388,17 +377,6 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     #hellobar-slider {
       max-width: 500px;
       width: 500px;
-
-      .hb-cta {
-        display: block;
-        font-size: 1.1em;
-        font-weight: 700;
-        margin-top: 12px;
-        letter-spacing: 2px;
-        padding: 4px 3px;
-        box-shadow: 0px 4px 20px -7px black;
-        max-width: inherit;
-      }
     }
 
     #hellobar-slider.image-background {
