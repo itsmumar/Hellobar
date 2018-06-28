@@ -62,7 +62,10 @@ json.cache! site_element do
     :notification_delay,
     :trigger_color,
     :trigger_icon_color,
-    :enable_gdpr
+    :enable_gdpr,
+    :cta_border_color,
+    :cta_border_width,
+    :cta_border_radius
 
   json.font site_element.font.try(:value)
 
@@ -78,7 +81,7 @@ json.cache! site_element do
   json.wiggle_wait 0
   json.email_redirect site_element.email_redirect?
 
-  json.thank_you_text SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;')
+  json.thank_you_text site_element.display_thank_you_text.gsub(/"/, '&quot;')
 
   json.template_name "#{ site_element.class.name.downcase }_#{ site_element.element_subtype }"
 

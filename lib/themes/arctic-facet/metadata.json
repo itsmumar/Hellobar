@@ -18,6 +18,7 @@
       "button_color": "264AAE",
       "link_color": "FFFFFF",
       "font_id": "open_sans",
+      "cta_border_radius": 4,
       "text_field_border_radius": 5,
       "text_field_border_width": 0
     }

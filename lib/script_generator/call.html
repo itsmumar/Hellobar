@@ -1,11 +1,11 @@
-<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="hb-cta {{siteElement.model().wiggle}}"
-   href="tel:{{siteElement.model().phone_number}}"
+<{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="{{siteElement.ctaClass()}}"
+   href="tel:{{siteElement.phone_number}}"
    onclick="if (hellobar('base.preview').isActive()) { return false } else { hellobar('elements.conversion').trackClick(this, {{siteElement.me}}); return {{siteElement.model().open_in_new_window ? 'true' : 'false'}} };"
-   style="color: #{{siteElement.model().link_color}}; background-color: #{{siteElement.model().secondary_color}}; border-color: #{{siteElement.model().secondary_color}}">
+   style="{{siteElement.ctaStyle()}}">
   <img class="icon-phone"
     src="{{hellobar('base.coloring').colorIsBright(siteElement.model().secondary_color) ? 'https://assets.hellobar.com/dark-phone.png' : 'https://assets.hellobar.com/white-phone.png'}}"
   />
-  <div class="hb-text-holder {{siteElement.questionOrAnswerIsShown && siteElement.questionOrAnswerIsShown() ? '' : 'hb-editable-block hb-editable-block-with-simple-no-link-formatting'}}"
+  <div class="{{siteElement.textHolderClass()}}"
        data-hb-editable-block="action_link"
        data-hb-inline-editor-placeholder="Action">
     {{siteElement.model().link_text}}

@@ -122,6 +122,7 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
+      :cta_border_color, :cta_border_width, :cta_border_radius,
       :text_field_border_color, :text_field_border_width, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
       settings: settings_keys

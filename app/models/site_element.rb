@@ -51,6 +51,9 @@ class SiteElement < ApplicationRecord
   validates :contact_list, association_exists: true, if: :email?
   validates :image_overlay_color, hex_color: true
   validates :image_overlay_opacity, numericality: true
+  validates :cta_border_color, hex_color: true
+  validates :cta_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :cta_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :text_field_border_color, hex_color: true
   validates :text_field_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :text_field_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

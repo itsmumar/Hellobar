@@ -9,12 +9,6 @@
     overflow-x: hidden;
   }
 
-  #hellobar-bar {
-    .hb-cta {
-      border-radius: 0px;
-    }
-  }
-
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {
@@ -38,7 +32,6 @@
       min-width: 7em;
       margin-top: 1em;
       padding: 15px 30px;
-      border-radius: 0px;
       letter-spacing: 1px;
       display: inline-block;
     }
@@ -87,7 +80,6 @@
 
     .hb-cta {
       font-size: 18px;
-      border-radius: 0px;
     }
 
     .hb-name-input {
@@ -105,10 +97,6 @@
       font-size: 18px;
       line-height: 32px;
       margin-top: 15px;
-    }
-
-    .hb-cta {
-      border-radius: 0px;
     }
 
     .hb-input-block input {
