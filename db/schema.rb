@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20180627212456) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
 
-  create_table "affiliate_commissions", id: false, force: :cascade do |t|
+  create_table "affiliate_commissions", force: :cascade do |t|
     t.integer "identifier", limit: 4, null: false
     t.integer "bill_id",    limit: 4, null: false
   end

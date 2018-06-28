@@ -1,6 +1,6 @@
 class CreateAffiliateCommissions < ActiveRecord::Migration
   def change
-    create_table :affiliate_commissions, id: false do |t|
+    create_table :affiliate_commissions do |t|
       t.integer :identifier, null: false
       t.integer :bill_id, null: false
     end
