@@ -3,7 +3,7 @@
     {{ siteElement.createInputs() }}
 
     <{{ hellobar('base.preview').isActive() ? 'div' : 'a' }} class="{{siteElement.ctaClass()}}"
-           onclick="siteElement.ctaOnClick()"
+           onclick="{{siteElement.me}}.ctaOnClick(this, document)"
            href="javascript:void(0)"
            style="{{siteElement.ctaStyle()}}">
       <div class="{{siteElement.textHolderClass()}}"
