@@ -19,10 +19,6 @@ class Subscription::ProManaged::Capabilities < Subscription::Pro::Capabilities
     true
   end
 
-  def opacity?
-    true
-  end
-
   def advanced_themes?
     true
   end
