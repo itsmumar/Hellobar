@@ -20,6 +20,11 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 .smooth-impact {
   color: '#3A3A49';
 
+  #hello-bar {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+
   .hb-header {
     display: none;
   }
@@ -154,6 +159,9 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     .hb-input-block {
+      margin-bottom: 4px;
+      margin-top: 4px;
+
       &:before {
         left: 13px;
         top: 11px;
@@ -171,7 +179,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     .hb-cta {
       font-size: 18px;
       height: 34px;
-      margin-left: 10px;
+      margin: 4px 10px;
 
       .hb-text-holder {
         padding-top: 6px;
