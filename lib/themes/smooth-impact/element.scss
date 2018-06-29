@@ -148,7 +148,8 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   #hellobar-bar {
     .hb-text-wrapper {
-      margin-right: 20px;
+      margin-left: 10px;
+      margin-right: 10px;
       padding-bottom: 4px;
     }
 
@@ -191,6 +192,27 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       top: 50%;
       right: 15px;
       transform: translateY(-51%);
+    }
+
+    &.mobile {
+      .hb-headline-text {
+        font-size: 1.1em;
+      }
+
+      .hb-input-block {
+        margin-bottom: 0;
+        margin-top: 0;
+
+        input {
+          font-size: 13px;
+        }
+      }
+
+      .hb-cta {
+        font-size: 16px;
+        height: 32px;
+        margin: 2px 6px;
+      }
     }
   }
 
