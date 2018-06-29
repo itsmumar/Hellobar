@@ -194,7 +194,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       transform: translateY(-51%);
     }
 
-    &.mobile {
+    @media screen and (max-width: 840px) {
       .hb-headline-text {
         font-size: 1.1em;
       }
@@ -273,6 +273,17 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
     .hb-cta {
       font-size: 19px;
+    }
+
+    @media screen and (max-width: 700px) {
+      .hb-image-wrapper {
+        display: none;
+      }
+
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        margin-left: inherit;
+        width: auto;
+      }
     }
   }
 
