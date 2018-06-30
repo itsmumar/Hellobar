@@ -18,7 +18,7 @@ class CreditCard < ApplicationRecord
   ]
 
   def name
-    "#{ first_name } #{ last_name }"
+    "#{ first_name } #{ last_name }".strip
   end
 
   def description

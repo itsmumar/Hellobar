@@ -18,6 +18,7 @@ div.row
           th Email
           th Website URL
           th Affiliate ID
+          th Require CC
           th Date Created
           th
 
@@ -29,6 +30,7 @@ div.row
             td= partner.email
             td= partner.website_url
             td= partner.affiliate_identifier
+            td= yes_or_no(partner.require_credit_card)
             td= partner.created_at
             td
               = link_to 'Edit', edit_admin_partner_path(partner)
