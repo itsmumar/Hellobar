@@ -1,14 +1,11 @@
 class TeamMailer < ApplicationMailer
-  layout 'user_mailer'
   default from: 'Hello Bar <contact@hellobar.com>'
 
   def invite(site_membership)
     user = site_membership.user
     site = site_membership.site
 
-    if user.temporary? && !user.invite_token_expired?
-      return invite_new_user(user, site)
-    end
+    return invite_new_user(user, site) if user.temporary? && !user.invite_token_expired?
 
     @site = site
     @login_url = user.oauth_user? ? oauth_login_url(action: 'google_oauth2') : new_user_session_url

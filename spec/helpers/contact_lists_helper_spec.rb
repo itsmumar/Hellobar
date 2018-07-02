@@ -8,7 +8,8 @@ describe ContactListsHelper, type: :helper do
         requires_api_key: nil,
         requires_username: nil,
         requires_webhook_url: nil,
-        oauth: nil
+        oauth: nil,
+        hidden: nil
       }.merge(other)
     end
 
@@ -22,8 +23,7 @@ describe ContactListsHelper, type: :helper do
         ['ConvertKit', :convert_kit, options(requires_api_key: true)],
         ['Drip', :drip, options(oauth: true)],
         ['GetResponse', :get_response_api, options(requires_api_key: true)],
-        ['iContact', :icontact, options(requires_embed_code: true)],
-        ['Infusionsoft', :infusionsoft, options(oauth: true)],
+        ['Infusionsoft', :infusionsoft, options(requires_app_url: true, requires_api_key: true)],
         ['Iterable', :iterable, options(requires_api_key: true)],
         ['MadMimi', :mad_mimi_api, options(requires_api_key: true, requires_username: true)],
         ['MailChimp', :mailchimp, options(oauth: true)],

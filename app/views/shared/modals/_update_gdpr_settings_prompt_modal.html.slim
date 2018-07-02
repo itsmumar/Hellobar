@@ -1,0 +1,26 @@
+script id="update-gdpr-settings-prompt-modal-template" type="text/x-handlebars-template"
+  .modal-wrapper
+
+    .modal-block
+
+      i.icon-close
+
+      .flash-block
+        i.icon-close
+
+      h3 GDPR Compliance Settings
+
+      hr
+
+      p Your settings have not been saved.
+
+      p Please go to your Site Settings to update your GDPR Compliance settings.
+
+      p Once saved, edit your site element and switch this toggle to ON to have the GDPR consent form enabled.
+
+      hr
+
+      .buttons
+        = link_to 'Go To Settings', edit_site_privacy_path(current_site), class: 'button submit', target: '_blank'
+
+

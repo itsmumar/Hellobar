@@ -11,10 +11,10 @@ describe SitesController do
       expect(assigns[:site]).not_to be_nil
     end
 
-    it 'sets the url if present from the params' do
+    it 'sets normalized site url (with scheme) if present from the params' do
       get :new, url: 'site.com'
 
-      expect(assigns[:site].url).to eql('site.com')
+      expect(assigns[:site].url).to eql('http://site.com')
     end
 
     it 'flashes a notice if the url is present in the params' do
@@ -28,33 +28,6 @@ describe SitesController do
     before do
       upload_to_s3 = double(:upload_to_s3, call: true)
       allow(UploadToS3).to receive(:new).and_return(upload_to_s3)
-    end
-
-    context 'when no user is logged-in' do
-      it 'redirects to oauth login' do
-        post :create, site: { url: 'temporary-site.com' }
-        expect(response).to redirect_to('/auth/google_oauth2')
-      end
-
-      it 'redirects to the landing page with an error if site is not valid' do
-        post :create, site: { url: 'not a valid url' }
-
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'redirects to the landing page with an error if site is an email address' do
-        post :create, site: { url: 'asdf@mail.com' }
-
-        expect(response).to redirect_to root_path
-        expect(flash[:error]).to match(/not valid/)
-      end
-
-      it 'redirects to login page if base URL has already been taken' do
-        post :create, site: { url: "#{ site.url }/path" }, source: 'landing'
-
-        expect(response).to redirect_to(new_user_session_path(existing_url: site.url))
-      end
     end
 
     context 'existing user' do
@@ -93,6 +66,26 @@ describe SitesController do
         expect(response).to redirect_to(site_path(site))
         expect(flash[:error]).to eq('Url is already in use.')
       end
+
+      context 'when ActiveRecord::RecordInvalid is raised' do
+        it 'renders errors' do
+          site.errors.add :base, 'foo'
+          error = ActiveRecord::RecordInvalid.new(site)
+          expect(CreateSite).to receive_service_call.and_raise(error)
+          post :create, site: { url: 'www.test.com' }
+          expect(flash[:error]).to eq ['foo']
+        end
+      end
+
+      context 'when CreateSite::DuplicateURLError is raised' do
+        let!(:existing_site) { create :site, user: user, url: 'www.test.com' }
+
+        it 'redirects to existing site' do
+          post :create, site: { url: 'www.test.com' }
+          expect(flash[:error]).to eq 'Url is already in use.'
+          expect(response).to redirect_to site_path(existing_site)
+        end
+      end
     end
   end
 
@@ -107,13 +100,6 @@ describe SitesController do
       put :update, id: site.id, site: { url: 'http://updatedurl.com' }
 
       expect(site.reload.url).to eq('http://updatedurl.com')
-    end
-
-    it 'does not allow updating to existing urls' do
-      new_membership = create(:site_membership, user: user)
-      put :update, id: new_membership.site.id, site: { url: site.url }
-
-      expect(flash[:error]).to include('URL is already in use')
     end
 
     it 'renders the edit template if the change was rejected' do
@@ -144,8 +130,6 @@ describe SitesController do
     it 'renders static script' do
       stub_current_user(user)
 
-      expect(GenerateStaticScriptModules).to receive_service_call
-
       options = {
         templates: SiteElement.all_templates,
         no_rules: true,
@@ -175,14 +159,15 @@ describe SitesController do
       expect(StaticScriptAssets)
         .to receive(:render_model).with(instance_of(StaticScriptModel)).and_return('__DATA__')
       expect(StaticScriptAssets)
-        .to receive(:digest_path).with('modules.js').and_return('modules.js')
-      expect(StaticScriptAssets)
         .to receive(:render).with('static_script_template.js', site_id: site.id).and_return('$INJECT_MODULES; $INJECT_DATA')
 
       get :script, id: site
 
       expect(response).to be_success
-      expect(response.body).to eql '"/generated_scripts/modules.js"; __DATA__'
+
+      folder = StaticScript::SCRIPTS_LOCAL_FOLDER
+      filename = HellobarModules.filename
+      expect(response.body).to eql %("#{ folder }#{ filename }"; __DATA__)
     end
   end
 
@@ -226,7 +211,7 @@ describe SitesController do
       stub_current_user(user)
       expect(FetchSiteStatistics)
         .to receive_service_call
-        .with(site, site_element_ids: [site_element.id])
+        .with(site)
         .and_return(statistics)
 
       expect(FetchSiteStatistics)

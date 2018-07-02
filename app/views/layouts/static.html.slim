@@ -2,27 +2,26 @@ doctype html
 html
   head
     title Hello Bar
-    link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
-    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+    = render "shared/gtm_script"
+    = render 'shared/favicon'
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" type="text/css"
 
     = stylesheet_link_tag    "static", :media => "all"
     = javascript_include_tag "static"
 
-    = render "shared/hellobar_script"
     = render 'shared/typekit'
 
     = csrf_meta_tags
 
   body#hb-static
-    = render 'shared/crazy_egg'
-    = render 'shared/google_analytics'
-    = render 'shared/segment'
+    = render "shared/gtm_noscript"
+    = render 'shared/amplitude'
 
     main.global-content id=page_id
       .bounds-wrapper
         .logo-block
-          = link_to 'HelloBar', root_path
 
         == yield
 

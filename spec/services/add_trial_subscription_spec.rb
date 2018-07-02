@@ -5,7 +5,10 @@ describe AddTrialSubscription, :freeze do
   let(:service) { AddTrialSubscription.new(site, params) }
   let(:last_subscription) { Subscription.last }
 
-  before { ChangeSubscription.new(site, subscription: 'free').call }
+  before do
+    ChangeSubscription.new(site, subscription: 'free').call
+    allow(TrackSubscriptionChange).to receive_message_chain(:new, :call)
+  end
 
   describe '.call' do
     it 'returns paid bill with zero amount' do
@@ -22,10 +25,30 @@ describe AddTrialSubscription, :freeze do
       expect(site).to be_capable_of :pro
     end
 
+    it 'creates pending bill for next period' do
+      bill = service.call
+
+      next_bill = site.bills.order(:id).last
+
+      expect(next_bill).to be_pending
+      expect(next_bill.amount).to eq(site.current_subscription.amount)
+      expect(next_bill.bill_at).to eq(bill.end_date - 3.days)
+    end
+
     it 'changes capabilities to pro' do
       expect { service.call }
         .to change { site.capabilities }
       expect(site).to be_capable_of :pro
+    end
+
+    it 'tracks subscription change event' do
+      expect(TrackSubscriptionChange).to receive_service_call.with(
+        user,
+        instance_of(Subscription::Free),
+        instance_of(Subscription::Pro)
+      )
+
+      service.call
     end
 
     context 'when trial ends up' do
@@ -33,7 +56,7 @@ describe AddTrialSubscription, :freeze do
 
       it 'reverts back to free' do
         expect(site.current_subscription).to be_a Subscription::Pro
-        travel_to 7.days.from_now do
+        Timecop.travel 7.days.from_now do
           expect(site.current_subscription).to be_a Subscription::Free
         end
       end
@@ -57,7 +80,7 @@ describe AddTrialSubscription, :freeze do
 
     context 'when error is raised during transaction' do
       it 'does not create neither a subscription nor a bill' do
-        expect(Bill::Recurring).to receive(:create!).and_raise(StandardError)
+        expect(Bill).to receive(:create!).and_raise(StandardError)
         expect { service.call }
           .to raise_error(StandardError)
           .and change(Subscription, :count)

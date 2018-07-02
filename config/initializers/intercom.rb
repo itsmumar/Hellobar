@@ -46,7 +46,7 @@ IntercomRails.config do |config|
   # A Proc that given a user returns true if the user should be excluded
   # from imports and Javascript inclusion, false otherwise.
   #
-  # config.user.exclude_if = Proc.new { |user| user.deleted? }
+  config.user.exclude_if = proc { |user| user.pro_managed? }
 
   # == User Custom Data
   # A hash of additional data you wish to send about your users.
@@ -60,7 +60,10 @@ IntercomRails.config do |config|
     additional_domains: proc { |user| user.sites.map { |site| NormalizeURI[site.url]&.domain }.compact.join(', ') },
     contact_lists: proc { |user| user.contact_lists.count },
     total_views: proc { |user| user.sites.map { |site| site.statistics.views }.sum },
-    total_conversions: proc { |user| user.sites.map { |site| site.statistics.conversions }.sum }
+    total_conversions: proc { |user| user.sites.map { |site| site.statistics.conversions }.sum },
+    total_subscribers: proc { |user| user.sites.to_a.sum { |s| FetchSiteContactListTotals.new(s).call.values.sum || 0 } },
+    managed_sites: proc { |user| user.site_ids },
+    affiliate_identifier: proc { |user| user.affiliate_information&.affiliate_identifier }
   }
 
   # == Current company method/variable
@@ -116,5 +119,8 @@ IntercomRails.config do |config|
   # config.inbox.custom_activator = '.intercom'
   #
   # If you'd like to hide default launcher button uncomment this line
-  config.hide_default_launcher = true
+  # config.hide_default_launcher = true
+
+  # Display Messenger for logged out users
+  config.include_for_logged_out_users = true
 end

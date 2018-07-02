@@ -1,10 +1,8 @@
-require 'integration_helper'
-
 describe 'Content upgrade requests' do
   let(:user) { create :user }
   let(:site) { create :site, :with_rule, user: user }
   let(:site_element) { site.site_elements.last }
-  let!(:subscription) { create :subscription, :pro_managed, user: user, site: site }
+  let!(:subscription) { create :subscription, :pro_managed, site: site }
 
   context 'when unauthenticated' do
     describe 'GET :index' do
@@ -19,13 +17,36 @@ describe 'Content upgrade requests' do
 
   context 'when authenticated' do
     let!(:content_upgrade) { create(:content_upgrade, site: site) }
-    let(:pdf_upload) { fixture_file_upload(content_upgrade.content_upgrade_pdf.path) }
+    let(:settings) { content_upgrade.content_upgrade_settings }
+    let(:pdf_upload) { fixture_file_upload(settings.content_upgrade_pdf.path) }
+
     let(:content_upgrade_params) do
-      content_upgrade.attributes.deep_symbolize_keys.merge(
-        site_id: site,
-        content_upgrade: { content_upgrade_pdf: pdf_upload }
+      content_upgrade.attributes.deep_symbolize_keys.slice(
+        :headline,
+        :caption,
+        :link_text,
+        :name_placeholder,
+        :email_placeholder,
+        :contact_list_id,
+        :enable_gdpr
       )
     end
+
+    let(:content_upgrade_settings_params) do
+      settings.attributes.deep_symbolize_keys.slice(
+        :offer_headline,
+        :disclaimer,
+        :content_upgrade_title,
+        :content_upgrade_url,
+        :thank_you_enabled,
+        :thank_you_headline,
+        :thank_you_subheading,
+        :thank_you_cta,
+        :thank_you_url
+      ).merge(content_upgrade: { content_upgrade_pdf: pdf_upload })
+    end
+
+    let(:params) { content_upgrade_params.merge(content_upgrade_settings_params) }
 
     before { login_as user, scope: :user, run_callbacks: false }
 
@@ -45,7 +66,7 @@ describe 'Content upgrade requests' do
       before do
         expect(FetchSiteStatistics)
           .to receive_service_call
-          .with(site, site_element_ids: [site_element.id])
+          .with(site)
           .and_return(SiteStatistics.new)
       end
 
@@ -67,14 +88,14 @@ describe 'Content upgrade requests' do
     describe 'POST :create' do
       it 'creates a new content upgrade when params are correct' do
         expect {
-          post site_content_upgrades_path(site), content_upgrade_params
+          post site_content_upgrades_path(site), params
         }.to change { ContentUpgrade.count }.by 1
 
         expect(response).to be_a_redirect
       end
 
       it 'does not create a new content upgrade when some params are missing' do
-        params = content_upgrade_params.merge(offer_headline: '')
+        params[:offer_headline] = ''
 
         expect {
           post site_content_upgrades_path(site), params
@@ -98,7 +119,7 @@ describe 'Content upgrade requests' do
       let(:content_upgrade) { create :content_upgrade, site: site }
 
       it 'updates data of an existing content upgrade when params are correct' do
-        params = content_upgrade_params.merge(offer_headline: 'new offer_headline')
+        params[:offer_headline] = 'new offer_headline'
 
         expect {
           patch site_content_upgrade_path(site, content_upgrade), params
@@ -108,7 +129,7 @@ describe 'Content upgrade requests' do
       end
 
       it 'does not update an content upgrade when some params are missing' do
-        params = content_upgrade_params.merge(offer_headline: '')
+        params[:offer_headline] = ''
 
         expect {
           patch site_content_upgrade_path(site, content_upgrade), params
@@ -118,17 +139,38 @@ describe 'Content upgrade requests' do
       end
     end
 
-    describe 'POST :update_styles' do
-      it 'updates site.settings[:content_upgrade]' do
-        params = site.content_upgrade_styles.merge(offer_font_size: '32px', offer_font_family: 'Oswald,sans-serif')
+    describe 'DELETE :destroy' do
+      let(:content_upgrade) { create :content_upgrade, site: site }
 
-        expect { post update_styles_site_content_upgrades_path(site), params }
-          .to change { site.reload.content_upgrade_styles[:offer_font_size] }
-          .to('32px')
-          .and change { site.reload.content_upgrade_styles[:offer_font_family_name] }
-          .to('Oswald')
+      it 'destroys record' do
+        expect {
+          delete site_content_upgrade_path(site, content_upgrade)
+        }.to change(ContentUpgrade, :count).by(-1)
 
         expect(response).to be_a_redirect
+      end
+    end
+
+    describe 'POST :update_styles' do
+      let(:params) do
+        {
+          content_upgrade_styles: attributes_for(:content_upgrade_styles, offer_font_size: '32px', offer_font_family_name: 'Oswald')
+        }
+      end
+
+      it 'updates content_upgrade_styles' do
+        post update_styles_site_content_upgrades_path(site), params
+
+        expect(site.content_upgrade_styles.offer_font_size).to eq('32px')
+        expect(site.content_upgrade_styles.offer_font_family_name).to eq('Oswald')
+        expect(site.content_upgrade_styles.offer_font_family).to eq('Oswald,sans-serif')
+
+        expect(response).to be_a_redirect
+      end
+
+      it 'regenerates script' do
+        expect { post update_styles_site_content_upgrades_path(site), params }
+          .to have_enqueued_job(GenerateStaticScriptJob).with(site)
       end
     end
 
@@ -136,6 +178,48 @@ describe 'Content upgrade requests' do
       it 'responds with success' do
         get style_editor_site_content_upgrades_path(site)
         expect(response).to be_successful
+      end
+    end
+
+    describe 'PUT :toggle_paused' do
+      let(:content_upgrade) { create :content_upgrade, site: site }
+
+      it 'pause content upgrade' do
+        expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
+          .to change { content_upgrade.reload.paused? }.from(false).to(true)
+      end
+
+      it 'regenerates script' do
+        expect {
+          put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+        }.to have_enqueued_job(GenerateStaticScriptJob)
+      end
+
+      it 'redirects to index' do
+        put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+        expect(response).to redirect_to site_content_upgrades_path(site)
+      end
+
+      context 'when already paused' do
+        before do
+          content_upgrade.pause!
+        end
+
+        it 'unpause content upgrade' do
+          expect { put toggle_paused_site_content_upgrade_path(site, content_upgrade) }
+            .to change { content_upgrade.reload.paused? }.from(true).to(false)
+        end
+
+        it 'regenerates script' do
+          expect {
+            put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+          }.to have_enqueued_job(GenerateStaticScriptJob)
+        end
+
+        it 'redirects to index' do
+          put toggle_paused_site_content_upgrade_path(site, content_upgrade)
+          expect(response).to redirect_to site_content_upgrades_path(site)
+        end
       end
     end
   end

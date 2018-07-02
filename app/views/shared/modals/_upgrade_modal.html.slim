@@ -1,3 +1,6 @@
+- # do not render it for pro managed sites since it takes a lot of time for huge sites
+- return if current_site&.pro_managed?
+
 script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
   .modal-wrapper
@@ -44,9 +47,9 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
         / Pro Package
         .package-block.pro
           .package-title
-            .package-name Pro
-            .package-price.monthly #{subscription_cost(Subscription::Pro, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Pro, :yearly)}/year
+            .package-name = Subscription.pro_or_growth_for(current_user).defaults[:name]
+            .package-price.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}/year
 
           .package-features
 
@@ -68,7 +71,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                 span.info-plus Target bars by device, location, URL, or traffic source
 
             .package-status
-              = choose_plan_button(Subscription::Pro.new)
+              = choose_pro_or_growth_button
               .email-links
                 - if current_site
                   - current_site.owners.each do |owner|
@@ -87,7 +90,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             ul
               li Unlimited visits
               li.placeholder-list-item --------------------------
-              li All the benefits of Pro
+              li All the benefits of #{ pro_or_growth } subscription
               li.placeholder-list-item --------------------------
 
             .package-status

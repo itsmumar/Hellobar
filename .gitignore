@@ -18,6 +18,12 @@ public/*bar_test.html
 public/integration
 public/image_uploads
 public/content_upgrades
+public/content_upgrade_settings
+
+# Ignore uploads in tests
+public/test_image_uploads
+public/test_content_upgrades
+public/test_content_upgrade_settings
 
 # Ignore tmp/scratch/editor files
 *.sublime-*

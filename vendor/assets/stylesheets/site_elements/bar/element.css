@@ -9,7 +9,6 @@
   font-weight: 400;
   padding: 0.33em 0.5em;
   background-color: #FF0000;
-  -webkit-font-smoothing: antialiased;
 }
 
 #hellobar-bar .hb-logo-wrapper,
@@ -53,25 +52,12 @@
 #hellobar-bar .hb-cta {
   display: inline-block;
   vertical-align: middle;
-  margin: 5px 0;
-}
-
-#hellobar-bar .hb-cta-style-text {
-  color: #fff;
-  padding: 6px 15px;
-  padding-left: 5px;
-  border-radius: 4px;
-  text-decoration: underline;
-  background: none !important;
-}
-
-#hellobar-bar .hb-cta-style-button {
   margin: 0 0;
   line-height: 1.05;
   padding: 0;
 }
 
-#hellobar-bar .hb-cta-style-button .hb-text-holder {
+#hellobar-bar .hb-cta .hb-text-holder {
   border-radius: inherit;
   padding: 5px 15px;
 }
@@ -171,15 +157,6 @@
   border-radius: 3px;
 }
 
-/*-----------  State: Multiline  -----------*/
-
-/*#hellobar-bar.multiline .hb-text-wrapper,
-#hellobar-bar.multiline .hb-input-wrapper {
-  display: block;
-  max-width: 100%;
-  text-align: center;
-}*/
-
 /*-----------  State: Bottom  -----------*/
 
 #hellobar-bar.bar-bottom {
@@ -211,7 +188,7 @@
   font-size: 9px;
 }
 
-#hellobar-bar.regular .hb-cta-style-button {
+#hellobar-bar.regular .hb-cta {
   padding: 3px 8px;
 }
 
@@ -229,7 +206,6 @@
   line-height: 195%;
 }
 
-
 /*-----------  Size: X-Large -----------*/
 
 #hellobar-bar.x-large {
@@ -237,26 +213,10 @@
   font-size: 19px;
 }
 
-#hellobar-bar.x-large .hb-logo-wrapper {
-}
-
-#hellobar-bar.x-large .hb-cta-style-button {
-}
-
-#hellobar-bar.x-large .hb-social-wrapper {
-}
-
-#hellobar-bar.x-large .hb-social-wrapper.hb-google-wrapper {
-}
-
-#hellobar-bar.x-large .hb-input-wrapper .hb-input-block input {
-}
-
 /*-----------  Animations: Button Wiggle  -----------*/
 
 #hellobar-bar .hb-cta.wiggle {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-  -moz-osx-font-smoothing: grayscale;
 
   backface-visibility: hidden;
   -o-backface-visibility: hidden;
@@ -399,4 +359,27 @@
     -webkit-transform: translateX(-1px) rotate(0);
     transform: translateX(-1px) rotate(0);
   }
+}
+
+/*-----------  GDPR  -----------*/
+
+#hellobar-bar .gdpr-consent-form {
+  display: flex;
+  font-size: 13px;
+  max-width: 800px;
+}
+
+#hellobar-bar .gdpr-consent-form p {
+  align-items: flext-start;
+  flex: 45%;
+  margin: 3px 10px 6px 0;
+}
+
+/*-----------  IE11 fixes  -----------*/
+#hellobar-bar .gdpr-consent-form {
+  min-width: 600px;
+}
+
+#hellobar-bar.mobile .gdpr-consent-form {
+  min-width: 360px;
 }

@@ -84,28 +84,57 @@ describe SiteElementsHelper do
       end
     end
 
-    it 'shows the conversion rate relative to other elements of the same type' do
-      rule = create(:rule)
-      element = create(:site_element, :twitter, rule: rule)
-      other_element = create(:site_element, :twitter, rule: rule)
+    describe 'conversion rate relative to other elements of the same type' do
+      let(:rule) { create(:rule) }
+      let(:element) { create(:site_element, :twitter, rule: rule) }
+      let(:other_element) { create(:site_element, :twitter, rule: rule) }
 
-      records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
-      ]
-      expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [element.id])
-        .and_return(SiteStatistics.new(records))
+      let(:total_views) { 10 }
 
-      records = [
-        create(:site_statistics_record, views: 10, conversions: 1, site_element_id: other_element.id)
-      ]
-      expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [other_element.id])
-        .and_return(SiteStatistics.new(records))
+      let(:element_stats) do
+        [
+          create(:site_statistics_record, views: 10, conversions: element_conversions, site_element_id: element.id),
+          create(:site_statistics_record, views: 10, conversions: other_conversions, site_element_id: other_element.id)
+        ]
+      end
 
-      expect(helper.activity_message_for_conversion(element, element.related_site_elements)).to match(/converting 400\.0% better than your other social bars/)
+      subject(:message) { helper.activity_message_for_conversion(element, element.related_site_elements) }
+
+      before do
+        expect(FetchSiteStatistics)
+          .to receive_service_call
+          .exactly(2)
+          .times
+          .with(rule.site)
+          .and_return(SiteStatistics.new(element_stats))
+      end
+
+      context 'when element performs better than other' do
+        let(:element_conversions) { 5 }
+        let(:other_conversions) { 1 }
+
+        it 'states that element is converting better' do
+          expect(message).to match(%r{converting 400.0% better than your other social bars})
+        end
+      end
+
+      context 'when element performs worse than other' do
+        let(:element_conversions) { 1 }
+        let(:other_conversions) { 5 }
+
+        it 'states that element is converting worse' do
+          expect(message).to match(%r{converting 80.0% worse than your other social bars})
+        end
+      end
+
+      context 'when element performs the same as other' do
+        let(:element_conversions) { 3 }
+        let(:other_conversions) { 3 }
+
+        it 'states that element is converting exactly the same as others' do
+          expect(message).to match(/converting exactly as well as your other social bars/)
+        end
+      end
     end
 
     it "doesn't show a percentage when comparing against other bars with no conversions" do
@@ -114,19 +143,14 @@ describe SiteElementsHelper do
       other_element = create(:site_element, :twitter, rule: rule)
 
       records = [
-        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id)
-      ]
-      expect(FetchSiteStatistics)
-        .to receive_service_call
-        .with(rule.site, site_element_ids: [element.id])
-        .and_return(SiteStatistics.new(records))
-
-      records = [
+        create(:site_statistics_record, views: 10, conversions: 5, site_element_id: element.id),
         create(:site_statistics_record, views: 10, conversions: 0, site_element_id: other_element.id)
       ]
       expect(FetchSiteStatistics)
         .to receive_service_call
-        .with(rule.site, site_element_ids: [other_element.id])
+        .exactly(2)
+        .times
+        .with(rule.site)
         .and_return(SiteStatistics.new(records))
 
       expect(helper.activity_message_for_conversion(element, element.related_site_elements))
@@ -237,7 +261,7 @@ describe SiteElementsHelper do
 
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
-      se.update_attribute(:paused, true)
+      se.pause!
 
       expect(helper.ab_test_icon(se)).to include('icon-abtest')
     end
@@ -343,30 +367,17 @@ describe SiteElementsHelper do
 
   describe '#render_headline' do
     let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
+    let(:slider_element) { create(:site_element, site: site, headline: '<b>Headline</b>') }
+
+    it 'strips tags' do
+      expect(helper.render_headline(slider_element)).to eql 'Headline'
+    end
 
     context 'when use_question' do
       let(:slider_element) { create(:site_element, site: site, use_question: true, question: '<b>Questions?</b>') }
 
       it 'strips tags' do
         expect(helper.render_headline(slider_element)).to eql 'Questions?'
-      end
-    end
-
-    context 'when blocks are empty' do
-      let(:slider_element) { create(:site_element, site: site, headline: '<b>Headline</b>') }
-      it 'strips tags' do
-        expect(helper.render_headline(slider_element)).to eql 'Headline'
-      end
-    end
-
-    context 'when blocks are present' do
-      let(:site) { create(:site, elements: %i[traffic email twitter facebook]) }
-      let(:element_with_blocks) { create(:site_element, :with_blocks, site: site) }
-      let(:slider_element) { create(:slider, site: site) }
-
-      it 'strips tags' do
-        expect(helper.render_headline(element_with_blocks)).to eql 'Grow your blog traffic by 300% with our free tool '
-        expect(helper.render_headline(slider_element)).to eql 'Hello, HelloBar!'
       end
     end
   end

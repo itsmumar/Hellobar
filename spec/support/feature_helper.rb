@@ -1,34 +1,10 @@
-include Warden::Test::Helpers
-
-Warden.test_mode!
-
-RSpec.configure do |config|
-  config.after(:each, type: :feature) do
-    Warden.test_reset!
-  end
-end
+SimpleCov.command_name 'test:features' if ENV['COVERAGE'] || ENV['CI']
 
 module FeatureHelper
   def sign_in(user)
     login_as user, scope: :user, run_callbacks: false
+
     visit '/'
-    user
-  end
-
-  # Deprecated. Use sign_in(user) instead
-  def login(user = nil)
-    user ||= create(:user)
-    if user.sites.blank?
-      user.sites.create(url: generate(:random_uniq_url)) # Setup a site so that it goes directly to summary page
-    end
-
-    login_as user, scope: :user, run_callbacks: false
-    visit '/'
-    user
-  end
-
-  def the_onboarding_campaigns_run
-    DeliverOnboardingCampaigns.new.call
   end
 
   def wait_for_ajax

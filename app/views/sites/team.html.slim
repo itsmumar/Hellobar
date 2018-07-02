@@ -1,9 +1,6 @@
 = javascript_include_tag "team"
 
-nav.tabs-wrapper
-  = active_link_to 'You', profile_path()
-  = active_link_to 'Team', site_team_path(current_site)
-  = active_link_to 'Site', edit_site_path(current_site)
+= render 'shared/setting_tabs'
 
 .error_container
 
@@ -18,7 +15,7 @@ nav.tabs-wrapper
     tr
       td
       - sites.each do |site|
-        td= site.normalized_url
+        td= site.host
     - sites.map(&:users).flatten.uniq.each do |user|
       tr
         td

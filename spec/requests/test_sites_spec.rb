@@ -1,12 +1,9 @@
-require 'integration_helper'
-
 describe 'test_sites requests' do
   describe 'GET :show' do
     let!(:site) { create :site }
     let(:script) { "#{ target_site.id } script" }
 
     before do
-      expect(GenerateStaticScriptModules).to receive_service_call
       expect(RenderStaticScript).to receive_service_call.and_return(script)
     end
 

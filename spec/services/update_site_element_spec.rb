@@ -1,5 +1,5 @@
 describe UpdateSiteElement do
-  let!(:element) { create :bar, :email }
+  let!(:element) { create(:bar, :email, :with_pro_site) }
   let(:headline) { 'Updated headline' }
   let(:params) do
     {
@@ -10,18 +10,14 @@ describe UpdateSiteElement do
   end
   let(:service) { UpdateSiteElement.new(element, params) }
 
-  before do
-    allow_any_instance_of(Site).to receive(:regenerate_script)
-  end
-
   context 'when update is successful' do
     it 'returns element' do
       expect(service.call).to eql element
     end
 
-    it 'regenerates the script' do
-      service.call
-      expect(element.site).to have_received(:regenerate_script)
+    it 'regenerates script' do
+      expect { service.call }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(element.site)
     end
 
     it 'updates the attributes' do
@@ -85,47 +81,32 @@ describe UpdateSiteElement do
 
       it 'does not pause the original element' do
         expect { service.call }.to raise_error ActiveRecord::RecordInvalid
-        expect(SiteElement.find(element.id).paused).to be_falsey
+        expect(SiteElement.find(element.id).paused?).to be_falsey
       end
 
       context 'when update succeeds but pausing fails' do
         let(:params) { Hash[element_subtype: 'traffic'] }
 
         it 'does not create new element' do
-          allow(element).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(element))
+          allow(element).to receive(:pause!).and_raise(ActiveRecord::RecordInvalid.new(element))
 
           expect { service.call }.to raise_error(ActiveRecord::RecordInvalid)
-          expect(element.reload.paused).to be_falsey
+          expect(element.reload.paused?).to be_falsey
         end
       end
     end
   end
 
   context 'when use_question has been previously set to true' do
-    context 'and theme is a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'traffic-growth' } }
+    let!(:element) { create(:site_element, :email, use_question: true) }
+    let(:params) { { use_question: true, theme_id: 'autodetect' } }
 
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'sets use_question to false' do
-        expect { service.call }.to change(element, :use_question).from(true).to(false)
-      end
+    it 'returns true' do
+      expect(service.call).to be_truthy
     end
 
-    context 'and theme is not a template' do
-      let!(:element) { create(:site_element, :email, use_question: true) }
-      let(:params) { { use_question: true, theme_id: 'autodetect' } }
-
-      it 'returns true' do
-        expect(service.call).to be_truthy
-      end
-
-      it 'does not touch use_question' do
-        expect { service.call }.not_to change(element, :use_question)
-      end
+    it 'does not touch use_question' do
+      expect { service.call }.not_to change(element, :use_question)
     end
   end
 

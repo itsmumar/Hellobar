@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.10'
 
 # AWS
 gem 'aws-sdk-cloudwatch'
@@ -11,16 +11,21 @@ gem 'aws-sdk-sqs'
 
 # Authentication / authorization
 gem 'devise'
+gem 'jwt'
 gem 'omniauth'
+gem 'rack-cors'
 
 # OTP Authentication (One Time Passwords)
 gem 'rotp'
 gem 'rqrcode'
 gem 'ruby-hmac'
 
+# OAuth provider
+gem 'doorkeeper'
+
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
-gem 'omniauth-constantcontact2'
+gem 'omniauth-constantcontact2', github: 'Hello-bar/omniauth-constantcontact2'
 gem 'omniauth-createsend', github: 'Hello-bar/omniauth-createsend'
 gem 'omniauth-drip'
 gem 'omniauth-google-oauth2'
@@ -35,7 +40,7 @@ gem 'omniauth-verticalresponse', github: 'Hello-bar/omniauth-verticalresponse'
 gem 'aweber', github: 'aweber/AWeber-API-Ruby-Library'
 
 gem 'active_campaign'
-gem 'createsend', github: 'Hello-bar/createsend-ruby' # CampaignMonitor
+gem 'createsend' # CampaignMonitor
 gem 'drip-ruby', require: 'drip'
 gem 'faraday' # Webhooks adapter
 gem 'gibbon' # MailChimp
@@ -46,6 +51,7 @@ gem 'verticalresponse'
 # Mailing
 gem 'pony'
 gem 'roadie-rails'
+gem 'sendgrid-ruby'
 
 # Billing
 gem 'activemerchant', '~> 1.65.0'
@@ -59,7 +65,7 @@ gem 'countries'
 gem 'country_select', github: 'stefanpenner/country_select', ref: '79755038ca61dafdfebf4c55346d4a2085f98479'
 gem 'handlebars_assets' # Handlebars templates in Rails assets pipeline (js modals)
 gem 'jquery-rails'
-gem 'jwt'
+gem 'loofah'
 gem 'mustache'
 gem 'rails-html-sanitizer'
 gem 'sassc-rails'
@@ -69,6 +75,7 @@ gem 'sprockets'
 gem 'sprockets-es6'
 
 # ActiveRecord / Database
+gem 'aasm'
 gem 'kaminari'
 gem 'mysql2'
 
@@ -76,7 +83,7 @@ gem 'mysql2'
 gem 'paperclip', github: 'morgoth/paperclip', branch: 'aws-sdk-s3'
 
 # JSON
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.10.6'
 gem 'jbuilder'
 
 # Real-time error reporting
@@ -93,6 +100,7 @@ gem 'public_suffix'
 gem 'abanalyzer'
 gem 'active_hash'
 gem 'avatar'
+gem 'bootsnap', require: false
 gem 'dalli'
 gem 'elif'
 gem 'hashie'
@@ -101,7 +109,6 @@ gem 'nokogiri'
 gem 'paranoia'
 gem 'phpass-ruby', require: 'phpass'
 gem 'psych'
-gem 'rack-ssl-enforcer'
 gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc4112ec25c6b0a9595123c3c3'
 gem 'render_anywhere'
 gem 'rubyzip'
@@ -111,7 +118,8 @@ gem 'unf'
 gem 'whenever'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
-# Sending analytics data to intercom.com
+# Sending analytics data to intercom.com & amplitude
+gem 'amplitude-api'
 gem 'intercom'
 gem 'intercom-rails'
 
@@ -136,7 +144,6 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-shell'
-  gem 'guard-teaspoon'
   gem 'terminal-notifier-guard'
 
   # Debugging
@@ -150,16 +157,14 @@ group :development do
 end
 
 group :development, :test do
-  gem 'capybara'
-  gem 'capybara-webkit'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'rspec-rails'
-  gem 'teaspoon-jasmine'
 
   # Debugging
   gem 'pry'
   gem 'pry-doc'
   gem 'pry-nav'
+  gem 'pry-rails'
 
   # Spring preloader
   gem 'spring'
@@ -168,11 +173,16 @@ group :development, :test do
 end
 
 group :test do
+  gem 'capybara'
+  gem 'selenium-webdriver'
+
   # Fake ip-api.com server for specs (Geolocation)
   gem 'capybara_discoball'
 
   # Spec formatters
-  gem 'rspec_junit_formatter'
+  gem 'fuubar'
+  gem 'rspec-instafail', require: false
+  gem 'rspec_junit_formatter', require: false
 
   # Code coverage metrics
   gem 'codecov', require: false
@@ -192,4 +202,7 @@ group :production, :staging, :edge do
   # Loggly
   gem 'lograge'
   gem 'syslogger'
+
+  # New Relic
+  gem 'newrelic_rpm'
 end

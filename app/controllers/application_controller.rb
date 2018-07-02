@@ -8,9 +8,8 @@ class ApplicationController < ActionController::Base
   helper_method :access_token, :current_admin, :impersonated_user,
     :current_site, :visitor_id, :ab_variation, :ab_variation_or_nil
 
-  before_action :record_tracking_param
-  before_action :track_h_visit
   before_action :set_raven_context
+  before_action :require_credit_card
   after_action :store_last_requested_path
 
   delegate :remote_ip, to: :request
@@ -38,32 +37,34 @@ class ApplicationController < ActionController::Base
   end
 
   def require_pro_managed_subscription
-    redirect_to root_path unless current_site.pro_managed_subscription?
+    redirect_to root_path unless current_site.pro_managed?
   end
 
   def require_no_user
     return unless current_user
 
-    if current_user.sites.empty?
-      redirect_to new_site_path
-    elsif current_user.temporary? && current_user.sites.none? { |s| s.site_elements.any? }
-      redirect_to new_site_site_element_path(current_site)
-    else
-      redirect_to site_path(current_site)
-    end
+    redirect_to after_sign_in_path_for(current_user)
   end
 
-  def after_sign_in_path_for(resource)
-    if current_user.should_send_to_new_site_element_path?
-      new_site_site_element_path(current_user.sites.script_not_installed.last)
+  def require_credit_card
+    return unless current_user
+    return if current_user.credit_cards.exists?
+    return unless current_user.affiliate_information&.partner&.require_credit_card
 
-    elsif current_user.sites.any?
-      # Use last site viewed if available
-      s = cookies[:lsv] && current_user.sites.where(id: cookies[:lsv]).first
-      stored_location_for(resource) || site_path(s || current_user.sites.last)
+    redirect_to new_credit_card_path
+  end
 
-    else
+  def after_sign_in_path_for(user)
+    return_url = stored_location_for(user)
+
+    if return_url.present?
+      return_url
+    elsif user.sites.empty?
       new_site_path
+    elsif user.sites.count == 1 && user.site_elements.empty?
+      new_site_site_element_path(current_site)
+    else
+      site_path(current_site)
     end
   end
 
@@ -90,31 +91,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_site
-    @current_site ||= begin
-      if current_user && session[:current_site]
-        current_user.sites.where(id: session[:current_site]).first || current_user.sites.first
+    @current_site ||=
+      if current_user && session[:current_site].present?
+        current_user.sites.where(id: session[:current_site]).first || current_user.sites.last
+      elsif current_user && cookies[:lsv].present?
+        current_user.sites.where(id: cookies[:lsv]).first || current_user.sites.last
       elsif current_user
-        current_user.sites.first
+        current_user.sites.last
       end
-    end
-  end
-
-  def record_tracking_param
-    Hello::TrackingParam.track(params[:trk]) if params[:trk]
-  end
-
-  def track_h_visit
-    return unless params[:hbt]
-
-    track_params = { h_type: params[:hbt] }
-    if params[:sid] # If site element is given, attach the site element id and site id
-      site_element = SiteElement.where(id: params[:sid]).first
-      if site_element
-        track_params[:site_element_id] = site_element.id
-        track_params[:site_id] = site_element.site.id if site_element.site
-      end
-    end
-    Analytics.track(*current_person_type_and_id, 'H Visit', track_params)
   end
 
   def set_raven_context
@@ -140,6 +124,14 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html { render html: error, status: error }
       format.json { render json: { error: error }, status: error }
+    end
+  end
+
+  def record_invalid(e)
+    respond_to do |format|
+      format.json do
+        render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+      end
     end
   end
 end

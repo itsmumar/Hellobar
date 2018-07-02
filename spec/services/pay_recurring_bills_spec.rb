@@ -1,7 +1,27 @@
 describe PayRecurringBills do
+  describe '.bills' do
+    let!(:bills) do
+      [
+        create(:bill, bill_at: 1.year.ago),
+        create(:bill, bill_at: 27.days.ago),
+        create(:bill, bill_at: 1.day.ago),
+        create(:bill, bill_at: Time.current)
+      ]
+    end
+
+    let!(:future_bill) { create(:bill, bill_at: 1.day.from_now) }
+
+    it 'includes bills within period from 27 days ago till today' do
+      expect(PayRecurringBills.bills).to match_array bills
+      expect(PayRecurringBills.bills).not_to include future_bill
+    end
+  end
+
   describe '#call', freeze: 30.days.ago do
     let(:report) { BillingReport.new(1) }
     let(:service) { PayRecurringBills.new }
+    let(:subscription) { build_stubbed :subscription }
+    let(:site) { create :site, :with_user }
 
     before { allow(BillingReport).to receive(:new).and_return(report) }
 
@@ -12,7 +32,17 @@ describe PayRecurringBills do
 
     shared_examples 'pay bill' do
       specify do
-        expect(PayBill).to receive_service_call.and_return(double(paid?: true))
+        bill = double(
+          paid?: true,
+          subscription: subscription,
+          credit_card: nil,
+          site: site
+        )
+
+        expect(PayBill)
+          .to receive_service_call
+          .and_return(bill)
+
         service.call
       end
     end
@@ -34,22 +64,22 @@ describe PayRecurringBills do
         ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
         expect(site).to be_capable_of :pro
 
-        travel_to '2017-07-28 13:00 UTC' do
+        Timecop.travel '2017-07-28 13:00 UTC' do
           service.call
         end
 
-        travel_to '2017-07-31 00:00 UTC' do
+        Timecop.travel '2017-07-31 00:00 UTC' do
           expect(site).to be_capable_of :pro
         end
 
-        travel_to '2017-08-01 11:00 UTC' do
+        Timecop.travel '2017-08-01 11:00 UTC' do
           expect(site).to be_capable_of :pro
         end
       end
     end
 
     it 'logs results' do
-      create :free_bill
+      create :bill, :free
       expect(report).to receive(:start)
       expect(report).to receive(:count).exactly(1).times
       expect(report).to receive(:finish)
@@ -58,11 +88,10 @@ describe PayRecurringBills do
     end
 
     context 'with zero amount bill' do
-      let!(:zero_amount_bill) { create :free_bill }
+      let!(:zero_amount_bill) { create :bill, :free }
 
       specify do
-        expect { service.call }
-          .to change { zero_amount_bill.reload.status }.to(:paid)
+        expect { service.call }.to change { zero_amount_bill.reload.paid? }.to true
       end
 
       include_examples 'pay bill'
@@ -75,8 +104,7 @@ describe PayRecurringBills do
       specify do
         expect(report).to receive(:void).with(bill_without_site)
 
-        expect { service.call }
-          .to change { bill_without_site.reload.status }.to(:voided)
+        expect { service.call }.to change { bill_without_site.reload.voided? }.to true
       end
 
       include_examples 'do not pay bill'
@@ -99,7 +127,7 @@ describe PayRecurringBills do
     context 'with bill which has no payment method' do
       let!(:bill_without_credit_card) { create :bill }
 
-      before { bill_without_credit_card.credit_card.destroy }
+      before { bill_without_credit_card.subscription.credit_card.destroy }
 
       specify do
         expect(report).to receive(:cannot_pay)
@@ -109,6 +137,32 @@ describe PayRecurringBills do
       end
 
       include_examples 'do not pay bill'
+
+      context 'when its end_date < 27.days.ago' do
+        let!(:bill_without_credit_card) { create :bill, end_date: 28.days.ago }
+
+        specify do
+          expect(report).to receive(:downgrade)
+          expect(report).not_to receive(:attempt)
+
+          expect(DowngradeSiteToFree)
+            .to receive_service_call
+            .with(bill_without_credit_card.site)
+            .and_return(build(:subscription))
+
+          expect { service.call }.to change { bill_without_credit_card.reload.voided? }.to true
+        end
+      end
+    end
+
+    context 'with bill in the future' do
+      let!(:bill) { create :bill, bill_at: 1.month.from_now }
+
+      specify do
+        expect(report).not_to receive(:count)
+        expect { service.call }
+          .not_to change { bill.reload.status }
+      end
     end
 
     context 'with payable bill' do
@@ -119,18 +173,28 @@ describe PayRecurringBills do
       specify do
         expect(report).to receive(:success)
 
-        expect { service.call }
-          .to change { bill.reload.status }.to :paid
+        expect { service.call }.to change { bill.reload.paid? }.to true
+      end
+
+      it 'tracks auto_renewed_subscription event' do
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:auto_renewed_subscription, anything)
+
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(:paid_bill, anything)
+
+        service.call
       end
 
       include_examples 'pay bill'
 
       context 'when bill had payment problem before' do
-        let!(:bill) { create :bill, :problem }
+        let!(:bill) { create :bill, :failed }
 
         specify do
-          expect { service.call }
-            .to change { bill.reload.status }.to :paid
+          expect { service.call }.to change { bill.reload.paid? }.to true
         end
 
         include_examples 'pay bill'
@@ -142,8 +206,13 @@ describe PayRecurringBills do
         specify do
           expect(report).to receive(:fail)
 
+          expect { service.call }.to change { bill.reload.failed? }.to true
+        end
+
+        it 'notifies owners' do
           expect { service.call }
-            .to change { bill.reload.status }.to :problem
+            .to have_enqueued_job
+            .with('BillingMailer', 'could_not_charge', 'deliver_now', bill)
         end
       end
 
@@ -153,8 +222,20 @@ describe PayRecurringBills do
 
         specify do
           expect(report).to receive(:exception).with(exception)
+          expect(report).to receive(:interrupt).with(exception)
 
           expect { service.call }.to raise_error exception
+        end
+
+        context 'when killed with a SignalException' do
+          let(:exception) { Exception.new('kill') }
+
+          specify do
+            expect(report).not_to receive(:exception)
+            expect(report).to receive(:interrupt).with(exception)
+
+            expect { service.call }.to raise_error exception
+          end
         end
       end
     end
@@ -170,14 +251,13 @@ describe PayRecurringBills do
 
       before { stub_cyber_source :purchase }
 
-      let(:free_bill) { site.bills[0] }
-      let(:first_pro_bill) { site.bills[1] }
-      let(:renewal_pro_bill) { site.bills[2] }
-      let(:last_pending_pro_bill) { site.bills[3] }
+      let(:first_pro_bill) { site.bills[0] }
+      let(:renewal_pro_bill) { site.bills[1] }
+      let(:last_pending_pro_bill) { site.bills[2] }
       let(:last_bill) { site.bills.last }
 
       def travel_to_next_billing_date
-        travel_to 1.month.from_now + 1.day
+        Timecop.travel(1.month.from_now + 1.day)
       end
 
       def bills
@@ -190,12 +270,12 @@ describe PayRecurringBills do
         before { change_subscription('free') }
 
         it 'does not create free bill' do
-          expect(bills.count).to eql 1
+          expect(bills.count).to eql 0
 
           travel_to_next_billing_date
           service.call
 
-          expect(bills.count).to eql 1
+          expect(bills.count).to eql 0
         end
 
         context 'when upgraded to pro next month' do
@@ -208,14 +288,14 @@ describe PayRecurringBills do
           it 'creates right bills' do
             expect(site.active_paid_bill).to eql first_pro_bill
 
-            expect(bills.count).to eql 3
+            expect(bills.count).to eql 2
             expect(bills.paid).to match_array([first_pro_bill])
             expect(bills.pending).to match_array([renewal_pro_bill])
-            expect(bills.voided).to match_array([free_bill])
+            expect(bills.voided).to be_empty
           end
 
           context 'a month later' do
-            before { travel_to 1.month.from_now }
+            before { Timecop.travel 1.month.from_now }
 
             it 'still on Pro' do
               expect(site).to be_capable_of :pro
@@ -223,7 +303,7 @@ describe PayRecurringBills do
               site.reload
 
               expect(site).to be_capable_of :pro
-              expect(bills.count).to eql 4
+              expect(bills.count).to eql 3
             end
 
             context 'when expires' do
@@ -241,14 +321,12 @@ describe PayRecurringBills do
 
             it 'has correct bills' do
               service.call
-              expect(site.bills.count).to eql 4
+              expect(site.bills.count).to eql 3
               expect(site.bills.paid).to match_array([first_pro_bill, renewal_pro_bill])
               expect(site.bills.pending).to match_array([last_pending_pro_bill])
-              expect(site.bills.voided).to match_array([free_bill])
+              expect(site.bills.voided).to be_empty
 
               expect(site.active_paid_bill).to eql renewal_pro_bill
-
-              expect(free_bill.end_date.to_s).to match '2017-02-01'
 
               expect(first_pro_bill.end_date.to_s).to match '2017-03-02'
               expect(renewal_pro_bill.bill_at.to_s).to match '2017-02-27'
@@ -261,6 +339,38 @@ describe PayRecurringBills do
               expect(last_bill.end_date.to_s).to match '2017-05-02'
             end
           end
+        end
+      end
+
+      context 'when there is a past due bill' do
+        before { change_subscription('pro') }
+        let(:pending_bill) { site.bills.pending.last }
+
+        it 'tries to charge 10 times every 3rd day' do
+          stub_cyber_source :purchase, success?: false
+
+          Timecop.travel pending_bill.bill_at do
+            expect { service.call }.to change { pending_bill.reload.failed? }.to true
+          end
+
+          (1..26).each do |nth|
+            Timecop.travel pending_bill.bill_at + nth.day do
+              service.call
+            end
+          end
+          expect(pending_bill.billing_attempts.failed.count).to eql 9
+
+          Timecop.travel pending_bill.bill_at + 27.days do
+            service.call
+          end
+
+          expect(pending_bill.billing_attempts.failed.count).to eql 10
+
+          Timecop.travel pending_bill.bill_at + 30.days do
+            service.call
+          end
+
+          expect(pending_bill.reload).to be_voided
         end
       end
     end

@@ -1,4 +1,4 @@
-FROM hellobarcom/base:2.3.4
+FROM hellobarcom/base:2.3.4.2
 
 ENV DISPLAY :99
 ENV APP /app/

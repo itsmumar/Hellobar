@@ -2,7 +2,7 @@
 # key) is what is used in the backend storage and in the Javascript.
 module Hello
   module Segments
-    User = [
+    USER = [
       { key: 'fv', name: 'First Visit', type: :timestamp },
       { key: 'lv', name: 'Last Visit', type: :timestamp },
       { key: 'nv', name: 'Number of Visits', type: :number, units: 'visit' },
@@ -13,7 +13,6 @@ module Hello
       { key: 'rf', name: 'Referrer URL', type: :string, units: 'url' },
       { key: 'rd', name: 'Referrer Domain', type: :string, units: 'domain' },
       { key: 'or', name: 'Original Referrer', type: :string, units: 'url' },
-      { key: 'pu', name: 'Page URL', type: :string, units: 'url' },
       { key: 'pq', name: 'Page Query', type: :string, units: 'url' },
       { key: 'pup', name: 'URL Path', type: :string, units: 'url' },
       { key: 'st', name: 'Search Terms', type: :string },

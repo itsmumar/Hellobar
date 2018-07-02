@@ -4,18 +4,15 @@ class Users::SessionsController < Devise::SessionsController
   def find_email
     email = params[:user].try(:[], :email)
 
-    @user = User.search_all_versions_for_email(email)
+    @user = User.find_by(email: email)
 
     if @user
-      if @user.status == User::TEMPORARY_STATUS
-        sign_in(@user)
-
-        render 'users/forgot_emails/set_password'
-      elsif (auth = @user.authentications.first)
+      if (auth = @user.authentications.first)
         redirect_to "/auth/#{ auth.provider }"
+      else
+        render :find_email
       end
     else
-      cookies.delete(:login_email)
       redirect_to new_user_session_path, alert: "Email doesn't exist."
     end
   end
@@ -32,10 +29,6 @@ class Users::SessionsController < Devise::SessionsController
 
       if @user.valid_password?(user_params[:password])
         sign_in(@user)
-
-        cookies.permanent[:login_email] = email
-        # Record log in
-        Analytics.track(*current_person_type_and_id, 'Logged In', ip: request.remote_ip)
 
         redirect_to after_sign_in_path_for(@user)
       else

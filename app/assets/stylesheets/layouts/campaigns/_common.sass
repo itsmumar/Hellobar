@@ -1,0 +1,54 @@
+%status
+  border: 1px solid transparent
+  border-radius: 3px
+  color: $white
+  padding: 3px 10px
+
+  &.new
+    background-color: $green
+
+  &.sent
+    background-color: $blue
+
+.email-campaigns
+  .button
+    @extend %green-button
+
+  .status
+    @extend %status
+
+.email-campaign
+  .details
+    margin: 20px 3px
+
+  .status
+    @extend %status
+
+  a.button
+    @extend %gray-button
+
+    &.action
+      @extend %green-button
+
+.email-campaign-form
+  width: 85%
+
+  h1
+    margin-bottom: 0.7em
+
+  label
+    margin-bottom: 0.3em
+
+  input[type="text"], input[type="email"], textarea
+    margin-left: 0 !important
+
+  .form-actions
+    margin-top: 1.5em
+
+    a.button
+      @extend %gray-button
+
+    input[type="submit"]
+      @extend %green-button
+      padding-left: 1.1em
+      padding-right: 1.1em

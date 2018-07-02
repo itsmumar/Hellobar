@@ -1,25 +1,25 @@
-require 'integration_helper'
-
 feature 'Users can use site element targeting rule presets', :js do
-  given(:free_options)   { ['Everyone'] }
-  given(:paid_options)   { ['Mobile Visitors', 'Homepage Visitors'] }
-  given(:custom_option)  { 'Custom Rule' }
-  given(:saved_option)   { 'Show to a saved targeting rule' }
-  given(:site)           { @user.sites.first }
+  given(:free_options) { ['Everyone'] }
+  given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }
+  given(:custom_option) { 'Custom Rule' }
+  given(:saved_option) { 'Show to a saved targeting rule' }
 
-  before do
-    @user = login
-
-    site.create_default_rules
-
+  background do
     allow_any_instance_of(SiteElementSerializer)
       .to receive(:proxied_url2png).and_return('')
 
     stub_out_ab_variations('Targeting UI Variation 2016-06-13') { 'variant' }
   end
 
-  feature 'Free subscription sites' do
-    before do
+  context 'Free subscription sites' do
+    given!(:user) { create :user, :with_site }
+    given(:site) { user.sites.first }
+
+    background do
+      sign_in user
+
+      site.create_default_rules
+
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
@@ -41,23 +41,27 @@ feature 'Users can use site element targeting rule presets', :js do
     end
   end
 
-  feature 'Pro subscription sites' do
-    given(:custom_rule)        { create(:rule) }
-    given(:first_select_input) { first('select')['id'] }
-    given(:default_option)     { 'Choose a saved rule...' }
+  context 'Pro subscription sites' do
+    given(:site) { create :site, :with_user, :pro }
+    given(:user) { site.owners.last }
+    given(:custom_rule) { create(:rule) }
+    given(:credit_card) { create(:credit_card, user: user) }
 
-    before { stub_cyber_source :purchase }
+    background do
+      # sign_in user
+      login_as user, scope: :user, run_callbacks: false
 
-    before do
-      credit_card = create(:credit_card, user: @user)
-      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
+      site.create_default_rules
 
       custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
+
       site.rules << custom_rule
+
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
     end
 
     scenario 'The user can select any rule preset' do
-      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
 
       (free_options + paid_options).each do |text|
         find('div.step-link-block', text: text).click
@@ -75,7 +79,7 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
-      visit new_site_site_element_path(@user.sites.first) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
       find('a', text: 'CHANGE TARGET AUDIENCE').click
       find('h6', text: custom_option).click
       find('a', text: '+').click

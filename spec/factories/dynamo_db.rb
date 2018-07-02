@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :site_statistics, class: SiteStatistics do
     skip_create
 

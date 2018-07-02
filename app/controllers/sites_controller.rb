@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   include SitesHelper
 
-  before_action :authenticate_user!, except: :create
+  before_action :authenticate_user!
   before_action :load_site, except: %i[index new create]
   before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
@@ -9,6 +9,9 @@ class SitesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[preview_script script]
 
   layout :determine_layout
+
+  def index
+  end
 
   def new
     @site = Site.new(url: params[:url])
@@ -18,19 +21,10 @@ class SitesController < ApplicationController
 
   def create
     @site = Site.new(site_params)
-    cookies.permanent[:registration_url] = params[:site][:url]
+    create_site
+  end
 
-    if current_user
-      create_for_logged_in_user
-    elsif !@site.valid?
-      flash[:error] = 'Your URL is not valid. Please double-check it and try again.'
-      redirect_to root_path
-    elsif params[:source] == 'landing' && @site.url_exists?
-      redirect_to new_user_session_path(existing_url: @site.url)
-    else
-      session[:new_site_url] = @site.url
-      redirect_to '/auth/google_oauth2'
-    end
+  def edit
   end
 
   def show
@@ -45,7 +39,7 @@ class SitesController < ApplicationController
         session[:current_site] = @site.id
 
         @totals = site_statistics
-        @recent_elements = @site.site_elements.recent(5)
+        @recent_elements = @site.site_elements.active.recent(5)
       end
 
       format.json { render json: @site }
@@ -58,6 +52,7 @@ class SitesController < ApplicationController
 
   def update
     if @site.update_attributes(site_params)
+      @site.script.generate
       flash[:success] = 'Your settings have been updated.'
       redirect_to site_path(@site)
     else
@@ -76,7 +71,6 @@ class SitesController < ApplicationController
 
   # a version of the site's script with all templates, no elements and no rules, for use in the editor live preview
   def preview_script
-    GenerateStaticScriptModules.new.call if Rails.env.test? || Rails.env.development?
     render js: render_script(preview: true)
   end
 
@@ -106,7 +100,7 @@ class SitesController < ApplicationController
   def install_check
     CheckStaticScriptInstallation.new(@site).call
 
-    render json: @site
+    render json: { script_installed: @site.script_installed? }
   end
 
   private
@@ -119,8 +113,7 @@ class SitesController < ApplicationController
   def site_params
     if session[:new_site_url]
       params[:site] ||= {}
-      params[:site][:url] ||= session[:new_site_url]
-      session.delete(:new_site_url)
+      params[:site][:url] ||= session.delete(:new_site_url)
     end
     params.require(:site).permit(:url, :opted_in_to_email_digest, :timezone, :invoice_information)
   end
@@ -134,27 +127,16 @@ class SitesController < ApplicationController
     params[:action] == 'preview_script' ? false : 'application'
   end
 
-  def create_for_logged_in_user
-    if @site.valid? && @site.url_exists?(current_user)
-      flash[:error] = 'Url is already in use.'
-      sites = current_user.sites.merge(Site.protocol_ignored_url(@site.url))
-      redirect_to site_path(sites.first)
-    elsif @site.save
-      Referrals::HandleToken.run(user: current_user, token: session[:referral_token])
-      SiteMembership.create!(site: @site, user: current_user)
-      Analytics.track(*current_person_type_and_id, 'Created Site', site_id: @site.id)
+  def create_site
+    CreateSite.new(@site, current_user, referral_token: session[:referral_token]).call
 
-      ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
-
-      @site.create_default_rules
-
-      DetectInstallType.new(@site).call
-      TrackEvent.new(:created_site, site: @site, user: current_user).call
-      redirect_to new_site_site_element_path(@site)
-    else
-      flash.now[:error] = @site.errors.full_messages
-      render action: :new
-    end
+    redirect_to new_site_site_element_path(@site)
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:error] = e.record.errors.full_messages
+    render action: :new
+  rescue CreateSite::DuplicateURLError => e
+    flash[:error] = e.message
+    return redirect_to site_path(e.existing_site)
   end
 
   def load_top_performers
@@ -174,7 +156,7 @@ class SitesController < ApplicationController
   end
 
   def load_bills
-    @bills = @site.bills.paid_or_problem.non_free.includes(:subscription).reorder(bill_at: :desc)
+    @bills = @site.bills.not_voided.not_pending.non_free.includes(:subscription).reorder(bill_at: :desc)
     @next_bill = @site.bills.pending.includes(:subscription).last
   end
 

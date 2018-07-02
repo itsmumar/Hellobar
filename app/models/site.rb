@@ -1,6 +1,8 @@
 require 'uri'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
+  COMMUNICATION_TYPES = %i[newsletter promotional partnership product research].freeze
+
   DEFAULT_UPGRADE_STYLES = {
     'offer_bg_color' => '#ffffb6',
     'offer_text_color' => '#000000',
@@ -16,9 +18,9 @@ class Site < ActiveRecord::Base
     'offer_font_family_name' => 'Open Sans'
   }.freeze
 
-  attr_accessor :skip_script_generation
+  acts_as_paranoid
 
-  # rubocop: disable Rails/HasManyOrHasOneDependent
+  has_one :whitelabel, dependent: :destroy
   has_many :rules, -> { order('rules.editable ASC, rules.id ASC') }, dependent: :destroy, inverse_of: :site
   has_many :site_elements, through: :rules, dependent: :destroy
   has_many :active_site_elements, through: :rules
@@ -28,18 +30,21 @@ class Site < ActiveRecord::Base
   has_many :owners_and_admins, -> { where(site_memberships: { role: %w[owner admin] }) }, through: :site_memberships, source: :user
   has_many :users, through: :site_memberships
   has_many :identities, dependent: :destroy
-  has_many :contact_lists, -> { order 'name' }, dependent: :destroy
-  has_many :subscriptions, -> { order 'id' }
+  has_many :contact_lists, -> { order 'name' }, dependent: :destroy, inverse_of: :site
+  has_many :subscriptions, -> { order 'id' }, dependent: :destroy, inverse_of: :site
   accepts_nested_attributes_for :subscriptions
 
   has_many :bills, -> { order 'id' }, through: :subscriptions, inverse_of: :site
-  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.problem) },
+  has_many :bills_with_payment_issues, -> { order(:bill_at).merge(Bill.failed) },
     class_name: 'Bill', through: :subscriptions, inverse_of: :site, source: :bills
 
   has_many :image_uploads, dependent: :destroy
   has_many :autofills, dependent: :destroy
-
-  acts_as_paranoid
+  has_many :campaigns, dependent: :destroy, through: :contact_lists
+  has_many :sequences, dependent: :destroy, through: :contact_lists
+  has_many :coupon_uses, through: :bills
+  has_many :emails, dependent: :destroy
+  has_one :content_upgrade_styles, inverse_of: :site
 
   scope :preload_for_script, lambda {
     preload(
@@ -49,29 +54,23 @@ class Site < ActiveRecord::Base
   }
 
   scope :weekly_digest_optin, -> { where(opted_in_to_email_digest: true) }
+  scope :by_url, ->(url) { protocol_ignored_url(url) }
+  scope :active, -> { script_installed.joins(:site_elements).merge(SiteElement.active).distinct }
 
-  before_validation :standardize_url
   before_validation :generate_read_write_keys
 
-  after_update :regenerate_script
-  after_touch  :regenerate_script
-
-  after_commit do
-    if needs_script_regeneration?
-      script.generate
-      @needs_script_regeneration = false
-    end
-  end
-
   validates :url, url: true
+  validates :terms_and_conditions_url, :privacy_policy_url, url: true, on: :update_privacy
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
-
-  validate :url_is_unique?
-
-  store :settings, coder: JSON
+  validates :communication_types, presence: true, on: :update_privacy
+  validates :gdpr_consent_language, inclusion: { in: I18n.t('gdpr.languages').keys.map(&:to_s) }
 
   delegate :installed?, :name, :url, to: :script, prefix: true
+
+  def self.recently_created
+    where('created_at > ?', 30.days.ago)
+  end
 
   def self.script_installed
     where(
@@ -110,30 +109,40 @@ class Site < ActiveRecord::Base
   end
 
   def self.protocol_ignored_url(url)
-    host = normalize_url(url).normalized_host if url.include?('http')
-    where('sites.url = ? OR sites.url = ?', "https://#{ host }", "http://#{ host }")
+    host = Addressable::URI.heuristic_parse(url).normalized_host
+    where(url: ["https://#{ host || url }", "http://#{ host || url }"])
+  rescue Addressable::URI::InvalidURIError
+    none
   end
 
-  def self.find_by_script(script_embed)
-    target_hash = script_embed.gsub(/^.*\//, '').gsub(/\.js$/, '')
+  def self.by_url_for(user, url:)
+    by_url(url).joins(:users).find_by(users: { id: user.id })
+  end
 
-    (Site.maximum(:id) || 1).downto(1) do |i|
-      return Site.find_by(id: i) if StaticScript.hash_id(i) == target_hash
-    end
+  def communication_types=(value)
+    super(value.select(&:presence).join(','))
+  end
 
+  def communication_types
+    self[:communication_types]&.split(',') || []
+  end
+
+  def url=(value)
+    super(Addressable::URI.heuristic_parse(value)&.normalized_site || value)
+  rescue Addressable::URI::InvalidURIError
+    super(value)
+  end
+
+  def display_url
+    display_uri&.to_s || url
+  rescue Addressable::URI::InvalidURIError
     nil
   end
 
-  def self.normalize_url(url)
-    Addressable::URI.heuristic_parse(url)
-  end
-
-  def needs_script_regeneration?
-    !skip_script_generation && @needs_script_regeneration.presence
-  end
-
-  def regenerate_script
-    @needs_script_regeneration = true unless deleted? || destroyed?
+  def host
+    display_uri&.host || url
+  rescue Addressable::URI::InvalidURIError
+    nil
   end
 
   def statistics
@@ -159,37 +168,14 @@ class Site < ActiveRecord::Base
     subscriptions.offset(1).last
   end
 
-  def pro_managed_subscription?
-    subscriptions.any? { |s| s.class == Subscription::ProManaged }
-  end
-
-  def url_exists?(user = nil)
-    if user
-      Site.joins(:users)
-          .merge(Site.protocol_ignored_url(url))
-          .where(users: { id: user.id })
-          .where.not(id: id)
-          .any?
-    else
-      Site.where.not(id: id).merge(Site.protocol_ignored_url(url)).any?
-    end
-  end
-
-  def url_is_unique?
-    if users
-       .joins(:sites)
-       .merge(Site.protocol_ignored_url(url))
-       .where.not(sites: { id: id })
-       .any?
-
-      errors.add(:url, 'is already in use')
-    end
-  end
-
   def free?
     current_subscription.nil? ||
       current_subscription.type.blank? ||
       current_subscription.free?
+  end
+
+  def pro_managed?
+    current_subscription.is_a? Subscription::ProManaged
   end
 
   # in case of downgrade user can have e.g Pro capabilities with Free subscription
@@ -214,22 +200,12 @@ class Site < ActiveRecord::Base
     site_elements.where.not(wordpress_bar_id: nil).any?
   end
 
-  def normalized_url
-    self.class.normalize_url(url).normalized_host || url
-  rescue Addressable::URI::InvalidURIError
-    url
-  end
-
-  def update_content_upgrade_styles!(style_params)
-    update_attribute(:settings, settings.merge('content_upgrade' => style_params))
-  end
-
   def content_upgrade_styles
-    settings.fetch('content_upgrade', DEFAULT_UPGRADE_STYLES)
+    super || build_content_upgrade_styles(ContentUpgradeStyles::DEFAULT_STYLES)
   end
 
   def active_paid_bill
-    bills.paid.active.without_refunds.reorder(end_date: :desc, id: :desc).first
+    bills.paid.active.reorder(end_date: :desc, id: :desc).first
   end
 
   def active_subscription
@@ -240,14 +216,37 @@ class Site < ActiveRecord::Base
     @script ||= StaticScript.new(self)
   end
 
+  def gdpr_enabled?
+    communication_types? &&
+      terms_and_conditions_url? &&
+      privacy_policy_url?
+  end
+
+  def gdpr_consent
+    topics = communication_types.map do |type|
+      I18n.t(type, scope: 'gdpr.communication_types', locale: gdpr_consent_language)
+    end
+
+    topics = topics.to_sentence(locale: gdpr_consent_language)
+
+    I18n.t('gdpr.consent', topics: topics, locale: gdpr_consent_language)
+  end
+
+  def gdpr_agreement
+    I18n.t('gdpr.agreement',
+      locale: gdpr_consent_language,
+      privacy_policy_url: privacy_policy_url,
+      terms_and_conditions_url: terms_and_conditions_url)
+  end
+
+  def gdpr_action
+    I18n.t('gdpr.action', locale: gdpr_consent_language)
+  end
+
   private
 
-  def standardize_url
-    return if url.blank?
-    normalized_url = self.class.normalize_url(url)
-    self.url = "#{ normalized_url.scheme }://#{ normalized_url.normalized_host }"
-  rescue Addressable::URI::InvalidURIError
-    nil
+  def display_uri
+    Addressable::URI.parse(url)&.display_uri
   end
 
   def generate_read_write_keys

@@ -14,16 +14,13 @@ describe RenderStaticScript do
         .and_return('__DATA__')
 
       expect(StaticScriptAssets)
-        .to receive(:digest_path)
-        .with('modules.js')
-        .and_return('modules.js')
-
-      expect(StaticScriptAssets)
         .to receive(:render)
         .with('static_script_template.js', site_id: site.id)
         .and_return('$INJECT_MODULES; $INJECT_DATA')
 
-      expect(script).to eql '"/generated_scripts/modules.js"; __DATA__'
+      folder = StaticScript::SCRIPTS_LOCAL_FOLDER
+      filename = HellobarModules.filename
+      expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
     end
 
     context 'when options[:compress]' do
@@ -45,7 +42,9 @@ describe RenderStaticScript do
           .with('static_script_template.js', site_id: site.id)
           .and_return '$INJECT_MODULES; $INJECT_DATA'
 
-        expect(service.call).to eql '"/generated_scripts/modules.js"; __DATA__'
+        folder = StaticScript::SCRIPTS_LOCAL_FOLDER
+        filename = HellobarModules.filename
+        expect(script).to eql %("#{ folder }#{ filename }"; __DATA__)
       end
     end
   end

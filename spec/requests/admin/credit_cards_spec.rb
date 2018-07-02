@@ -1,6 +1,4 @@
-require 'integration_helper'
-
-describe 'Admin CreditCard requests' do
+describe 'Admin::CreditCard requests' do
   context 'when unauthenticated' do
     describe 'DELETE :destroy' do
       it 'responds with a redirect to the login page' do

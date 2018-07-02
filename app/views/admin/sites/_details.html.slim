@@ -1,0 +1,36 @@
+#site_details
+  div.site-block
+    = render 'admin/sites/header', site: site
+
+    - unless bills_for(site).empty?
+      div.site_section
+        div.title
+          | Custom invoice information (Address, PO Box, etc)
+          = add_or_clear_site_info(site)
+        = site_info_or_form(site)
+
+      div.site_section.billing_history
+        div.title Billing History
+        = render 'admin/bills/list', bills: bills_for(site), user: user
+
+    div.site_section.subscription_history
+      div.title Subscription History
+
+      - if site.deleted?
+        div
+          | Site <strong>deleted</strong> on #{ format_date(site.deleted_at) }
+
+      - site.subscriptions.with_deleted.reverse.each do |sub|
+        div
+          | Changed to <strong>#{ subscription_history_link(sub) }</strong> on #{ format_date(sub.created_at) } #{ sub.trial_end_date ? "(trial ends #{ format_date(sub.trial_end_date) })" : ''}
+
+          - if sub.deleted?
+            | (subscription deleted on #{ format_date(sub.deleted_at) })
+
+      div
+        | Site created on #{ format_date(site.created_at) }
+
+    - if site.site_memberships.with_deleted.any?
+      div.site_section.site_users
+        div.title Shared By
+        = render 'admin/sites/site_users', site: site

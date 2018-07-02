@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     transient do
       site nil
@@ -6,7 +6,8 @@ FactoryGirl.define do
 
     first_name 'FirstName'
     last_name 'LastName'
-    email { generate(:email) }
+
+    sequence(:email) { |i| "user#{ i }@hellobar.com" }
     password 'password'
 
     after :create do |user, evaluator|
@@ -18,24 +19,33 @@ FactoryGirl.define do
     end
 
     trait :temporary do
-      status { User::TEMPORARY_STATUS }
+      status { User::TEMPORARY }
     end
 
     trait :with_free_subscription do
       after(:create) do |user|
-        create :subscription, :free, user: user
+        create :subscription, :free, site: evaluator.site || create(:site, user: user)
       end
     end
 
     trait :with_pro_subscription do
       after(:create) do |user|
-        create :subscription, :pro, user: user
+        subscription = create :subscription, :pro
+        subscription.credit_card.update user_id: user.id
+      end
+    end
+
+    trait :with_pro_subscription_and_bill do
+      after(:create) do |user|
+        subscription = create :subscription, :pro, :with_bill
+        subscription.credit_card.update user_id: user.id
       end
     end
 
     trait :with_pro_managed_subscription do
       after(:create) do |user|
-        create :subscription, :pro_managed, user: user
+        subscription = create :subscription, :pro_managed
+        subscription.credit_card.update user_id: user.id
       end
     end
 
@@ -66,6 +76,10 @@ FactoryGirl.define do
       after(:create) do |user, evaluator|
         create_list :site, evaluator.count, users: [user]
       end
+    end
+
+    trait :affiliate do
+      affiliate_information
     end
   end
 end

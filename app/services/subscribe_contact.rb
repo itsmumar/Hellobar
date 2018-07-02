@@ -7,7 +7,7 @@ class SubscribeContact
   end
 
   def call
-    update_contact_list_cache
+    invalidate_cache
     subscribe
   end
 
@@ -16,42 +16,30 @@ class SubscribeContact
   attr_reader :email, :name, :contact_list, :provider
 
   # it updates cache_key and causes cached things to be updated
-  def update_contact_list_cache
+  def invalidate_cache
     contact_list.touch
+    contact_list.site_elements.each(&:touch)
   end
 
   def subscribe
-    with_status_update do
-      provider.subscribe email: email, name: name
-    end
-  end
-
-  def with_status_update
-    # TODO: remove
-    log_entry = contact_list.contact_list_logs.create!(email: email, name: name)
-
-    yield
+    provider.subscribe email: email, name: name
 
     update_status :synced
-
-    # TODO: remove
-    log_entry.update(completed: true, migrated: true)
+    execute_sequence_triggers
   rescue ServiceProvider::InvalidSubscriberError => e
     update_status :error, error: e.to_s
-
-    # TODO: remove
-    log_entry.update(completed: false, migrated: true, error: e.to_s)
   rescue StandardError => e
     update_status :error, error: e.to_s
-
-    # TODO: remove
-    log_entry.update(completed: false, migrated: true, error: e.to_s)
 
     raven_log e
   end
 
   def update_status status, error: nil
     UpdateContactStatus.new(contact_list.id, email, status, error: error).call
+  end
+
+  def execute_sequence_triggers
+    ExecuteSequenceTriggers.new(email, name, contact_list).call
   end
 
   def raven_log(exception)

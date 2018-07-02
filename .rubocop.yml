@@ -20,26 +20,6 @@ AllCops:
 
 #### BEGIN STYLES
 
-Style/Documentation:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/MethodDefParentheses:
-  Enabled: false
-
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Enabled: false
-
-Style/NumericLiterals:
-  Enabled: false
-
 Layout/AlignHash:
   Enabled: false
 
@@ -47,10 +27,6 @@ Layout/AlignHash:
 # SupportedStyles: with_first_parameter, with_fixed_indentation
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
-
-Security/MarshalLoad:
-  Exclude:
-    - 'lib/grand_central_api.rb'
 
 # Configuration parameters: SupportedStyles, IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_brackets
@@ -62,6 +38,49 @@ Layout/IndentArray:
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Layout/SpaceInsideStringInterpolation:
+  EnforcedStyle: space
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - Guardfile
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/MethodMissing:
+  Exclude:
+    - app/core/settings.rb
+
+# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
 # Configuration parameters: EnforcedOctalStyle, SupportedOctalStyles.
 # SupportedOctalStyles: zero_with_o, zero_only
 Style/NumericLiteralPrefix:
@@ -72,69 +91,44 @@ Style/NumericLiteralPrefix:
 Style/RegexpLiteral:
   Enabled: false
 
-Style/EmptyMethod:
-  EnforcedStyle: expanded
-
-Style/BlockDelimiters:
-  EnforcedStyle: braces_for_chaining
-
 Style/WordArray:
   # The `MinSize` option causes the `WordArray` rule to be ignored for arrays
   # smaller than a certain size.  The rule is only applied to arrays
   # whose element count is greater than or equal to `MinSize`.
   MinSize: 3
 
-Layout/SpaceInsideStringInterpolation:
-  EnforcedStyle: space
-
-Naming/FileName:
-  Exclude:
-    - Guardfile
-
-Style/MethodMissing:
-  Exclude:
-    - app/system/settings.rb
-
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
 #### END STYLES
+
 
 #### BEGIN RAILS
 
-# TODO: enable after updating rails/rspec
-Rails/HttpPositionalArguments:
+# TODO enable when using Rails 5
+Rails/ApplicationRecord:
   Enabled: false
 
-# Configuration parameters: Blacklist.
-# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
-Rails/SkipsModelValidations:
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+# TODO: enable after updating rails/rspec
+Rails/HttpPositionalArguments:
   Enabled: false
 
 # SupportedStyles: referer, referrer
 Rails/RequestReferer:
   EnforcedStyle: referrer
 
-# TODO enable when using Rails 5
-Rails/ApplicationRecord:
+# Configuration parameters: Blacklist.
+# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
+Rails/SkipsModelValidations:
   Enabled: false
 
-Rails/DynamicFindBy:
-  Whitelist:
-    - find_by_sql
-    - find_by_email
-    - find_by_script
-
-# TODO: issue XOHB-1599
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: strict, flexible
-Rails/Date:
-  Exclude:
-    - 'app/controllers/sites_controller.rb'
-    - 'app/helpers/email_digest_helper.rb'
-    - 'app/helpers/sites_helper.rb'
-    - 'lib/hello/api_performance.rb'
-    - 'spec/lib/hello/api_performance_spec.rb'
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - staging
+    - edge
 
 #### END RAILS
 
@@ -142,20 +136,26 @@ Rails/Date:
 #### BEGIN METRICS
 
 Metrics/AbcSize:
-  Max: 60 # ideally 16
+  Max: 49 # ideally 16
 
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:
-  Max: 1000 # ideally 25
+  Max: 50 # ideally 25
+  Exclude:
+    - 'spec/**/*'
+    - 'app/views/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/*.rake'
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 188 # ideally 100
+  Max: 185 # ideally 100
   Exclude:
     - 'app/models/site.rb'
     - 'app/models/site_element.rb'
     - 'app/models/static_script_model.rb'
     - 'app/models/user.rb'
+    - 'app/core/analytics_provider.rb'
 
 Metrics/CyclomaticComplexity:
   Max: 17 # ideally 6
@@ -163,22 +163,20 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 1246 # ideally 120
+  Max: 546 # ideally 120
   IgnoreCopDirectives: true
 
 Metrics/MethodLength:
-  Max: 82 # ideally 10
+  Max: 32 # ideally 10
   CountComments: false
 
 Metrics/ModuleLength:
-  Max: 187 # ideally 10
+  Max: 176 # ideally 10
   CountComments: false
-
-Metrics/ParameterLists:
   Exclude:
-    - 'lib/hello/data_api_helper.rb'
+    - app/helpers/site_elements_helper.rb
 
 Metrics/PerceivedComplexity:
-  Max: 18 # ideally 7
+  Max: 14 # ideally 7
 
 #### END METRICS

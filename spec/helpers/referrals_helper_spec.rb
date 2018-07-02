@@ -9,7 +9,7 @@ describe ReferralsHelper do
   end
 
   it 'Returns an icon for a referral with a valid state' do
-    ref = Referral.new(state: :sent)
+    ref = Referral.new(state: Referral::SENT)
     img = helper.icon_for_referral(ref)
 
     expect(img).to match('img')
@@ -24,7 +24,7 @@ describe ReferralsHelper do
   end
 
   it 'Returns the text for a referral with a valid state' do
-    ref = Referral.new(state: :sent)
+    ref = Referral.new(state: Referral::SENT)
     text = helper.text_for_referral(ref)
 
     expect(text).to match(I18n.t('referral.state.sent'))

@@ -1,4 +1,4 @@
-class ImageUpload < ActiveRecord::Base
+class ImageUpload < ApplicationRecord
   STYLES = {
     original: '2000x2000>',
     large: '1500x1500>',
@@ -6,7 +6,8 @@ class ImageUpload < ActiveRecord::Base
   }.freeze
 
   belongs_to :site
-  has_many :site_elements, foreign_key: :active_image_id, dependent: :nullify
+  has_many :site_elements, foreign_key: :active_image_id, dependent: :nullify,
+    inverse_of: :active_image
 
   has_attached_file :image, styles: STYLES
   validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/

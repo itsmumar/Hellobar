@@ -8,6 +8,36 @@ describe Site do
     expect(site.owners.first).not_to be_nil
   end
 
+  it 'allows creating a second site with the same url' do
+    url = 'http://test.com'
+    user = create :user
+    first_site = create :site, user: user, url: url
+    second_site = create :site, user: user, url: url
+
+    expect(first_site).to be_valid
+    expect(first_site).to be_persisted
+    expect(second_site).to be_valid
+    expect(second_site).to be_persisted
+  end
+
+  it 'allows having membership access to two sites with the same url' do
+    url = 'http://test.com'
+    membership = create :site_membership
+
+    new_site = membership.user.sites.create url: url
+
+    expect(new_site).to be_valid
+    expect(new_site).to be_persisted
+  end
+
+  it 'destroys the subscription when site is destroyed' do
+    site = create :site, :pro
+
+    site.destroy
+
+    expect(site.subscriptions.with_deleted.last).to be_deleted
+  end
+
   describe '#owners_and_admins' do
     it "should return site's owners & admins" do
       create(:site_membership, :admin, site: site)
@@ -56,24 +86,20 @@ describe Site do
     end
   end
 
-  describe '#pro_managed_subscription?' do
+  describe '#pro_managed?' do
     it 'returns true if the site has a ProManaged subscription' do
-      site = build_stubbed :site
-      subscription = build_stubbed :subscription, :pro_managed
+      site = create :site
+      create :subscription, :pro_managed, site: site
 
-      expect(site).to receive(:subscriptions).and_return [subscription]
-
-      expect(site).to be_pro_managed_subscription
+      expect(site).to be_pro_managed
     end
 
     it 'returns false if the site does not have a ProManaged subscription' do
-      site = build_stubbed :site
-      free = build_stubbed :subscription, :free
-      pro = build_stubbed :subscription, :pro
+      site = create :site
+      create :subscription, :free, site: site
+      create :subscription, :pro, site: site
 
-      expect(site).to receive(:subscriptions).and_return [free, pro]
-
-      expect(site).not_to be_pro_managed_subscription
+      expect(site).not_to be_pro_managed
     end
   end
 
@@ -149,53 +175,6 @@ describe Site do
     end
   end
 
-  describe 'url_uniqueness' do
-    let(:membership) { create(:site_membership) }
-
-    it 'returns false if the url is not unique to the user' do
-      s2 = membership.user.sites.create(url: 'different.com')
-      s2.url = membership.site.url
-
-      expect(s2.valid?).to be_falsey
-    end
-
-    it 'returns true if the url is unqiue to the user' do
-      s2 = membership.user.sites.create(url: 'uniqueurl.com')
-
-      expect(s2.valid?).to be_truthy
-    end
-  end
-
-  describe '#url_exists?' do
-    it 'should return false if no other site exists with the url' do
-      expect(Site.create(url: 'http://abc.com').url_exists?).to be_falsey
-    end
-
-    it 'should return true if another site exists with the url' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'http://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should return true if another site exists even with other protocol' do
-      Site.create(url: 'http://abc.com')
-      expect(Site.new(url: 'https://abc.com').url_exists?).to be_truthy
-    end
-
-    it 'should scope to user if user is given' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'http://abc.com').url_exists?(u2)).to be_falsey
-    end
-
-    it 'should ignore protocol if user scoped call' do
-      u1 = create(:user, :with_site)
-      u1.sites.create(url: 'http://abc.com')
-      u2 = create(:user, :with_site)
-      expect(u2.sites.build(url: 'https://abc.com').url_exists?(u2)).to be_falsey
-    end
-  end
-
   describe '#set_branding_on_site_elements' do
     let!(:site) { create(:site, :with_rule) }
     let!(:element) { create(:site_element, :traffic, rule: site.rules.first!, show_branding: true) }
@@ -219,18 +198,6 @@ describe Site do
     end
   end
 
-  describe '#find_by_script' do
-    it 'should return the site if the script name matches' do
-      site = create(:site)
-      expect(Site.find_by_script(site.script_name)).to eq(site)
-    end
-
-    it 'should return nil if no site exists with that script' do
-      allow(Site).to receive(:maximum).and_return(10) # so that it doesn't run forever
-      expect(Site.find_by_script('foo')).to be_nil
-    end
-  end
-
   describe '#script_url' do
     it 'is delegated to #script' do
       expect(site.script).to receive(:url)
@@ -238,40 +205,35 @@ describe Site do
     end
   end
 
-  describe '.normalize_url' do
-    it 'should remove www' do
-      expect(Site.normalize_url('http://www.cnn.com').host).to eq('www.cnn.com')
+  describe '.host' do
+    def host(url)
+      Site.new(url: url).host
     end
 
-    it 'should not remove www from other parts of the url' do
-      expect(Site.normalize_url('cnnwww.com/').host).to eq('cnnwww.com')
+    it 'removes www' do
+      expect(host('http://www.cnn.com')).to eq('www.cnn.com')
     end
 
-    it 'should not remove the www1 subdomain' do
-      expect(Site.normalize_url('www1.abc.com/').host).to eq('www1.abc.com')
+    it 'does not remove www from other parts of the url' do
+      expect(host('cnnwww.com/')).to eq('cnnwww.com')
     end
 
-    it 'should normalize to http' do
-      expect(Site.normalize_url('https://cnn.com').scheme).to eq('https')
-    end
-  end
-
-  describe '#normalized_url' do
-    it 'returns shorter URLs for different sites' do
-      site = Site.new(url: 'http://asdf.com')
-      expect(site.normalized_url).to eq('asdf.com')
-
-      site = Site.new(url: 'http://www.asdf.com')
-      expect(site.normalized_url).to eq('www.asdf.com')
-
-      site = Site.new(url: 'http://cs.horelement.bike')
-      expect(site.normalized_url).to eq('cs.horelement.bike')
+    it 'does not removes the www1 subdomain' do
+      expect(host('www1.abc.com/')).to eq('www1.abc.com')
     end
 
-    it 'returns the site URL if normalized_url returns nil' do
-      site = Site.new(url: 'https://ca-staging-uk')
+    it 'returns nil if invalid' do
+      expect(host('http://')).to be_nil
+    end
 
-      expect(site.normalized_url).to eql('ca-staging-uk')
+    it 'does not encodes non-unicode characters' do
+      expect(host('яндекс.рф')).to eq('яндекс.рф')
+    end
+
+    context 'when url is nil' do
+      it 'returns nil' do
+        expect(host(nil)).to be_nil
+      end
     end
   end
 
@@ -284,59 +246,6 @@ describe Site do
     it 'returns false when no site elements are migrated from wordpress' do
       site_element = create(:site_element, wordpress_bar_id: nil)
       expect(site_element.site.had_wordpress_bars?).to be(false)
-    end
-  end
-
-  describe 'after_touch' do
-    context 'not destroyed' do
-      it 'sets needs_script_regeneration? to true' do
-        site = create(:site)
-        site.touch
-        expect(site.needs_script_regeneration?).to be_truthy
-      end
-    end
-
-    context 'destroyed' do
-      it 'sets needs_script_regeneration? to false' do
-        site = create(:site)
-
-        site.destroy
-
-        expect(site).to be_deleted
-        expect(site.needs_script_regeneration?).to be_falsey
-      end
-    end
-  end
-
-  describe '#update_content_upgrade_styles!' do
-    let(:site) { create :site }
-    let(:content_upgrade_styles) { generate :content_upgrade_styles }
-
-    it 'updates settings' do
-      expect { site.update_content_upgrade_styles! content_upgrade_styles }
-        .to change(site, :settings).to('content_upgrade' => content_upgrade_styles)
-    end
-  end
-
-  describe 'after_commit callback' do
-    let(:site) { create :site }
-    let(:commit) { site.run_callbacks :commit }
-
-    context 'when skip_script_generation' do
-      before { site.skip_script_generation = true }
-
-      it 'does not generate script' do
-        expect { commit }.not_to have_enqueued_job GenerateStaticScriptJob
-      end
-    end
-
-    context 'when not skip_script_generation' do
-      before { site.skip_script_generation = false }
-      before { site.touch }
-
-      it 'generates script' do
-        expect { commit }.to have_enqueued_job GenerateStaticScriptJob
-      end
     end
   end
 
@@ -359,7 +268,7 @@ describe Site do
     it 'returns bills that are problem' do
       expect(site.bills_with_payment_issues).to be_empty
       change_subscription('pro')
-      last_bill.problem!
+      last_bill.fail!
       expect(site.bills_with_payment_issues).to match_array [last_bill]
     end
   end
@@ -381,6 +290,42 @@ describe Site do
         .with(site, days_limit: 7)
         .and_return(statistics)
       expect(site.statistics).to be statistics
+    end
+  end
+
+  describe '#communication_types' do
+    it 'returns array of strings' do
+      site.communication_types = Site::COMMUNICATION_TYPES.map(&:to_s)
+      expect(site.communication_types).to eql Site::COMMUNICATION_TYPES.map(&:to_s)
+
+      expect(site[:communication_types]).to eql Site::COMMUNICATION_TYPES.join(',')
+    end
+  end
+
+  describe '#gdpr_enabled?' do
+    before do
+      site.communication_types = [Site::COMMUNICATION_TYPES.first]
+      site.privacy_policy_url = 'google.com'
+      site.terms_and_conditions_url = 'google.com'
+    end
+
+    context 'when all gdpr-related attributes are present' do
+      specify { expect(site.gdpr_enabled?).to be_truthy }
+    end
+
+    context 'when privacy_policy_url is blank' do
+      before { site.privacy_policy_url = nil }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
+    end
+
+    context 'when terms_and_conditions_url is blank' do
+      before { site.terms_and_conditions_url = nil }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
+    end
+
+    context 'when communication_types is blank' do
+      before { site.communication_types = [] }
+      specify { expect(site.gdpr_enabled?).to be_falsey }
     end
   end
 end

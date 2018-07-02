@@ -1,3 +1,3 @@
-= form_for site, url: admin_user_site_path(@user, site), method: :put, html: {class: "hidden add_invoice_form"} do |f|
+= form_for site, url: admin_site_path(site), method: :put, html: {class: "hidden add_invoice_form"} do |f|
   div= f.text_area 'invoice_information', placeholder: "Appears below name on invoice and replaces the address from credit card information.", class: "site-invoice-information", required: true
   div= f.submit "Submit", data: { disable_with: "Submitting..." }

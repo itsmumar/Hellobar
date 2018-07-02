@@ -1,7 +1,7 @@
 class ContactListsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_site
-  before_action :load_contact_list, only: %i[show update destroy download]
+  before_action :load_contact_list, only: %i[show update destroy export]
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
@@ -14,7 +14,7 @@ class ContactListsController < ApplicationController
     end
 
     @contact_lists = @site.contact_lists
-    @contact_list_totals = FetchContactListTotals.new(@site).call
+    @contact_list_totals = FetchSiteContactListTotals.new(@site).call
   end
 
   def create
@@ -24,7 +24,7 @@ class ContactListsController < ApplicationController
       identity =
         if params[:identity_id].present?
           @site.identities.find params[:identity_id]
-        elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks'
+        elsif ServiceProvider.embed_code?(provider_token) || provider_token == 'webhooks' || provider_token == 'zapier'
           @site.identities.find_or_create_by!(provider: provider_token)
         elsif Identity.from_session(session)
           @site.identities.from_session(session, provider: provider_token, clear: true)
@@ -42,16 +42,15 @@ class ContactListsController < ApplicationController
     respond_to do |format|
       format.html do
         @other_lists = @site.contact_lists.where.not(id: @contact_list.id)
-        @subscribers = FetchContacts.new(@contact_list).call
-        @total_subscribers = FetchContactListTotals.new(@site, id: params[:id]).call
-        @email_statuses = @contact_list.statuses_for_subscribers(@subscribers)
+        @subscribers = FetchSubscribers.new(@contact_list).call[:items]
+        @total_subscribers = fetch_subscribers_count(@contact_list.id)
       end
       format.json { render json: @contact_list }
     end
   end
 
-  def download
-    DownloadContactListJob.perform_later(current_user, @contact_list)
+  def export
+    ExportSubscribersJob.perform_later(current_user, @contact_list)
     flash[:success] =
       "We will email you the list of your contacts to #{ current_user.email }." \
       ' At peak times this can take a few minutes'
@@ -97,6 +96,10 @@ class ContactListsController < ApplicationController
 
   def load_contact_list
     @contact_list = @site.contact_lists.find(params[:id])
+  end
+
+  def fetch_subscribers_count(contact_list_id)
+    FetchSiteContactListTotals.new(@site, [contact_list_id]).call[contact_list_id]
   end
 
   def omniauth_error?

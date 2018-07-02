@@ -18,14 +18,26 @@
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
-      "font_id": "oswald"
+      "font_id": "oswald",
+      "cta_border_radius": 3,
+      "text_field_border_radius": 3,
+      "text_field_border_width": 0,
+      "text_field_text_color": "FFFFFF",
+      "text_field_background_color": "000000",
+      "text_field_background_opacity": 10
     },
     "Alert": {
       "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "DC5B38",
-      "font_id": "oswald"
+      "font_id": "oswald",
+      "cta_border_radius": 3,
+      "text_field_border_radius": 3,
+      "text_field_border_width": 0,
+      "text_field_text_color": "FFFFFF",
+      "text_field_background_color": "000000",
+      "text_field_background_opacity": 10
     }
   },
   "image": {

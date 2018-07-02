@@ -22,7 +22,7 @@ nav.tabs-wrapper
 
   .service-actions
     a#edit-contact-list.button Edit
-    a.button href=download_site_contact_list_path(@site, @contact_list) Export CSV
+    a.button href=export_site_contact_list_path(@site, @contact_list) Export CSV
 
 - if @contact_list.service_provider
   .info-block
@@ -36,27 +36,28 @@ table.contacts-table
       th #
       th Email
       th Name
-      - if @email_statuses.any?
+      - if @contact_list.service_provider
         th Status
       th Date Subscribed
 
   tbody
-    - if @subscribers.any?
-      - @subscribers.each_with_index do |subscriber, index|
-        tr
-          td= index + 1
-          td= subscriber[:email]
-          td= subscriber[:name]
-          - if @email_statuses.any?
-            td= @email_statuses[subscriber[:email]]
-          td= subscriber[:subscribed_at].try(:strftime, "%b %d, %Y")
+    - @subscribers.each_with_index do |subscriber, index|
+      tr
+        td= index + 1
+        td= subscriber.email
+        td= subscriber.name
 
-    - else
+        - if @contact_list.service_provider
+          td= contact_status(subscriber)
+
+        td= subscriber.subscribed_at.try(:strftime, "%b %d, %Y")
+
+    - if @subscribers.empty?
       tr
         td colspan='9'
           h6 No Emails Collected Yet
 
 - if @total_subscribers > 100
   p
-    'Only showing the first 100 subscribers.
-    = link_to 'Download all subscribers', download_site_contact_list_path(@site, @contact_list)
+    'Only showing latest 100 subscribers.
+    = link_to 'Export CSV', export_site_contact_list_path(@site, @contact_list)

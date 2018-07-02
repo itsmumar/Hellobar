@@ -1,0 +1,16 @@
+el:
+  support:
+    array:
+      last_word_connector: ! ' και '
+      two_words_connector: ! ' και '
+      words_connector: ! ', '
+  gdpr:
+    consent: Συναινώ στo να λαμβάνω περιστασιακά emails σχετικά με %{topics}.
+    communication_types:
+      newsletter: νέες εξελίξεις
+      promotional: προωθητικές ενέργειες
+      partnership: συνεργασίες
+      product: προϊόντα/υπηρεσίες
+      research: έρευνες αγοράς
+    agreement: "Έχω διαβάσει και αποδεχθεί την <a target=\"_blank\" href=\"%{privacy_policy_url}\">Πολιτική Απορρήτου</a> και τους <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">Όρους και Προϋποθέσεις</a>."
+    action: Υποβάλλουν

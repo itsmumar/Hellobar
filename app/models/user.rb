@@ -1,4 +1,6 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
+  NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE = Date.new(2018, 4, 26)
+
   acts_as_paranoid
 
   include UserValidator
@@ -6,15 +8,13 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :rememberable, :trackable
   # devise :omniauthable, :omniauth_providers => [:google_oauth2]
 
-  after_initialize :check_if_temporary
   before_save :clear_invite_token
   after_save :disconnect_oauth, if: :oauth_user?
-  after_save :track_temporary_status_change
   after_create :create_referral_token
-  after_create :add_to_onboarding_campaign
 
-  # rubocop: disable Rails/HasManyOrHasOneDependent
-  has_one :referral_token, as: :tokenizable, dependent: :destroy
+  has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
+  has_one :affiliate_information
+
   has_many :credit_cards, dependent: :destroy
   has_many :site_memberships, dependent: :destroy
   has_many :sites, -> { distinct }, through: :site_memberships
@@ -24,30 +24,10 @@ class User < ActiveRecord::Base
   has_many :authentications, dependent: :destroy
 
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id',
-    dependent: :destroy
+    dependent: :destroy, inverse_of: :recipient
 
   has_many :sent_referrals, class_name: 'Referral',
-    foreign_key: 'sender_id', dependent: :destroy
-
-  has_many :onboarding_statuses, -> { order(created_at: :desc, id: :desc) },
-    class_name: 'UserOnboardingStatus', dependent: :destroy
-
-  has_one :current_onboarding_status, -> { order 'created_at DESC' },
-    class_name: 'UserOnboardingStatus'
-
-  scope :join_current_onboarding_status, lambda {
-    joins(:onboarding_statuses)
-      .where("user_onboarding_statuses.created_at =
-              (SELECT MAX(user_onboarding_statuses.created_at)
-                      FROM user_onboarding_statuses
-                      WHERE user_onboarding_statuses.user_id = users.id)")
-      .group('users.id')
-  }
-
-  scope :onboarding_sequence_before, lambda { |sequence_index|
-    where("user_onboarding_statuses.sequence_delivered_last < #{ sequence_index } OR
-           user_onboarding_statuses.sequence_delivered_last IS NULL")
-  }
+    foreign_key: 'sender_id', dependent: :destroy, inverse_of: :sender
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
 
@@ -55,27 +35,14 @@ class User < ActiveRecord::Base
   validate :oauth_email_change, if: :oauth_user?
 
   delegate :url_helpers, to: 'Rails.application.routes'
+  delegate :affiliate_identifier, to: :affiliate_information, allow_nil: true
 
   attr_accessor :timezone, :is_impersonated
 
-  ACTIVE_STATUS = 'active'.freeze
-  TEMPORARY_STATUS = 'temporary'.freeze
+  ACTIVE = 'active'.freeze
+  TEMPORARY = 'temporary'.freeze
+  DELETED = 'deleted'.freeze
   INVITE_EXPIRE_RATE = 2.weeks
-
-  def self.search_all_versions_for_email(email)
-    return if email.blank?
-
-    find_by_email(email) || find_and_create_by_referral(email)
-  end
-
-  def self.find_and_create_by_referral(email)
-    return unless Referral.find_by(email: email)
-    password = Devise.friendly_token[9, 20]
-
-    User.create email: email,
-                status: TEMPORARY_STATUS,
-                password: password, password_confirmation: password
-  end
 
   def can_view_exit_intent_modal?
     user_upgrade_policy.should_show_exit_intent_modal?
@@ -99,19 +66,16 @@ class User < ActiveRecord::Base
     sign_in_count == 1 && site_elements.empty?
   end
 
-  def should_send_to_new_site_element_path?
-    return false unless current_onboarding_status
-
-    %i[new selected_goal].include?(current_onboarding_status.status_name) &&
-      sites.script_not_installed.any?
+  def pro_managed?
+    sites.any?(&:pro_managed?)
   end
 
   def active?
-    status == ACTIVE_STATUS
+    status == ACTIVE
   end
 
   def temporary?
-    status == TEMPORARY_STATUS
+    status == TEMPORARY
   end
 
   def temporary_email?
@@ -119,11 +83,9 @@ class User < ActiveRecord::Base
   end
 
   def paying_subscription?
-    subscriptions.active.any? { |subscription| subscription.capabilities.acts_as_paid_subscription? }
-  end
-
-  def onboarding_status_setter
-    @onboarding_status_setter ||= UserOnboardingStatusSetter.new(self, paying_subscription?, onboarding_statuses)
+    subscriptions.paid.any? do |subscription|
+      subscription.capabilities.acts_as_paid_subscription?
+    end
   end
 
   def send_devise_notification(notification, reset_password_token = nil, *_args)
@@ -136,21 +98,6 @@ class User < ActiveRecord::Base
   def role_for_site(site)
     return unless (membership = site_memberships.find_by(site: site))
     membership.role.to_sym
-  end
-
-  def track_temporary_status_change
-    return unless @was_temporary && !temporary?
-    Analytics.track(:user, id, 'Completed Signup', email: email)
-    @was_temporary = false
-  end
-
-  def check_if_temporary
-    @was_temporary = temporary?
-  end
-
-  def add_to_onboarding_campaign
-    onboarding_status_setter.new_user!
-    onboarding_status_setter.created_site!
   end
 
   def valid_password?(password)
@@ -171,70 +118,6 @@ class User < ActiveRecord::Base
     first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
   end
 
-  def self.find_for_google_oauth2(omniauth_hash, original_email = nil, track_options = {})
-    info = omniauth_hash.info
-
-    if original_email.present? && info.email != original_email # the user is trying to login with a different Google account
-      user = User.new
-      user.errors.add(:base, "Please log in with your #{ original_email } Google email")
-      raise ActiveRecord::RecordInvalid, user
-    elsif (user = User.joins(:authentications).find_by(authentications: { uid: omniauth_hash.uid, provider: omniauth_hash.provider }))
-      # TODO: deprecated case. use #update_authentication directly
-      user.first_name = info.first_name if info.first_name.present?
-      user.last_name = info.last_name if info.last_name.present?
-
-      user.save
-    else # create a new user
-      user = User.find_by(email: info.email, status: TEMPORARY_STATUS) || User.new(email: info.email)
-
-      password = Devise.friendly_token[9, 20]
-      user.password = password
-      user.password_confirmation = password
-
-      user.first_name = info.first_name
-      user.last_name = info.last_name
-
-      user.authentications.build(provider: omniauth_hash.provider, uid: omniauth_hash.uid)
-      user.status = ACTIVE_STATUS
-
-      if user.save
-        TrackEvent.new(:signed_up, user: user).call
-
-        Analytics.track(:user, user.id, 'Signed Up', track_options)
-        Analytics.track(:user, user.id, 'Completed Signup', email: user.email)
-      end
-    end
-
-    # TODO: deprecated. use #update_authentication directly
-    # update the authentication tokens & expires for this provider
-    if omniauth_hash.credentials && user.persisted?
-      user.authentications.detect { |x| x.provider == omniauth_hash.provider }.update(
-        refresh_token: omniauth_hash.credentials.refresh_token,
-        access_token: omniauth_hash.credentials.token,
-        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
-      )
-    end
-
-    user
-  end
-
-  def update_authentication(omniauth_hash)
-    authentication = authentications.find_by(uid: omniauth_hash.uid, provider: omniauth_hash.provider)
-
-    self.first_name = omniauth_hash.info.first_name if omniauth_hash.info.first_name.present?
-    self.last_name = omniauth_hash.info.last_name if omniauth_hash.info.last_name.present?
-
-    if omniauth_hash.credentials && persisted?
-      authentication.update(
-        refresh_token: omniauth_hash.credentials.refresh_token,
-        access_token: omniauth_hash.credentials.token,
-        expires_at: Time.zone.at(omniauth_hash.credentials.expires_at)
-      )
-    end
-
-    save!
-  end
-
   def self.find_or_invite_by_email(email, _site)
     user = User.find_by(email: email)
 
@@ -245,7 +128,7 @@ class User < ActiveRecord::Base
       user.password_confirmation = password
       user.invite_token = Devise.friendly_token
       user.invite_token_expire_at = INVITE_EXPIRE_RATE.from_now
-      user.status = TEMPORARY_STATUS
+      user.status = TEMPORARY
       user.save
     end
 
@@ -254,11 +137,17 @@ class User < ActiveRecord::Base
 
   def self.search_by_site_url url
     domain = NormalizeURI[url]&.domain
-    domain ? User.joins(:sites).where('url LIKE ?', "%#{ domain }%") : User.none
+    if domain
+      where(
+        id: SiteMembership.with_deleted.joins(:site).where('url LIKE ?', "%#{ domain }%").select(:user_id)
+      )
+    else
+      none
+    end
   end
 
   def self.search_by_username(username)
-    User.with_deleted.where('email like ?', "%#{ username }%")
+    with_deleted.where('email like ?', "%#{ username }%")
   end
 
   def was_referred?

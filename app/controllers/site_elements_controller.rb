@@ -1,4 +1,6 @@
 class SiteElementsController < ApplicationController
+  include ActionView::Helpers::UrlHelper
+
   before_action :authenticate_user!
   before_action :force_trailing_slash, only: %i[new edit]
   before_action :load_site
@@ -6,10 +8,10 @@ class SiteElementsController < ApplicationController
 
   layout :determine_layout
 
-  rescue_from ActiveRecord::RecordInvalid, with: :record_not_found_error
+  rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity_error
 
   def show
-    render json: @site_element, serializer: SiteElementSerializer
+    render json: @site_element, serializer: SiteElementSerializer, scope: serializer_scope
   end
 
   def index
@@ -17,9 +19,7 @@ class SiteElementsController < ApplicationController
   end
 
   def new
-    if current_user.temporary? && @site.site_elements.any?
-      return redirect_to after_sign_in_path_for(@site)
-    end
+    return redirect_to after_sign_in_path_for(@site) if current_user.temporary? && @site.site_elements.any?
 
     @rules = @site.rules.all
     @site_element = SiteElement.new(
@@ -33,7 +33,7 @@ class SiteElementsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @site_element, serializer: SiteElementSerializer }
+      format.json { render json: @site_element, serializer: SiteElementSerializer, scope: serializer_scope }
     end
   end
 
@@ -42,24 +42,20 @@ class SiteElementsController < ApplicationController
   end
 
   def create
-    @site_element = SiteElement.new(site_element_params)
-    @site_element.save!
-
+    site_element = CreateSiteElement.new(site_element_params, @site, current_user).call
     flash[:success] = message_to_clear_cache
-    TrackEvent.new(:created_bar, site_element: @site_element, user: current_user).call
-
-    render json: @site_element, serializer: SiteElementSerializer
+    render json: site_element, serializer: SiteElementSerializer
   end
 
   def update
-    element = UpdateSiteElement.new(@site_element, site_element_params).call
+    site_element = UpdateSiteElement.new(@site_element, site_element_params).call
     flash[:success] = message_to_clear_cache
-
-    render json: element, serializer: SiteElementSerializer
+    render json: site_element, serializer: SiteElementSerializer
   end
 
   def destroy
     @site_element.destroy
+    @site.script.generate
 
     respond_to do |format|
       format.js { head :ok }
@@ -72,23 +68,20 @@ class SiteElementsController < ApplicationController
 
   def toggle_paused
     @site_element.toggle_paused!
-
-    respond_to do |format|
-      format.js { head :ok }
-      format.html { redirect_to site_site_elements_path(site_id: @site) }
-    end
+    @site.script.generate
+    head :ok
   end
 
   private
 
-  def record_not_found_error(e)
+  def unprocessable_entity_error(e)
     response = { errors: e.record.errors, full_error_messages: e.record.errors.to_a }
     render json: response, status: :unprocessable_entity
   end
 
   def message_to_clear_cache
-    message = 'It may take a few minutes for Hello Bar to show up on your site. '
-    message << 'You’ll want to <a href="http://www.refreshyourcache.com/en/home" target="_blank" style="text-decoration: underline;">clear your cache</a> to see your updates.'
+    clear_cache_link = link_to 'clearing browser\'s cache', 'https://kb.iu.edu/d/ahic', target: '_blank'
+    "Usually a simple page refresh will show your changes, if not try #{ clear_cache_link }.".html_safe # rubocop:disable Rails/OutputSafety
   end
 
   def load_site
@@ -120,7 +113,7 @@ class SiteElementsController < ApplicationController
       :answer1, :answer1caption, :answer1link_text, :answer1response,
       :answer2, :answer2caption, :answer2link_text, :answer2response,
       :background_color, :border_color, :button_color, :content, :caption,
-      :closable, :contact_list_id, :display_when, :element_subtype,
+      :closable, :contact_list_id, :element_subtype,
       :email_placeholder, :font_id, :headline, :image_placement, :image_opacity,
       :link_color, :link_text, :name_placeholder, :open_in_new_window,
       :phone_country_code, :phone_number, :placement, :pushes_page_down,
@@ -128,22 +121,12 @@ class SiteElementsController < ApplicationController
       :thank_you_text, :theme_id, :type, :use_question,
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
-      :trigger_icon_color,
-      { settings: settings_keys },
-      blocks: blocks_keys
+      :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
+      :cta_border_color, :cta_border_width, :cta_border_radius,
+      :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+      :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
+      settings: settings_keys
     )
-  end
-
-  def blocks_keys
-    [
-      :id,
-      { content: %i[text href] },
-      themes: [
-        :id,
-        :css_classes,
-        { styles: %i[background_color border_color] }
-      ]
-    ]
   end
 
   def settings_keys
@@ -151,8 +134,6 @@ class SiteElementsController < ApplicationController
       :after_email_submit_action, :buffer_message, :buffer_url,
       { fields_to_collect: %i[id type label is_enabled] },
       { cookie_settings: %i[duration success_duration] },
-      :display_when_delay, :display_when_delay_units, :display_when_scroll_element,
-      :display_when_scroll_percentage, :display_when_scroll_type,
       :message_to_tweet,
       :pinterest_description, :pinterest_full_name,
       :pinterest_image_url, :pinterest_url, :pinterest_user_url,
@@ -160,5 +141,9 @@ class SiteElementsController < ApplicationController
       :url, :url_to_like, :url_to_plus_one, :url_to_share, :url_to_tweet,
       :use_location_for_url
     ]
+  end
+
+  def serializer_scope
+    { user: current_user }
   end
 end

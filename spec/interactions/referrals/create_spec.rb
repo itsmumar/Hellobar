@@ -35,4 +35,31 @@ describe Referrals::Create do
       send_emails: false
     )
   end
+
+  it 'tracks "referred_friend" event' do
+    expect(TrackEvent)
+      .to receive_service_call
+      .with(:referred_friend, user: user, referral: instance_of(Referral))
+
+    Referrals::Create.run(
+      sender: user,
+      params: { email: 'tj@hellobar.com', body: 'test body' },
+      send_emails: false
+    )
+  end
+
+  context 'when trying to send 11th invitation' do
+    before { create_list :referral, 10, sender: user }
+
+    it 'raises Error' do
+      expect {
+        Referrals::Create.run(
+          sender: user,
+          params: { email: 'tj@hellobar.com', body: 'test body' },
+          send_emails: false
+        )
+      }.to raise_error Referrals::Create::Error,
+        "Only #{ Referrals::Create::MAX_REFERRALS_PER_DAY } invitations are allowed per day"
+    end
+  end
 end

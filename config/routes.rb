@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :applications, :token_info
+  end
+
   resources :referrals do
     collection do
       get :accept
@@ -6,18 +10,76 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :user_state, only: :show
+    # Used by Ember.js
     resources :settings, only: :index
 
+    resources :user_state, only: :show
+
+    # Used by Vue.js
+    post :authenticate, controller: :authentications
+
     resources :sites, only: [] do
-      member do
-        post :update_install_type
-        post :update_static_script_installation
+      resources :campaigns, except: %i[new edit] do
+        member do
+          post :send_out
+          post :send_out_test_email
+          post :archive
+        end
+      end
+
+      resources :contact_lists, only: [] do
+        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
+      end
+
+      resources :sequences, except: %i[new edit] do
+        resources :steps, except: %i[new edit], controller: 'sequence_steps'
+      end
+
+      resource :whitelabel, only: %i[create show destroy] do
+        member do
+          post :validate
+        end
+      end
+
+      resources :emails, only: %i[create show update]
+    end
+
+    # Used by Lambda functions
+    namespace :internal do
+      resources :campaigns, only: [] do
+        member do
+          post :update_status
+        end
+      end
+
+      resources :sites, only: [] do
+        member do
+          post :update_install_type
+          post :update_static_script_installation
+        end
+      end
+    end
+
+    namespace :external do
+      get '/me', to: 'user#show', as: :me
+
+      resources :sites, only: %i[index] do
+        resources :contact_lists, only: %i[index] do
+          resources :subscribers, only: %i[index]
+
+          member do
+            post :subscribe
+            post :unsubscribe
+          end
+        end
       end
     end
   end
 
   devise_for :users, controllers: { sessions: 'users/sessions', passwords: 'users/passwords' }
+
+  get '/users/sign_up', to: 'registrations#new'
+  post '/users/sign_up', to: 'registrations#create'
 
   devise_scope :user do
     post '/users/find_email', to: 'users/sessions#find_email', as: :find_email
@@ -36,14 +98,14 @@ Rails.application.routes.draw do
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
   resources :sites do
+    resource :privacy, only: %i[edit update]
+
     member do
       put :downgrade
       post :install_check
     end
 
     get 'team'
-
-    post :track_selected_goal, to: 'tracking#track_selected_goal'
 
     resource :wordpress_plugin, controller: :wordpress_plugin
 
@@ -53,13 +115,16 @@ Rails.application.routes.draw do
     get 'site_elements/new/*path', to: 'site_elements#new'
 
     resources :content_upgrades do
+      member do
+        put :toggle_paused
+      end
       collection do
         get :style_editor
         post :update_styles
       end
     end
 
-    resources :autofills, only: %i[index new create edit update destroy]
+    resources :autofills, except: :show
 
     resources :image_uploads, only: [:create]
 
@@ -70,7 +135,7 @@ Rails.application.routes.draw do
     resources :identities
     resources :contact_lists do
       member do
-        get :download
+        get :export
       end
     end
 
@@ -85,8 +150,8 @@ Rails.application.routes.draw do
     get :registration
   end
 
-  resources :credit_cards, only: %i[index]
-  resource :subscription, only: %i[create update]
+  resources :credit_cards, only: %i[index new create]
+  resource :subscription, only: %i[update]
   resources :bills, only: :show do
     put :pay, on: :member
   end
@@ -100,12 +165,10 @@ Rails.application.routes.draw do
 
   get '/auth/:provider/callback', to: 'identities#store'
 
-  resources :contact_submissions, only: [:create]
-  get '/contact', to: 'contact_submissions#new', as: :new_contact_submission
+  post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
+  post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
 
-  %w[email_developer generic_message].each do |sub|
-    post "/contact_submissions/#{ sub }", to: "contact_submissions##{ sub }", as: "#{ sub }_contact_submission"
-  end
+  resources :authorized_applications, only: %i[index destroy]
 
   get '/admin', to: 'admin/users#index', as: :admin
 
@@ -119,50 +182,67 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :credit_cards, only: [:destroy]
+    resources :contact_lists, only: %i[show]
+
+    resources :credit_cards, only: %i[show destroy]
 
     resources :users, only: %i[index show destroy] do
-      resources :sites, only: [:update] do
-        member do
-          post :regenerate
-          put :add_free_days
-        end
+      member do
+        post :reset_password
+      end
+    end
 
-        resources :contact_lists, only: [:index]
+    resources :sites, only: %i[show update] do
+      member do
+        post :regenerate
+        put :add_free_days
       end
 
-      resources :bills, only: [:show] do
+      resources :contact_lists, only: %i[index]
+    end
+
+    resources :bills, only: %i[index show] do
+      collection do
+        get 'filter/:status', action: 'filter_by_status', as: :filter_by_status
+      end
+
+      member do
+        get 'receipt'
         put 'void'
         put 'pay'
         put 'refund'
+        put 'chargeback'
       end
     end
+
+    resources :subscriptions, only: %i[index show] do
+      collection do
+        get :trial
+        get :ended_trial
+        get :deleted
+        get 'filter/:type', action: 'filter_by_type', as: :filter_by_type
+      end
+    end
+
+    resources :partners
 
     get 'lockdown/:email/:key/:timestamp', to: 'access#lockdown', constraints: { email: /[^\/]+/ }, as: :lockdown
     get 'logout', to: 'access#logout_admin', as: :logout
     get 'reset_password', to: 'access#reset_password'
     post 'reset_password', to: 'access#do_reset_password'
     get 'access', to: 'access#step1', as: :access
-    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     post 'access', to: 'access#process_step1'
+    get 'otp', to: 'access#step2', as: :otp
+    post 'access/authenticate', to: 'access#process_step2', as: :authenticate
     get 'locked', to: 'access#locked', as: :locked
   end
 
-  post '/track/current_person/did/:event' => 'tracking#track_current_person'
-  post '/track/:type/:id/did/:event' => 'tracking#track'
-  get '/pixel.gif' => 'tracking#pixel', :as => :tracking_pixel
-
   get '/install' => 'sites#install_redirect'
-
-  get '/use-cases' => 'pages#use_cases'
-  get '/amazon' => 'pages#use_cases'
-  get '/terms-of-use' => 'pages#terms_of_use'
-  get '/privacy-policy' => 'pages#privacy_policy'
   get '/logged_out' => 'pages#logout_confirmation', as: :logout_confirmation
 
   get '/heartbeat' => 'heartbeat#index'
   get '/login', to: redirect('/users/sign_in')
-  get '/signup', to: redirect('/')
+  get '/signup', to: redirect('/users/sign_up')
 
   get '/proxy/:scheme/*url', to: 'proxy#proxy' if Rails.env.development?
 
@@ -170,12 +250,10 @@ Rails.application.routes.draw do
     get code, to: 'errors#show', code: code
   end
 
-  get 'get-started', to: redirect('/')
-
-  root 'welcome#index'
-
   resources :test_sites, only: :show
   resource :test_site, only: :show, as: :latest_test_site
+
+  root 'pages#index'
 
   get '*unmatched_route', to: 'errors#show', code: 404
 end

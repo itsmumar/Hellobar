@@ -8,8 +8,6 @@ class GenerateAndStoreStaticScript
   def call
     site.update_column(:script_attempted_to_generate_at, Time.current)
 
-    GenerateStaticScriptModules.new.call if Rails.env.development? || Rails.env.test?
-
     if store_site_scripts_locally?
       store_locally
     else
@@ -24,7 +22,11 @@ class GenerateAndStoreStaticScript
   attr_reader :site, :options
 
   def script_content
-    @script_content ||= options[:script_content] || RenderStaticScript.new(site, compress: compress_script?).call
+    @script_content ||= options[:script_content] || render_script
+  end
+
+  def render_script
+    RenderStaticScript.new(site, compress: compress_script?).call
   end
 
   def store_locally
@@ -37,7 +39,8 @@ class GenerateAndStoreStaticScript
   end
 
   def store_wordpress_bars
-    wordpress_elements_and_users = site.site_elements.wordpress_bars.to_a.product(site.users.wordpress_users)
+    wordpress_elements_and_users =
+      site.site_elements.wordpress_bars.to_a.product(site.users.wordpress_users)
 
     wordpress_elements_and_users.each do |site_element, user|
       name = "#{ user.wordpress_user_id }_#{ site_element.wordpress_bar_id }.js"

@@ -6,9 +6,9 @@ describe GenerateAndStoreStaticScript do
   let(:service) { described_class.new(site) }
 
   before do
+    allow(Rails.env).to receive(:development?).and_return true
     allow(Settings).to receive(:store_site_scripts_locally).and_return false
     allow_any_instance_of(RenderStaticScript).to receive(:call).and_return(script_content)
-    expect(GenerateStaticScriptModules).to receive_service_call
   end
 
   it 'generates and uploads the script content for a site' do
@@ -33,7 +33,6 @@ describe GenerateAndStoreStaticScript do
 
   context 'when store locally' do
     let(:file) { double('file') }
-    before { allow(Analytics).to receive(:track) }
     before { allow(Settings).to receive(:store_site_scripts_locally).and_return true }
 
     it 'does not compress script' do

@@ -13,7 +13,6 @@ class @PaymentModal extends Modal
     @$modal.on 'complete', -> $(this).removeClass('loading').finish()
 
     @fetchUserCreditCards(window.siteID)
-
     @_bindInteractions()
 
   buildModal: ->
@@ -31,8 +30,6 @@ class @PaymentModal extends Modal
 
   open: ->
     $('body').append(@$modal)
-    @source = @options.source
-
     super
 
   close: ->
@@ -50,11 +47,16 @@ class @PaymentModal extends Modal
     url += "?site_id=#{siteID}" if siteID
 
     $.getJSON(url).then (response) =>
+      @current_credit_card_id =
+        response.current_credit_card_id ||
+        @options.credit_card_id ||
+        @options.site.current_subscription.credit_card_id
+
       if response.credit_cards.length > 0
         template = Handlebars.compile(@creditCardDetailsTemplate())
 
-        @currentCreditCard = response.credit_cards.filter((creditCard) ->
-          creditCard.id == response.current_credit_card_id
+        @currentCreditCard = response.credit_cards.filter((creditCard) =>
+          creditCard.id == @current_credit_card_id
         )[0] || {}
 
         html = $(template(
@@ -65,7 +67,7 @@ class @PaymentModal extends Modal
 
         # update the template with linked credit cards
         html.find('#linked-credit-cards')
-            .html(@_buildLinkedCreditCards(response.credit_cards))
+          .html(@_buildLinkedCreditCards(response.credit_cards))
 
 
       # replace the credit card details fragment
@@ -73,11 +75,9 @@ class @PaymentModal extends Modal
       $creditCardDetails = $('#credit-card-details')
       $creditCardDetails.html(html)
       $creditCardDetails.find('.site-select-form').hide() if window.siteID
-      @_bindLinkedCreditCards() # make sure we still toggle on linking credit card
       @_bindFormSubmission() # make sure we can still submit with the new form!
 
-      if @options.site.current_subscription && @options.site.current_subscription.credit_card_id
-        $creditCardDetails.find("select#linked-credit-card").val(@options.site.current_subscription.credit_card_id).change()
+      $creditCardDetails.find("select#linked-credit-card").val(@current_credit_card_id) if @current_credit_card_id
 
     , -> # on failed retreival
       console.log "Couldn't retreive user credit cards for #{siteID}"
@@ -89,9 +89,26 @@ class @PaymentModal extends Modal
     $(template(creditCards: creditCards))
 
   _bindInteractions: ->
+    @_bindChangeSchedule()
+    @_bindNewCreditCard()
     @_bindChangePlan()
     @_bindFormSubmission()
-    @_bindDynamicStateLength()
+
+  _bindChangeSchedule: ->
+    @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
+      @options.package.schedule = event.target.value
+
+  _bindNewCreditCard: ->
+    @$modal.on 'click', '#add-new-credit-card', (event) =>
+      event.preventDefault()
+      options =
+        site: @options.site
+        package: @options.package
+        open_payment_form: true
+
+      new NewCreditCardModal(options).open()
+
+      @close()
 
   # re-open the upgrade modal to allow selecting a different plan
   _bindChangePlan: ->
@@ -119,7 +136,7 @@ class @PaymentModal extends Modal
       $.ajax
         dataType: 'json'
         url: @_url()
-        method: @_method()
+        method: 'PUT'
         data: $form.serialize()
         success: (data, status, xhr) =>
           options =
@@ -127,6 +144,8 @@ class @PaymentModal extends Modal
             data: data
             isFree: @_isFree()
             siteName: @options.site.display_name
+
+          @_pushGTMEvents(data)
 
           new PaymentConfirmationModal(options).open()
           @close()
@@ -137,42 +156,31 @@ class @PaymentModal extends Modal
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
 
-  _bindDynamicStateLength: ->
-    @$modal.on 'change', '#credit_card_country', (event) =>
-      if event.target.value == 'US'
-        @$modal.find('.cc-state input').attr('maxlength', 2)
-      else
-        @$modal.find('.cc-state input').attr('maxlength', 3)
+  _pushGTMEvents: (billData) ->
+    return if !window?.dataLayer?.push || !billData.is_upgrade
 
-    @$modal.find('#credit_card_country').trigger('change')
+    window.dataLayer.push
+      event: 'GAEvent'
+      category: 'Subscription'
+      action: 'upgrade'
+      label: billData.subscription_name + '-' + billData.subscription_schedule
+
+    window.dataLayer.push
+      event: 'GATransaction'
+      transactionId: billData.id
+      transactionTotal: billData.amount
+      transactionProducts: [
+        {
+          sku: billData.subscription_name + '-' + billData.subscription_schedule
+          name: billData.subscription_name
+          category: billData.subscription_schedule
+          price: billData.amount
+          quantity: 1
+        }
+      ]
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
-
-  _bindLinkedCreditCards: ->
-    @$modal.find('select#linked-credit-card').on 'change', (event) =>
-      $creditCard = $(event.target)
-
-      if @_isUsingLinkedCreditCard()
-        @_hideCreditCardForm()
-      else
-        @_showCreditCardForm()
-
-  # disables the details form elements
-  # triggered when a user wants to link an existing credit card
-  _hideCreditCardForm: ->
-    @$modal.find('form .details-fields').hide()
-    @$modal.find('.details-fields input, .details-fields select')
-         .val('')
-         .attr('disabled', true)
-
-  _showCreditCardForm: ->
-    @$modal.find('form .details-fields').show()
-    @$modal.find('.details-fields input, .details-fields select')
-           .attr('disabled', false)
-
-  _isUsingLinkedCreditCard: ->
-    !isNaN(@_linkedCreditCardId())
 
   _isAnnual: ->
     @options.package.schedule == 'yearly'
@@ -185,18 +193,8 @@ class @PaymentModal extends Modal
       if @_isAnnual() then @options.package.yearly_amount == 0 else @options.package.monthly_amount == 0
 
   _linkedCreditCardId: ->
-    parseInt(@$modal.find('select#linked-credit-card').val())
-
-  _method: ->
-    if @_isUsingLinkedCreditCard() || @_isFree()
-      'PUT'
-    else
-      'POST'
+    parseInt(@$modal.find('select#linked-credit-card').val()) || @currentCreditCard.id
 
   _url: ->
-    if @_isUsingLinkedCreditCard()
-      "/subscription/?credit_card_id=" + @_linkedCreditCardId()
-    else if @_isFree()
-      "/subscription/?credit_card_id=" + @currentCreditCard.id
-    else
-      "/subscription"
+    "/subscription/?credit_card_id=" + @_linkedCreditCardId()
+

@@ -3,6 +3,14 @@ require 'avatar/view/action_view_support'
 module ApplicationHelper
   include Avatar::View::ActionViewSupport
 
+  def yes_or_no(value)
+    if value
+      'Yes'
+    else
+      'No'
+    end
+  end
+
   def page_id
     if controller_name == 'pages' && params[:page]
       [controller_name, params[:page]].join('-')
@@ -28,5 +36,31 @@ module ApplicationHelper
 
   def filtered_timezone_list
     ActiveSupport::TimeZone.all.uniq(&:tzinfo)
+  end
+
+  def serialize_current_user
+    UserSerializer.new(current_user).to_json
+  end
+
+  def serialize_current_site
+    current_site ? SiteSerializer.new(current_site, scope: { user: current_user }).to_json : {}
+  end
+
+  def pro_or_growth(user = nil)
+    user ||= current_user
+    @pro_or_growth ||= Subscription.pro_or_growth_for(user).defaults[:name]
+  end
+
+  def pro_or_growth_price(user = nil)
+    user ||= current_user
+    @pro_or_growth_price ||=
+      number_to_currency(
+        Subscription.pro_or_growth_for(user).defaults[:monthly_amount],
+        precision: 0
+      )
+  end
+
+  def format_date(datetime, format = '%F')
+    datetime&.strftime(format)
   end
 end

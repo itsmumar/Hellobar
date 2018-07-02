@@ -29,7 +29,7 @@ describe 'Sites requests' do
         post install_check_site_path(site)
 
         expect(response).to be_successful
-        expect(JSON.parse(response.body)['id']).to eq site.id
+        expect(JSON.parse(response.body)['script_installed']).to be_truthy
       end
     end
 
@@ -53,6 +53,30 @@ describe 'Sites requests' do
         bill = create :bill, :pending, site: site
         expect { delete site_path(site) }.to change { site.bills.pending.count }.to 0
         expect(bill.reload).to be_voided
+      end
+    end
+
+    describe 'GET #edit' do
+      context 'with a pro site' do
+        let!(:site) { create :site, :pro, user: user }
+
+        before do
+          create :bill, :failed, subscription: site.current_subscription
+        end
+
+        it 'responds with success' do
+          get edit_site_path(site)
+          expect(response).to be_successful
+        end
+      end
+
+      context 'with a free site' do
+        let!(:site) { create :site, :free, user: user }
+
+        it 'responds with success' do
+          get edit_site_path(site)
+          expect(response).to be_successful
+        end
       end
     end
   end

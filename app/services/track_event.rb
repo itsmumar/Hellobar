@@ -5,11 +5,21 @@ class TrackEvent
   end
 
   def call
-    SendEventToIntercomJob.perform_later event.to_s, args
-    SendEventToDiamondAnalyticsJob.perform_later event.to_s, args
+    return unless Rails.env.production?
+
+    track_with_intercom
+    track_with_amplitude
   end
 
   private
 
   attr_reader :event, :args
+
+  def track_with_intercom
+    SendEventToIntercomJob.perform_later event.to_s, args
+  end
+
+  def track_with_amplitude
+    SendEventToAmplitudeJob.perform_later event.to_s, args
+  end
 end

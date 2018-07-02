@@ -1,0 +1,41 @@
+class Api::AuthenticationsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  before_action :ensure_cors_request
+
+  def authenticate
+    if current_user && current_site
+      render json: current_user,
+             serializer: CurrentUserSerializer,
+             scope: serializer_context
+    else
+      head :unauthorized
+    end
+  end
+
+  private
+
+  def token
+    JsonWebToken.encode(user_id: current_user.id)
+  end
+
+  def serializer_context
+    {
+      user: current_user,
+      list_totals: list_totals,
+      site_id: current_site.id,
+      token: token
+    }
+  end
+
+  def list_totals
+    @subscriber_totals ||= begin
+      current_user.sites.each_with_object({}) do |site, memo|
+        memo.merge!(FetchSiteContactListTotals.new(site).call)
+      end
+    end
+  end
+
+  def ensure_cors_request
+    return head :unauthorized unless env[Rack::Cors::ENV_KEY]&.hit?
+  end
+end

@@ -7,10 +7,14 @@ export default Ember.Component.extend({
 
   theming: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
-  internalTracking: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
+  palette: Ember.inject.service(),
 
   currentThemeIsGeneric: Ember.computed.alias('theming.currentThemeIsGeneric'),
+
+  recentColors: Ember.computed.alias('palette.recentColors'),
+  siteColors: Ember.computed.alias('palette.colorPalette'),
+  focusedColor: Ember.computed.alias('palette.focusedColor'),
 
   selectedContactList: function () {
     const contactListId = this.get('model.contact_list_id');
@@ -18,11 +22,39 @@ export default Ember.Component.extend({
     return _.find(contactLists, (contactList) => contactList.id === contactListId);
   }.property('model.contact_list_id', 'model.site.contact_lists'),
 
+  textFieldBorderWidth: function () {
+    return this.get('model.text_field_border_width');
+  }.property('model.text_field_border_width'),
+
+  textFieldBorderRadius: function () {
+    return this.get('model.text_field_border_radius');
+  }.property('model.text_field_border_radius'),
+
+  textFieldBackgroundOpacity: function () {
+    return this.get('model.text_field_background_opacity');
+  }.property('model.text_field_background_opacity'),
 
   actions: {
 
     setContactList(listId) {
       this.set('model.contact_list_id', listId);
+    },
+
+    setTextFieldBorderWidth(width) {
+      this.set('model.text_field_border_width', parseInt(width));
+    },
+
+    setTextFieldBorderRadius(radius) {
+      this.set('model.text_field_border_radius', parseInt(radius));
+    },
+
+    setTextFieldBackgroundOpacity(opacity) {
+      this.set('model.text_field_background_opacity', parseInt(opacity));
+    },
+
+    eyeDropperSelected() {
+      this.set('focusedColor', null);
+      return false;
     },
 
     openEmailListPopup(listId = 0) {
@@ -72,11 +104,6 @@ export default Ember.Component.extend({
 
       } else {
         // New Contact List
-        this.get('internalTracking').track('Editor Flow', {
-          step: 'Contact List Settings',
-          goal: this.get('model.element_subtype')
-        });
-
         new ContactListModal({
           siteID,
           saveURL: `/sites/${siteID}/contact_lists.json`,

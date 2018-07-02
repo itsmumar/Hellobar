@@ -1,6 +1,4 @@
 describe Rule do
-  it_behaves_like 'a model triggering script regeneration'
-
   describe '.defaults' do
     let(:defaults)         { Rule.defaults }
     let(:everyone)         { defaults[0] }
@@ -67,14 +65,14 @@ describe Rule do
 
     it 'concatenates conditions when present' do
       rule = Rule.new
-      rule.conditions << Condition.new(operand: :includes, value: ['zombo.com'], segment: 'UrlCondition')
-      expect(rule.to_sentence).to eq('Page URL includes zombo.com')
+      rule.conditions << build(:condition, :url_path_includes, value: ['/foo'])
+      expect(rule.to_sentence).to eq('URL Path includes /foo')
 
-      rule.conditions << Condition.new(operand: :does_not_include, value: ['zombo.com/foo'], segment: 'UrlCondition')
-      expect(rule.to_sentence).to eq('Page URL includes zombo.com and 1 other condition')
+      rule.conditions << build(:condition, :url_path_does_not_include, value: ['/bar'])
+      expect(rule.to_sentence).to eq('URL Path includes /foo and 1 other condition')
 
       rule.conditions << Condition.date_condition_from_params('7/6', '')
-      expect(rule.to_sentence).to eq('Page URL includes zombo.com and 2 other conditions')
+      expect(rule.to_sentence).to eq('URL Path includes /foo and 2 other conditions')
     end
   end
 
@@ -111,30 +109,30 @@ describe Rule do
       expect(condition.value).to eq [yesterday, tomorrow]
     end
 
-    it 'builds out a URL condition with an include URLs' do
-      condition = create(:condition, :url_includes)
+    it 'builds out a URL condition with an include URL path' do
+      condition = create(:condition, :url_path_includes)
       expect(condition.value.class).to eq(Array)
       expect(condition.value).to eq(['/asdf'])
-      expect(condition.to_sentence).to eq 'Page URL includes /asdf'
+      expect(condition.to_sentence).to eq 'URL Path includes /asdf'
     end
 
     it 'builds out a URL condition with a "does not include" URL' do
-      condition = create(:condition, :url_does_not_include)
+      condition = create(:condition, :url_path_does_not_include)
       expect(condition.value.class).to eq(Array)
       expect(condition.value).to eq(['/asdf'])
-      expect(condition.to_sentence).to eq 'Page URL does not include /asdf'
+      expect(condition.to_sentence).to eq 'URL Path does not include /asdf'
     end
 
     it 'builds out a URL condition with 2 URLs' do
-      condition = create(:condition, :url_includes)
+      condition = create(:condition, :url_path_includes)
       condition.value = ['/foo', '/bar']
-      expect(condition.to_sentence).to eq 'Page URL includes /foo or 1 other'
+      expect(condition.to_sentence).to eq 'URL Path includes /foo or 1 other'
     end
 
     it 'builds out a URL condition with > 2 URLs' do
-      condition = create(:condition, :url_includes)
+      condition = create(:condition, :url_path_includes)
       condition.value = ['/foo', '/bar', '/baz']
-      expect(condition.to_sentence).to eq 'Page URL includes /foo or 2 others'
+      expect(condition.to_sentence).to eq 'URL Path includes /foo or 2 others'
     end
   end
 
@@ -177,6 +175,28 @@ describe Rule do
       allow(other_rule).to receive(:conditions).and_return([date_between, date_after])
 
       expect(rule).not_to be_same_as(other_rule)
+    end
+  end
+
+  describe '#nested_error_messages' do
+    it 'includes errors on the Rule model' do
+      rule = Rule.new site: Site.new
+
+      rule.valid?
+
+      expect(rule.nested_error_messages).to include "name can't be blank"
+    end
+
+    it 'includes errors on the nested model' do
+      condition = Condition.new
+      rule = Rule.new site: Site.new, name: 'Name', conditions: [condition]
+
+      rule.valid?
+
+      expect(rule.nested_error_messages).to include "segment can't be blank"
+      expect(rule.nested_error_messages).to include 'segment is not included in the list'
+      expect(rule.nested_error_messages).to include "operand can't be blank"
+      expect(rule.nested_error_messages).to include "conditions value can't be blank"
     end
   end
 end

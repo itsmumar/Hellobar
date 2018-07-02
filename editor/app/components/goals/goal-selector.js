@@ -15,10 +15,6 @@ export default Ember.Component.extend({
     this.set('selectionInProgress', !this.get('goal'));
   },
 
-  elementTypeIsAlert: Ember.computed.equal('model.type', 'Alert'),
-  canUseCallGoal: Ember.computed.not('elementTypeIsAlert'),
-  canUseSocialGoal: Ember.computed.not('elementTypeIsAlert'),
-
   goal: Ember.computed.alias('model.element_subtype'),
 
   shouldShowEmail: function () {
@@ -26,11 +22,11 @@ export default Ember.Component.extend({
   }.property('goal', 'selectionInProgress'),
 
   shouldShowCall: function () {
-    return this.get('canUseCallGoal') && (this.get('goal') === 'call' || this.get('selectionInProgress'));
+    return (this.get('goal') === 'call' || this.get('selectionInProgress'));
   }.property('goal', 'selectionInProgress', 'canUseCallGoal'),
 
   shouldShowSocial: function () {
-    return this.get('canUseSocialGoal') && (_.startsWith(this.get('goal'), 'social') || this.get('selectionInProgress'));
+    return (_.startsWith(this.get('goal'), 'social') || this.get('selectionInProgress'));
   }.property('goal', 'selectionInProgress', 'canUseCallGoal'),
 
   shouldShowTraffic: function () {

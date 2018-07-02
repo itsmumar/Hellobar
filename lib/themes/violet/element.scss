@@ -4,8 +4,7 @@
   }
 
   #hellobar-bar {
-    .hb-cta-style-button {
-      border-radius: 5px;
+    .hb-cta {
       font-weight: 400;
     }
   }
@@ -23,9 +22,8 @@
       line-height: 20px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 16px;
-      border-radius: 5px;
     }
 
     .slider-content {
@@ -53,9 +51,8 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 18px;
-      border-radius: 10px;
     }
 
     .hb-name-input {
@@ -75,9 +72,8 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-weight: 400;
-      border-radius: 10px;
     }
 
     .hb-input-block input {

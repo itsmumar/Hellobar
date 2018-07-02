@@ -24,30 +24,30 @@ Install all the gems:
 `bundle install`
 
 
-Setup your `database.yml` file:
-
-`cp config/database.yml.example config/database.yml`
-
-
-Setup your local database:
-
-`rake db:setup`
-
-
 Setup the `secrets.yml` file:
 
 `cp config/secrets.yml.example config/secrets.yml`
 
+Setup your `database.yml` file:
 
-It is advised to run the application locally using the `local.hellobar.com` vhost/domain as this domain has been setup to resolve to `127.0.0.1`.
+`cp config/database.yml.example config/database.yml`
+  
+Setup your local database:
 
-You need to visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
-and add new or use existing Google OAuth credentials to be able to log in.
+`rake db:setup`
 
-`google_auth_id` and `google_auth_secret` entries should be added into `config/secrets.yml`.
+You can run your application locally on `localhost:3000` or via
+`local.hellobar.com` vhost as this domain has been setup to resolve to
+`127.0.0.1`.
+
+Credentials in config/secrets.yml.example are setup to handle both cases.
+
+In case you want to run the app locally on a different domain/port you need to
+visit https://console.developers.google.com/apis/credentials?project=hellobar-oauth
+and add new Google OAuth credentials to be able to log in.
 
 
-Here's the list of additional settings in `secrets.yml`, which might need to be set in your local development environment:
+Here's the list of additional settings in `secrets.yml`, which might be needed to be set in your local development environment:
 * `aws_access_key_id`
 * `aws_secret_access_key`
 * `deliver_emails`
@@ -62,10 +62,13 @@ be found at Confluence: https://crossover.atlassian.net/wiki/display/XOHB/System
 
 ### Front-end
 
-Install `node.js`, `yarn`, and `ImageMagick`:
+Install `node.js`
+
+You actually need to install `node@6` so if you have a later version of node, first run `brew install node@6` then `brew unlink node` then `brew link node@6`. Otherwise just run `brew install node`
+
+Install `yarn`, and `ImageMagick`
 
 ```
-brew install node
 brew install yarn
 brew install imagemagick
 ```
@@ -122,13 +125,23 @@ Compiling custom icons into a font file:
 https://crossover.atlassian.net/wiki/display/XOHB/Compiling+custom+icons+into+font+file
 
 
+## Testing generated site scripts
+
+Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
+(Note: this will show an error if you haven't created a `Site` instance yet)
+
+You can specify `id` param for the exact site you want: `http://localhost:3000/test_sites/133`
+
+If you are working on css/js of script you might want to fully regenerate script on every reload.
+Use the `fresh` param then: `http://localhost:3000/test_site?fresh`
+
+
 
 ## Running specs
 
-To run specs locally you need to have QT version 5.5+ installed locally. Installation instructions can be found here:
+Currently we use Chrome --headless for all our feature
 
-https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit
-
+`brew install chromedriver`
 
 ### Rails specs
 
@@ -154,36 +167,10 @@ bundle exec rspec spec
 ```
 
 
-## Javascript specs
+### Rails specs "don'ts"
 
-Teaspoon runs the `*_spec.js` files in `spec/javascripts/`.
-
-The results of that suite can be seen at http://localhost:3000/teaspoon where you can also run individual js spec files.
-
-To run the whole suite of Javascript specs execute:
-
-```
-rake teaspoon
-```
-
-
-Tests are divided into two groups:
-
-* `generator` (tests `hellobar.base.js` and some other files)
-* `project` (tests `assets/javascripts/` files).
-
-To get the coverage of Generator:
-
-```
-teaspoon --suite=generator --coverage=generator
-```
-
-Coverage of Project:
-
-```
-teaspoon --suite=project --coverage=project
-```
-
+* don’t use `around`; use `before` and `after` instead
+* don’t use `travel_to`, use `Timecop.travel` instead
 
 
 ## Development Workflow
@@ -192,9 +179,21 @@ https://crossover.atlassian.net/wiki/display/XOHB/Development+workflow
 
 
 
+## Site script installation in development
+
+We have Lambda function checking if the site script is installed. It sends a POST request to the Rails app
+with appropriate value. Since there is no way to make AWS Lambda communicate with your locally installed
+application, the only way to mark a script as installed is to update it from the console:
+
+```ruby
+Site.first.update_column :script_installed_at, Time.current
+```
+
+
 ## Deployments
 
-To do a production deploy from **master**:
+In order to do deployments, your public ssh key needs to be added to the appropriate server(s) first.
+Then to do a production deploy from **master**:
 
 ```
 cap production deploy
@@ -212,6 +211,20 @@ To do an edge deploy:
 cap edge deploy BRANCH=other-branch
 ```
 
+### Using live version of hellobar modules from dev server
+In order to use live version from hellobar_modules project do following:
+
+- in `hellobar_modules` directory run the dev server, i.e. `npm run dev`
+- add `local_modules_url: 'http://localhost:9090/modules.bundle.js'` into `config/secrets.yml` (see secrets.yml.example)  
+- enjoy! :)
+
+### Updating hellobar modules version
+
+In order to deploy a new version of hellobar static script run following: 
+
+```
+rake modules:bump
+```
 
 ## Provisioning a new Hello Bar server
 
@@ -253,16 +266,6 @@ server 'new-ip-address', user: 'hellobar', roles: %w{web}
 ```
 
 
-## Testing generated site scripts
-
-Just open `http://localhost:3000/test_site` to see the most recently updated `Site`.
-
-#### Options
-
-You can specify `id` param to exact site you need: `http://localhost:3000/test_sites/133`
-
-If you are working on css/js of script you might want to fully regenerate script on every reload
-just use `fresh` param then: `http://localhost:3000/test_site?fresh`
 
 ## Live testing/QA info
 
@@ -298,7 +301,7 @@ From the terminal, go to your root of the app and run following command:
 brakeman
 ```
 
-## Running Hello Bar via Docker
+## Running Hello Bar via Docker (Proceed into this section with caution. It's possibly a bit outdated...)
 
 This section assumes that you are using the [Docker Toolbox](https://www.docker.com/products/docker-toolbox) or have the knowledge to set up the various components on your own.
 

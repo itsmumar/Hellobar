@@ -19,9 +19,6 @@ module Hello
 
     class << self
       def register_test(name, values, index, weights = [], user_start_date = nil)
-        @expected_index ||= 0
-
-        raise "Expected index: #{ @expected_index.inspect }, but got index: #{ index.inspect }. You either changed the order of the tests, removed a test, added a test out of order, or did not set the index of a test correctly. Please fix and try again" unless index == @expected_index
         raise "#{ name.inspect } has #{ values.length } values, but max is #{ MAX_VALUES_PER_TEST }" if values.length > MAX_VALUES_PER_TEST
         sum = weights.inject(0) { |result, w| result + w }
         if weights.length < values.length
@@ -44,7 +41,6 @@ module Hello
           (start_range...end_range)
         end
 
-        @expected_index += 1
         tests[name] = { values: values, index: index, weights: weights, name: name, user_start_date: user_start_date }
       end
 
@@ -54,7 +50,7 @@ module Hello
           name            = registered_test['name']
           values          = registered_test['values']
           index           = registered_test['index']
-          weights         = registered_test['weights'].present? ? registered_test['weights'] : []
+          weights         = registered_test['weights'].presence || []
           user_start_date = registered_test['user_start_date']
           register_test(name, values, index, weights, user_start_date)
         end
@@ -141,7 +137,6 @@ module Hello
       return nil unless ab_test_passes_time_constraints?(test_name)
       ab_test = ab_test(test_name)
       value_index, status = ab_variation_index_without_setting(test_name, user)
-      value = nil
 
       user ||= current_user if defined?(current_user)
 
@@ -152,18 +147,9 @@ module Hello
         elsif user.blank?
           raise 'Cookies or user must be present for A/B test'
         end
-
-        # Get the value
-        value = ab_test[:values][value_index]
-
-        # Track it
-        Analytics.track(*current_person_type_and_id(user), test_name, value: value)
-      else
-        # Just get the value
-        value = ab_test[:values][value_index]
       end
 
-      value
+      ab_test[:values][value_index]
     end
 
     def visitor_id
@@ -171,7 +157,6 @@ module Hello
 
       unless cookies[VISITOR_ID_COOKIE]
         cookies.permanent[VISITOR_ID_COOKIE] = Digest::SHA1.hexdigest("visitor_#{ Time.current.to_f }_#{ request.remote_ip }_#{ request.env['HTTP_USER_AGENT'] }_#{ rand(1000) }_id") + USER_ID_NOT_SET_YET # The x indicates this ID has not been persisted yet
-        Analytics.track(*current_person_type_and_id, 'First Visit', ip: request.remote_ip)
       end
       # Return the first VISITOR_ID_LENGTH characters of the hash
       cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH]
@@ -190,8 +175,6 @@ module Hello
       if user
         # See if a we have an unassociated visitor ID
         if user_id_from_cookie == USER_ID_NOT_SET_YET
-          # Associate it with the visitor
-          Analytics.alias(visitor_id, user.id)
           # Mark it as associated
           cookies.permanent[VISITOR_ID_COOKIE] = cookies[VISITOR_ID_COOKIE][0...VISITOR_ID_LENGTH] + user.id.to_s
         end

@@ -6,13 +6,12 @@ describe ContactsMailer do
     let(:attachment) { mail.attachments[0] }
 
     let(:subject) do
-      url = contact_list.site.normalized_url
+      url = contact_list.site.host
       "#{ url }: Your CSV export is ready #{ contact_list.name.parameterize }.zip"
     end
 
     before do
-      expect(FetchContactsCSV)
-        .to receive_service_call.with(contact_list).and_return('csv')
+      expect(ExportSubscribers).to receive_service_call.with(contact_list).and_return('csv')
     end
 
     it 'renders the headers' do

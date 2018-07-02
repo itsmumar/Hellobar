@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :site do
     transient do
       elements []
@@ -6,7 +6,7 @@ FactoryGirl.define do
       schedule :monthly
     end
 
-    url { generate(:random_uniq_url) }
+    sequence(:url) { |i| "http://url-#{ i }.net" }
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?
@@ -45,31 +45,60 @@ FactoryGirl.define do
 
     trait :free_subscription do
       after(:create) do |site, evaluator|
-        create(:subscription, :free, site: site, user: site.users.first, schedule: evaluator.schedule)
+        create(:subscription, :free, site: site, schedule: evaluator.schedule)
+      end
+    end
+
+    trait :with_paid_bill do
+      after(:create) do |site, evaluator|
+        subscription = create(
+          :subscription,
+          evaluator.subscription_plan,
+          site: site,
+          schedule: evaluator.schedule
+        )
+
+        bill = CalculateBill.new(subscription, bills: site.bills).call
+        bill.pay!
+        bill.save
       end
     end
 
     trait :pro do
-      after(:create) do |site, evaluator|
-        create(:subscription, :pro, site: site, user: site.users.first, schedule: evaluator.schedule)
+      transient do
+        subscription_plan :pro
       end
+
+      with_paid_bill
+    end
+
+    trait :free do
+      transient do
+        subscription_plan :free
+      end
+
+      with_paid_bill
     end
 
     trait :enterprise do
-      after(:create) do |site, evaluator|
-        create(:subscription, :enterprise, site: site, user: site.users.first, schedule: evaluator.schedule)
+      transient do
+        subscription_plan :enterprise
       end
+
+      with_paid_bill
     end
 
     trait :pro_managed do
-      after(:create) do |site, evaluator|
-        create(:subscription, :pro_managed, site: site, user: site.users.first, schedule: evaluator.schedule)
+      transient do
+        subscription_plan :pro_managed
       end
+
+      with_paid_bill
     end
 
     trait :past_due_site do
       after(:create) do |site|
-        subscription = create(:subscription, :pro, site: site, user: site.users.first)
+        subscription = create(:subscription, :pro, site: site)
         create(:past_due_bill, subscription: subscription)
       end
     end

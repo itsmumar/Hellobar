@@ -1,22 +1,36 @@
-class Referral < ActiveRecord::Base
+class Referral < ApplicationRecord
   FOLLOWUP_INTERVAL = 5.days
 
-  enum state: %i[sent signed_up installed]
+  SENT = 'sent'.freeze
+  SIGNED_UP = 'signed_up'.freeze
+  INSTALLED = 'installed'.freeze
+  STATES = [SENT, SIGNED_UP, INSTALLED].freeze
 
   scope :redeemable_by_sender_for_site, ->(site) { installed.where(available_to_sender: true, site_id: site.id) }
   scope :to_be_followed_up, -> { sent.where(created_at: (FOLLOWUP_INTERVAL.ago..(FOLLOWUP_INTERVAL - 1.day).ago)) }
+  scope :in_last_24_hours, -> { where('created_at between ? and ?', 1.day.ago, Time.current) }
 
-  belongs_to :sender, class_name: 'User'
-  belongs_to :recipient, class_name: 'User'
+  belongs_to :sender, class_name: 'User', inverse_of: :sent_referrals
+  belongs_to :recipient, class_name: 'User', inverse_of: :received_referral
   belongs_to :site
 
-  has_one :referral_token, as: :tokenizable, dependent: :destroy
+  has_one :referral_token, as: :tokenizable, dependent: :destroy, inverse_of: :tokenizable
 
   validates :sender_id, presence: true
-  validates :email, presence: true
+  validates :email, presence: true, format: { with: Devise.email_regexp }
   validate :ensure_email_available, on: :create
 
   after_create :create_referral_token
+
+  STATES.each do |state|
+    # define .sent .signed_up .installed
+    scope state, -> { where(state: state) }
+
+    # define #sent? #signed_up? #installed?
+    define_method state + '?' do
+      self.state == state
+    end
+  end
 
   def self.redeemable_for_site(site)
     possible_recipient_ids = site.owners.pluck(:id)
@@ -26,8 +40,13 @@ class Referral < ActiveRecord::Base
     ', possible_recipient_ids, site.id)
   end
 
-  def set_standard_body
-    self.body = I18n.t('referral.standard_body', name: sender.name)
+  def body
+    self[:body].presence || default_body
+  end
+
+  def default_body
+    pro_or_growth = Subscription.pro_or_growth_for(sender).defaults[:name]
+    I18n.t('referral.standard_body', name: sender.name, pro_or_growth: pro_or_growth)
   end
 
   def set_site_if_only_one
@@ -49,32 +68,25 @@ class Referral < ActiveRecord::Base
     expiration_date.strftime('%B ') + expiration_date.day.ordinalize
   end
 
+  def already_accepted?
+    installed? || redeemed_by_recipient_at?
+  end
+
   def accepted?
-    state != 'sent'
+    state != SENT
   end
 
   def redeemable_by_sender?
-    state == 'installed' && available_to_sender == true && redeemed_by_sender_at.blank?
+    state == INSTALLED && available_to_sender == true && redeemed_by_sender_at.blank?
   end
 
   def redeemed_by_sender?
-    state == 'installed' && available_to_sender == false && redeemed_by_sender_at.present?
-  end
-
-  def email_already_registered?
-    return false if email.blank?
-    User.where(email: email).count > 0
-  end
-
-  def email_already_referrred?
-    return false if email.blank?
-    Referral.where(email: email).count > 0
+    state == INSTALLED && available_to_sender == false && redeemed_by_sender_at.present?
   end
 
   private
 
   def ensure_email_available
-    return if email.blank?
     return if recipient # If we're creating with a recipient, we don't need to run this check at all
 
     if User.where(email: email).count > 0

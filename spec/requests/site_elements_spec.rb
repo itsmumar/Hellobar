@@ -93,8 +93,35 @@ describe 'SiteElements requests' do
     describe 'PUT #toggle_paused' do
       it 'responds with success' do
         put site_site_element_toggle_paused_path(site, element)
-        expect(response).to redirect_to site_site_elements_path(site)
+        expect(response.status).to eq(200)
+      end
+
+      it 'toggle site element status' do
+        put site_site_element_toggle_paused_path(site, element)
         expect(element.reload).to be_paused
+      end
+
+      it 'regenerates script' do
+        expect { put site_site_element_toggle_paused_path(site, element) }
+          .to have_enqueued_job(GenerateStaticScriptJob).with(site)
+      end
+
+      context 'when site element returns validation error' do
+        before do
+          allow_any_instance_of(SiteElement).to receive(:toggle_paused!) do |record|
+            record.errors.add(:site, 'is invalid')
+            raise ActiveRecord::RecordInvalid, record
+          end
+        end
+
+        it 'respond with errors' do
+          put site_site_element_toggle_paused_path(site, element)
+
+          expect(response.status).to eq(422)
+
+          expect(json[:errors]).to match site: ['is invalid']
+          expect(json[:full_error_messages]).to match_array ['Site is invalid']
+        end
       end
     end
 
@@ -150,12 +177,12 @@ describe 'SiteElements requests' do
     end
 
     describe 'GET #new' do
-      def get_new # rubocop: disable Naming/AccessorMethodName
+      def send_request
         get new_site_site_element_path site, format: :json
       end
 
       it 'defaults the font_id to the column default' do
-        get_new
+        send_request
 
         default_font_id = SiteElement.columns_hash['font_id'].default
 
@@ -166,7 +193,7 @@ describe 'SiteElements requests' do
         let!(:subscription) { create(:subscription, :pro, :paid, site: site) }
 
         it 'defaults branding to false if pro' do
-          get_new
+          send_request
           expect(json).to include show_branding: false
         end
       end
@@ -175,19 +202,20 @@ describe 'SiteElements requests' do
         let!(:subscription) { create(:subscription, :free, site: site) }
 
         it 'defaults branding to true' do
-          get_new
+          send_request
           expect(json).to include show_branding: true
         end
 
         it 'sets `theme_id` to `autodetect`' do
-          get_new
+          send_request
           expect(json).to include theme_id: 'autodetect'
         end
       end
     end
 
     describe 'PUT #update' do
-      let(:element) { create :bar, closable: false, site: site }
+      let(:site) { create :site, :pro, :with_rule, :installed, user: user }
+      let(:element) { create(:bar, site: site, closable: false) }
       let(:params) { Hash[closable: true] }
 
       before do

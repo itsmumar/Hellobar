@@ -12,6 +12,7 @@ class UpdateSiteElement
       element.update!(params)
       destroy_previous_image_if_necessary
     end
+    generate_script
     element
   end
 
@@ -19,10 +20,14 @@ class UpdateSiteElement
 
   attr_reader :element, :params, :new_type, :theme
 
+  def generate_script
+    element.site.script.generate
+  end
+
   def copy_element_and_change_type
     existing_element = element
     element_with_new_type.tap do
-      existing_element.update!(paused: true)
+      existing_element.pause!
     end
   end
 

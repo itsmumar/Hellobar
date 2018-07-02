@@ -1,29 +1,23 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :condition do
     rule
 
-    segment 'UrlCondition'
+    segment 'UrlPathCondition'
     operand 'is'
-    value ['http://test.com']
+    value ['/path']
 
-    trait :url_is
+    trait :url_path
 
-    trait :url_includes do
-      segment 'UrlCondition'
+    trait :url_path_includes do
+      segment 'UrlPathCondition'
       operand 'includes'
       value ['/asdf']
     end
 
-    trait :url_does_not_include do
-      segment 'UrlCondition'
+    trait :url_path_does_not_include do
+      segment 'UrlPathCondition'
       operand 'does_not_include'
       value ['/asdf']
-    end
-
-    trait :url_path do
-      segment 'UrlCondition'
-      operand 'is'
-      value ['/path']
     end
 
     trait :every_x_session do
@@ -66,6 +60,24 @@ FactoryGirl.define do
       segment 'DeviceCondition'
       operand 'is'
       value 'mobile'
+    end
+
+    trait :url_query do
+      segment 'UrlQueryCondition'
+      operand 'includes'
+      value 'a=b'
+    end
+
+    trait :utm_source do
+      segment 'UTMSourceCondition'
+      operand 'is'
+      value ['hellobar']
+    end
+
+    trait :city do
+      segment 'LocationCityCondition'
+      operand 'is'
+      value ['London']
     end
   end
 end

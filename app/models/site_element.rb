@@ -1,4 +1,4 @@
-class SiteElement < ActiveRecord::Base
+class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
@@ -28,18 +28,14 @@ class SiteElement < ActiveRecord::Base
     'social/follow_on_pinterest'      => 'Follows',
     'social/share_on_buffer'          => 'Shares',
     'social/share_on_linkedin'        => 'Shares',
-    'question'                        => 'Question',
-
-    # themes type `template`
-    'traffic_growth'                  => 'Emails'
+    'question'                        => 'Question'
   }.freeze
 
-  TEMPLATE_NAMES = %w[traffic_growth].freeze
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze
 
-  belongs_to :rule, touch: true
+  belongs_to :rule
   belongs_to :contact_list
-  belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy
+  belongs_to :active_image, class_name: 'ImageUpload', dependent: :destroy, inverse_of: :site_elements
   belongs_to :theme
   belongs_to :font
 
@@ -47,27 +43,47 @@ class SiteElement < ActiveRecord::Base
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
   validates :rule, association_exists: true
-  validates :background_color, :border_color, :button_color, :link_color, :text_color, hex_color: true
+  validates :background_color, hex_color: true
+  validates :border_color, hex_color: true
+  validates :button_color, hex_color: true
+  validates :link_color, hex_color: true
+  validates :text_color, hex_color: true
   validates :contact_list, association_exists: true, if: :email?
+  validates :image_overlay_color, hex_color: true
+  validates :image_overlay_opacity, numericality: true
+  validates :cta_border_color, hex_color: true
+  validates :cta_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :cta_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :text_field_border_color, hex_color: true
+  validates :text_field_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :text_field_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :text_field_text_color, hex_color: true
+  validates :text_field_background_color, hex_color: true
+  validates :text_field_background_opacity, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate :site_is_capable_of_creating_element, unless: :persisted?
-  validate :redirect_has_url, if: :email?
-  validate :validate_thank_you_text, if: :email?
-  validate :subscription_for_custom_targeting
+  validate :ensure_custom_targeting_allowed
+  validate :ensure_precise_geolocation_targeting_allowed
+  validate :ensure_closable_allowed
+  validate :ensure_custom_thank_you_text_allowed, if: :email?
+  validate :ensure_custom_thank_you_text_configured, if: :email?
+  validate :ensure_custom_redirect_url_allowed, if: :email?
+  validate :ensure_custom_redirect_url_configured, if: :email?
 
-  scope :paused, -> { where("paused = true and type != 'ContentUpgrade'") }
-  scope :active, -> { where("paused = false and type != 'ContentUpgrade'") }
-  scope :paused_content_upgrades, -> { where("paused = true and type = 'ContentUpgrade'") }
-  scope :active_content_upgrades, -> { where("paused = false and type = 'ContentUpgrade'") }
-  scope :has_performance, -> { where('element_subtype != ?', 'announcement') }
+  scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
+  scope :active_content_upgrades, -> { where(paused_at: nil).where(type: 'ContentUpgrade') }
+  scope :content_upgrades, -> { where(type: 'ContentUpgrade') }
+  scope :has_performance, -> { where.not(element_subtype: 'announcement') }
   scope :bars, -> { where(type: 'Bar') }
   scope :sliders, -> { where(type: 'Slider') }
   scope :modals_and_takeovers, -> { where(type: ['Modal', 'Takeover']) }
   scope :email_subtype, -> { where(element_subtype: 'email') }
-  scope :social_subtype, -> { where("element_subtype LIKE '%social%'") }
+  scope :social_subtype, -> { where("site_elements.element_subtype LIKE '%social%'") }
   scope :traffic_subtype, -> { where(element_subtype: 'traffic') }
   scope :call_subtype, -> { where(element_subtype: 'call') }
   scope :announcement_subtype, -> { where(element_subtype: 'announcement') }
-  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order('created_at DESC').limit(limit).select { |se| se.announcement? || se.converted? } }
+  scope :recent, ->(limit) { where('site_elements.created_at > ?', 2.weeks.ago).order(created_at: :desc).limit(limit).select { |se| se.announcement? || se.converted? } }
   scope :matching_content, ->(*query) { matching(:content, *query) }
   scope :wordpress_bars, -> { where.not(wordpress_bar_id: nil) }
 
@@ -78,9 +94,7 @@ class SiteElement < ActiveRecord::Base
   delegate :conversion_rate, to: :statistics
 
   store :settings, coder: Hash
-  serialize :blocks, Array
 
-  after_create :track_creation
   after_destroy :nullify_image_upload_reference
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
@@ -89,7 +103,7 @@ class SiteElement < ActiveRecord::Base
     created_at
     updated_at
     deleted_at
-    paused
+    paused_at
   ].freeze
 
   QUESTION_DEFAULTS = {
@@ -109,26 +123,25 @@ class SiteElement < ActiveRecord::Base
   end
 
   def self.types
-    [Bar, Modal, Slider, Takeover, ContentUpgrade, Alert].map(&:name)
+    [Bar, Modal, Slider, Takeover, Alert].map(&:name)
   end
 
-  def caption=(c_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    c_value = white_list_sanitizer.sanitize(c_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    self[:caption] = c_value
+  def caption=(value)
+    self[:caption] = sanitize value
   end
 
-  def headline=(h_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    h_value = white_list_sanitizer.sanitize(h_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    h_value = 'Hello. Add your message here.' if h_value.blank?
-    self[:headline] = h_value
+  def headline=(value)
+    value = sanitize value
+    value = 'Hello. Add your message here.' if value.blank?
+    self[:headline] = value
   end
 
-  def link_text=(lt_value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    lt_value = white_list_sanitizer.sanitize(lt_value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
-    self[:link_text] = lt_value
+  def link_text=(value)
+    self[:link_text] = sanitize value
+  end
+
+  def content=(value)
+    self[:content] = sanitize value
   end
 
   def fonts
@@ -163,47 +176,42 @@ class SiteElement < ActiveRecord::Base
     total_conversions > 0
   end
 
+  def pause
+    update(paused_at: Time.current)
+  end
+
+  def pause!
+    update!(paused_at: Time.current)
+  end
+
+  def unpause
+    update(paused_at: nil)
+  end
+
+  def unpause!
+    update!(paused_at: nil)
+  end
+
+  def paused?
+    paused_at.present?
+  end
+
   def toggle_paused!
-    update paused: !paused?
+    if paused?
+      unpause!
+    else
+      pause!
+    end
   end
 
   def short_subtype
     element_subtype[/(\w+)/]
   end
 
-  def track_creation
-    analytics_track_site_element_creation!
-    onboarding_track_site_element_creation!
-  end
-
-  def analytics_track_site_element_creation!
-    Analytics.track(
-      :site, site_id, 'Created Site Element',
-      site_element_id: id,
-      type: element_subtype,
-      style: type.to_s.downcase
-    )
-  end
-
-  def onboarding_track_site_element_creation!
-    site.owners.each do |user|
-      user.onboarding_status_setter.created_element!
-    end
-  end
-
   def self.all_templates
-    [].tap do |templates|
-      types.each do |type|
-        BAR_TYPES.each_key do |subtype|
-          if TEMPLATE_NAMES.include?(subtype)
-            types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-            if types.include?(type)
-              templates << "#{ type.downcase }_#{ subtype }"
-            end
-          else
-            templates << "#{ type.downcase }_#{ subtype }"
-          end
-        end
+    types.flat_map do |type|
+      BAR_TYPES.keys.map do |subtype|
+        "#{ type.downcase }_#{ subtype }"
       end
     end
   end
@@ -240,6 +248,14 @@ class SiteElement < ActiveRecord::Base
     after_email_submit_action == :redirect
   end
 
+  def custom_thank_you?
+    after_email_submit_action == :custom_thank_you_text
+  end
+
+  def redirect_url
+    settings['redirect_url']
+  end
+
   def announcement?
     element_subtype == 'announcement'
   end
@@ -257,7 +273,11 @@ class SiteElement < ActiveRecord::Base
   end
 
   def statistics
-    @statistics ||= FetchSiteStatistics.new(site, site_element_ids: [id]).call
+    @statistics ||=
+      begin
+        statistics = FetchSiteStatistics.new(site).call
+        statistics.for_element(id)
+      end
   end
 
   private
@@ -272,33 +292,54 @@ class SiteElement < ActiveRecord::Base
     errors.add(:site, 'is currently at its limit to create site elements')
   end
 
-  def redirect_has_url
-    return unless after_email_submit_action == :redirect
-
-    if !site.capabilities.after_submit_redirect?
-      errors.add('settings.redirect_url', 'is a pro feature')
-    elsif settings['redirect_url'].blank?
-      errors.add('settings.redirect_url', 'cannot be blank')
-    end
-  end
-
-  def validate_thank_you_text
-    return unless after_email_submit_action == :custom_thank_you_text
-
-    if !site.capabilities.custom_thank_you_text?
-      errors.add('custom_thank_you_text', 'is a pro feature')
-    elsif self[:thank_you_text].blank?
-      errors.add('custom_thank_you_text', 'cannot be blank')
-    end
-  end
-
   def custom_targeting?
     rule&.conditions&.any?
   end
 
-  def subscription_for_custom_targeting
-    return unless custom_targeting? && !site.capabilities.custom_targeted_bars?
+  def precise_geolocation_targeting?
+    rule&.conditions&.any?(&:precise?)
+  end
+
+  def ensure_closable_allowed
+    return if paused? || !closable? || site.capabilities.closable?
+
+    errors.add(:site, 'subscription does not support closable elements. Upgrade subscription.')
+  end
+
+  def ensure_custom_targeting_allowed
+    return if paused? || !custom_targeting? || site.capabilities.custom_targeted_bars?
+
     errors.add(:site, 'subscription does not support custom targeting. Upgrade subscription.')
+  end
+
+  def ensure_precise_geolocation_targeting_allowed
+    return if paused? || !precise_geolocation_targeting? || site.capabilities.precise_geolocation_targeting?
+
+    errors.add(:site, 'subscription does not support precise geolocation targeting. Upgrade subscription.')
+  end
+
+  def ensure_custom_thank_you_text_allowed
+    return if paused? || !custom_thank_you? || site.capabilities.custom_thank_you_text?
+
+    errors.add(:thank_you_text, 'subscription does not support custom thank you text. Upgrade subscription.')
+  end
+
+  def ensure_custom_thank_you_text_configured
+    return if !custom_thank_you? || thank_you_text.present?
+
+    errors.add(:thank_you_text, :blank)
+  end
+
+  def ensure_custom_redirect_url_allowed
+    return if paused? || !email_redirect? || site.capabilities.after_submit_redirect?
+
+    errors.add(:redirect_url, 'subscription does not support custom redirect URL. Upgrade subscription.')
+  end
+
+  def ensure_custom_redirect_url_configured
+    return if !email_redirect? || redirect_url.present?
+
+    errors.add(:redirect_url, :blank)
   end
 
   def nullify_image_upload_reference
@@ -307,5 +348,10 @@ class SiteElement < ActiveRecord::Base
     # This is a Paranoia issue, which we need to work around manually
     # https://github.com/rubysherpas/paranoia/issues/413
     update_attribute :active_image_id, nil
+  end
+
+  def sanitize(value)
+    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+    white_list_sanitizer.sanitize(value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
   end
 end

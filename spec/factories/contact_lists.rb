@@ -1,13 +1,4 @@
-FactoryGirl.define do
-  factory :embed_code, class: String do
-    skip_create
-    provider 'my_emma'
-
-    initialize_with do
-      Rails.root.join('spec', 'support', 'embed_code', "#{ provider }.html").read
-    end
-  end
-
+FactoryBot.define do
   factory :contact_list do
     transient do
       list_id 1
@@ -50,11 +41,6 @@ FactoryGirl.define do
       identity { create :identity, :get_response_api, site: site }
     end
 
-    trait :icontact do
-      identity { create :identity, :icontact, site: site }
-      data { Hash['embed_code' => build(:embed_code, provider: 'icontact')] }
-    end
-
     trait :infusionsoft do
       identity { create :identity, :infusionsoft, site: site }
     end
@@ -93,6 +79,12 @@ FactoryGirl.define do
 
     trait :webhooks do
       identity { create :identity, :webhooks, site: site }
+    end
+
+    trait :zapier do
+      identity { create :identity, :zapier, site: site }
+
+      data { { webhook_url: 'https://zapier.com', webhook_method: 'POST' } }
     end
 
     trait :embed_code_invalid do

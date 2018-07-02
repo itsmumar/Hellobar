@@ -1,7 +1,6 @@
-/* globals siteID, ContactListModal, formatE164, InternalTracking, EditorErrorsModal */
+/* globals siteID, ContactListModal, formatE164, EditorErrorsModal */
 
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 export default Ember.Route.extend({
 
@@ -93,25 +92,24 @@ export default Ember.Route.extend({
 
     saveSiteElement() {
       const prepareModel = () => {
-        _.each(this.currentModel.blocks, (block) => delete block.isDefault);
         if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
           this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
         }
       };
 
-      this.get('validation').validate('phone_number', this.currentModel).then(() => {
+      const allValidation = Ember.RSVP.Promise.all([
+        this.get('validation').validate('phone_number', this.currentModel),
+        this.get('validation').validate('url', this.currentModel),
+        this.get('validation').validate('url_to_like', this.currentModel),
+        this.get('validation').validate('cookie_settings.duration', this.currentModel),
+        this.get('validation').validate('cookie_settings.success_duration', this.currentModel)
+      ]);
+
+      allValidation.then(() => {
         // Successful validation
         this.get('bus').trigger('hellobar.core.validation.succeeded');
         this.controller.set('saveSubmitted', true);
         this.set('saveCount', this.get('saveCount') + 1);
-        if (this.controller.get('applicationSettings.track_editor_flow')) {
-          InternalTracking.track_current_person('Editor Flow', {
-            step: 'Save Bar',
-            goal: this.currentModel.element_subtype,
-            style: this.currentModel.type,
-            save_attempts: this.get('saveCount')
-          });
-        }
 
         const ajaxParams = window.barID ? {
           url: `/sites/${window.siteID}/site_elements/${window.barID}.json`,
@@ -130,14 +128,6 @@ export default Ember.Route.extend({
           data: JSON.stringify(this.currentModel),
 
           success: () => {
-            if (this.controller.get('applicationSettings.track_editor_flow')) {
-              InternalTracking.track_current_person('Editor Flow', {
-                step: 'Completed',
-                goal: this.currentModel.element_subtype,
-                style: this.currentModel.type,
-                save_attempts: this.get('saveCount')
-              });
-            }
             if (this.controller.get('model.site.site_elements_count') === 0) {
               window.location = `/sites/${window.siteID}`;
             } else {

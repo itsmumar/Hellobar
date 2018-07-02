@@ -5,6 +5,7 @@
 [id^="passwords-"],
 [id^="registrations-"],
 [id^="forgot_emails-"],
+[id^="credit_cards-"],
 #user-create,
 #user-new,
 #pages-logout_confirmation
@@ -22,6 +23,9 @@
     background-color: $white
     @include clearfix()
 
+    @media screen and (max-width: 600px)
+      width: auto
+
     input
       font-size: 1em
       margin-bottom: 0
@@ -37,6 +41,12 @@
       margin-top: 0.75em
       @extend %red-button
       @include antialiased(false)
+      &.gray
+        border-color: $grayDarker !important
+        background: $grayDarker !important
+
+        &:hover
+          background-color: darken($grayDarker, 5%) !important
 
     p a
       color: $blue

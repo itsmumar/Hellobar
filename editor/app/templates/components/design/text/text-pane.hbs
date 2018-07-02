@@ -2,6 +2,11 @@
   <label class="questions">
     {{common/checkboxes/toggle-switch switch=model.use_question}}
     Boost your conversions by asking a leading question first
+    {{#common/hints/popup-hint-trigger}}
+      <p>When asking a leading question, <br>
+      you are not able to style this leading question in the inline editor. <br>
+      There is also no way to add an image to the leading question.</p>
+    {{/common/hints/popup-hint-trigger}}
   </label>
 
   {{#if showQuestionFields}}

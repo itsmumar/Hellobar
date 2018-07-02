@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'Webhooks Integration', :js, :contact_list_feature do
   let(:provider) { 'webhooks' }
 
@@ -29,7 +27,7 @@ feature 'Webhooks Integration', :js, :contact_list_feature do
 
   scenario 'when valid' do
     connect('http://localhost')
-
+    page.find('#edit-contact-list').click
     expect(page.find('#contact_list_webhook_url').value).to eql 'http://localhost'
     expect(page).to have_content 'Syncing contacts with Webhooks'
   end

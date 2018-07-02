@@ -3,14 +3,14 @@ div.row
   div.col-md-4
     h1 Enter Password
 
-    = simple_form_for :admin_authenticate, url: admin_authenticate_path do |f|
-      - if Rails.env.production?
+    = simple_form_for :admin_session, url: admin_authenticate_path do |f|
+      - if Admin.otp_enabled?
         - if @admin.present? && @admin.needs_otp_code?
           = render partial: 'qr_code', locals: { generated_otp: @admin.generate_new_otp! }
 
-        = f.input :otp, input_html: { name: :otp, autocomplete: :off }
+        = f.input :otp, input_html: { autocomplete: :off, autofocus: true }, label: 'OTP'
 
-      = f.input :password, input_html: { name: :admin_password }
       = f.button :submit, 'Continue', class: 'btn btn-primary'
+      =< link_to 'Cancel', admin_access_path, class: 'btn btn-default'
 
   div.col-md-4

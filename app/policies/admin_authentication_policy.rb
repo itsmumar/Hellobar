@@ -4,9 +4,6 @@ class AdminAuthenticationPolicy
   end
 
   def otp_valid?(otp)
-    # Verify OTP only in production environment
-    return true unless Rails.env.production?
-
     totp.verify(otp.delete(' '))
   end
 

@@ -2,7 +2,7 @@ describe BillsHelper do
   describe '#coupons_and_uses' do
     it 'yields a list of coupons and uses' do
       coupon = create :coupon, :referral
-      bill = create(:pro_bill)
+      bill = create(:bill, :pro)
       3.times { bill.coupon_uses.create(coupon: coupon) }
       run_coupon = ->(b) { helper.coupons_and_uses(bill, &b) }
 

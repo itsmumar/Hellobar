@@ -1,10 +1,15 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :subscription do
     site
-    user nil
-    schedule :monthly
+    schedule Subscription::MONTHLY
     association :credit_card, factory: :credit_card
     amount 0.0
+
+    trait :monthly
+
+    trait :yearly do
+      schedule Subscription::YEARLY
+    end
 
     trait :free do
       amount 0.0
@@ -36,7 +41,7 @@ FactoryGirl.define do
 
     trait :with_bill do
       after :create do |subscription|
-        create(:recurring_bill, :paid, subscription: subscription)
+        create(:bill, :paid, subscription: subscription)
         subscription.reload
       end
     end
@@ -49,7 +54,7 @@ FactoryGirl.define do
 
     trait :paid do
       after(:create) do |subscription|
-        create :pro_bill, :paid, subscription: subscription
+        create :bill, :pro, :paid, subscription: subscription
         subscription.reload
       end
     end

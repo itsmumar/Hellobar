@@ -2,62 +2,51 @@ describe Subscription do
   it { is_expected.to validate_presence_of :schedule }
   it { is_expected.to validate_presence_of :site }
 
+  it 'soft-deletes when object is being destroyed', :freeze do
+    subscription = create :subscription
+    subscription.destroy
+
+    expect(subscription.reload).to be_deleted
+    expect(subscription.deleted_at).to eq Time.current
+  end
+
+  describe '.pro_or_growth_for' do
+    context 'when user signed up before 2018-04-01' do
+      let(:user) { build :user, created_at: '2018-03-31' }
+
+      it 'returns Pro' do
+        expect(Subscription.pro_or_growth_for(user)).to be Subscription::Pro
+      end
+    end
+
+    context 'when user signed up after 2018-04-01' do
+      let(:user) { build :user, created_at: '2018-04-01' }
+
+      it 'returns Growth' do
+        expect(Subscription.pro_or_growth_for(user)).to be Subscription::Growth
+      end
+    end
+  end
+
   describe '.paid scope' do
     let!(:paid_subscription) { create(:subscription, :pro) }
     let!(:unpaid_subscription) { create(:subscription, :pro) }
 
     before do
-      create(:recurring_bill, :pending, subscription: unpaid_subscription)
+      create(:bill, :pending, subscription: unpaid_subscription)
     end
 
     context 'when today is between bill start and end date' do
       it 'returns paid subscriptions with paid bills' do
-        create(:recurring_bill, :paid, subscription: paid_subscription)
+        create(:bill, :paid, subscription: paid_subscription)
         expect(Subscription.paid).to match_array [paid_subscription]
       end
     end
 
     context 'when bill is outdated' do
       it 'returns no subscriptions' do
-        create(:recurring_bill, :paid, subscription: paid_subscription, start_date: 1.month.ago, end_date: 1.day.ago)
+        create(:bill, :paid, subscription: paid_subscription, start_date: 1.month.ago, end_date: 1.day.ago)
         expect(Subscription.paid).to be_empty
-      end
-    end
-  end
-
-  describe '.active scope' do
-    context 'with paid bill' do
-      let(:pro) { create(:subscription, :pro, :with_bill) }
-      let(:free) { create(:subscription, :free, :with_bill) }
-      let(:free_plus) { create(:subscription, :free_plus, :with_bill) }
-      let(:enterprise) { create(:subscription, :enterprise, :with_bill) }
-      let(:pro_managed) { create(:subscription, :pro_managed, :with_bill) }
-      let(:pro_comped) { create(:subscription, :pro_comped, :with_bill) }
-
-      let!(:active_subscriptions) do
-        [pro, free, free_plus, enterprise, pro_managed, pro_comped]
-      end
-
-      it 'returns subscriptions' do
-        expect(Subscription.active).to match_array active_subscriptions
-      end
-
-      context 'and refunded bill' do
-        before { stub_cyber_source :refund }
-
-        it 'returns no subscriptions' do
-          RefundBill.new(pro.bills.first).call
-          expect(Subscription.active).not_to include pro.reload
-        end
-      end
-    end
-
-    context 'with pending bill' do
-      let!(:active_subscription) { create(:subscription, :pro) }
-      before { create(:recurring_bill, :pending, subscription: active_subscription) }
-
-      it 'returns no subscriptions' do
-        expect(Subscription.active).to be_empty
       end
     end
   end
@@ -76,6 +65,17 @@ describe Subscription do
     end
   end
 
+  describe '.days_left' do
+    it 'returns number of days before active subscription ends' do
+      end_date = 4.weeks.from_now
+      first_bill = create(:bill, status: :paid, start_date: 1.week.ago, end_date: 1.week.from_now)
+      create(:bill, status: :paid, start_date: 1.week.ago, end_date: end_date, subscription: first_bill.subscription)
+      days_left = (end_date.to_date - Date.current).to_i
+
+      expect(first_bill.subscription.days_left).to eql days_left
+    end
+  end
+
   describe '.estimated_price' do
     before { allow_any_instance_of(DiscountCalculator).to receive(:current_discount).and_return(12) }
     before { allow_any_instance_of(Subscription).to receive(:amount).and_return(13) }
@@ -89,6 +89,22 @@ describe Subscription do
       it 'returns the regular price' do
         expect(Subscription.estimated_price(nil, :yearly)).to eql 1
       end
+    end
+  end
+
+  describe '#monthly? / #yearly?' do
+    specify 'monthly subscriptions are monthly' do
+      subscription = build_stubbed :subscription, :monthly
+
+      expect(subscription).to be_monthly
+      expect(subscription).not_to be_yearly
+    end
+
+    specify 'yearly subscriptions are yearly' do
+      subscription = build_stubbed :subscription, :yearly
+
+      expect(subscription).not_to be_monthly
+      expect(subscription).to be_yearly
     end
   end
 
@@ -217,7 +233,7 @@ describe Subscription do
   end
 
   describe '#currently_on_trial?' do
-    let(:bill) { create(:pro_bill, :paid) }
+    let(:bill) { create(:bill, :pro, :paid) }
 
     context 'when subscription amount is not 0 and has a paid bill but no credit card' do
       before do
@@ -245,7 +261,7 @@ describe Subscription do
     end
 
     context 'all bills are paid' do
-      let!(:bill) { create(:pro_bill, :paid) }
+      let!(:bill) { create(:bill, :pro, :paid) }
 
       specify { expect(bill.subscription).not_to be_problem_with_payment }
     end
@@ -253,16 +269,20 @@ describe Subscription do
 
   describe '#expired?' do
     context 'when pro' do
-      let!(:bill) { create(:pro_bill, :paid) }
+      let!(:bill) { create(:bill, :pro, :paid) }
 
       specify { expect(bill.subscription).not_to be_expired }
 
-      context 'and period has ended' do
-        specify { travel_to((1.month + 1.day).from_now) { expect(bill.subscription).to be_expired } }
+      context 'and period has ended', :freeze do
+        specify do
+          Timecop.travel(1.month.from_now + 1.day) do
+            expect(bill.subscription).to be_expired
+          end
+        end
       end
 
       context 'and not paid' do
-        let!(:bill) { create(:pro_bill) }
+        let!(:bill) { create(:bill, :pro) }
 
         specify { expect(bill.subscription).to be_expired }
       end
@@ -274,7 +294,11 @@ describe Subscription do
       specify { expect(bill.subscription).not_to be_expired }
 
       context 'and period has ended' do
-        specify { travel_to(1.year.from_now) { expect(bill.subscription).not_to be_expired } }
+        specify do
+          Timecop.travel(1.year.from_now) do
+            expect(bill.subscription).not_to be_expired
+          end
+        end
       end
     end
   end
@@ -295,8 +319,8 @@ describe Subscription do
       create(:bill, subscription: subscription, start_date: 45.days.ago, end_date: 15.days.ago, amount: 1)
       expect(subscription.active_bills).to be_empty
 
-      # Add a bill during time, but voided
-      create(:bill, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, status: :voided, amount: 1)
+      # Add a bill during time, but void
+      create(:bill, :voided, subscription: subscription, start_date: Time.current, end_date: 30.days.from_now, amount: 1)
       expect(subscription.active_bills).to be_empty
 
       # Add an active bill

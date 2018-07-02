@@ -1,0 +1,34 @@
+= simple_form_for(@form, url: users_sign_up_path, method: :post) do |f|
+  = render 'shared/flash'
+
+  h1 Create free account
+
+  - if @form.existing_site_url?
+    = render 'shared/existing_site_warning'
+    = f.hidden_field :ignore_existing_site
+
+  = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
+  = f.input_field :email, placeholder: 'Your Email'
+  = f.input_field :password, placeholder: 'Password'
+  = f.label :accept_terms_and_conditions, accept_terms_and_conditions_label do
+    = f.check_box :accept_terms_and_conditions
+    = accept_terms_and_conditions_label
+  = f.button :submit, 'Create free account', class: 'button gray', name: 'signup_with_email'
+
+  .strike
+    span OR
+
+  button type="submit" class="button google-sign-in-button" name="signup_with_google"
+    i.icon
+    span.label Use Google Account
+
+  .devise-links
+    = link_to 'Already a user? Sign in', new_user_session_path
+    br
+    = link_to 'Forgot email?', new_forgot_email_path
+    br
+    = link_to 'Forgot your password?', new_user_password_path
+
+#trusted_by
+  h3 Trusted by over 43,000+ businesses
+  = image_tag 'trusted_by.png'

@@ -5,7 +5,7 @@ class PrepareZippedContacts
   end
 
   def call
-    csv_content = FetchContactsCSV.new(contact_list).call
+    csv_content = ExportSubscribers.new(contact_list).call
     zip(csv_content)
   end
 

@@ -1,5 +1,5 @@
 module StaticScriptAssets
-  mattr_reader(:uglifier) { Uglifier.new(output: { inline_script: true, comments: :none }) }
+  mattr_reader(:uglifier) { Uglifier.new(harmony: true, output: { inline_script: true, comments: :none }) }
 
   mattr_reader(:jbuilder) do
     ActionController::Base.new.view_context.tap do |context|
@@ -9,15 +9,14 @@ module StaticScriptAssets
 
   mattr_reader(:env) do
     Sprockets::Environment.new(Rails.root) do |env|
-      env.append_path 'vendor/assets/javascripts/modules'
-      env.append_path 'vendor/assets/javascripts/hellobar_script'
+      env.append_path 'app/views/static_script_models'
       env.append_path 'vendor/assets/stylesheets/site_elements'
 
       env.append_path 'lib/themes/templates'
       env.append_path 'lib/themes'
       env.append_path 'lib/script_generator'
 
-      env.version = '1.0'
+      env.version = '2.0'
       env.gzip = false
       env.css_compressor = :scss
       env.js_compressor = nil
@@ -32,6 +31,10 @@ module StaticScriptAssets
   def precompile
     manifest.clobber
     with_js_compressor { manifest.compile('*.js', '*.es6', '*.css', '*.html') }
+  end
+
+  def compile_if_missed(path)
+    with_js_compressor { manifest.compile(path) } unless manifest.assets[path]
   end
 
   def with_js_compressor

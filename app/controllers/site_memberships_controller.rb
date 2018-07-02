@@ -12,15 +12,21 @@ class SiteMembershipsController < ApplicationController
 
       render json: site_membership
     else
-      render json: site_membership.errors.full_messages, status: :unprocessable_entity
+      render json: { site_memberships: site_membership.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def show
+  end
+
+  def edit
   end
 
   def update
     if @site_membership.update(site_membership_params)
       render json: @site_membership
     else
-      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
+      render json: { site_memberships: @site_membership.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +36,7 @@ class SiteMembershipsController < ApplicationController
     elsif @site_membership.can_destroy? && @site_membership.destroy
       render json: @site_membership
     else
-      render json: @site_membership.errors.full_messages, status: :unprocessable_entity
+      render json: { site_memberships: @site_membership.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

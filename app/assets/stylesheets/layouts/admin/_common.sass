@@ -60,6 +60,15 @@ h1
   font-weight: 400
   color: $orange
 
+  a
+    margin-left: 3em
+    font-size: 0.6em
+    font-weight: normal
+    color: $orange
+
+    &:hover, &:active, &:visited
+      color: $orange
+
 h2, h3
   font-weight: 600
   color: $darkest-grey
@@ -102,9 +111,15 @@ small
 /*-----------  Admin Header  -----------*/
 
 #admin-users-search
-  float: right
   margin-top: 20px
-  width: 40%
+  text-align: right
+
+  .form-control
+    width: 80%
+
+  .btn-submit
+    height: 34px
+    vertical-align: middle
 
 .header-wrapper
   background-color: $orange
@@ -200,6 +215,15 @@ small
 .col-age span
   font-size: 1.2em
 
+table
+  td.date
+    white-space: nowrap
+
+.title
+  margin-bottom: 6px
+
+/*-----------  Admin Users  -----------*/
+
 table.admin-users
   ul
     padding: 0
@@ -211,3 +235,14 @@ table.admin-users
 .subtype
   color: gray
   font-size: 0.9em
+
+/*-----------  Admin Contact Lists  -----------*/
+.contact-list
+  border: 1px solid #ccc
+  margin: 1em 0
+  padding: 1em 2em
+
+table.contacts
+  .error
+    p
+      font-size: 1em

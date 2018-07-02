@@ -1,4 +1,6 @@
 RSpec::Matchers.define :receive_service_call do
+  include RSpec::Mocks::Matchers::Matcher
+
   match do |service_class|
     @service_name = service_class.name
     @service_double = double service_class.name
@@ -28,6 +30,10 @@ RSpec::Matchers.define :receive_service_call do
     else
       expect(service_class).not_to receive(:new)
     end
+  end
+
+  def setup_allowance(subject)
+    allow(subject).to receive_message_chain(:new, :call)
   end
 
   chain :with do |*args|

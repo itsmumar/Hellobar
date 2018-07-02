@@ -1,0 +1,11 @@
+= simple_form_for [:admin, @partner] do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.input :email
+  = f.input :website_url
+  = f.input :affiliate_identifier, error: true
+  = f.input :partner_plan_id, collection: PartnerPlan.all, include_blank: false
+  = f.input :require_credit_card, wrapper: :vertical_boolean
+
+  = f.button :submit, 'Save', class: 'btn btn-primary'
+  =< link_to 'Cancel', admin_partners_path, class: 'btn btn-default'

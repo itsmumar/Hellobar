@@ -13,10 +13,6 @@ class @Modal
       @$modal.trigger("open")
     ), 0
 
-    # Track the open if possible
-    if @modalName && @source
-      InternalTracking.track_current_person(@modalName, { source: @source })
-
   close: ->
     @$modal.removeClass('show-modal')
 
@@ -39,7 +35,7 @@ class @Modal
       callback.call(this) if event.keyCode == 27
 
   _bindClickOnClose: (callback) ->
-    @$modal.find('a.cancel, .modal-block > .icon-close').on 'click', (event) =>
+    @$modal.find('a.cancel, a.js-close, .modal-block > .icon-close').on 'click', (event) =>
       event.preventDefault()
       @_clearErrors()
       callback.call(this)
@@ -76,7 +72,7 @@ class @Modal
     return unless errors.length > 0
     $('.modal-wrapper').animate({ scrollTop: 0 })
     errorText = errors.reduce (a, b) -> "#{a}<br>#{b}"
-    @$modal.find('.modal-block .flash-block').append(errorText).addClass('alert show')
+    @$modal.find('.modal-block .flash-block').html(errorText).addClass('alert show')
 
   _clearErrors: ->
     @$modal.find('.modal-block .flash-block').html('<i class="icon-close"></i>').removeClass('alert show')

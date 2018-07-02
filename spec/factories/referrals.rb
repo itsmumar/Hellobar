@@ -1,8 +1,17 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :referral do
     sequence(:email) { |i| "referral#{ i }@hellobar.com" }
-    sender { create(:user) }
-    state 'signed_up'
+    sender factory: :user
+    site
+    state 'sent'
     body 'Some text...'
+
+    trait :signed_up do
+      state Referral::SIGNED_UP
+    end
+
+    trait :installed do
+      state Referral::INSTALLED
+    end
   end
 end

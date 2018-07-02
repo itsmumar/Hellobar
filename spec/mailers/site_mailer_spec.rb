@@ -32,11 +32,13 @@ describe SiteMailer do
     before do
       expect(FetchSiteStatistics)
         .to receive_service_call
-        .with(site, site_element_ids: [site_element.id])
+        .with(site)
         .and_return(statistics)
 
       expect(FetchSiteStatistics)
-        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
+        .to receive_service_call
+        .with(site, days_limit: 90)
+        .and_return(statistics)
     end
 
     it 'renders headers' do
@@ -50,28 +52,13 @@ describe SiteMailer do
     end
 
     context 'when history is too short' do
-      it 'displays n/a' do
+      it 'displays n/a', :freeze do
         # Travel to one day past the delivery date to ensure it's picking up the
         # mocked data regardless of when the test runs
-        travel_to(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
+        Timecop.travel(EmailDigestHelper.date_of_previous('Sunday') + 1.day) do
           expect(mail.body.encoded).to match('n/a')
         end
       end
-    end
-  end
-
-  describe '.site_script_not_installed' do
-    let(:mail) { SiteMailer.site_script_not_installed(site, user) }
-
-    it 'renders headers' do
-      expect(mail).to deliver_to(user.email)
-      expect(mail).to have_subject('One final step and your Hello bar is live')
-      expect(mail).to deliver_from('Hello Bar <contact@hellobar.com>')
-    end
-
-    it 'renders body' do
-      expect(mail.body.encoded).to match 'Start using Hello Bar!'
-      expect(mail.body.encoded).to match 'collecting emails'
     end
   end
 end

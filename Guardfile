@@ -1,3 +1,6 @@
+# Make '#singularize' available here in the Guardfile
+require 'active_support/core_ext/string'
+
 # Only watch a subset of directories
 directories %w[app config lib spec vendor]
 
@@ -6,13 +9,12 @@ ignore(/editor/, /public/, /app\/assets\/editor\/editor/)
 
 # This group allows to skip running RuboCop when RSpec failed
 group :red_green_refactor, halt_on_fail: true do
-  guard :rspec, cmd: 'bin/rspec', failed_mode: :focus do
+  guard :rspec, cmd: 'bin/spring rspec -f doc', failed_mode: :focus do
     require 'guard/rspec/dsl'
     dsl = Guard::RSpec::Dsl.new(self)
 
     # RSpec files
     rspec = dsl.rspec
-    watch(rspec.spec_helper) { rspec.spec_dir }
     watch(rspec.spec_support) { rspec.spec_dir }
     watch(rspec.spec_files)
 
@@ -28,12 +30,11 @@ group :red_green_refactor, halt_on_fail: true do
     watch(rails.controllers) do |m|
       [
         rspec.spec.call("controllers/#{ m[1] }_controller"),
-        rspec.spec.call("requests/#{ m[1] }_controller")
+        rspec.spec.call("requests/#{ m[1] }")
       ]
     end
 
     # Rails config changes
-    watch(rails.spec_helper)     { rspec.spec_dir }
     watch(rails.app_controller)  { "#{ rspec.spec_dir }/controllers" }
 
     # Capybara features specs
@@ -60,15 +61,4 @@ guard :shell do
   watch('config/environments/development.rb') { `touch tmp/restart.txt` }
   watch('config/secrets.yml')                 { `touch tmp/restart.txt` }
   watch(%r{^config/initializers/.+\.rb$})     { `touch tmp/restart.txt` }
-end
-
-guard :teaspoon, all_on_start: false, all_after_pass: false do
-  # Implementation files
-  watch(%r{^app/assets/javascripts/(.+).js}) { |m| "#{ m[1] }_spec" }
-
-  # Vendored javascript files
-  watch(%r{^vendor/assets/javascripts/modules/(.*)\.es6}) { |m| "spec/javascripts/hellobar_generator/modules/#{ m[1] }_spec.js" }
-
-  # Specs / Helpers
-  watch(%r{^spec/javascripts/(.*)})
 end

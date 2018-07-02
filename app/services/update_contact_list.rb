@@ -6,8 +6,9 @@ class UpdateContactList
 
   def call
     Identity.transaction do
-      destroy_identity_if_necessary
+      identity_was = contact_list.identity
       update_contact_list
+      destroy_identity_if_necessary(identity_was)
     end
   end
 
@@ -16,7 +17,7 @@ class UpdateContactList
   attr_reader :contact_list, :params
 
   def identity
-    if embed_code? || webhooks?
+    if embed_code? || webhooks? || zapier?
       find_or_create_identity
     else
       params[:identity]
@@ -31,6 +32,10 @@ class UpdateContactList
     params[:provider_token] == 'webhooks'
   end
 
+  def zapier?
+    params[:provider_token] == 'zapier'
+  end
+
   def find_or_create_identity
     contact_list.site.identities.find_or_create_by!(provider: params[:provider_token])
   end
@@ -39,12 +44,15 @@ class UpdateContactList
     contact_list.update! params.merge(identity: identity)
   end
 
-  def destroy_identity_if_necessary
-    return if contact_list.identity.nil? || params[:identity] == contact_list.identity
+  def destroy_identity_if_necessary(identity_was)
+    return if identity_was.nil?
+    return if identity_was == contact_list.identity
 
-    # will destroy when:
-    # 1) passed params[:identity] is nil and there is an existing identity
-    # 2) passed params[:identity] is different than the existing one
-    contact_list.identity.destroy!
+    provider = identity_was.service_provider
+
+    # identity for webhook and embed_code providers is a generic stub and shouldn't be cleaned up
+    return if provider.config.requires_webhook_url || provider.config.requires_embed_code
+
+    identity_was.destroy!
   end
 end

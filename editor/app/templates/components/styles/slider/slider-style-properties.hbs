@@ -12,8 +12,15 @@
 
   <label class="toggle-hiding">
     {{common/checkboxes/toggle-switch switch=model.closable}}
-    Allow to hide a slider
+    Allow user to hide slider
   </label>
+
+  {{#if isEmailSubtype}}
+  <label class="toggle-gdpr">
+    {{common/checkboxes/toggle-switch switch=model.enable_gdpr}}
+    GDPR Compliant
+  </label>
+  {{/if}}
 
   <label>Placement</label>
 

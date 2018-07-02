@@ -1,10 +1,9 @@
-class CreditCard < ActiveRecord::Base
+class CreditCard < ApplicationRecord
   include ActiveMerchant::Billing::CreditCardMethods
 
-  # rubocop: disable Rails/HasManyOrHasOneDependent
   belongs_to :user
-  has_many :subscriptions
-  has_many :billing_attempts
+  has_many :subscriptions, dependent: :nullify, inverse_of: :credit_card
+  has_many :billing_attempts, inverse_of: :credit_card
 
   acts_as_paranoid
 
@@ -19,7 +18,7 @@ class CreditCard < ActiveRecord::Base
   ]
 
   def name
-    "#{ first_name } #{ last_name }"
+    "#{ first_name } #{ last_name }".strip
   end
 
   def description

@@ -12,20 +12,18 @@
       </div>
     {{/if}}
 
-    {{#if isTopBarStyle}}
-      {{#if shouldShowMobileVisitorsPreset}}
-        <div class="step-link-block active" {{action 'select' 'Mobile Visitors'}}>
-          <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
-          <h6>
-            Mobile Visitors
-            {{#if cannotTarget}}
-              <span class="button paid">PAID</span>
-            {{/if}}
-          </h6>
+    {{#if shouldShowMobileVisitorsPreset}}
+      <div class="step-link-block active" {{action 'select' 'Mobile Visitors'}}>
+        <i class="hellobar-icon hellobar-icon-mobile-phone"></i>
+        <h6>
+          Mobile Visitors
+          {{#if cannotTarget}}
+            <span class="button paid">PAID</span>
+          {{/if}}
+        </h6>
 
-          <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
-        </div>
-      {{/if}}
+        <p>Show your Hello Bar to visitors who go to your site on mobile devices.</p>
+      </div>
     {{/if}}
 
     {{#if shouldShowHomepageVisitorsPreset}}
@@ -102,31 +100,40 @@
   </div>
 
   <label>
-    <span>Cookie Duration</span>
+    <span>After user hides the site element, don't display it again to that user for:</span>
     {{#common/hints/popup-hint-trigger}}
-      <p>The number of days before the optin will display <br>
-        again once the user exits your campaign. <br>
-        <strong>Change to 0 to prevent cookies from being set.</strong></p>
+      <p>Number of days before the site element <br>
+        will be displayed again to the user once he hides it.<br>
+        Note that when you update a site element, <br>
+        it will be shown again to all users who had previously dismissed it.
+      </p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.duration
   placeholder="Cookie Duration"
-  maxlength=5
+  min=0
+  max=10000
   type="number"
+  name="duration"
   }}
 
   <label>
-    <span>Success Cookie Duration</span>
+    <span>After a conversion, don't display this bar to that user for:</span>
     {{#common/hints/popup-hint-trigger}}
-      <p>The number of days before the optin will display <br>
-        again once the user successfully opts in to your <br>
-        campaign. <strong>Change to 0 to prevent success <br> cookies from being set.</strong></p>
+      <p>Number of days before the site element <br>
+        will be displayed again to the user once he converts, <br>
+        i.e. submits an email or clicks on a button. <br>
+        Note that when you update a site element, <br>
+        it will be shown again to all users who had previously dismissed it.
+      </p>
     {{/common/hints/popup-hint-trigger}}
   </label>
   {{input value=model.settings.cookie_settings.success_duration
   placeholder="Success Cookie Duration"
-  maxlength=5
+  min=0
+  max=10000
   type="number"
+  name="success_duration"
   }}
 
 </div>

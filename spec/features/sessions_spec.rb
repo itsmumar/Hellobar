@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'User can sign up', :js do
   given(:email) { 'bob@lawblog.com' }
   given(:user) { create :user, email: email }
@@ -16,13 +14,37 @@ feature 'User can sign up', :js do
       .to receive(:call).and_return('function hellobar(){}')
   end
 
-  scenario 'through oauth' do
+  scenario 'through OAuth' do
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: email })
-    visit root_path
+    visit users_sign_up_path
 
-    fill_in 'site[url]', with: 'mewgle.com'
+    fill_in 'registration_form[site_url]', with: 'mewgle.com'
 
-    click_on 'sign-up-button'
+    check 'registration_form[accept_terms_and_conditions]'
+    first('[name=signup_with_google]').click
+
+    expect(page).to have_content "I'll create it later"
+
+    click_on "I'll create it later - take me back"
+
+    within('.header-user-wrapper') do
+      find('.dropdown-wrapper').click
+      expect(page).to have_content('Sign Out')
+    end
+
+    OmniAuth.config.mock_auth[:google_oauth2] = nil
+  end
+
+  scenario 'with email/password' do
+    visit users_sign_up_path
+
+    fill_in 'registration_form[site_url]', with: 'mewgle.com'
+
+    fill_in 'registration_form[email]', with: 'email@example.com'
+    fill_in 'registration_form[password]', with: 'password123'
+    check 'registration_form[accept_terms_and_conditions]'
+
+    first('[name=signup_with_email]').click
 
     expect(page).to have_content "I'll create it later"
 
@@ -68,7 +90,10 @@ feature 'User can sign in', js: true do
   end
 
   scenario 'and sign out' do
-    login
+    site = create :site, elements: [:email]
+    user = create :user, site: site
+
+    sign_in user
 
     find('.header-user-wrapper .dropdown-wrapper').click
     page.find(:xpath, "//a[@href='/users/sign_out']").click
@@ -78,7 +103,6 @@ feature 'User can sign in', js: true do
 
   scenario 'user with no sites can sign out' do
     user = create :user
-
     login_as user, scope: :user, run_callbacks: false
 
     visit root_path

@@ -6,18 +6,52 @@ describe ChangeSubscription, :freeze do
   let(:service) { ChangeSubscription.new(site, params, credit_card) }
   let(:last_subscription) { Subscription.last }
 
-  before { stub_cyber_source :purchase }
-  before { change_subscription 'free' }
+  before do
+    stub_cyber_source :purchase
+    change_subscription 'free'
 
-  def change_subscription(subscription, schedule = 'monthly')
+    allow(TrackSubscriptionChange).to receive_message_chain(:new, :call)
+  end
+
+  def change_subscription(subscription, schedule = 'monthly', new_credit_card: nil)
     ChangeSubscription.new(
       site,
       { subscription: subscription, schedule: schedule },
-      credit_card
+      new_credit_card || credit_card
     ).call
   end
 
-  describe '.call' do
+  describe '#same_subscription?' do
+    context 'when subscription is changed' do
+      let(:params) { { subscription: 'pro', schedule: 'yearly' } }
+
+      it 'returns false' do
+        expect(service.same_subscription?).to be_falsey
+      end
+    end
+
+    context 'when schedule is changed' do
+      before { change_subscription('pro', 'monthly') }
+
+      let(:params) { { subscription: 'pro', schedule: 'yearly' } }
+
+      it 'returns false' do
+        expect(service.same_subscription?).to be_falsey
+      end
+    end
+
+    context 'when neither subscription nor schedule is changed' do
+      before { change_subscription('pro', 'monthly') }
+
+      let(:params) { { subscription: 'pro', schedule: 'monthly' } }
+
+      it 'returns true' do
+        expect(service.same_subscription?).to be_truthy
+      end
+    end
+  end
+
+  describe '#call' do
     it 'creates a bill for current period' do
       expect { service.call }
         .to change(site.bills.where(bill_at: Time.current), :count).by(1)
@@ -32,12 +66,17 @@ describe ChangeSubscription, :freeze do
       service.call
     end
 
+    it 'regenerates script' do
+      expect { service.call }
+        .to have_enqueued_job(GenerateStaticScriptJob).with(site).twice
+    end
+
     it 'returns paid bill' do
       expect(service.call).to be_a(Bill).and be_paid
     end
 
     context 'with pending bills' do
-      let!(:pending_bill) { create :free_bill, subscription: site.current_subscription }
+      let!(:pending_bill) { create :bill, :free, subscription: site.current_subscription }
 
       it 'voids pending bills' do
         service.call
@@ -45,29 +84,12 @@ describe ChangeSubscription, :freeze do
       end
     end
 
-    it 'sends an event to Analytics' do
-      props = {
-        to_subscription: 'Pro',
-        to_schedule: 'yearly',
-        from_subscription: 'Free',
-        from_schedule: 'monthly'
-      }
-      expect(Analytics).to receive(:track).with(:site, site.id, :change_sub, props)
-      service.call
-    end
-
-    it 'sends an event to Intercom' do
-      expect { service.call }
-        .to have_enqueued_job(SendEventToIntercomJob)
-        .with('changed_subscription', site: site, user: user)
-    end
-
     context 'without credit card' do
       let(:credit_card) { nil }
 
-      it 'raises PayBill::Error' do
+      it 'raises PayBill::MissingCreditCard' do
         expect { service.call }
-          .to raise_error PayBill::Error, 'could not pay bill without credit card'
+          .to raise_error PayBill::MissingCreditCard, 'Could not pay bill without credit card'
       end
     end
 
@@ -90,6 +112,16 @@ describe ChangeSubscription, :freeze do
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Pro
       end
+
+      it 'tracks subscription change event' do
+        expect(TrackSubscriptionChange).to receive_service_call.with(
+          user,
+          instance_of(Subscription::Free),
+          instance_of(Subscription::Pro)
+        )
+
+        service.call
+      end
     end
 
     context 'upgrade to enterprise' do
@@ -104,6 +136,16 @@ describe ChangeSubscription, :freeze do
 
         expect(last_subscription.schedule).to eql 'yearly'
         expect(last_subscription).to be_a Subscription::Enterprise
+      end
+
+      it 'tracks subscription change event' do
+        expect(TrackSubscriptionChange).to receive_service_call.with(
+          user,
+          instance_of(Subscription::Free),
+          instance_of(Subscription::Enterprise)
+        )
+
+        service.call
       end
     end
 
@@ -147,15 +189,38 @@ describe ChangeSubscription, :freeze do
             .to change { site.current_subscription.reload.credit_card }
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Pro),
+            instance_of(Subscription::Pro)
+          )
+
+          service.call
+        end
+
         context 'when there is a problem bill' do
+          let!(:new_credit_card) { create :credit_card }
+          let(:failed_bill) { site.current_subscription.bills.last }
+
           before do
             change_subscription('pro', 'monthly')
-            site.current_subscription.bills.last.problem!
+            failed_bill.fail!
           end
 
-          it 'pays the problem bill' do
-            change_subscription('pro', 'monthly')
-            expect(site.bills.problem).to be_empty
+          it 'pays the failed bill' do
+            expect { change_subscription('pro', 'monthly') }
+              .to change(site.bills.failed, :count)
+              .by(-1)
+          end
+
+          it 'uses new credit card if provided' do
+            expect(failed_bill.reload.subscription.credit_card).to eql credit_card
+
+            Timecop.travel site.current_subscription.active_until + 1.day do
+              change_subscription('pro', 'monthly', new_credit_card: new_credit_card)
+              expect(failed_bill.reload.subscription.credit_card).to eql new_credit_card
+            end
           end
         end
       end
@@ -169,13 +234,63 @@ describe ChangeSubscription, :freeze do
           expect(site).to be_capable_of :free
         end
 
-        it 'pays bill' do
-          expect(PayBill).to receive_service_call
+        it 'does not create a bill' do
+          expect(PayBill).not_to receive_service_call
+          expect { change_subscription('free') }.not_to change(Bill, :count)
+        end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            nil,
+            instance_of(Subscription::Free)
+          )
+
           change_subscription('free')
         end
       end
 
-      context 'when upgrading to Pro from Free' do
+      context 'when upgrading to ProManaged' do
+        it 'changes subscription and capabilities' do
+          expect { change_subscription('pro_managed') }
+            .to change { site.reload.current_subscription }
+
+          expect(site.current_subscription).to be_instance_of Subscription::ProManaged
+          expect(site).to be_capable_of :pro_managed
+        end
+
+        it 'pays bill' do
+          expect(PayBill).to receive_service_call
+          change_subscription('pro_managed')
+        end
+
+        it 'does not create pending bill for next period' do
+          expect { change_subscription('pro_managed') }
+            .not_to change { site.reload.bills.pending }
+        end
+
+        it 'never expires' do
+          change_subscription('pro_managed')
+          Timecop.travel 10.years.from_now do
+            expect(site.current_subscription).to be_instance_of Subscription::ProManaged
+            expect(site).to be_capable_of :pro_managed
+          end
+        end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Free),
+            instance_of(Subscription::ProManaged)
+          )
+
+          change_subscription('pro_managed')
+        end
+      end
+
+      context 'when upgrading to Pro from FreePlus' do
+        before { change_subscription('free_plus') }
+
         it 'changes subscription and capabilities' do
           expect { change_subscription('pro') }.to change { site.reload.current_subscription }
           expect(site.current_subscription).to be_instance_of Subscription::Pro
@@ -194,6 +309,16 @@ describe ChangeSubscription, :freeze do
           expect(site.previous_subscription.bills.first).to be_voided
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::FreePlus),
+            instance_of(Subscription::Pro)
+          )
+
+          change_subscription('pro')
+        end
+
         context 'and then to Enterprise from Pro' do
           before { change_subscription('pro') }
 
@@ -209,6 +334,16 @@ describe ChangeSubscription, :freeze do
 
           it 'pays bill' do
             expect(PayBill).to receive_service_call
+            change_subscription('enterprise')
+          end
+
+          it 'tracks subscription change event' do
+            expect(TrackSubscriptionChange).to receive_service_call.with(
+              user,
+              instance_of(Subscription::Pro),
+              instance_of(Subscription::Enterprise)
+            )
+
             change_subscription('enterprise')
           end
 
@@ -240,14 +375,35 @@ describe ChangeSubscription, :freeze do
           change_subscription('free')
         end
 
+        it 'voids pending bill' do
+          expect { change_subscription('free') }
+            .to change { site.bills.voided.count }
+            .by(1)
+        end
+
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Pro),
+            instance_of(Subscription::Free)
+          )
+
+          change_subscription('free')
+        end
+
         context 'when Pro subscription expires' do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now + 1.day do
+            Timecop.travel 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
+        end
+
+        it 'returns a bill' do
+          bill = change_subscription('free')
+          expect(bill).to be_a(Bill)
         end
       end
 
@@ -268,11 +424,21 @@ describe ChangeSubscription, :freeze do
           change_subscription('free')
         end
 
+        it 'tracks subscription change event' do
+          expect(TrackSubscriptionChange).to receive_service_call.with(
+            user,
+            instance_of(Subscription::Enterprise),
+            instance_of(Subscription::Free)
+          )
+
+          change_subscription('free')
+        end
+
         context 'when Pro subscription expires' do
           it 'changes capabilities to Free' do
             change_subscription('free')
 
-            travel_to 1.month.from_now + 1.day do
+            Timecop.travel 1.month.from_now + 1.day do
               expect(site).to be_capable_of :free
             end
           end
@@ -280,7 +446,7 @@ describe ChangeSubscription, :freeze do
       end
 
       context 'when payment fails' do
-        let(:last_bill) { site.reload.current_subscription.bills.with_amount.last }
+        let(:last_bill) { site.reload.current_subscription.bills.non_free.last }
 
         it 'returns problem bill' do
           expect {

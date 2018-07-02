@@ -1,0 +1,17 @@
+table
+  tr
+    th Email
+    th Permissions
+    th Additional info
+    th Actions
+
+  - site.site_memberships.with_deleted.each do |site_membership|
+    tr
+      td= link_to User.with_deleted.find_by(id: site_membership.user_id)&.email, admin_user_path(site_membership.user_id)
+      td= site_membership.role
+      td
+        = " (user deleted)" unless site_membership.user
+        = " (site membership deleted)" if site_membership.deleted?
+      td
+        - if site_membership.user && !site_membership.user.deleted?
+          = link_to 'Impersonate User', admin_impersonate_user_path(site_membership.user), :method => :post

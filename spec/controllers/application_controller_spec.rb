@@ -20,7 +20,7 @@ describe ApplicationController do
       expect(controller.current_site).to eq(site)
     end
 
-    it "returns user's first site if site stored in session is not available or doesn't belong to user" do
+    it "returns user's last site if site stored in session is not available" do
       user = stub_current_user(current_user)
       session[:current_site] = create(:site).id
 
@@ -36,15 +36,6 @@ describe ApplicationController do
       end
     end
   end
-
-  describe 'record_tracking_param' do
-    it 'records the tracking param' do
-      allow(controller).to receive(:params).and_return(trk: 'asdf')
-      expect(Hello::TrackingParam).to receive(:track).with('asdf')
-
-      controller.record_tracking_param
-    end
-  end
 end
 
 describe ApplicationController, '#require_no_user' do
@@ -56,11 +47,11 @@ describe ApplicationController, '#require_no_user' do
     end
   end
 
-  let(:user) { create :user, :with_site }
+  let(:user) { create :user, :with_site, :with_email_bar }
 
   it 'redirects a logged in user to the dashboard of their most recent site' do
     allow(controller).to receive(:current_user).and_return(user)
-    dashboard_path = site_path(user.sites.first)
+    dashboard_path = site_path(user.sites.last)
 
     get :index
 
@@ -84,13 +75,9 @@ describe ApplicationController, '#require_pro_managed_subscription' do
   end
 
   it 'redirects a user without a ProManaged subscription' do
-    user = build_stubbed :user
-    site = build_stubbed :site
-    subscription = build_stubbed :subscription, :pro
+    site = create :site
+    create :subscription, :pro, site: site
 
-    expect(site).to receive(:subscriptions).and_return [subscription]
-
-    allow(controller).to receive(:current_user).and_return user
     allow(controller).to receive(:current_site).and_return site
 
     get :index
@@ -99,13 +86,9 @@ describe ApplicationController, '#require_pro_managed_subscription' do
   end
 
   it 'does not redirect a user with ProManaged subscription' do
-    user = build_stubbed :user
-    site = build_stubbed :site
-    subscription = build_stubbed :subscription, :pro_managed
+    site = create :site
+    create :subscription, :pro_managed, site: site
 
-    expect(site).to receive(:subscriptions).and_return [subscription]
-
-    allow(controller).to receive(:current_user).and_return user
     allow(controller).to receive(:current_site).and_return site
 
     get :index

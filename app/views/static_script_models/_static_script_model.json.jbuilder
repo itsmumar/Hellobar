@@ -1,5 +1,5 @@
 json.ignore_nil!
-json.cache_if! !model.preview_is_active, model do
+json.cache_if! model.cache_enabled?, model do
   json.extract! model,
     :preview_is_active,
     :capabilities,
@@ -9,17 +9,18 @@ json.cache_if! !model.preview_is_active, model do
     :site_timezone,
     :hellobar_container_css,
     :templates,
-    :branding_templates,
-    :content_upgrade_template,
+    :gdpr_enabled,
+    :gdpr_consent,
+    :gdpr_agreement,
+    :gdpr_action,
     :geolocation_url,
-    :hb_backend_host,
+    :tracking_url,
     :site_write_key,
     :external_tracking,
     :hellobar_element_css,
     :content_upgrades,
     :content_upgrades_styles,
-    :autofills,
-    :script_is_installed_properly
+    :autofills
 
   json.rules model.rules do |rule|
     json.match rule[:match]
@@ -31,5 +32,7 @@ json.cache_if! !model.preview_is_active, model do
 end
 
 json.extract! model,
+  :disable_self_check,
+  :modules_version,
   :version,
   :timestamp

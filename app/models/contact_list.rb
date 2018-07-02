@@ -1,11 +1,12 @@
-class ContactList < ActiveRecord::Base
+class ContactList < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :site
   belongs_to :identity, dependent: :destroy
 
   has_many :site_elements, dependent: :destroy
-  has_many :contact_list_logs, dependent: :destroy
+  has_many :campaigns, dependent: :destroy
+  has_many :sequences, dependent: :destroy
 
   store :data, coder: Hash
 
@@ -18,16 +19,11 @@ class ContactList < ActiveRecord::Base
   validate :provider_credentials_exist, if: :provider_set?
   validate :embed_code_exists?, if: :embed_code?
   validate :embed_code_valid?, if: :embed_code?
-  validate :webhook_url_valid?, if: :webhook?
+  validate :webhook_url_valid?, if: -> { webhook? || zapier? }
 
   delegate :count, to: :site_elements, prefix: true
 
   attr_accessor :provider_token
-
-  def statuses_for_subscribers(subscribers)
-    return [] unless identity
-    contact_list_logs.statuses(subscribers)
-  end
 
   def provider_name
     identity&.provider_name || 'Hello Bar'
@@ -52,6 +48,10 @@ class ContactList < ActiveRecord::Base
 
   def webhook?
     identity&.provider == 'webhooks'
+  end
+
+  def zapier?
+    identity&.provider == 'zapier'
   end
 
   def tags
@@ -105,6 +105,6 @@ class ContactList < ActiveRecord::Base
     # this point is not the case as the record is already marked as being
     # deleted (thanks, paranoia), so we have to nullify the reference manually
     # https://github.com/rubysherpas/paranoia/issues/413
-    update_attribute :identity_id, nil
+    update_attribute(:identity_id, nil) if persisted?
   end
 end

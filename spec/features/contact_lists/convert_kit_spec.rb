@@ -1,5 +1,3 @@
-require 'integration_helper'
-
 feature 'ConvertKit integration', :js, :contact_list_feature do
   let(:provider) { 'convert_kit' }
 
@@ -8,6 +6,7 @@ feature 'ConvertKit integration', :js, :contact_list_feature do
 
   before do
     sign_in user
+    stub_provider(provider)
   end
 
   context 'when invalid' do

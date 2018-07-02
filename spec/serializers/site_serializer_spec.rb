@@ -1,7 +1,7 @@
 describe SiteSerializer do
   let(:site) { create :site }
   let(:user) { build_stubbed :user }
-  let(:serialized_site) { SiteSerializer.new(site, scope: user) }
+  let(:serialized_site) { SiteSerializer.new(site, scope: { user: user }) }
   let(:serializable_hash) { serialized_site.serializable_hash }
 
   before { allow(site).to receive(:script_installed?).and_return true }
@@ -37,12 +37,24 @@ describe SiteSerializer do
         }
       ]
     end
+
+    context 'when totals are passed to the context' do
+      let(:subscribers_count) { 5 }
+      let(:scope) { { list_totals: { user: user, contact_list.id => subscribers_count } } }
+      let(:serialized_site) { SiteSerializer.new(site, scope: scope) }
+
+      it 'returns subscribers_count attribute' do
+        expect(serializable_hash).to include(contact_lists: [
+          hash_including(subscribers_count: subscribers_count)
+        ])
+      end
+    end
   end
 
   context 'with current_subscription' do
     let!(:subscription) { create :subscription, site: site }
 
-    before { allow(SubscriptionSerializer).to receive(:new).and_return :subscription }
+    before { allow(SubscriptionSerializer).to receive_message_chain(:new, :as_json).and_return :subscription }
 
     it 'serializes subscription' do
       expect(serializable_hash).to include current_subscription: :subscription

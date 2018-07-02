@@ -1,25 +1,5 @@
-deliverPasswordReset = (ahref) ->
-  $link = $(ahref)
-
-  $.ajax
-    method: 'POST'
-    url: $link.attr('href')
-    data:
-      user: { email: $link.data('user-email') }
-    success: ->
-      $link.text('Sent!')
-
 $ ->
   $('[data-toggle="tooltip"]').tooltip()
-
-  $('a#reset_password').on 'click', (event) ->
-    event.preventDefault()
-    deliverPasswordReset(this)
-
-  $(".refund_link").click ->
-    $(@).hide()
-    $("#edit_bill_recurring_" + $(@).data("id")).toggleClass("hidden")
-    $(@).closest("tr").toggleClass( "hilight" )
 
   $(".subscription_link").click ->
     siteId = $(@).data("siteid")
@@ -52,3 +32,7 @@ $ ->
           alert(data.message)
       }
     )
+
+  $(".edit_site_form input[id^=subscription_subscription]").change (e) ->
+    paid = /^(Pro|Growth|Enterprise)$/.test($(e.target).val())
+    $(e.target).closest("form").find("#subscription_trial_period").prop("disabled", !paid)

@@ -1,7 +1,4 @@
-nav.tabs-wrapper
-  = active_link_to 'You', profile_path()
-  = active_link_to 'Team', site_team_path(current_site)
-  = active_link_to 'Site', edit_site_path(current_site)
+= render 'shared/setting_tabs'
 
 = simple_form_for @site do |form|
 
@@ -23,7 +20,7 @@ nav.tabs-wrapper
     = link_to "Installation instructions", site_install_path(@site)
 
   .add-site-wrapper
-    = link_to "Add New Site", new_site_path, class: ["button", "track-click"], data: {tracking_event: "edit_site_new_site_clicked"}
+    = link_to "Add New Site", new_site_path, class: "button"
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.free?

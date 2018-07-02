@@ -1,0 +1,58 @@
+= render 'shared/setting_tabs'
+
+h5.page-header.alt GDPR Compliance
+
+= simple_form_for current_site, url: site_privacy_path(current_site), html: { class: 'site-privacy' } do |form|
+  p
+    ' We've added features to make your site elements GDPR compliant.
+    ' Any site elements that collect personal information such as email addresses,
+    ' names and phone numbers from anyone in the EU
+    ' will need to be updated across your site in order to comply.
+    ' Please provide the following information below and then
+    ' turn the GDPR Compliance setting on for each site element that needs to become compliant.
+
+  p
+    ' The GDPR Compliance setting must be enabled for each site element.
+    ' When enabled each site element will display two checkboxes
+    ' that your visitor MUST agree to in order for them to be added to your
+    ' list and for you to be able to contact them.
+
+  p
+    h5.site-privacy__subhead Communications Consent
+
+  p
+    ' Anyone signing up through your site elements will need to consent
+    ' to receive the types of communication you want to send to them.
+    ' What kind of information or data will you be communicating to your users?
+
+  p
+    = form.input :communication_types, collection: Site::COMMUNICATION_TYPES, as: :check_boxes, label: false
+
+  p
+    h5.site-privacy__subhead Data Privacy Consent
+
+  p
+    ' Your site visitors will need to agree to <b>your</b> Privacy Policy and Terms of Use.
+    ' Please provide the links below. If you do not have a Privacy Policy or Terms and Conditions already,
+    ' we recommend you add both of those to your site immediately
+    ' and turn off any site elements that collect personal data such as
+    ' email addresses, names and phone numbers before proceeding
+    ' with collecting any personal information from your site visitors.
+
+  .site-privacy__column
+    = form.label :privacy_policy_url
+    = form.text_field :privacy_policy_url
+
+    = form.label :terms_and_conditions_url
+    = form.text_field :terms_and_conditions_url
+
+  h5.site-privacy__subhead Language
+
+  p The GDPR consent text that will be seen on your site elements is not editable but we have translated the text into a number of different languages for you. Please choose the language you would like to display this text in below.
+
+  .site-privacy__column
+    .select-wrapper
+      = form.input :gdpr_consent_language, collection: t('gdpr.languages').invert, label: false, include_blank: false
+
+  .site-privacy__actions
+    = form.button :submit, 'Save', class: 'button'

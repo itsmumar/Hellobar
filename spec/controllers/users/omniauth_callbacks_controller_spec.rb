@@ -12,12 +12,13 @@ describe Users::OmniauthCallbacksController do
     )
   end
 
+  let(:credentials) { double(refresh_token: 'refresh_token', token: 'token', expires_at: Time.current.to_i) }
+
   describe 'POST google_oauth2' do
     let(:send_request) { post :google_oauth2 }
 
     context 'when user exists' do
       let(:user) { create(:user) }
-      let(:credentials) { double('credentials') }
       let(:uid) { 'abc123' }
 
       before do
@@ -34,7 +35,6 @@ describe Users::OmniauthCallbacksController do
 
       context 'and has authentications' do
         let!(:authentication) { create(:authentication, user: user, uid: uid) }
-        let(:credentials) { double(refresh_token: 'refresh_token', token: 'token', expires_at: Time.current.to_i) }
 
         it 'updates authentication tokens' do
           expect { send_request }
@@ -86,25 +86,14 @@ describe Users::OmniauthCallbacksController do
             send_request
             expect(flash[:error]).to eql 'Email can\'t be blank.'
           end
-
-          context 'when cookie login_email exists' do
-            before { cookies.permanent[:login_email] = 'some@email.com' }
-            before { send_request }
-
-            it 'removes that cookie' do
-              expect(cookies[:login_email]).to be_nil
-            end
-
-            it 'sets flash[:error]' do
-              expect(flash[:error]).to eql 'Please log in with your some@email.com Google email.'
-            end
-          end
         end
 
         context 'without validation errors' do
           before do
             stub_omniauth
-            allow(User).to receive(:find_for_google_oauth2).and_raise(ActiveRecord::ActiveRecordError)
+            expect(SignInUser)
+              .to receive_service_call
+              .and_raise(ActiveRecord::ActiveRecordError)
           end
 
           it 'sets flash[:error]' do

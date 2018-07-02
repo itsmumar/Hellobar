@@ -1,4 +1,4 @@
-/* globals UpgradeAccountModal */
+/* globals UpgradeAccountModal, UpdateGDPRSettingsPromtModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
@@ -88,6 +88,12 @@ export default Ember.Service.extend({
       });
       this.set('model.settings.fields_to_collect', fields);
     }
+
+    if (this.get('model.type') === 'Takeover') {
+      this.set('model.image_style', 'large');
+    } else {
+      this.set('model.image_style', 'medium');
+    }
   }.observes('model.type'),
 
   // ------ Template handling
@@ -163,20 +169,10 @@ export default Ember.Service.extend({
   initializeCookieSettings: function () {
     let cookieSettings = this.get('model.settings.cookie_settings');
     if (_.isEmpty(cookieSettings)) {
-      const elementType = this.get('model.type');
-      if (elementType === 'Modal' || elementType === 'Takeover') {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      } else {
-        cookieSettings = {
-          duration: 0,
-          success_duration: 0
-        };
-      }
-
-      this.set('model.settings.cookie_settings', cookieSettings);
+      this.set('model.settings.cookie_settings', {
+        duration: 10,
+        success_duration: 30
+      });
     }
   }.observes('model'),
 
@@ -213,6 +209,16 @@ export default Ember.Service.extend({
     }
   }.observes('model.show_branding'),
 
+  promptUpdateGDPRWhenNotEnabled: function () {
+    const isGDPREnabled = this.get('model.site.gdpr_enabled');
+    const enableGDPR = this.get('model.enable_gdpr');
+
+    if (!isGDPREnabled && enableGDPR) {
+      this.set('model.enable_gdpr', false);
+      this.promptUpdateSettings();
+    }
+  }.observes('model.enable_gdpr'),
+
   promptUpgradeWhenEnablingHiding: function () {
     const isClosable = this.get('model.closable');
     const canBeClosable = this.get('model.site.capabilities.closable');
@@ -234,6 +240,9 @@ export default Ember.Service.extend({
       },
       upgradeBenefit: message
     }).open();
-  }
+  },
 
+  promptUpdateSettings() {
+    new UpdateGDPRSettingsPromtModal().open();
+  }
 });

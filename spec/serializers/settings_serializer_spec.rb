@@ -4,32 +4,33 @@ describe SettingsSerializer do
   let(:serializer) { SettingsSerializer.new(user, scope: site) }
 
   describe '#available_themes' do
+    let(:expected_themes) { Theme.sorted }
+    let(:serialized_themes) { expected_themes.map { |theme| ThemeSerializer.new(theme).as_json } }
+
     context 'when site has got advanced_themes capability' do
       let(:site) { create :site, :pro_managed, user: user }
 
       it 'returns all themes' do
-        expect(serializer.available_themes)
-          .to eql ActiveModel::ArraySerializer.new(Theme.sorted, each_serializer: ThemeSerializer).as_json
+        expect(serializer.available_themes).to eql(serialized_themes)
       end
     end
 
     context 'when site has not got advanced_themes capability' do
       let(:site) { create :site, :pro, user: user }
       let(:advanced_themes) { %w[arctic-facet subtle-facet smooth-impact] }
+      let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
 
       it 'does not return advanced themes' do
-        themes = Theme.sorted.reject { |theme| theme.id.in? advanced_themes }
-
-        expect(serializer.available_themes)
-          .to eql ActiveModel::ArraySerializer.new(themes, each_serializer: ThemeSerializer).as_json
+        expect(serializer.available_themes).to eql(serialized_themes)
       end
     end
   end
 
   describe '#available_fonts' do
+    let(:serialized_fonts) { Font.all.map { |font| FontSerializer.new(font).as_json } }
+
     it 'returns all fonts' do
-      expect(serializer.available_fonts)
-        .to eql ActiveModel::ArraySerializer.new(Font.all, each_serializer: FontSerializer).as_json
+      expect(serializer.available_fonts).to eql(serialized_fonts)
     end
   end
 
@@ -51,28 +52,10 @@ describe SettingsSerializer do
     end
   end
 
-  describe '#track_editor_flow' do
-    context 'when user has a site but has no bars yet' do
-      it 'returns true' do
-        expect(serializer.track_editor_flow).to be_truthy
-      end
-    end
-
-    context 'when user has a site but has no bars yet' do
-      let!(:site) { create :site, :with_rule }
-
-      before { create :site_element, site: site }
-
-      it 'returns false' do
-        expect(serializer.track_editor_flow).to be_falsey
-      end
-    end
-  end
-
   describe '#serializable_hash' do
     it 'has expected structure' do
       expect(serializer.serializable_hash).to include(
-        :current_user, :geolocation_url, :track_editor_flow,
+        :current_user, :geolocation_url,
         :available_themes, :available_fonts, :country_codes
       )
     end

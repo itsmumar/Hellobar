@@ -11,6 +11,7 @@ export default Ember.Component.extend({
   min: 0,
   max: 100,
   start: 0,
+  default: 0,
 
   leftLabel: null,
   rightLabel: null,
@@ -22,7 +23,7 @@ export default Ember.Component.extend({
   // ----- Component lifecycle methods -----
 
   didInsertElement() {
-    const startValue = this.start || this.min;
+    const startValue = this.start || this.default;
     const el = this.$('.js-slider')[0];
     noUiSlider.create(el, {
       start: [startValue],

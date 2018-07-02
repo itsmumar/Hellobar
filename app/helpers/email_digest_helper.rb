@@ -17,21 +17,6 @@ module EmailDigestHelper
     number_to_human(num, units: { thousand: 'k', million: 'm', billion: 'b' }, format: '%n%u', precision: precision)
   end
 
-  def reason_for_element(site_element)
-    case site_element.short_subtype
-    when 'traffic'
-      'driving traffic.'
-    when 'email'
-      'collecting emails.'
-    when 'social'
-      'driving social media traffic.'
-    when 'call'
-      'receiving calls.'
-    else
-      'involving users.'
-    end
-  end
-
   def self.date_of_previous(day)
     date = Date.parse(day)
     delta = date > Date.current ? 7 : 0
@@ -54,9 +39,5 @@ module EmailDigestHelper
     from = start_date.strftime('%b %-d')
     till = end_date.strftime(end_date_format)
     "#{ from } - #{ till }"
-  end
-
-  def tracker_param(*args)
-    Hello::TrackingParam.encode_tracker(*args)
   end
 end

@@ -1,8 +1,6 @@
-require 'integration_helper'
-
-feature 'Autofills management' do
-  given(:user) { create :user }
-  given(:site) { create :site, user: user }
+feature 'Autofills management', :js do
+  given(:user) { create :user, :with_site }
+  given(:site) { user.sites.first }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
   given(:name) { 'Email rule' }
@@ -16,7 +14,7 @@ feature 'Autofills management' do
   end
 
   scenario 'Adding, listing, editing and destroying an autofill' do
-    visit root_path
+    visit site_path site
 
     click_on 'Autofills'
 
@@ -55,7 +53,9 @@ feature 'Autofills management' do
       expect(page).to have_content listen_selector
       expect(page).to have_content populate_selector
 
-      click_on 'Destroy'
+      accept_alert do
+        click_on 'Destroy'
+      end
     end
 
     expect(page).not_to have_content new_name

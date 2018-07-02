@@ -12,15 +12,19 @@
 
 #hellobar-takeover .hb-content-wrapper {
   top: 50%;
-  left: 50%;
+  left: 0;
   width: 100%;
   padding: 1em;
-  max-width: 41em;
   position: absolute;
-  transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
+  transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+
+#hellobar-takeover .hb-inner-content {
+  max-width: 41em;
+  margin: 0 auto;
 }
 
 /*-----------  Close Buttons  -----------*/
@@ -33,11 +37,11 @@
 
 /*-----------  Call to Acton Button  -----------*/
 
-#hellobar-takeover .hb-cta-style-button {
+#hellobar-takeover .hb-cta {
   padding: 0;
 }
 
-#hellobar-takeover .hb-cta-style-button .hb-text-holder {
+#hellobar-takeover .hb-cta .hb-text-holder {
   border-radius: inherit;
   padding: 12px 40px;
 }
@@ -101,6 +105,26 @@
   text-transform: uppercase;
 }
 
+/*----------- GDPR -----------*/
+
+#hellobar-takeover .gdpr-consent-form {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+#hellobar-takeover .gdpr-consent-form p {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+#hellobar-takeover .gdpr-consent-form p:last-child {
+  margin-bottom: 45px;
+}
+
+#hellobar-takeover .gdpr-consent-form input {
+  margin: 9px 13px 0 0;
+}
+
 /*-----------  State: Mobile  -----------*/
 
 #hellobar-takeover.mobile {
@@ -111,39 +135,10 @@
   font-size: 12px;
 }
 
-/*-----------  Old IE Fixes  -----------*/
-
-.hb-old-ie #hellobar-takeover {
-  display: table;
-  text-align: center;
+#hellobar-takeover.mobile .gdpr-consent-form {
+  max-width: 350px;
 }
 
-.hb-old-ie #hellobar-takeover .hb-content-wrapper {
-  top: 0;
-  left: 0;
-  margin: 0 auto;
-  padding: 2em 1em;
-  position: relative;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.hb-old-ie #hellobar-takeover .hb-logo-wrapper {
-  left: 0;
-  right: 0;
-  bottom: 1em;
-  position: absolute;
-}
-
-.hb-old-ie #hellobar-takeover .hb-logo-wrapper a {
-  left: 0;
-  bottom: 0;
-  margin: 0 auto;
-  display: block;
-  font-size: 14px;
-  position: relative;
-}
-
-.hb-old-ie #hellobar-takeover .hb-logo-wrapper a .hb-logo-line {
-  display: block;
+#hellobar-takeover.mobile .gdpr-consent-form p {
+  font-size: 16px;
 }

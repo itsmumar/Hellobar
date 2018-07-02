@@ -3,20 +3,19 @@ html
   head
     title Hello Bar
 
-    link rel="shortcut icon" href="#{image_path('favicon.ico')}" type="image/x-icon"
+    = render "shared/gtm_script"
+    = render 'shared/favicon'
 
     = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
 
-    = render "shared/hellobar_script"
     = render 'shared/typekit'
 
     = csrf_meta_tags
 
   body#hb-application
-    = render 'shared/crazy_egg'
-    = render 'shared/google_analytics'
-    = render 'shared/segment'
+    = render "shared/gtm_noscript"
+    = render 'shared/amplitude'
 
     header.global-header
       = render "shared/header"
@@ -31,12 +30,12 @@ html
         = render "shared/prompt"
         == yield
 
-    / deprecated JS implementation of shared/flash
     = render "shared/alert_template"
     = render "shared/modals/downgrade_modal"
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"
+    = render "shared/modals/new_credit_card_modal"
     = render "shared/modals/account_prompt"
     = render "shared/modals/add_team_member"
     = render "shared/modals/exit_intent"
@@ -48,6 +47,6 @@ html
         new AccountPromptModal().open();
 
     javascript:
-      var currentUser = #{{UserSerializer.new(current_user).to_json}};
+      var currentUser = #{{serialize_current_user}};
       var siteID = "#{@site.try(:id)}";
-      var site = #{{SiteSerializer.new(current_site, scope: current_user).to_json}};
+      var site = #{{serialize_current_site}};

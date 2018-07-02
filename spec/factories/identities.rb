@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :identity do
     site
     provider 'mailchimp'
@@ -47,10 +47,6 @@ FactoryGirl.define do
       api_key 'api-key'
     end
 
-    trait :icontact do
-      provider 'icontact'
-    end
-
     trait :infusionsoft do
       provider 'infusionsoft'
     end
@@ -93,6 +89,10 @@ FactoryGirl.define do
     end
 
     trait :webhooks do
+      provider 'webhooks'
+    end
+
+    trait :zapier do
       provider 'webhooks'
     end
   end

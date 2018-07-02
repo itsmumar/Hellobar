@@ -1,5 +1,5 @@
 class RuleSerializer < ActiveModel::Serializer
-  attributes :id, :site_id, :name, :priority, :match, :description, :editable
+  attributes :id, :site_id, :name, :match, :description, :editable
 
   has_many :conditions, serializer: ConditionSerializer
 

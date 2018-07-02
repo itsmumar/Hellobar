@@ -2,11 +2,10 @@
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
-import defaultBlocks from './inline-editing.blocks';
 import geolocationHelper from './inline-editing.geolocation-helper';
 
 // Froala Editor license key
-const froalaKey = 'Qg1Ti1LXd2URVJh1DWXG==';
+const froalaKey = 'UA9B8E7A3dC3E3A2B10B6B5D5E4E3A2C-7KC1KXDF1INBh1KPe2TK==';
 
 /**
  * Simple model adapter that performs basic inline editing data management
@@ -121,93 +120,6 @@ class SimpleModelAdapter {
   }
 }
 
-/**
- * Flexible model adapter based on property 'blocks' of model.
- */
-class BlockBasedModelAdapter {
-  constructor(modelHandler, service) {
-    this.modelHandler = modelHandler;
-    this.service = service;
-  }
-
-  /**
-   * Handles block content change
-   * @param blockId {string} fully-qualified block id, i.e. 'blocks.action_link'
-   * @param content {string} plain text or HTML fragment
-   */
-  handleContentChange(blockId, content) {
-    const blocks = this.modelHandler.get('model.blocks');
-    const shortBlockId = blockId.substring('blocks.'.length);
-    const foundBlock = _.find(blocks, (block) => block.id === shortBlockId);
-    if (foundBlock) {
-      if (foundBlock.content) {
-        foundBlock.content.text = content;
-      } else {
-        foundBlock.content = {
-          text: content
-        };
-      }
-      delete foundBlock.isDefault;
-    } else {
-      console.warn(`Block ${blockId} not found in the current template blocks.`);
-    }
-  }
-}
-
-/**
- * @deprecated
- */
-class InlineImageManagementPane {
-  constructor($iframe, $iframeBody, hasImage) {
-    this.$pane = $('<div></div>').addClass('inline-image-management-pane');
-    if (hasImage) {
-      (this.$pane.addClass('image-loaded'));
-    }
-    $('<a href="javascript:void(0)" data-action="add-image"><i class="fa fa-image"></i><span>add image</span></a>').appendTo(this.$pane);
-    $('<a href="javascript:void(0)" data-action="edit-image"><i class="fa fa-image"></i><span>edit image</span></a>').appendTo(this.$pane);
-    $('<div class="image-holder hb-editable-block hb-editable-block-image hb-editable-block-image-without-placement"><img class="image" src=""></div>').appendTo(this.$pane);
-    const $container = $iframeBody.find('.js-hellobar-element');
-    $container.append(this.$pane);
-    this.$pane.on('click', '[data-action]', evt => {
-      const action = $(evt.currentTarget).attr('data-action');
-      switch (action) {
-        case 'add-image':
-          return this.addImage();
-        case 'edit-image':
-          return this.editImage();
-      }
-    });
-  }
-
-  addImage() {
-    const editor = this.$pane.find('.image-holder').data('froala.editor');
-    const imageHolder = this.$pane.find('.image-holder')[0];
-    const image = this.$pane.find('.image-holder .image')[0];
-    if (editor && imageHolder && image) {
-      const r = imageHolder.getBoundingClientRect();
-      editor.selection.setAtStart(image);
-      editor.selection.setAtEnd(image);
-      editor.image.showInsertPopup();
-      return editor.popups.show('image.insert', r.left + (r.width / 2), r.top);
-    }
-  }
-
-  editImage() {
-    const image = this.$pane.find('.image-holder .image')[0];
-    if (image) {
-      let event = document.createEvent('Events');
-      event.initEvent('click', true, false);
-      image.dispatchEvent(event);
-    }
-  }
-
-
-  destroy() {
-    this.$pane.off('click');
-    this.$pane.remove();
-  }
-}
-
 export default Ember.Service.extend({
 
   bus: Ember.inject.service(),
@@ -215,12 +127,9 @@ export default Ember.Service.extend({
 
   modelHandler: null,
   simpleModelAdapter: null,
-  blockBasedModelAdapter: null,
 
   $currentFroalaInstances: null,
   $currentInputInstances: null,
-
-  inlineImageManagementPane: null,
 
   init() {
     Ember.run.next(() => this.customizeFroala());
@@ -286,10 +195,8 @@ export default Ember.Service.extend({
     this.modelHandler = modelHandler;
     if (modelHandler) {
       this.simpleModelAdapter = new SimpleModelAdapter(modelHandler, this);
-      this.blockBasedModelAdapter = new BlockBasedModelAdapter(modelHandler, this);
     } else {
       this.simpleModelAdapter = null;
-      this.blockBasedModelAdapter = null;
     }
   },
 
@@ -308,9 +215,6 @@ export default Ember.Service.extend({
         const $iframeBody = $($iframe[0].contentDocument.body);
         if ($iframeBody.length > 0) {
           return $($iframe[0].contentDocument).ready(() => {
-              // NOTE So far we don't use InlineImageManagementPane, we need to make final desicion later
-              // const hasImage = this.simpleModelAdapter ? !!this.simpleModelAdapter.activeImageId() : false;
-              //@instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage)
               this.instantiateFroala($iframe, $iframeBody, elementType);
               this.initializeInputEditing($iframe, $iframeBody);
             }
@@ -318,10 +222,6 @@ export default Ember.Service.extend({
         }
       }
     }, 500);
-  },
-
-  instantiateInlineImageManagementPane($iframe, $iframeBody, elementType, hasImage) {
-    return this.inlineImageManagementPane = new InlineImageManagementPane($iframe, $iframeBody, hasImage);
   },
 
   instantiateFroala($iframe, $iframeBody, elementType){
@@ -355,10 +255,6 @@ export default Ember.Service.extend({
           'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
           'insertHR', 'insertLink', '-',
           'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
-        ],
-        'limited': [
-          'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ]
       };
       const htmlAllowedTags = {
@@ -371,14 +267,11 @@ export default Ember.Service.extend({
         'full': [
           'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'ul', 'ol', 'li',
           'a', 'br', 'hr', 'table', 'tbody', 'tr', 'th', 'td', 'blockquote'
-        ],
-        'limited': [
-          'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
         ]
       };
       const froalaOptions = {
         key: froalaKey,
-        linkStyles: mode === 'limited' ? undefined : linkStyles,
+        linkStyles: linkStyles,
         linkMultipleStyles: false,
         toolbarInline: true,
         toolbarVisibleWithoutSelection: true,
@@ -389,7 +282,7 @@ export default Ember.Service.extend({
         htmlAllowedTags: htmlAllowedTags[mode],
         htmlAllowedEmptyTags: ['span'],
         enter: $.FroalaEditor.ENTER_P,
-        multiLine: mode === 'full',
+        multiLine: true,
         initOnClick: false,
         zIndex: 9888,
         fontFamily: this.get('froalaFonts').fontFamily()
@@ -452,7 +345,6 @@ export default Ember.Service.extend({
       .add(textFroala('simple'))
       .add(textFroala('simple-no-link'))
       .add(textFroala('full'))
-      .add(textFroala('limited'))
       .add(imageFroala());
 
     geolocationHelper.bindEvents($allFroala);
@@ -492,39 +384,15 @@ export default Ember.Service.extend({
 
 
   cleanup() {
-    if (this.inlineImageManagementPane) {
-      this.inlineImageManagementPane.destroy();
-    }
     this.cleanupFroala();
     this.cleanupInputs();
   },
 
 
   handleContentChange(blockId, content) {
-    if (blockId && _.startsWith(blockId, 'blocks.')) {
-      if (this.blockBasedModelAdapter) {
-        this.blockBasedModelAdapter.handleContentChange(blockId, content);
-      }
-    } else if (this.simpleModelAdapter) {
+    if (this.simpleModelAdapter) {
       this.simpleModelAdapter.handleContentChange(blockId, content);
     }
-  },
-
-  initializeBlocks(model, themeId) {
-    //const newBlock = (id, text) => ( {id, content: {text: text}} );
-    model.blocks = model.blocks || [];
-    const blocks = defaultBlocks[themeId];
-    _.each(blocks, (defaultBlock) => {
-      const foundModelBlock = _.find(model.blocks, (modelBlock) => modelBlock.id === defaultBlock.id);
-      const clonedDefaultBlock = _.defaultsDeep({isDefault: true}, defaultBlock);
-      if (!foundModelBlock) {
-        model.blocks.push(clonedDefaultBlock);
-      } else {
-        if (foundModelBlock.isDefault) {
-          _.extend(foundModelBlock, clonedDefaultBlock);
-        }
-      }
-    });
   }
 
 });

@@ -1,35 +1,40 @@
 class SiteElementSerializer < ActiveModel::Serializer
   attributes :id, :site, :rule_id, :rule, :contact_list_id,
-
+    #
     # settings
     :type, :element_subtype, :settings, :view_condition, :phone_number,
-    :phone_country_code, :blocks, :email_redirect,
-
+    :phone_country_code, :email_redirect, :enable_gdpr,
+    #
     # text
     :headline, :caption, :content, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
-    :preset_rule_name, :disclaimer, :offer_text, :offer_headline,
-
+    :preset_rule_name,
+    #
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
-
+    #
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
     :animated, :wiggle_button, :theme, :theme_id,
-
+    :cta_border_color, :cta_border_width, :cta_border_radius,
+    #
     # image
     :image_url, :image_large_url, :image_modal_url, :image_style,
     :image_placement, :active_image_id, :image_file_name, :use_default_image,
-    :image_opacity,
-
+    :image_opacity, :image_overlay_color, :image_overlay_opacity,
+    #
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
     :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
-
+    #
     # alert type
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,
-
+    #
+    # text field styling
+    :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+    :text_field_text_color, :text_field_background_color, :text_field_background_opacity,
+    #
     # other
-    :updated_at, :link_style, :size, :site_preview_image, :site_preview_image_mobile,
+    :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
@@ -48,25 +53,31 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def rule
-    RuleSerializer.new(object.rule)
+    return unless object.rule
+
+    RuleSerializer.new(object.rule).as_json
   end
 
   def preset_rule_name
     return '' unless object.rule
 
-    if rule.editable
+    if object.rule.editable
       'Saved'
     else
-      rule.name
+      object.rule.name
     end
   end
 
   def site
-    SiteSerializer.new(object.site, scope: scope)
+    return unless object.site
+
+    SiteSerializer.new(object.site, scope: scope).as_json
   end
 
   def theme
-    ThemeSerializer.new(object.theme, scope: scope)
+    return unless object.theme
+
+    ThemeSerializer.new(object.theme, scope: scope).as_json
   end
 
   def theme_id
@@ -74,25 +85,16 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def site_preview_image
-    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }") : ''
+    return '' unless object.site
+    proxied_url2png(url: object.site.url)
   end
 
   def site_preview_image_mobile
-    object.site ? proxied_url2png("?url=#{ ERB::Util.url_encode(object.site.url) }&viewport=320x568") : ''
+    return '' unless object.site
+    proxied_url2png(url: object.site.url, viewport: '320x568')
   end
 
-  def proxied_url2png(params)
-    '/proxy/https/' + url2png(params).sub(/^https:\/\//, '')
-  end
-
-  def url2png(params)
-    css_url = "http://#{ Settings.host }/stylesheets/hide_bar.css"
-    # Include CSS to hide any Hello Bar already there
-    params += "&custom_css_url=#{ ERB::Util.url_encode(css_url) }"
-    # Cache for 7 days
-    params += "&ttl=#{ 7 * 24 * 60 * 60 }"
-    # Calculate the token
-    token = Digest::MD5.hexdigest("#{ params }SC10DF8C7E0FE8")
-    "https://api.url2png.com/v6/P52EBC321291EF/#{ token }/png/#{ params }"
+  def proxied_url2png(options)
+    '/proxy/https/' + Url2png.new(options).call
   end
 end

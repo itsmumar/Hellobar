@@ -1,25 +1,6 @@
 class Admin::UsersController < AdminController
   def index
-    q = params[:q].to_s.strip
-
-    if q.blank?
-      @users = User.page(params[:page]).per(24).includes(:authentications)
-    else
-      users = User.search_by_username(q).includes(:authentications)
-
-      if q =~ /\.js$/
-        site = Site.find_by_script(q)
-        users += site.owners if site
-      else
-        users += User.search_by_site_url(q).includes(:authentications)
-      end
-
-      if q =~ /\d{4}/
-        users += User.joins(:credit_cards).where('credit_cards.number like ?', "%-#{ q }%").uniq
-      end
-
-      @users = Kaminari.paginate_array(users.uniq).page(params[:page]).per(24)
-    end
+    @users = SearchUsers.new(params).call
   end
 
   def show
@@ -44,7 +25,21 @@ class Admin::UsersController < AdminController
   end
 
   def unimpersonate
-    session.delete(:impersonated_user)
-    redirect_to admin_users_path
+    user_id = session.delete(:impersonated_user)
+
+    if user_id
+      redirect_to admin_user_path(user_id)
+    else
+      redirect_to admin_users_path
+    end
+  end
+
+  def reset_password
+    @user = User.with_deleted.find(params[:id])
+    @user.send_reset_password_instructions
+
+    flash[:success] = 'Password reset instruction has been sent to user\'s email'
+
+    redirect_to admin_user_path(@user)
   end
 end

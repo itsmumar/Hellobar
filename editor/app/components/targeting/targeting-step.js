@@ -1,4 +1,4 @@
-/* globals InternalTracking, UpgradeAccountModal, RuleModal */
+/* globals UpgradeAccountModal, RuleModal */
 
 import Ember from 'ember';
 import _ from 'lodash/lodash';
@@ -48,15 +48,6 @@ export default Ember.Component.extend({
     this.get('modelLogic').setRule(rule);
   },
 
-  trackUpgrade() {
-    if (this.get('applicationSettings.settings.track_editor_flow')) {
-      InternalTracking.track_current_person('Editor Flow', {
-        step: 'Choose Targeting Type - Converted to Pro',
-        ui: this.get('targetingUiVariant') ? 'variant' : 'original'
-      });
-    }
-  },
-
   canTarget: function () {
     return this.get('model.site.capabilities.custom_targeted_bars');
   }.property('model.site.capabilities.custom_targeted_bars'),
@@ -76,8 +67,6 @@ export default Ember.Component.extend({
     return selectedOption || options[0];
   }.property('model.rule_id', 'ruleOptions'),
 
-  isTopBarStyle: Ember.computed.equal('model.type', 'Bar'),
-
   rulePopUpOptions: function (ruleData, isNewRule) {
     const that = this;
 
@@ -94,7 +83,6 @@ export default Ember.Component.extend({
           Ember.set(updatedRule, 'description', ruleData.description);
           Ember.set(updatedRule, 'name', ruleData.name);
           Ember.set(updatedRule, 'match', ruleData.match);
-          Ember.set(updatedRule, 'priority', ruleData.priority);
         } else { // we created a new rule
           that.get('model.site.rules').push(ruleData);
         }
@@ -129,7 +117,6 @@ export default Ember.Component.extend({
       site: that.get('model.site'),
       successCallback() {
         that.set('model.site.capabilities', this.site.capabilities);
-        that.send('trackUpgrade');
       },
       upgradeBenefit: 'create custom-targeted rules'
     };

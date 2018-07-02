@@ -18,6 +18,7 @@
   height: 30px;
   overflow: hidden;
   position: relative;
+  flex: none;
 }
 
 #hellobar-pusher.hb-large {

@@ -1,16 +1,16 @@
 class URLValidator < ActiveModel::EachValidator
+  URL_REGEXP = /^https?:\/\/([a-z0-9][a-z0-9_\-]*)(\.[a-z0-9][a-z0-9_\-]*)*(:[0-9]{1,5})?(\/.*)*$/ix
+
   def validate_each(record, attribute, value)
-    record.errors.add(attribute, "can't be blank") if value.blank?
-
-    uri = Addressable::URI.parse(value)
-
-    if !%w[http https].include?(uri.scheme) || uri.host.blank? || !uri.ip_based? && url !~ /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix
-      record.errors.add(attribute, 'is invalid')
+    if value.blank?
+      record.errors.add(attribute, "can't be blank")
+      return
     end
-  rescue Addressable::URI::InvalidURIError
-    record.errors.add(attribute, 'is invalid')
+
+    record.errors.add(attribute, 'is invalid') unless value =~ URL_REGEXP
   end
 end
 
 # Add an alias (diff versions of Rails/Ruby constantize this differently)
-class UrlValidator < URLValidator; end
+class UrlValidator < URLValidator
+end

@@ -4,35 +4,30 @@ class FetchSiteStatistics
   # let's take some synthetic date
   MAX_DAYS = 5 * 365
 
-  def initialize(site, days_limit: MAX_DAYS, site_element_ids: nil)
+  CACHE_TTL = 1.hour
+
+  def initialize(site, days_limit: MAX_DAYS)
     @site = site
     @days_limit = days_limit
-    @site_element_ids = site_element_ids
+    @site_elements ||= site.site_elements
   end
 
   def call
-    statistics.clear # clear the results in case we are calling this service object a second time
-    site_elements.each { |site_element| process site_element }
-    statistics
+    cache { fetch_statistic }
   end
 
   private
 
-  attr_reader :site, :days_limit, :site_element_ids
+  attr_reader :site, :days_limit, :site_elements
 
-  def process(site_element)
-    request = request_for(site_element.id)
-    process_response site_element, dynamo_db_for(site_element).query(request)
-  end
-
-  def process_response(site_element, response)
-    response.each do |item|
-      statistics << enhance_record(site_element, item)
+  def fetch_statistic
+    statistics = SiteStatistics.new
+    site_elements.each do |site_element|
+      dynamo_db_for(site_element).query_each(request_for(site_element.id)) do |item|
+        statistics << enhance_record(site_element, item)
+      end
     end
-  end
-
-  def statistics
-    @statistics ||= SiteStatistics.new
+    statistics
   end
 
   def request_for(id)
@@ -45,15 +40,6 @@ class FetchSiteStatistics
       return_consumed_capacity: 'TOTAL',
       limit: days_limit
     }
-  end
-
-  def site_elements
-    @site_elements ||=
-      if site_element_ids.present?
-        site.site_elements.where(id: site_element_ids)
-      else
-        site.site_elements
-      end
   end
 
   def table_name
@@ -93,6 +79,15 @@ class FetchSiteStatistics
   end
 
   def dynamo_db_for(site_element)
-    DynamoDB.new(cache_key: "#{ site_element.cache_key }/#{ days_limit }")
+    DynamoDB.new(cache_context: site_element.cache_key)
+  end
+
+  def cache
+    Rails.cache.fetch(all_site_statistics_cache_key, expires_in: CACHE_TTL) { yield }
+  end
+
+  def all_site_statistics_cache_key
+    key = [site, site.site_elements.reorder(:updated_at).last]
+    ActiveSupport::Cache.expand_cache_key key, "site_statistics/#{ days_limit }"
   end
 end

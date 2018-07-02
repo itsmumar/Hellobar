@@ -1,22 +1,25 @@
-- @site.contact_lists.each do |contact_list|
-  h4= "#{contact_list.name}    (#{contact_list.id})"
-  h4
-    ' Synced to:
-    = contact_list.identity.try(:provider) || "Hello Bar"
+#site_details
+  div.site-title
+    h3
+      = link_to site_title(@site), admin_site_path(@site)
 
-  table.table.table-striped
-    th colspan=2
-      | Last Synced
-    - contact_list.contact_list_logs.where(error: nil).order(created_at: :desc).limit(5).each do |log|
-      tr
-        td= log.email
-        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
+  div.site_section
+    div.title Contact Lists
 
-  table.table.table-striped
-    th colspan=3
-      | Recent Errors
-    - contact_list.contact_list_logs.where.not(error: nil).order(created_at: :desc).limit(5).each do |log|
+    table
       tr
-        td= log.email
-        td= log.error
-        td= log.created_at.strftime("%b %d, %Y at %l:%M %p")
+        th ID
+        th Name
+        th Created at
+        th Deleted at
+        th Synced to
+        th Subscribers count
+
+      - @contact_lists.each do |contact_list|
+        tr
+          td= link_to contact_list.id, admin_contact_list_path(contact_list)
+          td= link_to contact_list.name, admin_contact_list_path(contact_list)
+          td= format_date(contact_list.created_at)
+          td= format_date(contact_list.deleted_at)
+          td= contact_list&.identity&.provider || "Hello Bar"
+          td= @subscribers_count[contact_list.id]

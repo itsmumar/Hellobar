@@ -10,17 +10,14 @@ describe RuleSerializer do
       site_id: rule.site_id,
       name: rule.name,
       match: rule.match,
-      priority: rule.priority,
       description: rule.to_sentence,
       editable: true,
-
       conditions: [{
         id: condition.id,
         rule_id: rule.id,
         segment: condition.segment,
         operand: condition.operand,
-        value: condition.value,
-        data_type: nil
+        value: condition.value
       }]
     )
   end

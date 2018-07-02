@@ -3,12 +3,6 @@
     display: none;
   }
 
-  #hellobar-bar {
-   .hb-cta-style-button {
-      border-radius: 0px;
-    }
-  }
-
   #hellobar-slider {
     border-radius: 0px;
     border: 2px solid #202020;
@@ -21,10 +15,6 @@
     .hb-secondary-text {
       font-size: 12px;
       line-height: 22px;
-    }
-
-    .hb-cta-style-button {
-      border-radius: 0px;
     }
 
     .slider-content {
@@ -53,9 +43,8 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 18px;
-      border-radius: 0px;
     }
 
     .hb-name-input {
@@ -75,9 +64,8 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-weight: 400;
-      border-radius: 0px;
     }
 
     .hb-input-block input {

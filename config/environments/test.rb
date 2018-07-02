@@ -41,8 +41,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Configure Rails.cache store for test environment
-  # With this cache store, all fetch and read operations will result in a miss.
-  config.cache_store = :null_store
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
   # ActiveJob
   config.active_job.queue_adapter = :test

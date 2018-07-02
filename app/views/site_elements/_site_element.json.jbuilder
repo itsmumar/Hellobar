@@ -2,7 +2,6 @@ json.ignore_nil!
 json.cache! site_element do
   json.extract! site_element,
     :id,
-
     :answer1,
     :answer1response,
     :answer1caption,
@@ -13,15 +12,15 @@ json.cache! site_element do
     :answer2link_text,
     :use_question,
     :question,
-
     :contact_list_id,
-
     :use_default_image,
     :image_url,
     :image_large_url,
     :image_modal_url,
     :image_style,
     :image_opacity,
+    :image_overlay_color,
+    :image_overlay_opacity,
     :open_in_new_window,
     :phone_number,
     :primary_color,
@@ -29,8 +28,6 @@ json.cache! site_element do
     :remains_at_top,
     :secondary_color,
     :settings,
-    :target,
-    :blocks,
     :animated,
     :background_color,
     :border_color,
@@ -40,7 +37,6 @@ json.cache! site_element do
     :content,
     :image_placement,
     :link_color,
-    :link_style,
     :link_text,
     :name_placeholder,
     :phone_number,
@@ -48,38 +44,48 @@ json.cache! site_element do
     :show_border,
     :show_branding,
     :size,
-    :target,
     :text_color,
-    :texture,
     :theme_id,
     :type,
     :view_condition,
     :wiggle_button,
     :wordpress_bar_id,
-    :blocks,
-
     :fonts,
-
+    :text_field_border_color,
+    :text_field_border_width,
+    :text_field_border_radius,
+    :text_field_text_color,
+    :text_field_background_color,
+    :text_field_background_opacity,
     # alert bar
     :sound,
     :notification_delay,
     :trigger_color,
-    :trigger_icon_color
+    :trigger_icon_color,
+    :enable_gdpr,
+    :cta_border_color,
+    :cta_border_width,
+    :cta_border_radius
 
   json.font site_element.font.try(:value)
-  json.theme site_element.theme.attributes
+
+  json.theme do
+    json.image do
+      json.default_url site_element.theme.image['default_url']
+      json.position_default site_element.theme.image['position_default']
+    end
+  end
+
   json.google_font site_element.font.try(:google_font)
   json.subtype site_element.short_subtype
-  json.hide_destination true
   json.wiggle_wait 0
-  json.tab_side 'right'
   json.email_redirect site_element.email_redirect?
 
-  json.thank_you_text SiteElement.sanitize(site_element.display_thank_you_text).gsub(/"/, '&quot;')
+  json.thank_you_text site_element.display_thank_you_text.gsub(/"/, '&quot;')
 
   json.template_name "#{ site_element.class.name.downcase }_#{ site_element.element_subtype }"
 
-  json.branding_url "https://www.hellobar.com?sid=#{ site_element.id }"
+  json.branding_url "#{ Settings.marketing_site_url }?sid=#{ site_element.id }"
 
   json.closable(site_element.is_a?(Bar) || site_element.is_a?(Slider) ? site_element.closable : false)
 
@@ -91,6 +97,5 @@ json.cache! site_element do
 
   statistics = site_element.statistics
   json.views statistics.views
-  json.conversions statistics.conversions
   json.conversion_rate statistics.conversion_rate
 end

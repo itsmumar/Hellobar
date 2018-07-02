@@ -38,22 +38,9 @@ describe StaticScriptModel do
 
     it 'returns a Hash with capabilities' do
       expected_capabilities = {
-        no_b: site.capabilities.remove_branding?,
-        b_variation: 'animated',
-        preview: false,
-        remove_branding: site_capabilities.remove_branding?,
-        closable: site_capabilities.closable?,
-        custom_targeted_bars: site_capabilities.custom_targeted_bars?,
-        at_site_element_limit: site_capabilities.at_site_element_limit?,
-        custom_thank_you_text: site_capabilities.custom_thank_you_text?,
-        after_submit_redirect: site_capabilities.after_submit_redirect?,
-        content_upgrades: site_capabilities.content_upgrades?,
         autofills: site_capabilities.autofills?,
         geolocation_injection: site_capabilities.geolocation_injection?,
-        external_tracking: site_capabilities.external_tracking?,
-        alert_bars: site_capabilities.alert_bars?,
-        opacity: site_capabilities.opacity?,
-        precise_geolocation_targeting: site_capabilities.precise_geolocation_targeting?
+        external_tracking: site_capabilities.external_tracking?
       }
       expect(capabilities).to match expected_capabilities
     end
@@ -94,9 +81,6 @@ describe StaticScriptModel do
     end
 
     it 'returns css for all kind of containers' do
-      expect(StaticScriptAssets)
-        .to receive(:render).with('container_common.css', site_id: site.id).and_return('container_common.css')
-
       SiteElement.types.each do |type|
         type = type.downcase
         expect(StaticScriptAssets)
@@ -109,13 +93,12 @@ describe StaticScriptModel do
       end
 
       expect(model.hellobar_container_css)
-        .to eql "container_common.css\nbar/container.css\nmodal/container.css\nslider/container.css\n" \
-                "takeover/container.css\ncontentupgrade/container.css\nalert/container.css\n" \
+        .to eql "bar/container.css\nmodal/container.css\nslider/container.css\n" \
+                "takeover/container.css\nalert/container.css\n" \
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngreen-timberline/container.css\n" \
-                "marigold/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\n" \
-                "traffic-growth/container.css\nviolet/container.css"
+                "marigold/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\nviolet/container.css"
     end
   end
 
@@ -129,30 +112,21 @@ describe StaticScriptModel do
         %w[call traffic email announcement
            social/tweet_on_twitter social/follow_on_twitter social/like_on_facebook social/plus_one_on_google_plus
            social/pin_on_pinterest social/follow_on_pinterest social/share_on_buffer social/share_on_linkedin
-           question traffic_growth]
+           question]
       end
 
-      let(:bar_types) { %w[Bar Modal Slider Takeover ContentUpgrade Alert] }
-      let(:template_names) { %w[traffic_growth] }
+      let(:bar_types) { %w[Bar Modal Slider Takeover Alert] }
 
       def all_templates
         bar_subtypes.flat_map { |subtype|
-          bar_types.map do |type|
-            if template_names.include?(subtype)
-              element_types = Theme.find_by(id: subtype.tr('_', '-')).element_types
-              "#{ type.downcase }_#{ subtype }" if element_types.include?(type)
-            else
-              "#{ type.downcase }_#{ subtype }"
-            end
-          end
+          bar_types.map { |type| "#{ type.downcase }_#{ subtype }" }
         }.compact
       end
 
       before { allow(StaticScriptAssets).to receive(:render).and_return('') }
 
-      context 'for all bar types except traffic_growth template' do
-        let(:bar_subtypes_except_traffic_growth) { bar_subtypes - %w[traffic_growth] }
-        let(:bars_number) { bar_subtypes_except_traffic_growth.count }
+      context 'for all bar types' do
+        let(:bars_number) { bar_subtypes.count }
 
         it 'renders header and footer' do
           templates
@@ -171,17 +145,12 @@ describe StaticScriptModel do
           it 'renders content markup' do
             templates
 
-            bar_subtypes_except_traffic_growth.each do |subtype|
+            bar_subtypes.each do |subtype|
               args = ["#{ subtype.tr('/', '_') }.html", site_id: site.id]
               expect(StaticScriptAssets).to have_received(:render).with(*args).exactly(bars_number).times
             end
           end
         end
-      end
-
-      it 'renders traffic-growth/modal.html for traffic_growth template' do
-        templates
-        expect(StaticScriptAssets).to have_received(:render).with('traffic-growth', 'modal.html', site_id: site.id)
       end
 
       it 'returns array of template names and markups' do
@@ -201,33 +170,6 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#branding_templates' do
-    let(:templates) { model.branding_templates }
-    let(:names) { templates.map { |template| template[:name] } }
-    let(:markups) { templates.map { |template| template[:markup] } }
-
-    before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, path| path.basename.sub_ext('').to_s } }
-
-    it 'returns array of template names and markups' do
-      expected = %w[branding_add_hb branding_animated branding_gethb branding_gethb_no_track
-                    branding_not_using_hb branding_original branding_powered_by]
-
-      expect(names).to match_array expected
-      expect(markups).to match_array expected.map { |s| s.sub('branding_', '') }
-    end
-  end
-
-  describe '#content_upgrade_template' do
-    let(:templates) { model.content_upgrade_template }
-
-    before { allow(StaticScriptAssets).to receive(:render).and_return('') }
-
-    it 'returns array of template names and markups' do
-      expect(templates).to match_array [{ name: 'contentupgrade', markup: '' }]
-      expect(StaticScriptAssets).to have_received(:render).with('contentupgrade/contentupgrade.html', site_id: site.id)
-    end
-  end
-
   describe '#geolocation_url' do
     let(:geolocation_url) { 'geolocation_url' }
 
@@ -237,19 +179,6 @@ describe StaticScriptModel do
 
     it 'returns url' do
       expect(model.geolocation_url).to eql geolocation_url
-    end
-  end
-
-  describe '#hb_backend_host' do
-    let(:tracking_host) { 'hb_backend_host' }
-    let(:tracking_api_url) { "https://#{ tracking_host }" }
-
-    before do
-      allow(Settings).to receive(:tracking_api_url).and_return tracking_api_url
-    end
-
-    it 'returns host' do
-      expect(model.hb_backend_host).to eql tracking_host
     end
   end
 
@@ -294,7 +223,7 @@ describe StaticScriptModel do
 
     before do
       site.rules.first.update conditions: [
-        create(:condition, :url_is), create(:condition, :date_between), create(:condition, :time_before)
+        create(:condition, :url_path), create(:condition, :date_between), create(:condition, :time_before)
       ]
     end
 
@@ -316,7 +245,7 @@ describe StaticScriptModel do
       before { allow(StaticScriptAssets).to receive(:render).and_wrap_original { |_, filename| filename } }
 
       it 'returns common.css' do
-        expect(model.hellobar_element_css).to eql 'common.css'
+        expect(model.hellobar_element_css).to eql ''
       end
     end
 
@@ -325,8 +254,8 @@ describe StaticScriptModel do
       before { allow(model).to receive(:element_types).and_return ['Bar'] }
       before { allow(model).to receive(:element_themes).and_return [Theme.find('autodetect')] }
 
-      it 'returns common.css, element.css for each bar type and element.css for each theme' do
-        expect(model.hellobar_element_css).to eql "common.css\nbar/element.css\nautodetect/element.css"
+      it 'returns element.css for each bar type and element.css for each theme' do
+        expect(model.hellobar_element_css).to eql "bar/element.css\nautodetect/element.css"
       end
     end
   end
@@ -345,14 +274,19 @@ describe StaticScriptModel do
   end
 
   describe '#content_upgrade_styles' do
-    let(:content_upgrade_styles) { generate :content_upgrade_styles }
+    let(:content_upgrade_styles) { attributes_for(:content_upgrade_styles) }
+    let(:font_family) { ContentUpgradeStyles::AVAILABLE_FONTS[content_upgrade_styles[:offer_font_family_name]] }
 
     before do
-      site.update_content_upgrade_styles! content_upgrade_styles
+      site.content_upgrade_styles.update!(content_upgrade_styles)
     end
 
-    it 'returns site.settings[content_upgrades]' do
-      expect(model.content_upgrades_styles).to eql content_upgrade_styles
+    it 'returns styles attributes and font_family' do
+      expect(model.content_upgrades_styles).to include(content_upgrade_styles.stringify_keys)
+    end
+
+    it 'returns offer_font_family' do
+      expect(model.content_upgrades_styles).to include('offer_font_family' => font_family)
     end
   end
 
@@ -364,27 +298,16 @@ describe StaticScriptModel do
     end
   end
 
-  describe '#script_is_installed_properly' do
-    context 'when test env' do
-      specify { expect(model.script_is_installed_properly).to eql true }
-    end
-
-    context 'when not test env' do
-      before { allow(Rails.env).to receive(:test?).and_return(false) }
-
-      specify { expect(model.script_is_installed_properly).to eql 'scriptIsInstalledProperly()' }
-    end
-  end
-
   describe 'to_json' do
     let(:json) { JSON.parse(model.to_json).deep_symbolize_keys }
 
     it 'renders models partial to json' do
       expect(json.keys).to match_array %i[
-        preview_is_active version timestamp capabilities site_id site_url pro_secret
-        hellobar_container_css templates branding_templates content_upgrade_template
-        geolocation_url hb_backend_host site_write_key external_tracking hellobar_element_css
-        content_upgrades content_upgrades_styles autofills script_is_installed_properly rules
+        preview_is_active version modules_version timestamp capabilities site_id
+        site_url pro_secret hellobar_container_css templates geolocation_url
+        tracking_url site_write_key external_tracking hellobar_element_css
+        content_upgrades content_upgrades_styles autofills rules
+        disable_self_check gdpr_enabled gdpr_consent gdpr_agreement gdpr_action
       ]
     end
 
@@ -430,6 +353,84 @@ describe StaticScriptModel do
             )
           )
         end
+      end
+    end
+  end
+
+  describe '#gdpr_enabled' do
+    it 'returns site.gdpr_enabled?' do
+      expect(model.gdpr_enabled).to be site.gdpr_enabled?
+    end
+  end
+
+  describe '#gdpr_consent' do
+    let(:site) do
+      create :site,
+        communication_types: %w[newsletter promotional partnership product research]
+    end
+
+    it 'returns consent sentence' do
+      expect(model.gdpr_consent)
+        .to eql 'I consent to occasionally receive newsletter, promotional, ' \
+                'partnership, product/service, and market research emails.'
+    end
+  end
+
+  describe '#gdpr_agreement' do
+    let(:site) do
+      create(:site, privacy_policy_url: 'http://mysite.com/privacy', terms_and_conditions_url: 'http://mysite.com/terms')
+    end
+
+    it 'returns agreement HTML' do
+      expect(model.gdpr_agreement)
+        .to eql 'I have read and agree to the ' \
+                '<a target="_blank" href="http://mysite.com/privacy">Privacy Policy</a> and ' \
+                '<a target="_blank" href="http://mysite.com/terms">Terms and Conditions</a>.'
+    end
+  end
+
+  describe '#gdpr_action' do
+    it 'returns action text' do
+      expect(model.gdpr_action).to eql 'Submit'
+    end
+  end
+
+  describe '#disable_self_check' do
+    before { allow(Rails.env).to receive(:production?).and_return true }
+
+    context 'when preview' do
+      let(:options) { { preview: true } }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when site url is mysite.com' do
+      let(:site) { create :site, url: 'http://mysite.com' }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when site has disable_script_self_check capabilities' do
+      let(:site) { create :site, :pro_managed }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
+      end
+    end
+
+    context 'when Rails.env is not production || edge || staging' do
+      let(:site) { create :site }
+
+      before { allow(Rails.env).to receive(:production?).and_return false }
+      before { allow(Rails.env).to receive(:edge?).and_return false }
+      before { allow(Rails.env).to receive(:staging?).and_return false }
+
+      it 'returns true' do
+        expect(model.disable_self_check).to be_truthy
       end
     end
   end

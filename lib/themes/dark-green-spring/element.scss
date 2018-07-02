@@ -3,21 +3,11 @@
     display: none;
   }
 
-  #hellobar-bar {
-    .hb-cta-style-button {
-      border-radius: 5px;
-    }
-  }
-
   #hellobar-slider {
     border-radius: 5px;
 
     .hb-headline-text, .hb-secondary-text {
       line-height: 20px;
-    }
-
-    .hb-cta-style-button {
-      border-radius: 5px;
     }
 
     .slider-content {
@@ -45,9 +35,8 @@
       margin-top: 15px;
     }
 
-    .hb-cta-style-button {
+    .hb-cta {
       font-size: 18px;
-      border-radius: 10px;
     }
 
     .hb-name-input {
@@ -65,10 +54,6 @@
       font-size: 18px;
       line-height: 32px;
       margin-top: 15px;
-    }
-
-    .hb-cta-style-button {
-      border-radius: 10px;
     }
 
     .hb-input-block input {

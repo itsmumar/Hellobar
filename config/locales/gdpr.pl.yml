@@ -1,0 +1,16 @@
+pl:
+  support:
+    array:
+      last_word_connector: " oraz "
+      two_words_connector: " i "
+      words_connector: ", "
+  gdpr:
+    consent: Wyrażam zgodę na otrzymywanie od czasu do czasu %{topics} drogą elektroniczną.
+    communication_types:
+      newsletter: biuletynów informacyjnych
+      promotional: materiałów promocyjnych
+      partnership: ofert współpracy
+      product: informacji dotyczącej produktów i usług
+      research: badań marketingowych
+    agreement: "Oświadczam, że zapoznałem się i akceptuję treść <a target=\"_blank\" href=\"%{privacy_policy_url}\">polityki prywatności</a> i <a target=\"_blank\" href=\"%{terms_and_conditions_url}\">regulaminu</a>."
+    action: OK

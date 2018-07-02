@@ -30,7 +30,6 @@ module.exports = {
       "id": 8,
       "site_id": 3,
       "name": "Mobile Visitors",
-      "priority": null,
       "match": "all",
       "description": "Device is mobile",
       "editable": false,
@@ -39,14 +38,12 @@ module.exports = {
         "rule_id": 8,
         "segment": "DeviceCondition",
         "operand": "is",
-        "value": "mobile",
-        "data_type": null
+        "value": "mobile"
       }]
     }, {
       "id": 9,
       "site_id": 3,
       "name": "Homepage Visitors",
-      "priority": null,
       "match": "all",
       "description": "URL Path is /",
       "editable": false,
@@ -55,8 +52,7 @@ module.exports = {
         "rule_id": 9,
         "segment": "UrlPathCondition",
         "operand": "is",
-        "value": ["/"],
-        "data_type": null
+        "value": ["/"]
       }]
     }]
   },
@@ -65,7 +61,6 @@ module.exports = {
     "id": 7,
     "site_id": 3,
     "name": "Everyone",
-    "priority": null,
     "match": "all",
     "description": "Show this to everyone",
     "editable": false,
@@ -80,7 +75,6 @@ module.exports = {
   "view_condition": "immediately",
   "phone_number": null,
   "phone_country_code": "US",
-  "blocks": [],
   "headline": null,
   "caption": null,
   "link_text": "Click Here",
@@ -124,7 +118,6 @@ module.exports = {
   "answer1link_text_placeholder": "Take the tour",
   "answer2link_text_placeholder": "Shop now",
   "updated_at": null,
-  "link_style": "button",
   "size": "large",
   "site_preview_image": "/proxy/https/api.url2png.com/v6/P52EBC321291EF/7765925f00baf2a12be38e58d21a7d8c/png/?url=http%3A%2F%2Fhellobar.sergey-shakhov.com\u0026custom_css_url=http%3A%2F%2Fstaging.hellobar.com%2Fstylesheets%2Fhide_bar.css\u0026ttl=604800",
   "site_preview_image_mobile": "/proxy/https/api.url2png.com/v6/P52EBC321291EF/cd3e884f1676f50035dae2d449b69328/png/?url=http%3A%2F%2Fhellobar.sergey-shakhov.com\u0026viewport=320x568\u0026custom_css_url=http%3A%2F%2Fstaging.hellobar.com%2Fstylesheets%2Fhide_bar.css\u0026ttl=604800",

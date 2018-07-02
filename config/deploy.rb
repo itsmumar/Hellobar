@@ -74,7 +74,31 @@ namespace :deploy do
     end
   end
 
+  desc 'Precompile static assets to be used for static site scripts recompilation'
+  task :precompile_static_assets do
+    on roles(:web, :worker) do
+      within release_path do
+        execute :rake, "site:scripts:precompile_static_assets RAILS_ENV=#{ fetch :stage }"
+      end
+    end
+  end
+
+  desc 'Check if modules.js exist on S3'
+  task :check_modules do
+    run_locally do
+      require 'httparty'
+      require_relative '../app/core/hellobar_modules'
+      settings = YAML.load_file(File.join(__dir__, 'secrets.yml'))
+      stage = fetch(:stage).to_s
+      bucket = settings.dig(stage, 'script_cdn_url')
+      url = "https://#{ bucket }/#{ HellobarModules.filename }"
+      response = HTTParty.get(url)
+      abort "#{ url } not found. Upload #{ HellobarModules.filename } first" unless response.success?
+    end
+  end
+
   # TODO: Move node and bower dependencies to some shared folder
+  before :starting, 'check_modules'
   before 'assets:precompile', 'node:yarn_install'
   before 'assets:precompile', 'node:bower_install'
   before 'assets:precompile', 'ember:build'
@@ -84,16 +108,6 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :copy_additional_logrotate_files
   after :finished, 'tag_release:github'
-  after :finished, 'trigger_automated_qa_tests'
-
-  desc 'Precompile static assets to be used for static site scripts recompilation'
-  task :precompile_static_assets do
-    on roles(:web, :worker) do
-      within release_path do
-        execute :rake, "site:scripts:precompile_static_assets RAILS_ENV=#{ fetch :stage }"
-      end
-    end
-  end
 
   desc 'Starts maintenance mode'
   task :start_maintenance do
@@ -201,28 +215,6 @@ namespace :tag_release do
       strategy.git 'remote update'
       strategy.git "branch -f #{ fetch :stage } #{ current_revision }"
       strategy.git "push -f origin #{ fetch :stage }"
-    end
-  end
-end
-
-desc 'Run automated QA tests after edge and production deployments'
-task :trigger_automated_qa_tests do
-  run_locally do
-    stage = fetch :stage
-
-    if !dry_run? && %i[edge production].include?(stage)
-      info "Trigger automated QA tests on #{ stage }"
-
-      execute <<~CMD
-        curl --data '{"build_parameters": {"QA_ENV": "#{ stage }"}}' \
-             -X POST https://circleci.com/api/v1.1/project/github/Hello-bar/hellobar_qa_java/tree/master \
-             --header "Content-Type: application/json" \
-             --silent -u 73ba0635bbc31e2b342dff9664810f1e13e71556: > /dev/null
-      CMD
-    else
-      info 'Skipping automated QA tests'
-
-      next
     end
   end
 end

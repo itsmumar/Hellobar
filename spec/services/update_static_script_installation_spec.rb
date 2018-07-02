@@ -12,13 +12,7 @@ describe UpdateStaticScriptInstallation do
       end
 
       it 'redeems referrals' do
-        expect(Referrals::RedeemForRecipient).to receive(:run).with(site: site)
-
-        service.call
-      end
-
-      it 'tracks the install event' do
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Installed')
+        expect(RedeemReferralForRecipient).to receive_service_call.with(site)
 
         service.call
       end
@@ -29,19 +23,12 @@ describe UpdateStaticScriptInstallation do
 
         service.call
       end
-
-      it 'creates onboarding status :installed_script' do
-        expect { service.call }.to change(UserOnboardingStatus, :count).by 1
-        expect(UserOnboardingStatus.last.status_id)
-          .to eql UserOnboardingStatus::STATUSES[:installed_script]
-      end
     end
 
     context 'and is set to uninstalled' do
       let(:service) { UpdateStaticScriptInstallation.new site, installed: false }
 
       it 'does nothing' do
-        expect(Analytics).not_to receive(:track).with(:site, site.id, 'Uninstalled')
         expect(TrackEvent).not_to receive_service_call
 
         service.call
@@ -63,21 +50,11 @@ describe UpdateStaticScriptInstallation do
         }.to Time.current
       end
 
-      it 'tracks the uninstall event' do
-        expect(Analytics).to receive(:track).with(:site, site.id, 'Uninstalled')
-
-        service.call
-      end
-
       it 'sends the uninstall event to analytics' do
         expect(TrackEvent).to receive_service_call
           .with(:uninstalled_script, site: site, user: site.owners.first)
 
         service.call
-      end
-
-      it 'changes user onboarding status' do
-        expect { service.call }.to change(UserOnboardingStatus, :count).by 1
       end
     end
 
@@ -91,7 +68,6 @@ describe UpdateStaticScriptInstallation do
       end
 
       it 'does not send tracking events' do
-        expect(Analytics).not_to receive(:track).with(:site, site.id, 'Installed')
         expect(TrackEvent).not_to receive_service_call
 
         service.call

@@ -1,6 +1,4 @@
 describe Condition do
-  it_behaves_like 'a model triggering script regeneration'
-
   it { is_expected.to validate_presence_of :rule }
   it { is_expected.to validate_presence_of :segment }
   it { is_expected.to validate_inclusion_of(:segment).in_array Condition::SEGMENTS.keys }
@@ -13,7 +11,7 @@ describe Condition do
         rule: create(:rule),
         operand: 'is',
         value: ['/foo', '/bar', ''],
-        segment: 'UrlCondition'
+        segment: 'UrlPathCondition'
       )
 
       expect(condition).to be_valid
@@ -22,14 +20,14 @@ describe Condition do
 
     context 'the operand is NOT "between"' do
       it 'is NOT valid when the value is a non-String object' do
-        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+        condition = Condition.new segment: 'DeviceCondition', operand: 'is',
           value: ['array'], rule: Rule.new
 
         expect(condition).not_to be_valid
       end
 
       it 'is valid when the value is a String' do
-        condition = Condition.new segment: 'LocationCityCondition', operand: 'is',
+        condition = Condition.new segment: 'DeviceCondition', operand: 'is',
           value: 'string', rule: Rule.new
 
         expect(condition).to be_valid
@@ -95,16 +93,6 @@ describe Condition do
   end
 
   describe '#to_sentence' do
-    context 'is a UrlCondition' do
-      it 'calls #url_condition_sentence' do
-        condition = create :condition, :url_is
-
-        expect(condition).to be_persisted
-        expect(condition).to receive(:multiple_condition_sentence) { 'right' }
-        expect(condition.to_sentence).to eql('right')
-      end
-    end
-
     context 'is a UrlPathCondition' do
       it 'calls #url_condition_sentence' do
         condition = create :condition, :url_path
@@ -114,6 +102,16 @@ describe Condition do
         expect(condition.to_sentence).to eql('right')
       end
     end
+
+    context 'is a UrlQueryCondition' do
+      it 'outputs nice sentence' do
+        condition = create :condition, :url_query
+
+        expect(condition).to be_persisted
+        expect(condition.to_sentence).to include 'Page Query'
+      end
+    end
+
     context 'is a DateCondition' do
       it "converts 'is between' conditions to sentences" do
         expect(Condition.date_condition_from_params('7/6', '7/13').to_sentence).to eq('Date is between 7/6 and 7/13')
@@ -136,70 +134,25 @@ describe Condition do
         expect(condition.to_sentence).to eq('Every 5th session')
       end
     end
+
+    context 'is a UTMSourceCondition' do
+      it 'outputs nice sentence' do
+        condition = create :condition, :utm_source
+
+        expect(condition).to be_persisted
+        expect(condition.to_sentence).to include 'Ad Source'
+      end
+    end
   end
 
   describe '#normalize_url_condition' do
-    context 'is not a UrlCondition' do
+    context 'is not a UrlPathCondition' do
       it 'should do nothing to the value' do
         value = 'https://google.com'
         condition = build :condition, :referrer, value: value
 
         condition.send(:normalize_url_condition)
         expect(condition.value).to eq value
-      end
-    end
-
-    context 'is a UrlCondition' do
-      it 'should do nothing if url is already absolute (http)' do
-        url = 'http://google.com'
-        condition = build(:condition, :url_is, value: url)
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq url
-      end
-
-      it 'should do nothing if url is already absolute (https)' do
-        url = 'https://google.com'
-        condition = build(:condition, :url_is, value: url)
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq url
-      end
-
-      it 'should do nothing if url is a relative path' do
-        path = '/about'
-        condition = build(:condition, :url_is, value: path)
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq path
-      end
-
-      it 'should prepend a / if url is relative' do
-        condition = build(:condition, :url_is, value: 'about')
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about')
-      end
-
-      it 'should prepend a / if url is relative and has an extension' do
-        condition = build(:condition, :url_is, value: 'about.html')
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq('/about.html')
-      end
-
-      it 'should prepend http:// if url is absolute' do
-        host = 'about.com'
-        condition = build(:condition, :url_is, value: host)
-        condition.send(:normalize_url_condition)
-        expect(condition.value).to eq "http://#{ host }"
-      end
-
-      it 'should normalize values in an array' do
-        host = 'hey.hellobar.com'
-        path = 'about.html'
-
-        condition = build(:condition, :url_is, value: [host, path])
-        condition.send(:normalize_url_condition)
-
-        expect(condition.value).to eq(["http://#{ host }", "/#{ path }"])
       end
     end
 

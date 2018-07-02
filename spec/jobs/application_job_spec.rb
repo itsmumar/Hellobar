@@ -7,15 +7,29 @@ describe ApplicationJob do
   end
 
   describe '#perform' do
-    let(:exception) { StandardError.new }
-
-    it 'clears Raven context' do
+    it 'clears Raven context after #perform' do
       expect(Raven::Context).to receive :clear!
 
       job.perform_now
     end
 
-    context 'when error is raised' do
+    context 'when ActiveJob::DeserializationError is raised' do
+      let(:exception) { ActiveJob::DeserializationError.new OpenStruct.new }
+
+      before do
+        expect_any_instance_of(job).to receive(:perform).and_raise(exception)
+      end
+
+      it 'captures the exception and logs it' do
+        expect(Shoryuken.logger).to receive(:error).twice
+
+        expect { job.perform_now }.not_to raise_exception
+      end
+    end
+
+    context 'when StandardError is raised' do
+      let(:exception) { StandardError.new }
+
       before do
         expect_any_instance_of(job).to receive(:perform).and_raise(exception)
       end
@@ -28,7 +42,7 @@ describe ApplicationJob do
       end
     end
 
-    context 'when Aws::S3::Errors::InternalError is raise' do
+    context 'when Aws::S3::Errors::InternalError is raised' do
       let(:job) do
         Class.new(ApplicationJob) do
           def perform

@@ -1,9 +1,8 @@
-class Admin < ActiveRecord::Base
+class Admin < ApplicationRecord
   LOCKDOWN_KEY_EXPIRY = 2.hours
   MAX_ACCESS_TOKENS = 10
   MAX_LOGIN_ATTEMPTS = 10
   MAX_SESSION_TIME = 24.hours
-  MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD = 90.days
   MIN_PASSWORD_LENGTH = 8
   SALT = 'thisismyawesomesaltgoducks'.freeze
   ISSUER = 'HelloBar'.freeze
@@ -66,10 +65,18 @@ class Admin < ActiveRecord::Base
     def unlock_all!
       Admin.update_all(login_attempts: 0, locked: 0)
     end
+
+    def otp_enabled?
+      Rails.env.production?
+    end
   end
 
   def logout!
     update_attribute(:session_token, '')
+  end
+
+  def otp_enabled?
+    self.class.otp_enabled?
   end
 
   def needs_otp_code?
@@ -80,61 +87,45 @@ class Admin < ActiveRecord::Base
     authentication_policy.generate_otp
   end
 
-  # Validates the access_token, password and otp_code
-  # Makes sure not locked
-  # Save entered_otp, so next time user won't see the barcode rendered again.
-  # Also increases the login_attempts and locks it down if reaches MAX_LOGIN_ATTEMPTS
-  # If this is a valid login then we call login!. Returns true if everything
-  # is valid, false otherwise
-  def validate_login(password, entered_otp)
-    update_attribute(:login_attempts, login_attempts + 1)
-    update_attribute(:authentication_code, entered_otp)
-
-    lock! if login_attempts > MAX_LOGIN_ATTEMPTS
-    return false if locked? ||
-                    !valid_authentication_otp?(entered_otp) ||
-                    password_hashed != encrypt_password(password)
-
-    login!
-    true
+  def validate_password!(password)
+    if password_hashed == encrypt_password(password)
+      update_attribute(:login_attempts, 0)
+      true
+    else
+      increment(:login_attempts)
+      lock! if login_attempts >= MAX_LOGIN_ATTEMPTS
+      false
+    end
   end
 
-  def valid_authentication_otp?(otp)
-    authentication_policy.otp_valid?(otp)
+  def validate_otp!(otp)
+    return true unless otp_enabled?
+
+    update_attribute(:authentication_code, otp) if authentication_policy.otp_valid?(otp)
   end
 
   def reset_password!(unencrypted_password)
     timestamp = Time.current
-    self.password_last_reset = timestamp
     self.password = unencrypted_password
     save!
 
     lockdown_url = admin_lockdown_url(email: email, key: Admin.lockdown_key(email, timestamp.to_i), timestamp: timestamp.to_i, host: Settings.host)
 
+    body = "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
+        Not me, lock it down -> #{ lockdown_url }
+
+    "
+
     Pony.mail(
       to: email,
       subject: 'Your password has been reset',
-      body: "If this is not you, this may be an attack and you should lock down the admin by clicking this link:
-
-        Not me, lock it down -> #{ lockdown_url }
-
-"
+      body: body
     )
   end
 
-  # Reset login_attempts, session_token and session_last_active
   def login!
-    return false if locked?
-
-    update_attributes(
-      login_attempts: 0,
-      session_token: hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join(''))
-    )
+    generate_new_session!
     session_heartbeat!
-  end
-
-  def needs_to_set_new_password?
-    !password_last_reset || Time.current - password_last_reset > MAX_TIME_BEFORE_NEEDS_NEW_PASSWORD
   end
 
   def lock!
@@ -174,6 +165,10 @@ class Admin < ActiveRecord::Base
 
   def set_default_password
     self.password = initial_password if new_record? && password_hashed.blank?
+  end
+
+  def generate_new_session!
+    update_attribute(:session_token, hexdigest([Time.current.to_i, rand(10_000), email, rand(10_000)].map(&:to_s).join('')))
   end
 
   def generate_rotp_secret_base!

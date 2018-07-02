@@ -7,20 +7,11 @@ class ChangeSubscription
   end
 
   def call
-    if same_subscription?
-      update_credit_card
-    else
-      change_subscription
+    return downgrade_site_to_free if downgrading_to_free?
+
+    change_or_update_subscription.tap do
+      regenerate_script
     end
-  end
-
-  private
-
-  attr_reader :site, :credit_card, :billing_params, :old_subscription
-
-  def cancel_subscription_if_it_is_free
-    return if !old_subscription || old_subscription.paid?
-    old_subscription.bills.free.each(&:voided!)
   end
 
   def same_subscription?
@@ -28,30 +19,56 @@ class ChangeSubscription
       billing_params[:schedule] == old_subscription.schedule
   end
 
+  private
+
+  attr_reader :site, :credit_card, :billing_params, :old_subscription
+
+  def change_or_update_subscription
+    if same_subscription?
+      update_credit_card
+    else
+      change_subscription
+    end
+  end
+
+  def regenerate_script
+    site.script.generate
+  end
+
+  def cancel_subscription_if_it_is_free
+    return if !old_subscription || old_subscription.paid?
+    old_subscription.bills.free.each(&:void!)
+  end
+
   def update_credit_card
-    old_subscription.update credit_card: credit_card
-    try_to_pay_problem_bill
+    site.current_subscription.update! credit_card: credit_card
+    try_to_pay_failed_bill
     old_subscription.bills.last
   end
 
-  def try_to_pay_problem_bill
-    return unless (last_problem_bill = old_subscription.bills.problem.last)
-    PayBill.new(last_problem_bill).call
+  def try_to_pay_failed_bill
+    return unless (last_failed_bill = site.current_subscription.bills.failed.last)
+    PayBill.new(last_failed_bill).call
   end
 
   def change_subscription
     cancel_subscription_if_it_is_free
-    create_subscription_and_pay_bill.tap do |bill|
-      track_subscription_change(bill.subscription)
-    end
+    create_subscription_and_pay_bill
   end
 
   def create_subscription_and_pay_bill
     Subscription.transaction do
+      void_pending_bills!
       subscription = create_subscription
-      bill = create_bill(subscription)
-      pay_bill(bill)
+      track_subscription_change(subscription)
+      create_and_pay_bill_if_necessary(subscription)
     end
+  end
+
+  def create_and_pay_bill_if_necessary(subscription)
+    return if subscription_class == Subscription::Free
+    bill = create_bill(subscription)
+    pay_bill(bill)
   end
 
   def create_subscription
@@ -64,12 +81,12 @@ class ChangeSubscription
 
   def pay_bill(bill)
     PayBill.new(bill).call if bill.due_at(credit_card) <= Time.current
-    raise_record_invalid_if_problem(bill)
+    raise_record_invalid_if_failed(bill)
     bill
   end
 
-  def raise_record_invalid_if_problem(bill)
-    return unless bill.problem?
+  def raise_record_invalid_if_failed(bill)
+    return unless bill.failed?
     bill.errors.add :base,
       "There was a problem while charging your credit card ending in #{ credit_card.last_digits }." \
       ' You can fix this by adding another credit card'
@@ -77,20 +94,19 @@ class ChangeSubscription
   end
 
   def create_bill(subscription)
-    void_pending_bills!
     CalculateBill.new(subscription, bills: site.bills).call.tap(&:save!)
   end
 
   def void_pending_bills!
-    site.bills.pending.each(&:voided!)
+    site.bills.pending.each(&:void!)
   end
 
   def subscription_class
-    Subscription.const_get(billing_params[:subscription].camelize)
+    Subscription.const_get(billing_params[:subscription].to_s.camelize)
   end
 
   def track_subscription_change(subscription)
-    return unless subscription.persisted?
+    return unless subscription&.persisted?
 
     props = {
       to_subscription: subscription.values[:name],
@@ -104,7 +120,19 @@ class ChangeSubscription
 
     BillingLogger.change_subscription(site, props)
 
-    Analytics.track(:site, site.id, :change_sub, props)
-    TrackEvent.new(:changed_subscription, site: site, user: site.owners.first).call
+    TrackSubscriptionChange.new(credit_card&.user || site.owners.first, old_subscription, subscription).call
+  end
+
+  def downgrading_to_free?
+    subscription_class == Subscription::Free && old_subscription
+  end
+
+  def downgrade_site_to_free
+    subscription = DowngradeSiteToFree.new(site).call
+    track_subscription_change(subscription)
+
+    # since the service has to return a bill
+    # let's just return an new one
+    subscription.bills.new
   end
 end

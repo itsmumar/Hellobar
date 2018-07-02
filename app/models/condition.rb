@@ -1,4 +1,4 @@
-class Condition < ActiveRecord::Base
+class Condition < ApplicationRecord
   serialize :value
 
   # class name: Hello::Segments::User key
@@ -14,19 +14,22 @@ class Condition < ActiveRecord::Base
     'PreviousPageURL' => 'pp',
     'ReferrerCondition' => 'rf',
     'ReferrerDomainCondition' => 'rd',
-    'SearchTermCondition' => 'st',
     'TimeCondition' => 'tc',
+    'UrlPathCondition' => 'pup',
+    'UrlQueryCondition' => 'pq',
     'UTMCampaignCondition' => 'ad_ca',
     'UTMContentCondition' => 'ad_co',
     'UTMMediumCondition' => 'ad_me',
     'UTMSourceCondition' => 'ad_so',
-    'UTMTermCondition' => 'ad_te',
-    'UrlCondition' => 'pu',
-    'UrlPathCondition' => 'pup',
-    'UrlQuery' => 'pq'
+    'UTMTermCondition' => 'ad_te'
   }.freeze
 
-  MULTIPLE_CHOICE_SEGMENTS = %w[UrlCondition UrlPathCondition LocationCountryCondition].freeze
+  MULTIPLE_CHOICE_SEGMENTS = %w[
+    UrlPathCondition LocationCountryCondition LocationRegionCondition LocationCityCondition
+    UTMCampaignCondition UTMContentCondition UTMMediumCondition UTMSourceCondition UTMTermCondition
+  ].freeze
+
+  PRECISE_SEGMENTS = %w[LocationRegionCondition LocationCityCondition].freeze
 
   # stored value: displayed value
   OPERANDS = {
@@ -41,7 +44,7 @@ class Condition < ActiveRecord::Base
     less_than: 'is less than'
   }.with_indifferent_access.freeze
 
-  belongs_to :rule, inverse_of: :conditions, touch: true
+  belongs_to :rule, inverse_of: :conditions
 
   before_validation :clear_blank_values
   before_validation :format_string_values
@@ -51,8 +54,8 @@ class Condition < ActiveRecord::Base
   validates :segment, presence: true, inclusion: { in: SEGMENTS.keys }
   validates :operand, presence: true
   validates :value, presence: true
-  validate :value_is_valid
-  validate :operand_is_valid
+  validate :value_correctness
+  validate :operand_correctness
 
   delegate :site, to: :rule
 
@@ -101,7 +104,7 @@ class Condition < ActiveRecord::Base
   end
 
   def segment_data
-    Hello::Segments::User.find { |s| s[:key] == segment_key } || {}
+    Hello::Segments::USER.find { |s| s[:key] == segment_key } || {}
   end
 
   def timezone_offset
@@ -114,6 +117,10 @@ class Condition < ActiveRecord::Base
         Time.zone.now.formatted_offset
       end
     end
+  end
+
+  def precise?
+    PRECISE_SEGMENTS.include?(segment)
   end
 
   private
@@ -136,7 +143,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def value_is_valid
+  def value_correctness
     if operand == 'between'
       errors.add(:value, 'is not a valid value') unless value.is_a?(Array) && value.length == 2 && value.all?(&:present?)
     elsif MULTIPLE_CHOICE_SEGMENTS.include?(segment) || (segment == 'TimeCondition') # time condition is also array, but not with multiple choice
@@ -146,7 +153,7 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def operand_is_valid
+  def operand_correctness
     @operands ||= {
       'DateCondition'             => %w[is is_not before after between],
       'DeviceCondition'           => %w[is is_not],
@@ -159,11 +166,14 @@ class Condition < ActiveRecord::Base
       'PreviousPageURL'           => %w[includes does_not_include],
       'ReferrerCondition'         => %w[is is_not includes does_not_include],
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
-      'SearchTermCondition'       => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
-      'UrlCondition'              => %w[is is_not includes does_not_include],
       'UrlPathCondition'          => %w[is is_not includes does_not_include],
-      'UtmCondition'              => %w[is is_not includes does_not_include]
+      'UrlQueryCondition'         => %w[is is_not includes does_not_include],
+      'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
+      'UTMContentCondition'       => %w[is is_not includes does_not_include],
+      'UTMMediumCondition'        => %w[is is_not includes does_not_include],
+      'UTMSourceCondition'        => %w[is is_not includes does_not_include],
+      'UTMTermCondition'          => %w[is is_not includes does_not_include]
     }
 
     return if @operands[segment]&.include? operand
@@ -176,7 +186,7 @@ class Condition < ActiveRecord::Base
   end
 
   def normalize_url_condition
-    return if segment != 'UrlCondition' && segment != 'UrlPathCondition'
+    return if segment != 'UrlPathCondition'
 
     if value.is_a?(String)
       self.value = normalize_url(value)

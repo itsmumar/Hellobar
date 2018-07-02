@@ -21,6 +21,10 @@ class SiteStatistics
     )
   end
 
+  def ==(other)
+    other.class == self.class && other.records == records
+  end
+
   def site_element_ids
     map(&:site_element_id).uniq
   end

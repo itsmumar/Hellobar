@@ -3,8 +3,15 @@ class StaticScript
 
   attr_reader :site
 
+  def self.hash_content
+    {
+      prefix: 'bar',
+      suffix: 'cat'
+    }
+  end
+
   def self.hash_id(id)
-    Digest::SHA1.hexdigest("bar#{ id }cat")
+    Digest::SHA1.hexdigest(hash_content[:prefix] + id.to_s + hash_content[:suffix])
   end
 
   def initialize(site)
@@ -24,7 +31,7 @@ class StaticScript
   end
 
   def modules_url
-    cdn_url_for StaticScriptAssets.digest_path('modules.js')
+    HellobarModules.local_modules_url || cdn_url_for(HellobarModules.filename)
   end
 
   def installed?
@@ -34,6 +41,7 @@ class StaticScript
   end
 
   def generate
+    refresh_cache
     GenerateStaticScriptJob.perform_later site
   end
 
@@ -42,6 +50,14 @@ class StaticScript
   end
 
   private
+
+  # forces site.cache_key to be updated
+  #
+  # @see StaticScriptModel#to_json
+  # @see _static_script_model.json.jbuilder
+  def refresh_cache
+    site.touch
+  end
 
   def cdn_url_for(path)
     File.join(cdn_domain, path)

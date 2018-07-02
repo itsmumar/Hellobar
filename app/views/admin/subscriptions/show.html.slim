@@ -1,0 +1,11 @@
+#subscriptions
+  div.subscription_section.site_details
+    = render 'admin/sites/header', site: subscription_site(@subscription)
+
+  div.subscription_section.subscription_details
+    div.title Subscription Details
+    = render 'list', subscriptions: [@subscription]
+
+  div.subscription_section.billing_history
+    div.title Billing History
+    = render 'admin/bills/list', bills: @subscription.bills, user: @subscription.credit_card&.user

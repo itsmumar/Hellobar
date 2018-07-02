@@ -110,9 +110,9 @@ describe StaticScriptAssets do
       context 'and syntax error' do
         let(:file) { 'with_syntax_error.js' }
 
-        it 'raises ExecJS::ProgramError' do
+        it 'raises Uglifier::Error' do
           expect { rendered }
-            .to raise_error ExecJS::Error, 'SyntaxError: Unexpected character \'#\''
+            .to raise_error Uglifier::Error, 'Unexpected character \'#\''
         end
       end
     end
@@ -147,12 +147,17 @@ describe StaticScriptAssets do
 
   describe '.digest_path' do
     before do
-      StaticScriptAssets.manifest.compile('modules.js')
+      allow(StaticScriptAssets)
+        .to receive_message_chain(:manifest, :assets)
+        .and_return('modules.js' => 'modules-compiled.js')
+
+      allow(StaticScriptAssets)
+        .to receive(:digest_path)
+        .and_call_original
     end
-    before { allow(StaticScriptAssets).to receive(:digest_path).and_call_original }
 
     it 'returns path to file with a hash' do
-      expect(assets.digest_path('modules.js')).to match(/modules-\w{64}.js/)
+      expect(assets.digest_path('modules.js')).to eql 'modules-compiled.js'
     end
   end
 end

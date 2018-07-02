@@ -1,12 +1,13 @@
 class ContactFormMailer < ApplicationMailer
-  layout 'no_signature'
+  SPACE = ' '.freeze
+
   default to: 'support@hellobar.com',
           from: 'Hello Bar <contact@hellobar.com>'
 
   def generic_message(message, user, site)
     @message = message
     @website = site&.url
-    preview = message.to_s[0, 50]
+    preview = build_preview(message)
 
     params = {
       subject: "Contact Form: #{ preview }",
@@ -14,20 +15,6 @@ class ContactFormMailer < ApplicationMailer
     }
 
     mail params
-  end
-
-  def guest_message(name:, email:, message:)
-    preview = message.to_s[0, 50]
-
-    params = {
-      subject: "Contact Form: #{ preview }",
-      from: "#{ name } <#{ email }>"
-    }
-
-    mail(params) do |format|
-      format.text { render plain: message }
-      format.html { render html: message }
-    end
   end
 
   def forgot_email(site_url:, first_name:, last_name:, email:)
@@ -44,7 +31,7 @@ class ContactFormMailer < ApplicationMailer
   end
 
   def contact_developer(developer_email, site, user)
-    @site_url = site.normalized_url
+    @site_url = site.host
     @script_url = site.script_url
     @user_email = user.email
 
@@ -54,5 +41,12 @@ class ContactFormMailer < ApplicationMailer
     }
 
     mail params
+  end
+
+  private
+
+  def build_preview(value)
+    # removes line-endings and unreadable symbols and truncate message
+    value.to_s.gsub(/\s/, SPACE).strip.squeeze(SPACE)[0, 50]
   end
 end

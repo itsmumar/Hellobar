@@ -1,7 +1,0 @@
-{
-  "id": "traffic-growth",
-  "type": "template",
-  "element_types": ["Modal"],
-  "name": "Traffic Growth",
-  "disabled": true
-}

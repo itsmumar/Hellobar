@@ -10,44 +10,47 @@
   .header-nav-wrapper
     .dropdown-wrapper.no-hover#site-selector
       div.site-label SITE
-      span.site-name= current_site.normalized_url
+      span.site-name= current_site.host
       span.caret
         = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'Site Settings', (current_user ? edit_site_path(current_site) : root_path)
         - if current_site.free?
-          = content_tag 'a', 'Hello Bar PRO', class: 'show-upgrade-modal floating-button', data: { source: 'Hello Bar PRO' }
+          = content_tag 'a', "Hello Bar #{ pro_or_growth }", class: 'show-upgrade-modal floating-button', data: { source: "Hello Bar #{ pro_or_growth }" }
         h6= current_user.sites.count <= 1 ? 'Sites' : 'Switch Sites'
 
         ul
-          - current_user.sites.sort_by(&:normalized_url).each do |site|
+          - sorted_sites.each do |site|
             li.padded
               - unless site.free?
                 div.pill class=site.current_subscription.values[:name].parameterize
                   = site.current_subscription.values[:label]
 
-              = active_link_to site.normalized_url, site_path(site)
+              = active_link_to site.host, site_path(site)
 
         = button_to 'Add New Site', new_site_path, class: 'button', method: :get
 
   .header-user-wrapper
     .ctas
       - unless current_user.temporary?
-        - if current_site.free?
+        - if current_site.free? && !current_site.active_subscription
           a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
             | Want More Power?
 
         - elsif current_site.current_subscription.try(:currently_on_trial?)
           a.button.show-payment-modal data={ source: "Add payment to trial" }
-            div Enjoying Hello Bar Pro?
+            div Enjoying Hello Bar #{ current_site.current_subscription.name }?
+        - elsif current_site.free? && current_site.active_subscription
+          a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
+            = subscription_days_left(current_site)
 
     .dropdown-wrapper.no-hover
-      = image_tag gravatar_url_for(current_user), :class => 'user-avatar'
+      = image_tag gravatar_url_for(current_user), class: 'user-avatar'
       span.user-name= display_name_for_user(current_user)
       span.caret
         = image_tag('caret-down.svg')
       .dropdown-block
-        = active_link_to 'User Settings', profile_path()
+        = active_link_to 'Settings', profile_path()
         - if current_site.free?
           a.show-upgrade-modal.floating-button data-source='Header Drop-down' Upgrade Plan
         - else
@@ -67,4 +70,4 @@
       span.caret
         = image_tag('caret-down.svg')
       .dropdown-block
-        = active_link_to 'Sign Out', destroy_user_session_path, :method => :delete
+        = active_link_to 'Sign Out', destroy_user_session_path, method: :delete

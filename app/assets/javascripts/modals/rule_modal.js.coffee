@@ -18,7 +18,7 @@ class @RuleModal extends Modal
   buildCondition: (conditionData, index) ->
     conditionData.index ||= index
     conditionData.is_between = true if conditionData.operand == 'between'
-    conditionData.canUseAdvancedLocation = @site.capabilities.precise_geolocation_targeting
+    conditionData.canUsePreciseGeolocationTargeting = @site.capabilities.precise_geolocation_targeting
     template = Handlebars.compile(@conditionTemplate())
     $condition = $(template(conditionData))
     @_updateConditionMarkup($condition, conditionData)
@@ -40,16 +40,6 @@ class @RuleModal extends Modal
     @_bindAddCondition()
     @_bindRemoveCondition()
     @_bindMultipleChoiceActions()
-    @_bindSelectionChanges()
-
-  _removeUrlCondition: ->
-    urlCondition = @ruleData.conditions.find (condition) ->
-      condition.segment == "UrlCondition"
-
-    # delete the UrlCondition if the user isn't using it
-    unless urlCondition
-      this.$modal.find('select.condition-segment option[value="UrlCondition"]').remove()
-
 
   _renderContent: ->
     $('body').append(@$modal)
@@ -61,11 +51,9 @@ class @RuleModal extends Modal
       $condition = ruleModal.buildCondition(conditionData, index)
       ruleModal._addCondition($condition)
 
-    @_removeUrlCondition()
-
     @_toggleNewConditionMessage()
 
-    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_data_type, .rule_conditions_operand', ->
+    @$modal.on 'change', '.rule_conditions_segment, .rule_conditions_operand', ->
       $this = $(this)
       $condition = $this.parents('.condition-block:first')
       segment = $condition.find('.condition-segment').val()
@@ -73,7 +61,7 @@ class @RuleModal extends Modal
       # reset the value if the segment changes
       if $this.hasClass('rule_conditions_segment')
         value = null
-      else if segment == "UrlCondition" || segment == "UrlPathCondition"
+      else if segment == "UrlPathCondition"
         value = $.map($condition.find('.value:visible'), (field, i) -> $(field).val())
       else
         value = $condition.find('.value:visible').val()
@@ -83,7 +71,6 @@ class @RuleModal extends Modal
         index: $condition.data('condition-index')
         segment: segment
         operand: $condition.find('.condition-operand').val()
-        data_type: $condition.find('.condition-data-type').val() || 'string'
         value: value
 
       $updatedCondition = ruleModal.buildCondition(conditionData, conditionData.index)
@@ -92,13 +79,8 @@ class @RuleModal extends Modal
       $condition.html($updatedCondition.html())
 
   _updateConditionMarkup: ($condition, conditionData) ->
-    @_renderDataTypes($condition, conditionData)
     @_renderOperands($condition, conditionData)
     @_renderValue($condition, conditionData)
-
-  _renderDataTypes: ($condition, conditionData) ->
-    types = Object.keys(@_dataTypeOperandMapping)
-    $condition.find('.rule_conditions_data_type').remove()
 
   _renderOperands: ($condition, conditionData) ->
     validOperands = @filteredOperands(conditionData.segment)
@@ -168,16 +150,14 @@ class @RuleModal extends Modal
     'PreviousPageURL': ['includes', 'does_not_include']
     'ReferrerCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'SearchTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'TimeCondition': ['before', 'after']
+    'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQueryCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlQuery': ['is', 'is_not', 'includes', 'does_not_include']
 
   _segmentToClassMapping:
     'DateCondition': '.date-choice'
@@ -191,26 +171,14 @@ class @RuleModal extends Modal
     'PreviousPageURL': '.previous-page-choice'
     'ReferrerCondition': '.referrer-choice'
     'ReferrerDomainCondition': '.referrer-domain-choice'
-    'SearchTermCondition': '.search-term-choice'
     'TimeCondition': '.time-choice'
+    'UrlPathCondition': '.url-choice'
+    'UrlQueryCondition': '.url-query'
     'UTMCampaignCondition': '.utm-campaign-choice'
     'UTMContentCondition': '.utm-content-choice'
     'UTMMediumCondition': '.utm-medium-choice'
     'UTMSourceCondition': '.utm-source-choice'
     'UTMTermCondition': '.utm-term-choice'
-    'UrlCondition': '.url-choice'
-    'UrlPathCondition': '.url-choice'
-    'UrlQuery': '.url-query'
-
-  _dataTypeOperandMapping:
-    'string': ['is', 'is_not', 'includes', 'does_not_include']
-    'date': ['is', 'is_not', 'before', 'after', 'between']
-    'number': ['is', 'is_not', 'less_than', 'greater_than']
-
-  _dataTypeToClass:
-    'date': '.date-choice'
-    'string': '.string-choice'
-    'number': '.number-of-visits-choice'
 
   _bindSubmit: ->
     @_unbindSubmit() # clear any existing event bindings to make sure we only have one at a time
@@ -260,14 +228,12 @@ class @RuleModal extends Modal
       conditionData =
         index: nextIndex
         segment: 'DeviceCondition'
-        data_type: 'string'
         operand: 'is'
 
       $condition = @buildCondition(conditionData, nextIndex)
 
       @_addCondition($condition)
       @_toggleNewConditionMessage()
-      @_updateConditionHints()
 
   _bindRemoveCondition: ->
     ruleModal = this
@@ -278,31 +244,11 @@ class @RuleModal extends Modal
       $condition = $(this).parents('.condition-block:first')
       ruleModal._removeCondition($condition)
       ruleModal._toggleNewConditionMessage()
-      ruleModal._updateConditionHints()
-
-  _bindSelectionChanges: ->
-    @$modal.on 'change', 'select', (event) =>
-      @_updateConditionHints()
-
-  _updateConditionHints: ->
-    setTimeout(->
-      $mobileDeviceConditions = $('.conditions-wrapper .condition-block:visible').filter(->
-        $this = $(this)
-        return $this.find('.condition-segment').val() == 'DeviceCondition' and
-            $this.find('.condition-operand').val() == 'is' and
-            $this.find('.rule_conditions_choices select').val() == 'mobile'
-      )
-      $('.conditions-wrapper .condition-hint').remove()
-      $mobileDeviceConditions.each(->
-        $(this).prepend('<div class="condition-hint">Only topbar style Hello Bars can be shown on mobile devices.</div>')
-      )
-    , 1)
 
   #-----------  Render a Condition to the Page  -----------#
 
   _addCondition: ($condition) ->
     @$modal.find('.conditions-wrapper').append($condition.prop('outerHTML'))
-    @_removeUrlCondition()
 
   _removeCondition: ($condition) ->
     # if persisted, set the hidden destroy field to true for Rails to pick up

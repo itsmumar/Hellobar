@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title Hello Bar
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1.0" name="viewport"
+
+    = render "shared/gtm_script"
+    = render 'shared/favicon'
+
+    = stylesheet_link_tag "auth"
+    = csrf_meta_tags
+
+  body
+    = render "shared/gtm_noscript"
+    = render 'shared/amplitude'
+
+    header
+      .logo
+
+    #container
+      main#content
+        = render 'shared/flash'
+        = yield

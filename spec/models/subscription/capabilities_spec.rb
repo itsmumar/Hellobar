@@ -65,7 +65,7 @@ describe Subscription::Capabilities do
     expect(site).to be_capable_of :free
 
     # Void the paid bill
-    pro_bill.voided!
+    pro_bill.void!
 
     # Should not have pro capabilities
     expect(site).to be_capable_of :free
@@ -85,7 +85,7 @@ describe Subscription::Capabilities do
   it 'stays at pro capabilities until bill period is over' do
     change_subscription('pro', credit_card, 'yearly')
     expect(site).to be_capable_of :pro
-    travel_to 2.years.from_now do
+    Timecop.travel 2.years.from_now do
       expect(site).to be_capable_of :free
     end
   end
@@ -101,6 +101,7 @@ describe Subscription::Capabilities do
       expect(capabilities.external_tracking?).to be_falsey
       expect(capabilities.alert_bars?).to be_falsey
       expect(capabilities.advanced_themes?).to be_falsey
+      expect(capabilities.campaigns?).to be_falsey
     end
 
     specify 'ProManaged plan has certain custom capabilities' do
@@ -113,6 +114,7 @@ describe Subscription::Capabilities do
       expect(capabilities.external_tracking?).to be_truthy
       expect(capabilities.alert_bars?).to be_truthy
       expect(capabilities.advanced_themes?).to be_truthy
+      expect(capabilities.campaigns?).to be_truthy
     end
   end
 

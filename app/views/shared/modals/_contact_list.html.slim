@@ -17,7 +17,7 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
             label for="contact_list_name" What would you like to name your List?
             input type="text" id="contact_list_name" name="contact_list[name]" value="My Contacts"
 
-            .primary-selection-block
+            .primary-selection-block style="display: none"
               label After Hello Bar collects an email address, where should we send it?
               .contact-list-radio-wrapper
                 - options_for_provider_select.drop(1).each do |text, value, data|
@@ -62,6 +62,9 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
         .sync-details-block
           / Empty
 
+        .zapier-block
+          / Empty
+
         .hellobar-only
           label After Hello Bar collects an email address, where should we send it?
           .hellobar-selection-wrapper
@@ -74,6 +77,8 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
 
       .contact-list-delete-link
         input type="hidden" id="contact_list_site_elements_count" name="contact_list[site_elements_count]" value="0"
+
+      = image_tag 'spinner.gif', class: 'spinner'
 
       footer
         a.button.cancel Cancel
@@ -265,3 +270,9 @@ script id="contact-list-variant-modal-sync-details-template" type="text/x-handle
   div
     a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}
   small Disconnecting your {{providerName}} account will prevent Hello Bar from automatically pushing subscriptions to your list.
+
+script id="contact-list-variant-modal-zapier-template" type="text/x-handlebars-template"
+  p
+    ' This contact list is attached to Zapier platform. You can manage it at
+    = link_to 'Zapier Website', 'https://zapier.com', target: '_blank'
+    ' . If you want to detach it from Zapier you need to disable your Zap.

@@ -1,4 +1,26 @@
 describe ContactFormMailer do
+  shared_examples 'subject with message preview' do
+    context 'when message has leading or trailing line ending' do
+      let(:message) { "\r\nmessage \r\n one more line\r\n" }
+
+      let(:expected_subject) { 'Contact Form: message one more line' }
+
+      it 'cuts it off when build subject' do
+        expect(mail.subject).to eq expected_subject
+      end
+    end
+
+    context 'when message is very long' do
+      let(:message) { 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus blandit leo in velit.' }
+
+      let(:expected_subject) { 'Contact Form: Lorem ipsum dolor sit amet, consectetur adipiscing' }
+
+      it 'includes only 50 first chars to subject' do
+        expect(mail.subject).to eq expected_subject
+      end
+    end
+  end
+
   describe '#generic_message' do
     let(:message) { 'message' }
     let(:user) { create :user }
@@ -17,25 +39,8 @@ describe ContactFormMailer do
       expect(mail.body.encoded).to match('message')
       expect(mail.body.encoded).to match(site.url)
     end
-  end
 
-  describe '#guest_message' do
-    let(:message) { 'message' }
-    let(:email) { 'email@example.com' }
-    let(:name) { 'Name' }
-    let(:mail) { ContactFormMailer.guest_message message: message, name: name, email: email }
-
-    let(:subject) { "Contact Form: #{ message }" }
-
-    it 'renders the headers' do
-      expect(mail.subject).to eq subject
-      expect(mail.to).to eq ['support@hellobar.com']
-      expect(mail.from).to eq [email]
-    end
-
-    it 'renders the body' do
-      expect(mail.body.encoded).to match('message')
-    end
+    include_examples 'subject with message preview'
   end
 
   describe '#forgot_email' do
@@ -76,7 +81,7 @@ describe ContactFormMailer do
     let(:mail) { ContactFormMailer.contact_developer developer_email, site, user }
 
     let(:subject) do
-      "Please install Hello Bar on #{ site.normalized_url }"
+      "Please install Hello Bar on #{ site.host }"
     end
 
     it 'renders the headers' do
@@ -86,7 +91,7 @@ describe ContactFormMailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match(site.normalized_url)
+      expect(mail.body.encoded).to match(site.host)
       expect(mail.body.encoded).to match(%(src="#{ site.script_url }"))
       expect(mail.body.encoded).to match(user.email)
     end

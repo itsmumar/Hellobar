@@ -3,8 +3,6 @@ namespace :site do
     desc 'Precompile assets (js, css, html) which are used in the static site script'
     task precompile_static_assets: :environment do
       StaticScriptAssets.precompile
-      GenerateStaticScriptModules.new.call
-      puts "Uploaded new modules.js version to S3: #{ StaticScriptAssets.digest_path('modules.js') }"
     end
 
     namespace :regenerate do
@@ -24,8 +22,9 @@ namespace :site do
 
       desc 'Regenerate static site scripts for active sites (take 200 least recently regenerated sites)'
       task sample_of_least_recently_regenerated_active_sites: :environment do
-        # Take 200 sites at one go; at 39K active sites it will take a little
-        # bit under 23 hours to regenerate them all (if executed every 7 minutes)
+        # Take 200 sites at one go; it will take ~24 hours to regenerate static
+        # site script for up to 40K installed sites (we have about 30K installed
+        # sites)
         # (#each and not #find_each, to respect #limit)
         Site
           .script_installed
@@ -45,7 +44,7 @@ namespace :site do
     namespace :install_check do
       desc 'Install check for recently uninstalled sites'
       task recently_uninstalled: :environment do
-        # around 4K; we can deal with them at one go every day
+        # around 2-4K; we can deal with them at one go every day
         Site.script_recently_uninstalled.find_each do |site|
           CheckStaticScriptInstallation.new(site).call
         end
@@ -53,8 +52,16 @@ namespace :site do
 
       desc 'Install check for uninstalled sites recently modified'
       task uninstalled_but_recently_modified: :environment do
-        # around 2K; we can deal with them at one go every day
+        # up to 2K; we can deal with them at one go every day
         Site.script_uninstalled_but_recently_modified.find_each do |site|
+          CheckStaticScriptInstallation.new(site).call
+        end
+      end
+
+      desc 'Install check for recently created sites with uninstalled script'
+      task recently_created_not_installed: :environment do
+        # up to 5K; we can deal with them at one go every day
+        Site.recently_created.script_not_installed.find_each do |site|
           CheckStaticScriptInstallation.new(site).call
         end
       end

@@ -1,4 +1,16 @@
 describe User do
+  describe '#to_s via Rails initializer' do
+    it 'includes `id:nil` for non-persisted records' do
+      expect(User.new.to_s).to include 'id:nil'
+    end
+
+    it 'includes record ID for persisted records' do
+      user = create :user
+
+      expect(user.to_s).to include "id:#{ user.id }"
+    end
+  end
+
   describe 'validations' do
     it 'cannot have the same email as someone in the Rails database' do
       email = 'hoogaboo@gmail.com'
@@ -56,29 +68,6 @@ describe User do
     end
   end
 
-  describe '.find_and_create_by_referral' do
-    it 'returns nil if there are no referrals for the email' do
-      no_user = User.find_and_create_by_referral('asd')
-
-      expect(no_user).to be_nil
-    end
-
-    it 'returns a temporary user with the email that was found' do
-      user = create(:user)
-      email_to_invite = 'hello@email.com'
-
-      Referrals::Create.run(
-        sender: user,
-        params: { email: email_to_invite },
-        send_emails: false
-      )
-
-      user = User.find_and_create_by_referral(email_to_invite)
-
-      expect(user.status).to eql(User::TEMPORARY_STATUS)
-    end
-  end
-
   describe '#can_view_exit_intent_modal?' do
     let!(:user) { create(:user) }
     let!(:site) { create(:site, :with_rule) }
@@ -130,7 +119,7 @@ describe User do
 
     it 'returns false if the user logging in for the first time and does have bars' do
       user = create(:user)
-      site = user.sites.create(url: generate(:random_uniq_url))
+      site = create :site, user: user
       rule = site.rules.create(name: 'test rule', match: 'all')
       create(:site_element, rule: rule)
       # normaly devise would set it
@@ -151,7 +140,7 @@ describe User do
     let(:user) { User.new }
 
     it 'returns true when the user is active' do
-      user.status = User::ACTIVE_STATUS
+      user.status = User::ACTIVE
 
       expect(user).to be_active
     end
@@ -194,115 +183,6 @@ describe User do
       user.update(encrypted_password: '$P$Brhelf0cSqkZABYCgR08YB8kVp1EFa/')
 
       expect(user.valid_password?('thisisold')).to be_truthy
-    end
-  end
-
-  describe '.find_for_google_oauth2' do
-    let(:email) { 'user@hellobar.com' }
-    let(:uuid) { SecureRandom.uuid }
-
-    let(:token) do
-      OmniAuth::AuthHash.new(
-        'info' => {
-          'email' => email
-        },
-        'uid' => uuid,
-        'provider' => 'google_oauth2'
-      )
-    end
-
-    context 'when user does not exist' do
-      it 'creates a new user with correct email' do
-        user = User.find_for_google_oauth2(token)
-
-        expect(user.email).to eq(email)
-      end
-
-      it 'creates a new user with one authentication' do
-        user = User.find_for_google_oauth2(token)
-
-        expect(user.authentications.count).to eq(1)
-      end
-
-      it 'creates a new user with correct provider info' do
-        user = User.find_for_google_oauth2(token)
-
-        expect(user.authentications.first.provider).to eq('google_oauth2')
-        expect(user.authentications.first.uid).to eq(uuid)
-      end
-
-      context 'when first and last name provided' do
-        let(:first_name) { 'John' }
-        let(:last_name) { 'Doe' }
-
-        before do
-          token.info.first_name = first_name
-          token.info.last_name = last_name
-        end
-
-        it 'set the first name' do
-          user = User.find_for_google_oauth2(token)
-
-          expect(user.first_name).to eq(first_name)
-        end
-
-        it 'set the last name' do
-          user = User.find_for_google_oauth2(token)
-
-          expect(user.last_name).to eq(last_name)
-        end
-      end
-
-      context 'when the original_email is not match the OAuth email' do
-        it 'returns a user with an error on the email' do
-          expect { User.find_for_google_oauth2(token, 'notmy@email.com') }
-            .to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Please log in with your notmy@email.com Google email')
-        end
-      end
-    end
-
-    context 'when user exists' do
-      it 'finds a user based on the uid and provider' do
-        user = create_user
-
-        found = User.find_for_google_oauth2(token)
-
-        expect(found.id).to eq(user.id)
-      end
-
-      context 'when name not set & names passed' do
-        let(:first_name) { 'John' }
-        let(:last_name) { 'Doe' }
-
-        before do
-          token['info']['first_name'] = first_name
-          token['info']['last_name'] = last_name
-        end
-
-        it 'sets the first name' do
-          user = create_user
-          expect(user.first_name).to be_nil
-
-          found = User.find_for_google_oauth2(token)
-
-          expect(found.reload.first_name).to eq(first_name)
-        end
-
-        it 'sets the last name' do
-          user = create_user
-          expect(user.last_name).to be_nil
-
-          found = User.find_for_google_oauth2(token)
-
-          expect(found.reload.last_name).to eq(last_name)
-        end
-      end
-
-      def create_user
-        user = User.create(email: email, password: '123devdev', password_confirmation: '123devdev')
-        user.authentications.create(provider: 'google_oauth2', uid: uuid)
-        user
-      end
     end
   end
 
@@ -377,27 +257,6 @@ describe User do
     it 'catches bcrypt errors when using old hellobar passwords' do
       user.encrypted_password = old_password
       expect(user.valid_password?('wrong password')).to be(false)
-    end
-  end
-
-  describe '.search_all_versions_for_email' do
-    it 'returns nil when email is blank' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-
-      expect(User.search_all_versions_for_email('')).to be_nil
-    end
-
-    it 'first queries by email' do
-      expect(User).not_to receive(:find_and_create_by_referral)
-      expect(User).to receive(:find_by).with(email: 'email@email.com') { User.new }
-
-      User.search_all_versions_for_email('email@email.com')
-    end
-
-    it 'returns a new user if a referred user' do
-      expect(User).to receive(:find_and_create_by_referral).with('email@email.com') { User.new(status: User::TEMPORARY_STATUS) }
-
-      User.search_all_versions_for_email('email@email.com')
     end
   end
 end

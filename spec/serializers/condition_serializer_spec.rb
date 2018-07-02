@@ -9,8 +9,7 @@ describe ConditionSerializer do
         rule_id: condition.rule_id,
         segment: condition.segment,
         operand: condition.operand,
-        value: condition.value,
-        data_type: nil
+        value: condition.value
       )
   end
 end

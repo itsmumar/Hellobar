@@ -19,6 +19,7 @@ export default Ember.Component.extend({
   inlineEditing: Ember.inject.service(),
   imaging: Ember.inject.service(),
   preview: Ember.inject.service(),
+  theming: Ember.inject.service(),
   fonts: Ember.inject.service(),
   froalaFonts: Ember.inject.service(),
 
@@ -105,6 +106,9 @@ export default Ember.Component.extend({
     'model.background_color',
     'model.border_color',
     'model.button_color',
+    'model.cta_border_color',
+    'model.cta_border_width',
+    'model.cta_border_radius',
     'model.caption',
     'model.content',
     'model.closable',
@@ -115,8 +119,9 @@ export default Ember.Component.extend({
     'model.image_placement',
     'model.image_opacity',
     'model.image_url',
+    'model.image_overlay_color',
+    'model.image_overlay_opacity',
     'model.link_color',
-    'model.link_style',
     'model.link_text',
     'model.name_placeholder',
     'model.notification_delay',
@@ -157,6 +162,12 @@ export default Ember.Component.extend({
     'model.use_default_image',
     'model.view_condition',
     'model.wiggle_button',
+    'model.text_field_border_color',
+    'model.text_field_border_width',
+    'model.text_field_border_radius',
+    'model.text_field_text_color',
+    'model.text_field_background_color',
+    'model.text_field_background_opacity',
     'isFullscreen',
     'isMobile'
   ),
@@ -187,7 +198,7 @@ export default Ember.Component.extend({
       return _.find(this.get('availableFonts'), font => font.id === fontId);
     };
     const font = getFont();
-    const currentTheme = this.get('currentTheme');
+    const currentTheme = this.get('theming.currentTheme');
     let previewElement = $.extend({}, this.get('model'), {
         animated: withAnimations && this.get('model.animated'),
         hide_destination: true,
@@ -208,7 +219,7 @@ export default Ember.Component.extend({
         fonts: this.get('froalaFonts').googleFonts(),
         google_font: font.google_font,
         theme: currentTheme,
-        branding_url: 'http://www.hellobar.com?sid=preview'
+        branding_url: 'https://www.hellobar.com?sid=preview'
       }
     );
 

@@ -37,7 +37,7 @@ main
       th.right.narrow_column Line total
     tr.thin_border
       td.left
-        | HelloBar #{@bill.subscription.values[:name]} - #{@bill.subscription.schedule.capitalize}
+        | HelloBar #{@subscription.values[:name]} - #{@subscription.schedule.capitalize}
         br
         | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
       td.right= number_to_currency(@bill.amount)

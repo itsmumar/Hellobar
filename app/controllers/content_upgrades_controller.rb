@@ -1,14 +1,13 @@
 class ContentUpgradesController < ApplicationController
-  include RulesHelper
-
   before_action :authenticate_user!
   before_action :load_site
   before_action :verify_capability
-  before_action :load_content_upgrade, only: %i[show edit update destroy]
+  before_action :load_content_upgrade, only: %i[show edit update destroy toggle_paused]
 
   def index
-    @content_upgrades = @site.site_elements.active_content_upgrades.order(created_at: :desc)
-    @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym).reverse if params[:sort]
+    @content_upgrades = @site.site_elements.content_upgrades.order(created_at: :desc)
+    @content_upgrades = @content_upgrades.sort_by(&params[:sort].to_sym) if params[:sort]
+    @content_upgrades = @content_upgrades.reverse if params[:desc].eql?('true')
   end
 
   def new
@@ -18,10 +17,14 @@ class ContentUpgradesController < ApplicationController
     # Some Defualts
     @content_upgrade.name_placeholder = 'First Name'
     @content_upgrade.email_placeholder = 'Your Email'
-    @content_upgrade.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
     @content_upgrade.link_text = 'Download Now'
     @content_upgrade.headline = 'Enter your email to download this free guide right now.'
     @content_upgrade.caption = 'Almost there! Please complete this form and click the button below to gain instant access.'
+    @content_upgrade.content_upgrade_settings.disclaimer = 'We hate SPAM and promise to keep your email address safe.'
+  end
+
+  def show
+    render :show
   end
 
   def edit
@@ -32,6 +35,7 @@ class ContentUpgradesController < ApplicationController
     @content_upgrade = ContentUpgrade.new(content_upgrade_params)
 
     if @content_upgrade.save
+      @site.script.generate
       flash[:success] = 'Your content upgrade has been saved.'
       redirect_to site_content_upgrades_path(@site.id)
     else
@@ -44,6 +48,7 @@ class ContentUpgradesController < ApplicationController
 
   def update
     if @content_upgrade.update(content_upgrade_params)
+      @site.script.generate
       flash[:success] = 'Your content upgrade has been saved.'
       redirect_to site_content_upgrades_path(@site.id)
     else
@@ -54,15 +59,65 @@ class ContentUpgradesController < ApplicationController
     end
   end
 
-  def destroy
-  end
-
   def style_editor
     @styles = @site.content_upgrade_styles
   end
 
   def update_styles
-    style_params = params.permit(
+    @styles = @site.content_upgrade_styles
+
+    if @styles.update(styles_params)
+      @site.script.generate
+      flash[:success] = 'Content Upgrade styles have been saved.'
+      redirect_to site_content_upgrades_path(@site.id)
+    else
+      render :style_editor
+    end
+  end
+
+  def destroy
+    @content_upgrade.destroy!
+    flash[:success] = 'Your content upgrade has been deleted.'
+    redirect_to site_content_upgrades_path(@site.id)
+  end
+
+  def toggle_paused
+    @content_upgrade.toggle_paused!
+    @site.script.generate
+    redirect_to site_content_upgrades_path(@site.id)
+  end
+
+  private
+
+  def content_upgrade_params
+    {
+      type: 'ContentUpgrade',
+      element_subtype: 'email',
+      headline: params[:headline],
+      caption: params[:caption],
+      link_text: params[:link_text],
+      name_placeholder: params[:name_placeholder],
+      email_placeholder: params[:email_placeholder],
+      contact_list_id: params[:contact_list_id],
+      rule: @site.rules.first,
+      enable_gdpr: ActiveRecord::Type::Boolean.new.type_cast_from_user(params[:enable_gdpr]),
+      content_upgrade_settings_attributes: {
+        id: params[:content_upgrade_settings_id],
+        offer_headline: params[:offer_headline],
+        disclaimer: params[:disclaimer],
+        content_upgrade_title: params[:content_upgrade_title],
+        content_upgrade_url: params[:content_upgrade_url],
+        thank_you_enabled: params[:thank_you_enabled].present?,
+        thank_you_headline: params[:thank_you_headline],
+        thank_you_subheading: params[:thank_you_subheading],
+        thank_you_cta: params[:thank_you_cta],
+        thank_you_url: params[:thank_you_url]
+      }.merge(pdf_params)
+    }
+  end
+
+  def styles_params
+    params.require(:content_upgrade_styles).permit(
       :offer_bg_color,
       :offer_text_color,
       :offer_link_color,
@@ -73,40 +128,8 @@ class ContentUpgradesController < ApplicationController
       :modal_button_color,
       :offer_font_size,
       :offer_font_weight,
-      :offer_font_family
+      :offer_font_family_name
     )
-
-    offer_font_family_name = ContentUpgrade::AVAILABLE_FONTS.invert.fetch(style_params[:offer_font_family])
-    @site.update_content_upgrade_styles!(style_params.merge(offer_font_family_name: offer_font_family_name))
-
-    flash[:success] = 'Content Upgrade styles have been saved.'
-    redirect_to site_content_upgrades_path(@site.id)
-  end
-
-  private
-
-  def content_upgrade_params
-    {
-      type: 'ContentUpgrade',
-      element_subtype: 'email',
-      offer_text: params[:offer_text],
-      offer_headline: params[:offer_headline],
-      headline: params[:headline],
-      caption: params[:caption],
-      disclaimer: params[:disclaimer],
-      link_text: params[:link_text],
-      thank_you_enabled: params[:thank_you_enabled].present?,
-      thank_you_headline: params[:thank_you_headline],
-      thank_you_subheading: params[:thank_you_subheading],
-      thank_you_cta: params[:thank_you_cta],
-      thank_you_url: params[:thank_you_url],
-      name_placeholder: params[:name_placeholder],
-      email_placeholder: params[:email_placeholder],
-      contact_list_id: params[:contact_list_id],
-      content_upgrade_title: params[:content_upgrade_title],
-      content_upgrade_url: params[:content_upgrade_url],
-      rule: @site.rules.first
-    }.merge(pdf_params)
   end
 
   def pdf_params

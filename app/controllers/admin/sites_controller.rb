@@ -1,4 +1,8 @@
 class Admin::SitesController < AdminController
+  def show
+    site
+  end
+
   def update
     begin
       site.update_attributes(site_params) if params.key?(:site)
@@ -13,17 +17,16 @@ class Admin::SitesController < AdminController
       raise if Rails.env.test?
     end
 
-    redirect_to admin_user_path(params[:user_id])
+    redirect_to admin_site_path(params[:id])
   end
 
   def regenerate
     site = Site.find_by(id: params[:id])
 
-    if site.nil?
-      return render(json: { message: 'Site was not found' }, status: 404)
-    end
+    return render(json: { message: 'Site was not found' }, status: 404) if site.nil?
 
     begin
+      site.touch # refresh cache
       GenerateAndStoreStaticScript.new(site).call
       render json: { message: 'Site regenerated' }, status: 200
     rescue RuntimeError
@@ -34,17 +37,21 @@ class Admin::SitesController < AdminController
   def add_free_days
     AddFreeDays.new(site, params[:free_days][:count]).call
     flash[:success] = "#{ params[:free_days][:count] } free days have been added."
-    redirect_to admin_user_path(params[:user_id])
+    redirect_to admin_site_path(params[:id])
   rescue AddFreeDays::Error => e
-    flash[:error] = "There was an error: #{ e.message }"
-    redirect_to admin_user_path(params[:user_id])
+    flash[:error] = e.message
+    redirect_to admin_site_path(params[:id])
   end
 
   private
 
   def change_subscription
     if subscription_params[:trial_period].present?
-      AddTrialSubscription.new(site, subscription_params).call
+      AddFreeDaysOrTrialSubscription.new(
+        site,
+        subscription_params[:trial_period],
+        subscription: subscription_params[:subscription]
+      ).call
     else
       ChangeSubscription.new(site, subscription_params).call
     end
@@ -59,6 +66,6 @@ class Admin::SitesController < AdminController
   end
 
   def site
-    @site ||= Site.find(params[:id])
+    @site ||= Site.with_deleted.find(params[:id])
   end
 end
