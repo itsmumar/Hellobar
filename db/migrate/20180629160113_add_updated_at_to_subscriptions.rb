@@ -1,10 +1,10 @@
 class AddUpdatedAtToSubscriptions < ActiveRecord::Migration
-  def self.up
+  def up
     add_column :subscriptions, :updated_at, :datetime
     Subscription.update_all("updated_at=created_at")
   end
 
-  def self.down
+  def down
     remove_column :subscriptions, :updated_at
   end
 end
