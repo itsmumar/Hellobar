@@ -4,7 +4,7 @@ describe SubscribeContact do
   let(:site_element) { create(:site_element, :email, contact_list: contact_list, updated_at: 1.minute.ago) }
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
-  let(:name) { 'firstname lastname' }
+  let(:name) { 'Firstname Lastname' }
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
   let(:provider) { double('ServiceProvider') }
