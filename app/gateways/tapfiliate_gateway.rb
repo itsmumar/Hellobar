@@ -1,7 +1,7 @@
 class TapfiliateGateway
   include HTTParty
 
-  base_uri 'https://api.tapfiliate.com/1.6/conversions/'
+  base_uri 'https://api.tapfiliate.com/1.6/'
 
   # refunds tracking
   def disapprove_commission commission_id:
@@ -18,7 +18,7 @@ class TapfiliateGateway
       amount: 0
     }
 
-    post! '/', body
+    post! '/conversions/', body
   end
 
   # paid bill tracking
@@ -28,7 +28,7 @@ class TapfiliateGateway
       comment: comment
     }
 
-    post! "/#{ conversion_identifier }/commissions/", body
+    post! "/conversions/#{ conversion_identifier }/commissions/", body
   end
 
   private
