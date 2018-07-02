@@ -97,20 +97,19 @@ ActiveRecord::Schema.define(version: 20180627212456) do
   add_index "billing_attempts", ["credit_card_id"], name: "index_billing_attempts_on_credit_card_id", using: :btree
 
   create_table "bills", force: :cascade do |t|
-    t.integer  "subscription_id",          limit: 4
-    t.decimal  "amount",                               precision: 7,  scale: 2
-    t.string   "description",              limit: 255
-    t.boolean  "grace_period_allowed",                                          default: true
+    t.integer  "subscription_id",      limit: 4
+    t.decimal  "amount",                           precision: 7,  scale: 2
+    t.string   "description",          limit: 255
+    t.boolean  "grace_period_allowed",                                      default: true
     t.datetime "bill_at"
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "status_set_at"
     t.datetime "created_at"
-    t.decimal  "discount",                             precision: 10,           default: 0
-    t.decimal  "base_amount",                          precision: 10
-    t.string   "authorization_code",       limit: 255
-    t.string   "status",                   limit: 20,                           default: "pending", null: false
-    t.integer  "tapfiliate_commission_id", limit: 4
+    t.decimal  "discount",                         precision: 10,           default: 0
+    t.decimal  "base_amount",                      precision: 10
+    t.string   "authorization_code",   limit: 255
+    t.string   "status",               limit: 20,                           default: "pending", null: false
   end
 
   add_index "bills", ["bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
