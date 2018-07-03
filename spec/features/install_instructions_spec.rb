@@ -25,8 +25,11 @@ feature 'Install Instructions', js: true do
 
     scenario 'displays T&C updated message' do
       visit site_install_path(site)
-
-      expect(page).to have_content('Please review our updated Terms of Use and Privacy Policy')
+      if Settings.tos_updated_display == true
+        expect(page).to have_content('Please review our updated Terms of Use and Privacy Policy')
+      else
+        expect(page).not_to have_content('Please review our updated Terms of Use and Privacy Policy')
+      end
     end
   end
 
