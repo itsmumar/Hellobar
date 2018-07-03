@@ -21,14 +21,24 @@ feature 'Install Instructions', js: true do
   end
 
   context 'when user sign up before effective date' do
+    given(:user) { create(:user, :with_site, created_at: terms_and_conditions_effective_date - 1.day) }
+
     context 'when Settings.tos_updated_display is true' do
       before { allow(Settings).to receive(:tos_updated_display).and_return true }
-      expect(page).to have_content('Please review our updated Terms of Use and Privacy Policy')
+
+      it 'shows the review our updated terms of service alert' do
+        visit site_install_path(site)
+        expect(page).to have_content('Please review our updated Terms of Use and Privacy Policy')
+      end
     end
 
     context 'when Settings.tos_updated_display is false' do
       before { allow(Settings).to receive(:tos_updated_display).and_return false }
-      expect(page).not_to have_content('Please review our updated Terms of Use and Privacy Policy')
+
+      it 'does not show the review our updated terms of service alert' do
+        visit site_install_path(site)
+        expect(page).not_to have_content('Please review our updated Terms of Use and Privacy Policy')
+      end
     end
   end
 
