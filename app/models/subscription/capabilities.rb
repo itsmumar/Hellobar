@@ -82,10 +82,6 @@ class Subscription::Capabilities
     false
   end
 
-  def opacity?
-    false
-  end
-
   def advanced_themes?
     false
   end

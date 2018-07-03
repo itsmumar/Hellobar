@@ -14,7 +14,6 @@ export default Ember.Component.extend({
   imageUploadCopy: Ember.computed.oneWay('theming.currentTheme.image.upload_copy'),
   themeHasDefaultImage: Ember.computed.oneWay('theming.themeHasDefaultImage'),
   useThemeImage: Ember.computed.oneWay('theming.useThemeImage'),
-  canUseOpacity: Ember.computed.alias('model.site.capabilities.opacity'),
 
   recentColors: Ember.computed.alias('palette.recentColors'),
   siteColors: Ember.computed.alias('palette.colorPalette'),
