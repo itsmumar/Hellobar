@@ -41,6 +41,13 @@ ActiveRecord::Schema.define(version: 20180629160113) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
 
+  create_table "affiliate_commissions", force: :cascade do |t|
+    t.integer "identifier", limit: 4, null: false
+    t.integer "bill_id",    limit: 4, null: false
+  end
+
+  add_index "affiliate_commissions", ["identifier", "bill_id"], name: "index_affiliate_commissions_on_identifier_and_bill_id", using: :btree
+
   create_table "affiliate_information", force: :cascade do |t|
     t.integer  "user_id",               limit: 4,   null: false
     t.string   "visitor_identifier",    limit: 255, null: false
@@ -310,10 +317,11 @@ ActiveRecord::Schema.define(version: 20180629160113) do
     t.string   "last_name",            limit: 255
     t.string   "email",                limit: 255
     t.string   "website_url",          limit: 255
-    t.string   "affiliate_identifier", limit: 255, null: false
-    t.string   "partner_plan_id",      limit: 255, null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.string   "affiliate_identifier", limit: 255,                 null: false
+    t.string   "partner_plan_id",      limit: 255,                 null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.boolean  "require_credit_card",              default: false
   end
 
   add_index "partners", ["affiliate_identifier"], name: "index_partners_on_affiliate_identifier", unique: true, using: :btree

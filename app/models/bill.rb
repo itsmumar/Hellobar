@@ -49,6 +49,7 @@ class Bill < ApplicationRecord
   has_many :billing_attempts, -> { order 'id' }, dependent: :destroy, inverse_of: :bill
   has_many :coupon_uses, dependent: :destroy
   has_one :site, through: :subscription, inverse_of: :bills
+  has_one :affiliate_commission, inverse_of: :bill
 
   delegate :site_id, to: :subscription
 

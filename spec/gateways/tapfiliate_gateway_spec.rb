@@ -3,6 +3,17 @@ describe TapfiliateGateway do
   let(:user) { create :user, :affiliate }
   let(:headers) { Hash['Content-Type' => 'application/json'] }
 
+  describe '#disapprove_commission' do
+    let(:commission_id) { 999 }
+
+    it 'sends "disapprove commission" request to Tapfiliate' do
+      stub_request(:delete, /commissions\/#{ commission_id }\/approved/)
+        .to_return status: 200
+
+      tapfiliate.disapprove_commission commission_id: commission_id
+    end
+  end
+
   describe '#store_conversion' do
     it 'sends "store conversion with $0 commission" request to Tapfiliate' do
       stub_request(:post, /.*conversions\//).to_return status: 200
