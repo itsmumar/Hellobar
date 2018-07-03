@@ -336,9 +336,12 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       max-width: 600px;
     }
 
+    .hb-logo-wrapper {
+      bottom: 2em;
+    }
+
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
-      bottom: 2em;
     }
 
     @media screen and (max-width: 840px) {
