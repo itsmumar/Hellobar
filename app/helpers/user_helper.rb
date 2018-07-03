@@ -47,7 +47,7 @@ module UserHelper
   end
 
   def display_terms_and_condition_updated?
-    current_user.created_at < User::NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE
+    Settings.tos_updated_display == true && current_user.created_at < User::NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE
   end
 
   def display_referral_announcement?(site)
