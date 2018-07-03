@@ -25,13 +25,11 @@ SimpleForm.setup do |config|
     end
   end
 
-  config.wrappers :vertical_boolean, tag: 'span', class: 'form-group', error_class: 'has-error' do |b|
+  config.wrappers :vertical_boolean, tag: 'div', class: 'checkbox', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder
 
-    b.wrapper tag: 'span', class: 'checkbox' do |ba|
-      ba.use :label_input
-    end
+    b.use :label_input
 
     b.use :hint, wrap_with: { tag: 'p', class: 'help-block' }
   end

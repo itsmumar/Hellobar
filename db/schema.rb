@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180623154528) do
+ActiveRecord::Schema.define(version: 20180629160113) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(version: 20180623154528) do
   add_index "admins", ["api_token"], name: "index_admins_on_api_token", using: :btree
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["session_token"], name: "index_admins_on_session_token", using: :btree
+
+  create_table "affiliate_commissions", force: :cascade do |t|
+    t.integer "identifier", limit: 4, null: false
+    t.integer "bill_id",    limit: 4, null: false
+  end
+
+  add_index "affiliate_commissions", ["identifier", "bill_id"], name: "index_affiliate_commissions_on_identifier_and_bill_id", using: :btree
 
   create_table "affiliate_information", force: :cascade do |t|
     t.integer  "user_id",               limit: 4,   null: false
@@ -310,10 +317,11 @@ ActiveRecord::Schema.define(version: 20180623154528) do
     t.string   "last_name",            limit: 255
     t.string   "email",                limit: 255
     t.string   "website_url",          limit: 255
-    t.string   "affiliate_identifier", limit: 255, null: false
-    t.string   "partner_plan_id",      limit: 255, null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.string   "affiliate_identifier", limit: 255,                 null: false
+    t.string   "partner_plan_id",      limit: 255,                 null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.boolean  "require_credit_card",              default: false
   end
 
   add_index "partners", ["affiliate_identifier"], name: "index_partners_on_affiliate_identifier", unique: true, using: :btree
@@ -503,6 +511,7 @@ ActiveRecord::Schema.define(version: 20180623154528) do
     t.integer  "credit_card_id",       limit: 4
     t.string   "schedule",             limit: 20,                          default: "monthly", null: false
     t.datetime "deleted_at"
+    t.datetime "updated_at"
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree

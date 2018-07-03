@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
     :current_site, :visitor_id, :ab_variation, :ab_variation_or_nil
 
   before_action :set_raven_context
+  before_action :require_credit_card
   after_action :store_last_requested_path
 
   delegate :remote_ip, to: :request
@@ -43,6 +44,14 @@ class ApplicationController < ActionController::Base
     return unless current_user
 
     redirect_to after_sign_in_path_for(current_user)
+  end
+
+  def require_credit_card
+    return unless current_user
+    return if current_user.credit_cards.exists?
+    return unless current_user.affiliate_information&.partner&.require_credit_card
+
+    redirect_to new_credit_card_path
   end
 
   def after_sign_in_path_for(user)

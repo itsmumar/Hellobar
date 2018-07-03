@@ -3,6 +3,14 @@ require 'avatar/view/action_view_support'
 module ApplicationHelper
   include Avatar::View::ActionViewSupport
 
+  def yes_or_no(value)
+    if value
+      'Yes'
+    else
+      'No'
+    end
+  end
+
   def page_id
     if controller_name == 'pages' && params[:page]
       [controller_name, params[:page]].join('-')

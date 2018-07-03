@@ -20,12 +20,10 @@
 
   {{/unless}}
 
-  {{#if canUseOpacity }}
-    <label>Image opacity</label>
-    <div class="slider-wrapper">
-      {{common/sliders/range-slider min=0 max=100 start=imageOpacity update="setImageOpacity" leftLabel="0%" rightLabel="100%"}}
-    </div>
-  {{/if}}
+  <label>Image opacity</label>
+  <div class="slider-wrapper">
+    {{common/sliders/range-slider min=0 max=100 start=imageOpacity update="setImageOpacity" leftLabel="0%" rightLabel="100%"}}
+  </div>
 
   {{#if backgroundImage }}
     <label>Image Overlay Color</label>

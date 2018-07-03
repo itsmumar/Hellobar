@@ -7,6 +7,7 @@ class TrackAffiliateCommission
     return if conversion_identifier.blank?
 
     store_commission
+    create_affiliate_commission
     log_error_if_necessary
   end
 
@@ -18,6 +19,15 @@ class TrackAffiliateCommission
 
   def store_commission
     @result = affiliate_gateway.store_commission commission_params
+  end
+
+  def create_affiliate_commission
+    return unless result.success?
+
+    AffiliateCommission.create!(
+      bill: bill,
+      identifier: result[0]['id']
+    )
   end
 
   def commission_params

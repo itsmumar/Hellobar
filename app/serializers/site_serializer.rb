@@ -34,8 +34,7 @@ class SiteSerializer < ActiveModel::Serializer
       geolocation_injection: object.capabilities.geolocation_injection?,
       precise_geolocation_targeting: object.capabilities.precise_geolocation_targeting?,
       external_tracking: object.capabilities.external_tracking?,
-      alert_bars: object.capabilities.alert_bars?,
-      opacity: object.capabilities.opacity?
+      alert_bars: object.capabilities.alert_bars?
     }
   end
 

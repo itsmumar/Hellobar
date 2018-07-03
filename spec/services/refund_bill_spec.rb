@@ -37,6 +37,11 @@ describe RefundBill do
     expect(bill.site.current_subscription).to be_a Subscription::Free
   end
 
+  it 'calls TrackAffiliateRefund service' do
+    expect(TrackAffiliateRefund).to receive_service_call.with(bill)
+    service.call
+  end
+
   context 'when cybersource failed' do
     before { stub_cyber_source(:refund, success?: false) }
 
