@@ -10,7 +10,7 @@ class SubscribeContactWorker
     end
 
     def fields
-      # titleize fields so that names are always capitilized:
+      # titleize fields so that names are always capitalized:
       #   "firstname lastname" => "Firstname Lastname"
       cleanup(self[:fields])&.titleize
     end
