@@ -4,7 +4,7 @@ describe SubscribeContact do
   let(:site_element) { create(:site_element, :email, contact_list: contact_list, updated_at: 1.minute.ago) }
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
-  let(:name) { 'FirstName LastName' }
+  let(:name) { 'Firstname Lastname' }
   let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
   let(:service) { described_class.new(contact) }
   let(:provider) { double('ServiceProvider') }
@@ -20,6 +20,9 @@ describe SubscribeContact do
     allow(UpdateContactStatus).to receive_service_call
     allow(ExecuteSequenceTriggers).to receive_service_call
   end
+
+  before { allow(contact).to receive(:contact_list).and_return(contact_list) }
+  before { allow(provider).to receive(:subscribe).with(email: email, name: name.titleize) }
 
   context 'when subscription is successful' do
     it 'calls subscribe on provider instance' do
@@ -58,7 +61,7 @@ describe SubscribeContact do
           identity_id: contact_list.identity.id,
           contact_list_id: contact_list.id,
           remote_list_id: contact_list.data['remote_id'],
-          arguments: { email: email, name: name },
+          arguments: { email: email, name: name.titleize },
           double_optin: contact_list.double_optin,
           tags: contact_list.tags,
           exception: '#<StandardError: StandardError>'

@@ -8,7 +8,7 @@ describe ServiceProvider::Adapters::Infusionsoft do
     }
   end
 
-  let(:identity) { double('identity', provider: 'infusionsoft', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
+  let(:identity) { double('identity', provider: 'infusion_soft', api_key: 'api_key', extra: { 'app_url' => 'api.infusionsoft.com/crm/rest/v1/' }) }
 
   include_context 'service provider'
 

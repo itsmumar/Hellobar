@@ -420,6 +420,7 @@ class @ContactListModal extends Modal
       isProviderGetResponse: (label == 'GetResponse')
       showTagTextfield: (label == 'AWeber')
       isProviderDrip: (label == 'Drip')
+      isProviderInfusionsoft: (label == 'Infusionsoft')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -438,9 +439,9 @@ class @ContactListModal extends Modal
               [null]
       providerNameLabel: (label + ' ' + switch label
                                           when 'Drip' then 'campaign'
+                                          when 'Infusionsoft' then 'campaign'
                                           when 'ConvertKit' then 'form'
-                                          else 'list'
-      )
+                                          else 'list')
 
     if value == "0" || value == null # 0 - "Hello Bar only", null - hidden provider
       @options.identity = null
@@ -480,10 +481,9 @@ class @ContactListModal extends Modal
               "<br>Please check your credentials and connect again."
           )
 
-        if data.provider != "infusionsoft"
-          @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
+        @_renderBlock("remoteListSelect", $.extend(defaultContext, {identity: data})).show()
 
-        if data.provider == "infusionsoft" or data.provider == "maropost" or @_showListsAndTags(defaultContext)
+        if data.provider == "maropost" or @_showListsAndTags(defaultContext)
           noTags = $.isArray(data.tags) && data.tags.length == 0
           tagsContext = $.extend(true, {}, defaultContext, {identity: data, noTags: noTags})
           tagsContext.preparedLists = (tagsContext.tags).map((tag) =>
@@ -517,6 +517,7 @@ class @ContactListModal extends Modal
     context.isProviderConvertKit or
       context.isProviderGetResponse or
       context.isProviderDrip or
+      context.isProviderInfusionsoft or
       context.showTagTextfield
 
   _setFormValues: (data) ->

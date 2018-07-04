@@ -34,6 +34,18 @@ module ServiceProvider::Adapters
 
     private
 
+    def get(resource)
+      process_response client.get(resource)
+    end
+
+    def post(resource, data = {})
+      response = client.post do |request|
+        request.url resource
+        request.body = data
+      end
+      process_response response
+    end
+
     def process_response(response)
       return if response.body.blank?
       JSON.parse response.body
