@@ -184,7 +184,11 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       margin: 4px 10px;
 
       .hb-text-holder {
-        padding-top: 6px;
+        padding: 0 15px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
 
@@ -247,16 +251,27 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     .hb-headline-text {
       font-size: 2.1em;
       margin-bottom: 20px;
+      text-align: center;
     }
 
     [data-hb-editable-block="caption"] {
       font-size: 1.5em;
       margin: 15px auto;
+      text-align: center;
     }
 
     [data-hb-editable-block="content"] {
       font-size: 1.1em;
       padding: 0 0 10px;
+      text-align: center;
+    }
+
+    &.image-background {
+      .hb-headline-text,
+      [data-hb-editable-block="content"],
+      [data-hb-editable-block="caption"] {
+        text-align: left;
+      }
     }
 
     .hb-input-block {
@@ -470,6 +485,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
     .hb-cta {
       font-size: 17px;
+      display: block;
     }
 
     .hb-logo-wrapper {
@@ -477,7 +493,18 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       right: auto;
       bottom: auto;
       text-align: center;
-      margin-bottom: 15px;
+      margin: 5px 25px 15px 20px;
+      opacity: 0.2;
+
+      &:hover {
+        opacity: 0.4;
+      }
+
+      svg {
+        width: 30px;
+        height: 20px;
+        border-radius: 3px;
+      }
     }
 
     .icon-close {
