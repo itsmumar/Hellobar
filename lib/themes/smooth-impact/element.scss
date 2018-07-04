@@ -485,6 +485,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
     .hb-cta {
       font-size: 17px;
+      display: block;
     }
 
     .hb-logo-wrapper {
@@ -492,7 +493,18 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       right: auto;
       bottom: auto;
       text-align: center;
-      margin-bottom: 15px;
+      margin: 5px 25px 15px 20px;
+      opacity: 0.2;
+
+      &:hover {
+        opacity: 0.4;
+      }
+
+      svg {
+        width: 30px;
+        height: 20px;
+        border-radius: 3px;
+      }
     }
 
     .icon-close {
