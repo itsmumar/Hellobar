@@ -19,8 +19,15 @@ module ServiceProvider::Adapters
     end
 
     def subscribe(campaign_id, params)
-      contact = add_contact(params)
-      add_to_campaign(campaign_id, contact['id']) if campaign_id
+      contact_id = add_contact(params)&.fetch('id', nil)
+      return unless contact_id
+
+      add_to_campaign(campaign_id, contact_id) if campaign_id
+      apply_tags(params[:tags], contact_id)
+    end
+
+    def tags
+      (get('tags') || {}).fetch('tags', [])
     end
 
     private
@@ -52,6 +59,11 @@ module ServiceProvider::Adapters
       campaign = get("campaigns/#{ campaign_id }?optional_properties=sequences")
       sequence_id = campaign.dig('sequences', 0, 'id')
       post("campaigns/#{ campaign_id }/sequences/#{ sequence_id }/contacts/#{ contact_id }")
+    end
+
+    def apply_tags(tags, contact_id)
+      return if tags.blank?
+      res = post("contacts/#{ contact_id }/tags", tagIds: tags)
     end
 
     def test_connection

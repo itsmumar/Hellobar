@@ -420,6 +420,7 @@ class @ContactListModal extends Modal
       isProviderGetResponse: (label == 'GetResponse')
       showTagTextfield: (label == 'AWeber')
       isProviderDrip: (label == 'Drip')
+      isProviderInfusionsoft: (label == 'Infusionsoft')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -516,6 +517,7 @@ class @ContactListModal extends Modal
     context.isProviderConvertKit or
       context.isProviderGetResponse or
       context.isProviderDrip or
+      context.isProviderInfusionsoft or
       context.showTagTextfield
 
   _setFormValues: (data) ->
