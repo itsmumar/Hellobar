@@ -63,7 +63,7 @@ module ServiceProvider::Adapters
 
     def apply_tags(tags, contact_id)
       return if tags.blank?
-      res = post("contacts/#{ contact_id }/tags", tagIds: tags)
+      post("contacts/#{ contact_id }/tags", tagIds: tags)
     end
 
     def test_connection

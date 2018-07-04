@@ -4,7 +4,9 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
       subscribe: 'https://api.infusionsoft.com/crm/rest/v1/contacts',
       campaigns: 'https://api.infusionsoft.com/crm/rest/v1/campaigns',
       campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}?optional_properties=sequences',
-      add_to_campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}/sequences/{sequence_id}/contacts/{contact_id}'
+      add_to_campaign: 'https://api.infusionsoft.com/crm/rest/v1/campaigns/{campaign_id}/sequences/{sequence_id}/contacts/{contact_id}',
+      apply_tags: 'https://api.infusionsoft.com/crm/rest/v1/contacts/{contact_id}/tags',
+      tags: 'https://api.infusionsoft.com/crm/rest/v1/tags'
     }
   end
 
@@ -43,6 +45,14 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
     end
   end
 
+  describe '#tags' do
+    before { allow_request :get, :tags }
+
+    it 'returns array of id => name' do
+      expect(provider.tags).to eql [{ 'id' => 1, 'name' => 'Tag 1' }]
+    end
+  end
+
   describe '#subscribe' do
     let(:body) { {} }
 
@@ -51,6 +61,7 @@ describe ServiceProvider::Adapters::InfusionsoftOauth do
     before do
       allow_request :get, :campaign
       allow_request :post, :add_to_campaign
+      allow_request :post, :apply_tags, body: { tagIds: ['id1', 'id2'] }
     end
 
     it 'sends subscribe request' do
