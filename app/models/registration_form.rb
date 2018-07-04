@@ -25,8 +25,6 @@ class RegistrationForm
   def existing_site_url?
     return false unless site.valid?
 
-    self.ignore_existing_site = true
-
     @existing_site_url ||= Site.by_url(site.url).any?
   end
 

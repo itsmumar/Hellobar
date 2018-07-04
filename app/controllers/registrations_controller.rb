@@ -40,6 +40,7 @@ class RegistrationsController < ApplicationController
     end
 
     if @form.existing_site_url? && !@form.ignore_existing_site
+      @form.ignore_existing_site = true
       render :new
       return false
     end
