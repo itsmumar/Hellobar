@@ -32,7 +32,7 @@ describe 'Users registration' do
         expect(response).to render_template('registrations/new')
       end
 
-      #should add spec here to check if ignore_existing_site input field is set to true in the form
+      # should add spec here to check if ignore_existing_site input field is set to true in the form
 
       it 'should pass if ignore_existing_site is set to true' do
         user_params[:ignore_existing_site] = true
