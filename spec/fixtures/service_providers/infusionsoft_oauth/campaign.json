@@ -1,0 +1,73 @@
+{
+  "error_message": null,
+  "date_created": "2017-09-05T18:05:07.000+0000",
+  "name": "Initial Coupon or Discount - Capture Leads (Online Store)",
+  "active_contact_count": 0,
+  "completed_contact_count": 0,
+  "published_status": false,
+  "id": 5,
+  "published_time_zone": "America/Chicago",
+  "time_zone": "America/Chicago",
+  "published_date": null,
+  "sequences": [
+    {
+      "id": 615,
+      "name": "Coupon or Discount  Delivery Series: 3 Emails + Tag",
+      "paths": [
+        {
+          "id": 598,
+          "items": [
+            {
+              "id": 5,
+              "name": "Apply 1 Tag:",
+              "type": "Tag",
+              "next_item_id": 7,
+              "previous_item_id": null
+            },
+            {
+              "id": 7,
+              "name": "Coupon Delivery: Welcome! We're  excited to have you. Email #1",
+              "type": "BardEmail",
+              "next_item_id": 3,
+              "previous_item_id": 5
+            },
+            {
+              "id": 3,
+              "name": "Wait at least 5 days and then run at 9:00 AM",
+              "type": "DelayTimer",
+              "next_item_id": 1,
+              "previous_item_id": 7
+            },
+            {
+              "id": 1,
+              "name": "Offer to Buy Online: Did you see this? - Email #2",
+              "type": "BardEmail",
+              "next_item_id": 9,
+              "previous_item_id": 3
+            },
+            {
+              "id": 9,
+              "name": "Wait at least 5 days and then run at 8:00 AM",
+              "type": "DelayTimer",
+              "next_item_id": 11,
+              "previous_item_id": 1
+            },
+            {
+              "id": 11,
+              "name": "Offer to Buy Online: Checking in... Email #3",
+              "type": "BardEmail",
+              "next_item_id": null,
+              "previous_item_id": 9
+            }
+          ]
+        }
+      ],
+      "active_contact_count": 0,
+      "active_contact_count_completed": 6,
+      "historical_contact_count": {
+        "24_hours": 6,
+        "30_days": 6
+      }
+    }
+  ]
+}

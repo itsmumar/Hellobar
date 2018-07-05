@@ -6,6 +6,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2, Settings.google_auth_id, Settings.google_auth_secret
   provider :mailchimp, Settings.identity_providers['mailchimp']['client_id'], Settings.identity_providers['mailchimp']['secret']
   provider :verticalresponse, Settings.identity_providers['verticalresponse']['client_id'], Settings.identity_providers['verticalresponse']['secret']
+  provider :infusionsoft, Settings.identity_providers['infusionsoft']['client_id'], Settings.identity_providers['infusionsoft']['secret']
 
   on_failure do |env|
     provider = env['omniauth.error.strategy'].try(:name)
