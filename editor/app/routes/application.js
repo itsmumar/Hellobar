@@ -1,4 +1,4 @@
-/* globals siteID, ContactListModal, formatE164, EditorErrorsModal */
+/* globals siteID, ContactListModal */
 
 import Ember from 'ember';
 
@@ -37,7 +37,7 @@ export default Ember.Route.extend({
 
   afterModel(resolvedModel) {
     this.get('modelLogic').setModel(resolvedModel);
-    this.get('theming').setModel(resolvedModel);
+
     if (localStorage['stashedContactList']) {
       const contactList = JSON.parse(localStorage['stashedContactList']);
       localStorage.removeItem('stashedContactList');
@@ -79,73 +79,6 @@ export default Ember.Route.extend({
         }
       };
       new ContactListModal($.extend(baseOptions, options)).open();
-    }
-  },
-
-  //-----------  Actions  -----------#
-
-  // Actions bubble up the routers from most specific to least specific.
-  // In order to catch all the actions (because they happen in different
-  // routes), the action catch was places in the top-most application route.
-
-  actions: {
-
-    saveSiteElement() {
-      const prepareModel = () => {
-        if (this.currentModel.phone_number && this.currentModel.phone_country_code) {
-          this.currentModel.phone_number = formatE164(this.currentModel.phone_country_code, this.currentModel.phone_number);
-        }
-      };
-
-      const allValidation = Ember.RSVP.Promise.all([
-        this.get('validation').validate('phone_number', this.currentModel),
-        this.get('validation').validate('url', this.currentModel),
-        this.get('validation').validate('url_to_like', this.currentModel),
-        this.get('validation').validate('cookie_settings.duration', this.currentModel),
-        this.get('validation').validate('cookie_settings.success_duration', this.currentModel)
-      ]);
-
-      allValidation.then(() => {
-        // Successful validation
-        this.get('bus').trigger('hellobar.core.validation.succeeded');
-        this.controller.set('saveSubmitted', true);
-        this.set('saveCount', this.get('saveCount') + 1);
-
-        const ajaxParams = window.barID ? {
-          url: `/sites/${window.siteID}/site_elements/${window.barID}.json`,
-          method: 'PUT'
-        } : {
-          url: `/sites/${window.siteID}/site_elements.json`,
-          method: 'POST'
-        };
-
-        prepareModel();
-
-        return Ember.$.ajax({
-          type: ajaxParams.method,
-          url: ajaxParams.url,
-          contentType: 'application/json',
-          data: JSON.stringify(this.currentModel),
-
-          success: () => {
-            if (this.controller.get('model.site.site_elements_count') === 0) {
-              window.location = `/sites/${window.siteID}`;
-            } else {
-              window.location = `/sites/${window.siteID}/site_elements`;
-            }
-          },
-
-          error: data => {
-            this.controller.set('saveSubmitted', false);
-            this.controller.set('model.errors', data.responseJSON.errors);
-            new EditorErrorsModal({errors: data.responseJSON.full_error_messages}).open();
-          }
-        });
-      }, (failures) => {
-        // Validation failed
-        this.get('bus').trigger('hellobar.core.validation.failed', failures);
-      });
-
     }
   }
 });

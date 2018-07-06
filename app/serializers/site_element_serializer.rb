@@ -1,5 +1,5 @@
 class SiteElementSerializer < ActiveModel::Serializer
-  attributes :id, :site, :rule_id, :rule, :contact_list_id,
+  attributes :id, :site, :rule_id, :rule, :contact_list_id, :paused_at,
     #
     # settings
     :type, :element_subtype, :settings, :view_condition, :phone_number,

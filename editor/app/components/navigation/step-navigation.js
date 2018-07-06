@@ -6,6 +6,8 @@ export default Ember.Component.extend({
   classNames: ['step-navigation'],
 
   bus: Ember.inject.service(),
+  saveSiteElementService: Ember.inject.service(),
+  modelLogic: Ember.inject.service(),
 
   //-----------  Routing  -----------#
 
@@ -53,10 +55,12 @@ export default Ember.Component.extend({
   //-----------  Save Actions  -----------#
 
   actions: {
+    saveAndPublish () {
+      this.get('saveSiteElementService').saveAndPublish();
+    },
 
-    saveSiteElement() {
-      this.sendAction('action');
+    saveSiteElement () {
+      this.get('saveSiteElementService').save();
     }
-
   }
 });
