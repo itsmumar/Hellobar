@@ -21,9 +21,12 @@ describe 'Users registration' do
     end
 
     context 'signs up for an account' do
+      let(:site) do
+        create :site
+      end
+
       before do
-        @site = create :site
-        user_params[:site_url] = @site.url
+        user_params[:site_url] = site.url
       end
 
       it 'fails the first time the user enters a site_url if already exists' do
@@ -32,7 +35,7 @@ describe 'Users registration' do
         expect(response).to render_template('registrations/new')
       end
 
-      it 'should pass if ignore_existing_site is set to true' do
+      it 'passes if ignore_existing_site is set to true' do
         user_params[:ignore_existing_site] = true
         post users_sign_up_path, registration_form: user_params, signup_with_email: '1'
         site = User.find_by(email: user_params[:email]).sites.last
