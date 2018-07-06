@@ -146,6 +146,14 @@ module SiteElementsHelper
     end
   end
 
+  def gdpr_enabled_for_element?(element)
+    if element.element_subtype == 'email'
+      element.enable_gdpr ? 'Yes' : 'No'
+    else
+      'N/A'
+    end
+  end
+
   def style_icon_class_for_element(element)
     element.type.casecmp('bar').zero? ? 'icon-bar' : 'icon-modal'
   end
