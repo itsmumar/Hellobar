@@ -23,8 +23,6 @@ export default Ember.Service.extend({
     return this.validate().then(() => {
       this.set('saving', true);
 
-      this.formatPhoneNumber();
-
       return this.sendRequest({ publish }).then(data => {
         this.get('modelLogic').setModel(data);
         this.set('saving', false);
@@ -63,19 +61,21 @@ export default Ember.Service.extend({
     });
   },
 
-  formatPhoneNumber () {
+  modelWithFormattedPhoneNumber () {
     const model = this.get('model');
 
     if (model.phone_number && model.phone_country_code) {
       const formattedPhoneNumber =
         formatE164(model.phone_country_code, model.phone_number);
 
-      this.set('model.phone_number', formattedPhoneNumber);
+      model.phone_number = formattedPhoneNumber;
     }
+
+    return model;
   },
 
   sendRequest ({ publish }) {
-    const model = this.get('model');
+    const model = this.modelWithFormattedPhoneNumber();
 
     model.paused_at = publish ? null : new Date();
 
