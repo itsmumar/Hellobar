@@ -26,13 +26,11 @@ describe 'Users registration' do
         user_params[:site_url] = @site.url
       end
 
-      it 'should fail the first time the user enters a site_url if already exists' do
+      it 'fails the first time the user enters a site_url if already exists' do
         post users_sign_up_path, registration_form: user_params, signup_with_email: '1'
 
         expect(response).to render_template('registrations/new')
       end
-
-      # should add spec here to check if ignore_existing_site input field is set to true in the form
 
       it 'should pass if ignore_existing_site is set to true' do
         user_params[:ignore_existing_site] = true
