@@ -7,6 +7,8 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
   td
     i class="#{type_icon_class_for_element(site_element)}"
   td
+    span.text-center= gdpr_enabled_for_element?(site_element)
+  td
     i class="#{style_icon_class_for_element(site_element)}"
   td
     span.num= number_with_delimiter(site_element.total_views)
