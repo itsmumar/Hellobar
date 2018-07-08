@@ -19,5 +19,29 @@ describe 'Users registration' do
 
       expect(user).to be_present
     end
+
+    context 'signs up for an account' do
+      let(:site) do
+        create :site
+      end
+
+      before do
+        user_params[:site_url] = site.url
+      end
+
+      it 'fails the first time the user enters a site_url if already exists' do
+        post users_sign_up_path, registration_form: user_params, signup_with_email: '1'
+
+        expect(response).to render_template('registrations/new')
+      end
+
+      it 'passes if ignore_existing_site is set to true' do
+        user_params[:ignore_existing_site] = true
+        post users_sign_up_path, registration_form: user_params, signup_with_email: '1'
+        site = User.find_by(email: user_params[:email]).sites.last
+
+        expect(response).to redirect_to(new_site_site_element_path(site))
+      end
+    end
   end
 end
