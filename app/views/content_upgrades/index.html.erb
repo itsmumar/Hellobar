@@ -8,6 +8,7 @@
   <tr>
     <th><%= link_to_order 'Title', by: 'display_title' %></th>
     <th>WP Script Tag</th>
+    <th>GDPR</th>
     <th><%= link_to_order 'Contact List', by: 'contact_list_name' %></th>
     <th><%= link_to_order 'Views', by: 'total_views' %></th>
     <th><%= link_to_order 'Conversions', by: 'total_conversions' %></th>
@@ -26,6 +27,7 @@
     <% end %>
  </td>
  <td><input type="text" value="<%= content_upgrade.content_upgrade_script_tag %>"></td>
+ <td><%= content_upgrade.enable_gdpr ? 'Yes' : 'No' %></td>
  <td><%= content_upgrade.contact_list.name %></td>
  <td><%= content_upgrade.total_views %></td>
  <td><%= content_upgrade.total_conversions %></td>
