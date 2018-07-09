@@ -46,7 +46,7 @@
           = f.text_field :state, placeholder: 'CA', autocomplete: 'state'
 
         .cc-zip
-          = f.label :zip, 'Zipcode'
+          = f.label :zip, 'Zip'
           = f.text_field :zip, placeholder: '90210', autocomplete: 'postal-code', required: 'required'
 
       .field-row
@@ -56,4 +56,3 @@
             = country_select('credit_card', 'country', priority_countries: ['US'], selected: 'US')
 
     = submit_tag 'Finish', class: 'btn btn-default button'
-
