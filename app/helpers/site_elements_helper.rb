@@ -74,7 +74,7 @@ module SiteElementsHelper
   end
 
   def conversion_percent_text(site_element)
-    site_element.element_subtype == 'announcement' ? 'n/a' : number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
+    site_element.element_subtype == 'announcement' ? 'N/A' : number_to_percentage(site_element.conversion_percentage * 100, precision: 1)
   end
 
   def site_element_activity_units(elements, opts = {})

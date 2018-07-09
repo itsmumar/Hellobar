@@ -51,7 +51,7 @@
         text-align: center
         margin-bottom: 0.67em
 
-        &:nth-child(2)
+        &.site-element__headline
           text-align: left
           padding-left: 1.33rem
 
@@ -109,7 +109,7 @@
             font-size: 2.25em
             vertical-align: bottom
 
-          &:nth-child(2)
+          &.site-element__headline
             width: 100%
             max-width: 23em
             padding-left: 1.67rem
@@ -117,20 +117,20 @@
             p
               width: 100%
 
-          &:nth-child(3)
+          &.site-element__age
             min-width: 6rem
 
-          &:nth-child(4)
+          &.site-element__type
             background-color: $blueLighter
 
             [class*='icon-']
               color: $red
 
-          &:nth-child(8)
+          &.site-element__convertions-percent
             min-width: 6rem
             font-weight: $fontWeightBold
 
-          &:nth-child(9)
+          &.site-element__actions
             min-width: 7rem
             border-right-width: 1px
             background-color: $grayLightest
@@ -180,42 +180,42 @@
 
         &.type-social
 
-          td:nth-child(4) [class*='icon-']
+          td.site-element__type [class*='icon-']
             color: $blue
 
-          td:nth-child(9) .testing-icon
+          td.site-element__actions .testing-icon
             color: $blue
 
         &.type-traffic
 
-          td:nth-child(4) [class*='icon-']
+          td.site-element__type [class*='icon-']
             color: $yellow
 
-          td:nth-child(9) .testing-icon
+          td.site-element__actions .testing-icon
             color: $yellow
 
         &.type-email
 
-          td:nth-child(4) [class*='icon-']
+          td.site-element__type [class*='icon-']
             color: $green
 
-          td:nth-child(9) .testing-icon
+          td.site-element__actions .testing-icon
             color: $green
 
         &.type-announcement
 
-          td:nth-child(4) [class*='icon-']
+          td.site-element__type [class*='icon-']
             color: $purple
 
-          td:nth-child(9) .testing-icon
+          td.site-element__actions .testing-icon
             color: $purple
 
         &.type-call
 
-          td:nth-child(4) [class*='icon-']
+          td.site-element__type [class*='icon-']
             color: $purple
 
-          td:nth-child(9) .testing-icon
+          td.site-element__actions .testing-icon
             color: $purple
 
 
@@ -227,10 +227,10 @@
           td.color-flag
             background-color: $grayLight !important
 
-          td:nth-child(2) p
+          td.site-element__headline p
             color: $gray
 
-          td:nth-child(4)
+          td.site-element__type
             background-color: $grayLightest
 
           [class*='icon-']

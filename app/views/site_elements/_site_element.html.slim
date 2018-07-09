@@ -1,22 +1,22 @@
 tr.site-element-block class="type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id data-active=(!site_element.paused?).to_s data-type=site_element.type.downcase
   td.color-flag style="background-color: ##{site_element.background_color}"
-  td
+  td.site-element__headline
     p= render_headline(site_element)
-  td
+  td.site-element__age
     span.num= site_element_age(site_element)
-  td
+  td.site-element__type
     i class="#{type_icon_class_for_element(site_element)}"
-  td
+  td.site-element__gdpr
     span.text-center= gdpr_enabled_for_element?(site_element)
-  td
+  td.site-element__style
     i class="#{style_icon_class_for_element(site_element)}"
-  td
+  td.site-element__views
     span.num= number_with_delimiter(site_element.total_views)
-  td
+  td.site-element__conversions
     span.num= total_conversion_text(site_element)
-  td
+  td.site-element__convertions-percent
     span.num= conversion_percent_text(site_element)
-  td
+  td.site-element__actions
     - if (icon = ab_test_icon(site_element)) && icon.match(/icon-abtest/)
       .dropdown-wrapper
         = icon
