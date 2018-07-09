@@ -49,7 +49,7 @@ class Admin::PartnersController < AdminController
       :last_name,
       :email,
       :url,
-      :website_url,
+      :community,
       :affiliate_identifier,
       :partner_plan_id,
       :require_credit_card
