@@ -6,12 +6,12 @@ class RegistrationsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_errors
 
   def new
-    @form = RegistrationForm.new(params)
+    @form = RegistrationForm.new(params, cookies)
     @form.ignore_existing_site = @form.existing_site_url?
   end
 
   def create
-    @form = RegistrationForm.new(params)
+    @form = RegistrationForm.new(params, cookies)
 
     session[:new_site_url] = @form.site_url
 

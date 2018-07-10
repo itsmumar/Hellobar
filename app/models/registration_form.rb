@@ -7,11 +7,12 @@ class RegistrationForm
 
   attr_reader :user, :site
 
-  def initialize(params)
+  def initialize(params, cookies = {})
     super(params[:registration_form])
 
     @user = User.new(email: email, password: password)
     @site = Site.new(url: site_url)
+    @cookies = cookies
   end
 
   def ignore_existing_site=(value)
@@ -31,5 +32,65 @@ class RegistrationForm
   def validate!
     user.validate!
     site.validate!
+  end
+
+  def title
+    return default_title unless affiliate_signup?
+    return affiliate_trial_signup_title unless partner?
+
+    partner_signup_title
+  end
+
+  def cta
+    return default_cta unless affiliate_signup?
+    return affiliate_trial_signup_cta unless partner?
+
+    partner_signup_cta
+  end
+
+  private
+
+  def default_title
+    I18n.t :default_title, scope: :registration
+  end
+  alias default_cta default_title
+
+  def affiliate_trial_signup_title
+    I18n.t :affiliate_trial_signup_title, scope: :registration
+  end
+
+  def affiliate_trial_signup_cta
+    I18n.t :affiliate_trial_signup_cta, scope: :registration
+  end
+
+  def partner_signup_title
+    community = @partner.community
+    duration = @partner.partner_plan.duration
+
+    I18n.t :partner_signup_title, scope: :registration, duration: duration, community: community
+  end
+
+  def partner_signup_cta
+    duration = @partner.partner_plan.duration
+
+    I18n.t :partner_signup_cta, scope: :registration, duration: duration
+  end
+
+  def affiliate_signup?
+    affiliate_identifier.present? && visitor_identifier.present?
+  end
+
+  def partner?
+    return if affiliate_identifier.blank?
+
+    @partner ||= Partner.find_by affiliate_identifier: affiliate_identifier
+  end
+
+  def affiliate_identifier
+    @cookies[:tap_aid]
+  end
+
+  def visitor_identifier
+    @cookies[:tap_vid]
   end
 end

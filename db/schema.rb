@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180629160113) do
+ActiveRecord::Schema.define(version: 20180709132622) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -316,7 +316,7 @@ ActiveRecord::Schema.define(version: 20180629160113) do
     t.string   "first_name",           limit: 255
     t.string   "last_name",            limit: 255
     t.string   "email",                limit: 255
-    t.string   "website_url",          limit: 255
+    t.string   "community",            limit: 255
     t.string   "affiliate_identifier", limit: 255,                 null: false
     t.string   "partner_plan_id",      limit: 255,                 null: false
     t.datetime "created_at",                                       null: false

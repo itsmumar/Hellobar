@@ -8,10 +8,4 @@ describe Partner do
   it { is_expected.to allow_value('abc@example.com').for(:email) }
   it { is_expected.not_to allow_value('example').for(:email) }
   it { is_expected.not_to allow_value('@example').for(:email) }
-
-  it { is_expected.to allow_value('http://example.com').for(:website_url) }
-  it { is_expected.to allow_value('https://example.com').for(:website_url) }
-  it { is_expected.not_to allow_value('example').for(:website_url) }
-  it { is_expected.not_to allow_value('example.com').for(:website_url) }
-  it { is_expected.not_to allow_value('https://example$$$.com').for(:website_url) }
 end
