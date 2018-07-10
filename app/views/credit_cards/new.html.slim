@@ -12,12 +12,12 @@
     .details-fields
       = hidden_field_tag :update_subscription, false
 
-      .field-row
+      .field-row.name-row
         .cc-name
           = f.label :name, 'Name on card'
           = f.text_field :name, placeholder: 'John Smith', autocomplete: 'cc-name', required: 'required'
 
-      .field-row
+      .field-row.cc-row
         .cc-number
           = f.label :number, 'Card number'
           = f.text_field :number, placeholder: '    -    -    -', autocomplete: 'cc-number', required: 'required'
@@ -31,12 +31,12 @@
           = f.label :verification_value, 'CSV'
           = f.text_field :verification_value, placeholder: '123', autocomplete: 'cc-csc', required: 'required'
 
-      .field-row
+      .field-row.address1-row
         .cc-address
           = f.label :address, 'Address'
           = f.text_field :address, placeholder: '123 Main Street', autocomplete: 'street-address', required: 'required'
 
-      .field-row
+      .field-row.address2-row
         .cc-city
           = f.label :city, 'City'
           = f.text_field :city, placeholder: 'Beverly Hills', autocomplete: 'city', required: 'required'
@@ -49,7 +49,7 @@
           = f.label :zip, 'Zip'
           = f.text_field :zip, placeholder: '90210', autocomplete: 'postal-code', required: 'required'
 
-      .field-row
+      .field-row.country-row
         .cc-country
           label Country
           .select-wrapper
