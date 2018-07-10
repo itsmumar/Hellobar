@@ -96,14 +96,41 @@
   &.is-mobile
 
     .preview-image
-      width: 232px !important
-      height: 410px !important
+      width: 320px !important
+      height: 568px !important
       border-top: none !important
       position: relative !important
 
     #hellobar-preview-container
-      width: 232px
-      height: 410px
+      width: 320px
+      height: 568px
+      overflow: hidden
+      margin: -3px auto 0
+      border: 1px solid $grayLight
+      @include vertical-align()
+
+      iframe.hb-bar-bottom
+        padding-left: 0 !important
+        position: absolute !important
+
+      &.is-pushed.bar.bar-top .preview-image
+        top: -12px !important
+
+  /*-----------  Tablet State  -----------*/
+
+  &.is-tablet
+
+    .preview-image
+      width: 768px !important
+      height: 100% !important
+      min-height: 100% !important
+      border-top: none !important
+      position: relative !important
+
+    #hellobar-preview-container
+      width: 768px
+      height: 100%
+      min-height: 100%
       overflow: hidden
       margin: -3px auto 0
       border: 1px solid $grayLight

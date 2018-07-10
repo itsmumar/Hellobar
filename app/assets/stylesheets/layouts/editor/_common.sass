@@ -104,12 +104,11 @@
           a
             padding: 0.5em 0 2.8em 0
           .caption
-            bottom: 0.4em
+            bottom: 0.9em
         &.close-editor
           a
             padding: 0.3em 0 1.7em 0
 
-      .toggle-mobile,
       .toggle-fullscreen
         @include clearfix()
 
@@ -132,6 +131,30 @@
 
           i
             width: 50%
+            float: left
+
+      .toggle-mobile
+        @include clearfix()
+
+        .caption
+          display: block
+          position: absolute
+          bottom: 0.8em
+          left: 0
+          right: 0
+          pointer-events: none
+          font-size: 0.63em
+          line-height: 0.63em
+          color: #c7c7c7
+
+        a
+          width: 300%
+          margin-left: -200%
+          position: relative
+          transition: 0.25s
+
+          i
+            width: 33%
             float: left
 
         &:hover
@@ -218,12 +241,18 @@
     .toggle-mobile a
       margin-left: 0% !important
 
-  &.is-call-goal
+  &.is-tablet
 
     .toggle-mobile a
-      color: $grayLighter
+      margin-left: -100% !important
 
-      &:hover,
-      i:hover
-        cursor: not-allowed
-        color: $grayLighter
+  &.is-call-goal
+
+    .toggle-mobile
+      & *
+        color: $grayLighter !important
+        cursor: not-allowed !important
+
+      &:hover > *
+        cursor: not-allowed !important
+        color: $grayLighter !important
