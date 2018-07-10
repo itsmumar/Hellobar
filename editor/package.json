@@ -19,6 +19,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@fortawesome/ember-fontawesome": "^0.1.0",
+    "@fortawesome/free-solid-svg-icons": "^5.1.0",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^2.4.1",
     "ember-browserify": "^1.1.13",
