@@ -1,7 +1,8 @@
 = simple_form_for(@form, url: users_sign_up_path, method: :post) do |f|
   = render 'shared/flash'
 
-  h1 Create free account
+  h1
+    = @form.title
 
   - if @form.existing_site_url?
     = render 'shared/existing_site_warning'
@@ -13,7 +14,7 @@
   = f.label :accept_terms_and_conditions, accept_terms_and_conditions_label do
     = f.check_box :accept_terms_and_conditions
     = accept_terms_and_conditions_label
-  = f.button :submit, 'Create free account', class: 'button gray', name: 'signup_with_email'
+  = f.button :submit, @form.cta, class: 'button gray', name: 'signup_with_email'
 
   .strike
     span OR
