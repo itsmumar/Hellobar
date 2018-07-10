@@ -41,6 +41,7 @@ export default Ember.Service.extend({
 
   setModel(model) {
     this.set('model', model);
+    this.get('theming').setModel(model);
   },
 
 
@@ -55,6 +56,18 @@ export default Ember.Service.extend({
       this.notifyPropertyChange('model.settings.fields_to_collect');
     });
   },
+
+  isTypeSelected: function () {
+    return this.get('model.type') && this.get('model.element_subtype');
+  }.property('model.type', 'model.element_subtype'),
+
+  isPublished: function () {
+    return this.get('isTypeSelected') && !this.get('model.paused_at') && this.get('model.id');
+  }.property('model.id', 'model.paused_at', 'isTypeSelected'),
+
+  isNotPublished: function () {
+    return this.get('isTypeSelected') && (this.get('model.paused_at') || !this.get('model.id'));
+  }.property('model.id', 'model.paused_at', 'isTypeSelected'),
 
   // ------ Fields handling
 

@@ -16,13 +16,19 @@
   {{/if}}
 </nav>
 
-<button class="button save-editor" disabled={{saveSubmitted}} {{action "saveSiteElement"}}>
-  {{#if saveSubmitted}}
-    Saving...
-  {{else}}
+{{#if saveSiteElementService.saving}}
+  Saving...
+{{else if modelLogic.isTypeSelected}}
+  <button class="button save-editor" disabled={{saving}} {{action "saveAndPublish"}}>
     Save & Publish
+  </button>
+
+  {{#if modelLogic.isNotPublished}}
+    <a class="button button--link" disabled={{saving}} {{action "saveSiteElement"}}>
+      Save
+    </a>
   {{/if}}
-</button>
+{{/if}}
 
 {{common/validation/validation-summary validationMessages=validationMessages header="Cannot save the bar:"}}
 

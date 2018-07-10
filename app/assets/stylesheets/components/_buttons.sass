@@ -17,12 +17,17 @@
     vertical-align: middle
     margin: 0 0.67em 0 -0.33em
 
-  &:hover
-    // ??
-
   &[disabled]
     cursor: not-allowed
     background-color: $gray
+
+%button--link
+  color: $red
+  border-color: white
+  background-color: transparent
+
+  &:hover
+    background-color: transparent
 
 /*-----------  Inverted Alternative  -----------*/
 
@@ -125,3 +130,4 @@
   &:hover
     color: $grayDark
     border-color: darken($grayLight, 15%)
+
