@@ -8,13 +8,10 @@ export default Ember.Component.extend({
     switch (this.get('viewMode')) {
       case VIEW_DESKTOP:
         return 'Desktop';
-        break;
       case VIEW_TABLET:
         return 'Tablet';
-        break;
       case VIEW_MOBILE:
         return 'Mobile';
-        break;
       default:
         return 'Desktop';
     }
