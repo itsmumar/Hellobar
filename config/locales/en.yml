@@ -61,8 +61,10 @@ en:
               blank: You must select a contact list to sync with in the "goals" section
 
   registration:
-    affiliate_trial_signup_title: 'Welcome To Your FREE %{duration} Day Trial Of Hello Bar %{subscription}'
-    affiliate_trial_signup_cta: 'Start Your %{duration} Day Free Trial'
+    affiliate_signup_title: 'Welcome To Your FREE %{duration} Day Trial Of Hello Bar %{subscription}'
+    affiliate_signup_cta: 'Start Your %{duration} Day Free Trial'
     partner_signup_title: "Welcome To Your FREE %{duration} Day Trial Of Hello Bar %{subscription} %{community}"
     partner_signup_cta: "Start Your %{duration} Day Free Trial"
+    promotional_signup_title: 'Welcome To Your FREE %{duration} Day Trial Of Hello Bar %{subscription}'
+    promotional_signup_cta: "Start Your %{duration} Day Free Trial"
     default_title: 'Create free account'
