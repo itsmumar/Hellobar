@@ -29,11 +29,11 @@ export default Ember.Route.extend({
         localStorage.removeItem('stashedEditorModel');
         resolve(model);
       } else if (window.barID) {
-        this.get('api').siteElement(window.barID).then(resolve);
+        this.get('api').siteElement(window.barID).then(resolve, reject);
       } else if (window.elementToCopyID) {
-        this.get('api').siteElement(window.elementToCopyID).then(resolve);
+        this.get('api').siteElement(window.elementToCopyID).then(resolve, reject);
       } else {
-        this.get('api').newSiteElement().then(resolve);
+        this.get('api').newSiteElement().then(resolve, reject);
       }
     }).then(model => {
       this.get('modelLogic').setModel(model);
