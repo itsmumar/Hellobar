@@ -38,6 +38,9 @@
             | Want More Power?
 
         - elsif current_site.current_subscription.try(:currently_on_trial?)
+          span.trial-days-left
+            => pluralize current_site.current_subscription.days_left, 'day'
+            | left
           a.button.show-payment-modal data={ source: "Add payment to trial" }
             div Enjoying Hello Bar #{ current_site.current_subscription.name }?
         - elsif current_site.free? && current_site.active_subscription
