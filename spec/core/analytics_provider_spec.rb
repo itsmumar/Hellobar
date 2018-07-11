@@ -10,27 +10,59 @@ describe AnalyticsProvider do
   end
 
   describe '#signed_up' do
-    it 'tracks "signed-up" without affiliate info' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'signed-up', user: user, params: {})
+    context 'when regular signup' do
+      it 'tracks "signed-up" without affiliate info' do
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'signed-up', user: user, params: {})
 
-      track('signed-up', user: user)
+        track('signed-up', user: user)
+      end
     end
 
-    it 'tracks "signed-up" with affiliate info if present' do
-      affiliate_information = create :affiliate_information, user: user
-      params = { affiliate_identifier: affiliate_information.affiliate_identifier }
+    context 'when affiliate signup without partner record' do
+      it 'tracks "signed-up" with affiliate info' do
+        affiliate_information = create :affiliate_information, user: user
+        params = {
+          affiliate_identifier: affiliate_information.affiliate_identifier,
+          source: 'affiliate'
+        }
 
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'signed-up', user: user, params: params)
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'signed-up', user: user, params: params)
 
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Affiliate', [user])
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Affiliate', [user])
 
-      track('signed-up', user: user)
+        track('signed-up', user: user)
+      end
+    end
+
+    context 'when affiliate signup with partner record' do
+      it 'tracks "signed-up" with affiliate info' do
+        affiliate_information = create :affiliate_information, user: user
+        partner = create :partner, affiliate_identifier: affiliate_information.affiliate_identifier
+
+        params = {
+          affiliate_identifier: affiliate_information.affiliate_identifier,
+          source: 'affiliate',
+          trial_period: partner.partner_plan.duration,
+          trial_subscription: partner.partner_plan.subscription_type,
+          credit_card_signup: partner.require_credit_card
+        }
+
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'signed-up', user: user, params: params)
+
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Affiliate', [user])
+
+        track('signed-up', user: user)
+      end
     end
   end
 

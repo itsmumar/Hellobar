@@ -41,7 +41,20 @@ class AnalyticsProvider
   def signed_up(user:)
     params = {}
 
-    params[:affiliate_identifier] = user.affiliate_identifier if user.affiliate_identifier
+    # Affiliate signups additional params
+    if user.affiliate_identifier
+      params[:affiliate_identifier] = user.affiliate_identifier
+      params[:source] = 'affiliate'
+
+      partner = user.affiliate_information&.partner
+      partner_plan = partner&.partner_plan
+
+      if partner_plan
+        params[:trial_period] = partner_plan.duration
+        params[:trial_subscription] = partner_plan.subscription_type
+        params[:credit_card_signup] = partner.require_credit_card
+      end
+    end
 
     track(
       event: 'signed-up',
