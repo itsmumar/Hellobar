@@ -5,7 +5,6 @@ import Ember from 'ember';
 import MobileMixin from './application.mixin.mobile';
 
 export default Ember.Controller.extend(MobileMixin, {
-
   bus: Ember.inject.service(),
   inlineEditing: Ember.inject.service(),
   palette: Ember.inject.service(),
