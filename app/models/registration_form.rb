@@ -56,18 +56,26 @@ class RegistrationForm
   alias default_cta default_title
 
   def affiliate_trial_signup_title
-    I18n.t :affiliate_trial_signup_title, scope: :registration
+    duration = default_partner_plan.duration
+    subscription = default_partner_plan.subscription_type.capitalize
+
+    I18n.t :affiliate_trial_signup_title, scope: :registration,
+      duration: duration, subscription: subscription
   end
 
   def affiliate_trial_signup_cta
-    I18n.t :affiliate_trial_signup_cta, scope: :registration
+    duration = default_partner_plan.duration
+
+    I18n.t :affiliate_trial_signup_cta, scope: :registration, duration: duration
   end
 
   def partner_signup_title
     community = @partner.community
     duration = @partner.partner_plan.duration
+    subscription = @partner.partner_plan.subscription_type.capitalize
 
-    I18n.t :partner_signup_title, scope: :registration, duration: duration, community: community
+    I18n.t :partner_signup_title, scope: :registration, duration: duration,
+      community: community, subscription: subscription
   end
 
   def partner_signup_cta
@@ -92,5 +100,9 @@ class RegistrationForm
 
   def visitor_identifier
     @cookies[:tap_vid]
+  end
+
+  def default_partner_plan
+    Partner.default_partner_plan
   end
 end
