@@ -41,7 +41,7 @@ class AmplitudeAnalyticsAdapter
       sites_count: user.sites.count,
       site_elements_count: user.site_elements.count,
       managed_sites: user.site_ids,
-      affiliate_identifier: user.affiliate_information&.affiliate_identifier
+      affiliate_identifier: user.affiliate_identifier
     }
   end
 
