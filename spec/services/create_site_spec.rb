@@ -71,20 +71,38 @@ describe CreateSite do
     end
   end
 
-  context 'when user sign up from affiliate link' do
+  context 'when user signs up from an affiliate link' do
     let(:affiliate_identifier) { 'qwe123' }
-    let(:partner_plan) { PartnerPlan.find('growth_60') }
 
-    before do
-      create(:partner, affiliate_identifier: affiliate_identifier, partner_plan: partner_plan)
-      create(:affiliate_information, user: user, affiliate_identifier: affiliate_identifier)
+    context 'when there is an associated partner record' do
+      let(:partner_plan) { PartnerPlan.find('growth_60') }
+
+      before do
+        create(:partner, affiliate_identifier: affiliate_identifier, partner_plan: partner_plan)
+        create(:affiliate_information, user: user, affiliate_identifier: affiliate_identifier)
+      end
+
+      it 'creates trial subscription' do
+        expect(ChangeSubscription).not_to receive_service_call
+        expect(AddTrialSubscription).to receive_service_call.with(instance_of(Site), subscription: 'growth', trial_period: 60)
+
+        service.call
+      end
     end
 
-    it 'creates trials subscription' do
-      expect(ChangeSubscription).not_to receive_service_call
-      expect(AddTrialSubscription).to receive_service_call.with(instance_of(Site), subscription: 'growth', trial_period: 60)
+    context 'when there is no partner record' do
+      let(:partner_plan) { Partner.default_partner_plan }
 
-      service.call
+      before do
+        create(:affiliate_information, user: user, affiliate_identifier: affiliate_identifier)
+      end
+
+      it 'creates default trial subscription' do
+        expect(ChangeSubscription).not_to receive_service_call
+        expect(AddTrialSubscription).to receive_service_call.with(instance_of(Site), subscription: partner_plan.subscription_type, trial_period: partner_plan.duration)
+
+        service.call
+      end
     end
   end
 end
