@@ -8,6 +8,10 @@ class Partner < ActiveRecord::Base
   validates :affiliate_identifier, presence: true, uniqueness: true
   validates :partner_plan, presence: true
 
+  def self.default_partner_plan
+    PartnerPlan.find('growth_30')
+  end
+
   def partner_plan
     partner_plan_id && PartnerPlan.find(partner_plan_id)
   end
