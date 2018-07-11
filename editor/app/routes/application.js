@@ -16,28 +16,41 @@ export default Ember.Route.extend({
   // TODO check other API calls and move them to api service
 
   beforeModel() {
-    return this.get('applicationSettings').load();
+    return Ember.RSVP.Promise.all([
+      this.get('applicationSettings').load(),
+      this.loadModel()
+    ]);
   },
 
-  model() {
-    if (localStorage['stashedEditorModel']) {
-      const model = JSON.parse(localStorage['stashedEditorModel']);
-      localStorage.removeItem('stashedEditorModel');
-      return model;
-    } else if (window.barID) {
-      return this.get('api').siteElement(window.barID);
-    } else if (window.elementToCopyID) {
-      return this.get('api').siteElement(window.elementToCopyID);
-    } else {
-      return this.get('api').newSiteElement();
-    }
+  loadModel() {
+    return new Ember.RSVP.Promise((resolve, reject) => {
+      if (localStorage['stashedEditorModel']) {
+        const model = JSON.parse(localStorage['stashedEditorModel']);
+        localStorage.removeItem('stashedEditorModel');
+        resolve(model);
+      } else if (window.barID) {
+        this.get('api').siteElement(window.barID).then(resolve);
+      } else if (window.elementToCopyID) {
+        this.get('api').siteElement(window.elementToCopyID).then(resolve);
+      } else {
+        this.get('api').newSiteElement().then(resolve);
+      }
+    }).then(model => {
+      this.get('modelLogic').setModel(model);
+    });
+  },
+
+  model () {
+    return this.get('modelLogic.model');
+  },
+
+  setupController (controller, model) {
+    controller.set('model', model);
   },
 
   //-----------  Parse JSON Model  -----------#
 
   afterModel(resolvedModel) {
-    this.get('modelLogic').setModel(resolvedModel);
-
     if (localStorage['stashedContactList']) {
       const contactList = JSON.parse(localStorage['stashedContactList']);
       localStorage.removeItem('stashedContactList');

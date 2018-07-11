@@ -10,13 +10,13 @@ export default Ember.Service.extend({
   model: Ember.computed.alias('modelLogic.model'),
 
   saveAndPublish () {
-    this.validateAndSave({ publish: true }).then(() => {
+    return this.validateAndSave({ publish: true }).then(() => {
       this.redirectToSite();
     });
   },
 
   save () {
-    this.validateAndSave({ publish: false });
+    return this.validateAndSave({ publish: false });
   },
 
   validateAndSave ({ publish }) {
