@@ -56,6 +56,17 @@ class AnalyticsProvider
       end
     end
 
+    # Promotional signups additional params
+    if promotional_signup?(user)
+      plan = PromotionalPlan.new
+
+      params[:promotional_identifier] = user.utm_source
+      params[:source] = user.source
+      params[:trial_period] = plan.duration
+      params[:trial_subscription] = plan.subscription_type
+      params[:credit_card_signup] = false
+    end
+
     track(
       event: 'signed-up',
       user: user,
@@ -63,6 +74,7 @@ class AnalyticsProvider
     )
 
     tag_users('Affiliate', [user]) if user.affiliate_identifier
+    tag_users('Promotional', [user]) if promotional_signup?(user)
   end
 
   def invited_member(site:, user:)
@@ -264,5 +276,9 @@ class AnalyticsProvider
 
     untag_users previous_subscription.name, site.owners
     untag_users 'Paid', site.owners if subscription.amount.zero?
+  end
+
+  def promotional_signup? user
+    user.source == 'promotional'
   end
 end

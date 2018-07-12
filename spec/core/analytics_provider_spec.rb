@@ -20,6 +20,35 @@ describe AnalyticsProvider do
       end
     end
 
+    context 'when promotional signup' do
+      before do
+        user.source = 'promotional'
+        user.utm_source = 'site'
+      end
+
+      it 'tracks "signed-up" with promotional info' do
+        plan = PromotionalPlan.new
+
+        params = {
+          promotional_identifier: user.utm_source,
+          source: 'promotional',
+          trial_period: plan.duration,
+          trial_subscription: plan.subscription_type,
+          credit_card_signup: false
+        }
+
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'signed-up', user: user, params: params)
+
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Promotional', [user])
+
+        track('signed-up', user: user)
+      end
+    end
+
     context 'when affiliate signup without partner record' do
       it 'tracks "signed-up" with affiliate info' do
         affiliate_information = create :affiliate_information, user: user
