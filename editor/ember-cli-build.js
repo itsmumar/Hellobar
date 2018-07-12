@@ -31,6 +31,15 @@ module.exports = function (defaults) {
         srcDir: 'lib',
         'import': ['codemirror.css']
       }
+    },
+    fontawesome: {
+      icons: {
+        'free-solid-svg-icons': [
+          'mobile-alt',
+          'tablet-alt',
+          'laptop'
+        ]
+      }
     }
     // Add options here
   });

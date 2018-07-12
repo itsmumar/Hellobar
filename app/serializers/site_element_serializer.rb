@@ -35,6 +35,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
+    :site_preview_image_tablet,
     :open_in_new_window, :placement, :default_email_thank_you_text
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
@@ -92,6 +93,11 @@ class SiteElementSerializer < ActiveModel::Serializer
   def site_preview_image_mobile
     return '' unless object.site
     proxied_url2png(url: object.site.url, viewport: '320x568')
+  end
+
+  def site_preview_image_tablet
+    return '' unless object.site
+    proxied_url2png(url: object.site.url, viewport: '768x1024')
   end
 
   def proxied_url2png(options)

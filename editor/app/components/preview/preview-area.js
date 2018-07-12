@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
+import { VIEW_DESKTOP, VIEW_TABLET, VIEW_MOBILE } from '../../constants';
 
 export default Ember.Component.extend({
 
@@ -50,15 +51,20 @@ export default Ember.Component.extend({
 
   previewStyleString: (function () {
     return `background-image: url(${ this.get('previewImageURL') })`;
-  }).property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
+  }).property('previewImageURL'),
 
   previewImageURL: function () {
-    if (this.get('isMobile')) {
-      return `${this.get('model.site_preview_image_mobile')}`;
-    } else {
-      return `${this.get('model.site_preview_image')}`;
+    switch (this.get('viewMode')) {
+      case VIEW_DESKTOP:
+        return `${this.get('model.site_preview_image')}`;
+      case VIEW_TABLET:
+        return `${this.get('model.site_preview_image_tablet')}`;
+      case VIEW_MOBILE:
+        return `${this.get('model.site_preview_image_mobile')}`;
+      default:
+        return `${this.get('model.site_preview_image')}`;
     }
-  }.property('isMobile', 'model.site_preview_image', 'model.site_preview_image_mobile'),
+  }.property('viewMode', 'model.site_preview_image', 'model.site_preview_image_mobile', 'model.site_preview_image_tablet'),
 
 
   previewContainerCssClasses: function () {
