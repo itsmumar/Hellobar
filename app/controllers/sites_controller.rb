@@ -128,7 +128,7 @@ class SitesController < ApplicationController
   end
 
   def create_site
-    CreateSite.new(@site, current_user, referral_token: session[:referral_token]).call
+    CreateSite.new(@site, current_user, cookies: cookies, referral_token: session[:referral_token]).call
 
     redirect_to new_site_site_element_path(@site)
   rescue ActiveRecord::RecordInvalid => e
