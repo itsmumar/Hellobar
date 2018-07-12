@@ -79,7 +79,7 @@ export default Ember.Service.extend({
 
     model.paused_at = publish ? null : new Date();
 
-    const ajaxParams = model.id ? {
+    const ajaxParams = window.barID ? {
       url: `/sites/${ model.site.id }/site_elements/${ model.id }.json`,
       method: 'PUT'
     } : {
