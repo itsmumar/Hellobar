@@ -60,7 +60,7 @@ class AnalyticsProvider
     if promotional_signup?(user)
       plan = PromotionalPlan.new
 
-      params[:promotional_identifier] = user.utm_source
+      params[:promotional_identifier] = user.utm_source if user.utm_source.present?
       params[:source] = user.source
       params[:trial_period] = plan.duration
       params[:trial_subscription] = plan.subscription_type
