@@ -37,6 +37,7 @@ class @ContactListModal extends Modal
     @blocks.syncDetails.hide()
     @blocks.remoteListSelect.hide()
     @blocks.tagListSelect.hide()
+    @blocks.zapierConnected.hide()
     @$modal.trigger('provider:disconnected')
     delete @options.identity
     @_chooseHelloBar()
@@ -86,7 +87,6 @@ class @ContactListModal extends Modal
       syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
       remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
       tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
-      zapier           : $("#contact-list-variant-modal-zapier-template").html()
     }
 
   _initializeTemplates: ->
@@ -97,9 +97,9 @@ class @ContactListModal extends Modal
       syncDetails      : Handlebars.compile(@options.templates.syncDetails)
       remoteListSelect : Handlebars.compile(@options.templates.remoteListSelect)
       tagListSelect    : Handlebars.compile(@options.templates.tagListSelect)
-      zapier           : Handlebars.compile(@options.templates.zapier)
 
     @$modal = $(@templates.main({header: @_header()}))
+
     @$modal.appendTo($("body"))
 
   _header: -> "Set up your contact list and integration"
@@ -114,7 +114,7 @@ class @ContactListModal extends Modal
       remoteListSelect : @$modal.find(".remote-list-select-block")
       hellobarOnly     : @$modal.find(".hellobar-only")
       tagListSelect    : @$modal.find(".tag-select-block")
-      zapier           : @$modal.find(".zapier-block")
+      zapierConnected  : @$modal.find(".zapier-block-connected")
 
   _bindInteractions: (object) ->
     @_bindCustomEvents(object)
@@ -421,6 +421,7 @@ class @ContactListModal extends Modal
       showTagTextfield: (label == 'AWeber')
       isProviderDrip: (label == 'Drip')
       isProviderInfusionsoft: (label == 'Infusionsoft')
+      isProviderNotZapier: (label != 'Zapier')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -451,8 +452,15 @@ class @ContactListModal extends Modal
       @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
       @blocks.tagListSelect.hide()
-      @_renderBlock("zapier", {}).show() if @options.contactList.provider_token == 'zapier'
       return
+
+    if value != 1 && value != null && label == 'Zapier' && @options.id
+      @blocks.selectListing.hide()
+      @blocks.zapierConnected.show()
+    else
+      @blocks.selectListing.show()
+      @blocks.zapierConnected.hide()
+
 
     @$modal.trigger 'load'
 

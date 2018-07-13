@@ -62,8 +62,13 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
         .sync-details-block
           / Empty
 
-        .zapier-block
-          / Empty
+        .zapier-block-connected
+          p
+            ' This contact list is attached to
+            = link_to 'a Zap', 'https://zapier.com/app/dashboard', target: '_blank'
+            ' . You can manage it at
+            = link_to 'Zapier', 'https://zapier.com', target: '_blank'
+            ' . If you want to detach it from Zapier, you need to disable your Zap.
 
         .hellobar-only
           label After Hello Bar collects an email address, where should we send it?
@@ -122,11 +127,13 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
 script id="contact-list-variant-modal-provider-instructions-template" type="text/x-handlebars-template"
 
   | {{#if requiresWebhookUrl}}
-  |   <label for="contact_list_username">Webhook URL</label>
-  |   <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="http://example.com/webhook-callback">
-  |   <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
-  |   <label for="contact_list_webhook_method">POST request</label>
-  |   <small>Each email collected is guaranteed to be sent to the specified URL at least once, but possibly more than once. It is the responsibility of the webhook to take care of possible duplicates.</small>
+  |   {{#if isProviderNotZapier}}
+  |     <label for="contact_list_username">Webhook URL</label>
+  |     <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="http://example.com/webhook-callback">
+  |     <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
+  |     <label for="contact_list_webhook_method">POST request</label>
+  |     <small>Each email collected is guaranteed to be sent to the specified URL at least once, but possibly more than once. It is the responsibility of the webhook to take care of possible duplicates.</small>
+  |   {{/if}}
   | {{/if}}
   |
   | {{#if requiresUsername}}
@@ -270,11 +277,3 @@ script id="contact-list-variant-modal-sync-details-template" type="text/x-handle
   div
     a.button.cancel.unlink data-identity-id="{{identity.id}}" Disconnect {{providerName}}
   small Disconnecting your {{providerName}} account will prevent Hello Bar from automatically pushing subscriptions to your list.
-
-script id="contact-list-variant-modal-zapier-template" type="text/x-handlebars-template"
-  p
-    ' This contact list is attached to
-    = link_to 'a Zap', 'https://zapier.com/app/dashboard', target: '_blank'
-    ' . You can manage it at
-    = link_to 'Zapier', 'https://zapier.com', target: '_blank'
-    ' . If you want to detach it from Zapier, you need to disable your Zap.
