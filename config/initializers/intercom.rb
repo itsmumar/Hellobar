@@ -63,7 +63,7 @@ IntercomRails.config do |config|
     total_conversions: proc { |user| user.sites.map { |site| site.statistics.conversions }.sum },
     total_subscribers: proc { |user| user.sites.to_a.sum { |s| FetchSiteContactListTotals.new(s).call.values.sum || 0 } },
     managed_sites: proc { |user| user.site_ids },
-    affiliate_identifier: proc { |user| user.affiliate_information&.affiliate_identifier }
+    affiliate_identifier: proc { |user| user.affiliate_identifier }
   }
 
   # == Current company method/variable
