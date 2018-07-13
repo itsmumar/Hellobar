@@ -114,6 +114,7 @@ class @ContactListModal extends Modal
       remoteListSelect : @$modal.find(".remote-list-select-block")
       hellobarOnly     : @$modal.find(".hellobar-only")
       tagListSelect    : @$modal.find(".tag-select-block")
+      zapierTemplates  : @$modal.find(".zapier-block-templates")
       zapierConnected  : @$modal.find(".zapier-block-connected")
 
   _bindInteractions: (object) ->
@@ -454,13 +455,23 @@ class @ContactListModal extends Modal
       @blocks.tagListSelect.hide()
       return
 
-    if value != 1 && value != null && label == 'Zapier' && @options.id
-      @blocks.selectListing.hide()
-      @blocks.zapierConnected.show()
-    else
-      @blocks.selectListing.show()
-      @blocks.zapierConnected.hide()
+    if value != "0" && value != null
+      if label == 'Zapier'
+        if @options.id
+          # connected Zapier list
+          @blocks.selectListing.hide()
+          @blocks.zapierConnected.show()
+        else
+          # new Zapier list
+          @blocks.selectListing.show()
+          @blocks.zapierTemplates.show()
 
+          @_loadZapierTemplates()
+      else
+        # other providers
+        @blocks.selectListing.show()
+        @blocks.zapierTemplates.hide()
+        @blocks.zapierConnected.hide()
 
     @$modal.trigger 'load'
 
@@ -527,6 +538,13 @@ class @ContactListModal extends Modal
       context.isProviderDrip or
       context.isProviderInfusionsoft or
       context.showTagTextfield
+
+  _loadZapierTemplates: ->
+    src = 'https://zapier.com/apps/embed/widget.js?services=hello-bar&html_id=zapier-templates'
+    script = document.createElement('script')
+    script.setAttribute('src', src)
+
+    @$modal.find(".zapier-block-templates").append(script)
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)

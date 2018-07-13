@@ -62,6 +62,14 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
         .sync-details-block
           / Empty
 
+        .zapier-block-templates
+          p
+            'Choose proposed Zapier template or
+            = link_to 'integate directly at Zapier', 'https://zapier.com/apps/hello-bar/integrations', target: '_blank'
+            '.
+
+          #zapier-templates
+
         .zapier-block-connected
           p
             ' This contact list is attached to
