@@ -85,7 +85,7 @@ export default Ember.Component.extend({
   }.property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
 
   componentBackground: function () {
-    const backgroundColor = '#f6f6f6';
+    const backgroundColor = '#ffffff';
 
     if (this.get('isMobile')) {
       const phoneImageUrl = this.get('imaging').imagePath('iphone-bg.png');

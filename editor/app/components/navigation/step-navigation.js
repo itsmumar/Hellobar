@@ -5,27 +5,9 @@ export default Ember.Component.extend({
 
   classNames: ['step-navigation'],
 
-  bus: Ember.inject.service(),
-  saveSiteElementService: Ember.inject.service(),
-  modelLogic: Ember.inject.service(),
-
   //-----------  Routing  -----------#
 
   routes: ['goals', 'styles', 'design', 'targeting'],
-
-  init() {
-    this._super();
-    this._subscribeToValidationEvents();
-  },
-
-  _subscribeToValidationEvents() {
-    this.get('bus').subscribe('hellobar.core.validation.failed', (failures) => {
-      this.set('validationMessages', failures.map(failure => failure.error));
-    });
-    this.get('bus').subscribe('hellobar.core.validation.succeeded', () => {
-      this.set('validationMessages', null);
-    });
-  },
 
   next: function () {
     return this._routeByIndex(this._currentRouteIndex() + 1);
@@ -50,17 +32,5 @@ export default Ember.Component.extend({
     return _.map(this.get('routes'), (route, i) => {
       return {route, past: (i < currentRouteIndex)};
     });
-  }.property('router.currentPath'),
-
-  //-----------  Save Actions  -----------#
-
-  actions: {
-    saveAndPublish () {
-      this.get('saveSiteElementService').saveAndPublish();
-    },
-
-    saveSiteElement () {
-      this.get('saveSiteElementService').save();
-    }
-  }
+  }.property('router.currentPath')
 });

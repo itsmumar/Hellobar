@@ -15,20 +15,3 @@
     <a disabled class="button">Next</a>
   {{/if}}
 </nav>
-
-{{#if saveSiteElementService.saving}}
-  Saving...
-{{else if modelLogic.isTypeSelected}}
-  <button class="button save-editor" disabled={{saving}} {{action "saveAndPublish"}}>
-    Save & Publish
-  </button>
-
-  {{#if modelLogic.isNotPublished}}
-    <a class="button button--link" disabled={{saving}} {{action "saveSiteElement"}}>
-      Save
-    </a>
-  {{/if}}
-{{/if}}
-
-{{common/validation/validation-summary validationMessages=validationMessages header="Cannot save the bar:"}}
-
