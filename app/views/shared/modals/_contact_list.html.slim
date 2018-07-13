@@ -273,6 +273,8 @@ script id="contact-list-variant-modal-sync-details-template" type="text/x-handle
 
 script id="contact-list-variant-modal-zapier-template" type="text/x-handlebars-template"
   p
-    ' This contact list is attached to Zapier platform. You can manage it at
-    = link_to 'Zapier Website', 'https://zapier.com', target: '_blank'
-    ' . If you want to detach it from Zapier you need to disable your Zap.
+    ' This contact list is attached to
+    = link_to 'a Zap', 'https://zapier.com/app/dashboard', target: '_blank'
+    ' . You can manage it at
+    = link_to 'Zapier', 'https://zapier.com', target: '_blank'
+    ' . If you want to detach it from Zapier, you need to disable your Zap.
