@@ -543,6 +543,7 @@ class @ContactListModal extends Modal
     src = 'https://zapier.com/apps/embed/widget.js?services=hello-bar&html_id=zapier-templates'
     script = document.createElement('script')
     script.setAttribute('src', src)
+    script.setAttribute('async', 'async')
 
     @$modal.find(".zapier-block-templates").append(script)
 
