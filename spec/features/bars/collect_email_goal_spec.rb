@@ -71,6 +71,7 @@ feature 'Collect Email goal', :js do
     find('a.change-selection').click
     find('h6', text: 'Modal').click
     find('.step-settings').click
+    find('span', text: 'Autodetect colors from site').click
 
     find('div.item-block.add', text: 'Add field').click
 
