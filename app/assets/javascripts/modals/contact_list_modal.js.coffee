@@ -422,7 +422,7 @@ class @ContactListModal extends Modal
       showTagTextfield: (label == 'AWeber')
       isProviderDrip: (label == 'Drip')
       isProviderInfusionsoft: (label == 'Infusionsoft')
-      isProviderNotZapier: (label != 'Zapier')
+      isProviderZapier: (label == 'Zapier')
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')

@@ -135,7 +135,10 @@ script id="contact-list-variant-modal-template" type="text/x-handlebars-template
 script id="contact-list-variant-modal-provider-instructions-template" type="text/x-handlebars-template"
 
   | {{#if requiresWebhookUrl}}
-  |   {{#if isProviderNotZapier}}
+  |   {{#if isProviderZapier}}
+  |     <input type="hidden" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}">
+  |     <input type="hidden" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}">
+  |   {{else}}
   |     <label for="contact_list_username">Webhook URL</label>
   |     <input type="url" id="contact_list_webhook_url" name="contact_list[data][webhook_url]" value="{{contactList.data.webhook_url}}" placeholder="http://example.com/webhook-callback">
   |     <input type="checkbox" id="contact_list_webhook_method" name="contact_list[data][webhook_method]" value="{{contactList.data.webhook_method}}" {{#if webhookIsPost}}checked{{/if}}>
