@@ -25,7 +25,7 @@ feature 'Editing site element', :js do
     value = 'Dear I fear because were facing a problem'
     first('.ember-text-field').set(value)
 
-    click_on 'Save & Publish'
+    find('a', text: 'Save & Publish').click
 
     expect(page).to have_content(value)
   end

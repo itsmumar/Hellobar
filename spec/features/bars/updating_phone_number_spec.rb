@@ -16,7 +16,7 @@ feature 'Adding and editing bars', :js do
 
     click_button 'Continue'
 
-    click_on 'Save & Publish'
+    find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Get Free Growth') # waits for next page load
     element = SiteElement.last
