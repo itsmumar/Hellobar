@@ -1,5 +1,3 @@
-/* globals TempUserUnsavedChangesModal, UnsavedChangesModal */
-
 import Ember from 'ember';
 
 import MobileMixin from './application.mixin.mobile';

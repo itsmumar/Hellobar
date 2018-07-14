@@ -1,3 +1,5 @@
+/* globals UnsavedChangesModal */
+
 import Ember from 'ember';
 import { VIEW_DESKTOP, VIEW_TABLET, VIEW_MOBILE } from '../../constants';
 
