@@ -1,30 +1,21 @@
 <ul class="step-links">
-  <li class="step-settings">
-    {{#link-to 'goals'}}
-      <i class="hellobar-icon hellobar-icon-trophy"></i>
+  {{#link-to 'goals' tagName="li" class="step-settings"}}
+    <i class="hellobar-icon hellobar-icon-trophy"></i>
+    <div class="caption">Goals</div>
+  {{/link-to}}
 
-      <div class="caption">Goals</div>
-    {{/link-to}}
-  </li>
-  <li class="step-style">
-    {{#link-to 'styles'}}
-      <i class="icon-style"></i>
+  {{#link-to 'styles' tagName="li" class="step-style"}}
+    <i class="icon-style"></i>
+    <div class="caption">Style</div>
+  {{/link-to}}
 
-      <div class="caption">Style</div>
-    {{/link-to}}
-  </li>
-  <li class="step-content">
-    {{#link-to 'design'}}
-      <i class="icon-content"></i>
+  {{#link-to 'design' tagName="li" class="step-content"}}
+    <i class="icon-content"></i>
+    <div class="caption">Content</div>
+  {{/link-to}}
 
-      <div class="caption">Content</div>
-    {{/link-to}}
-  </li>
-  <li class="step-targeting">
-    {{#link-to 'targeting'}}
-      <i class="icon-views"></i>
-
-      <div class="caption">Targeting</div>
-    {{/link-to}}
-  </li>
+  {{#link-to 'targeting' tagName="li" class="step-targeting"}}
+    <i class="icon-views"></i>
+    <div class="caption">Targeting</div>
+  {{/link-to}}
 </ul>
