@@ -1,0 +1,25 @@
+<ul class="view-switcher">
+  <li class="view-switcher__button {{if isDesktop "active" ""}}" {{action 'setView' 'VIEW_DESKTOP'}}>
+    {{fa-icon 'desktop' size='lg'}}
+  </li>
+  <li class="view-switcher__button {{if isTablet "active" ""}}" {{action 'setView' 'VIEW_TABLET'}}>
+    {{fa-icon 'tablet-alt' size='lg'}}
+  </li>
+  <li class="view-switcher__button {{if isMobile "active" ""}}" {{action 'setView' 'VIEW_MOBILE'}}>
+    {{fa-icon 'mobile-alt' size='lg'}}
+  </li>
+</ul>
+
+<div class="action-buttons">
+  {{#if saveSiteElementService.saving}}
+    <span class="action-buttons__saving">Saving...</span>
+  {{else}}
+    <a class="action-buttons__button" {{action 'cancel'}}>Cancel</a>
+    {{#if modelLogic.isNotPublished}}
+      <a class="action-buttons__button {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'save'}}>Save</a>
+    {{/if}}
+    <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndPublish'}}>Save & Publish</a>
+  {{/if}}
+</div>
+
+{{common/validation/validation-summary validationMessages=validationMessages header="Cannot save the bar:"}}

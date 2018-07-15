@@ -20,7 +20,7 @@ feature 'Adding Alert bar', :js do
     find('a', text: 'CHANGE TYPE').click
     find('h6', text: 'Alert').click
     first('.autodetection-button').click
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     click_on 'Manage'
 
     expect(page).to have_selector '[data-type="alert"]'

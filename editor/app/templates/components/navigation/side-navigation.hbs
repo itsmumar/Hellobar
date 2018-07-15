@@ -28,38 +28,3 @@
     {{/link-to}}
   </li>
 </ul>
-
-<ul class="action-links">
-  <li class="toggle-fullscreen">
-    <a {{action 'toggleFullscreen'}}>
-      <i class="icon-back2"></i>
-      <i class="icon-back2"></i>
-    </a>
-
-    <div class="caption">
-      {{#if isFullscreen}}
-        Show
-      {{else}}
-        Hide
-      {{/if}}
-    </div>
-  </li>
-  <li class="toggle-mobile">
-    <a {{action 'toggleView'}}>
-      <i>{{fa-icon 'mobile-alt' size='xs'}}</i>
-      <i>{{fa-icon 'tablet-alt' size='xs'}}</i>
-      <i>{{fa-icon 'laptop' size='xs'}}</i>
-    </a>
-
-    <div class="caption">
-      {{ viewName }}
-    </div>
-  </li>
-  <li class="close-editor">
-    <a {{action "closeEditor"}}>
-      <i class="icon-close"></i>
-
-      <div class="caption">Close</div>
-    </a>
-  </li>
-</ul>

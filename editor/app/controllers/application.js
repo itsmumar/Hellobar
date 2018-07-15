@@ -1,5 +1,3 @@
-/* globals TempUserUnsavedChangesModal, UnsavedChangesModal */
-
 import Ember from 'ember';
 
 import MobileMixin from './application.mixin.mobile';
@@ -61,29 +59,5 @@ export default Ember.Controller.extend(MobileMixin, {
     if (this.get('model') && ruleId >= 0) {
       this.set('model.rule_id', ruleId);
     }
-  }).observes('rule_id', 'model'),
-
-  //-----------  Actions  -----------#
-
-  actions: {
-
-    closeEditor() {
-      if (this.get('isTemporaryUser')) {
-        new TempUserUnsavedChangesModal().open();
-      } else {
-        const dashboardURL = `/sites/${window.siteID}/site_elements`;
-        if (this.get('modelIsDirty')) {
-          const options = {
-            dashboardURL,
-            doSave: () => {
-              this.send('saveSiteElement');
-            }
-          };
-          new UnsavedChangesModal(options).open();
-        } else {
-          window.location = dashboardURL;
-        }
-      }
-    }
-  }
+  }).observes('rule_id', 'model')
 });

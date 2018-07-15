@@ -22,7 +22,7 @@ feature 'Adding bars', :js do
     expect(page).to have_content 'PROMOTE A SALE'
 
     click_button 'Continue'
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')
 
@@ -47,7 +47,7 @@ feature 'Adding bars', :js do
     expect(page).to have_content 'PROMOTE A SALE'
 
     click_button 'Continue'
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')
 

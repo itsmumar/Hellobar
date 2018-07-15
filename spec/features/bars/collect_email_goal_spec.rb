@@ -25,7 +25,7 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'only built-in-email enabled' do
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -35,7 +35,7 @@ feature 'Collect Email goal', :js do
   scenario 'built-in-phone enabled' do
     @phone_field.hover
     @phone_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -45,7 +45,7 @@ feature 'Collect Email goal', :js do
   scenario 'built-in-name enabled' do
     @name_field.hover
     @name_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -57,7 +57,7 @@ feature 'Collect Email goal', :js do
     @name_field.find('.hellobar-icon-check-mark').click
     @phone_field.hover
     @phone_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -71,13 +71,14 @@ feature 'Collect Email goal', :js do
     find('a.change-selection').click
     find('h6', text: 'Modal').click
     find('.step-settings').click
+    find('span', text: 'Autodetect colors from site').click
 
     find('div.item-block.add', text: 'Add field').click
 
     expect(page).to have_selector '.new-item-prototype > input'
     find('.new-item-prototype > input').set "Age\n"
 
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
 
     find('a', text: 'Manage').click

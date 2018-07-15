@@ -75,7 +75,7 @@ feature 'Users can use site element targeting rule presets', :js do
       find('a', text: 'CHANGE TARGET AUDIENCE').click
 
       find('h6', text: custom_option).click
-      find('a', text: 'Cancel').click
+      find('a.button', text: 'Cancel').click
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
@@ -84,11 +84,11 @@ feature 'Users can use site element targeting rule presets', :js do
       find('h6', text: custom_option).click
       find('a', text: '+').click
       fill_in 'rule_name', with: 'New Custom Rule'
-      find('a', text: 'Save').click
+      find('a.button', text: 'Save').click
 
       find('a', text: 'Edit.').click
       fill_in 'rule_name', with: 'Edited Custom Rule'
-      find('a', text: 'Save').click
+      find('a.button', text: 'Save').click
 
       expect(page).to have_content 'Edited Custom Rule'
     end
