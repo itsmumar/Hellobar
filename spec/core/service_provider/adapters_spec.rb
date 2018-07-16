@@ -79,8 +79,7 @@ describe ServiceProvider::Adapters do
         ServiceProvider::Adapters::Hellobar,
         ServiceProvider::Adapters::MadMimiForm,
         ServiceProvider::Adapters::VerticalResponseForm,
-        ServiceProvider::Adapters::Infusionsoft,
-        ServiceProvider::Adapters::Zapier
+        ServiceProvider::Adapters::Infusionsoft
       ]
     end
 

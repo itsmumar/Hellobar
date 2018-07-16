@@ -37,6 +37,7 @@ class @ContactListModal extends Modal
     @blocks.syncDetails.hide()
     @blocks.remoteListSelect.hide()
     @blocks.tagListSelect.hide()
+    @blocks.zapierConnected.hide()
     @$modal.trigger('provider:disconnected')
     delete @options.identity
     @_chooseHelloBar()
@@ -86,7 +87,6 @@ class @ContactListModal extends Modal
       syncDetails      : $("#contact-list-variant-modal-sync-details-template").html()
       remoteListSelect : $("#contact-list-variant-modal-remote-list-select-template").html()
       tagListSelect    : $("#contact-list-variant-modal-tag-select-template").html()
-      zapier           : $("#contact-list-variant-modal-zapier-template").html()
     }
 
   _initializeTemplates: ->
@@ -97,9 +97,9 @@ class @ContactListModal extends Modal
       syncDetails      : Handlebars.compile(@options.templates.syncDetails)
       remoteListSelect : Handlebars.compile(@options.templates.remoteListSelect)
       tagListSelect    : Handlebars.compile(@options.templates.tagListSelect)
-      zapier           : Handlebars.compile(@options.templates.zapier)
 
     @$modal = $(@templates.main({header: @_header()}))
+
     @$modal.appendTo($("body"))
 
   _header: -> "Set up your contact list and integration"
@@ -114,7 +114,9 @@ class @ContactListModal extends Modal
       remoteListSelect : @$modal.find(".remote-list-select-block")
       hellobarOnly     : @$modal.find(".hellobar-only")
       tagListSelect    : @$modal.find(".tag-select-block")
-      zapier           : @$modal.find(".zapier-block")
+      zapierTemplates  : @$modal.find(".zapier-block-templates")
+      zapierConnected  : @$modal.find(".zapier-block-connected")
+      submitButton     : @$modal.find("a.submit")
 
   _bindInteractions: (object) ->
     @_bindCustomEvents(object)
@@ -292,8 +294,7 @@ class @ContactListModal extends Modal
   _doSubmit: (e) ->
     @_clearErrors()
 
-    submitButton = @$modal.find("a.submit")
-    submitButton.attr("disabled", true)
+    @blocks.submitButton.attr("disabled", true)
     formData = @_getFormData()
 
     $.ajax @options.saveURL,
@@ -304,7 +305,7 @@ class @ContactListModal extends Modal
       error: (response) =>
         contactList = response.responseJSON
         @_displayErrors(contactList.errors)
-        @$modal.find("a.submit").removeAttr("disabled")
+        @blocks.submitButton.removeAttr("disabled")
 
   _confirmDelete: (e) =>
     @$modal.find("#contact-list-form").hide()
@@ -352,7 +353,12 @@ class @ContactListModal extends Modal
     username        = $('#contact_list_username').val()
     app_url         = $('#contact_list_app_url').val()
     webhook_url     = $('#contact_list_webhook_url').val()
-    webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+
+    if @options?.identity?.provider == 'zapier'
+      webhook_method = $('#contact_list_webhook_method').val()
+    else
+      webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+
     tags            = (tag.value for tag in $(".contact-list-tag"))
     $cycle_day      = $('#contact_list_cycle_day')
 
@@ -421,6 +427,8 @@ class @ContactListModal extends Modal
       showTagTextfield: (label == 'AWeber')
       isProviderDrip: (label == 'Drip')
       isProviderInfusionsoft: (label == 'Infusionsoft')
+      isProviderZapier: (label == 'Zapier')
+      isProviderZapierConnected: label == 'Zapier' && @options.contactList?.data?.webhook_method?.toLowerCase() == 'post' && @options.contactList?.data?.webhook_url?.length > 0
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -451,8 +459,28 @@ class @ContactListModal extends Modal
       @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
       @blocks.tagListSelect.hide()
-      @_renderBlock("zapier", {}).show() if @options.contactList.provider_token == 'zapier'
       return
+
+    if value != "0" && value != null
+      if label == 'Zapier'
+        if @options.id && defaultContext.isProviderZapierConnected
+          # connected Zapier list
+          @blocks.selectListing.hide()
+          @blocks.zapierConnected.show()
+          @blocks.submitButton.show()
+        else
+          # new Zapier list
+          @blocks.selectListing.show()
+          @blocks.zapierTemplates.show()
+          @blocks.submitButton.hide()
+
+          @_loadZapierTemplates()
+      else
+        # other providers
+        @blocks.selectListing.show()
+        @blocks.zapierTemplates.hide()
+        @blocks.zapierConnected.hide()
+        @blocks.submitButton.show()
 
     @$modal.trigger 'load'
 
@@ -519,6 +547,14 @@ class @ContactListModal extends Modal
       context.isProviderDrip or
       context.isProviderInfusionsoft or
       context.showTagTextfield
+
+  _loadZapierTemplates: ->
+    src = 'https://zapier.com/apps/embed/widget.js?services=hello-bar&html_id=zapier-templates'
+    script = document.createElement('script')
+    script.setAttribute('src', src)
+    script.setAttribute('async', 'async')
+
+    @$modal.find(".zapier-block-templates").append(script)
 
   _setFormValues: (data) ->
     @$modal.find("#contact_list_name").val(data.name)
