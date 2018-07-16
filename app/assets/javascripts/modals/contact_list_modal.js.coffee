@@ -116,6 +116,7 @@ class @ContactListModal extends Modal
       tagListSelect    : @$modal.find(".tag-select-block")
       zapierTemplates  : @$modal.find(".zapier-block-templates")
       zapierConnected  : @$modal.find(".zapier-block-connected")
+      submitButton     : @$modal.find("a.submit")
 
   _bindInteractions: (object) ->
     @_bindCustomEvents(object)
@@ -293,8 +294,7 @@ class @ContactListModal extends Modal
   _doSubmit: (e) ->
     @_clearErrors()
 
-    submitButton = @$modal.find("a.submit")
-    submitButton.attr("disabled", true)
+    @blocks.submitButton.attr("disabled", true)
     formData = @_getFormData()
 
     $.ajax @options.saveURL,
@@ -305,7 +305,7 @@ class @ContactListModal extends Modal
       error: (response) =>
         contactList = response.responseJSON
         @_displayErrors(contactList.errors)
-        @$modal.find("a.submit").removeAttr("disabled")
+        @blocks.submitButton.removeAttr("disabled")
 
   _confirmDelete: (e) =>
     @$modal.find("#contact-list-form").hide()
@@ -467,10 +467,12 @@ class @ContactListModal extends Modal
           # connected Zapier list
           @blocks.selectListing.hide()
           @blocks.zapierConnected.show()
+          @blocks.submitButton.show()
         else
           # new Zapier list
           @blocks.selectListing.show()
           @blocks.zapierTemplates.show()
+          @blocks.submitButton.hide()
 
           @_loadZapierTemplates()
       else
@@ -478,6 +480,7 @@ class @ContactListModal extends Modal
         @blocks.selectListing.show()
         @blocks.zapierTemplates.hide()
         @blocks.zapierConnected.hide()
+        @blocks.submitButton.show()
 
     @$modal.trigger 'load'
 
