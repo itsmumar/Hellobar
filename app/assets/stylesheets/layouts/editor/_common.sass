@@ -46,30 +46,45 @@
 
       color: $grayDarkColor
       line-height: 1em
-      padding: 20px 0 15px 0
       background-color: $grayLightest
       border: 1px solid #e0e0e0
       border-right: none
-      opacity: .4
       cursor: pointer
       transition: all 0.5s ease, margin-right 1ms, border-right 1ms
 
-      & + li
-        margin-top: -1px
-
       &:hover
-        opacity: .8
-        .caption
+        img, .caption
           opacity: .8
 
       &.active
-        color: $grayDarkColor
         pointer-events: none
         background-color: $white
         border-right: 1px solid white
-        border-left: 7px solid #27ab9e
         margin-right: -1px
-        opacity: 1
+
+        img, .caption
+          opacity: 1
+
+      .step-links__item
+        padding: 20px 0 15px 0
+
+      .step-links__item.done, &.active .step-links__item
+        .progress
+          background-color: #27ab9e
+
+      .progress
+        width: 7px
+        height: calc(100% + 1px)
+        position: absolute
+        top: -1px
+        transition: all 0.5s ease
+
+      img, .caption
+        opacity: .4
+        transition: opacity 0.5s ease
+
+      & + li
+        margin-top: -1px
 
       .caption
         display: block
@@ -83,19 +98,6 @@
         font-size: 2.67em
         margin-bottom: -0.25em
         @include inline-block()
-
-      &.step-style
-        a
-          .caption
-            bottom: 0.8em
-      &.step-content
-        a
-          .caption
-            bottom: 0.85em
-      &.step-targeting
-        a
-          .caption
-            bottom: 1.2em
 
     .step-links
       padding: 0
@@ -116,30 +118,6 @@
         &.close-editor
           a
             padding: 0.3em 0 1.7em 0
-
-      .toggle-fullscreen
-        @include clearfix()
-
-        .caption
-          display: block
-          position: absolute
-          bottom: 0.8em
-          left: 0
-          right: 0
-          pointer-events: none
-          font-size: 0.63em
-          line-height: 0.63em
-          color: #c7c7c7
-
-        a
-          width: 200%
-          margin-left: -100%
-          position: relative
-          transition: 0.25s
-
-          i
-            width: 50%
-            float: left
 
       .toggle-mobile
         @include clearfix()
@@ -188,10 +166,6 @@
         &.icon-mobile:after
           right: -1px
 
-      .toggle-fullscreen a i:first-child
-        margin-top: -6px
-        transform: rotate(180deg)
-
       .icon-close:before
         font-size: 0.75em
 
@@ -231,18 +205,6 @@
       flex: 0 1 auto
 
   /*-----------  Alternate States  -----------*/
-
-  &.is-fullscreen
-
-    .toggle-fullscreen a
-      margin-left: 0% !important
-
-    .step-wrapper
-      margin-left: -$stepWidth
-
-    .hellobar#pull-down
-      &.hb-bottom-left, &.hb-top-left
-        left: $linkWidth + 0.25em
 
   &.is-mobile
 

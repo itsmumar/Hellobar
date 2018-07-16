@@ -4,7 +4,7 @@ import { VIEW_DESKTOP, VIEW_TABLET, VIEW_MOBILE } from '../constants';
 export default Ember.Component.extend({
 
   classNames: ['editor-wrapper'],
-  classNameBindings: ['isMobile', 'isTablet', 'isDesktop', 'isFullscreen', 'isCallGoal'],
+  classNameBindings: ['isMobile', 'isTablet', 'isDesktop', 'isCallGoal'],
 
   bus: Ember.inject.service(),
   palette: Ember.inject.service(),
