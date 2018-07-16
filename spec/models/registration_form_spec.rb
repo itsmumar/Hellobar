@@ -16,14 +16,26 @@ describe RegistrationForm do
       end
     end
 
-    context 'affiliate trial signup without partner record' do
-      let(:cookies) { Hash[tap_vid: 'vid', tap_aid: affiliate_identifier] }
+    context 'promotional signup' do
+      let(:cookies) { Hash[promotional_signup: 'true'] }
 
-      it 'displays trial signup title' do
+      it 'displays promotional signup title' do
         expect(form.title).to include 'FREE 30 Day Trial Of Hello Bar Growth'
       end
 
-      it 'displays trial signup cta' do
+      it 'displays promotional signup cta' do
+        expect(form.cta).to include 'Start Your 30 Day Free Trial'
+      end
+    end
+
+    context 'affiliate signup without partner record' do
+      let(:cookies) { Hash[tap_vid: 'vid', tap_aid: affiliate_identifier] }
+
+      it 'displays affiliate signup title' do
+        expect(form.title).to include 'FREE 30 Day Trial Of Hello Bar Growth'
+      end
+
+      it 'displays affiliate signup cta' do
         expect(form.cta).to include 'Start Your 30 Day Free Trial'
       end
     end
