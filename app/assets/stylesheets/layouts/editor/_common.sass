@@ -44,20 +44,23 @@
       position: relative
       user-select: none
 
-      color: $grayLight
+      color: $grayDarkColor
       line-height: 1em
-      padding: 20px 0 0 0
+      padding: 20px 0 15px 0
       background-color: $grayLightest
       border: 1px solid #e0e0e0
       border-right: none
+      opacity: .4
+      cursor: pointer
+      transition: all 0.5s ease, margin-right 1ms, border-right 1ms
 
       & + li
         margin-top: -1px
 
       &:hover
-        color: $grayDarkColor
+        opacity: .8
         .caption
-          color: $grayDarkColor
+          opacity: .8
 
       &.active
         color: $grayDarkColor
@@ -66,14 +69,13 @@
         border-right: 1px solid white
         border-left: 7px solid #27ab9e
         margin-right: -1px
-        .caption
-          color: $grayDarkColor
+        opacity: 1
 
       .caption
         display: block
         font-size: 0.9em
-        line-height: 60px
-        color: #c7c7c7
+        line-height: 30px
+        color: $grayDarkColor
 
       i
         width: 100%
