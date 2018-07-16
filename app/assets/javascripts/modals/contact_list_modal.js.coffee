@@ -353,7 +353,12 @@ class @ContactListModal extends Modal
     username        = $('#contact_list_username').val()
     app_url         = $('#contact_list_app_url').val()
     webhook_url     = $('#contact_list_webhook_url').val()
-    webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+
+    if @options?.identity?.provider == 'zapier'
+      webhook_method = $('#contact_list_webhook_method').val()
+    else
+      webhook_method  = if $('#contact_list_webhook_method').prop('checked') then "post" else "get"
+
     tags            = (tag.value for tag in $(".contact-list-tag"))
     $cycle_day      = $('#contact_list_cycle_day')
 
