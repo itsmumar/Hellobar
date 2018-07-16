@@ -428,6 +428,7 @@ class @ContactListModal extends Modal
       isProviderDrip: (label == 'Drip')
       isProviderInfusionsoft: (label == 'Infusionsoft')
       isProviderZapier: (label == 'Zapier')
+      isProviderZapierConnected: label == 'Zapier' && @options.contactList?.data?.webhook_method?.toLowerCase() == 'post' && @options.contactList?.data?.webhook_url?.length > 0
       oauth: option.data('oauth')
       requiresEmbedCode: option.data('requiresEmbedCode')
       requiresAppUrl: option.data('requiresAppUrl')
@@ -462,7 +463,7 @@ class @ContactListModal extends Modal
 
     if value != "0" && value != null
       if label == 'Zapier'
-        if @options.id
+        if @options.id && defaultContext.isProviderZapierConnected
           # connected Zapier list
           @blocks.selectListing.hide()
           @blocks.zapierConnected.show()
