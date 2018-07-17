@@ -459,28 +459,30 @@ class @ContactListModal extends Modal
       @blocks.syncDetails.hide()
       @blocks.remoteListSelect.hide()
       @blocks.tagListSelect.hide()
+      @blocks.zapierTemplates.hide()
+      @blocks.zapierConnected.hide()
+      @blocks.submitButton.show()
       return
 
-    if value != "0" && value != null
-      if label == 'Zapier'
-        if @options.id && defaultContext.isProviderZapierConnected
-          # connected Zapier list
-          @blocks.selectListing.hide()
-          @blocks.zapierConnected.show()
-          @blocks.submitButton.show()
-        else
-          # new Zapier list
-          @blocks.selectListing.show()
-          @blocks.zapierTemplates.show()
-          @blocks.submitButton.hide()
-
-          @_loadZapierTemplates()
-      else
-        # other providers
-        @blocks.selectListing.show()
-        @blocks.zapierTemplates.hide()
-        @blocks.zapierConnected.hide()
+    if label == 'Zapier'
+      if @options.id && defaultContext.isProviderZapierConnected
+        # connected Zapier list
+        @blocks.selectListing.hide()
+        @blocks.zapierConnected.show()
         @blocks.submitButton.show()
+      else
+        # new Zapier list
+        @blocks.selectListing.show()
+        @blocks.zapierTemplates.show()
+        @blocks.submitButton.hide()
+
+        @_loadZapierTemplates()
+    else
+      # other providers
+      @blocks.selectListing.show()
+      @blocks.zapierTemplates.hide()
+      @blocks.zapierConnected.hide()
+      @blocks.submitButton.show()
 
     @$modal.trigger 'load'
 
