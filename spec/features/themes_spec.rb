@@ -22,7 +22,7 @@ feature 'Users can select a design theme for SiteElements', :js do
 
     find("div[data-theme-id='#{ theme_id }']").click
 
-    click_on 'Content'
+    find('.step-links__item .caption', text: 'Design').click
 
     expect(page).to have_content 'DESIGN & CONTENT'
 

@@ -33,7 +33,7 @@ feature 'Editing site element', :js do
 
     expect(page).to have_content 'TARGETING'
 
-    click_on 'Content'
+    find('.step-links__item .caption', text: 'Design').click
 
     expect(page).to have_content('Background Color')
 
