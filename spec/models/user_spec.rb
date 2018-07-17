@@ -69,7 +69,7 @@ describe User do
   end
 
   describe 'attr_accessors' do
-    %i[timezone is_impersonated source utm_source].each do |attr|
+    %i[timezone is_impersonated].each do |attr|
       it "has :#{ attr } attribute" do
         user = User.new
         value = 'x'

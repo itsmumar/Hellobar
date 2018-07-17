@@ -8,8 +8,6 @@ class CreateUser
   def call
     persist_user
     create_affiliate_information
-    attach_source_information
-    attach_utm_source_information
     track_event
     user
   end
@@ -26,23 +24,29 @@ class CreateUser
     CreateAffiliateInformation.new(user, cookies).call
   end
 
-  def attach_source_information
-    user.source = 'promotional' if promotional_signup?
-  end
-
-  def attach_utm_source_information
-    user.utm_source = utm_source if utm_source
-  end
-
-  def promotional_signup?
-    cookies[:promotional_signup] == 'true'
-  end
-
   def utm_source
     cookies[:utm_source]
   end
 
   def track_event
-    TrackEvent.new(:signed_up, user: user).call
+    TrackEvent.new(:signed_up, event_params).call
+  end
+
+  def event_params
+    if promotional_signup? && utm_source
+      default_event_params.merge promotional_signup: true, utm_source: utm_source
+    elsif promotional_signup?
+      default_event_params.merge promotional_signup: true
+    else
+      default_event_params
+    end
+  end
+
+  def default_event_params
+    Hash[user: user]
+  end
+
+  def promotional_signup?
+    cookies[:promotional_signup] == 'true'
   end
 end

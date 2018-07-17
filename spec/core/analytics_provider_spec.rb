@@ -21,16 +21,13 @@ describe AnalyticsProvider do
     end
 
     context 'when promotional signup' do
-      before do
-        user.source = 'promotional'
-        user.utm_source = 'site'
-      end
+      let(:utm_source) { 'site' }
 
       it 'tracks "signed-up" with promotional info' do
         plan = PromotionalPlan.new
 
         params = {
-          promotional_identifier: user.utm_source,
+          promotional_identifier: utm_source,
           source: 'promotional',
           trial_period: plan.duration,
           trial_subscription: plan.subscription_type,
@@ -45,7 +42,7 @@ describe AnalyticsProvider do
           .to receive(:tag_users)
           .with('Promotional', [user])
 
-        track('signed-up', user: user)
+        track('signed-up', user: user, promotional_signup: true, utm_source: utm_source)
       end
     end
 
