@@ -46,7 +46,6 @@ export default Ember.Controller.extend(MobileMixin, {
 
   queryParams: ['rule_id'],
 
-  isFullscreen: false,
   saveSubmitted: false,
   modelIsDirty: false,
   rule_id: null,

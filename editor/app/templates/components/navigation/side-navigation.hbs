@@ -1,30 +1,35 @@
+<img class="side-bar-logo" src="{{ image_path "icons/h-logo.svg" }}">
+
 <ul class="step-links">
-  <li class="step-settings">
-    {{#link-to 'goals'}}
-      <i class="hellobar-icon hellobar-icon-trophy"></i>
-
+  {{#link-to 'goals' tagName="li"}}
+    <div class="step-links__item" onclick={{action "updateProgress"}}>
+      <div class="progress"></div>
+      <img src="{{ image_path "icons/goal.svg" }}">
       <div class="caption">Goals</div>
-    {{/link-to}}
-  </li>
-  <li class="step-style">
-    {{#link-to 'styles'}}
-      <i class="icon-style"></i>
+    </div>
+  {{/link-to}}
 
-      <div class="caption">Style</div>
-    {{/link-to}}
-  </li>
-  <li class="step-content">
-    {{#link-to 'design'}}
-      <i class="icon-content"></i>
+  {{#link-to 'styles' tagName="li"}}
+    <div class="step-links__item" onclick={{action "updateProgress"}}>
+      <div class="progress"></div>
+      <img src="{{ image_path "icons/type.svg" }}">
+      <div class="caption">Type</div>
+    </div>
+  {{/link-to}}
 
-      <div class="caption">Content</div>
-    {{/link-to}}
-  </li>
-  <li class="step-targeting">
-    {{#link-to 'targeting'}}
-      <i class="icon-views"></i>
+  {{#link-to 'design' tagName="li"}}
+    <div class="step-links__item" onclick={{action "updateProgress"}}>
+      <div class="progress"></div>
+      <img src="{{ image_path "icons/design.svg" }}">
+      <div class="caption">Design</div>
+    </div>
+  {{/link-to}}
 
+  {{#link-to 'targeting' tagName="li" onclick=(action "updateProgress")}}
+    <div class="step-links__item" onclick={{action "updateProgress"}}>
+      <div class="progress"></div>
+      <img src="{{ image_path "icons/targeting.svg" }}">
       <div class="caption">Targeting</div>
-    {{/link-to}}
-  </li>
+    </div>
+  {{/link-to}}
 </ul>

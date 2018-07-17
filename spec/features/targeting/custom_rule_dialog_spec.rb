@@ -15,7 +15,7 @@ feature 'Targeting. Custom rule dialog', :js do
     end
 
     click_on 'Continue'
-    click_on 'Targeting'
+    find('.step-links__item .caption', text: 'Targeting').click
     find('.change-selection').click
     find('h6', text: 'Custom Rule').click
 

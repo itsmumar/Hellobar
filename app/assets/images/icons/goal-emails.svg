@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="26px" viewBox="0 0 38 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0.195156 0.168109091 12.5476 0.168109091 12.5476 22.5068591 0.195156 22.5068591"></polygon>
+        <polygon id="path-3" points="0.0540671642 0.160862069 34.4904104 0.160862069 34.4904104 14.6509655 0.0540671642 14.6509655"></polygon>
+    </defs>
+    <g id="Hello-Bar-New-Creation-Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1.---Goal" transform="translate(-152.000000, -143.000000)">
+            <g id="content" transform="translate(111.000000, 59.000000)">
+                <g id="Collect-emails" transform="translate(0.000000, 40.000000)">
+                    <g id="Group" transform="translate(41.000000, 44.000000)">
+                        <g id="Group-3" transform="translate(25.000000, 2.000000)">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <g id="Clip-2"></g>
+                            <path d="M12.419316,22.5068591 C12.496276,22.27895 12.547756,22.0395409 12.547756,21.7870636 L12.547756,0.852359091 C12.547756,0.612427273 12.499916,0.385563636 12.430236,0.168109091 L0.195156,10.69845 L12.419316,22.5068591 Z" id="Fill-1" fill="#E8562A" mask="url(#mask-2)"></path>
+                        </g>
+                        <g id="Group-6" transform="translate(2.000000, 0.000000)">
+                            <mask id="mask-4" fill="white">
+                                <use xlink:href="#path-3"></use>
+                            </mask>
+                            <g id="Clip-5"></g>
+                            <path d="M17.2719776,14.6509655 L20.5092164,12.0430345 L22.1474254,10.7230345 L34.4904104,0.262344828 C34.2877239,0.202344828 34.0777239,0.160448276 33.8562313,0.160448276 L0.689291045,0.160448276 C0.467798507,0.160448276 0.256753731,0.202344828 0.0540671642,0.262862069 L12.4038433,10.7292414 L14.0425746,12.0497586 L17.2719776,14.6509655 Z" id="Fill-4" fill="#E8562A" mask="url(#mask-4)"></path>
+                        </g>
+                        <path d="M35.3976998,26 C35.6074201,26 35.8068094,25.9608389 36,25.9049691 L23.7385941,14 L18.9987086,17.8983552 L14.2665715,14.0057436 L2,25.9054913 C2.19267407,25.9608389 2.39206332,26 2.60126707,26 L35.3976998,26 Z" id="Fill-7" fill="#E8562A"></path>
+                        <path d="M0.114112598,2 C0.0464529159,2.21415701 0,2.43809524 0,2.67438867 L0,23.2911197 C0,23.5407979 0.0499873769,23.7765766 0.124715981,24 L12,12.3758044 L0.114112598,2 Z" id="Fill-9" fill="#E8562A"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

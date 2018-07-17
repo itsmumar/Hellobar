@@ -32,6 +32,11 @@
     border-right: $border
     background-color: $grayLightest
 
+    .side-bar-logo
+      height: 59px
+      padding: 10px
+      width: 90px
+
     li
       display: block
       font-size: 16px
@@ -39,59 +44,63 @@
       position: relative
       user-select: none
 
-      a
+      color: $grayDarkColor
+      line-height: 1em
+      background-color: $grayLightest
+      border: 1px solid #e0e0e0
+      border-right: none
+      cursor: pointer
+      transition: all 0.5s ease, margin-right 1ms, border-right 1ms
+
+      &:hover
+        img, .caption
+          opacity: .8
+
+      &.active
+        background-color: $white
+        border-right: 1px solid white
+        margin-right: -1px
+
+        img, .caption
+          opacity: 1
+
+      .step-links__item
+        padding: 20px 0 15px 0
+
+      .step-links__item.done, &.active .step-links__item
+        .progress
+          background-color: #27ab9e
+
+      .progress
+        width: 7px
+        height: calc(100% + 1px)
+        position: absolute
+        top: -1px
+        transition: all 0.5s ease
+
+      img, .caption
+        opacity: .4
+        transition: opacity 0.5s ease
+
+      & + li
+        margin-top: -1px
+
+      .caption
         display: block
-        position: relative
-        color: $grayLight
-        width: $linkWidth
-        line-height: 1em
-        padding: 0.55em 0 1.65em 0
-        background-color: $grayLightest
+        font-size: 0.9em
+        line-height: 30px
+        color: $grayDarkColor
 
-        &:hover
-          color: $red
-          .caption
-            color: $red
-
-        &.active
-          color: $red
-          pointer-events: none
-          background-color: $white
-          .caption
-            color: $red
-
-        .caption
-          display: block
-          position: absolute
-          bottom: 0.63em
-          left: 0
-          right: 0
-          font-size: 0.63em
-          line-height: 0.63em
-          color: #c7c7c7
-
-        i
-          width: 100%
-          cursor: pointer
-          font-size: 1.67em
-          margin-bottom: -0.25em
-          @include inline-block()
-
-      &.step-style
-        a
-          .caption
-            bottom: 0.8em
-      &.step-content
-        a
-          .caption
-            bottom: 0.85em
-      &.step-targeting
-        a
-          .caption
-            bottom: 1.2em
+      i
+        width: 100%
+        cursor: pointer
+        font-size: 2.67em
+        margin-bottom: -0.25em
+        @include inline-block()
 
     .step-links
-      padding: 3em 0
+      padding: 0
+      width: 90px
 
     .action-links
       padding-bottom: 1.5em
@@ -108,30 +117,6 @@
         &.close-editor
           a
             padding: 0.3em 0 1.7em 0
-
-      .toggle-fullscreen
-        @include clearfix()
-
-        .caption
-          display: block
-          position: absolute
-          bottom: 0.8em
-          left: 0
-          right: 0
-          pointer-events: none
-          font-size: 0.63em
-          line-height: 0.63em
-          color: #c7c7c7
-
-        a
-          width: 200%
-          margin-left: -100%
-          position: relative
-          transition: 0.25s
-
-          i
-            width: 50%
-            float: left
 
       .toggle-mobile
         @include clearfix()
@@ -180,10 +165,6 @@
         &.icon-mobile:after
           right: -1px
 
-      .toggle-fullscreen a i:first-child
-        margin-top: -6px
-        transform: rotate(180deg)
-
       .icon-close:before
         font-size: 0.75em
 
@@ -200,7 +181,7 @@
   .viewport-wrapper
     width: 100%
     height: 100%
-    padding-left: $linkWidth * 1.075
+    padding-left: 90px
     justify-content: space-between
     align-items: stretch
     flex-flow: row nowrap
@@ -223,18 +204,6 @@
       flex: 0 1 auto
 
   /*-----------  Alternate States  -----------*/
-
-  &.is-fullscreen
-
-    .toggle-fullscreen a
-      margin-left: 0% !important
-
-    .step-wrapper
-      margin-left: -$stepWidth
-
-    .hellobar#pull-down
-      &.hb-bottom-left, &.hb-top-left
-        left: $linkWidth + 0.25em
 
   &.is-mobile
 
