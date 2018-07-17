@@ -34,7 +34,11 @@ module.exports = function (defaults) {
     },
     fontawesome: {
       icons: {
-        'free-solid-svg-icons': 'all'
+        'free-solid-svg-icons': [
+          'mobile-alt',
+          'tablet-alt',
+          'desktop'
+        ]
       }
     }
     // Add options here
