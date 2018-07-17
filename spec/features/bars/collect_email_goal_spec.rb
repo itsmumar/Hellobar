@@ -15,7 +15,7 @@ feature 'Collect Email goal', :js do
     find('.goal-block.contacts').click_on('Select This Goal')
     click_button 'Continue'
 
-    click_on 'Goals'
+    find('.step-links__item', text: 'Goals').click
 
     @phone_field = find('.item-block[data-field-type="builtin-phone"]')
     @phone_field.find('.hellobar-icon-check-mark').click if @phone_field[:class].include?('is-selected')
@@ -67,12 +67,11 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'custom field' do
-    click_link 'Style'
+    find('.step-links__item .caption', text: 'Type').click
     find('a.change-selection').click
     find('h6', text: 'Modal').click
-    find('.step-settings').click
     find('span', text: 'Autodetect colors from site').click
-
+    find('.step-links__item .caption', text: 'Goals').click
     find('div.item-block.add', text: 'Add field').click
 
     expect(page).to have_selector '.new-item-prototype > input'

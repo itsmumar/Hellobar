@@ -17,27 +17,26 @@ export default Ember.Component.extend({
     }
   }.property('viewMode'),
 
-  /**
-   * @property {boolean}
-   */
-  isFullscreen: false,
-
-  /**
-   * @property {string}
-   */
-  goal: true,
-
-  /**
-   * @property {string}
-   */
-  style: true,
-
   tagName: 'nav',
 
   classNames: ['step-navigation', 'links-wrapper'],
 
+  didRender () {
+    this._super(...arguments);
+    this.updateProgress(this.$('li.active'));
+  },
+
+  updateProgress (element) {
+    this.$('.step-links__item').removeClass('done');
+    this.$(element).prevAll('li').find('.step-links__item').addClass('done');
+  },
+
   actions: {
-    toggleView() {
+    updateProgress (e) {
+      this.updateProgress(this.$(e.target).parents('li'));
+    },
+
+    toggleView () {
       if (this.get('modelLogic.model.element_subtype') === 'call') {
         return;
       }
@@ -55,10 +54,6 @@ export default Ember.Component.extend({
         default:
           this.set('viewMode', VIEW_DESKTOP);
       }
-    },
-
-    toggleFullscreen() {
-      this.toggleProperty('isFullscreen');
     },
 
     closeEditor() {

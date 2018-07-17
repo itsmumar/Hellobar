@@ -100,7 +100,7 @@ feature 'Payment modal interaction', :js do
 
       find('.goal-block.contacts').click_on('Select This Goal')
       click_button 'Continue'
-      find('.step-style').click
+      find('.step-links__item .caption', text: 'Type').click
       find('.toggle-showing-branding .toggle-on').click
 
       expect(page).to have_content "Upgrade #{ site.host } to remove branding"
@@ -113,7 +113,7 @@ feature 'Payment modal interaction', :js do
 
       find('.goal-block.contacts').click_on('Select This Goal')
       click_button 'Continue'
-      find('.step-style').click
+      find('.step-links__item .caption', text: 'Type').click
       find('.toggle-hiding .toggle-off').click
 
       expect(page).to have_content "Upgrade #{ site.host } to allow hiding a bar"
