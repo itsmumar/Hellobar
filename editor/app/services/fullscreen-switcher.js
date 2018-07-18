@@ -6,4 +6,4 @@ export default Ember.Service.extend({
   toggle () {
     this.toggleProperty('isFullscreen');
   }
-})
+});
