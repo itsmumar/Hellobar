@@ -1,36 +1,28 @@
 import Ember from 'ember';
-import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
-
   classNames: ['step-navigation'],
 
-  //-----------  Routing  -----------#
+  pagination: Ember.inject.service(),
+  fullscreenSwitcher: Ember.inject.service(),
 
-  routes: ['goals', 'styles', 'design', 'targeting'],
+  isFullscreen: Ember.computed.alias('fullscreenSwitcher.isFullscreen'),
 
   next: function () {
-    return this._routeByIndex(this._currentRouteIndex() + 1);
+    return this.get('pagination').next();
   }.property('router.currentPath'),
 
   prev: function () {
-    return this._routeByIndex(this._currentRouteIndex() - 1);
+    return this.get('pagination').prev();
   }.property('router.currentPath'),
 
-  _currentRouteIndex() {
-    const currentRoute = this.get('router.currentPath');
-    return _.findIndex(this.get('routes'), (route) => route === currentRoute);
-  },
-
-  _routeByIndex(index) {
-    const routes = this.get('routes');
-    return (index >= 0 && index < routes.length) ? routes[index] : null;
-  },
-
   routeLinks: function () {
-    const currentRouteIndex = this._currentRouteIndex();
-    return _.map(this.get('routes'), (route, i) => {
-      return {route, past: (i < currentRouteIndex)};
-    });
-  }.property('router.currentPath')
+    return this.get('pagination').routeLinks();
+  }.property('router.currentPath'),
+
+  actions: {
+    toggleFullscreen () {
+      this.get('fullscreenSwitcher').toggle();
+    }
+  }
 });
