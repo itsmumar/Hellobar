@@ -1,14 +1,11 @@
 {{#application-layout viewMode=viewMode isCallGoal=isCallGoal}}
 
-  {{navigation/side-navigation viewMode=viewMode closeEditor='closeEditor'}}
+  {{navigation/step-navigation routes=routes}}
+  {{navigation/side-navigation routes=routes}}
 
   <div class="viewport-wrapper">
     <div class="step-wrapper">
       {{outlet}}
-
-      {{navigation/step-navigation
-      action='saveSiteElement'
-      saveSubmitted=saveSubmitted}}
     </div>
 
     {{preview/preview-area model=model viewMode=viewMode}}

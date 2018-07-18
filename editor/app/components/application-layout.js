@@ -2,29 +2,19 @@ import Ember from 'ember';
 import { VIEW_DESKTOP, VIEW_TABLET, VIEW_MOBILE } from '../constants';
 
 export default Ember.Component.extend({
-
   classNames: ['editor-wrapper'],
-  classNameBindings: ['isMobile', 'isTablet', 'isDesktop', 'isCallGoal'],
+  classNameBindings: ['isMobile', 'isTablet', 'isDesktop', 'isCallGoal', 'isFullscreen'],
 
   bus: Ember.inject.service(),
   palette: Ember.inject.service(),
-
-  isMobile: function () {
-    return this.get('viewMode') === VIEW_MOBILE;
-  }.property('viewMode'),
-
-  isTablet: function () {
-    return this.get('viewMode') === VIEW_TABLET;
-  }.property('viewMode'),
-
-  isDesktop: function () {
-    return this.get('viewMode') === VIEW_DESKTOP;
-  }.property('viewMode'),
-
-  /**
-   * @property {string}
-   */
+  fullscreenSwitcher: Ember.inject.service(),
   viewMode: VIEW_DESKTOP,
+
+  isMobile: Ember.computed.equal('viewMode', VIEW_MOBILE),
+  isTablet: Ember.computed.equal('viewMode', VIEW_TABLET),
+  isDesktop: Ember.computed.equal('viewMode', VIEW_DESKTOP),
+
+  isFullscreen: Ember.computed.alias('fullscreenSwitcher.isFullscreen'),
 
   didRender() {
     Ember.run.next(() => this.get('bus').trigger('hellobar.core.application.initialized'));
@@ -40,5 +30,4 @@ export default Ember.Component.extend({
       this.set('palette.focusedColor', null);
     }
   }
-
 });
