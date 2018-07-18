@@ -2,8 +2,7 @@ class InternalMetricsMailer < ApplicationMailer
   RECIPIENTS = %w[
     neil@neilpatel.com
     mike@mikekamo.com
-    mailmanager@hellobar.com
-    swzrainey@gmail.com
+    seth@hellobar.com
     lindsey@hellobar.com
     keith@neilpatel.com
   ].freeze
