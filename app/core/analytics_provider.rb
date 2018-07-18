@@ -38,7 +38,7 @@ class AnalyticsProvider
     tag_users subscription.name, site.owners
   end
 
-  def signed_up(user:)
+  def signed_up(user:, promotional_signup: false, utm_source: nil)
     params = {}
 
     # Affiliate signups additional params
@@ -57,11 +57,11 @@ class AnalyticsProvider
     end
 
     # Promotional signups additional params
-    if promotional_signup?(user)
+    if promotional_signup
       plan = PromotionalPlan.new
 
-      params[:promotional_identifier] = user.utm_source if user.utm_source.present?
-      params[:source] = user.source
+      params[:promotional_identifier] = utm_source if utm_source.present?
+      params[:source] = 'promotional'
       params[:trial_period] = plan.duration
       params[:trial_subscription] = plan.subscription_type
       params[:credit_card_signup] = false
@@ -74,7 +74,7 @@ class AnalyticsProvider
     )
 
     tag_users('Affiliate', [user]) if user.affiliate_identifier
-    tag_users('Promotional', [user]) if promotional_signup?(user)
+    tag_users('Promotional', [user]) if promotional_signup
   end
 
   def invited_member(site:, user:)
@@ -276,9 +276,5 @@ class AnalyticsProvider
 
     untag_users previous_subscription.name, site.owners
     untag_users 'Paid', site.owners if subscription.amount.zero?
-  end
-
-  def promotional_signup? user
-    user.source == 'promotional'
   end
 end

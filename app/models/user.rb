@@ -37,7 +37,7 @@ class User < ApplicationRecord
   delegate :url_helpers, to: 'Rails.application.routes'
   delegate :affiliate_identifier, to: :affiliate_information, allow_nil: true
 
-  attr_accessor :timezone, :is_impersonated, :source, :utm_source
+  attr_accessor :timezone, :is_impersonated
 
   ACTIVE = 'active'.freeze
   TEMPORARY = 'temporary'.freeze
