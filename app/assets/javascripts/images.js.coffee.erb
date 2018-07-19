@@ -7,7 +7,18 @@
     end
   end
   images = images.sort.to_h
+
+  svgs = {}
+  Dir.chdir(imageBasePath) do
+    Dir["**/*.svg"].each do |filename|
+      svgs[filename] = Rails.application.assets[filename].to_s
+    end
+  end
+  svgs = svgs.sort.to_h
 %>
 
 window.image_path = (name) ->
   <%= images.to_json %>[name]
+
+window.svg_content = (name) ->
+  <%= svgs.to_json %>[name]
