@@ -1,5 +1,7 @@
 #ember-root
 
+= render 'shared/flash_toastr'
+
 javascript:
   window.siteID = #{@site.id}
   window.rules = #{{@rules.map{|rule| RuleSerializer.new(rule) }.to_json }};

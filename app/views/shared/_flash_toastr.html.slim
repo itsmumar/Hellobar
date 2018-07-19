@@ -1,0 +1,6 @@
+// regular flash messages
+- %i[success notice alert error].each do |key|
+  - if flash[key].present?
+    - message = flash[key]
+      javascript:
+        displayAlert(key, message);

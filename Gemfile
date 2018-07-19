@@ -116,6 +116,7 @@ gem 'thread'
 gem 'uglifier'
 gem 'unf'
 gem 'whenever'
+gem 'toastr-rails'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # Sending analytics data to intercom.com & amplitude
