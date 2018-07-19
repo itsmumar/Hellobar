@@ -2,7 +2,9 @@
 
 *, *:after, *:before
   box-sizing: border-box
-
+@font-face
+  font-family: "geomanist-regular"
+  src: font-url('Geomanist-Regular.otf')
 html,
 body
   width: 100%
@@ -11,7 +13,7 @@ body
   font-size: $emBase
   min-width: $maxWidth
   font-weight: $fontWeightLight
-  font-family: "proxima-nova", sans-serif
+  font-family: "geomanist-regular"
 
   @media screen and (max-width: 600px)
     min-width: auto
