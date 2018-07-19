@@ -13,25 +13,27 @@
   transition: all 0.15s ease-out 0s
 
   span
-    color: $grayLighter
+    color: $gray
     text-align: center
     line-height: 1.25rem
     text-transform: uppercase
     transition: all 0.15s ease-out 0s
 
     &.toggle-on
-      opacity: 0
-      float: left
-      margin-top: 1px
-      margin-left: 2px
-      font-size: 0.75em
-
-    &.toggle-off
       opacity: 1
       float: right
       margin-top: 1px
+      margin-left: 2px
+      margin-right: 2px
+      font-size: 0.75em
+
+    &.toggle-off
+      opacity: 0
+      float: left
+      margin-top: 1px
       font-size: 0.7em
       margin-right: 2px
+      margin-left: 2px
 
   .toggle-floater
     width: 1.45em
@@ -39,7 +41,7 @@
     margin-left: 0
     border-radius: 2px
     margin-right: 1.75em
-    background-color: $grayLighter
+    background-color: #27ab9e
     transition: 0.2s
 
   &:hover
@@ -47,32 +49,33 @@
     box-shadow: inset $shadowSubtle
 
     span
-      color: $grayLight
+      color: $gray
 
     .toggle-floater
       box-shadow: $shadowSubtle
-      background-color: $grayLight
+      background-color: #219287
 
   &.is-selected
-    border-color: $green
-    background-color: $green
+    border-color: $grayLighter
+    background-color: $white
 
     span
-      color: $white
+      color: $gray
 
       &.toggle-on
-        opacity: 1
+        opacity: 0
 
       &.toggle-off
-        opacity: 0
+        opacity: 1
 
     .toggle-floater
       margin-right: 0
       margin-left: 1.75em
-      background-color: $white
+      background-color: $grayLight
 
     &:hover
       box-shadow: inset $shadow
 
       .toggle-floater
+        background-color: $grayLighter
         box-shadow: $shadow
