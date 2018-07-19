@@ -458,7 +458,7 @@ ActiveRecord::Schema.define(version: 20180719091901) do
     t.string   "cta_border_color",              limit: 255,      default: "ffffff",      null: false
     t.integer  "cta_border_width",              limit: 4,        default: 0,             null: false
     t.integer  "cta_border_radius",             limit: 4,        default: 0,             null: false
-    t.integer  "cta_height",                    limit: 4,        default: 20,            null: false
+    t.integer  "cta_height",                    limit: 4,        default: 27,            null: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
