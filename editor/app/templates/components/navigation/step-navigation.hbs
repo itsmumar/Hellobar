@@ -1,6 +1,6 @@
 <nav>
   {{#link-to prev class="button" classNameBindings="prev::disabled"}}
-    {{icons/angel-left}}
+    {{icons/icon-angel-left}}
     Prev
   {{/link-to}}
 
@@ -10,14 +10,14 @@
 
   {{#link-to next class="button" classNameBindings="next::disabled"}}
     Next
-    {{icons/angel-right}}
+    {{icons/icon-angel-right}}
   {{/link-to}}
 </nav>
 
 <div class="pin" {{action "toggleFullscreen"}}>
   {{#if isFullscreen}}
-    {{icons/angel-left}}
+    {{icons/icon-angel-left}}
   {{ else }}
-    {{icons/angel-right}}
+    {{icons/icon-angel-right}}
   {{/if}}
 </div>

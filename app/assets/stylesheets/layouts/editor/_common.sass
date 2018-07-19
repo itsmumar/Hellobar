@@ -54,16 +54,18 @@
       transition: all 0.5s ease, margin-right 1ms, border-right 1ms
 
       &:hover
-        img, .caption
-          opacity: .8
+        [class*="icon-"], .caption
+          fill: $grayColor
+          color: $grayColor
 
       &.active
         background-color: $white
         border-right: 1px solid white
         margin-right: -1px
 
-        img, .caption
-          opacity: 1
+        [class*="icon-"], .caption
+          fill: $grayDarkColor
+          color: $grayDarkColor
 
       .step-links__item
         padding: 20px 0 15px 0
@@ -79,9 +81,10 @@
         top: -1px
         transition: all 0.5s ease
 
-      img, .caption
-        opacity: .4
-        transition: opacity 0.5s ease
+      [class*="icon-"], .caption
+        fill: $grayLightColor
+        color: $grayLightColor
+        transition: fill 0.5s ease, color 0.5s ease
 
       & + li
         margin-top: -1px
@@ -90,7 +93,6 @@
         display: block
         font-size: 0.9em
         line-height: 30px
-        color: $grayDarkColor
 
       i
         width: 100%
