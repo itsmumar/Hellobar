@@ -1,6 +1,6 @@
 <nav>
   {{#link-to prev class="button" classNameBindings="prev::disabled"}}
-    <div class="icon-angel-left">{{ svg_content "icons/arrow-left.svg" }}</div>
+    {{icons/angel-left}}
     Prev
   {{/link-to}}
 
@@ -10,14 +10,14 @@
 
   {{#link-to next class="button" classNameBindings="next::disabled"}}
     Next
-    <div class="icon-angel-right">{{ svg_content "icons/arrow-right.svg" }}</div>
+    {{icons/angel-right}}
   {{/link-to}}
 </nav>
 
 <div class="pin" {{action "toggleFullscreen"}}>
   {{#if isFullscreen}}
-    <div class="icon-angel-right">{{ svg_content "icons/arrow-right.svg" }}</div>
+    {{icons/angel-left}}
   {{ else }}
-    <div class="icon-angel-left">{{ svg_content "icons/arrow-left.svg" }}</div>
+    {{icons/angel-right}}
   {{/if}}
 </div>
