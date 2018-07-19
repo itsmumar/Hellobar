@@ -27,7 +27,7 @@
     top: 0
     left: 0
     height: 100%
-    z-index: 15
+    z-index: 10
     position: absolute
     border-right: $border
     background-color: $grayLightest
@@ -189,7 +189,7 @@
     align-items: stretch
     flex-flow: row nowrap
     display: flex
-    transition: all 0.3s
+    transition: all 0.5s
 
     /*-----------  Steps  -----------*/
 
@@ -200,8 +200,9 @@
       padding: 0 2em 2em
       max-width: $stepWidth
       border-right: $border
+      border-left: $border
       z-index: 10
-      transition: 0.25s
+      transition: 0.5s
       flex: 1 0 auto
 
     .preview-area

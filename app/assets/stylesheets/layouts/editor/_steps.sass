@@ -9,6 +9,7 @@
     width: 427px
     bottom: 0
     left: 0
+    transition: all 0.5s
 
     nav
       justify-content: space-between
@@ -21,7 +22,6 @@
       min-height: 100%
       padding: 15px
       box-shadow: 0 0 1px rgba(0,0,0,0.3)
-      transition: all 0.5s
 
       .button
         display: flex
@@ -97,26 +97,17 @@
 
 &.is-fullscreen
   .step-wrapper
-    transform: translate(-340px)
-    width: 0 !important
-    padding: 0 !important
+    margin-left: -430px
 
   .viewport-wrapper
     padding-left: 0
 
   .side-navigation
-    transform: translate(-90px)
+    //transform: translate(-90px)
+    margin-left: -90px
 
   .step-navigation
-    nav
-      opacity: 0
-      transform: translate(-336px)
-
-      .button
-        opacity: 0
-
-    .pin
-      transform: translate(0, 0)
+    margin-left: -430px
 
 .editor-wrapper .step-wrapper
   background-color: $white
