@@ -113,10 +113,10 @@ gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc411
 gem 'render_anywhere'
 gem 'rubyzip'
 gem 'thread'
+gem 'toastr-rails'
 gem 'uglifier'
 gem 'unf'
 gem 'whenever'
-gem 'toastr-rails'
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # Sending analytics data to intercom.com & amplitude
