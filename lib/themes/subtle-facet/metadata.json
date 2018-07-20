@@ -19,6 +19,7 @@
       "link_color": "3B386B",
       "font_id": "kanit",
       "cta_border_radius": 4,
+      "cta_height": 66,
       "text_field_border_radius": 5,
       "text_field_border_width": 0
     }
