@@ -38,6 +38,7 @@
       "link_color": "067d4d",
       "font_id": "montserrat",
       "cta_border_radius": 28,
+      "cta_height": 41,
       "text_field_border_width": 1
     },
     "Takeover": {

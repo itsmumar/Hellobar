@@ -39,5 +39,30 @@ class MigrateCtaHeightToDatabaseValues < ActiveRecord::Migration
       .where(type: 'Slider')
       .where(theme_id: 'marigold')
       .update_all(cta_height: 34)
+
+    # Sliders
+    SiteElement
+      .where(type: 'Modal')
+      .update_all(cta_height: 41)
+
+    SiteElement
+      .where(type: 'Modal')
+      .where(theme_id: 'classic')
+      .update_all(cta_height: 38)
+
+    SiteElement
+      .where(type: 'Modal')
+      .where(theme_id: 'french-rose')
+      .update_all(cta_height: 71)
+
+    SiteElement
+      .where(type: 'Modal')
+      .where(theme_id: 'marigold')
+      .update_all(cta_height: 71)
+
+    SiteElement
+      .where(type: 'Modal')
+      .where(theme_id: 'smooth-impact')
+      .update_all(cta_height: 42)
   end
 end
