@@ -60,6 +60,7 @@
       "link_color": "ffffff",
       "font_id": "source_pro",
       "cta_border_radius": 7,
+      "cta_height": 33,
       "text_field_border_width": 1
     }
   },

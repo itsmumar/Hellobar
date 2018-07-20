@@ -60,6 +60,7 @@
       "link_color": "ffffff",
       "font_id": "roboto",
       "cta_border_radius": 40,
+      "cta_height": 46,
       "text_field_border_width": 1
     }
   },
