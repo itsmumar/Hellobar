@@ -21,10 +21,27 @@ $ ->
     div.removeClass('show')
   ), 5000
 
-displayAlert = (type, message) ->
+@displayAlert = (type, message) ->
+  configToastr
   if type == 'notice'
     type = 'info'
   else if type == 'alert'
     type = 'warning'
-  window['toastr.' + type] message
+  toastr[type] message
   return
+
+@configToastr = () ->
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  };
