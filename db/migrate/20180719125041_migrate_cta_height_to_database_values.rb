@@ -40,7 +40,7 @@ class MigrateCtaHeightToDatabaseValues < ActiveRecord::Migration
       .where(theme_id: 'marigold')
       .update_all(cta_height: 34)
 
-    # Sliders
+    # Modals
     SiteElement
       .where(type: 'Modal')
       .update_all(cta_height: 41)
@@ -94,5 +94,35 @@ class MigrateCtaHeightToDatabaseValues < ActiveRecord::Migration
       .where(type: 'Takeover')
       .where(theme_id: 'smooth-impact')
       .update_all(cta_height: 66)
+
+    # Alerts
+    SiteElement
+      .where(type: 'Alert')
+      .update_all(cta_height: 30)
+
+    SiteElement
+      .where(type: 'Alert')
+      .where(theme_id: 'french-rose')
+      .update_all(cta_height: 49)
+
+    SiteElement
+      .where(type: 'Alert')
+      .where(theme_id: 'green-timberline')
+      .update_all(cta_height: 33)
+
+    SiteElement
+      .where(type: 'Alert')
+      .where(theme_id: 'marigold')
+      .update_all(cta_height: 46)
+
+    SiteElement
+      .where(type: 'Alert')
+      .where(theme_id: 'smooth-impact')
+      .update_all(cta_height: 35)
+
+    SiteElement
+      .where(type: 'Alert')
+      .where(theme_id: 'marigold')
+      .update_all(cta_height: 34)
   end
 end

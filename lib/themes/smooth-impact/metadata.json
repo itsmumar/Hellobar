@@ -75,7 +75,8 @@
       "text_field_border_width": 0,
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
-      "text_field_background_opacity": 10
+      "text_field_background_opacity": 10,
+      "cta_height": 35
     }
   },
   "image": {
