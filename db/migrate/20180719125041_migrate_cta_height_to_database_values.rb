@@ -64,5 +64,35 @@ class MigrateCtaHeightToDatabaseValues < ActiveRecord::Migration
       .where(type: 'Modal')
       .where(theme_id: 'smooth-impact')
       .update_all(cta_height: 42)
+
+    # Page Takeovers
+    SiteElement
+      .where(type: 'Takeover')
+      .update_all(cta_height: 57)
+
+    SiteElement
+      .where(type: 'Takeover')
+      .where(theme_id: 'arctic-facet')
+      .update_all(cta_height: 66)
+
+    SiteElement
+      .where(type: 'Takeover')
+      .where(theme_id: 'french-rose')
+      .update_all(cta_height: 79)
+
+    SiteElement
+      .where(type: 'Takeover')
+      .where(theme_id: 'marigold')
+      .update_all(cta_height: 79)
+
+    SiteElement
+      .where(type: 'Takeover')
+      .where(theme_id: 'smooth-impact')
+      .update_all(cta_height: 76)
+
+    SiteElement
+      .where(type: 'Takeover')
+      .where(theme_id: 'smooth-impact')
+      .update_all(cta_height: 66)
   end
 end
