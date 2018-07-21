@@ -23,24 +23,14 @@ export default Ember.Component.extend({
   currentThemeName: Ember.computed.alias('theming.currentThemeName'),
   isEditing: Ember.computed.bool('model.id'),
 
+  isAlert: Ember.computed.equal('style', 'Alert'),
+  isBar: Ember.computed.equal('style', 'Bar'),
+  isModal: Ember.computed.equal('style', 'Modal'),
+  isSlider: Ember.computed.equal('style', 'Slider'),
+  isTakeover: Ember.computed.equal('style', 'Takeover'),
+
   init() {
     this._super();
-    this.set('selectionInProgress', !this.get('style'));
-    this.set('themeSelectionInProgress', false);
-    allStyles.forEach((style) => {
-      this[`shouldShow${style}ThemeInfo`] = Ember.computed('themeSelectionInProgress',
-        'selectionInProgress',
-        'style',
-        function () {
-          return this.get(`canUse${style}Style`) !== false &&
-            this.get('style') === style && !this.get('themeSelectionInProgress') && !this.get('selectionInProgress');
-        });
-      this[`shouldShow${style}`] = Ember.computed('selectionInProgress', 'style', function () {
-        return this.get(`canUse${style}Style`) !== false &&
-          (this.get('style') === style || this.get('selectionInProgress'));
-      });
-
-    });
 
     this.get('bus').subscribe('hellobar.core.rightPane.show', (params) => {
         if (params.componentName === 'preview/containers/theming/theme-tile-grid') {
@@ -48,13 +38,12 @@ export default Ember.Component.extend({
         }
       }
     );
+
     this.get('bus').subscribe('hellobar.core.rightPane.hide', (/* params */) => {
         this.set('themeSelectionInProgress', false);
       }
     );
   },
-
-  canUseAlertStyle: Ember.computed.alias('model.site.capabilities.alert_bars'),
 
   onlyTopBarStyleIsAvailable: Ember.computed.equal('model.element_subtype', 'call'),
   notOnlyTopBarStyleIsAvailable: Ember.computed.not('onlyTopBarStyleIsAvailable'),
@@ -77,20 +66,11 @@ export default Ember.Component.extend({
 
 
   actions: {
-
     select(style) {
-      if (!this.get('selectionInProgress')) {
-        return;
-      }
       this.set('style', style);
-      this.set('selectionInProgress', false);
       if (this.get('theming').resetThemeIfNeeded(style)) {
         this.send('showThemeGrid');
       }
-    },
-
-    initiateSelection() {
-      this.set('selectionInProgress', true);
     },
 
     showThemeGrid() {
