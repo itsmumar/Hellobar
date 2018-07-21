@@ -12,11 +12,12 @@ const Router = Ember.Router.extend({
 
 Router.map(function () {
   this.route('home', {path: '/'});
-  this.route('goals');
-  this.route('styles');
+  this.route('goal');
+  this.route('type');
   this.route('design');
-  this.route('text');
+  this.route('settings');
   this.route('targeting');
+  this.route('conversion');
   this.route('interstitial', function () {
       this.route('call');
       this.route('traffic');
