@@ -48,7 +48,8 @@
     {{#power-select options=triggerOptions
                     selected=selectedTriggerOption
                     renderInPlace=true
-                    searchEnabled=false as |option|}}
+                    searchEnabled=false
+                    onchange=(action "selectTrigger") as |option|}}
       {{option.label}}
     {{/power-select}}
   </div>
