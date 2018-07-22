@@ -1,0 +1,57 @@
+<div class="substep">
+  <label
+    title="Your takeover will contain Hello Bar branding. By turning it off you will receive more clicks and conversions.">
+    {{common/checkboxes/toggle-switch switch=model.show_branding}}
+    <span class="property-name">Hello Bar branding</span>
+  </label>
+
+  <label>
+    {{common/checkboxes/toggle-switch switch=model.animated}}
+    <span class="property-name">Animate entry/exit</span>
+  </label>
+
+  {{#if canWiggle}}
+    <label class="toggle-wiggling">
+      {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
+      <span class="property-name">Wiggle button</span>
+    </label>
+  {{/if}}
+
+  <label class="toggle-hiding">
+    {{common/checkboxes/toggle-switch switch=model.closable}}
+    <span class="property-name">Allow visitors to close</span>
+  </label>
+
+  <label class="toggle-pushing-page-down">
+    {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
+    <span class="property-name">{{ pushesText }}</span>
+  </label>
+
+  <label class="toggle-remaining-at-top">
+    {{common/checkboxes/toggle-switch switch=model.remains_at_top}}
+    <span class="property-name">Remains in place on scroll</span>
+  </label>
+
+  {{#if isEmailSubtype}}
+    <label class="toggle-gdpr">
+      {{common/checkboxes/toggle-switch switch=model.enable_gdpr}}
+      <span class="property-name">GDPR Compliant</span>
+    </label>
+  {{/if}}
+
+  <label>
+    <span class="property-name">When does it display?</span>
+    <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small>
+  </label>
+
+  <div class="select-wrapper">
+    {{#power-select options=triggerOptions
+                    selected=selectedTriggerOption
+                    renderInPlace=true
+                    searchEnabled=false as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+</div>
+
+
