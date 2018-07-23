@@ -3,4 +3,4 @@
   - if flash[key].present?
     - message = flash[key]
     javascript:
-      displayAlert('#{key}', '#{message}');
+      displayAlert('#{key}', '#{sanitize(message, attributes: %w{ href target style })}');
