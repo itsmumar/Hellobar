@@ -120,7 +120,7 @@ module.exports = {
   "updated_at": null,
   "size": "large",
   "site_preview_image": "/proxy/https/api.url2png.com/v6/P52EBC321291EF/7765925f00baf2a12be38e58d21a7d8c/png/?url=http%3A%2F%2Fhellobar.sergey-shakhov.com\u0026custom_css_url=http%3A%2F%2Fstaging.hellobar.com%2Fstylesheets%2Fhide_bar.css\u0026ttl=604800",
-  "site_preview_image_mobile": "/proxy/https/api.url2png.com/v6/P52EBC321291EF/cd3e884f1676f50035dae2d449b69328/png/?url=http%3A%2F%2Fhellobar.sergey-shakhov.com\u0026viewport=320x568\u0026custom_css_url=http%3A%2F%2Fstaging.hellobar.com%2Fstylesheets%2Fhide_bar.css\u0026ttl=604800",
+  "site_preview_image_mobile": "/proxy/https/api.url2png.com/v6/P52EBC321291EF/cd3e884f1676f50035dae2d449b69328/png/?url=http%3A%2F%2Fhellobar.sergey-shakhov.com\u0026viewport=375x667\u0026custom_css_url=http%3A%2F%2Fstaging.hellobar.com%2Fstylesheets%2Fhide_bar.css\u0026ttl=604800",
   "open_in_new_window": false,
   "placement": null,
   "default_email_thank_you_text": "Thank you for signing up! If you'd like this sort of bar on your site..."
