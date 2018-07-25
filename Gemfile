@@ -113,6 +113,7 @@ gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc411
 gem 'render_anywhere'
 gem 'rubyzip'
 gem 'thread'
+gem 'toastr-rails'
 gem 'uglifier'
 gem 'unf'
 gem 'whenever'

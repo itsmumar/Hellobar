@@ -81,6 +81,7 @@ table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_el
                     "data-display-when" => "any"
 
 = render 'shared/modals/rule_modal_template'
+= render 'shared/flash_toastr'
 
 javascript:
   var rules = #{{@rules.map{|rule| RuleSerializer.new(rule) }.to_json }};
