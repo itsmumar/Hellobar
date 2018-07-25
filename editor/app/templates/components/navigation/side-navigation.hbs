@@ -1,16 +1,16 @@
 <img class="side-bar-logo" src="{{ image_path "icons/h-logo.svg" }}">
 
 <ul class="step-links">
-  {{#link-to 'goals' tagName="li"}}
-    <div class="step-links__item {{if isGoalsDone "done"}}">
+  {{#link-to 'goal' tagName="li"}}
+    <div class="step-links__item {{if isGoalDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-goal}}
       <div class="caption">Goal</div>
     </div>
   {{/link-to}}
 
-  {{#link-to 'styles' tagName="li"}}
-    <div class="step-links__item {{if isStylesDone "done"}}">
+  {{#link-to 'type' tagName="li"}}
+    <div class="step-links__item {{if isTypeDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-type}}
       <div class="caption">Type</div>
@@ -25,11 +25,27 @@
     </div>
   {{/link-to}}
 
+  {{#link-to 'settings' tagName="li"}}
+    <div class="step-links__item {{if isSettingsDone "done"}}">
+      <div class="progress"></div>
+      {{icons/icon-settings}}
+      <div class="caption">Settings</div>
+    </div>
+  {{/link-to}}
+
   {{#link-to 'targeting' tagName="li"}}
     <div class="step-links__item {{if isTargetingDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-targeting}}
       <div class="caption">Targeting</div>
+    </div>
+  {{/link-to}}
+
+  {{#link-to 'conversion' tagName="li"}}
+    <div class="step-links__item {{if isConversionDone "done"}}">
+      <div class="progress"></div>
+      {{icons/icon-conversion}}
+      <div class="caption">Conversion</div>
     </div>
   {{/link-to}}
 </ul>

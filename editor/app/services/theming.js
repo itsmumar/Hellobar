@@ -151,9 +151,6 @@ export default Ember.Service.extend({
   },
 
   onCurrentThemeChanged: (function () {
-    if (this.get('currentThemeIsTemplate')) {
-      this.set('model.element_subtype', 'email');
-    }
     this.applyCurrentTheme();
     Ember.run.next(() => {
       this.setProperties({

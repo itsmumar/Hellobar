@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { STEP_GOAL, STEP_TYPE, STEP_DESIGN, STEP_TARGETING } from '../../constants';
+import { STEP_GOAL, STEP_TYPE, STEP_DESIGN, STEP_SETTINGS, STEP_TARGETING, STEP_CONVERSION } from '../../constants';
 
 export default Ember.Component.extend({
   classNames: ['side-navigation', 'links-wrapper'],
@@ -7,11 +7,11 @@ export default Ember.Component.extend({
   pagination: Ember.inject.service(),
   tagName: 'nav',
 
-  isGoalsDone: function () {
+  isGoalDone: function () {
     return this.isDone(STEP_GOAL);
   }.property('router.currentPath'),
 
-  isStylesDone: function () {
+  isTypeDone: function () {
     return this.isDone(STEP_TYPE);
   }.property('router.currentPath'),
 
@@ -19,8 +19,16 @@ export default Ember.Component.extend({
     return this.isDone(STEP_DESIGN);
   }.property('router.currentPath'),
 
+  isSettingsDone: function () {
+    return this.isDone(STEP_SETTINGS);
+  }.property('router.currentPath'),
+
   isTargetingDone: function () {
     return this.isDone(STEP_TARGETING);
+  }.property('router.currentPath'),
+
+  isConversionDone: function () {
+    return this.isDone(STEP_CONVERSION);
   }.property('router.currentPath'),
 
   isDone (route) {

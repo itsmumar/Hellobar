@@ -32,6 +32,7 @@
     border-right: $border
     background-color: $grayLightest
     transition: all 0.3s
+    transform: translate(-1px)
 
     .side-bar-logo
       height: 59px
@@ -75,7 +76,7 @@
           background-color: #27ab9e
 
       .progress
-        width: 7px
+        width: 5px
         height: calc(100% + 1px)
         position: absolute
         top: -1px
@@ -196,11 +197,10 @@
     .step-wrapper
       overflow-y: auto
       overflow-x: hidden
-      width: $stepWidth
-      padding: 0 2em 5em
+      width: 290px
+      padding: 0 1.1em 5em
       max-width: $stepWidth
       border-right: $border
-      border-left: $border
       z-index: 10
       transition: 0.5s
       flex: 1 0 auto

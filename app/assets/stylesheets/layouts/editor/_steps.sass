@@ -6,7 +6,7 @@
   .step-navigation
     z-index: 16
     position: absolute
-    width: 427px
+    width: 379px
     bottom: 0
     left: 0
     transition: all 0.5s
@@ -86,7 +86,7 @@
       border: 1px solid rgba(0,0,0,0.1)
       cursor: pointer
       transition: all 0.5s
-      transform: translate(427px, 0)
+      transform: translate(379px, 0)
 
       .icon-angel-right,
       .icon-angel-left
@@ -103,11 +103,13 @@
     padding-left: 0
 
   .side-navigation
-    //transform: translate(-90px)
     margin-left: -90px
 
   .step-navigation
     margin-left: -430px
+
+  .pin
+    transform: translate(430px, 0)!important
 
 .editor-wrapper .step-wrapper
   background-color: $white
@@ -118,10 +120,18 @@
 
   .step-title
     text-align: center
-    line-height: 2.5em
-    margin: 0 -0.75em 1.5em
+    font-weight: bold
+    line-height: 3em
+    margin: 0 -0.75em 1em
     border-bottom: $borderLight
     @include antialiased()
+
+  .step-title-hint
+    font-size: 0.8em
+    color: #7e7e7e
+    font-weight: 100
+    text-align: center
+    margin-bottom: 2em
 
   .step-arrow
     right: 0
@@ -134,8 +144,6 @@
       background-color: gray
 
   p
-    padding-right: 15%
-
     a
       color: $blue
       text-decoration: underline
@@ -149,7 +157,6 @@
     padding: 0 0.75em
     margin: $gutterSm -0.75em -0.5em
     border-bottom: 1px solid #e2e2e2
-    //border-bottom: $borderLight
 
     a
       font-size: 90%
@@ -244,30 +251,36 @@
   .step-link-wrapper
     margin-bottom: -1em
     transition: all 0.15s ease-out 0s
+    display: flex
+    align-items: stretch
+    flex-flow: row wrap
+    justify-content: space-between
 
     .step-link-block
-      opacity: 1
-      display: block
+      width: 120px
       position: relative
-      max-height: 5.5em
       margin-bottom: 0.67em
       transition: 0.67s
+      border: 1px solid #dcdcdc
+      border-radius: 5px
+      padding: 10px
+      text-align: center
+      cursor: pointer
       @include clearfix()
 
-      i
-        float: left
-        font-size: 1.75em
-        transition: all 0.15s ease-out 0s
-
-      h6, p
-        width: 82%
-        float: right
+      img
+        padding: 10px
 
       h6
         padding-bottom: 0.25em
+        white-space: nowrap
 
       &:focus
         outline: 0
+
+      &.is-selected
+        border-color: $grayDarkColor
+        border-width: 2px
 
     .change-selection
       cursor: default !important
@@ -284,37 +297,12 @@
         font-size: 0.85em
         margin-right: 0.33em
 
-    &.is-not-selected
-      .step-link-block
-        cursor: pointer
-
-    &.is-selected
-      padding-bottom: 1.5em
-      border-bottom: $borderLight
-
-      .step-link-block:not(.active)
-        opacity: 0
-        max-height: 0
-        margin-bottom: 0
-        overflow: hidden
-
-      .step-link-block.active
-        p
-          margin-bottom: 0
-
-      .step-arrow
-        display: none
-
-      .change-selection
-        opacity: 1
-        cursor: pointer !important
-
-        &:hover
-          color: $red
-
   .substep
-    margin-top: 2.5em
     margin-bottom: 40px
+
+    .property-name
+      font-weight: bold
+      color: $grayDarkColor
 
   /*-----------  Step: Settings  -----------*/
 
