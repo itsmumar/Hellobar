@@ -6,7 +6,7 @@ export default Ember.Route.extend({
   redirect() {
     if (((typeof HB_DATA !== 'undefined') && HB_DATA.skipInterstitial) || localStorage['stashedEditorModel']) {
       // skip interstitial if it's explisitly set in global variable or if editor model was already stored in localStorage
-      return this.replaceWith('goals');
+      return this.replaceWith('goal');
     } else {
       return this.replaceWith('interstitial');
     }
