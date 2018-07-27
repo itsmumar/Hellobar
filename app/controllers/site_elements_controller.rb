@@ -22,6 +22,7 @@ class SiteElementsController < ApplicationController
     return redirect_to after_sign_in_path_for(@site) if current_user.temporary? && @site.site_elements.any?
 
     @rules = @site.rules.all
+    params[:skip_interstitial] = true if @site.site_elements.present?
     @site_element = SiteElement.new(
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
