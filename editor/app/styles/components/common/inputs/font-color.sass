@@ -1,0 +1,134 @@
+.color-input
+  position: relative
+  user-select: none
+
+  .color-input-spacer
+    height: 35px
+    display: block
+
+  .color-input-wrapper
+    top: 0
+    right: 0
+    width: 104px
+    padding: 0
+    overflow: hidden
+    font-size: 0.85em
+    max-height: 35px
+    position: absolute
+    background-color: $white
+    border: 1px solid $grayLighter
+    border-radius: 5px
+    transition: 0.15s ease-in-out
+
+    .color-input-block
+      color: $gray
+      cursor: pointer
+      display: flex
+      align-items: center
+      margin-top: -1px
+
+      .color-preview
+        width: 35px
+        height: 35px
+        margin-right: 1px
+        border-radius: 5px 0 0 5px
+        @include inline-block()
+
+      .hash-mark
+        margin-left: 4px
+        font-size: 0.90em
+
+      input
+        width: 53px
+        margin: 0px
+        color: $gray
+        text-transform: uppercase
+        font-size: 0.90em
+        padding: 0.25em 0.3em 0.25em 0
+        border: none
+
+  .color-dropdown
+    display: none
+    margin: 0 auto
+    background: white
+    opacity: 0
+    position: absolute
+    left: -150px
+    width: 150px
+    top: 35px
+    transition: 0.25s ease-in-out
+
+    .color-preview-row
+      @include clearfix()
+
+      ul
+        width: 69%
+        margin-bottom: 0.5em
+        // TODO uncomment and adopt
+        //cursor: url(<%= asset_path "eyedropper.svg" %>) 0 18, auto
+        justify-content: space-between
+        align-items: stretch
+        flex-flow: row nowrap
+        display: flex
+
+
+        .color-preview
+          width: 22%
+          height: 1.1em
+          border-radius: $radiusSm
+          border: 1px solid $grayLight
+          @include inline-block()
+
+      small
+        width: 25%
+        float: right
+        color: $grayLight
+        line-height: 1.67em
+
+    .color-picker
+      @include clearfix()
+
+      .slider-wrapper,
+      .gradient-wrapper
+        height: 11.75em
+        cursor: pointer
+        position: relative
+        border: 1px solid $grayLighter
+        @include inline-block()
+
+      .gradient-wrapper
+        width: 120px
+
+        .gradient
+          width: 100%
+          height: 100%
+
+        .gradient-indicator
+          width: 8px
+          height: 8px
+          position: absolute
+          border-radius: 1em
+          border: 1px solid $white
+          box-shadow: 1px 1px 5px rgba($black, 0.4)
+
+      .slider-wrapper
+        width: 1.33em
+        margin-left: 0.33em
+
+        .slider
+          width: 100%
+          height: 100%
+
+        .slider-indicator
+          width: 17px
+          height: 5px
+          cursor: pointer
+          margin-left: -1px
+          position: absolute
+          border: 1px solid $white
+          box-shadow: 1px 1px 5px rgba($black, 0.4)
+
+  &.in-focus
+    .color-dropdown
+      opacity: 1
+      display: block

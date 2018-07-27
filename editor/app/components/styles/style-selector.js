@@ -2,8 +2,6 @@
 
 import Ember from 'ember';
 
-const allStyles = ['Bar', 'Modal', 'Slider', 'Takeover', 'Alert'];
-
 export default Ember.Component.extend({
 
   /**

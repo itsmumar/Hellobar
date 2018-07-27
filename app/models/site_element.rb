@@ -2,7 +2,7 @@ class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
-  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
+  DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,

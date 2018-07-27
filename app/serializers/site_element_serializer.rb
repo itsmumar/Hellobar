@@ -36,7 +36,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :site_preview_image_tablet,
-    :open_in_new_window, :placement, :default_email_thank_you_text
+    :open_in_new_window, :placement, :default_email_thank_you_text,
+    #
+    # conversion
+    :conversion_font, :conversion_font_color, :conversion_font_size
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
     define_method "#{ attr_name }_placeholder" do

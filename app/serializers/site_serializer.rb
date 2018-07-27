@@ -11,7 +11,8 @@ class SiteSerializer < ActiveModel::Serializer
       list_attributes = {
         id: list.id,
         name: list.name,
-        provider_name: list.provider_name
+        provider_name: list.provider_name,
+        icon_path: list.provider_icon_path
       }
 
       subscribers_count = list_subscribers_count(list.id)

@@ -126,6 +126,7 @@ class SiteElementsController < ApplicationController
       :cta_border_color, :cta_border_width, :cta_border_radius,
       :text_field_border_color, :text_field_border_width, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
+      :conversion_font, :conversion_font_color, :conversion_font_size,
       settings: settings_keys
     )
   end
