@@ -1,0 +1,25 @@
+.font-size-input
+  display: flex
+
+  .font-size-input__controls
+    border: 1px solid $grayLighterColor
+    border-radius: 5px
+    width: 50px
+    margin: 0.5em 0 0.5em 5px
+
+  .font-size-input__control
+    border-radius: 0 0 5px 5px
+    color: $grayLighterColor
+    text-align: center
+    cursor: pointer
+
+    &:first-child
+      border-bottom: 1px solid $grayLighterColor
+      border-radius: 5px 5px 0 0
+
+    &:hover
+      background-color: $actionColor
+      color: white
+
+  input
+    width: 50px
