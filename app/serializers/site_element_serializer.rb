@@ -41,7 +41,6 @@ class SiteElementSerializer < ActiveModel::Serializer
     # conversion
     :conversion_font, :conversion_font_color, :conversion_font_size
 
-
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
     define_method "#{ attr_name }_placeholder" do
       SiteElement::QUESTION_DEFAULTS[attr_name]
