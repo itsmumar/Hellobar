@@ -13,7 +13,7 @@ export default Ember.Component.extend({
 
   actions: {
     toggle () {
-      this.toggleProperty('show')
+      this.toggleProperty('show');
     }
   }
 });

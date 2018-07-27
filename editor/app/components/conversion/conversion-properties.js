@@ -1,3 +1,5 @@
+/* global ContactListModal */
+
 import _ from 'lodash/lodash';
 import Ember from 'ember';
 

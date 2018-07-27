@@ -13,7 +13,7 @@ export default Ember.Component.extend({
 
   actions: {
     selectFont (font) {
-      this.set('selectedFont', font)
+      this.set('selectedFont', font);
     }
   }
 });
