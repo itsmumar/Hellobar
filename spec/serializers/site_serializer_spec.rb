@@ -32,7 +32,8 @@ describe SiteSerializer do
         {
           id: contact_list.id,
           name: contact_list.name,
-          provider_name: contact_list.provider_name
+          provider_name: contact_list.provider_name,
+          icon_path: 'providers/hellobar.png'
         }
       ]
     end
