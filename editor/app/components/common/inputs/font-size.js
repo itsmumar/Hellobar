@@ -5,7 +5,7 @@ export default Ember.Component.extend({
 
   formattedValue: function () {
     return `${ this.get('size') }px`;
-  }.property('value'),
+  }.property('size'),
 
   actions: {
     increment () {
