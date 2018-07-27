@@ -37,7 +37,11 @@ module.exports = function (defaults) {
         'free-solid-svg-icons': [
           'mobile-alt',
           'tablet-alt',
-          'desktop'
+          'desktop',
+          'caret-down',
+          'caret-up',
+          'caret-left',
+          'caret-right'
         ]
       }
     }
