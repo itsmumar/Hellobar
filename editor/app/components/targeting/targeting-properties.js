@@ -135,6 +135,14 @@ export default Ember.Component.extend({
     return this.get('days').find(option => option.duration === duration) || days[0];
   }.property('model.duration'),
 
+  shouldShowDissmissDuration: function () {
+    return this.get('model.closable');
+  }.property('model.closable'),
+
+  shouldShowSuccessDuration: function () {
+    return this.get('model.element_subtype') !== 'announcement';
+  }.property('model.type'),
+
   actions: {
     selectSuccessDuration (option) {
       this.set('model.success_duration', option.duration);
