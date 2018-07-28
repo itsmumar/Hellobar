@@ -3,8 +3,6 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
 
-const presetRuleNames = ['Everyone', 'Mobile Visitors', 'Homepage Visitors', 'Custom', 'Saved'];
-
 export default Ember.Component.extend({
 
   /**
@@ -15,32 +13,12 @@ export default Ember.Component.extend({
   applicationSettings: Ember.inject.service(),
   modelLogic: Ember.inject.service(),
 
-  selectedRule: null,
-
-  init() {
-    this._super();
-    presetRuleNames.forEach((presetRuleName) => {
-      const preparedName = presetRuleName.replace(/\s/g, '');
-      this[`shouldShow${preparedName}Preset`] = Ember.computed('model.preset_rule_name', 'selectionInProgress', function () {
-        return this.get('selectionInProgress') || this.get('model.preset_rule_name') === presetRuleName;
-      });
-    });
-  },
-
   rules: function () {
     return this.get('model.site.rules').map(rule => {
       return _.merge(rule, {
         isPaid: this.get('cannotTarget') && rule.name !== 'Everyone'
       })
     });
-  }.property('model.site.rules'),
-
-  customRules: function () {
-    return this.get('model.site.rules').filter(rule => rule.editable === true);
-  }.property('model.site.rules'),
-
-  hasCustomRules: function () {
-    return this.get('customRules').length > 0;
   }.property('model.site.rules'),
 
   associateRuleToModel(rule) {
@@ -97,10 +75,6 @@ export default Ember.Component.extend({
 
     return options;
   },
-
-  shouldShowSavedRuleList: function() {
-    return !this.get('selectionInProgress') && this.get('model.preset_rule_name') === 'Saved';
-  }.property('model.preset_rule_name', 'selectionInProgress'),
 
   openUpgradeModal() {
     const that = this;
