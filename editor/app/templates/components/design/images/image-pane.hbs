@@ -23,7 +23,7 @@
   <div class="panel-input">
     <div class="panel-input__label">Opacity</div>
     <div class="panel-input__input">
-      {{common/inputs/font-size size=model.image_opacity}}
+      {{common/inputs/number-input value=model.image_opacity type="%"}}
     </div>
   </div>
 
@@ -38,7 +38,7 @@
     <div class="panel-input">
       <div class="panel-input__label">Overlay opacity</div>
       <div class="panel-input__input">
-        {{common/inputs/font-size size=model.image_overlay_opacity}}
+        {{common/inputs/number-input value=model.image_overlay_opacity type="%"}}
       </div>
     </div>
   {{/if}}
