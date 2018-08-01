@@ -20,18 +20,26 @@
 
   {{/unless}}
 
-  <label>Image opacity</label>
-  <div class="slider-wrapper">
-    {{common/sliders/range-slider min=0 max=100 start=imageOpacity update="setImageOpacity" leftLabel="0%" rightLabel="100%"}}
+  <div class="panel-input">
+    <div class="panel-input__label">Opacity</div>
+    <div class="panel-input__input">
+      {{common/inputs/font-size size=model.image_opacity}}
+    </div>
   </div>
 
   {{#if backgroundImage }}
-    <label>Image Overlay Color</label>
-    {{design/colors/selection/color-select color=model.image_overlay_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
+    <div class="panel-input">
+      <div class="panel-input__label">Overlay color</div>
+      <div class="panel-input__input">
+        {{common/inputs/font-color color=model.image_overlay_color}}
+      </div>
+    </div>
 
-    <label>Image Overlay Opacity</label>
-    <div class="slider-wrapper">
-      {{common/sliders/range-slider min=0 max=100 start=imageOverlayOpacity update="setImageOverlayOpacity" leftLabel="0%" rightLabel="100%"}}
+    <div class="panel-input">
+      <div class="panel-input__label">Overlay opacity</div>
+      <div class="panel-input__input">
+        {{common/inputs/font-size size=model.image_overlay_opacity}}
+      </div>
     </div>
   {{/if}}
 {{else}}
