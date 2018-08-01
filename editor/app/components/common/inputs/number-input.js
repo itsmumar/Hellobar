@@ -1,4 +1,3 @@
-import _ from 'lodash/lodash';
 import Ember from 'ember';
 
 const TYPE_PERCENT = '%';
