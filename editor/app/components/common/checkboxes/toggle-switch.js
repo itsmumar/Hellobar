@@ -26,6 +26,6 @@ export default Ember.Component.extend({
   },
 
   _setDisplayValue: function () {
-    this.set('displayValue', this.get('inverted') ? !this.get('switch') : this.get('switch'));
+    this.set('displayValue', !this.get('switch'));
   }.observes('switch')
 });

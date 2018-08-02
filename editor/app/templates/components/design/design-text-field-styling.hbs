@@ -1,0 +1,43 @@
+{{#common/panels/collapse-panel title="Text Field Styling"}}
+  <div class="panel-input">
+    <div class="panel-input__label">Background color</div>
+    <div class="panel-input__input">
+      {{common/inputs/font-color color=model.text_field_background_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Text color</div>
+    <div class="panel-input__input">
+      {{common/inputs/font-color color=model.text_field_text_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Rounded corners</div>
+    <div class="panel-input__input">
+      {{common/inputs/number-input value=model.text_field_border_radius}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Opacity</div>
+    <div class="panel-input__input">
+      {{common/inputs/number-input value=model.text_field_background_opacity type="%"}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Border color</div>
+    <div class="panel-input__input">
+      {{common/inputs/font-color color=model.text_field_border_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Border width</div>
+    <div class="panel-input__input">
+      {{common/inputs/number-input value=model.text_field_border_width}}
+    </div>
+  </div>
+{{/common/panels/collapse-panel}}

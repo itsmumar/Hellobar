@@ -72,6 +72,17 @@ class SiteElementSerializer < ActiveModel::Serializer
     end
   end
 
+  def size
+    case object.size
+    when 'large'
+      50
+    when 'regular'
+      30
+    else
+      object.size
+    end
+  end
+
   def site
     return unless object.site
 

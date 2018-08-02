@@ -26,6 +26,7 @@
     border-radius: 0 0 5px 5px
     display: none
     padding-top: 15px
+    padding-bottom: 15px
 
   &.show
     .collapse__header
@@ -42,10 +43,21 @@
 
   .panel-input
     display: flex
-    margin: auto
+    margin: 10px auto
     justify-content: space-between
+
+    &:last-child
+      margin-bottom: 0
+
+    .ember-basic-dropdown
+      width: 110px
+      margin: 0
 
   .panel-input__label
     align-self: center
     font-weight: bold
     white-space: nowrap
+    font-size: 0.9em
+
+  label
+    margin: 0

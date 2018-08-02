@@ -1,0 +1,10 @@
+{{#common/panels/collapse-panel title="URL Target"}}
+  <label>Enter link URL</label>
+  {{input value=model.settings.url placeholder="http://mysite.com/new" maxlength=510}}
+  <p>This is the web address that your button will link to, e.g. http://mysite.com/new</p>
+
+  <label>
+    {{common/checkboxes/toggle-switch switch=model.open_in_new_window}}
+    Open link in new tab
+  </label>
+{{/common/panels/collapse-panel}}
