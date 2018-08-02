@@ -106,7 +106,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
   def site_preview_image_mobile
     return '' unless object.site
-    proxied_url2png(url: object.site.url, viewport: '320x568')
+    proxied_url2png(url: object.site.url, viewport: '375x667')
   end
 
   def site_preview_image_tablet
