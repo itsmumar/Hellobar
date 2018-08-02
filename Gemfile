@@ -166,11 +166,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'pry-rails'
-
-  # Spring preloader
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen'
 end
 
 group :test do
