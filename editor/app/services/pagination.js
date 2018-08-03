@@ -31,7 +31,6 @@ export default Ember.Service.extend({
   },
 
   routeLinks () {
-    debugger
     const currentRouteIndex = this.currentRouteIndex();
 
     return _.map(this.get('routes'), (route, i) => {
