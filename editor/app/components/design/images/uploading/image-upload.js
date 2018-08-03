@@ -15,11 +15,12 @@ export default Ember.Component.extend({
     }
   ),
 
-  errorState() {
-    let dropzone = this.get('dropzoneInstance');
-    let file = dropzone.files[0];
+  errorState: function () {
+    const dropzone = this.get('dropzoneInstance');
+    if (!dropzone) return;
+    const file = dropzone.files[0];
     return file && file.status === 'error';
-  },
+  }.property('dropzoneInstance'),
 
   isUploading: Ember.computed('existingFileName', function () {
       let dropzone;
