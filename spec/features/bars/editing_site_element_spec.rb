@@ -5,7 +5,7 @@ feature 'Editing site element', :js do
     site = user.sites.first
     site.rules << create(:rule)
 
-    create :site_element, rule: site.rules.first
+    create :site_element, :email, rule: site.rules.first
 
     site.reload
 
@@ -13,14 +13,12 @@ feature 'Editing site element', :js do
 
     visit edit_site_site_element_path(site, site.site_elements.last)
 
-    bypass_setup_steps(2)
+    find('h6', text: 'Collect emails').click
+    go_to_tab 'Design'
+    find('.collapse', text: 'Leading Question').click
+    find('.questions .toggle-switch').click
 
-    within('.step-wrapper') do
-      click_on 'Text'
-      find('.questions .toggle-off').click
-
-      expect(page).to have_content 'QUESTION'
-    end
+    expect(page).to have_content 'Question'
 
     value = 'Dear I fear because were facing a problem'
     first('.ember-text-field').set(value)
