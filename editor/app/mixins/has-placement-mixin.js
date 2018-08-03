@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
     const selectedOption = _.find(options, (option) => option.value === placement);
     if (selectedOption) {
       return selectedOption;
-    } else {
+    } else if (options && options[0]) {
       const defaultOption = options[0];
       Ember.run.next(() => this.set('model.placement', defaultOption.value));
       return defaultOption;

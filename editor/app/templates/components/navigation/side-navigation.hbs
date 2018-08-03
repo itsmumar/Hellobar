@@ -17,7 +17,7 @@
     </div>
   {{/link-to}}
 
-  {{#link-to 'design' tagName="li"}}
+  {{#link-to 'design' tagName="li" classNameBindings="isGoalSelected::disabled"}}
     <div class="step-links__item {{if isDesignDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-design}}
@@ -25,7 +25,7 @@
     </div>
   {{/link-to}}
 
-  {{#link-to 'settings' tagName="li"}}
+  {{#link-to 'settings' tagName="li" classNameBindings="isGoalSelected::disabled"}}
     <div class="step-links__item {{if isSettingsDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-settings}}
@@ -33,7 +33,7 @@
     </div>
   {{/link-to}}
 
-  {{#link-to 'targeting' tagName="li"}}
+  {{#link-to 'targeting' tagName="li" classNameBindings="isGoalSelected::disabled"}}
     <div class="step-links__item {{if isTargetingDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-targeting}}
@@ -41,7 +41,7 @@
     </div>
   {{/link-to}}
 
-  {{#link-to 'conversion' tagName="li"}}
+  {{#link-to 'conversion' tagName="li" classNameBindings="isGoalSelected::disabled"}}
     <div class="step-links__item {{if isConversionDone "done"}}">
       <div class="progress"></div>
       {{icons/icon-conversion}}

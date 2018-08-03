@@ -4,8 +4,12 @@ import { STEP_GOAL, STEP_TYPE, STEP_DESIGN, STEP_SETTINGS, STEP_TARGETING, STEP_
 export default Ember.Component.extend({
   classNames: ['side-navigation', 'links-wrapper'],
 
+  model: null,
+
   pagination: Ember.inject.service(),
   tagName: 'nav',
+
+  isGoalSelected: Ember.computed.notEmpty('model.element_subtype'),
 
   isGoalDone: function () {
     return this.isDone(STEP_GOAL);

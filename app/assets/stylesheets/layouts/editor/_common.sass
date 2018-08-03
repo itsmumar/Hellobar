@@ -12,8 +12,8 @@
   position: relative
 
   .tooltip-label
-    font-size: 0.9em
-    color: $grayLight
+    font-size: 1.1em
+    color: $grayDarkColor
 
   .select-wrapper
     margin-bottom: 0
@@ -54,6 +54,11 @@
       cursor: pointer
       transition: all 0.5s ease, margin-right 1ms, border-right 1ms
 
+      &.disabled
+        pointer-events: none
+        cursor: wait
+        opacity: 0.5
+
       &:hover
         [class*="icon-"], .caption
           fill: $grayColor
@@ -73,7 +78,7 @@
 
       .step-links__item.done, &.active .step-links__item
         .progress
-          background-color: #27ab9e
+          background-color: $actionColor
 
       .progress
         width: 5px
