@@ -35,15 +35,17 @@ class RegistrationForm
   end
 
   def title
-    return default_title unless affiliate_signup?
-    return affiliate_trial_signup_title unless partner?
+    return default_title unless promotional_signup? || affiliate_signup?
+    return promotional_signup_title unless affiliate_signup?
+    return affiliate_signup_title unless partner?
 
     partner_signup_title
   end
 
   def cta
-    return default_cta unless affiliate_signup?
-    return affiliate_trial_signup_cta unless partner?
+    return default_cta unless promotional_signup? || affiliate_signup?
+    return promotional_signup_cta unless affiliate_signup?
+    return affiliate_signup_cta unless partner?
 
     partner_signup_cta
   end
@@ -55,18 +57,32 @@ class RegistrationForm
   end
   alias default_cta default_title
 
-  def affiliate_trial_signup_title
-    duration = default_partner_plan.duration
-    subscription = default_partner_plan.subscription_type.capitalize
+  def promotional_signup_title
+    duration = PromotionalPlan.new.duration
+    subscription = PromotionalPlan.new.subscription_type.capitalize
 
-    I18n.t :affiliate_trial_signup_title, scope: :registration,
+    I18n.t :promotional_signup_title, scope: :registration,
       duration: duration, subscription: subscription
   end
 
-  def affiliate_trial_signup_cta
+  def promotional_signup_cta
+    duration = PromotionalPlan.new.duration
+
+    I18n.t :promotional_signup_cta, scope: :registration, duration: duration
+  end
+
+  def affiliate_signup_title
+    duration = default_partner_plan.duration
+    subscription = default_partner_plan.subscription_type.capitalize
+
+    I18n.t :affiliate_signup_title, scope: :registration,
+      duration: duration, subscription: subscription
+  end
+
+  def affiliate_signup_cta
     duration = default_partner_plan.duration
 
-    I18n.t :affiliate_trial_signup_cta, scope: :registration, duration: duration
+    I18n.t :affiliate_signup_cta, scope: :registration, duration: duration
   end
 
   def partner_signup_title
@@ -82,6 +98,10 @@ class RegistrationForm
     duration = @partner.partner_plan.duration
 
     I18n.t :partner_signup_cta, scope: :registration, duration: duration
+  end
+
+  def promotional_signup?
+    @cookies[:promotional_signup] == 'true'
   end
 
   def affiliate_signup?

@@ -68,6 +68,19 @@ describe User do
     end
   end
 
+  describe 'attr_accessors' do
+    %i[timezone is_impersonated].each do |attr|
+      it "has :#{ attr } attribute" do
+        user = User.new
+        value = 'x'
+
+        user.public_send "#{ attr }=", value
+
+        expect(user.public_send(attr)).to eql value
+      end
+    end
+  end
+
   describe '#can_view_exit_intent_modal?' do
     let!(:user) { create(:user) }
     let!(:site) { create(:site, :with_rule) }

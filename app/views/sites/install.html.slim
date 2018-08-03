@@ -74,6 +74,30 @@
         | Try reading these&nbsp;
         = link_to "helpful instructions for installing plugins on WordPress", "https://support.hellobar.com/how-do-i-manually-upload-a-wordpress-plugin/"
 
+  div class=["reveal-wrapper", @site.install_type == "wix" ? "activated" : ""]
+    i.icon-wix
+    .reveal-title I use Wix
+    p If your site is hosted on Wix, we've built a super easy copy and paste integration. Get your trackng ID here.
+
+    .reveal-block.wix-reveal
+      .title 1) Copy your ID:
+      .form-inline
+        = text_field_tag :script_id, @site.script.hashed_id, readonly: true
+        button.button data-clipboard-target="#script_id"
+          i.icon-clipboard
+          span Copy
+
+      .title 2) Paste it to Wix
+      p
+        ' Go to your
+        strong Wix account
+        ', click on
+        strong> Promote > Marketing integrations >
+        ' in the
+        strong> HelloBar widget
+        ' click
+        strong Go for it.
+
   .reveal-wrapper
     i.icon-contacts
     .reveal-title Email my Web Developer

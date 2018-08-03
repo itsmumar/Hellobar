@@ -8,9 +8,10 @@ class CreateSite
     end
   end
 
-  def initialize(site, user, referral_token:)
+  def initialize(site, user, cookies: {}, referral_token:)
     @site = site
     @user = user
+    @cookies = cookies
     @referral_token = referral_token
   end
 
@@ -28,23 +29,35 @@ class CreateSite
 
   private
 
-  attr_reader :site, :user, :referral_token
+  attr_reader :site, :user, :cookies, :referral_token
 
   def change_subscription
-    if user.sites.count == 1 && user.affiliate_identifier
-      partner = Partner.find_by(affiliate_identifier: user.affiliate_identifier)
-      partner_plan = partner&.partner_plan || Partner.default_partner_plan
+    if promotional_signup? || affiliate_signup?
+      plan = PromotionalPlan.new
+
+      if affiliate_signup?
+        partner = Partner.find_by(affiliate_identifier: user.affiliate_identifier)
+        plan = partner&.partner_plan || Partner.default_partner_plan
+      end
 
       AddTrialSubscription.new(
         site,
-        subscription: partner_plan.subscription_type,
-        trial_period: partner_plan.duration
+        subscription: plan.subscription_type,
+        trial_period: plan.duration
       ).call
 
       return
     end
 
     ChangeSubscription.new(site, subscription: 'free', schedule: 'monthly').call
+  end
+
+  def promotional_signup?
+    user.sites.count == 1 && cookies[:promotional_signup] == 'true'
+  end
+
+  def affiliate_signup?
+    user.sites.count == 1 && user.affiliate_identifier
   end
 
   def detect_install_type
