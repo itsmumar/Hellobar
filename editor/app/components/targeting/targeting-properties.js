@@ -140,7 +140,6 @@ export default Ember.Component.extend({
       }
 
       if (rule) {
-        const rules = this.get('rules');
         this.associateRuleToModel(rule);
         this.set('model.preset_rule_name', rule);
       }
