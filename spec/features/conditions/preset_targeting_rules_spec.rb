@@ -1,7 +1,6 @@
 feature 'Users can use site element targeting rule presets', :js do
   given(:free_options) { ['Everyone'] }
   given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }
-  given(:custom_option) { 'Custom Rule' }
   given(:saved_option) { 'Show to a saved targeting rule' }
 
   background do
@@ -24,15 +23,13 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'The user can select free options' do
-      find('div.step-link-block', text: free_options.first).click
-      expect(page).to have_content 'CHANGE TARGET AUDIENCE'
+      choose_rule free_options.first
+      expect_choosen free_options.first
     end
 
     scenario 'The user is prompted to upgrade when clicking rule presets' do
-      find('a', text: 'CHANGE TARGET AUDIENCE').click
-
-      (paid_options << custom_option).each do |text|
-        find('div.step-link-block', text: text).click
+      paid_options.each do |rule|
+        choose_rule rule
 
         expect(page).to have_content 'MONTHLY BILLING'
 
@@ -63,34 +60,18 @@ feature 'Users can use site element targeting rule presets', :js do
     scenario 'The user can select any rule preset' do
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
 
-      (free_options + paid_options).each do |text|
-        find('div.step-link-block', text: text).click
-        find('a', text: 'CHANGE TARGET AUDIENCE').click
+      (free_options + paid_options).each do |rule|
+        choose_rule rule
+        expect_choosen rule
       end
-
-      # wait for the UI to load.
-      sleep 0.2
-
-      find('div.step-link-block', text: 'Show to a saved targeting rule').click
-      find('a', text: 'CHANGE TARGET AUDIENCE').click
-
-      find('h6', text: custom_option).click
-      find('a.button', text: 'Cancel').click
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
       visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
-      find('a', text: 'CHANGE TARGET AUDIENCE').click
-      find('h6', text: custom_option).click
-      find('a', text: '+').click
+      find('.actions a').click
       fill_in 'rule_name', with: 'New Custom Rule'
       find('a.button', text: 'Save').click
-
-      find('a', text: 'Edit.').click
-      fill_in 'rule_name', with: 'Edited Custom Rule'
-      find('a.button', text: 'Save').click
-
-      expect(page).to have_content 'Edited Custom Rule'
+      expect_choosen 'New Custom Rule'
     end
 
     feature 'Editing existing site elements' do
@@ -107,13 +88,17 @@ feature 'Users can use site element targeting rule presets', :js do
         element = create(:site_element, rule: custom_rule)
         visit edit_site_site_element_path(site, element.id) + '/#/targeting?skip_interstitial=true'
 
-        expect(page).to have_content custom_rule.name
-
-        find('a', text: 'Edit.').click
-
-        value = find('.location-country-select').value
-        expect(value).to eql('AR')
+        expect_choosen custom_rule.name
       end
     end
+  end
+
+  def choose_rule(rule)
+    find('.select-wrapper.rules').click
+    find('.ember-power-select-option', text: rule).click
+  end
+
+  def expect_choosen(rule)
+    expect(find('.select-wrapper.rules .ember-power-select-selected-item').text).to eql rule
   end
 end

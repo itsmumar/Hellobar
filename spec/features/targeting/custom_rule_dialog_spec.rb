@@ -15,12 +15,12 @@ feature 'Targeting. Custom rule dialog', :js do
     end
 
     click_on 'Continue'
-    find('.step-links__item .caption', text: 'Targeting').click
-    find('.change-selection').click
-    find('h6', text: 'Custom Rule').click
+    go_to_tab 'Targeting'
+    find('a', text: 'Create new customer targeting rule').click
 
     expect(page.all('.show-modal.rules-modal').count).to be 1
 
+    sleep 1
     click_on 'Cancel'
     page.has_no_selector?('.cancel.button')
     expect(page.all('.show-modal.rules-modal').count).to be 0

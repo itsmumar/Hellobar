@@ -127,7 +127,7 @@ export default Ember.Component.extend({
     },
 
     selectRule (rule) {
-      if (rule !== 'Everyone' && !this.get('canTarget')) {
+      if (rule && rule.isPaid) {
         this.openUpgradeModal();
         return;
       }
@@ -141,7 +141,7 @@ export default Ember.Component.extend({
 
       if (rule) {
         const rules = this.get('rules');
-        this.associateRuleToModel(rules[rule]);
+        this.associateRuleToModel(rule);
         this.set('model.preset_rule_name', rule);
       }
     },
