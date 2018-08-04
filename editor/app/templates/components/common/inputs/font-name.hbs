@@ -1,9 +1,7 @@
-<div class="select-wrapper">
-  {{#power-select options=fonts
-                  selected=selectedFont
-                  renderInPlace=true
-                  searchEnabled=false
-                  onchange=(action "selectFont") as |option|}}
-    {{option}}
-  {{/power-select}}
-</div>
+{{#power-select options=fonts
+                selected=selectedFont
+                renderInPlace=true
+                searchEnabled=false
+                onchange=(action "selectFont") as |option|}}
+  {{option}}
+{{/power-select}}
