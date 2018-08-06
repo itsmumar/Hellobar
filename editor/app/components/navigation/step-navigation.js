@@ -20,8 +20,8 @@ export default Ember.Component.extend({
   }.property('router.currentPath'),
 
   routeLinks: function () {
-    return this.get('pagination').routeLinks();
-  }.property('router.currentPath'),
+    return this.get('pagination.routeLinks');
+  }.property('pagination.routeLinks'),
 
   actions: {
     toggleFullscreen () {

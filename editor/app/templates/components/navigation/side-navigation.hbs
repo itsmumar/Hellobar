@@ -1,51 +1,13 @@
 <img class="side-bar-logo" src="{{ image_path "icons/h-logo.svg" }}">
 
 <ul class="step-links">
-  {{#link-to 'goal' tagName="li"}}
-    <div class="step-links__item {{if isGoalDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-goal}}
-      <div class="caption">Goal</div>
-    </div>
-  {{/link-to}}
-
-  {{#link-to 'type' tagName="li"}}
-    <div class="step-links__item {{if isTypeDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-type}}
-      <div class="caption">Type</div>
-    </div>
-  {{/link-to}}
-
-  {{#link-to 'design' tagName="li" classNameBindings="isGoalSelected::disabled"}}
-    <div class="step-links__item {{if isDesignDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-design}}
-      <div class="caption">Design</div>
-    </div>
-  {{/link-to}}
-
-  {{#link-to 'settings' tagName="li" classNameBindings="isGoalSelected::disabled"}}
-    <div class="step-links__item {{if isSettingsDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-settings}}
-      <div class="caption">Settings</div>
-    </div>
-  {{/link-to}}
-
-  {{#link-to 'targeting' tagName="li" classNameBindings="isGoalSelected::disabled"}}
-    <div class="step-links__item {{if isTargetingDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-targeting}}
-      <div class="caption">Targeting</div>
-    </div>
-  {{/link-to}}
-
-  {{#link-to 'conversion' tagName="li" classNameBindings="isGoalSelected::disabled"}}
-    <div class="step-links__item {{if isConversionDone "done"}}">
-      <div class="progress"></div>
-      {{icons/icon-conversion}}
-      <div class="caption">Conversion</div>
-    </div>
-  {{/link-to}}
+  {{#each links as |link| }}
+    {{#link-to link.route tagName="li" class=link.classNames}}
+      <div class="step-links__item {{if link.isDone "done"}}">
+        <div class="progress"></div>
+        {{component link.icon}}
+        <div class="caption">{{link.caption}}</div>
+      </div>
+    {{/link-to}}
+  {{/each}}
 </ul>
