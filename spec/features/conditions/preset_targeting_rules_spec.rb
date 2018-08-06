@@ -81,7 +81,7 @@ feature 'Users can use site element targeting rule presets', :js do
       scenario 'With a preset rule' do
         element = create(:site_element, rule: preset_rule)
 
-        visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
+        visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
         find('h6', text: 'Collect emails').click
         go_to_tab 'Targeting'
 
@@ -90,7 +90,7 @@ feature 'Users can use site element targeting rule presets', :js do
 
       scenario 'With a custom rule' do
         element = create(:site_element, rule: custom_rule)
-        visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
+        visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
         find('h6', text: 'Collect emails').click
         go_to_tab 'Targeting'
 
