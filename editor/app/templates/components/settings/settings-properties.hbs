@@ -9,12 +9,10 @@
     <span class="property-name">Animate entry/exit</span>
   </label>
 
-  {{#if canWiggle}}
-    <label class="toggle-wiggling">
-      {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
-      <span class="property-name">Wiggle button</span>
-    </label>
-  {{/if}}
+  <label class="toggle-wiggling">
+    {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
+    <span class="property-name">Wiggle button</span>
+  </label>
 
   {{# if isNotAlert }}
     <label class="toggle-hiding">
