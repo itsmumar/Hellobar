@@ -2,12 +2,15 @@ import Ember from 'ember';
 
 const TYPE_PERCENT = '%';
 const TYPE_PIXEL = 'px';
-const TYPES = [TYPE_PERCENT, TYPE_PIXEL];
+const TYPE_SECOND = 's';
+const TYPES = [TYPE_PERCENT, TYPE_PIXEL, TYPE_SECOND];
 
 export default Ember.Component.extend({
   classNames: ['number-input'],
 
   type: TYPE_PIXEL,
+  max: 100,
+  min: 0,
 
   label: function () {
     const type = this.get('type');
@@ -23,41 +26,19 @@ export default Ember.Component.extend({
     return `${ this.get('value') }${ this.get('label') }`;
   }.property('value'),
 
-  incrementPercent: function () {
-    if (this.get('value') >= 100) {
+  increment: function () {
+    if (this.get('value') >= this.get('max')) {
       return;
     }
 
     this.incrementProperty('value');
   },
 
-  incrementPixel: function () {
-    this.incrementProperty('value');
-  },
-
-  decrementPercent: function () {
-    if (this.get('value') <= 0) {
+  decrement: function () {
+    if (this.get('value') <= this.get('min')) {
       return;
     }
     this.decrementProperty('value');
-  },
-
-  decrementPixel: function () {
-    if (this.get('value') <= 0) {
-      return;
-    }
-    this.decrementProperty('value');
-  },
-
-  doAction: function (action) {
-    switch(this.get('type')) {
-      case TYPE_PERCENT:
-        this[`${ action }Percent`]();
-        break;
-      case TYPE_PIXEL:
-        this[`${ action }Pixel`]();
-        break;
-    }
   },
 
   delayAction (action, delay = 200) {
@@ -70,7 +51,7 @@ export default Ember.Component.extend({
 
   repeatAction (action, delay = 50) {
     const interval = setInterval(() => {
-      this.doAction(action);
+      this[action]();
     }, delay);
 
     this.set('interval', interval);
@@ -78,12 +59,12 @@ export default Ember.Component.extend({
 
   actions: {
     increment () {
-      this.doAction('increment');
+      this.increment();
       this.delayAction('increment');
     },
 
     decrement () {
-      this.doAction('decrement');
+      this.decrement();
       this.delayAction('decrement');
     },
 

@@ -3,8 +3,8 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   alertPlacement: function () {
     return [
-      {value: 'bottom-right', label: 'Bottom right'},
-      {value: 'bottom-left', label: 'Bottom left'}
+      {value: 'bottom-left', label: 'Bottom left'},
+      {value: 'bottom-right', label: 'Bottom right'}
     ];
   }.property(),
 

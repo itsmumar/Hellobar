@@ -8,6 +8,7 @@ export default Ember.Component.extend({
 
   theming: Ember.inject.service(),
   elementPlacement: Ember.inject.service(),
+  elementTrigger: Ember.inject.service(),
 
   themeSelectionInProgress: false,
 
@@ -28,6 +29,7 @@ export default Ember.Component.extend({
       this.get('theming').resetThemeIfNeeded(type);
       this.get('theming').applyCurrentTheme();
       this.get('elementPlacement').updatePlacement(this, type);
+      this.get('elementTrigger').updateTrigger(this, type);
     }
   }
 });

@@ -63,7 +63,6 @@ class SiteElement < ApplicationRecord
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed
-  validate :ensure_closable_allowed
   validate :ensure_custom_thank_you_text_allowed, if: :email?
   validate :ensure_custom_thank_you_text_configured, if: :email?
   validate :ensure_custom_redirect_url_allowed, if: :email?
@@ -264,10 +263,6 @@ class SiteElement < ApplicationRecord
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  def pushes_page_down
-    nil
-  end
-
   def image_style
     :modal
   end
@@ -298,12 +293,6 @@ class SiteElement < ApplicationRecord
 
   def precise_geolocation_targeting?
     rule&.conditions&.any?(&:precise?)
-  end
-
-  def ensure_closable_allowed
-    return if paused? || !closable? || site.capabilities.closable?
-
-    errors.add(:site, 'subscription does not support closable elements. Upgrade subscription.')
   end
 
   def ensure_custom_targeting_allowed

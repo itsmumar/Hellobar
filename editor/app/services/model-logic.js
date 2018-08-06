@@ -234,17 +234,6 @@ export default Ember.Service.extend({
     }
   }.observes('model.enable_gdpr'),
 
-  promptUpgradeWhenEnablingHiding: function () {
-    const isClosable = this.get('model.closable');
-    const canBeClosable = this.get('model.site.capabilities.closable');
-
-    if (isClosable && !canBeClosable) {
-      this.set('model.closable', false);
-      const elementTypeName = (this.get('model.type') || 'Bar').toLowerCase();
-      this.promptUpgrade('closable', isClosable, `allow hiding a ${elementTypeName}`);
-    }
-  }.observes('model.closable'),
-
   promptUpgrade(attr, val, message) {
     const view = this;
     new UpgradeAccountModal({

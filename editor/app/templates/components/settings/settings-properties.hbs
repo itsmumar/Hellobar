@@ -16,10 +16,12 @@
     </label>
   {{/if}}
 
-  <label class="toggle-hiding">
-    {{common/checkboxes/toggle-switch switch=model.closable}}
-    <span class="property-name">Allow visitors to hide bar</span>
-  </label>
+  {{# if isNotAlert }}
+    <label class="toggle-hiding">
+      {{common/checkboxes/toggle-switch switch=model.closable}}
+      <span class="property-name">Allow visitors to hide {{ elementTypeName }}</span>
+    </label>
+  {{/if}}
 
   <label class="toggle-pushing-page-down">
     {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
