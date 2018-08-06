@@ -107,19 +107,6 @@ feature 'Payment modal interaction', :js do
       expect(page).to have_content "Upgrade #{ site.host } to remove branding"
     end
 
-    scenario 'trying to enable bar hiding triggers the Pro Upgrade popup' do
-      visit site_path(site)
-
-      click_on 'Create New'
-
-      find('.goal-block.contacts').click_on('Select This Goal')
-      click_button 'Continue'
-      go_to_tab 'Settings'
-      find('.toggle-hiding .toggle-off').click
-
-      expect(page).to have_content "Upgrade #{ site.host } to allow hiding a bar"
-    end
-
     def date_format(date)
       date.strftime "%b #{ date.day.ordinalize }, %Y"
     end

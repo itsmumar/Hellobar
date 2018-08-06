@@ -47,7 +47,7 @@ feature 'Users can select a design theme for SiteElements', :js do
       end
 
       scenario 'does not override existing value for "Pushes page down"' do
-        visit url
+        visit edit_site_site_element_path(site, site.site_elements.first)
         find('.step-links__item .caption', text: 'Settings').click
         expect(first('.toggle-pushing-page-down')).to have_selector '.toggle-switch.is-selected'
       end
