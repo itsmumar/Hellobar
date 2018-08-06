@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Service.extend({
   options: [
     {value: 'exit-intent', label: 'Exit intent (user begins to leave your site)'},
-    {value: 'wait-5', label: '5 second delayy'},
+    {value: 'wait-5', label: '5 second delay'},
     {value: 'wait-10', label: '10 second delay'},
     {value: 'wait-30', label: '30 second delay'},
     {value: 'wait-60', label: '60 second delay'},
