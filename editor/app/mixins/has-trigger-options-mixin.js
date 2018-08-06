@@ -6,6 +6,8 @@ import _ from 'lodash/lodash';
 export default Ember.Mixin.create({
   elementTrigger: Ember.inject.service(),
 
+  triggerOptions: Ember.computed.alias('elementTrigger.options'),
+
   selectedTriggerOption: function() {
     const viewCondition = this.get('model.view_condition');
     return _.find(
