@@ -35,4 +35,34 @@ describe SiteElementSerializer do
       specify { expect(serializer.preset_rule_name).to eql rule.name }
     end
   end
+
+  describe '#size' do
+    context 'when "large"' do
+      let(:element) { create(:site_element) }
+
+      specify { expect(element.size).to eql 'large' }
+      specify { expect(serializer.size).to eql 50 }
+    end
+
+    context 'when "regular"' do
+      let(:element) { create(:site_element, size: 'regular') }
+
+      specify { expect(element.size).to eql 'regular' }
+      specify { expect(serializer.size).to eql 30 }
+    end
+
+    context 'when empty' do
+      let(:element) { create(:site_element, size: '') }
+
+      specify { expect(element.size).to eql '' }
+      specify { expect(serializer.size).to eql 0 }
+    end
+
+    context 'otherwise' do
+      let(:element) { create(:site_element, size: '100') }
+
+      specify { expect(element.size).to eql '100' }
+      specify { expect(serializer.size).to eql 100 }
+    end
+  end
 end
