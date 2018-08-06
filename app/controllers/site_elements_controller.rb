@@ -28,6 +28,7 @@ class SiteElementsController < ApplicationController
       rule: @site.rules.first,
       show_branding: !@site.capabilities.remove_branding?,
       closable: false,
+      wiggle_button: true,
       theme_id: 'autodetect',
       settings: { url: @site.url, url_to_like: @site.url }
     )

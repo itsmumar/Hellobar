@@ -19,7 +19,9 @@ feature 'Users can use site element targeting rule presets', :js do
 
       site.create_default_rules
 
-      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
+      find('h6', text: 'Collect emails').click
+      go_to_tab 'Targeting'
     end
 
     scenario 'The user can select free options' do
@@ -54,12 +56,12 @@ feature 'Users can use site element targeting rule presets', :js do
 
       site.rules << custom_rule
 
-      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
+      visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
+      find('h6', text: 'Collect emails').click
+      go_to_tab 'Targeting'
     end
 
     scenario 'The user can select any rule preset' do
-      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
-
       (free_options + paid_options).each do |rule|
         choose_rule rule
         expect_choosen rule
@@ -67,7 +69,6 @@ feature 'Users can use site element targeting rule presets', :js do
     end
 
     scenario 'Custom rule presets are editable as saved rules' do
-      visit new_site_site_element_path(site) + '/#/targeting?skip_interstitial=true'
       find('.actions a').click
       fill_in 'rule_name', with: 'New Custom Rule'
       find('a.button', text: 'Save').click
@@ -79,14 +80,19 @@ feature 'Users can use site element targeting rule presets', :js do
 
       scenario 'With a preset rule' do
         element = create(:site_element, rule: preset_rule)
-        visit edit_site_site_element_path(site, element.id) + '/#/targeting?skip_interstitial=true'
+
+        visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
+        find('h6', text: 'Collect emails').click
+        go_to_tab 'Targeting'
 
         expect(page).to have_content preset_rule.name
       end
 
       scenario 'With a custom rule' do
         element = create(:site_element, rule: custom_rule)
-        visit edit_site_site_element_path(site, element.id) + '/#/targeting?skip_interstitial=true'
+        visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
+        find('h6', text: 'Collect emails').click
+        go_to_tab 'Targeting'
 
         expect_choosen custom_rule.name
       end

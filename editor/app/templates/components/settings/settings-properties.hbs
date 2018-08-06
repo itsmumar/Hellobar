@@ -9,17 +9,17 @@
     <span class="property-name">Animate entry/exit</span>
   </label>
 
-  {{#if canWiggle}}
-    <label class="toggle-wiggling">
-      {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
-      <span class="property-name">Wiggle button</span>
+  <label class="toggle-wiggling">
+    {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
+    <span class="property-name">Wiggle button</span>
+  </label>
+
+  {{# if isNotAlert }}
+    <label class="toggle-hiding">
+      {{common/checkboxes/toggle-switch switch=model.closable}}
+      <span class="property-name">Allow visitors to hide {{ elementTypeName }}</span>
     </label>
   {{/if}}
-
-  <label class="toggle-hiding">
-    {{common/checkboxes/toggle-switch switch=model.closable}}
-    <span class="property-name">Allow visitors to close</span>
-  </label>
 
   <label class="toggle-pushing-page-down">
     {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
@@ -40,7 +40,7 @@
 
   <label>
     <span class="property-name">When does it display?</span>
-    <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">(What's this?)</a></small>
+    <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">Learn more</a></small>
   </label>
 
   <div class="select-wrapper">

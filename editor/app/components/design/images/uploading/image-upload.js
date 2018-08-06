@@ -7,31 +7,35 @@ export default Ember.Component.extend({
   classNames: ['file-upload-container'],
   classNameBindings: ['hasFile:has-file', 'errorState:with-errors'],
 
-  hasFile: Ember.computed('existingFileName', function () {
-      if (this.get('existingFileName') === 'uploading') {
-        return false;
-      }
-      return this.get('existingFileName');
+  hasFile: function () {
+    if (this.get('existingFileName') === 'uploading') {
+      return false;
     }
-  ),
+    return this.get('existingFileName');
+  }.property('existingFileName'),
 
-  errorState() {
-    let dropzone = this.get('dropzoneInstance');
-    let file = dropzone.files[0];
+  errorState: function () {
+    const dropzone = this.get('dropzoneInstance');
+    if (!dropzone) {
+      return;
+    }
+
+    const file = dropzone.files[0];
     return file && file.status === 'error';
-  },
+  }.property('dropzoneInstance'),
 
-  isUploading: Ember.computed('existingFileName', function () {
-      let dropzone;
-      if (!(dropzone = this.get('dropzoneInstance'))) {
-        return false;
-      }
-      let file = dropzone.files[0];
-      if (file && file.status === 'uploading') {
-        return file.name;
-      }
+  isUploading: function () {
+    const dropzone = this.get('dropzoneInstance');
+    if (!dropzone) {
+      return false;
     }
-  ),
+
+    const file = dropzone.files[0];
+
+    if (file && file.status === 'uploading') {
+      return file.name;
+    }
+  }.property('existingFileName'),
 
   actions: {
     removeDropzoneImages() {

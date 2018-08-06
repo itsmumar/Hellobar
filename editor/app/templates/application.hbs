@@ -1,11 +1,11 @@
 {{#application-layout viewMode=viewMode isCallGoal=isCallGoal}}
 
-  {{navigation/side-navigation routes=routes}}
+  {{navigation/side-navigation routes=routes model=model}}
 
   <div class="viewport-wrapper">
     <div class="step-wrapper">
       {{outlet}}
-      {{navigation/step-navigation routes=routes}}
+      {{navigation/step-navigation routes=routes model=model}}
     </div>
 
     {{preview/preview-area model=model viewMode=viewMode}}

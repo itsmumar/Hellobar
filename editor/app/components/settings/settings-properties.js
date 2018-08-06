@@ -20,5 +20,14 @@ export default Ember.Component.extend(HasTriggerOptions, ElementSubtype, {
     } else {
       return 'Pushes page up';
     }
-  }.property('model.placement')
+  }.property('model.placement'),
+
+  elementTypeName: function () {
+    return this.get('model.type').toLowerCase();
+  }.property('model.type'),
+
+  isNotAlert: function () {
+    return this.get('model.type') !== 'Alert';
+  }.property('model.type')
+
 });

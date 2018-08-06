@@ -9,6 +9,7 @@ export default Ember.Controller.extend(MobileMixin, {
   theming: Ember.inject.service(),
   modelValidation: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
+  pagination: Ember.inject.service(),
 
   goal: Ember.computed.alias('model.element_subtype'),
   style: Ember.computed.alias('model.type'),
@@ -58,5 +59,9 @@ export default Ember.Controller.extend(MobileMixin, {
     if (this.get('model') && ruleId >= 0) {
       this.set('model.rule_id', ruleId);
     }
-  }).observes('rule_id', 'model')
+  }).observes('rule_id', 'model'),
+
+  syncGoal: function () {
+    this.set('pagination.goal', this.get('goal'));
+  }.observes('goal')
 });
