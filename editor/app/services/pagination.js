@@ -31,7 +31,7 @@ export default Ember.Service.extend({
 
   routes: function () {
     if (this.get('goal') === 'email') {
-      return STEPS
+      return STEPS;
     } else {
       return STEPS.slice(0, -1);
     }

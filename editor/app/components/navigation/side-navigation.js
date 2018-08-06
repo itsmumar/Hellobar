@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import _ from 'lodash/lodash';
-import { STEP_GOAL, STEP_TYPE, STEP_DESIGN, STEP_SETTINGS, STEP_TARGETING, STEP_CONVERSION } from '../../constants';
 
 export default Ember.Component.extend({
   classNames: ['side-navigation', 'links-wrapper'],
@@ -15,7 +14,7 @@ export default Ember.Component.extend({
   links: function () {
     const routeLinks = this.get('pagination.routeLinks');
 
-    return _.map(routeLinks, (link, i) => {
+    return _.map(routeLinks, (link) => {
       return {
         route: link.route,
         isDone: this.isDone(link.route),
