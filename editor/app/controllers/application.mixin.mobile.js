@@ -21,6 +21,8 @@ export default Ember.Mixin.create({
   forceMobileBarForCall: function () {
     if (this.get('model.element_subtype') === 'call') {
       this.set('viewMode', VIEW_MOBILE);
+    } else {
+      this.set('viewMode', VIEW_DESKTOP);
     }
   }.observes('model.element_subtype'),
 
