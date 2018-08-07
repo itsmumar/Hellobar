@@ -4,7 +4,7 @@ const TYPE_PERCENT = '%';
 const TYPE_PIXEL = 'px';
 const TYPE_SECOND = 's';
 const TYPES = [TYPE_PERCENT, TYPE_PIXEL, TYPE_SECOND];
-const CTA_MIN_MAX_HEIGHT = {'Bar': [20, 100], 'Alert': [20,50], 'Slider': [20,50], 'Modal': [20,110], 'Takeover': [20,110]};
+const CTA_MIN_MAX_HEIGHT = {'Bar': [21, 99], 'Alert': [21,49], 'Slider': [21,49], 'Modal': [21,109], 'Takeover': [21,109]};
 
 export default Ember.Component.extend({
   classNames: ['number-input'],
@@ -33,14 +33,13 @@ export default Ember.Component.extend({
       return;
     }
     const elementType = this.parentView.parentView.attrs.model.value.type;
-    console.log(elementType);
     const elementStyleName = this.get('name');
     if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
       var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1];
       if(elementType === 'Bar') {
         maxSize = this.get('bar_size') - 10;
       }
-      if(this.get('value') > maxSize || this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
+      if(this.get('value') > maxSize) {
         return;
       }
     }
@@ -52,6 +51,15 @@ export default Ember.Component.extend({
     if (this.get('value') <= this.get('min')) {
       return;
     }
+
+    const elementType = this.parentView.parentView.attrs.model.value.type;
+    const elementStyleName = this.get('name');
+    if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
+      if(this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
+        return;
+      }
+    }
+
     this.decrementProperty('value');
   },
 
