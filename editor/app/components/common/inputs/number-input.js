@@ -4,7 +4,7 @@ const TYPE_PERCENT = '%';
 const TYPE_PIXEL = 'px';
 const TYPE_SECOND = 's';
 const TYPES = [TYPE_PERCENT, TYPE_PIXEL, TYPE_SECOND];
-const CTA_MIN_MAX_HEIGHT = {'Bar': [21, 99], 'Alert': [21,49], 'Slider': [21,49], 'Modal': [21,109], 'Takeover': [21,109]};
+const CTA_MIN_MAX_HEIGHT = {'Bar': [24, 99], 'Alert': [24,49], 'Slider': [24,49], 'Modal': [24,109], 'Takeover': [24,109]};
 
 export default Ember.Component.extend({
   classNames: ['number-input'],
