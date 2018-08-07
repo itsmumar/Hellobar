@@ -39,24 +39,4 @@
       {{/power-select}}
     </div>
   </div>
-
-  <div class="panel-input">
-    <div class="panel-input__label">Sound</div>
-    <div class="panel-input__input">
-      {{#power-select options=soundOptions
-                      selected=selectedSoundOption
-                      renderInPlace=true
-                      searchEnabled=false
-                      onchange=(action "selectSound") as |option|}}
-        {{option.label}}
-      {{/power-select}}
-    </div>
-  </div>
-
-  <div class="panel-input">
-    <div class="panel-input__label">Notification delay</div>
-    <div class="panel-input__input">
-      {{common/inputs/number-input value=model.notification_delay max=600 type="s"}}
-    </div>
-  </div>
 {{/common/panels/collapse-panel}}

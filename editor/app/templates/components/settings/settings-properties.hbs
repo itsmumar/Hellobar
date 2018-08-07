@@ -1,35 +1,41 @@
 <div class="substep">
-  <label class="toggle-showing-branding">
-    {{common/checkboxes/toggle-switch switch=model.show_branding}}
-    <span class="property-name">Hello Bar branding</span>
-  </label>
+  {{#if isNotAlert}}
+    <label class="toggle-showing-branding">
+      {{common/checkboxes/toggle-switch switch=model.show_branding}}
+      <span class="property-name">Hello Bar branding</span>
+    </label>
+  {{/if}}
 
   <label class="toggle-animation">
     {{common/checkboxes/toggle-switch switch=model.animated}}
     <span class="property-name">Animate entry/exit</span>
   </label>
 
-  <label class="toggle-wiggling">
-    {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
-    <span class="property-name">Wiggle button</span>
-  </label>
+  {{#if canWiggle}}
+    <label class="toggle-wiggling">
+      {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
+      <span class="property-name">Wiggle button</span>
+    </label>
+  {{/if}}
 
-  {{# if isNotAlert }}
+  {{#if canHideElement}}
     <label class="toggle-hiding">
       {{common/checkboxes/toggle-switch switch=model.closable}}
       <span class="property-name">Allow visitors to hide {{ elementTypeName }}</span>
     </label>
   {{/if}}
 
-  <label class="toggle-pushing-page-down">
-    {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
-    <span class="property-name">{{ pushesText }}</span>
-  </label>
+  {{#if isBar}}
+    <label class="toggle-pushing-page-down">
+      {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
+      <span class="property-name">{{ pushesText }}</span>
+    </label>
 
-  <label class="toggle-remaining-at-top">
-    {{common/checkboxes/toggle-switch switch=model.remains_at_top}}
-    <span class="property-name">Remains in place on scroll</span>
-  </label>
+    <label class="toggle-remaining-at-top">
+      {{common/checkboxes/toggle-switch switch=model.remains_at_top}}
+      <span class="property-name">Remains in place on scroll</span>
+    </label>
+  {{/if}}
 
   {{#if isEmailSubtype}}
     <label class="toggle-gdpr">
@@ -52,6 +58,30 @@
       {{option.label}}
     {{/power-select}}
   </div>
+
+  {{#if isAlert}}
+    {{#common/panels/collapse-panel title="Notification" show=true}}
+      <div class="panel-input">
+        <div class="panel-input__label">Sound</div>
+        <div class="panel-input__input">
+          {{#power-select options=soundOptions
+                          selected=selectedSoundOption
+                          renderInPlace=true
+                          searchEnabled=false
+                          onchange=(action "selectSound") as |option|}}
+            {{option.label}}
+          {{/power-select}}
+        </div>
+      </div>
+
+      <div class="panel-input">
+        <div class="panel-input__label">Notification delay</div>
+        <div class="panel-input__input">
+          {{common/inputs/number-input value=model.notification_delay max=600 type="s"}}
+        </div>
+      </div>
+    {{/common/panels/collapse-panel}}
+  {{/if}}
 </div>
 
 
