@@ -4,6 +4,7 @@ const TYPE_PERCENT = '%';
 const TYPE_PIXEL = 'px';
 const TYPE_SECOND = 's';
 const TYPES = [TYPE_PERCENT, TYPE_PIXEL, TYPE_SECOND];
+const CTA_MIN_MAX_HEIGHT = {'Bar': [20, 100], 'Alert': [20,50], 'Slider': [20,50], 'Modal': [20,110], 'Takeover': [20,110]};
 
 export default Ember.Component.extend({
   classNames: ['number-input'],
@@ -27,8 +28,21 @@ export default Ember.Component.extend({
   }.property('value'),
 
   increment: function () {
+
     if (this.get('value') >= this.get('max')) {
       return;
+    }
+    const elementType = this.parentView.parentView.attrs.model.value.type;
+    console.log(elementType);
+    const elementStyleName = this.get('name');
+    if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
+      var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1]
+      if(elementType == 'Bar') {
+        maxSize = this.get('bar_size') - 10;
+      };
+      if(this.get('value') > maxSize || this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
+        return;
+      }
     }
 
     this.incrementProperty('value');
