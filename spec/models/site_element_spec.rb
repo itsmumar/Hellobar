@@ -9,6 +9,8 @@ describe SiteElement do
 
   it { is_expected.to validate_numericality_of(:cta_border_width).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:cta_border_radius).only_integer.is_greater_than_or_equal_to 0 }
+  it { is_expected.to validate_numericality_of(:cta_height).only_integer.is_greater_than_or_equal_to 20 }
+  it { is_expected.to validate_numericality_of(:cta_height).only_integer.is_less_than_or_equal_to 150 }
   it { is_expected.to validate_numericality_of(:text_field_border_width).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:text_field_border_radius).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:text_field_background_opacity).only_integer.is_greater_than_or_equal_to 0 }

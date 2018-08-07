@@ -65,7 +65,8 @@ json.cache! site_element do
     :enable_gdpr,
     :cta_border_color,
     :cta_border_width,
-    :cta_border_radius
+    :cta_border_radius,
+    :cta_height
 
   json.font site_element.font.try(:value)
 

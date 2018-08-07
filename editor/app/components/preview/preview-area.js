@@ -115,6 +115,7 @@ export default Ember.Component.extend({
     'model.cta_border_color',
     'model.cta_border_width',
     'model.cta_border_radius',
+    'model.cta_height',
     'model.caption',
     'model.content',
     'model.closable',

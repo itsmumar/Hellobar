@@ -21,6 +21,10 @@ export default Ember.Component.extend({
       return false;
     },
 
+    buttonHeightUpdated(value) {
+      this.set('model.cta_height', value);
+    },
+
     buttonBorderUpdated(value) {
       this.set('model.cta_border_width', value);
     },
