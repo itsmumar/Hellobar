@@ -2,7 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Service.extend({
   options: [
-    {value: 'immediately', label: 'Immediately'},
     {value: 'exit-intent', label: 'Exit intent (user begins to leave your site)'},
     {value: 'wait-5', label: '5 second delay'},
     {value: 'wait-10', label: '10 second delay'},
@@ -14,7 +13,7 @@ export default Ember.Service.extend({
   ],
 
   alertDefaultTrigger: 'wait-5',
-  barDefaultTrigger: 'immediately',
+  barDefaultTrigger: 'wait-5',
   modalDefaultTrigger: 'wait-10',
   takeoverDefaultTrigger: 'exit-intent',
   sliderDefaultTrigger: 'wait-10',
