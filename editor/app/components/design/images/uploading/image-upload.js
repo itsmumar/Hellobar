@@ -62,6 +62,7 @@ export default Ember.Component.extend({
         createImageThumbnails: false,
         parallelUploads: 1, // default is 2; we don't need that
         uploadMultiple: false,
+        hiddenInputContainer: '.file-upload-container',
         timeout: 300000, // 5 minutes; lets wait until backend resizes 7MB animated gifs;
                          // otherwise Dropzone issues new POST request which breaks things
         acceptedFiles: 'image/*',
