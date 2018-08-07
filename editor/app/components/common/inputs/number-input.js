@@ -36,10 +36,10 @@ export default Ember.Component.extend({
     console.log(elementType);
     const elementStyleName = this.get('name');
     if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
-      var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1]
-      if(elementType == 'Bar') {
+      var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1];
+      if(elementType === 'Bar') {
         maxSize = this.get('bar_size') - 10;
-      };
+      }
       if(this.get('value') > maxSize || this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
         return;
       }
