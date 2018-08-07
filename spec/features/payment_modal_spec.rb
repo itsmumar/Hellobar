@@ -21,6 +21,7 @@ feature 'Payment modal interaction', :js do
 
       click_link('Change plan or billing schedule')
       find('.different-plan').click
+      sleep 2
       expect(page).to have_selector '.upgrade-account-modal'
 
       within '.package-block.basic' do
@@ -100,23 +101,10 @@ feature 'Payment modal interaction', :js do
 
       find('.goal-block.contacts').click_on('Select This Goal')
       click_button 'Continue'
-      find('.step-links__item .caption', text: 'Type').click
+      go_to_tab 'Settings'
       find('.toggle-showing-branding .toggle-on').click
 
       expect(page).to have_content "Upgrade #{ site.host } to remove branding"
-    end
-
-    scenario 'trying to enable bar hiding triggers the Pro Upgrade popup' do
-      visit site_path(site)
-
-      click_on 'Create New'
-
-      find('.goal-block.contacts').click_on('Select This Goal')
-      click_button 'Continue'
-      find('.step-links__item .caption', text: 'Type').click
-      find('.toggle-hiding .toggle-off').click
-
-      expect(page).to have_content "Upgrade #{ site.host } to allow hiding a bar"
     end
 
     def date_format(date)

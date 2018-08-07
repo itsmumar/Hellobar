@@ -3,11 +3,6 @@ import Ember from 'ember';
 import HasPlacement from '../../../mixins/has-placement-mixin';
 
 export default Ember.Component.extend(HasPlacement, {
-  placementOptions: [
-    {value: 'bottom-right', label: 'Bottom right'},
-    {value: 'bottom-left', label: 'Bottom left'}
-  ],
-
   soundOptions: [
     {value: 'bell', label: 'Bell'},
     {value: 'none', label: 'No sound'}

@@ -17,27 +17,11 @@ feature 'Editing site element', :js do
 
     click_button 'Continue'
 
-    expect(page).to have_content 'STYLE'
+    go_to_tab 'Design'
+    find('.collapse', text: 'Bar Styling').click
+    find('.panel-input', text: 'Color').find('input').set color
 
-    click_link 'Next'
-
-    within('.step-wrapper') do
-      first('.color-select-block input').set color
-
-      # make sure the color is set there by clicking to show the dropdown
-      # and then hide it
-      2.times { first('.color-select-wrapper').click }
-    end
-
-    click_link 'Next'
-
-    expect(page).to have_content 'TARGETING'
-
-    find('.step-links__item .caption', text: 'Design').click
-
-    expect(page).to have_content('Background Color')
-
-    expect(first('.color-select-block input').value.upcase).to eql color
+    expect(find('.panel-input', text: 'Color').find('input').value.upcase).to eql color
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

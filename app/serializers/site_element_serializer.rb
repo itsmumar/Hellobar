@@ -73,13 +73,15 @@ class SiteElementSerializer < ActiveModel::Serializer
   end
 
   def size
+    return 0 if object.size.blank?
+
     case object.size
     when 'large'
       50
     when 'regular'
       30
     else
-      object.size
+      object.size.to_i
     end
   end
 

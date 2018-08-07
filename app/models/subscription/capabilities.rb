@@ -19,7 +19,7 @@ class Subscription::Capabilities
   end
 
   def closable?
-    false
+    true
   end
 
   def custom_targeted_bars?

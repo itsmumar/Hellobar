@@ -71,6 +71,18 @@ describe CreateSite do
     end
   end
 
+  context 'when user signs up from the promotional page' do
+    let(:cookies) { Hash[promotional_signup: 'true'] }
+    let(:service) { CreateSite.new(site, user, cookies: cookies, referral_token: '') }
+
+    it 'creates trial subscription' do
+      expect(ChangeSubscription).not_to receive_service_call
+      expect(AddTrialSubscription).to receive_service_call.with(instance_of(Site), subscription: 'growth', trial_period: 30)
+
+      service.call
+    end
+  end
+
   context 'when user signs up from an affiliate link' do
     let(:affiliate_identifier) { 'qwe123' }
 

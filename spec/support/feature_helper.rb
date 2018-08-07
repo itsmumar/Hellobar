@@ -25,6 +25,10 @@ module FeatureHelper
     find('input[name="commit"]').click
   end
 
+  def go_to_tab(name)
+    find('.step-links__item .caption', text: name).click
+  end
+
   private
 
   def scroll_and_click(link_label, scroll_class)

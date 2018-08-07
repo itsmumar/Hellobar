@@ -116,14 +116,6 @@ describe SiteElement do
       end
     end
 
-    describe '#closable' do
-      before do
-        element.closable = true
-      end
-
-      include_examples 'capability validation', :closable, :site, 'subscription does not support closable elements. Upgrade subscription.'
-    end
-
     describe '#custom_targeting' do
       before do
         element.rule.conditions << build(:condition, :url_path_includes, rule: element.rule)

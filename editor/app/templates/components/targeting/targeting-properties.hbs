@@ -3,7 +3,7 @@
     <span class="property-name">When and where should this site element be displayed?</span>
   </label>
 
-  <div class="select-wrapper">
+  <div class="select-wrapper rules">
     {{#power-select options=rules
                     selected=selectedRule
                     renderInPlace=true
@@ -25,7 +25,7 @@
     <span class="property-name">After a user closes this site element, don't display it again to that user for:</span>
   </label>
 
-  <div class="select-wrapper">
+  <div class="select-wrapper dissmiss-duration">
     {{#power-select options=days
                     selected=selectedDissmissDuration
                     renderInPlace=true
@@ -41,7 +41,7 @@
     <span class="property-name">After a conversion, don't display this site element to that user for:</span>
   </label>
 
-  <div class="select-wrapper">
+  <div class="select-wrapper success-duration">
     {{#power-select options=days
                     selected=selectedSuccessDuration
                     renderInPlace=true

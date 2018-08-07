@@ -2,6 +2,12 @@ import Ember from 'ember';
 import _ from 'lodash/lodash';
 
 export default Ember.Mixin.create({
+  elementPlacement: Ember.inject.service(),
+
+  placementOptions: function () {
+    const type = this.get('model.type');
+    return this.get('elementPlacement').placementOptionsFor(type);
+  }.property('model.type'),
 
   selectedPlacementOption: function () {
     const placement = this.get('model.placement');
@@ -9,7 +15,7 @@ export default Ember.Mixin.create({
     const selectedOption = _.find(options, (option) => option.value === placement);
     if (selectedOption) {
       return selectedOption;
-    } else {
+    } else if (options && options[0]) {
       const defaultOption = options[0];
       Ember.run.next(() => this.set('model.placement', defaultOption.value));
       return defaultOption;

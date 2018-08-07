@@ -2,6 +2,8 @@
 
 {{goals/social/selection/social-select options=socialOptions selection=selectedSocialSubtype}}
 
-{{#if socialSubtypeComponentName}}
-  {{component socialSubtypeComponentName model=model}}
-{{/if}}
+<div class="social-profile-options">
+  {{#if socialSubtypeComponentName}}
+    {{component socialSubtypeComponentName model=model}}
+  {{/if}}
+</div>

@@ -150,12 +150,12 @@ export default Ember.Service.extend({
     }
   },
 
-  onCurrentThemeChanged: (function () {
+  onCurrentThemeChanged: function () {
     this.applyCurrentTheme();
     Ember.run.next(() => {
       this.setProperties({
         'model.image_placement': this.getImagePlacement()
       });
     });
-  }).observes('model.theme_id')
+  }.observes('model.theme_id')
 });

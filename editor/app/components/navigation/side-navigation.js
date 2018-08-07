@@ -1,35 +1,29 @@
 import Ember from 'ember';
-import { STEP_GOAL, STEP_TYPE, STEP_DESIGN, STEP_SETTINGS, STEP_TARGETING, STEP_CONVERSION } from '../../constants';
+import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
   classNames: ['side-navigation', 'links-wrapper'],
 
+  model: null,
+
   pagination: Ember.inject.service(),
   tagName: 'nav',
 
-  isGoalDone: function () {
-    return this.isDone(STEP_GOAL);
-  }.property('router.currentPath'),
+  isGoalSelected: Ember.computed.notEmpty('model.element_subtype'),
 
-  isTypeDone: function () {
-    return this.isDone(STEP_TYPE);
-  }.property('router.currentPath'),
+  links: function () {
+    const routeLinks = this.get('pagination.routeLinks');
 
-  isDesignDone: function () {
-    return this.isDone(STEP_DESIGN);
-  }.property('router.currentPath'),
-
-  isSettingsDone: function () {
-    return this.isDone(STEP_SETTINGS);
-  }.property('router.currentPath'),
-
-  isTargetingDone: function () {
-    return this.isDone(STEP_TARGETING);
-  }.property('router.currentPath'),
-
-  isConversionDone: function () {
-    return this.isDone(STEP_CONVERSION);
-  }.property('router.currentPath'),
+    return _.map(routeLinks, (link) => {
+      return {
+        route: link.route,
+        isDone: this.isDone(link.route),
+        icon: `icons/icon-${ link.route }`,
+        caption: _.capitalize(link.route),
+        classNames: this.get('isGoalSelected') ? '' : 'disabled'
+      };
+    });
+  }.property('pagination.routeLinks'),
 
   isDone (route) {
     return this.get('pagination').isDone(route);

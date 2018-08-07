@@ -3,7 +3,6 @@ import _ from 'lodash/lodash';
 import { STEPS } from '../constants';
 
 export default Ember.Service.extend({
-  routes: STEPS,
   router: Ember.inject.service('-routing'),
 
   next () {
@@ -30,7 +29,15 @@ export default Ember.Service.extend({
     return (index >= 0 && index < routes.length) ? routes[index] : null;
   },
 
-  routeLinks () {
+  routes: function () {
+    if (this.get('goal') === 'email') {
+      return STEPS;
+    } else {
+      return STEPS.slice(0, -1);
+    }
+  }.property('goal'),
+
+  routeLinks: function () {
     const currentRouteIndex = this.currentRouteIndex();
 
     return _.map(this.get('routes'), (route, i) => {
@@ -39,5 +46,5 @@ export default Ember.Service.extend({
         past: (i < currentRouteIndex)
       };
     });
-  }
+  }.property('router.currentPath', 'routes')
 });
