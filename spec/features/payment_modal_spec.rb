@@ -20,7 +20,7 @@ feature 'Payment modal interaction', :js do
       visit edit_site_path(site)
 
       click_link('Change plan or billing schedule')
-      click_link('Choose a different plan')
+      find('.different-plan').click
       sleep 2
 
       within '.package-block.basic' do
