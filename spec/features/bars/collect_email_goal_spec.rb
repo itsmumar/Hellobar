@@ -14,7 +14,6 @@ feature 'Collect Email goal', :js do
 
     find('.goal-block.contacts').click
     find('.goal-block.contacts').click
-  
 
     go_to_tab 'Goal'
   end

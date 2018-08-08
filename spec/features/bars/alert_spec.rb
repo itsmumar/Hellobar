@@ -14,7 +14,6 @@ feature 'Adding Alert bar', :js do
 
     find('.goal-block.contacts').click
 
-
     find('.goal-block.contacts').click
 
     find('a', text: 'Save & Publish').click

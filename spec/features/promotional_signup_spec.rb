@@ -15,9 +15,9 @@ feature 'Promotional signup', :js do
 
       first('[name=signup_with_email]').click
 
-      expect(page).to have_content "I’ll do this later"
+      expect(page).to have_content 'I’ll do this later'
 
-      click_on "I’ll do this later, take me to my dashboard"
+      click_on 'I’ll do this later, take me to my dashboard'
 
       expect(page).to have_content 'Settings'
       click_on 'Settings'
@@ -45,9 +45,9 @@ feature 'Promotional signup', :js do
 
       first('[name=signup_with_google]').click
 
-      expect(page).to have_content "I’ll do this later, take me to my dashboard"
+      expect(page).to have_content 'I’ll do this later, take me to my dashboard'
 
-      click_on "I’ll do this later, take me to my dashboard"
+      click_on 'I’ll do this later, take me to my dashboard'
 
       expect(page).to have_content 'Settings'
       click_on 'Settings'
