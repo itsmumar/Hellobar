@@ -23,9 +23,9 @@ feature 'User can sign up', :js do
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
-    expect(page).to have_content "I’ll do this later, take me to my dashboard"
+    expect(page).to have_content 'I’ll do this later, take me to my dashboard'
 
-    click_on "I’ll do this later, take me to my dashboard"
+    click_on 'I’ll do this later, take me to my dashboard'
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
@@ -46,9 +46,9 @@ feature 'User can sign up', :js do
 
     first('[name=signup_with_email]').click
 
-    expect(page).to have_content "I’ll do this later, take me to my dashboard"
+    expect(page).to have_content 'I’ll do this later, take me to my dashboard'
 
-    click_on "I’ll do this later, take me to my dashboard"
+    click_on 'I’ll do this later, take me to my dashboard'
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click

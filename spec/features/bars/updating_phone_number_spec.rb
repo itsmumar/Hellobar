@@ -1,11 +1,9 @@
 feature 'Adding and editing bars', :js do
   # TODO: Add further testing here!
-  
   scenario 'User can set phone number for click to call' do
     user = create(:user)
     site = create(:site, :with_rule, user: user)
-    phone_number = '+12025550144'
-
+    # phone_number = '+12025550144'
     sign_in user
 
     visit new_site_site_element_path(site)
