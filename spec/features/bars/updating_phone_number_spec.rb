@@ -8,7 +8,7 @@ feature 'Adding and editing bars', :js do
 
     visit new_site_site_element_path(site)
 
-    find('.goal-block.call').click_on('Select This Goal')
+    find('.goal-block.call').click_on('Get Phone Calls')
 
     all('input')[0].set('Hello from Hello Bar')
     all('input')[1].set('Button McButtonson')

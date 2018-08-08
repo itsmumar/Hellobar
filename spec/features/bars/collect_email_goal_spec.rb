@@ -12,7 +12,7 @@ feature 'Collect Email goal', :js do
 
     visit new_site_site_element_path(site)
 
-    find('.goal-block.contacts').click_on('Select This Goal')
+    find('.goal-block.contacts').click_on('Collect Emails')
     click_button 'Continue'
 
     go_to_tab 'Goal'
