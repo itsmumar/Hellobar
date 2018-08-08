@@ -13,7 +13,7 @@ describe 'Affiliate trial subscription', js: true do
       fill_in 'site[url]', with: 'mysite.com'
       click_on 'Create Site'
 
-      expect(page).to have_content "I'll do this later"
+      expect(page).to have_content "I’ll do this later, take me to my dashboard"
       click_on "I’ll do this later, take me to my dashboard"
 
       expect(page).to have_content 'Settings'
@@ -35,7 +35,7 @@ describe 'Affiliate trial subscription', js: true do
       fill_in 'site[url]', with: 'mysite.com'
       click_on 'Create Site'
 
-      expect(page).to have_content "I'll do this later"
+      expect(page).to have_content "I’ll do this later, take me to my dashboard"
       click_on "I’ll do this later, take me to my dashboard"
 
       expect(page).to have_content 'Settings'

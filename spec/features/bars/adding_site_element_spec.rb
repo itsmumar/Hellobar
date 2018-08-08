@@ -17,12 +17,12 @@ feature 'Adding bars', :js do
 
     expect(page).to have_content 'choose your goal'
 
-    first('.goal-block').click_on('Collect Emails')
+    first('.goal-block').click
 
     expect(page).to have_content 'Collect Emails'
 
     # click_button 'Continue'
-    first('.goal-block').click_on('Hello Bar')
+    first('.goal-block').click
     find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')
@@ -43,12 +43,12 @@ feature 'Adding bars', :js do
 
     expect(page).to have_content 'choose your goal'
 
-    first('.goal-block').click_on('Collect Emails')
+    first('.goal-block').click
 
     expect(page).to have_content 'Collect Emails'
 
     # click_button 'Continue'
-    first('.goal-block').click_on('Hello Bar')
+    first('.goal-block').click
     find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')

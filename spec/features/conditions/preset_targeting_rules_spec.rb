@@ -19,7 +19,7 @@ feature 'Users can use site element targeting rule presets', :js do
 
       site.create_default_rules
 
-      visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
+        visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
       find('h6', text: 'Collect emails').click
       go_to_tab 'Targeting'
     end

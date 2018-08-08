@@ -11,11 +11,11 @@ feature 'Editing site element', :js do
 
     expect(page).to have_content 'CHOOSE GOAL'
 
-    first('.goal-block').click_on('Select This Goal')
+    first('.goal-block').click
 
-    expect(page).to have_content 'PROMOTE A SALE'
+    expect(page).to have_content 'Collect Emails'
 
-    click_button 'Continue'
+    first('.goal-block').click
 
     go_to_tab 'Design'
     find('.collapse', text: 'Bar Styling').click
