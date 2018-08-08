@@ -22,7 +22,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
 
     h5
       margin: 0
-      color: $red
+      color: $green
       text-transform: uppercase
 
   footer
@@ -35,10 +35,21 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     @include inline-block()
 
     a
-      color: $red
+      width: 631px
+      height: 14px
+      font-family: Geomanist
+      font-size: 12px
+      font-weight: normal
+      font-style: normal
+      font-stretch: normal
+      line-height: normal
+      letter-spacing: normal
+      text-align: center
+      text-decoration: underline
+      color: $grayDarker
 
-      &.deemphasize
-        color: $grayDarker
+    p
+      color: $green
 
     .reveal-block form
       .send
@@ -126,6 +137,10 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         &:before
           margin-top: 1px
 
+    img
+      width: 4.95em
+      height: 4.95em
+
     .goal-block
       margin: 0 0.75em
       padding: $gutter $gutterSm
@@ -164,6 +179,8 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         margin-right: auto
 
       &:hover
+        border-radius: 4px
+        border: solid 2px #27ab9e
 
         i
           animation: jingle 0.67s ease-out 1
