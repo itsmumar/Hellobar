@@ -1,10 +1,13 @@
 <header>
+  <img src="{{ image_path "icons/h-logo.svg" }}">
   <h5>Choose Goal</h5>
 </header>
 
-<div>
+<div class="line-1">
   Step 1 is to choose your goal.
-  <br/>
+</div>
+
+<div class="line-2">
   What do you want to do with your first campaign?
 </div>
 
@@ -43,7 +46,7 @@
     <h6>Make Announcement</h6>
     <img src="{{ image_path 'icons/goal-announcement.svg' }}">
 
-    <p>No buttons, just text.</p>
+    <p>No buttons, make announcements with just text.</p>
   </div>
   </a>
 
@@ -68,7 +71,6 @@
 
 <footer>
   {{interstitial/helpers/i-need-help model=model}}
-
   <p>
     <small>
       <a href="/sites/{{ siteID }}">I’ll do this later, take me to my dashboard</a>
