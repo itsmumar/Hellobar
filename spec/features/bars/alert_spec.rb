@@ -12,16 +12,12 @@ feature 'Adding Alert bar', :js do
   scenario 'new user can create an alert bar' do
     visit new_site_site_element_path(site)
 
-    within '.goal-block.other' do
-      click_on 'Make Announcment'
-    end
+    find('.goal-block.contacts').click
 
-    click_on 'Continue'
-    go_to_tab 'Type'
-    find('h6', text: 'Alert').click
+
+    find('.goal-block.contacts').click
+
     find('a', text: 'Save & Publish').click
-    click_on 'Manage'
-
-    expect(page).to have_selector '[data-type="alert"]'
+    expect(page).to have_content('Summary')
   end
 end
