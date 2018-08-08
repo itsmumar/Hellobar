@@ -8,6 +8,8 @@ export default Ember.Mixin.create({
 
   triggerOptions: Ember.computed.alias('elementTrigger.options'),
 
+  nonBarTriggerOptions: Ember.computed.alias('elementTrigger.nonBarOptions'),
+
   selectedTriggerOption: function() {
     const viewCondition = this.get('model.view_condition');
     return _.find(
