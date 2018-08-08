@@ -12,8 +12,8 @@ feature 'Adding Alert bar', :js do
   scenario 'new user can create an alert bar' do
     visit new_site_site_element_path(site)
 
-    within '.goal-block.money' do
-      click_on 'Select This Goal'
+    within '.goal-block.other' do
+      click_on 'Make Announcment'
     end
 
     click_on 'Continue'

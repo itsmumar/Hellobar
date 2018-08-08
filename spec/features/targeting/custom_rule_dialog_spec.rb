@@ -11,7 +11,7 @@ feature 'Targeting. Custom rule dialog', :js do
     visit new_site_site_element_path(site)
 
     within '.goal-block.contacts' do
-      click_on 'Select This Goal'
+      click_on 'Collect Emails'
     end
 
     click_on 'Continue'

@@ -9,7 +9,7 @@ feature 'Editing site element', :js do
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
-    expect(page).to have_content 'SELECT YOUR GOAL'
+    expect(page).to have_content 'CHOOSE GOAL'
 
     first('.goal-block').click_on('Select This Goal')
 

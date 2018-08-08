@@ -99,7 +99,7 @@ feature 'Payment modal interaction', :js do
 
       click_on 'Create New'
 
-      find('.goal-block.contacts').click_on('Select This Goal')
+      find('.goal-block.contacts').click_on('Collect Emails')
       click_button 'Continue'
       go_to_tab 'Settings'
       find('.toggle-showing-branding .toggle-on').click

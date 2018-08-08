@@ -22,7 +22,7 @@ feature 'User sign ups with a referral token', :js do
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
-      click_on "I'll create it later - take me back"
+      click_on "I’ll do this later, take me to my dashboard"
     end
 
     scenario 'both recipient and sender get pro subscription' do
@@ -52,7 +52,7 @@ feature 'User sign ups with a referral token', :js do
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
-      click_on "I'll create it later - take me back"
+      click_on "I’ll do this later, take me to my dashboard"
 
       expect(recipients_site).to be_capable_of :free
 
@@ -109,7 +109,7 @@ feature 'User sign ups with a referral token', :js do
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
-      click_on "I'll create it later - take me back"
+      click_on "I’ll do this later, take me to my dashboard"
     end
 
     scenario 'recipient sees announcement message on install page' do
