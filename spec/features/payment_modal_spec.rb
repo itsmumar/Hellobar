@@ -20,9 +20,8 @@ feature 'Payment modal interaction', :js do
       visit edit_site_path(site)
 
       click_link('Change plan or billing schedule')
-      find('.different-plan').click
+      click_link('Choose a different plan')
       sleep 2
-      expect(page).to have_selector '.upgrade-account-modal'
 
       within '.package-block.basic' do
         find('.button', text: 'Choose Plan').click
