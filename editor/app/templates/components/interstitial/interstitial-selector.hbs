@@ -1,61 +1,79 @@
 <header>
-  <h5>Select Your Goal</h5>
+  <h5>Choose Goal</h5>
 </header>
 
+<div>
+  Step 1 is to choose your goal.
+  <br/>
+  What do you want to do with your first campaign?
+</div>
+
 <div class="goal-wrapper">
-  <div class="goal-block money" data-route="traffic">
-    <i class="large-icon icon-money"></i>
-    <h6>Promote a Sale/Discount</h6>
-
-    <p>Point visitors to your latest deal, bargain, or giveaway.</p>
-    <button class="button" {{action 'selectGoal' 'interstitial.traffic'}}>Select This Goal</button>
-  </div>
-
-  <div class="goal-block call" data-route="call">
-    <i class="large-icon icon-call"></i>
-    <h6>Talk to Your Visitors</h6>
-
-    <p>Encourage mobile visitors to give you a ring.</p>
-    <button class="button" {{action 'selectGoal' 'interstitial.call'}}>Select This Goal</button>
-  </div>
-
+  <a {{action 'selectGoal' 'interstitial.email'}}>
   <div class="goal-block contacts" data-route="email">
-    <i class="large-icon icon-contacts"></i>
-    <h6>Grow Your Mailing List</h6>
+    <h6>Collect Emails</h6>
+    <img src="{{ image_path 'icons/goal-emails.svg' }}">
 
-    <p>Convert one-time visits into lasting connections.</p>
-    <button class="button" {{action 'selectGoal' 'interstitial.email'}}>Select This Goal</button>
+    <p>I want to collect my visitors email addresses.</p>
   </div>
+  </a>
 
-  <div class="goal-block facebook" data-route="social">
-    <i class="large-icon icon-thumbsup"></i>
-    <h6>Get Facebook Likes</h6>
-
-    <p>Expand your social reach to maximize word of mouth.</p>
-    <button class="button" {{action 'selectGoal' 'interstitial.social'}}>Select This Goal</button>
-  </div>
-
+  <a {{action 'selectGoal' 'interstitial.target'}}>
   <div class="goal-block other" data-route="other">
-    <i class="large-icon icon-other"></i>
-    <h6>Other</h6>
+    <h6>Target a URL</h6>
+    <img src="{{ image_path 'icons/goal-url.svg' }}">
 
-    <p>Don't see your goal? Customize Hello Bar to fit your needs.</p>
-    <button class="button" {{action 'selectGoal' 'goals'}}>Select This Goal</button>
+    <p>Drive traffic to a certain part of your site.</p>
   </div>
+  </a>
+
+  <a {{action 'selectGoal' 'interstitial.traffic'}}>
+  <div class="goal-block money" data-route="traffic">
+    <h6>Generate Sales</h6>
+    <img src="{{ image_path 'icons/goal-sales.svg' }}">
+
+    <p>Let visitors know about a sale or a promotion.</p>
+  </div>
+  </a>
+</div>
+
+<div class="goal-wrapper">
+  <a {{action 'selectGoal' 'interstitial.announcement'}}>
+  <div class="goal-block other" data-route="other">
+    <h6>Make Announcement</h6>
+    <img src="{{ image_path 'icons/goal-announcement.svg' }}">
+
+    <p>No buttons, just text.</p>
+  </div>
+  </a>
+
+  <a {{action 'selectGoal' 'interstitial.call'}}>
+  <div class="goal-block call" data-route="call">
+    <h6>Get Phone Calls</h6>
+    <img src="{{ image_path 'icons/goal-calls.svg' }}">
+
+    <p>Allow users to call you in one click.</p>
+  </div>
+  </a>
+
+  <a {{action 'selectGoal' 'interstitial.social'}}>
+  <div class="goal-block facebook" data-route="social">
+    <h6>Social Engagement</h6>
+    <img src="{{ image_path 'icons/goal-social.svg' }}">
+
+    <p>Point visitors to your social media channels.</p>
+  </div>
+  </a>
 </div>
 
 <footer>
-  <p>Select one of the goals above. You can always change this later.</p>
-
-  <div>
-    <a href="/sites/{{ siteID }}">I'll create it later - take me back</a>
-  </div>
-
   {{interstitial/helpers/i-need-help model=model}}
 
   <p>
     <small>
-      <a href="/users/sign_out" data-method="delete" class="deemphasize">Sign Out</a>
+      <a href="/sites/{{ siteID }}">I’ll do this later, take me to my dashboard</a>
+      <br/>
+      <a href="/users/sign_out" data-method="delete">Sign Out</a>
     </small>
   </p>
 </footer>
