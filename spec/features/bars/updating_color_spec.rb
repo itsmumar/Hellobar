@@ -18,6 +18,8 @@ feature 'Editing site element', :js do
     first('.goal-block').click
 
     go_to_tab 'Design'
+    sleep 5
+    page.execute_script("$('.introjs-skipbutton').trigger('click')")
     find('.collapse', text: 'Bar Styling').click
     find('.panel-input', text: 'Color').find('input').set color
 

@@ -23,6 +23,8 @@ feature 'Adding bars', :js do
 
     # click_button 'Continue'
     first('.goal-block').click
+    sleep 3
+    page.execute_script("$('.introjs-skipbutton').trigger('click')")
     find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')
@@ -49,8 +51,9 @@ feature 'Adding bars', :js do
 
     # click_button 'Continue'
     first('.goal-block').click
+    sleep 5
+    page.execute_script("$('.introjs-skipbutton').trigger('click')")
     find('a', text: 'Save & Publish').click
-
     expect(page).to have_content('Summary')
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
