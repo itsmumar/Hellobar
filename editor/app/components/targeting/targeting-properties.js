@@ -93,7 +93,18 @@ export default Ember.Component.extend({
   days: function () {
     return [
       { label: '30 days', duration: 30 },
-      { label: '10 days', duration: 10 }
+      { label: '20 days', duration: 20 },
+      { label: '15 days', duration: 15 },
+      { label: '10 days', duration: 10 },
+      { label: '9 days', duration: 9 },
+      { label: '8 days', duration: 8 },
+      { label: '7 days', duration: 7 },
+      { label: '6 days', duration: 6 },
+      { label: '5 days', duration: 5 },
+      { label: '4 days', duration: 4 },
+      { label: '3 days', duration: 3 },
+      { label: '2 days', duration: 2 },
+      { label: '1 day', duration: 1 }
     ];
   }.property(),
 
