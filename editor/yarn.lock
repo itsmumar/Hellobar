@@ -3111,9 +3111,9 @@ ember-getowner-polyfill@^1.1.0:
     ember-cli-version-checker "^1.2.0"
     ember-factory-for-polyfill "^1.1.0"
 
-ember-introjs@^2.6.1:
+"ember-introjs@https://github.com/Hello-bar/ember-introjs.git":
   version "2.6.1"
-  resolved "https://registry.yarnpkg.com/ember-introjs/-/ember-introjs-2.6.1.tgz#7bbf1fd99f133aaacca9a745e62055baadf9338b"
+  resolved "https://github.com/Hello-bar/ember-introjs.git#8ac10a57eacbcad67766537e0cb48e234205ae29"
   dependencies:
     broccoli-funnel "2.0.1"
     broccoli-merge-trees "3.0.0"
