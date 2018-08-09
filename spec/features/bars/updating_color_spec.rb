@@ -13,11 +13,15 @@ feature 'Editing site element', :js do
 
     first('.goal-block').click
 
-    expect(page).to have_content 'Collect Emails'
+    expect(page).to have_content 'CHOOSE TYPE'
 
     first('.goal-block').click
 
+    sleep 2
+    page.execute_script("$('.introjs-skipbutton').trigger('click')")
+
     go_to_tab 'Design'
+
     find('.collapse', text: 'Bar Styling').click
     find('.panel-input', text: 'Color').find('input').set color
 

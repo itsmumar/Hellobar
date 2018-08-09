@@ -1,7 +1,12 @@
-{{#common/panels/collapse-panel title="Template" show=true}}
-  <div class="design__template-name">{{templateName}}</div>
-  <div class="design__hint">
-    Check out our other templates by clicking the button below.
-  </div>
-  <div class="design__template-button" {{action "changeTheme"}}>Change template</div>
-{{/common/panels/collapse-panel}}
+{{#intro-js/step step=1 tooltipClass="tour-tooltip" intro="<h5 class='text-color'>Templates</h5><p class='text-color'>We scanned your site and autodetected your most prominent colors to create your bar.</p> <p class='text-color'>We also have a temporary library with lots of great designs you can choose from as well!</p>"}}
+  {{#common/panels/collapse-panel title="Template" show=true}}
+    <div class="design__template-name">{{templateName}}</div>
+    <div class="design__hint">
+      Check out our other templates by clicking the button below.
+    </div>
+    <div class="design__template-button" {{action "changeTheme"}}>Change template</div>
+  {{/common/panels/collapse-panel}}
+{{/intro-js/step}}
+{{#if userIsNew}}
+  {{intro-js start-if=true}}
+{{/if}}
