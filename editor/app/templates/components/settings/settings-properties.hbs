@@ -3,18 +3,36 @@
     <label class="toggle-showing-branding">
       {{common/checkboxes/toggle-switch switch=model.show_branding}}
       <span class="property-name">Hello Bar branding</span>
+      {{#common/hints/popup-hint-trigger}}
+        <p>Turn this off to remove the H logo on<br/>
+        your site elements. Only Paid Plans have<br/>
+         accounts have this feature.</p>
+      {{/common/hints/popup-hint-trigger}}
     </label>
   {{/if}}
 
   <label class="toggle-animation">
     {{common/checkboxes/toggle-switch switch=model.animated}}
     <span class="property-name">Animate entry/exit</span>
+    {{#common/hints/popup-hint-trigger}}
+      <p>If enabled, your bar will display just after<br/>
+      the page loads and drop down from the top<br/>
+      (or pop up from the bottom) of the page. This<br/>
+      draws your site visitors attention to the bar.<br/>
+      If enabled, this type of animation will also occur<br/>
+      if a user closes your bar.</p>
+    {{/common/hints/popup-hint-trigger}}
   </label>
 
   {{#if canWiggle}}
     <label class="toggle-wiggling">
       {{common/checkboxes/toggle-switch switch=model.wiggle_button}}
       <span class="property-name">Wiggle button</span>
+      {{#common/hints/popup-hint-trigger}}
+        <p>If enabled, the CTA button on your bar will<br/>
+        wiggle slightly. This draws more attention to<br/>
+        your CTA button.</p>
+      {{/common/hints/popup-hint-trigger}}
     </label>
   {{/if}}
 
@@ -22,6 +40,11 @@
     <label class="toggle-hiding">
       {{common/checkboxes/toggle-switch switch=model.closable}}
       <span class="property-name">Allow visitors to hide {{ elementTypeName }}</span>
+      {{#common/hints/popup-hint-trigger}}
+        <p>If enabled, your bar will have an X button<br/>
+        in the right corner, which allows your site<br/>
+        visitors to close the bar if they want to.</p>
+      {{/common/hints/popup-hint-trigger}}
     </label>
   {{/if}}
 
@@ -29,11 +52,22 @@
     <label class="toggle-pushing-page-down">
       {{common/checkboxes/toggle-switch switch=model.pushes_page_down}}
       <span class="property-name">{{ pushesText }}</span>
+      {{#common/hints/popup-hint-trigger}}
+        <p>If enabled, Hello Bar will attempt to push your<br/>
+        header menu down so that the bar does not cover<br/>
+        your menu. If you have a ‘sticky’ menu, you may<br/>
+        need to do some more customization on your site<br/>
+        before this works properly.</p>
+      {{/common/hints/popup-hint-trigger}}
     </label>
 
     <label class="toggle-remaining-at-top">
       {{common/checkboxes/toggle-switch switch=model.remains_at_top}}
       <span class="property-name">Remains in place on scroll</span>
+      {{#common/hints/popup-hint-trigger}}
+        <p>If enabled, your bar will stay visible<br/>
+        to the user as they scroll up or down your page.</p>
+      {{/common/hints/popup-hint-trigger}}
     </label>
   {{/if}}
 
@@ -41,11 +75,24 @@
     <label class="toggle-gdpr">
       {{common/checkboxes/toggle-switch switch=model.enable_gdpr}}
       <span class="property-name">GDPR Compliant</span>
+        {{#common/hints/popup-hint-trigger}}
+          <p>If enabled, your bar will become GDPR compliant,<br/>
+          which means that anyone who converts must perform<br/>
+          a secondary opt-in before being added to your contacts<br/>
+          list. You must set up your GDPR Settings in the Site<br/>
+          Settings tab before this can be enabled.</p>
+        {{/common/hints/popup-hint-trigger}}
     </label>
   {{/if}}
 
   <label>
     <span class="property-name">When does it display?</span>
+    {{#common/hints/popup-hint-trigger}}
+      <p>Choose when this site element should be displayed to the<br/>
+      user. You can choose from a X second delay, a scrolling<br/>
+      trigger, or an ‘exit intent’ which displays when the user<br/>
+      intends to leave your site.</p>
+    {{/common/hints/popup-hint-trigger}}
     <small><a {{action "popDelayTootlipModal"}} class="tooltip-label">Learn more</a></small>
   </label>
 
