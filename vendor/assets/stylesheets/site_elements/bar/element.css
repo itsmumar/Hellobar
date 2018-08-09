@@ -50,9 +50,11 @@
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar-bar .hb-cta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   vertical-align: middle;
   margin: 0;
+  width: auto;
 }
 
 #hellobar-bar .hb-cta .hb-text-holder {
@@ -103,8 +105,7 @@
 /*-----------  Inputs  -----------*/
 
 #hellobar-bar .hb-input-wrapper,
-#hellobar-bar .hb-input-wrapper .hb-input-block,
-#hellobar-bar .hb-input-wrapper .hb-cta {
+#hellobar-bar .hb-input-wrapper .hb-input-block {
   width: auto;
   display: inline-block;
 }

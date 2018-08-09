@@ -121,7 +121,9 @@
 }
 
 #hellobar-slider .hb-input-wrapper .hb-cta {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
   margin-top: 0.67em;
 }
