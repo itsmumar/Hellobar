@@ -15,13 +15,14 @@ feature 'Adding bars', :js do
 
     click_on 'Create Site'
 
-    expect(page).to have_content 'SELECT YOUR GOAL'
+    expect(page).to have_content 'choose your goal'
 
-    first('.goal-block').click_on('Select This Goal')
+    first('.goal-block').click
 
-    expect(page).to have_content 'PROMOTE A SALE'
+    expect(page).to have_content 'Collect Emails'
 
-    click_button 'Continue'
+    # click_button 'Continue'
+    first('.goal-block').click
     find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')
@@ -40,13 +41,14 @@ feature 'Adding bars', :js do
 
     click_button 'Continue'
 
-    expect(page).to have_content 'SELECT YOUR GOAL'
+    expect(page).to have_content 'choose your goal'
 
-    first('.goal-block').click_on('Select This Goal')
+    first('.goal-block').click
 
-    expect(page).to have_content 'PROMOTE A SALE'
+    expect(page).to have_content 'Collect Emails'
 
-    click_button 'Continue'
+    # click_button 'Continue'
+    first('.goal-block').click
     find('a', text: 'Save & Publish').click
 
     expect(page).to have_content('Summary')

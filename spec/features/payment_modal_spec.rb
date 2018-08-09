@@ -22,7 +22,6 @@ feature 'Payment modal interaction', :js do
       click_link('Change plan or billing schedule')
       find('.different-plan').click
       sleep 2
-      expect(page).to have_selector '.upgrade-account-modal'
 
       within '.package-block.basic' do
         find('.button', text: 'Choose Plan').click
@@ -99,8 +98,8 @@ feature 'Payment modal interaction', :js do
 
       click_on 'Create New'
 
-      find('.goal-block.contacts').click_on('Select This Goal')
-      click_button 'Continue'
+      find('.goal-block.contacts').click
+      find('.goal-block.contacts').click
       go_to_tab 'Settings'
       find('.toggle-showing-branding .toggle-on').click
 

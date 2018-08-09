@@ -1,24 +1,13 @@
-<header>
-  <h5>Promote a Sale</h5>
-</header>
+{{interstitial/helpers/interstitial-header model=model}}
 
-<div class="goal-wrapper template-form">
-  <i class="large-icon icon-money"></i>
-
-  <h6>What should your Hello Bar say?</h6>
-  {{input value=model.headline placeholder="Check out our latest sale" maxlength=255}}
-
-  <h6>What should the button say?</h6>
-  {{input value=model.link_text placeholder="Shop Now" maxlength=255}}
-
-  <h6>What URL should users go to when they click your button?</h6>
-  {{input value=model.settings.url placeholder=model.site.url maxlength=510}}
-
-  <div class="step-container">
-    {{#link-to "interstitial" replace=true classNames="button cancel-button cancel"}}Cancel{{/link-to}}
-    <button class="button save-editor" {{action "closeInterstitial"}} disabled={{inputIsInvalid}}>Continue</button>
-  </div>
+<div class="line-1">
+  Since your goal is Target a URL, we recommend you use a Hello Bar.
 </div>
 
-{{interstitial/helpers/interstitial-footer model=model}}
+<div class="line-2">
+  Hello Bars can remain visible across every page of your site and will not disrupt your visitor's experience.
+</div>
 
+{{interstitial/helpers/element-types model=model}}
+
+{{interstitial/helpers/interstitial-footer model=model}}

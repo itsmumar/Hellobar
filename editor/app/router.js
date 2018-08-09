@@ -23,6 +23,8 @@ Router.map(function () {
       this.route('traffic');
       this.route('email');
       this.route('social');
+      this.route('target');
+      this.route('announcement');
     }
   );
 });
