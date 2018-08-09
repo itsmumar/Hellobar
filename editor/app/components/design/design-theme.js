@@ -8,6 +8,8 @@ export default Ember.Component.extend({
   theming: Ember.inject.service(),
 
   templateName: Ember.computed.alias('model.theme.name'),
+  userIsNew: Ember.computed.equal('model.settings.new_user', true),
+
 
   actions: {
     changeTheme () {

@@ -30,7 +30,7 @@ class SiteElementsController < ApplicationController
       closable: false,
       wiggle_button: true,
       theme_id: 'autodetect',
-      settings: { url: @site.url, url_to_like: @site.url }
+      settings: { url: @site.url, url_to_like: @site.url, new_user: @site.users.first.new? }
     )
 
     respond_to do |format|

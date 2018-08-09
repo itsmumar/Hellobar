@@ -28,6 +28,11 @@ a
     &:hover
       color: $blueLight
 
+  .introjs-button
+    color: white !important
+    background: $turtleGreen  !important
+    text-shadow: none !important
+
 /*-----------  Headers  -----------*/
 
 h1, h2, h3, h4, h5, h6, legend
@@ -36,6 +41,10 @@ h1, h2, h3, h4, h5, h6, legend
   line-height: 100%
   font-weight: $fontWeightNormal
   @include antialiased()
+  &.text-color
+    color: $grayDark !important
+    text-align: center
+    border-bottom: 1px solid lightgrey
 
 h1
   font-size: 2.5em
@@ -68,6 +77,9 @@ p
   font-weight: $fontWeightLight
   line-height: 150%
   @include antialiased()
+  &.text-color
+    text-align: center
+    font-size: 12px
 
 /*-----------  Lists  -----------*/
 
