@@ -1,5 +1,6 @@
-<span class="question-mark">?</span>
-
-{{#common/hints/popup-hint visible=hintIsVisible}}
-  {{yield}}
-{{/common/hints/popup-hint}}
+<span class="tooltip-color">
+  {{fa-icon 'info-circle' size='sm' }}
+  {{#common/hints/popup-hint visible=hintIsVisible}}
+    {{yield}}
+  {{/common/hints/popup-hint}}
+</span>

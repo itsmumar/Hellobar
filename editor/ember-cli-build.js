@@ -7,12 +7,15 @@ module.exports = function (defaults) {
     fingerprint: {
       enabled: false
     },
+
     minifyJS: {
       enabled: false
     },
+
     minifyCSS: {
       enabled: false
     },
+
     sassOptions: {
       includePaths: [
         '../app/assets/stylesheets',
@@ -25,13 +28,17 @@ module.exports = function (defaults) {
         'vendor'
       ]
     },
+
     storeConfigInMeta: false,
+
     nodeAssets: {
       'codemirror': {
         srcDir: 'lib',
         'import': ['codemirror.css']
       }
     },
+
+    // Add options here
     fontawesome: {
       icons: {
         'free-solid-svg-icons': [
@@ -41,11 +48,11 @@ module.exports = function (defaults) {
           'caret-down',
           'caret-up',
           'caret-left',
-          'caret-right'
+          'caret-right',
+          'info-circle'
         ]
       }
     }
-    // Add options here
   });
 
   // Use `app.import` to add additional libraries to the generated
