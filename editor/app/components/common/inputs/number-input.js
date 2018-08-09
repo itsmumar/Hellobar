@@ -32,15 +32,17 @@ export default Ember.Component.extend({
     if (this.get('value') >= this.get('max')) {
       return;
     }
-    const elementType = this.parentView.parentView.attrs.model.value.type;
     const elementStyleName = this.get('name');
-    if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
-      var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1];
-      if(elementType === 'Bar') {
-        maxSize = this.get('bar_size') - 10;
-      }
-      if(this.get('value') > maxSize) {
-        return;
+    if(elementStyleName === "cta_height") {
+      const elementType = this.parentView.parentView.attrs.model.value.type;
+      if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
+        var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1];
+        if(elementType === 'Bar') {
+          maxSize = this.get('bar_size') - 10;
+        }
+        if(this.get('value') > maxSize) {
+          return;
+        }
       }
     }
 
@@ -51,12 +53,13 @@ export default Ember.Component.extend({
     if (this.get('value') <= this.get('min')) {
       return;
     }
-
-    const elementType = this.parentView.parentView.attrs.model.value.type;
     const elementStyleName = this.get('name');
-    if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
-      if(this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
-        return;
+    if(elementStyleName === "cta_height") {
+      const elementType = this.parentView.parentView.attrs.model.value.type;
+      if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
+        if(this.get('value') < CTA_MIN_MAX_HEIGHT[elementType][0]) {
+          return;
+        }
       }
     }
 
