@@ -89,6 +89,9 @@
 
 #hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #hellobar-modal .hb-cta {
