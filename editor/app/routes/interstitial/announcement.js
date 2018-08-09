@@ -5,9 +5,9 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
   afterModel(model) {
     Ember.setProperties(model, {
-      'headline': 'Have Questions? Get Our Team Live On The Phone!',
-      'link_text': 'Call Now!',
-      'element_subtype': 'call'
+      'headline': 'Flash Sale: 20% Off Sitewide, Enter Code “20savings” on Checkout!',
+      'link_text': 'Shop Now',
+      'element_subtype': 'announcement'
     });
   }
 

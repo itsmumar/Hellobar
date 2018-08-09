@@ -24,8 +24,8 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
   afterModel(model) {
     Ember.setProperties(model, {
-      'headline': 'Join our mailing list to stay up to date on our upcoming events',
-      'link_text': 'Subscribe',
+      'headline': 'Host Your First Webinar In Under 5 Minutes With Our A-Z Guide!',
+      'link_text': 'Send Me My Guide!',
       'element_subtype': 'email'
     });
     this.createDefaultContactList(model);
