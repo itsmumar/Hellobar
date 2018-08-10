@@ -1,6 +1,6 @@
 feature 'Editing site element', :js do
   scenario 'User can modify the color settings for a bar' do
-    color = 'AABBCC'
+    # color = 'AABBCC'
 
     OmniAuth.config.add_mock(:google_oauth2, uid: '12345', info: { email: 'bob@lawblog.com' })
     visit users_sign_up_path

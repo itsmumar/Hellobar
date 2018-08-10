@@ -24,7 +24,7 @@ feature 'Users can select a design theme for SiteElements', :js do
     find("div[data-theme-id='#{ theme_id }']").click
     find('.collapse', text: 'Modal Styling').click
 
-    background_color = theme.defaults[subtype]['background_color']
+    # background_color = theme.defaults[subtype]['background_color']
 
     # verify the `background_color`
     # expect(find('.panel-input', text: 'Color').find('input').value)
