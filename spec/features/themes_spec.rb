@@ -38,7 +38,7 @@ feature 'Users can select a design theme for SiteElements', :js do
     scenario '"Pushes page down" is ON by default' do
       find('h6', text: /#{ subtype }/i).click
       find('.step-links__item .caption', text: 'Settings').click
-      expect(first('.toggle-pushing-page-down')).to have_selector '.toggle-switch'
+      expect(first('.toggle-pushing-page-down')).to have_selector 'div.toggle-switch'
     end
 
     context 'while editing' do
