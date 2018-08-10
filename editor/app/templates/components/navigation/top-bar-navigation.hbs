@@ -1,5 +1,5 @@
 <ul class="view-switcher">
-  {{#intro-js/step step=2 intro="<h5 class='text-color'>Preview</h5><p class='text-color'><p class='text-color'>Use this to preview what your site element will look like on desktop, tablet and mobile.</p><p class='text-color'>Remember: over 55% of internet traffic is now done on the mobile devices!</p>"}}
+  {{#intro-js/step step=2 intro="<h5 class='text-color'>Preview</h5><p class='text-color'><p class='text-color'>Use this to preview what your site element will look like on desktop, tablet and mobile.</p><p class='text-color'>Remember: over 55% of internet traffic is now done on mobile devices!</p>"}}
     <li class="view-switcher__button {{if isDesktop "active" ""}}" {{action 'setView' 'VIEW_DESKTOP'}}>
       {{fa-icon 'desktop' size='lg'}}
     </li>
@@ -16,8 +16,8 @@
   {{#if saveSiteElementService.saving}}
     <span class="action-buttons__saving">Saving...</span>
   {{else}}
-    <a class="action-buttons__button" {{action 'cancel'}}>Cancel</a>
-    {{#intro-js/step step=3 intro="<h5 class='text-color'>Save</h5><p class='text-color'>Click Save & Publish once your site element is ready to go live on your site.</p><p class='text-color'>Click Save to keep your current styling and settings until you're ready to complete it.</p>"}}
+    <a class="action-buttons__button" {{action 'cancel'}}>Close</a>
+    {{#intro-js/step step=3 intro="<h5 class='text-color'>Save</h5><p class='text-color'>Click Save & Publish once your site element is ready to go live on your site. Not ready to publish? Click Save so that you can come back and finish your design later.</p><p class='text-color'>Click Save to keep your current styling and settings until you're ready to complete it.</p>"}}
       {{#if modelLogic.isNotPublished}}
         <a class="action-buttons__button {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'save'}}>Save</a>
       {{/if}}
