@@ -18,6 +18,12 @@ Router.map(function () {
   this.route('settings');
   this.route('targeting');
   this.route('conversion');
+  this.route('announcement');
+  this.route('call');
+  this.route('traffic');
+  this.route('email');
+  this.route('social');
+  this.route('target');
   this.route('interstitial', function () {
       this.route('call', function () {
         this.route('bar');
