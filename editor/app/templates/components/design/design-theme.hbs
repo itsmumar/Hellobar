@@ -7,6 +7,8 @@
     <div class="design__template-button" {{action "changeTheme"}}>Change template</div>
   {{/common/panels/collapse-panel}}
 {{/intro-js/step}}
-{{#if userIsNew}}
-  {{intro-js start-if=true}}
+{{#if isNotRendered}}
+  {{#if userIsNew}}
+    {{intro-js start-if=true}}
+  {{/if}}
 {{/if}}
