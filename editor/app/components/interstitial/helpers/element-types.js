@@ -11,6 +11,8 @@ export default Ember.Component.extend({
     'model.headline'
   ),
 
+  isCall: Ember.computed.equal('model.element_subtype', 'call'),
+
   actions: {
     selectGoalAndType (goal, type) {
       const routeName = 'interstitial.' + goal + '.' + type;

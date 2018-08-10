@@ -27,7 +27,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
       'headline': 'Host Your First Webinar In Under 5 Minutes With Our A-Z Guide!',
       'link_text': 'Send Me My Guide!',
       'element_subtype': 'email',
-      'type': 'Bar'
+      'type': 'Slider'
     });
     this.get('router').transitionTo('design');
   }
