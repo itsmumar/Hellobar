@@ -5,7 +5,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
   afterModel(model) {
     Ember.setProperties(model, {
-      'headline': 'Click “Like” To Learn How To Generate 100+ New Followers a Month Without Spending a Dollar on Ads!',
+      'headline': 'Like us on Facebook!',
       'element_subtype': 'social/like_on_facebook'
     });
   }

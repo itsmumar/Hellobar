@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import InterstitialNestedRouteMixin from '../mixins/interstitial-nested-route-mixin';
+import InterstitialNestedRouteMixin from '../../mixins/interstitial-nested-route-mixin';
 
 export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
@@ -24,11 +24,12 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
 
   afterModel(model) {
     Ember.setProperties(model, {
-      'headline': 'Join our mailing list to stay up to date on our upcoming events',
-      'link_text': 'Subscribe',
-      'element_subtype': 'email'
+      'headline': 'Host Your First Webinar In Under 5 Minutes With Our A-Z Guide!',
+      'link_text': 'Send Me My Guide!',
+      'element_subtype': 'email',
+      'type': 'Bar'
     });
-    this.createDefaultContactList(model);
+    this.get('router').transitionTo('design');
   }
 
 });
