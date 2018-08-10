@@ -1,12 +1,13 @@
 <div class="goal-wrapper">
   <a {{action 'selectGoalAndType' model.element_subtype 'bar' }}>
-    <div class="goal-block contacts">
+    <div class="goal-block contacts {{if isCall 'only-option'}}">
       <h6>Hello Bar</h6>
       <img src="{{ image_path 'icons/type-bar.svg' }}">
       <p>A customizable bar at the top or bottom of your site.</p>
     </div>
   </a>
 
+  {{#unless isCall}}
   <a {{action 'selectGoalAndType' model.element_subtype 'modal' }}>
     <div class="goal-block other" data-route="other">
       <h6>Pop-up Modal</h6>
@@ -15,31 +16,33 @@
     </div>
   </a>
 
-  {{#link-to "design" replace=true }}
+  <a {{action 'selectGoalAndType' model.element_subtype 'slider' }}>
     <div class="goal-block money" data-route="traffic">
       <h6>Slider</h6>
       <img src="{{ image_path 'icons/type-slider.svg' }}">
       <p>A small window that slides out of the right or left side.</p>
     </div>
-  {{/link-to}}
+  </a>
+  {{/unless}}
 </div>
 
+{{#unless isCall}}
 <div class="goal-wrapper">
-  {{#link-to "design" replace=true }}
+  <a {{action 'selectGoalAndType' model.element_subtype 'page-takeover' }}>
     <div class="goal-block other" data-route="other">
       <h6>Page Takeover</h6>
       <img src="{{ image_path 'icons/type-takeover.svg' }}">
       <p>A full page pop up that your visitors can’t miss.</p>
     </div>
-  {{/link-to}}
+  </a>
 
-  {{#link-to "design" replace=true }}
+  <a {{action 'selectGoalAndType' model.element_subtype 'alert' }}>
     <div class="goal-block call" data-route="call">
       <h6>Alert Bell</h6>
       <img src="{{ image_path 'icons/type-alert.svg' }}">
       <p>A small floating button that expands when clicked on.</p>
     </div>
-  {{/link-to}}
+  </a>
 
   <div class="goal-block facebook" data-route="social">
     <h6>Push Notification</h6>
@@ -47,3 +50,4 @@
     <p>Coming Soon! Notify your users with Push Notifications.</p>
   </div>
 </div>
+{{/unless}}
