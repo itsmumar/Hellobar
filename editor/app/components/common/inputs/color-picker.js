@@ -1,5 +1,6 @@
-import _ from 'lodash/lodash';
-import SpectrumColorPickerComponent from 'ember-spectrum-color-picker/components/spectrum-color-picker';
+// import _ from 'lodash/lodash';
+// import SpectrumColorPickerComponent from 'ember-spectrum-color-picker/components/spectrum-color-picker';
+import Ember from 'ember';
 
 export default Ember.Component.extend({
   classNames: 'spectrum-color-picker',
