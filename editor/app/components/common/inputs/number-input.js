@@ -28,17 +28,17 @@ export default Ember.Component.extend({
   }.property('value'),
 
   increment: function () {
-
-    if (this.get('value') >= this.get('max')) {
+    const elementStyleName = this.get('name');
+    if(elementStyleName !== 'cta_height' && this.get('value') >= this.get('max')) {
       return;
     }
-    const elementStyleName = this.get('name');
     if(elementStyleName === "cta_height") {
       const elementType = this.parentView.parentView.attrs.model.value.type;
       if(elementType.length > 0 && typeof elementStyleName !== "undefined") {
         var maxSize = CTA_MIN_MAX_HEIGHT[elementType][1];
         if(elementType === 'Bar') {
-          maxSize = this.get('bar_size') - 10;
+          console.log(elementType);
+          maxSize = this.get('bar_size') - 11;
         }
         if(this.get('value') > maxSize) {
           return;
