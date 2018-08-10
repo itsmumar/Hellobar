@@ -19,12 +19,54 @@ Router.map(function () {
   this.route('targeting');
   this.route('conversion');
   this.route('interstitial', function () {
-      this.route('call');
-      this.route('traffic');
-      this.route('email');
-      this.route('social');
-      this.route('target');
-      this.route('announcement');
+      this.route('call', function () {
+        this.route('bar');
+        this.route('modal');
+        this.route('slider');
+        this.route('page-takeover');
+        this.route('alert');
+      }
+      );
+      this.route('traffic', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('email', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('social', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('target', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('announcement', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
     }
   );
 });

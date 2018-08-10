@@ -1,19 +1,19 @@
 <div class="goal-wrapper">
-  {{#link-to "design" replace=true }}
+  <a {{action 'selectGoalAndType' model.element_subtype 'bar' }}>
     <div class="goal-block contacts">
       <h6>Hello Bar</h6>
       <img src="{{ image_path 'icons/type-bar.svg' }}">
       <p>A customizable bar at the top or bottom of your site.</p>
     </div>
-  {{/link-to}}
+  </a>
 
-  {{#link-to "design" replace=true }}
+  <a {{action 'selectGoalAndType' model.element_subtype 'modal' }}>
     <div class="goal-block other" data-route="other">
       <h6>Pop-up Modal</h6>
       <img src="{{ image_path 'icons/type-modal.svg' }}">
       <p>A pop up window in the center of your site.</p>
     </div>
-  {{/link-to}}
+  </a>
 
   {{#link-to "design" replace=true }}
     <div class="goal-block money" data-route="traffic">
