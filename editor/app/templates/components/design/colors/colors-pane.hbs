@@ -6,9 +6,6 @@
   <label>Default Text Color</label>
   {{design/colors/selection/color-select color=model.text_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
 
-  <label>Button</label>
-  {{design/colors/selection/color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
-
   {{#if elementTypeIsAlert}}
     <label>Trigger Color</label>
     {{design/colors/selection/color-select color=model.trigger_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
@@ -16,6 +13,17 @@
     <label>Trigger Icon Color</label>
     {{design/colors/selection/color-select color=model.trigger_icon_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
   {{/if}}
+
+  <label>Button Color</label>
+  {{design/colors/selection/color-select color=model.button_color siteColors=siteColors recentColors=recentColors focusedColor=focusedColor eyeDropperSelected='eyeDropperSelected'}}
+
+  <br/>
+
+  <label>Button height</label>
+
+  <div class="slider-wrapper">
+    {{common/sliders/range-slider min=20 max=150 start=model.cta_height update="buttonHeightUpdated" leftLabel="20" rightLabel="150"}}
+  </div>
 
   <br/>
 

@@ -150,15 +150,12 @@ export default Ember.Service.extend({
     }
   },
 
-  onCurrentThemeChanged: (function () {
-    if (this.get('currentThemeIsTemplate')) {
-      this.set('model.element_subtype', 'email');
-    }
+  onCurrentThemeChanged: function () {
     this.applyCurrentTheme();
     Ember.run.next(() => {
       this.setProperties({
         'model.image_placement': this.getImagePlacement()
       });
     });
-  }).observes('model.theme_id')
+  }.observes('model.theme_id')
 });

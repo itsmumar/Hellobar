@@ -1,0 +1,16 @@
+<div class="substep">
+  {{#if isEmailGoal}}
+    {{conversion/thank-you/thank-you-editor model=model}}
+  {{/if}}
+
+  {{conversion/conversion-styling model=model}}
+
+  {{#if isEmailGoal}}
+    {{conversion/contacts/contact-list-select
+      selectedOption=selectedContactList
+      options=model.site.contact_lists
+      setList="setContactList"
+      editList="openEmailListPopup"
+    }}
+  {{/if}}
+</div>

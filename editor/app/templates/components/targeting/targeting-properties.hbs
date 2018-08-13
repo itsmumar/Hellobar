@@ -1,0 +1,54 @@
+<div class="substep">
+  <label>
+    <span class="property-name">Who should see this?</span>
+  </label>
+
+  <div class="select-wrapper rules">
+    {{#power-select options=rules
+                    selected=selectedRule
+                    renderInPlace=true
+                    searchEnabled=false
+                    onchange=(action "selectRule") as |rule|}}
+      {{rule.name}}
+      {{#if rule.isPaid}}
+        <span class="button paid">PAID</span>
+      {{/if}}
+    {{/power-select}}
+  </div>
+
+  <small class="actions">
+    <a {{action 'openRuleModal'}}>Create new customer targeting rule</a>
+  </small>
+
+  {{#if shouldShowDissmissDuration}}
+  <label>
+    <span class="property-name">After a user closes this site element, don't display it again to that user for:</span>
+  </label>
+
+  <div class="select-wrapper dissmiss-duration">
+    {{#power-select options=days
+                    selected=selectedDissmissDuration
+                    renderInPlace=true
+                    searchEnabled=false
+                    onchange=(action "selectDissmissDuration") as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+  {{/if}}
+
+  {{#if shouldShowSuccessDuration}}
+  <label>
+    <span class="property-name">After a conversion, don't display this site element to that user for:</span>
+  </label>
+
+  <div class="select-wrapper success-duration">
+    {{#power-select options=days
+                    selected=selectedSuccessDuration
+                    renderInPlace=true
+                    searchEnabled=false
+                    onchange=(action "selectSuccessDuration") as |option|}}
+      {{option.label}}
+    {{/power-select}}
+  </div>
+  {{/if}}
+</div>

@@ -113,6 +113,7 @@ gem 'rake_running', github: 'colinyoung/rake_running', ref: '12d47fe692ffb8cc411
 gem 'render_anywhere'
 gem 'rubyzip'
 gem 'thread'
+gem 'toastr-rails'
 gem 'uglifier'
 gem 'unf'
 gem 'whenever'
@@ -165,11 +166,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-nav'
   gem 'pry-rails'
-
-  # Spring preloader
-  gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen'
 end
 
 group :test do

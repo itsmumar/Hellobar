@@ -2,7 +2,7 @@ class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
-  DEFAULT_EMAIL_THANK_YOU = 'Thank you for signing up!'.freeze
+  DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
   DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
@@ -54,6 +54,7 @@ class SiteElement < ApplicationRecord
   validates :cta_border_color, hex_color: true
   validates :cta_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :cta_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :cta_height, numericality: { only_integer: true, greater_than_or_equal_to: 20, less_than_or_equal_to: 150 }
   validates :text_field_border_color, hex_color: true
   validates :text_field_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :text_field_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -63,7 +64,6 @@ class SiteElement < ApplicationRecord
   validate :site_is_capable_of_creating_element, unless: :persisted?
   validate :ensure_custom_targeting_allowed
   validate :ensure_precise_geolocation_targeting_allowed
-  validate :ensure_closable_allowed
   validate :ensure_custom_thank_you_text_allowed, if: :email?
   validate :ensure_custom_thank_you_text_configured, if: :email?
   validate :ensure_custom_redirect_url_allowed, if: :email?
@@ -264,10 +264,6 @@ class SiteElement < ApplicationRecord
     !site.capabilities.custom_thank_you_text? || (after_email_submit_action == :show_default_message)
   end
 
-  def pushes_page_down
-    nil
-  end
-
   def image_style
     :modal
   end
@@ -298,12 +294,6 @@ class SiteElement < ApplicationRecord
 
   def precise_geolocation_targeting?
     rule&.conditions&.any?(&:precise?)
-  end
-
-  def ensure_closable_allowed
-    return if paused? || !closable? || site.capabilities.closable?
-
-    errors.add(:site, 'subscription does not support closable elements. Upgrade subscription.')
   end
 
   def ensure_custom_targeting_allowed

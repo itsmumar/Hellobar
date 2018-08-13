@@ -85,7 +85,7 @@ export default Ember.Component.extend({
   }.property('barPosition', 'barSize', 'elementType', 'isPushed', 'isMobile'),
 
   componentBackground: function () {
-    const backgroundColor = '#f6f6f6';
+    const backgroundColor = '#f1f0f0';
 
     if (this.get('isMobile')) {
       const phoneImageUrl = this.get('imaging').imagePath('iphone-bg.png');
@@ -115,6 +115,7 @@ export default Ember.Component.extend({
     'model.cta_border_color',
     'model.cta_border_width',
     'model.cta_border_radius',
+    'model.cta_height',
     'model.caption',
     'model.content',
     'model.closable',
@@ -174,7 +175,6 @@ export default Ember.Component.extend({
     'model.text_field_text_color',
     'model.text_field_background_color',
     'model.text_field_background_opacity',
-    'isFullscreen',
     'isMobile'
   ),
 
@@ -218,7 +218,7 @@ export default Ember.Component.extend({
         subtype: this.get('model.element_subtype'),
         tab_side: 'right',
         template_name: (this.get('model.type') || 'bar').toLowerCase() + '_' + (this.get('model.element_subtype') || 'traffic'),
-        thank_you_text: 'Thank you for signing up!',
+        thank_you_text: 'Thanks for signing up!',
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,

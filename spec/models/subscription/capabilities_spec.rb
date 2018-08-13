@@ -28,7 +28,7 @@ describe Subscription::Capabilities do
 
   it 'returns default capabilities for plan' do
     expect(site).to be_capable_of :free
-    expect(capabilities).not_to be_closable
+    expect(capabilities).to be_closable
 
     change_subscription('pro', credit_card)
 

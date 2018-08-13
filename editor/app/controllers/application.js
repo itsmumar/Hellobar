@@ -1,5 +1,3 @@
-/* globals TempUserUnsavedChangesModal, UnsavedChangesModal */
-
 import Ember from 'ember';
 
 import MobileMixin from './application.mixin.mobile';
@@ -11,6 +9,7 @@ export default Ember.Controller.extend(MobileMixin, {
   theming: Ember.inject.service(),
   modelValidation: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
+  pagination: Ember.inject.service(),
 
   goal: Ember.computed.alias('model.element_subtype'),
   style: Ember.computed.alias('model.type'),
@@ -48,7 +47,6 @@ export default Ember.Controller.extend(MobileMixin, {
 
   queryParams: ['rule_id'],
 
-  isFullscreen: false,
   saveSubmitted: false,
   modelIsDirty: false,
   rule_id: null,
@@ -63,27 +61,7 @@ export default Ember.Controller.extend(MobileMixin, {
     }
   }).observes('rule_id', 'model'),
 
-  //-----------  Actions  -----------#
-
-  actions: {
-
-    closeEditor() {
-      if (this.get('isTemporaryUser')) {
-        new TempUserUnsavedChangesModal().open();
-      } else {
-        const dashboardURL = `/sites/${window.siteID}/site_elements`;
-        if (this.get('modelIsDirty')) {
-          const options = {
-            dashboardURL,
-            doSave: () => {
-              this.send('saveSiteElement');
-            }
-          };
-          new UnsavedChangesModal(options).open();
-        } else {
-          window.location = dashboardURL;
-        }
-      }
-    }
-  }
+  syncGoal: function () {
+    this.set('pagination.goal', this.get('goal'));
+  }.observes('goal')
 });

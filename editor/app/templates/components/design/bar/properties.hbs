@@ -1,0 +1,35 @@
+{{#common/panels/collapse-panel title="Bar Styling"}}
+  <div class="panel-input">
+    <div class="panel-input__label">Color</div>
+    <div class="panel-input__input">
+      {{common/inputs/color-picker color=model.background_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Default text color</div>
+    <div class="panel-input__input">
+      {{common/inputs/color-picker color=model.text_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Placement</div>
+    <div class="panel-input__input">
+      {{#power-select options=placementOptions
+                      selected=selectedPlacementOption
+                      renderInPlace=true
+                      searchEnabled=false
+                      onchange=(action "selectPlacement") as |option|}}
+        {{option.label}}
+      {{/power-select}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Size</div>
+    <div class="panel-input__input">
+      {{common/inputs/number-input name="size" value=model.size min=30 max=100}}
+    </div>
+  </div>
+{{/common/panels/collapse-panel}}

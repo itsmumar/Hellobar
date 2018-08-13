@@ -1,0 +1,35 @@
+<label>
+  <span class="property-name">After Hello Bar collects an email address, where should we send it?</span>
+</label>
+
+{{#if hasContactList}}
+
+  {{#power-select options=options
+    selected=calculatedSelectedOption
+    renderInPlace=true
+    searchEnabled=false
+    onchange=(action "selectOption") as |option|}}
+    {{option.label}}
+    <div class="contact-list-block">
+      <img src="{{image_path option.icon_path}}">
+      <div>
+        <div class="contact-list-title">{{option.name}}</div>
+        <em>{{option.provider_name}}</em>
+      </div>
+    </div>
+  {{/power-select}}
+
+
+  <small class="actions">
+    <a {{action 'editList'}}>Edit '{{calculatedSelectedOption.name}}'</a>
+    <a {{action 'newList'}}>Create New Contact List</a>
+  </small>
+
+{{else}}
+
+  <div class="contact-list-block" {{action 'newList'}}>
+    <i>+</i>
+    <div>Create a list and integration</div>
+  </div>
+
+{{/if}}

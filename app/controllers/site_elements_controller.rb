@@ -22,13 +22,15 @@ class SiteElementsController < ApplicationController
     return redirect_to after_sign_in_path_for(@site) if current_user.temporary? && @site.site_elements.any?
 
     @rules = @site.rules.all
+    params[:skip_interstitial] = true if @site.site_elements.present?
     @site_element = SiteElement.new(
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
       show_branding: !@site.capabilities.remove_branding?,
       closable: false,
+      wiggle_button: true,
       theme_id: 'autodetect',
-      settings: { url: @site.url, url_to_like: @site.url }
+      settings: { url: @site.url, url_to_like: @site.url, new_user: @site.users.first.new? }
     )
 
     respond_to do |format|
@@ -122,9 +124,10 @@ class SiteElementsController < ApplicationController
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
-      :cta_border_color, :cta_border_width, :cta_border_radius,
+      :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,
       :text_field_border_color, :text_field_border_width, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
+      :conversion_font, :conversion_font_color, :conversion_font_size,
       settings: settings_keys
     )
   end

@@ -60,7 +60,6 @@
 
 #hellobar-slider .hb-cta .hb-text-holder {
   border-radius: inherit;
-  padding: 6px 20px;
 }
 
 /*-----------  Logos  -----------*/
@@ -122,7 +121,9 @@
 }
 
 #hellobar-slider .hb-input-wrapper .hb-cta {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
   margin-top: 0.67em;
 }

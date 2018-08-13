@@ -1,65 +1,13 @@
+<img class="side-bar-logo" src="{{ image_path "icons/h-logo.svg" }}">
+
 <ul class="step-links">
-  <li class="step-settings">
-    {{#link-to 'goals'}}
-      <i class="hellobar-icon hellobar-icon-trophy"></i>
-
-      <div class="caption">Goals</div>
+  {{#each links as |link| }}
+    {{#link-to link.route tagName="li" class=link.classNames}}
+      <div class="step-links__item {{if link.isDone "done"}}">
+        <div class="progress"></div>
+        {{component link.icon}}
+        <div class="caption">{{link.caption}}</div>
+      </div>
     {{/link-to}}
-  </li>
-  <li class="step-style">
-    {{#link-to 'styles'}}
-      <i class="icon-style"></i>
-
-      <div class="caption">Style</div>
-    {{/link-to}}
-  </li>
-  <li class="step-content">
-    {{#link-to 'design'}}
-      <i class="icon-content"></i>
-
-      <div class="caption">Content</div>
-    {{/link-to}}
-  </li>
-  <li class="step-targeting">
-    {{#link-to 'targeting'}}
-      <i class="icon-views"></i>
-
-      <div class="caption">Targeting</div>
-    {{/link-to}}
-  </li>
-</ul>
-
-<ul class="action-links">
-  <li class="toggle-fullscreen">
-    <a {{action 'toggleFullscreen'}}>
-      <i class="icon-back2"></i>
-      <i class="icon-back2"></i>
-    </a>
-
-    <div class="caption">
-      {{#if isFullscreen}}
-        Show
-      {{else}}
-        Hide
-      {{/if}}
-    </div>
-  </li>
-  <li class="toggle-mobile">
-    <a {{action 'toggleView'}}>
-      <i>{{fa-icon 'mobile-alt' size='xs'}}</i>
-      <i>{{fa-icon 'tablet-alt' size='xs'}}</i>
-      <i>{{fa-icon 'laptop' size='xs'}}</i>
-    </a>
-
-    <div class="caption">
-      {{ viewName }}
-    </div>
-  </li>
-  <li class="close-editor">
-    <a {{action "closeEditor"}}>
-      <i class="icon-close"></i>
-
-      <div class="caption">Close</div>
-    </a>
-  </li>
+  {{/each}}
 </ul>

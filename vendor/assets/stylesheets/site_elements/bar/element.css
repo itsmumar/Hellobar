@@ -50,16 +50,16 @@
 /*-----------  Call to Acton Button  -----------*/
 
 #hellobar-bar .hb-cta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   vertical-align: middle;
-  margin: 0 0;
-  line-height: 1.05;
-  padding: 0;
+  margin: 0;
+  width: auto;
 }
 
 #hellobar-bar .hb-cta .hb-text-holder {
   border-radius: inherit;
-  padding: 5px 15px;
+  padding: 0 15px;
 }
 
 #hellobar-bar .answer {
@@ -105,8 +105,7 @@
 /*-----------  Inputs  -----------*/
 
 #hellobar-bar .hb-input-wrapper,
-#hellobar-bar .hb-input-wrapper .hb-input-block,
-#hellobar-bar .hb-input-wrapper .hb-cta {
+#hellobar-bar .hb-input-wrapper .hb-input-block {
   width: auto;
   display: inline-block;
 }
@@ -186,10 +185,6 @@
 
 #hellobar-bar.regular .hb-logo-wrapper {
   font-size: 9px;
-}
-
-#hellobar-bar.regular .hb-cta {
-  padding: 3px 8px;
 }
 
 #hellobar-bar.regular .hb-social-wrapper {

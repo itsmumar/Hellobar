@@ -1,0 +1,38 @@
+<div class="step-link-wrapper">
+  <div class="step-link-block {{if isBar 'is-selected'}}" {{action 'select' 'Bar'}}>
+    <h6>Bar</h6>
+    <img src="{{ image_path 'icons/type-bar.svg' }}">
+
+    <p>A customizable bar at the top or bottom of your site.</p>
+  </div>
+
+  {{#if notOnlyTopBarStyleIsAvailable}}
+    <div class="step-link-block {{if isModal 'is-selected'}}" {{action 'select' 'Modal'}}>
+      <h6>Modal</h6>
+      <img src="{{ image_path 'icons/type-modal.svg' }}">
+
+      <p>A pop up window in the center of your site.</p>
+    </div>
+
+    <div class="step-link-block {{if isSlider 'is-selected'}}" {{action 'select' 'Slider'}}>
+      <h6>Slider</h6>
+      <img src="{{ image_path 'icons/type-slider.svg' }}">
+
+      <p>A small window that slides out of the right or left side.</p>
+    </div>
+
+    <div class="step-link-block {{if isTakeover 'is-selected'}}" {{action 'select' 'Takeover'}}>
+      <h6>Page Takeover</h6>
+      <img src="{{ image_path 'icons/type-takeover.svg' }}">
+
+      <p>A full page pop up that your visitors can't miss.</p>
+    </div>
+
+    <div class="step-link-block {{if isAlert 'is-selected'}}" {{action 'select' 'Alert'}}>
+      <h6>Alert</h6>
+      <img src="{{ image_path 'icons/type-alert.svg' }}">
+
+      <p>A small floating button that expands when clicked on.</p>
+    </div>
+  {{/if}}
+</div>

@@ -15,7 +15,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
     :animated, :wiggle_button, :theme, :theme_id,
-    :cta_border_color, :cta_border_width, :cta_border_radius,
+    :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,
     #
     # image
     :image_url, :image_large_url, :image_modal_url, :image_style,
@@ -36,7 +36,10 @@ class SiteElementSerializer < ActiveModel::Serializer
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
     :site_preview_image_tablet,
-    :open_in_new_window, :placement, :default_email_thank_you_text
+    :open_in_new_window, :placement, :default_email_thank_you_text,
+    #
+    # conversion
+    :conversion_font, :conversion_font_color, :conversion_font_size
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
     define_method "#{ attr_name }_placeholder" do
@@ -69,6 +72,19 @@ class SiteElementSerializer < ActiveModel::Serializer
     end
   end
 
+  def size
+    return 0 if object.size.blank?
+
+    case object.size
+    when 'large'
+      50
+    when 'regular'
+      30
+    else
+      object.size.to_i
+    end
+  end
+
   def site
     return unless object.site
 
@@ -92,7 +108,7 @@ class SiteElementSerializer < ActiveModel::Serializer
 
   def site_preview_image_mobile
     return '' unless object.site
-    proxied_url2png(url: object.site.url, viewport: '320x568')
+    proxied_url2png(url: object.site.url, viewport: '375x667')
   end
 
   def site_preview_image_tablet

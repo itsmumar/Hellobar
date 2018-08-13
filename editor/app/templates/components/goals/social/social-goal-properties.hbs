@@ -1,10 +1,9 @@
-<div class="substep social">
+<div class="design__hint">Choose which social profile you want to promote below:</div>
 
-  <label>Would you like your visitors to...</label>
-  {{goals/social/selection/social-select options=socialOptions selection=selectedSocialSubtype}}
+{{goals/social/selection/social-select options=socialOptions selection=selectedSocialSubtype}}
 
+<div class="social-profile-options">
   {{#if socialSubtypeComponentName}}
     {{component socialSubtypeComponentName model=model}}
   {{/if}}
-
 </div>

@@ -35,7 +35,7 @@
 #= require referrals
 #= require images
 #= require header
-#= require clipboard
+#= require toastr
 #= require_self
 
 $ ->

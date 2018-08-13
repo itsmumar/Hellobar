@@ -1,60 +1,42 @@
-<div class="settings ember-view">
+<div class="step-title">Goal</div>
+<div class="step-title-hint">What do you want your Hello Bar to do?</div>
 
-  <h5 class="step-title">Goals</h5>
+<div class="step-link-wrapper">
 
-  <div class="step-link-wrapper {{if selectionInProgress 'is-not-selected' 'is-selected'}}">
+  <div class="step-link-block {{if isEmail 'is-selected'}}" {{action 'select' 'email'}}>
+    <h6>Collect emails</h6>
+    <img src="{{ image_path 'icons/goal-emails.svg' }}">
 
-    {{#if shouldShowEmail}}
-      <div class="step-link-block active" {{action 'select' 'email'}}>
-        <i class="icon-contacts"></i>
-        <h6>Collect Email</h6>
-
-        <p>Use your Hello Bar to collect visitors' email addresses</p>
-      </div>
-    {{/if}}
-
-    {{#if shouldShowCall}}
-      <div class="step-link-block active" {{action 'select' 'call'}}>
-        <i class="icon-call"></i>
-        <h6>Talk to Visitors</h6>
-
-        <p>Let mobile visitors call you with a click</p>
-      </div>
-    {{/if}}
-
-    {{#if shouldShowSocial}}
-      <div class="step-link-block active" {{action 'select' 'social'}}>
-        <i class="icon-social"></i>
-        <h6>Social</h6>
-
-        <p>Point visitors to your social media channels</p>
-      </div>
-    {{/if}}
-
-    {{#if shouldShowTraffic}}
-      <div class="step-link-block active" {{action 'select' 'traffic'}}>
-        <i class="icon-clicks"></i>
-        <h6>Click Link</h6>
-
-        <p>Use your Hello Bar to drive more traffic to a specific URL</p>
-      </div>
-    {{/if}}
-
-    {{#if shouldShowAnnouncement}}
-      <div class="step-link-block active" {{action 'select' 'announcement'}}>
-        <i class="icon-megaphone"></i>
-        <h6>Announcement</h6>
-
-        <p>Display a simple announcement to your visitors</p>
-      </div>
-    {{/if}}
-
-    {{#if shouldShowInitiateSelection}}
-      <a {{action 'initiateSelection'}} class="change-selection">
-        <i class="icon-back1"></i>
-        Change Goal
-      </a>
-    {{/if}}
+    <p>I want to collect my visitors email addresses.</p>
   </div>
 
+  <div class="step-link-block {{if isCall 'is-selected'}}" {{action 'select' 'call'}}>
+    <h6>Get phone calls</h6>
+    <img src="{{ image_path 'icons/goal-calls.svg' }}">
+
+    <p>Allow visitors to call you in one click</p>
+  </div>
+
+  <div class="step-link-block {{if isSocial 'is-selected'}}" {{action 'select' 'social'}}>
+    <h6>Social traffic</h6>
+    <img src="{{ image_path 'icons/goal-social.svg' }}">
+
+    <p>Point visitors to your social media channels</p>
+  </div>
+
+  <div class="step-link-block {{if isTraffic 'is-selected'}}" {{action 'select'
+                                                                       'traffic'}}>
+    <h6>Target a URL</h6>
+    <img src="{{ image_path 'icons/goal-url.svg' }}">
+
+    <p>Drive traffic to a certain part of your site.</p>
+  </div>
+
+  <div class="step-link-block {{if isAnnouncement 'is-selected'}}" {{action 'select'
+                                                                            'announcement'}}>
+    <h6>Announcement</h6>
+    <img src="{{ image_path 'icons/goal-announcement.svg' }}">
+
+    <p>No buttons, just text.</p>
+  </div>
 </div>

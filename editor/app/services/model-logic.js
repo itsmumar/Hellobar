@@ -109,6 +109,12 @@ export default Ember.Service.extend({
     } else {
       this.set('model.image_style', 'medium');
     }
+
+    if (this.get('model.type') === 'Alert') {
+      this.set('model.show_branding', false);
+    } else {
+      this.set('model.show_branding', true);
+    }
   }.observes('model.type'),
 
   // ------ Template handling
@@ -216,9 +222,10 @@ export default Ember.Service.extend({
 
   promptUpgradeWhenRemovingBranding: function () {
     const isBranded = this.get('model.show_branding');
+    const isAlert = this.get('model.type') === 'Alert';
     const canRemoveBranding = this.get('model.site.capabilities.remove_branding');
 
-    if (!isBranded && !canRemoveBranding) {
+    if (!isAlert && !isBranded && !canRemoveBranding) {
       this.set('model.show_branding', true);
       this.promptUpgrade('show_branding', isBranded, 'remove branding');
     }
@@ -233,17 +240,6 @@ export default Ember.Service.extend({
       this.promptUpdateSettings();
     }
   }.observes('model.enable_gdpr'),
-
-  promptUpgradeWhenEnablingHiding: function () {
-    const isClosable = this.get('model.closable');
-    const canBeClosable = this.get('model.site.capabilities.closable');
-
-    if (isClosable && !canBeClosable) {
-      this.set('model.closable', false);
-      const elementTypeName = (this.get('model.type') || 'Bar').toLowerCase();
-      this.promptUpgrade('closable', isClosable, `allow hiding a ${elementTypeName}`);
-    }
-  }.observes('model.closable'),
 
   promptUpgrade(attr, val, message) {
     const view = this;

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180709132622) do
+ActiveRecord::Schema.define(version: 20180802225248) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -391,7 +391,7 @@ ActiveRecord::Schema.define(version: 20180709132622) do
   create_table "site_elements", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "element_subtype",               limit: 191,                              null: false
+    t.string   "element_subtype",               limit: 191,                             null: false
     t.boolean  "closable",                                       default: false
     t.boolean  "show_border",                                    default: false
     t.string   "background_color",              limit: 255,      default: "eb593c"
@@ -420,9 +420,9 @@ ActiveRecord::Schema.define(version: 20180709132622) do
     t.text     "content",                       limit: 16777215
     t.string   "placement",                     limit: 255
     t.datetime "deleted_at"
-    t.string   "view_condition",                limit: 255,      default: "immediately"
-    t.string   "email_placeholder",             limit: 255,      default: "Your email",  null: false
-    t.string   "name_placeholder",              limit: 255,      default: "Your name",   null: false
+    t.string   "view_condition",                limit: 255,      default: "wait-5"
+    t.string   "email_placeholder",             limit: 255,      default: "Your email", null: false
+    t.string   "name_placeholder",              limit: 255,      default: "Your name",  null: false
     t.string   "image_placement",               limit: 255,      default: "bottom"
     t.integer  "active_image_id",               limit: 4
     t.string   "question",                      limit: 255
@@ -438,12 +438,12 @@ ActiveRecord::Schema.define(version: 20180709132622) do
     t.string   "phone_number",                  limit: 255
     t.string   "phone_country_code",            limit: 255,      default: "US"
     t.string   "theme_id",                      limit: 255
-    t.boolean  "use_default_image",                              default: true,          null: false
+    t.boolean  "use_default_image",                              default: true,         null: false
     t.string   "offer_text",                    limit: 255
-    t.string   "sound",                         limit: 255,      default: "none",        null: false
-    t.integer  "notification_delay",            limit: 4,        default: 10,            null: false
-    t.string   "trigger_color",                 limit: 255,      default: "31b5ff",      null: false
-    t.string   "trigger_icon_color",            limit: 255,      default: "ffffff",      null: false
+    t.string   "sound",                         limit: 255,      default: "none",       null: false
+    t.integer  "notification_delay",            limit: 4,        default: 10,           null: false
+    t.string   "trigger_color",                 limit: 255,      default: "31b5ff",     null: false
+    t.string   "trigger_icon_color",            limit: 255,      default: "ffffff",     null: false
     t.integer  "image_opacity",                 limit: 4,        default: 100
     t.boolean  "enable_gdpr",                                    default: false
     t.datetime "paused_at"
@@ -455,9 +455,13 @@ ActiveRecord::Schema.define(version: 20180709132622) do
     t.string   "text_field_text_color",         limit: 10,       default: "5c5e60"
     t.string   "text_field_background_color",   limit: 10,       default: "ffffff"
     t.integer  "text_field_background_opacity", limit: 1,        default: 100
-    t.string   "cta_border_color",              limit: 255,      default: "ffffff",      null: false
-    t.integer  "cta_border_width",              limit: 4,        default: 0,             null: false
-    t.integer  "cta_border_radius",             limit: 4,        default: 0,             null: false
+    t.string   "cta_border_color",              limit: 255,      default: "ffffff",     null: false
+    t.integer  "cta_border_width",              limit: 4,        default: 0,            null: false
+    t.integer  "cta_border_radius",             limit: 4,        default: 0,            null: false
+    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
+    t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
+    t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
+    t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

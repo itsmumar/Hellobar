@@ -24,34 +24,15 @@ feature 'Render the country select for the Rule modal', :js do
     site.reload
 
     visit edit_site_site_element_path(site, element.id)
-    bypass_setup_steps(3)
+    go_to_tab 'Targeting'
 
-    page.find('a', text: 'Edit.').click
+    find('a', text: 'Create new customer targeting rule').click
+    fill_in 'rule_name', with: 'New Custom Rule'
     page.find('a', text: '+').click
 
     select('Country')
     value = find('.location-country-select').value
 
     expect(value).to eql('US')
-  end
-
-  it 'properly sets the value when the condition has been set previously' do
-    custom_rule.conditions.create(segment: 'LocationCountryCondition', operand: 'is', value: ['AR'])
-
-    site.rules << custom_rule
-
-    element = create(:site_element, rule: custom_rule)
-    site.reload
-
-    visit edit_site_site_element_path(site, element.id)
-    bypass_setup_steps(3)
-
-    expect(page).to have_content 'Geolocation Country is AR'
-
-    page.find('a', text: 'Edit.').click
-
-    expect(page).to have_content 'EDIT RULE'
-
-    expect(find('.location-country-select').value).to eql('AR')
   end
 end

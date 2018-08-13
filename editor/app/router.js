@@ -12,16 +12,67 @@ const Router = Ember.Router.extend({
 
 Router.map(function () {
   this.route('home', {path: '/'});
-  this.route('goals');
-  this.route('styles');
+  this.route('goal');
+  this.route('type');
   this.route('design');
-  this.route('text');
+  this.route('settings');
   this.route('targeting');
+  this.route('conversion');
+  this.route('announcement');
+  this.route('call');
+  this.route('traffic');
+  this.route('email');
+  this.route('social');
+  this.route('target');
   this.route('interstitial', function () {
-      this.route('call');
-      this.route('traffic');
-      this.route('email');
-      this.route('social');
+      this.route('call', function () {
+        this.route('bar');
+        this.route('modal');
+        this.route('slider');
+        this.route('page-takeover');
+        this.route('alert');
+      }
+      );
+      this.route('traffic', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('email', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('social', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('target', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
+      this.route('announcement', function () {
+          this.route('bar');
+          this.route('modal');
+          this.route('slider');
+          this.route('page-takeover');
+          this.route('alert');
+        }
+      );
     }
   );
 });

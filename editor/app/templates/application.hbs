@@ -1,14 +1,11 @@
-{{#application-layout viewMode=viewMode isFullscreen=isFullscreen isCallGoal=isCallGoal}}
+{{#application-layout viewMode=viewMode isCallGoal=isCallGoal}}
 
-  {{navigation/side-navigation viewMode=viewMode isFullscreen=isFullscreen goal=goal style=style closeEditor='closeEditor'}}
+  {{navigation/side-navigation routes=routes model=model}}
 
   <div class="viewport-wrapper">
     <div class="step-wrapper">
       {{outlet}}
-
-      {{navigation/step-navigation
-      action='saveSiteElement'
-      saveSubmitted=saveSubmitted}}
+      {{navigation/step-navigation routes=routes model=model}}
     </div>
 
     {{preview/preview-area model=model viewMode=viewMode}}

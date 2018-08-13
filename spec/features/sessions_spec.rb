@@ -23,9 +23,9 @@ feature 'User can sign up', :js do
     check 'registration_form[accept_terms_and_conditions]'
     first('[name=signup_with_google]').click
 
-    expect(page).to have_content "I'll create it later"
+    expect(page).to have_content 'I’ll do this later, take me to my dashboard'
 
-    click_on "I'll create it later - take me back"
+    click_on 'I’ll do this later, take me to my dashboard'
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
@@ -46,9 +46,9 @@ feature 'User can sign up', :js do
 
     first('[name=signup_with_email]').click
 
-    expect(page).to have_content "I'll create it later"
+    expect(page).to have_content 'I’ll do this later, take me to my dashboard'
 
-    click_on "I'll create it later - take me back"
+    click_on 'I’ll do this later, take me to my dashboard'
 
     within('.header-user-wrapper') do
       find('.dropdown-wrapper').click
@@ -71,7 +71,7 @@ feature 'User can sign in', js: true do
     fill_in 'Password', with: user.password
     click_button 'Continue'
 
-    expect(page).to have_content('SELECT YOUR GOAL')
+    expect(page).to have_content('CHOOSE GOAL')
   end
 
   scenario 'through oauth' do
@@ -84,7 +84,7 @@ feature 'User can sign in', js: true do
     fill_in 'Your Email', with: user.email
     click_button 'Continue'
 
-    expect(page).to have_content('SELECT YOUR GOAL')
+    expect(page).to have_content('CHOOSE GOAL')
 
     OmniAuth.config.mock_auth[:google_oauth2] = nil
   end

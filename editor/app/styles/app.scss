@@ -40,6 +40,7 @@
 @import 'components/preview/containers/right-pane';
 @import 'components/design/no-content-parameters';
 @import 'components/common/sliders/range-slider';
+@import 'components/common/colorpicker/custom-colorpicker';
 
 @import 'components/common/tabs/tab-view';
 @import 'components/common/checkboxes/toggle-switch';
@@ -53,13 +54,19 @@
 @import 'components/goals/email/contacts/contact-list-select';
 @import 'components/design/thank-you/thank-you-editor';
 @import 'components/preview/containers/theming/autodetection-button';
-@import 'components/styles/theming/theme-info';
 @import 'components/preview/containers/theming/theme-tile-grid';
 @import 'components/preview/containers/theming/theme-tile';
 @import 'components/common/validation/validation-message';
 @import 'components/common/validation/validation-summary';
 @import 'components/common/text/text';
 @import 'components/spinner';
+@import 'components/navigation/top-bar-navigation';
+@import 'components/ember-power-select-trigger';
+@import 'components/common/panels/collapse-panel';
+@import 'components/common/inputs/number-input';
+@import 'components/common/inputs/font-color';
+@import 'components/common/inputs/font-name';
+@import 'components/design/design-theme';
 
 @import 'layouts/_common.sass';
 @import 'layouts/_document.sass';

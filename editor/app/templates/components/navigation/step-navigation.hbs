@@ -1,34 +1,23 @@
 <nav>
-  {{#if prev}}
-    {{link-to 'Prev' prev class="button"}}
-  {{else}}
-    <a disabled class="button">Prev</a>
-  {{/if}}
+  {{#link-to prev class="button" classNameBindings="prev::disabled"}}
+    {{icons/icon-angel-left}}
+    Prev
+  {{/link-to}}
 
-  {{#each routeLinks as |obj| }}
-    {{link-to '' obj.route classNameBindings="obj.past:past :nav-dot"}}
+  {{#each routeLinks as |dot| }}
+    {{link-to '' dot.route classNameBindings="dot.past:past :nav-dot"}}
   {{/each}}
 
-  {{#if next}}
-    {{link-to 'Next' next class="button"}}
-  {{else}}
-    <a disabled class="button">Next</a>
-  {{/if}}
+  {{#link-to next class="button" classNameBindings="next::disabled"}}
+    Next
+    {{icons/icon-angel-right}}
+  {{/link-to}}
 </nav>
 
-{{#if saveSiteElementService.saving}}
-  Saving...
-{{else if modelLogic.isTypeSelected}}
-  <button class="button save-editor" disabled={{saving}} {{action "saveAndPublish"}}>
-    Save & Publish
-  </button>
-
-  {{#if modelLogic.isNotPublished}}
-    <a class="button button--link" disabled={{saving}} {{action "saveSiteElement"}}>
-      Save
-    </a>
+<div class="pin" {{action "toggleFullscreen"}}>
+  {{#if isFullscreen}}
+    {{icons/icon-angel-right}}
+  {{ else }}
+    {{icons/icon-angel-left}}
   {{/if}}
-{{/if}}
-
-{{common/validation/validation-summary validationMessages=validationMessages header="Cannot save the bar:"}}
-
+</div>

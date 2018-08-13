@@ -12,20 +12,14 @@ feature 'Collect Email goal', :js do
 
     visit new_site_site_element_path(site)
 
-    find('.goal-block.contacts').click_on('Select This Goal')
-    click_button 'Continue'
+    find('.goal-block.contacts').click
+    find('.goal-block.contacts').click
 
-    click_on 'Goals'
-
-    @phone_field = find('.item-block[data-field-type="builtin-phone"]')
-    @phone_field.find('.hellobar-icon-check-mark').click if @phone_field[:class].include?('is-selected')
-
-    @name_field = find('.item-block[data-field-type="builtin-name"]')
-    @name_field.find('.hellobar-icon-check-mark').click if @name_field[:class].include?('is-selected')
+    go_to_tab 'Goal'
   end
 
   scenario 'only built-in-email enabled' do
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -33,9 +27,10 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'built-in-phone enabled' do
-    @phone_field.hover
-    @phone_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    go_to_tab 'Design'
+    find('.collapse', text: 'Text Fields').click
+    enable_input 'Phone'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -43,9 +38,10 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'built-in-name enabled' do
-    @name_field.hover
-    @name_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    go_to_tab 'Design'
+    find('.collapse', text: 'Text Fields').click
+    enable_input 'Name'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -53,11 +49,11 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'only multiple built-in fields enabled' do
-    @name_field.hover
-    @name_field.find('.hellobar-icon-check-mark').click
-    @phone_field.hover
-    @phone_field.find('.hellobar-icon-check-mark').click
-    click_button 'Save & Publish'
+    go_to_tab 'Design'
+    find('.collapse', text: 'Text Fields').click
+    enable_input 'Phone'
+    enable_input 'Name'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -67,25 +63,34 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'custom field' do
-    click_link 'Style'
-    find('a.change-selection').click
+    go_to_tab 'Type'
     find('h6', text: 'Modal').click
-    find('.step-settings').click
+    go_to_tab 'Design'
 
+    find('.collapse', text: 'Text Fields').click
     find('div.item-block.add', text: 'Add field').click
 
     expect(page).to have_selector '.new-item-prototype > input'
     find('.new-item-prototype > input').set "Age\n"
 
-    click_button 'Save & Publish'
+    find('a', text: 'Save & Publish').click
     expect(page).to have_content('Summary')
 
     find('a', text: 'Manage').click
     find('.dropdown-wrapper.adjusted').hover
     find('.dropdown-wrapper.adjusted').find('a', text: 'Edit').click
 
+    go_to_tab 'Design'
+    find('.collapse', text: 'Text Fields').click
+
     expect(page).to have_content('Age')
     expect(page).to have_css('.item-block[data-field-type="text"] .hellobar-icon-check-mark')
     expect(page).to have_content('Add field')
+  end
+
+  def enable_input(type)
+    input = find('.item-block', text: type)
+    input.hover
+    input.find('.select-button').click
   end
 end

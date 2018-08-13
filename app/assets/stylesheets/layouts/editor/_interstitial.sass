@@ -22,8 +22,23 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
 
     h5
       margin: 0
-      color: $red
+      color: $blueLight
       text-transform: uppercase
+      margin-right: 73px
+
+    img
+      float: left
+      margin-top: -9px
+
+  div
+    color: $gray
+
+    .line-1
+      margin-top: 20px
+
+    .line-2
+      margin-top: 15px
+
 
   footer
     color: $gray
@@ -35,10 +50,24 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
     @include inline-block()
 
     a
-      color: $red
+      width: 631px
+      height: 14px
+      font-family: Geomanist
+      font-size: 12px
+      font-weight: normal
+      font-style: normal
+      font-stretch: normal
+      line-height: normal
+      letter-spacing: normal
+      text-align: center
+      text-decoration: underline
+      color: $grayDarker
+      cursor: pointer
 
-      &.deemphasize
-        color: $grayDarker
+    p
+      color: $blueLight
+      font-size: 15px
+      font-family: sans-serif
 
     .reveal-block form
       .send
@@ -52,11 +81,15 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
   .goal-wrapper
     padding: 0 0.75em
     text-align: center
-    margin: 6em auto 4em
+    margin: 2em
     justify-content: center
     flex-flow: row nowrap
     align-items: stretch
     display: flex
+
+    div.only-option
+      margin-top: 70px
+      margin-bottom: 50px
 
     i.large-icon
       width: 4.95em
@@ -126,6 +159,10 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         &:before
           margin-top: 1px
 
+    img
+      width: 4.95em
+      height: 4.95em
+
     .goal-block
       margin: 0 0.75em
       padding: $gutter $gutterSm
@@ -164,6 +201,8 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         margin-right: auto
 
       &:hover
+        border-radius: 4px
+        border: solid 2px #27ab9e
 
         i
           animation: jingle 0.67s ease-out 1

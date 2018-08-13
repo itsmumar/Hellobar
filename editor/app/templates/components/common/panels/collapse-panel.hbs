@@ -1,0 +1,8 @@
+<div class="collapse__header" {{ action "toggle" }}>
+  <span class="collapse__caret">{{fa-icon caretIcon size='sm'}}</span>
+  {{title}}
+</div>
+
+<div class="collapse__body">
+  {{yield}}
+</div>

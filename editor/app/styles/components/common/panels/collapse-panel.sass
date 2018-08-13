@@ -1,0 +1,66 @@
+.collapse
+  border-radius: 5px
+  margin: 0.5em auto
+  user-select: none
+
+  .collapse__header,
+  .collapse__body
+    padding: 10px 15px
+
+  .collapse__header
+    background: $grayLightest
+    border-radius: 5px
+    border: $border
+    color: $grayDarkColor
+    font-weight: bold
+    cursor: pointer
+
+  .collapse__caret
+    height: 20px
+    float: right
+    color: $grayLighterColor
+
+  .collapse__body
+    border: 1px solid $grayLighterColor
+    border-top: none
+    border-radius: 0 0 5px 5px
+    display: none
+    padding-top: 15px
+    padding-bottom: 15px
+
+  &.show
+    .collapse__header
+      background: $redColor
+      border: none
+      border-radius: 5px 5px 0 0
+      color: white
+
+    .collapse__body
+      display: block
+
+    .collapse__caret
+      color: white
+
+  .panel-input
+    display: flex
+    margin: 10px auto
+    justify-content: space-between
+
+    &:first-child
+      margin-top: 0
+
+    &:last-child
+      margin-bottom: 0
+
+    .ember-basic-dropdown
+      width: 104px
+      margin: 0
+
+  .panel-input__label
+    align-self: center
+    font-weight: bold
+    white-space: nowrap
+    font-size: 0.9em
+
+  label
+    margin: 0

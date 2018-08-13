@@ -1,0 +1,10 @@
+{{input value=formattedValue disabled="disabled"}}
+
+<div class="number-input__controls">
+  <div class="number-input__control" onmousedown={{ action "increment" }} onmouseup={{ action "resetTimers" }}>
+    {{fa-icon 'caret-up' size='sm'}}
+  </div>
+  <div class="number-input__control" onmousedown={{ action "decrement" }} onmouseup={{ action "resetTimers" }}>
+    {{fa-icon 'caret-down' size='sm'}}
+  </div>
+</div>

@@ -10,17 +10,15 @@ feature 'Targeting. Custom rule dialog', :js do
   scenario 'cancel button should close dialog' do
     visit new_site_site_element_path(site)
 
-    within '.goal-block.contacts' do
-      click_on 'Select This Goal'
-    end
+    find('.goal-block.contacts').click
 
-    click_on 'Continue'
-    click_on 'Targeting'
-    find('.change-selection').click
-    find('h6', text: 'Custom Rule').click
+    find('.goal-block.contacts').click
+    go_to_tab 'Targeting'
+    find('a', text: 'Create new customer targeting rule').click
 
     expect(page.all('.show-modal.rules-modal').count).to be 1
 
+    sleep 1
     click_on 'Cancel'
     page.has_no_selector?('.cancel.button')
     expect(page.all('.show-modal.rules-modal').count).to be 0

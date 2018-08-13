@@ -1,0 +1,29 @@
+.number-input
+  display: flex
+  height: 40px
+
+  .number-input__controls
+    border: 1px solid $grayLighterColor
+    border-radius: 6px
+    width: 49px
+    margin: 0 0 0 5px
+    display: flex
+    flex-direction: column
+
+  .number-input__control
+    border-radius: 0 0 5px 5px
+    color: $grayLighterColor
+    text-align: center
+    cursor: pointer
+    height: 50%
+
+    &:first-child
+      border-bottom: 1px solid $grayLighterColor
+      border-radius: 5px 5px 0 0
+
+    &:hover
+      background-color: $actionColor
+      color: white
+
+  input
+    width: 50px

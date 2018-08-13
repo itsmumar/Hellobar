@@ -1,69 +1,31 @@
 import Ember from 'ember';
-import { VIEW_DESKTOP, VIEW_TABLET, VIEW_MOBILE } from '../../constants';
+import _ from 'lodash/lodash';
 
 export default Ember.Component.extend({
-  modelLogic: Ember.inject.service(),
+  classNames: ['side-navigation', 'links-wrapper'],
 
-  viewName: function () {
-    switch (this.get('viewMode')) {
-      case VIEW_DESKTOP:
-        return 'Desktop';
-      case VIEW_TABLET:
-        return 'Tablet';
-      case VIEW_MOBILE:
-        return 'Mobile';
-      default:
-        return 'Desktop';
-    }
-  }.property('viewMode'),
+  model: null,
 
-  /**
-   * @property {boolean}
-   */
-  isFullscreen: false,
-
-  /**
-   * @property {string}
-   */
-  goal: true,
-
-  /**
-   * @property {string}
-   */
-  style: true,
-
+  pagination: Ember.inject.service(),
   tagName: 'nav',
 
-  classNames: ['step-navigation', 'links-wrapper'],
+  isGoalSelected: Ember.computed.notEmpty('model.element_subtype'),
 
-  actions: {
-    toggleView() {
-      if (this.get('modelLogic.model.element_subtype') === 'call') {
-        return;
-      }
+  links: function () {
+    const routeLinks = this.get('pagination.routeLinks');
 
-      switch (this.get('viewMode')) {
-        case VIEW_DESKTOP:
-          this.set('viewMode', VIEW_TABLET);
-          break;
-        case VIEW_TABLET:
-          this.set('viewMode', VIEW_MOBILE);
-          break;
-        case VIEW_MOBILE:
-          this.set('viewMode', VIEW_DESKTOP);
-          break;
-        default:
-          this.set('viewMode', VIEW_DESKTOP);
-      }
-    },
+    return _.map(routeLinks, (link) => {
+      return {
+        route: link.route,
+        isDone: this.isDone(link.route),
+        icon: `icons/icon-${ link.route }`,
+        caption: _.capitalize(link.route),
+        classNames: this.get('isGoalSelected') ? '' : 'disabled'
+      };
+    });
+  }.property('pagination.routeLinks'),
 
-    toggleFullscreen() {
-      this.toggleProperty('isFullscreen');
-    },
-
-    closeEditor() {
-      this.sendAction('closeEditor');
-    }
+  isDone (route) {
+    return this.get('pagination').isDone(route);
   }
-
 });

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72px" height="34px" viewBox="0 0 72 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Hello-Bar-New-Creation-Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4---Settings" transform="translate(-10.000000, -13.000000)">
+            <g id="top-bar">
+                <g id="logo" transform="translate(10.000000, 13.000000)">
+                    <rect id="Rectangle-2" fill="#E8562A" x="0" y="0" width="72" height="34" rx="4"></rect>
+                    <polygon id="Shape" fill="#FFFFFF" points="54.667685 25.7136667 38.8817661 25.7136667 38.8817661 22.4756667 45.0611456 22.4756667 45.0611456 18.2966667 28.2006683 18.2966667 28.2006683 22.4756667 34.274463 22.4756667 34.274463 25.7136667 18.5410024 25.7136667 18.5410024 22.4756667 24.5095465 22.4756667 24.5095465 12.1596667 18.5410024 12.1596667 18.5410024 8.99866667 34.274463 8.99866667 34.274463 12.1596667 28.2006683 12.1596667 28.2006683 15.294 45.0611456 15.294 45.0611456 12.1596667 38.8817661 12.1596667 38.8817661 8.99866667 54.667685 8.99866667 54.667685 12.1596667 48.8037232 12.1596667 48.8037232 22.4756667 54.667685 22.4756667"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
