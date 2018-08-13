@@ -64,6 +64,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         find('h6', text: 'Modal').click
         find('.step-links__item .caption', text: 'Design').click
         find('.collapse', text: 'Image').click
+        find('.default-image .toggle-switch').click
 
         execute_script('$(".dz-hidden-input").attr("id", "dz-image").removeAttr("style")') # make the input visible
         attach_file 'dz-image', image
