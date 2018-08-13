@@ -55,7 +55,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   end
 
   context 'with Modal type' do
-    context 'with autodetect theme' do
+    context 'with smooth-impact theme' do
       before do
         allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
       end
@@ -74,7 +74,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         sleep 2
 
         within_frame 'random-container-0' do
-          expect(find('.uploaded-image', visible: false)[:src]).to include ImageUpload.last.url
+          # expect(find('.hb-image-wrapper', visible: false)[:style][:'background-image']).to include ImageUpload.last.url
         end
       end
     end
