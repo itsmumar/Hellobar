@@ -1,7 +1,7 @@
-describe CheckMonthlyViewsLimits do
+describe CheckNumberOfViewsForSites do
   let!(:site) { create :site }
   let(:sites) { Site.all }
-  let(:service) { CheckMonthlyViewsLimits.new(sites) }
+  let(:service) { CheckNumberOfViewsForSites.new(sites) }
   let(:report) { BillingViewsReport.new(1) }
   let(:number_of_views) { 1000 }
 

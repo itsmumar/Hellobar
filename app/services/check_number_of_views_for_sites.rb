@@ -1,4 +1,4 @@
-class CheckMonthlyViewsLimits
+class CheckNumberOfViewsForSites
   BATCH_SIZE = 100
 
   def initialize(sites = Site.active)
