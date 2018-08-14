@@ -20,7 +20,6 @@
     <a {{action 'openRuleModal'}}>Create new customer targeting rule</a>
   </small>
 
-  {{#if shouldShowDissmissDuration}}
   <label>
     <span class="property-name">After a user closes this site element, don't display it again to that user for:</span>
   </label>
@@ -34,7 +33,6 @@
       {{option.label}}
     {{/power-select}}
   </div>
-  {{/if}}
 
   {{#if shouldShowSuccessDuration}}
   <label>
