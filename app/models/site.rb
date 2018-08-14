@@ -119,6 +119,11 @@ class Site < ApplicationRecord
     by_url(url).joins(:users).find_by(users: { id: user.id })
   end
 
+  def views_limit
+    subscription = active_subscription&.class || Subscription::Free
+    subscription.defaults[:visit_overage]
+  end
+
   def communication_types=(value)
     super(value.select(&:presence).join(','))
   end

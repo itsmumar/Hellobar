@@ -23,6 +23,10 @@ gem 'ruby-hmac'
 # OAuth provider
 gem 'doorkeeper'
 
+gem 'chewy'
+gem 'faraday_middleware-aws-sigv4'
+gem 'net-http-persistent'
+
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
 gem 'omniauth-constantcontact2', github: 'Hello-bar/omniauth-constantcontact2'

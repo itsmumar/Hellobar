@@ -203,6 +203,10 @@ GEM
       capybara (~> 2.7)
     case_transform (0.2)
       activesupport
+    chewy (5.0.0)
+      activesupport (>= 4.0)
+      elasticsearch (>= 2.0.0)
+      elasticsearch-dsl
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
@@ -254,6 +258,15 @@ GEM
     drip-ruby (0.0.11)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
+    elasticsearch (6.1.0)
+      elasticsearch-api (= 6.1.0)
+      elasticsearch-transport (= 6.1.0)
+    elasticsearch-api (6.1.0)
+      multi_json
+    elasticsearch-dsl (0.1.6)
+    elasticsearch-transport (6.1.0)
+      faraday
+      multi_json
     elif (0.1.0)
     email_spec (2.1.1)
       htmlentities (~> 4.3.3)
@@ -274,6 +287,9 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
+    faraday_middleware-aws-sigv4 (0.2.4)
+      aws-sigv4 (~> 1.0)
+      faraday (>= 0.9)
     ffi (1.9.23)
     formatador (0.2.5)
     fuubar (2.3.1)
@@ -384,6 +400,8 @@ GEM
     mustache (1.0.5)
     mysql2 (0.4.10)
     nenv (0.3.0)
+    net-http-persistent (3.0.0)
+      connection_pool (~> 2.2)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.2.0)
@@ -678,6 +696,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara_discoball
+  chewy
   codecov
   coffee-rails
   connection_pool
@@ -693,6 +712,7 @@ DEPENDENCIES
   email_spec
   factory_bot_rails
   faraday
+  faraday_middleware-aws-sigv4
   fuubar
   gibbon
   guard
@@ -715,6 +735,7 @@ DEPENDENCIES
   madmimi
   mustache
   mysql2
+  net-http-persistent
   newrelic_rpm
   nokogiri
   omniauth

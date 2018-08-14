@@ -33,7 +33,11 @@ RSpec::Matchers.define :receive_service_call do
   end
 
   def setup_allowance(subject)
-    allow(subject).to receive_message_chain(:new, :call)
+    if @return_value
+      allow(subject).to receive_message_chain(:new, :call).and_return(@return_value)
+    else
+      allow(subject).to receive_message_chain(:new, :call)
+    end
   end
 
   chain :with do |*args|
