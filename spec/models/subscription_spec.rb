@@ -219,7 +219,7 @@ describe Subscription do
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 99
-        expect(subscription.visit_overage).to eql nil
+        expect(subscription.visit_overage).to eql 500_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql nil
       end
