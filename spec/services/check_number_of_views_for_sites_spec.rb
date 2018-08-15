@@ -13,6 +13,8 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:limit_exceeded)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
+
+    allow(HandleOverageSite).to receive_service_call
   end
 
   it 'calls report' do
@@ -30,6 +32,13 @@ describe CheckNumberOfViewsForSites do
       expect(report)
         .to have_received(:limit_exceeded)
         .with(site, number_of_views, site.views_limit)
+    end
+
+    it 'calls HandleOverageSite' do
+      perform_enqueued_jobs do
+        expect(HandleOverageSite).to receive_service_call
+        service.call
+      end
     end
   end
 

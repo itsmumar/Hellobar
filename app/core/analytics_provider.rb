@@ -239,6 +239,23 @@ class AnalyticsProvider
     )
   end
 
+  def exceeded_views_limit(site:, user:, limit:, number_of_views:)
+    subscription = site.current_subscription || Subscription::Free.new
+
+    track(
+      event: 'exceeded-views-limit',
+      user: user,
+      params: {
+        site_id: site.id,
+        site_url: site.url,
+        number_of_views: number_of_views,
+        limit: limit,
+        subscription: subscription.name,
+        schedule: subscription.schedule
+      }
+    )
+  end
+
   private
 
   def track(event:, user:, params: {})

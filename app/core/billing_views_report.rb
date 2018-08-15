@@ -9,6 +9,7 @@ class BillingViewsReport
     @count = 0
     @total_views = 0
     @overage_views = 0
+    @overage_views_paid_sites = 0
   end
 
   def start
@@ -21,7 +22,8 @@ class BillingViewsReport
     info '-' * 80
     info "*#{ number_with_delimiter(@count) }* sites have been processed"
     info "*#{ number_with_delimiter(@total_views) }* total views"
-    info "*#{ number_with_delimiter(@overage_views) }* overage views"
+    info "*#{ number_with_delimiter(@overage_views) }* overage views total"
+    info "*#{ number_with_delimiter(@overage_views_paid_sites) }* overage views on paid plans"
     info "#{ Rails.env }: #{ Time.current }"
     info ''
     info ''
@@ -42,6 +44,7 @@ class BillingViewsReport
   def limit_exceeded(site, number_of_views, limit)
     delta = number_of_views - limit
     @overage_views += delta
+    @overage_views_paid_sites += delta unless site.free?
     numbers = "#{ number_with_delimiter(number_of_views) }/#{ number_with_delimiter(limit) }"
     info "Limit exceeded #{ site.id } #{ site.url } -- #{ numbers } (*#{ number_with_delimiter(delta) }*) views"
   end
