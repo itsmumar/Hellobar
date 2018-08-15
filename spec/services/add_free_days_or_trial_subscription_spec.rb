@@ -17,7 +17,7 @@ describe AddFreeDaysOrTrialSubscription do
     before { AddFreeDaysOrTrialSubscription.new(site, 1.week).call } # adds Growth trial
 
     it 'calls AddFreeDays' do
-      expect(site).to be_capable_of :pro
+      expect(site).to be_capable_of :growth
 
       expect(AddFreeDays)
         .to receive_service_call
