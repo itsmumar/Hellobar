@@ -8,13 +8,13 @@ describe HandleOverageSite do
     it 'tracks "exceeded_views_limit" event' do
       expect(TrackEvent)
         .to receive_service_call
-              .with(
-                :exceeded_views_limit,
-                user: site.owners.first,
-                site: site,
-                number_of_views: number_of_views,
-                limit: limit
-              )
+        .with(
+          :exceeded_views_limit,
+          user: site.owners.first,
+          site: site,
+          number_of_views: number_of_views,
+          limit: limit
+        )
 
       service.call
     end

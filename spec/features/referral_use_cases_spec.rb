@@ -33,8 +33,8 @@ feature 'User sign ups with a referral token', :js do
         UpdateStaticScriptInstallation.new(recipients_site, installed: true).call
       }.to change(CouponUse, :count).by 2
 
-      expect(recipients_site).to be_capable_of :pro
-      expect(senders_site).to be_capable_of :pro
+      expect(recipients_site).to be_capable_of :growth
+      expect(senders_site).to be_capable_of :growth
 
       expect(referral.redeemed_by_sender_at).to be_present
       expect(referral.redeemed_by_recipient_at).to be_present
@@ -66,7 +66,7 @@ feature 'User sign ups with a referral token', :js do
         UpdateStaticScriptInstallation.new(recipients_site, installed: true).call
       }.to change(CouponUse, :count).by 1
 
-      expect(recipients_site).to be_capable_of :pro
+      expect(recipients_site).to be_capable_of :growth
 
       expect(referral.redeemed_by_sender_at).to be_nil
       expect(referral.redeemed_by_recipient_at).to be_present
