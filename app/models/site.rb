@@ -120,8 +120,7 @@ class Site < ApplicationRecord
   end
 
   def views_limit
-    subscription = active_subscription&.class || Subscription::Free
-    subscription.defaults[:visit_overage]
+    capabilities.visit_overage
   end
 
   def communication_types=(value)

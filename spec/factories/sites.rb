@@ -72,9 +72,25 @@ FactoryBot.define do
       with_paid_bill
     end
 
+    trait :growth do
+      transient do
+        subscription_plan :growth
+      end
+
+      with_paid_bill
+    end
+
     trait :free do
       transient do
         subscription_plan :free
+      end
+
+      with_paid_bill
+    end
+
+    trait :free_plus do
+      transient do
+        subscription_plan :free_plus
       end
 
       with_paid_bill
@@ -91,6 +107,14 @@ FactoryBot.define do
     trait :pro_managed do
       transient do
         subscription_plan :pro_managed
+      end
+
+      with_paid_bill
+    end
+
+    trait :pro_comped do
+      transient do
+        subscription_plan :pro_comped
       end
 
       with_paid_bill

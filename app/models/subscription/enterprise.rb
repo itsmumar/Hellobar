@@ -10,8 +10,8 @@ class Subscription
           label: 'ENT',
           monthly_amount: 99.0,
           yearly_amount: 999.0,
-          visit_overage: 500_000, # unlimited
-          visit_overage_amount: nil # unlimited
+          visit_overage: 500_000,
+          visit_overage_amount: nil
         }
       end
     end

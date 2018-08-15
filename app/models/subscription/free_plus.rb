@@ -10,7 +10,7 @@ class Subscription
           label: 'FREE',
           monthly_amount: 0.0,
           yearly_amount: 0.0,
-          visit_overage: 25_000,
+          visit_overage: 5000,
           visit_overage_amount: nil # ads
         }
       end

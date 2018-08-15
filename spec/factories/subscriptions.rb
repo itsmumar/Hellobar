@@ -26,6 +26,11 @@ FactoryBot.define do
       initialize_with { Subscription::Pro.new(schedule: schedule) }
     end
 
+    trait :growth do
+      amount { Subscription::Growth.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
+      initialize_with { Subscription::Growth.new(schedule: schedule) }
+    end
+
     trait :pro_managed do
       initialize_with { Subscription::ProManaged.new(schedule: schedule) }
     end
