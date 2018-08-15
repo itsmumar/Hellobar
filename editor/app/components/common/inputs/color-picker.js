@@ -25,13 +25,19 @@ export default Ember.Component.extend({
 
   showInitial: false,
 
-  showButtons: false,
+  showButtons: true,
 
-  showPalette: false,
+  showPalette: true,
 
   showPaletteOnly: false,
 
-  palette: [],
+  palette: [
+    ['#000000'], ['#ffffff'],
+    ['#FF0000'], ['#777777'],
+    ['#337ab7'], ['#5cb85c'],
+    ['#5bc0de'], ['#f0ad4e'],
+    ['#d9534f'], ['#a37ab7']
+  ],
 
   togglePaletteOnly: false,
 
@@ -47,7 +53,7 @@ export default Ember.Component.extend({
 
   clickoutFiresChange: false,
 
-  chooseText: 'Choose',
+  chooseText: 'Apply',
 
   cancelText: 'Cancel',
 

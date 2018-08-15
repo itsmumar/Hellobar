@@ -36,6 +36,7 @@
 #= require images
 #= require header
 #= require toastr
+#= require clipboard
 #= require_self
 
 $ ->

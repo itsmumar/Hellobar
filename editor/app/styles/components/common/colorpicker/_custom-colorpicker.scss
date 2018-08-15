@@ -26,5 +26,9 @@
 .sp-dd {
   color: lightgray!important;
   line-height: 28px!important;
+  margin-left: -3px;
+}
 
+.spectrum-color-picker-container {
+  position: fixed !important;
 }
