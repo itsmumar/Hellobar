@@ -424,4 +424,25 @@ describe AnalyticsProvider do
       track(event, user: user, referral: referral)
     end
   end
+
+  describe '#exceeded_views_limit' do
+    let(:event) { 'exceeded-views-limit' }
+    let(:number_of_views) { 999 }
+    let(:limit) { 100 }
+
+    it 'tracks "exceeded-views-limit"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: event, user: user, params: {
+          site_id: site.id,
+          site_url: site.url,
+          number_of_views: number_of_views,
+          limit: limit,
+          subscription: 'Free',
+          schedule: 'monthly'
+        })
+
+      track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
+    end
+  end
 end
