@@ -1,6 +1,6 @@
 class Subscription
   class Growth < Pro
-    autoload :Capabilities, 'subscription/pro/capabilities'
+    autoload :Capabilities, 'subscription/growth/capabilities'
 
     class << self
       def defaults
