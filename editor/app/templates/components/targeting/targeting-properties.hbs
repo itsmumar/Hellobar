@@ -21,19 +21,19 @@
   </small>
 
   {{#if shouldShowDissmissDuration}}
-  <label>
-    <span class="property-name">After a user closes this site element, don't display it again to that user for:</span>
-  </label>
+    <label>
+      <span class="property-name">After a user closes this site element, don't display it again to that user for:</span>
+    </label>
 
-  <div class="select-wrapper dissmiss-duration">
-    {{#power-select options=days
-                    selected=selectedDissmissDuration
-                    renderInPlace=true
-                    searchEnabled=false
-                    onchange=(action "selectDissmissDuration") as |option|}}
-      {{option.label}}
-    {{/power-select}}
-  </div>
+    <div class="select-wrapper dissmiss-duration">
+      {{#power-select options=days
+                      selected=selectedDissmissDuration
+                      renderInPlace=true
+                      searchEnabled=false
+                      onchange=(action "selectDissmissDuration") as |option|}}
+        {{option.label}}
+      {{/power-select}}
+    </div>
   {{/if}}
 
   {{#if shouldShowSuccessDuration}}

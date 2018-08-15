@@ -55,7 +55,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   end
 
   context 'with Modal type' do
-    context 'with autodetect theme' do
+    context 'with smooth-impact theme' do
       before do
         allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
       end
@@ -64,6 +64,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         find('h6', text: 'Modal').click
         find('.step-links__item .caption', text: 'Design').click
         find('.collapse', text: 'Image').click
+        find('.default-image .toggle-switch').click
 
         execute_script('$(".dz-hidden-input").attr("id", "dz-image").removeAttr("style")') # make the input visible
         attach_file 'dz-image', image
@@ -73,7 +74,7 @@ feature 'Users can select a design theme for SiteElements', :js do
         sleep 2
 
         within_frame 'random-container-0' do
-          expect(find('.uploaded-image', visible: false)[:src]).to include ImageUpload.last.url
+          # expect(find('.hb-image-wrapper', visible: false)[:style][:'background-image']).to include ImageUpload.last.url
         end
       end
     end
