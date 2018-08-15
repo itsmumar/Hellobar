@@ -79,7 +79,7 @@ feature 'User sign ups with a referral token', :js do
       expect(page).to have_content "Applied to #{ random_sender_site.host }"
       expect(CouponUse.count).to eql 2
 
-      expect(random_sender_site).to be_capable_of :pro
+      expect(random_sender_site).to be_capable_of :growth
       expect(referral.reload.redeemed_by_sender_at).to be_present
     end
 
