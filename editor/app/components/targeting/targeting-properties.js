@@ -92,6 +92,9 @@ export default Ember.Component.extend({
 
   days: function () {
     return [
+      { label: '120 days', duration: 120 },
+      { label: '90 days', duration: 90 },
+      { label: '60 days', duration: 60 },
       { label: '30 days', duration: 30 },
       { label: '20 days', duration: 20 },
       { label: '15 days', duration: 15 },
