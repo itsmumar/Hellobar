@@ -57,34 +57,32 @@
   div class=["reveal-wrapper", @site.install_type == "wordpress" ? "activated" : ""]
     i.icon-wordpress
     .reveal-title I use WordPress
-    p If you use WordPress you'll love our zero-configuration custom plugin. Just download, install and you're done.
+    p If you use WordPress you'll love our super easy copy and paste integration. Get your site snippet here.
 
     .reveal-block.wordpress-reveal
-      strong 1) Download Your Plugin
-      = link_to site_wordpress_plugin_path(@site), method: :get, class: "button" do
-        i.icon-download
-        span Download
-      small 1MB
+      strong 1) Copy Your Site Snippet
+      = text_area_tag :site_snippet, "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>", readonly: true
+      button.button data-clipboard-target="#site_snippet"
+        i.icon-clipboard.clipboard-btn
+        span Copy
 
-      strong 2) Install Your Plugin
-      p= "Now you just need to install the .zip file you downloaded it by uploading it to your WordPress site. The plugin was preconfigured specifically for your site (#{@site.url}). After you install and activate there are no settings to adjust!"
+      strong 2) Find Our Plugin
+      p  Go to your website's Wordpress admin and select <b>PLUGINS > ADD NEW</b> and then search for <b>Hellobar</b>. Press the <b>INSTALL NOW</b> button on the official Hello Bar plugin and <b>ACTIVATE</b>.
 
-      p
-        strong Need More Help?
-        | Try reading these&nbsp;
-        = link_to "helpful instructions for installing plugins on WordPress", "https://support.hellobar.com/how-do-i-manually-upload-a-wordpress-plugin/"
+      strong 3) Paste Site Snippet
+      p Now you should see a new <b>Hello Bar</b> option in your WP admin side menu. Select that to open the plugin and paste the site snippet that you copied in <b>step 1</b>.
 
   div class=["reveal-wrapper", @site.install_type == "wix" ? "activated" : ""]
     i.icon-wix
     .reveal-title I use Wix
-    p If your site is hosted on Wix, we've built a super easy copy and paste integration. Get your trackng ID here.
+    p If your site is hosted on Wix, we've got a super easy copy and paste integration. Get your trackng ID here.
 
     .reveal-block.wix-reveal
       .title 1) Copy your ID:
       .form-inline
         = text_field_tag :script_id, @site.script.hashed_id, readonly: true
         button.button data-clipboard-target="#script_id"
-          i.icon-clipboard
+          i.icon-clipboard.clipboard-btn
           span Copy
 
       .title 2) Paste it to Wix
