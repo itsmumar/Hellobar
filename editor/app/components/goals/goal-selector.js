@@ -23,6 +23,7 @@ export default Ember.Component.extend({
     select(goal) {
       this.set('goal', goal === 'social' ? 'social/like_on_facebook' : goal);
       this.get('theming').resetThemeIfNeeded();
+      this.set('model.wiggle_button', false); // turn wiggling off
     }
   }
 });
