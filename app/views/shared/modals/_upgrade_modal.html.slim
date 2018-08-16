@@ -35,10 +35,10 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              li Hello Bar logo on each bar
-              li No bar targeting
-              li Limit of 10 bars
-              li No custom thank you messages
+              li Hello Bar Logo On Each Pop-Up
+              li Up to 5,000 Views Per Month
+              li Limited Design Features
+              li Limited Email Integrations
 
             .package-status(data-btn-prefix='Your ')
               = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
@@ -56,19 +56,19 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             ul
               li.thin
                 i.icon-unbranded
-                span.info No Hello Bar Logo
+                span.info Turn Off Hello Bar Logo
+              li.thin
+                i.icon-thumbsup
+                span.info-plus 50,000 Views Per Month
               li.thin
                 i.icon-opportunity
-                span.info Custom thank you messages
-              li.thin
-                i.icon-unlimited
-                span.info Unlimited bars
+                span.info Advanced Design Features & Email Integrations
               li.thin.adjusted-down
-                i.icon-thumbsup
-                span.info-plus 250,000 visits/mo ($5/mo for each additional 25,000 visits)
+                i.icon-unlimited
+                span.info Unlimited A/B Testing
               li.thin
                 i.icon-target
-                span.info-plus Target bars by device, location, URL, or traffic source
+                span.info-plus Audience Targeting By Device, Location, URL Path, & Over 200+ Conditional Rules
 
             .package-status
               = choose_pro_or_growth_button
@@ -88,10 +88,11 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           .package-features
 
             ul
-              li Unlimited visits
-              li.placeholder-list-item --------------------------
-              li All the benefits of #{ pro_or_growth } subscription
-              li.placeholder-list-item --------------------------
+              li All Features From Growth Plan
+              li 500,000 Views Per Month
+              li Premium Design Features & Email Integrations
+              li VIP Support
+              li Dedicated Marketing Specialist - Coming Soon
 
             .package-status
               = choose_plan_button(Subscription::Enterprise.new)
