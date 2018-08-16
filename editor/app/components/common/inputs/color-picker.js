@@ -51,7 +51,7 @@ export default Ember.Component.extend({
 
   moveFiresChange: false,
 
-  clickoutFiresChange: false,
+  clickoutFiresChange: true,
 
   chooseText: 'Apply',
 
