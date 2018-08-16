@@ -1,6 +1,6 @@
 class Subscription
   class Growth < Pro
-    autoload :Capabilities, 'subscription/pro/capabilities'
+    autoload :Capabilities, 'subscription/growth/capabilities'
 
     class << self
       def defaults
@@ -10,8 +10,7 @@ class Subscription
           label: 'GRW',
           monthly_amount: 29.0,
           yearly_amount: 289.0,
-          visit_overage: 250_000, # after this many visits in a month
-          # visit_overage_amount: 25_000, # every X visitors
+          visit_overage: 50_000,
           visit_overage_amount: 5.00, # $$$
           discounts: [ # discounts are doubled from Pro
             DiscountRange.new(5, 0, 0, 0),

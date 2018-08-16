@@ -58,24 +58,13 @@ class FetchSiteStatistics
     item.merge(attributes)
   end
 
-  # convert 2017-01-01 to "17001"
-  # this comes from DynamoDB
-  # where such weird thing is used as a key
-  # see "over_time" table
-  #
-  # first 2 numbers represent year
-  #   i.e. 17 for 2017, 10 for 2010
-  # last 3 numbers represent day of year
-  #   i.e. 001 for 1 Jun, 365 for 31 Dec, 188 for 29 Mar
   def convert_to_weird_date(date)
-    (date.year - 2000) * 1000 + date.yday
+    WeirdDate.from_date date
   end
 
   # convert "17001" to 2017-01-01
   def convert_from_weird_date(date)
-    year = date.to_s[0..1].to_i + 2000
-    yday = date.to_s[2..4].to_i
-    yday.days.since(Date.new(year) - 1)
+    WeirdDate.to_date date
   end
 
   def dynamo_db_for(site_element)

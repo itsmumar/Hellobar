@@ -10,6 +10,11 @@ every :day, at: '2:00pm', roles: [:cron] do
   rake 'billing:run'
 end
 
+# All times are in UTC
+every :day, at: '2:10pm', roles: [:cron] do
+  rake 'monthly_views_tracker:check'
+end
+
 every :monday, at: '2:30pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
 end

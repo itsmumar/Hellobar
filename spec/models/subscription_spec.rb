@@ -145,6 +145,9 @@ describe Subscription do
   end
 
   describe '#initialize' do
+    let(:site) { create :site, subscription_type }
+    let(:subscription) { site.active_subscription }
+
     context 'by default' do
       let(:subscription) { Subscription.new }
 
@@ -154,35 +157,41 @@ describe Subscription do
     end
 
     context 'Free' do
-      let(:subscription) { build :subscription, :free }
+      let(:subscription_type) { :free }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 0
-        expect(subscription.visit_overage).to eql 25_000
+        expect(subscription.visit_overage).to eql 5000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql nil
+
+        expect(site.views_limit).to eql 5000
       end
     end
 
     context 'FreePlus' do
-      let(:subscription) { build :subscription, :free_plus }
+      let(:subscription_type) { :free_plus }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 0
-        expect(subscription.visit_overage).to eql 25_000
+        expect(subscription.visit_overage).to eql 5000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql nil
+
+        expect(site.views_limit).to eql 5000
       end
     end
 
     context 'Pro' do
-      let(:subscription) { build :subscription, :pro }
+      let(:subscription_type) { :pro }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 15
-        expect(subscription.visit_overage).to eql 250_000
+        expect(subscription.visit_overage).to eql 50_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 50_000
       end
 
       context 'when yearly' do
@@ -192,34 +201,57 @@ describe Subscription do
       end
     end
 
+    context 'Growth' do
+      let(:subscription_type) { :growth }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 29
+        expect(subscription.visit_overage).to eql 50_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 50_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :growth, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 289 }
+      end
+    end
+
     context 'ProComped' do
-      let(:subscription) { build :subscription, :pro_comped }
+      let(:subscription_type) { :pro_comped }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 0
-        expect(subscription.visit_overage).to eql 250_000
+        expect(subscription.visit_overage).to eql 50_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 0
+
+        expect(site.views_limit).to eql 50_000
       end
     end
 
     context 'ProManaged' do
-      let(:subscription) { build :subscription, :pro_managed }
+      let(:subscription_type) { :pro_managed }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 0
         expect(subscription.visit_overage).to eql nil
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql nil
+
+        expect(site.views_limit).to eql ::Float::INFINITY
       end
     end
 
     context 'Enterprise' do
-      let(:subscription) { build :subscription, :enterprise }
+      let(:subscription_type) { :enterprise }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 99
-        expect(subscription.visit_overage).to eql nil
+        expect(subscription.visit_overage).to eql 500_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql nil
       end
