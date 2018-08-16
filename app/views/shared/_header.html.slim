@@ -54,8 +54,9 @@
         = image_tag('caret-down.svg')
       .dropdown-block
         = active_link_to 'Settings', profile_path()
-        - if @site.id?
-          = active_link_to 'Installation Instructions', site_install_path(@site)
+        - if @site
+          - if @site.id?
+            = active_link_to 'Installation Instructions', site_install_path(@site)
         - if current_site.free?
           a.show-upgrade-modal.floating-button data-source='Header Drop-down' Upgrade Plan
         - else
