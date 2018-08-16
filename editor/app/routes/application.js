@@ -19,9 +19,9 @@ export default Ember.Route.extend({
     return new Ember.RSVP.Promise((resolve, reject) => {
       const loadModel = () => {
         this.loadModel().then(resolve, reject);
-      }
+      };
       this.get('applicationSettings').load().then(loadModel, reject);
-    })
+    });
   },
 
   loadModel() {
