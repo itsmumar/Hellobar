@@ -16,10 +16,12 @@ export default Ember.Route.extend({
   // TODO check other API calls and move them to api service
 
   beforeModel() {
-    return Ember.RSVP.Promise.all([
-      this.get('applicationSettings').load(),
-      this.loadModel()
-    ]);
+    return new Ember.RSVP.Promise((resolve, reject) => {
+      const loadModel = () => {
+        this.loadModel().then(resolve, reject);
+      };
+      this.get('applicationSettings').load().then(loadModel, reject);
+    });
   },
 
   loadModel() {
