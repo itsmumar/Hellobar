@@ -9,7 +9,8 @@ class ContactListSerializer < ActiveModel::Serializer
     :provider_name,
     :provider_token,
     :site_elements_count,
-    :site_id
+    :site_id,
+    :icon_path
   )
 
   def errors
@@ -18,6 +19,10 @@ class ContactListSerializer < ActiveModel::Serializer
 
   def provider_token
     object&.identity&.provider || '0'
+  end
+
+  def icon_path
+    object&.provider_icon_path
   end
 
   def hidden
