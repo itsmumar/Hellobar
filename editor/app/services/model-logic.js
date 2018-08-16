@@ -113,7 +113,7 @@ export default Ember.Service.extend({
     if (this.get('model.type') === 'Alert') {
       this.set('model.show_branding', false);
     } else {
-      this.set('model.show_branding', true);
+      this.set('model.show_branding', this.get('model.show_branding'));
     }
   }.observes('model.type'),
 
