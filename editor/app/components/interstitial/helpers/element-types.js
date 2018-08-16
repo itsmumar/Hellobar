@@ -15,6 +15,12 @@ export default Ember.Component.extend({
 
   actions: {
     selectGoalAndType (goal, type) {
+
+      //patch to handle special condition for social sub types
+      if (goal === 'social/like_on_facebook'){
+        goal = 'social';
+      }
+
       const routeName = 'interstitial.' + goal + '.' + type;
       this.get('router').transitionTo(routeName);
     }
