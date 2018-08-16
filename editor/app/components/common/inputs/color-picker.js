@@ -49,7 +49,7 @@ export default Ember.Component.extend({
 
   preferredFormat: 'hex',
 
-  moveFiresChange: false,
+  moveFiresChange: true,
 
   clickoutFiresChange: true,
 
