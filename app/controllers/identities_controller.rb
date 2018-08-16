@@ -79,7 +79,7 @@ class IdentitiesController < ApplicationController
 
   def after_auth_redirect_url
     url = env.dig('omniauth.params', 'redirect_to') || request.referrer
-    url += '#/goals' if url.include?('/site_elements/')
+    url += '#/goal' if url.include?('/site_elements/')
     url
   end
 end
