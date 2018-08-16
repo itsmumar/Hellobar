@@ -49,9 +49,9 @@ export default Ember.Component.extend({
 
   preferredFormat: 'hex',
 
-  moveFiresChange: false,
+  moveFiresChange: true,
 
-  clickoutFiresChange: false,
+  clickoutFiresChange: true,
 
   chooseText: 'Apply',
 
