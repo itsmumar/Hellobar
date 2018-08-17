@@ -9,7 +9,7 @@ export default Ember.Route.extend({
     }
   },
 
-  afterModel(model) {
+  afterModel() {
     this.get('theming').applyCurrentTheme();
   }
 });
