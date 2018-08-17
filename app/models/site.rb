@@ -123,6 +123,10 @@ class Site < ApplicationRecord
     capabilities.visit_overage
   end
 
+  def warning_level_one
+    capabilities.visit_warning_one
+  end
+
   def communication_types=(value)
     super(value.select(&:presence).join(','))
   end

@@ -38,12 +38,22 @@ class CheckNumberOfViewsForSites
   def check_views_number_for_site(site, number_of_views)
     report.count(number_of_views)
     limit = site.views_limit
+    warning_level = site.warning_level_one
 
-    handle_overage_site(site, number_of_views, limit) if number_of_views > limit
+    if number_of_views > limit
+      handle_overage_site(site, number_of_views, limit)
+    elsif
+      send_warning_email(site, number_of_views, limit)
+    end
   end
 
   def handle_overage_site(site, number_of_views, limit)
     report.limit_exceeded(site, number_of_views, limit)
     HandleOverageSiteJob.perform_later(site, number_of_views, limit)
+  end
+
+  def send_warning_email(site, number_of_views, limit)
+    # send the warning email
+    
   end
 end
