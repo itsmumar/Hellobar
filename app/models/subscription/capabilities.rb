@@ -54,6 +54,10 @@ class Subscription::Capabilities
     self.class.parent.defaults[:visit_overage]
   end
 
+  def visit_warning_one
+    self.class.parent.defaults[:visit_warning_one]
+  end
+
   def content_upgrades?
     false
   end

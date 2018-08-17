@@ -42,6 +42,17 @@ describe CheckNumberOfViewsForSites do
     end
   end
 
+  context 'when limit is approaching' do
+    let(:number_of_views) { site.visit_warning_one + 1 }
+
+    it 'calls report.send_warning_email' do
+      service.call
+      expect(report)
+        .to have_received(:send_warning_email)
+        .with(site, number_of_views, site.views_limit, site.visit_warning_one)
+    end
+  end
+
   context 'when exception is raised' do
     let(:error) { StandardError.new('OOPS!') }
 

@@ -49,6 +49,13 @@ class BillingViewsReport
     info "Limit exceeded #{ site.id } #{ site.url } -- #{ numbers } (*#{ number_with_delimiter(delta) }*) views"
   end
 
+  def send_warning_email(site, number_of_views, limit, warning_level)
+    delta = limit - number_of_views
+    WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    numbers = "#{ number_with_delimiter(number_of_views) }/#{ number_with_delimiter(limit) }"
+    info "Limit approaching #{ site.id } #{ site.url } -- #{ numbers } (*#{ number_with_delimiter(delta) }*) views"
+  end
+
   private
 
   def info(msg)

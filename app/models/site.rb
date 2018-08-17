@@ -123,7 +123,7 @@ class Site < ApplicationRecord
     capabilities.visit_overage
   end
 
-  def warning_level_one
+  def visit_warning_one
     capabilities.visit_warning_one
   end
 

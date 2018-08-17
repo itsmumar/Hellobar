@@ -15,7 +15,8 @@ class Subscription
           monthly_amount: 0.0,
           yearly_amount: 0.0,
           visit_overage: 5000, # after this many visits in a month
-          visit_overage_amount: nil # ads
+          visit_overage_amount: nil, # ads
+          visit_warning_one: 4000
         }
       end
     end
