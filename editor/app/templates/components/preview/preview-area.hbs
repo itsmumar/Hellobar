@@ -1,4 +1,9 @@
 <div class="preview-wrapper" style="background: {{componentBackground}}">
+  {{#if isNotElementSelected}}
+    <div id="overlay">
+      <div id="text">TO PREVIEW THE SITE ELEMENT ON YOUR SITE, CHOOSE A GOAL AND TYPE</div>
+    </div>
+  {{/if}}
   {{navigation/top-bar-navigation viewMode=viewMode closeEditor='closeEditor'}}
 
   {{preview/containers/announcement-container}}
@@ -6,7 +11,6 @@
   {{preview/containers/right-pane}}
 
   <div id="hellobar-preview-container" class={{previewContainerCssClasses}}>
-
     <div class="loading-message">
       <i class="icon-settings"></i>
       Site preview loading...
