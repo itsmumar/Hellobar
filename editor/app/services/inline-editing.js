@@ -7,6 +7,115 @@ import geolocationHelper from './inline-editing.geolocation-helper';
 // Froala Editor license key
 const froalaKey = 'UA9B8E7A3dC3E3A2B10B6B5D5E4E3A2C-7KC1KXDF1INBh1KPe2TK==';
 
+const emojisSet = [
+  {code: '1f600', desc: 'Grinning face'},
+  {code: '1f601', desc: 'Grinning face with smiling eyes'},
+  {code: '1f602', desc: 'Face with tears of joy'},
+  {code: '1f603', desc: 'Smiling face with open mouth'},
+  {code: '1f604', desc: 'Smiling face with open mouth and smiling eyes'},
+  {code: '1f605', desc: 'Smiling face with open mouth and cold sweat'},
+  {code: '1f606', desc: 'Smiling face with open mouth and tightly-closed eyes'},
+  {code: '1f607', desc: 'Smiling face with halo'},
+
+  {code: '1f608', desc: 'Smiling face with horns'},
+  {code: '1f609', desc: 'Winking face'},
+  {code: '1f60a', desc: 'Smiling face with smiling eyes'},
+  {code: '1f60b', desc: 'Face savoring delicious food'},
+  {code: '1f60c', desc: 'Relieved face'},
+  {code: '1f60d', desc: 'Smiling face with heart-shaped eyes'},
+  {code: '1f60e', desc: 'Smiling face with sunglasses'},
+  {code: '1f60f', desc: 'Smirking face'},
+
+  {code: '1f610', desc: 'Neutral face'},
+  {code: '1f611', desc: 'Expressionless face'},
+  {code: '1f612', desc: 'Unamused face'},
+  {code: '1f613', desc: 'Face with cold sweat'},
+  {code: '1f614', desc: 'Pensive face'},
+  {code: '1f615', desc: 'Confused face'},
+  {code: '1f616', desc: 'Confounded face'},
+  {code: '1f617', desc: 'Kissing face'},
+
+  {code: '1f618', desc: 'Face throwing a kiss'},
+  {code: '1f619', desc: 'Kissing face with smiling eyes'},
+  {code: '1f61a', desc: 'Kissing face with closed eyes'},
+  {code: '1f61b', desc: 'Face with stuck out tongue'},
+  {code: '1f61c', desc: 'Face with stuck out tongue and winking eye'},
+  {code: '1f61d', desc: 'Face with stuck out tongue and tightly-closed eyes'},
+  {code: '1f61e', desc: 'Disappointed face'},
+  {code: '1f61f', desc: 'Worried face'},
+
+  {code: '1f620', desc: 'Angry face'},
+  {code: '1f621', desc: 'Pouting face'},
+  {code: '1f622', desc: 'Crying face'},
+  {code: '1f623', desc: 'Persevering face'},
+  {code: '1f624', desc: 'Face with look of triumph'},
+  {code: '1f625', desc: 'Disappointed but relieved face'},
+  {code: '1f626', desc: 'Frowning face with open mouth'},
+  {code: '1f627', desc: 'Anguished face'},
+
+  {code: '1f628', desc: 'Fearful face'},
+  {code: '1f629', desc: 'Weary face'},
+  {code: '1f62a', desc: 'Sleepy face'},
+  {code: '1f62b', desc: 'Tired face'},
+  {code: '1f62c', desc: 'Grimacing face'},
+  {code: '1f62d', desc: 'Loudly crying face'},
+  {code: '1f62e', desc: 'Face with open mouth'},
+  {code: '1f62f', desc: 'Hushed face'},
+
+  {code: '1f630', desc: 'Face with open mouth and cold sweat'},
+  {code: '1f631', desc: 'Face screaming in fear'},
+  {code: '1f632', desc: 'Astonished face'},
+  {code: '1f633', desc: 'Flushed face'},
+  {code: '1f634', desc: 'Sleeping face'},
+  {code: '1f635', desc: 'Dizzy face'},
+  {code: '1f636', desc: 'Face without mouth'},
+  {code: '1f637', desc: 'Face with medical mask'}
+];
+
+const charactersSet = [{
+  title: 'Latin',
+  list: [
+    { 'char': '&iexcl;', desc: 'INVERTED EXCLAMATION MARK' },
+    { 'char': '&cent;', desc: 'CENT SIGN' },
+    { 'char': '&pound;', desc: 'POUND SIGN' },
+    { 'char': '&curren;', desc: 'CURRENCY SIGN' },
+    { 'char': '&yen;', desc: 'YEN SIGN' },
+    { 'char': '&brvbar;', desc: 'BROKEN BAR' },
+    { 'char': '&sect;', desc: 'SECTION SIGN' },
+    { 'char': '&uml;', desc: 'DIAERESIS' },
+    { 'char': '&copy;', desc: 'COPYRIGHT SIGN' },
+    { 'char': '&trade;', desc: 'TRADEMARK SIGN' },
+    { 'char': '&ordf;', desc: 'FEMININE ORDINAL INDICATOR' },
+    { 'char': '&laquo;', desc: 'LEFT-POINTING DOUBLE ANGLE QUOTATION MARK' },
+    { 'char': '&not;', desc: 'NOT SIGN' },
+    { 'char': '&reg;', desc: 'REGISTERED SIGN' },
+    { 'char': '&macr;', desc: 'MACRON' },
+    { 'char': '&deg;', desc: 'DEGREE SIGN' },
+    { 'char': '&plusmn;', desc: 'PLUS-MINUS SIGN' },
+    { 'char': '&sup2;', desc: 'SUPERSCRIPT TWO' },
+    { 'char': '&sup3;', desc: 'SUPERSCRIPT THREE' },
+    { 'char': '&acute;', desc: 'ACUTE ACCENT' },
+    { 'char': '&micro;', desc: 'MICRO SIGN' },
+    { 'char': '&para;', desc: 'PILCROW SIGN' },
+    { 'char': '&middot;', desc: 'MIDDLE DOT' }
+  ]},
+  {
+    title: 'Greek',
+    list: [
+      { 'char': '&Alpha;', desc: 'GREEK CAPITAL LETTER ALPHA' },
+      { 'char': '&Beta;', desc: 'GREEK CAPITAL LETTER BETA' },
+      { 'char': '&Gamma;', desc: 'GREEK CAPITAL LETTER GAMMA' },
+      { 'char': '&Delta;', desc: 'GREEK CAPITAL LETTER DELTA' },
+      { 'char': '&Epsilon;', desc: 'GREEK CAPITAL LETTER EPSILON' },
+      { 'char': '&Zeta;', desc: 'GREEK CAPITAL LETTER ZETA' },
+      { 'char': '&Eta;', desc: 'GREEK CAPITAL LETTER ETA' },
+      { 'char': '&Theta;', desc: 'GREEK CAPITAL LETTER THETA' },
+      { 'char': '&Iota;', desc: 'GREEK CAPITAL LETTER IOTA' },
+      { 'char': '&Kappa;', desc: 'GREEK CAPITAL LETTER KAPPA' }
+    ]
+  }
+];
+
 /**
  * Simple model adapter that performs basic inline editing data management
  */
@@ -82,7 +191,7 @@ class SimpleModelAdapter {
       const fieldIdToChange = blockId.substring(2);
       const fieldToChange = (blockId === 'f-builtin-email') ?
         _.find(fields, f => f.type === 'builtin-email') :
-        _.find(fields, f => f.id === fieldIdToChange);
+      _.find(fields, f => f.id === fieldIdToChange);
       if (fieldToChange) {
         fieldToChange.label = content;
         this.service.get('bus').trigger('hellobar.core.fields.changed', {
@@ -186,7 +295,7 @@ export default Ember.Service.extend({
         this.html.insert(span);
         setTimeout(() => {
           this.toolbar.hide();
-        }, 200);
+      }, 200);
       }
     });
   },
@@ -211,17 +320,17 @@ export default Ember.Service.extend({
     }
     return setTimeout(() => {
       const $iframe = $('#hellobar-preview-container > iframe');
-      if ($iframe.length > 0) {
-        const $iframeBody = $($iframe[0].contentDocument.body);
-        if ($iframeBody.length > 0) {
-          return $($iframe[0].contentDocument).ready(() => {
-              this.instantiateFroala($iframe, $iframeBody, elementType);
-              this.initializeInputEditing($iframe, $iframeBody);
-            }
-          );
-        }
+    if ($iframe.length > 0) {
+      const $iframeBody = $($iframe[0].contentDocument.body);
+      if ($iframeBody.length > 0) {
+        return $($iframe[0].contentDocument).ready(() => {
+          this.instantiateFroala($iframe, $iframeBody, elementType);
+        this.initializeInputEditing($iframe, $iframeBody);
       }
-    }, 500);
+      );
+      }
+    }
+  }, 500);
   },
 
   instantiateFroala($iframe, $iframeBody, elementType){
@@ -240,23 +349,24 @@ export default Ember.Service.extend({
         barlinkwhite: 'White',
         barlinkblack: 'Black'
       };
+
       const toolbarButtons = {
-        'simple': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-          'fontFamily', 'fontSize', 'color', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
+        'simple': ['bold', 'italic', 'underline', 'strikeThrough','|',
+          'fontFamily', 'fontSize', 'color','specialCharacters','emoticons', '-', 'insertLink',
+          'undo', 'redo', 'clearFormatting', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
-        'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-          'fontFamily', 'fontSize', 'color', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
+        'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough',  '|',
+          'fontFamily', 'fontSize','specialCharacters','emoticons', 'color', '-',
+          'undo', 'redo', 'clearFormatting', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ],
         'full': [
-          'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|',
-          'fontFamily', 'fontSize', 'color', '-',
-          'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', '|',
-          'insertHR', 'insertLink', '-',
-          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
+          'bold', 'italic', 'underline', 'strikeThrough', '|',
+          'fontFamily', 'fontSize', 'color',
+          'align','-', 'formatOL', 'formatUL', 'outdent', 'indent','specialCharacters','emoticons', 'quote', '|', 'insertLink', '-',
+          'undo', 'redo', 'clearFormatting', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
         ]
       };
+
       const htmlAllowedTags = {
         'simple': [
           'p', 'strong', 'em', 'u', 's', 'sub', 'sup', 'span', 'a', 'br'
@@ -269,12 +379,17 @@ export default Ember.Service.extend({
           'a', 'br', 'hr', 'table', 'tbody', 'tr', 'th', 'td', 'blockquote'
         ]
       };
+
       const froalaOptions = {
         key: froalaKey,
         linkStyles: linkStyles,
         linkMultipleStyles: false,
         toolbarInline: true,
         toolbarVisibleWithoutSelection: true,
+        emoticonsStep: 8,
+        emoticonsSet: emojisSet,
+        specialCharactersStep: 10,
+        specialCharactersSets: charactersSet,
         toolbarButtons: toolbarButtons[mode],
         toolbarButtonsMD: toolbarButtons[mode],
         toolbarButtonsSM: toolbarButtons[mode],
@@ -292,10 +407,10 @@ export default Ember.Service.extend({
       }, froalaOptions));
       $textFroala.on('froalaEditor.contentChanged', (e /*, editor */) => {
         const $target = $(e.currentTarget);
-        const content = $target.froalaEditor('html.get');
-        const blockId = $target.attr('data-hb-editable-block');
-        this.handleContentChange(blockId, content);
-      });
+      const content = $target.froalaEditor('html.get');
+      const blockId = $target.attr('data-hb-editable-block');
+      this.handleContentChange(blockId, content);
+    });
       $textFroala.each(function () {
         const $editableElement = $(this);
         const editor = $editableElement.data('froala.editor');
@@ -333,11 +448,11 @@ export default Ember.Service.extend({
       }, imageFroalaOptions));
       $imageFroala.on('froalaEditor.image.uploaded', (e, editor, response) => {
         const responseObject = JSON.parse(response);
-        if (this.simpleModelAdapter) {
-          this.simpleModelAdapter.handleImageReplaced(responseObject);
-        }
-        return false;
-      });
+      if (this.simpleModelAdapter) {
+        this.simpleModelAdapter.handleImageReplaced(responseObject);
+      }
+      return false;
+    });
       return $imageFroala;
     };
 
@@ -356,12 +471,12 @@ export default Ember.Service.extend({
   initializeInputEditing($iframe, $iframeBody){
     this.cleanupInputs();
     $('.hb-editable-block-input input', $iframeBody).blur(evt => {
-        const $target = $(evt.currentTarget);
-        const blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
-        const content = $target.val();
-        this.handleContentChange(blockId, content);
-      }
-    );
+      const $target = $(evt.currentTarget);
+    const blockId = $target.closest('[data-hb-editable-block]').attr('data-hb-editable-block');
+    const content = $target.val();
+    this.handleContentChange(blockId, content);
+  }
+  );
   },
 
   cleanupInputs() {
