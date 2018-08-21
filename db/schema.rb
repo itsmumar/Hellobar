@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20180821173639) do
-=======
-ActiveRecord::Schema.define(version: 20180819083917) do
->>>>>>> Changed default value of type in site element
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
