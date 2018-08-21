@@ -1,7 +1,6 @@
 class WarningMailer < ApplicationMailer
 
   def warning_email(site, number_of_views, limit, warning_level)
-    p "Sending warning email"
     @site = site
     @number_of_views = number_of_views
     @limit = limit
