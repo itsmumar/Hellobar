@@ -1,6 +1,6 @@
 class PayRecurringBills
   MIN_RETRY_TIME = 3.days
-  MAX_RETRY_TIME = 27.days
+  MAX_RETRY_TIME = 9.days
 
   # Find all pending bills which should be processed today
   def self.bills

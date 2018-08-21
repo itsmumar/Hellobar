@@ -3,7 +3,7 @@ describe PayRecurringBills do
     let!(:bills) do
       [
         create(:bill, bill_at: 1.year.ago),
-        create(:bill, bill_at: 27.days.ago),
+        create(:bill, bill_at: 9.days.ago),
         create(:bill, bill_at: 1.day.ago),
         create(:bill, bill_at: Time.current)
       ]
@@ -11,7 +11,7 @@ describe PayRecurringBills do
 
     let!(:future_bill) { create(:bill, bill_at: 1.day.from_now) }
 
-    it 'includes bills within period from 27 days ago till today' do
+    it 'includes bills within period from 9 days ago till today' do
       expect(PayRecurringBills.bills).to match_array bills
       expect(PayRecurringBills.bills).not_to include future_bill
     end
@@ -358,15 +358,15 @@ describe PayRecurringBills do
               service.call
             end
           end
-          expect(pending_bill.billing_attempts.failed.count).to eql 9
+          expect(pending_bill.billing_attempts.failed.count).to eql 4
 
-          Timecop.travel pending_bill.bill_at + 27.days do
+          Timecop.travel pending_bill.bill_at + 9.days do
             service.call
           end
 
-          expect(pending_bill.billing_attempts.failed.count).to eql 10
+          expect(pending_bill.billing_attempts.failed.count).to eql 4
 
-          Timecop.travel pending_bill.bill_at + 30.days do
+          Timecop.travel pending_bill.bill_at + 12.days do
             service.call
           end
 
