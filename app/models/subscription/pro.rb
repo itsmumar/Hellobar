@@ -10,7 +10,10 @@ class Subscription
           label: 'PRO',
           monthly_amount: 15.0,
           yearly_amount: 149.0,
-          visit_overage: 50_000,
+          visit_warning_one: 40_000,
+          visit_warning_two: ::Float::INFINITY,
+          visit_warning_three: ::Float::INFINITY,
+          visit_overage: 50_000, # after this many visits in a month
           visit_overage_amount: 5.00, # $$$
           discounts: [
             DiscountRange.new(5, 0, 0, 0),

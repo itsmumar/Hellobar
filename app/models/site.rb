@@ -127,6 +127,14 @@ class Site < ApplicationRecord
     capabilities.visit_warning_one
   end
 
+  def visit_warning_two
+    capabilities.visit_warning_two
+  end
+
+  def visit_warning_three
+    capabilities.visit_warning_three
+  end
+
   def communication_types=(value)
     super(value.select(&:presence).join(','))
   end

@@ -58,6 +58,14 @@ class Subscription::Capabilities
     self.class.parent.defaults[:visit_warning_one]
   end
 
+  def visit_warning_two
+    self.class.parent.defaults[:visit_warning_two]
+  end
+
+  def visit_warning_three
+    self.class.parent.defaults[:visit_warning_three]
+  end
+
   def content_upgrades?
     false
   end
