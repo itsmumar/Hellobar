@@ -46,7 +46,7 @@ describe CheckNumberOfViewsForSites do
   context 'when first limit is approaching for all subscriptions' do
     let(:number_of_views) { site.visit_warning_one + 1 }
     let(:limit) { site.views_limit }
-    let (:warning_level_one) { site.visit_warning_one}
+    let(:warning_level_one) { site.visit_warning_one }
 
     it 'sends warning email for warning number one' do
       service.call
@@ -65,7 +65,7 @@ describe CheckNumberOfViewsForSites do
   context 'when second limit warning is approaching' do
     let(:number_of_views) { site.visit_warning_two + 1 }
     let(:limit) { site.views_limit }
-    let (:warning_level_two) { site.visit_warning_two}
+    let(:warning_level_two) { site.visit_warning_two }
 
     it 'sends warning email for warning number two for free sites' do
       service.call
@@ -77,7 +77,7 @@ describe CheckNumberOfViewsForSites do
   context 'when third limit warning is approaching' do
     let(:number_of_views) { site.visit_warning_three + 1 }
     let(:limit) { site.views_limit }
-    let (:warning_level_two) { site.visit_warning_three}
+    let(:warning_level_two) { site.visit_warning_three }
 
     it 'sends warning email for warning number three for free sites' do
       service.call
