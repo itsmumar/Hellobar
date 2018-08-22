@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe OveragePaidMailer, type: :mailer do
   describe '.send_overage_paid_email' do
@@ -14,7 +14,7 @@ RSpec.describe OveragePaidMailer, type: :mailer do
     end
 
     it 'has correct subject' do
-      expect(subject).to have_subject("You have exceeded your Hello Bar monthly view limit!")
+      expect(subject).to have_subject('You have exceeded your Hello Bar monthly view limit!')
     end
 
     it 'is sent from hello bar contact email' do

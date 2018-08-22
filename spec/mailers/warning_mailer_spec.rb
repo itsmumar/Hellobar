@@ -6,7 +6,7 @@ RSpec.describe WarningMailer, type: :mailer do
     let(:user) { site.users.first }
     let(:number_of_views) { site.visit_warning_one }
     let(:limit) { site.views_limit }
-    let(:warning_level) { "warning_level_one" }
+    let(:warning_level) { 'warning_level_one' }
 
     subject { WarningMailer.warning_email(site, number_of_views, limit, warning_level) }
 

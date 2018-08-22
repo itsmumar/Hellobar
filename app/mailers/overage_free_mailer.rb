@@ -7,7 +7,7 @@ class OverageFreeMailer < ApplicationMailer
 
     users.each do |user|
       @user = user
-      mail(to: user.email, subject: "You have exceeded your Hello Bar monthly view limit!")
+      mail(to: user.email, subject: 'You have exceeded your Hello Bar monthly view limit!')
     end
   end
 end
