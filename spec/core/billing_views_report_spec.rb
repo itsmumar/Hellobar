@@ -81,12 +81,4 @@ describe BillingViewsReport, :freeze do
       ]
     end
   end
-
-  describe '#send_warning_email' do
-    specify do
-      expect { report.send_warning_email(site, 100, 50) }.to log [
-        "Limit approaching #{ site.id } #{ site.url } -- 100/50 (*50*) views"
-      ]
-    end
-  end
 end
