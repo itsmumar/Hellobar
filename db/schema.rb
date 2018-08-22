@@ -415,7 +415,7 @@ ActiveRecord::Schema.define(version: 20180821173639) do
     t.boolean  "open_in_new_window",                             default: false
     t.boolean  "animated",                                       default: true
     t.boolean  "wiggle_button",                                  default: false
-    t.string   "type",                          limit: 255
+    t.string   "type",                          limit: 255,      default: "Bar"
     t.text     "caption",                       limit: 16777215
     t.text     "content",                       limit: 16777215
     t.string   "placement",                     limit: 255
