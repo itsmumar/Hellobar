@@ -45,11 +45,11 @@ class CheckNumberOfViewsForSites
     if number_of_views > limit
       handle_overage_site(site, number_of_views, limit)
 
-    elsif number of views < limit && number_of_views > warning_level_one && site.warning_email_one_sent == false
+    elsif number_of_views < limit && number_of_views > warning_level_one && site.warning_email_one_sent == false
       send_warning_email(site, number_of_views, limit, warning_level_one, 'warning_email_one_sent')
-    elsif number of views < limit && number_of_views > warning_level_two && site.warning_email_two_sent == false && site.free?
+    elsif number_of_views < limit && number_of_views > warning_level_two && site.warning_email_two_sent == false && site.free?
       send_warning_email(site, number_of_views, limit, warning_level_two, 'warning_email_two_sent')
-    elsif number of views < limit && number_of_views > warning_level_three && site.warning_email_three_sent == false && site.free?
+    elsif number_of_views < limit && number_of_views > warning_level_three && site.warning_email_three_sent == false && site.free?
       send_warning_email(site, number_of_views, limit, warning_level_three, 'warning_email_three_sent')
     end
   end
