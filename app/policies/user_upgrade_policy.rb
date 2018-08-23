@@ -8,6 +8,9 @@ class UserUpgradePolicy
 
   def should_show_upgrade_suggest_modal?
     # Freemium user that have HB installed and active.
+    # return false if @has_paying_subscription || no_script_installed?
+    # return false if already_viewed_before?(@user.upgrade_suggest_modal_last_shown_at)
+    # any_max_total_views_in_month?
     false
   end
 
