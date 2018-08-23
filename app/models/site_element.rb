@@ -341,7 +341,15 @@ class SiteElement < ApplicationRecord
   end
 
   def sanitize(value)
-    white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
-    white_list_sanitizer.sanitize(value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+    if value # rubocop:disable Style/GuardClause
+      white_list_sanitizer = Rails::Html::WhiteListSanitizer.new
+      style_atributes = value.partition('style').last.partition('>').first
+      if style_atributes.present?
+        style_atributes_final = white_list_sanitizer.sanitize(value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+        style_atributes_final.insert(style_atributes_final.index('style') + 5, style_atributes)
+      else
+        white_list_sanitizer.sanitize(value, tags: WHITELISTED_TAGS, attributes: WHITELISTED_ATTRS)
+      end
+    end
   end
 end
