@@ -231,6 +231,16 @@ export default Ember.Service.extend({
     }
   }.observes('model.show_branding'),
 
+  promptUpgradeWhenLeadingQuestion: function () {
+    const questionOn = this.get('model.use_question');
+    const canLeadingQuestion = this.get('model.site.capabilities.leading_question');
+
+    if (!canLeadingQuestion && questionOn) {
+      this.set('model.use_question', false);
+      this.promptUpgrade('use_question', questionOn, 'ask leading questions');
+    }
+  }.observes('model.use_question'),
+
   promptUpdateGDPRWhenNotEnabled: function () {
     const isGDPREnabled = this.get('model.site.gdpr_enabled');
     const enableGDPR = this.get('model.enable_gdpr');
