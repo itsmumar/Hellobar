@@ -2,6 +2,7 @@ import Ember from 'ember';
 import InterstitialNestedRouteMixin from '../../mixins/interstitial-nested-route-mixin';
 
 export default Ember.Route.extend(InterstitialNestedRouteMixin, {
+  theming: Ember.inject.service(),
 
   afterModel(model) {
     Ember.setProperties(model, {
@@ -12,6 +13,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
       'type': 'Alert'
     });
     this.get('router').transitionTo('design');
+    this.get('theming').applyCurrentTheme();
   }
 
 });
