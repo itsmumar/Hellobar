@@ -23,6 +23,10 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
     true
   end
 
+  def leading_question?
+    true
+  end
+
   def activate_on_exit?
     true
   end

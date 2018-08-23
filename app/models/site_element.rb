@@ -68,6 +68,7 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_thank_you_text_configured, if: :email?
   validate :ensure_custom_redirect_url_allowed, if: :email?
   validate :ensure_custom_redirect_url_configured, if: :email?
+  validate :ensure_leading_question_configured, if: :email?
 
   scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
   scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
@@ -318,6 +319,12 @@ class SiteElement < ApplicationRecord
     return if !custom_thank_you? || thank_you_text.present?
 
     errors.add(:thank_you_text, :blank)
+  end
+
+  def ensure_leading_question_configured
+    return if !leading_question? #|| thank_you_text.present?
+
+    errors.add(:leading_question, :blank)
   end
 
   def ensure_custom_redirect_url_allowed

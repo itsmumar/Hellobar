@@ -27,6 +27,7 @@ class SiteElementsController < ApplicationController
       font_id: SiteElement.columns_hash['font_id'].default,
       rule: @site.rules.first,
       show_branding: !@site.capabilities.remove_branding?,
+      question: !@site.capabilities.leading_question?,
       closable: false,
       wiggle_button: false,
       theme_id: 'smooth-impact',
