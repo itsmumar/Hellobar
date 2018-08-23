@@ -157,8 +157,7 @@ class User < ApplicationRecord
   private
 
   def user_upgrade_policy
-    false
-    # @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, paying_subscription?)
+    @user_upgrade_policy ||= ::UserUpgradePolicy.new(self, paying_subscription?)
   end
 
   # Disconnect oauth logins if user sets their own password
