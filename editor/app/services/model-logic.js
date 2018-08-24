@@ -246,7 +246,7 @@ export default Ember.Service.extend({
     console.log("Opacity Value is:")
     console.log(opacityValue)
     if (!canUseImageOpacity && opacityValue == 99) {
-      // this.set('model.image_opacity', 100);
+      this.set('model.image_opacity', 100);
       this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
     }
   }.observes('model.image_opacity'),
