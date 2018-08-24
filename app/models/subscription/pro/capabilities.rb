@@ -27,6 +27,10 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
     true
   end
 
+  def image_opacity?
+    true
+  end
+
   def activate_on_exit?
     true
   end

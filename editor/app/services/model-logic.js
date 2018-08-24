@@ -234,12 +234,22 @@ export default Ember.Service.extend({
   promptUpgradeWhenLeadingQuestion: function () {
     const questionOn = this.get('model.use_question');
     const canLeadingQuestion = this.get('model.site.capabilities.leading_question');
-
     if (!canLeadingQuestion && questionOn) {
       this.set('model.use_question', false);
       this.promptUpgrade('use_question', questionOn, 'ask leading questions');
     }
   }.observes('model.use_question'),
+
+  promptImageOpacity: function () {
+    const opacityValue = this.get('model.image_opacity');
+    const canUseImageOpacity = this.get('model.site.capabilities.image_opacity');
+    console.log("Opacity Value is:")
+    console.log(opacityValue)
+    if (!canUseImageOpacity && opacityValue == 99) {
+      // this.set('model.image_opacity', 100);
+      this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
+    }
+  }.observes('model.image_opacity'),
 
   promptUpdateGDPRWhenNotEnabled: function () {
     const isGDPREnabled = this.get('model.site.gdpr_enabled');
