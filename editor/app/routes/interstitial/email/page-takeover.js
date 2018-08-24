@@ -2,6 +2,7 @@ import Ember from 'ember';
 import InterstitialNestedRouteMixin from '../../mixins/interstitial-nested-route-mixin';
 
 export default Ember.Route.extend(InterstitialNestedRouteMixin, {
+  theming: Ember.inject.service(),
 
   createDefaultContactList(model) {
     if (Ember.get(model, 'site.contact_lists').length === 0 || Ember.get(model, 'contact_list_id') === 0) {
@@ -29,6 +30,7 @@ export default Ember.Route.extend(InterstitialNestedRouteMixin, {
       'element_subtype': 'email',
       'type': 'Takeover'
     });
+    this.get('theming').applyCurrentTheme();
     this.get('router').transitionTo('design');
   }
 
