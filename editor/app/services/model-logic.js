@@ -240,16 +240,34 @@ export default Ember.Service.extend({
     }
   }.observes('model.use_question'),
 
+
+//   document.getElementById('myDiv').onmousedown = function() {
+//   alert('New mouse down handler.');
+// };
+
   promptImageOpacity: function () {
     const opacityValue = this.get('model.image_opacity');
     const canUseImageOpacity = this.get('model.site.capabilities.image_opacity');
     console.log("Opacity Value is:")
     console.log(opacityValue)
-    if (!canUseImageOpacity && opacityValue == 99) {
+    if (!canUseImageOpacity && opacityValue != 100) {
       this.set('model.image_opacity', 100);
       this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
+      resetTimers
     }
   }.observes('model.image_opacity'),
+
+  promptImageOverlayOpacity: function () {
+    const opacityOverlayValue = this.get('model.image_overlay_opacity');
+    const canUseImageOverlayOpacity = this.get('model.site.capabilities.image_overlay_opacity');
+    console.log("Opacity Overlay Value is:")
+    console.log(opacityOverlayValue)
+    if (!canUseImageOverlayOpacity && opacityOverlayValue != 0) {
+      this.set('model.image_overlay_opacity', 0);
+      this.promptUpgrade('image_overlay_opacity', opacityOverlayValue, 'adjust image overlay opacity');
+      break;
+    }
+  }.observes('model.image_overlay_opacity'),
 
   promptUpdateGDPRWhenNotEnabled: function () {
     const isGDPREnabled = this.get('model.site.gdpr_enabled');

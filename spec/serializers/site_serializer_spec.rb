@@ -21,7 +21,8 @@ describe SiteSerializer do
       alert_bars: site.capabilities.alert_bars?,
       precise_geolocation_targeting: site.capabilities.precise_geolocation_targeting?,
       leading_question: site.capabilities.leading_question?,
-      image_opacity: site.capabilities.image_opacity?
+      image_opacity: site.capabilities.image_opacity?,
+      image_overlay_opacity: site.capabilities.image_overlay_opacity?,
     }
     expect(serializable_hash[:capabilities]).to match expected_capabilities
   end

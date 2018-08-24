@@ -43,6 +43,7 @@ export default Ember.Component.extend({
     },
 
     setImageProps(imageProps) {
+      console.log("SetImageProps called")
       this.get('theming').setImage(imageProps);
     },
 

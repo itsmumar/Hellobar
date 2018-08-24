@@ -46,6 +46,10 @@ class Subscription::Capabilities
     false
   end
 
+  def image_overlay_opacity?
+    false
+  end
+
   def max_site_elements
     10
   end
