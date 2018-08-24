@@ -61,7 +61,7 @@
 
     .reveal-block.wordpress-reveal
       strong 1) Copy Your Site Snippet
-      = text_area_tag :site_snippet, "<script src=\"#{@site.script_url}\" type=\"text/javascript\" charset=\"utf-8\" async=\"async\"></script>", readonly: true
+      = text_field_tag :site_snippet, "#{@site.script.hashed_id}", readonly: true, onclick: 'this.select();'
       button.button data-clipboard-target="#site_snippet"
         i.icon-clipboard.clipboard-btn
         span Copy
@@ -80,7 +80,7 @@
     .reveal-block.wix-reveal
       .title 1) Copy your ID:
       .form-inline
-        = text_field_tag :script_id, @site.script.hashed_id, readonly: true
+        = text_field_tag :script_id, @site.script.hashed_id, readonly: true, onclick: 'this.select();'
         button.button data-clipboard-target="#script_id"
           i.icon-clipboard.clipboard-btn
           span Copy
