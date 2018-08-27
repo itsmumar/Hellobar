@@ -248,21 +248,21 @@ export default Ember.Service.extend({
   promptImageOpacity: function () {
     const opacityValue = this.get('model.image_opacity');
     const canUseImageOpacity = this.get('model.site.capabilities.image_opacity');
-    if (!canUseImageOpacity && opacityValue != 100) {
+
+    if (!canUseImageOpacity && opacityValue !== 100) {
       this.set('model.image_opacity', 100);
       this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
-      resetTimers
+      throw "Requires a paid subscription";
     }
   }.observes('model.image_opacity'),
 
   promptImageOverlayOpacity: function () {
     const opacityOverlayValue = this.get('model.image_overlay_opacity');
     const canUseImageOverlayOpacity = this.get('model.site.capabilities.image_overlay_opacity');
-    if (!canUseImageOverlayOpacity && opacityOverlayValue != 0) {
+    if (!canUseImageOverlayOpacity && opacityOverlayValue !== 0) {
       this.set('model.image_overlay_opacity', 0);
       this.promptUpgrade('image_overlay_opacity', opacityOverlayValue, 'adjust image overlay opacity');
-      // break;
-      resetTimers
+      throw "Requires a paid subscription";
     }
   }.observes('model.image_overlay_opacity'),
 
