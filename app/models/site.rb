@@ -123,6 +123,20 @@ class Site < ApplicationRecord
     capabilities.visit_overage
   end
 
+  # rubocop:disable Delegate
+  def visit_warning_one
+    capabilities.visit_warning_one
+  end
+
+  def visit_warning_two
+    capabilities.visit_warning_two
+  end
+
+  def visit_warning_three
+    capabilities.visit_warning_three
+  end
+  # rubocop:enable Delegate
+
   def communication_types=(value)
     super(value.select(&:presence).join(','))
   end

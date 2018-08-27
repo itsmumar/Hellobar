@@ -143,7 +143,7 @@ export default Ember.Service.extend({
     const type = style || this.get('model.type');
     const themeSupportsStyle = !_.includes(this.get('model.theme.element_types'), type);
 
-    if (themeSupportsStyle) {
+    if (themeSupportsStyle && type) {
       this.set('model.theme', null);
       this.set('model.theme_id', null);
       return true;

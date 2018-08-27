@@ -357,7 +357,8 @@ export default Ember.Service.extend({
         ],
         'simple-no-link': ['bold', 'italic', 'underline', 'strikeThrough',  '|',
           'fontFamily', 'fontSize','specialCharacters','emoticons', 'color', '-',
-          'undo', 'redo', 'clearFormatting', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
+          'undo', 'redo', 'clearFormatting', 'selectAll', isGeolocationInjectionAllowed() ? 'geolocationDropdown' : undefined
+
         ],
         'full': [
           'bold', 'italic', 'underline', 'strikeThrough', '|',

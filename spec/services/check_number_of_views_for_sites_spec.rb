@@ -11,6 +11,7 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:finish)
     allow(report).to receive(:count)
     allow(report).to receive(:limit_exceeded)
+    allow(report).to receive(:send_warning_email)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
 
@@ -39,6 +40,49 @@ describe CheckNumberOfViewsForSites do
         expect(HandleOverageSite).to receive_service_call
         service.call
       end
+    end
+  end
+
+  context 'when first limit is approaching for all subscriptions' do
+    let(:number_of_views) { site.visit_warning_one + 1 }
+    let(:limit) { site.views_limit }
+    let(:warning_level_one) { site.visit_warning_one }
+
+    it 'sends warning email for warning number one' do
+      service.call
+      expect(report)
+        .to have_received(:send_warning_email)
+    end
+
+    it 'does not call HandleOverageSite' do
+      perform_enqueued_jobs do
+        expect(HandleOverageSite).not_to receive_service_call
+        service.call
+      end
+    end
+  end
+
+  context 'when second limit warning is approaching' do
+    let(:number_of_views) { site.visit_warning_two + 1 }
+    let(:limit) { site.views_limit }
+    let(:warning_level_two) { site.visit_warning_two }
+
+    it 'sends warning email for warning number two for free sites' do
+      service.call
+      expect(report)
+        .to have_received(:send_warning_email)
+    end
+  end
+
+  context 'when third limit warning is approaching' do
+    let(:number_of_views) { site.visit_warning_three + 1 }
+    let(:limit) { site.views_limit }
+    let(:warning_level_two) { site.visit_warning_three }
+
+    it 'sends warning email for warning number three for free sites' do
+      service.call
+      expect(report)
+        .to have_received(:send_warning_email)
     end
   end
 
