@@ -25,8 +25,11 @@ export default Ember.Component.extend({
   froalaFonts: Ember.inject.service(),
 
   availableFonts: Ember.computed.alias('fonts.availableFonts'),
+  isNotElementSelected: Ember.computed.equal('model.type', null),
+  isNotGoalSelected: Ember.computed.equal('model.element_subtype', null),
 
   _shouldSkipPreviewUpdate: false,
+
 
   didInsertElement() {
     this.get('preview').addPreviewInjectionListener(() => {
@@ -72,8 +75,9 @@ export default Ember.Component.extend({
 
     classes.push(this.get('barPosition'));
     classes.push(this.get('barSize'));
-    classes.push(this.get('elementType').toLowerCase());
-
+    if(this.get('elementType')) {
+      classes.push(this.get('elementType').toLowerCase());
+    }
     if (this.get('isPushed')) {
       classes.push('is-pushed');
     }

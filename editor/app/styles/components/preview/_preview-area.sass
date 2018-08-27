@@ -13,6 +13,28 @@
     border: 1px solid $black
     border-radius: 10em
     box-shadow: $shadow
+  #overlay
+    position: fixed
+    display: block
+    width: 100%
+    height: 100%
+    top: 60px
+    left: 0
+    right: 0
+    bottom: 0
+    background-color: rgba(0,0,0,0.5)
+    z-index: 999
+    cursor: pointer
+    #text
+      position: absolute
+      text-align: center
+      top: 50%
+      left: 62%
+      font-size: 23px
+      font-weight: bold
+      color: white
+      transform: translate(-50%,-50%)
+      -ms-transform: translate(-50%,-50%)
 
   .preview-wrapper
     width: 100%
