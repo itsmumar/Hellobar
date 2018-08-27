@@ -10,6 +10,9 @@ class Subscription
           label: 'GRW',
           monthly_amount: 29.0,
           yearly_amount: 289.0,
+          visit_warning_one: 40_000,
+          visit_warning_two: ::Float::INFINITY,
+          visit_warning_three: ::Float::INFINITY,
           visit_overage: 50_000,
           visit_overage_amount: 5.00, # $$$
           discounts: [ # discounts are doubled from Pro
