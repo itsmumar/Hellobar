@@ -2,7 +2,6 @@ feature 'Editing site element', :js do
   scenario 'User can edit a site element' do
     site = create :site, :with_user, :pro
     user = site.owners.last
-    credit_card = create :credit_card, user: user
 
     site.rules << create(:rule)
 

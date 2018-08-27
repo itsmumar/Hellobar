@@ -34,10 +34,6 @@ class Subscription::Capabilities
     false
   end
 
-  def after_submit_redirect?
-    false
-  end
-
   def leading_question?
     false
   end
