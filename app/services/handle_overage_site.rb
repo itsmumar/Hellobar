@@ -43,7 +43,7 @@ class HandleOverageSite
   end
 
   def handle_enterprise
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_pro_managed
@@ -53,18 +53,18 @@ class HandleOverageSite
   end
 
   def handle_growth
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_pro
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_free_plus
   end
 
   def handle_free
-    OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def track_exceeded_views_limit_event

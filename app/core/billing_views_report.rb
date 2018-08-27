@@ -50,7 +50,7 @@ class BillingViewsReport
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)
-    WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    # WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
   end
 
   private
