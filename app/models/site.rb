@@ -135,6 +135,7 @@ class Site < ApplicationRecord
   def visit_warning_three
     capabilities.visit_warning_three
   end
+  # rubocop:enable Delegate
 
   def communication_types=(value)
     super(value.select(&:presence).join(','))
