@@ -11,19 +11,19 @@ RSpec.describe WarningMailer, type: :mailer do
     subject { WarningMailer.warning_email(site, number_of_views, limit, warning_level) }
 
     it 'set to be delivered to user\'s email' do
-      # expect(subject).to deliver_to(user.email)
+      expect(subject).to deliver_to(user.email)
     end
 
     it 'has correct subject' do
-      # expect(subject).to have_subject("You're approaching your Hello Bar monthly view limit!")
+      expect(subject).to have_subject("You're approaching your Hello Bar monthly view limit!")
     end
 
     it 'is sent from hello bar contact email' do
-      # expect(subject).to deliver_from('Hello Bar <contact@hellobar.com>')
+      expect(subject).to deliver_from('Hello Bar <contact@hellobar.com>')
     end
 
     it 'includes site\'s URL' do
-      # expect(subject).to have_body_text(site.url)
+      expect(subject).to have_body_text(site.url)
     end
   end
 end
