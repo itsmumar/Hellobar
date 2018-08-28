@@ -231,6 +231,41 @@ export default Ember.Service.extend({
     }
   }.observes('model.show_branding'),
 
+  promptUpgradeWhenLeadingQuestion: function () {
+    const questionOn = this.get('model.use_question');
+    const canLeadingQuestion = this.get('model.site.capabilities.leading_question');
+    if (!canLeadingQuestion && questionOn) {
+      this.set('model.use_question', false);
+      this.promptUpgrade('use_question', questionOn, 'ask leading questions');
+    }
+  }.observes('model.use_question'),
+
+
+//   document.getElementById('myDiv').onmousedown = function() {
+//   alert('New mouse down handler.');
+// };
+
+  promptImageOpacity: function () {
+    const opacityValue = this.get('model.image_opacity');
+    const canUseImageOpacity = this.get('model.site.capabilities.image_opacity');
+
+    if (!canUseImageOpacity && opacityValue !== 100) {
+      this.set('model.image_opacity', 100);
+      this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
+      throw "Requires a paid subscription";
+    }
+  }.observes('model.image_opacity'),
+
+  promptImageOverlayOpacity: function () {
+    const opacityOverlayValue = this.get('model.image_overlay_opacity');
+    const canUseImageOverlayOpacity = this.get('model.site.capabilities.image_overlay_opacity');
+    if (!canUseImageOverlayOpacity && opacityOverlayValue !== 0) {
+      this.set('model.image_overlay_opacity', 0);
+      this.promptUpgrade('image_overlay_opacity', opacityOverlayValue, 'adjust image overlay opacity');
+      throw "Requires a paid subscription";
+    }
+  }.observes('model.image_overlay_opacity'),
+
   promptUpdateGDPRWhenNotEnabled: function () {
     const isGDPREnabled = this.get('model.site.gdpr_enabled');
     const enableGDPR = this.get('model.enable_gdpr');

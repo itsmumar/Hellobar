@@ -34,7 +34,15 @@ class Subscription::Capabilities
     false
   end
 
-  def activate_on_exit?
+  def leading_question?
+    false
+  end
+
+  def image_opacity?
+    false
+  end
+
+  def image_overlay_opacity?
     false
   end
 

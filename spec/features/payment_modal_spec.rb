@@ -106,6 +106,20 @@ feature 'Payment modal interaction', :js do
       expect(page).to have_content "Upgrade #{ site.host } to remove branding"
     end
 
+    scenario 'trying to ask leading questions triggers the Pro Upgrade popup' do
+      visit site_path(site)
+
+      click_on 'Create New'
+
+      find('.goal-block.contacts').click
+      find('.goal-block.contacts').click
+      go_to_tab 'Design'
+      find('.collapse', text: 'Leading Question').click
+      find('.questions .toggle-switch').click
+
+      expect(page).to have_content "Upgrade #{ site.host } to ask leading questions"
+    end
+
     def date_format(date)
       date.strftime "%b #{ date.day.ordinalize }, %Y"
     end

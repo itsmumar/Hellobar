@@ -23,6 +23,18 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
     true
   end
 
+  def leading_question?
+    true
+  end
+
+  def image_opacity?
+    true
+  end
+
+  def image_overlay_opacity?
+    true
+  end
+
   def activate_on_exit?
     true
   end
