@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe UpsellMailer, type: :mailer do
   let(:site) { create :site, :pro, :with_user }
