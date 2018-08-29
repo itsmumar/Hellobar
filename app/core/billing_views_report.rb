@@ -53,6 +53,14 @@ class BillingViewsReport
     # WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
   end
 
+  def send_upsell_email(site, number_of_views, limit)
+    # UpsellMailer.upsell_email(site, number_of_views, limit).deliver_later
+  end
+
+  def send_enterprise_upsell_email(site, number_of_views, limit)
+    # UpsellMailer.enterprise_upsell_email(site, number_of_views, limit).deliver_later
+  end
+
   private
 
   def info(msg)

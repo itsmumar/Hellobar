@@ -14,7 +14,8 @@ class Subscription
           visit_warning_two: ::Float::INFINITY,
           visit_warning_three: ::Float::INFINITY,
           visit_overage: 50_000, # after this many visits in a month
-          visit_overage_amount: 0.0 # $$$
+          visit_overage_amount: 0.0, # $$$
+          upsell_email_trigger: ::Float::INFINITY
         }
       end
     end
