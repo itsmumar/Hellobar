@@ -9,7 +9,11 @@
     = f.hidden_field :ignore_existing_site
 
   = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
+  br
+  br
   = f.input_field :email, placeholder: 'Your Email'
+  br
+  br
   = f.input_field :password, placeholder: 'Password'
   = f.label :accept_terms_and_conditions, accept_terms_and_conditions_label do
     = f.check_box :accept_terms_and_conditions
@@ -31,5 +35,5 @@
     = link_to 'Forgot your password?', new_user_password_path
 
 #trusted_by
-  h3 Trusted by over 43,000+ businesses
+  h3 Trusted by over 500,000 marketers
   = image_tag 'trusted_by.png'
