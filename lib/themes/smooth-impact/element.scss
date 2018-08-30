@@ -519,6 +519,10 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
   }
 
   #hellobar-alert {
+    #hb-answer1, #hb-answer2{
+      padding: 5px;
+    }
+
     .image-background .hb-image-wrapper.background {
       width: 45%;
     }
