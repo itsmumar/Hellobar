@@ -25,7 +25,7 @@ RSpec.describe UpsellMailer, type: :mailer do
   end
 
   let(:mail) { UpsellMailer.enterprise_upsell_email(site, number_of_views, limit) }
-  
+
   it 'has correct subject' do
     expect(mail).to have_subject('Heads up! An Enterprise customer is paying a lot in overage fees')
   end
