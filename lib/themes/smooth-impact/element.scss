@@ -64,7 +64,6 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   .hb-input-block {
     &:before {
-      background-image: $input-icon;
       background-repeat: no-repeat;
       content: "";
       position: absolute;
@@ -98,13 +97,13 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   .builtin-email {
     &:before {
-      background-image: $email-input-icon;
+
     }
   }
 
   .builtin-phone {
     &:before {
-      background-image: $phone-input-icon;
+
     }
   }
 
@@ -281,7 +280,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       input {
         font-size: 16px;
         height: 3.5rem;
-        padding: 0 0 0 45px;
+        padding: 0 0 0 5px;
       }
     }
 
