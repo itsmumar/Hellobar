@@ -23,4 +23,15 @@ RSpec.describe UpsellMailer, type: :mailer do
   it 'includes site\'s URL' do
     expect(subject).to have_body_text(site.url)
   end
+
+
+  let(:mail) { UpsellMailer.enterprise_upsell_email(site, number_of_views, limit) }
+  it 'has correct subject' do
+    expect(mail).to have_subject('Heads up! An Enterprise customer is paying a lot in overage fees')
+  end
+
+  it 'set to be delivered to admin email' do
+    expect(mail).to deliver_to("mike@hellobar.com")
+  end
+
 end
