@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20180829223323) do
-=======
-ActiveRecord::Schema.define(version: 20180829153128) do
->>>>>>> upsell emailer logic
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
