@@ -24,7 +24,7 @@ export default Ember.Component.extend({
       this.set('goal', goal === 'social' ? 'social/like_on_facebook' : goal);
       this.get('theming').resetThemeIfNeeded();
       this.set('model.wiggle_button', false); // turn wiggling off
-      switch(goal) {git
+      switch(goal) {
         case 'call':
           this.set('model.headline', 'Talk to us to find out more')
           this.set('model.link_text', 'Call Now')
@@ -44,9 +44,6 @@ export default Ember.Component.extend({
           this.set('model.headline', 'Want To Become An Expert In Hosting Webinars? Join Our Free Webinar Masterclass!' )
           this.set('model.link_text', 'Save Me A Spot!')
           break;
-        default:
-          this.set('model.headline', goal )
-          this.set('model.link_text', goal )
       }
     }
   }
