@@ -14,7 +14,8 @@ class Subscription
           visit_warning_one: 400_000,
           visit_warning_two: ::Float::INFINITY,
           visit_warning_three: ::Float::INFINITY,
-          visit_overage_amount: nil
+          visit_overage_amount: nil,
+          upsell_email_trigger: 1_000_000
         }
       end
     end
