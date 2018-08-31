@@ -36,7 +36,10 @@ export default Ember.Component.extend({
     autodetectColors() {
       this.get('theming').setThemeById('autodetect');
       this.get('bus').trigger('hellobar.core.rightPane.hide');
+    },
+
+    closeGallery() {
+      this.get('bus').trigger('hellobar.core.rightPane.hide');
     }
   }
-
 });
