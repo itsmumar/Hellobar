@@ -16,11 +16,11 @@ class CreateOverageBill
     Bill.create!(
       subscription: @site.active_subscription,
       amount: @amount,
-      description: "Monthly View Limit Overage Fee",
+      description: 'Monthly View Limit Overage Fee',
       grace_period_allowed: true,
-      bill_at: (DateTime.now + 1.hour),
-      start_date: DateTime.now,
-      end_date: DateTime.now
+      bill_at: (Time.current + 1.hour),
+      start_date: Time.current,
+      end_date: Time.current
     )
 
     # reset the overage counter for the new month
