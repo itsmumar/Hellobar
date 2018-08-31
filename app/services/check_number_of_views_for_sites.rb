@@ -36,27 +36,36 @@ class CheckNumberOfViewsForSites
   end
 
   def check_views_number_for_site(site, number_of_views)
-    report.count(number_of_views)
-    limit = site.views_limit
-    warning_level_one = site.visit_warning_one
-    warning_level_two = site.visit_warning_two
-    warning_level_three = site.visit_warning_three
-
-    if number_of_views > limit
-      handle_overage_site(site, number_of_views, limit)
-
-    elsif number_of_views < limit && number_of_views > warning_level_one && site.warning_email_one_sent == false
-      send_warning_email(site, number_of_views, limit, warning_level_one, 'warning_email_one_sent')
-    elsif number_of_views < limit && number_of_views > warning_level_two && site.warning_email_two_sent == false && site.free?
-      send_warning_email(site, number_of_views, limit, warning_level_two, 'warning_email_two_sent')
-    elsif number_of_views < limit && number_of_views > warning_level_three && site.warning_email_three_sent == false && site.free?
-      send_warning_email(site, number_of_views, limit, warning_level_three, 'warning_email_three_sent')
+    setup_views_counter(site, number_of_views)
+    if number_of_views > @limit
+      handle_overage_site(site, number_of_views, @limit)
+    elsif number_of_views < @limit && number_of_views > @warning_level_one && site.warning_email_one_sent == false
+      send_warning_email(site, number_of_views, @limit, @warning_level_one, 'warning_email_one_sent')
+    elsif number_of_views < @limit && number_of_views > @warning_level_two && site.warning_email_two_sent == false && site.free?
+      send_warning_email(site, number_of_views, @limit, @warning_level_two, 'warning_email_two_sent')
+    elsif number_of_views < @limit && number_of_views > @warning_level_three && site.warning_email_three_sent == false && site.free?
+      send_warning_email(site, number_of_views, @limit, @warning_level_three, 'warning_email_three_sent')
     end
+  end
+
+  def setup_views_counter(site, number_of_views)
+    report.count(number_of_views)
+    @limit = site.views_limit
+    @warning_level_one = site.visit_warning_one
+    @warning_level_two = site.visit_warning_two
+    @warning_level_three = site.visit_warning_three
   end
 
   def handle_overage_site(site, number_of_views, limit)
     report.limit_exceeded(site, number_of_views, limit)
     HandleOverageSiteJob.perform_later(site, number_of_views, limit)
+    if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.current_subscription.is_a?(Subscription::Enterprise)
+      site.update(upsell_email_sent: true)
+      report.send_enterprise_upsell_email(site, number_of_views, limit)
+    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !site.current_subscription.is_a?(Subscription::Enterprise)
+      site.update(upsell_email_sent: true)
+      report.send_upsell_email(site, number_of_views, limit)
+    end
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level, db_field)

@@ -135,6 +135,10 @@ class Site < ApplicationRecord
   def visit_warning_three
     capabilities.visit_warning_three
   end
+
+  def upsell_email_trigger
+    capabilities.upsell_email_trigger
+  end
   # rubocop:enable Delegate
 
   def communication_types=(value)

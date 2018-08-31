@@ -12,6 +12,8 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:count)
     allow(report).to receive(:limit_exceeded)
     allow(report).to receive(:send_warning_email)
+    allow(report).to receive(:send_upsell_email)
+    allow(report).to receive(:send_enterprise_upsell_email)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
 
@@ -83,6 +85,35 @@ describe CheckNumberOfViewsForSites do
       service.call
       expect(report)
         .to have_received(:send_warning_email)
+    end
+  end
+
+  context 'when it would be cheaper for a user to upgrade' do
+    let(:number_of_views) { site.upsell_email_trigger + 1 }
+    let(:limit) { site.views_limit }
+    let(:upsell_trigger) { site.upsell_email_trigger }
+
+    it 'sends an upsell email' do
+      service.call
+      expect(report)
+        .to have_received(:send_upsell_email)
+    end
+  end
+
+  context 'when and an enterprise user needs a custom plan' do
+    let(:number_of_views) { site.upsell_email_trigger + 1 }
+    let(:limit) { site.views_limit }
+    let(:upsell_trigger) { site.upsell_email_trigger }
+    let(:credit_card) { create :credit_card }
+    before do
+      stub_cyber_source :purchase
+      ChangeSubscription.new(site, { subscription: 'enterprise' }, credit_card).call
+    end
+
+    it 'sends an notification email to get a custom plan' do
+      service.call
+      expect(report)
+        .to have_received(:send_enterprise_upsell_email)
     end
   end
 

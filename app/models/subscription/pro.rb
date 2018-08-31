@@ -15,6 +15,7 @@ class Subscription
           visit_warning_three: ::Float::INFINITY,
           visit_overage: 50_000, # after this many visits in a month
           visit_overage_amount: 5.00, # $$$
+          upsell_email_trigger: 300_000, # Send the email saying they should upgrade to sav
           discounts: [
             DiscountRange.new(5, 0, 0, 0),
             DiscountRange.new(5, 1, 2, 20),
