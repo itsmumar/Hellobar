@@ -34,7 +34,7 @@ export default Ember.Component.extend({
           this.set('model.link_text', 'Subscribe');
           break;
         case 'announcement':
-          this.set('model.headline', 'Flash Sale: 20% Off Sitewide, Enter Code: 20savings');
+          this.set('model.headline', 'Flash Sale: 20% Off Sitewide, Enter Code: 20savings on Checkout!');
           this.set('model.link_text', 'Shop Now');
           break;
         case 'social':
