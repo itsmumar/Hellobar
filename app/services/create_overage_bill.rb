@@ -1,7 +1,7 @@
 class CreateOverageBill
   def initialize(site)
     @site = site
-    @amount = (@site.overage_count * 5)
+    @amount = (@site.overage_count * 5) # @site.overage = the number of penalty intervals used this month
   end
 
   def call
@@ -10,7 +10,7 @@ class CreateOverageBill
 
   private
 
-  attr_reader :bill
+  attr_reader :site
 
   def create_bill_for_overage
     Bill.create!(
