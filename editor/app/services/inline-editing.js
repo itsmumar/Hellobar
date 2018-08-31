@@ -124,7 +124,7 @@ class SimpleModelAdapter {
   constructor(modelHandler, service) {
     this.modelHandler = modelHandler;
     this.service = service;
-    this.lastElementType = null;our
+    this.lastElementType = null;
     this.fullFeaturedHeadline = null;
     this.shortenedHeadline = null;
   }
@@ -133,7 +133,7 @@ class SimpleModelAdapter {
     if (this.lastElementType && this.lastElementType !== 'Bar' && newElementType === 'Bar') {
       const headline = this.modelHandler.get('model.headline');
       this.fullFeaturedHeadlineBackup = headline;
-      this.shortenedHeadline = this.purgeHtmlMarkup(headline)
+      this.shortenedHeadline = this.purgeHtmlMarkup(headline);
       this.modelHandler.set('model.headline', this.shortenedHeadline);
     }
 
