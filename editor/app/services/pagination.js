@@ -35,7 +35,7 @@ export default Ember.Service.extend({
     } else {
       return STEPS.slice(0, -1);
     }
-  }.property('goal'),
+  }.property('goal', 'type'),
 
   routeLinks: function () {
     const currentRouteIndex = this.currentRouteIndex();

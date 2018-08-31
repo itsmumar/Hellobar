@@ -63,5 +63,8 @@ export default Ember.Controller.extend(MobileMixin, {
 
   syncGoal: function () {
     this.set('pagination.goal', this.get('goal'));
-  }.observes('goal')
+  }.observes('goal'),
+  syncStyle: function () {
+    this.set('pagination.type', this.get('style'));
+  }.observes('style')
 });
