@@ -87,9 +87,6 @@
   margin: 1.33em auto 0;
 }
 
-#hellobar-modal #hb-answer1, #hellobar-modal #hb-answer2 {
-  padding: 7px;
-}
 #hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
   display: flex;
