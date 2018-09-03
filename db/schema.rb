@@ -503,6 +503,7 @@ ActiveRecord::Schema.define(version: 20180831091951) do
     t.boolean  "warning_email_two_sent",                           default: false
     t.boolean  "warning_email_three_sent",                         default: false
     t.boolean  "limit_email_sent",                                 default: false
+    t.boolean  "upsell_email_sent",                                default: false
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
