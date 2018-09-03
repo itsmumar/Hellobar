@@ -87,9 +87,6 @@
   margin: 1.33em auto 0;
 }
 
-#hellobar-modal #hb-answer1, #hellobar-modal #hb-answer2 {
-  padding: 7px;
-}
 #hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
   display: flex;
@@ -141,13 +138,4 @@
 
 #hellobar-modal.mobile .gdpr-consent-form {
   padding-left: 15px;
-}
-.hb-editable-block>.fr-wrapper p, .hb-editable-block p {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-top: 2.5%;
-  padding-bottom: 2.5%;
-  padding-left: 6px;
-  padding-right: 6px;
-
 }
