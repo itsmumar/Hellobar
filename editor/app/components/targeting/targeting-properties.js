@@ -91,36 +91,38 @@ export default Ember.Component.extend({
   },
 
   days: function () {
-    return [
-      { label: '120 days', duration: 120 },
-      { label: '90 days', duration: 90 },
-      { label: '60 days', duration: 60 },
-      { label: '30 days', duration: 30 },
-      { label: '20 days', duration: 20 },
-      { label: '15 days', duration: 15 },
-      { label: '10 days', duration: 10 },
-      { label: '9 days', duration: 9 },
-      { label: '8 days', duration: 8 },
-      { label: '7 days', duration: 7 },
-      { label: '6 days', duration: 6 },
-      { label: '5 days', duration: 5 },
-      { label: '4 days', duration: 4 },
-      { label: '3 days', duration: 3 },
+    return  [
+      { label: 'Display after every page load', duration: 0},
+      { label: '1 day', duration: 1 },
       { label: '2 days', duration: 2 },
-      { label: '1 day', duration: 1 }
+      { label: '3 days', duration: 3 },
+      { label: '4 days', duration: 4 },
+      { label: '5 days', duration: 5 },
+      { label: '6 days', duration: 6 },
+      { label: '7 days', duration: 7 },
+      { label: '8 days', duration: 8 },
+      { label: '9 days', duration: 9 },
+      { label: '10 days', duration: 10 },
+      { label: '15 days', duration: 15 },
+      { label: '20 days', duration: 20 },
+      { label: '30 days', duration: 30 },
+      { label: '60 days', duration: 60 },
+      { label: '90 days', duration: 90 },
+      { label: '120 days', duration: 120 },
+      { label: 'Never display again', duration: 120 }
     ];
   }.property(),
 
   selectedSuccessDuration: function () {
     const duration = this.get('model.success_duration');
     const days = this.get('days');
-    return days.find(option => option.duration === duration) || days[0];
+    return days.find(option => option.duration === duration) || days[3];
   }.property('model.success_duration'),
 
   selectedDissmissDuration: function () {
     const duration = this.get('model.duration');
     const days = this.get('days');
-    return this.get('days').find(option => option.duration === duration) || days[0];
+    return this.get('days').find(option => option.duration === duration) || days[3];
   }.property('model.duration'),
 
   shouldShowDissmissDuration: function () {
