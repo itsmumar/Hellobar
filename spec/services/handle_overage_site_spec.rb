@@ -25,6 +25,16 @@ describe HandleOverageSite do
     include_examples 'tracks events'
   end
 
+  context 'with Enterprise & into overage counts' do
+    let(:subscription_type) { :enterprise }
+    let(:number_of_views) { 25_001 }
+    let(:limit) { 25_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
   context 'with ProManaged subscription' do
     let(:subscription_type) { :pro_managed }
     include_examples 'tracks events'
@@ -40,9 +50,29 @@ describe HandleOverageSite do
     include_examples 'tracks events'
   end
 
+  context 'with Growth & into overage counts' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 25_001 }
+    let(:limit) { 25_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
   context 'with Pro subscription' do
     let(:subscription_type) { :pro }
     include_examples 'tracks events'
+  end
+
+  context 'with Pro & into overage counts' do
+    let(:subscription_type) { :pro }
+    let(:number_of_views) { 25_001 }
+    let(:limit) { 25_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
   end
 
   context 'with FreePlus subscription' do
