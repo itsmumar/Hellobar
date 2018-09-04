@@ -139,3 +139,14 @@
 #hellobar-modal.mobile .gdpr-consent-form {
   padding-left: 15px;
 }
+
+/*-----------  Autodetect  -----------*/
+
+.autodetect #hellobar-modal .answer {
+  padding: 10px;
+}
+
+.autodetect #hellobar-slider .answer {
+  padding-left: 8px;
+  padding-right: 8px;
+}
