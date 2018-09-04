@@ -124,7 +124,11 @@ export default Ember.Component.extend({
   }.property('model.duration'),
 
   shouldShowDissmissDuration: function () {
-    return this.get('model.closable');
+    if(this.get('model.type') === 'Modal') {
+      return true;
+    } else if(this.get('model.type') === 'Takeover') {
+      return true;
+    } else { return this.get('model.closable'); }
   }.property('model.closable'),
 
   shouldShowSuccessDuration: function () {
