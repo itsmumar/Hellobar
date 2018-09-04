@@ -21,6 +21,8 @@ feature 'Users can use site element targeting rule presets', :js do
 
       visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
       find('h6', text: 'Collect emails').click
+      go_to_tab 'Type'
+      find('h6', text: 'Bar').click
       go_to_tab 'Targeting'
     end
 
@@ -58,6 +60,8 @@ feature 'Users can use site element targeting rule presets', :js do
 
       visit new_site_site_element_path(site) + '/#/goal?skip_interstitial=true'
       find('h6', text: 'Collect emails').click
+      go_to_tab 'Type'
+      find('h6', text: 'Bar').click
       go_to_tab 'Targeting'
     end
 
@@ -83,6 +87,8 @@ feature 'Users can use site element targeting rule presets', :js do
 
         visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
         find('h6', text: 'Collect emails').click
+        go_to_tab 'Type'
+        find('h6', text: 'Bar').click
         go_to_tab 'Targeting'
 
         expect(page).to have_content preset_rule.name
@@ -92,6 +98,8 @@ feature 'Users can use site element targeting rule presets', :js do
         element = create(:site_element, rule: custom_rule)
         visit edit_site_site_element_path(site, element.id) + '/#/goal?skip_interstitial=true'
         find('h6', text: 'Collect emails').click
+        go_to_tab 'Type'
+        find('h6', text: 'Bar').click
         go_to_tab 'Targeting'
 
         expect_choosen custom_rule.name
