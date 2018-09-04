@@ -49,11 +49,11 @@ class HandleOverageSite
 
   def update_enterprise_overage_count
     delta = (@number_of_views - @limit)
-    charge_count = @site.overage_count
-    charges = (delta.to_f / 100_000.0).ceil
+    current_charge_count = @site.overage_count
+    new_charge_count = (delta.to_f / 100_000.0).ceil
 
-    return unless charges > charge_count
-    @site.update(overage_count: charges)
+    return unless new_charge_count > current_charge_count
+    @site.update(overage_count: new_charge_count)
   end
 
   def handle_pro_managed
@@ -69,15 +69,15 @@ class HandleOverageSite
 
   def update_growth_overage_count
     delta = (@number_of_views - @limit)
-    charge_count = @site.overage_count
-    charges = (delta.to_f / 25_000.0).ceil
+    current_charge_count = @site.overage_count
+    new_charge_count = (delta.to_f / 25_000.0).ceil
 
-    return unless charges > charge_count
-    @site.update(overage_count: charges)
+    return unless new_charge_count > current_charge_count
+    @site.update(overage_count: new_charge_count)
   end
 
   def handle_pro
-    update_growth_overage_count
+    update_growth_overage_count # pro is the same as growth now
     # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
