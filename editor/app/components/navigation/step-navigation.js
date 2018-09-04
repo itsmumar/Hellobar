@@ -1,5 +1,7 @@
 import Ember from 'ember';
 
+var renderCount = 0;
+
 export default Ember.Component.extend({
   classNames: ['step-navigation'],
 
@@ -10,6 +12,24 @@ export default Ember.Component.extend({
 
   isFullscreen: Ember.computed.alias('fullscreenSwitcher.isFullscreen'),
   isGoalSelected: Ember.computed.notEmpty('model.element_subtype'),
+
+  didRender() {
+    this._super(...arguments);
+    $('nav a.button.next').addClass('disabled');
+    if(this.get('model.element_subtype') !== null) {
+      $('nav a.button.next').removeClass('disabled');
+      console.log(renderCount > 0);
+      renderCount++;
+    }
+    if(renderCount > 1 && this.get('model.type') === null)
+    {
+      $('nav a.button.next').addClass('disabled');
+
+    }
+    if(this.get('model.type') !== null) {
+      $('nav a.button.next').removeClass('disabled');
+    }
+  },
 
   next: function () {
     return this.get('pagination').next();

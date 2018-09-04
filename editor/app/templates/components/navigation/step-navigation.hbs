@@ -1,5 +1,5 @@
 <nav>
-  {{#link-to prev class="button" classNameBindings="prev::disabled"}}
+  {{#link-to prev class="button prev" classNameBindings="prev::disabled"}}
     {{icons/icon-angel-left}}
     Prev
   {{/link-to}}
@@ -8,7 +8,7 @@
     {{link-to '' dot.route classNameBindings="dot.past:past :nav-dot"}}
   {{/each}}
 
-  {{#link-to next class="button" classNameBindings="next::disabled"}}
+  {{#link-to next class="button next" classNameBindings="next::disabled"}}
     Next
     {{icons/icon-angel-right}}
   {{/link-to}}
