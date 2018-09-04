@@ -10,6 +10,15 @@ export default Ember.Component.extend({
   tagName: 'nav',
 
   isGoalSelected: Ember.computed.notEmpty('model.element_subtype'),
+  isTypeSelected: Ember.computed.notEmpty('model.type'),
+
+  didRender() {
+    this._super(...arguments);
+    if(this.get('model.element_subtype') !== null) {
+      $('nav ul li:nth-child(1)').removeClass('disabled');
+      $('nav ul li:nth-child(2)').removeClass('disabled');
+    }
+  },
 
   links: function () {
     const routeLinks = this.get('pagination.routeLinks');
@@ -20,7 +29,7 @@ export default Ember.Component.extend({
         isDone: this.isDone(link.route),
         icon: `icons/icon-${ link.route }`,
         caption: _.capitalize(link.route),
-        classNames: this.get('isGoalSelected') ? '' : 'disabled'
+        classNames: this.get('isTypeSelected') ? '' : 'disabled'
       };
     });
   }.property('pagination.routeLinks'),
