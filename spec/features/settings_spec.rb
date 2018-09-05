@@ -27,7 +27,6 @@ feature 'Manage Settings', :js do
   end
 
   scenario 'it shows monthly overage bills that are coming up' do
-
     site.update_attribute('overage_count', 1)
     visit edit_site_path(site)
 
@@ -35,7 +34,6 @@ feature 'Manage Settings', :js do
   end
 
   scenario 'site is not over limit so no overage bill should appear' do
-
     site.update_attribute('overage_count', 0)
     visit edit_site_path(site)
 
