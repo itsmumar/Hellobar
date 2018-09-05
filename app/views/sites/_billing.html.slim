@@ -108,6 +108,7 @@ section
             th Date
             th Cost
             th Description
+            th # of Monthly Views So Far
         tbody
         tr
           td
@@ -116,19 +117,13 @@ section
           td= format_date(Date.today.at_beginning_of_month)
           td= number_to_currency(@next_overage_bills)
           td= "Monthly View Limit Overage Fee"
-        - if Permissions.view_bills?(current_user, @site)
-          - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
-            - if @next_bill
-              = bill_estimated_amount(@next_bill)
-            - else
-              = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
-              '
-              = @site.current_subscription.schedule
-              | .
-          - if @site.requires_credit_card?
-            - # only show "billing schedule" if user is on a plan that actually has one
-            = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal', data: { source: "Change plan or billing" }
-
+          td= @current_view_count
+        tr
+          td
+            i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
+          td= format_date(@next_bill.due_at)
+          td= bill_estimated_amount(@next_bill)
+          td= "#{@next_bill.subscription.values[:name]} #{@next_bill.subscription.schedule}"
 
 - elsif @site.free?
   ul
