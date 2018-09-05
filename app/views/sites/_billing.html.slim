@@ -11,6 +11,7 @@ section
       = "(#{subscription_days_left(@site)})"
     - if Permissions.view_bills?(current_user, @site)
       - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
+        = bill_estimated_amount(@next_overage_bill)
         - if @next_bill
           = bill_estimated_amount(@next_bill)
         - else
@@ -96,13 +97,38 @@ section
       ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
 
   - if @next_bill && @next_bill.amount > 0
-    ' Next bill is due on
-    = format_date(@next_bill.due_at)
-    '  and will total
-    = bill_estimated_amount(@next_bill)
-    '  for a
-    = @next_bill.subscription.schedule
-    |  subscription.
+
+    section
+      label Upcoming Bills
+
+      table
+        thead
+          tr
+            th
+            th Date
+            th Cost
+            th Description
+        tbody
+        tr
+          td
+            i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
+
+          td= format_date(Date.today.at_beginning_of_month)
+          td= number_to_currency(@next_overage_bills)
+          td= "Monthly View Limit Overage Fee"
+        - if Permissions.view_bills?(current_user, @site)
+          - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
+            - if @next_bill
+              = bill_estimated_amount(@next_bill)
+            - else
+              = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
+              '
+              = @site.current_subscription.schedule
+              | .
+          - if @site.requires_credit_card?
+            - # only show "billing schedule" if user is on a plan that actually has one
+            = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal', data: { source: "Change plan or billing" }
+
 
 - elsif @site.free?
   ul
