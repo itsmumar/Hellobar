@@ -18,7 +18,6 @@ export default Ember.Component.extend({
     $('nav a.button.next').addClass('disabled');
     if(this.get('model.element_subtype') !== null) {
       $('nav a.button.next').removeClass('disabled');
-      console.log(renderCount > 0);
       renderCount++;
     }
     if(renderCount > 1 && this.get('model.type') === null)
@@ -28,6 +27,12 @@ export default Ember.Component.extend({
     }
     if(this.get('model.type') !== null) {
       $('nav a.button.next').removeClass('disabled');
+    }
+    if(this.get('router.currentPath') === 'conversion' && this.get('model.element_subtype') === 'email') {
+      $('nav a.button.next').addClass('disabled');
+    }
+    else if(this.get('router.currentPath') === 'targeting' && this.get('model.element_subtype') !== 'email') {
+      $('nav a.button.next').addClass('disabled');
     }
   },
 
