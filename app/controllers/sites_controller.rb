@@ -159,6 +159,8 @@ class SitesController < ApplicationController
     @bills = @site.bills.not_voided.not_pending.non_free.includes(:subscription).reorder(bill_at: :desc)
     @next_bill = @site.bills.pending.includes(:subscription).last
     @next_overage_bills = (@site.overage_count * 5)
+    count = FetchTotalViewsForMonth.new(Site.where(id:540046)).call
+    @current_view_count = count[site.id]
   end
 
   def render_script(preview:)
