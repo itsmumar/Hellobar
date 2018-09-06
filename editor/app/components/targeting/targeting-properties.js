@@ -114,16 +114,16 @@ export default Ember.Component.extend({
   }.property(),
 
   selectedSuccessDuration: function () {
-    const duration = this.get('model.success_duration');
+    const duration = this.get('model.settings.cookie_settings.success_duration');
     const days = this.get('days');
     return days.find(option => option.duration === duration) || days[3];
-  }.property('model.success_duration'),
+  }.property('model.settings.cookie_settings.success_duration'),
 
   selectedDissmissDuration: function () {
-    const duration = this.get('model.duration');
+    const duration = this.get('model.settings.cookie_settings.duration');
     const days = this.get('days');
     return this.get('days').find(option => option.duration === duration) || days[3];
-  }.property('model.duration'),
+  }.property('model.settings.cookie_settings.duration'),
 
   shouldShowDissmissDuration: function () {
     if(this.get('model.type') === 'Modal') {
@@ -139,11 +139,11 @@ export default Ember.Component.extend({
 
   actions: {
     selectSuccessDuration (option) {
-      this.set('model.success_duration', option.duration);
+      this.set('model.settings.cookie_settings.success_duration', option.duration);
     },
 
     selectDissmissDuration (option) {
-      this.set('model.duration', option.duration);
+      this.set('model.settings.cookie_settings.duration', option.duration);
     },
 
     selectRule (rule) {
