@@ -35,6 +35,13 @@ describe 'Users registration' do
         expect(response).to render_template('registrations/new')
       end
 
+      it 'fails with a banned URL' do
+        user_params[:site_url] = 'http://facebook.com'
+        post users_sign_up_path, registration_form: user_params, signup_with_email: '1'
+
+        expect(response).to render_template('registrations/new')
+      end
+
       it 'passes if ignore_existing_site is set to true' do
         user_params[:ignore_existing_site] = true
         post users_sign_up_path, registration_form: user_params, signup_with_email: '1'

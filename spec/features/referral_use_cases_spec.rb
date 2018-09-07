@@ -18,7 +18,7 @@ feature 'User sign ups with a referral token', :js do
     background do
       visit accept_referrals_path(token: referral_token.token)
 
-      fill_in 'registration_form[site_url]', with: 'hellobar.com'
+      fill_in 'registration_form[site_url]', with: 'hellobars.com'
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
@@ -48,7 +48,7 @@ feature 'User sign ups with a referral token', :js do
     background do
       visit accept_referrals_path(token: referral_token.token)
 
-      fill_in 'registration_form[site_url]', with: 'hellobar.com'
+      fill_in 'registration_form[site_url]', with: 'hellobars.com'
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
 
@@ -104,7 +104,7 @@ feature 'User sign ups with a referral token', :js do
     background do
       visit accept_referrals_path(token: referral_token.token)
 
-      fill_in 'registration_form[site_url]', with: 'hellobar.com'
+      fill_in 'registration_form[site_url]', with: 'hellobars.com'
       click_on 'Create free account'
       check 'registration_form[accept_terms_and_conditions]'
       first('[name=signup_with_google]').click
