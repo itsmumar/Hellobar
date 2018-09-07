@@ -26,6 +26,10 @@ class RegistrationsController < ApplicationController
 
   private
 
+  def allowed_url?
+    return true unless Site.banned_sites.include?(URI.parse(@form.site.url).host.downcase)
+  end
+
   def validate_url
     unless @form.site.valid?
       flash.now[:error] = 'Your URL is not valid. Please double-check it and try again.'
@@ -45,6 +49,11 @@ class RegistrationsController < ApplicationController
       return false
     end
 
+    unless allowed_url?
+      flash.now[:error] = Site.url_error_messages(URI.parse(@form.site.url).host.downcase)
+      render :new
+      return false
+    end
     true
   end
 

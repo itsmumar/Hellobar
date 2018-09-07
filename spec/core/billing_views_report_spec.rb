@@ -73,12 +73,4 @@ describe BillingViewsReport, :freeze do
       ]
     end
   end
-
-  describe '#limit_exceeded' do
-    specify do
-      expect { report.limit_exceeded(site, 100, 50) }.to log [
-        "Limit exceeded #{ site.id } #{ site.url } -- 100/50 (*50*) views"
-      ]
-    end
-  end
 end

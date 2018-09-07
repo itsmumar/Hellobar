@@ -236,22 +236,22 @@ describe User do
     context 'valid urls' do
       let(:user) { create :user }
 
-      %w[http://www.google.com https://google.com].each do |url|
+      %w[http://www.googles.com https://googles.com].each do |url|
         context "when site is added as #{ url }" do
           before do
             user.sites << create(:site, url: url)
           end
 
           it 'finds user when searching by zone apex' do
-            expect(User.search_by_site_url('google.com')).to include user
+            expect(User.search_by_site_url('googles.com')).to include user
           end
 
           it 'finds user when searching by full domain' do
-            expect(User.search_by_site_url('www.google.com')).to include user
+            expect(User.search_by_site_url('www.googles.com')).to include user
           end
 
           it 'finds user when searching by FQDN' do
-            expect(User.search_by_site_url('www.google.com.')).to include user
+            expect(User.search_by_site_url('www.googles.com.')).to include user
           end
         end
       end
