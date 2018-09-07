@@ -378,14 +378,14 @@ describe StaticScriptModel do
 
   describe '#gdpr_agreement' do
     let(:site) do
-      create(:site, privacy_policy_url: 'http://mysitey.com/privacy', terms_and_conditions_url: 'http://mysitey.com/terms')
+      create(:site, privacy_policy_url: 'http://mysite.com/privacy', terms_and_conditions_url: 'http://mysite.com/terms')
     end
 
     it 'returns agreement HTML' do
       expect(model.gdpr_agreement)
         .to eql 'I have read and agree to the ' \
-                '<a target="_blank" href="http://mysitey.com/privacy">Privacy Policy</a> and ' \
-                '<a target="_blank" href="http://mysitey.com/terms">Terms and Conditions</a>.'
+                '<a target="_blank" href="http://mysite.com/privacy">Privacy Policy</a> and ' \
+                '<a target="_blank" href="http://mysite.com/terms">Terms and Conditions</a>.'
     end
   end
 
@@ -406,8 +406,8 @@ describe StaticScriptModel do
       end
     end
 
-    context 'when site url is mysitey.com' do
-      let(:site) { create :site, url: 'http://mysitey.com' }
+    context 'when site url is mysite.com' do
+      let(:site) { create :site, url: 'http://mysite.com' }
 
       it 'returns true' do
         expect(model.disable_self_check).to be_truthy
