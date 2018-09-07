@@ -4,9 +4,9 @@ header
   address
     | Hello Bar
     br
-    | 16220 Ridgeview Lane
+    | 750 B St, Unit 2600
     br
-    | La Mirada, CA 90638
+    | San Diego, CA 92101
 
 main
 
@@ -37,9 +37,13 @@ main
       th.right.narrow_column Line total
     tr.thin_border
       td.left
-        | HelloBar #{@subscription.values[:name]} - #{@subscription.schedule.capitalize}
+        - if @bill.description == "Monthly View Limit Overage Fee"
+          | Monthly View Limit Overage Fees
+        - else
+          | HelloBar #{@subscription.values[:name]} - #{@subscription.schedule.capitalize}
         br
-        | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
+        - unless @bill.description == "Monthly View Limit Overage Fee"
+          | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
       td.right= number_to_currency(@bill.amount)
       td.right= number_to_currency(@bill.amount)
     - coupons_and_uses(@bill) do |coupon, uses|

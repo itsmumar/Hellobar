@@ -11,6 +11,8 @@ section
       = "(#{subscription_days_left(@site)})"
     - if Permissions.view_bills?(current_user, @site)
       - if @site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym] > 0
+        - if @next_overage_bill
+          = bill_estimated_amount(@next_overage_bill)
         - if @next_bill
           = bill_estimated_amount(@next_bill)
         - else
@@ -57,7 +59,7 @@ section
             th
             th Date
             th Cost
-            th Plan
+            th Description
             th Card
             th Receipt
         tbody
@@ -76,7 +78,10 @@ section
                   |  (Refund)
                 - if bill.chargedback?
                   |  (Chargeback)
-              td= "Hello Bar #{bill.subscription.values[:name]}"
+              - if bill.description == "Monthly View Limit Overage Fee"
+                td= "#{bill.description}"
+              -else
+                td= "Hello Bar #{bill.subscription.values[:name]} #{bill.subscription.schedule} subscription"
               td= bill.used_credit_card&.description
               td
                 - if bill.failed?
@@ -95,14 +100,40 @@ section
       ' Please enter credit card details by #{format_date(@site.current_subscription.trial_end_date)}
       ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
 
-  - if @next_bill && @next_bill.amount > 0
-    ' Next bill is due on
-    = format_date(@next_bill.due_at)
-    '  and will total
-    = bill_estimated_amount(@next_bill)
-    '  for a
-    = @next_bill.subscription.schedule
-    |  subscription.
+  - if @next_bill && @next_bill.amount > 0 || @next_overage_bills
+
+    section
+      label Upcoming Bills
+
+      table
+        thead
+          tr
+            th
+            th Date
+            th Cost
+            th Description
+            th # of Monthly Views So Far
+        tbody
+        - if @next_bill
+
+          tr
+            td
+              i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
+            td= format_date(@next_bill.due_at)
+            td= bill_estimated_amount(@next_bill)
+            td= "#{@next_bill.subscription.values[:name]} #{@next_bill.subscription.schedule}"
+            td= ""
+
+        - if @next_overage_bills
+
+          tr
+            td
+              i.icon-thumbsup title="Thank you!" data-toggle="tooltip" data-placement="bottom"
+
+            td= format_date(Date.today.at_beginning_of_month)
+            td= number_to_currency(@next_overage_bills)
+            td= "Monthly View Limit Overage Fee"
+            td= "#{number_with_delimiter(@current_view_count)}+"
 
 - elsif @site.free?
   ul

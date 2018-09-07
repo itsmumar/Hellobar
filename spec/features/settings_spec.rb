@@ -25,4 +25,18 @@ feature 'Manage Settings', :js do
 
     expect(page).to have_content('my cool address')
   end
+
+  scenario 'it shows monthly overage bills that are coming up' do
+    site.update_attribute('overage_count', 1)
+    visit edit_site_path(site)
+
+    expect(page).to have_content('Monthly View Limit Overage Fee')
+  end
+
+  scenario 'site is not over limit so no overage bill should appear' do
+    site.update_attribute('overage_count', 0)
+    visit edit_site_path(site)
+
+    expect(page).not_to have_content('Monthly View Limit Overage Fee')
+  end
 end
