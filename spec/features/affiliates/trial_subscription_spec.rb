@@ -10,7 +10,7 @@ describe 'Affiliate trial subscription', js: true do
     it 'adds 90 days of trial on Growth subscription when user creates a site', freeze: '2018-06-24T14:00 UTC' do
       visit new_site_path
 
-      fill_in 'site[url]', with: 'mysite.com'
+      fill_in 'site[url]', with: 'mysites.com'
       click_on 'Create Site'
 
       expect(page).to have_content 'I’ll do this later, take me to my dashboard'
@@ -32,7 +32,7 @@ describe 'Affiliate trial subscription', js: true do
     it 'adds 30 days of trial on Growth subscription when user creates a site', freeze: '2018-06-24T14:00 UTC' do
       visit new_site_path
 
-      fill_in 'site[url]', with: 'mysite.com'
+      fill_in 'site[url]', with: 'mysites.com'
       click_on 'Create Site'
 
       expect(page).to have_content 'I’ll do this later, take me to my dashboard'
