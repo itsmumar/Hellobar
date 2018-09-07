@@ -52,7 +52,7 @@ describe 'Users requests' do
         {
           user: {
             invite_token: 'token',
-            email: 'email@example.com',
+            email: 'email@abcdef.com',
             first_name: 'FirstName',
             last_name: 'LastName',
             password: 'password',

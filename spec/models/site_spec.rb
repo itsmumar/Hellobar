@@ -9,7 +9,7 @@ describe Site do
   end
 
   it 'allows creating a second site with the same url' do
-    url = 'http://test.com'
+    url = 'http://tests.com'
     user = create :user
     first_site = create :site, user: user, url: url
     second_site = create :site, user: user, url: url
@@ -21,7 +21,7 @@ describe Site do
   end
 
   it 'allows having membership access to two sites with the same url' do
-    url = 'http://test.com'
+    url = 'http://tests.com'
     membership = create :site_membership
 
     new_site = membership.user.sites.create url: url
@@ -305,8 +305,8 @@ describe Site do
   describe '#gdpr_enabled?' do
     before do
       site.communication_types = [Site::COMMUNICATION_TYPES.first]
-      site.privacy_policy_url = 'google.com'
-      site.terms_and_conditions_url = 'google.com'
+      site.privacy_policy_url = 'googles.com'
+      site.terms_and_conditions_url = 'googles.com'
     end
 
     context 'when all gdpr-related attributes are present' do

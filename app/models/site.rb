@@ -60,6 +60,7 @@ class Site < ApplicationRecord
   before_validation :generate_read_write_keys
 
   validates :url, url: true
+  validate :url, :check_for_banned_url
   validates :terms_and_conditions_url, :privacy_policy_url, url: true, on: :update_privacy
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
@@ -265,6 +266,17 @@ class Site < ApplicationRecord
     I18n.t('gdpr.action', locale: gdpr_consent_language)
   end
 
+  def self.banned_sites
+    ['facebook.com', 'google.com', 'wordpress.com', 'hellobar.com', 'linkedin.com', 'mayvern.com', 'twitter.com', 'pintrest.com', 'youtube.com', 'google.com', 'yahoo.com', 'amazon.com', 'snapchat.com', 'instagram.com', 'gmail.com', 'plus.google.com', 'test.com', 'mysite.com', 'mail.google.com', 'zepo.com', 'vk.com', 'naver.com']
+  end
+
+  def self.url_error_messages(url)
+    ["I, too, like to daydream that I own #{ url }. But I also like to imagine what the world would be like if a dog were president… Maybe it’s best if we’re realistic. Real URL, please?", "Fake news!!! #{ url } is not your URL! SAD!",
+     "I call shenanigans! If #{ url } is your URL, then Neil has hair! Preposterous! Try again.",
+     "Liar, liar, dungarees on fire! There’s no way #{ url } is your real URL. Try again!",
+     "Hey now, this isn’t an online dating profile – no need to stretch the truth! What’s your real URL? Promise we won’t ghost you, even if you aren’t really the owner of #{ url }."].sample
+  end
+
   private
 
   def display_uri
@@ -278,5 +290,9 @@ class Site < ApplicationRecord
 
   def set_branding_on_site_elements
     site_elements.update_all(show_branding: !capabilities.remove_branding?)
+  end
+
+  def check_for_banned_url
+    errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase)
   end
 end
