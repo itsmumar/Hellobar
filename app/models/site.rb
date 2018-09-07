@@ -267,7 +267,7 @@ class Site < ApplicationRecord
   end
 
   def self.banned_sites
-    ['facebook.com', 'google.com', 'wordpress.com', 'hellobar.com', 'linkedin.com', 'mayvern.com', 'twitter.com', 'pintrest.com', 'youtube.com', 'google.com', 'yahoo.com', 'amazon.com', 'snapchat.com', 'instagram.com', 'gmail.com', 'plus.google.com', 'test.com', 'mysite.com', 'mail.google.com', 'zepo.com', 'vk.com', 'naver.com']
+    ['facebook.com', 'google.com', 'wordpress.com', 'hellobar.com', 'linkedin.com', 'mayvern.com', 'twitter.com', 'pintrest.com', 'youtube.com', 'google.com', 'yahoo.com', 'amazon.com', 'snapchat.com', 'instagram.com', 'gmail.com', 'plus.google.com', 'test.com', 'mail.google.com', 'zepo.com', 'vk.com', 'naver.com']
   end
 
   def self.url_error_messages(url)
