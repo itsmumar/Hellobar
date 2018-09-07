@@ -1,6 +1,7 @@
 describe Site do
   let(:site) { create(:site, :with_user, :with_rule) }
   let(:pro_site) { create(:site, :pro) }
+  let(:banned_sites) { Site.banned_sites }
 
   it_behaves_like 'an object with a valid url'
 
@@ -9,7 +10,7 @@ describe Site do
   end
 
   it 'allows creating a second site with the same url' do
-    url = 'http://test.com'
+    url = 'http://tests.com'
     user = create :user
     first_site = create :site, user: user, url: url
     second_site = create :site, user: user, url: url
@@ -20,8 +21,30 @@ describe Site do
     expect(second_site).to be_persisted
   end
 
+  it 'contains a list of banned urls' do
+    expect(banned_sites).to include('facebook.com')
+    expect(banned_sites).to include('google.com')
+    expect(banned_sites).to include('wordpress.com')
+    expect(banned_sites).to include('hellobar.com')
+    expect(banned_sites).to include('linkedin.com')
+    expect(banned_sites).to include('mayvern.com')
+    expect(banned_sites).to include('twitter.com')
+    expect(banned_sites).to include('pintrest.com')
+    expect(banned_sites).to include('youtube.com')
+    expect(banned_sites).to include('google.com')
+    expect(banned_sites).to include('yahoo.com')
+    expect(banned_sites).to include('amazon.com')
+    expect(banned_sites).to include('snapchat.com')
+    expect(banned_sites).to include('instagram.com')
+    expect(banned_sites).to include('gmail.com')
+    expect(banned_sites).to include('test.com')
+    expect(banned_sites).to include('zepo.com')
+    expect(banned_sites).to include('vk.com')
+    expect(banned_sites).to include('naver.com')
+  end
+
   it 'allows having membership access to two sites with the same url' do
-    url = 'http://test.com'
+    url = 'http://tests.com'
     membership = create :site_membership
 
     new_site = membership.user.sites.create url: url
@@ -173,6 +196,11 @@ describe Site do
       expect(site).not_to be_valid
       expect(site.url).to be_blank
     end
+
+    it 'is invalid with banned URL' do
+      site = Site.new(url: 'http://facebook.com')
+      expect { site.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe '#set_branding_on_site_elements' do
@@ -305,8 +333,8 @@ describe Site do
   describe '#gdpr_enabled?' do
     before do
       site.communication_types = [Site::COMMUNICATION_TYPES.first]
-      site.privacy_policy_url = 'google.com'
-      site.terms_and_conditions_url = 'google.com'
+      site.privacy_policy_url = 'googles.com'
+      site.terms_and_conditions_url = 'googles.com'
     end
 
     context 'when all gdpr-related attributes are present' do
