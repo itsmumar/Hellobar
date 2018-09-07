@@ -176,7 +176,7 @@ describe Site do
 
     it 'is invalid with banned URL' do
       site = Site.new(url: 'http://facebook.com')
-      expect {site.save!}.to  raise_error(ActiveRecord::RecordInvalid)
+      expect { site.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
