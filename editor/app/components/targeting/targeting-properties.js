@@ -109,7 +109,7 @@ export default Ember.Component.extend({
       { label: '60 days', duration: 60 },
       { label: '90 days', duration: 90 },
       { label: '120 days', duration: 120 },
-      { label: 'Never display again', duration: 120 }
+      { label: 'Never display again', duration: 150 }
     ];
   }.property(),
 
