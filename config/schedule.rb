@@ -53,6 +53,10 @@ end
 #   rake 'overage_fees:run' # generate overage fee bills to be paid in next billing run
 # end
 
+every 1.month, at: 'start of the month at 4am' do
+  rake 'reset_email_sent_fields:run' # reset the warning_email_sent fields to `true` on sites
+end
+
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
 end
