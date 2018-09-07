@@ -173,6 +173,11 @@ describe Site do
       expect(site).not_to be_valid
       expect(site.url).to be_blank
     end
+
+    it 'is invalid with banned URL' do
+      site = Site.new(url: 'http://facebook.com')
+      expect {site.save!}.to  raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe '#set_branding_on_site_elements' do
