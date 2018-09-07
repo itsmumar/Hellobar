@@ -192,7 +192,7 @@ export default Ember.Service.extend({
     if (_.isEmpty(cookieSettings)) {
       this.set('model.settings.cookie_settings', {
         duration: 3,
-        success_duration: 30
+        success_duration: 3
       });
     }
   }.observes('model'),
