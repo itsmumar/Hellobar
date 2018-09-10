@@ -253,4 +253,36 @@ describe SitesController do
       expect(controller).to redirect_to(site_install_path(site))
     end
   end
+
+  describe 'GET #edit' do
+    let(:site) { create(:site, :with_user, overage_count: 2) }
+    let(:user) { site.owners.first }
+
+    it 'loads bills properly' do
+      stub_current_user(user)
+      create(:subscription, :pro, site: site)
+      create(:bill, subscription: site.subscriptions.last, amount: 5, start_date: Time.zone.today, end_date: Time.zone.today, base_amount: 5, status: 'pending')
+
+      allow(controller).to receive(:current_site).and_return(site)
+
+      get :edit, id: site.id
+
+      expect(assigns(:bills)).to_not be_nil
+      expect(assigns(:next_overage_bills)).to eql(10)
+    end
+
+    it 'handles sites with no overages' do
+      stub_current_user(user)
+      create(:subscription, :pro, site: site)
+      create(:bill, subscription: site.subscriptions.last, amount: 5, start_date: Time.zone.today, end_date: Time.zone.today, base_amount: 5, status: 'pending')
+      site.update_attributes(overage_count: 0)
+
+      allow(controller).to receive(:current_site).and_return(site)
+
+      get :edit, id: site.id
+
+      expect(assigns(:bills)).to_not be_nil
+      expect(assigns(:next_overage_bills)).to eql(nil)
+    end
+  end
 end

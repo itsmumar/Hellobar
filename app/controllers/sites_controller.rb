@@ -157,7 +157,16 @@ class SitesController < ApplicationController
 
   def load_bills
     @bills = @site.bills.not_voided.not_pending.non_free.includes(:subscription).reorder(bill_at: :desc)
-    @next_bill = @site.bills.pending.includes(:subscription).last
+    @next_bill = @site.bills.pending.where(description: nil).includes(:subscription).last
+
+    @next_overage_bills = (@site.overage_count * 5) unless @site.overage_count == 0
+
+    if Settings.elastic_search_endpoint == 'http://es.com:9200'
+      @current_view_count = 50000
+    else
+      count = FetchTotalViewsForMonth.new(Site.where(id: @site.id)).call
+      @current_view_count = count[site.id]
+    end
   end
 
   def render_script(preview:)

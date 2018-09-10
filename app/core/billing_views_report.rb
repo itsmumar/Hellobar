@@ -45,8 +45,8 @@ class BillingViewsReport
     delta = number_of_views - limit
     @overage_views += delta
     @overage_views_paid_sites += delta unless site.free?
-    numbers = "#{ number_with_delimiter(number_of_views) }/#{ number_with_delimiter(limit) }"
-    info "Limit exceeded #{ site.id } #{ site.url } -- #{ numbers } (*#{ number_with_delimiter(delta) }*) views"
+    # numbers = "#{ number_with_delimiter(number_of_views) }/#{ number_with_delimiter(limit) }"
+    # info "Limit exceeded #{ site.id } #{ site.url } -- #{ numbers } (*#{ number_with_delimiter(delta) }*) views"
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)

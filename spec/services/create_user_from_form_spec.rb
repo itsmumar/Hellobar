@@ -1,6 +1,6 @@
 describe CreateUserFromForm do
   let(:params) do
-    Hash[email: 'email@example.com', password: 'password', site_url: 'google.com']
+    Hash[email: 'email@example.com', password: 'password', site_url: 'abcdefg.com']
   end
 
   let(:cookies) { Hash[tap_vid: 'vid', tap_aid: 'aid'] }
