@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE = Date.new(2018, 4, 26)
-  GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE = Date.new(2018, 8, 16)
 
   acts_as_paranoid
 

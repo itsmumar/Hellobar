@@ -1,6 +1,7 @@
 require 'discount_calculator'
 
 class Subscription < ApplicationRecord
+  GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE = Date.new(2018, 8, 16)
   GROWTH_START_DATE = Time.zone.parse('2018-04-01T00:00 UTC').freeze
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
