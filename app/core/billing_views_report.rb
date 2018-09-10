@@ -61,6 +61,10 @@ class BillingViewsReport
     # UpsellMailer.enterprise_upsell_email(site, number_of_views, limit).deliver_later
   end
 
+  def log_grandfathered_site(site)
+    Rails.logger.warn "#{ site.url } is grandfathered"
+  end
+
   private
 
   def info(msg)

@@ -61,11 +61,13 @@ class CheckNumberOfViewsForSites
       @warning_level_one = ::Float::INFINITY
       @warning_level_two = ::Float::INFINITY
       @warning_level_three = ::Float::INFINITY
+      report.log_grandfathered_site(site)
     elsif current_sub && last_bill && current_sub.schedule == 'yearly' && (current_sub.type == 'Subscription::Growth' || current_sub.type == 'Subscription::Pro') && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
       @limit = 250_000
       @warning_level_one = 200_000
       @warning_level_two = ::Float::INFINITY
       @warning_level_three = ::Float::INFINITY
+      report.log_grandfathered_site(site)
     else
       @limit = site.views_limit
       @warning_level_one = site.visit_warning_one
