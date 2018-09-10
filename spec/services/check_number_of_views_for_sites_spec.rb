@@ -13,7 +13,8 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:limit_exceeded)
     allow(report).to receive(:send_warning_email)
     allow(report).to receive(:send_upsell_email)
-    allow(report).to receive(:send_elite_upsell_email)
+    allow(report).to receive(:send_enterprise_upsell_email)
+    allow(report).to receive(:log_grandfathered_site)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
 
@@ -62,7 +63,6 @@ describe CheckNumberOfViewsForSites do
         .to_not have_received(:limit_exceeded)
       expect(report)
         .to have_received(:log_grandfathered_site)
-      # expect(BillingLogger).to receive(:info).with("Site is grandfathered")
     end
 
     it 'renews for another year for enterprise and now gets limits enforced' do
