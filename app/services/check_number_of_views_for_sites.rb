@@ -49,11 +49,29 @@ class CheckNumberOfViewsForSites
   end
 
   def setup_views_counter(site, number_of_views)
+    unless site.current_subscription.nil?
+      current_sub = site.current_subscription
+      last_bill = current_sub.bills.where(status: 'paid').last
+    end
     report.count(number_of_views)
-    @limit = site.views_limit
-    @warning_level_one = site.visit_warning_one
-    @warning_level_two = site.visit_warning_two
-    @warning_level_three = site.visit_warning_three
+
+    # the following if / elsif is a temporary handling of existing enterprise annual subscriptions where the user signed up before we had view limits
+    if current_sub && last_bill && current_sub.schedule == 'yearly' && current_sub.type == 'Subscription::Enterprise' && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
+      @limit = ::Float::INFINITY
+      @warning_level_one = ::Float::INFINITY
+      @warning_level_two = ::Float::INFINITY
+      @warning_level_three = ::Float::INFINITY
+    elsif current_sub && last_bill && current_sub.schedule == 'yearly' && (current_sub.type == 'Subscription::Growth' || current_sub.type == 'Subscription::Pro') && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
+      @limit = 250_000
+      @warning_level_one = 200_000
+      @warning_level_two = ::Float::INFINITY
+      @warning_level_three = ::Float::INFINITY
+    else
+      @limit = site.views_limit
+      @warning_level_one = site.visit_warning_one
+      @warning_level_two = site.visit_warning_two
+      @warning_level_three = site.visit_warning_three
+    end
   end
 
   def handle_overage_site(site, number_of_views, limit)

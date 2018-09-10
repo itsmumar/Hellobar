@@ -45,6 +45,34 @@ describe CheckNumberOfViewsForSites do
     end
   end
 
+  context 'when limit exceeded for grandfathered subscription' do
+    let(:number_of_views) { 500_001 }
+    let(:credit_card) { create :credit_card }
+
+    before do
+      stub_cyber_source :purchase
+      Timecop.travel '2018-08-15 13:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'enterprise', schedule: 'yearly' }, credit_card).call
+      end
+    end
+
+    it 'subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+    end
+
+    it 'renews for another year for growth and now gets limits enforced' do
+      Timecop.travel '2018-08-17 13:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'growth', schedule: 'yearly' }, credit_card).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+    end
+  end
+
   context 'when first limit is approaching for all subscriptions' do
     let(:number_of_views) { site.visit_warning_one + 1 }
     let(:limit) { site.views_limit }
