@@ -14,7 +14,7 @@ feature 'Targeting. Custom rule dialog', :js do
 
     find('.goal-block.contacts').click
     go_to_tab 'Targeting'
-    find('a', text: 'Create new customer targeting rule').click
+    find('a', text: 'Create new custom targeting rule').click
 
     expect(page.all('.show-modal.rules-modal').count).to be 1
 
