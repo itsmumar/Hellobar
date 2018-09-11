@@ -26,7 +26,7 @@ feature 'Render the country select for the Rule modal', :js do
     visit edit_site_site_element_path(site, element.id)
     go_to_tab 'Targeting'
 
-    find('a', text: 'Create new customer targeting rule').click
+    find('a', text: 'Create new custom targeting rule').click
     fill_in 'rule_name', with: 'New Custom Rule'
     page.find('a', text: '+').click
 
