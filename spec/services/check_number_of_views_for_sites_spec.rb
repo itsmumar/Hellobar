@@ -63,6 +63,7 @@ describe CheckNumberOfViewsForSites do
         .to_not have_received(:limit_exceeded)
       expect(report)
         .to have_received(:log_grandfathered_site)
+      expect(Rails.logger).to receive(:info).with("Site is grandfathered")
     end
 
     it 'renews for another year for growth and now gets limits enforced' do

@@ -62,7 +62,7 @@ class BillingViewsReport
   end
 
   def log_grandfathered_site(site)
-    Rails.logger.warn "#{ site.url } is grandfathered"
+    Rails.logger.info "Site is grandfathered"
   end
 
   private
