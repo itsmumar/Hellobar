@@ -21,14 +21,14 @@
               </header>
 
               <div class="package-cycle">
-                <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" {{#if isMonthly}}checked{{/if}} />
+                <input type="radio" id="monthly-billing" name="billing[schedule]" value="monthly" />
 
                 <label for="monthly-billing">
                   Monthly
                   <small>${{package.monthly_amount}} Per Month</small>
                 </label>
 
-                <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" {{#if isAnnual}}checked{{/if}} />
+                <input type="radio" id="anually-billing" name="billing[schedule]" value="yearly" checked="checked" />
 
                 <label for="anually-billing">
                   Annually

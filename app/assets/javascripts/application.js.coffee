@@ -40,6 +40,20 @@
 #= require_self
 
 $ ->
+
+  if (window.location.href.indexOf("pricing-growth") != -1)
+    options =
+      source: "package-selected"
+      package: {"schedule":"monthly","type":"growth","name":"Growth","yearly_amount":"289","monthly_amount":"29","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
+      site: window.site
+    new PaymentModal(options).open()
+  else if (window.location.href.indexOf("pricing-ent") != -1)
+    options =
+      source: "package-selected"
+      package: {"schedule":"monthly","type":"enterprise","name":"Enterprise","yearly_amount":"999","monthly_amount":"99","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
+      site: window.site
+    new PaymentModal(options).open()
+  #Tooltip
   $('[data-toggle="tooltip"]').tooltip()
 
   # Reveal Blocks
