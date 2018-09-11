@@ -165,7 +165,7 @@ class SitesController < ApplicationController
       @current_view_count = 50000
     else
       count = FetchTotalViewsForMonth.new(Site.where(id: @site.id)).call
-      @current_view_count = count[site.id]
+      @current_view_count = count[@site.id]
     end
   end
 
