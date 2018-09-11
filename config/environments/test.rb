@@ -45,4 +45,7 @@ Rails.application.configure do
 
   # ActiveJob
   config.active_job.queue_adapter = :test
+
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :INFO
 end

@@ -46,7 +46,7 @@ describe CheckNumberOfViewsForSites do
     end
   end
 
-  context 'when limit exceeded for grandfathered subscription' do
+  context 'when limit exceeded for grandfathered enterprise subscription' do
     let(:number_of_views) { 500_001 }
     let(:credit_card) { create :credit_card }
 
@@ -57,18 +57,71 @@ describe CheckNumberOfViewsForSites do
       end
     end
 
-    it 'subscription is grandfathered and does not call report.limit_exceeded' do
+    it 'enterprise subscription is grandfathered and does not call report.limit_exceeded' do
       service.call
       expect(report)
         .to_not have_received(:limit_exceeded)
       expect(report)
         .to have_received(:log_grandfathered_site)
-      expect(Rails.logger).to receive(:info).with("Site is grandfathered")
+      # expect(BillingLogger).to receive(:info).with("Site is grandfathered")
+    end
+
+    it 'renews for another year for enterprise and now gets limits enforced' do
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+      expect(report)
+        .to_not have_received(:log_grandfathered_site)
+    end
+
+    it 'growth subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+      expect(report)
+        .to have_received(:log_grandfathered_site)
+      # expect(BillingLogger).to receive(:info).with("Site is grandfathered")
+    end
+
+    it 'renews for another year for enterprise and now gets limits enforced' do
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+      expect(report)
+        .to_not have_received(:log_grandfathered_site)
+    end
+  end
+
+  context 'when limit exceeded for grandfathered growth subscription' do
+    let(:number_of_views) { 50_001 }
+    let(:credit_card) { create :credit_card }
+
+    before do
+      stub_cyber_source :purchase
+      Timecop.travel '2018-08-15 13:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'growth', schedule: 'yearly' }, credit_card).call
+      end
+    end
+
+    it 'growth subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+      expect(report)
+        .to have_received(:log_grandfathered_site)
     end
 
     it 'renews for another year for growth and now gets limits enforced' do
-      Timecop.travel '2018-08-17 13:00 UTC' do
-        ChangeSubscription.new(site, { subscription: 'growth', schedule: 'yearly' }, credit_card).call
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
       end
 
       service.call
