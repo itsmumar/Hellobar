@@ -84,8 +84,8 @@ feature 'Payment modal interaction', :js do
         page.find('.submit').click
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
-        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $289.00."
-        expect(page).to have_text 'You will be billed $289.00 every year.'
+        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $229.00."
+        expect(page).to have_text 'You will be billed $229.00 every year.'
         expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
 
         page.find('a', text: 'OK').click
