@@ -329,7 +329,7 @@ describe ChangeSubscription, :freeze do
           end
 
           it 'excludes a paid amount from new bill' do
-            expect(change_subscription('enterprise').amount).to eql 99 - 15
+            expect(change_subscription('enterprise').amount).to eql 99 - 29
           end
 
           it 'pays bill' do

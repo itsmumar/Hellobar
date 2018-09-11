@@ -13,11 +13,11 @@ describe InternalMetricsMailer, freeze: '2017-12-10 23:00 UTC' do
 
       expect(mail.subject).to include '2 new sites'
       expect(mail.subject).to include '50.00% install'
-      expect(mail.subject).to include '$15.00'
+      expect(mail.subject).to include '$29.00'
       expect(mail.to).to eq ['dev@hellobar.com']
       expect(mail.from).to eq ['contact@hellobar.com']
       expect(mail.body.encoded).to include 'Pro (Monthly): 1'
-      expect(mail.body.encoded).to include '($15.00)'
+      expect(mail.body.encoded).to include '($29.00)'
     end
   end
 end

@@ -111,13 +111,13 @@ describe Bill do
       bill.site.owners << user
     end
 
-    it "sets the final amount to 0 if there's a discount for 15.0" do
+    it "sets the final amount to 0 if there's a discount for 29.0" do
       allow_any_instance_of(DiscountCalculator)
-        .to receive(:current_discount).and_return(15.0)
+        .to receive(:current_discount).and_return(29.0)
 
       PayBill.new(bill).call
       expect(bill.amount).to eq(0.0)
-      expect(bill.discount).to eq(15.0)
+      expect(bill.discount).to eq(29.0)
     end
   end
 
