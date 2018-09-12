@@ -60,7 +60,7 @@ describe 'Admin::Sites requests' do
       end
 
       context 'when trying to upgrade and it must be paid' do
-        let(:params) { { subscription: { subscription: 'Enterprise', schedule: 'monthly' } } }
+        let(:params) { { subscription: { subscription: 'Elite', schedule: 'monthly' } } }
 
         it 'raises error' do
           update
@@ -70,7 +70,7 @@ describe 'Admin::Sites requests' do
 
       context 'when difference between subscription is less than 0' do
         let(:site) { create(:site, :with_user, :pro, schedule: :yearly) }
-        let(:params) { { subscription: { subscription: 'Enterprise', schedule: 'monthly' } } }
+        let(:params) { { subscription: { subscription: 'Elite', schedule: 'monthly' } } }
 
         before { create(:bill, :paid, subscription: site.current_subscription) }
 

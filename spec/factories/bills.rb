@@ -38,9 +38,9 @@ FactoryBot.define do
       end
     end
 
-    trait :enterprise do
-      amount { Subscription::Enterprise.defaults[:monthly_amount] }
-      subscription { create :subscription, :enterprise }
+    trait :elite do
+      amount { Subscription::Elite.defaults[:monthly_amount] }
+      subscription { create :subscription, :elite }
 
       after :create do |bill|
         create :billing_attempt, :success,

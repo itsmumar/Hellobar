@@ -55,6 +55,6 @@ class @PaymentConfirmationModal extends Modal
       siteName: @options.siteName
       isUpgrade: @options.data.is_upgrade
       oldPlanName: if old_subscription then old_subscription.name else ""
-      showPaidFeatures: subscription.type == "pro" || subscription.type == "growth" || subscription.type == "enterprise"
-      showEnterpriseFeatures: subscription.type == "enterprise"
+      showPaidFeatures: subscription.type == "pro" || subscription.type == "growth" || subscription.type == "elite"
+      showEliteFeatures: subscription.type == "elite"
     }
