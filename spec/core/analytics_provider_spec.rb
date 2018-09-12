@@ -364,7 +364,7 @@ describe AnalyticsProvider do
 
     before do
       stub_cyber_source(:purchase)
-      ChangeSubscription.new(site, { subscription: 'enterprise' }, credit_card).call
+      ChangeSubscription.new(site, { subscription: 'elite' }, credit_card).call
     end
 
     before { allow(adapter).to receive(:tag_users) }
@@ -375,7 +375,7 @@ describe AnalyticsProvider do
 
   describe '#downgraded_subscription' do
     let(:event) { 'upgraded-subscription' }
-    let(:site) { create :site, :enterprise }
+    let(:site) { create :site, :elite }
     let(:credit_card) { create :credit_card }
     let(:subscription) { site.current_subscription }
     let(:previous_subscription) { site.previous_subscription }

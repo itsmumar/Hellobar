@@ -4,7 +4,7 @@ describe Subscription::Comparison do
       Subscription::Free,
       Subscription::FreePlus,
       Subscription::Pro,
-      Subscription::Enterprise,
+      Subscription::Elite,
       Subscription::ProComped,
       Subscription::ProManaged
     ]
@@ -15,9 +15,9 @@ describe Subscription::Comparison do
   end
 
   describe '#upgrade?' do
-    # for `Free` selects FreePlus, Pro, Enterprise, ProComped and ProManaged
-    # for `FreePlus` selects Pro, Enterprise, ProComped and ProManaged
-    # for `Pro` selects Enterprise, ProComped and ProManaged
+    # for `Free` selects FreePlus, Pro, Elite, ProComped and ProManaged
+    # for `FreePlus` selects Pro, Elite, ProComped and ProManaged
+    # for `Pro` selects Elite, ProComped and ProManaged
     # etc.
     def subscription_to_upgrade from_subscription
       subscriptions.select do |subscription|
@@ -44,8 +44,8 @@ describe Subscription::Comparison do
   end
 
   describe '#downgrade?' do
-    # for `ProManaged` selects Free, FreePlus, Pro, Enterprise, ProComped
-    # for `ProComped` selects Free, FreePlus, Pro, Enterprise
+    # for `ProManaged` selects Free, FreePlus, Pro, Elite, ProComped
+    # for `ProComped` selects Free, FreePlus, Pro, Elite
     # etc.
     def subscription_to_downgrade from_subscription
       subscriptions.select do |subscription|

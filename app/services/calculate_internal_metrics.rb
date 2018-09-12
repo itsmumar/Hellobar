@@ -18,13 +18,13 @@ class CalculateInternalMetrics
       revenue_sum: revenue_sum,
       growth: growth,
       pro: pro,
-      enterprise: enterprise,
+      elite: elite,
       growth_monthly: growth_monthly,
       growth_yearly: growth_yearly,
       pro_monthly: pro_monthly,
       pro_yearly: pro_yearly,
-      enterprise_monthly: enterprise_monthly,
-      enterprise_yearly: enterprise_yearly
+      elite_monthly: elite_monthly,
+      elite_yearly: elite_yearly
     )
   end
 
@@ -79,8 +79,8 @@ class CalculateInternalMetrics
     @growth ||= revenue.select { |bill| bill.subscription&.type =~ /Growth/ }
   end
 
-  def enterprise
-    @enterprise ||= revenue.select { |bill| bill.subscription&.type =~ /Enterprise/ }
+  def elite
+    @elite ||= revenue.select { |bill| bill.subscription&.type =~ /Elite/ }
   end
 
   def pro_monthly
@@ -99,11 +99,11 @@ class CalculateInternalMetrics
     @growth_yearly ||= growth.select { |bill| bill.subscription&.yearly? }
   end
 
-  def enterprise_monthly
-    @enterprise_monthly ||= enterprise.select { |bill| bill.subscription&.monthly? }
+  def elite_monthly
+    @elite_monthly ||= elite.select { |bill| bill.subscription&.monthly? }
   end
 
-  def enterprise_yearly
-    @enterprise_yearly ||= enterprise.select { |bill| bill.subscription&.yearly? }
+  def elite_yearly
+    @elite_yearly ||= elite.select { |bill| bill.subscription&.yearly? }
   end
 end

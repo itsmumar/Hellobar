@@ -59,10 +59,10 @@ class CheckNumberOfViewsForSites
   def handle_overage_site(site, number_of_views, limit)
     report.limit_exceeded(site, number_of_views, limit)
     HandleOverageSiteJob.perform_later(site, number_of_views, limit)
-    if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.current_subscription.is_a?(Subscription::Enterprise)
+    if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.current_subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
-      report.send_enterprise_upsell_email(site, number_of_views, limit)
-    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !site.current_subscription.is_a?(Subscription::Enterprise)
+      report.send_elite_upsell_email(site, number_of_views, limit)
+    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !site.current_subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
       report.send_upsell_email(site, number_of_views, limit)
     end

@@ -8,7 +8,7 @@ describe AddFreeDays, :freeze do
   let(:next_bill) { current_subscription.bills.last }
   let(:current_bill) { current_subscription.bills.first }
 
-  %w[Pro Enterprise].each do |subscription|
+  %w[Pro Elite].each do |subscription|
     context "with #{ subscription } subscription" do
       before do
         stub_cyber_source :purchase
