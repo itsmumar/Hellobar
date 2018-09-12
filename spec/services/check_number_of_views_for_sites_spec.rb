@@ -15,6 +15,7 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:send_upsell_email)
     allow(report).to receive(:send_enterprise_upsell_email)
     allow(report).to receive(:log_grandfathered_site)
+    allow(report).to receive(:send_elite_upsell_email)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
 
