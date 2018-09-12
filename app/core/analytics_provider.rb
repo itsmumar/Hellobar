@@ -105,6 +105,7 @@ class AnalyticsProvider
         url: site.url
       }
     )
+    tag_users site.install_type, site.owners
   end
 
   def uninstalled_script(site:, user:)
