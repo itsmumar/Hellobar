@@ -9,7 +9,7 @@ describe CalculateBill do
     context 'with any refunds' do
       let(:site) { create(:site) }
       let!(:active_bill) { create :bill, :paid, subscription: create(:subscription, :pro, site: site) }
-      let(:subscription) { create :subscription, :enterprise }
+      let(:subscription) { create :subscription, :elite }
 
       before do
         stub_cyber_source :refund
@@ -24,7 +24,7 @@ describe CalculateBill do
     context 'with any chargebacks' do
       let(:site) { create(:site) }
       let!(:active_bill) { create(:bill, :paid, subscription: create(:subscription, :pro, site: site)) }
-      let(:subscription) { create(:subscription, :enterprise) }
+      let(:subscription) { create(:subscription, :elite) }
 
       before do
         ChargebackBill.new(active_bill).call
@@ -38,7 +38,7 @@ describe CalculateBill do
     context 'when upgrading' do
       let(:site) { create :site, :pro }
       let!(:active_bill) { create :bill, :paid, subscription: site.current_subscription }
-      let(:subscription) { create :subscription, :enterprise }
+      let(:subscription) { create :subscription, :elite }
       let!(:reduced_amount) { subscription.amount - site.current_subscription.amount }
 
       it 'returns bill with reduced amount' do
@@ -65,7 +65,7 @@ describe CalculateBill do
     end
 
     context 'when downgrading' do
-      let(:site) { create :site, :enterprise }
+      let(:site) { create :site, :elite }
       let!(:active_bill) { create :bill, :paid, end_date: 2.days.from_now, subscription: site.current_subscription }
       let(:subscription) { create :subscription, :pro }
 
@@ -82,7 +82,7 @@ describe CalculateBill do
 
   context 'without active paid bills', :freeze do
     let(:site) { create :site }
-    let(:subscription) { create :subscription, :enterprise }
+    let(:subscription) { create :subscription, :elite }
     let(:bill) { service.call }
 
     it 'returns bill with full amount' do

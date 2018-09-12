@@ -50,7 +50,7 @@ $ ->
   else if (window.location.href.indexOf("pricing-ent") != -1)
     options =
       source: "package-selected"
-      package: {"schedule":"monthly","type":"enterprise","name":"Enterprise","yearly_amount":"799","monthly_amount":"99","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
+      package: {"schedule":"monthly","type":"elite","name":"Elite","yearly_amount":"799","monthly_amount":"99","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
       site: window.site
     new PaymentModal(options).open()
   else if (window.location.href.indexOf("pricing-pro") != -1)

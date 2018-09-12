@@ -7,7 +7,7 @@ class Subscription < ApplicationRecord
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
 
-  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, Enterprise].freeze
+  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, Elite].freeze
 
   acts_as_paranoid
 
@@ -22,7 +22,7 @@ class Subscription < ApplicationRecord
   scope :non_free, -> { where('subscriptions.amount > 0') }
   scope :pro, -> { where(type: Subscription::Pro) }
   scope :growth, -> { where(type: Subscription::Growth) }
-  scope :enterprise, -> { where(type: Subscription::Enterprise) }
+  scope :elite, -> { where(type: Subscription::Elite) }
   scope :paid, -> { joins(:bills).merge(Bill.paid.active).distinct }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
   scope :ended_trial, -> { where('trial_end_date is not null AND trial_end_date < ?', Time.current) }

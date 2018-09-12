@@ -40,12 +40,12 @@ to <%= @metrics.beginning_of_current_week %> (excl)</p>
   (<%= number_to_currency(@metrics.growth_yearly.sum(&:amount)) %>)
 </li>
 <li>
-  Enterprise (Monthly): <%= number_with_delimiter(@metrics.enterprise_monthly.size) %>
-  (<%= number_to_currency(@metrics.enterprise_monthly.sum(&:amount)) %>)
+  Elite (Monthly): <%= number_with_delimiter(@metrics.elite_monthly.size) %>
+  (<%= number_to_currency(@metrics.elite_monthly.sum(&:amount)) %>)
 </li>
 <li>
-  Enterprise (Yearly): <%= number_with_delimiter(@metrics.enterprise_yearly.size) %>
-  (<%= number_to_currency(@metrics.enterprise_yearly.sum(&:amount)) %>)
+  Elite (Yearly): <%= number_with_delimiter(@metrics.elite_yearly.size) %>
+  (<%= number_to_currency(@metrics.elite_yearly.sum(&:amount)) %>)
 </li>
 </ul>
 

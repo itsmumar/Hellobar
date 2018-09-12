@@ -11,7 +11,7 @@ class UpsellMailer < ApplicationMailer
     end
   end
 
-  def enterprise_upsell_email(site, number_of_views, limit)
+  def elite_upsell_email(site, number_of_views, limit)
     @site = site
     @number_of_views = number_of_views
     @limit = limit
@@ -25,7 +25,7 @@ class UpsellMailer < ApplicationMailer
 
     hb_team.each do |user|
       @user = user
-      mail(to: user, subject: 'Heads up! An Enterprise customer is paying a lot in overage fees')
+      mail(to: user, subject: 'Heads up! An Elite customer is paying a lot in overage fees')
     end
   end
 end

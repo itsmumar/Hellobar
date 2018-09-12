@@ -62,21 +62,21 @@ describe CalculateInternalMetrics, freeze: '2017-12-05 15:00 UTC' do
       expect(metrics.pro).to match_array [bill]
       expect(metrics.pro_monthly).to match_array [bill]
       expect(metrics.pro_yearly).to match_array []
-      expect(metrics.enterprise_monthly).to match_array []
-      expect(metrics.enterprise_yearly).to match_array []
+      expect(metrics.elite_monthly).to match_array []
+      expect(metrics.elite_yearly).to match_array []
       expect(metrics.revenue_sum).to eq bill.amount
     end
 
-    it 'includes Enterprise revenue from the 1 week period' do
-      site = create :site, :installed, :enterprise, created_at: 1.week.ago
-      bill = create :bill, :enterprise, :paid, subscription: site.current_subscription,
+    it 'includes Elite revenue from the 1 week period' do
+      site = create :site, :installed, :elite, created_at: 1.week.ago
+      bill = create :bill, :elite, :paid, subscription: site.current_subscription,
         created_at: 1.week.ago, bill_at: 1.week.ago
 
       expect(metrics.revenue).to match_array [bill]
       expect(metrics.pro).to match_array []
       expect(metrics.pro_monthly).to match_array []
-      expect(metrics.enterprise_monthly).to match_array [bill]
-      expect(metrics.enterprise_yearly).to match_array []
+      expect(metrics.elite_monthly).to match_array [bill]
+      expect(metrics.elite_yearly).to match_array []
       expect(metrics.revenue_sum).to eq bill.amount
     end
 

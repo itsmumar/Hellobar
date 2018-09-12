@@ -1,12 +1,12 @@
 class Subscription
-  class Enterprise < Subscription
-    autoload :Capabilities, 'subscription/enterprise/capabilities'
+  class Elite < Subscription
+    autoload :Capabilities, 'subscription/elite/capabilities'
 
     class << self
       def defaults
         {
-          type: 'enterprise',
-          name: 'Enterprise',
+          type: 'elite',
+          name: 'Elite',
           label: 'ENT',
           monthly_amount: 99.0,
           yearly_amount: 799.0,
