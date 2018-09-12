@@ -60,7 +60,7 @@ class Site < ApplicationRecord
   before_validation :generate_read_write_keys
 
   validates :url, url: true
-  validate :url, :check_for_banned_url
+  validate :url, :check_for_banned_url, on: :create
   validates :terms_and_conditions_url, :privacy_policy_url, url: true, on: :update_privacy
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
