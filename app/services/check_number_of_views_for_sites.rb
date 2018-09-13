@@ -55,8 +55,8 @@ class CheckNumberOfViewsForSites
     end
     report.count(number_of_views)
 
-    # the following if / elsif is a temporary handling of existing enterprise annual subscriptions where the user signed up before we had view limits
-    if current_sub && last_bill && current_sub.schedule == 'yearly' && current_sub.type == 'Subscription::Enterprise' && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
+    # the following if / elsif is a temporary handling of existing elite annual subscriptions where the user signed up before we had view limits
+    if current_sub && last_bill && current_sub.schedule == 'yearly' && current_sub.type == 'Subscription::Elite' && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
       @limit = ::Float::INFINITY
       @warning_level_one = ::Float::INFINITY
       @warning_level_two = ::Float::INFINITY

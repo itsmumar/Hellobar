@@ -13,7 +13,7 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:limit_exceeded)
     allow(report).to receive(:send_warning_email)
     allow(report).to receive(:send_upsell_email)
-    allow(report).to receive(:send_enterprise_upsell_email)
+    allow(report).to receive(:send_elite_upsell_email)
     allow(report).to receive(:log_grandfathered_site)
     allow(report).to receive(:send_elite_upsell_email)
     allow(FetchTotalViewsForMonth)
@@ -47,18 +47,18 @@ describe CheckNumberOfViewsForSites do
     end
   end
 
-  context 'when limit exceeded for grandfathered enterprise subscription' do
+  context 'when limit exceeded for grandfathered elite subscription' do
     let(:number_of_views) { 500_001 }
     let(:credit_card) { create :credit_card }
 
     before do
       stub_cyber_source :purchase
       Timecop.travel '2018-08-15 13:00 UTC' do
-        ChangeSubscription.new(site, { subscription: 'enterprise', schedule: 'yearly' }, credit_card).call
+        ChangeSubscription.new(site, { subscription: 'elite', schedule: 'yearly' }, credit_card).call
       end
     end
 
-    it 'enterprise subscription is grandfathered and does not call report.limit_exceeded' do
+    it 'elite subscription is grandfathered and does not call report.limit_exceeded' do
       service.call
       expect(report)
         .to_not have_received(:limit_exceeded)
@@ -66,7 +66,7 @@ describe CheckNumberOfViewsForSites do
         .to have_received(:log_grandfathered_site)
     end
 
-    it 'renews for another year for enterprise and now gets limits enforced' do
+    it 'renews for another year for elite and now gets limits enforced' do
       Timecop.travel '2019-08-17 13:00 UTC' do
         PayBill.new(site.bills.last).call
       end
@@ -87,7 +87,7 @@ describe CheckNumberOfViewsForSites do
       # expect(BillingLogger).to receive(:info).with("Site is grandfathered")
     end
 
-    it 'renews for another year for enterprise and now gets limits enforced' do
+    it 'renews for another year for elite and now gets limits enforced' do
       Timecop.travel '2019-08-17 13:00 UTC' do
         PayBill.new(site.bills.last).call
       end
