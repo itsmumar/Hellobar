@@ -30,7 +30,8 @@ describe AnalyticsProvider do
           source: 'promotional',
           trial_period: plan.duration,
           trial_subscription: plan.subscription_type,
-          credit_card_signup: false
+          credit_card_signup: false,
+          admin_link: "https://app.hellobar.com/admin/users/#{ user.id }"
         }
 
         expect(adapter)
