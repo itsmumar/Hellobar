@@ -4,6 +4,7 @@ class UpdateSiteElement
     @theme = Theme.find_by(id: params[:theme_id])
     @params = disable_use_question_if_template(params)
     @new_type = params[:element_subtype]
+    @current_user = current_user
   end
 
   def call
@@ -18,7 +19,7 @@ class UpdateSiteElement
 
   private
 
-  attr_reader :element, :params, :new_type, :theme
+  attr_reader :element, :params, :new_type, :theme, :current_user
 
   def generate_script
     element.site.script.generate
@@ -66,5 +67,9 @@ class UpdateSiteElement
   def disable_use_question_if_template(params)
     params[:use_question] = false if theme&.type == 'template'
     params
+  end
+
+  def track_event
+    TrackEvent.new(:updated_bar, site_element: element, user: current_user).call
   end
 end
