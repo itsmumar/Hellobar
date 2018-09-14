@@ -76,7 +76,8 @@ describe AnalyticsProvider do
           source: 'affiliate',
           trial_period: partner.partner_plan.duration,
           trial_subscription: partner.partner_plan.subscription_type,
-          credit_card_signup: partner.require_credit_card
+          credit_card_signup: partner.require_credit_card,
+          admin_link: "https://app.hellobar.com/admin/users/#{ user.id }"
         }
 
         expect(adapter)
