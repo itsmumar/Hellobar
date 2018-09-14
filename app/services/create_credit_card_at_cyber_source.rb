@@ -25,6 +25,7 @@ class CreateCreditCardAtCyberSource
       raise 'Invalid credit card' if field == 'c:cardType'
       raise "Invalid #{ field.gsub(/^c:/, '').underscore.humanize.downcase }"
     end
+    Raven.capture_exception(response.message, extra: { full_response: response, params: @params })
     raise response.message
   end
 
