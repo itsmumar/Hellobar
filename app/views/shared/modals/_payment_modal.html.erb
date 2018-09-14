@@ -16,8 +16,12 @@
           <div class="payment-wrapper {{ package.type }}">
             <div class="payment-sidebar">
               <header>
-                {{ package.name }}
-                <small>Select Billing</small>
+                {{#if isElite}}
+                 Elite
+                {{else}}
+                 {{ package.name }}
+                {{/if}}
+                <small>Select plan below</small>
               </header>
 
               <div class="package-cycle">
@@ -35,7 +39,7 @@
                   <small>${{package.yearly_amount}} Per Year <strong>Save 20%</strong><strong>LIMITED TIME OFFER</strong></small>
                 </label>
 
-                <p>This will upgrade ONLY site {{siteName}} to {{ package.type }}.<br><br>Each site will need to be upgraded seperately to gain {{ package.type }} features.</p>
+
               </div>
 
               <a class="different-plan">Choose a different plan</a>
@@ -43,9 +47,15 @@
 
             <div id="credit-card-details" class="credit_card_form">
               {{> credit-card-details this}}
-            </div>
 
+            </div>
+            <dev class="card_form">
+              <p>This will upgrade ONLY site {{siteName}} to {{ package.type }}.<br><br>Each site will need to be
+                upgraded
+                seperately to gain {{ package.type }} features.</p>
+            </dev>
           </div>
+
         {{/if}}
       </form>
 

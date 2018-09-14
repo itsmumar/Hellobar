@@ -2,6 +2,9 @@
 
 .payment-account-modal
 
+  footer
+    .button.submit
+      @extend %darkgray-button
   .modal-block > footer
     margin-top: 0
     border-top: none
@@ -39,7 +42,7 @@
             display: block
             font-size: 0.75em
             font-weight: normal
-            text-transform: uppercase
+
 
         p
           color: $gray
@@ -58,6 +61,7 @@
 
           input
             display: none
+
 
           label
             font-size: 0.95em
@@ -91,28 +95,48 @@
 
         > a
           font-size: 0.9em
-          text-decoration: underline
+          color: #e8562a
+          display: block
+
+
+
 
       /*-----------  Payment Form  -----------*/
 
+
+
       .credit_card_form
         width: 62%
+        height: 160px
         float: right
-        text-align: left
+        text-align: center
         border: 1px solid $grayLighter
 
         header
           color: $gray
           font-size: 1.25em
+          text-align: left
+          height: 60px
           line-height: 195%
-          padding: 1.5rem 2rem
-          background-color: $grayLightest
+          padding: 1.2rem 1rem
+          color: #6f6f6f
+          background-color: #f6f6f6
+          font-family: Geomanist
+          font-size: 18px
+          font-weight: bold
+          font-style: normal
+          font-stretch: normal
+          line-height: normal
+          letter-spacing: normal
 
         .credit-card, .site-select
-          padding: 1.5rem 2rem
+          padding: 2.5rem 2rem
 
           #add-new-credit-card
-            color: $green
+            color:  #27ab9e
+            font-weight: bold
+
+
 
         label
           font-size: 0.8em !important
@@ -122,6 +146,24 @@
         select
           margin-top: 0 !important
           font-size: 0.85em !important
+
+
+      .card_form
+        margin-top: 15px
+        width: 62%
+        float: right
+        text-align: left
+        border: solid 1px #ebebeb
+        p
+          padding-top: 20px
+          padding-left: 15px
+          font-size: 14px
+          width: 450px
+          height: 89px
+          border-radius: 4px
+          background-color: #ffffff
+          background-color: var(--white)
+
 
       /*----------- Free -----------*/
 
@@ -152,17 +194,19 @@
       &.pro, &.pro_comped, &.growth
         .payment-sidebar
           header
-            background-color: $green
+            background-color: #27ab9e
 
           input:checked + label:before
-            border-color: $green
-            background-color: $green
+            border-color: #27ab9e
+            background-color: #27ab9e
 
           > a
-            color: $green
+            color: #e8562a
 
             &:hover
-              color: lighten($green, 5%)
+              color: lighten(#e8562a, 5%)
+
+
 
       /*-----------  Enterprise  -----------*/
 
@@ -171,17 +215,17 @@
         .payment-sidebar
 
           header
-            background-color: $blue
+            background-color: #27ab9e
 
           input:checked + label:before
-            border-color: $blue
-            background-color: $blue
+            border-color: #27ab9e
+            background-color: #27ab9e
 
           > a
-            color: $blue
+            color: #e8562a
 
             &:hover
-              color: lighten($blue, 5%)
+              color: lighten(#e8562a, 5%)
 
         .button
           @extend %blue-button

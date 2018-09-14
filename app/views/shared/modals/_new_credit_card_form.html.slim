@@ -9,8 +9,8 @@
   .field-row
     .cc-number
       label Card number
-      input type="text" placeholder="    -    -    -" name="credit_card[number]" autocomplete="cc-number"
-      i.icon-modal
+      input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" name="credit_card[number]" autocomplete="cc-number"
+
 
     .cc-expiry
       label Expiry
@@ -22,7 +22,7 @@
 
   .field-row
     .cc-address
-      label Address
+      label Billing Address
       input type="text" placeholder="123 Main Street" name="credit_card[address]" autocomplete="street-address"
 
   .field-row
@@ -42,4 +42,4 @@
     .cc-country
       label Country
       .select-wrapper
-        = country_select('credit_card', 'country', priority_countries: ['US'], selected: 'US')
+        = country_select('credit_card', 'country', priority_countries: ['US'] )

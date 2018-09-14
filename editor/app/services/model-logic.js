@@ -227,7 +227,7 @@ export default Ember.Service.extend({
 
     if (!isAlert && !isBranded && !canRemoveBranding) {
       this.set('model.show_branding', true);
-      this.promptUpgrade('show_branding', isBranded, 'remove branding');
+      this.promptUpgrade('show_branding', isBranded, 'remove Hello Bar logo, upgrade your subscription for');
     }
   }.observes('model.show_branding'),
 
@@ -236,7 +236,7 @@ export default Ember.Service.extend({
     const canLeadingQuestion = this.get('model.site.capabilities.leading_question');
     if (!canLeadingQuestion && questionOn) {
       this.set('model.use_question', false);
-      this.promptUpgrade('use_question', questionOn, 'ask leading questions');
+      this.promptUpgrade('use_question', questionOn, ' enable Yes/No Questions, upgrade your subscription for ');
     }
   }.observes('model.use_question'),
 
