@@ -66,7 +66,7 @@ class AnalyticsProvider
       params[:trial_subscription] = plan.subscription_type
       params[:credit_card_signup] = false
     end
-    
+
     params[:admin_link] = "https://app.hellobar.com/admin/users/#{ user.id }"
     track(
       event: 'signed-up',
@@ -84,7 +84,7 @@ class AnalyticsProvider
       user: user,
       params: {
         site_url: site.url,
-        site_id: site.id,
+        site_id: site.id
       }
     )
   end
