@@ -66,7 +66,8 @@ class AnalyticsProvider
       params[:trial_subscription] = plan.subscription_type
       params[:credit_card_signup] = false
     end
-
+    
+    params[:admin_link] = "https://app.hellobar.com/admin/users/#{ user.id }"
     track(
       event: 'signed-up',
       user: user,
@@ -278,8 +279,7 @@ class AnalyticsProvider
         limit: limit,
         subscription: subscription.name,
         schedule: subscription.schedule,
-        overage_count: site.overage_count,
-        visit_overage: subscription.visit_overage
+        overage_count: site.overage_count
       }
     )
   end
@@ -311,7 +311,8 @@ class AnalyticsProvider
         trial_days: subscription.trial_period || 0,
         previous_subscription: previous_subscription&.name,
         previous_subscription_amount: previous_subscription&.amount,
-        previous_subscription_schedule: previous_subscription&.schedule
+        previous_subscription_schedule: previous_subscription&.schedule,
+        subscription_start_date: subscription.created_at
       }
     )
 
