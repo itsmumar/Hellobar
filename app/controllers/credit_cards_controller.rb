@@ -44,6 +44,7 @@ class CreditCardsController < ApplicationController
         render :new, layout: 'static'
       end
       format.json do
+        Raven.capture_exception(error.record.errors.full_messages.to_sentence, extra: { full_response: error.record.errors.full_messages })
         render json: { errors: error.record.errors.full_messages }, status: :unprocessable_entity
       end
     end
