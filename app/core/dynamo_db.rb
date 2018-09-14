@@ -126,9 +126,9 @@ class DynamoDB
 
   def send_request(method, request)
     self.last_request = [method, request]
-    rescue_from_service_error do
-      self.last_response = client.send(method, request)
-    end
+    # rescue_from_service_error do
+    #   self.last_response = client.send(method, request)
+    # end
     last_response
   end
 

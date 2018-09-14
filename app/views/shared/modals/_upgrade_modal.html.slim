@@ -15,89 +15,117 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
       form(class=upgrade_modal_ab_class)
 
         .site-title
-          | Upgrade {{siteName}}
           | {{#if upgradeBenefit}}
           |   to {{upgradeBenefit}}
           | {{/if}}
+          | upgrade your subscription to {{siteName}}
 
         .billing-options
           input id='monthly-billing' type='radio' name='billing' value='monthly'
-          label for='monthly-billing' Monthly Billing
+          |Monthly
+          label for='monthly-billing'
           input id='yearly-billing' type='radio' name='billing' value='yearly'
-          label for='yearly-billing' Annual Billing
+          label for='yearly-billing'
+          |  Yearly
 
-        / Basic Package
-        .package-block.basic
-          .package-title
-            .package-name Basic
-            .package-price FREE
+      table
+        thead
 
-          .package-features
+          tr
 
-            ul
-              li Hello Bar Logo On Each Pop-Up
-              li Up to 5,000 Views Per Month
-              li Limited Design Features
-              li Limited Email Integrations
+            th
+            th.prime Most Popular
+            th
+              div
+            th
+              div
+          tr
 
-            .package-status(data-btn-prefix='Your ')
-              = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
+            th
+            th.back
+              div Elite
+              div.sm
+                strike.fl $140
+                span.bold #{subscription_cost(Subscription::Enterprise, :monthly)}
+                |/mo
+            th
+              div = Subscription.pro_or_growth_for(current_user).defaults[:name]
+              div.sm
+                strike.fl $49
+                span.bold #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}
+                |/mo
+            th
+              div Basic
+              div.bold forever Free
+        tbody
+          tr
+            th.thborder Views
+            td 500,000/mo
+            td 50,000/mo
+            td 5,000/mo
+          tr
+            th.thborder # of Campaigns
+            td Unlimited
+            td Unlimited
+            td Unlimited
+          tr
+            th.thborder # of Subscribers
+            td Unlimited
+            td Unlimited
+            td Unlimited
+          tr
+            th.thborder Design Features
+            td Premium
+            td Advanced
+            td Basic
+          tr
+            th.thborder Targeting Features
+            td Premium
+            td Advanced
+            td Device Type Only
+          tr
+            th.thborder A/B Testing
+            td Unlimited Tests
+            td Unlimited Tests
+            td 1 Live Test
+          tr
+            th.thborder Integrations
+            td Premium
+            td Advanced
+            td Basic
+          tr
+            th.thborder Dedicated Marketing Expert
+            td.check &#10004;
+            td 90 Days
+            td.cross &#10005;
+          tr
+            th.thborder Remove HB Logo
+            td.check  &#10004;
+            td.check  &#10004;
+            td.cross &#10005;
+          tr.trborder
+            th
+              dev
+            td.trborder
+              .package-block.enterprise
+                .package-features
+                  .package-status
+                    = choose_plan_button(Subscription::Enterprise.new)
+            td.trborder
+              .package-block.enterprise
+                .package-features
+                  .package-status
+                    = choose_pro_or_growth_button
 
+            td.trborder
+              .package-block.enterprise
+                .package-features
+                  .package-status(data-btn-prefix='Your ')
+                    = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
 
-        / Pro Package
-        .package-block.pro
-          .package-title
-            .package-name = Subscription.pro_or_growth_for(current_user).defaults[:name]
-            .package-price.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}/year LIMITED TIME OFFER
-
-          .package-features
-
-            ul
-              li.thin
-                i.icon-unbranded
-                span.info Turn Off Hello Bar Logo
-              li.thin
-                i.icon-thumbsup
-                span.info-plus 50,000 Views Per Month
-              li.thin
-                i.icon-opportunity
-                span.info Advanced Design Features & Email Integrations
-              li.thin.adjusted-down
-                i.icon-unlimited
-                span.info Unlimited A/B Testing
-              li.thin
-                i.icon-target
-                span.info-plus Audience Targeting By Device, Location, URL Path, & Over 200+ Conditional Rules
-
-            .package-status
-              = choose_pro_or_growth_button
-              .email-links
-                - if current_site
-                  - current_site.owners.each do |owner|
-                    div
-                      = mail_to owner.email, owner.name || owner.email
-
-        / Elite Package
-        .package-block.elite
-          .package-title
-            .package-name Elite
-            .package-price.monthly #{subscription_cost(Subscription::Elite, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Elite, :yearly)}/year LIMITED TIME OFFER
-
-          .package-features
-
-            ul
-              li All Features From Growth Plan
-              li 500,000 Views Per Month
-              li Premium Design Features & Email Integrations
-              li VIP Support
-              li Dedicated Marketing Specialist - Coming Soon
-
-            .package-status
-              = choose_plan_button(Subscription::Elite.new)
-              .email-links
-                - if current_site
-                  - current_site.owners.each do |owner|
-                    div
-                      = mail_to owner.email, owner.name || owner.email
+          tr.trborder
+            th
+              dev
+            td.trborder See all features
+            td.trborder See all features
+            td.trborder See all features
