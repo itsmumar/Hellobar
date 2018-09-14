@@ -214,7 +214,7 @@ describe AnalyticsProvider do
     it 'tracks "created-site"' do
       expect(adapter)
         .to receive(:tag_users)
-        .with("#{ (user.sites.count) } Sites", site.owners)
+        .with("#{ user.sites.count } Sites", site.owners)
 
       expect(adapter)
         .to receive(:untag_users)
