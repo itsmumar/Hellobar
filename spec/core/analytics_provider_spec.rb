@@ -15,7 +15,6 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:track)
           .with(event: 'signed-up', user: user, params: {})
-
         track('signed-up', user: user)
       end
     end
@@ -562,7 +561,8 @@ describe AnalyticsProvider do
           trial_days: 0,
           previous_subscription: previous_subscription.name,
           previous_subscription_amount: previous_subscription.amount,
-          previous_subscription_schedule: previous_subscription.schedule
+          previous_subscription_schedule: previous_subscription.schedule,
+          subscription_start_date: subscription.created_at
         })
 
       track(event,
