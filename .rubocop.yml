@@ -69,11 +69,7 @@ Style/FormatStringToken:
 Style/MethodDefParentheses:
   Enabled: false
 
-Style/MethodMissingSuper:
-  Exclude:
-    - app/core/settings.rb
-
-Style/MissingRespondToMissing:
+Style/MethodMissing:
   Exclude:
     - app/core/settings.rb
 

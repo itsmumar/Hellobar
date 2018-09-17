@@ -39,7 +39,7 @@ class AnalyticsProvider
   end
 
   def signed_up(user:, promotional_signup: false, utm_source: nil)
-    params = {admin_link: "https://app.hellobar.com/admin/users/#{ user.id }"}
+    params = { admin_link: "https://app.hellobar.com/admin/users/#{ user.id }" }
 
     # Affiliate signups additional params
     if user.affiliate_identifier
