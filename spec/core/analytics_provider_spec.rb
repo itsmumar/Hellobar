@@ -14,7 +14,7 @@ describe AnalyticsProvider do
       it 'tracks "signed-up" without affiliate info' do
         expect(adapter)
           .to receive(:track)
-          .with(event: 'signed-up', user: user, params: {})
+          .with(event: 'signed-up', user: user, params: { admin_link: "https://app.hellobar.com/admin/users/#{ user.id }" })
         track('signed-up', user: user)
       end
     end
@@ -51,7 +51,8 @@ describe AnalyticsProvider do
         affiliate_information = create :affiliate_information, user: user
         params = {
           affiliate_identifier: affiliate_information.affiliate_identifier,
-          source: 'affiliate'
+          source: 'affiliate',
+          admin_link: "https://app.hellobar.com/admin/users/#{ user.id }"
         }
 
         expect(adapter)
