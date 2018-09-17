@@ -256,10 +256,32 @@ class AnalyticsProvider
     )
   end
 
-  def update_site_count_tags(user:)
-    tag_users "#{ user.sites.count } Sites", site.owners
-    untag_users "#{ (user.sites.count - 1) } Sites", site.owners unless user.sites.count == 1
-    tag_users "Multiple Sites" if user.sites.count > 1
+  def update_site_count(user:)
+    track(
+      event: 'update-site-count',
+      user: user,
+      params: {}
+    )
+
+    # clean up possibly stale tags
+    untag_users "#{ (user.sites.count - 1) } Sites", [user] unless user.sites.count <= 1
+    untag_users "#{ (user.sites.count) } Sites", [user]
+    untag_users "#{ (user.sites.count + 1) } Sites", [user]
+    untag_users 'Multiple Sites', [user]
+
+    # tag with current count
+    tag_users "#{ user.sites.count } Sites", [user]
+    tag_users 'Multiple Sites', [user] unless user.sites.count < 2
+  end
+
+  def add_dme(user:)
+    track(
+      event: 'add-dme',
+      user: user,
+      params: {}
+    )
+    
+    tag_users 'DME', [user]
   end
 
   private

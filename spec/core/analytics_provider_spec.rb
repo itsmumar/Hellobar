@@ -445,4 +445,61 @@ describe AnalyticsProvider do
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
     end
   end
+
+  describe '#update_site_count' do
+    # let(:user) { create :user}
+    let(:site) { create :site }
+    let(:other_site) { create :site }
+
+    it 'tracks "update-site-count"' do
+      site.owners << user
+      other_site.owners << user
+
+      expect(adapter)
+        .to receive(:untag_users)
+        .with("#{ (user.sites.count - 1) } Sites", [user])
+
+      expect(adapter)
+        .to receive(:untag_users)
+        .with("#{ (user.sites.count) } Sites", [user])
+
+      expect(adapter)
+        .to receive(:untag_users)
+        .with("#{ (user.sites.count + 1) } Sites", [user])
+
+      expect(adapter)
+        .to receive(:untag_users)
+        .with('Multiple Sites', [user])
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with("#{ user.sites.count } Sites", [user])
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Multiple Sites', [user])
+
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'update-site-count', user: user, params: {})
+
+      track('update-site-count', user: user)
+    end
+  end
+
+  describe '#add_dme' do
+    let(:site) { create :site, :elite, user: user }
+
+    it 'tracks "fired DME"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'add-dme', user: user, params: {})
+
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('DME', [site.users.first])
+
+      track('add-dme', user: user)
+    end
+  end
 end
