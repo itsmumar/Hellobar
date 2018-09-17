@@ -39,7 +39,7 @@ class AnalyticsProvider
   end
 
   def signed_up(user:, promotional_signup: false, utm_source: nil)
-    params = {}
+    params = {admin_link: "https://app.hellobar.com/admin/users/#{ user.id }"}
 
     # Affiliate signups additional params
     if user.affiliate_identifier
@@ -67,7 +67,6 @@ class AnalyticsProvider
       params[:credit_card_signup] = false
     end
 
-    params[:admin_link] = "https://app.hellobar.com/admin/users/#{ user.id }"
     track(
       event: 'signed-up',
       user: user,
@@ -279,7 +278,8 @@ class AnalyticsProvider
         limit: limit,
         subscription: subscription.name,
         schedule: subscription.schedule,
-        overage_count: site.overage_count
+        overage_count: site.overage_count,
+        visit_overage: subscription.visit_overage
       }
     )
   end
