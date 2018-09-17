@@ -70,6 +70,7 @@ class SiteElement < ApplicationRecord
   validate :ensure_custom_redirect_url_configured, if: :email?
 
   scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :deactivated, -> { where.not(deactivated_at: nil).where.not(type: 'ContentUpgrade')}
   scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
   scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
   scope :active_content_upgrades, -> { where(paused_at: nil).where(type: 'ContentUpgrade') }
@@ -192,8 +193,28 @@ class SiteElement < ApplicationRecord
     update!(paused_at: nil)
   end
 
+  def activate
+    update(deactivated_at: nil)
+  end
+
+  def activate!
+    update!(deactivated_at: nil)
+  end
+
+  def deactivate
+    update(deactivated_at: Time.current)
+  end
+
+  def deactivate!
+    update!(deactivated_at: Time.current)
+  end
+
   def paused?
     paused_at.present?
+  end
+
+  def deactivated?
+    deactivated_at.present?
   end
 
   def toggle_paused!

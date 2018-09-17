@@ -58,6 +58,7 @@ class Site < ApplicationRecord
   scope :active, -> { script_installed.joins(:site_elements).merge(SiteElement.active).distinct }
 
   before_validation :generate_read_write_keys
+  after_update :deactivate_site_element, if: Proc.new{|site| site.overage_count > site.overage_count_was}
 
   validates :url, url: true
   validate :url, :check_for_banned_url, on: :create
@@ -294,5 +295,11 @@ class Site < ApplicationRecord
 
   def check_for_banned_url
     errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase)
+  end
+
+  def deactivate_site_element
+    site_elements.active.each do |element|
+      element.deactivate!
+    end
   end
 end
