@@ -39,7 +39,7 @@ class AnalyticsProvider
   end
 
   def signed_up(user:, promotional_signup: false, utm_source: nil)
-    params = {}
+    params = { admin_link: "https://app.hellobar.com/admin/users/#{ user.id }" }
 
     # Affiliate signups additional params
     if user.affiliate_identifier
@@ -82,7 +82,8 @@ class AnalyticsProvider
       event: 'invited-member',
       user: user,
       params: {
-        site_url: site.url
+        site_url: site.url,
+        site_id: site.id
       }
     )
   end
@@ -92,9 +93,12 @@ class AnalyticsProvider
       event: 'created-site',
       user: user,
       params: {
-        url: site.url
+        url: site.url,
+        site_id: site.id
       }
     )
+    tag_users "#{ user.sites.count } Sites", site.owners
+    untag_users "#{ (user.sites.count - 1) } Sites", site.owners unless user.sites.count == 1
   end
 
   def installed_script(site:, user:)
@@ -102,9 +106,12 @@ class AnalyticsProvider
       event: 'installed-script',
       user: user,
       params: {
-        url: site.url
+        url: site.url,
+        site_id: site.id,
+        install_type: site.install_type
       }
     )
+    tag_users site.install_type, site.owners
   end
 
   def uninstalled_script(site:, user:)
@@ -112,7 +119,8 @@ class AnalyticsProvider
       event: 'uninstalled-script',
       user: user,
       params: {
-        url: site.url
+        url: site.url,
+        site_id: site.id
       }
     )
   end
@@ -125,23 +133,40 @@ class AnalyticsProvider
       user: user,
       params: {
         identity: contact_list.identity&.provider,
-        site_url: contact_list.site&.url
+        site_url: contact_list.site&.url,
+        site_id: contact_list.site&.id
       }
     )
   end
 
   def created_bar(site_element:, user:)
-    return if !site_element || site_element.deleted?
+    site = site_element.site
+    if site_element.type == 'Bar'
+      created_element('created_bar', site, site_element, user)
+    elsif site_element.type == 'Modal'
+      created_element('created_modal', site, site_element, user)
+    elsif site_element.type == 'Slider'
+      created_element('created_slider', site, site_element, user)
+    elsif site_element.type == 'Takeover'
+      created_element('created_page_takeover', site, site_element, user)
+    elsif site_element.type == 'Alert'
+      created_element('created_alert', site, site_element, user)
+    end
+  end
 
-    track(
-      event: 'created-bar',
-      user: user,
-      params: {
-        bar_type: site_element.type,
-        goal: site_element.element_subtype,
-        site_url: site_element.site&.url
-      }
-    )
+  def updated_bar(site_element:, user:)
+    site = site_element.site
+    if site_element.type == 'Bar'
+      updated_element('updated_bar', site, site_element, user)
+    elsif site_element.type == 'Modal'
+      updated_element('updated_modal', site, site_element, user)
+    elsif site_element.type == 'Slider'
+      updated_element('updated_slider', site, site_element, user)
+    elsif site_element.type == 'Takeover'
+      updated_element('updated_page_takeover', site, site_element, user)
+    elsif site_element.type == 'Alert'
+      updated_element('updated_alert', site, site_element, user)
+    end
   end
 
   def upgraded_subscription(params)
@@ -192,6 +217,7 @@ class AnalyticsProvider
       user: user,
       params: {
         site_url: site&.url,
+        site_id: site&.id,
         subscription: subscription.name,
         schedule: subscription.schedule
       }
@@ -251,7 +277,9 @@ class AnalyticsProvider
         number_of_views: number_of_views,
         limit: limit,
         subscription: subscription.name,
-        schedule: subscription.schedule
+        schedule: subscription.schedule,
+        overage_count: site.overage_count,
+        visit_overage: subscription.visit_overage
       }
     )
   end
@@ -277,12 +305,14 @@ class AnalyticsProvider
       params: {
         amount: subscription.amount,
         site_url: site&.url,
+        site_id: site&.id,
         subscription: subscription.name,
         schedule: subscription.schedule,
         trial_days: subscription.trial_period || 0,
         previous_subscription: previous_subscription&.name,
         previous_subscription_amount: previous_subscription&.amount,
-        previous_subscription_schedule: previous_subscription&.schedule
+        previous_subscription_schedule: previous_subscription&.schedule,
+        subscription_start_date: subscription.created_at
       }
     )
 
@@ -293,5 +323,45 @@ class AnalyticsProvider
 
     untag_users previous_subscription.name, site.owners
     untag_users 'Paid', site.owners if subscription.amount.zero?
+  end
+
+  def created_element(event, site, site_element, user)
+    track(
+      event: event,
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        theme_id: site_element.theme_id,
+        enable_gdpr: site_element.enable_gdpr,
+        show_branding: site_element.show_branding,
+        headline: site_element.headline,
+        use_default_image: site_element.use_default_image,
+        link_text: site_element.link_text,
+        use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def updated_element(event, site, site_element, user)
+    track(
+      event: event,
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        theme_id: site_element.theme_id,
+        enable_gdpr: site_element.enable_gdpr,
+        show_branding: site_element.show_branding,
+        headline: site_element.headline,
+        use_default_image: site_element.use_default_image,
+        link_text: site_element.link_text,
+        use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
   end
 end
