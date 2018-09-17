@@ -256,6 +256,12 @@ class AnalyticsProvider
     )
   end
 
+  def update_site_count_tags(user:)
+    tag_users "#{ user.sites.count } Sites", site.owners
+    untag_users "#{ (user.sites.count - 1) } Sites", site.owners unless user.sites.count == 1
+    tag_users "Multiple Sites" if user.sites.count > 1
+  end
+
   private
 
   def track(event:, user:, params: {})

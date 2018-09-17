@@ -11,10 +11,10 @@ class IntercomRefresh
 
   private
 
-  attr_reader :site_element, :current_user, :site
+  attr_reader :current_user, :site
 
   def refresh
-    site_element.site.script.generate
+    
   end
 
   # def track_event
