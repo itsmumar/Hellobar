@@ -38,7 +38,9 @@ class SiteSerializer < ActiveModel::Serializer
       alert_bars: object.capabilities.alert_bars?,
       leading_question: object.capabilities.leading_question?,
       image_opacity: object.capabilities.image_opacity?,
-      image_overlay_opacity: object.capabilities.image_overlay_opacity?
+      image_overlay_opacity: object.capabilities.image_overlay_opacity?,
+      a_b_test_in_progress: object.capabilities.a_b_test_in_progress?,
+      max_variations: object.capabilities.max_variations
     }
   end
 
