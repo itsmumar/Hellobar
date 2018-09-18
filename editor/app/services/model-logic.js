@@ -64,12 +64,12 @@ export default Ember.Service.extend({
   }.property('model.type', 'model.element_subtype'),
 
   isPublished: function () {
-    return this.get('isTypeSelected') && !this.get('model.paused_at') && this.get('model.id');
-  }.property('model.id', 'model.paused_at', 'isTypeSelected'),
+    return this.get('isTypeSelected') && !this.get('model.paused_at') && !this.get('model.deactivated_at') && this.get('model.id');
+  }.property('model.id', 'model.paused_at','model.deactivated_at', 'isTypeSelected'),
 
   isNotPublished: function () {
-    return this.get('isTypeSelected') && (this.get('model.paused_at') || !this.get('model.id'));
-  }.property('model.id', 'model.paused_at', 'isTypeSelected'),
+    return this.get('isTypeSelected') && (this.get('model.paused_at') && this.get('model.deactivated_at') || !this.get('model.id'));
+  }.property('model.id', 'model.paused_at','model.deactivated_at', 'isTypeSelected'),
 
   // ------ Fields handling
 

@@ -1,53 +1,56 @@
--if(site_element.deactivated?)
-  tr.site-element-block class="type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id data-active="deactivated" data-type=site_element.type.downcase
--else
-  tr.site-element-block class="type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id data-active=(!site_element.paused?).to_s data-type=site_element.type.downcase
-  td.color-flag style="background-color: ##{site_element.background_color}"
-  td.site-element__headline
-    p= render_headline(site_element)
-  td.site-element__age
-    span.num= site_element_age(site_element)
-  td.site-element__type
-    i class="#{type_icon_class_for_element(site_element)}"
-  td.site-element__gdpr
-    span.text-center= gdpr_enabled_for_element?(site_element)
-  td.site-element__style
-    i class="#{style_icon_class_for_element(site_element)}"
-  td.site-element__views
-    span.num= number_with_delimiter(site_element.total_views)
-  td.site-element__conversions
-    span.num= total_conversion_text(site_element)
-  td.site-element__convertions-percent
-    span.num= conversion_percent_text(site_element)
-  td.site-element__actions
-    - if (icon = ab_test_icon(site_element)) && icon.match(/icon-abtest/)
-      .dropdown-wrapper
-        = icon
-        .dropdown-block.adjusted
-          = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars" do
-              i.icon-docs
-              | Create Variation
-    - else
+tr.site-element-block class="type-#{site_element.short_subtype}" id="site_element_#{site_element.id}" data-rule-id=rule.id data-active=(!site_element.paused? && !site_element.deactivated?).to_s data-deactive=(site_element.deactivated?).to_s data-paused=(site_element.paused?).to_s data-type=site_element.type.downcase
+td.color-flag style="background-color: ##{site_element.background_color}"
+td.site-element__headline
+  p= render_headline(site_element)
+td.site-element__age
+  span.num= site_element_age(site_element)
+td.site-element__type
+  i class="#{type_icon_class_for_element(site_element)}"
+td.site-element__gdpr
+  span.text-center= gdpr_enabled_for_element?(site_element)
+td.site-element__style
+  i class="#{style_icon_class_for_element(site_element)}"
+td.site-element__views
+  span.num= number_with_delimiter(site_element.total_views)
+td.site-element__conversions
+  span.num= total_conversion_text(site_element)
+td.site-element__convertions-percent
+  span.num= conversion_percent_text(site_element)
+td.site-element__actions
+  - if (icon = ab_test_icon(site_element)) && icon.match(/icon-abtest/)
+    .dropdown-wrapper
       = icon
-
-    .dropdown-wrapper.adjusted
-      i.icon-settings
-      .dropdown-block
-        = link_to edit_site_site_element_path(site_element, :site_id => @site) do
-          i.icon-edit
-          | Edit
-
+      .dropdown-block.adjusted
         = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars" do
-          i.icon-docs
-          | Create Variation
+            i.icon-docs
+            | Create Variation
+  - else
+    = icon
 
-        = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
-          - if site_element.paused?
-            i.icon-play
-          - else
-           i.icon-pause
-          = site_element.paused? ? 'Unpause' : 'Pause'
+  .dropdown-wrapper.adjusted
+    i.icon-settings
+    .dropdown-block
+      = link_to edit_site_site_element_path(site_element, :site_id => @site) do
+        i.icon-edit
+        | Edit
 
-        = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id, "data-rule-id" => rule.id do
-          i.icon-trash
-          | Remove
+      = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars" do
+        i.icon-docs
+        | Create Variation
+
+      = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
+        - if site_element.paused?
+          i.icon-play
+        - else
+         i.icon-pause
+        = site_element.paused? ? 'Unpause' : 'Pause'
+      /= content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
+        - if site_element.deactivated?
+          i.icon-play
+        - else
+          i.icon-pause
+          = site_element.deactivated? ? 'Activate' : 'Deactivate'
+
+      = content_tag 'a', class: 'delete-element', "data-element-id" => site_element.id, "data-site-id" => @site.id, "data-rule-id" => rule.id do
+        i.icon-trash
+        | Remove

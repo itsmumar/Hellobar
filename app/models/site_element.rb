@@ -71,7 +71,7 @@ class SiteElement < ApplicationRecord
 
   scope :paused, -> { where.not(paused_at: nil).where.not(type: 'ContentUpgrade') }
   scope :deactivated, -> { where.not(deactivated_at: nil).where.not(type: 'ContentUpgrade')}
-  scope :active, -> { where(paused_at: nil).where.not(type: 'ContentUpgrade') }
+  scope :active, -> { where(paused_at: nil, deactivated_at: nil).where.not(type: 'ContentUpgrade') }
   scope :paused_content_upgrades, -> { where.not(paused_at: nil).where(type: 'ContentUpgrade') }
   scope :active_content_upgrades, -> { where(paused_at: nil).where(type: 'ContentUpgrade') }
   scope :content_upgrades, -> { where(type: 'ContentUpgrade') }
