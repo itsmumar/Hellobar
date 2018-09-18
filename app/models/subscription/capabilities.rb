@@ -63,9 +63,9 @@ class Subscription::Capabilities
     @site.site_elements.size >= max_site_elements
   end
 
-  def at_variation_limit?
-    site_element = @site.site_elements.active.first
-    elements_in_group = site_element.rule.site_elements.select { |se| !se.paused? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
+  def at_variation_limit? site_element
+    @site_element = site_element
+    elements_in_group = @site_element.rule.site_elements.select { |se| !se.paused? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.count >= max_variations
   end
 
