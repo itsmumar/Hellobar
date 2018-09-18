@@ -15,6 +15,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:track)
           .with(event: 'signed-up', user: user, params: { admin_link: "https://app.hellobar.com/admin/users/#{ user.id }" })
+
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Free', [user])
         track('signed-up', user: user)
       end
     end
@@ -42,6 +46,10 @@ describe AnalyticsProvider do
           .to receive(:tag_users)
           .with('Promotional', [user])
 
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Free', [user])
+
         track('signed-up', user: user, promotional_signup: true, utm_source: utm_source)
       end
     end
@@ -62,6 +70,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Affiliate', [user])
+
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Free', [user])
 
         track('signed-up', user: user)
       end
@@ -88,6 +100,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Affiliate', [user])
+
+        expect(adapter)
+          .to receive(:tag_users)
+          .with('Free', [user])
 
         track('signed-up', user: user)
       end
@@ -574,19 +590,6 @@ describe AnalyticsProvider do
         previous_subscription: previous_subscription)
     end
 
-    it 'tags users with "Paid"' do
-      expect(adapter)
-        .to receive(:tag_users)
-        .with('Paid', anything)
-
-      expect(adapter).to receive(:track)
-
-      track(event,
-        user: user,
-        subscription: subscription,
-        previous_subscription: previous_subscription)
-    end
-
     it 'tags users with new "Subscription.name" tags' do
       expect(adapter)
         .to receive(:tag_users)
@@ -653,10 +656,10 @@ describe AnalyticsProvider do
         DowngradeSiteToFree.new(site).call
       end
 
-      it 'untags owners of "Paid" tag' do
+      it 'untags owners of "previous subscription" tag when downgrading' do
         expect(adapter)
           .to receive(:untag_users)
-          .with('Paid', anything)
+          .with(previous_subscription.name, anything)
 
         expect(adapter).to receive(:track)
 
