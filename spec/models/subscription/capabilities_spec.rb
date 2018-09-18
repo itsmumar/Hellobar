@@ -102,6 +102,8 @@ describe Subscription::Capabilities do
       expect(capabilities.alert_bars?).to be_falsey
       expect(capabilities.advanced_themes?).to be_falsey
       expect(capabilities.campaigns?).to be_falsey
+      expect(capabilities.max_a_b_tests).to be(1)
+      expect(capabilities.max_variations).to be(3)
     end
 
     specify 'ProManaged plan has certain custom capabilities' do
