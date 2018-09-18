@@ -12,6 +12,7 @@ class UpdateSiteElement
       @element = copy_element_and_change_type if type_should_change?
       element.update!(params)
       destroy_previous_image_if_necessary
+      track_event
     end
     generate_script
     element
