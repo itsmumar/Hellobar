@@ -364,44 +364,4 @@ class AnalyticsProvider
       }
     )
   end
-
-  def created_element(event, site, site_element, user)
-    track(
-      event: event,
-      user: user,
-      params: {
-        goal: site_element.element_subtype,
-        type: site_element.type,
-        theme_id: site_element.theme_id,
-        enable_gdpr: site_element.enable_gdpr,
-        show_branding: site_element.show_branding,
-        headline: site_element.headline,
-        use_default_image: site_element.use_default_image,
-        link_text: site_element.link_text,
-        use_question: site_element.use_question,
-        site_url: site.url,
-        site_id: site.id
-      }
-    )
-  end
-
-  def updated_element(event, site, site_element, user)
-    track(
-      event: event,
-      user: user,
-      params: {
-        goal: site_element.element_subtype,
-        type: site_element.type,
-        theme_id: site_element.theme_id,
-        enable_gdpr: site_element.enable_gdpr,
-        show_branding: site_element.show_branding,
-        headline: site_element.headline,
-        use_default_image: site_element.use_default_image,
-        link_text: site_element.link_text,
-        use_question: site_element.use_question,
-        site_url: site.url,
-        site_id: site.id
-      }
-    )
-  end
 end
