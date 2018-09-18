@@ -27,12 +27,12 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
     - else
       = icon
 
-    .dropdown-wrapper.adjusted
-      i.icon-settings
-      .dropdown-block
-        = link_to edit_site_site_element_path(site_element, :site_id => @site) do
-          i.icon-edit
-          | Edit
+  .dropdown-wrapper.adjusted
+    i.icon-settings
+    .dropdown-block
+      = link_to edit_site_site_element_path(site_element, :site_id => @site) do
+        i.icon-edit
+        | Edit
 
         = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "get more A/B tests" do
           i.icon-docs
