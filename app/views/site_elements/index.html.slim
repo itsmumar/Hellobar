@@ -3,7 +3,7 @@
 nav.tabs-wrapper
   a.element-filter.active href="#active" Active
   a.element-filter href="#paused" Paused
-  - if(current_site.capabilities.subscription.free?)
+  - if(current_site.free?)
     a.element-filter href="#deactivated" Deactivated
   a.element-filter href="#all" All
 

@@ -236,6 +236,31 @@
           [class*='icon-']
             color: $grayLight !important
 
+        /*-----------  Paused State  -----------*/
+
+        &.deactivated
+          span
+            color: $orange
+          background-color: $orangeLightest
+
+          td.color-flag
+            background-color: $orangeLight !important
+
+          td.site-element__headline p
+            color: $orange
+          td.site-element__age
+            small
+              color: $orange
+
+
+          td.site-element__type
+            background-color: $orangeLightest
+          td.site-element__actions
+            background-color: $orangeLightest
+
+          [class*='icon-']
+            color: $orangeLight !important
+
         /*-----------  Deleting State  -----------*/
 
         &.deleting
