@@ -72,7 +72,7 @@ class AnalyticsProvider
       user: user,
       params: params
     )
-
+    tag_users('Free', [user])
     tag_users('Affiliate', [user]) if user.affiliate_identifier
     tag_users('Promotional', [user]) if promotional_signup
   end
@@ -316,13 +316,13 @@ class AnalyticsProvider
       }
     )
 
-    tag_users 'Paid', site.owners unless subscription.amount.zero?
+    # tag_users 'Paid', site.owners unless subscription.amount.zero?
     tag_users subscription.name, site.owners
 
     return unless previous_subscription
 
     untag_users previous_subscription.name, site.owners
-    untag_users 'Paid', site.owners if subscription.amount.zero?
+    # untag_users 'Paid', site.owners if subscription.amount.zero?
   end
 
   def created_element(event, site, site_element, user)
