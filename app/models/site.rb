@@ -59,6 +59,7 @@ class Site < ApplicationRecord
 
   before_validation :generate_read_write_keys
   after_update :deactivate_site_element, if: proc { |site| site.overage_count > site.overage_count_was }
+  after_update :activate_site_element, if: proc { |site| site.overage_count <= site.overage_count_was }
 
   validates :url, url: true
   validate :url, :check_for_banned_url, on: :create
@@ -299,5 +300,9 @@ class Site < ApplicationRecord
 
   def deactivate_site_element
     site_elements.active.each(&:deactivate!)
+  end
+
+  def activate_site_element
+    site_elements.deactivated.each(&:activate!)
   end
 end
