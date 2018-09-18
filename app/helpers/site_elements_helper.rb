@@ -173,6 +173,7 @@ module SiteElementsHelper
     return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? || elements_in_group.size == 1
     letter = (index + A_OFFSET).chr
     winner = elements_in_group.max_by(&:conversion_percentage)
+    site_element.site.update(ab_test_running: true) if site_element.site.free?
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     else
