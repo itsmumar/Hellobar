@@ -16,6 +16,7 @@ class SiteElementsController < ApplicationController
 
   def index
     @rules = @site.rules.includes(%i[site_elements conditions])
+    @free_overage = check_free_overage
   end
 
   def new
@@ -149,5 +150,9 @@ class SiteElementsController < ApplicationController
 
   def serializer_scope
     { user: current_user }
+  end
+
+  def check_free_overage
+    (@site.overage_count > 0) && !@site.active_subscription
   end
 end

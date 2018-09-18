@@ -1,2 +1,5 @@
-.free-notice
-  | You have surpassed the 5k view limit on our Free Plan. Your site elements have been deactivated. Upgrade now to reactivate
+- if controller_name == 'site_elements' && action_name == 'index' && @free_overage
+  .free-notice
+    | You have surpassed the 5k view limit on our Free Plan. Your site elements have been deactivated.&nbsp;
+    b.show-upgrade-modal
+      | Upgrade now to reactivate
