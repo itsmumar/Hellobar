@@ -54,7 +54,6 @@ class Subscription::Capabilities
     Float::INFINITY
   end
 
-
   def at_site_element_limit?
     @site.site_elements.size >= max_site_elements
   end
@@ -68,7 +67,6 @@ class Subscription::Capabilities
     elements_in_group = @site_element.rule.site_elements.select { |se| !se.paused? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.count >= max_variations
   end
-
 
   def num_days_improve_data
     90
