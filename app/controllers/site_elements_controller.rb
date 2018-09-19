@@ -154,6 +154,6 @@ class SiteElementsController < ApplicationController
   end
 
   def check_free_overage
-    !@site.site_elements.last.deactivated_at.nil?
+    !@site.site_elements.last&.deactivated_at.nil?
   end
 end
