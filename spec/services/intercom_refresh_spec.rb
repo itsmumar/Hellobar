@@ -2,7 +2,7 @@ describe IntercomRefresh do
   subject!(:service) { IntercomRefresh.new }
 
   before do
-    allow(BillingViewsReport).to receive(:new)
+    allow(IntercomRefresh).to receive(:new)
     allow(service).to receive(:track_updated_site_counts)
   end
 
@@ -15,11 +15,23 @@ describe IntercomRefresh do
     let!(:params) { Hash[element_subtype: 'call', rule_id: site.rules.ids.first] }
     let!(:element) { create :slider, site: site}
 
+    it 'calls TrackEvent with :update_site_count event' do
+      expect(service)
+        .to receive_service_call
+      
+
+      service.call
+    end
+
     it 'updates site count' do
       site.update(script_installed_at: Time.now)
-      
+
+      service.call
+      # expect { service.call }
+      #   .to have_received(:track_updated_site_counts)
+
       p user.sites.last.site_elements.count
-      expect(service).to have_received(:track_updated_site_counts)
+      # expect(service).to have_received(:track_updated_site_counts)
 
       # expect(last_bill.subscription).to eql(site.active_subscription)
       # expect(last_bill.amount).to eql(10)
