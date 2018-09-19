@@ -3,32 +3,99 @@
 .upgrade-account-modal
 
 
+  .switch
+    padding-top: 10px
+    position: relative
+    display: inline-block
+    width: 40px
+    height: 22px
+
+    input
+      display: none
+    .slider
+      border: 1px solid #E0E0E0
+      position: absolute
+      cursor: pointer
+      top: 8px
+      left: 0
+      right: 0
+      bottom: -8px
+      background-color: #ffffff
+      -webkit-transition: .2s
+      transition: .2s
+      &:before
+        position: absolute
+        content: ""
+        height: 19px
+        width: 19px
+        left: 1px
+        bottom: 1px
+        background-color: #27ab9e
+        -webkit-transition: .4s
+        transition: .4s
+
+    input
+      &:checked + .slider
+        background-color: $white
+      &:focus + .slider
+        box-shadow: 0 0 1px $white
+      &:checked + .slider:before
+        -webkit-transform: translateX(18px)
+        -ms-transform: translateX(18px)
+        transform: translateX(18px)
+
+    /* Rounded sliders
+
+    .slider.round
+
+      border-radius: 20px
+      &:before
+        border-radius: 50%
+
   .thborder
     border: 1px solid #E0E0E0
 
   .trborder
+    margin-top: 30px
+    padding-left: 18px
     text-align: center
     border: none
 
   .check
     color: #27ab9e
     font-size: 15px
-    font-weight: bolder
+
+  .h40
+     height: 40px
 
   .cross
     color: #d0021b
     font-size: 15px
-    font-weight: bolder
 
   .bold
     font-weight: bolder
     font-size: 25px
 
   .sm
+    padding-right: 30px
     font-size: 12px
 
-  td
-    border: 1px solid #E0E0E0
+  thead
+    div.sm
+      .package-pricing
+        .monthly
+          display: block
+
+        .yearly
+          display: none
+
+        &.yearly
+          .monthly
+            display: none
+
+          .yearly
+            display: block
+
 
   .prime
     background-color: #27ab9e
@@ -46,6 +113,9 @@
     color: #e8562a
 
   th
+    padding-left: 10px
+    padding-top: 10.5px
+    padding-bottom: 10.5px
     text-align: left
 
     div
@@ -54,10 +124,17 @@
       text-align: center
 
   td
+    border: 1px solid #E0E0E0
+    font-size: 15px
+    padding-left: 10px
+    padding-top: 10.5px
+    padding-bottom: 10.5px
     color: #636363
     text-align: center
 
   .modal-block
+    height: 45.5em
+    padding-bottom: 0.1px
     padding-left: 1.75em
     padding-right: 1.75em
 
@@ -85,30 +162,6 @@
     input
       display: none
 
-    label
-      width: 4%
-      margin: 0
-      color: $gray
-      border-radius: 14px
-      padding: 0.60em
-      cursor: pointer
-      text-align: center
-      border: solid 1px #e0e0e0
-      text-transform: uppercase
-      font-size: 0.95em !important
-      @include inline-block()
-      @include antialiased()
-      transition: all 0.15s ease-out 0s
-
-      &:first-child
-        border-radius: $radiusSm 0 0 $radiusSm
-
-      &:last-child
-        border-radius: 0 $radiusSm $radiusSm 0
-        border-radius: 14px
-
-      &:hover
-        background-color: lighten($green, 37.5%)
 
     input:checked + label
       color: $white !important
@@ -117,7 +170,7 @@
       background-color: #27ab9e
 
     &:after
-      top: 0.5em
+      top: 0.7em
       right: 5em
       width: 89px
       height: 53px
@@ -148,16 +201,8 @@
       padding-left: 25px
 
     .package-title
-      text-align: center
-      text-align: center
-      color: $white
-      border-width: 0
-      line-height: 145%
-      flex: 1 0 16%
 
       .package-name
-        font-size: 1.1em
-        font-weight: $fontWeightBold
 
       .package-price
 
@@ -261,17 +306,15 @@
     &.basic
 
       .package-title
-        color: $gray
-        border-width: 1px 0 1px 1px
-        background-color: $grayLightest
+
 
     /*-----------  Pro Package  -----------*/
 
     &.pro
-      border-color: $grayLight
+
 
       .package-title
-        background-color: $green
+
 
       .package-features
 
@@ -311,7 +354,7 @@
     &.elite
 
       .package-title
-        background-color: $red
+
 
       .button
         @extend %red-button
@@ -334,36 +377,24 @@
 
       .package-title,
       .package-features
-        border-color: $grayLightest
+
 
       &.pro
-        padding-right: 1.75em
-        margin: 1.5em -1.75em 1.75em
 
         .package-title
-          border: none
+
 
         .package-features
-          width: 100%
-          border: none
-          display: block
+
 
           .pro-logos
-            margin-top: $gutter
-            margin-left: $gutter
-            padding-top: $gutter
-            border-top: 1px solid $grayLightest
+
 
             h6
-              color: $gray
-              padding: 0 15%
-              line-height: 140%
-              margin-bottom: 1em
+
 
             img
-              width: 100px
-              height: auto
-              margin: 0em 1em
+
 
           .flex-container
             padding-top: $gutterSm

@@ -50,14 +50,14 @@ class @UpgradeAccountModal extends Modal
       @close(true)
 
   _bindBillingCycleEvents: ->
-    @$modal.find('input[type="radio"]').on 'change', (event) =>
-      switch event.target.value
-        when 'yearly'
+    @$modal.find('input[type="checkbox"]').on 'click', (event) =>
+      switch event.target.checked
+        when true
           @chosenSchedule = 'yearly'
-          @$modal.find('.package-title').addClass('yearly')
-        when 'monthly'
+          @$modal.find('.package-pricing').addClass('yearly')
+        when false
           @chosenSchedule = 'monthly'
-          @$modal.find('.package-title').removeClass('yearly')
+          @$modal.find('.package-pricing').removeClass('yearly')
 
   _disableCurrentPlanButton: ->
     return if $.isEmptyObject(@options.site.current_subscription)
