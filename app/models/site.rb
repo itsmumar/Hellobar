@@ -303,5 +303,4 @@ class Site < ApplicationRecord
   def activate_site_element
     site_elements.deactivated.each(&:activate!)
   end
-
 end
