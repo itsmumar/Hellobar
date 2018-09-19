@@ -281,6 +281,10 @@ class Site < ApplicationRecord
     site_elements.active.each(&:deactivate!)
   end
 
+  def activate_site_element
+    site_elements.deactivated.each(&:activate!)
+  end
+
   private
 
   def display_uri
@@ -298,9 +302,5 @@ class Site < ApplicationRecord
 
   def check_for_banned_url
     errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase)
-  end
-
-  def activate_site_element
-    site_elements.deactivated.each(&:activate!)
   end
 end
