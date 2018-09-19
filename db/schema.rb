@@ -462,6 +462,7 @@ ActiveRecord::Schema.define(version: 20180918090041) do
     t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
+    t.datetime "deactivated_at"
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

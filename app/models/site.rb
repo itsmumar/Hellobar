@@ -285,6 +285,14 @@ class Site < ApplicationRecord
     update!(ab_test_running: false)
   end
 
+  def deactivate_site_element
+    site_elements.active.each(&:deactivate!)
+  end
+
+  def activate_site_element
+    site_elements.deactivated.each(&:activate!)
+  end
+
   private
 
   def display_uri
