@@ -4,7 +4,7 @@ describe Subscription::Capabilities do
   let(:credit_card) { create(:credit_card, user: user) }
   let(:free) { create :subscription, :free, user: user, site: site }
   let(:pro) { create :subscription, :pro, user: user, site: site }
-  let(:enterprise) { create :subscription, :enterprise, user: user, site: site }
+  let(:elite) { create :subscription, :elite, user: user, site: site }
   let(:capabilities) { site.capabilities }
   let(:last_bill) { Bill.last }
 
@@ -22,8 +22,8 @@ describe Subscription::Capabilities do
     change_subscription 'pro', credit_card
     expect(site).to be_capable_of :pro
 
-    change_subscription 'enterprise', credit_card
-    expect(site).to be_capable_of :enterprise
+    change_subscription 'elite', credit_card
+    expect(site).to be_capable_of :elite
   end
 
   it 'returns default capabilities for plan' do
@@ -46,12 +46,12 @@ describe Subscription::Capabilities do
     end
   end
 
-  context 'when downgrade from enterprise to pro' do
-    before { change_subscription('enterprise', credit_card) }
+  context 'when downgrade from elite to pro' do
+    before { change_subscription('elite', credit_card) }
     before { change_subscription('pro', credit_card) }
 
-    it 'returns enterprise capabilities' do
-      expect(site).to be_capable_of :enterprise
+    it 'returns elite capabilities' do
+      expect(site).to be_capable_of :elite
     end
   end
 
@@ -76,10 +76,10 @@ describe Subscription::Capabilities do
 
   it 'gives the greatest capability of all current paid subscriptions' do
     # Auto pays each of these
-    change_subscription('enterprise', credit_card)
+    change_subscription('elite', credit_card)
     change_subscription('pro', credit_card)
     change_subscription('free', credit_card)
-    expect(site).to be_capable_of :enterprise
+    expect(site).to be_capable_of :elite
   end
 
   it 'stays at pro capabilities until bill period is over' do
@@ -102,6 +102,8 @@ describe Subscription::Capabilities do
       expect(capabilities.alert_bars?).to be_falsey
       expect(capabilities.advanced_themes?).to be_falsey
       expect(capabilities.campaigns?).to be_falsey
+      expect(capabilities.max_a_b_tests).to be(1)
+      expect(capabilities.max_variations).to be(3)
     end
 
     specify 'ProManaged plan has certain custom capabilities' do

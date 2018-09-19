@@ -13,7 +13,9 @@ describe CheckNumberOfViewsForSites do
     allow(report).to receive(:limit_exceeded)
     allow(report).to receive(:send_warning_email)
     allow(report).to receive(:send_upsell_email)
-    allow(report).to receive(:send_enterprise_upsell_email)
+    allow(report).to receive(:send_elite_upsell_email)
+    allow(report).to receive(:log_grandfathered_site)
+    allow(report).to receive(:send_elite_upsell_email)
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash[site.id => number_of_views])
 
@@ -42,6 +44,91 @@ describe CheckNumberOfViewsForSites do
         expect(HandleOverageSite).to receive_service_call
         service.call
       end
+    end
+  end
+
+  context 'when limit exceeded for grandfathered elite subscription' do
+    let(:number_of_views) { 500_001 }
+    let(:credit_card) { create :credit_card }
+
+    before do
+      stub_cyber_source :purchase
+      Timecop.travel '2018-08-15 13:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'elite', schedule: 'yearly' }, credit_card).call
+      end
+    end
+
+    it 'elite subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+      expect(report)
+        .to have_received(:log_grandfathered_site)
+    end
+
+    it 'renews for another year for elite and now gets limits enforced' do
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+      expect(report)
+        .to_not have_received(:log_grandfathered_site)
+    end
+
+    it 'growth subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+      expect(report)
+        .to have_received(:log_grandfathered_site)
+      # expect(BillingLogger).to receive(:info).with("Site is grandfathered")
+    end
+
+    it 'renews for another year for elite and now gets limits enforced' do
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+      expect(report)
+        .to_not have_received(:log_grandfathered_site)
+    end
+  end
+
+  context 'when limit exceeded for grandfathered growth subscription' do
+    let(:number_of_views) { 50_001 }
+    let(:credit_card) { create :credit_card }
+
+    before do
+      stub_cyber_source :purchase
+      Timecop.travel '2018-08-15 13:00 UTC' do
+        ChangeSubscription.new(site, { subscription: 'growth', schedule: 'yearly' }, credit_card).call
+      end
+    end
+
+    it 'growth subscription is grandfathered and does not call report.limit_exceeded' do
+      service.call
+      expect(report)
+        .to_not have_received(:limit_exceeded)
+      expect(report)
+        .to have_received(:log_grandfathered_site)
+    end
+
+    it 'renews for another year for growth and now gets limits enforced' do
+      Timecop.travel '2019-08-17 13:00 UTC' do
+        PayBill.new(site.bills.last).call
+      end
+
+      service.call
+      expect(report)
+        .to have_received(:limit_exceeded)
+      expect(report)
+        .to_not have_received(:log_grandfathered_site)
     end
   end
 
@@ -100,20 +187,20 @@ describe CheckNumberOfViewsForSites do
     end
   end
 
-  context 'when and an enterprise user needs a custom plan' do
+  context 'when and an elite user needs a custom plan' do
     let(:number_of_views) { site.upsell_email_trigger + 1 }
     let(:limit) { site.views_limit }
     let(:upsell_trigger) { site.upsell_email_trigger }
     let(:credit_card) { create :credit_card }
     before do
       stub_cyber_source :purchase
-      ChangeSubscription.new(site, { subscription: 'enterprise' }, credit_card).call
+      ChangeSubscription.new(site, { subscription: 'elite' }, credit_card).call
     end
 
     it 'sends an notification email to get a custom plan' do
       service.call
       expect(report)
-        .to have_received(:send_enterprise_upsell_email)
+        .to have_received(:send_elite_upsell_email)
     end
   end
 

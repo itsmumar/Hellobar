@@ -78,12 +78,12 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                     div
                       = mail_to owner.email, owner.name || owner.email
 
-        / Enterprise Package
-        .package-block.enterprise
+        / Elite Package
+        .package-block.elite
           .package-title
-            .package-name Enterprise
-            .package-price.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}/mo
-            .package-price.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}/year LIMITED TIME OFFER
+            .package-name Elite
+            .package-price.monthly #{subscription_cost(Subscription::Elite, :monthly)}/mo
+            .package-price.yearly #{subscription_cost(Subscription::Elite, :yearly)}/year LIMITED TIME OFFER
 
           .package-features
 
@@ -95,7 +95,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               li Dedicated Marketing Specialist - Coming Soon
 
             .package-status
-              = choose_plan_button(Subscription::Enterprise.new)
+              = choose_plan_button(Subscription::Elite.new)
               .email-links
                 - if current_site
                   - current_site.owners.each do |owner|

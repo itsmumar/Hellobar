@@ -124,10 +124,10 @@ describe ChangeSubscription, :freeze do
       end
     end
 
-    context 'upgrade to enterprise' do
-      let(:params) { { subscription: 'enterprise', schedule: 'yearly' } }
+    context 'upgrade to elite' do
+      let(:params) { { subscription: 'elite', schedule: 'yearly' } }
 
-      it 'creates Subscription::Enterprise' do
+      it 'creates Subscription::Elite' do
         expect { service.call }
           .to change(site.subscriptions, :count)
           .by(1)
@@ -135,14 +135,14 @@ describe ChangeSubscription, :freeze do
           .by(1)
 
         expect(last_subscription.schedule).to eql 'yearly'
-        expect(last_subscription).to be_a Subscription::Enterprise
+        expect(last_subscription).to be_a Subscription::Elite
       end
 
       it 'tracks subscription change event' do
         expect(TrackSubscriptionChange).to receive_service_call.with(
           user,
           instance_of(Subscription::Free),
-          instance_of(Subscription::Enterprise)
+          instance_of(Subscription::Elite)
         )
 
         service.call
@@ -319,32 +319,32 @@ describe ChangeSubscription, :freeze do
           change_subscription('pro')
         end
 
-        context 'and then to Enterprise from Pro' do
+        context 'and then to Elite from Pro' do
           before { change_subscription('pro') }
 
           it 'changes subscription and capabilities' do
-            expect { change_subscription('enterprise') }.to change { site.reload.current_subscription }
-            expect(site.current_subscription).to be_instance_of Subscription::Enterprise
-            expect(site).to be_capable_of :enterprise
+            expect { change_subscription('elite') }.to change { site.reload.current_subscription }
+            expect(site.current_subscription).to be_instance_of Subscription::Elite
+            expect(site).to be_capable_of :elite
           end
 
           it 'excludes a paid amount from new bill' do
-            expect(change_subscription('enterprise').amount).to eql 99 - 29
+            expect(change_subscription('elite').amount).to eql 99 - 15
           end
 
           it 'pays bill' do
             expect(PayBill).to receive_service_call
-            change_subscription('enterprise')
+            change_subscription('elite')
           end
 
           it 'tracks subscription change event' do
             expect(TrackSubscriptionChange).to receive_service_call.with(
               user,
               instance_of(Subscription::Pro),
-              instance_of(Subscription::Enterprise)
+              instance_of(Subscription::Elite)
             )
 
-            change_subscription('enterprise')
+            change_subscription('elite')
           end
 
           context 'when a refund has been made' do
@@ -352,7 +352,7 @@ describe ChangeSubscription, :freeze do
             before { RefundBill.new(site.reload.current_subscription.bills.paid.last).call }
 
             it 'charges full amount' do
-              expect(change_subscription('enterprise').amount).to eql 99
+              expect(change_subscription('elite').amount).to eql 99
             end
           end
         end
@@ -407,8 +407,8 @@ describe ChangeSubscription, :freeze do
         end
       end
 
-      context 'when downgrading to Free from Enterprise' do
-        before { change_subscription('enterprise') }
+      context 'when downgrading to Free from Elite' do
+        before { change_subscription('elite') }
 
         it 'changes subscription' do
           expect { change_subscription('free') }.to change { site.reload.current_subscription }
@@ -427,7 +427,7 @@ describe ChangeSubscription, :freeze do
         it 'tracks subscription change event' do
           expect(TrackSubscriptionChange).to receive_service_call.with(
             user,
-            instance_of(Subscription::Enterprise),
+            instance_of(Subscription::Elite),
             instance_of(Subscription::Free)
           )
 

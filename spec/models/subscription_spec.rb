@@ -186,7 +186,7 @@ describe Subscription do
       let(:subscription_type) { :pro }
 
       it 'sets initial values' do
-        expect(subscription.amount).to eql 29
+        expect(subscription.amount).to eql 15
         expect(subscription.visit_overage).to eql 50_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 5
@@ -246,8 +246,8 @@ describe Subscription do
       end
     end
 
-    context 'Enterprise' do
-      let(:subscription_type) { :enterprise }
+    context 'Elite' do
+      let(:subscription_type) { :elite }
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 99
@@ -257,7 +257,7 @@ describe Subscription do
       end
 
       context 'when yearly' do
-        let(:subscription) { build :subscription, :enterprise, schedule: 'yearly' }
+        let(:subscription) { build :subscription, :elite, schedule: 'yearly' }
 
         specify { expect(subscription.amount).to eql 799 }
       end

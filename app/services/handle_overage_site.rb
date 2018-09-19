@@ -23,8 +23,8 @@ class HandleOverageSite
 
   def handle_subscription_specific_case
     case site.capabilities
-    when Subscription::Enterprise::Capabilities
-      handle_enterprise
+    when Subscription::Elite::Capabilities
+      handle_elite
     when Subscription::ProManaged::Capabilities
       handle_pro_managed
     when Subscription::ProComped::Capabilities
@@ -42,12 +42,12 @@ class HandleOverageSite
     end
   end
 
-  def handle_enterprise
-    update_enterprise_overage_count
+  def handle_elite
+    update_elite_overage_count
     # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
-  def update_enterprise_overage_count
+  def update_elite_overage_count
     delta = (@number_of_views - @limit)
     current_charge_count = @site.overage_count
     new_charge_count = (delta.to_f / 100_000.0).ceil
@@ -85,6 +85,7 @@ class HandleOverageSite
   end
 
   def handle_free
+    # @site.deactivate_site_element
     # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 

@@ -5,7 +5,7 @@ describe TrackSubscriptionChange do
   let(:free_subscription) { create(:subscription, :free, site: site) }
   let(:pro_subscription) { create(:subscription, :pro, site: site) }
   let(:pro_subscription_yearly) { create(:subscription, :pro, :yearly, site: site) }
-  let(:enterprise_subscription) { create(:subscription, :enterprise, site: site) }
+  let(:elite_subscription) { create(:subscription, :elite, site: site) }
 
   before do
     allow(TrackEvent).to receive_message_chain(:new, :call)
@@ -46,10 +46,10 @@ describe TrackSubscriptionChange do
     end
   end
 
-  context 'when subscription is upgraded from "pro" to "enterprise"' do
+  context 'when subscription is upgraded from "pro" to "elite"' do
     include_examples 'tracks event', :upgraded_subscription do
       let(:old_subscription) { pro_subscription }
-      let(:new_subscription) { enterprise_subscription }
+      let(:new_subscription) { elite_subscription }
     end
   end
 
@@ -60,9 +60,9 @@ describe TrackSubscriptionChange do
     end
   end
 
-  context 'when subscription is downgraded from "enterprise" to "pro"' do
+  context 'when subscription is downgraded from "elite" to "pro"' do
     include_examples 'tracks event', :downgraded_subscription do
-      let(:old_subscription) { enterprise_subscription }
+      let(:old_subscription) { elite_subscription }
       let(:new_subscription) { pro_subscription }
     end
   end

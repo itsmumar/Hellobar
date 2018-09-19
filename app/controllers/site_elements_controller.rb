@@ -60,6 +60,7 @@ class SiteElementsController < ApplicationController
   def destroy
     @site_element.destroy
     @site.script.generate
+    @site.ab_test_not_running if @site.free?
 
     respond_to do |format|
       format.js { head :ok }
