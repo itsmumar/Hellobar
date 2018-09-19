@@ -3,8 +3,7 @@
 nav.tabs-wrapper
   a.element-filter.active href="#active" Active
   a.element-filter href="#paused" Paused
-  - if(current_site.free?)
-    a.element-filter href="#deactivated" Deactivated
+  a.element-filter href="#deactivated" Deactivated
   a.element-filter href="#all" All
 
 table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_elements

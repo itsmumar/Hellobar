@@ -58,8 +58,6 @@ class Site < ApplicationRecord
   scope :active, -> { script_installed.joins(:site_elements).merge(SiteElement.active).distinct }
 
   before_validation :generate_read_write_keys
-  after_update :deactivate_site_element, if: proc { |site| site.overage_count > site.overage_count_was }
-  after_update :activate_site_element, if: proc { |site| site.overage_count <= site.overage_count_was }
 
   validates :url, url: true
   validate :url, :check_for_banned_url, on: :create
@@ -279,6 +277,10 @@ class Site < ApplicationRecord
      "Hey now, this isn’t an online dating profile – no need to stretch the truth! What’s your real URL? Promise we won’t ghost you, even if you aren’t really the owner of #{ url }."].sample
   end
 
+  def deactivate_site_element
+    site_elements.active.each(&:deactivate!)
+  end
+
   private
 
   def display_uri
@@ -298,11 +300,8 @@ class Site < ApplicationRecord
     errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase)
   end
 
-  def deactivate_site_element
-    site_elements.active.each(&:deactivate!)
-  end
-
   def activate_site_element
     site_elements.deactivated.each(&:activate!)
   end
+
 end
