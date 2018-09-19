@@ -47,7 +47,7 @@ feature 'Payment modal interaction', :js do
         visit edit_site_path(site)
 
         page.find('footer .show-upgrade-modal').click
-        expect(page).to have_content "Why Upgrade to Pro?"
+        expect(page).to have_content 'Why Upgrade to Pro?'
 
         first('.button', text: 'Choose Plan').click
 

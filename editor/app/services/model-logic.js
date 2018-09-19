@@ -227,7 +227,7 @@ export default Ember.Service.extend({
 
     if (!isAlert && !isBranded && !canRemoveBranding) {
       this.set('model.show_branding', true);
-      this.promptUpgrade('show_branding', isBranded, 'remove Hello Bar logo, ');
+      this.promptUpgrade('show_branding', isBranded, 'remove Hello Bar logo, upgrade your subscription for');
     }
   }.observes('model.show_branding'),
 
@@ -236,7 +236,7 @@ export default Ember.Service.extend({
     const canLeadingQuestion = this.get('model.site.capabilities.leading_question');
     if (!canLeadingQuestion && questionOn) {
       this.set('model.use_question', false);
-      this.promptUpgrade('use_question', questionOn, ' enable Yes/No Questions, ');
+      this.promptUpgrade('use_question', questionOn, ' enable Yes/No Questions, upgrade your subscription for');
     }
   }.observes('model.use_question'),
 
@@ -251,7 +251,7 @@ export default Ember.Service.extend({
 
     if (!canUseImageOpacity && opacityValue !== 100) {
       this.set('model.image_opacity', 100);
-      this.promptUpgrade('image_opacity', opacityValue, 'adjust image opacity');
+      this.promptUpgrade('image_opacity', opacityValue, 'To unlock the next level of Hello Bar, upgrade your subscription for');
       throw "Requires a paid subscription";
     }
   }.observes('model.image_opacity'),
@@ -261,7 +261,7 @@ export default Ember.Service.extend({
     const canUseImageOverlayOpacity = this.get('model.site.capabilities.image_overlay_opacity');
     if (!canUseImageOverlayOpacity && opacityOverlayValue !== 0) {
       this.set('model.image_overlay_opacity', 0);
-      this.promptUpgrade('image_overlay_opacity', opacityOverlayValue, 'adjust image overlay opacity');
+      this.promptUpgrade('image_overlay_opacity', opacityOverlayValue, 'To unlock the next level of Hello Bar, upgrade your subscription for');
       throw "Requires a paid subscription";
     }
   }.observes('model.image_overlay_opacity'),

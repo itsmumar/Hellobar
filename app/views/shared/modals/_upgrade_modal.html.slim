@@ -16,16 +16,20 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
         .site-title
           | {{#if upgradeBenefit}}
-          |   To {{upgradeBenefit}}
+          |   To {{upgradeBenefit}} {{siteName}}
+          | {{else}}
+          | To unlock the next level of Hello Bar, upgrade your subscription for {{siteName}}
           | {{/if}}
-          | upgrade your subscription for {{siteName}}
+
+
+
 
         .billing-options
-          input id='monthly-billing' type='radio' name='billing' value='monthly'
-          |Monthly
-          label for='monthly-billing'
-          input id='yearly-billing' type='radio' name='billing' value='yearly'
-          label for='yearly-billing'
+
+          |Monthly&nbsp;
+          label.switch
+            input type='checkbox'
+            span.slider.round
           |  Yearly
           img {src = "#{image_path('icons/path-2.svg')}" }
 
@@ -46,60 +50,68 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             th.back
               div Elite
               div.sm
-                strike.fl $140
-                span.bold #{subscription_cost(Subscription::Enterprise, :monthly)}
-                |/mo
-            th
-              div = Subscription.pro_or_growth_for(current_user).defaults[:name]
-              div.sm
-                strike.fl $49
-                span.bold #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}
-                |/mo
-            th
-              div Basic
-              div.bold forever Free
+                .package-pricing
+                  strike.fl.monthly $140
+                  span.bold.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}
+                  strike.fl.yearly $1188
+                  span.bold.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}
+
+            th.thborder
+
+                  div = Subscription.pro_or_growth_for(current_user).defaults[:name] = Subscription.pro_or_growth_for(current_user).defaults[:name]
+                  div.sm
+                    .package-pricing
+                      strike.fl.monthly $49
+                      span.bold.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}
+                      strike.fl.yearly $348
+                      span.bold.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}
+
+
+            th.thborder
+              div Starter
+              div.bold Forever Free
         tbody
-          tr
+          tr.h44
             th.thborder Views
             td 500,000/mo
             td 50,000/mo
             td 5,000/mo
-          tr
+          tr.h44
             th.thborder # of Campaigns
             td Unlimited
             td Unlimited
             td Unlimited
-          tr
+          tr.h44
             th.thborder # of Subscribers
             td Unlimited
             td Unlimited
             td Unlimited
-          tr
+          tr.h44
             th.thborder Design Features
             td Premium
             td Advanced
             td Basic
-          tr
+          tr.h44
             th.thborder Targeting Features
             td Premium
             td Advanced
             td Device Type Only
-          tr
+          tr.h44
             th.thborder A/B Testing
             td Unlimited Tests
             td Unlimited Tests
             td 1 Live Test
-          tr
+          tr.h44
             th.thborder Integrations
             td Premium
             td Advanced
             td Basic
-          tr
+          tr.h44
             th.thborder Dedicated Marketing Expert
             td.check &#10004;
             td 90 Days
             td.cross &#10005;
-          tr
+          tr.h44
             th.thborder Remove HB Logo
             td.check  &#10004;
             td.check  &#10004;
@@ -124,9 +136,3 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                   .package-status(data-btn-prefix='Your ')
                     = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
 
-          tr.trborder
-            th
-              dev
-            td.trborder See all features
-            td.trborder See all features
-            td.trborder See all features

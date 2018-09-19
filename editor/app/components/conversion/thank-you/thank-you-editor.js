@@ -65,8 +65,8 @@ export default Ember.Component.extend({
       };
       function chooseUpgradeBenefit() {
         const map = {
-          'redirect': 'redirect to a custom url',
-          'custom_message': 'customize your thank you text'
+          'redirect': 'unlock the next level of Hello Bar, upgrade your subscription for www.example.com',
+          'custom_message': 'unlock the next level of Hello Bar, upgrade your subscription for www.example.com'
         };
         return map[selection.key] || '';
       }
