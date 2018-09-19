@@ -167,11 +167,13 @@ module SiteElementsHelper
   def ab_test_icon(site_element)
     elements_in_group = site_element.rule.site_elements.select { |se| !se.paused? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.sort_by!(&:created_at)
+
     index = elements_in_group.find_index { |e| e.id == site_element.id }
     # site element is paused, its the only site element in the group, or something wacky is going on
     return "<i class='testing-icon icon-abtest'></i>".html_safe if index.nil? || elements_in_group.size == 1
     letter = (index + A_OFFSET).chr
     winner = elements_in_group.max_by(&:conversion_percentage)
+    site_element.site.update(ab_test_running: true) if site_element.site.free?
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     else

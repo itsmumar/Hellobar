@@ -19,7 +19,6 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Free', [user])
-
         track('signed-up', user: user)
       end
     end
