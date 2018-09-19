@@ -60,7 +60,7 @@ class Site < ApplicationRecord
   before_validation :generate_read_write_keys
 
   validates :url, url: true
-  validate :url, :check_for_banned_url
+  validate :url, :check_for_banned_url, on: :create
   validates :terms_and_conditions_url, :privacy_policy_url, url: true, on: :update_privacy
   validates :read_key, presence: true, uniqueness: true
   validates :write_key, presence: true, uniqueness: true
@@ -275,6 +275,22 @@ class Site < ApplicationRecord
      "I call shenanigans! If #{ url } is your URL, then Neil has hair! Preposterous! Try again.",
      "Liar, liar, dungarees on fire! There’s no way #{ url } is your real URL. Try again!",
      "Hey now, this isn’t an online dating profile – no need to stretch the truth! What’s your real URL? Promise we won’t ghost you, even if you aren’t really the owner of #{ url }."].sample
+  end
+
+  def ab_test_not_running
+    update(ab_test_running: false)
+  end
+
+  def ab_test_not_running!
+    update!(ab_test_running: false)
+  end
+
+  def deactivate_site_element
+    site_elements.active.each(&:deactivate!)
+  end
+
+  def activate_site_element
+    site_elements.deactivated.each(&:activate!)
   end
 
   private

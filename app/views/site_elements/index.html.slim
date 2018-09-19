@@ -3,6 +3,7 @@
 nav.tabs-wrapper
   a.element-filter.active href="#active" Active
   a.element-filter href="#paused" Paused
+  a.element-filter href="#deactivated" Deactivated
   a.element-filter href="#all" All
 
 table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_elements
@@ -29,56 +30,66 @@ table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_el
         | Everything is currently active.
         a
           | [view active bars]
-    - @rules.each do |rule|
-      tr.rule-block data-rule-id=rule.id
-        th.page-header colspan='10'
-          .rule-description
-            h4= rule.name
-            span= rule.to_sentence
 
-          - if rule.editable?
-            .dropdown-wrapper
-              i.icon-settings
-              .dropdown-block
-                = link_to "#", class: "edit-rule", "data-rule-id" => rule.id, "data-can-edit" => @site.capabilities.custom_targeted_bars? do
-                  i.icon-edit
-                  | Edit
+    - unless @free_overage
+      - @rules.each do |rule|
+        tr.rule-block data-rule-id=rule.id
+          th.page-header colspan='10'
+            .rule-description
+              h4= rule.name
+              span= rule.to_sentence
 
-                - unless @rules.count == 1
-                  = content_tag 'a', class: 'remove-rule' do
-                    i.icon-trash
-                    = "Delete"
-                    - if rule.site_elements.any?
-                      = " this and "
-                      span= rule.site_elements.size
-                      = " bar".pluralize(rule.site_elements.size)
+            - if rule.editable?
+              .dropdown-wrapper
+                i.icon-settings
+                .dropdown-block
+                  = link_to "#", class: "edit-rule", "data-rule-id" => rule.id, "data-can-edit" => @site.capabilities.custom_targeted_bars? do
+                    i.icon-edit
+                    | Edit
 
-      - elements_grouped_by_type(rule.site_elements).each do |site_elements|
-        - elements_grouped_by_subtype(site_elements).each do |site_elements|
-          - site_elements.each do |site_element|
-            = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
+                  - unless @rules.count == 1
+                    = content_tag 'a', class: 'remove-rule' do
+                      i.icon-trash
+                      = "Delete"
+                      - if rule.site_elements.any?
+                        = " this and "
+                        span= rule.site_elements.size
+                        = " bar".pluralize(rule.site_elements.size)
 
-      tr data-rule-id=rule.id
-        td.temporary-block.suggestion-block colspan='10'
-          = link_to "Create a new Hello Bar",
-                  new_site_site_element_path(@site),
-                  "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?,
-                  "data-upgrade-benefit" => "create more bars",
-                  "data-display-when" => "empty"
+        - elements_grouped_by_type(rule.site_elements).each do |site_elements|
+          - elements_grouped_by_subtype(site_elements).each do |site_elements|
+            - site_elements.each do |site_element|
+              = render "site_elements/site_element", { :site_element => site_element, :rule => rule }
 
-          - if !@site.custom_rules? && !@site.script_installed?
-            .icon-wrapper data-display-when="any"
-              i.icon-alert
-            div data-display-when="any"
-              | Note! Your Hello Bar has not been installed yet!  You won't see any results until it's been installed.
-            div data-display-when="any"
-              = link_to "Relax: It's easy! Click here to find out how.", site_install_path(@site)
-          - else
-            = link_to "A/B test a new bar for this rule to maximize your conversions",
-                    new_site_site_element_path(@site, :anchor => "/goal?rule_id=#{rule.id}"),
+        tr data-rule-id=rule.id
+          td.temporary-block.suggestion-block colspan='10'
+            = link_to "Create a new Hello Bar",
+                    new_site_site_element_path(@site),
                     "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?,
                     "data-upgrade-benefit" => "create more bars",
-                    "data-display-when" => "any"
+                    "data-display-when" => "empty"
+
+            - if !@site.custom_rules? && !@site.script_installed?
+              .icon-wrapper data-display-when="any"
+                i.icon-alert
+              div data-display-when="any"
+                | Note! Your Hello Bar has not been installed yet!  You won't see any results until it's been installed.
+              div data-display-when="any"
+                = link_to "Relax: It's easy! Click here to find out how.", site_install_path(@site)
+            - else
+              = link_to "A/B test a new bar for this rule to maximize your conversions",
+                      new_site_site_element_path(@site, :anchor => "/goal?rule_id=#{rule.id}"),
+                      "data-prompt-upgrade" => @site.capabilities.at_site_element_limit?,
+                      "data-upgrade-benefit" => "create more bars",
+                      "data-display-when" => "any"
+
+- if @free_overage
+  div.free-notice-main
+    .text
+      p You have exceeded the 5,000 view count on our Free Forever Plan.
+      p Your site elements have been paused until your billing cycle resets.
+      p Or upgrade to one of our Paid Plans and reactivate your site elements instantly.
+      button.show-upgrade-modal Upgrade Account
 
 = render 'shared/modals/rule_modal_template'
 = render 'shared/flash_toastr'

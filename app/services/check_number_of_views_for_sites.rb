@@ -49,20 +49,40 @@ class CheckNumberOfViewsForSites
   end
 
   def setup_views_counter(site, number_of_views)
+    unless site.current_subscription.nil?
+      current_sub = site.current_subscription
+      last_bill = current_sub.bills.where(status: 'paid').last
+    end
     report.count(number_of_views)
-    @limit = site.views_limit
-    @warning_level_one = site.visit_warning_one
-    @warning_level_two = site.visit_warning_two
-    @warning_level_three = site.visit_warning_three
+
+    # the following if / elsif is a temporary handling of existing elite annual subscriptions where the user signed up before we had view limits
+    if current_sub && last_bill && current_sub.schedule == 'yearly' && current_sub.type == 'Subscription::Elite' && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
+      @limit = ::Float::INFINITY
+      @warning_level_one = ::Float::INFINITY
+      @warning_level_two = ::Float::INFINITY
+      @warning_level_three = ::Float::INFINITY
+      report.log_grandfathered_site(site)
+    elsif current_sub && last_bill && current_sub.schedule == 'yearly' && (current_sub.type == 'Subscription::Growth' || current_sub.type == 'Subscription::Pro') && last_bill.bill_at < Subscription::GRANDFATHER_VIEW_LIMIT_EFFECTIVE_DATE
+      @limit = 250_000
+      @warning_level_one = 200_000
+      @warning_level_two = ::Float::INFINITY
+      @warning_level_three = ::Float::INFINITY
+      report.log_grandfathered_site(site)
+    else
+      @limit = site.views_limit
+      @warning_level_one = site.visit_warning_one
+      @warning_level_two = site.visit_warning_two
+      @warning_level_three = site.visit_warning_three
+    end
   end
 
   def handle_overage_site(site, number_of_views, limit)
     report.limit_exceeded(site, number_of_views, limit)
     HandleOverageSiteJob.perform_later(site, number_of_views, limit)
-    if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.current_subscription.is_a?(Subscription::Enterprise)
+    if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.current_subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
-      report.send_enterprise_upsell_email(site, number_of_views, limit)
-    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !site.current_subscription.is_a?(Subscription::Enterprise)
+      report.send_elite_upsell_email(site, number_of_views, limit)
+    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !site.current_subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
       report.send_upsell_email(site, number_of_views, limit)
     end

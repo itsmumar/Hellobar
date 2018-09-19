@@ -9,12 +9,12 @@ describe TrackSystemMetrics, :freeze do
   let(:active_paid_subscriptions) { 8 }
   let(:active_paid_pro_subscriptions) { 6 }
   let(:active_paid_growth_subscriptions) { 1 }
-  let(:active_paid_enterprise_subscriptions) { 1 }
+  let(:active_paid_elite_subscriptions) { 1 }
   let(:active_paid_subscription_average_days) { 30.0 }
   let(:paying_users) { active_users } # uses the same `allow` stub
   let(:paying_pro_users) { 7 }
   let(:paying_growth_users) { paying_pro_users } # uses the same `allow` stub
-  let(:paying_enterprise_users) { paying_pro_users } # uses the same `allow` stub
+  let(:paying_elite_users) { paying_pro_users } # uses the same `allow` stub
   let(:pending_bills_sum) { 10000 }
   let(:failed_bills_sum) { 1000 }
   let(:future_voided_bills_sum) { 3000 }
@@ -29,12 +29,12 @@ describe TrackSystemMetrics, :freeze do
       active_paid_subscriptions: active_paid_subscriptions,
       active_paid_pro_subscriptions: active_paid_pro_subscriptions,
       active_paid_growth_subscriptions: active_paid_growth_subscriptions,
-      active_paid_enterprise_subscriptions: active_paid_enterprise_subscriptions,
+      active_paid_elite_subscriptions: active_paid_elite_subscriptions,
       active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
       paying_pro_users: paying_pro_users,
       paying_growth_users: paying_growth_users,
-      paying_enterprise_users: paying_enterprise_users,
+      paying_elite_users: paying_elite_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
       future_voided_bills_sum: future_voided_bills_sum,
@@ -67,7 +67,7 @@ describe TrackSystemMetrics, :freeze do
     allow(Subscription).to receive_message_chain(:paid, :merge, :count).and_return(active_paid_subscriptions)
     allow(Subscription).to receive_message_chain(:paid, :pro, :merge, :count).and_return(active_paid_pro_subscriptions)
     allow(Subscription).to receive_message_chain(:paid, :growth, :merge, :count).and_return(active_paid_growth_subscriptions)
-    allow(Subscription).to receive_message_chain(:paid, :enterprise, :merge, :count).and_return(active_paid_enterprise_subscriptions)
+    allow(Subscription).to receive_message_chain(:paid, :elite, :merge, :count).and_return(active_paid_elite_subscriptions)
     allow(Subscription).to receive_message_chain(:paid, :merge, :average).and_return(30.days.ago.to_i)
     allow(Bill).to receive_message_chain(:pending, :sum).and_return(pending_bills_sum)
     allow(Bill).to receive_message_chain(:failed, :sum).and_return(failed_bills_sum)

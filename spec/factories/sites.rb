@@ -96,9 +96,9 @@ FactoryBot.define do
       with_paid_bill
     end
 
-    trait :enterprise do
+    trait :elite do
       transient do
-        subscription_plan :enterprise
+        subscription_plan :elite
       end
 
       with_paid_bill

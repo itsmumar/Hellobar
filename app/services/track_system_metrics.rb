@@ -23,12 +23,12 @@ class TrackSystemMetrics
       active_paid_subscriptions: active_paid_subscriptions,
       active_paid_pro_subscriptions: active_paid_pro_subscriptions,
       active_paid_growth_subscriptions: active_paid_growth_subscriptions,
-      active_paid_enterprise_subscriptions: active_paid_enterprise_subscriptions,
+      active_paid_elite_subscriptions: active_paid_elite_subscriptions,
       active_paid_subscription_average_days: active_paid_subscription_average_days,
       paying_users: paying_users,
       paying_pro_users: paying_pro_users,
       paying_growth_users: paying_growth_users,
-      paying_enterprise_users: paying_enterprise_users,
+      paying_elite_users: paying_elite_users,
       pending_bills_sum: pending_bills_sum,
       failed_bills_sum: failed_bills_sum,
       future_voided_bills_sum: future_voided_bills_sum,
@@ -64,8 +64,8 @@ class TrackSystemMetrics
     Subscription.paid.growth.merge(Bill.non_free).count
   end
 
-  def active_paid_enterprise_subscriptions
-    Subscription.paid.enterprise.merge(Bill.non_free).count
+  def active_paid_elite_subscriptions
+    Subscription.paid.elite.merge(Bill.non_free).count
   end
 
   def active_paid_subscription_average_days
@@ -90,8 +90,8 @@ class TrackSystemMetrics
     paying_users_query.merge(Subscription.growth).count
   end
 
-  def paying_enterprise_users
-    paying_users_query.merge(Subscription.enterprise).count
+  def paying_elite_users
+    paying_users_query.merge(Subscription.elite).count
   end
 
   def paying_users_query

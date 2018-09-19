@@ -52,9 +52,9 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               div.sm
                 .package-pricing
                   strike.fl.monthly $140
-                  span.bold.monthly #{subscription_cost(Subscription::Enterprise, :monthly)}
+                  span.bold.monthly #{subscription_cost(Subscription::Elite, :monthly)}
                   strike.fl.yearly $1188
-                  span.bold.yearly #{subscription_cost(Subscription::Enterprise, :yearly)}
+                  span.bold.yearly #{subscription_cost(Subscription::Elite, :yearly)}
 
             th.thborder
 
@@ -123,7 +123,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               .package-block.enterprise
                 .package-features
                   .package-status
-                    = choose_plan_button(Subscription::Enterprise.new)
+                    = choose_plan_button(Subscription::Elite.new)
             td.trborder
               .package-block.enterprise
                 .package-features
@@ -135,4 +135,3 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                 .package-features
                   .package-status(data-btn-prefix='Your ')
                     = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
-

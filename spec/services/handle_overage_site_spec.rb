@@ -20,13 +20,13 @@ describe HandleOverageSite do
     end
   end
 
-  context 'with Enterprise subscription' do
-    let(:subscription_type) { :enterprise }
+  context 'with Elite subscription' do
+    let(:subscription_type) { :elite }
     include_examples 'tracks events'
   end
 
-  context 'with Enterprise & into overage counts' do
-    let(:subscription_type) { :enterprise }
+  context 'with Elite & into overage counts' do
+    let(:subscription_type) { :elite }
     let(:number_of_views) { 25_001 }
     let(:limit) { 25_000 }
     it 'increments the overage count by 1' do
@@ -83,5 +83,9 @@ describe HandleOverageSite do
   context 'with Free subscription' do
     let(:subscription_type) { :free }
     include_examples 'tracks events'
+    it 'decrements the active site elements count to 0' do
+      site.deactivate_site_element
+      expect(site.site_elements.active.count).to eql(0)
+    end
   end
 end

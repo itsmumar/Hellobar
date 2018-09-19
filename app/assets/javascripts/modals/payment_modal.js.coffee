@@ -26,7 +26,7 @@ class @PaymentModal extends Modal
       isFree: @_isFree()
       siteName: @options.site.display_name
       upgradeBenefit: @options.upgradeBenefit
-      isElite: @options.package.name == "Enterprise"
+      isElite: @options.package.name == "Elite"
     ))
 
   open: ->
@@ -198,4 +198,3 @@ class @PaymentModal extends Modal
 
   _url: ->
     "/subscription/?credit_card_id=" + @_linkedCreditCardId()
-
