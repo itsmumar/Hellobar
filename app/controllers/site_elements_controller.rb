@@ -16,6 +16,7 @@ class SiteElementsController < ApplicationController
 
   def index
     @rules = @site.rules.includes(%i[site_elements conditions])
+    @free_overage = check_free_overage
   end
 
   def new
@@ -59,6 +60,7 @@ class SiteElementsController < ApplicationController
   def destroy
     @site_element.destroy
     @site.script.generate
+    @site.ab_test_not_running if @site.free?
 
     respond_to do |format|
       format.js { head :ok }
@@ -149,5 +151,9 @@ class SiteElementsController < ApplicationController
 
   def serializer_scope
     { user: current_user }
+  end
+
+  def check_free_overage
+    !@site.site_elements.last&.deactivated_at.nil?
   end
 end

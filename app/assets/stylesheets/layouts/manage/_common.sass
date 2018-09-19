@@ -31,6 +31,28 @@
 
 [id^="site_elements-"]
 
+  div.free-notice-main
+    height: 269px
+    width: available
+    text-align: center
+    background-color: #F6F6F6
+
+    .text
+      padding-top: 3em
+      p
+        color: #4A4A4A
+        font-size: 16px
+
+      button
+        margin-top: 1em
+        width: 209px
+        height: 49px
+        color: #FFFFFF
+        border-radius: 2px
+        font-size: 16px
+        background-color: #27AB9E
+        @extend %gray-button
+
   table.rules-wrapper
     width: 100%
     max-width: 100%
@@ -235,6 +257,31 @@
 
           [class*='icon-']
             color: $grayLight !important
+
+        /*-----------  Paused State  -----------*/
+
+        &.deactivated
+          span
+            color: $orange
+          background-color: $redLightest
+
+          td.color-flag
+            background-color: $orangeLight !important
+
+          td.site-element__headline p
+            color: $orange
+          td.site-element__age
+            small
+              color: $orange
+
+
+          td.site-element__type
+            background-color: $redLightest
+          td.site-element__actions
+            background-color: $redLightest
+
+          [class*='icon-']
+            color: $orangeLight !important
 
         /*-----------  Deleting State  -----------*/
 
