@@ -277,6 +277,14 @@ class Site < ApplicationRecord
      "Hey now, this isn’t an online dating profile – no need to stretch the truth! What’s your real URL? Promise we won’t ghost you, even if you aren’t really the owner of #{ url }."].sample
   end
 
+  def ab_test_not_running
+    update(ab_test_running: false)
+  end
+
+  def ab_test_not_running!
+    update!(ab_test_running: false)
+  end
+
   private
 
   def display_uri
