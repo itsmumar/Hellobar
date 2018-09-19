@@ -85,7 +85,7 @@ class HandleOverageSite
   end
 
   def handle_free
-    @site.deactivate_site_element
+    # @site.deactivate_site_element
     # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
