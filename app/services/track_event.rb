@@ -9,6 +9,7 @@ class TrackEvent
 
     track_with_intercom
     track_with_amplitude
+    track_with_profitwell
   end
 
   private
@@ -21,5 +22,12 @@ class TrackEvent
 
   def track_with_amplitude
     SendEventToAmplitudeJob.perform_later event.to_s, args
+  end
+
+  def track_with_profitwell
+    case event
+    when :upgraded_subscription, :downgraded_subscription
+      SendEventToProfitwellJob.perform_later event.to_s, args
+    end
   end
 end

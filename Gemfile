@@ -26,6 +26,7 @@ gem 'doorkeeper'
 gem 'chewy'
 gem 'faraday_middleware-aws-sigv4'
 gem 'net-http-persistent'
+gem 'typhoeus'
 
 # Omniauth authentication used by email providers
 gem 'omniauth-aweber'
