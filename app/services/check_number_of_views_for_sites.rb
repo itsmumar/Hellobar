@@ -90,10 +90,6 @@ class CheckNumberOfViewsForSites
 
   def send_warning_email(site, number_of_views, limit, warning_level, db_field)
     site.update("#{db_field}": true)
-    if site.current_subscription&.non_free
-      report.send_warning_email(site, number_of_views, limit, warning_level)
-    else
-      report.send_warning_free_email(site, number_of_views, limit, warning_level)
-    end
+    report.send_warning_email(site, number_of_views, limit, warning_level)
   end
 end

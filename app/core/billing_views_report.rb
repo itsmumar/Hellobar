@@ -50,7 +50,11 @@ class BillingViewsReport
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)
-    # WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    if site.current_subscription&.non_free
+      # WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    else
+      # WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
+    end
   end
 
   def send_upsell_email(site, number_of_views, limit)
