@@ -3,7 +3,7 @@
 .new-credit-card-modal
   footer
     .button.submit
-      @extend %darkgray-button
+      @extend %green-button
 
   .modal-block
     width: 35em
@@ -25,7 +25,6 @@
     margin-left: -2.33em
     margin-right: -2.33em
     padding: 1em
-
 
     .wrapper
       @include clearfix()
@@ -66,7 +65,6 @@
 
             input
 
-
             i
               left: 12px
               bottom: 2px
@@ -92,6 +90,8 @@
           .cc-country
             .select-wrapper
               margin-bottom: 0 !important
+              &:before
+                line-height: inherit
 
         label
           font-size: 0.8em !important

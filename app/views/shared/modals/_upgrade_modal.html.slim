@@ -33,7 +33,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
           |  Yearly
           img {src = "#{image_path('icons/path-2.svg')}" }
 
-      table
+      table.plans-table
         thead
 
           tr
@@ -118,10 +118,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
             td.cross &#10005;
           tr.trborder
             th
-              dev
             td.trborder
               .package-block.enterprise
-                .package-features
                   .package-status
                     = choose_plan_button(Subscription::Elite.new)
             td.trborder
