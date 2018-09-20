@@ -1,0 +1,18 @@
+script id='reactivate-template' type='text/x-handlebars-template'
+  - if current_site
+    .modal-wrapper
+      .modal-block
+        h5 You've exceeded your monthly view limit
+        span.icon-alert
+        div
+          p
+          ' You have gone over 5,000 views this month so we have deactivated your site elements until the next billing cycle.
+          br
+          br
+
+          ' If you’d like you can reactivate them immediately by upgrading to one of our Paid Plans.
+
+        br
+        a.button.upgrade-plan href="#" Upgrade to paid plan and reactivate
+        br
+        a.cancel.stay-on-plan href="#" No thanks, I'll stay on the free plan

@@ -22,6 +22,7 @@ class SiteSerializer < ActiveModel::Serializer
     end
   end
 
+  # rubocop: disable Metrics/AbcSize
   def capabilities
     {
       remove_branding: object.capabilities.remove_branding?,
@@ -38,9 +39,12 @@ class SiteSerializer < ActiveModel::Serializer
       alert_bars: object.capabilities.alert_bars?,
       leading_question: object.capabilities.leading_question?,
       image_opacity: object.capabilities.image_opacity?,
-      image_overlay_opacity: object.capabilities.image_overlay_opacity?
+      image_overlay_opacity: object.capabilities.image_overlay_opacity?,
+      a_b_test_in_progress: object.capabilities.a_b_test_in_progress?,
+      max_variations: object.capabilities.max_variations
     }
   end
+  # rubocop: enable Metrics/AbcSize
 
   def display_name
     object.host

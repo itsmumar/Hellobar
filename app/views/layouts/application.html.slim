@@ -17,6 +17,9 @@ html
     = render "shared/gtm_noscript"
     = render 'shared/amplitude'
 
+    div
+      = render "shared/free_notice"
+
     header.global-header
       = render "shared/header"
 
@@ -32,6 +35,7 @@ html
 
     = render "shared/alert_template"
     = render "shared/modals/downgrade_modal"
+    = render "shared/modals/reactivate_element_modal"
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"

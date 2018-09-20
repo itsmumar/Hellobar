@@ -7,29 +7,6 @@ feature 'Payment modal interaction', :js do
     sign_in user
   end
 
-  context 'pro subscription' do
-    background do
-      stub_cyber_source :purchase
-    end
-
-    scenario "downgrade to free from pro should say when it's active until" do
-      ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
-
-      end_date = site.current_subscription.active_until
-
-      visit edit_site_path(site)
-
-      click_link('Change plan or billing schedule')
-      find('.different-plan').click
-      sleep 2
-
-      within '.package-block.basic' do
-        find('.button', text: 'Choose Plan').click
-      end
-      expect(page).to have_content "until #{ end_date.strftime('%-m-%-d-%Y') }"
-    end
-  end
-
   context 'free subscription' do
     background do
       stub_cyber_source :store, :purchase
@@ -48,13 +25,11 @@ feature 'Payment modal interaction', :js do
         visit edit_site_path(site)
 
         page.find('footer .show-upgrade-modal').click
-        expect(page).to have_content "Upgrade #{ site.host }"
+        expect(page).to have_content 'Why Upgrade to Pro?'
 
-        within '.package-block.pro' do
-          find('.button', text: 'Choose Plan').click
-        end
+        page.all('.button', text: 'Choose Plan')[1].click
 
-        expect(page).to have_content 'Pro SELECT BILLING'
+        expect(page).to have_content 'Add new credit card'
         expect(page.find('#anually-billing', visible: false)).to be_checked
 
         page.find('.submit').click
@@ -74,11 +49,9 @@ feature 'Payment modal interaction', :js do
         visit edit_site_path(site)
 
         page.find('footer .show-upgrade-modal').click
-        within '.package-block.pro' do
-          find('.button', text: 'Choose Plan').click
-        end
+        page.all('.button', text: 'Choose Plan')[1].click
 
-        expect(page).to have_content 'Growth SELECT BILLING'
+        expect(page).to have_content 'Growth'
         expect(page.find('#anually-billing', visible: false)).to be_checked
 
         page.find('.submit').click
@@ -103,7 +76,7 @@ feature 'Payment modal interaction', :js do
       go_to_tab 'Settings'
       find('.toggle-showing-branding .toggle-on').click
 
-      expect(page).to have_content "Upgrade #{ site.host } to remove branding"
+      expect(page).to have_content "To remove Hello Bar logo, upgrade your subscription for #{ site.host }"
     end
 
     scenario 'trying to ask leading questions triggers the Pro Upgrade popup' do
@@ -117,7 +90,7 @@ feature 'Payment modal interaction', :js do
       find('.collapse', text: 'Leading Question').click
       find('.questions .toggle-switch').click
 
-      expect(page).to have_content "Upgrade #{ site.host } to ask leading questions"
+      expect(page).to have_content "To enable Yes/No Questions, upgrade your subscription for #{ site.host }"
     end
 
     def date_format(date)

@@ -22,7 +22,9 @@ describe SiteSerializer do
       precise_geolocation_targeting: site.capabilities.precise_geolocation_targeting?,
       leading_question: site.capabilities.leading_question?,
       image_opacity: site.capabilities.image_opacity?,
-      image_overlay_opacity: site.capabilities.image_overlay_opacity?
+      image_overlay_opacity: site.capabilities.image_overlay_opacity?,
+      a_b_test_in_progress: site.capabilities.a_b_test_in_progress?,
+      max_variations: site.capabilities.max_variations
     }
     expect(serializable_hash[:capabilities]).to match expected_capabilities
   end

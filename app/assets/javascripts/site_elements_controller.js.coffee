@@ -31,7 +31,7 @@ $ ->
       for bar in rule.site_elements
         bar = $(bar)
         bar.hide()
-        showBars.push(bar) if active == null || bar.data('active') == active
+        showBars.push(bar) if (active == null || (bar.data('active') == active && bar.data('deactive') == false)) || (active == 3 && bar.data('deactive') == true)
 
       if showBars.length == 0 && active != null
         hideRule(rule)
@@ -40,7 +40,7 @@ $ ->
         if nextBar && (bar.data('type') != nextBar.data('type'))
           $("<tr class='spacer'>").insertAfter(bar)
         bar.show()
-        bar.removeClass("active paused").addClass(if bar.data('active') then "active" else "paused")
+        bar.removeClass("active paused deactivated").addClass(if bar.data('active') then "active"  else if bar.data("deactive") then "deactivated" else "paused")
 
     renderGuidance(active)
 
@@ -150,6 +150,17 @@ $ ->
           # toggle the class and text back to original and render any error
           console.log "Unexpected error: #{error}"
 
+  #-----------  Reactivate  -----------#
+
+  $('body').on 'click', '.show-activation-modal', (event) ->
+    event.preventDefault()
+
+    options =
+      site: window.site
+    new ReactivateElementModal(options).open()
+
+
+
   #-----------  Delete Rule  -----------#
 
   # send a request to delete the rule itself, let Rails
@@ -209,6 +220,7 @@ $ ->
     target = $('a.element-filter.active').attr('href')
     selection = target && target.replace(/\W/g, '')
     return null if selection == "all"
+    return 3 if selection == 'deactivated'
     selection == "active"
 
   rules = ->

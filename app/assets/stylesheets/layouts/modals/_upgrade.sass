@@ -2,72 +2,194 @@
 
 .upgrade-account-modal
 
+
+  .switch
+    padding-top: 10px
+    position: relative
+    display: inline-block
+    width: 40px
+    height: 22px
+
+    input
+      display: none
+    .slider
+      border: 1px solid #E0E0E0
+      position: absolute
+      cursor: pointer
+      top: 8px
+      left: 0
+      right: 0
+      bottom: -8px
+      background-color: #ffffff
+      -webkit-transition: .2s
+      transition: .2s
+      &:before
+        position: absolute
+        content: ""
+        height: 19px
+        width: 19px
+        left: 1px
+        bottom: 1px
+        background-color: #27ab9e
+        -webkit-transition: .4s
+        transition: .4s
+
+    input
+      &:checked + .slider
+        background-color: $white
+      &:focus + .slider
+        box-shadow: 0 0 1px $white
+      &:checked + .slider:before
+        -webkit-transform: translateX(18px)
+        -ms-transform: translateX(18px)
+        transform: translateX(18px)
+
+    /* Rounded sliders
+
+    .slider.round
+
+      border-radius: 20px
+      &:before
+        border-radius: 50%
+
+  .thborder
+    border: 1px solid #E0E0E0
+
+  .trborder
+    margin-top: 30px
+    padding-left: 18px
+    text-align: center
+    border: none
+
+  .check
+    color: #27ab9e
+    font-size: 15px
+
+  .h40
+     height: 40px
+
+  .cross
+    color: #d0021b
+    font-size: 15px
+
+  .bold
+    font-weight: bolder
+    font-size: 25px
+
+  .sm
+    padding-right: 30px
+    font-size: 12px
+
+  thead
+    div.sm
+      .package-pricing
+        .monthly
+          display: block
+
+        .yearly
+          display: none
+
+        &.yearly
+          .monthly
+            display: none
+
+          .yearly
+            display: block
+
+
+  .prime
+    background-color: #27ab9e
+    font-size: 14px
+    text-align: center
+    color: #ffffff
+
+  .back
+    background-color: #dfeceb
+
+  .fl
+    padding-left: 30px
+    float: left
+    font-size: 12px
+    color: #e8562a
+
+  th
+    padding-left: 10px
+    padding-top: 10.5px
+    padding-bottom: 10.5px
+    text-align: left
+
+    div
+      color: #636363
+      font-size: 25px
+      text-align: center
+
+  td
+    border: 1px solid #E0E0E0
+    font-size: 15px
+    padding-left: 10px
+    padding-top: 10.5px
+    padding-bottom: 10.5px
+    color: #636363
+    text-align: center
+
   .modal-block
+    height: 45.5em
+    padding-bottom: 0.1px
     padding-left: 1.75em
     padding-right: 1.75em
 
   .site-title
+    padding-bottom: 2emgit
     text-align: center
     font-size: 1.33em
     @include antialiased()
 
   .billing-options
     text-align: center
-    width: 21.5em
+    width: 30.5em
     margin: 1.5em auto
     position: relative
+
+    img
+     max-width: 100%
+     height: auto
+     border: none
+     margin-left: auto
+     margin-right: auto
+     vertical-align: bottom
+     padding-bottom: 2em
 
     input
       display: none
 
-    label
-      width: 50%
-      margin: 0
-      color: $gray
-      padding: 0.33em
-      cursor: pointer
-      text-align: center
-      border: 1px solid $green
-      text-transform: uppercase
-      font-size: 0.95em !important
-      @include inline-block()
-      @include antialiased()
-      transition: all 0.15s ease-out 0s
-
-      &:first-child
-        border-radius: $radiusSm 0 0 $radiusSm
-
-      &:last-child
-        border-radius: 0 $radiusSm $radiusSm 0
-
-      &:hover
-        background-color: lighten($green, 37.5%)
 
     input:checked + label
       color: $white !important
       cursor: default
-      background-color: $green
+      border-radius: 14px
+      background-color: #27ab9e
 
     &:after
-      top: -1.5em
-      right: -2em
-      width: 3.5em
-      height: 3.5em
-      color: $white
-      font-size: 0.6em
+      top: 0.7em
+      right: 5em
+      width: 89px
+      height: 53px
+      transform: rotate(-15deg)
+      color: #636363
+      font-size: 13px
       line-height: 115%
       position: absolute
-      content: 'Save 15%'
+      content: 'Get 2 months for free'
       padding-top: 0.67em
-      border-radius: 10em
+      padding-bottom: 0.67em
+      border-radius: 4px
       text-transform: uppercase
-      background-color: $yellow
+      background-color: rgba(248, 231, 28, 0.35)
 
   /*-----------  Packages  -----------*/
 
   .package-block
     margin-bottom: 0.5em
-    border-color: $grayLighter
     justify-content: flex-start
     align-content: center
     align-items: stretch
@@ -75,22 +197,12 @@
     display: flex
 
     > *
-      padding-top: 1.5em
-      padding-bottom: 1.5em
-      border-style: solid
-      border-color: inherit
-      @include antialiased()
+
+      padding-left: 25px
 
     .package-title
-      text-align: center
-      color: $white
-      border-width: 0
-      line-height: 145%
-      flex: 1 0 16%
 
       .package-name
-        font-size: 1.1em
-        font-weight: $fontWeightBold
 
       .package-price
 
@@ -109,7 +221,6 @@
           display: block
 
     .package-features
-      border-width: 1px 1px 1px 0
       justify-content: center
       align-content: center
       align-items: center
@@ -195,17 +306,15 @@
     &.basic
 
       .package-title
-        color: $gray
-        border-width: 1px 0 1px 1px
-        background-color: $grayLightest
+
 
     /*-----------  Pro Package  -----------*/
 
     &.pro
-      border-color: $grayLight
+
 
       .package-title
-        background-color: $green
+
 
       .package-features
 
@@ -245,10 +354,10 @@
     &.elite
 
       .package-title
-        background-color: $blue
+
 
       .button
-        @extend %blue-button
+        @extend %red-button
 
   /*-----------  AB TEST: Company Logos  -----------*/
 
@@ -268,39 +377,24 @@
 
       .package-title,
       .package-features
-        border-color: $grayLightest
+
 
       &.pro
-        padding-right: 1.75em
-        margin: 1.5em -1.75em 1.75em
-        border: 1px solid $green
-        border-left-width: 1.75em
-        border-right-width: 0
 
         .package-title
-          border: none
+
 
         .package-features
-          width: 100%
-          border: none
-          display: block
+
 
           .pro-logos
-            margin-top: $gutter
-            margin-left: $gutter
-            padding-top: $gutter
-            border-top: 1px solid $grayLightest
+
 
             h6
-              color: $gray
-              padding: 0 15%
-              line-height: 140%
-              margin-bottom: 1em
+
 
             img
-              width: 100px
-              height: auto
-              margin: 0em 1em
+
 
           .flex-container
             padding-top: $gutterSm

@@ -4,6 +4,7 @@ namespace :reset_email_sent_fields do
     Site.active.where(warning_email_one_sent: true).find_in_batches do |group|
       group.each do |site|
         ResetEmailSentFields.new(site).call
+        HandleUnfreezeFrozenAccount.new(site).call
       end
     end
   end

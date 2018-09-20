@@ -10,4 +10,13 @@ class OveragePaidMailer < ApplicationMailer
       mail(to: user.email, subject: 'You have exceeded your Hello Bar monthly view limit!')
     end
   end
+
+  def unfreeze_email(site)
+    @site = site
+    users = site.owners_and_admins
+    users.each do |user|
+      @user = user
+      mail(to: user.email, subject: 'Your deactivated Hello Bar elements have been activated!')
+    end
+  end
 end

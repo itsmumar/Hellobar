@@ -1,6 +1,9 @@
 /*-----------  New Credit Card Modal  -----------*/
 
 .new-credit-card-modal
+  footer
+    .button.submit
+      @extend %darkgray-button
 
   .modal-block
     width: 35em
@@ -14,7 +17,7 @@
     border-top: none
 
   .modal-title
-    font-size: 2em
+    font-size: 20px
     @include antialiased()
 
   .new-credit-card-form
@@ -22,7 +25,7 @@
     margin-left: -2.33em
     margin-right: -2.33em
     padding: 1em
-    border: 1px solid $grayLighter
+
 
     .wrapper
       @include clearfix()
@@ -62,7 +65,7 @@
             position: relative
 
             input
-              padding-left: 3em !important
+
 
             i
               left: 12px
