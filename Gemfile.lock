@@ -794,6 +794,7 @@ DEPENDENCIES
   thread
   timecop
   toastr-rails
+  typhoeus
   uglifier
   unf
   verticalresponse

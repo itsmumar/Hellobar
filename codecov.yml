@@ -16,3 +16,4 @@ ignore:
   - "app/controllers/heartbeat_controller.rb"
   - "app/controllers/modals_controller.rb"
   - "app/controllers/proxy_controller.rb"
+  - "app/services/upload_subscriptions_to_profitwell.rb"
