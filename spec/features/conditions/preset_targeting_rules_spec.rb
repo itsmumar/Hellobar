@@ -35,7 +35,7 @@ feature 'Users can use site element targeting rule presets', :js do
       paid_options.each do |rule|
         choose_rule rule
 
-        expect(page).to have_content 'MONTHLY BILLING'
+        expect(page).to have_content 'Choose Plan'
 
         find('.upgrade-account-modal .modal-block > .icon-close').click
       end

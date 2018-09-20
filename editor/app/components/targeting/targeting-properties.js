@@ -85,7 +85,7 @@ export default Ember.Component.extend({
       successCallback() {
         that.set('model.site.capabilities', this.site.capabilities);
       },
-      upgradeBenefit: 'create custom-targeted rules'
+      upgradeBenefit: 'enable more targeting features, upgrade your subscription for'
     };
     new UpgradeAccountModal(options).open();
   },
