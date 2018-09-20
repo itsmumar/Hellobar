@@ -726,7 +726,7 @@ describe AnalyticsProvider do
 
       expect(adapter)
         .to receive(:untag_users)
-        .with("#{ (user.sites.count) } Sites", [user])
+        .with("#{ user.sites.count } Sites", [user])
 
       expect(adapter)
         .to receive(:untag_users)

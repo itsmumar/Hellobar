@@ -6,14 +6,13 @@ describe IntercomRefresh do
     allow(service).to receive(:track_updated_site_counts)
   end
 
-
   # let(:rules) { create_list :static_script_rule, 1, rule: elite_site.rules.first }
 
   context 'when bill subscription is elite' do
     let!(:user) { create :user }
     let!(:site) { create :site, :with_rule, user: user }
     let!(:params) { Hash[element_subtype: 'call', rule_id: site.rules.ids.first] }
-    let!(:element) { create :slider, site: site}
+    let!(:element) { create :slider, site: site }
 
     # it 'calls TrackEvent with :update_site_count event' do
     #   expect(service)

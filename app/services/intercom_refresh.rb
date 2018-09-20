@@ -28,17 +28,15 @@ class IntercomRefresh
   end
 
   def check_site_for_dme(site)
-    if site.active_subscription&.type == "Subscription::ProComped" || site.active_subscription&.type == "Subscription::Elite" || site.active_subscription&.type == "Subscription::ProManaged"
+    if site.active_subscription&.type == 'Subscription::ProComped' || site.active_subscription&.type == 'Subscription::Elite' || site.active_subscription&.type == 'Subscription::ProManaged'
       track_dme(site)
-    elsif site.active_subscription&.type == "Subscription::Pro" || site.active_subscription&.type == "Subscription::Growth"
+    elsif site.active_subscription&.type == 'Subscription::Pro' || site.active_subscription&.type == 'Subscription::Growth'
       handle_trial_dme(site)
     end
   end
 
   def handle_trial_dme(site)
-    if site.active_subscription&.created_at > (Date.today - 90.days)
-      track_dme(site)
-    end
+    track_dme(site) if site.active_subscription&.created_at >= (Time.zone.today - 90.days) # rubocop:disable Lint/SafeNavigationChain
   end
 
   def track_dme(site)

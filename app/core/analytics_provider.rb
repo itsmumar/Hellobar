@@ -293,7 +293,7 @@ class AnalyticsProvider
 
     # clean up possibly stale tags
     untag_users "#{ (user.sites.count - 1) } Sites", [user] unless user.sites.count <= 1
-    untag_users "#{ (user.sites.count) } Sites", [user]
+    untag_users "#{ user.sites.count } Sites", [user]
     untag_users "#{ (user.sites.count + 1) } Sites", [user]
     untag_users 'Multiple Sites', [user]
 
@@ -308,7 +308,7 @@ class AnalyticsProvider
       user: user,
       params: {}
     )
-    
+
     tag_users 'DME', [user]
   end
 
