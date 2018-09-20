@@ -44,7 +44,7 @@
         -ms-transform: translateX(18px)
         transform: translateX(18px)
 
-    /* Rounded sliders
+    /* Rounded sliders */
 
     .slider.round
 
@@ -52,14 +52,18 @@
       &:before
         border-radius: 50%
 
+  .plans-table
+    margin-bottom: 0
+
   .thborder
     border: 1px solid #E0E0E0
 
   .trborder
-    margin-top: 30px
     padding-left: 18px
+    padding-top: 20px
     text-align: center
     border: none
+
 
   .check
     color: #27ab9e
@@ -133,10 +137,13 @@
     text-align: center
 
   .modal-block
-    height: 45.5em
-    padding-bottom: 0.1px
+    padding-bottom: 10px
     padding-left: 1.75em
     padding-right: 1.75em
+
+  &.show-modal
+    .modal-block
+      margin-top: -1em
 
   .site-title
     padding-bottom: 2emgit

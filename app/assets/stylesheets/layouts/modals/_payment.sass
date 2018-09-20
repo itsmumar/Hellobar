@@ -4,7 +4,7 @@
 
   footer
     .button.submit
-      @extend %darkgray-button
+      @extend %green-button
   .modal-block > footer
     margin-top: 0
     border-top: none
@@ -107,10 +107,10 @@
 
       .credit_card_form
         width: 62%
-        height: 160px
         float: right
         text-align: center
         border: 1px solid $grayLighter
+        padding-bottom: 10px
 
         header
           color: $gray
@@ -130,7 +130,11 @@
           letter-spacing: normal
 
         .credit-card, .site-select
-          padding: 2.5rem 2rem
+          padding: 0 2rem
+
+          #linked-credit-cards
+            .select-wrapper::before
+              line-height: inherit
 
           #add-new-credit-card
             color:  #27ab9e
