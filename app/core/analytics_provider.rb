@@ -302,7 +302,7 @@ class AnalyticsProvider
     tag_users 'Multiple Sites', [user] unless user.sites.count < 2
   end
 
-  def add_dme(user:)
+  def add_dme(user:, highest_subscription_name:)
     track(
       event: 'add-dme',
       user: user,
@@ -310,6 +310,7 @@ class AnalyticsProvider
     )
 
     tag_users 'DME', [user]
+    tag_users highest_subscription_name, [user]
   end
 
   private

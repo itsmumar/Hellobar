@@ -764,7 +764,11 @@ describe AnalyticsProvider do
         .to receive(:tag_users)
         .with('DME', [site.users.first])
 
-      track('add-dme', user: user)
+      expect(adapter)
+        .to receive(:tag_users)
+        .with('Elite', [site.users.first])
+
+      track('add-dme', user: user, highest_subscription_name: 'Elite')
     end
   end
 end
