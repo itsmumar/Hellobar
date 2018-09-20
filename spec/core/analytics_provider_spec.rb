@@ -637,7 +637,7 @@ describe AnalyticsProvider do
   end
 
   describe '#downgraded_subscription' do
-    let(:event) { 'upgraded-subscription' }
+    let(:event) { 'downgraded-subscription' }
     let(:site) { create :site, :elite }
     let(:credit_card) { create :credit_card }
     let(:subscription) { site.current_subscription }
