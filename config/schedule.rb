@@ -6,6 +6,10 @@ set :output, standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log'
 env :PATH, ENV['PATH']
 
 # All times are in UTC
+every :day, at: '1:30pm', roles: [:cron] do
+  rake 'intercom_refresh:start'
+end
+
 every :day, at: '2:00pm', roles: [:cron] do
   rake 'billing:run'
 end
