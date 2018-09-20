@@ -1,11 +1,17 @@
 <p>Hi,</p>
 
 <p>
-  You are approaching the monthly view limit of <%= @limit %> on your Hello Bar site: <%= @site.url %>.
+  Well done… you’ve reached <%= @number_of_views %> views on  <%= @site.url %>.
 </p>
 
 <p>
-  You're currently at <%= @number_of_views %> and if you surpass your monthly limit, your popups and bars will stop displaying until the 1st of next month. Login now at <a href="<%= @login_url %>"> <%= @login_url %></a> to upgrade to a larger plan.
+  This email is just a friendly reminder that your Growth plan has a cap of <%= @limit %> views per month and if you go over the <%= @limit %> views you will be charged an extra $5 per 25,000 views during this cycle which will be billed at the end of the month.
 </p>
 
-<p>Thanks for using Hello Bar!</p>
+<p>
+  Your other option is to upgrade to our <a href="https://app.hellobar.com/profile#pricing-elite">Elite Plan</a> which gives you 500,000 views plus lots of other cool features.
+</p>
+
+<p>Cheers,<br>
+
+Hello Bar Success Team</p>

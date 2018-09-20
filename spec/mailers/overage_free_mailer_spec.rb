@@ -26,7 +26,7 @@ RSpec.describe OverageFreeMailer, type: :mailer do
     end
 
     it 'mentions not displaying' do
-      expect(subject).to have_body_text('stopped displaying')
+      expect(subject).to have_body_text('disabled')
     end
   end
 end
