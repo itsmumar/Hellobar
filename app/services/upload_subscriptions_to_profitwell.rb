@@ -27,13 +27,14 @@ class UploadSubscriptionsToProfitwell
   def call
     sites.each do |site|
       subscriptions = site.subscriptions.with_deleted.to_a
+
       subscriptions.inject(nil) do |prev_subscription, subscription|
-        create(subscription) unless prev_subscription
-        update(subscription) if subscription.paid?
-        churn(subscription.site_id, subscription.created_at) if prev_subscription && subscription.free?
+        create(subscription)
+        churn(prev_subscription, subscription.created_at) if prev_subscription
+
         subscription
       end
-      churn(site.id, site.deleted_at) if site.deleted?
+      churn(subscriptions.last, site.deleted_at) if subscriptions.last.deleted? || site.deleted?
     end
   end
 
@@ -45,12 +46,8 @@ class UploadSubscriptionsToProfitwell
     create_request(params(subscription)).run
   end
 
-  def update(subscription)
-    update_request(subscription.site_id, params_for_update(subscription)).run
-  end
-
-  def churn(site_id, date)
-    churn_request(site_id, date).run
+  def churn(subscription, date)
+    churn_request(subscription.id, date).run
   end
 
   def create_request(params)
@@ -62,18 +59,9 @@ class UploadSubscriptionsToProfitwell
     )
   end
 
-  def update_request(id, params)
+  def churn_request(id, date)
     Typhoeus::Request.new(
-      "https://api.profitwell.com/v2/subscriptions/#{ id }/",
-      method: :put,
-      body: params.to_json,
-      headers: headers
-    )
-  end
-
-  def churn_request(site_id, date)
-    Typhoeus::Request.new(
-      "https://api.profitwell.com/v2/subscriptions/#{ site_id }/?effective_date=#{ date.to_i }",
+      "https://api.profitwell.com/v2/subscriptions/#{ id }/?effective_date=#{ date.to_i }",
       method: :delete,
       headers: headers
     )
@@ -83,7 +71,7 @@ class UploadSubscriptionsToProfitwell
     owner = subscription.site.owners.with_deleted.first
     {
       user_alias: owner.id,
-      subscription_alias: subscription.site_id,
+      subscription_alias: subscription.id,
       email: owner.email,
       plan_id: subscription.type,
       plan_interval: subscription.monthly? ? 'month' : 'year',
@@ -92,10 +80,6 @@ class UploadSubscriptionsToProfitwell
       value: (subscription.amount * 100).to_i,
       effective_date: subscription.created_at.to_i
     }
-  end
-
-  def params_for_update(subscription)
-    params(subscription).except(:user_alias)
   end
 
   def headers

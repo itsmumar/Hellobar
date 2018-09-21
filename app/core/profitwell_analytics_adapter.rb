@@ -1,10 +1,8 @@
 class ProfitwellAnalyticsAdapter
   def track(event:, subscription:, previous_subscription:, user:)
     case event
-    when :upgraded_subscription
-      subscription_upgraded subscription, previous_subscription, user
-    when :downgraded_subscription
-      subscription_downgraded subscription
+    when :upgraded_subscription, :downgraded_subscription
+      subscription_updated subscription, previous_subscription, user
     end
   end
 
@@ -18,20 +16,9 @@ class ProfitwellAnalyticsAdapter
 
   private
 
-  def subscription_upgraded(subscription, previous_subscription, user)
-    if previous_subscription
-      profitwell.update_subscription(subscription)
-    else
-      profitwell.create_subscription(user, subscription)
-    end
-  end
-
-  def subscription_downgraded(subscription)
-    if subscription.free?
-      profitwell.churn_subscription(subscription.site_id, subscription.created_at)
-    else
-      profitwell.update_subscription(subscription)
-    end
+  def subscription_updated(subscription, previous_subscription, user)
+    profitwell.churn_subscription(previous_subscription.id, subscription.created_at) if previous_subscription
+    profitwell.create_subscription(user, subscription)
   end
 
   def profitwell
