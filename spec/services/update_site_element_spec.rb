@@ -1,4 +1,5 @@
 describe UpdateSiteElement do
+  let(:user) { create :user }
   let!(:element) { create(:bar, :email, :with_pro_site) }
   let(:headline) { 'Updated headline' }
   let(:params) do
@@ -8,7 +9,7 @@ describe UpdateSiteElement do
       headline: headline
     }
   end
-  let(:service) { UpdateSiteElement.new(element, params) }
+  let(:service) { UpdateSiteElement.new(element, params, user) }
 
   context 'when update is successful' do
     it 'returns element' do
@@ -121,5 +122,13 @@ describe UpdateSiteElement do
         .to change { ImageUpload.exists? old_image.id }
         .from(true).to(false)
     end
+  end
+
+  it 'calls TrackEvent with :created_bar event' do
+    expect(TrackEvent)
+      .to receive_service_call
+      .with(:updated_bar, site_element: element, user: user)
+
+    service.call
   end
 end
