@@ -524,6 +524,7 @@ ActiveRecord::Schema.define(version: 20180921145626) do
     t.string   "schedule",             limit: 20,                          default: "monthly", null: false
     t.datetime "deleted_at"
     t.datetime "updated_at"
+    t.decimal  "original_amount",                  precision: 7, scale: 2
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
