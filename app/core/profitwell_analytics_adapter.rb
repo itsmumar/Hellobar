@@ -17,11 +17,8 @@ class ProfitwellAnalyticsAdapter
   private
 
   def subscription_updated(subscription, previous_subscription, user)
-    if previous_subscription
-      profitwell.churn_subscription(previous_subscription.id, subscription.created_at)
-    else
-      profitwell.create_subscription(user, subscription)
-    end
+    profitwell.churn_subscription(previous_subscription.id, subscription.created_at) if previous_subscription
+    profitwell.create_subscription(user, subscription)
   end
 
   def profitwell

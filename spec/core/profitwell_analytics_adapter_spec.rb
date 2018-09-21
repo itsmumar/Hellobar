@@ -4,8 +4,8 @@ describe ProfitwellAnalyticsAdapter do
   let(:adapter) { ProfitwellAnalyticsAdapter.new }
 
   let(:user) { double('user') }
-  let(:subscription) { double('subscription') }
-  let(:previous_subscription) { double('previous_subscription') }
+  let(:subscription) { create :subscription, :pro }
+  let(:previous_subscription) { create :subscription, :free }
 
   before do
     allow(ProfitwellGateway)
@@ -23,58 +23,50 @@ describe ProfitwellAnalyticsAdapter do
       )
     end
 
-    context 'with :upgraded_subscription event' do
-      let(:event) { :upgraded_subscription }
+    before { allow(profitwell_gateway).to receive(:create_subscription) }
+    before { allow(profitwell_gateway).to receive(:churn_subscription) }
 
-      context 'and previous_subscription is nil' do
-        let(:previous_subscription) { nil }
+    %i[downgraded_subscription upgraded_subscription].each do |event|
+      context "with #{ event } event" do
+        let(:event) { event }
 
-        it 'calls create_subscription' do
-          expect(profitwell_gateway)
-            .to receive(:create_subscription)
-            .with(user, subscription)
+        context 'when previous_subscription is nil' do
+          let(:previous_subscription) { nil }
 
-          track
-        end
-      end
+          it 'calls create_subscription' do
+            expect(profitwell_gateway)
+              .to receive(:create_subscription)
+              .with(user, subscription)
 
-      context 'and previous_subscription is not nil' do
-        it 'calls update_subscription' do
-          expect(profitwell_gateway)
-            .to receive(:update_subscription)
-            .with(subscription)
+            track
+          end
 
-          track
-        end
-      end
-    end
+          it 'does not call churn_subscription' do
+            expect(profitwell_gateway)
+              .not_to receive(:churn_subscription)
 
-    context 'with :downgraded_subscription event' do
-      let(:event) { :downgraded_subscription }
-
-      context 'and subscription is free' do
-        let(:subscription) do
-          double('subscription', free?: true, site_id: 1, created_at: 'created_at')
+            track
+          end
         end
 
-        it 'calls churn_subscription' do
-          expect(profitwell_gateway)
-            .to receive(:churn_subscription)
-            .with(subscription.site_id, subscription.created_at)
+        context 'and previous_subscription is not nil' do
+          let(:previous_subscription) { create :subscription, :free }
 
-          track
-        end
-      end
+          it 'calls create_subscription' do
+            expect(profitwell_gateway)
+              .to receive(:create_subscription)
+              .with(user, subscription)
 
-      context 'and previous_subscription is not nil' do
-        let(:subscription) { double('subscription', free?: false) }
+            track
+          end
 
-        it 'calls update_subscription' do
-          expect(profitwell_gateway)
-            .to receive(:update_subscription)
-            .with(subscription)
+          it 'calls churn_subscription' do
+            expect(profitwell_gateway)
+              .to receive(:churn_subscription)
+              .with(previous_subscription.id, subscription.created_at)
 
-          track
+            track
+          end
         end
       end
     end
