@@ -186,7 +186,7 @@ describe Subscription do
       let(:subscription_type) { :pro }
 
       it 'sets initial values' do
-        expect(subscription.amount).to eql 15
+        expect(subscription.amount).to eql 29
         expect(subscription.visit_overage).to eql 50_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 5
