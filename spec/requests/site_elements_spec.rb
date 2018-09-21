@@ -229,7 +229,7 @@ describe 'SiteElements requests' do
       it 'updates with the params' do
         expect(UpdateSiteElement)
           .to receive_service_call
-          .with(element, closable: 'true')
+          .with(element, { closable: 'true' }, user)
           .and_return(element)
 
         put_update params

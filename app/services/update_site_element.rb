@@ -1,5 +1,5 @@
 class UpdateSiteElement
-  def initialize(element, params)
+  def initialize(element, params, current_user)
     @element = element
     @theme = Theme.find_by(id: params[:theme_id])
     @params = disable_use_question_if_template(params)

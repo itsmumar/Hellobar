@@ -52,7 +52,7 @@ class SiteElementsController < ApplicationController
   end
 
   def update
-    site_element = UpdateSiteElement.new(@site_element, site_element_params).call
+    site_element = UpdateSiteElement.new(@site_element, site_element_params, current_user).call
     flash[:success] = message_to_clear_cache
     render json: site_element, serializer: SiteElementSerializer
   end
