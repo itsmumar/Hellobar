@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180918090041) do
+ActiveRecord::Schema.define(version: 20180921145626) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -524,6 +524,7 @@ ActiveRecord::Schema.define(version: 20180918090041) do
     t.string   "schedule",             limit: 20,                          default: "monthly", null: false
     t.datetime "deleted_at"
     t.datetime "updated_at"
+    t.decimal  "original_amount",                  precision: 7, scale: 2
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
