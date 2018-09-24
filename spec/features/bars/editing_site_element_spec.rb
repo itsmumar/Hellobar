@@ -13,7 +13,6 @@ feature 'Editing site element', :js do
 
     visit edit_site_site_element_path(site, site.site_elements.last)
 
-    find('h6', text: 'Collect emails').click
     go_to_tab 'Design'
     find('.collapse', text: 'Leading Question').click
     find('.questions .toggle-switch').click
