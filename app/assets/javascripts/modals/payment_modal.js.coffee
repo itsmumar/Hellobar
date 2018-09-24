@@ -33,6 +33,10 @@ class @PaymentModal extends Modal
   open: ->
     $('body').append(@$modal)
     super
+    if @options.package.schedule == 'monthly'
+      document.getElementById("monthly-billing").checked = true
+    else
+      document.getElementById("anually-billing").checked = true
 
   close: ->
     $form = @$modal.find('form')
@@ -41,6 +45,7 @@ class @PaymentModal extends Modal
     ).length
 
     super
+
 
   fetchUserCreditCards: (siteID) ->
     @$modal.trigger('load') # indicate we need to do more work

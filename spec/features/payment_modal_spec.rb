@@ -30,7 +30,7 @@ feature 'Payment modal interaction', :js do
         page.all('.button', text: 'Choose Plan')[1].click
 
         expect(page).to have_content 'Add new credit card'
-        expect(page.find('#anually-billing', visible: false)).to be_checked
+        expect(page.find('#monthly-billing', visible: false)).to be_checked
 
         page.find('.submit').click
 
@@ -52,7 +52,7 @@ feature 'Payment modal interaction', :js do
         page.all('.button', text: 'Choose Plan')[1].click
 
         expect(page).to have_content 'Growth'
-        expect(page.find('#anually-billing', visible: false)).to be_checked
+        expect(page.find('#monthly-billing', visible: false)).to be_checked
 
         page.find('.submit').click
 
