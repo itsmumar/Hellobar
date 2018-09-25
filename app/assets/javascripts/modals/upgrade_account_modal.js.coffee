@@ -3,7 +3,7 @@ class @UpgradeAccountModal extends Modal
   modalName: "upgrade-account"
   modalTemplate: -> $('script#upgrade-account-modal-template').html()
 
-  chosenSchedule: "yearly"
+  chosenSchedule: 'monthly'
 
   constructor: (@options = {}) ->
     @$modal = @buildModal()
