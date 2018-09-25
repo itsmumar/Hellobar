@@ -53,7 +53,7 @@ export default Ember.Component.extend({
     },
 
     cancel() {
-      if (this.get('modelLogic.isTypeSelected')) {
+      if (this.get('modelLogic.isTypeSelected') && !this.get('modelLogic.model.isSaved')) {
         const options = {
           dashboardURL: this.get('dashboardURL'),
           doSave: () => {
@@ -61,6 +61,7 @@ export default Ember.Component.extend({
           }
         };
         new UnsavedChangesModal(options).open();
+
       } else {
         window.location = this.get('dashboardURL');
       }
