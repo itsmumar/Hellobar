@@ -4,6 +4,10 @@ class UpdateAnnualPrices < ActiveRecord::Migration
     pro_bills.where(created_before_promotion).update_all amount: 289, base_amount: 289
     elite_bills.where(created_before_promotion).update_all amount: 999, base_amount: 999
 
+    growth_bills.where(next_year_bills).update_all amount: 289, base_amount: 289
+    pro_bills.where(next_year_bills).update_all amount: 289, base_amount: 289
+    elite_bills.where(next_year_bills).update_all amount: 999, base_amount: 999
+
     growth_subscriptions.update_all(['original_amount = amount, amount = ?', 289])
     pro_subscriptions.update_all(['original_amount = amount, amount = ?', 289])
     elite_subscriptions.update_all(['original_amount = amount, amount = ?', 999])
@@ -39,5 +43,9 @@ class UpdateAnnualPrices < ActiveRecord::Migration
 
   def created_before_promotion
     ['bills.created_at < ?', Date.parse('2018-09-13')]
+  end
+
+  def next_year_bills
+    ['bills.bill_at >= ?', Date.parse('2019-09-13')]
   end
 end
