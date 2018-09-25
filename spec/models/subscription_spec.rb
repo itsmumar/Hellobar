@@ -197,7 +197,7 @@ describe Subscription do
       context 'when yearly' do
         let(:subscription) { build :subscription, :pro, schedule: 'yearly' }
 
-        specify { expect(subscription.amount).to eql 149 }
+        specify { expect(subscription.amount).to eql 289 }
       end
     end
 
@@ -216,7 +216,7 @@ describe Subscription do
       context 'when yearly' do
         let(:subscription) { build :subscription, :growth, schedule: 'yearly' }
 
-        specify { expect(subscription.amount).to eql 229 }
+        specify { expect(subscription.amount).to eql 289 }
       end
     end
 
@@ -259,7 +259,7 @@ describe Subscription do
       context 'when yearly' do
         let(:subscription) { build :subscription, :elite, schedule: 'yearly' }
 
-        specify { expect(subscription.amount).to eql 799 }
+        specify { expect(subscription.amount).to eql 999 }
       end
     end
   end
