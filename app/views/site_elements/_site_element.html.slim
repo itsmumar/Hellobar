@@ -21,7 +21,7 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
       .dropdown-wrapper
         = icon
         .dropdown-block.adjusted
-          = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "get more A/B tests" do
+          = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "unlock more A/B testing, upgrade " do
             i.icon-docs
             | Create Variation
     - else
@@ -34,7 +34,7 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
           i.icon-edit
           | Edit
 
-        = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "get more A/B tests" do
+        = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "unlock more A/B testing, upgrade " do
           i.icon-docs
           | Create Variation
 
