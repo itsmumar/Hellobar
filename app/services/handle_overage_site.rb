@@ -63,6 +63,7 @@ class HandleOverageSite
   end
 
   def handle_growth
+    return if @site.current_subscription.currently_on_trial? # let users on free trials go nuts until the trial is over
     update_growth_overage_count
     # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
