@@ -58,7 +58,6 @@ describe HandleOverageSite do
       service.call
       expect(site.overage_count).to eql(1)
     end
-
   end
 
   context 'with Growth & into overage counts on free trials' do
