@@ -35,9 +35,9 @@ feature 'Payment modal interaction', :js do
         page.find('.submit').click
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE PRO PLAN!"
-        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $149.00."
-        expect(page).to have_text 'You will be billed $149.00 every year.'
-        expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
+        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $29.00."
+        expect(page).to have_text 'You will be billed $29.00 every month.'
+        expect(page).to have_text "Your next bill will be on #{ date_format(1.month.from_now) }."
 
         page.find('a', text: 'OK').click
         expect(page).to have_content 'is on the Pro plan'
@@ -57,9 +57,9 @@ feature 'Payment modal interaction', :js do
         page.find('.submit').click
 
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
-        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $229.00."
-        expect(page).to have_text 'You will be billed $229.00 every year.'
-        expect(page).to have_text "Your next bill will be on #{ date_format(1.year.from_now) }."
+        expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $29.00."
+        expect(page).to have_text 'You will be billed $29.00 every month.'
+        expect(page).to have_text "Your next bill will be on #{ date_format(1.month.from_now) }."
 
         page.find('a', text: 'OK').click
         expect(page).to have_content 'is on the Growth plan'
