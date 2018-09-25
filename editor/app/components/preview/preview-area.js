@@ -102,6 +102,7 @@ export default Ember.Component.extend({
   // ----- Preview updating triggers
 
   onModelUpdated: function () {
+    this.set('model.isSaved', false);
     this.renderPreview();
   }.observes(
     'model',

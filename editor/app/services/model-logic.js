@@ -44,6 +44,7 @@ export default Ember.Service.extend({
     const newModel = _.assign(currentModel, model);
     this.set('model', newModel);
     this.get('theming').setModel(newModel);
+    this.set('model.isSaved', true);
   },
 
 
