@@ -9,7 +9,7 @@ class Subscription
           name: 'Pro',
           label: 'PRO',
           monthly_amount: 29.0,
-          yearly_amount: 149.0,
+          yearly_amount: 289.0,
           visit_warning_one: 40_000,
           visit_warning_two: ::Float::INFINITY,
           visit_warning_three: ::Float::INFINITY,

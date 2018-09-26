@@ -117,6 +117,8 @@ describe Subscription::Capabilities do
       expect(capabilities.alert_bars?).to be_truthy
       expect(capabilities.advanced_themes?).to be_truthy
       expect(capabilities.campaigns?).to be_truthy
+      expect(capabilities.max_a_b_tests).to be(99999)
+      expect(capabilities.max_variations).to be(99999)
     end
   end
 
