@@ -14,13 +14,13 @@ module SitesHelper
   def install_help_data(site)
     case site.install_type
     when 'weebly'
-      ['Weebly', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-weebly/']
+      ['Weebly', 'https://support.hellobar.com/installation/how-to-install-hello-bar-on-weebly/']
     when 'squarespace'
-      ['Squarespace', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-squarespace/']
+      ['Squarespace', 'https://support.hellobar.com/installation/how-to-install-hello-bar-on-squarespace/']
     when 'shopify'
-      ['Shopify', 'https://support.hellobar.com/how-do-i-install-hello-bar-on-shopify/']
+      ['Shopify', 'https://support.hellobar.com/installation/how-to-install-hello-bar-on-shopify/']
     when 'blogspot'
-      ['Blogger', 'https://support.hellobar.com/how-do-i-istall-hello-bar-on-bloggerblogspot/']
+      ['Blogger', 'https://support.hellobar.com/installation/how-to-install-hello-bar-on-blogger-or-blogspot/']
     end
   end
 
