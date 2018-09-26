@@ -8,6 +8,7 @@ class @UpgradeAccountModal extends Modal
   constructor: (@options = {}) ->
     @$modal = @buildModal()
     @_bindBillingCycleEvents()
+    @_selectInitialPlan()
 
   buildModal: ->
     template = Handlebars.compile(@modalTemplate())
@@ -36,7 +37,7 @@ class @UpgradeAccountModal extends Modal
         if packageData.type == "free"
           new DowngradeSiteModal({site: @options.site}).open()
         else
-          packageData.schedule = @chosenSchedule
+          packageData.schedule = @options.view || @chosenSchedule
 
           options =
             source: "package-selected"
@@ -51,13 +52,21 @@ class @UpgradeAccountModal extends Modal
 
   _bindBillingCycleEvents: ->
     @$modal.find('input[type="checkbox"]').on 'click', (event) =>
-      switch event.target.checked
-        when true
-          @chosenSchedule = 'yearly'
-          @$modal.find('.package-pricing').addClass('yearly')
-        when false
-          @chosenSchedule = 'monthly'
-          @$modal.find('.package-pricing').removeClass('yearly')
+      this._selectPlan(event.target.checked)
+      @options.view = null
+
+  _selectInitialPlan: ->
+    if @options.view == 'yearly'
+      @$modal.find('input[type="checkbox"]').prop("checked", true)
+      this._selectPlan(true)
+
+  _selectPlan: (isYearly) ->
+    if isYearly
+      @chosenSchedule = 'yearly'
+      @$modal.find('.package-pricing').addClass('yearly')
+    else
+      @chosenSchedule = 'monthly'
+      @$modal.find('.package-pricing').removeClass('yearly')
 
   _disableCurrentPlanButton: ->
     return if $.isEmptyObject(@options.site.current_subscription)

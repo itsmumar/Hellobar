@@ -59,6 +59,18 @@ $ ->
       package: {"schedule":"monthly","type":"pro","name":"Pro","yearly_amount":"149","monthly_amount":"29","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
       site: window.site
     new PaymentModal(options).open()
+  else if (window.location.href.indexOf("pricing-monthly") != -1)
+    options =
+      source: "Change Plan"
+      view: "monthly"
+      site: window.site
+    new UpgradeAccountModal(options).open()
+  else if (window.location.href.indexOf("pricing-yearly") != -1)
+    options =
+      source: "Change Plan"
+      view: "yearly"
+      site: window.site
+    new UpgradeAccountModal(options).open()
   #Tooltip
   $('[data-toggle="tooltip"]').tooltip()
 
