@@ -54,7 +54,7 @@ describe SitesHelper do
 
       specify do
         expect(install_help_data)
-          .to match ['Blogger', a_string_matching(/support\.hellobar\.com.+bloggerblogspot/)]
+          .to match ['Blogger', a_string_matching(/support\.hellobar\.com.+how-to-install-hello-bar-on-blogger-or-blogspot/)]
       end
     end
   end

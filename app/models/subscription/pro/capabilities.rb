@@ -50,4 +50,12 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
   def num_days_improve_data
     180
   end
+
+  def max_variations
+    99999
+  end
+
+  def max_a_b_tests
+    99999
+  end
 end

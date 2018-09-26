@@ -76,7 +76,7 @@ describe 'Admin::Sites requests' do
 
         it 'raises error' do
           update
-          expect(flash[:error]).to eql 'You are trying to downgrade subscription but difference between subscriptions is -49.0$. Try to refund this amount first'
+          expect(flash[:error]).to eql 'You are trying to downgrade subscription but difference between subscriptions is -189.0$. Try to refund this amount first'
         end
       end
 
