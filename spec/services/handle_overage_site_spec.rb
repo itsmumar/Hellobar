@@ -60,6 +60,19 @@ describe HandleOverageSite do
     end
   end
 
+  context 'with Growth & into overage counts on free trials' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 25_001 }
+    let(:limit) { 25_000 }
+    let(:add_trial) { AddTrialSubscription.new(site, subscription: 'Growth', trial_period: 30) }
+
+    it 'does not increment the overage count by 1' do
+      add_trial.call
+      service.call
+      expect(site.overage_count).not_to eql(1)
+    end
+  end
+
   context 'with Pro subscription' do
     let(:subscription_type) { :pro }
     include_examples 'tracks events'
