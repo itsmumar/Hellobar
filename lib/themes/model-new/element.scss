@@ -1,12 +1,81 @@
 .new {
   #hellobar-modal {
     padding: 0;
+    .hb-header {
+      display: none;
+    }
+    .image-background .hb-image-wrapper.background {
+      height: 230px; 
+      & ~ .slider-content {
+        margin-top: 250px;
+      }
+    } 
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      margin-top: 250px; 
+    } 
+
+    .hb-content-wrapper{
+      font-size: 14px;
+      .hb-image-holder {
+        .uploaded-image {
+          max-width: 100%;
+          max-height: 230px;
+          width: 100%;
+          object-fit: cover;
+          margin: 0;
+        }
+      }
+    }
+    .hb-text-wrapper{
+      padding: 0 2.5em;
+    }
+    .hb-input-wrapper{
+      max-width: 42em;
+      margin: 1em auto;
+      #hb-fields-form{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        & > *{
+          margin-left: 5px;
+          margin-right: 5px;  
+        }
+        .hb-input-block { 
+          margin-bottom: 0;   
+        }
+        .hb-cta {
+          margin-top: 0; 
+          width: 33.3%;
+          flex: 0 0 33.3%; 
+        }
+      }
+    }
     .hb-name-input {
       margin-bottom: 5px;
     }
     .hb-cta {
       padding: 7px;
     }
+    .icon-close {
+      top: -30px;
+      right: 10px;
+      z-index: 10000;
+      color: #fff;
+      opacity: 1;
+    } 
+    .hb-image-wrapper{
+      padding: 0px;
+      margin-bottom:20px; 
+      height: 230px;
+    }
+    .hb-logo-wrapper {
+      opacity: 0.4;
+      svg{
+        *{
+          fill: #ffffff;
+        }
+      }
+    } 
   } 
   #hellobar-takeover {
     .hb-input-block input {
@@ -28,4 +97,28 @@
       padding: 12px
     }
   }
+  @media screen and (max-width:640px){
+    #hellobar-modal {
+      width: 95%;
+      margin: 0 auto;
+      .hb-input-wrapper {
+        #hb-fields-form{
+          flex-direction: column;
+          width: 85%;
+          margin: 0 auto;
+          & > *{
+            margin:5px;  
+          } 
+          .hb-input-block { 
+            margin-bottom: 5px;   
+          }
+          .hb-cta {
+            margin-top: 0; 
+            width: 100%;
+            flex: 0 0 100%; 
+          }
+        }
+      }
+    } 
+  } 
 }
