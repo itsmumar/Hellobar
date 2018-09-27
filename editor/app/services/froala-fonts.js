@@ -38,7 +38,26 @@ export default Ember.Service.extend({
       "Tahoma, Geneva, sans-serif": 'Tahoma',
       "\'Times New Roman\', Times, serif": 'Times New Roman',
       "'Ubuntu Condensed', sans-serif": 'Ubuntu Condensed',
-      "Verdana, Geneva, sans-serif": 'Verdana'
+      "Verdana, Geneva, sans-serif": 'Verdana',
+      "'Open Sans Condensed', sans-serif":'Open Sans Condensed',
+      "'Playfair Display', serif":'Playfair Display',
+      "'Spirax', cursive": 'Spirax',
+      "'Anton', sans-serif": 'Anton',
+      "'Abril Fatface', cursive":'Abril Fatface',
+      "'Coiny', cursive":'Coiny',
+      "'Cinzel', serif":'Cinzel',
+      "'Rajdhani', sans-serif":'Rajdhani',
+      "'Kavoon', cursive":'Kavoon',
+      "'Notable', sans-serif":'Notable',
+      "'Philosopher', sans-serif":'Philosopher',
+      "'Ultra', serif":'Ultra',
+      "'Martel', serif":'Martel',
+      "'Prata', serif":'Prata',
+      "'Julius Sans One', sans-serif":'Julius Sans One',
+      "'Antic Slab', serif":'Antic Slab',
+      "'Berkshire Swash', cursive":'Berkshire Swash',
+      "'Aclonica', sans-serif":'Aclonica',
+      "'Bungee Inline', cursive":'Bungee Inline'
     };
   },
 
@@ -73,7 +92,27 @@ export default Ember.Service.extend({
       'Sintony',
       'Special+Elite',
       'Source+Sans+Pro',
-      'Ubuntu+Condensed'
+      'Ubuntu+Condensed',
+      'Open+Sans+Condensed:300',
+      'Playfair+Display',
+      'Spirax',
+      'Anton',
+      'Abril+Fatface',
+      'Coiny',
+      'Cinzel',
+      'Rajdhani',
+      'Kavoon',
+      'Notable',
+      'Philosopher',
+      'Ultra',
+      'Martel',
+      'Prata',
+      'Julius+Sans+One',
+      'Antic+Slab',
+      'Berkshire+Swash',
+      'Aclonica',
+      'Bungee+Inline'
+
     ];
   }
 });
