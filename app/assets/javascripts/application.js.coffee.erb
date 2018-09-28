@@ -48,12 +48,12 @@ $ ->
     options.source = 'Change Plan'
     options.view = route
     new UpgradeAccountModal(options).open()
-  else if ["pro", "growth", "ent"].includes(route)
+  else if ["pro", "growth", "elite"].includes(route)
     options.source = 'package-selected'
     switch route
       when 'growth'
         options.package = <%= SubscriptionSerializer.new(Subscription::Growth.new(schedule: 'monthly')).to_json %>
-      when 'ent'
+      when 'elite'
         options.package = <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
       when 'pro'
         options.package = <%= SubscriptionSerializer.new(Subscription::Pro.new(schedule: 'monthly')).to_json %>
