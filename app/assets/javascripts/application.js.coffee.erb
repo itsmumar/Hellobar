@@ -60,13 +60,6 @@ $ ->
     console.log(options)
     new PaymentModal(options).open()
 
-  setOptions = (route) ->
-    if route =='monthly' || route == 'yearly'
-      source: 'Change Plan'
-      view: route
-    else
-      source: 'package-selected'
-
 
   #Tooltip
   $('[data-toggle="tooltip"]').tooltip()
