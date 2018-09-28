@@ -1,4 +1,6 @@
 class SignInUser
+  PROVIDERS = %w[google_oauth2 subscribers]
+
   # @param [ActionDispatch::Request] request
   def initialize(request)
     @request = request
@@ -20,10 +22,14 @@ class SignInUser
       update_user
       create_authentication if should_create_authentication?
       update_authentication if should_update_authentication?
-      [user, redirect_url_for_existing_user]
+      build_authorization(user, redirect_url_for_existing_user)
     else
-      create_user
+      build_authorization(create_user, redirect_url_for_new_user)
     end
+  end
+
+  def build_authorization(user, redirect_url)
+    Authorization.new(user, redirect_url, omniauth_hash.provider)
   end
 
   def redirect_url_for_existing_user
@@ -41,7 +47,7 @@ class SignInUser
   def should_create_authentication?
     authentication.nil? && user.present? &&
       omniauth_hash.credentials.present? &&
-      omniauth_hash.provider == 'google_oauth2'
+      omniauth_hash.provider.in?(PROVIDERS)
   end
 
   def cookies
@@ -82,6 +88,7 @@ class SignInUser
     return unless omniauth_hash.credentials && user.persisted?
 
     user.authentications.create!(
+      uid: omniauth_hash.uid,
       provider: omniauth_hash.provider,
       refresh_token: omniauth_hash.credentials.refresh_token,
       access_token: omniauth_hash.credentials.token,
@@ -101,8 +108,6 @@ class SignInUser
   end
 
   def create_user
-    user = CreateUserFromOauth.new(omniauth_hash, cookies).call
-
-    [user, redirect_url_for_new_user]
+    CreateUserFromOauth.new(omniauth_hash, cookies).call
   end
 end
