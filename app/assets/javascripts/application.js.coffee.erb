@@ -41,7 +41,7 @@
 
 $ ->
 
-  route = window.location.href.split('/').slice(-1)[0].split('-')[1]
+  route = window.location.hash.split('-')[1]
   options = site: window.site
 
   if route =='monthly' || route == 'yearly'
