@@ -48,7 +48,7 @@ $ ->
     options.source = 'Change Plan'
     options.view = route
     new UpgradeAccountModal(options).open()
-  else
+  else if ["pro", "growth", "ent"].includes(route)
     options.source = 'package-selected'
     switch route
       when 'growth'
@@ -57,7 +57,6 @@ $ ->
         options.package = <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
       when 'pro'
         options.package = <%= SubscriptionSerializer.new(Subscription::Pro.new(schedule: 'monthly')).to_json %>
-    console.log(options)
     new PaymentModal(options).open()
 
 
