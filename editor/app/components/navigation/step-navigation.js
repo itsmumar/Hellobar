@@ -22,8 +22,12 @@ export default Ember.Component.extend({
     }
     if(renderCount > 1 && this.get('model.type') === null)
     {
-      $('nav a.button.next').addClass('disabled');
-
+      if(this.get('router.currentPath') === 'goal') {
+        $('nav a.button.next').removeClass('disabled');
+      }
+      else {
+        $('nav a.button.next').addClass('disabled');
+      }
     }
     if(this.get('model.type') !== null) {
       $('nav a.button.next').removeClass('disabled');
