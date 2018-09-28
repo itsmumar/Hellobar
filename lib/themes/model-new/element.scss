@@ -1,21 +1,26 @@
 .new {
-  #hellobar-modal {
-    padding: 0;
+  #hellobar-modal { 
+    padding: 10px;
     .hb-header {
       display: none;
     }
     .image-background .hb-image-wrapper.background {
       height: 230px; 
       & ~ .slider-content {
-        margin-top: 250px;
+        margin-top: 230px;
       }
     } 
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      margin-top: 250px; 
+      margin-top: 230px;
+      display: flex;
+      flex-direction: column; 
     } 
 
     .hb-content-wrapper{
-      font-size: 14px;
+      font-size: 14px;  
+      .hb-inner-content{
+        margin-top: 10px;
+      }
       .hb-image-holder {
         .uploaded-image {
           max-width: 100%;
@@ -27,7 +32,12 @@
       }
     }
     .hb-text-wrapper{
-      padding: 0 2.5em;
+      padding: 0 2.5em; 
+      .hb-headline-text{ 
+        font-size: 1.50em;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
     }
     .hb-input-wrapper{
       max-width: 42em;
@@ -54,11 +64,12 @@
       margin-bottom: 5px;
     }
     .hb-cta {
-      padding: 7px;
+      padding: 9px;
+      text-transform: uppercase;
     }
     .icon-close {
-      top: -30px;
-      right: 10px;
+      top: -24px;
+      right: 0;
       z-index: 10000;
       color: #fff;
       opacity: 1;
@@ -67,15 +78,30 @@
       padding: 0px;
       margin-bottom:20px; 
       height: 230px;
+      background-position: center;
     }
     .hb-logo-wrapper {
       opacity: 0.4;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-top: 1.75em;
       svg{
         *{
           fill: #ffffff;
         }
       }
     } 
+    .questionslist {
+      display: flex; 
+      width: 80%;
+      margin: 10px auto;
+      .hb-cta { 
+        width: 45%;
+        max-width: none; 
+        text-transform: uppercase;
+      }
+    }
   } 
   #hellobar-takeover {
     .hb-input-block input {
@@ -99,8 +125,7 @@
   }
   @media screen and (max-width:640px){
     #hellobar-modal {
-      width: 95%;
-      margin: 0 auto;
+      width: calc(100% - 20px);
       .hb-input-wrapper {
         #hb-fields-form{
           flex-direction: column;
@@ -113,10 +138,18 @@
             margin-bottom: 5px;   
           }
           .hb-cta {
-            margin-top: 0; 
+            margin-top: 5px; 
             width: 100%;
             flex: 0 0 100%; 
           }
+        }
+      }
+      .questionslist {
+        flex-direction: column;
+        width: 85%;
+        .hb-cta {
+          margin: 5px;
+           width: 100%;
         }
       }
     } 
