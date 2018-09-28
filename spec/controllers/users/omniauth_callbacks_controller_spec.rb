@@ -98,7 +98,7 @@ describe Users::OmniauthCallbacksController do
 
           it 'sets flash[:error]' do
             send_request
-            expect(flash[:error]).to eql 'We could not authenticate with Google.'
+            expect(flash[:error]).to eql 'Sorry, we could not authenticate you at the moment.'
           end
         end
       end

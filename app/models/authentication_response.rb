@@ -8,6 +8,7 @@ class AuthenticationResponse
   end
 
   def event
+    return unless new_user?
     { category: 'Signup', action: 'signup-google' } if provider == 'google_oauth2'
     { category: 'Signup', action: 'signup-subscribers' } if provider == 'subscribers'
   end

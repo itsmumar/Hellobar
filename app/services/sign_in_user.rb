@@ -1,5 +1,5 @@
 class SignInUser
-  PROVIDERS = %w[google_oauth2 subscribers]
+  PROVIDERS = %w[google_oauth2 subscribers].freeze
 
   # @param [ActionDispatch::Request] request
   def initialize(request)

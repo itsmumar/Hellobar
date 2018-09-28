@@ -27,7 +27,7 @@ class Users::OmniauthCallbacksController < ApplicationController
 
     sign_in response.user, event: :authentication
 
-    flash[:event] = response.event if authorization.new_user?
+    flash[:event] = response.event if response.event
 
     redirect_to response.redirect_url || after_sign_in_path_for(response.user)
   end

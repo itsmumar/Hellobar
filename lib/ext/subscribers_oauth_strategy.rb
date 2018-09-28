@@ -6,13 +6,12 @@ module OmniAuth
       # change the class name and the :name option to match your application name
       option :name, 'subscribers'
 
-      option :client_options, {
+      option :client_options, \
         site: Settings.subscribers_app_url,
         request_token_path: '/auth/request_token',
         authorize_path:     '/auth/authorize',
         access_token_path:  '/auth/access_token',
         scheme: :query_string
-      }
 
       uid { raw_info['id'] }
 
