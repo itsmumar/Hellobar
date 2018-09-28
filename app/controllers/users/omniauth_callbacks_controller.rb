@@ -11,7 +11,7 @@ class Users::OmniauthCallbacksController < ApplicationController
   end
 
   def failure
-    flash[:error] = 'Sorry, we could not authorize you. Please try again later.'
+    flash[:error] = 'Sorry, we could not authenticate you. Please try again later.'
 
     if session[:new_site_url]
       redirect_to root_path
@@ -23,13 +23,13 @@ class Users::OmniauthCallbacksController < ApplicationController
   private
 
   def handle_oauth_callback
-    authorization = SignInUser.new(request).call
+    response = SignInUser.new(request).call
 
-    sign_in authorization.user, event: :authentication
+    sign_in response.user, event: :authentication
 
-    flash[:event] = authorization.event if authorization.new_user?
+    flash[:event] = response.event if authorization.new_user?
 
-    redirect_to authorization.redirect_url || after_sign_in_path_for(authorization.user)
+    redirect_to response.redirect_url || after_sign_in_path_for(response.user)
   end
 
   def show_invalid_credentials_error(invalid)
@@ -38,7 +38,7 @@ class Users::OmniauthCallbacksController < ApplicationController
   end
 
   def show_could_not_authenticate
-    flash[:error] = 'Sorry, we could not authorize you at the moment.'
+    flash[:error] = 'Sorry, we could not authenticate you at the moment.'
     redirect_to root_path
   end
 end

@@ -22,14 +22,14 @@ class SignInUser
       update_user
       create_authentication if should_create_authentication?
       update_authentication if should_update_authentication?
-      build_authorization(user, redirect_url_for_existing_user)
+      build_response(user, redirect_url_for_existing_user)
     else
-      build_authorization(create_user, redirect_url_for_new_user)
+      build_response(create_user, redirect_url_for_new_user)
     end
   end
 
-  def build_authorization(user, redirect_url)
-    Authorization.new(user, redirect_url, omniauth_hash.provider)
+  def build_response(user, redirect_url)
+    AuthenticationResponse.new(user, redirect_url, omniauth_hash.provider)
   end
 
   def redirect_url_for_existing_user

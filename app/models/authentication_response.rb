@@ -1,4 +1,4 @@
-class Authorization
+class AuthenticationResponse
   attr_reader :user, :redirect_url, :provider
 
   def initialize(user, redirect_url, provider)
