@@ -57,9 +57,6 @@ export default Ember.Service.extend({
       "'Ubuntu Condensed', sans-serif": 'Ubuntu Condensed',
       "'Ultra', serif":'Ultra',
       "Verdana, Geneva, sans-serif": 'Verdana'
-
-
-
     };
   },
 
@@ -112,7 +109,7 @@ export default Ember.Service.extend({
       'Special+Elite',
       'Spirax',
       'Ubuntu+Condensed',
-      'Ultra',
+      'Ultra'
     ];
   }
 });
