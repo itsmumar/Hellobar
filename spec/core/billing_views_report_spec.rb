@@ -81,4 +81,12 @@ describe BillingViewsReport, :freeze do
       ]
     end
   end
+
+  describe '#send_warning_email' do
+    specify do
+      report.send_warning_email(site, 2001, 2500, "warning_level_one")
+      expect(WarningMailer)
+        .to receive(:warning_free_email)
+    end
+  end
 end
