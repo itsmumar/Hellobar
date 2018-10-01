@@ -66,10 +66,9 @@ describe BillingViewsReport, :freeze do
 
   describe '#count' do
     specify do
-      expect { 1500.times { report.count(10) } }.to log [
-        '500 sites processed...',
-        '1000 sites processed...',
-        '1500 sites processed...'
+      expect { 4000.times { report.count(10) } }.to log [
+        '2000 sites processed...',
+        '4000 sites processed...'
       ]
     end
   end
