@@ -50,19 +50,19 @@ class BillingViewsReport
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)
-    # if site.current_subscription&.non_free
-    #   WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
-    # else
-    #   WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
-    # end
+    if site.current_subscription&.non_free
+      WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    else
+      WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
+    end
   end
 
   def send_upsell_email(site, number_of_views, limit)
-    # UpsellMailer.upsell_email(site, number_of_views, limit).deliver_later
+    UpsellMailer.upsell_email(site, number_of_views, limit).deliver_later
   end
 
   def send_elite_upsell_email(site, number_of_views, limit)
-    # UpsellMailer.elite_upsell_email(site, number_of_views, limit).deliver_later
+    UpsellMailer.elite_upsell_email(site, number_of_views, limit).deliver_later
   end
 
   def log_grandfathered_site(site)
