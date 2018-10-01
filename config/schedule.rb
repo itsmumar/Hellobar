@@ -52,11 +52,11 @@ every 24.hours, at: '2:00am', roles: [:cron] do
 end
 
 # All times are in UTC
-every 1.month, at: 'start of the month at 3am' do
+every '0 0 3 1 * ?' do
   rake 'overage_fees:run' # generate overage fee bills to be paid in next billing run
 end
 
-every 1.month, at: 'start of the month at 4am' do
+every '0 0 4 1 * ?' do
   rake 'reset_email_sent_fields:run' # reset the warning_email_sent fields to `true` on sites
 end
 
