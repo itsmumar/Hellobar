@@ -2,6 +2,7 @@ describe BillingViewsReport, :freeze do
   let(:sites_count) { 999 }
   let(:report) { BillingViewsReport.new(sites_count) }
   let(:site) { create :site }
+  let(:old_site) { create :site }
 
   before { allow(report).to receive(:puts) }
 
