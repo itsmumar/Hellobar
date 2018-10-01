@@ -38,7 +38,7 @@ class BillingViewsReport
   def count(number_of_views)
     @count += 1
     @total_views += number_of_views
-    info "#{ @count } sites processed..." if !@count.zero? && @count % 500 == 0
+    info "#{ @count } sites processed..." if !@count.zero? && @count % 2000 == 0
   end
 
   def limit_exceeded(site, number_of_views, limit)
@@ -66,7 +66,7 @@ class BillingViewsReport
   end
 
   def log_grandfathered_site(site)
-    Rails.logger.warn "#{ site.url } is grandfathered"
+    info "#{ site.url } is grandfathered"
   end
 
   private
