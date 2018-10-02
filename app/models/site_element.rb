@@ -3,8 +3,8 @@ class SiteElement < ApplicationRecord
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
   DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
-  DEFAULT_FREE_EMAIL_THANK_YOU = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
-  DEFAULT_FREE_EMAIL_THANK_YOU_2 = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of pop-up on your site...".freeze
+  DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
+  DEFAULT_FREE_EMAIL_POPUP_THANK_YOU_TEXT = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of pop-up on your site...".freeze
   AFTER_EMAIL_ACTION_MAP = {
     0 => :show_default_message,
     1 => :custom_thank_you_text,
@@ -257,9 +257,9 @@ class SiteElement < ApplicationRecord
   def default_email_thank_you_text
     if site&.free?
       if (type == 'Modal') || (type == 'Takeover')
-        DEFAULT_FREE_EMAIL_THANK_YOU_2
+        DEFAULT_FREE_EMAIL_POPUP_THANK_YOU_TEXT
       else
-        DEFAULT_FREE_EMAIL_THANK_YOU
+        DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT
       end
     else
       DEFAULT_EMAIL_THANK_YOU

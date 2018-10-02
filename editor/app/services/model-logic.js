@@ -117,10 +117,10 @@ export default Ember.Service.extend({
       this.set('model.show_branding', this.get('model.show_branding'));
     }
     if(this.get('model.type') === 'Takeover' || this.get('model.type') === 'Modal') {
-      this.set('model.default_email_thank_you_text', "Thanks for signing up! If you would like this sort of pop-up on your site...")
+      this.set('model.default_email_thank_you_text', "Thanks for signing up! If you would like this sort of pop-up on your site...");
     }
     else {
-      this.set('model.default_email_thank_you_text', "Thanks for signing up! If you would like this sort of bar on your site...")
+      this.set('model.default_email_thank_you_text', "Thanks for signing up! If you would like this sort of bar on your site...");
     }
   }.observes('model.type'),
 
