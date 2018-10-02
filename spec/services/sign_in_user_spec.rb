@@ -40,10 +40,12 @@ describe SignInUser do
 
   context 'when new_site_url presents in session' do
     before { request.session[:new_site_url] = 'new_site_url' }
+    let(:response) { service.call }
 
-    it 'returns user and redirect_url' do
-      expect(service.call)
-        .to match [instance_of(User), '/continue_create_site']
+    it 'returns a AuthenticationResponse' do
+      expect(response).to be_a AuthenticationResponse
+      expect(response.user).to be_a User
+      expect(response.redirect_url).to eql '/continue_create_site'
     end
   end
 
@@ -61,12 +63,14 @@ describe SignInUser do
 
     context 'when new_site_url presents in session' do
       let(:new_site_url) { 'new_site_url' }
+      let(:response) { service.call }
 
       before { request.session[:new_site_url] = new_site_url }
 
-      it 'returns user and redirect_url' do
-        expect(service.call)
-          .to match [instance_of(User), '/sites/new?url=new_site_url']
+      it 'returns a AuthenticationResponse' do
+        expect(response).to be_a AuthenticationResponse
+        expect(response.user).to eql user
+        expect(response.redirect_url).to eql '/sites/new?url=new_site_url'
       end
     end
 

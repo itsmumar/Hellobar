@@ -38,7 +38,7 @@ class BillingViewsReport
   def count(number_of_views)
     @count += 1
     @total_views += number_of_views
-    info "#{ @count } sites processed..." if !@count.zero? && @count % 500 == 0
+    info "#{ @count } sites processed..." if !@count.zero? && @count % 2000 == 0
   end
 
   def limit_exceeded(site, number_of_views, limit)
@@ -50,23 +50,23 @@ class BillingViewsReport
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)
-    # if site.current_subscription&.non_free
-    #   WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
-    # else
-    #   WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
-    # end
+    if site.current_subscription&.paid?
+      WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+    else
+      WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
+    end
   end
 
   def send_upsell_email(site, number_of_views, limit)
-    # UpsellMailer.upsell_email(site, number_of_views, limit).deliver_later
+    UpsellMailer.upsell_email(site, number_of_views, limit).deliver_later
   end
 
   def send_elite_upsell_email(site, number_of_views, limit)
-    # UpsellMailer.elite_upsell_email(site, number_of_views, limit).deliver_later
+    UpsellMailer.elite_upsell_email(site, number_of_views, limit).deliver_later
   end
 
   def log_grandfathered_site(site)
-    Rails.logger.warn "#{ site.url } is grandfathered"
+    info "#{ site.url } is grandfathered"
   end
 
   private
