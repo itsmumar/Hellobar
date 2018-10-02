@@ -44,7 +44,7 @@ class HandleOverageSite
 
   def handle_elite
     update_elite_overage_count
-    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def update_elite_overage_count
@@ -65,7 +65,7 @@ class HandleOverageSite
   def handle_growth
     return if @site.current_subscription.currently_on_trial? # let users on free trials go nuts until the trial is over
     update_growth_overage_count
-    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def update_growth_overage_count
@@ -79,15 +79,15 @@ class HandleOverageSite
 
   def handle_pro
     update_growth_overage_count # pro is the same as growth now
-    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_free_plus
   end
 
   def handle_free
-    # @site.deactivate_site_element
-    # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
+    @site.deactivate_site_element
+    OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def track_exceeded_views_limit_event

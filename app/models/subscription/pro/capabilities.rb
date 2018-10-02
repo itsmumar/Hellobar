@@ -44,7 +44,7 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
   end
 
   def max_site_elements
-    Float::INFINITY
+    99999
   end
 
   def num_days_improve_data

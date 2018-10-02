@@ -183,6 +183,9 @@ class Site < ApplicationRecord
     rules.editable.any?
   end
 
+  # Last subscription with excluded trials
+  # meaning, it returns last subscription
+  # even if it was refunded or has a due bill
   def current_subscription
     subscriptions.exclude_ended_trials.last
   end
@@ -231,6 +234,8 @@ class Site < ApplicationRecord
     bills.paid.active.reorder(end_date: :desc, id: :desc).first
   end
 
+  # A paid, active subscription
+  # returns nil if it was cancelled or refunded
   def active_subscription
     active_paid_bill&.subscription
   end

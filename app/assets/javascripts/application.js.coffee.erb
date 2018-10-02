@@ -41,24 +41,25 @@
 
 $ ->
 
-  if (window.location.href.indexOf("pricing-growth") != -1)
-    options =
-      source: "package-selected"
-      package: {"schedule":"monthly","type":"growth","name":"Growth","yearly_amount":"229","monthly_amount":"29","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
-      site: window.site
+  route = window.location.hash.split('-')[1]
+  options = site: window.site
+
+  if route =='monthly' || route == 'yearly'
+    options.source = 'Change Plan'
+    options.view = route
+    new UpgradeAccountModal(options).open()
+  else if ["pro", "growth", "elite"].includes(route)
+    options.source = 'package-selected'
+    switch route
+      when 'growth'
+        options.package = <%= SubscriptionSerializer.new(Subscription::Growth.new(schedule: 'monthly')).to_json %>
+      when 'elite'
+        options.package = <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
+      when 'pro'
+        options.package = <%= SubscriptionSerializer.new(Subscription::Pro.new(schedule: 'monthly')).to_json %>
     new PaymentModal(options).open()
-  else if (window.location.href.indexOf("pricing-ent") != -1)
-    options =
-      source: "package-selected"
-      package: {"schedule":"monthly","type":"elite","name":"Elite","yearly_amount":"799","monthly_amount":"99","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
-      site: window.site
-    new PaymentModal(options).open()
-  else if (window.location.href.indexOf("pricing-pro") != -1)
-    options =
-      source: "package-selected"
-      package: {"schedule":"monthly","type":"pro","name":"Pro","yearly_amount":"149","monthly_amount":"29","trial":false,"credit_card_id":null,"credit_card_last_digits":null,"payment_valid":true}
-      site: window.site
-    new PaymentModal(options).open()
+
+
   #Tooltip
   $('[data-toggle="tooltip"]').tooltip()
 
