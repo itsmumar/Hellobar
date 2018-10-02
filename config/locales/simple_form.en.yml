@@ -33,7 +33,7 @@ en:
     options:
       site:
         communication_types:
-          newsletter: 'Newsletter (blog articles, annoncements, reports)'
+          newsletter: 'Newsletter (blog articles, announcements, reports)'
           promotional: 'Promotional (sales, deals, gifts, offers)'
           partnership: 'Partnerships (business deals, partnership opportunities)'
           product: 'Product/service (updates, new or removed)'
