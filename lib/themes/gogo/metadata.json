@@ -1,7 +1,7 @@
 {
-  "name": "French Rose 11",
+  "name": "Gogo",
   "type": "generic",
-  "id": "french-rose-11",
+  "id": "gogo",
   "fonts": [
     "source_pro",
     "open_sans",
@@ -65,7 +65,7 @@
     }
   },
   "image": {
-    "default_url": "https://assets.hellobar.com/french-rose-default.jpeg",
+    "default_url": "https://assets.hellobar.com/gogo-default.jpg",
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "background",
     "position_selectable": false
