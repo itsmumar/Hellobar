@@ -132,12 +132,8 @@ script#condition-partial type="text/x-handlebars-template"
 
         = render layout: "shared/modals/multiple_choice_wrapper",
                  locals: {class_name: "location-country-choice select-wrapper"} do |name|
-          = country_select("rule", "conditions_attributes", {priority_countries: ["US"]}, {\
-              disabled: "disabled",
-              id: nil,
-              name: name,
-              class: "value location-country-select"\
-            })
+          = select("rule", "conditions_attributes", get_country_options,
+                  {priority_countries: ["US"]})
 
         .choice-wrapper.time-choice
           .select-wrapper.time-select
