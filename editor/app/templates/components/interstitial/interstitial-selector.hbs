@@ -14,7 +14,7 @@
 <div class="goal-wrapper">
   <a {{action 'selectGoal' 'interstitial.email'}}>
   <div class="goal-block contacts" data-route="email">
-    <h6>Collect Emails</h6>
+    <h6>Grow Email list</h6>
     <img src="{{ image_path 'icons/goal-emails.svg' }}">
 
     <p>I want to collect my visitors email addresses.</p>
@@ -32,10 +32,10 @@
 
   <a {{action 'selectGoal' 'interstitial.traffic'}}>
   <div class="goal-block money" data-route="traffic">
-    <h6>Generate Sales</h6>
+    <h6>Make Sales</h6>
     <img src="{{ image_path 'icons/goal-sales.svg' }}">
 
-    <p>Let visitors know about a sale or a promotion.</p>
+    <p>Let visitors know about a sale <br>or a promotion.</p>
   </div>
   </a>
 </div>
@@ -43,10 +43,10 @@
 <div class="goal-wrapper">
   <a {{action 'selectGoal' 'interstitial.announcement'}}>
   <div class="goal-block other" data-route="announcement">
-    <h6>Make Announcement</h6>
-    <img src="{{ image_path 'icons/goal-announcement.svg' }}">
+    <h6>Announcement</h6>
+    <img class="smallq" src="{{ image_path 'icons/goal-announcement.svg' }}">
 
-    <p>No buttons, make announcements with just text.</p>
+    <p>No buttons,just text.</p>
   </div>
   </a>
 
@@ -64,7 +64,7 @@
     <h6>Social Engagement</h6>
     <img src="{{ image_path 'icons/goal-social.svg' }}">
 
-    <p>Point visitors to your social media channels.</p>
+    <p>Point visitors to your social <br> media channels.</p>
   </div>
   </a>
 </div>
@@ -73,9 +73,9 @@
   {{interstitial/helpers/i-need-help model=model}}
   <p>
     <small>
-      <a href="/sites/{{ siteID }}">I’ll do this later, take me to my dashboard</a>
+      <a class="black" href="/sites/{{ siteID }}">I’ll do this later, take me to my dashboard</a>
       <br/>
-      <a href="/users/sign_out" data-method="delete">Sign Out</a>
+      <a class="black" href="/users/sign_out" data-method="delete">Sign Out</a>
     </small>
   </p>
 </footer>

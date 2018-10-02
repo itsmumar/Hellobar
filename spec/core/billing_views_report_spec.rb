@@ -2,6 +2,7 @@ describe BillingViewsReport, :freeze do
   let(:sites_count) { 999 }
   let(:report) { BillingViewsReport.new(sites_count) }
   let(:site) { create :site }
+  let(:old_site) { create :site }
 
   before { allow(report).to receive(:puts) }
 
@@ -66,10 +67,17 @@ describe BillingViewsReport, :freeze do
 
   describe '#count' do
     specify do
-      expect { 1500.times { report.count(10) } }.to log [
-        '500 sites processed...',
-        '1000 sites processed...',
-        '1500 sites processed...'
+      expect { 4000.times { report.count(10) } }.to log [
+        '2000 sites processed...',
+        '4000 sites processed...'
+      ]
+    end
+  end
+
+  describe '#log_grandfathered_site' do
+    specify do
+      expect { report.log_grandfathered_site(old_site) }.to log [
+        "#{ old_site.url } is grandfathered"
       ]
     end
   end

@@ -2,6 +2,8 @@
 
 $transition: 0.75s //when changing please update it in "interstitial-view.coffee" as well
 
+
+
 .goal-interstitial
   top: 0
   left: 0
@@ -22,7 +24,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
 
     h5
       margin: 0
-      color: $blueLight
+      color: #27AB9E
       text-transform: uppercase
       margin-right: 73px
 
@@ -61,11 +63,15 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
       letter-spacing: normal
       text-align: center
       text-decoration: underline
-      color: $grayDarker
+      color: #27AB9E
       cursor: pointer
 
+      &.black
+        color: $grayDark
+
+
     p
-      color: $blueLight
+      color: #27AB9E
       font-size: 15px
       font-family: sans-serif
 
@@ -163,6 +169,9 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
       width: 4.95em
       height: 4.95em
 
+      &.small
+        width: 3.6em
+
     .goal-block
       margin: 0 0.75em
       padding: $gutter $gutterSm
@@ -173,17 +182,21 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
       flex: 0 1 auto
       flex-flow: column nowrap
       display: flex
-      max-width: 15em
+      width: 15.5em
+      height: 15em
+
+      &.bigger
+        height: 16em
 
       h6
-        margin: 1.5em 0 0.33em
-        font-size: 1em
+        padding-bottom: 1.2em
+        font-size: 1.2em
         color: $grayDark
 
       p
-        color: $gray
-        padding: 0 0.5em
-        font-size: 0.8em
+        color: $grayDark
+        font-size: 0.9em
+        margin-top: 2em
 
       .button
         width: 100%
@@ -205,7 +218,7 @@ $transition: 0.75s //when changing please update it in "interstitial-view.coffee
         border: solid 2px #27ab9e
 
         i
-          animation: jingle 0.67s ease-out 1
+          animation: jingle 0.67s ease-out
 
   .interstitial-container
     position: absolute
