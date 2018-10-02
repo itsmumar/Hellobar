@@ -256,11 +256,7 @@ class SiteElement < ApplicationRecord
 
   def default_email_thank_you_text
     if site&.free?
-      if (type == 'Modal') || (type == 'Takeover')
-        DEFAULT_FREE_EMAIL_POPUP_THANK_YOU_TEXT
-      else
-        DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT
-      end
+      DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT
     else
       DEFAULT_EMAIL_THANK_YOU
     end
