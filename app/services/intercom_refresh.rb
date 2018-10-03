@@ -56,7 +56,7 @@ class IntercomRefresh
       highest_subscription_name = 'Elite'
     elsif sub_names.include?('Growth')
       highest_subscription_name = 'Growth'
-    elsif sub_names.include?('Pro')
+    elsif sub_names.include?('Pro') || sub_names.include?('Pro Special')
       highest_subscription_name = 'Pro'
     elsif sub_names.include?('Pro Comped')
       highest_subscription_name = 'Pro Comped'
