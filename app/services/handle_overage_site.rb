@@ -33,6 +33,8 @@ class HandleOverageSite
       handle_growth
     when Subscription::Pro::Capabilities
       handle_pro
+    when Subscription::ProSpecial::Capabilities
+      handle_pro
     when Subscription::FreePlus::Capabilities
       handle_free_plus
     when Subscription::Free::Capabilities
@@ -44,7 +46,6 @@ class HandleOverageSite
 
   def handle_elite
     update_elite_overage_count
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def update_elite_overage_count
@@ -53,6 +54,8 @@ class HandleOverageSite
     new_charge_count = (delta.to_f / 100_000.0).ceil
 
     return unless new_charge_count > current_charge_count
+    site.update(limit_email_sent: true)
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
     @site.update(overage_count: new_charge_count)
   end
 
@@ -65,7 +68,6 @@ class HandleOverageSite
   def handle_growth
     return if @site.current_subscription.currently_on_trial? # let users on free trials go nuts until the trial is over
     update_growth_overage_count
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def update_growth_overage_count
@@ -75,11 +77,12 @@ class HandleOverageSite
 
     return unless new_charge_count > current_charge_count
     @site.update(overage_count: new_charge_count)
+    site.update(limit_email_sent: true)
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_pro
     update_growth_overage_count # pro is the same as growth now
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_free_plus
@@ -87,6 +90,9 @@ class HandleOverageSite
 
   def handle_free
     @site.deactivate_site_element
+
+    return if site.limit_email_sent
+    site.update(limit_email_sent: true)
     OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 

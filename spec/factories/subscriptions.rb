@@ -39,6 +39,11 @@ FactoryBot.define do
       initialize_with { Subscription::ProComped.new(schedule: schedule) }
     end
 
+    trait :pro_special do
+      amount { Subscription::ProSpecial.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
+      initialize_with { Subscription::ProSpecial.new(schedule: schedule) }
+    end
+
     trait :elite do
       amount { Subscription::Elite.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Elite.new(schedule: schedule) }
