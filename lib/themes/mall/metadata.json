@@ -1,0 +1,76 @@
+{
+  "name": "Mall",
+  "type": "generic",
+  "id": "mall",
+  "fonts": [
+    "source_pro",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Bar", "Modal", "Slider", "Takeover", "Alert"],
+  "defaults": {
+    "Bar": {
+      "background_color": "4D8589",
+      "text_color": "FFFFFF",
+      "button_color": "5cb89a",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro",
+      "cta_border_radius": 0,
+      "cta_height": 27,
+      "text_field_border_width": 1
+    },
+    "Slider": {
+      "background_color": "4D8589",
+      "text_color": "FFFFFF",
+      "button_color": "5cb89a",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro",
+      "cta_border_radius": 0,
+      "cta_height": 49,
+      "text_field_border_width": 1
+    },
+    "Modal": {
+      "background_color": "4D8589",
+      "text_color": "FFFFFF",
+      "button_color": "5cb89a",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro",
+      "cta_border_radius": 0,
+      "cta_height": 71,
+      "text_field_border_width": 1,
+      "image_overlay_color": "000000",
+      "image_overlay_opacity": 30
+    },
+    "Takeover": {
+      "background_color": "4D8589",
+      "text_color": "FFFFFF",
+      "button_color": "5cb89a",
+      "link_color": "FFFFFF",
+      "font_id": "source_pro",
+      "cta_border_radius": 0,
+      "cta_height": 79,
+      "text_field_border_width": 1
+    },
+    "Alert": {
+      "background_color": "4d8589",
+      "trigger_color": "4d8589",
+      "trigger_icon_color": "ffffff",
+      "text_color": "ffffff",
+      "button_color": "5cb89a",
+      "link_color": "ffffff",
+      "font_id": "source_pro",
+      "cta_border_radius": 0,
+      "cta_height": 49,
+      "text_field_border_width": 1
+    }
+  },
+  "image": {
+    "default_url": "https://assets.hellobar.com/mall-default.jpg",
+    "upload_copy": "Recommended minimum is 750 x 900",
+    "position_default": "background",
+    "position_selectable": false
+  },
+  "advanced": false
+}
