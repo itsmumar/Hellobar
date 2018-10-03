@@ -1,7 +1,7 @@
 {
-  "name": "Smooth Impact 7",
+  "name": "Resteo",
   "type": "generic",
-  "id": "smooth-impact-7",
+  "id": "resteo",
   "fonts": [
     "oswald",
     "kanit",
@@ -17,8 +17,8 @@
       "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
-      "link_color": "DC5B38",
-      "font_id": "oswald",
+      "link_color": "000000",
+      "font_id": "roboto",
       "text_field_border_radius": 3,
       "text_field_border_width": 0,
       "text_field_text_color": "FFFFFF",
@@ -27,7 +27,7 @@
       "cta_height": 34
     },
     "Takeover": {
-      "background_color": "514ADB",
+      "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "000000",
@@ -36,14 +36,11 @@
       "text_field_border_width": 0,
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
-      "text_field_background_opacity": 20,
-      "cta_height": 60,
-      "position_default": "background",
-      "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "text_field_background_opacity": 10,
+      "cta_height": 76
     },
     "Slider": {
-      "background_color": "514ADB",
+      "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "000000",
@@ -52,26 +49,21 @@
       "text_field_border_width": 0,
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
-      "text_field_background_opacity": 20,
-      "cta_height": 35,
-      "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "text_field_background_opacity": 10,
+      "cta_height": 35
     },
     "Modal": {
-      "background_color": "514ADB",
+      "background_color": "4A47F2",
       "text_color": "FFFFFF",
       "button_color": "FFFFFF",
       "link_color": "000000",
-      "font_id": "roboto", 
+      "font_id": "roboto",
       "text_field_border_radius": 3,
       "text_field_border_width": 0,
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
-      "text_field_background_opacity": 20,
-      "cta_height": 42,
-      "position_default": "background",
-      "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "text_field_background_opacity": 10,
+      "cta_height": 42
     },
     "Alert": {
       "background_color": "4A47F2",
@@ -84,10 +76,7 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 35,
-      "position_default": "background",
-      "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "cta_height": 35
     }
   },
   "image": {

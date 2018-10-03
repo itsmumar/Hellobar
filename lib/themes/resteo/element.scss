@@ -17,7 +17,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
   pointer-events: none;
 }
 
-.smooth-impact-8 {
+.resteo {
   color: '#3A3A49';
 
   #hello-bar {
@@ -26,7 +26,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
   }
 
   .hb-header {
-    display: none;
+    display: none; 
   }
 
   .image-background .hb-image-wrapper.background {
@@ -36,10 +36,9 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     left: auto;
   }
 
-  .hb-headline-text {
+  .hb-headline-text { 
     font-size: 2em;
     text-align: left;
-    text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 15px;
   }
