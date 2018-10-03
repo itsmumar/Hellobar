@@ -33,6 +33,8 @@ class HandleOverageSite
       handle_growth
     when Subscription::Pro::Capabilities
       handle_pro
+    when Subscription::ProSpecial::Capabilities
+      handle_pro
     when Subscription::FreePlus::Capabilities
       handle_free_plus
     when Subscription::Free::Capabilities
