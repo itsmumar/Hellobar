@@ -20,6 +20,9 @@ describe TrackSubscriptionChange do
         previous_subscription: old_subscription
       )
 
+      expect(HandleUnfreezeFrozenAccount).to receive_service_call if old_subscription.name == 'Free'
+      expect(ResetEmailSentFields).to receive_service_call if old_subscription == 'Free'
+
       described_class.new(user, old_subscription, new_subscription).call
     end
   end
