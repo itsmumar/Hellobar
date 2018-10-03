@@ -6,7 +6,8 @@ describe Subscription::Comparison do
       Subscription::Pro,
       Subscription::Elite,
       Subscription::ProComped,
-      Subscription::ProManaged
+      Subscription::ProManaged,
+      Subscription::ProSpecial
     ]
   end
 
