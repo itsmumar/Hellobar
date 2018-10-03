@@ -15,12 +15,14 @@ en:
     - {code: "AM", name: "Armenia"}
     - {code: "AW", name: "Aruba"}
     - {code: "AU", name: "Australia"}
+    - {code: "AT", name: "Austria"}
     - {code: "AZ", name: "Azerbaijan"}
     - {code: "BS", name: "Bahamas"}
     - {code: "BH", name: "Bahrain"}
     - {code: "BD", name: "Bangladesh"}
     - {code: "BB", name: "Barbados"}
     - {code: "BY", name: "Belarus"}
+    - {code: "BE", name: "Belgium"}
     - {code: "BZ", name: "Belize"}
     - {code: "BJ", name: "Benin"}
     - {code: "BM", name: "Bermuda"}
@@ -32,6 +34,7 @@ en:
     - {code: "BR", name: "Brazil"}
     - {code: "IO", name: "British Indian Ocean Territory"}
     - {code: "BN", name: "Brunei"}
+    - {code: "BG", name: "Bulgaria"}
     - {code: "BF", name: "Burkina Faso"}
     - {code: "BI", name: "Burundi"}
     - {code: "KH", name: "Cambodia"}
@@ -51,8 +54,12 @@ en:
     - {code: "CK", name: "Cook Islands"}
     - {code: "CR", name: "Costa Rica"}
     - {code: "CI", name: "Cote D'Ivorie (Ivory Coast)"}
+    - {code: "HR", name: "Croatia (Hrvatska)"}
     - {code: "CU", name: "Cuba"}
+    - {code: "CY", name: "Cyprus"}
+    - {code: "CZ", name: "Czech Republic"}
     - {code: "CD", name: "Democratic Republic Of Congo (Zaire)"}
+    - {code: "DK", name: "Denmark"}
     - {code: "DJ", name: "Djibouti"}
     - {code: "DM", name: "Dominica"}
     - {code: "DO", name: "Dominican Republic"}
@@ -62,10 +69,13 @@ en:
     - {code: "SV", name: "El Salvador"}
     - {code: "GQ", name: "Equatorial Guinea"}
     - {code: "ER", name: "Eritrea"}
+    - {code: "EE", name: "Estonia"}
     - {code: "ET", name: "Ethiopia"}
     - {code: "FK", name: "Falkland Islands (Malvinas)"}
     - {code: "FO", name: "Faroe Islands"}
     - {code: "FJ", name: "Fiji"}
+    - {code: "FI", name: "Finland"}
+    - {code: "FR", name: "France"}
     - {code: "FX", name: "France Metropolitan"}
     - {code: "GF", name: "French Guinea"}
     - {code: "PF", name: "French Polynesia"}
@@ -73,8 +83,10 @@ en:
     - {code: "GA", name: "Gabon"}
     - {code: "GM", name: "Gambia"}
     - {code: "GE", name: "Georgia"}
+    - {code: "DE", name: "Germany"}
     - {code: "GH", name: "Ghana"}
     - {code: "GI", name: "Gibraltar"}
+    - {code: "GR", name: "Greece"}
     - {code: "GL", name: "Greenland"}
     - {code: "GD", name: "Grenada"}
     - {code: "GP", name: "Guadeloupe"}
@@ -87,13 +99,16 @@ en:
     - {code: "HM", name: "Heard And McDonald Islands"}
     - {code: "HN", name: "Honduras"}
     - {code: "HK", name: "Hong Kong"}
+    - {code: "HU", name: "Hungary"}
     - {code: "IS", name: "Iceland"}
     - {code: "IN", name: "India"}
     - {code: "ID", name: "Indonesia"}
     - {code: "IR", name: "Iran"}
     - {code: "IQ", name: "Iraq"}
+    - {code: "IE", name: "Ireland"}
     - {code: "IM", name: "Isle of Man"}
     - {code: "IL", name: "Israel"}
+    - {code: "IT", name: "Italy"}
     - {code: "JM", name: "Jamaica"}
     - {code: "JP", name: "Japan"}
     - {code: "JO", name: "Jordan"}
@@ -103,11 +118,14 @@ en:
     - {code: "KW", name: "Kuwait"}
     - {code: "KG", name: "Kyrgyzstan"}
     - {code: "LA", name: "Laos"}
+    - {code: "LV", name: "Latvia"}
     - {code: "LB", name: "Lebanon"}
     - {code: "LS", name: "Lesotho"}
     - {code: "LR", name: "Liberia"}
     - {code: "LY", name: "Libya"}
     - {code: "LI", name: "Liechtenstein"}
+    - {code: "LT", name: "Lithuania"}
+    - {code: "LU", name: "Luxembourg"}
     - {code: "MO", name: "Macau"}
     - {code: "MK", name: "Macedonia"}
     - {code: "MG", name: "Madagascar"}
@@ -115,6 +133,7 @@ en:
     - {code: "MY", name: "Malaysia"}
     - {code: "MV", name: "Maldives"}
     - {code: "ML", name: "Mali"}
+    - {code: "MT", name: "Malta"}
     - {code: "MH", name: "Marshall Islands"}
     - {code: "MQ", name: "Martinique"}
     - {code: "MR", name: "Mauritania"}
@@ -132,6 +151,7 @@ en:
     - {code: "NA", name: "Namibia"}
     - {code: "NR", name: "Nauru"}
     - {code: "NP", name: "Nepal"}
+    - {code: "NL", name: "Netherlands"}
     - {code: "AN", name: "Netherlands Antilles"}
     - {code: "NC", name: "New Caledonia"}
     - {code: "NZ", name: "New Zealand"}
@@ -152,9 +172,12 @@ en:
     - {code: "PE", name: "Peru"}
     - {code: "PH", name: "Philippines"}
     - {code: "PN", name: "Pitcairn"}
+    - {code: "PL", name: "Poland"}
+    - {code: "PT", name: "Portugal"}
     - {code: "PR", name: "Puerto Rico"}
     - {code: "QA", name: "Qatar"}
     - {code: "RE", name: "Reunion"}
+    - {code: "RO", name: "Romania"}
     - {code: "RU", name: "Russia"}
     - {code: "RW", name: "Rwanda"}
     - {code: "SH", name: "Saint Helena"}
@@ -170,16 +193,19 @@ en:
     - {code: "SL", name: "Sierra Leone"}
     - {code: "SG", name: "Singapore"}
     - {code: "SK", name: "Slovak Republic"}
+    - {code: "SI", name: "Slovenia"}
     - {code: "SB", name: "Solomon Islands"}
     - {code: "SO", name: "Somalia"}
     - {code: "ZA", name: "South Africa"}
     - {code: "GS", name: "South Georgia And South Sandwich Islands"}
     - {code: "KR", name: "South Korea"}
+    - {code: "ES", name: "Spain"}
     - {code: "LK", name: "Sri Lanka"}
     - {code: "SD", name: "Sudan"}
     - {code: "SR", name: "Suriname"}
     - {code: "SJ", name: "Svalbard And Jan Mayen"}
     - {code: "SZ", name: "Swaziland"}
+    - {code: "SE", name: "Sweden"}
     - {code: "CH", name: "Switzerland"}
     - {code: "SY", name: "Syria"}
     - {code: "TW", name: "Taiwan"}
@@ -198,6 +224,7 @@ en:
     - {code: "UG", name: "Uganda"}
     - {code: "UA", name: "Ukraine"}
     - {code: "AE", name: "United Arab Emirates"}
+    - {code: "GB", name: "United Kingdom"}
     - {code: "UM", name: "United States Minor Outlying Islands"}
     - {code: "UY", name: "Uruguay"}
     - {code: "UZ", name: "Uzbekistan"}
@@ -214,4 +241,3 @@ en:
     - {code: "YU", name: "Yugoslavia"}
     - {code: "ZM", name: "Zambia"}
     - {code: "ZW", name: "Zimbabwe"}
-
