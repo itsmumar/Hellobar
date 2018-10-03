@@ -89,7 +89,7 @@ class HandleOverageSite
   def handle_free
     @site.deactivate_site_element
 
-    return unless site.limit_email_sent == false
+    return if site.limit_email_sent
     site.update(limit_email_sent: true)
     OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
