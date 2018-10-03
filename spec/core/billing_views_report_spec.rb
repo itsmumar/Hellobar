@@ -77,7 +77,7 @@ describe BillingViewsReport, :freeze do
   describe '#log_grandfathered_site' do
     specify do
       expect { report.log_grandfathered_site(old_site) }.to log [
-        "#{ old_site.url } is grandfathered"
+        "#{ old_site.url } is grandfathered (#{ old_site.active_subscription&.name }) until #{ old_site.active_subscription&.active_until }"
       ]
     end
   end

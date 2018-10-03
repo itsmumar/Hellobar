@@ -66,7 +66,7 @@ class BillingViewsReport
   end
 
   def log_grandfathered_site(site)
-    info "#{ site.url } is grandfathered"
+    info "#{ site.url } is grandfathered (#{ site.active_subscription&.name }) until #{ site.active_subscription&.active_until }"
   end
 
   private
