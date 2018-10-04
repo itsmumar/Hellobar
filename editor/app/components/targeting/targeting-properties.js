@@ -168,7 +168,7 @@ export default Ember.Component.extend({
 
     openRuleModal(ruleData = {}) {
       if (this.get('cannotTarget')) {
-        const rule = "Custom Rule"
+        const rule = "Custom Rule";
         this.openUpgradeModal(rule);
         return;
       }

@@ -37,4 +37,3 @@ class TrackEvent
     end
   end
 end
-

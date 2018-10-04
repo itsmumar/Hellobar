@@ -92,7 +92,7 @@ class UserController < ApplicationController
   end
 
   def trigger_for_amplitude
-    if (params[:source] == params[:amplitude_source])
+    if params[:source] == params[:amplitude_source]
       TrackEvent.new(:upgrade_account_triggered, user: current_user, source: params[:source]).trigger
     else
       TrackEvent.new(:upgrade_account_triggered, user: current_user, source: params[:amplitude_source]).trigger

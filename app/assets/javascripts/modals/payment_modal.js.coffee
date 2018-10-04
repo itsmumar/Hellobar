@@ -32,7 +32,6 @@ class @PaymentModal extends Modal
 
   open: ->
     $('body').append(@$modal)
-    console.log(@options.amplitudeSource)
     super
     if @options.package.schedule == 'monthly'
       document.getElementById("monthly-billing").checked = true

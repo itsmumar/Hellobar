@@ -20,7 +20,6 @@ class @UpgradeAccountModal extends Modal
     ))
 
   open: ->
-    console.log(@options)
     @$modal.appendTo($("body"))
     @$modal.find('#yearly-billing').trigger('click')
     @_disableCurrentPlanButton()
