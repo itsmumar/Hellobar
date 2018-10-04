@@ -6,17 +6,39 @@ describe HandleOverageSite do
 
   shared_examples 'tracks events' do
     it 'tracks "exceeded_views_limit" event' do
-      expect(TrackEvent)
-        .to receive_service_call
-        .with(
-          :exceeded_views_limit,
-          user: site.owners.first,
-          site: site,
-          number_of_views: number_of_views,
-          limit: limit
-        )
+      if site.current_subscription.name == "Free"
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(
+            :free_overage,
+            user: site.owners.first,
+            site: site
+          )
 
-      service.call
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(
+            :exceeded_views_limit,
+            user: site.owners.first,
+            site: site,
+            number_of_views: number_of_views,
+            limit: limit
+          )
+
+        service.call
+      else
+        expect(TrackEvent)
+          .to receive_service_call
+          .with(
+            :exceeded_views_limit,
+            user: site.owners.first,
+            site: site,
+            number_of_views: number_of_views,
+            limit: limit
+          )
+
+        service.call
+      end
     end
   end
 
