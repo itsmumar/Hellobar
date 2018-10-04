@@ -31,9 +31,11 @@ $ ->
     ).open()
 
   $('.show-upgrade-modal').click ->
+    console.log(this)
     options =
       site: window.site
       source: $(this).data('source')
+      amplitudeSource: $(this).data('amplitude-source')
     new UpgradeAccountModal(options).open()
 
   $('.show-downgrade-modal').click ->

@@ -12,6 +12,12 @@ class TrackEvent
     track_with_profitwell
   end
 
+  def trigger
+    return unless Rails.env.production?
+
+    track_with_amplitude
+  end
+
   private
 
   attr_reader :event, :args
@@ -31,3 +37,4 @@ class TrackEvent
     end
   end
 end
+

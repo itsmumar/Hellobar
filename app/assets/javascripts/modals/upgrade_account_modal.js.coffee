@@ -20,6 +20,7 @@ class @UpgradeAccountModal extends Modal
     ))
 
   open: ->
+    console.log(@options)
     @$modal.appendTo($("body"))
     @$modal.find('#yearly-billing').trigger('click')
     @_disableCurrentPlanButton()
@@ -27,8 +28,15 @@ class @UpgradeAccountModal extends Modal
     @_bindPackageSelection()
 
     @source = @options.source || @options.upgradeBenefit
+    @amplitudeSource = @options.amplitudeSource || @options.source
 
     super
+    $.ajax
+      type: 'POST'
+      url: '/user/trigger_for_amplitude'
+      data:
+        source: @source
+        amplitude_source: @amplitudeSource
 
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
@@ -45,6 +53,7 @@ class @UpgradeAccountModal extends Modal
             site: @options.site
             successCallback: @options.successCallback
             upgradeBenefit: @options.upgradeBenefit
+            amplitudeSource: @amplitudeSource || @source
 
           new PaymentModal(options).open()
 
