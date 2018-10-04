@@ -6,7 +6,7 @@ describe HandleOverageSite do
 
   shared_examples 'tracks events' do
     it 'tracks "exceeded_views_limit" event' do
-      if site.current_subscription.name == "Free"
+      if site.current_subscription.name == 'Free'
         expect(TrackEvent)
           .to receive_service_call
           .with(
@@ -24,8 +24,6 @@ describe HandleOverageSite do
             number_of_views: number_of_views,
             limit: limit
           )
-
-        service.call
       else
         expect(TrackEvent)
           .to receive_service_call
@@ -36,9 +34,8 @@ describe HandleOverageSite do
             number_of_views: number_of_views,
             limit: limit
           )
-
-        service.call
       end
+      service.call
     end
   end
 
