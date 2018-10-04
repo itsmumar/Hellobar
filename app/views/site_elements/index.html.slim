@@ -22,16 +22,24 @@ table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_el
   tbody
     tr.active.elements-paused#paused-guidance
       td colspan='10'
+       - unless @free_overage
         | Everything is currently paused.
         a
           | [view paused bars]
+       - if @free_overage
+          div.free-notice-main
+            .text
+              p Not seeing your site elements live? Here’s why:
+              p You have exceeded the 5,000 view limit on our Starter Plan.
+              p When you pass the view limit, your pop-ups and bars are deactivated until the end of the month, when your view count resets.
+              p Need more views sooner? Increase your view count with one of our Paid Plans and reactivate your pop-ups instantly.
+              button.show-upgrade-modal Reactive Popups & Bars
     tr.paused.elements-paused#active-guidance
       td colspan='10'
         | Everything is currently active.
         a
           | [view active bars]
 
-    - unless @free_overage
       - @rules.each do |rule|
         tr.rule-block data-rule-id=rule.id
           th.page-header colspan='10'
@@ -83,13 +91,7 @@ table.rules-wrapper data-max-site-elements=current_site.capabilities.max_site_el
                       "data-upgrade-benefit" => "create more bars",
                       "data-display-when" => "any"
 
-- if @free_overage
-  div.free-notice-main
-    .text
-      p You have exceeded the 5,000 view count on our Free Forever Plan.
-      p Your site elements have been paused until your billing cycle resets.
-      p Or upgrade to one of our Paid Plans and reactivate your site elements instantly.
-      button.show-upgrade-modal Upgrade Account
+
 
 = render 'shared/modals/rule_modal_template'
 = render 'shared/flash_toastr'

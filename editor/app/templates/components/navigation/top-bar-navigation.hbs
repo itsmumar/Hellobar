@@ -21,8 +21,12 @@
       {{#if modelLogic.isNotPublished}}
         <a class="action-buttons__button {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'save'}}>Save</a>
       {{/if}}
-      <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndPublish'}}>Save & Publish</a>
-    {{/intro-js/step}}
+  {{#unless modelLogic.model.site.deactivated}}
+         <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndPublish'}}>Save & Publish</a>
+  {{else}}
+         <a class="action-buttons__button {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndClose'}}>Save</a>
+  {{/unless}}
+  {{/intro-js/step}}
   {{/if}}
 </div>
 

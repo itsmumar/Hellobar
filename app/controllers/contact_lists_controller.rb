@@ -7,7 +7,7 @@ class ContactListsController < ApplicationController
 
   def index
     @site ||= current_site # Necessary here in case this is a redirect from failed oauth
-
+    @free_overage = check_free_overage
     if omniauth_error?
       flash.now[:error] = omniauth_error_message
       Rails.logger.warn "[Omniauth] [Error] #{ omniauth_error_message }"
@@ -111,7 +111,9 @@ class ContactListsController < ApplicationController
     return nil if message.nil?
     message.to_s.split('|').last.try(:strip) || ''
   end
-
+  def check_free_overage
+    !@site.site_elements.last&.deactivated_at.nil?
+  end
   def record_invalid exception
     render json: exception.record, status: :bad_request
   end

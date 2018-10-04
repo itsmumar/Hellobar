@@ -4,7 +4,7 @@ class SiteSerializer < ActiveModel::Serializer
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :script_installed, :site_elements_count
   attributes :view_billing, :timezone, :rules
-  attributes :gdpr_enabled
+  attributes :gdpr_enabled,:deactivated
 
   def contact_lists
     object.contact_lists.map do |list|
@@ -72,6 +72,10 @@ class SiteSerializer < ActiveModel::Serializer
 
   def rules
     object.rules.map { |rule| RuleSerializer.new(rule).as_json }
+  end
+
+  def deactivated
+    object.deactivated?
   end
 
   def gdpr_enabled
