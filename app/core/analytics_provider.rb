@@ -313,14 +313,13 @@ class AnalyticsProvider
     tag_users highest_subscription_name, [user]
   end
 
-  def free_overage(user:, site:, number_of_views:)
+  def free_overage(user:, site:)
     track(
       event: 'free-overage',
       user: user,
       params: {
         site_id: site.id,
         site_url: site.url,
-        number_of_views: number_of_views,
         limit: 5000,
         overage_count: site.overage_count
       }

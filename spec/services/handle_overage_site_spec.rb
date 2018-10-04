@@ -1,5 +1,5 @@
 describe HandleOverageSite do
-  let(:site) { create :site, subscription_type }
+  let(:site) { create :site, :with_user, subscription_type }
   let(:number_of_views) { 999 }
   let(:limit) { 100 }
   let(:service) { HandleOverageSite.new(site, number_of_views, limit) }

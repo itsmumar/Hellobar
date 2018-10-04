@@ -782,12 +782,11 @@ describe AnalyticsProvider do
           params: {
             site_id: site.id,
             site_url: site.url,
-            number_of_views: 2,
             limit: 5000,
             overage_count: site.overage_count
           })
 
-      track('free-overage', user: user, site: site, number_of_views: 2)
+      track('free-overage', user: user, site: site)
     end
   end
 end
