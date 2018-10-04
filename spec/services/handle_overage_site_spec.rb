@@ -111,6 +111,7 @@ describe HandleOverageSite do
   context 'with Free subscription' do
     let(:subscription_type) { :free }
     include_examples 'tracks events'
+
     it 'decrements the active site elements count to 0' do
       site.deactivate_site_element
       expect(site.site_elements.active.count).to eql(0)
