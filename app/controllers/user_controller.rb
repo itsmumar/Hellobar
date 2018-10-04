@@ -102,6 +102,7 @@ class UserController < ApplicationController
 
   def checkout_trigger_for_amplitude
     TrackEvent.new(:payment_checkout_triggered, user: current_user, source: params[:source]).trigger
+    render nothing: true
   end
 
   private
