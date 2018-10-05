@@ -771,4 +771,23 @@ describe AnalyticsProvider do
       track('add-dme', user: user, highest_subscription_name: 'Elite')
     end
   end
+
+  describe '#free_overage' do
+    let(:site) { create :site, user: user }
+
+    it 'tracks "fired free overage"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'free-overage', user: user,
+          params: {
+            site_id: site.id,
+            site_url: site.url,
+            number_of_views: 2,
+            limit: 5000,
+            overage_count: site.overage_count
+          })
+
+      track('free-overage', user: user, site: site, number_of_views: 2)
+    end
+  end
 end
