@@ -91,6 +91,20 @@ class UserController < ApplicationController
     end
   end
 
+  def trigger_for_amplitude
+    if params[:source] == params[:amplitude_source]
+      TrackEvent.new(:upgrade_account_triggered, user: current_user, source: params[:source]).trigger
+    else
+      TrackEvent.new(:upgrade_account_triggered, user: current_user, source: params[:amplitude_source]).trigger
+    end
+    render nothing: true
+  end
+
+  def checkout_trigger_for_amplitude
+    TrackEvent.new(:payment_checkout_triggered, user: current_user, source: params[:source]).trigger
+    render nothing: true
+  end
+
   private
 
   def invitation_token
