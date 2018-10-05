@@ -51,6 +51,10 @@ describe AnalyticsProvider do
           .to receive(:tag_users)
           .with('Free', [user])
 
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
+
         track('signed-up', user: user, promotional_signup: true, utm_source: utm_source)
       end
     end
@@ -75,6 +79,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Free', [user])
+
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
 
         track('signed-up', user: user)
       end
@@ -105,6 +113,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Free', [user])
+
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
 
         track('signed-up', user: user)
       end
