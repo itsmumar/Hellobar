@@ -28,10 +28,14 @@ class CreditCardsController < ApplicationController
   def create
     @form = PaymentForm.new(params[:credit_card])
     credit_card = CreateCreditCard.new(@site, current_user, params).call
-
-    respond_to do |format|
-      format.html { redirect_to after_sign_in_path_for(current_user) }
-      format.json { render json: credit_card }
+    if(@form.plan)
+      ChangeSubscription.new(@site, subscription: @form.plan[0], schedule: @form.plan[1]).call
+      redirect_to new_site_site_element_path(site)
+    else
+      respond_to do |format|
+        format.html { redirect_to after_sign_in_path_for(current_user) }
+        format.json { render json: credit_card }
+      end
     end
   end
 

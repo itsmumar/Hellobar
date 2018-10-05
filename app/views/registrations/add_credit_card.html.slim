@@ -1,0 +1,58 @@
+= form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form'} do |f|
+  = render 'shared/flash'
+
+  h1 Billing Information
+
+  -if(@plan[0])
+    .note
+      p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
+      -@form.plan = [@plan[0], @plan[1]]
+      /p =link_to 'Choose a different plan', show_plans_path
+  .wrapper
+    .details-fields
+      = hidden_field_tag :update_subscription, false
+
+      .field-row.name-row
+        .cc-name
+          = f.label :name, 'Name on card'
+          = f.text_field :name, placeholder: 'John Smith', autocomplete: 'cc-name', required: 'required'
+
+      .field-row.cc-row
+        .cc-number
+          = f.label :number, 'Card number'
+          = f.text_field :number, placeholder: '    -    -    -', autocomplete: 'cc-number', required: 'required'
+          i.icon-modal
+
+        .cc-expiry
+          = f.label :expiration, 'Expiry'
+          = f.text_field :expiration, placeholder: '08/2016', autocomplete: 'cc-exp', required: 'required'
+
+        .cc-csv
+          = f.label :verification_value, 'CSV'
+          = f.text_field :verification_value, placeholder: '123', autocomplete: 'cc-csc', required: 'required'
+
+      .field-row.address1-row
+        .cc-address
+          = f.label :address, 'Address'
+          = f.text_field :address, placeholder: '123 Main Street', autocomplete: 'street-address', required: 'required'
+
+      .field-row.address2-row
+        .cc-city
+          = f.label :city, 'City'
+          = f.text_field :city, placeholder: 'Beverly Hills', autocomplete: 'city', required: 'required'
+
+        .cc-state
+          = f.label :state, 'State'
+          = f.text_field :state, placeholder: 'CA', autocomplete: 'state'
+
+        .cc-zip
+          = f.label :zip, 'Zip'
+          = f.text_field :zip, placeholder: '90210', autocomplete: 'postal-code', required: 'required'
+
+      .field-row.country-row
+        .cc-country
+          label Country
+          .select-wrapper
+            = country_select('credit_card', 'country', priority_countries: ['US'], selected: 'US')
+
+    = submit_tag "Get Started at #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default button'

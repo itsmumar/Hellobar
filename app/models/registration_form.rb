@@ -3,6 +3,7 @@ class RegistrationForm
 
   attr_accessor :site_url
   attr_accessor :email, :password
+  attr_accessor :plan
   attr_reader :accept_terms_and_conditions, :ignore_existing_site
 
   attr_reader :user, :site

@@ -4,6 +4,7 @@ class PaymentForm
 
   attr_accessor :number, :expiration, :verification_value
   attr_accessor :name, :city, :state, :zip, :address, :country
+  attr_accessor :plan
   attr_reader :first_name, :last_name
 
   validates :number, :expiration, :month, :year, :name, :city, :zip, :address, :country, :verification_value, presence: true
