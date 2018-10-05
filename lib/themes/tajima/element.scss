@@ -31,6 +31,16 @@
       display: none;
     }
   }
+  #hb-fields-form{
+    &>*{
+      display: none;
+    }
+    &>*{
+      &:first-child, &:last-child{
+        display: block;
+      }
+    } 
+  }
 
   .hb-input-block {
     &:before {
@@ -132,7 +142,7 @@
           font-size: 16px;
           font-weight: 300;
           letter-spacing: 0.5px;
-
+          padding: .9em 1.33em;
         } 
       } 
     }  
@@ -217,10 +227,10 @@
       }
     } 
     .hb-content-wrapper {
-      padding: 2em;
-      max-width: 40em;
+      padding: 3em;
+      max-width: 50em;
       right: 0;
-      margin: auto;
+      margin: auto; 
     }
     .hb-text-wrapper {
       max-width: 600px;
@@ -235,23 +245,23 @@
     .hb-logo-wrapper {
       bottom: 2em;
     } 
-    .uploaded-image {
+    .uploaded-image { 
       max-height: 300px;
     }  
     .hb-headline-text{
       font-size: 1.7em; 
       margin-bottom: 15px;
     }
-    [data-hb-editable-block="caption"] {
+    [data-hb-editable-block="caption"] { 
       font-weight: 600;
       margin: 0 auto 20px;
-      text-align: left;
-      font-size: 1em;
+      text-align: left;  
+      font-size: 1em;  
     }
 
     [data-hb-editable-block="content"] {
-      font-size: 1.1em;
-      padding: 0 0 10px;
+      font-size: 1em;
+      padding: 0 0 10px;  
     }
 
     .hb-input-block {
@@ -280,35 +290,50 @@
           font-size: 16px;
           font-weight: 300;
           letter-spacing: 0.5px;
-
+          padding: .9em 1.33em;
         } 
       } 
-    }  
-    @media screen and (max-width: 840px) {
+    } 
+    @media screen and (max-width: 640px) {
       .hb-image-wrapper {
         display: none;
       } 
-    }
-    @media screen and (max-width: 640px) {
       .hb-headline-text {
-        font-size: 1.3em; 
+        font-size: 1.2em; 
       }
       [data-hb-editable-block="caption"] {
-        font-size: 1.2em; 
+        font-size: 1em; 
       } 
       [data-hb-editable-block="content"] {
         font-size: 0.8em; 
       }
       .hb-cta {
         font-size: 22px;
-        height: 60px !important;
+        height: 50px !important;
       }
       .hb-input-block {
         input {
           font-size: 16px;
-          height: 60px !important; 
+          height: 50px !important; 
         }
       }
+      .hb-content-wrapper{
+        padding: 1em;
+      }
+      &.image-right {
+        .hb-inner-content {
+          width: 100%;
+        }
+      }
+      .hb-input-wrapper{ 
+        #hb-fields-form{ 
+          .hb-cta{
+            width: 40%;
+            margin: 0 0 0 2%;
+            flex: 0 0 40%; 
+          } 
+        } 
+      } 
     }
   }
 
