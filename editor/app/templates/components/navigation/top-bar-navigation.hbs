@@ -11,7 +11,6 @@
     </li>
   {{/intro-js/step}}
 </ul>
-
 <div class="action-buttons">
   {{#if saveSiteElementService.saving}}
     <span class="action-buttons__saving">Saving...</span>
@@ -24,7 +23,7 @@
   {{#unless modelLogic.model.site.deactivated}}
          <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndPublish'}}>Save & Publish</a>
   {{else}}
-         <a class="action-buttons__button {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndClose'}}>Save</a>
+         <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected "" "disabled"}}" {{action 'saveAndClose'}}>Save & Close</a>
   {{/unless}}
   {{/intro-js/step}}
   {{/if}}

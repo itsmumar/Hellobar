@@ -48,6 +48,7 @@ $ ->
     $('tr.spacer').remove()
 
   renderGuidance = (active) ->
+    deactive = currentSelection()
     $("#active-guidance").hide()
     $("#paused-guidance").hide()
     return if active == null
@@ -56,6 +57,13 @@ $ ->
       $("#paused-guidance").show()
     else if active == false && $(".site-element-block").filter((index) -> $(@).data('active') == false).length == 0
       $("#active-guidance").show()
+
+    if deactive == 3
+      $("#deactivated").hide()
+      $("#deactivate").hide()
+    else
+      $("#deactivated").show()
+      $("#deactivate").show()
 
   hideRule = (rule) ->
     $("tr[data-rule-id='#{rule.id}']").hide()
