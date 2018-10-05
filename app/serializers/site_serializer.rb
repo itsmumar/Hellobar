@@ -4,7 +4,7 @@ class SiteSerializer < ActiveModel::Serializer
   attributes :id, :url, :contact_lists, :capabilities, :display_name
   attributes :current_subscription, :script_installed, :site_elements_count
   attributes :view_billing, :timezone, :rules
-  attributes :gdpr_enabled,:deactivated
+  attributes :gdpr_enabled, :deactivated
 
   def contact_lists
     object.contact_lists.map do |list|

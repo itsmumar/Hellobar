@@ -74,7 +74,6 @@ export default Ember.Component.extend({
     },
 
     saveAndPublish () {
-      debugger
       if (this.get('modelLogic.isTypeSelected')) {
         this.get('saveSiteElementService').saveAndPublish();
       }

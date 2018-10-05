@@ -50,7 +50,6 @@ class SitesController < ApplicationController
   def improve
     @totals = site_statistics
     @free_overage = check_free_overage
-
   end
 
   def update
@@ -172,9 +171,11 @@ class SitesController < ApplicationController
       @current_view_count = count[@site.id]
     end
   end
+
   def check_free_overage
     !@site.site_elements.last&.deactivated_at.nil?
   end
+
   def render_script(preview:)
     options =
       if preview

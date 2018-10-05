@@ -111,9 +111,11 @@ class ContactListsController < ApplicationController
     return nil if message.nil?
     message.to_s.split('|').last.try(:strip) || ''
   end
+
   def check_free_overage
     !@site.site_elements.last&.deactivated_at.nil?
   end
+
   def record_invalid exception
     render json: exception.record, status: :bad_request
   end
