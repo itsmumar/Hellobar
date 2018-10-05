@@ -110,7 +110,7 @@ describe IntercomAnalyticsAdapter do
     it 'calls IntercomGateway#update_user' do
       expect(intercom_gateway)
         .to receive(:update_user)
-        .with(user, params)
+        .with(user.id, params)
 
       adapter.update_user user: user, params: params
     end
