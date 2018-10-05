@@ -3,6 +3,7 @@ class TrackSubscriptionChange
     @user = user
     @old_subscription = old_subscription
     @new_subscription = new_subscription
+    @site = new_subscription.site
   end
 
   def call
@@ -17,7 +18,7 @@ class TrackSubscriptionChange
 
   private
 
-  attr_reader :user, :old_subscription, :new_subscription
+  attr_reader :user, :old_subscription, :new_subscription, :site
 
   def skip?
     return true if new_subscription.free? && old_subscription.nil?
@@ -31,6 +32,7 @@ class TrackSubscriptionChange
   end
 
   def track_upgrade
+    unfreeze_elements
     TrackEvent.new(:upgraded_subscription, event_params).call
   end
 
@@ -44,5 +46,10 @@ class TrackSubscriptionChange
       previous_subscription: old_subscription,
       user: user
     }
+  end
+
+  def unfreeze_elements
+    ResetEmailSentFields.new(site).call
+    HandleUnfreezeFrozenAccount.new(site).call
   end
 end

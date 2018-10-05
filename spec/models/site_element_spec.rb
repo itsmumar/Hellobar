@@ -366,7 +366,7 @@ describe SiteElement do
 
         it 'should return the default message regardless of the thank you text' do
           element.thank_you_text = 'do not show this'
-          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT)
         end
       end
 
@@ -377,12 +377,12 @@ describe SiteElement do
 
         it 'should return the default message if thank you text not set' do
           element.thank_you_text = ''
-          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT)
         end
 
         it 'should still return the default thank you text' do
           element.thank_you_text = 'dont show this message'
-          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_THANK_YOU)
+          expect(element.display_thank_you_text).to eq(SiteElement::DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT)
         end
       end
     end

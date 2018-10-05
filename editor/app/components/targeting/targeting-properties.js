@@ -76,7 +76,7 @@ export default Ember.Component.extend({
     return options;
   },
 
-  openUpgradeModal() {
+  openUpgradeModal(rule) {
     const that = this;
     that.send('initiateSelection');
 
@@ -85,7 +85,8 @@ export default Ember.Component.extend({
       successCallback() {
         that.set('model.site.capabilities', this.site.capabilities);
       },
-      upgradeBenefit: 'enable more targeting features, upgrade your subscription for'
+      upgradeBenefit: 'enable more targeting features, upgrade your subscription for',
+      amplitudeSource: rule,
     };
     new UpgradeAccountModal(options).open();
   },
@@ -148,7 +149,7 @@ export default Ember.Component.extend({
 
     selectRule (rule) {
       if (rule && rule.isPaid) {
-        this.openUpgradeModal();
+        this.openUpgradeModal(rule.name);
         return;
       }
 
@@ -167,7 +168,8 @@ export default Ember.Component.extend({
 
     openRuleModal(ruleData = {}) {
       if (this.get('cannotTarget')) {
-        this.openUpgradeModal();
+        const rule = "Custom Rule";
+        this.openUpgradeModal(rule);
         return;
       }
 

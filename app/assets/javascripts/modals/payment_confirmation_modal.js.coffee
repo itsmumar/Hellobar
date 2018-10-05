@@ -10,6 +10,11 @@ class @PaymentConfirmationModal extends Modal
     @_bindCloseButton()
 
     super(@$modal)
+    $.ajax
+      type: 'POST'
+      url: '/user/checkout_trigger_for_amplitude'
+      data:
+        source: @options.source
 
   close: ->
     if @options.successCallback

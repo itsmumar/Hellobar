@@ -116,6 +116,8 @@ export default Ember.Service.extend({
     } else {
       this.set('model.show_branding', this.get('model.show_branding'));
     }
+    var type = (this.get('model.type') === 'Takeover') || (this.get('model.type') === 'Modal') ? 'pop-up' : 'bar';
+    this.set('model.default_email_thank_you_text', "Thanks for signing up! If you would like this sort of "+ type +" on your site...");
   }.observes('model.type'),
 
   // ------ Template handling

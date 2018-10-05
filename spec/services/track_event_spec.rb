@@ -18,6 +18,28 @@ describe TrackEvent do
       .with(event.to_s, params)
   end
 
+  context 'when event is :upgrade_account_triggered' do
+    let(:event) { :upgrade_account_triggered }
+
+    it 'enqueues SendEventToAmplitudeJob' do
+      service.trigger
+      expect(SendEventToAmplitudeJob)
+        .to have_been_enqueued
+        .with(event.to_s, params)
+    end
+  end
+
+  context 'when event is :payment_checkout_triggered' do
+    let(:event) { :payment_checkout_triggered }
+
+    it 'enqueues SendEventToAmplitudeJob' do
+      service.trigger
+      expect(SendEventToAmplitudeJob)
+        .to have_been_enqueued
+        .with(event.to_s, params)
+    end
+  end
+
   context 'when event is :upgraded_subscription' do
     let(:event) { :upgraded_subscription }
 
