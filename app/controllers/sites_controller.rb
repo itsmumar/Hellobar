@@ -5,13 +5,13 @@ class SitesController < ApplicationController
   before_action :load_site, except: %i[index new create]
   before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
+  before_action :check_free_overage, only: %i[index improve install]
 
   skip_before_action :verify_authenticity_token, only: %i[preview_script script]
 
   layout :determine_layout
 
   def index
-    @free_overage = check_free_overage
   end
 
   def new
@@ -49,7 +49,6 @@ class SitesController < ApplicationController
 
   def improve
     @totals = site_statistics
-    @free_overage = check_free_overage
   end
 
   def update
@@ -92,7 +91,6 @@ class SitesController < ApplicationController
   end
 
   def install
-    @free_overage = check_free_overage
   end
 
   def install_redirect
