@@ -167,6 +167,8 @@ Rails.application.routes.draw do
 
   post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
   post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
+  post '/user/trigger_for_amplitude', to: 'user#trigger_for_amplitude'
+  post '/user/checkout_trigger_for_amplitude', to: 'user#checkout_trigger_for_amplitude'
 
   resources :authorized_applications, only: %i[index destroy]
 

@@ -112,6 +112,7 @@ class @PaymentModal extends Modal
         site: @options.site
         package: @options.package
         open_payment_form: true
+        amplitudeSource: @options.amplitudeSource || @options.source
 
       new NewCreditCardModal(options).open()
 
@@ -125,6 +126,7 @@ class @PaymentModal extends Modal
         successCallback: @options.successCallback
         upgradeBenefit: @options.upgradeBenefit
         source: "Change Plan"
+        amplitudeSource: @options.amplitudeSource || @options.source
 
       new UpgradeAccountModal(options).open()
       @close()
@@ -151,6 +153,7 @@ class @PaymentModal extends Modal
             data: data
             isFree: @_isFree()
             siteName: @options.site.display_name
+            source: @options.amplitudeSource || @options.source
 
           @_pushGTMEvents(data)
 

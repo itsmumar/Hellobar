@@ -62,6 +62,7 @@ class @NewCreditCardModal extends Modal
       package: @options.package
       site: window.site
       credit_card_id: data.id
+      source: @options.amplitudeSource
     new PaymentModal(options).open()
 
   _bindDynamicStateLength: ->
