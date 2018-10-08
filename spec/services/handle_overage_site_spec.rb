@@ -101,11 +101,11 @@ describe HandleOverageSite do
     end
   end
 
-  context 'with Custom 2 & into second overage increment' do
-    let(:subscription_type) { :custom_2 }
+  context 'with Custom 3 & into second overage increment' do
+    let(:subscription_type) { :custom_3 }
     let(:number_of_views) { 20_250_001 }
     let(:limit) { 20_000_000 }
-    it 'increments the overage count by 2' do
+    it 'increments the overage count by 3' do
       service.call
       expect(site.overage_count).to eql(3)
     end

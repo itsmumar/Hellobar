@@ -40,11 +40,11 @@ class HandleOverageSite
     when Subscription::Free::Capabilities
       handle_free
     when Subscription::Custom1::Capabilities
-      handle_custom_1
+      handle_custom
     when Subscription::Custom2::Capabilities
-      handle_custom_2
+      handle_custom
     when Subscription::Custom3::Capabilities
-      handle_custom_3
+      handle_custom
     else
       raise UnknownSubscriptionError, site.capabilities.class.name
     end
@@ -65,15 +65,7 @@ class HandleOverageSite
     @site.update(overage_count: new_charge_count)
   end
 
-  def handle_custom_1
-    update_custom_plan_overage_count
-  end
-
-  def handle_custom_2
-    update_custom_plan_overage_count
-  end
-
-  def handle_custom_3
+  def handle_custom
     update_custom_plan_overage_count
   end
 
