@@ -128,6 +128,30 @@ FactoryBot.define do
       with_paid_bill
     end
 
+    trait :custom_1 do
+      transient do
+        subscription_plan :custom_1
+      end
+
+      with_paid_bill
+    end
+
+    trait :custom_2 do
+      transient do
+        subscription_plan :custom_2
+      end
+
+      with_paid_bill
+    end
+
+    trait :custom_3 do
+      transient do
+        subscription_plan :custom_3
+      end
+
+      with_paid_bill
+    end
+
     trait :past_due_site do
       after(:create) do |site|
         subscription = create(:subscription, :pro, site: site)
