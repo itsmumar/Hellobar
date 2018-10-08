@@ -80,7 +80,7 @@
     }
   },
   "image": {
-    "default_url": "https://assets.hellobar.com/marigold-default.jpeg",
+    "default_url": "https://assets.hellobar.com/modal-new-default.png",
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "background",
     "position_selectable": false
