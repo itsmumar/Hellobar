@@ -102,9 +102,8 @@ class HandleOverageSite
       TrackEvent.new(
         :free_overage,
         user: user,
-        site: @site,
-        number_of_views: @number_of_views
-      )
+        site: @site
+      ).call
     end
   end
 
