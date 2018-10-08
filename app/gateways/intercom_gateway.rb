@@ -33,6 +33,14 @@ class IntercomGateway
     client.users.delete intercom_user
   end
 
+  def update_user user_id, params
+    intercom_user = find_user user_id
+    return unless intercom_user
+
+    intercom_user.custom_attributes.merge!(params)
+    client.users.save intercom_user
+  end
+
   private
 
   def client
