@@ -51,7 +51,7 @@ class Subscription::Capabilities
   end
 
   def max_variations
-    Float::INFINITY
+    99999
   end
 
   def at_site_element_limit?

@@ -50,7 +50,7 @@ class BillingViewsReport
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level)
-    if site.current_subscription&.non_free
+    if site.current_subscription&.paid?
       WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
     else
       WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
@@ -66,7 +66,7 @@ class BillingViewsReport
   end
 
   def log_grandfathered_site(site)
-    info "#{ site.url } is grandfathered"
+    info "#{ site.url } is grandfathered (#{ site.active_subscription&.name }) until #{ site.active_subscription&.active_until }"
   end
 
   private

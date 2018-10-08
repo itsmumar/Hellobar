@@ -90,7 +90,7 @@ Rails.application.routes.draw do
   post '/users/:user_id/update_exit_intent', to: 'user_campaign#update_exit_intent', as: :update_user_exit_intent
   post '/users/:user_id/update_upgrade_suggest', to: 'user_campaign#update_upgrade_suggest', as: :update_user_upgrade_suggest
 
-  get '/auth/:action/callback', controller: 'users/omniauth_callbacks', constraints: { action: /google_oauth2/ }
+  get '/auth/:action/callback', controller: 'users/omniauth_callbacks', constraints: { action: /google_oauth2|subscribers/ }
   get '/auth/:action', controller: 'users/omniauth_callbacks', constraints: { action: /google_oauth2/ }, as: :oauth_login
 
   get 'profile', to: 'user#edit', as: :profile
@@ -167,6 +167,8 @@ Rails.application.routes.draw do
 
   post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
   post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
+  post '/user/trigger_for_amplitude', to: 'user#trigger_for_amplitude'
+  post '/user/checkout_trigger_for_amplitude', to: 'user#checkout_trigger_for_amplitude'
 
   resources :authorized_applications, only: %i[index destroy]
 

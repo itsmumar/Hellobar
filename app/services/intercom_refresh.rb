@@ -30,7 +30,7 @@ class IntercomRefresh
   def check_site_for_dme(site)
     if site.current_subscription&.type == 'Subscription::ProComped' || site.current_subscription&.type == 'Subscription::Elite' || site.current_subscription&.type == 'Subscription::ProManaged'
       track_dme(site)
-    elsif site.current_subscription&.type == 'Subscription::Pro' || site.current_subscription&.type == 'Subscription::Growth'
+    elsif site.current_subscription&.type == 'Subscription::Pro' || site.current_subscription&.type == 'Subscription::Growth' || site.current_subscription&.type == 'Subscription::ProSpecial'
       handle_trial_dme(site)
     end
   end
@@ -56,7 +56,7 @@ class IntercomRefresh
       highest_subscription_name = 'Elite'
     elsif sub_names.include?('Growth')
       highest_subscription_name = 'Growth'
-    elsif sub_names.include?('Pro')
+    elsif sub_names.include?('Pro') || sub_names.include?('Pro Special')
       highest_subscription_name = 'Pro'
     elsif sub_names.include?('Pro Comped')
       highest_subscription_name = 'Pro Comped'

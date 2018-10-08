@@ -98,9 +98,11 @@ describe StaticScriptModel do
                 "hellobar-classic/container.css\nmodel-new/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
                 "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngogo/container.css\ngreen-timberline/container.css\n" \
-                "marigold/container.css\nmarigold-10/container.css\npulse/container.css\n" \
+                "mall/container.css\nmarigold/container.css\npulse/container.css\n" \
                 "resteo/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\n" \
                 "violet/container.css\nwooli/container.css"
+                "marigold/container.css\nsmooth-impact/container.css\n" \
+                "subtle-facet/container.css\nviolet/container.css"
     end
   end
 

@@ -51,6 +51,10 @@ describe AnalyticsProvider do
           .to receive(:tag_users)
           .with('Free', [user])
 
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
+
         track('signed-up', user: user, promotional_signup: true, utm_source: utm_source)
       end
     end
@@ -75,6 +79,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Free', [user])
+
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
 
         track('signed-up', user: user)
       end
@@ -105,6 +113,10 @@ describe AnalyticsProvider do
         expect(adapter)
           .to receive(:tag_users)
           .with('Free', [user])
+
+        expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
 
         track('signed-up', user: user)
       end
@@ -769,6 +781,24 @@ describe AnalyticsProvider do
         .with('Elite', [site.users.first])
 
       track('add-dme', user: user, highest_subscription_name: 'Elite')
+    end
+  end
+
+  describe '#free_overage' do
+    let(:site) { create :site, user: user }
+
+    it 'tracks "fired free overage"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'free-overage', user: user,
+          params: {
+            site_id: site.id,
+            site_url: site.url,
+            limit: 5000,
+            overage_count: site.overage_count
+          })
+
+      track('free-overage', user: user, site: site)
     end
   end
 end

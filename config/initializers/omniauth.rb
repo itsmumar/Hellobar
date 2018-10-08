@@ -1,4 +1,11 @@
+require 'ext/subscribers_oauth_strategy'
+
 Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :subscribers,
+    Settings.subscribers_auth_id,
+    Settings.subscribers_auth_secret,
+    client_options: { site: Settings.subscribers_app_url }
+
   provider :aweber, Settings.identity_providers['aweber']['consumer_key'], Settings.identity_providers['aweber']['consumer_secret']
   provider :constantcontact, Settings.identity_providers['constantcontact']['app_key'], Settings.identity_providers['constantcontact']['app_secret']
   provider :createsend, Settings.identity_providers['createsend']['client_id'], Settings.identity_providers['createsend']['secret'], scope: 'ManageLists,ImportSubscribers'
@@ -11,7 +18,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   on_failure do |env|
     provider = env['omniauth.error.strategy'].try(:name)
 
-    if provider.nil? || provider == 'google_oauth2'
+    if provider.nil? || provider.in?(SignInUser::PROVIDERS)
       Users::OmniauthCallbacksController.action(:failure).call(env)
     else
       ContactListsController.action(:index).call(env)
