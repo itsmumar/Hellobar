@@ -7,7 +7,7 @@
   - if @form.existing_site_url?
     = render 'shared/existing_site_warning'
     = f.hidden_field :ignore_existing_site
-    = f.hidden_field :plan
+  = f.hidden_field :plan, value: (params[:plan].blank? ? f.object.plan : params[:plan])
 
   = f.input_field :site_url, placeholder: 'Your website URL', autofocus: true, type: 'text'
   br

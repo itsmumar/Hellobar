@@ -7,10 +7,12 @@
     .note
       p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
       -@form.plan = [@plan[0], @plan[1]]
-      /p =link_to 'Choose a different plan', show_plans_path
+      /p =link_to 'Choose a different plan', class: "different-plan"
   .wrapper
     .details-fields
       = hidden_field_tag :update_subscription, false
+      = hidden_field_tag :site_id, current_user.sites.first.id
+      = f.hidden_field :plan, value: params[:plan] || f.object.plan
 
       .field-row.name-row
         .cc-name
@@ -21,7 +23,7 @@
         .cc-number
           = f.label :number, 'Card number'
           = f.text_field :number, placeholder: '    -    -    -', autocomplete: 'cc-number', required: 'required'
-          i.icon-modal
+            i.icon-modal
 
         .cc-expiry
           = f.label :expiration, 'Expiry'
@@ -56,3 +58,5 @@
             = country_select('credit_card', 'country', priority_countries: ['US'], selected: 'US')
 
     = submit_tag "Get Started at #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default button'
+
+= render "shared/modals/upgrade_modal"

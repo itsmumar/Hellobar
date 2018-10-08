@@ -31,11 +31,6 @@ class RegistrationsController < ApplicationController
     render layout: 'static'
   end
 
-  def show_plans
-
-    render layout: 'static'
-  end
-
   private
 
   def allowed_url?
@@ -76,10 +71,9 @@ class RegistrationsController < ApplicationController
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
     if(@form.plan)
-      add_credit_card_details
+      redirect_to add_credit_card_registration_path(@form.plan)
     else
       flash[:event] = { category: 'Signup', action: 'signup-email' }
-
       redirect_to new_site_site_element_path(site)
     end
   end
@@ -88,9 +82,6 @@ class RegistrationsController < ApplicationController
     redirect_to oauth_login_path(action: 'google_oauth2')
   end
 
-  def add_credit_card_details
-    redirect_to add_credit_card_registration_path(plan)
-  end
 
   def render_errors(exception)
     flash.now[:error] = exception.record.errors.full_messages.to_sentence
