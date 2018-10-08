@@ -299,7 +299,7 @@ class Site < ApplicationRecord
   end
 
   def deactivated?
-    site_elements.where.not(deactivated_at: nil).present?
+    site_elements.where.not(deactivated_at: nil).any?
   end
 
   private

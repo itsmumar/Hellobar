@@ -48,7 +48,6 @@ $ ->
     $('tr.spacer').remove()
 
   renderGuidance = (active) ->
-    deactive = currentSelection()
     $("#active-guidance").hide()
     $("#paused-guidance").hide()
     return if active == null
@@ -58,7 +57,7 @@ $ ->
     else if active == false && $(".site-element-block").filter((index) -> $(@).data('active') == false).length == 0
       $("#active-guidance").show()
 
-    if deactive == 3
+    if currentSelection() == 3
       $("#deactivated").hide()
       $("#deactivate").hide()
     else
