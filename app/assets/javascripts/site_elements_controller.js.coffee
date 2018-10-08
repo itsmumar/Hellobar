@@ -31,7 +31,7 @@ $ ->
       for bar in rule.site_elements
         bar = $(bar)
         bar.hide()
-        showBars.push(bar) if (active == null || (bar.data('active') == active && bar.data('deactive') == false)) || (active == 3 && bar.data('deactive') == true)
+        showBars.push(bar) if (active == null || (bar.data('active') == active && bar.data('deactive') == false)) || (active == 'deactivated' && bar.data('deactive') == true)
 
       if showBars.length == 0 && active != null
         hideRule(rule)
@@ -57,7 +57,7 @@ $ ->
     else if active == false && $(".site-element-block").filter((index) -> $(@).data('active') == false).length == 0
       $("#active-guidance").show()
 
-    if currentSelection() == 3
+    if currentSelection() == 'deactivated'
       $("#deactivated").hide()
       $("#deactivate").hide()
     else
@@ -227,7 +227,7 @@ $ ->
     target = $('a.element-filter.active').attr('href')
     selection = target && target.replace(/\W/g, '')
     return null if selection == "all"
-    return 3 if selection == 'deactivated'
+    return selection if selection == 'deactivated'
     selection == "active"
 
   rules = ->

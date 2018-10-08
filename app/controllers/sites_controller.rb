@@ -171,7 +171,7 @@ class SitesController < ApplicationController
   end
 
   def check_free_overage
-    @site.deactivated?
+    @free_overage = @site.deactivated?
   end
 
   def render_script(preview:)
