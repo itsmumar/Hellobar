@@ -202,12 +202,11 @@ class SiteElement < ApplicationRecord
     update!(deactivated_at: nil)
   end
 
+  # avoid running validations,
+  # cause we might run into validation errors
+  # such as `ensure_custom_targeting_allowed`
   def deactivate
-    update(deactivated_at: Time.current)
-  end
-
-  def deactivate!
-    update!(deactivated_at: Time.current)
+    update_column(:deactivated_at, Time.current)
   end
 
   def paused?
