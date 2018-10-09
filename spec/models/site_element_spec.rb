@@ -548,4 +548,37 @@ describe SiteElement do
       end
     end
   end
+
+  describe '#activate' do
+    it 'sets deactivated_at to nil' do
+      element.deactivate
+      expect { element.activate }
+        .to change { element.reload.deactivated_at }
+        .to(nil)
+    end
+  end
+
+  describe '#deactivate', :freeze do
+    it 'sets deactivated_at to Time.current' do
+      expect { element.deactivate }
+        .to change { element.reload.deactivated_at }
+        .to(Time.current)
+    end
+
+    context 'with invalid element' do
+      let(:element) { create(:site_element, :email) }
+
+      before do
+        element.settings['after_email_submit_action'] = 1
+        element.thank_you_text = nil
+      end
+
+      it 'sets deactivated_at to Time.current' do
+        expect(element).to be_invalid
+        expect { element.deactivate }
+          .to change { element.reload.deactivated_at }
+          .to(Time.current)
+      end
+    end
+  end
 end
