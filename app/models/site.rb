@@ -45,6 +45,7 @@ class Site < ApplicationRecord
   has_many :coupon_uses, through: :bills
   has_many :emails, dependent: :destroy
   has_one :content_upgrade_styles, inverse_of: :site
+  has_many :credit_cards, -> { order(:created_at) }, through: :subscriptions
 
   scope :preload_for_script, lambda {
     preload(

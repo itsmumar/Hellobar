@@ -62,9 +62,11 @@ describe 'Admin::Sites requests' do
       context 'when trying to upgrade and it must be paid' do
         let(:params) { { subscription: { subscription: 'Elite', schedule: 'monthly' } } }
 
-        it 'raises error' do
+        before { stub_cyber_source :purchase }
+
+        it 'upgrades successfully' do
           update
-          expect(flash[:error]).to eql 'You are trying to upgrade subscription but it must be paid by the user'
+          expect(site.reload.current_subscription).to be_a Subscription::Elite
         end
       end
 
