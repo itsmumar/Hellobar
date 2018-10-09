@@ -28,6 +28,10 @@ class IntercomAnalyticsAdapter
     intercom.tag_users tag, users
   end
 
+  def update_user(user:, params: {})
+    intercom.update_user(user.id, params)
+  end
+
   private
 
   def ensure_users_exist(users)

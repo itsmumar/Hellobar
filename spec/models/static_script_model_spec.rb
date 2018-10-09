@@ -96,7 +96,7 @@ describe StaticScriptModel do
         .to eql "bar/container.css\nmodal/container.css\nslider/container.css\n" \
                 "takeover/container.css\nalert/container.css\n" \
                 "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
-                "blue-avalanche/container.css\nclassy/container.css\ndark-green-spring/container.css\n" \
+                "blue-avalanche/container.css\nclassy/container.css\ncocina/container.css\ndark-green-spring/container.css\n" \
                 "evergreen-meadow/container.css\nfrench-rose/container.css\ngogo/container.css\ngreen-timberline/container.css\n" \
                 "mall/container.css\nmarigold/container.css\npuesto/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\ntocaya/container.css\nviolet/container.css"
     end

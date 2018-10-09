@@ -12,7 +12,7 @@ class ResetEmailSentFields
   attr_reader :site
 
   def reset_site_fields
-    site.update(
+    site.update_columns(
       warning_email_one_sent: false,
       warning_email_two_sent: false,
       warning_email_three_sent: false,
