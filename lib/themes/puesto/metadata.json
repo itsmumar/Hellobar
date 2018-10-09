@@ -1,0 +1,75 @@
+{
+  "name": "Puesto",
+  "type": "generic",
+  "id": "puesto",
+  "fonts": [
+    "oswald",
+    "kanit",
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Modal", "Slider", "Takeover"],
+  "defaults": { 
+    "Takeover": {
+      "background_color": "f8f8f8",
+      "text_color": "4a4a4a",
+      "button_color": "ff8b45",
+      "link_color": "FFFFFF", 
+      "font_id": "roboto",
+      "text_field_border_radius": 4,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 50,
+      "cta_border_radius": 4,
+      "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
+      "caption":"Create the Hook, Line and Sinker CTA",
+      "link_text":"DOWNLOAD FOR FREE"
+    },
+    "Slider": {
+      "background_color": "f8f8f8",
+      "text_color": "4a4a4a",
+      "button_color": "ff8b45",
+      "link_color": "FFFFFF",
+      "font_id": "roboto",
+      "text_field_border_radius": 4,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 35,
+      "cta_border_radius": 4,
+      "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
+      "caption":"Create the Hook, Line and Sinker CTA",
+      "link_text":"DOWNLOAD FOR FREE"
+    },
+    "Modal": {
+      "background_color": "f8f8f8",
+      "text_color": "4a4a4a",
+      "button_color": "ff8b45",
+      "link_color": "FFFFFF",
+      "font_id": "roboto",
+      "text_field_border_radius": 4,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 50,
+      "cta_border_radius": 4,
+      "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
+      "caption":"Create the Hook, Line and Sinker CTA",
+      "link_text":"DOWNLOAD FOR FREE"
+    }
+  },
+  "image": {
+    "default_url": "http://assets.hellobar.com/default-ang-ebook.png",
+    "upload_copy": "Recommended minimum is 270 x 370",
+    "position_default": "right",
+    "position_selectable": false
+  },
+  "advanced": true
+}
