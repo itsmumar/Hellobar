@@ -7,7 +7,7 @@ class Subscription < ApplicationRecord
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
 
-  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, Elite].freeze
+  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, Elite, Custom1, Custom2, Custom3].freeze
 
   acts_as_paranoid
 

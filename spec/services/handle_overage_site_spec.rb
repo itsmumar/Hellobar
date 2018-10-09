@@ -36,6 +36,81 @@ describe HandleOverageSite do
     end
   end
 
+  context 'with Custom 1 subscription' do
+    let(:subscription_type) { :custom_1 }
+    include_examples 'tracks events'
+  end
+
+  context 'with Custom 1 & into overage counts' do
+    let(:subscription_type) { :custom_1 }
+    let(:number_of_views) { 5_000_001 }
+    let(:limit) { 5_000_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
+  context 'with Custom 1 & into second overage increment' do
+    let(:subscription_type) { :custom_1 }
+    let(:number_of_views) { 5_250_001 }
+    let(:limit) { 5_000_000 }
+    it 'increments the overage count by 2' do
+      service.call
+      expect(site.overage_count).to eql(3)
+    end
+  end
+
+  context 'with Custom 2 subscription' do
+    let(:subscription_type) { :custom_2 }
+    include_examples 'tracks events'
+  end
+
+  context 'with Custom 2 & into overage counts' do
+    let(:subscription_type) { :custom_2 }
+    let(:number_of_views) { 10_000_001 }
+    let(:limit) { 10_000_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
+  context 'with Custom 2 & into second overage increment' do
+    let(:subscription_type) { :custom_2 }
+    let(:number_of_views) { 10_250_001 }
+    let(:limit) { 10_000_000 }
+    it 'increments the overage count by 2' do
+      service.call
+      expect(site.overage_count).to eql(3)
+    end
+  end
+
+  context 'with Custom 3 subscription' do
+    let(:subscription_type) { :custom_3 }
+    include_examples 'tracks events'
+  end
+
+  context 'with Custom 3 & into overage counts' do
+    let(:subscription_type) { :custom_3 }
+    let(:number_of_views) { 20_000_001 }
+    let(:limit) { 20_000_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
+  context 'with Custom 3 & into second overage increment' do
+    let(:subscription_type) { :custom_3 }
+    let(:number_of_views) { 20_250_001 }
+    let(:limit) { 20_000_000 }
+    it 'increments the overage count by 3' do
+      service.call
+      expect(site.overage_count).to eql(3)
+    end
+  end
+
   context 'with ProManaged subscription' do
     let(:subscription_type) { :pro_managed }
     include_examples 'tracks events'
