@@ -90,7 +90,7 @@ class CheckNumberOfViewsForSites
   end
 
   def send_warning_email(site, number_of_views, limit, warning_level, db_field)
-    site.update("#{ db_field }": true)
+    site.update_column(db_field, true)
     report.send_warning_email(site, number_of_views, limit, warning_level)
   end
 end
