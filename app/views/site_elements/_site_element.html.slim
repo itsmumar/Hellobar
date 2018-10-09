@@ -39,7 +39,8 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
           | Create Variation
 
         - if not(site_element.deactivated?)
-          = content_tag 'a', class: 'toggle-pause', "data-element-id" => site_element.id, "data-site-id" => @site.id do
+          - class_to_add = @site.deactivated? ? 'show-activation-modal' : 'toggle-pause'
+          = content_tag 'a', class: class_to_add, "data-element-id" => site_element.id, "data-site-id" => @site.id do
             - if site_element.paused?
               i.icon-play
             - else
