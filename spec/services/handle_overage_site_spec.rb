@@ -1,8 +1,10 @@
 describe HandleOverageSite do
-  let(:site) { create :site, subscription_type }
+  let(:site) { create :site, :with_user, subscription_type }
   let(:number_of_views) { 999 }
   let(:limit) { 100 }
   let(:service) { HandleOverageSite.new(site, number_of_views, limit) }
+
+  before { allow(TrackEvent).to receive_service_call }
 
   shared_examples 'tracks events' do
     it 'tracks "exceeded_views_limit" event' do
@@ -15,7 +17,6 @@ describe HandleOverageSite do
           number_of_views: number_of_views,
           limit: limit
         )
-
       service.call
     end
   end
@@ -110,7 +111,21 @@ describe HandleOverageSite do
 
   context 'with Free subscription' do
     let(:subscription_type) { :free }
+
+    it 'tracks "free_overage" event' do
+      expect(TrackEvent)
+        .to receive_service_call
+        .with(
+          :free_overage,
+          user: site.owners.first,
+          site: site
+        )
+
+      service.call
+    end
+
     include_examples 'tracks events'
+
     it 'decrements the active site elements count to 0' do
       site.deactivate_site_element
       expect(site.site_elements.active.count).to eql(0)

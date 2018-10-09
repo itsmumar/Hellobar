@@ -93,7 +93,18 @@ class HandleOverageSite
 
     return if site.limit_email_sent
     site.update(limit_email_sent: true)
-    OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
+    track_free_exceeded_in_intercom
+    # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
+  end
+
+  def track_free_exceeded_in_intercom
+    @site.owners_and_admins.each do |user|
+      TrackEvent.new(
+        :free_overage,
+        user: user,
+        site: @site
+      ).call
+    end
   end
 
   def track_exceeded_views_limit_event
