@@ -9,7 +9,7 @@ class Admin::SitesController < AdminController
       change_subscription if params.key?(:subscription)
       flash[:success] = 'Site and/or subscription has been updated.'
     rescue PayBill::MissingCreditCard
-      flash[:error] = 'You are trying to upgrade subscription but it must be paid by the user'
+      flash[:error] = 'Could not find a proper credit card'
     rescue Bill::InvalidBillingAmount => e
       flash[:error] = "You are trying to downgrade subscription but difference between subscriptions is #{ e.amount }$. Try to refund this amount first"
     rescue StandardError => e
@@ -53,7 +53,7 @@ class Admin::SitesController < AdminController
         subscription: subscription_params[:subscription]
       ).call
     else
-      ChangeSubscription.new(site, subscription_params).call
+      ChangeSubscription.new(site, subscription_params, site.credit_cards.last).call
     end
   end
 
