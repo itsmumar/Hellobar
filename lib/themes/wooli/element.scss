@@ -17,7 +17,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
   pointer-events: none;
 }
 
-.smooth-impact {
+.wooli {
   color: '#3A3A49';
 
   #hello-bar {
@@ -31,13 +31,14 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   .image-background .hb-image-wrapper.background {
     width: 43%;
-    background-position: top center;
+    background-position: top center; 
   }
 
   .hb-headline-text {
     font-size: 2em;
-    text-align: left; 
-    font-weight: 700; 
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: 700;
     margin-bottom: 15px;
   }
 
@@ -140,7 +141,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       bottom: 0;
       left: 0;
       pointer-events: none;
-      background: linear-gradient(to bottom, transparent 0%, $mask-color 100%);
+      // background: linear-gradient(to bottom, transparent 0%, $mask-color 100%);
     }
   }
 
@@ -171,7 +172,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       input {
         font-size: 15px;
         height: 36px;
-        padding: 0 0 0 5px;
+        padding: 0 0 0 10px;
       }
     }
 
@@ -284,8 +285,8 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     .icon-close {
-      top: 19px;
-      right: 19px;
+      top: -20px;
+      right: 0px;
       font-size: 14px;
     }
 
@@ -468,7 +469,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       input {
         font-size: 13px;
         height: 40px;
-        padding: 0 0 0 5px;
+        padding: 0 0 0 10px;
       }
     }
 

@@ -93,12 +93,38 @@ describe StaticScriptModel do
       end
 
       expect(model.hellobar_container_css)
-        .to eql "bar/container.css\nmodal/container.css\nslider/container.css\n" \
-                "takeover/container.css\nalert/container.css\n" \
-                "hellobar-classic/container.css\narctic-facet/container.css\nautodetect/container.css\nblue-autumn/container.css\n" \
-                "blue-avalanche/container.css\nclassy/container.css\ncocina/container.css\ndark-green-spring/container.css\n" \
-                "evergreen-meadow/container.css\nfrench-rose/container.css\ngogo/container.css\ngreen-timberline/container.css\nlionshare/container.css\n" \
-                "mall/container.css\nmarigold/container.css\npuesto/container.css\nsmooth-impact/container.css\nsubtle-facet/container.css\ntajima/container.css\ntocaya/container.css\nviolet/container.css"
+        .to eql %w[
+          bar/container.css
+          modal/container.css
+          slider/container.css
+          takeover/container.css
+          alert/container.css
+          hellobar-classic/container.css
+          model-new/container.css
+          arctic-facet/container.css
+          autodetect/container.css
+          blue-autumn/container.css
+          blue-avalanche/container.css
+          classy/container.css
+          cocina/container.css
+          dark-green-spring/container.css
+          evergreen-meadow/container.css
+          french-rose/container.css
+          gogo/container.css
+          green-timberline/container.css
+          lionshare/container.css
+          mall/container.css
+          marigold/container.css
+          puesto/container.css
+          pulse/container.css
+          resteo/container.css
+          smooth-impact/container.css
+          subtle-facet/container.css
+          tajima/container.css
+          tocaya/container.css
+          violet/container.css
+          wooli/container.css
+        ].join("\n")
     end
   end
 
