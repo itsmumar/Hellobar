@@ -7,7 +7,7 @@
     .note
       p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
       -@form.plan = [@plan[0], @plan[1]]
-      /p =link_to 'Choose a different plan', class: "different-plan"
+      p =link_to 'Choose a different plan','#', class: "different-plan", onclick: 'showPlans()'
   .wrapper
     .details-fields
       = hidden_field_tag :update_subscription, false
@@ -59,4 +59,8 @@
 
     = submit_tag "Get Started at #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default button'
 
-= render "shared/modals/upgrade_modal"
+= render "registrations/modals/upgrade_modal"
+
+javascript:
+  function showPlans() {
+    new ChoosePlanModal({site: window.site, current_plan: '#{@plan[0].downcase}' }).open();}

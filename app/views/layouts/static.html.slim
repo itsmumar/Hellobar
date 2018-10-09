@@ -18,6 +18,7 @@ html
   body#hb-static
     = render "shared/gtm_noscript"
     = render 'shared/amplitude'
+    = render 'shared/shared_variables' if current_user.present?
 
     main.global-content id=page_id
       .bounds-wrapper

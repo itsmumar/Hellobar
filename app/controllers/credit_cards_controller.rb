@@ -46,7 +46,7 @@ class CreditCardsController < ApplicationController
       format.html do
         if @form && @form.plan.present?
           flash[:error] = error.record.errors.full_messages.to_sentence
-          redirect_to add_credit_card_registration_path(@form.plan)
+          redirect_to subscribe_registration_path(@form.plan)
         else
           flash.now[:error] = error.record.errors.full_messages.to_sentence
           render :new, layout: 'static'

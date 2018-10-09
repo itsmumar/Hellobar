@@ -1,0 +1,133 @@
+
+script id="upgrade-account-modal-template" type="text/x-handlebars-template"
+
+  .modal-wrapper
+
+    .modal-block
+
+      i.icon-close
+
+      .flash-block
+        i.icon-close
+
+      form(class=upgrade_modal_ab_class)
+
+        .site-title
+          | {{#if upgradeBenefit}}
+          |   To {{upgradeBenefit}} {{siteName}}
+          | {{else}}
+          | In order to change the plan for {{siteName}}, Please select below
+          | {{/if}}
+
+
+
+
+        .billing-options
+
+          |Monthly&nbsp;
+          label.switch
+            input type='checkbox'
+            span.slider.round
+          |  Yearly
+          img {src = "#{image_path('icons/path-2.svg')}" }
+
+      table.plans-table
+        thead
+
+          tr
+
+            th
+            th.prime Most Popular
+            th
+              div
+            th
+              div
+          tr
+
+            th
+            th.back
+              div Elite
+              div.sm
+                .package-pricing
+                  strike.fl.monthly $140
+                  span.bold.monthly #{subscription_cost(Subscription::Elite, :monthly)}
+                  strike.fl.yearly $1188
+                  span.bold.yearly #{subscription_cost(Subscription::Elite, :yearly)}
+
+            th.thborder
+
+                  div = Subscription.pro_or_growth_for(current_user).defaults[:name] = Subscription.pro_or_growth_for(current_user).defaults[:name]
+                  div.sm
+                    .package-pricing
+                      strike.fl.monthly $49
+                      span.bold.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}
+                      strike.fl.yearly $348
+                      span.bold.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}
+
+
+            th.thborder
+              div Starter
+              div.bold Forever Free
+        tbody
+          tr.h44
+            th.thborder Views
+            td 500,000/mo
+            td 50,000/mo
+            td 5,000/mo
+          tr.h44
+            th.thborder # of Campaigns
+            td Unlimited
+            td Unlimited
+            td Unlimited
+          tr.h44
+            th.thborder # of Subscribers
+            td Unlimited
+            td Unlimited
+            td Unlimited
+          tr.h44
+            th.thborder Design Features
+            td Premium
+            td Advanced
+            td Basic
+          tr.h44
+            th.thborder Targeting Features
+            td Premium
+            td Advanced
+            td Device Type Only
+          tr.h44
+            th.thborder A/B Testing
+            td Unlimited Tests
+            td Unlimited Tests
+            td 1 Live Test
+          tr.h44
+            th.thborder Integrations
+            td Premium
+            td Advanced
+            td Basic
+          tr.h44
+            th.thborder Dedicated Marketing Expert
+            td.check &#10004;
+            td 90 Days
+            td.cross &#10005;
+          tr.h44
+            th.thborder Remove HB Logo
+            td.check  &#10004;
+            td.check  &#10004;
+            td.cross &#10005;
+          tr.trborder
+            th
+            td.trborder
+              .package-block.enterprise
+                  .package-status
+                    = choose_plan_button(Subscription::Elite.new)
+            td.trborder
+              .package-block.enterprise
+                .package-features
+                  .package-status
+                    = choose_pro_or_growth_button
+
+            td.trborder
+              .package-block.enterprise
+                .package-features
+                  .package-status(data-btn-prefix='Your ')
+                    = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe

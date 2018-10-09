@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :require_no_user, except: [:add_credit_card, :show_plans]
+  before_action :require_no_user, except: [:subscribe, :show_plans]
 
   layout 'static'
 
@@ -24,7 +24,7 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def add_credit_card
+  def subscribe
     @plan = params[:plan].split('-')
     @form = PaymentForm.new(params[:credit_card])
 
@@ -70,8 +70,8 @@ class RegistrationsController < ApplicationController
 
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
-    if(@form.plan)
-      redirect_to add_credit_card_registration_path(@form.plan)
+    if(@form.plan.present?)
+      redirect_to subscribe_registration_path(@form.plan)
     else
       flash[:event] = { category: 'Signup', action: 'signup-email' }
       redirect_to new_site_site_element_path(site)
