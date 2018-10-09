@@ -5,6 +5,7 @@ class SitesController < ApplicationController
   before_action :load_site, except: %i[index new create]
   before_action :load_top_performers, only: :improve
   before_action :load_bills, only: :edit
+  before_action :check_free_overage, only: %i[index improve install]
 
   skip_before_action :verify_authenticity_token, only: %i[preview_script script]
 
@@ -167,6 +168,10 @@ class SitesController < ApplicationController
       count = FetchTotalViewsForMonth.new(Site.where(id: @site.id)).call
       @current_view_count = count[@site.id]
     end
+  end
+
+  def check_free_overage
+    @free_overage = @site.deactivated?
   end
 
   def render_script(preview:)

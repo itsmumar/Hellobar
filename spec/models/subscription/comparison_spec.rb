@@ -7,7 +7,10 @@ describe Subscription::Comparison do
       Subscription::Elite,
       Subscription::ProComped,
       Subscription::ProManaged,
-      Subscription::ProSpecial
+      Subscription::ProSpecial,
+      Subscription::Custom1,
+      Subscription::Custom2,
+      Subscription::Custom3
     ]
   end
 

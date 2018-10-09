@@ -75,6 +75,8 @@ class AnalyticsProvider
     tag_users('Free', [user])
     tag_users('Affiliate', [user]) if user.affiliate_identifier
     tag_users('Promotional', [user]) if promotional_signup
+
+    update_user(user: user, params: params) if user.affiliate_identifier || promotional_signup
   end
 
   def invited_member(site:, user:)
@@ -313,14 +315,13 @@ class AnalyticsProvider
     tag_users highest_subscription_name, [user]
   end
 
-  def free_overage(user:, site:, number_of_views:)
+  def free_overage(user:, site:)
     track(
       event: 'free-overage',
       user: user,
       params: {
         site_id: site.id,
         site_url: site.url,
-        number_of_views: number_of_views,
         limit: 5000,
         overage_count: site.overage_count
       }
@@ -337,7 +338,7 @@ class AnalyticsProvider
     )
   end
 
-  delegate :tag_users, :untag_users, to: :adapter
+  delegate :tag_users, :untag_users, :update_user, to: :adapter
 
   def changed_subscription(event, subscription:, previous_subscription:, user:)
     site = Site.with_deleted.find(subscription.site_id)

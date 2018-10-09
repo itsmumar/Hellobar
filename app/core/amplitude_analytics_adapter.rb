@@ -16,6 +16,10 @@ class AmplitudeAnalyticsAdapter
     # do nothing
   end
 
+  def update_user(*)
+    # do nothing
+  end
+
   private
 
   def send_event(attributes)
