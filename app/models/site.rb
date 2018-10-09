@@ -298,6 +298,10 @@ class Site < ApplicationRecord
     site_elements.deactivated.each(&:activate!)
   end
 
+  def deactivated?
+    site_elements.where.not(deactivated_at: nil).any?
+  end
+
   private
 
   def display_uri
