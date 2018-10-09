@@ -202,7 +202,7 @@ class SiteElement < ApplicationRecord
     update!(deactivated_at: nil)
   end
 
-  # avoid to run validations for this,
+  # avoid running validations,
   # cause we might run into validation errors
   # such as `ensure_custom_targeting_allowed`
   def deactivate
