@@ -1,0 +1,75 @@
+{
+  "name": "Tajima",
+  "type": "generic",
+  "id": "tajima",
+  "fonts": [
+    "oswald",
+    "kanit",
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Modal", "Slider", "Takeover"],
+  "defaults": { 
+    "Takeover": {
+      "background_color": "f8f8f8",
+      "text_color": "000000",
+      "button_color": "feab00",
+      "link_color": "FFFFFF", 
+      "font_id": "roboto",
+      "text_field_border_radius": 3,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 50,
+      "cta_border_radius": 4,
+      "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
+      "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
+      "link_text":"DOWNLOAD"
+    },
+    "Slider": {
+      "background_color": "f8f8f8",
+      "text_color": "000000",
+      "button_color": "feab00",
+      "link_color": "FFFFFF",
+      "font_id": "roboto",
+      "text_field_border_radius": 3,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 35,
+      "cta_border_radius": 4,
+      "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
+      "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
+      "link_text":"DOWNLOAD"
+    },
+    "Modal": {
+      "background_color": "f8f8f8",
+      "text_color": "000000",
+      "button_color": "feab00",
+      "link_color": "FFFFFF",
+      "font_id": "roboto",
+      "text_field_border_radius": 3,
+      "text_field_border_width": 1,
+      "text_field_border_color": "d5d5d5",
+      "text_field_text_color": "9b9b9b",
+      "text_field_background_color": "f8f8f8",
+      "cta_height": 50,
+      "cta_border_radius": 4,
+      "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
+      "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
+      "link_text":"DOWNLOAD"
+    }
+  },
+  "image": {
+    "default_url": "http://assets.hellobar.com/default-ebook.png",
+    "upload_copy": "Recommended minimum is 200 x 300",
+    "position_default": "right",
+    "position_selectable": false
+  },
+  "advanced": true
+}
