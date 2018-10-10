@@ -141,6 +141,10 @@ class Site < ApplicationRecord
   def upsell_email_trigger
     capabilities.upsell_email_trigger
   end
+
+  def upgrade_trigger
+    capabilities.upgrade_trigger
+  end
   # rubocop:enable Delegate
 
   def communication_types=(value)

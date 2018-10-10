@@ -92,6 +92,10 @@ class Subscription::Capabilities
     self.class.parent.defaults[:upsell_email_trigger]
   end
 
+  def upgrade_trigger
+    self.class.parent.defaults[:upgrade_trigger]
+  end
+
   def content_upgrades?
     false
   end

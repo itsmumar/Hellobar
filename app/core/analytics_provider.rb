@@ -354,6 +354,17 @@ class AnalyticsProvider
     )
   end
 
+  def auto_upgrade_to_elite(user:, site:)
+    track(
+      event: 'auto-upgrade-to-elite',
+      user: user,
+      params: {
+        site_id: site.id,
+        site_url: site.url
+      }
+    )
+  end
+
   private
 
   def track(event:, user:, params: {})

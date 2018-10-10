@@ -93,6 +93,14 @@ class HandleOverageSite
   def handle_growth
     return if @site.current_subscription.currently_on_trial? # let users on free trials go nuts until the trial is over
     update_growth_overage_count
+    check_if_auto_upgrade_is_needed
+  end
+
+  def check_if_auto_upgrade_is_needed
+    return unless number_of_views >= site.upgrade_trigger && site.active_subscription.schedule == 'monthly'
+    ChangeSubscription.new(site, { subscription: 'elite', schedule: 'monthly' }, site.credit_cards.last).call
+    site.update_attribute('auto_upgraded_at', Time.zone.now)
+    track_auto_upgrade_in_intercom
   end
 
   def update_growth_overage_count
@@ -108,6 +116,7 @@ class HandleOverageSite
 
   def handle_pro
     update_growth_overage_count # pro is the same as growth now
+    check_if_auto_upgrade_is_needed
   end
 
   def handle_free_plus
@@ -140,5 +149,15 @@ class HandleOverageSite
       number_of_views: number_of_views,
       limit: limit
     ).call
+  end
+
+  def track_auto_upgrade_in_intercom
+    @site.owners_and_admins.each do |user|
+      TrackEvent.new(
+        :auto_upgrade_to_elite,
+        user: user,
+        site: @site
+      ).call
+    end
   end
 end

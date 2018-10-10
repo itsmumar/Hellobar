@@ -83,7 +83,7 @@ class CheckNumberOfViewsForSites
     if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
       report.send_elite_upsell_email(site, number_of_views, limit)
-    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && !subscription.is_a?(Subscription::Elite)
+    elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.active_subscription&.schedule == 'yearly' && !subscription.is_a?(Subscription::Elite)
       site.update(upsell_email_sent: true)
       report.send_upsell_email(site, number_of_views, limit)
     end
