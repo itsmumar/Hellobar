@@ -4,10 +4,10 @@ class @ChoosePlanModal extends UpgradeAccountModal
       unless !!$(event.target).attr("disabled")
         packageData = JSON.parse(event.target.dataset.package)
         if packageData.type == "free"
-          new DowngradeSiteModal({site: @options.site}).open()
+          location.href = '/subscribe/free'
         else
           packageData.schedule = @options.view || @chosenSchedule
-        location.href = '/subscribe/' + packageData.name + '-' + packageData.schedule
+          location.href = '/subscribe/' + packageData.name + '-' + packageData.schedule
 
   _disableCurrentPlanButton: ->
     return if $.isEmptyObject(@options.site.current_subscription)
@@ -22,3 +22,4 @@ class @ChoosePlanModal extends UpgradeAccountModal
           $(button).attr("disabled", "disabled")
           prefix = $(button).closest(".package-status").data('btn-prefix') || ""
           $(button).text(prefix + "Current Plan")
+

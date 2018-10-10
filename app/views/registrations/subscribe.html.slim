@@ -1,18 +1,22 @@
 = render 'shared/flash'
-= form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form', style: 'width: 50%;margin-bottom: 25px;'} do |f|
-  h1 Billing Information
-  -if(@plan[0])
-    .note
-      p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
-      p =link_to 'Choose a different plan','#', class: "different-plan", onclick: 'showPlans()'
-  .wrapper.static-credit-card
-    = hidden_field_tag :update_subscription, false
-    = hidden_field_tag :site_id, current_user.sites.first.id
-    = f.hidden_field :plan, value: params[:plan] || f.object.plan
-    = render 'shared/modals/new_credit_card_form'
+- if (@plan[0] && @plan[0] != 'free')
+  = form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form', style: 'width: 50%;margin-bottom: 25px;'} do |f|
+    h1 Billing Information
+    -if (@plan[0] && @plan[0] != 'free')
+      .note
+        p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
+        p =link_to 'Choose a different plan','#', class: "different-plan", onclick: 'showPlans()'
+    .wrapper.static-credit-card
+      = hidden_field_tag :update_subscription, false
+      = hidden_field_tag :site_id, current_user.sites.first.id
+      = f.hidden_field :plan, value: params[:plan] || f.object.plan
+      = render 'shared/modals/new_credit_card_form'
 
-    = submit_tag "Get Started at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default btn-md md button'
-
+      = submit_tag "Get Started at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default btn-md md button'
+- else
+  .note
+    p You’re signing up for our free plan, No credit card required.
+    p = raw "#{link_to 'Choose a different plan','#', class: "different-plan", onclick: 'showPlans()'} or #{link_to 'Continue', new_site_site_element_path(current_user.sites.first), class: "different-plan"}"
 = render "shared/modals/upgrade_modal"
 
 javascript:
