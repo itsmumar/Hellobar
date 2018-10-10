@@ -82,6 +82,7 @@ class ChangeSubscription
   def pay_bill(bill)
     PayBill.new(bill).call if bill.due_at(credit_card) <= Time.current
     raise_record_invalid_if_failed(bill)
+    reset_current_overage_count(bill)
     bill
   end
 
@@ -91,6 +92,19 @@ class ChangeSubscription
       "There was a problem while charging your credit card ending in #{ credit_card.last_digits }." \
       ' You can fix this by adding another credit card'
     raise ActiveRecord::RecordInvalid, bill
+  end
+
+  def reset_current_overage_count(bill)
+    # When a user upgrades, we need to reduce their Site#overage_count to suit the higher limits
+    # of the new subscription. We don't need to worry about doing this for downgrades because
+    # the overage_count will be going up and so will be handled by the HandleOverageSite job
+    # when it runs tomorrow
+    return if bill.failed? || !Rails.env.production?
+    site.update_attribute('overage_count', 0) # reset to zero and now let's recalculate
+    query = FetchTotalViewsForMonth.new(Site.where(id: site.id)).call
+    number_of_views = query.first.last # query.first looks like this: [528206, 184136] so we take the second element
+    limit = site.views_limit
+    HandleOverageSite.new(site, number_of_views, limit).call if number_of_views >= limit
   end
 
   def create_bill(subscription)
