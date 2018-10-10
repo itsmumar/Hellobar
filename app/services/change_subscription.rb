@@ -104,7 +104,7 @@ class ChangeSubscription
     query = FetchTotalViewsForMonth.new(Site.where(id: site.id)).call
     number_of_views = query.first.last # query.first looks like this: [528206, 184136] so we take the second element
     limit = site.views_limit
-    HandleOverageSite.new(site, number_of_views, limit).call if number_of_views >= limit
+    HandleOverageSiteJob.perform_later(site, number_of_views, limit) if number_of_views >= limit
   end
 
   def create_bill(subscription)
