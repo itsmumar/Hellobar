@@ -891,4 +891,20 @@ describe AnalyticsProvider do
       track('triggered-upgrade-account', user: user, source: source)
     end
   end
+
+  describe '#auto_upgrade_to_elite' do
+    let(:site) { create :site, user: user }
+
+    it 'tracks "fired auto-upgrade-to-elite"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'auto-upgrade-to-elite', user: user,
+          params: {
+            site_id: site.id,
+            site_url: site.url
+          })
+
+      track('auto-upgrade-to-elite', user: user, site: site)
+    end
+  end
 end
