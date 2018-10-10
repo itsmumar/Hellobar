@@ -24,7 +24,7 @@ class Subscription
     # ----> upgrading
     # <---- downgrading
     def plans
-      [Free, FreePlus, Pro, Growth, Elite, ProComped, ProManaged, ProSpecial, Custom1, Custom2, Custom3].map(&:name)
+      [Free, FreePlus, Pro, Growth, ProSpecial, ProComped, ProManaged, Elite, Custom1, Custom2, Custom3].map(&:name)
     end
 
     def index_of(subscription)
