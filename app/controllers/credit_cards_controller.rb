@@ -29,7 +29,7 @@ class CreditCardsController < ApplicationController
     @form = PaymentForm.new(params[:credit_card])
     credit_card = CreateCreditCard.new(@site, current_user, params).call
     if @form.plan.present?
-      ChangeSubscription.new(@site, {subscription: @form.plan_name, schedule: @form.plan_schedule}, credit_card).call
+      ChangeSubscription.new(@site, { subscription: @form.plan_name, schedule: @form.plan_schedule }, credit_card).call
       redirect_to new_site_site_element_path(@site)
     else
       respond_to do |format|
@@ -44,7 +44,7 @@ class CreditCardsController < ApplicationController
   def record_invalid(error)
     respond_to do |format|
       format.html do
-        if @form && @form.plan.present?
+        if @form.plan.present?
           flash[:error] = error.record.errors.full_messages.to_sentence
           redirect_to subscribe_registration_path(@form.plan)
         else

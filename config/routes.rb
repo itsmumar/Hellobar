@@ -97,7 +97,6 @@ Rails.application.routes.draw do
   resource :user, controller: :user, only: %i[update destroy create]
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
-
   get '/subscribe/:plan', to: 'registrations#subscribe', as: :subscribe_registration
   get '/show_plans', to: 'registrations#show_plans', as: :show_plans
 

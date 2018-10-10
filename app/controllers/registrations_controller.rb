@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :require_no_user, except: [:subscribe, :show_plans]
+  before_action :require_no_user, except: [:subscribe]
 
   layout 'static'
 
@@ -70,7 +70,7 @@ class RegistrationsController < ApplicationController
 
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
-    if(@form.plan.present?)
+    if @form.plan.present?
       redirect_to subscribe_registration_path(@form.plan)
     else
       flash[:event] = { category: 'Signup', action: 'signup-email' }
@@ -81,7 +81,6 @@ class RegistrationsController < ApplicationController
   def signup_with_google
     redirect_to oauth_login_path(action: 'google_oauth2')
   end
-
 
   def render_errors(exception)
     flash.now[:error] = exception.record.errors.full_messages.to_sentence
