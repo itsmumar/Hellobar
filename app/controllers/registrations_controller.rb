@@ -70,7 +70,7 @@ class RegistrationsController < ApplicationController
 
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
-    if @form.plan.present? && !['free', 'starter'].include?(@form.plan)
+    if @form.plan.present?
       redirect_to subscribe_registration_path(@form.plan)
     else
       flash[:event] = { category: 'Signup', action: 'signup-email' }
