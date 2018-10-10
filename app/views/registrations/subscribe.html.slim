@@ -1,17 +1,17 @@
 = render 'shared/flash'
-h1 Billing Information
 = form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form', style: 'width: 50%;margin-bottom: 25px;'} do |f|
+  h1 Billing Information
   -if(@plan[0])
     .note
       p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}.
-      p =link_to 'Change plan','#', class: "different-plan", onclick: 'showPlans()'
+      p =link_to 'Choose a different plan','#', class: "different-plan", onclick: 'showPlans()'
   .wrapper.static-credit-card
     = hidden_field_tag :update_subscription, false
     = hidden_field_tag :site_id, current_user.sites.first.id
     = f.hidden_field :plan, value: params[:plan] || f.object.plan
     = render 'shared/modals/new_credit_card_form'
 
-    = submit_tag "Get Started at #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default button'
+    = submit_tag "Get Started at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}/#{@plan[1] == 'monthly' ? '/mo': '/yr'}", class: 'btn btn-default btn-md md button'
 
 = render "shared/modals/upgrade_modal"
 
