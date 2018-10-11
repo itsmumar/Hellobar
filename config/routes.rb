@@ -98,7 +98,6 @@ Rails.application.routes.draw do
   get 'user/new/:invite_token', to: 'user#new', as: :invite_user
 
   get '/subscribe/:plan', to: 'registrations#subscribe', as: :subscribe_registration
-  get '/show_plans', to: 'registrations#show_plans', as: :show_plans
 
   resources :sites do
     resource :privacy, only: %i[edit update]
