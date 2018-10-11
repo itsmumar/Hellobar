@@ -78,15 +78,16 @@
   }
 
   #hellobar-modal {
-    padding: 78px; 
+    padding: 40px; 
+    max-width: 45em;
     .hb-headline-text {
       font-size: 28px;
       line-height: 40px;
     }
     
     .hb-image-wrapper{
-      -webkit-mask-image: linear-gradient(to right, transparent 25%, black 75%);
-      mask-image: linear-gradient(to right, transparent 25%, black 75%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
+      mask-image: linear-gradient(to right, transparent 0%, black 60%);
     }
   
 
