@@ -14,6 +14,10 @@ class ProfitwellAnalyticsAdapter
     # do nothing
   end
 
+  def update_user(*)
+    # do nothing
+  end
+
   private
 
   def subscription_updated(subscription, previous_subscription, user)

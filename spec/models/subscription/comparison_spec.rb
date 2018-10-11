@@ -4,10 +4,14 @@ describe Subscription::Comparison do
       Subscription::Free,
       Subscription::FreePlus,
       Subscription::Pro,
-      Subscription::Elite,
+      Subscription::Growth,
+      Subscription::ProSpecial,
       Subscription::ProComped,
       Subscription::ProManaged,
-      Subscription::ProSpecial
+      Subscription::Elite,
+      Subscription::Custom1,
+      Subscription::Custom2,
+      Subscription::Custom3
     ]
   end
 

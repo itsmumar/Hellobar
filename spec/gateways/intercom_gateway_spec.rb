@@ -100,4 +100,25 @@ describe IntercomGateway do
       intercom.delete_user user_id
     end
   end
+
+  describe '#update_user' do
+    it 'sends users.save request to Intercom' do
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 200, body: user_attributes.to_json
+
+      stub_request(:post, "#{ url }/users")
+        .with(body: {
+          custom_attributes: { foo: 'bar' }, id: intercom_id, user_id: user_id
+        })
+
+      intercom.update_user user_id, foo: 'bar'
+    end
+
+    it 'does not send delete request to Intercom if user is not found' do
+      stub_request(:get, "#{ url }/users?user_id=#{ user_id }")
+        .to_return status: 404
+
+      intercom.delete_user user_id
+    end
+  end
 end

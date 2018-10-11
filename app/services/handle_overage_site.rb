@@ -39,6 +39,12 @@ class HandleOverageSite
       handle_free_plus
     when Subscription::Free::Capabilities
       handle_free
+    when Subscription::Custom1::Capabilities
+      handle_custom
+    when Subscription::Custom2::Capabilities
+      handle_custom
+    when Subscription::Custom3::Capabilities
+      handle_custom
     else
       raise UnknownSubscriptionError, site.capabilities.class.name
     end
@@ -52,6 +58,21 @@ class HandleOverageSite
     delta = (@number_of_views - @limit)
     current_charge_count = @site.overage_count
     new_charge_count = (delta.to_f / 100_000.0).ceil
+
+    return unless new_charge_count > current_charge_count
+    site.update(limit_email_sent: true)
+    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    @site.update(overage_count: new_charge_count)
+  end
+
+  def handle_custom
+    update_custom_plan_overage_count
+  end
+
+  def update_custom_plan_overage_count
+    delta = (@number_of_views - @limit)
+    current_charge_count = @site.overage_count
+    new_charge_count = (delta.to_f / 250_000.0).ceil
 
     return unless new_charge_count > current_charge_count
     site.update(limit_email_sent: true)
@@ -92,7 +113,7 @@ class HandleOverageSite
     @site.deactivate_site_element
 
     return if site.limit_email_sent
-    site.update(limit_email_sent: true)
+    site.update_column(:limit_email_sent, true)
     track_free_exceeded_in_intercom
     # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
@@ -102,9 +123,8 @@ class HandleOverageSite
       TrackEvent.new(
         :free_overage,
         user: user,
-        site: @site,
-        number_of_views: @number_of_views
-      )
+        site: @site
+      ).call
     end
   end
 
