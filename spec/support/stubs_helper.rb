@@ -41,4 +41,8 @@ module StubsHelper
     gateway = double('CyberSourceGateway', methods)
     allow(CyberSourceGateway).to receive(:new).and_return(gateway)
   end
+
+  def stub_handle_overage(_site, _number_of_views, _limit)
+    allow(FetchTotalViewsForMonth).to receive_service_call.and_return([[528206, 184136]])
+  end
 end

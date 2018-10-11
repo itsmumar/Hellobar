@@ -99,7 +99,7 @@ class ChangeSubscription
     # of the new subscription. We don't need to worry about doing this for downgrades because
     # the overage_count will be going up and so will be handled by the HandleOverageSite job
     # when it runs tomorrow
-    return if bill.failed? || !Rails.env.production?
+    return if bill.failed?
     site.update_attribute('overage_count', 0) # reset to zero and now let's recalculate
     query = FetchTotalViewsForMonth.new(Site.where(id: site.id)).call
     number_of_views = query.first.last # query.first looks like this: [528206, 184136] so we take the second element
