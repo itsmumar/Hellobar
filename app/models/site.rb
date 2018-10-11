@@ -45,6 +45,7 @@ class Site < ApplicationRecord
   has_many :coupon_uses, through: :bills
   has_many :emails, dependent: :destroy
   has_one :content_upgrade_styles, inverse_of: :site
+  has_many :credit_cards, -> { order(:created_at).distinct }, through: :subscriptions
 
   scope :preload_for_script, lambda {
     preload(
@@ -291,7 +292,7 @@ class Site < ApplicationRecord
   end
 
   def deactivate_site_element
-    site_elements.active.each(&:deactivate!)
+    site_elements.active.each(&:deactivate)
   end
 
   def activate_site_element

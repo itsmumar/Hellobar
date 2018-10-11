@@ -239,6 +239,63 @@ describe Subscription do
       end
     end
 
+    context 'Custom1' do
+      let(:subscription_type) { :custom_1 }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 199
+        expect(subscription.visit_overage).to eql 5_000_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 5_000_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :custom_1, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 1990 }
+      end
+    end
+
+    context 'Custom2' do
+      let(:subscription_type) { :custom_2 }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 299
+        expect(subscription.visit_overage).to eql 10_000_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 10_000_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :custom_2, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 2990 }
+      end
+    end
+
+    context 'Custom3' do
+      let(:subscription_type) { :custom_3 }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 399
+        expect(subscription.visit_overage).to eql 20_000_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 20_000_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :custom_3, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 3990 }
+      end
+    end
+
     context 'ProComped' do
       let(:subscription_type) { :pro_comped }
 
@@ -272,7 +329,7 @@ describe Subscription do
         expect(subscription.amount).to eql 99
         expect(subscription.visit_overage).to eql 500_000
         expect(subscription.visit_overage_unit).to eql nil
-        expect(subscription.visit_overage_amount).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
       end
 
       context 'when yearly' do

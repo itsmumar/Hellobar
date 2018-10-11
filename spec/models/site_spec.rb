@@ -356,4 +356,17 @@ describe Site do
       specify { expect(site.gdpr_enabled?).to be_falsey }
     end
   end
+
+  describe '#credit_cards' do
+    let(:credit_card) { create :credit_card }
+
+    before do
+      create :subscription, :pro, site: site, credit_card: credit_card
+      create :subscription, :elite, site: site, credit_card: credit_card
+    end
+
+    it 'returns unique credit cards' do
+      expect(site.credit_cards).to match_array [credit_card]
+    end
+  end
 end
