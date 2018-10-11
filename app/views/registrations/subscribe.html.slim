@@ -4,14 +4,28 @@
     .col-custom
       h1 Billing Information
       .note
-        p You've chosen the Starter Plan (Free Forever), are you sure?
+        p.line-height-90 You've chosen the Starter Plan (Free Forever), are you sure?
         p = link_to 'No, I want advance features and expert marketing tips','#', class: "different-plan", onclick: 'showPlans()'
       p.margin-top-40 By signing up below for the Starter Plan you will be missing out on:
       ul
-        li Help from Dedicated Marketing experts (we'll help write your copy!)
-        li Increased view count every month
-        li Advnace design features
-        li Unlimited A/B test
+        li
+          img {src = "#{image_path('icons/check-solid.svg')}" }
+            |Help from Dedicated Marketing experts (we'll help write your copy!)
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Increased view count every month
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Advnace design features
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Premium templates
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Advnace design features
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+            |Unlimited A/B test
       = link_to 'Get Started For Free',new_site_site_element_path(current_user.sites.first),class: 'btn btn-default button'
   - else
     = form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form', style: 'width: 50%;margin-bottom: 25px;'} do |f|
