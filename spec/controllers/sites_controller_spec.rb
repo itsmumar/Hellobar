@@ -59,9 +59,9 @@ describe SitesController do
       end
 
       it 'redirects to the site when using existing url' do
-        site = create(:site, url: 'www.test.com')
+        site = create(:site, url: 'www.test-site.com')
         site.users << user
-        post :create, site: { url: 'www.test.com' }
+        post :create, site: { url: 'www.test-site.com' }
 
         expect(response).to redirect_to(site_path(site))
         expect(flash[:error]).to eq('Url is already in use.')
@@ -78,10 +78,10 @@ describe SitesController do
       end
 
       context 'when CreateSite::DuplicateURLError is raised' do
-        let!(:existing_site) { create :site, user: user, url: 'www.test.com' }
+        let!(:existing_site) { create :site, user: user, url: 'www.test-site.com' }
 
         it 'redirects to existing site' do
-          post :create, site: { url: 'www.test.com' }
+          post :create, site: { url: 'www.test-site.com' }
           expect(flash[:error]).to eq 'Url is already in use.'
           expect(response).to redirect_to site_path(existing_site)
         end
