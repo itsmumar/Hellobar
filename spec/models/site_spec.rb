@@ -369,4 +369,36 @@ describe Site do
       expect(site.credit_cards).to match_array [credit_card]
     end
   end
+
+  describe '#deactivate_site_element', :freeze do
+    let!(:site_element) { create :site_element, site: site }
+
+    it 'deactivates site elements' do
+      expect { site.deactivate_site_element }
+        .to change { site_element.reload.deactivated_at }
+        .from(nil)
+        .to(Time.current)
+    end
+
+    it 'regenerates script' do
+      site.deactivate_site_element
+      expect(GenerateStaticScriptJob).to have_been_enqueued
+    end
+  end
+
+  describe '#activate_site_element', :freeze do
+    let!(:site_element) { create :site_element, site: site, deactivated_at: Time.current }
+
+    it 'activates site elements' do
+      expect { site.activate_site_element }
+        .to change { site_element.reload.deactivated_at }
+        .from(Time.current)
+        .to(nil)
+    end
+
+    it 'regenerates script' do
+      site.activate_site_element
+      expect(GenerateStaticScriptJob).to have_been_enqueued
+    end
+  end
 end
