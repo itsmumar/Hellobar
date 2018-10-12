@@ -362,6 +362,25 @@ class AnalyticsProvider
         site_id: site.id,
         site_url: site.url
       }
+  end
+
+  def triggered_upgrade_account(user:, source:)
+    track(
+      event: 'triggered-upgrade-account',
+      user: user,
+      params: {
+        source: source
+      }
+    )
+  end
+
+  def triggered_payment_checkout(user:, source:)
+    track(
+      event: 'triggered-payment-checkout',
+      user: user,
+      params: {
+        source: source
+      }
     )
   end
 

@@ -865,4 +865,36 @@ describe AnalyticsProvider do
       end
     end
   end
+
+  describe '#triggered_payment_checkout' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-payment-checkout"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-payment-checkout',
+          user: user,
+          params: {
+            source: source
+          })
+
+      track('triggered-payment-checkout', user: user, source: source)
+    end
+  end
+
+  describe '#triggered_upgrade_account' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-upgrade-account"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-upgrade-account',
+          user: user,
+          params: {
+            source: source
+          })
+
+      track('triggered-upgrade-account', user: user, source: source)
+    end
+  end
 end
