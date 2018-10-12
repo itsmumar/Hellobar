@@ -293,10 +293,12 @@ class Site < ApplicationRecord
 
   def deactivate_site_element
     site_elements.active.each(&:deactivate)
+    script.generate
   end
 
   def activate_site_element
     site_elements.deactivated.each(&:activate!)
+    script.generate
   end
 
   def deactivated?
