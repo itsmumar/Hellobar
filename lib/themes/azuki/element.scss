@@ -1,4 +1,4 @@
-.new {
+.azuki {
   #hellobar-modal { 
     padding: 10px;
     .hb-header {
@@ -44,7 +44,7 @@
       margin: 1em auto;
       #hb-fields-form{
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
         align-items: center;
         & > *{
           margin-left: 5px;
@@ -103,29 +103,12 @@
       }
     }
   } 
-  #hellobar-takeover {
-    .hb-input-block input {
-      font-size: .7em;
-    }
-
-    .hb-name-input {
-      margin-bottom: 12px;
-    }
-  } 
-  #hellobar-slider {
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
-    }
- 
-    .hb-cta {
-      padding: 12px
-    }
-  }
   @media screen and (max-width:640px){
     #hellobar-modal {
       width: calc(100% - 20px);
+      .hb-text-wrapper{
+        padding: 0 1.7em;
+      }
       .hb-input-wrapper {
         #hb-fields-form{
           flex-direction: column;
@@ -153,5 +136,72 @@
         }
       }
     } 
+  } 
+
+  #hellobar-takeover {
+    .image-background .hb-image-wrapper.background {
+      height: 50%; 
+      & ~ .slider-content {
+        margin-top: 50%;
+      }
+    } 
+    .hb-image-wrapper.background ~ .slider-content {
+      margin-top: 50%;
+      display: flex;
+      flex-direction: column; 
+      padding: 15px 25px;
+    } 
+    .hb-image-wrapper{
+      padding: 0px;
+      margin-bottom:20px; 
+      height: 50%;
+      background-position: center;
+    }
+    .hb-content-wrapper{
+      top: 70%;
+    }
+
+    .hb-input-block input {
+      font-size: .7em;
+    }
+
+    .hb-name-input {
+      margin-bottom: 12px;
+    }
+    .hb-header{
+      display: none;
+    }
+  } 
+  
+  #hellobar-slider {
+    .image-background .hb-image-wrapper.background {
+      height: 130px; 
+      & ~ .slider-content {
+        margin-top: 130px;
+      }
+    } 
+    .hb-image-wrapper.background ~ .slider-content {
+      margin-top: 130px;
+      display: flex;
+      flex-direction: column; 
+      padding: 15px 25px;
+    } 
+    .hb-image-wrapper{
+      padding: 0px;
+      margin-bottom:20px; 
+      height: 130px;
+      background-position: center;
+    }
+
+    
+    &.show-branding {
+      .slider-content {
+        padding-bottom: 38px;
+      }
+    }
+ 
+    .hb-cta {
+      padding: 12px
+    }
   } 
 }

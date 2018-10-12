@@ -12,6 +12,18 @@
     padding-left: 9%;
 
   }
+  .hb-image-overlay{
+    content: ""; 
+    display: block;
+    z-index: 100;
+    left: 30px;
+    right: 30px;
+    top: 30px;
+    bottom: 30px;
+    height: auto;
+    width: auto;
+    position: absolute; 
+  }
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover { 
@@ -41,17 +53,18 @@
     }
   }
 
-  #hellobar-slider {   
-    &:before{
-      content: "";
-      background: rgba(0,0,0,0.5);
+  #hellobar-slider { 
+    .hb-image-overlay{
+      content: ""; 
       display: block;
       z-index: 100;
       left: 15px;
       right: 15px;
       top: 15px;
       bottom: 15px;
-      position: absolute;
+      height: auto;
+      width: auto;
+      position: absolute; 
     }
     .hb-headline-text {
       font-size: 16px;
@@ -81,18 +94,7 @@
   }
 
   #hellobar-modal {
-    padding: 78px;
-    &:before{
-      content: "";
-      background: rgba(0,0,0,0.5);
-      display: block;
-      z-index: 100;
-      left: 30px;
-      right: 30px;
-      top: 30px;
-      bottom: 30px;
-      position: absolute;
-    }
+    padding: 78px; 
     .hb-headline-text {
       font-size: 28px;
       line-height: 40px;
@@ -124,16 +126,17 @@
   }
 
   #hellobar-takeover {
-    &:before{
-      content: "";
-      background: rgba(0,0,0,0.5);
+    .hb-image-overlay{
+      content: ""; 
       display: block;
       z-index: 100;
       left: 30px;
       right: 30px;
       top: 30px;
       bottom: 30px;
-      position: absolute;
+      height: auto;
+      width: auto;
+      position: absolute; 
     }
     .hb-headline-text {
       font-size: 34px;
@@ -161,16 +164,17 @@
   } 
   @media screen and (max-width: 640px){
     #hellobar-takeover {
-      &:before{
-        content: "";
-        background: rgba(0,0,0,0.5);
+      .hb-image-overlay{
+        content: ""; 
         display: block;
         z-index: 100;
         left: 15px;
         right: 15px;
         top: 15px;
         bottom: 15px;
-        position: absolute;
+        height: auto;
+        width: auto;
+        position: absolute; 
       }
       .icon-close {
         top: 40px;

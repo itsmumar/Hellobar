@@ -43,6 +43,7 @@
   }
 
   .hb-input-block {
+    margin: 0;
     &:before {
       background-repeat: no-repeat;
       content: "";
@@ -116,7 +117,7 @@
   #hellobar-modal {
     padding: 3.5em;
     max-width: 50em;  
-
+    min-height: 20em;  
     .hb-content-wrapper:after { 
       margin: 8px;
       border-width: 1px;
@@ -148,6 +149,7 @@
     }  
     .uploaded-image {
       max-height: 300px;
+      height: 90%;
     } 
 
     .hb-input-block {
@@ -175,9 +177,9 @@
         width: 60%;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 33%;
         position: absolute;
-        right: 1.5em;
+        right: 3.5em;
         bottom: 3.5em;
         top: 3.5em;
         margin: auto;
@@ -265,6 +267,7 @@
     } 
     .uploaded-image { 
       max-height: 300px;
+      height: 90%;
     }  
     .hb-headline-text{
       font-size: 1.7em;  
@@ -278,7 +281,7 @@
 
     [data-hb-editable-block="content"] {
       font-size: 1em;
-      padding: 0 0 10px;  
+      margin: 0 0 10px;  
     }
 
     .hb-input-block {
@@ -316,7 +319,7 @@
         width: 60%;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 36%;
         position: absolute;
         right: 0em; 
         bottom: 25px;
