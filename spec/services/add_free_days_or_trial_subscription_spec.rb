@@ -3,9 +3,7 @@ describe AddFreeDaysOrTrialSubscription do
   let(:site) { create :site, user: user }
   let(:service) { AddFreeDaysOrTrialSubscription.new(site, 1.week) }
 
-  before do
-    stub_handle_overage(site, 100, 99)
-  end
+  before { stub_handle_overage(site, 100, 99) }
 
   context 'when site has no subscription (free)' do
     it 'calls AddTrialSubscription' do

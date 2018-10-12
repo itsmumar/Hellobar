@@ -84,7 +84,7 @@ describe AddFreeDays, :freeze do
       before do
         stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, subscription: subscription).call
-       end
+      end
 
       it 'raises error' do
         expect { service.call }
