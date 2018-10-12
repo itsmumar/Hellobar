@@ -44,5 +44,7 @@ module StubsHelper
 
   def stub_handle_overage(_site, _number_of_views, _limit)
     allow(FetchTotalViewsForMonth).to receive_service_call.and_return([[528206, 184136]])
+    stub_request(:get, 'http://es.com:9200/test_over_time/over_time_type/_search')
+      .to_return(status: 200)
   end
 end
