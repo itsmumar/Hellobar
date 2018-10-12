@@ -35,7 +35,10 @@ describe 'Subscriptions requests' do
         }
       end
 
-      before { ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call }
+      before do
+        stub_handle_overage(site, 100, 99)
+        ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
+      end
 
       it 'links new credit card to subscription' do
         expect { put subscription_path(params) }

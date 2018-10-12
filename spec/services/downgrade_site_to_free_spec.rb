@@ -5,6 +5,7 @@ describe DowngradeSiteToFree, :freeze do
   let(:service) { DowngradeSiteToFree.new(site) }
 
   before do
+    stub_handle_overage(site, 100, 99)
     stub_cyber_source :purchase
     ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
     Timecop.travel site.active_subscription.active_until + 1.day

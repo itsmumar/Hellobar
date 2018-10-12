@@ -3,6 +3,9 @@ describe 'Admin::Sites requests' do
   let(:site) { create(:site, :free_subscription, :with_user) }
   let!(:user) { site.owners.first }
   before(:each) { stub_current_admin(admin) }
+  before do
+    stub_handle_overage(site, 100, 99)
+  end
 
   context 'GET admin_site_path' do
     before do

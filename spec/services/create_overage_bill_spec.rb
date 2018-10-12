@@ -8,6 +8,7 @@ describe CreateOverageBill do
 
   context 'when bill subscription is Pro' do
     before do
+      stub_handle_overage(site, 100, 99)
       stub_cyber_source(:purchase)
       ChangeSubscription.new(site, { subscription: 'pro', schedule: 'monthly' }, credit_card).call
     end
