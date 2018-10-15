@@ -6,7 +6,10 @@ describe BillingMailer do
   let(:owner2) { create :user }
 
   before { site.owners = [owner1, owner2] }
-  before { stub_cyber_source :purchase }
+  before do
+    stub_handle_overage(site, 100, 99)
+    stub_cyber_source :purchase
+  end
 
   describe '#could_not_charge' do
     let(:mail) { BillingMailer.could_not_charge(bill) }

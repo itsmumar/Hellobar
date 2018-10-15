@@ -5,8 +5,10 @@ describe ChangeSubscription, :freeze do
   let(:params) { { subscription: 'pro', schedule: 'yearly' } }
   let(:service) { ChangeSubscription.new(site, params, credit_card) }
   let(:last_subscription) { Subscription.last }
+  let(:overage_service) { HandleOverageSite.new(site, number_of_views, limit) }
 
   before do
+    stub_handle_overage(site, 100, 99)
     stub_cyber_source :purchase
     change_subscription 'free'
 

@@ -289,6 +289,7 @@ describe Site do
     let(:last_bill) { site.bills.last }
 
     def change_subscription(subscription, schedule = 'monthly')
+      stub_handle_overage(site, 100, 99)
       ChangeSubscription.new(
         site,
         { subscription: subscription, schedule: schedule },

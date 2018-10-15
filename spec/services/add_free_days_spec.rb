@@ -12,6 +12,7 @@ describe AddFreeDays, :freeze do
     context "with #{ subscription } subscription" do
       before do
         stub_cyber_source :purchase
+        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: subscription }, create(:credit_card)).call
       end
 
@@ -80,7 +81,10 @@ describe AddFreeDays, :freeze do
 
   %w[Free FreePlus ProComped ProManaged].each do |subscription|
     context "with #{ subscription } subscription" do
-      before { ChangeSubscription.new(site, subscription: subscription).call }
+      before do
+        stub_handle_overage(site, 100, 99)
+        ChangeSubscription.new(site, subscription: subscription).call
+      end
 
       it 'raises error' do
         expect { service.call }
