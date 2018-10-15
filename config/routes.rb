@@ -186,6 +186,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :stats, only: %i[index]
+
     resources :contact_lists, only: %i[show]
 
     resources :credit_cards, only: %i[show destroy]
