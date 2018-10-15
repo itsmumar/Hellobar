@@ -176,6 +176,8 @@ Rails.application.routes.draw do
 
   get '/admin', to: 'admin/users#index', as: :admin
 
+  resources :stats, only: :index
+
   namespace :admin do
     post 'users/:id/impersonate', to: 'users#impersonate', as: :impersonate_user
     delete 'users/unimpersonate', to: 'users#unimpersonate', as: :unimpersonate_user
