@@ -8,10 +8,7 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
   }
-  .answer {
-    padding-left: 9%;
 
-  }
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {
@@ -36,6 +33,8 @@
       margin-top: 1em;
       letter-spacing: 1px;
       max-width: none;
+      display: inline-flex;
+      align-items: center;
     }
   }
 

@@ -26,7 +26,14 @@
     }
 
     .hb-cta {
-      padding: 6px
+      padding: 7px;
+      display: inline-flex;
+      align-items: center;
     }
+    .answer
+    {
+      padding: 7px;
+    }
+
   }
 }
