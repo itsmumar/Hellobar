@@ -50,7 +50,4 @@ html
       javascript:
         new AccountPromptModal().open();
 
-    javascript:
-      var currentUser = #{{serialize_current_user}};
-      var siteID = "#{@site.try(:id)}";
-      var site = #{{serialize_current_site}};
+    = render 'shared/shared_variables'
