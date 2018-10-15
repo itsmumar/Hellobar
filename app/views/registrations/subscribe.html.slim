@@ -1,0 +1,50 @@
+= render 'shared/flash'
+.static-credit-card
+  - if (@plan[0] && @plan[0] == 'free'|| @plan[0] == 'starter')
+    .col-custom
+      h1 Billing Information
+      .note
+        p.line-height-100 You've chosen the Starter Plan (Free Forever), are you sure?
+          (This plan includes Hello Bar branding)
+        p = link_to 'No, I want advanced features and expert marketing tips','#', class: "different-plan", onclick: 'showPlans()'
+      p.margin-top-40 By signing up below for the Starter Plan you will be missing out on:
+      ul
+        li
+          img {src = "#{image_path('icons/check-solid.svg')}" }
+            |Help from Dedicated Marketing experts (we'll help write your copy!)
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Increased monthly view limits
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Ability to remove Hello Bar branding
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Premium templates
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+              |Advanced design features
+          li
+            img {src = "#{image_path('icons/check-solid.svg')}" }
+            |Unlimited A/B testing
+      = link_to 'Get Started For Free',new_site_site_element_path(current_user.sites.first),class: 'btn btn-default button'
+  - else
+    = form_for @form, as: :credit_card, url: credit_cards_path, html: {class: 'new-credit-card-form', style: 'width: 50%;margin-bottom: 25px;'} do |f|
+      h1 Billing Information
+      - if (@plan[0] && @plan[0] != 'free')
+        .note
+          p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo' : '/yr'}.
+          p = link_to 'Choose a different plan', '#', class: "different-plan", onclick: 'showPlans()'
+      .wrapper
+        = hidden_field_tag :update_subscription, false
+        = hidden_field_tag :site_id, current_user.sites.first.id
+        = f.hidden_field :plan, value: params[:plan] || f.object.plan
+        = render 'shared/modals/new_credit_card_form'
+
+        = submit_tag "Get Started at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo' : '/yr'}", class: 'btn btn-default btn-md md button'
+
+= render "shared/modals/upgrade_modal"
+
+javascript:
+  function showPlans() {
+    new ChoosePlanModal({site: window.site, current_plan: '#{@plan[0].downcase}' }).open();}

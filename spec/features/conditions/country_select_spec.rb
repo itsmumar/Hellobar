@@ -5,6 +5,7 @@ feature 'Render the country select for the Rule modal', :js do
   given(:custom_rule) { create :rule }
 
   background do
+    stub_handle_overage(site, 100, 99)
     stub_cyber_source :purchase
 
     sign_in user

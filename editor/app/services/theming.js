@@ -4,6 +4,7 @@ import _ from 'lodash/lodash';
 export default Ember.Service.extend({
 
   inlineEditing: Ember.inject.service(),
+  bus: Ember.inject.service(),
   applicationSettings: Ember.inject.service(),
   palette: Ember.inject.service(),
   modelLogic: Ember.inject.service(),
@@ -20,28 +21,6 @@ export default Ember.Service.extend({
     return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
   }.property('availableThemes'),
 
-  autodetectedTheme: function () {
-    return {
-      name: 'Autodetected',
-      type: 'generic',
-      id: 'autodetected',
-      fonts: [
-        'open_sans',
-        'source_pro',
-        'helvetica',
-        'arial',
-        'georgia'
-      ],
-      'element_types': ['Bar', 'Modal', 'Slider', 'Takeover'],
-      defaults: {},
-      image: {
-        position_default: 'left',
-        position_selectable: true
-      }
-    };
-
-  }.property(),
-
   _firstAttemptOfThemeApplying: false,
 
   setThemeById: function (themeId) {
@@ -53,28 +32,37 @@ export default Ember.Service.extend({
         'model.theme': theme,
         'model.theme_id': themeId
       });
+      this.applyCurrentTheme();
     }
   },
 
   applyCurrentTheme() {
-    if (!this.get('model.id') || this._firstAttemptOfThemeApplying) {
-      const allThemes = this.get('availableThemes');
-      const currentThemeId = this.get('model.theme_id');
-      if (currentThemeId && currentThemeId !== 'autodetect') {
-        const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
-        const currentElementType = this.get('model.type');
-        if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
-          const themeStyleDefaults = currentTheme.defaults[currentElementType] || {};
-          _.each(themeStyleDefaults, (value, key) => {
-              this.set(`model.${key}`, value);
-            }
-          );
+    const allThemes = this.get('availableThemes');
+    const currentThemeId = this.get('model.theme_id');
+    const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
+    const currentElementType = this.get('model.type');
+
+    if (!currentTheme) {
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'preview/containers/theming/theme-tile-grid',
+        componentOptions: {
+          elementType: currentElementType
         }
-      } else {
-        this.get('palette').setSiteColors(this);
-      }
+      });
+      return;
     }
-    this._firstAttemptOfThemeApplying = true;
+
+    if (currentTheme.defaults && currentTheme.defaults[currentElementType]) {
+      const themeStyleDefaults = currentTheme.defaults[currentElementType] || {};
+      _.each(themeStyleDefaults, (value, key) => {
+          this.set(`model.${key}`, value);
+        }
+      );
+    }
+
+    if (currentThemeId && currentThemeId === 'autodetect') {
+      this.get('palette').setSiteColors(this);
+    }
   },
 
   getImagePlacement() {
@@ -93,7 +81,9 @@ export default Ember.Service.extend({
   currentTheme: function () {
     const allThemes = this.get('availableThemes');
     const currentThemeId = this.get('model.theme_id');
-    return currentThemeId ? _.find(allThemes, theme => currentThemeId === theme.id) : this.get('defaultGenericTheme');
+    return currentThemeId ?
+      _.find(allThemes, theme => currentThemeId === theme.id) :
+      this.get('defaultGenericTheme');
   }.property('availableThemes', 'model.theme_id'),
 
   defaultImage: function () {
@@ -146,6 +136,12 @@ export default Ember.Service.extend({
     if (themeSupportsStyle && type) {
       this.set('model.theme', null);
       this.set('model.theme_id', null);
+      this.get('bus').trigger('hellobar.core.rightPane.show', {
+        componentName: 'preview/containers/theming/theme-tile-grid',
+        componentOptions: {
+          elementType: this.get('model.type')
+        }
+      });
       return true;
     }
   },

@@ -6,6 +6,7 @@ feature 'Manage Settings', :js do
 
   background do
     stub_cyber_source :purchase
+    stub_handle_overage(site, 100, 99)
 
     sign_in user
 

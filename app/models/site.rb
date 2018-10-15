@@ -321,6 +321,6 @@ class Site < ApplicationRecord
   end
 
   def check_for_banned_url
-    errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase)
+    errors.add('ERROR:', Site.url_error_messages(url)) if url =~ URI::DEFAULT_PARSER.make_regexp && Site.banned_sites.include?(URI.parse(url).host.downcase.split('www.').last)
   end
 end

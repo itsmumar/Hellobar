@@ -3,8 +3,8 @@ class PaymentForm
   include ActiveModel::Model
 
   attr_accessor :number, :expiration, :verification_value
-  attr_accessor :name, :city, :state, :zip, :address, :country
-  attr_reader :first_name, :last_name
+  attr_accessor :name, :city, :state, :zip, :address, :country, :plan
+  attr_reader :first_name, :last_name, :plan_name, :plan_schedule
 
   validates :number, :expiration, :month, :year, :name, :city, :zip, :address, :country, :verification_value, presence: true
   validates :state, presence: true, if: -> { country == 'US' }
@@ -25,6 +25,7 @@ class PaymentForm
   def normalize!
     @number = @number.to_s.delete(' ')
     @first_name, @last_name = (name || '').split(' ', 2)
+    @plan_name, @plan_schedule = (plan || '').split('-', 2)
     @month, @year = (expiration || '').split('/', 2)
   end
 

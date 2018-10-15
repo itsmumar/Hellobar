@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  before_action :require_no_user
+  before_action :require_no_user, except: [:subscribe]
 
   layout 'static'
 
@@ -22,6 +22,13 @@ class RegistrationsController < ApplicationController
     else
       signup_with_google
     end
+  end
+
+  def subscribe
+    @plan = params[:plan].split('-')
+    @form = PaymentForm.new(params[:credit_card])
+
+    render layout: 'static'
   end
 
   private
@@ -63,10 +70,12 @@ class RegistrationsController < ApplicationController
 
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
-
-    flash[:event] = { category: 'Signup', action: 'signup-email' }
-
-    redirect_to new_site_site_element_path(site)
+    if @form.plan.present?
+      redirect_to subscribe_registration_path(@form.plan)
+    else
+      flash[:event] = { category: 'Signup', action: 'signup-email' }
+      redirect_to new_site_site_element_path(site)
+    end
   end
 
   def signup_with_google

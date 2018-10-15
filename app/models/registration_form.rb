@@ -1,8 +1,7 @@
 class RegistrationForm
   include ActiveModel::Model
 
-  attr_accessor :site_url
-  attr_accessor :email, :password
+  attr_accessor :site_url, :email, :password, :plan
   attr_reader :accept_terms_and_conditions, :ignore_existing_site
 
   attr_reader :user, :site
@@ -11,7 +10,7 @@ class RegistrationForm
     super(params[:registration_form])
 
     @user = User.new(email: email, password: password)
-    @site = Site.new(url: site_url)
+    @site = Site.new(url: site_url, pre_selected_plan: plan)
     @cookies = cookies
   end
 

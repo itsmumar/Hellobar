@@ -7,7 +7,8 @@
 
 #= require flash_message_initializer
 #= require modal
-
+#= require ./modals/upgrade_account_modal
+#= require choose_plan_modal
 
 $ ->
 
