@@ -212,7 +212,7 @@ class AnalyticsProvider
   end
 
   def added_credit_card(user:, site:)
-    subscription = site.current_subscription || Subscription::Free.new
+    subscription = site&.current_subscription || Subscription::Free.new
 
     track(
       event: 'added-credit-card',
