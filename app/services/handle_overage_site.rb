@@ -25,6 +25,8 @@ class HandleOverageSite
     case site.capabilities
     when Subscription::Elite::Capabilities
       handle_elite
+    when Subscription::EliteSpecial::Capabilities
+      handle_elite
     when Subscription::ProManaged::Capabilities
       handle_pro_managed
     when Subscription::ProComped::Capabilities

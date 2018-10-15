@@ -49,6 +49,11 @@ FactoryBot.define do
       initialize_with { Subscription::Elite.new(schedule: schedule) }
     end
 
+    trait :elite_special do
+      amount { Subscription::EliteSpecial.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
+      initialize_with { Subscription::EliteSpecial.new(schedule: schedule) }
+    end
+
     trait :custom_1 do
       amount { Subscription::Custom1.defaults[schedule.to_sym == :monthly ? :monthly_amount : :yearly_amount] }
       initialize_with { Subscription::Custom1.new(schedule: schedule) }
