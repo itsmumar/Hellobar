@@ -26,3 +26,6 @@
 @import 'layouts/pages/*';          // Static Pages (Home, About Us, etc)
 @import 'layouts/devise/*';         // User Account Pages
 @import 'layouts/user/new';         // User Account Pages
+@import 'layouts/modals/upgrade';
+@import 'layouts/modals/new-credit-card';
+@import 'layouts/modals/credit-card-page-static';

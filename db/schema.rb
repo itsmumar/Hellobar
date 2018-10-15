@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180925173258) do
+ActiveRecord::Schema.define(version: 20181008162003) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -458,10 +458,10 @@ ActiveRecord::Schema.define(version: 20180925173258) do
     t.string   "cta_border_color",              limit: 255,      default: "ffffff",     null: false
     t.integer  "cta_border_width",              limit: 4,        default: 0,            null: false
     t.integer  "cta_border_radius",             limit: 4,        default: 0,            null: false
+    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
-    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.datetime "deactivated_at"
   end
 
@@ -507,6 +507,7 @@ ActiveRecord::Schema.define(version: 20180925173258) do
     t.boolean  "upsell_email_sent",                                default: false
     t.integer  "overage_count",                   limit: 4,        default: 0
     t.boolean  "ab_test_running",                                  default: false
+    t.string   "pre_selected_plan",               limit: 255
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
