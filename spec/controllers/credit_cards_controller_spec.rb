@@ -8,6 +8,7 @@ describe CreditCardsController do
     stub_current_user(@user)
     @site_element = create(:site_element)
     @site_element.site.users << @user
+    stub_handle_overage(@site_element.site, 100, 99)
   end
 
   describe 'POST #create' do
