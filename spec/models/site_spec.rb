@@ -201,6 +201,11 @@ describe Site do
       site = Site.new(url: 'http://facebook.com')
       expect { site.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
+
+    it 'is invalid with banned URL that has www' do
+      site = Site.new(url: 'http://www.facebook.com')
+      expect { site.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe '#set_branding_on_site_elements' do
