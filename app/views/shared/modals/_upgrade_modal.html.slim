@@ -72,54 +72,55 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               div.bold Forever Free
         tbody
           tr.h44
-            th.thborder Views
+            th.thborder.bolder Views
             td 500,000/mo
             td 50,000/mo
             td 5,000/mo
           tr.h44
-            th.thborder # of Campaigns
+            th.thborder.bolder # of Campaigns
             td Unlimited
             td Unlimited
             td Unlimited
           tr.h44
-            th.thborder # of Subscribers
+            th.thborder.bolder # of Subscribers
             td Unlimited
             td Unlimited
             td Unlimited
           tr.h44
-            th.thborder Design Features
+            th.thborder.bolder Design Features
             td Premium
             td Advanced
             td Basic
           tr.h44
-            th.thborder Targeting Features
+            th.thborder.bolder Targeting Features
             td Premium
             td Advanced
             td Device Type Only
           tr.h44
-            th.thborder A/B Testing
+            th.thborder.bolder A/B Testing
             td Unlimited Tests
             td Unlimited Tests
             td 1 Live Test
           tr.h44
-            th.thborder Integrations
+            th.thborder.bolder Integrations
             td Premium
             td Advanced
             td Basic
           tr.h44
-            th.thborder Dedicated Marketing Expert
+            th.thborder.bolder Dedicated Marketing Expert
             td.check &#10004;
             td 90 Days
             td.cross &#10005;
           tr.h44
-            th.thborder Remove HB Logo
+            th.thborder.bolder Remove HB Logo
             td.check  &#10004;
             td.check  &#10004;
             td.cross &#10005;
-          tr.trborder
+          tr
             th
             td.trborder
               .package-block.enterprise
+                .package-features
                   .package-status
                     = choose_plan_button(Subscription::Elite.new)
             td.trborder

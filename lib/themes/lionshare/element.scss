@@ -43,6 +43,7 @@
   }
 
   .hb-input-block {
+    margin-bottom: 0;
     &:before {
       background-repeat: no-repeat;
       content: "";
@@ -52,6 +53,7 @@
       width: 24px;
       height: 24px;
     }
+    
 
     input {
       appearance: none;

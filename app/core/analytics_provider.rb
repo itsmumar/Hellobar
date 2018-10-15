@@ -328,6 +328,26 @@ class AnalyticsProvider
     )
   end
 
+  def triggered_upgrade_account(user:, source:)
+    track(
+      event: 'triggered-upgrade-account',
+      user: user,
+      params: {
+        source: source
+      }
+    )
+  end
+
+  def triggered_payment_checkout(user:, source:)
+    track(
+      event: 'triggered-payment-checkout',
+      user: user,
+      params: {
+        source: source
+      }
+    )
+  end
+
   private
 
   def track(event:, user:, params: {})
