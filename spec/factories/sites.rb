@@ -104,6 +104,14 @@ FactoryBot.define do
       with_paid_bill
     end
 
+    trait :elite_special do
+      transient do
+        subscription_plan :elite_special
+      end
+
+      with_paid_bill
+    end
+
     trait :pro_managed do
       transient do
         subscription_plan :pro_managed

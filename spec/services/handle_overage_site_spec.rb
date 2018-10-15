@@ -36,6 +36,21 @@ describe HandleOverageSite do
     end
   end
 
+  context 'with Elite Special subscription' do
+    let(:subscription_type) { :elite_special }
+    include_examples 'tracks events'
+  end
+
+  context 'with Elite Special & into overage counts' do
+    let(:subscription_type) { :elite_special }
+    let(:number_of_views) { 25_001 }
+    let(:limit) { 25_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
   context 'with Custom 1 subscription' do
     let(:subscription_type) { :custom_1 }
     include_examples 'tracks events'

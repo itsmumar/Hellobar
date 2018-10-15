@@ -322,6 +322,25 @@ describe Subscription do
       end
     end
 
+    context 'EliteSpecial' do
+      let(:subscription_type) { :elite_special }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 99
+        expect(subscription.visit_overage).to eql 500_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 500_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :elite_special, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 799 }
+      end
+    end
+
     context 'Elite' do
       let(:subscription_type) { :elite }
 

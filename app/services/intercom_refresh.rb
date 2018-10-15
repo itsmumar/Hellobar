@@ -28,7 +28,7 @@ class IntercomRefresh
   end
 
   def check_site_for_dme(site)
-    if site.current_subscription&.type == 'Subscription::ProComped' || site.current_subscription&.type == 'Subscription::Elite' || site.current_subscription&.type == 'Subscription::ProManaged' || site.current_subscription&.type == 'Subscription::Custom1' || site.current_subscription&.type == 'Subscription::Custom2' || site.current_subscription&.type == 'Subscription::Custom3'
+    if site.current_subscription&.type == 'Subscription::ProComped' || site.current_subscription&.type == 'Subscription::Elite' || site.current_subscription&.type == 'Subscription::EliteSpecial' || site.current_subscription&.type == 'Subscription::ProManaged' || site.current_subscription&.type == 'Subscription::Custom1' || site.current_subscription&.type == 'Subscription::Custom2' || site.current_subscription&.type == 'Subscription::Custom3'
       track_dme(site)
     elsif site.current_subscription&.type == 'Subscription::Pro' || site.current_subscription&.type == 'Subscription::Growth' || site.current_subscription&.type == 'Subscription::ProSpecial'
       handle_trial_dme(site)
@@ -52,7 +52,7 @@ class IntercomRefresh
     end
 
     # rubocop:disable Style/ConditionalAssignment
-    if sub_names.include?('Elite')
+    if sub_names.include?('Elite') || sub_names.include?('Elite Special')
       highest_subscription_name = 'Elite'
     elsif sub_names.include?('Growth')
       highest_subscription_name = 'Growth'
