@@ -1,5 +1,4 @@
 describe RegistrationsController do
-
   let(:params) do
     Hash[email: 'email@example.com', password: 'password', site_url: 'wwww.abcd.com', accept_terms_and_conditions: 'true']
   end
@@ -21,4 +20,3 @@ describe RegistrationsController do
     end
   end
 end
-

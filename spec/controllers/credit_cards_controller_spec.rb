@@ -1,5 +1,4 @@
 describe CreditCardsController do
-
   let(:payment_form_params) { create :payment_form_params }
   let(:payment_form) { create :payment_form, params: payment_form_params }
   let(:params) { { credit_card: payment_form_params } }
