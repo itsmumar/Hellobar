@@ -22,9 +22,10 @@ export default Ember.Component.extend({
         }
       });
     }
-  },  init() {
-  this._super(...arguments);
-  count = count + 1;
+  },
+  init() {
+    this._super(...arguments);
+    count = count + 1;
   },
   willRender() {
     this._super(...arguments);
