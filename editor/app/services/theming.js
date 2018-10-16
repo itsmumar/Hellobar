@@ -21,14 +21,13 @@ export default Ember.Service.extend({
     return _.find(this.get('availableThemes'), (theme) => theme.type === 'generic');
   }.property('availableThemes'),
 
-  _firstAttemptOfThemeApplying: false,
-
   setThemeById: function (themeId) {
     const allThemes = this.get('availableThemes');
     const theme = _.find(allThemes, theme => theme.id === themeId);
 
     if (theme) {
       this.setProperties({
+        'model.theme_changed': true,
         'model.theme': theme,
         'model.theme_id': themeId
       });
@@ -37,6 +36,10 @@ export default Ember.Service.extend({
   },
 
   applyCurrentTheme() {
+    if (this.get('model.id') && !this.get('model.theme_changed')) {
+      return;
+    }
+
     const allThemes = this.get('availableThemes');
     const currentThemeId = this.get('model.theme_id');
     const currentTheme = _.find(allThemes, theme => currentThemeId === theme.id);
