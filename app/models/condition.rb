@@ -44,6 +44,8 @@ class Condition < ApplicationRecord
     less_than: 'is less than'
   }.with_indifferent_access.freeze
 
+  EU_COUNTRIES = %w[AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE GB].freeze
+
   belongs_to :rule, inverse_of: :conditions
 
   before_validation :clear_blank_values
@@ -82,6 +84,12 @@ class Condition < ApplicationRecord
     value.to_s if value
   end
 
+  def value
+    return EU_COUNTRIES.dup + self[:value] if segment_key == 'gl_ctr' && self[:value]&.include?('EU')
+
+    self[:value]
+  end
+
   def to_sentence
     if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
       multiple_condition_sentence
@@ -89,13 +97,10 @@ class Condition < ApplicationRecord
       every_x_sessions_sentence
     elsif segment == 'TimeCondition'
       "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value[0] }:#{ value[1] }"
+    elsif operand.to_s == 'between'
+      "#{ segment_data[:name] } is between #{ value.first } and #{ value.last }"
     else
-      name = segment_data[:name]
-      if operand.to_s == 'between'
-        "#{ name } is between #{ value.first } and #{ value.last }"
-      else
-        "#{ name } #{ OPERANDS[operand] } #{ value }"
-      end
+      "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ value }"
     end
   end
 
@@ -136,11 +141,9 @@ class Condition < ApplicationRecord
 
   def every_x_sessions_sentence
     return '' unless segment == 'EveryXSession'
-    if value.to_i == 1
-      'Every session'
-    else
-      "Every #{ value.to_i.ordinalize } session"
-    end
+
+    repetition = value.to_i == 1 ? '' : ' ' + value.to_i.ordinalize
+    "Every#{ repetition } session"
   end
 
   def value_correctness
