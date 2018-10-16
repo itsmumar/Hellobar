@@ -8,7 +8,6 @@ describe ChangeSubscription, :freeze do
   let(:overage_service) { HandleOverageSite.new(site, number_of_views, limit) }
 
   before do
-    stub_handle_overage(site, 100, 99)
     stub_cyber_source :purchase
     change_subscription 'free'
 
@@ -319,6 +318,15 @@ describe ChangeSubscription, :freeze do
           )
 
           change_subscription('pro')
+        end
+
+        it 'resets overage count' do
+          site.update_attribute('overage_count', 999)
+          expect { change_subscription('pro') }
+            .to have_enqueued_job(ResetCurrentOverageJob)
+            .with(site)
+
+          expect(site.reload.overage_count).to eql 0
         end
 
         context 'and then to Elite from Pro' do

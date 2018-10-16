@@ -10,7 +10,6 @@ feature 'Payment modal interaction', :js do
   context 'free subscription' do
     background do
       stub_cyber_source :store, :purchase
-      stub_handle_overage(site, 100, 99)
 
       create :rule, site: site
       create :subscription, :free, site: site, credit_card: credit_card

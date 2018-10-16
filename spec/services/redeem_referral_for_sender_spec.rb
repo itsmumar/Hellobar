@@ -38,7 +38,6 @@ describe RedeemReferralForSender do
 
       before { stub_cyber_source :purchase }
       before do
-        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: 'growth' }, credit_card).call
       end
 
@@ -98,7 +97,6 @@ describe RedeemReferralForSender do
 
     context 'when subscription schedule is monthly' do
       before do
-        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: 'growth' }, credit_card).call
       end
       before { site.bills.last.fail! }
@@ -124,7 +122,6 @@ describe RedeemReferralForSender do
 
     context 'when subscription schedule is yearly' do
       before do
-        stub_handle_overage(site, 100, 99)
         params = { subscription: 'growth', schedule: 'yearly' }
         ChangeSubscription.new(site, params, credit_card).call
       end

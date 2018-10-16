@@ -11,7 +11,6 @@ describe Subscription::Capabilities do
   before { stub_cyber_source :purchase, :refund }
 
   def change_subscription(subscription, credit_card, schedule = 'monthly')
-    stub_handle_overage(site, 100, 99)
     ChangeSubscription.new(
       site,
       { subscription: subscription, schedule: schedule },
