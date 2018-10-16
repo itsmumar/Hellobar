@@ -61,7 +61,6 @@ describe PayRecurringBills do
       before { stub_cyber_source :purchase }
 
       specify 'tries to charge users 3 days before the subscription ends', freeze: '2017-07-01 11:00 UTC' do
-        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
         expect(site).to be_capable_of :pro
 
@@ -246,7 +245,6 @@ describe PayRecurringBills do
       let!(:site) { create :site }
 
       def change_subscription(kind)
-        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: kind }, credit_card).call
         site.reload
       end

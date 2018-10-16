@@ -19,7 +19,6 @@ describe DestroyUser do
     stub_request(:delete, "#{ intercom_url }/users/#{ intercom_id }")
 
     sites.each do |site|
-      stub_handle_overage(site, 100, 99)
       ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
     end
   end

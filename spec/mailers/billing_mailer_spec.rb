@@ -7,7 +7,6 @@ describe BillingMailer do
 
   before { site.owners = [owner1, owner2] }
   before do
-    stub_handle_overage(site, 100, 99)
     stub_cyber_source :purchase
   end
 

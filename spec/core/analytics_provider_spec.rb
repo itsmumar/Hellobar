@@ -5,10 +5,6 @@ describe AnalyticsProvider do
   let(:adapter) { double('adapter') }
   let(:provider) { AnalyticsProvider.new(adapter) }
 
-  before do
-    stub_handle_overage(site, 100, 99)
-  end
-
   def track(*args)
     provider.fire_event(*args)
   end

@@ -101,10 +101,7 @@ class ChangeSubscription
     # when it runs tomorrow
     return if bill.failed?
     site.update_attribute('overage_count', 0) # reset to zero and now let's recalculate
-    query = FetchTotalViewsForMonth.new(Site.where(id: site.id)).call
-    number_of_views = query.first.last # query.first looks like this: [528206, 184136] so we take the second element
-    limit = site.views_limit
-    HandleOverageSiteJob.perform_later(site, number_of_views, limit) if number_of_views >= limit
+    ResetCurrentOverageJob.perform_later(site)
   end
 
   def create_bill(subscription)

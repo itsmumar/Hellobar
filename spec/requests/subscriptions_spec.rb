@@ -36,7 +36,6 @@ describe 'Subscriptions requests' do
       end
 
       before do
-        stub_handle_overage(site, 100, 99)
         ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
       end
 
