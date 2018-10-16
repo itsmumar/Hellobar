@@ -236,18 +236,35 @@ describe Condition do
   end
 
   describe '#value' do
-    let(:condition) { Condition.new(segment: 'LocationCountryCondition') }
+    let(:condition) { build :condition }
 
-    it 'returns EU codes if value contains EU' do
-      condition.value = ['EU']
+    context 'when segment key is "gl_ctr"' do
+      before { condition.segment = 'LocationCountryCondition' }
 
-      expect(condition.value).to include('AT', 'BE', 'BG')
+      context 'and value includes "EU"' do
+        before { condition.value = ['US', 'EU'] }
+
+        it 'adds all EU countries to the value' do
+          expect(condition.value).to include(*Condition::EU_COUNTRIES)
+          expect(condition.value).to include('US')
+        end
+      end
+
+      context 'and does not include "EU"' do
+        before { condition.value = ['US'] }
+
+        it 'returns value' do
+          expect(condition.value).to eql ['US']
+        end
+      end
     end
 
-    it 'returns value if value does not contain EU' do
-      condition.value = ['US']
+    context 'when segment key is not "gl_ctr"' do
+      before { condition.value = ['US', 'EU'] }
 
-      expect(condition.value).to eql(['US'])
+      it 'returns value' do
+        expect(condition.value).to eql(['US', 'EU'])
+      end
     end
   end
 end
