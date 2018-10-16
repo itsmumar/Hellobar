@@ -85,7 +85,7 @@ class Condition < ApplicationRecord
   end
 
   def value
-    return EU_COUNTRIES.dup << self[:value] if self[:value].is_a?(Array) && self[:value].include?('EU') && segment_key == 'gl_ctr'
+    return EU_COUNTRIES.dup + self[:value] if segment_key == 'gl_ctr' && self[:value]&.include?('EU')
 
     self[:value]
   end

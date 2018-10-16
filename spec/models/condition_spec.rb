@@ -234,4 +234,20 @@ describe Condition do
       expect(condition.timezone_offset).to eql(expected_offset)
     end
   end
+
+  describe '#value' do
+    let(:condition) { Condition.new(segment: 'LocationCountryCondition') }
+
+    it 'returns EU codes if value contains EU' do
+      condition.value = ['EU']
+
+      expect(condition.value).to include('AT', 'BE', 'BG')
+    end
+
+    it 'returns value if value does not contain EU' do
+      condition.value = ['US']
+
+      expect(condition.value).to eql(['US'])
+    end
+  end
 end
