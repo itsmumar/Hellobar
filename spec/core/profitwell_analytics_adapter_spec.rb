@@ -26,7 +26,7 @@ describe ProfitwellAnalyticsAdapter do
     before { allow(profitwell_gateway).to receive(:create_subscription) }
     before { allow(profitwell_gateway).to receive(:churn_subscription) }
 
-    %i[downgraded_subscription upgraded_subscription].each do |event|
+    %w[downgraded_subscription upgraded_subscription].each do |event|
       context "with #{ event } event" do
         let(:event) { event }
 
