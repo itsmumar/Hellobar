@@ -1,7 +1,7 @@
 class ProfitwellAnalyticsAdapter
   def track(event:, subscription:, previous_subscription:, user:)
-    case event
-    when :upgraded_subscription, :downgraded_subscription
+    case event.to_s
+    when 'upgraded_subscription', 'downgraded_subscription'
       subscription_updated subscription, previous_subscription, user
     end
   end
