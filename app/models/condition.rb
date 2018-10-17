@@ -84,8 +84,8 @@ class Condition < ApplicationRecord
     value.to_s if value
   end
 
-  def value
-    return EU_COUNTRIES.dup + self[:value] if segment_key == 'gl_ctr' && self[:value]&.include?('EU')
+  def serialized_value
+    return EU_COUNTRIES.dup + (self[:value] - ['EU']) if segment_key == 'gl_ctr' && self[:value]&.include?('EU')
 
     self[:value]
   end

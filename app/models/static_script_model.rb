@@ -253,7 +253,7 @@ class StaticScriptModel
     settings = {
       segment: condition.segment_key,
       operand: condition.operand,
-      value: condition.value
+      value: condition.serialized_value
     }
 
     if condition.timezone_offset.present?

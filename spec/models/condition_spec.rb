@@ -235,7 +235,7 @@ describe Condition do
     end
   end
 
-  describe '#value' do
+  describe '#serialized_value' do
     let(:condition) { build :condition }
 
     context 'when segment key is "gl_ctr"' do
@@ -245,8 +245,8 @@ describe Condition do
         before { condition.value = ['US', 'EU'] }
 
         it 'adds all EU countries to the value' do
-          expect(condition.value).to include(*Condition::EU_COUNTRIES)
-          expect(condition.value).to include('US')
+          expect(condition.serialized_value).to include(*Condition::EU_COUNTRIES)
+          expect(condition.serialized_value).to include('US')
         end
       end
 
@@ -254,7 +254,7 @@ describe Condition do
         before { condition.value = ['US'] }
 
         it 'returns value' do
-          expect(condition.value).to eql ['US']
+          expect(condition.serialized_value).to eql ['US']
         end
       end
     end
@@ -263,7 +263,7 @@ describe Condition do
       before { condition.value = ['US', 'EU'] }
 
       it 'returns value' do
-        expect(condition.value).to eql(['US', 'EU'])
+        expect(condition.serialized_value).to eql(['US', 'EU'])
       end
     end
   end
