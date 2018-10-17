@@ -3,11 +3,20 @@ class StatsController < ApplicationController
   before_action :calculate_today, only: [:index]
   before_action :calculate_tomorrow, only: [:index]
   before_action :calculate_day_before, only: [:index]
+  before_action :mtd, only: [:index]
 
   def index
   end
 
   private
+
+  def mtd
+    date = Date.current.beginning_of_month.midnight
+    end_of_month = Date.current.end_of_month.end_of_day
+    @mtd_paid = Subscription.where(created_at: date..end_of_month).non_free.where(trial_end_date: nil).count
+    @mtd_trials = Subscription.where(created_at: date..end_of_month).non_free.count - @mtd_paid
+    @mtd_elite = Subscription.where(created_at: date..end_of_month).non_free.elite.count
+  end
 
   def calculate_today
     date = Time.zone.today
