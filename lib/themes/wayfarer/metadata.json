@@ -12,7 +12,7 @@
   "element_types": ["Modal", "Slider", "Takeover", "Alert"],
   "defaults": {
     "Bar": {
-      "background_color": "2e2767",
+      "background_color": "FFFFFF",
       "text_color": "FFFFFF",
       "button_color": "a32b4e",
       "link_color": "FFFFFF",
@@ -27,7 +27,7 @@
       "text_field_text_color": "9b9b9b"
     },
     "Slider": {
-      "background_color": "2e2767",
+      "background_color": "FFFFFF",
       "text_color": "FFFFFF",
       "button_color": "a32b4e",
       "link_color": "FFFFFF",
@@ -39,10 +39,12 @@
       "headline": "Get the inside scoop",
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE",
-      "text_field_text_color": "9b9b9b"
+      "text_field_text_color": "9b9b9b",
+      "image_overlay_color": "2e2767",
+      "image_overlay_opacity": 60
     },
     "Modal": {
-      "background_color": "2e2767",
+      "background_color": "FFFFFF",
       "text_color": "FFFFFF",
       "button_color": "a32b4e",
       "link_color": "FFFFFF",
@@ -54,10 +56,12 @@
       "headline": "Get the inside scoop",
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE",
-      "text_field_text_color": "9b9b9b"
+      "text_field_text_color": "9b9b9b",
+      "image_overlay_color": "2e2767",
+      "image_overlay_opacity": 60
     },
     "Takeover": {
-      "background_color": "2e2767",
+      "background_color": "FFFFFF",
       "text_color": "FFFFFF",
       "button_color": "a32b4e",
       "link_color": "FFFFFF",
@@ -69,10 +73,12 @@
       "headline": "Get the inside scoop",
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE" ,
-      "text_field_text_color": "9b9b9b"
+      "text_field_text_color": "9b9b9b",
+      "image_overlay_color": "2e2767",
+      "image_overlay_opacity": 60
     },
     "Alert": {
-      "background_color": "2e2767",
+      "background_color": "FFFFFF",
       "trigger_color": "4d8589",
       "trigger_icon_color": "ffffff",
       "text_color": "ffffff",
@@ -86,7 +92,9 @@
       "headline": "Get the inside scoop",
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE", 
-      "text_field_text_color": "9b9b9b"
+      "text_field_text_color": "9b9b9b",
+      "image_overlay_color": "2e2767",
+      "image_overlay_opacity": 60
     }
   },
   "image": {

@@ -2,14 +2,6 @@
       text-align: left;
   .hb-header {
     display: none;
-  }
-
-  .image-background{
-    .hb-image-wrapper{
-      &.background{
-        left: 1px;
-      } 
-    }
   } 
   .hb-headline-text {
     text-align: left;
@@ -80,9 +72,9 @@
         padding-bottom: 38px;
       }
     }
-    .hb-image-wrapper{
-      -webkit-mask-image: linear-gradient(to right, transparent 20%, black 80%);
-      mask-image: linear-gradient(to right, transparent 20%, black 80%);
+    .hb-image-overlay{
+      -webkit-mask-image: linear-gradient(to left, transparent 20%, black 80%);
+      mask-image: linear-gradient(to left, transparent 20%, black 80%);
     } 
   }
 
@@ -93,9 +85,9 @@
       font-family: HoeflerText; 
       font-size: 3em;
     }  
-    .hb-image-wrapper{
-      -webkit-mask-image: linear-gradient(to right, transparent 20%, black 80%);
-      mask-image: linear-gradient(to right, transparent 20%, black 80%);
+    .hb-image-overlay{
+      -webkit-mask-image: linear-gradient(to left, transparent 20%, black 80%);
+      mask-image: linear-gradient(to left, transparent 20%, black 80%);
     } 
     [data-hb-editable-block="caption"]{
       font-size: 1.25em;
@@ -156,9 +148,9 @@
     .hb-cta{
       max-width: none;
     }
-    .hb-image-wrapper{
-      -webkit-mask-image: linear-gradient(to right, transparent 20%, black 80%);
-      mask-image: linear-gradient(to right, transparent 20%, black 80%);
+    .hb-image-overlay{
+      -webkit-mask-image: linear-gradient(to left, transparent 20%, black 80%);
+      mask-image: linear-gradient(to left, transparent 20%, black 80%);
     } 
     
     .hb-input-wrapper{
