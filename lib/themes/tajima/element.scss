@@ -87,14 +87,15 @@
 
     }
   }
-
+ 
   .hb-cta {
     display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
     letter-spacing: 1px; 
-    max-width: inherit; 
+    max-width: inherit;
+    padding: .67em 1.33em;
     &:hover {
       opacity: 0.95;
     }
@@ -142,11 +143,14 @@
           flex: 0 0 33%;
           font-size: 16px;
           font-weight: 300;
-          letter-spacing: 0.5px;
-          padding: .9em 1.33em;
+          letter-spacing: 0.5px; 
         } 
       } 
-    }  
+    }
+    .hb-cta{ 
+      padding: .9em 1.33em;
+    }
+     
     .uploaded-image {
       max-height: 300px;
       height: 90%;

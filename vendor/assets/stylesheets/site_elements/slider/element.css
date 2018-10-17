@@ -244,3 +244,13 @@
   clear: both;
   content: '';
 }
+
+@media screen and (max-width:640px){
+  #hellobar-slider {
+    font-size: 14px;
+    max-width: 380px; /* IF CHANGED, UPDATE maxSliderSize in 'elements.class' module */
+    position: absolute;
+    width: 90%;
+    min-height: 120px;
+  }
+}
