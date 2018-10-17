@@ -123,6 +123,7 @@ describe StaticScriptModel do
           tajima/container.css
           tocaya/container.css
           violet/container.css
+          wayfarer/container.css
           wooli/container.css
         ].join("\n")
     end
