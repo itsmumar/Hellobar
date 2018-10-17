@@ -132,7 +132,7 @@ script#condition-partial type="text/x-handlebars-template"
 
         = render layout: "shared/modals/multiple_choice_wrapper",
                  locals: {class_name: "location-country-choice select-wrapper"} do |name|
-          = rule_country_select
+          = rule_country_select(name)
 
         .choice-wrapper.time-choice
           .select-wrapper.time-select

@@ -31,7 +31,7 @@ feature 'Render the country select for the Rule modal', :js do
     page.find('a', text: '+').click
 
     select('Country')
-    value = find('#rule_conditions_attributes').value
+    value = find('.location-country-select').value
 
     expect(value).to eql('US')
   end
