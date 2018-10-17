@@ -44,8 +44,8 @@ main
         br
         - unless @bill.description == "Monthly View Limit Overage Fee"
           | #{@bill.start_date.strftime('%b. %d, %Y')} thru #{@bill.end_date.strftime('%b. %d, %Y')}
-      td.right= number_to_currency(@bill.amount)
-      td.right= number_to_currency(@bill.amount)
+      td.right= "#{number_to_currency(@bill.amount)} USD"
+      td.right= "#{number_to_currency(@bill.amount)} USD"
     - coupons_and_uses(@bill) do |coupon, uses|
       tr
         td.left
@@ -55,7 +55,7 @@ main
     tr
       th.left
       th.right Invoice Total
-      th.right= number_to_currency(@bill.amount)
+      th.right= "#{number_to_currency(@bill.amount)} USD"
 
   div.message
     | If you have any questions concerning this invoice, email:&nbsp;
