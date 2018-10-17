@@ -3,8 +3,8 @@ module ModalHelper
     'upgrade-account-modal'
   end
 
-  def rule_country_select
+  def rule_country_select name_value
     countries = I18n.t(:country_codes).map { |country| country.fetch_values :name, :code }
-    select('rule', 'conditions_attributes', countries, priority_countries: ['US'])
+    select('rule', 'conditions_attributes', countries, {priority_countries: ['US']}, name: name_value)
   end
 end
