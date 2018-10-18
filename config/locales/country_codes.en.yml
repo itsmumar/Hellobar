@@ -1,5 +1,7 @@
 en:
   country_codes:
+    - {code: "US", name: "United States"}
+    - {code: "EU", name: "European Union"}
     - {code: "AF", name: "Afghanistan"}
     - {code: "AL", name: "Albania"}
     - {code: "DZ", name: "Algeria"}
@@ -224,7 +226,6 @@ en:
     - {code: "AE", name: "United Arab Emirates"}
     - {code: "GB", name: "United Kingdom"}
     - {code: "UM", name: "United States Minor Outlying Islands"}
-    - {code: "US", name: "United States"}
     - {code: "UY", name: "Uruguay"}
     - {code: "UZ", name: "Uzbekistan"}
     - {code: "VU", name: "Vanuatu"}
@@ -240,4 +241,3 @@ en:
     - {code: "YU", name: "Yugoslavia"}
     - {code: "ZM", name: "Zambia"}
     - {code: "ZW", name: "Zimbabwe"}
-    - {code: "XX", name: "Custom"}
