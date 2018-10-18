@@ -114,6 +114,7 @@ describe StaticScriptModel do
           green-timberline/container.css
           lionshare/container.css
           mall/container.css
+          marble/container.css
           marigold/container.css
           puesto/container.css
           pulse/container.css
