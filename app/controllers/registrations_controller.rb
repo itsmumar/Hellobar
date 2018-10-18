@@ -6,6 +6,7 @@ class RegistrationsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_errors
 
   def new
+    cookies[:the_plan] = 'paid' if params[:plan] == 'growth-monthly' || params[:plan] == 'elite-monthly'
     @form = RegistrationForm.new(params, cookies)
     @form.ignore_existing_site = @form.existing_site_url?
   end
