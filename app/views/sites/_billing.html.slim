@@ -24,7 +24,7 @@ section
         - # only show "billing schedule" if user is on a plan that actually has one
         = link_to 'Change plan or billing schedule', '#', class: 'show-payment-modal', data: { source: "Change plan or billing" }
 
-- if Permissions.view_bills?(current_user, @site)
+- if can_view_bills?(current_user, @site)
   section
     label Card
     p
@@ -48,10 +48,22 @@ section
         = link_to "Add custom invoice address", "#", class: "toggle-site-invoice-information no-left-margin"
         br
       = form.text_area "invoice_information", placeholder: "Full address (leave blank to use address associated with your CC)", class: "hidden"
-
+- if @site.pro_managed?
+  .half-block
+    = render 'pro_managed'
+- elsif @site.growth? && @site.current_subscription.currently_on_trial?
+  .half-block
+    = render 'growth_trial'
+- elsif @site.growth?
+  .half-block
+    = render 'growth'
+- elsif @site.elite?
+  .half-block
+    = render 'elite'
+- if can_view_bills?(current_user, @site)
   - if !@bills.empty?
     section
-      label History
+
 
       table
         thead
@@ -94,11 +106,9 @@ section
                     i.icon-export
 
 
-  - if @site.current_subscription.currently_on_trial? && @site.current_subscription.trial_end_date
-    ' This site is on a trial plan.
-    a.show-payment-modal.underlined data-source="Please enter payment text"
-      ' Please enter credit card details by #{format_date(@site.current_subscription.trial_end_date)}
-      ' to continue using HelloBar #{@site.current_subscription.values[:name]}.
+  - if @site.growth? || @site.elite?
+    ' Next bill is due on #{format_date(@site.current_subscription.bills.last.end_date+1)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
+
 
   - if @next_bill && @next_bill.amount > 0 || @next_overage_bills
 

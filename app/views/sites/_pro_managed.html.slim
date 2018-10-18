@@ -1,0 +1,13 @@
+.free_block
+   div.padding
+    - if (current_user.role_for_site(@site) == :owner)
+      P This site is on a the Hello Bar Pro Managed Plan.
+    - else
+      div
+        p This site is on a the Hello Bar Pro Managed Plan. Contact your site owner to make any changes to this plan.
+        div.inline
+          span
+            | Your site owner is:&nbsp
+          .underline
+            | #{@site.owners.first.email}
+

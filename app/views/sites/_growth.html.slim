@@ -1,0 +1,17 @@
+.free_block
+   div.padding
+      - if (current_user.role_for_site(@site) == :owner)
+        p This site is currently on the Hello Bar Growth Plan.
+        p If you’re looking for more monthly views or additional features check out our Elite Plan
+      - else
+        div
+          p This site is currently on the Hello Bar Growth Plan.Contact your site owner to upgrade plan.
+          div.inline
+            span
+              | Your site owner is:&nbsp
+            .underline
+              | #{@site.owners.first.email}
+
+      div.centered
+      .button.show-upgrade-modal
+        | Upgrade here

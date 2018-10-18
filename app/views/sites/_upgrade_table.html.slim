@@ -1,8 +1,18 @@
 .free_block
    div.padding
+    - if (current_user.role_for_site(@site) == :owner)
       p This site is currently on the Hello Bar Starter Plan ($0/mo).
       P You’re missing out on lots of additional features and resources, check out our paid plans now
+    - else
+      div
+        p This site is currently on the Hello Bar Starter Plan ($0/mo).
+        p You’re missing out on lots of additional features and resources. Contact your site owner to upgrade to a paid plan.
+        div.inline
+          span
+            | Your site owner is:&nbsp
+          .underline
+            | #{@site.owners.first.email}
 
-      div.centered
-      .button.show-upgrade-modal
-        | Upgrade to #{ pro_or_growth }
+    div.centered
+    .button.show-upgrade-modal
+      | Upgrade here
