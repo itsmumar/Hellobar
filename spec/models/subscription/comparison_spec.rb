@@ -10,6 +10,7 @@ describe Subscription::Comparison do
       Subscription::ProManaged,
       Subscription::EliteSpecial,
       Subscription::Elite,
+      Subscription::Custom0,
       Subscription::Custom1,
       Subscription::Custom2,
       Subscription::Custom3

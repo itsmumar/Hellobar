@@ -28,7 +28,7 @@ class IntercomRefresh
   end
 
   def check_site_for_dme(site)
-    if site.current_subscription&.type == 'Subscription::ProComped' || site.current_subscription&.type == 'Subscription::Elite' || site.current_subscription&.type == 'Subscription::EliteSpecial' || site.current_subscription&.type == 'Subscription::ProManaged' || site.current_subscription&.type == 'Subscription::Custom1' || site.current_subscription&.type == 'Subscription::Custom2' || site.current_subscription&.type == 'Subscription::Custom3'
+    if site.current_subscription&.type == 'Subscription::ProComped' || site.current_subscription&.type == 'Subscription::Elite' || site.current_subscription&.type == 'Subscription::EliteSpecial' || site.current_subscription&.type == 'Subscription::ProManaged' || site.current_subscription&.type == 'Subscription::Custom0' || site.current_subscription&.type == 'Subscription::Custom1' || site.current_subscription&.type == 'Subscription::Custom2' || site.current_subscription&.type == 'Subscription::Custom3'
       track_dme(site)
     elsif site.current_subscription&.type == 'Subscription::Pro' || site.current_subscription&.type == 'Subscription::Growth' || site.current_subscription&.type == 'Subscription::ProSpecial'
       handle_trial_dme(site)
@@ -62,6 +62,8 @@ class IntercomRefresh
       highest_subscription_name = 'Pro Comped'
     elsif sub_names.include?('Pro Managed')
       highest_subscription_name = 'Pro Managed'
+    elsif sub_names.include?('Custom 0')
+      highest_subscription_name = 'Custom 0'
     elsif sub_names.include?('Custom 1')
       highest_subscription_name = 'Custom 1'
     elsif sub_names.include?('Custom 2')
