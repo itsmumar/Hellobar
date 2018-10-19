@@ -473,4 +473,21 @@ class AnalyticsProvider
       }
     )
   end
+
+  def paid_overage(event, user, site)
+    params = {
+      site_id: site.id,
+      site_url: site.url,
+      limit: site.current_subscription.capabilities.visit_overage,
+      overage_count: site.overage_count
+    }
+
+    track(
+      event: event,
+      user: user,
+      site: site,
+      params: params
+    )
+    update_user(user: user, params: params)
+  end
 end
