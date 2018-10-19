@@ -21,6 +21,8 @@ class ProfitwellAnalyticsAdapter
   private
 
   def subscription_updated(subscription, previous_subscription, user)
+    return if subscription.trial_end_date
+
     profitwell.churn_subscription(previous_subscription.id, subscription.created_at) if previous_subscription
     profitwell.create_subscription(user, subscription)
   end
