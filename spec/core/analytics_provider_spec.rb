@@ -741,6 +741,34 @@ describe AnalyticsProvider do
     end
   end
 
+  describe '#paid_overage' do
+    let(:event) { 'elite-overage' }
+    let(:site) { create :site, :elite }
+    let(:credit_card) { create :credit_card }
+    
+    context 'with paid site in overage' do
+      it 'tracks elite-overage' do
+        expect(adapter).to receive(:track)
+          .with(event: 'elite-overage',
+            user: user,
+            params: {
+              site_id: site.id,
+              site_url: site.url,
+              limit: site.current_subscription.capabilities.visit_overage,
+              overage_count: site.overage_count
+            })
+
+        expect(adapter)
+          .to receive(:elite_overage)
+
+        track(event,
+          user: user,
+          site: site)
+        end
+      end
+    end
+
+
   describe '#update_site_count' do
     # let(:user) { create :user}
     let(:site) { create :site }
