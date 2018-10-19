@@ -8,11 +8,23 @@ describe RegistrationForm do
       let(:cookies) { {} }
 
       it 'displays default title' do
-        expect(form.title).to eql 'Create free account'
+        expect(form.title).to eql 'Create Your Free Account'
       end
 
       it 'displays default cta' do
-        expect(form.cta).to eql 'Create free account'
+        expect(form.cta).to eql 'Create Your Free Account'
+      end
+    end
+
+    context 'signup for paid plan from the website' do
+      let(:cookies) { Hash[the_plan: 'paid'] }
+
+      it 'displays paid title' do
+        expect(form.title).to include 'Create Your Account'
+      end
+
+      it 'displays paid cta' do
+        expect(form.cta).to include 'Create Your Account Now'
       end
     end
 
