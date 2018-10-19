@@ -40,12 +40,12 @@ class CreateUser
     return default_event_params unless promotional_signup?
 
     default_event_params
-      .merge({
+      .merge(
         utm_source: utm_source,
         credit_card_signup: credit_card_signup,
         promotional_signup: true
-      })
-      .reject { |k, v| v.blank? }
+      )
+      .reject { |_, value| value.blank? }
   end
 
   def default_event_params

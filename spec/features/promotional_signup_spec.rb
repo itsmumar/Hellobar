@@ -62,6 +62,8 @@ feature 'Promotional signup', :js do
   context 'when cc cookie is set' do
     let(:credit_card_attributes) { build(:payment_form_params) }
 
+    before { stub_cyber_source :store, :purchase }
+
     it 'redirects to credit card page' do
       visit '/'
 
@@ -92,7 +94,7 @@ feature 'Promotional signup', :js do
 
       click_on 'Finish'
 
-      expect(page).to have_content 'Create A New Site'
+      expect(page).to have_content 'Step 1 is to choose your goal.'
     end
   end
 
