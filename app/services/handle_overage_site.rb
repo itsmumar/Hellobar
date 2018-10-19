@@ -41,6 +41,8 @@ class HandleOverageSite
       handle_free_plus
     when Subscription::Free::Capabilities
       handle_free
+    when Subscription::Custom0::Capabilities
+      handle_custom
     when Subscription::Custom1::Capabilities
       handle_custom
     when Subscription::Custom2::Capabilities
