@@ -205,8 +205,8 @@ class Site < ApplicationRecord
     current_subscription.is_a? Subscription::ProManaged
   end
 
-  def growth?
-    current_subscription.is_a? Subscription::Growth
+  def growth_or_pro?
+    current_subscription.is_a?(Subscription::Growth) || current_subscription.is_a?(Subscription::Pro)
   end
 
   def elite?

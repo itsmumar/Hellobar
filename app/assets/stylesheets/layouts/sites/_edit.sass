@@ -10,6 +10,10 @@
 
     .add-site-wrapper
       margin-top: 30px
+      text-decoration: underline
+
+      a
+       color: #27AB9E
 
     .url-wrapper,
     .selector-wrapper,
@@ -111,12 +115,18 @@
 
       table
         clear: both
-        width: 62.5%
+        width: 80%
         margin-left: 0
         margin-bottom: 0.5em
 
-        th, td
+        th
           padding: 0.85em 1em
+          font-weight: bold
+        td
+          padding: 0.85em 1em
+
+          img
+            width: 15px
 
         tbody tr:nth-child(even)
           background-color: $grayLightest

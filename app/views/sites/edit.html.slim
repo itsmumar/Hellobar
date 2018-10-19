@@ -20,7 +20,7 @@
     = link_to "Installation instructions", site_install_path(@site)
 
   .add-site-wrapper
-    = link_to "Add New Site", new_site_path, class: "button"
+    = link_to "Add New Site", new_site_path
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.free?

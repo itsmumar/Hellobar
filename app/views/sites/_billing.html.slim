@@ -51,10 +51,10 @@ section
 - if @site.pro_managed?
   .half-block
     = render 'pro_managed'
-- elsif @site.growth? && @site.current_subscription.currently_on_trial?
+- elsif @site.growth_or_pro? && @site.current_subscription.currently_on_trial?
   .half-block
     = render 'growth_trial'
-- elsif @site.growth?
+- elsif @site.growth_or_pro?
   .half-block
     = render 'growth'
 - elsif @site.elite?
@@ -103,11 +103,12 @@ section
                     a#problem-bill.button href=pay_bill_path(bill) data-method="put" Charge again
                 - else
                   = link_to bill_path(bill), target: '_blank' do
-                    i.icon-export
+                    img {src = "#{image_path('icons/file-alt-solid.svg')}" }
 
 
-  - if @site.growth? || @site.elite?
-    ' Next bill is due on #{format_date(@site.current_subscription.bills.last.end_date+1)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
+
+  - if @site.growth_or_pro? || @site.elite? && !@site.current_subscription.currently_on_trial?
+    ' Next bill is due on #{format_date(@site.current_subscription.bills.last.end_date)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
 
 
   - if @next_bill && @next_bill.amount > 0 || @next_overage_bills
