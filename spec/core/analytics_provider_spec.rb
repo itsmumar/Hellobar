@@ -256,6 +256,9 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('created-site', user: user, site: site)
     end
   end
@@ -597,6 +600,9 @@ describe AnalyticsProvider do
           subscription_start_date: subscription.created_at
         })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track(event,
         user: user,
         subscription: subscription,
@@ -610,6 +616,9 @@ describe AnalyticsProvider do
 
       expect(adapter).to receive(:track)
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track(event,
         user: user,
         subscription: subscription,
@@ -622,6 +631,9 @@ describe AnalyticsProvider do
         .with(previous_subscription.name, anything)
 
       expect(adapter).to receive(:track)
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track(event,
         user: user,
@@ -676,6 +688,9 @@ describe AnalyticsProvider do
 
         expect(adapter).to receive(:track)
 
+        expect(adapter)
+          .to receive(:update_user)
+
         track(event,
           user: user,
           subscription: subscription,
@@ -718,6 +733,9 @@ describe AnalyticsProvider do
           overage_count: site.overage_count,
           visit_overage: Subscription::Free.new.visit_overage
         })
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
     end
@@ -798,6 +816,9 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('free-overage', user: user, site: site)
     end
   end
@@ -829,6 +850,9 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
     end
