@@ -8,7 +8,6 @@ class RegistrationForm
 
   def initialize(params, cookies = {})
     super(params[:registration_form])
-
     @user = User.new(email: email, password: password)
     @site = Site.new(url: site_url, pre_selected_plan: plan)
     @cookies = cookies
