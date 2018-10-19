@@ -604,6 +604,9 @@ describe AnalyticsProvider do
 
       expect(adapter).to receive(:update_user)
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track(event,
         user: user,
         subscription: subscription,
@@ -617,6 +620,9 @@ describe AnalyticsProvider do
 
       expect(adapter).to receive(:track)
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track(event,
         user: user,
         subscription: subscription,
@@ -629,6 +635,9 @@ describe AnalyticsProvider do
         .with(previous_subscription.name, anything)
 
       expect(adapter).to receive(:track)
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track(event,
         user: user,
@@ -685,6 +694,9 @@ describe AnalyticsProvider do
 
         expect(adapter).to receive(:track)
 
+        expect(adapter)
+          .to receive(:update_user)
+
         track(event,
           user: user,
           subscription: subscription,
@@ -733,6 +745,9 @@ describe AnalyticsProvider do
         .with(event: event, user: user, params: params)
 
       expect(adapter).to receive(:update_user)
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
     end
@@ -893,6 +908,9 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
     end
