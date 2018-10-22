@@ -18,7 +18,7 @@ class IntercomRefresh
       end
     end
     @users = @users.uniq
-    track_updated_site_counts
+    # track_updated_site_counts # Disabled for now so that we don't crash Intercom...
   end
 
   def track_updated_site_counts
