@@ -272,18 +272,18 @@ class AnalyticsProvider
 
   def exceeded_views_limit(site:, user:, limit:, number_of_views:)
     subscription = site.current_subscription || Subscription::Free.new
-    params = {
-      site_id: site.id,
-      site_url: site.url,
-      number_of_views: number_of_views,
-      limit: limit,
-      subscription: subscription.name,
-      schedule: subscription.schedule,
-      overage_count: site.overage_count,
-      visit_overage: subscription.visit_overage#,
-      # overage_fees: ,
-      # upgrade_link:
-    }
+    params = {}
+    params[:site_id] = site.id
+    params[:site_url] = site.url
+    params[:number_of_views] = number_of_views
+    params[:limit] = limit
+    params[:subscription] = subscription.name
+    params[:schedule] = subscription.schedule
+    params[:overage_count] = site.overage_count
+    params[:visit_overage] = subscription.visit_overage
+    params[:overage_fees] = subscription.overage_count * 5 unless subscription.free?
+    params[:upgrade_link] = "https://app.hellobar.com/sites/#{site.id}/edit"
+
 
     track(
       event: 'exceeded-views-limit',

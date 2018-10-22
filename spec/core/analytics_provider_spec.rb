@@ -256,6 +256,9 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('created-site', user: user, site: site)
     end
   end
@@ -601,6 +604,10 @@ describe AnalyticsProvider do
         user: user,
         subscription: subscription,
         previous_subscription: previous_subscription)
+
+      expect(adapter)
+          .to receive(:update_user)
+          .with(user: user, params: params)
     end
 
     it 'tags users with new "Subscription.name" tags' do
@@ -716,7 +723,9 @@ describe AnalyticsProvider do
           subscription: 'Free',
           schedule: 'monthly',
           overage_count: site.overage_count,
-          visit_overage: Subscription::Free.new.visit_overage
+          visit_overage: Subscription::Free.new.visit_overage,
+          overage_fees: 5 * site.overage_count,
+          upgrade_link: "https://app.hellobar.com/sites/#{site.id}/edit"
         })
 
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
@@ -798,6 +807,9 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('free-overage', user: user, site: site)
     end
   end
@@ -829,6 +841,9 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
     end
