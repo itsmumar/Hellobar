@@ -280,7 +280,9 @@ class AnalyticsProvider
       subscription: subscription.name,
       schedule: subscription.schedule,
       overage_count: site.overage_count,
-      visit_overage: subscription.visit_overage
+      visit_overage: subscription.visit_overage#,
+      # overage_fees: ,
+      # upgrade_link:
     }
 
     track(
@@ -334,30 +336,6 @@ class AnalyticsProvider
       params: params
     )
     update_user(user: user, params: params)
-  end
-
-  def growth_overage(user:, site:)
-    paid_overage('growth-overage', user, site)
-  end
-
-  def pro_overage(user:, site:)
-    paid_overage('pro-overage', user, site)
-  end
-
-  def elite_overage(user:, site:)
-    paid_overage('elite-overage', user, site)
-  end
-
-  def custom_one_overage(user:, site:)
-    paid_overage('custom-one-overage', user, site)
-  end
-
-  def custom_two_overage(user:, site:)
-    paid_overage('custom-two-overage', user, site)
-  end
-
-  def custom_three_overage(user:, site:)
-    paid_overage('custom-three-overage', user, site)
   end
 
   def triggered_upgrade_account(user:, source:)
@@ -464,22 +442,5 @@ class AnalyticsProvider
         site_id: site.id
       }
     )
-  end
-
-  def paid_overage(event, user, site)
-    params = {
-      site_id: site.id,
-      site_url: site.url,
-      limit: site.current_subscription.capabilities.visit_overage,
-      overage_count: site.overage_count
-    }
-
-    track(
-      event: event,
-      user: user,
-      site: site,
-      params: params
-    )
-    update_user(user: user, params: params)
   end
 end
