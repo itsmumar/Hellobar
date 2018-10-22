@@ -38,4 +38,39 @@ describe CreateUser do
       CreateUser.new(user, cookies).call
     end
   end
+
+  context 'when credit card is required' do
+    let(:utm_source) { 'utm_source' }
+    let(:cookies) { Hash[promotional_signup: 'true', utm_source: utm_source, cc: '1'] }
+
+    it 'tracks :signed_up event with promotional signup params' do
+      expect(TrackEvent).to receive_service_call
+        .with(
+          :signed_up,
+          user: user,
+          promotional_signup: true,
+          utm_source: utm_source,
+          credit_card_signup: true
+        )
+
+      CreateUser.new(user, cookies).call
+    end
+  end
+
+  context 'when credit card is not required' do
+    let(:utm_source) { 'utm_source' }
+    let(:cookies) { Hash[promotional_signup: 'true', utm_source: utm_source, cc: 'whatever'] }
+
+    it 'tracks :signed_up event with promotional signup params' do
+      expect(TrackEvent).to receive_service_call
+        .with(
+          :signed_up,
+          user: user,
+          promotional_signup: true,
+          utm_source: utm_source
+        )
+
+      CreateUser.new(user, cookies).call
+    end
+  end
 end
