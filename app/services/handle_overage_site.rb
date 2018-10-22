@@ -111,7 +111,7 @@ class HandleOverageSite
     return unless new_charge_count > current_charge_count
     @site.update(overage_count: new_charge_count)
     site.update(limit_email_sent: true)
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_pro
