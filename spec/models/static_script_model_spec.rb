@@ -110,6 +110,7 @@ describe StaticScriptModel do
           dark-green-spring/container.css
           evergreen-meadow/container.css
           french-rose/container.css
+          gatsby/container.css
           gogo/container.css
           green-timberline/container.css
           lionshare/container.css
