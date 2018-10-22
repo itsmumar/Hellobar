@@ -23,7 +23,7 @@ feature 'Promotional signup', :js do
       click_on 'Settings'
 
       expect(page).to have_content 'Enjoying Hello Bar Growth?'
-      expect(page).to have_content 'This site is on a trial plan. Please enter credit card details by 2018-07-24'
+      expect(page).to have_content '2018-07-24'
     end
   end
 
@@ -53,7 +53,7 @@ feature 'Promotional signup', :js do
       click_on 'Settings'
 
       expect(page).to have_content 'Enjoying Hello Bar Growth?'
-      expect(page).to have_content 'This site is on a trial plan. Please enter credit card details by 2018-07-24'
+      expect(page).to have_content '2018-07-24'
 
       OmniAuth.config.mock_auth[:google_oauth2] = nil
     end

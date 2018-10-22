@@ -46,4 +46,8 @@ module SitesHelper
     days = pluralize(site.active_subscription.days_left, 'day')
     "#{ days } left of #{ site.active_subscription.name } features"
   end
+
+  def can_view_bills?(user, site)
+    Permissions.view_bills?(user, site)
+  end
 end
