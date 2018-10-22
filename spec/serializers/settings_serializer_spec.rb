@@ -39,6 +39,7 @@ describe SettingsSerializer do
           sling
           marble
         ]
+        
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
 
