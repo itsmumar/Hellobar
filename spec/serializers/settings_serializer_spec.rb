@@ -38,7 +38,7 @@ describe SettingsSerializer do
           chance
           sling
           marble
-        ] 
+        ]
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
 
       it 'does not return advanced themes' do
