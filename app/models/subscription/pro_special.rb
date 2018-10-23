@@ -21,7 +21,7 @@ class Subscription
     end
 
     def dme?
-      created_at < DME_TRIAL_PERIOD.ago
+      created_at > DME_TRIAL_PERIOD.ago
     end
   end
 end
