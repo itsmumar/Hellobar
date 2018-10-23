@@ -256,6 +256,9 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('created-site', user: user, site: site)
     end
   end
@@ -582,20 +585,24 @@ describe AnalyticsProvider do
 
   shared_examples 'change_subscription' do
     it 'tracks event' do
+      params = {
+        amount: subscription.amount,
+        subscription: subscription.name,
+        schedule: subscription.schedule,
+        site_url: site.url,
+        site_id: site.id,
+        trial_days: 0,
+        previous_subscription: previous_subscription.name,
+        previous_subscription_amount: previous_subscription.amount,
+        previous_subscription_schedule: previous_subscription.schedule,
+        subscription_start_date: subscription.created_at
+      }
+
       expect(adapter)
         .to receive(:track)
-        .with(event: event, user: user, params: {
-          amount: subscription.amount,
-          subscription: subscription.name,
-          schedule: subscription.schedule,
-          site_url: site.url,
-          site_id: site.id,
-          trial_days: 0,
-          previous_subscription: previous_subscription.name,
-          previous_subscription_amount: previous_subscription.amount,
-          previous_subscription_schedule: previous_subscription.schedule,
-          subscription_start_date: subscription.created_at
-        })
+        .with(event: event, user: user, params: params)
+
+      expect(adapter).to receive(:update_user)
 
       track(event,
         user: user,
@@ -644,6 +651,7 @@ describe AnalyticsProvider do
 
     before { allow(adapter).to receive(:tag_users) }
     before { allow(adapter).to receive(:untag_users) }
+    before { allow(adapter).to receive(:update_user) }
 
     include_examples 'change_subscription'
   end
@@ -661,6 +669,7 @@ describe AnalyticsProvider do
 
     before { allow(adapter).to receive(:tag_users) }
     before { allow(adapter).to receive(:untag_users) }
+    before { allow(adapter).to receive(:update_user) }
 
     include_examples 'change_subscription'
 
@@ -706,18 +715,24 @@ describe AnalyticsProvider do
     let(:limit) { 100 }
 
     it 'tracks "exceeded-views-limit"' do
+      params = {}
+
+      params[:site_id] = site.id
+      params[:site_url] = site.url
+      params[:number_of_views] = number_of_views
+      params[:limit] = limit
+      params[:subscription] = 'Free'
+      params[:schedule] = 'monthly'
+      params[:overage_count] = site.overage_count
+      params[:visit_overage] = Subscription::Free.new.visit_overage
+      params[:overage_fees] = 5 * site.overage_count if site.active_subscription
+      params[:upgrade_link] = "https://app.hellobar.com/sites/#{ site.id }/edit"
+
       expect(adapter)
         .to receive(:track)
-        .with(event: event, user: user, params: {
-          site_id: site.id,
-          site_url: site.url,
-          number_of_views: number_of_views,
-          limit: limit,
-          subscription: 'Free',
-          schedule: 'monthly',
-          overage_count: site.overage_count,
-          visit_overage: Subscription::Free.new.visit_overage
-        })
+        .with(event: event, user: user, params: params)
+
+      expect(adapter).to receive(:update_user)
 
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
     end
@@ -798,6 +813,9 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('free-overage', user: user, site: site)
     end
   end
@@ -829,6 +847,9 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter)
+        .to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
     end
