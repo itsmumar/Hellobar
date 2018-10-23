@@ -20,12 +20,10 @@
     = link_to "Installation instructions", site_install_path(@site)
 
   .add-site-wrapper
-    = link_to "Add New Site", new_site_path, class: "button"
+    = link_to "Add New Site", new_site_path
   .billing-wrapper
     h5.page-header.alt Billing
     - if @site.free?
-      .half-block
-        = render 'billing', form: form
       .half-block
         = render 'upgrade_table'
     - else
@@ -38,6 +36,3 @@
       a.button [href="#" data-confirm-url=site_path(@site) data-confirm-method="delete"
         data-confirm-text="Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to delete this site?"]
           |Delete Site
-
-    - if @site.free?
-      .button.floating-button.show-upgrade-modal(data-source="Billing Upgrade Variation") Find out more

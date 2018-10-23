@@ -1,0 +1,17 @@
+.free_block
+   div.padding
+      - if (current_user.role_for_site(@site) == :owner)
+        p This site is currently on the Hello Bar Elite Plan.
+        p If you’re looking for additional features or monthly views, get in touch with our team and we can work on creating a custom plan for you.
+        div.centered
+          .button.show-upgrade-modal
+            | Get in touch with us
+      - else
+        div
+          p This site is on a the Hello Bar Elite Plan. Contact your site owner to make any changes to this plan.
+          div.inline
+            span
+              | Your site owner is:&nbsp
+            .underline
+              | #{@site.owners.first.email}
+
