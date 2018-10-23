@@ -120,7 +120,7 @@ describe StaticScriptModel do
           puesto/container.css
           pulse/container.css
           resteo/container.css
-          rhythm/container.css
+          sling/container.css
           smooth-impact/container.css
           subtle-facet/container.css
           tajima/container.css
