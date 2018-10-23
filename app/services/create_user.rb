@@ -28,18 +28,24 @@ class CreateUser
     cookies[:utm_source]
   end
 
+  def credit_card_signup
+    cookies[:cc] == '1'
+  end
+
   def track_event
     TrackEvent.new(:signed_up, event_params).call
   end
 
   def event_params
-    if promotional_signup? && utm_source
-      default_event_params.merge promotional_signup: true, utm_source: utm_source
-    elsif promotional_signup?
-      default_event_params.merge promotional_signup: true
-    else
-      default_event_params
-    end
+    return default_event_params unless promotional_signup?
+
+    default_event_params
+      .merge(
+        utm_source: utm_source,
+        credit_card_signup: credit_card_signup,
+        promotional_signup: true
+      )
+      .reject { |_, value| value.blank? }
   end
 
   def default_event_params
