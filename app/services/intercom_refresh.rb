@@ -25,6 +25,7 @@ class IntercomRefresh
 
   def find_highest_subscription(user)
     sub_names = user.sites.map { |site| site.current_subscription.name }
+    highest_subscription_name =
       if sub_names.include?('Elite') || sub_names.include?('Elite Special')
         'Elite'
       elsif sub_names.include?('Growth')
