@@ -105,6 +105,7 @@ describe StaticScriptModel do
           autodetect/container.css
           blue-autumn/container.css
           blue-avalanche/container.css
+          chance/container.css
           classy/container.css
           cocina/container.css
           dark-green-spring/container.css
@@ -119,6 +120,7 @@ describe StaticScriptModel do
           puesto/container.css
           pulse/container.css
           resteo/container.css
+          rhythm/container.css
           sling/container.css
           smooth-impact/container.css
           subtle-facet/container.css
