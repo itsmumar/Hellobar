@@ -282,8 +282,7 @@ class AnalyticsProvider
     params[:overage_count] = site.overage_count
     params[:visit_overage] = subscription.visit_overage
     params[:overage_fees] = subscription.overage_count * 5 unless subscription.free?
-    params[:upgrade_link] = "https://app.hellobar.com/sites/#{site.id}/edit"
-
+    params[:upgrade_link] = "https://app.hellobar.com/sites/#{ site.id }/edit"
 
     track(
       event: 'exceeded-views-limit',
