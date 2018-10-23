@@ -24,8 +24,8 @@ feature 'Payment modal interaction', :js do
       scenario 'upgrade to pro from free' do
         visit edit_site_path(site)
 
-        page.find('footer .show-upgrade-modal').click
-        expect(page).to have_content 'Why Upgrade to Pro?'
+        page.find('.show-upgrade-modal', match: :first).click
+        expect(page).to have_content 'To unlock the next level'
 
         page.all('.button', text: 'Choose Plan')[1].click
 
@@ -37,7 +37,6 @@ feature 'Payment modal interaction', :js do
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE PRO PLAN!"
         expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $29.00."
         expect(page).to have_text 'You will be billed $29.00 every month.'
-        expect(page).to have_text "Your next bill will be on #{ date_format(1.month.from_now) }."
 
         page.find('a', text: 'OK').click
         expect(page).to have_content 'is on the Pro plan'
@@ -48,7 +47,7 @@ feature 'Payment modal interaction', :js do
       scenario 'upgrade to growth from free' do
         visit edit_site_path(site)
 
-        page.find('footer .show-upgrade-modal').click
+        page.find('.show-upgrade-modal', match: :first).click
         page.all('.button', text: 'Choose Plan')[1].click
 
         expect(page).to have_content 'Growth'
@@ -59,7 +58,6 @@ feature 'Payment modal interaction', :js do
         expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
         expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $29.00."
         expect(page).to have_text 'You will be billed $29.00 every month.'
-        expect(page).to have_text "Your next bill will be on #{ date_format(1.month.from_now) }."
 
         page.find('a', text: 'OK').click
         expect(page).to have_content 'is on the Growth plan'

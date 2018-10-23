@@ -1,0 +1,18 @@
+.free_block
+   div.padding
+      - if (current_user.role_for_site(@site) == :owner)
+        p This site is on a trial of our Growth Plan.
+      - else
+        div
+          p This site is on a trial of our Growth Plan.Contact your site owner to upgrade to a paid plan.
+          div.inline
+            span
+              | Your site owner is:&nbsp
+            .underline
+              | #{@site.owners.first.email}
+      P Please enter credit card details by #{format_date(@site.current_subscription.trial_end_date)} to continue using Hello Bar Growth.
+      p The next bill is due on #{format_date(@site.current_subscription.bills.last.bill_at)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
+
+      div.centered
+      .button.show-upgrade-modal
+        | Upgrade here

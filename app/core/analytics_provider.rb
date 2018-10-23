@@ -38,7 +38,7 @@ class AnalyticsProvider
     tag_users subscription.name, site.owners
   end
 
-  def signed_up(user:, promotional_signup: false, utm_source: nil)
+  def signed_up(user:, promotional_signup: false, utm_source: nil, credit_card_signup: false)
     params = { admin_link: "https://app.hellobar.com/admin/users/#{ user.id }" }
 
     # Affiliate signups additional params
@@ -64,7 +64,7 @@ class AnalyticsProvider
       params[:source] = 'promotional'
       params[:trial_period] = plan.duration
       params[:trial_subscription] = plan.subscription_type
-      params[:credit_card_signup] = false
+      params[:credit_card_signup] = credit_card_signup
     end
 
     track(
