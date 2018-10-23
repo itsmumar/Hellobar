@@ -7,6 +7,7 @@ class DestroySite
     void_pending_bills
     override_script
     site.destroy
+    track_site_count
   end
 
   private
@@ -19,5 +20,9 @@ class DestroySite
 
   def override_script
     site.script.destroy
+  end
+
+  def track_site_count
+    TrackEvent.new(:updated_site_count, user: user).call
   end
 end

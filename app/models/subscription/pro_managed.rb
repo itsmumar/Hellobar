@@ -19,5 +19,9 @@ class Subscription
         }
       end
     end
+
+    def dme?
+      true
+    end
   end
 end

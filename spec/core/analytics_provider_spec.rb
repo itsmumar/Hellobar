@@ -723,12 +723,11 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#update_site_count' do
-    # let(:user) { create :user}
+  describe '#updated_site_count' do
     let(:site) { create :site }
     let(:other_site) { create :site }
 
-    it 'tracks "update-site-count"' do
+    it 'tracks "updated-site-count"' do
       site.owners << user
       other_site.owners << user
 
@@ -756,15 +755,11 @@ describe AnalyticsProvider do
         .to receive(:tag_users)
         .with('Multiple Sites', [user])
 
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'update-site-count', user: user, params: {})
-
-      track('update-site-count', user: user)
+      track('updated-site-count', user: user)
     end
   end
 
-  describe '#add_dme' do
+  describe '#added_dme' do
     let(:site) { create :site, :elite, user: user }
 
     it 'tracks "fired DME"' do
@@ -780,7 +775,7 @@ describe AnalyticsProvider do
         .to receive(:tag_users)
         .with('Elite', [site.users.first])
 
-      track('add-dme', user: user, highest_subscription_name: 'Elite')
+      track('added_dme', user: user, highest_subscription_name: 'Elite')
     end
   end
 
