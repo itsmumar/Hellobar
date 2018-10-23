@@ -25,8 +25,6 @@ class IntercomRefresh
 
   def find_highest_subscription(user)
     sub_names = user.sites.map { |site| site.current_subscription.name }
-
-    highest_subscription_name =
       if sub_names.include?('Elite') || sub_names.include?('Elite Special')
         'Elite'
       elsif sub_names.include?('Growth')
@@ -37,8 +35,6 @@ class IntercomRefresh
         'Pro Comped'
       elsif sub_names.include?('Pro Managed')
         'Pro Managed'
-      elsif sub_names.include?('Custom 0')
-        'Custom 0'
       elsif sub_names.include?('Custom 1')
         'Custom 1'
       elsif sub_names.include?('Custom 2')
@@ -48,7 +44,7 @@ class IntercomRefresh
       else
         'Free'
       end
-
+    # rubocop:enable Style/ConditionalAssignment
     TrackEvent.new(:added_dme, user: user, highest_subscription_name: highest_subscription_name).call
   end
 end
