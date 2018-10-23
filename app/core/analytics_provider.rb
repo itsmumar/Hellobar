@@ -54,10 +54,10 @@ class AnalyticsProvider
         params[:trial_subscription] = partner_plan.subscription_type
         params[:credit_card_signup] = partner.require_credit_card
       end
-    end
+      tag_users('Affiliate', [user])
 
-    # Promotional signups additional params
-    if promotional_signup
+      # Promotional signups additional params
+    elsif promotional_signup
       plan = PromotionalPlan.new
 
       params[:promotional_identifier] = utm_source if utm_source.present?
@@ -65,6 +65,8 @@ class AnalyticsProvider
       params[:trial_period] = plan.duration
       params[:trial_subscription] = plan.subscription_type
       params[:credit_card_signup] = credit_card_signup
+
+      tag_users('Promotional', [user])
     end
 
     track(
@@ -73,8 +75,6 @@ class AnalyticsProvider
       params: params
     )
     tag_users('Free', [user])
-    tag_users('Affiliate', [user]) if user.affiliate_identifier
-    tag_users('Promotional', [user]) if promotional_signup
 
     update_user(user: user, params: params) if user.affiliate_identifier || promotional_signup
   end
