@@ -49,9 +49,8 @@ class ApplicationController < ActionController::Base
   def require_credit_card
     return unless current_user
     return if current_user.credit_cards.exists?
-    return unless current_user.affiliate_information&.partner&.require_credit_card
-
-    redirect_to new_credit_card_path
+    return redirect_to new_credit_card_path if cookies[:promotional_signup] == 'true' && cookies[:cc] == '1'
+    return redirect_to new_credit_card_path if current_user.affiliate_information&.partner&.require_credit_card
   end
 
   def after_sign_in_path_for(user)

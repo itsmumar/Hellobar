@@ -24,6 +24,7 @@ describe SettingsSerializer do
           mall
           puesto
           tocaya
+          gatsby
           gogo
           cocina
           tajima
@@ -33,10 +34,12 @@ describe SettingsSerializer do
           wooli
           pulse
           wayfarer
+          rhythm
+          chance
+          sling
           marble
         ]
       end
-
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
 
       it 'does not return advanced themes' do
