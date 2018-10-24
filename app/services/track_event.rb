@@ -44,6 +44,6 @@ class TrackEvent
 
   def profitwell_enabled?
     Rails.env.production? &&
-      event.to_sym.in?([:upgraded_subscription, :downgraded_subscription])
+      event.to_sym.in?(%i[upgraded_subscription downgraded_subscription])
   end
 end
