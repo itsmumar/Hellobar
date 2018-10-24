@@ -194,12 +194,8 @@ class SiteElement < ApplicationRecord
     update!(paused_at: nil)
   end
 
-  def activate
-    update(deactivated_at: nil)
-  end
-
   def activate!
-    update!(deactivated_at: nil)
+    update_column(:deactivated_at, nil)
   end
 
   # avoid running validations,
