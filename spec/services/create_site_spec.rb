@@ -39,10 +39,14 @@ describe CreateSite do
     service.call
   end
 
-  it 'calls TrackEvent with :created_site event' do
+  it 'calls TrackEvent with :created_site and :updated_site_count events' do
     expect(TrackEvent)
       .to receive_service_call
       .with(:created_site, site: site, user: user)
+
+    expect(TrackEvent)
+      .to receive_service_call
+      .with(:updated_site_count, user: user)
 
     service.call
   end

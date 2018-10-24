@@ -3,7 +3,6 @@ describe IntercomRefresh do
 
   before do
     allow(IntercomRefresh).to receive(:new)
-    allow(service).to receive(:track_updated_site_counts)
     allow(TrackEvent).to receive_service_call
 
     stub_cyber_source :purchase
@@ -20,7 +19,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Pro'
         )
@@ -39,7 +38,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Growth'
         )
@@ -58,7 +57,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Elite'
         )
@@ -77,7 +76,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Pro Comped'
         )
@@ -96,7 +95,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Pro Managed'
         )
@@ -115,7 +114,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Pro'
         )
@@ -134,7 +133,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Custom 1'
         )
@@ -153,7 +152,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Custom 2'
         )
@@ -172,7 +171,7 @@ describe IntercomRefresh do
       expect(TrackEvent)
         .to receive_service_call
         .with(
-          :add_dme,
+          :added_dme,
           user: site.owners.first,
           highest_subscription_name: 'Custom 3'
         )

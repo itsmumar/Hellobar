@@ -26,5 +26,9 @@ class Subscription
         }
       end
     end
+
+    def dme?
+      created_at > DME_TRIAL_PERIOD.ago
+    end
   end
 end

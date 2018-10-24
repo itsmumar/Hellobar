@@ -292,25 +292,19 @@ class AnalyticsProvider
     update_user(user: user, params: params)
   end
 
-  def update_site_count(user:)
-    track(
-      event: 'update-site-count',
-      user: user,
-      params: {}
-    )
-
+  def updated_site_count(user:)
     # clean up possibly stale tags
-    untag_users "#{ (user.sites.count - 1) } Sites", [user] unless user.sites.count <= 1
+    untag_users "#{ (user.sites.count - 1) } Sites", [user] if user.sites.count > 1
     untag_users "#{ user.sites.count } Sites", [user]
     untag_users "#{ (user.sites.count + 1) } Sites", [user]
     untag_users 'Multiple Sites', [user]
 
     # tag with current count
     tag_users "#{ user.sites.count } Sites", [user]
-    tag_users 'Multiple Sites', [user] unless user.sites.count < 2
+    tag_users 'Multiple Sites', [user] if user.sites.count > 1
   end
 
-  def add_dme(user:, highest_subscription_name:)
+  def added_dme(user:, highest_subscription_name:)
     track(
       event: 'add-dme',
       user: user,
