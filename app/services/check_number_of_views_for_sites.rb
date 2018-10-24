@@ -81,9 +81,11 @@ class CheckNumberOfViewsForSites
     subscription = site.active_subscription
 
     if number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && subscription.is_a?(Subscription::Elite)
+      # this Elite site should be on a custom plan. Let's send them an email about it
       site.update(upsell_email_sent: true)
       report.send_elite_upsell_email(site, number_of_views, limit)
     elsif number_of_views >= site.upsell_email_trigger && site.upsell_email_sent == false && site.active_subscription&.schedule == 'yearly' && !subscription.is_a?(Subscription::Elite)
+      # it's a non-elite subscription and should be on a bigger plan but it's yearly so we can't auto-upgrade. Sending an email to tell them to upgrade.
       site.update(upsell_email_sent: true)
       report.send_upsell_email(site, number_of_views, limit)
     end

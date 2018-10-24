@@ -904,6 +904,8 @@ describe AnalyticsProvider do
             site_url: site.url
           })
 
+      expect(adapter).to receive(:update_user)
+
       track('auto-upgrade-to-elite', user: user, site: site)
     end
   end

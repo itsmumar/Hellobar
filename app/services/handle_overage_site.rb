@@ -97,7 +97,7 @@ class HandleOverageSite
   end
 
   def check_if_auto_upgrade_is_needed
-    return unless number_of_views >= site.upgrade_trigger && site.active_subscription.schedule == 'monthly'
+    return unless number_of_views >= site.upgrade_trigger && site.active_subscription.schedule == 'monthly' # growth or pro in overage and monthly schedule
     ChangeSubscription.new(site, { subscription: 'elite', schedule: 'monthly' }, site.credit_cards.last).call
     site.update_attribute('auto_upgraded_at', Time.zone.now)
     track_auto_upgrade_in_intercom
