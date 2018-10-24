@@ -205,6 +205,10 @@ class Site < ApplicationRecord
     current_subscription.is_a? Subscription::ProManaged
   end
 
+  def growth?
+    current_subscription.is_a? Subscription::Growth
+  end
+
   # in case of downgrade user can have e.g Pro capabilities with Free subscription
   # when subscription ends up we return Free capabilities
   def capabilities
@@ -303,6 +307,10 @@ class Site < ApplicationRecord
 
   def deactivated?
     site_elements.where.not(deactivated_at: nil).any?
+  end
+
+  def number_of_views
+    FetchTotalViewsForMonth.new([self]).call[id]
   end
 
   private

@@ -1,0 +1,9 @@
+div
+  .free-notice
+    - if @free_overage
+      - if current_site.free?
+        = render 'shared/banner_free'
+      - elsif current_site.growth?
+        = render 'shared/banner_growth'
+    - elsif partial = notify_growth?(current_site)
+      = render partial

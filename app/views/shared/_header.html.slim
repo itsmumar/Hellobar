@@ -1,3 +1,5 @@
+= render 'shared/banner'
+
 .header-logo-block
   - if current_user && current_site
     = link_to(site_path(current_site)) do
@@ -33,6 +35,7 @@
   .header-user-wrapper
     .ctas
       - unless current_user.temporary?
+        = render 'shared/limit_watch'
         - if current_site.free? && !current_site.active_subscription
           a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
             | Want More Power?
