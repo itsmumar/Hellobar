@@ -26,6 +26,7 @@ export default Ember.Component.extend({
   actions: {
     select(type) {
       this.set('type', type);
+      this.set('model.theme_changed', true);
       this.get('theming').resetThemeIfNeeded(type);
       this.get('theming').applyCurrentTheme();
       this.get('elementPlacement').updatePlacement(this, type);
