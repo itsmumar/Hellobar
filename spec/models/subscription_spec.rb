@@ -239,6 +239,25 @@ describe Subscription do
       end
     end
 
+    context 'Custom0' do
+      let(:subscription_type) { :custom_0 }
+
+      it 'sets initial values' do
+        expect(subscription.amount).to eql 149
+        expect(subscription.visit_overage).to eql 2_000_000
+        expect(subscription.visit_overage_unit).to eql nil
+        expect(subscription.visit_overage_amount).to eql 5
+
+        expect(site.views_limit).to eql 2_000_000
+      end
+
+      context 'when yearly' do
+        let(:subscription) { build :subscription, :custom_0, schedule: 'yearly' }
+
+        specify { expect(subscription.amount).to eql 1490 }
+      end
+    end
+
     context 'Custom1' do
       let(:subscription_type) { :custom_1 }
 

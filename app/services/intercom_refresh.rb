@@ -37,6 +37,8 @@ class IntercomRefresh
         'Pro Comped'
       elsif sub_names.include?('Pro Managed')
         'Pro Managed'
+      elsif sub_names.include?('Custom 0')
+        'Custom 0'
       elsif sub_names.include?('Custom 1')
         'Custom 1'
       elsif sub_names.include?('Custom 2')

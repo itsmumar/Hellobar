@@ -8,7 +8,7 @@ class Subscription < ApplicationRecord
   SCHEDULES = [MONTHLY, YEARLY].freeze
   DME_TRIAL_PERIOD = 90.days
 
-  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, EliteSpecial, Elite, Custom1, Custom2, Custom3].freeze
+  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, EliteSpecial, Elite, Custom0, Custom1, Custom2, Custom3].freeze
 
   acts_as_paranoid
 

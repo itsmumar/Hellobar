@@ -136,6 +136,14 @@ FactoryBot.define do
       with_paid_bill
     end
 
+    trait :custom_0 do
+      transient do
+        subscription_plan :custom_0
+      end
+
+      with_paid_bill
+    end
+
     trait :custom_1 do
       transient do
         subscription_plan :custom_1
