@@ -320,11 +320,11 @@ describe Subscription do
 
       it 'sets initial values' do
         expect(subscription.amount).to eql 0
-        expect(subscription.visit_overage).to eql 50_000
+        expect(subscription.visit_overage).to eql nil
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 0
 
-        expect(site.views_limit).to eql 50_000
+        expect(site.views_limit).to eql ::Float::INFINITY
       end
     end
 
