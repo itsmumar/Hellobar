@@ -14,6 +14,7 @@
         = render 'admin/bills/list', bills: bills_for(site), user: user
 
     div.site_section.subscription_history
+      div.title Views in the Last 30 Days: #{ @stats&.views }
       div.title Subscription History
 
       - if site.deleted?
