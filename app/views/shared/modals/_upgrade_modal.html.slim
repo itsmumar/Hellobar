@@ -72,50 +72,88 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               div.bold Forever Free
         tbody
           tr.h44
-            th.thborder.bolder Views
-            td 500,000/mo
-            td 50,000/mo
-            td 5,000/mo
+            th.thborder.bolder.c1
+              span  Views
+              span
+                i.fa.fa-info-circle.pl8 title="View counts are based on the # of users that actually see your Hello Bar pop-ups or bars, not your total site visitors. Rest assured, you won’t be charged for people who’ve never seen your site features." data-toggle="tooltip" data-placement="right"
+            td.bolder.c2 500,000/mo
+            td.bolder.c2 50,000/mo
+            td.bolder.c3 5,000/mo
           tr.h44
-            th.thborder.bolder # of Campaigns
-            td Unlimited
-            td Unlimited
-            td Unlimited
+            th.thborder.bolder
+              span  # of Campaigns
+              span
+                i.fa.fa-info-circle.pl8 title="We want you to have the ability to create as many bars, pop-ups, and modals as you desire, so you can start collecting leads today!" data-toggle="tooltip" data-placement="bottom"
+            td.bolder Unlimited
+            td.bolder Unlimited
+            td.bolder Unlimited
           tr.h44
-            th.thborder.bolder # of Subscribers
-            td Unlimited
-            td Unlimited
-            td Unlimited
+            th.thborder.bolder
+              span.bolder  # of Subscribers
+              span
+                i.fa.fa-info-circle.pl8 title="We know that the money is in the list – so go ahead and collect as many email addresses as you want with Hello Bar, no cap!" data-toggle="tooltip" data-placement="bottom"
+            td.bolder Unlimited
+            td.bolder Unlimited
+            td.bolder Unlimited
           tr.h44
-            th.thborder.bolder Design Features
-            td Premium
-            td Advanced
-            td Basic
+            th.thborder.bolder
+              span  Design Features
+              span
+                i.fa.fa-info-circle.pl8 title="Our design features include everything from the ability to change your button’s size and shape, to the ability to change the opacity of a picture (minus complicated design tools). Whatever design you are attempting – we have the tools to make it happen." data-toggle="tooltip" data-placement="bottom"
+            td.bolder Premium
+            td.bolder Advanced
+            td.bolder Basic
           tr.h44
-            th.thborder.bolder Targeting Features
-            td Premium
-            td Advanced
-            td Device Type Only
+            th.thborder.bolder
+              span  Targeting Features
+              span
+                i.fa.fa-info-circle.pl8 title="Showing the right message to the right person at the right time is key. Targeting allows you to decide which pages you want to show your message on plus much more! We have over 200 variations of targeting rules." data-toggle="tooltip" data-placement="bottom"
+            td.bolder Premium
+            td.bolder Advanced
+            td.bolder Device Type Only
           tr.h44
-            th.thborder.bolder A/B Testing
-            td Unlimited Tests
-            td Unlimited Tests
-            td 1 Live Test
+            th.thborder.bolder
+              span  A/B Testing
+              span
+                i.fa.fa-info-circle.pl8 title="Testing is a marketing must. We recommend running at least 3 A/B tests to find the right message for your users. Hello Bar's A/B test feature is simple and does the work for you, so you can achieve the highest conversion rates and replicate them." data-toggle="tooltip" data-placement="bottom"
+            td.bolder Unlimited Tests
+            td.bolder Unlimited Tests
+            td.bolder 1 Live Test
           tr.h44
-            th.thborder.bolder Integrations
-            td Premium
-            td Advanced
-            td Basic
+            th.thborder.bolder
+              span  Integrations
+              span
+                i.fa.fa-info-circle.pl8 title="Want to connect Hello Bar to your email marketing software? No problem! Hello Bar integrates with most major email marketing softwares. Don't see your email marketing provider? Our integration with Zapier allows our users to connect Hello Bar to thousands of apps, even if we don’t have direct integrations." data-toggle="tooltip" data-placement="bottom"
+            td.bolder Premium
+            td.bolder Advanced
+            td.bolder Basic
           tr.h44
-            th.thborder.bolder Dedicated Marketing Expert
+            th.thborder.bolder
+              span  Dedicated Marketing Expert
+              span
+                i.fa.fa-info-circle.pl8 title="Software is only half the battle. We want to make sure you are successful with our software! Our team of dedicated marketing specialists are available during business hours to answer all of your marketing questions. Not sure what to write for your headline? No problem, we will write it for you! Don't know why your Hello Bar pop-up isn't converting? Let us take a look at your test and give you customized suggestions!" data-toggle="tooltip" data-placement="bottom"
             td.check &#10004;
-            td 90 Days
+            td.bolder 90 Days
             td.cross &#10005;
           tr.h44
-            th.thborder.bolder Remove HB Logo
+            th.thborder.bolder
+              span  Remove HB Logo
+              span
+                i.fa.fa-info-circle.pl8 title="Have the ability to take the Hello Bar logo off of all of your pop-ups and bars." data-toggle="tooltip" data-placement="bottom"
             td.check  &#10004;
             td.check  &#10004;
             td.cross &#10005;
+          / tr
+          /   th
+          /   td.trborder
+          /     = choose_plan_button(Subscription::Elite.new)
+          /
+          /   td.trborder
+          /     = choose_pro_or_growth_button
+          /
+          /   td.trborder
+          /     .package-status(data-btn-prefix='Your ')
+          /       = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
           tr
             th
             td.trborder
