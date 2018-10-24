@@ -18,7 +18,29 @@ describe TrackEvent do
       .with(event.to_s, params)
   end
 
-  context 'when event is :upgrade_account_triggered' do
+  context 'when on edge' do
+    before { allow(Rails.env).to receive(:edge?).and_return true }
+    before { allow(Rails.env).to receive(:production?).and_return false }
+
+    it 'enqueues SendEventToIntercomJob' do
+      service.call
+      expect(SendEventToIntercomJob)
+        .to have_been_enqueued
+        .with(event.to_s, params)
+    end
+
+    it 'does not enqueue SendEventToAmplitudeJob' do
+      service.call
+      expect(SendEventToAmplitudeJob).not_to have_been_enqueued
+    end
+
+    it 'does not enqueue SendEventToProfitwellJob' do
+      service.call
+      expect(SendEventToProfitwellJob).not_to have_been_enqueued
+    end
+  end
+
+  context 'when event is :triggered_upgrade_account' do
     let(:event) { :upgrade_account_triggered }
 
     it 'enqueues SendEventToAmplitudeJob' do
@@ -29,7 +51,7 @@ describe TrackEvent do
     end
   end
 
-  context 'when event is :payment_checkout_triggered' do
+  context 'when event is :triggered_payment_checkout' do
     let(:event) { :payment_checkout_triggered }
 
     it 'enqueues SendEventToAmplitudeJob' do

@@ -150,7 +150,6 @@ export default Ember.Service.extend({
   },
 
   onCurrentThemeChanged: function () {
-    this.set('model.theme_changed', true);
     this.applyCurrentTheme();
     Ember.run.next(() => {
       this.setProperties({

@@ -1,12 +1,14 @@
 class DestroySite
   def initialize(site)
     @site = site
+    @owners = site.owners
   end
 
   def call
     void_pending_bills
     override_script
     site.destroy
+    track_site_count
   end
 
   private
@@ -19,5 +21,11 @@ class DestroySite
 
   def override_script
     site.script.destroy
+  end
+
+  def track_site_count
+    site.owners.each do |user|
+      TrackEvent.new(:updated_site_count, user: user).call
+    end
   end
 end

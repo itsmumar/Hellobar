@@ -1,13 +1,6 @@
 script id="credit-card-details-template" type="text/x-handlebars-template"
-  .site-select-form style="#{current_user.sites.size <= 1 ? 'display: none' : ''}"
-    header Site Details
-
-    .site-select
-      .field-row
-        label Site
-        .select-wrapper
-          = select_tag 'site_id', options_for_select(current_user.sites.map{|site| [site.url, site.id] }, current_site.try(:id))
-
+  .site-select-form style="#{current_user.sites.size <= 1 ? 'display: none' : 'display: none'}"
+        = select_tag 'site_id', options_for_select(current_user.sites.map{|site| [site.url, site.id] }, current_site.try(:id))
   .payment-form
     header Billing Information
 

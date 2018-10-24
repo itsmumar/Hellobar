@@ -91,16 +91,19 @@ class AnalyticsProvider
   end
 
   def created_site(site:, user:)
+    params = {
+      url: site.url,
+      site_id: site.id
+    }
+
     track(
       event: 'created-site',
       user: user,
-      params: {
-        url: site.url,
-        site_id: site.id
-      }
+      params: params
     )
     tag_users "#{ user.sites.count } Sites", site.owners
     untag_users "#{ (user.sites.count - 1) } Sites", site.owners unless user.sites.count == 1
+    update_user(user: user, params: params)
   end
 
   def installed_script(site:, user:)
@@ -269,42 +272,39 @@ class AnalyticsProvider
 
   def exceeded_views_limit(site:, user:, limit:, number_of_views:)
     subscription = site.current_subscription || Subscription::Free.new
+    params = {}
+    params[:site_id] = site.id
+    params[:site_url] = site.url
+    params[:number_of_views] = number_of_views
+    params[:limit] = limit
+    params[:subscription] = subscription.name
+    params[:schedule] = subscription.schedule
+    params[:overage_count] = site.overage_count
+    params[:visit_overage] = subscription.visit_overage
+    params[:overage_fees] = subscription.overage_count * 5 unless subscription.free?
+    params[:upgrade_link] = "https://app.hellobar.com/sites/#{ site.id }/edit"
 
     track(
       event: 'exceeded-views-limit',
       user: user,
-      params: {
-        site_id: site.id,
-        site_url: site.url,
-        number_of_views: number_of_views,
-        limit: limit,
-        subscription: subscription.name,
-        schedule: subscription.schedule,
-        overage_count: site.overage_count,
-        visit_overage: subscription.visit_overage
-      }
+      params: params
     )
+    update_user(user: user, params: params)
   end
 
-  def update_site_count(user:)
-    track(
-      event: 'update-site-count',
-      user: user,
-      params: {}
-    )
-
+  def updated_site_count(user:)
     # clean up possibly stale tags
-    untag_users "#{ (user.sites.count - 1) } Sites", [user] unless user.sites.count <= 1
+    untag_users "#{ (user.sites.count - 1) } Sites", [user] if user.sites.count > 1
     untag_users "#{ user.sites.count } Sites", [user]
     untag_users "#{ (user.sites.count + 1) } Sites", [user]
     untag_users 'Multiple Sites', [user]
 
     # tag with current count
     tag_users "#{ user.sites.count } Sites", [user]
-    tag_users 'Multiple Sites', [user] unless user.sites.count < 2
+    tag_users 'Multiple Sites', [user] if user.sites.count > 1
   end
 
-  def add_dme(user:, highest_subscription_name:)
+  def added_dme(user:, highest_subscription_name:)
     track(
       event: 'add-dme',
       user: user,
@@ -316,26 +316,32 @@ class AnalyticsProvider
   end
 
   def free_overage(user:, site:)
+    params = {
+      site_id: site.id,
+      site_url: site.url,
+      limit: 5000,
+      overage_count: site.overage_count
+    }
+
     track(
       event: 'free-overage',
       user: user,
-      params: {
-        site_id: site.id,
-        site_url: site.url,
-        limit: 5000,
-        overage_count: site.overage_count
-      }
+      params: params
     )
+    update_user(user: user, params: params)
   end
 
   def triggered_upgrade_account(user:, source:)
+    params = {
+      source: source
+    }
+
     track(
       event: 'triggered-upgrade-account',
       user: user,
-      params: {
-        source: source
-      }
+      params: params
     )
+    update_user(user: user, params: params)
   end
 
   def triggered_payment_checkout(user:, source:)
@@ -362,26 +368,28 @@ class AnalyticsProvider
 
   def changed_subscription(event, subscription:, previous_subscription:, user:)
     site = Site.with_deleted.find(subscription.site_id)
+    params = {
+      amount: subscription.amount,
+      site_url: site&.url,
+      site_id: site&.id,
+      subscription: subscription.name,
+      schedule: subscription.schedule,
+      trial_days: subscription.trial_period || 0,
+      previous_subscription: previous_subscription&.name,
+      previous_subscription_amount: previous_subscription&.amount,
+      previous_subscription_schedule: previous_subscription&.schedule,
+      subscription_start_date: subscription.created_at
+    }
 
     track(
       event: event,
       user: user,
-      params: {
-        amount: subscription.amount,
-        site_url: site&.url,
-        site_id: site&.id,
-        subscription: subscription.name,
-        schedule: subscription.schedule,
-        trial_days: subscription.trial_period || 0,
-        previous_subscription: previous_subscription&.name,
-        previous_subscription_amount: previous_subscription&.amount,
-        previous_subscription_schedule: previous_subscription&.schedule,
-        subscription_start_date: subscription.created_at
-      }
+      params: params
     )
 
     # tag_users 'Paid', site.owners unless subscription.amount.zero?
     tag_users subscription.name, site.owners
+    update_user(user: user, params: params)
 
     return unless previous_subscription
 
