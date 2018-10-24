@@ -21,12 +21,16 @@ describe SettingsSerializer do
         %w[
           arctic-facet
           subtle-facet
+          chance
+          gatsby
           mall
           puesto
           tocaya
           gatsby
           gogo
           cocina
+          sling
+          rhythm
           tajima
           lionshare
           new

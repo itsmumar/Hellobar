@@ -358,16 +358,6 @@ class AnalyticsProvider
     update_user(user: user, params: params)
   end
 
-  def auto_upgrade_to_elite(user:, site:)
-    track(
-      event: 'auto-upgrade-to-elite',
-      user: user,
-      params: {
-        site_id: site.id,
-        site_url: site.url
-      }
-  end
-
   def triggered_upgrade_account(user:, source:)
     params = {
       source: source
@@ -375,6 +365,20 @@ class AnalyticsProvider
 
     track(
       event: 'triggered-upgrade-account',
+      user: user,
+      params: params
+    )
+    update_user(user: user, params: params)
+  end
+
+  def auto_upgrade_to_elite(user:, site:)
+    params = {
+      site_id: site.id,
+      site_url: site.url
+    }
+    
+    track(
+      event: 'auto-upgrade-to-elite',
       user: user,
       params: params
     )
@@ -389,20 +393,6 @@ class AnalyticsProvider
         source: source
       }
     )
-  end
-
-  def auto_upgrade_to_elite(user:, site:)
-    params = {
-      site_id: site.id,
-      site_url: site.url
-    }
-
-    track(
-      event: 'auto-upgrade-to-elite',
-      user: user,
-      params: params
-    )
-    update_user(user: user, params: params)
   end
 
   private
