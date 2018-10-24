@@ -725,7 +725,7 @@ describe AnalyticsProvider do
       params[:schedule] = 'monthly'
       params[:overage_count] = site.overage_count
       params[:visit_overage] = Subscription::Free.new.visit_overage
-      params[:overage_fees] = 5 * site.overage_count if site.active_subscription
+      params[:overage_fees] = 5 * site.overage_count
       params[:upgrade_link] = "https://app.hellobar.com/sites/#{ site.id }/edit"
 
       expect(adapter)
