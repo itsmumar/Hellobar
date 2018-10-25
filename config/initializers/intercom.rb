@@ -46,7 +46,7 @@ IntercomRails.config do |config|
   # A Proc that given a user returns true if the user should be excluded
   # from imports and Javascript inclusion, false otherwise.
   #
-  # config.user.exclude_if = proc { |user| user.pro_managed? }
+  config.user.exclude_if = proc { |user| user.is_impersonated }
 
   # == User Custom Data
   # A hash of additional data you wish to send about your users.
