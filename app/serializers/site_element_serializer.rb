@@ -31,7 +31,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # text field styling
     :text_field_border_color, :text_field_border_width, :text_field_border_radius,
-    :text_field_text_color, :text_field_background_color, :text_field_background_opacity,
+    :text_field_text_color, :text_field_background_color, :text_field_background_opacity, :text_field_font_size, :text_field_font_family,
     #
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,

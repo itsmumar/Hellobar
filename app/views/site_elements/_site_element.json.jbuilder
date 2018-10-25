@@ -53,10 +53,13 @@ json.cache! site_element do
     :fonts,
     :text_field_border_color,
     :text_field_border_width,
+    :text_field_font_size,
+    :text_field_font_family,
     :text_field_border_radius,
     :text_field_text_color,
     :text_field_background_color,
     :text_field_background_opacity,
+
     # alert bar
     :sound,
     :notification_delay,
