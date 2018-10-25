@@ -28,4 +28,16 @@ class UpsellMailer < ApplicationMailer
       mail(to: user, subject: 'Heads up! An Elite customer is paying a lot in overage fees')
     end
   end
+
+  def auto_upgrade_email(site, number_of_views, limit)
+    @site = site
+    @number_of_views = number_of_views
+    @limit = limit
+    users = site.owners_and_admins
+
+    users.each do |user|
+      @user = user
+      mail(to: user.email, subject: 'We’re Saving You Money: Changes to Your Hello Bar Account')
+    end
+  end
 end
