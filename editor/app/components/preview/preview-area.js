@@ -180,6 +180,8 @@ export default Ember.Component.extend({
     'model.text_field_text_color',
     'model.text_field_background_color',
     'model.text_field_background_opacity',
+    'model.text_field_font_size',
+    'model.text_field_font_family',
     'isMobile'
   ),
 

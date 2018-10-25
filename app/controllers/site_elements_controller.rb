@@ -32,6 +32,7 @@ class SiteElementsController < ApplicationController
       closable: false,
       wiggle_button: false,
       theme_id: 'smooth-impact',
+      text_field_font_family:SiteElement.columns_hash['font_id'].default,
       settings: { url: @site.url, url_to_like: @site.url, new_user: @site.users.first.new? }
     )
 
@@ -128,7 +129,7 @@ class SiteElementsController < ApplicationController
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,
-      :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+      :text_field_border_color, :text_field_border_width,:text_field_font_size, :text_field_font_family, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
       :conversion_font, :conversion_font_color, :conversion_font_size,
       settings: settings_keys
