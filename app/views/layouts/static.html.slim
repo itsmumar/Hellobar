@@ -22,7 +22,8 @@ html
 
     main.global-content id=page_id
       .bounds-wrapper
-        .logo-block
+        - unless false
+          .logo-block
 
         == yield
 

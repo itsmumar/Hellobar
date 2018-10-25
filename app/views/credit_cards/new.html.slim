@@ -5,7 +5,7 @@
 
   - if @partner_plan
     .note
-      p You’re signing up for a free #{ @partner_plan.duration } day trial of our #{ @partner_plan.subscription_name } Plan.
+      p You’re signing up for a free #{ @partner_plan.duration } day trial of our #{ @partner_plan.subscription_name } Plan ($29/mo) .
       p Your card will not be charged until your trial period has finished.
 
   .wrapper
@@ -55,4 +55,7 @@
           .select-wrapper
             = country_select('credit_card', 'country', priority_countries: ['US'], selected: 'US')
 
+  -if @partner_plan
+    = submit_tag 'Start My Free Trial', class: 'btn btn-default button'
+  -else
     = submit_tag 'Finish', class: 'btn btn-default button'
