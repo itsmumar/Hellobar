@@ -37,8 +37,8 @@
       - unless current_user.temporary?
         = render 'shared/limit_watch'
         - if current_site.free? && !current_site.active_subscription
-          a.button.show-upgrade-modal.floating-button data={ source: "Menu Button: Want More Power" }
-            | Want More Power?
+          a.button.floating-button data={ source: "Menu Button: Want More Power" }
+            = render 'shared/header_button_text'
 
         - elsif current_site.current_subscription.try(:currently_on_trial?)
           span.trial-days-left

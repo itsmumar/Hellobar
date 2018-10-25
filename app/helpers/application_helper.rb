@@ -69,7 +69,7 @@ module ApplicationHelper
   end
 
   def notify_growth?(site)
-    return 'shared/expiring_growth' if site.trial_expiring_soon?(site)
+    return 'shared/expiring_growth' if trial_expiring_soon?(site)
     return 'shared/exceeded_growth' if site.number_of_views > 50000
   end
 
