@@ -22,7 +22,7 @@ html
 
     main.global-content id=page_id
       .bounds-wrapper
-        - unless false
+        - unless @hide_logo
           .logo-block
 
         == yield
