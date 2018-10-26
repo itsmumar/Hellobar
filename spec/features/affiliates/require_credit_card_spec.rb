@@ -46,7 +46,7 @@ describe 'Affiliate require credit card' do
         fill_in 'credit_card[zip]', with: credit_card_attributes[:zip]
         select 'Belarus', from: 'credit_card[country]'
 
-        click_on 'Finish'
+        find('input[type="submit"]').click
 
         expect(page).to have_content 'Create A New Site'
       end
