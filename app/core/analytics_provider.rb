@@ -327,7 +327,6 @@ class AnalyticsProvider
       event: 'free-overage',
       user: user,
       params: params
-<<<<<<< HEAD
     )
     update_user(user: user, params: params)
   end
@@ -352,21 +351,6 @@ class AnalyticsProvider
       params: {
         source: source
       }
-=======
->>>>>>> Events update user in certain cases
-    )
-    update_user(user: user, params: params)
-  end
-
-  def triggered_upgrade_account(user:, source:)
-    params = {
-      source: source
-    }
-
-    track(
-      event: 'triggered-upgrade-account',
-      user: user,
-      params: params
     )
     update_user(user: user, params: params)
   end
@@ -376,23 +360,13 @@ class AnalyticsProvider
       site_id: site.id,
       site_url: site.url
     }
-    
+
     track(
       event: 'auto-upgrade-to-elite',
       user: user,
       params: params
     )
     update_user(user: user, params: params)
-  end
-
-  def triggered_payment_checkout(user:, source:)
-    track(
-      event: 'triggered-payment-checkout',
-      user: user,
-      params: {
-        source: source
-      }
-    )
   end
 
   private

@@ -21,16 +21,12 @@ describe SettingsSerializer do
         %w[
           arctic-facet
           subtle-facet
-          chance
-          gatsby
           mall
           puesto
           tocaya
           gatsby
           gogo
           cocina
-          sling
-          rhythm
           tajima
           lionshare
           new
@@ -43,7 +39,7 @@ describe SettingsSerializer do
           sling
           marble
         ]
-        
+      end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
 
       it 'does not return advanced themes' do

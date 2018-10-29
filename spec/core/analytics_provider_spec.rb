@@ -256,6 +256,8 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
+      expect(adapter).to receive(:update_user)
+
       track('created-site', user: user, site: site)
     end
   end
@@ -805,6 +807,8 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
+      expect(adapter).to receive(:update_user)
+
       track('free-overage', user: user, site: site)
     end
   end
@@ -855,6 +859,8 @@ describe AnalyticsProvider do
               site_url: site.url
             })
 
+        expect(adapter).to receive(:update_user)
+
         track('auto-upgrade-to-elite', user: user, site: site)
       end
     end
@@ -887,6 +893,8 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter).to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
     end
