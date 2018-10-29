@@ -345,12 +345,14 @@ class AnalyticsProvider
   end
 
   def triggered_payment_checkout(user:, source:)
+    params = {
+      source: source
+    }
+
     track(
       event: 'triggered-payment-checkout',
       user: user,
-      params: {
-        source: source
-      }
+      params: params
     )
     update_user(user: user, params: params)
   end

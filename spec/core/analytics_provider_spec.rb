@@ -825,6 +825,8 @@ describe AnalyticsProvider do
             source: source
           })
 
+      expect(adapter).to receive(:update_user)
+
       track('triggered-payment-checkout', user: user, source: source)
     end
   end
@@ -878,6 +880,8 @@ describe AnalyticsProvider do
             source: source
           })
 
+      expect(adapter).to receive(:update_user)
+      
       track('triggered-payment-checkout', user: user, source: source)
     end
   end
