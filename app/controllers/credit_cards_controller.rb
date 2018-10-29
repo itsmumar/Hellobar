@@ -22,6 +22,7 @@ class CreditCardsController < ApplicationController
   def new
     @form = PaymentForm.new(params[:credit_card])
 
+    @hide_logo = @partner_plan ? true : false
     render layout: 'static'
   end
 

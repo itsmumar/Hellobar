@@ -8,7 +8,6 @@ class RegistrationForm
 
   def initialize(params, cookies = {})
     super(params[:registration_form])
-
     @user = User.new(email: email, password: password)
     @site = Site.new(url: site_url, pre_selected_plan: plan)
     @cookies = cookies
@@ -34,7 +33,8 @@ class RegistrationForm
   end
 
   def title
-    return default_title unless promotional_signup? || affiliate_signup?
+    return default_title unless promotional_signup? || affiliate_signup? || paid_signup?
+    return paid_title if paid_signup?
     return promotional_signup_title unless affiliate_signup?
     return affiliate_signup_title unless partner?
 
@@ -42,9 +42,10 @@ class RegistrationForm
   end
 
   def cta
-    return default_cta unless promotional_signup? || affiliate_signup?
-    return promotional_signup_cta unless affiliate_signup?
-    return affiliate_signup_cta unless partner?
+    return default_cta unless promotional_signup? || affiliate_signup? || paid_signup?
+    return promotional_signup_cta unless affiliate_signup? || paid_signup?
+    return affiliate_signup_cta unless partner? || paid_signup?
+    return paid_signup_cta if paid_signup?
 
     partner_signup_cta
   end
@@ -55,6 +56,10 @@ class RegistrationForm
     I18n.t :default_title, scope: :registration
   end
   alias default_cta default_title
+
+  def paid_title
+    I18n.t :paid_title, scope: :registration
+  end
 
   def promotional_signup_title
     duration = PromotionalPlan.new.duration
@@ -68,6 +73,12 @@ class RegistrationForm
     duration = PromotionalPlan.new.duration
 
     I18n.t :promotional_signup_cta, scope: :registration, duration: duration
+  end
+
+  def paid_signup_cta
+    duration = PromotionalPlan.new.duration
+
+    I18n.t :paid_cta, scope: :registration, duration: duration
   end
 
   def affiliate_signup_title
@@ -97,6 +108,10 @@ class RegistrationForm
     duration = @partner.partner_plan.duration
 
     I18n.t :partner_signup_cta, scope: :registration, duration: duration
+  end
+
+  def paid_signup?
+    @cookies[:the_plan] == 'paid'
   end
 
   def promotional_signup?

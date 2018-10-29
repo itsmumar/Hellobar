@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181008162003) do
+ActiveRecord::Schema.define(version: 20181010212551) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 20181008162003) do
     t.integer  "overage_count",                   limit: 4,        default: 0
     t.boolean  "ab_test_running",                                  default: false
     t.string   "pre_selected_plan",               limit: 255
+    t.datetime "auto_upgraded_at"
   end
 
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
@@ -569,8 +570,6 @@ ActiveRecord::Schema.define(version: 20181008162003) do
     t.datetime "updated_at"
   end
 
-  add_foreign_key "affiliate_information", "users"
-  add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"

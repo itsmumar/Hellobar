@@ -67,4 +67,6 @@ en:
     partner_signup_cta: "Start Your %{duration} Day Free Trial"
     promotional_signup_title: 'Welcome To Your FREE %{duration} Day Trial Of Hello Bar %{subscription}'
     promotional_signup_cta: "Start Your %{duration} Day Free Trial"
-    default_title: 'Create free account'
+    default_title: 'Create Your Free Account'
+    paid_title: 'Create Your Account'
+    paid_cta: 'Create Your Account Now'

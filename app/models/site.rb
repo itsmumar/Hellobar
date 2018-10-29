@@ -141,6 +141,10 @@ class Site < ApplicationRecord
   def upsell_email_trigger
     capabilities.upsell_email_trigger
   end
+
+  def upgrade_trigger
+    capabilities.upgrade_trigger
+  end
   # rubocop:enable Delegate
 
   def communication_types=(value)
@@ -207,6 +211,14 @@ class Site < ApplicationRecord
 
   def growth?
     current_subscription.is_a? Subscription::Growth
+  end
+  
+  def growth_or_pro?
+    current_subscription.is_a?(Subscription::Growth) || current_subscription.is_a?(Subscription::Pro)
+  end
+
+  def elite?
+    current_subscription.is_a? Subscription::Elite
   end
 
   # in case of downgrade user can have e.g Pro capabilities with Free subscription

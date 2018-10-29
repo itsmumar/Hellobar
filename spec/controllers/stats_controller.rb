@@ -17,6 +17,9 @@ describe StatsController do
         get 'index'
         expect(response).to be_success
         expect(assigns(:today_stats)).to eq(1)
+        expect(assigns(:mtd_paid)).to eq(1)
+        expect(assigns(:mtd_trials)).to eq(0)
+        expect(assigns(:mtd_elite)).to eq(1)
       end
     end
   end

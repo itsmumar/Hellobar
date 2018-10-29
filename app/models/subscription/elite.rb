@@ -15,9 +15,14 @@ class Subscription
           visit_warning_two: ::Float::INFINITY,
           visit_warning_three: ::Float::INFINITY,
           visit_overage_amount: 5.00,
-          upsell_email_trigger: 1_000_000
+          upsell_email_trigger: 1_000_000,
+          upgrade_trigger: ::Float::INFINITY
         }
       end
+    end
+
+    def dme?
+      true
     end
   end
 end

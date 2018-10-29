@@ -105,19 +105,24 @@ describe StaticScriptModel do
           autodetect/container.css
           blue-autumn/container.css
           blue-avalanche/container.css
+          chance/container.css
           classy/container.css
           cocina/container.css
           dark-green-spring/container.css
           evergreen-meadow/container.css
           french-rose/container.css
+          gatsby/container.css
           gogo/container.css
           green-timberline/container.css
           lionshare/container.css
           mall/container.css
+          marble/container.css
           marigold/container.css
           puesto/container.css
           pulse/container.css
           resteo/container.css
+          rhythm/container.css
+          sling/container.css
           smooth-impact/container.css
           subtle-facet/container.css
           tajima/container.css

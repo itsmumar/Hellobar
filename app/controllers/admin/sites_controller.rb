@@ -1,4 +1,6 @@
 class Admin::SitesController < AdminController
+  before_action :calculate_views_avg, only: [:show]
+
   def show
     site
   end
@@ -44,6 +46,10 @@ class Admin::SitesController < AdminController
   end
 
   private
+
+  def calculate_views_avg
+    @stats = FetchSiteStatistics.new(site, days_limit: 30).call
+  end
 
   def change_subscription
     if subscription_params[:trial_period].present?
