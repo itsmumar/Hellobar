@@ -51,14 +51,6 @@ describe CreateSite do
     service.call
   end
 
-  it 'calls TrackEvent with :updated_site_count event' do
-    expect(TrackEvent)
-      .to receive_service_call
-      .with(:updated_site_count, user: user)
-
-    service.call
-  end
-
   it 'regenerates script' do
     expect { service.call }
       .to have_enqueued_job(GenerateStaticScriptJob).with(site)

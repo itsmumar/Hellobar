@@ -24,6 +24,8 @@ class DestroySite
   end
 
   def track_site_count
-    TrackEvent.new(:updated_site_count, user: user).call
+    site.owners.each do |user|
+      TrackEvent.new(:updated_site_count, user: user).call
+    end
   end
 end
