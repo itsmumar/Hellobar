@@ -23,7 +23,7 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
         .dropdown-block.adjusted
           = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "unlock more A/B testing, upgrade " do
             i.icon-docs
-            | Create Variation
+            | A/B Test
     - else
       = icon
 
@@ -36,7 +36,7 @@ tr.site-element-block class="type-#{site_element.short_subtype}" id="site_elemen
 
         = link_to new_site_site_element_path(:site_id => @site, :element_to_copy_id => site_element), :class => 'create-variation', 'data-prompt-upgrade' => @site.capabilities.at_site_element_limit? || @site.capabilities.at_variation_limit?(site_element) || (@site.free? && @site.ab_test_running), "data-upgrade-benefit" => "unlock more A/B testing, upgrade " do
           i.icon-docs
-          | Create Variation
+          | A/B Test
 
         - if not(site_element.deactivated?)
           - class_to_add = @site.deactivated? ? 'show-activation-modal' : 'toggle-pause'
