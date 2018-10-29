@@ -29,10 +29,6 @@ export default Ember.Component.extend({
   }.property('value'),
 
   formattedValue: function () {
-    // if(this.get('model_type') === 'Takeover' && this.get('model_id') !== '' && this.get('valueChanged')) {
-    //   this.set('valueChanged', false)
-    //   this.set('value', 18)
-    // }
     return `${ this.get('value') }${ this.get('label') }`;
   }.property('value'),
 

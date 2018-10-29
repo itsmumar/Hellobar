@@ -29,9 +29,6 @@ export default Ember.Component.extend({
       this.set('model.theme_changed', true);
       this.get('theming').resetThemeIfNeeded(type);
       this.get('theming').applyCurrentTheme();
-      if(this.get('model.type') === 'Takeover' && this.get('model.id') === null) {
-        this.set('model.text_field_font_size', 18);
-      }
       this.get('elementPlacement').updatePlacement(this, type);
       this.get('elementTrigger').updateTrigger(this, type);
     }
