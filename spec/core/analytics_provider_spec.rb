@@ -881,7 +881,7 @@ describe AnalyticsProvider do
           })
 
       expect(adapter).to receive(:update_user)
-      
+
       track('triggered-payment-checkout', user: user, source: source)
     end
   end
