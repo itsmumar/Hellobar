@@ -1,4 +1,4 @@
-- if current_site.current_subscription.currently_on_trial?
+- if current_site.current_subscription&.currently_on_trial?
   .show-new-credit-card-modal
     | Enter Payment Info
 - else

@@ -3,6 +3,6 @@ span.notify_span
     = current_site.number_of_views.to_s + ' views this month. Need more?'
   - elsif show_days?(current_site)
     = current_site.current_subscription.trial_days_remaining.to_s + ' days left'
-  - else
+  - elsif show_warning?(current_site)
     = image_tag 'warning_icon.png',class: 'warn_icon'
     | View Limit Reached

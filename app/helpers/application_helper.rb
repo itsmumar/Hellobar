@@ -65,12 +65,12 @@ module ApplicationHelper
   end
 
   def trial_expiring_soon?(site)
-    site.current_subscription.currently_on_trial? && site.current_subscription.trial_days_remaining < 7
+    site&.current_subscription&.currently_on_trial? && site.current_subscription.trial_days_remaining < 7
   end
 
   def notify_growth?(site)
     return 'shared/expiring_growth' if trial_expiring_soon?(site)
-    return 'shared/exceeded_growth' if site.number_of_views > 50000
+    return 'shared/exceeded_growth' if site && site.number_of_views > 50000
   end
 
   def show_views?(site)
@@ -79,5 +79,9 @@ module ApplicationHelper
 
   def show_days?(site)
     site.current_subscription.currently_on_trial?
+  end
+
+  def show_warning?(site)
+    site.free? && site.deactivated?
   end
 end
