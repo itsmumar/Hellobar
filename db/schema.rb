@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181008162003) do
+ActiveRecord::Schema.define(version: 20181024083902) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -463,6 +463,8 @@ ActiveRecord::Schema.define(version: 20181008162003) do
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
     t.datetime "deactivated_at"
+    t.string   "text_field_font_family",        limit: 255
+    t.integer  "text_field_font_size",          limit: 4,        default: 14
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

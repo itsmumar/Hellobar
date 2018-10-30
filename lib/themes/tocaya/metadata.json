@@ -12,7 +12,10 @@
     "georgia"
   ],
   "element_types": ["Modal", "Slider", "Takeover","Alert"],
-  "defaults": { 
+  "defaults": {
+    "Bar": {
+      "text_field_font_size": 14
+    },
     "Takeover": {
       "background_color": "f8f8f8",
       "text_color": "4a4a4a",
@@ -28,7 +31,8 @@
       "cta_border_radius": 4,
       "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
       "caption":"Create the Hook, Line and Sinker CTA",
-      "link_text":"DOWNLOAD FOR FREE"
+      "link_text":"DOWNLOAD FOR FREE",
+      "text_field_font_size": 18
     },
     "Slider": {
       "background_color": "f8f8f8",
@@ -45,7 +49,8 @@
       "cta_border_radius": 4,
       "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
       "caption":"Create the Hook, Line and Sinker CTA",
-      "link_text":"DOWNLOAD FOR FREE"
+      "link_text":"DOWNLOAD FOR FREE",
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "f8f8f8",
@@ -62,7 +67,8 @@
       "cta_border_radius": 4,
       "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
       "caption":"Create the Hook, Line and Sinker CTA",
-      "link_text":"DOWNLOAD FOR FREE"
+      "link_text":"DOWNLOAD FOR FREE",
+      "text_field_font_size": 14
     },
     "Alert": {
       "background_color": "f8f8f8",
@@ -79,7 +85,8 @@
       "cta_border_radius": 4,
       "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
       "caption":"Create the Hook, Line and Sinker CTA",
-      "link_text":"DOWNLOAD FOR FREE"
+      "link_text":"DOWNLOAD FOR FREE",
+      "text_field_font_size": 14
     }
   },
   "image": {
