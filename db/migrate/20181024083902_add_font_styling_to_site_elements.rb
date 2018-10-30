@@ -1,8 +1,13 @@
 class AddFontStylingToSiteElements < ActiveRecord::Migration
-  def change
-    add_column :site_elements, :text_field_font_family, :string, limit: 255
-    add_column :site_elements, :text_field_font_size, :integer, limit: 4, default: 14
+  def up
+    add_column :site_elements, :text_field_font_family, :string
+    add_column :site_elements, :text_field_font_size, :integer, default: 14
 
     SiteElement.where(type: 'Takeover').update_all(text_field_font_size: 18)
+  end
+
+  def down
+    remove_column :site_elements, :text_field_font_family
+    remove_column :site_elements, :text_field_font_size
   end
 end

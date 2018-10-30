@@ -24,7 +24,8 @@
       "headline": "Get the inside scoop",
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE",
-      "text_field_text_color": "9b9b9b"
+      "text_field_text_color": "9b9b9b",
+      "text_field_font_size": 14
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -41,7 +42,8 @@
       "link_text":"SUBSCRIBE",
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
-      "image_overlay_opacity": 60
+      "image_overlay_opacity": 60,
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "FFFFFF",
@@ -58,7 +60,8 @@
       "link_text":"SUBSCRIBE",
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
-      "image_overlay_opacity": 60
+      "image_overlay_opacity": 60,
+      "text_field_font_size": 14
     },
     "Takeover": {
       "background_color": "FFFFFF",
@@ -75,7 +78,8 @@
       "link_text":"SUBSCRIBE" ,
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
-      "image_overlay_opacity": 60
+      "image_overlay_opacity": 60,
+      "text_field_font_size": 18
     },
     "Alert": {
       "background_color": "FFFFFF",
@@ -94,7 +98,8 @@
       "link_text":"SUBSCRIBE", 
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
-      "image_overlay_opacity": 60
+      "image_overlay_opacity": 60,
+      "text_field_font_size": 14
     }
   },
   "image": {

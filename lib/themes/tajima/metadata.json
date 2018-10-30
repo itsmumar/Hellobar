@@ -12,7 +12,10 @@
     "georgia"
   ],
   "element_types": ["Modal", "Slider", "Takeover","Alert"],
-  "defaults": { 
+  "defaults": {
+    "Bar": {
+      "text_field_font_size": 14
+    },
     "Takeover": {
       "background_color": "f8f8f8",
       "text_color": "000000",
@@ -28,7 +31,8 @@
       "cta_border_radius": 4,
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
-      "link_text":"DOWNLOAD"
+      "link_text":"DOWNLOAD",
+      "text_field_font_size": 18
     },
     "Slider": {
       "background_color": "f8f8f8",
@@ -45,7 +49,8 @@
       "cta_border_radius": 4,
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
-      "link_text":"DOWNLOAD"
+      "link_text":"DOWNLOAD",
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "f8f8f8",
@@ -62,7 +67,8 @@
       "cta_border_radius": 4,
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
-      "link_text":"DOWNLOAD"
+      "link_text":"DOWNLOAD",
+      "text_field_font_size": 14
     },
     "Alert": {
       "background_color": "f8f8f8",
@@ -79,7 +85,8 @@
       "cta_border_radius": 4,
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
-      "link_text":"DOWNLOAD"
+      "link_text":"DOWNLOAD",
+      "text_field_font_size": 14
     }
   },
   "image": {
