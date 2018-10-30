@@ -67,7 +67,7 @@ class Subscription < ApplicationRecord
   def trial_ended?
     currently_on_trial? && Time.current > trial_end_date
   end
-  
+
   # dedicated marketing expert
   def dme?
     false
