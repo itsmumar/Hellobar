@@ -20,6 +20,7 @@ describe SettingsSerializer do
       let(:advanced_themes) do
         %w[
           arctic-facet
+          azuki
           subtle-facet
           mall
           puesto
