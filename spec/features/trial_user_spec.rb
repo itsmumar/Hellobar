@@ -28,7 +28,7 @@ feature 'Trial User', :js do
 
     Timecop.travel(91.days.from_now) do
       visit site_path(site)
-      expect(page).to have_content('Want More Power?')
+      expect(page).to have_content('Upgrade Now')
     end
   end
 end

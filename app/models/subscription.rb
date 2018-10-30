@@ -60,6 +60,14 @@ class Subscription < ApplicationRecord
     amount != 0 && credit_card.nil? && active_bills.paid.free.any?
   end
 
+  def trial_days_remaining
+    (trial_end_date.to_date - Time.current.to_date).to_i
+  end
+
+  def trial_ended?
+    currently_on_trial? && Time.current > trial_end_date
+  end
+
   # dedicated marketing expert
   def dme?
     false
