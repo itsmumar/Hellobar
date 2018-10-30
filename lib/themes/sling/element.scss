@@ -225,14 +225,14 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   #hellobar-modal {
     padding: 0;
-
+    max-width:42em;
     .hb-content-wrapper:after {
       @include frame;
       margin: 0.5rem;
       border-width: 1px;
     }  
     .hb-inner-content {
-      padding: 48px 18%;
+      padding: 48px 10%;
     } 
     .hb-headline-text {
       font-size: 2.1em; 
@@ -250,6 +250,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       text-align: center;
     } 
     .hb-input-block {
+      
       &:before {
         left: 16px;
         top: 19px;
@@ -268,10 +269,15 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       right: 19px;
       font-size: 14px;
     }
-
+    .hb-input-wrapper{
+      max-width: none;
+    }
     .hb-cta {
       font-size: 19px;
       padding: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       .fr-wrapper{
         .fr-element{
           letter-spacing: 1px;
@@ -286,7 +292,6 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
       .hb-content-wrapper{
         .hb-inner-content {
-          padding: 48px 12%;
           .hb-headline-text{
             font-size: 1.6em;
           }
@@ -333,14 +338,13 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       @include frame;
     } 
 
-    .hb-text-wrapper {
-      max-width: 600px;
+    .hb-text-wrapper { 
       margin: 0 auto;
     }
 
     .hb-input-wrapper {
       margin: 20px auto 0;
-      max-width: 480px;
+      max-width:none ; 
     }
 
     .hb-logo-wrapper {
@@ -377,8 +381,14 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
     }
 
+    .hb-inner-content{
+      max-width: 31em;
+    }
     .hb-cta {
       font-size: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;  
     }
 
     .icon-close {
