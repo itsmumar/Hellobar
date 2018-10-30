@@ -109,7 +109,7 @@
 
   .hb-logo-wrapper {
     opacity: 0.6;
-
+    text-align:center;
     svg {
       fill: white;
     }
@@ -337,7 +337,7 @@
     }
 
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
-      padding-left: 43%;
+      padding-left: 0;
     }
 
     
@@ -473,6 +473,7 @@
       text-align: left;
       margin: 5px 25px 15px 20px;
       opacity: 0.2;
+      text-align: center; 
 
       &:hover {
         opacity: 0.4;

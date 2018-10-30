@@ -156,5 +156,5 @@ export default Ember.Service.extend({
         'model.image_placement': this.getImagePlacement()
       });
     });
-  }.observes('model.theme_id')
+  }.observes('model.theme_id', 'model.type')
 });

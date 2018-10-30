@@ -553,7 +553,7 @@ describe SiteElement do
   describe '#activate' do
     it 'sets deactivated_at to nil' do
       element.deactivate
-      expect { element.activate }
+      expect { element.activate! }
         .to change { element.reload.deactivated_at }
         .to(nil)
     end

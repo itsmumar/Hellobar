@@ -256,6 +256,8 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
+      expect(adapter).to receive(:update_user)
+
       track('created-site', user: user, site: site)
     end
   end
@@ -582,20 +584,24 @@ describe AnalyticsProvider do
 
   shared_examples 'change_subscription' do
     it 'tracks event' do
+      params = {
+        amount: subscription.amount,
+        subscription: subscription.name,
+        schedule: subscription.schedule,
+        site_url: site.url,
+        site_id: site.id,
+        trial_days: 0,
+        previous_subscription: previous_subscription.name,
+        previous_subscription_amount: previous_subscription.amount,
+        previous_subscription_schedule: previous_subscription.schedule,
+        subscription_start_date: subscription.created_at
+      }
+
       expect(adapter)
         .to receive(:track)
-        .with(event: event, user: user, params: {
-          amount: subscription.amount,
-          subscription: subscription.name,
-          schedule: subscription.schedule,
-          site_url: site.url,
-          site_id: site.id,
-          trial_days: 0,
-          previous_subscription: previous_subscription.name,
-          previous_subscription_amount: previous_subscription.amount,
-          previous_subscription_schedule: previous_subscription.schedule,
-          subscription_start_date: subscription.created_at
-        })
+        .with(event: event, user: user, params: params)
+
+      expect(adapter).to receive(:update_user)
 
       track(event,
         user: user,
@@ -644,6 +650,7 @@ describe AnalyticsProvider do
 
     before { allow(adapter).to receive(:tag_users) }
     before { allow(adapter).to receive(:untag_users) }
+    before { allow(adapter).to receive(:update_user) }
 
     include_examples 'change_subscription'
   end
@@ -661,6 +668,7 @@ describe AnalyticsProvider do
 
     before { allow(adapter).to receive(:tag_users) }
     before { allow(adapter).to receive(:untag_users) }
+    before { allow(adapter).to receive(:update_user) }
 
     include_examples 'change_subscription'
 
@@ -706,29 +714,34 @@ describe AnalyticsProvider do
     let(:limit) { 100 }
 
     it 'tracks "exceeded-views-limit"' do
+      params = {}
+
+      params[:site_id] = site.id
+      params[:site_url] = site.url
+      params[:number_of_views] = number_of_views
+      params[:limit] = limit
+      params[:subscription] = 'Free'
+      params[:schedule] = 'monthly'
+      params[:overage_count] = site.overage_count
+      params[:visit_overage] = Subscription::Free.new.visit_overage
+      params[:overage_fees] = 5 * site.overage_count
+      params[:upgrade_link] = "https://app.hellobar.com/sites/#{ site.id }/edit"
+
       expect(adapter)
         .to receive(:track)
-        .with(event: event, user: user, params: {
-          site_id: site.id,
-          site_url: site.url,
-          number_of_views: number_of_views,
-          limit: limit,
-          subscription: 'Free',
-          schedule: 'monthly',
-          overage_count: site.overage_count,
-          visit_overage: Subscription::Free.new.visit_overage
-        })
+        .with(event: event, user: user, params: params)
+
+      expect(adapter).to receive(:update_user)
 
       track(event, site: site, user: user, limit: limit, number_of_views: number_of_views)
     end
   end
 
-  describe '#update_site_count' do
-    # let(:user) { create :user}
+  describe '#updated_site_count' do
     let(:site) { create :site }
     let(:other_site) { create :site }
 
-    it 'tracks "update-site-count"' do
+    it 'tracks "updated-site-count"' do
       site.owners << user
       other_site.owners << user
 
@@ -756,15 +769,11 @@ describe AnalyticsProvider do
         .to receive(:tag_users)
         .with('Multiple Sites', [user])
 
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'update-site-count', user: user, params: {})
-
-      track('update-site-count', user: user)
+      track('updated-site-count', user: user)
     end
   end
 
-  describe '#add_dme' do
+  describe '#added_dme' do
     let(:site) { create :site, :elite, user: user }
 
     it 'tracks "fired DME"' do
@@ -780,7 +789,7 @@ describe AnalyticsProvider do
         .to receive(:tag_users)
         .with('Elite', [site.users.first])
 
-      track('add-dme', user: user, highest_subscription_name: 'Elite')
+      track('added_dme', user: user, highest_subscription_name: 'Elite')
     end
   end
 
@@ -798,6 +807,8 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
+      expect(adapter).to receive(:update_user)
+
       track('free-overage', user: user, site: site)
     end
   end
@@ -813,6 +824,8 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter).to receive(:update_user)
 
       track('triggered-payment-checkout', user: user, source: source)
     end
@@ -830,7 +843,82 @@ describe AnalyticsProvider do
             source: source
           })
 
+      expect(adapter)
+        .to receive(:update_user)
+
       track('triggered-upgrade-account', user: user, source: source)
+    end
+
+    describe '#auto_upgrade_to_elite' do
+      let(:site) { create :site, user: user }
+
+      it 'tracks "fired auto-upgrade-to-elite"' do
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'auto-upgrade-to-elite', user: user,
+            params: {
+              site_id: site.id,
+              site_url: site.url
+            })
+
+        expect(adapter).to receive(:update_user)
+
+        track('auto-upgrade-to-elite', user: user, site: site)
+      end
+    end
+  end
+
+  describe '#triggered_payment_checkout' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-payment-checkout"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-payment-checkout',
+          user: user,
+          params: {
+            source: source
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('triggered-payment-checkout', user: user, source: source)
+    end
+  end
+
+  describe '#triggered_upgrade_account' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-upgrade-account"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-upgrade-account',
+          user: user,
+          params: {
+            source: source
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('triggered-upgrade-account', user: user, source: source)
+    end
+  end
+
+  describe '#auto_upgrade_to_elite' do
+    let(:site) { create :site, user: user }
+
+    it 'tracks "fired auto-upgrade-to-elite"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'auto-upgrade-to-elite', user: user,
+          params: {
+            site_id: site.id,
+            site_url: site.url
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('auto-upgrade-to-elite', user: user, site: site)
     end
   end
 end

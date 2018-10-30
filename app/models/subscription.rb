@@ -6,8 +6,9 @@ class Subscription < ApplicationRecord
   MONTHLY = 'monthly'.freeze
   YEARLY = 'yearly'.freeze
   SCHEDULES = [MONTHLY, YEARLY].freeze
+  DME_TRIAL_PERIOD = 90.days
 
-  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, EliteSpecial, Elite, Custom1, Custom2, Custom3].freeze
+  ALL = [Free, FreePlus, Growth, Pro, ProComped, ProManaged, ProSpecial, EliteSpecial, Elite, Custom0, Custom1, Custom2, Custom3].freeze
 
   acts_as_paranoid
 
@@ -57,6 +58,11 @@ class Subscription < ApplicationRecord
 
   def currently_on_trial?
     amount != 0 && credit_card.nil? && active_bills.paid.free.any?
+  end
+
+  # dedicated marketing expert
+  def dme?
+    false
   end
 
   def monthly?

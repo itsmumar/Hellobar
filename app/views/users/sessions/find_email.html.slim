@@ -5,7 +5,7 @@
   h1 Sign In
 
   = f.hidden_field :email
-  = f.input_field :password, :placeholder => 'Password'
+  = f.input_field :password, :placeholder => 'Password', autofocus: true
   = f.button :submit, "Continue", :class => "button"
 
   .devise-links

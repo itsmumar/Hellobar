@@ -107,7 +107,7 @@ section
 
 
 
-  - if @site.growth_or_pro? || @site.elite? && !@site.current_subscription.currently_on_trial?
+  - if ((@site.growth_or_pro? || @site.elite?) && !@site.current_subscription.currently_on_trial?)
     ' Next bill is due on #{format_date(@site.current_subscription.bills.last.end_date)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
 
 

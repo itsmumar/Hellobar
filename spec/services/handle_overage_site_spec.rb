@@ -51,6 +51,21 @@ describe HandleOverageSite do
     end
   end
 
+  context 'with Custom 0 subscription' do
+    let(:subscription_type) { :custom_0 }
+    include_examples 'tracks events'
+  end
+
+  context 'with Custom 0 & into overage counts' do
+    let(:subscription_type) { :custom_0 }
+    let(:number_of_views) { 2_000_001 }
+    let(:limit) { 2_000_000 }
+    it 'increments the overage count by 1' do
+      service.call
+      expect(site.overage_count).to eql(1)
+    end
+  end
+
   context 'with Custom 1 subscription' do
     let(:subscription_type) { :custom_1 }
     include_examples 'tracks events'
@@ -197,6 +212,66 @@ describe HandleOverageSite do
   context 'with FreePlus subscription' do
     let(:subscription_type) { :free_plus }
     include_examples 'tracks events'
+  end
+
+  context 'with Growth & auto upgraded to Elite' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 500_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'updates auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to_not eql(nil)
+    end
+
+    it 'changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Elite')
+    end
+  end
+
+  context 'with Growth & NOT auto upgraded to Elite' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 300_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'does not update auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to eql(nil)
+    end
+
+    it 'does not changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Growth')
+    end
+  end
+
+  context 'with Pro & auto upgraded to Elite' do
+    let(:subscription_type) { :pro }
+    let(:number_of_views) { 500_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'updates auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to_not eql(nil)
+    end
+
+    it 'changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Elite')
+    end
   end
 
   context 'with Free subscription' do

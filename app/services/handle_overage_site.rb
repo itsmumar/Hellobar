@@ -41,6 +41,8 @@ class HandleOverageSite
       handle_free_plus
     when Subscription::Free::Capabilities
       handle_free
+    when Subscription::Custom0::Capabilities
+      handle_custom
     when Subscription::Custom1::Capabilities
       handle_custom
     when Subscription::Custom2::Capabilities
@@ -63,7 +65,7 @@ class HandleOverageSite
 
     return unless new_charge_count > current_charge_count
     site.update(limit_email_sent: true)
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    OveragePaidMailer.overage_elite_email(site, number_of_views, limit).deliver_later
     @site.update(overage_count: new_charge_count)
   end
 
@@ -78,7 +80,7 @@ class HandleOverageSite
 
     return unless new_charge_count > current_charge_count
     site.update(limit_email_sent: true)
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
     @site.update(overage_count: new_charge_count)
   end
 
@@ -91,6 +93,14 @@ class HandleOverageSite
   def handle_growth
     return if @site.current_subscription.currently_on_trial? # let users on free trials go nuts until the trial is over
     update_growth_overage_count
+    check_if_auto_upgrade_is_needed
+  end
+
+  def check_if_auto_upgrade_is_needed
+    return unless number_of_views >= site.upgrade_trigger && site.active_subscription.schedule == 'monthly' # growth or pro in overage and monthly schedule
+    ChangeSubscription.new(site, { subscription: 'elite', schedule: 'monthly' }, site.credit_cards.last).call
+    site.update_attribute('auto_upgraded_at', Time.zone.now)
+    track_auto_upgrade_in_intercom
   end
 
   def update_growth_overage_count
@@ -101,11 +111,12 @@ class HandleOverageSite
     return unless new_charge_count > current_charge_count
     @site.update(overage_count: new_charge_count)
     site.update(limit_email_sent: true)
-    OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
+    # OveragePaidMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def handle_pro
     update_growth_overage_count # pro is the same as growth now
+    check_if_auto_upgrade_is_needed
   end
 
   def handle_free_plus
@@ -117,7 +128,7 @@ class HandleOverageSite
     return if site.limit_email_sent
     site.update_column(:limit_email_sent, true)
     track_free_exceeded_in_intercom
-    # OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
+    OverageFreeMailer.overage_email(site, number_of_views, limit).deliver_later
   end
 
   def track_free_exceeded_in_intercom
@@ -138,5 +149,15 @@ class HandleOverageSite
       number_of_views: number_of_views,
       limit: limit
     ).call
+  end
+
+  def track_auto_upgrade_in_intercom
+    @site.owners_and_admins.each do |user|
+      TrackEvent.new(
+        :auto_upgrade_to_elite,
+        user: user,
+        site: @site
+      ).call
+    end
   end
 end

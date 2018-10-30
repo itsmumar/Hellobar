@@ -21,6 +21,7 @@ class CreateSite
     check_for_duplicate!
     create_site
     track_site_creation
+    track_site_count
     handle_referral_token
     detect_install_type
     change_subscription
@@ -70,6 +71,10 @@ class CreateSite
 
   def track_site_creation
     TrackEvent.new(:created_site, site: site, user: user).call
+  end
+
+  def track_site_count
+    TrackEvent.new(:updated_site_count, user: user).call
   end
 
   def validate_site!

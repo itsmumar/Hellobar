@@ -1,6 +1,8 @@
 #site_details
   div.site-block
     = render 'admin/sites/header', site: site
+    div.site_section
+      div.title Views in the Last 30 Days: #{ @stats&.views }
 
     - unless bills_for(site).empty?
       div.site_section
