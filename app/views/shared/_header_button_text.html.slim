@@ -1,9 +1,0 @@
-- if current_site.current_subscription&.currently_on_trial?
-  .show-new-credit-card-modal
-    | Enter Payment Info
-- else
-  .show-upgrade-modal
-    - if current_site.growth?
-      | Upgrade to Elite
-    - else
-      | Upgrade Now
