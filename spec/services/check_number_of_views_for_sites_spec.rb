@@ -179,11 +179,22 @@ describe CheckNumberOfViewsForSites do
     let(:number_of_views) { site.upsell_email_trigger + 1 }
     let(:limit) { site.views_limit }
     let(:upsell_trigger) { site.upsell_email_trigger }
+    let(:credit_card) { create :credit_card }
 
-    it 'sends an upsell email' do
+    it 'sends an upsell email to customers stuck on a yearly plan' do
+      stub_cyber_source :purchase
+      ChangeSubscription.new(site, { subscription: 'growth', schedule: 'yearly' }, credit_card).call
       service.call
       expect(report)
         .to have_received(:send_upsell_email)
+    end
+
+    it 'does not send an upsell email for those users on a monthly plan because we will auto upgrade them' do
+      stub_cyber_source :purchase
+      ChangeSubscription.new(site, { subscription: 'growth', schedule: 'monthly' }, credit_card).call
+      service.call
+      expect(report)
+        .not_to have_received(:send_upsell_email)
     end
   end
 

@@ -214,6 +214,66 @@ describe HandleOverageSite do
     include_examples 'tracks events'
   end
 
+  context 'with Growth & auto upgraded to Elite' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 500_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'updates auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to_not eql(nil)
+    end
+
+    it 'changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Elite')
+    end
+  end
+
+  context 'with Growth & NOT auto upgraded to Elite' do
+    let(:subscription_type) { :growth }
+    let(:number_of_views) { 300_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'does not update auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to eql(nil)
+    end
+
+    it 'does not changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Growth')
+    end
+  end
+
+  context 'with Pro & auto upgraded to Elite' do
+    let(:subscription_type) { :pro }
+    let(:number_of_views) { 500_000 }
+    let(:limit) { 50_000 }
+    let(:user) { site.users.first }
+    let(:credit_card) { create :credit_card, user: user }
+    before do
+      stub_cyber_source(:purchase)
+      service.call
+    end
+
+    it 'updates auto_upgraded_at field' do
+      expect(site.auto_upgraded_at).to_not eql(nil)
+    end
+
+    it 'changes subscription to Elite' do
+      expect(site.active_subscription.name).to eql('Elite')
+    end
+  end
+
   context 'with Free subscription' do
     let(:subscription_type) { :free }
 
