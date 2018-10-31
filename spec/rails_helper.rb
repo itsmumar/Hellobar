@@ -1,3 +1,4 @@
+
 ENV['RAILS_ENV'] ||= 'test'
 
 require File.expand_path('../support/simplecov', __FILE__)
@@ -51,18 +52,17 @@ RSpec.configure do |config|
 
   config.before(type: :request) do
     OmniAuth.config.test_mode = true
+
+    allow(FetchTotalViewsForMonth)
+      .to receive_service_call.and_return(Hash.new(0))
   end
 
   config.after(:each, type: :feature) do
     Warden.test_reset!
-  end
 
-  config.before(:each, type: :feature) do
     allow_any_instance_of(FetchSiteStatistics)
       .to receive(:call).and_return(SiteStatistics.new)
-  end
 
-  config.before(:each) do
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash.new(0))
   end
