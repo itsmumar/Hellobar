@@ -52,17 +52,21 @@ RSpec.configure do |config|
 
   config.before(type: :request) do
     OmniAuth.config.test_mode = true
+  end
+
+  config.after(:each, type: :feature) do
+    Warden.test_reset!
+  end
+
+  config.before(:each, type: :feature) do
+    allow_any_instance_of(FetchSiteStatistics)
+      .to receive(:call).and_return(SiteStatistics.new)
 
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash.new(0))
   end
 
-  config.after(:each, type: :feature) do
-    Warden.test_reset!
-
-    allow_any_instance_of(FetchSiteStatistics)
-      .to receive(:call).and_return(SiteStatistics.new)
-
+  config.before(:each, type: :request) do
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash.new(0))
   end
