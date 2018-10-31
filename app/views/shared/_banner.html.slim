@@ -1,6 +1,6 @@
 - if @free_overage
   = render 'shared/banner_free'
-- elsif current_site.trial_ended?
+- elsif current_site&.trial_ended?
   = render 'shared/banner_growth'
 - elsif partial = notify_growth?(current_site)
   = render partial

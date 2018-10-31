@@ -327,7 +327,7 @@ class Site < ApplicationRecord
 
   # to check trial without bill
   def trial_ended?
-    Time.current.to_date > subscriptions.last.trial_end_date.to_date if subscriptions.last.trial_end_date
+    Time.current.to_date > subscriptions.last.trial_end_date.to_date if subscriptions.last&.trial_end_date
   end
 
   private
