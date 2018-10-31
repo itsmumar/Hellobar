@@ -30,5 +30,14 @@ describe CreditCardsController do
         expect(response.status).to redirect_to(controller.after_sign_in_path_for(@user))
       end
     end
+
+    context 'when it comes from the pricing page' do
+      before { cookies[:utm_campaign] = 'pricing' }
+      it 'should fire pricing_page_conversion event' do
+        expect(TrackEvent).to receive_service_call.with :added_credit_card, user: @user, site: nil
+        expect(TrackEvent).to receive_service_call.with :pricing_page_conversion, site: nil, user: @user
+        post :create, params
+      end
+    end
   end
 end

@@ -371,6 +371,22 @@ class AnalyticsProvider
     update_user(user: user, params: params)
   end
 
+  def pricing_page_conversion(site:, user:)
+    params = {
+      site_id: site.id,
+      site_url: site.url,
+      subscription: site.current_subscription,
+      schedule: site.current_subscription&.schedule
+    }
+
+    track(
+      event: 'pricing-page-conversion',
+      user: user,
+      params: params
+    )
+    update_user(user: user, params: params)
+  end
+
   private
 
   def track(event:, user:, params: {})
