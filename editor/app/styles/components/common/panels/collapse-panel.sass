@@ -62,5 +62,24 @@
     white-space: nowrap
     font-size: 0.9em
 
+  .optional-caption,
+  .optional-content
+    display: flex
+    margin: 10px auto
+    justify-content: space-between
+    align-self: center
+    font-weight: bold
+    white-space: nowrap
+    font-size: 0.9em
+
+    &:first-child
+      margin-top: 0
+
+    &:last-child
+      margin-bottom: 0
+
+    .ember-basic-dropdown
+      width: 104px
+      margin: 0
   label
     margin: 0
