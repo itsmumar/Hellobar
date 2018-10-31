@@ -60,7 +60,9 @@ RSpec.configure do |config|
   config.before(:each, type: :feature) do
     allow_any_instance_of(FetchSiteStatistics)
       .to receive(:call).and_return(SiteStatistics.new)
+  end
 
+  config.before(:each) do
     allow(FetchTotalViewsForMonth)
       .to receive_service_call.and_return(Hash.new(0))
   end
