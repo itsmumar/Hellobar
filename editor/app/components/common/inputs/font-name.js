@@ -6,7 +6,11 @@ export default Ember.Component.extend({
   froalaFonts: Ember.inject.service(),
 
   fonts: function () {
-    return this.get('froalaFonts').googleFonts();
+   var font= this.get('froalaFonts').fontFamily();
+   var result = Object.keys(font).map(function(key) {
+      return font[key];
+   });
+    return result
   }.property('froalaFonts'),
 
   selectedFont: null,
