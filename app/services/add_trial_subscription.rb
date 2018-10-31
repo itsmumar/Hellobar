@@ -5,10 +5,10 @@ class AddTrialSubscription
     @duration = to_duration params[:trial_period]
   end
 
-  def call
+  def call credit_card = nil
     raise 'wrong trial period' if duration > 90.days || duration < 1.day
     void_active_free_bill
-    create_trial_subscription.tap do |bill|
+    create_trial_subscription(credit_card).tap do |bill|
       track_event(bill)
     end
   end
@@ -22,9 +22,9 @@ class AddTrialSubscription
     site.active_paid_bill.void! if site.active_paid_bill.amount.zero?
   end
 
-  def create_trial_subscription
+  def create_trial_subscription credit_card
     Subscription.transaction do
-      subscription = subscription_class.create!(site: site, trial_end_date: duration.from_now)
+      subscription = subscription_class.create!(site: site, trial_end_date: duration.from_now, credit_card: credit_card)
       create_bill(subscription).tap do |bill|
         CreateBillForNextPeriod.new(bill).call
       end
