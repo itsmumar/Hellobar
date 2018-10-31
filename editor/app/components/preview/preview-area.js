@@ -162,6 +162,8 @@ export default Ember.Component.extend({
     'model.settings.url',
     'model.settings.use_location_for_url',
     'model.show_after_convert',
+    'model.show_optional_caption',
+    'model.show_optional_content',
     'model.show_branding',
     'model.sound',
     'model.size',

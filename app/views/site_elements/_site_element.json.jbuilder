@@ -35,6 +35,8 @@ json.cache! site_element do
     :email_placeholder,
     :headline,
     :content,
+    :show_optional_content,
+    :show_optional_caption,
     :image_placement,
     :link_color,
     :link_text,
