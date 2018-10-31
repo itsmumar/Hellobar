@@ -322,8 +322,12 @@ class Site < ApplicationRecord
   end
 
   def number_of_views
-    # FetchTotalViewsForMonth.new([self]).call[id]
-    3482
+    FetchTotalViewsForMonth.new([self]).call[id]
+  end
+
+  # to check trial without bill
+  def trial_ended?
+    Time.current.to_date > subscriptions.last.trial_end_date.to_date if subscriptions.last.trial_end_date
   end
 
   private

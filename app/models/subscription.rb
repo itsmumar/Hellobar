@@ -57,7 +57,7 @@ class Subscription < ApplicationRecord
   end
 
   def currently_on_trial?
-    amount != 0 && credit_card.nil? && active_bills.paid.free.any?
+    amount != 0 && active_bills.paid.free.any?
   end
 
   def trial_days_remaining

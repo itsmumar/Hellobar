@@ -78,10 +78,14 @@ module ApplicationHelper
   end
 
   def show_days?(site)
-    site.current_subscription.currently_on_trial?
+    site.current_subscription&.currently_on_trial?
   end
 
   def show_warning?(site)
     site.free? && site.deactivated?
+  end
+
+  def hide_button(site)
+    site.current_subscription&.currently_on_trial? && site.current_subscription.credit_card
   end
 end
