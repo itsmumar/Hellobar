@@ -78,6 +78,18 @@ describe Site do
     end
   end
 
+  describe '#ab_test_running' do
+    it 'toggles when a/b test is running' do
+      site.ab_test_not_running!
+      expect(site.ab_test_running).to eql(false)
+    end
+
+    it 'toggles when a/b test is not running' do
+      site.update_attribute('ab_test_running', true)
+      expect(site.ab_test_running).to eql(true)
+    end
+  end
+
   describe '#free?' do
     it 'is true when there is no subscription' do
       expect(site).to be_free

@@ -19,7 +19,8 @@ class Subscription
           visit_warning_one: 2500,
           visit_warning_two: 4000,
           visit_warning_three: 4500,
-          upsell_email_trigger: ::Float::INFINITY
+          upsell_email_trigger: ::Float::INFINITY,
+          upgrade_trigger: ::Float::INFINITY
         }
       end
     end

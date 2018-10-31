@@ -15,7 +15,8 @@ class Subscription
           visit_warning_three: ::Float::INFINITY,
           visit_overage: 50_000,
           visit_overage_amount: 5.00, # $$$
-          upsell_email_trigger: 300_000
+          upsell_email_trigger: 300_000,
+          upgrade_trigger: 400_000
         }
       end
     end

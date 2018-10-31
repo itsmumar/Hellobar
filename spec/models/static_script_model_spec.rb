@@ -99,8 +99,8 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
+          azuki/container.css
           hellobar-classic/container.css
-          model-new/container.css
           arctic-facet/container.css
           autodetect/container.css
           blue-autumn/container.css
