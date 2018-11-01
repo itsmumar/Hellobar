@@ -10,7 +10,7 @@ export default Ember.Component.extend({
    var result = Object.keys(font).map(function(key) {
       return font[key];
    });
-    return result
+    return result;
   }.property('froalaFonts'),
 
   selectedFont: null,
