@@ -463,8 +463,6 @@ ActiveRecord::Schema.define(version: 20181030114321) do
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
     t.datetime "deactivated_at"
-    t.string   "text_field_font_family",        limit: 255
-    t.integer  "text_field_font_size",          limit: 4,        default: 14
     t.boolean  "show_optional_caption",                          default: true,         null: false
     t.boolean  "show_optional_content",                          default: true,         null: false
   end
