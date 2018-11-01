@@ -13,9 +13,6 @@
   ],
   "element_types": ["Modal", "Slider", "Takeover","Alert"],
   "defaults": {
-    "Bar": {
-      "text_field_font_size": 14
-    },
     "Takeover": {
       "background_color": "f8f8f8",
       "text_color": "4a4a4a",

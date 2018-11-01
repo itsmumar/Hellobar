@@ -23,18 +23,6 @@
       "text_field_border_radius": 5,
       "text_field_border_width": 0,
       "text_field_font_size": 18
-    },
-    "Bar": {
-      "text_field_font_size": 14
-    },
-    "Slider": {
-      "text_field_font_size": 14
-    },
-    "Modal": {
-      "text_field_font_size": 14
-    },
-    "Alert": {
-      "text_field_font_size": 14
     }
   },
   "image": {
