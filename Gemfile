@@ -61,7 +61,7 @@ gem 'sendgrid-ruby'
 # Billing
 gem 'activemerchant', '~> 1.65.0'
 
-#fontawesome
+# fontawesome
 gem 'font-awesome-sass'
 
 # Assets / Frontend
