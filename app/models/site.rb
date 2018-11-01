@@ -210,7 +210,7 @@ class Site < ApplicationRecord
   end
 
   def growth?
-    current_subscription.is_a? Subscription::Growth
+    current_subscription.is_a?(Subscription::Growth) || current_subscription.is_a?(Subscription::Pro)
   end
 
   def growth_or_pro?

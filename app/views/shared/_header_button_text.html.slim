@@ -5,5 +5,5 @@
   .show-upgrade-modal data={ source: "Menu Button: Want More Power" }
     - if current_site.growth?
       | Upgrade to Elite
-    - else
+    - elsif !current_site.elite?
       | Upgrade Now
