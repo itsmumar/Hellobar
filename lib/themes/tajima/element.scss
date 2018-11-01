@@ -43,6 +43,7 @@
   }
 
   .hb-input-block {
+    margin: 0;
     &:before {
       background-repeat: no-repeat;
       content: "";
@@ -86,14 +87,15 @@
 
     }
   }
-
+ 
   .hb-cta {
     display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
     letter-spacing: 1px; 
-    max-width: inherit; 
+    max-width: inherit;
+    padding: .67em 1.33em;
     &:hover {
       opacity: 0.95;
     }
@@ -116,7 +118,7 @@
   #hellobar-modal {
     padding: 3.5em;
     max-width: 50em;  
-
+    min-height: 20em;  
     .hb-content-wrapper:after { 
       margin: 8px;
       border-width: 1px;
@@ -141,13 +143,17 @@
           flex: 0 0 33%;
           font-size: 16px;
           font-weight: 300;
-          letter-spacing: 0.5px;
-          padding: .9em 1.33em;
+          letter-spacing: 0.5px; 
         } 
       } 
-    }  
+    }
+    .hb-cta{ 
+      padding: .9em 1.33em;
+    }
+     
     .uploaded-image {
       max-height: 300px;
+      height: 90%;
     } 
 
     .hb-input-block {
@@ -175,9 +181,9 @@
         width: 60%;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 33%;
         position: absolute;
-        right: 1.5em;
+        right: 3.5em;
         bottom: 3.5em;
         top: 3.5em;
         margin: auto;
@@ -265,6 +271,7 @@
     } 
     .uploaded-image { 
       max-height: 300px;
+      height: 90%;
     }  
     .hb-headline-text{
       font-size: 1.7em;  
@@ -278,7 +285,7 @@
 
     [data-hb-editable-block="content"] {
       font-size: 1em;
-      padding: 0 0 10px;  
+      margin: 0 0 10px;  
     }
 
     .hb-input-block {
@@ -316,7 +323,7 @@
         width: 60%;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 36%;
         position: absolute;
         right: 0em; 
         bottom: 25px;

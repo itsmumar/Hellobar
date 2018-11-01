@@ -29,6 +29,7 @@ class CreditCardsController < ApplicationController
   def create
     @form = PaymentForm.new(params[:credit_card])
     credit_card = CreateCreditCard.new(@site, current_user, params).call
+    check_for_utm_campaign
     if @form.plan.present?
       ChangeSubscription.new(@site, { subscription: @form.plan_name, schedule: @form.plan_schedule }, credit_card).call
       redirect_to new_site_site_element_path(@site)
@@ -62,5 +63,9 @@ class CreditCardsController < ApplicationController
 
   def load_partner_plan
     @partner_plan = current_user.affiliate_information&.partner&.partner_plan
+  end
+
+  def check_for_utm_campaign
+    TrackEvent.new(:pricing_page_conversion, site: @site, user: current_user).call if cookies[:utm_campaign] == 'pricing'
   end
 end
