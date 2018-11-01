@@ -148,7 +148,7 @@ class SiteElement < ApplicationRecord
   end
 
   def fonts
-    (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS
+    (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS + (text_field_font_family.present? ? [text_field_font_family] : [])
   end
 
   def related_site_elements
