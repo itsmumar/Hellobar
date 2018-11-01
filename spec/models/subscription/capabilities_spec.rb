@@ -43,6 +43,7 @@ describe Subscription::Capabilities do
       expect(site.capabilities.closable?).to be_truthy
       expect(site.site_elements.none?(&:show_branding)).to be_truthy
       expect(site.site_elements.none?(&:closable)).to be_truthy
+      expect(capabilities.upgrade_trigger).to be(400_000)
     end
   end
 
@@ -59,6 +60,7 @@ describe Subscription::Capabilities do
     pro_bill = change_subscription('pro', credit_card)
 
     expect(site).to be_capable_of :pro
+    expect(capabilities.upgrade_trigger).to be(400_000)
 
     # Refund
     RefundBill.new(pro_bill).call
@@ -104,6 +106,7 @@ describe Subscription::Capabilities do
       expect(capabilities.campaigns?).to be_falsey
       expect(capabilities.max_a_b_tests).to be(1)
       expect(capabilities.max_variations).to be(3)
+      expect(capabilities.upgrade_trigger).to be(::Float::INFINITY)
     end
 
     specify 'ProManaged plan has certain custom capabilities' do
@@ -119,6 +122,7 @@ describe Subscription::Capabilities do
       expect(capabilities.campaigns?).to be_truthy
       expect(capabilities.max_a_b_tests).to be(99999)
       expect(capabilities.max_variations).to be(99999)
+      expect(capabilities.upgrade_trigger).to be(::Float::INFINITY)
     end
   end
 

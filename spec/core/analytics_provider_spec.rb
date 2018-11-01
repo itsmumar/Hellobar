@@ -256,8 +256,7 @@ describe AnalyticsProvider do
         .to receive(:track)
         .with(event: 'created-site', user: user, params: { url: site.url, site_id: site.id })
 
-      expect(adapter)
-        .to receive(:update_user)
+      expect(adapter).to receive(:update_user)
 
       track('created-site', user: user, site: site)
     end
@@ -808,8 +807,7 @@ describe AnalyticsProvider do
             overage_count: site.overage_count
           })
 
-      expect(adapter)
-        .to receive(:update_user)
+      expect(adapter).to receive(:update_user)
 
       track('free-overage', user: user, site: site)
     end
@@ -826,6 +824,8 @@ describe AnalyticsProvider do
           params: {
             source: source
           })
+
+      expect(adapter).to receive(:update_user)
 
       track('triggered-payment-checkout', user: user, source: source)
     end
@@ -847,6 +847,78 @@ describe AnalyticsProvider do
         .to receive(:update_user)
 
       track('triggered-upgrade-account', user: user, source: source)
+    end
+
+    describe '#auto_upgrade_to_elite' do
+      let(:site) { create :site, user: user }
+
+      it 'tracks "fired auto-upgrade-to-elite"' do
+        expect(adapter)
+          .to receive(:track)
+          .with(event: 'auto-upgrade-to-elite', user: user,
+            params: {
+              site_id: site.id,
+              site_url: site.url
+            })
+
+        expect(adapter).to receive(:update_user)
+
+        track('auto-upgrade-to-elite', user: user, site: site)
+      end
+    end
+  end
+
+  describe '#triggered_payment_checkout' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-payment-checkout"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-payment-checkout',
+          user: user,
+          params: {
+            source: source
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('triggered-payment-checkout', user: user, source: source)
+    end
+  end
+
+  describe '#triggered_upgrade_account' do
+    let(:source) { 'foo bar' }
+
+    it 'tracks "triggered-upgrade-account"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'triggered-upgrade-account',
+          user: user,
+          params: {
+            source: source
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('triggered-upgrade-account', user: user, source: source)
+    end
+  end
+
+  describe '#auto_upgrade_to_elite' do
+    let(:site) { create :site, user: user }
+
+    it 'tracks "fired auto-upgrade-to-elite"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'auto-upgrade-to-elite', user: user,
+          params: {
+            site_id: site.id,
+            site_url: site.url
+          })
+
+      expect(adapter).to receive(:update_user)
+
+      track('auto-upgrade-to-elite', user: user, site: site)
     end
   end
 end

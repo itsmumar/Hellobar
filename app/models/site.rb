@@ -141,6 +141,10 @@ class Site < ApplicationRecord
   def upsell_email_trigger
     capabilities.upsell_email_trigger
   end
+
+  def upgrade_trigger
+    capabilities.upgrade_trigger
+  end
   # rubocop:enable Delegate
 
   def communication_types=(value)
@@ -203,6 +207,10 @@ class Site < ApplicationRecord
 
   def pro_managed?
     current_subscription.is_a? Subscription::ProManaged
+  end
+
+  def growth?
+    current_subscription.is_a? Subscription::Growth
   end
 
   def growth_or_pro?
@@ -311,6 +319,15 @@ class Site < ApplicationRecord
 
   def deactivated?
     site_elements.where.not(deactivated_at: nil).any?
+  end
+
+  def number_of_views
+    FetchTotalViewsForMonth.new([self]).call[id]
+  end
+
+  # to check trial without bill
+  def trial_ended?
+    Time.current.to_date > subscriptions.last.trial_end_date.to_date if subscriptions.last&.trial_end_date
   end
 
   private

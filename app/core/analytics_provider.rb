@@ -345,13 +345,46 @@ class AnalyticsProvider
   end
 
   def triggered_payment_checkout(user:, source:)
+    params = {
+      source: source
+    }
+
     track(
       event: 'triggered-payment-checkout',
       user: user,
-      params: {
-        source: source
-      }
+      params: params
     )
+    update_user(user: user, params: params)
+  end
+
+  def auto_upgrade_to_elite(user:, site:)
+    params = {
+      site_id: site.id,
+      site_url: site.url
+    }
+
+    track(
+      event: 'auto-upgrade-to-elite',
+      user: user,
+      params: params
+    )
+    update_user(user: user, params: params)
+  end
+
+  def pricing_page_conversion(site:, user:)
+    params = {
+      site_id: site.id,
+      site_url: site.url,
+      subscription: site.current_subscription,
+      schedule: site.current_subscription&.schedule
+    }
+
+    track(
+      event: 'pricing-page-conversion',
+      user: user,
+      params: params
+    )
+    update_user(user: user, params: params)
   end
 
   private

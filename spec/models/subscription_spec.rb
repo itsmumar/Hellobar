@@ -192,6 +192,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 50_000
+        expect(site.upgrade_trigger).to eql 400_000
       end
 
       context 'when yearly' do
@@ -211,6 +212,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 50_000
+        expect(site.upgrade_trigger).to eql 400_000
       end
 
       context 'when yearly' do
@@ -230,6 +232,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 50_000
+        expect(site.upgrade_trigger).to eql 400_000
       end
 
       context 'when yearly' do
@@ -268,6 +271,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 5_000_000
+        expect(site.upgrade_trigger).to eql ::Float::INFINITY
       end
 
       context 'when yearly' do
@@ -287,6 +291,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 10_000_000
+        expect(site.upgrade_trigger).to eql ::Float::INFINITY
       end
 
       context 'when yearly' do
@@ -306,6 +311,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql 5
 
         expect(site.views_limit).to eql 20_000_000
+        expect(site.upgrade_trigger).to eql ::Float::INFINITY
       end
 
       context 'when yearly' do
@@ -338,6 +344,7 @@ describe Subscription do
         expect(subscription.visit_overage_amount).to eql nil
 
         expect(site.views_limit).to eql ::Float::INFINITY
+        expect(site.upgrade_trigger).to eql ::Float::INFINITY
       end
     end
 
@@ -368,6 +375,7 @@ describe Subscription do
         expect(subscription.visit_overage).to eql 500_000
         expect(subscription.visit_overage_unit).to eql nil
         expect(subscription.visit_overage_amount).to eql 5
+        expect(site.upgrade_trigger).to eql ::Float::INFINITY
       end
 
       context 'when yearly' do
