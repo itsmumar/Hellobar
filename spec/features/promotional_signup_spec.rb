@@ -22,7 +22,7 @@ feature 'Promotional signup', :js do
       expect(page).to have_content 'Settings'
       click_on 'Settings'
 
-      expect(page).to have_content 'Enjoying Hello Bar Growth?'
+      expect(page).to have_content 'Enter Payment Info'
       expect(page).to have_content '2018-07-24'
     end
   end
@@ -52,7 +52,7 @@ feature 'Promotional signup', :js do
       expect(page).to have_content 'Settings'
       click_on 'Settings'
 
-      expect(page).to have_content 'Enjoying Hello Bar Growth?'
+      expect(page).to have_content 'Enter Payment Info'
       expect(page).to have_content '2018-07-24'
 
       OmniAuth.config.mock_auth[:google_oauth2] = nil

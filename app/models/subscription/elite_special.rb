@@ -8,7 +8,7 @@ class Subscription
           type: 'elite_special',
           name: 'Elite Special',
           label: 'ESP',
-          monthly_amount: 99.0,
+          monthly_amount: 29.0,
           yearly_amount: 799.0,
           visit_overage: 500_000,
           visit_warning_one: 400_000,

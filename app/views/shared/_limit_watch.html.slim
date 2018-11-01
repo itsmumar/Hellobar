@@ -1,0 +1,9 @@
+span.notify_span
+  - if show_days?(current_site)
+    => pluralize current_site.current_subscription.trial_days_remaining, 'day'
+    | left
+  - elsif show_views?(current_site)
+    = current_site.number_of_views.to_s + ' views this month. Need more? '
+  - elsif show_warning?(current_site)
+    = image_tag 'warning_icon.png',class: 'warn_icon'
+    | View Limit Reached
