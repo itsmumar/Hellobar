@@ -40,4 +40,16 @@
       {{common/inputs/number-input name="text_field_border_width" value=model.text_field_border_width max=10}}
     </div>
   </div>
+<div class="panel-input">
+  <div class="panel-input__label">Font size</div>
+  <div class="panel-input__input">
+    {{common/inputs/number-input name="text_field_font_size" value=model.text_field_font_size}}
+  </div>
+</div>
+<div class="panel-input">
+  <div class="panel-input__label">Font family</div>
+  <div class="panel-input__input">
+    {{common/inputs/font-name selectedFont=model.text_field_font_family}}
+  </div>
+</div>
 {{/common/panels/collapse-panel}}

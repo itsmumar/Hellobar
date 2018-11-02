@@ -24,7 +24,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 34
+      "cta_height": 34,
+      "text_field_font_size": 14
     },
     "Takeover": {
       "background_color": "4A47F2",
@@ -37,7 +38,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 76
+      "cta_height": 76,
+      "text_field_font_size": 18
     },
     "Slider": {
       "background_color": "4A47F2",
@@ -50,7 +52,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 35
+      "cta_height": 35,
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "4A47F2",
@@ -63,7 +66,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 42
+      "cta_height": 42,
+      "text_field_font_size": 14
     },
     "Alert": {
       "background_color": "4A47F2",
@@ -76,7 +80,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 35
+      "cta_height": 35,
+      "text_field_font_size": 14
     }
   },
   "image": {

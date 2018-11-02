@@ -15,31 +15,36 @@
       "font_id": "libre_baskerville",
       "cta_border_radius": 0,
       "cta_height": 27,
-      "text_field_border_width": 1
+      "text_field_border_width": 1,
+      "text_field_font_size": 14
     },
     "Slider": {
       "font_id": "libre_baskerville",
       "cta_border_radius": 0,
       "cta_height": 30,
-      "text_field_border_width": 1
+      "text_field_border_width": 1,
+      "text_field_font_size": 14
     },
     "Modal": {
       "font_id": "libre_baskerville",
       "cta_border_radius": 0,
       "cta_height": 41,
-      "text_field_border_width": 1
+      "text_field_border_width": 1,
+      "text_field_font_size": 14
     },
     "Takeover": {
       "font_id": "libre_baskerville",
       "cta_border_radius": 0,
       "cta_height": 57,
-      "text_field_border_width": 1
+      "text_field_border_width": 1,
+      "text_field_font_size": 18
     },
     "Alert": {
       "font_id": "libre_baskerville",
       "cta_border_radius": 0,
       "cta_height": 30,
-      "text_field_border_width": 1
+      "text_field_border_width": 1,
+      "text_field_font_size": 14
     }
   },
   "image": {

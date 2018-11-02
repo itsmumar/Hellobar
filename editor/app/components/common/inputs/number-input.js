@@ -7,11 +7,16 @@ const TYPES = [TYPE_PERCENT, TYPE_PIXEL, TYPE_SECOND];
 const CTA_MIN_MAX_HEIGHT = {'Bar': [24, 99], 'Alert': [24,49], 'Slider': [24,49], 'Modal': [24,109], 'Takeover': [24,109]};
 
 export default Ember.Component.extend({
+
   classNames: ['number-input'],
 
   type: TYPE_PIXEL,
   max: 100,
   min: 0,
+  model_type: '',
+  model_id: '',
+  valueChanged: true,
+
 
   label: function () {
     const type = this.get('type');
