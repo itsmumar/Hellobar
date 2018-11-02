@@ -36,7 +36,7 @@
     .ctas
       - unless current_user.temporary?
         = render 'shared/limit_watch'
-        - unless hide_button(current_site, current_user)
+        - unless hide_button?(current_site, current_user)
           a.button.floating-button
             = render 'shared/header_button_text'
 

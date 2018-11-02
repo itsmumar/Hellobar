@@ -1,9 +1,6 @@
 - if current_site.current_subscription&.currently_on_trial?
   .show-new-credit-card-modal data={ source: "Add payment to trial" }
     | Enter Payment Info
-- else
+- elsif text = upgrade_button_text(current_site)
   .show-upgrade-modal data={ source: "Menu Button: Want More Power" }
-    - if current_site.growth?
-      | Upgrade to Elite
-    - elsif !current_site.elite?
-      | Upgrade Now
+    = text
