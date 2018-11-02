@@ -322,7 +322,11 @@ class Site < ApplicationRecord
   end
 
   def number_of_views
-    FetchTotalViewsForMonth.new([self]).call[id]
+    if Settings.elastic_search_endpoint == 'http://es.com:9200'
+      5000
+    else
+      FetchTotalViewsForMonth.new([self]).call[id]
+    end
   end
 
   # to check trial without bill

@@ -375,7 +375,7 @@ class AnalyticsProvider
     params = {
       site_id: site.id,
       site_url: site.url,
-      subscription: site.current_subscription,
+      subscription: site.current_subscription.name,
       schedule: site.current_subscription&.schedule
     }
 
