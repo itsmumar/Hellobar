@@ -31,7 +31,8 @@
       "text_field_border_color": "FFFFFF", 
       "text_field_border_radius": 5,
       "text_field_border_width": 0,
-      "text_field_text_color": "B3B3B3" 
+      "text_field_font_size": 18,
+      "text_field_text_color": "B3B3B3"
     }
   },
   "image": {

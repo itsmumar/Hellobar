@@ -32,6 +32,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 4,
       "text_field_border_width": 1,
+      "text_field_font_size": 18,
       "text_field_text_color": "9b9b9b"      
     },
     "Slider": {
@@ -53,6 +54,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 4,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b"      
     },
     "Modal": {
@@ -73,6 +75,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 4,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b" 
     },
     "Alert": {
@@ -94,6 +97,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 4,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
       "trigger_color": "ffffff",
       "trigger_icon_color": "ff8b45" 

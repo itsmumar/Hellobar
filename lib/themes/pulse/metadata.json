@@ -29,6 +29,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF" 
     },
     "Takeover": {
@@ -49,6 +50,7 @@
       "text_field_border_color": "d5d5d5", 
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_size": 18,
       "text_field_text_color": "FFFFFF" 
     },
     "Slider": {
@@ -69,6 +71,7 @@
       "text_field_border_color": "d5d5d5", 
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF" 
     },
     "Modal": {
@@ -89,6 +92,7 @@
       "text_field_border_color": "d5d5d5", 
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF" 
     },
     "Alert": {
@@ -109,6 +113,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF",
       "trigger_color": "ffffff",
       "trigger_icon_color": "000000"  
