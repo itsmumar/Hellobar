@@ -46,14 +46,10 @@
       "cta_border_radius": 0,
       "cta_height": 71,
       "text_field_border_width": 1,
-<<<<<<< HEAD
-      "text_field_font_size": 14,
-      "text_field_font_family": "source_pro"
-=======
+      "text_field_font_family": "source_pro",
       "image_overlay_color": "000000",
       "image_overlay_opacity":50,
       "text_field_font_size": 14
->>>>>>> fc6493a36e87ac865b062b4f739583ec0d026d3c
     },
     "Takeover": {
       "background_color": "4D8589",
@@ -64,14 +60,10 @@
       "cta_border_radius": 0,
       "cta_height": 79,
       "text_field_border_width": 1,
-<<<<<<< HEAD
-      "text_field_font_size": 18,
-      "text_field_font_family": "source_pro"
-=======
+      "text_field_font_family": "source_pro",
       "image_overlay_color": "000000",
       "image_overlay_opacity":50,
       "text_field_font_size": 18
->>>>>>> fc6493a36e87ac865b062b4f739583ec0d026d3c
     },
     "Alert": {
       "background_color": "4d8589",
@@ -84,14 +76,10 @@
       "cta_border_radius": 0,
       "cta_height": 30,
       "text_field_border_width": 1,
-<<<<<<< HEAD
-      "text_field_font_size": 14,
-      "text_field_font_family": "source_pro"
-=======
+      "text_field_font_family": "source_pro",
       "image_overlay_color": "000000",
       "image_overlay_opacity":50,
       "text_field_font_size": 14
->>>>>>> fc6493a36e87ac865b062b4f739583ec0d026d3c
     }
   },
   "image": {

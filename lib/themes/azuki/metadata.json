@@ -81,10 +81,7 @@
       "cta_border_radius": 0,
       "cta_height": 57,
       "text_field_border_width": 1,
-<<<<<<< HEAD:lib/themes/model-new/metadata.json
-      "text_field_font_size": 18,
-      "text_field_font_family": "open_sans"
-=======
+      "text_field_font_family": "open_sans",
       "question_placeholder": "Want to be the first to hear our new music?",
       "answer1_placeholder": "Yes, Give me early Access",
       "answer2_placeholder": "No Thanks", 
@@ -96,7 +93,6 @@
       "answer2link_text_placeholder": "Get Early Access",
       "headline": "Get out lastest music in your inbox first",
       "text_field_font_size": 18
->>>>>>> fc6493a36e87ac865b062b4f739583ec0d026d3c:lib/themes/azuki/metadata.json
     },
     "Alert": {
       "background_color": "ffffff",
@@ -109,10 +105,7 @@
       "cta_border_radius": 0,
       "cta_height": 30,
       "text_field_border_width": 1,
-<<<<<<< HEAD:lib/themes/model-new/metadata.json
-      "text_field_font_size": 14,
-      "text_field_font_family": "open_sans"
-=======
+      "text_field_font_family": "open_sans",
       "question_placeholder": "Want to be the first to hear our new music?",
       "answer1_placeholder": "Yes, Give me early Access",
       "answer2_placeholder": "No Thanks", 
@@ -124,7 +117,6 @@
       "answer2link_text_placeholder": "Get Early Access",
       "headline": "Get out lastest music in your inbox first",
       "text_field_font_size": 14
->>>>>>> fc6493a36e87ac865b062b4f739583ec0d026d3c:lib/themes/azuki/metadata.json
     }
   },
   "image": {
