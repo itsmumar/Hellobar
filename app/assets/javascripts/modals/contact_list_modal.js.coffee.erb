@@ -6,6 +6,7 @@ class @ContactListModal extends Modal
     @options.window ||= window
     @options.canDelete = (@options.canDelete != false)
     @options.templates ||= @_loadTemplates()
+    @site = @options.editorModel.site
 
     @_initializeTemplates()
     @_initializeBlocks()
@@ -165,11 +166,19 @@ class @ContactListModal extends Modal
     radioInputs = object.find('input[type = radio][name = "contact_list[provider]"]')
     selectList  = object.find('#contact_list_provider')
     blocks      = @blocks
+    elite_integrations = ['infusionsoft', 'maropost', 'iterable']
+    options = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
+    }
 
     radioInputs.on 'change', (e) ->
-      selectList.val(this.value).trigger('change')
-      blocks.iconListing.hide()
-      blocks.selectListing.show()
+      if(elite_integrations.includes(e.target.id.split('_')[3]))
+        new PaymentModal(options).open()
+      else
+        selectList.val(this.value).trigger('change')
+        blocks.iconListing.hide()
+        blocks.selectListing.show()
 
   # A/B Variant - Handles the select dropdown icon rendering
   _bindSelectIcons: (object) ->
