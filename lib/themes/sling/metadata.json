@@ -27,7 +27,8 @@
       "cta_height": 34,
       "position_default": "background",
       "headline": "LEARN HOW TO CRAFT HIGH CONVERTING WEBINARS", 
-      "link_text":"Send me my cheat sheet!" 
+      "link_text":"Send me my cheat sheet!",
+      "text_field_font_size": 14
     },
     "Takeover": {
       "background_color": "1579ab",
@@ -44,7 +45,8 @@
       "position_default": "background",
       "headline": "LEARN HOW TO CRAFT HIGH CONVERTING WEBINARS",
       "caption" : "Download our FREE webinar cheat sheet",
-      "link_text":"Send me my cheat sheet!" 
+      "link_text":"Send me my cheat sheet!" ,
+      "text_field_font_size": 18
     },
     "Slider": {
       "background_color": "1579ab",
@@ -60,7 +62,8 @@
       "cta_height": 35,
       "headline": "LEARN HOW TO CRAFT HIGH CONVERTING WEBINARS",
       "caption" : "Download our FREE webinar cheat sheet",
-      "link_text":"Send me my cheat sheet!" 
+      "link_text":"Send me my cheat sheet!",
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "1579ab",
@@ -77,7 +80,8 @@
       "position_default": "background",
       "headline": "LEARN HOW TO CRAFT HIGH CONVERTING WEBINARS",
       "caption" : "Download our FREE webinar cheat sheet",
-      "link_text":"Send me my cheat sheet!" 
+      "link_text":"Send me my cheat sheet!",
+      "text_field_font_size": 14
     },
     "Alert": {
       "background_color": "1579ab",
@@ -94,7 +98,8 @@
       "position_default": "background",
       "headline": "LEARN HOW TO CRAFT HIGH CONVERTING WEBINARS",
       "caption" : "Download our FREE webinar cheat sheet",
-      "link_text":"Send me my cheat sheet!" 
+      "link_text":"Send me my cheat sheet!",
+      "text_field_font_size": 14
     }
   },
   "image": {

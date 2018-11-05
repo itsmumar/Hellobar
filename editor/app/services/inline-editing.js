@@ -401,7 +401,8 @@ export default Ember.Service.extend({
         multiLine: true,
         initOnClick: false,
         zIndex: 9888,
-        fontFamily: this.get('froalaFonts').fontFamily()
+        fontFamily: this.get('froalaFonts').fontFamily(),
+        fontSize: ['8', '9', '10', '11', '12', '13', '14', '16', '18', '20', '24', '28', '32', '36', '40', '44', '48', '52', '60', '66', '72', '82', '96']
       };
       const $textFroala = $(`.hb-editable-block-with-${requestedMode}-formatting`, $iframeBody).froalaEditor($.extend({
         scrollableContainer: $iframeBody[0]

@@ -21,7 +21,8 @@
       "cta_border_radius": 4,
       "cta_height": 66,
       "text_field_border_radius": 5,
-      "text_field_border_width": 0
+      "text_field_border_width": 0,
+      "text_field_font_size": 18
     }
   },
   "image": {

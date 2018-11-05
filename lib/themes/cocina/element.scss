@@ -227,7 +227,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       border-width: 1px;
     }  
     .hb-inner-content {
-      padding: 48px 10%;
+      padding: 35px 10%;
     } 
     .hb-input-wrapper{
       max-width: none;
@@ -244,7 +244,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
     [data-hb-editable-block="content"] {
       font-size: 1.2em;
-      padding: 0 0 10px;
+      margin: 0 0 10px;
       text-align: center;
 
     } 
@@ -269,8 +269,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     .hb-cta {
-      font-size: 20px;
-      padding: 30px;
+      font-size: 20px; 
       .fr-wrapper{
         .fr-element{
           letter-spacing: 1px;
@@ -365,7 +364,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
     [data-hb-editable-block="content"] {
       font-size: 1em;
-      padding: 0 0 10px;
+      margin: 0 0 10px;
     }
 
     .hb-input-block {

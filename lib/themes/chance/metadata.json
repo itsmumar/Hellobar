@@ -24,7 +24,8 @@
       "text_field_text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
-      "cta_height": 34
+      "cta_height": 34,
+      "text_field_font_size": 14
     },
     "Takeover": {
       "background_color": "FFFFFF",
@@ -40,7 +41,8 @@
       "cta_height": 60,
       "position_default": "background",
       "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "caption" : "Get your first 30 days on us!",
+      "text_field_font_size": 18
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -55,7 +57,8 @@
       "text_field_background_opacity": 0,
       "cta_height": 35,
       "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "caption" : "Get your first 30 days on us!",
+      "text_field_font_size": 14
     },
     "Modal": {
       "background_color": "FFFFFF",
@@ -71,7 +74,8 @@
       "cta_height": 42,
       "position_default": "background",
       "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "caption" : "Get your first 30 days on us!",
+      "text_field_font_size": 14
     },
     "Alert": {
       "background_color": "FFFFFF",
@@ -87,7 +91,8 @@
       "cta_height": 35,
       "position_default": "background",
       "headline": "Voted Best Coworking Space in San Diego",
-      "caption" : "Get your first 30 days on us!"
+      "caption" : "Get your first 30 days on us!",
+      "text_field_font_size": 14
     }
   },
   "image": {
