@@ -29,7 +29,8 @@
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
       "link_text":"DOWNLOAD",
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "roboto"
     },
     "Slider": {
       "background_color": "f8f8f8",
@@ -47,7 +48,8 @@
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
       "link_text":"DOWNLOAD",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Modal": {
       "background_color": "f8f8f8",
@@ -65,7 +67,8 @@
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
       "link_text":"DOWNLOAD",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Alert": {
       "background_color": "f8f8f8",
@@ -83,7 +86,8 @@
       "headline": "LEARN HOW TO ACQUIRE 15,000 NEW VISITORS EVERY MONTH",
       "caption":"Download this free ebook to learn how to get 15,000 new, unique visitors per month with out proven techniques.",
       "link_text":"DOWNLOAD",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     }
   },
   "image": {

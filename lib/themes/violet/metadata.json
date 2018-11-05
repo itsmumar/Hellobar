@@ -20,7 +20,8 @@
       "cta_border_radius": 7,
       "cta_height": 27,
       "text_field_border_width": 1,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "josefin_sans"
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -31,7 +32,8 @@
       "cta_border_radius": 7,
       "cta_height": 34,
       "text_field_border_width": 1,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "josefin_sans"
     },
     "Modal": {
       "background_color": "FFFFFF",
@@ -42,7 +44,8 @@
       "cta_border_radius": 7,
       "cta_height": 41,
       "text_field_border_width": 1,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "josefin_sans"
     },
     "Takeover": {
       "background_color": "FFFFFF",
@@ -52,7 +55,8 @@
       "font_id": "josefin_sans",
       "cta_border_radius": 7,
       "text_field_border_width": 1,
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "josefin_sans"
     },
     "Alert": {
       "background_color": "ffffff",
@@ -64,7 +68,8 @@
       "font_id": "josefin_sans",
       "cta_border_radius": 7,
       "text_field_border_width": 1,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "josefin_sans"
     }
   },
   "image": {

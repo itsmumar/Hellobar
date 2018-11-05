@@ -29,7 +29,8 @@
       "headline": "7 TIPS FOR A KILLER CALL TO ACTION",
       "caption":"Create the Hook, Line and Sinker CTA",
       "link_text":"DOWNLOAD FOR FREE",
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "open_sans"
     },
     "Bar": {
       "text_field_font_size": 14

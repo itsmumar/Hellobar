@@ -31,7 +31,8 @@
       "headline": "Join Our Newsletter",
       "caption" : "SIGN UP TODAY FOR FREE AND BE THE FIRST TO GET NOTIFIED ON NEW UPDATES",
       "cta_border_radius": 4,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Takeover": {
       "background_color": "FFFFFF",
@@ -52,7 +53,8 @@
       "headline": "Join Our Newsletter",
       "caption" : "SIGN UP TODAY FOR FREE AND BE THE FIRST TO GET NOTIFIED ON NEW UPDATES",
       "cta_border_radius": 4,
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "roboto"
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -72,7 +74,8 @@
       "headline": "Join Our Newsletter",
       "caption" : "SIGN UP TODAY FOR FREE AND BE THE FIRST TO GET NOTIFIED ON NEW UPDATES",
       "cta_border_radius": 4,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Modal": {
       "background_color": "FFFFFF",
@@ -93,7 +96,8 @@
       "position_default": "background",
       "headline": "Join Our Newsletter",
       "caption" : "SIGN UP TODAY FOR FREE AND BE THE FIRST TO GET NOTIFIED ON NEW UPDATES",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Alert": {
       "background_color": "FFFFFF",
@@ -114,7 +118,8 @@
       "position_default": "background",
       "headline": "Join Our Newsletter",
       "caption" : "SIGN UP TODAY FOR FREE AND BE THE FIRST TO GET NOTIFIED ON NEW UPDATES",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     }
   },
   "image": {

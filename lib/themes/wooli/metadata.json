@@ -25,7 +25,8 @@
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "cta_height": 34,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Takeover": {
       "background_color": "4A47F2",
@@ -39,7 +40,8 @@
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "cta_height": 76,
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "roboto"
     },
     "Slider": {
       "background_color": "4A47F2",
@@ -53,7 +55,8 @@
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "cta_height": 35,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Modal": {
       "background_color": "4A47F2",
@@ -67,7 +70,8 @@
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "cta_height": 42,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     },
     "Alert": {
       "background_color": "4A47F2",
@@ -81,7 +85,8 @@
       "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "cta_height": 35,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "roboto"
     }
   },
   "image": {
