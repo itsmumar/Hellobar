@@ -25,7 +25,8 @@
       "caption":"We’ve got you covered with the latest news, deals and events.",
       "link_text":"SUBSCRIBE",
       "text_field_text_color": "9b9b9b",
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "source_pro"
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -43,7 +44,8 @@
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
       "image_overlay_opacity": 60,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "source_pro"
     },
     "Modal": {
       "background_color": "FFFFFF",
@@ -61,7 +63,8 @@
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
       "image_overlay_opacity": 60,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "source_pro"
     },
     "Takeover": {
       "background_color": "FFFFFF",
@@ -79,7 +82,8 @@
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
       "image_overlay_opacity": 60,
-      "text_field_font_size": 18
+      "text_field_font_size": 18,
+      "text_field_font_family": "source_pro"
     },
     "Alert": {
       "background_color": "FFFFFF",
@@ -99,7 +103,8 @@
       "text_field_text_color": "9b9b9b",
       "image_overlay_color": "2e2767",
       "image_overlay_opacity": 60,
-      "text_field_font_size": 14
+      "text_field_font_size": 14,
+      "text_field_font_family": "source_pro"
     }
   },
   "image": {
