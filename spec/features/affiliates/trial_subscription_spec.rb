@@ -19,7 +19,7 @@ describe 'Affiliate trial subscription', js: true do
       expect(page).to have_content 'Settings'
       click_on 'Settings'
 
-      expect(page).to have_content 'Enjoying Hello Bar Growth?'
+      expect(page).to have_content 'Enter Payment Info'
       expect(page).to have_content 'Please enter credit card details by 2018-09-22'
     end
   end
@@ -41,7 +41,7 @@ describe 'Affiliate trial subscription', js: true do
       expect(page).to have_content 'Settings'
       click_on 'Settings'
 
-      expect(page).to have_content 'Enjoying Hello Bar Growth?'
+      expect(page).to have_content 'Enter Payment Info'
       expect(page).to have_content 'Please enter credit card details by 2018-07-24'
     end
   end

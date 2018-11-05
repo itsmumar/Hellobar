@@ -68,9 +68,11 @@
   }
 
   #hellobar-modal {
+    max-width: 43.5em;
     .hb-headline-text {
       font-size: 28px;
       line-height: 40px;
+      max-width: 34.5em;
     }
 
     .hb-secondary-text {
@@ -82,10 +84,21 @@
     .hb-cta {
       font-size: 18px;
       padding: 4%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hb-name-input {
       margin-bottom: 5px;
+    }
+    .hb-input-wrapper{ 
+      max-width: 34.5em;
+    }
+    .questionslist{
+      max-width:34.5em;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 
@@ -93,6 +106,9 @@
     .hb-headline-text {
       font-size: 34px;
       line-height: 48px;
+      max-width: 16em;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hb-secondary-text {
@@ -107,6 +123,16 @@
 
     .hb-name-input {
       margin-bottom: 12px;
+    }
+    .hb-inner-content{
+      max-width: 22.5em;
+    }
+  }
+  @media screen and (max-width: 640px){
+    #hellobar-takeover {
+      .hb-inner-content{
+        max-width: 12.2em;
+      }
     }
   }
 }

@@ -63,4 +63,29 @@ module ApplicationHelper
   def format_date(datetime, format = '%F')
     datetime&.strftime(format)
   end
+
+  def trial_expiring_soon?(site)
+    site&.current_subscription&.currently_on_trial? && site.current_subscription.trial_days_remaining < 7
+  end
+
+  def notify_growth?(site)
+    return 'shared/expiring_growth' if trial_expiring_soon?(site)
+    return 'shared/exceeded_growth' if site && site.number_of_views > 50000 && site.active_subscription&.name =~ /(growth|pro)/
+  end
+
+  def show_views?(site)
+    site.free? && !site.deactivated? || site.current_subscription.trial_ended? || site.growth?
+  end
+
+  def show_days?(site)
+    site.current_subscription&.currently_on_trial?
+  end
+
+  def show_warning?(site)
+    site.free? && site.deactivated?
+  end
+
+  def hide_button(site)
+    site.current_subscription&.currently_on_trial? && site.current_subscription.credit_card
+  end
 end
