@@ -32,8 +32,9 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 18,
-      "text_field_text_color": "9b9b9b" 
+      "text_field_text_color": "9b9b9b"
     },
     "Slider": {
       "background_color": "f8f8f8",
@@ -54,6 +55,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b" 
     },
@@ -76,6 +78,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b" 
     },
@@ -98,6 +101,7 @@
       "text_field_border_color": "d5d5d5",
       "text_field_border_radius": 3,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
       "trigger_color": "ffffff",

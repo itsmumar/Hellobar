@@ -28,6 +28,7 @@
       "text_field_border_color": "ABAAAA",
       "text_field_border_radius": 0, 
       "text_field_border_width": 1,
+      "text_field_font_family": "montserrat",
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3"
     },
@@ -49,7 +50,8 @@
       "text_field_background_opacity": 100,
       "text_field_border_color": "ABAAAA",
       "text_field_border_radius": 0, 
-      "text_field_border_width": 0, 
+      "text_field_border_width": 0,
+      "text_field_font_family": "montserrat", 
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3" 
     },
@@ -72,6 +74,7 @@
       "text_field_border_color": "ABAAAA",
       "text_field_border_radius": 0, 
       "text_field_border_width": 0, 
+      "text_field_font_family": "montserrat",
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3" 
     },
@@ -94,6 +97,7 @@
       "text_field_border_color": "ABAAAA",
       "text_field_border_radius": 0, 
       "text_field_border_width": 0, 
+      "text_field_font_family": "montserrat",
       "text_field_font_size": 18,
       "text_field_text_color": "b3b3b3"  
     },
@@ -116,6 +120,7 @@
       "text_field_border_color": "ABAAAA",
       "text_field_border_radius": 0, 
       "text_field_border_width": 0, 
+      "text_field_font_family": "montserrat",
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3",
       "trigger_color": "0fcb80",

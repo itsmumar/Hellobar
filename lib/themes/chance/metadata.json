@@ -30,6 +30,7 @@
       "text_field_border_color": "FFFFFF" ,
       "text_field_border_radius": 0,
       "text_field_border_width": 1,
+      "text_field_font_family": "oswald",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF"
     },
@@ -52,6 +53,7 @@
       "text_field_border_color": "FFFFFF",
       "text_field_border_radius": 0,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 18,
       "text_field_text_color": "FFFFFF"
     },
@@ -74,6 +76,7 @@
       "text_field_border_color": "FFFFFF",
       "text_field_border_radius": 0,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF" 
     },
@@ -96,6 +99,7 @@
       "text_field_border_color": "FFFFFF",
       "text_field_border_radius": 0,
       "text_field_border_width": 1,
+      "text_field_font_family": "roboto",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF"
     },
@@ -118,7 +122,8 @@
       "text_field_border_color": "FFFFFF",
       "text_field_border_radius": 0,
       "text_field_border_width": 1,
-      "text_field_font_size": 14,
+      "text_field_font_family": "roboto",
+      "text_field_font_size": 14, 
       "text_field_text_color": "FFFFFF",
       "trigger_color": "000000",
       "trigger_icon_color": "FFFFFF"
