@@ -2,7 +2,7 @@ feature 'Iterable integration', :js, :contact_list_feature do
   let(:provider) { 'iterable' }
 
   let!(:user) { create :user }
-  let!(:site) { create :site, :with_bars, user: user }
+  let!(:site) { create :site, :with_bars, :elite, user: user }
 
   before do
     sign_in user

@@ -2,7 +2,7 @@ feature 'Maropost Integration', :js, :contact_list_feature do
   let(:provider) { 'maropost' }
 
   let!(:user) { create :user }
-  let!(:site) { create :site, :with_bars, user: user }
+  let!(:site) { create :site, :with_bars, :elite, user: user }
   let(:last_contact_list) { ContactList.joins(:identity).where(identities: { provider: provider }).last }
 
   before do
