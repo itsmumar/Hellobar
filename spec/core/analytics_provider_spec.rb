@@ -332,15 +332,12 @@ describe AnalyticsProvider do
   describe '#created_bar' do
     let(:event) { 'created-bar' }
     let(:site_element) { create :site_element, type: 'Bar' }
-    let(:takeover_element) { create :site_element, type: 'Takeover' }
     let(:modal_element) { create :site_element, type: 'Modal' }
-    let(:slider_element) { create :site_element, type: 'Slider' }
-    let(:alert_element) { create :site_element, type: 'Alert' }
 
-    it 'tracks "created-bar"' do
+    it 'tracks "created-popup" for bar' do
       expect(adapter)
         .to receive(:track)
-        .with(event: 'created_bar', user: user,
+        .with(event: 'created-popup', user: user,
           params: {
             goal: site_element.element_subtype,
             type: site_element.type,
@@ -360,13 +357,13 @@ describe AnalyticsProvider do
         site_element: site_element)
     end
 
-    it 'tracks "created-modal"' do
+    it 'tracks "created-popup" for modal' do
       expect(adapter)
         .to receive(:track)
-        .with(event: 'created_modal', user: user,
+        .with(event: 'created-popup', user: user,
           params: {
-            goal: modal_element.element_subtype,
-            type: modal_element.type,
+            goal: site_element.element_subtype,
+            type: 'Modal',
             theme_id: modal_element.theme_id,
             enable_gdpr: modal_element.enable_gdpr,
             show_branding: modal_element.show_branding,
@@ -381,91 +378,19 @@ describe AnalyticsProvider do
       track(event,
         user: user,
         site_element: modal_element)
-    end
-
-    it 'tracks "created-slider"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'created_slider', user: user,
-          params: {
-            goal: slider_element.element_subtype,
-            type: slider_element.type,
-            theme_id: slider_element.theme_id,
-            enable_gdpr: slider_element.enable_gdpr,
-            show_branding: slider_element.show_branding,
-            headline: slider_element.headline,
-            use_default_image: slider_element.use_default_image,
-            link_text: slider_element.link_text,
-            use_question: slider_element.use_question,
-            site_url: slider_element.site.url,
-            site_id: slider_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: slider_element)
-    end
-
-    it 'tracks "created-takeover"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'created_page_takeover', user: user,
-          params: {
-            goal: takeover_element.element_subtype,
-            type: takeover_element.type,
-            theme_id: takeover_element.theme_id,
-            enable_gdpr: takeover_element.enable_gdpr,
-            show_branding: takeover_element.show_branding,
-            headline: takeover_element.headline,
-            use_default_image: takeover_element.use_default_image,
-            link_text: takeover_element.link_text,
-            use_question: takeover_element.use_question,
-            site_url: takeover_element.site.url,
-            site_id: takeover_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: takeover_element)
-    end
-
-    it 'tracks "created-alert"' do
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'created_alert', user: user,
-          params: {
-            goal: alert_element.element_subtype,
-            type: alert_element.type,
-            theme_id: alert_element.theme_id,
-            enable_gdpr: alert_element.enable_gdpr,
-            show_branding: alert_element.show_branding,
-            headline: alert_element.headline,
-            use_default_image: alert_element.use_default_image,
-            link_text: alert_element.link_text,
-            use_question: alert_element.use_question,
-            site_url: alert_element.site.url,
-            site_id: alert_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: alert_element)
     end
   end
 
   describe '#updated_bar' do
     let(:event) { 'updated-bar' }
     let(:site_element) { create :site_element, type: 'Bar' }
-    let(:takeover_element) { create :site_element, type: 'Takeover' }
     let(:modal_element) { create :site_element, type: 'Modal' }
-    let(:slider_element) { create :site_element, type: 'Slider' }
-    let(:alert_element) { create :site_element, type: 'Alert' }
 
-    it 'tracks "updated-bar"' do
+    it 'tracks "updated-popup" for bar' do
       site_element.update(wiggle_button: true)
       expect(adapter)
         .to receive(:track)
-        .with(event: 'updated_bar', user: user,
+        .with(event: 'updated-popup', user: user,
           params: {
             goal: site_element.element_subtype,
             type: site_element.type,
@@ -485,14 +410,14 @@ describe AnalyticsProvider do
         site_element: site_element)
     end
 
-    it 'tracks "updated-modal"' do
+    it 'tracks "updated-popup" for modal' do
       modal_element.update(wiggle_button: true)
       expect(adapter)
         .to receive(:track)
-        .with(event: 'updated_modal', user: user,
+        .with(event: 'updated-popup', user: user,
           params: {
-            goal: modal_element.element_subtype,
-            type: modal_element.type,
+            goal: site_element.element_subtype,
+            type: 'Modal',
             theme_id: modal_element.theme_id,
             enable_gdpr: modal_element.enable_gdpr,
             show_branding: modal_element.show_branding,
@@ -507,78 +432,6 @@ describe AnalyticsProvider do
       track(event,
         user: user,
         site_element: modal_element)
-    end
-
-    it 'tracks "updated-slider"' do
-      slider_element.update(wiggle_button: true)
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'updated_slider', user: user,
-          params: {
-            goal: slider_element.element_subtype,
-            type: slider_element.type,
-            theme_id: slider_element.theme_id,
-            enable_gdpr: slider_element.enable_gdpr,
-            show_branding: slider_element.show_branding,
-            headline: slider_element.headline,
-            use_default_image: slider_element.use_default_image,
-            link_text: slider_element.link_text,
-            use_question: slider_element.use_question,
-            site_url: slider_element.site.url,
-            site_id: slider_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: slider_element)
-    end
-
-    it 'tracks "updated-takeover"' do
-      takeover_element.update(wiggle_button: true)
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'updated_page_takeover', user: user,
-          params: {
-            goal: takeover_element.element_subtype,
-            type: takeover_element.type,
-            theme_id: takeover_element.theme_id,
-            enable_gdpr: takeover_element.enable_gdpr,
-            show_branding: takeover_element.show_branding,
-            headline: takeover_element.headline,
-            use_default_image: takeover_element.use_default_image,
-            link_text: takeover_element.link_text,
-            use_question: takeover_element.use_question,
-            site_url: takeover_element.site.url,
-            site_id: takeover_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: takeover_element)
-    end
-
-    it 'tracks "updated-alert"' do
-      alert_element.update(wiggle_button: true)
-      expect(adapter)
-        .to receive(:track)
-        .with(event: 'updated_alert', user: user,
-          params: {
-            goal: alert_element.element_subtype,
-            type: alert_element.type,
-            theme_id: alert_element.theme_id,
-            enable_gdpr: alert_element.enable_gdpr,
-            show_branding: alert_element.show_branding,
-            headline: alert_element.headline,
-            use_default_image: alert_element.use_default_image,
-            link_text: alert_element.link_text,
-            use_question: alert_element.use_question,
-            site_url: alert_element.site.url,
-            site_id: alert_element.site.id
-          })
-
-      track(event,
-        user: user,
-        site_element: alert_element)
     end
   end
 
