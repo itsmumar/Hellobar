@@ -20,7 +20,8 @@ class CreateOverageBill
       grace_period_allowed: true,
       bill_at: (Time.current + 1.hour),
       start_date: Time.current,
-      end_date: Time.current
+      end_date: Time.current,
+      one_time: true
     )
 
     # reset the overage counter for the new month
