@@ -70,7 +70,7 @@ module ApplicationHelper
 
   def notify_growth?(site)
     return 'shared/expiring_growth' if trial_expiring_soon?(site)
-    return 'shared/exceeded_growth' if site && site.number_of_views > 50000
+    return 'shared/exceeded_growth' if site && site.number_of_views > 50000 && site.active_subscription&.name =~ /(growth|pro)/
   end
 
   def show_views?(site)
@@ -85,7 +85,12 @@ module ApplicationHelper
     site.free? && site.deactivated?
   end
 
-  def hide_button(site)
-    site.current_subscription&.currently_on_trial? && site.current_subscription.credit_card
+  def hide_button?(site, user)
+    site.current_subscription&.currently_on_trial? && user.credit_cards.any? || !upgrade_button_text(site)
+  end
+
+  def upgrade_button_text(site)
+    return 'Upgrade Now' if site.free? || site.current_subscription.trial_ended?
+    return 'Upgrade to Elite' if site.growth?
   end
 end
