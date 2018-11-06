@@ -16,3 +16,10 @@
     div.centered
     .button.show-upgrade-modal
       | Upgrade here
+
+.add-card-wrapper
+  .card
+    - if @site.current_subscription && @site.current_subscription.credit_card
+      = @site.current_subscription.credit_card.number
+  .show-new-credit-card-modal
+    a Add New Credit Card
