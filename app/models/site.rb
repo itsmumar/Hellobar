@@ -210,7 +210,7 @@ class Site < ApplicationRecord
   end
 
   def growth?
-    current_subscription.is_a? Subscription::Growth
+    current_subscription.is_a?(Subscription::Growth) || current_subscription.is_a?(Subscription::Pro)
   end
 
   def growth_or_pro?
@@ -322,11 +322,8 @@ class Site < ApplicationRecord
   end
 
   def number_of_views
-    if Settings.elastic_search_endpoint == 'http://es.com:9200'
-      5000
-    else
-      FetchTotalViewsForMonth.new([self]).call[id]
-    end
+    return 5000 if Settings.elastic_search_endpoint == 'http://es.com:9200'
+    FetchTotalViewsForMonth.new([self]).call[id]
   end
 
   # to check trial without bill
