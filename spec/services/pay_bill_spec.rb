@@ -13,6 +13,7 @@ describe PayBill do
 
     it 'does not create a pending bill for next period if it is an overage', :freeze do
       bill.update(one_time: true)
+      service.call
       expect(subscription.bills.count).to eql 1
     end
 
