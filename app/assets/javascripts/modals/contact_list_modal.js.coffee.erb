@@ -173,7 +173,7 @@ class @ContactListModal extends Modal
     }
 
     radioInputs.on 'change', (e) ->
-      if(elite_integrations.includes(e.target.id.split('_')[3]))
+      if(elite_integrations.includes(e.target.id.split('_')[3]) && options.package.type != 'elite')
         new PaymentModal(options).open()
       else
         selectList.val(this.value).trigger('change')
