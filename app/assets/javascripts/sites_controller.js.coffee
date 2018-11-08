@@ -24,6 +24,9 @@ $ ->
       source: $(this).data('source')
     new PaymentModal(options).open()
 
+  $('.show-intercom-popup-cancellation').click ->
+    Intercom('showNewMessage', 'Hi there, I would like to cancel my account')
+
   $('.show-new-credit-card-modal').click ->
     new NewCreditCardModal(
       site: window.site
