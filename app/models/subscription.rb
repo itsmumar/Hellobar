@@ -24,6 +24,7 @@ class Subscription < ApplicationRecord
   scope :pro, -> { where(type: Subscription::Pro) }
   scope :growth, -> { where(type: Subscription::Growth) }
   scope :elite, -> { where(type: Subscription::Elite) }
+  scope :custom, -> { where(type: [Subscription::Custom0, Subscription::Custom1, Subscription::Custom2, Subscription::Custom3]) }
   scope :paid, -> { joins(:bills).merge(Bill.paid.active).distinct }
   scope :exclude_ended_trials, -> { where('trial_end_date is null or trial_end_date > ?', Time.current) }
   scope :ended_trial, -> { where('trial_end_date is not null AND trial_end_date < ?', Time.current) }
