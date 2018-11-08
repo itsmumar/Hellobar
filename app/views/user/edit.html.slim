@@ -5,10 +5,6 @@
     = form_for @user, :url => user_path, :html => {:class => 'avatar-form'} do |f|
       = image_tag gravatar_url_for(@user, :size => 300), :class => 'user-avatar'
       = link_to 'Import from Gravatar', 'https://en.gravatar.com/emails/'
-    form
-      a [href="#" data-confirm-url=user_path data-confirm-method="delete"
-        data-confirm-text="Historical data will be deleted and you will not be able to recover it after this. Are you sure you wish to cancel your account?"]
-        |Cancel My Account
 
 
   = form_for @user, :url => user_path, :html => {:class => ['personal-form']} do |f|
