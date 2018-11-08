@@ -1,10 +1,13 @@
 <b>MTD:<br><%= "#{@mtd_paid} Paid" %><br>
 <%= "#{@mtd_trials} Trials" %><br>
-<%= "#{@mtd_elite} Elites" %></b>
+<%= "#{@mtd_elite} Elites" %><br>
+<%= "#{@mtd_custom} Custom Plans" %><br>
+<%= "#{@mtd_converted} Converted Trials" %></b>
 
 <center>
   <h1>Today Paid / Trials</h1>
-  <%= "#{@today_elite} Elites" %>
+  <%= "#{@today_elite} Elites" %><br>
+  <%= "#{@today_custom} Customs" %>
   <p style="color:green;font-size:250px;">
     <%= "#{@today_stats}   /   #{@today_trials}" %>
   </p>
@@ -13,7 +16,8 @@
 
 <center>
   <h1>Yesterday Paid / Trials</h1>
-  <%= "#{@yesterday_elite} Elites" %>
+  <%= "#{@yesterday_elite} Elites" %><br>
+  <%= "#{@yesterday_custom} Customs" %>
   <p style="color:blue;font-size:250px;line-height: 200px;">
     <%= "#{@yesterday_stats}   /   #{@yesterday_trials}" %>
   </p>
@@ -21,7 +25,8 @@
 
 <center>
   <h1>The Day Before That Paid / Trials</h1>
-  <%= "#{@day_before_elite} Elites" %>
+  <%= "#{@day_before_elite} Elites" %><br>
+  <%= "#{@day_before_custom} Customs" %>
   <p style="color:purple;font-size:250px;line-height: 200px;">
     <%= "#{@day_before_stats}   /   #{@day_before_trials}" %>
   </p>
