@@ -22,7 +22,7 @@ section
         | .
       - if @site.requires_credit_card?
         - # only show "billing schedule" if user is on a plan that actually has one
-        = link_to 'Change plan or billing schedule', '#', class: 'show-intercom-popup-cancellation', data: { source: "Change plan or billing" }
+        = link_to 'Change plan or billing schedule', '#', class: 'show-intercom-popup-cancellation'
 
 - if can_view_bills?(current_user, @site)
   section
