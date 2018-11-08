@@ -146,32 +146,44 @@ class AnalyticsProvider
 
   def created_bar(site_element:, user:)
     site = site_element.site
-    if site_element.type == 'Bar'
-      created_element('created_bar', site, site_element, user)
-    elsif site_element.type == 'Modal'
-      created_element('created_modal', site, site_element, user)
-    elsif site_element.type == 'Slider'
-      created_element('created_slider', site, site_element, user)
-    elsif site_element.type == 'Takeover'
-      created_element('created_page_takeover', site, site_element, user)
-    elsif site_element.type == 'Alert'
-      created_element('created_alert', site, site_element, user)
-    end
+    track(
+      event: 'created-popup',
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        theme_id: site_element.theme_id,
+        enable_gdpr: site_element.enable_gdpr,
+        show_branding: site_element.show_branding,
+        headline: site_element.headline,
+        use_default_image: site_element.use_default_image,
+        link_text: site_element.link_text,
+        use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
   end
 
   def updated_bar(site_element:, user:)
     site = site_element.site
-    if site_element.type == 'Bar'
-      updated_element('updated_bar', site, site_element, user)
-    elsif site_element.type == 'Modal'
-      updated_element('updated_modal', site, site_element, user)
-    elsif site_element.type == 'Slider'
-      updated_element('updated_slider', site, site_element, user)
-    elsif site_element.type == 'Takeover'
-      updated_element('updated_page_takeover', site, site_element, user)
-    elsif site_element.type == 'Alert'
-      updated_element('updated_alert', site, site_element, user)
-    end
+    track(
+      event: 'updated-popup',
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        theme_id: site_element.theme_id,
+        enable_gdpr: site_element.enable_gdpr,
+        show_branding: site_element.show_branding,
+        headline: site_element.headline,
+        use_default_image: site_element.use_default_image,
+        link_text: site_element.link_text,
+        use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
   end
 
   def upgraded_subscription(params)
@@ -428,45 +440,5 @@ class AnalyticsProvider
 
     untag_users previous_subscription.name, site.owners
     # untag_users 'Paid', site.owners if subscription.amount.zero?
-  end
-
-  def created_element(event, site, site_element, user)
-    track(
-      event: event,
-      user: user,
-      params: {
-        goal: site_element.element_subtype,
-        type: site_element.type,
-        theme_id: site_element.theme_id,
-        enable_gdpr: site_element.enable_gdpr,
-        show_branding: site_element.show_branding,
-        headline: site_element.headline,
-        use_default_image: site_element.use_default_image,
-        link_text: site_element.link_text,
-        use_question: site_element.use_question,
-        site_url: site.url,
-        site_id: site.id
-      }
-    )
-  end
-
-  def updated_element(event, site, site_element, user)
-    track(
-      event: event,
-      user: user,
-      params: {
-        goal: site_element.element_subtype,
-        type: site_element.type,
-        theme_id: site_element.theme_id,
-        enable_gdpr: site_element.enable_gdpr,
-        show_branding: site_element.show_branding,
-        headline: site_element.headline,
-        use_default_image: site_element.use_default_image,
-        link_text: site_element.link_text,
-        use_question: site_element.use_question,
-        site_url: site.url,
-        site_id: site.id
-      }
-    )
   end
 end
