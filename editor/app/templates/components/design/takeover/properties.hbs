@@ -12,4 +12,12 @@
       {{common/inputs/color-picker color=model.text_color}}
     </div>
   </div>
+  <label class="optional-caption">
+    Optional caption
+    {{common/checkboxes/toggle-switch switch=model.show_optional_caption}}
+  </label>
+  <label class="optional-content ">
+    Optional content
+    {{common/checkboxes/toggle-switch switch=model.show_optional_content}}
+  </label>
 {{/common/panels/collapse-panel}}
