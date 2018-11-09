@@ -25,7 +25,7 @@ $ ->
     new PaymentModal(options).open()
 
   $('.show-intercom-popup-cancellation').click ->
-    Intercom('showNewMessage', 'Hi there, I would like to cancel my account')
+    Intercom('showNewMessage', "Hi, I’d like to make a change to my account please…")
 
   $('.show-new-credit-card-modal').click ->
     new NewCreditCardModal(
