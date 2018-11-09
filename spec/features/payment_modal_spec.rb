@@ -39,7 +39,7 @@ feature 'Payment modal interaction', :js do
         expect(page).to have_text 'You will be billed $29.00 every month.'
 
         page.find('a', text: 'OK').click
-        expect(page).to have_content 'is on the growth plan'
+        expect(page).to have_content 'is on the Growth plan'
       end
     end
 
