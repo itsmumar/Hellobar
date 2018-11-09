@@ -171,9 +171,10 @@ class @ContactListModal extends Modal
       site: this.site,
       package: <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
     }
+    packageType = @site.current_subscription.type
 
     radioInputs.on 'change', (e) ->
-      if(elite_integrations.includes(e.target.id.split('_')[3]) && options.package.type != 'elite')
+      if(elite_integrations.includes(e.target.id.split('_')[3]) && packageType != 'elite')
         new PaymentModal(options).open()
       else
         selectList.val(this.value).trigger('change')
