@@ -292,6 +292,8 @@ GEM
       aws-sigv4 (~> 1.0)
       faraday (>= 0.9)
     ffi (1.9.23)
+    font-awesome-sass (5.5.0.1)
+      sassc (>= 1.11)
     formatador (0.2.5)
     fuubar (2.3.1)
       rspec-core (~> 3.0)
@@ -715,6 +717,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday_middleware-aws-sigv4
+  font-awesome-sass
   fuubar
   gibbon
   guard
