@@ -14,6 +14,8 @@ describe SiteElement do
   it { is_expected.to validate_numericality_of(:text_field_border_width).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:text_field_border_radius).only_integer.is_greater_than_or_equal_to 0 }
   it { is_expected.to validate_numericality_of(:text_field_background_opacity).only_integer.is_greater_than_or_equal_to 0 }
+  it { is_expected.to validate_numericality_of(:text_field_font_size).only_integer.is_greater_than_or_equal_to 8 }
+  it { is_expected.to validate_numericality_of(:text_field_font_size).only_integer.is_less_than_or_equal_to 24 }
 
   %w[background_color border_color button_color link_color text_color
      image_overlay_color text_field_border_color text_field_text_color

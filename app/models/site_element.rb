@@ -58,6 +58,7 @@ class SiteElement < ApplicationRecord
   validates :cta_height, numericality: { only_integer: true, greater_than_or_equal_to: 20, less_than_or_equal_to: 150 }
   validates :text_field_border_color, hex_color: true
   validates :text_field_border_width, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :text_field_font_size, numericality: { only_integer: true, greater_than_or_equal_to: 8, less_than_or_equal_to: 24 }
   validates :text_field_border_radius, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :text_field_text_color, hex_color: true
   validates :text_field_background_color, hex_color: true
@@ -147,7 +148,7 @@ class SiteElement < ApplicationRecord
   end
 
   def fonts
-    (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS
+    (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/).flatten.uniq - SYSTEM_FONTS + (text_field_font_family.present? ? [text_field_font_family] : [])
   end
 
   def related_site_elements

@@ -32,6 +32,7 @@ class SiteElementsController < ApplicationController
       closable: false,
       wiggle_button: false,
       theme_id: 'smooth-impact',
+      text_field_font_family: SiteElement.columns_hash['font_id'].default,
       settings: { url: @site.url, url_to_like: @site.url, new_user: @site.users.first.new? }
     )
 
@@ -118,17 +119,17 @@ class SiteElementsController < ApplicationController
       :answer1, :answer1caption, :answer1link_text, :answer1response,
       :answer2, :answer2caption, :answer2link_text, :answer2response,
       :background_color, :border_color, :button_color, :content, :caption,
-      :closable, :contact_list_id, :element_subtype,
+      :closable, :contact_list_id, :element_subtype, :show_optional_caption,
       :email_placeholder, :font_id, :headline, :image_placement, :image_opacity,
       :link_color, :link_text, :name_placeholder, :open_in_new_window, :paused_at,
       :phone_country_code, :phone_number, :placement, :pushes_page_down,
       :question, :remains_at_top, :rule_id, :show_branding, :size, :text_color,
-      :thank_you_text, :theme_id, :type, :use_question,
+      :thank_you_text, :theme_id, :type, :use_question, :show_optional_content,
       :view_condition_attribute, :view_condition, :wiggle_button,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,
-      :text_field_border_color, :text_field_border_width, :text_field_border_radius,
+      :text_field_border_color, :text_field_border_width, :text_field_font_size, :text_field_font_family, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
       :conversion_font, :conversion_font_color, :conversion_font_size,
       settings: settings_keys

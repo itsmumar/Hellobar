@@ -2,7 +2,7 @@ feature 'Infusionsoft Integration', :js, :contact_list_feature do
   let(:provider) { 'infusionsoft' }
 
   let!(:user) { create :user }
-  let!(:site) { create :site, :with_bars, user: user }
+  let!(:site) { create :site, :with_bars, :elite, user: user }
 
   before do
     sign_in user

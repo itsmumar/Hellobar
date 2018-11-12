@@ -7,7 +7,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # text
     :headline, :caption, :content, :link_text, :font_id, :thank_you_text, :email_placeholder, :name_placeholder,
-    :preset_rule_name,
+    :preset_rule_name, :show_optional_content, :show_optional_caption,
     #
     # colors
     :background_color, :border_color, :button_color, :link_color, :text_color,
@@ -31,7 +31,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # text field styling
     :text_field_border_color, :text_field_border_width, :text_field_border_radius,
-    :text_field_text_color, :text_field_background_color, :text_field_background_opacity,
+    :text_field_text_color, :text_field_background_color, :text_field_background_opacity, :text_field_font_size, :text_field_font_family,
     #
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,

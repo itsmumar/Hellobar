@@ -162,6 +162,8 @@ export default Ember.Component.extend({
     'model.settings.url',
     'model.settings.use_location_for_url',
     'model.show_after_convert',
+    'model.show_optional_caption',
+    'model.show_optional_content',
     'model.show_branding',
     'model.sound',
     'model.size',
@@ -180,6 +182,8 @@ export default Ember.Component.extend({
     'model.text_field_text_color',
     'model.text_field_background_color',
     'model.text_field_background_opacity',
+    'model.text_field_font_size',
+    'model.text_field_font_family',
     'isMobile'
   ),
 

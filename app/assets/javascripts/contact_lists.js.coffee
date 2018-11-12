@@ -18,6 +18,9 @@ $ ->
     options =
       saveURL: "/sites/#{siteID}/contact_lists.json"
       saveMethod: "POST"
+      editorModel: {
+        site: window.site
+      }
 
     new ContactListModal($.extend(baseOptions(), options)).open()
 
@@ -26,6 +29,9 @@ $ ->
       loadURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveURL: "/sites/#{siteID}/contact_lists/#{contactListID}.json"
       saveMethod: "PUT"
+      editorModel: {
+        site: window.site
+      }
 
     new ContactListModal($.extend(baseOptions(), options)).open()
 
@@ -43,5 +49,8 @@ $ ->
         saveMethod: "POST"
 
     options["contactList"] = contactList
+    options["editorModel"] = {
+      site: window.site
+    }
 
     new ContactListModal($.extend(baseOptions(), options)).open()
