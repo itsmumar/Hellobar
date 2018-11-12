@@ -37,6 +37,8 @@ class @UpgradeAccountModal extends Modal
         source: @source
         amplitude_source: @amplitudeSource
 
+    $('[data-toggle="tooltip"]').tooltip()
+
   _bindPackageSelection: ->
     @$modal.find('.button').on 'click', (event) =>
       unless !!$(event.target).attr("disabled")
