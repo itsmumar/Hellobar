@@ -1,6 +1,6 @@
 feature 'Users can use site element targeting rule presets', :js do
-  given(:free_options) { ['Everyone'] }
-  given(:paid_options) { ['Mobile Visitors', 'Homepage Visitors'] }
+  given(:free_options) { ['Everyone', 'Mobile Visitors'] }
+  given(:paid_options) { ['Homepage Visitors'] }
   given(:saved_option) { 'Show to a saved targeting rule' }
 
   background do
