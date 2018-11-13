@@ -307,7 +307,7 @@ class SiteElement < ApplicationRecord
   end
 
   def custom_targeting?
-    rule&.conditions&.any?
+    rule&.conditions&.custom&.any?
   end
 
   def precise_geolocation_targeting?
