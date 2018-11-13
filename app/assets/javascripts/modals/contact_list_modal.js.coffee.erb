@@ -173,8 +173,59 @@ class @ContactListModal extends Modal
     }
     packageType = @site.current_subscription.type
 
+    options2 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::ProComped.new(schedule: 'monthly')).to_json %>
+    }
+    packageType2 = @site.current_subscription.type
+
+    options3 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::ProManaged.new(schedule: 'monthly')).to_json %>
+    }
+    packageType3 = @site.current_subscription.type
+
+
+    options4 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::Custom0.new(schedule: 'monthly')).to_json %>
+    }
+    packageType4 = @site.current_subscription.type
+
+    options5 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::Custom1.new(schedule: 'monthly')).to_json %>
+    }
+    packageType5 = @site.current_subscription.type
+
+    options6 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::Custom2.new(schedule: 'monthly')).to_json %>
+    }
+    packageType6 = @site.current_subscription.type
+
+    options7 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::Custom3.new(schedule: 'monthly')).to_json %>
+    }
+    packageType7 = @site.current_subscription.type
+
+    options8 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::ProSpecial.new(schedule: 'monthly')).to_json %>
+    }
+    packageType8 = @site.current_subscription.type
+
+    options9 = {
+      site: this.site,
+      package: <%= SubscriptionSerializer.new(Subscription::EliteSpecial.new(schedule: 'monthly')).to_json %>
+    }
+    packageType9 = @site.current_subscription.type
+
+
+
     radioInputs.on 'change', (e) ->
-      if(elite_integrations.includes(e.target.id.split('_')[3]) && packageType != 'elite')
+      if(elite_integrations.includes(e.target.id.split('_')[3]) && packageType != 'elite' && packageType2 != 'pro_comped' && packageType3 != 'pro_managed' && packageType4 != 'custom0' && packageType5 != 'custom1' && packageType6 != 'custom2' && packageType7 != 'custom3' && packageType8 != 'pro_special' && packageType9 != 'elite_special')
         new PaymentModal(options).open()
       else
         selectList.val(this.value).trigger('change')
