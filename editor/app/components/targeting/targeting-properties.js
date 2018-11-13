@@ -16,7 +16,7 @@ export default Ember.Component.extend({
   rules: function () {
     return this.get('model.site.rules').map(rule => {
       return _.merge(rule, {
-        isPaid: this.get('cannotTarget') && rule.name !== 'Everyone'
+        isPaid: (this.get('cannotTarget') && (rule.name !== 'Everyone' && rule.name !== 'Mobile Visitors'))
       });
     });
   }.property('model.site.rules'),
