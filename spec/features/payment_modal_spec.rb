@@ -34,12 +34,12 @@ feature 'Payment modal interaction', :js do
 
         page.find('.submit').click
 
-        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE PRO PLAN!"
+        expect(page).to have_text "CONGRATULATIONS ON UPGRADING #{ site.host.upcase } TO THE GROWTH PLAN!"
         expect(page).to have_text "Your card ending in #{ credit_card.last_digits } has been charged $29.00."
         expect(page).to have_text 'You will be billed $29.00 every month.'
 
         page.find('a', text: 'OK').click
-        expect(page).to have_content 'is on the Pro plan'
+        expect(page).to have_content 'is on the Growth plan'
       end
     end
 
