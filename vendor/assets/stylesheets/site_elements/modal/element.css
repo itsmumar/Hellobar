@@ -7,7 +7,6 @@
   max-width: 41em;
   text-align: center;
   font-size: 16px;
-
   transform: translateX(-50%);
   -o-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
@@ -146,10 +145,7 @@
   padding: 10px;
 }
 
-.autodetect #hellobar-slider .answer {
-  padding-left: 8px;
-  padding-right: 8px;
-}
+.autodetect #hellobar-slider .answer,
 .autodetect #hellobar-slider .hb-cta {
   padding-left: 8px;
   padding-right: 8px;
