@@ -11,6 +11,7 @@ div.site-title
       a.free_days_link data-siteid=site.id Add free days
     a.regenerate_link data-url=regenerate_admin_site_path(site)
       | Regenerate script
+    = link_to 'Delete site', admin_site_path(site), method: :delete
 
 = form_for site, url: admin_site_path(site), method: :put, html: {class: "form edit_site_form hidden"}, data: { "site-id" => site.id } do |f|
   = f.hidden_field :id, value: site.id

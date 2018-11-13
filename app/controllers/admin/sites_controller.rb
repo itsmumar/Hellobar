@@ -45,6 +45,13 @@ class Admin::SitesController < AdminController
     redirect_to admin_site_path(params[:id])
   end
 
+  def destroy
+    DestroySite.new(site).call
+    flash[:success] = 'This site has been successfully deleted'
+
+    redirect_to admin_site_path(params[:id])
+  end
+
   private
 
   def calculate_views_avg
