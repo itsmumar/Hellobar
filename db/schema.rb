@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105113402) do
+ActiveRecord::Schema.define(version: 20181106222510) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20181105113402) do
     t.decimal  "base_amount",                      precision: 10
     t.string   "authorization_code",   limit: 255
     t.string   "status",               limit: 20,                           default: "pending", null: false
+    t.boolean  "one_time",                                                  default: false
   end
 
   add_index "bills", ["bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree

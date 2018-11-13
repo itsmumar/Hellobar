@@ -79,7 +79,7 @@ class PayBill
   end
 
   def create_bill_for_next_period
-    return if bill.subscription.amount.zero?
+    return if bill.subscription.amount.zero? || bill.one_time?
     return unless bill.paid?
 
     CreateBillForNextPeriod.new(bill).call

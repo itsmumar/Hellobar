@@ -11,9 +11,16 @@ describe PayBill do
     specify { expect { service.call }.to change { bill.paid? }.to true }
     specify { expect { service.call }.to change { BillingAttempt.charge.successful.count }.to 1 }
 
+    it 'does not create a pending bill for next period if it is an overage', :freeze do
+      bill.update(one_time: true)
+      service.call
+      expect(subscription.bills.count).to eql 1
+    end
+
     it 'creates pending bill for next period', :freeze do
       expect { service.call }.to change { subscription.bills.pending.last }.from(nil)
       expect(subscription.bills.pending.last.bill_at).to eql 3.days.until(bill.end_date)
+      expect(subscription.bills.count).to eql 2
     end
 
     it 'returns given bill' do
