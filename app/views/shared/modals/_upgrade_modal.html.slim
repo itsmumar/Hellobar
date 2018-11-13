@@ -58,13 +58,13 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
             th.thborder
 
-                  div = Subscription.pro_or_growth_for(current_user).defaults[:name] = Subscription.pro_or_growth_for(current_user).defaults[:name]
+                  div Growth
                   div.sm
                     .package-pricing
                       strike.fl.monthly $49
-                      span.bold.monthly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :monthly)}
+                      span.bold.monthly #{subscription_cost(Subscription::Growth, :monthly)}
                       strike.fl.yearly $348
-                      span.bold.yearly #{subscription_cost(Subscription.pro_or_growth_for(current_user), :yearly)}
+                      span.bold.yearly #{subscription_cost(Subscription::Growth, :yearly)}
 
 
             th.thborder
@@ -165,7 +165,7 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
               .package-block.enterprise
                 .package-features
                   .package-status
-                    = choose_pro_or_growth_button
+                    = choose_plan_button(Subscription::Growth.new)
 
             td.trborder
               .package-block.enterprise
