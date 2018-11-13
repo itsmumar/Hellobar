@@ -1,5 +1,5 @@
-describe CreateOverageBill do
-  subject!(:service) { CreateOverageBill.new(site) }
+describe CreateAndPayOverageBill do
+  subject!(:service) { CreateAndPayOverageBill.new(site) }
 
   let(:user) { create :user }
   let(:site) { create :site, user: user, overage_count: 2 }
@@ -20,6 +20,7 @@ describe CreateOverageBill do
       expect(last_bill.amount).to eql(10)
       expect(last_bill.grace_period_allowed).to be_truthy
       expect(last_bill.description).to eql('Monthly View Limit Overage Fee')
+      expect(last_bill.status).to eql('paid')
     end
   end
 end
