@@ -34,8 +34,8 @@ describe CreditCardsController do
     context 'when it comes from the pricing page' do
       before { cookies[:utm_campaign] = 'pricing' }
       it 'should fire pricing_page_conversion event' do
-        expect(TrackEvent).to receive_service_call.with :added_credit_card, user: @user, site: nil
-        expect(TrackEvent).to receive_service_call.with :pricing_page_conversion, site: nil, user: @user
+        expect(TrackEvent).to receive_service_call.with :added_credit_card, user: @user, site: @site_element.site
+        expect(TrackEvent).to receive_service_call.with :pricing_page_conversion, site: @site_element.site, user: @user
         post :create, params
       end
     end

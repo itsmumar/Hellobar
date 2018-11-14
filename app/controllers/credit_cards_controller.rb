@@ -28,6 +28,7 @@ class CreditCardsController < ApplicationController
 
   def create
     @form = PaymentForm.new(params[:credit_card])
+    @site ||= current_site
     credit_card = CreateCreditCard.new(@site, current_user, params).call
     check_for_utm_campaign
     if @form.plan.present?
