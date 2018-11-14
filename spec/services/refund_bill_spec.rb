@@ -37,6 +37,12 @@ describe RefundBill do
     expect(bill.site.current_subscription).to be_a Subscription::Free
   end
 
+  it 'does not cancel current subscription if it is an overage bill' do
+    bill.update(one_time: true)
+    expect { service.call }.to_not change(bill.subscription.bills.pending, :count)
+    expect(bill.site.current_subscription).to be_a Subscription::Pro
+  end
+
   it 'calls TrackAffiliateRefund service' do
     expect(TrackAffiliateRefund).to receive_service_call.with(bill)
     service.call

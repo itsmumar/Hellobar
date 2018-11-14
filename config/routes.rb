@@ -198,7 +198,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :sites, only: %i[show update] do
+    resources :sites, only: %i[show update destroy] do
       member do
         post :regenerate
         put :add_free_days

@@ -47,6 +47,7 @@ class RefundBill
 
   def cancel_subscription
     return unless bill.subscription
+    return if bill.one_time?
     bill.subscription.bills.pending.each(&:void!)
 
     return unless bill.site&.current_subscription
