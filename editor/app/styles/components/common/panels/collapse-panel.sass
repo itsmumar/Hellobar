@@ -62,8 +62,22 @@
     white-space: nowrap
     font-size: 0.9em
 
-  .optional-caption,
+  .optional-caption
+    .toggle-switch
+      margin-left: 33px
+
   .optional-content
+    .toggle-switch
+      margin-left: 32px
+
+  .default-image
+    .toggle-switch
+      margin-left: 47px
+
+  .optional-caption,
+  .optional-content,
+  .default-image
+    color: #666666
     display: flex
     margin: 15px auto
     justify-content: space-between
@@ -71,9 +85,6 @@
     font-weight: bold
     white-space: nowrap
     font-size: 0.9em
-
-    .toggle-switch
-      margin-left: 60px
 
     &:first-child
       margin-top: 0

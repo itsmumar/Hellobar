@@ -61,6 +61,8 @@ class Condition < ApplicationRecord
 
   delegate :site, to: :rule
 
+  scope :custom, -> { where.not(value: 'mobile') }
+
   def self.date_condition_from_params(start_date, end_date)
     return unless [start_date, end_date].any?(&:present?)
 

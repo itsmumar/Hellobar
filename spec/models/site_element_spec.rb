@@ -119,11 +119,23 @@ describe SiteElement do
     end
 
     describe '#custom_targeting' do
-      before do
-        element.rule.conditions << build(:condition, :url_path_includes, rule: element.rule)
+      context 'mobile visitors' do
+        before do
+          element.rule.conditions << build(:condition, :mobile, rule: element.rule)
+        end
+
+        it 'is valid' do
+          expect(element).to be_valid
+        end
       end
 
-      include_examples 'capability validation', :custom_targeted_bars, :site, 'subscription does not support custom targeting. Upgrade subscription.'
+      context 'other custom targeting' do
+        before do
+          element.rule.conditions << build(:condition, :url_path_includes, rule: element.rule)
+        end
+
+        include_examples 'capability validation', :custom_targeted_bars, :site, 'subscription does not support custom targeting. Upgrade subscription.'
+      end
     end
 
     describe '#precise_geolocation_targeting' do
