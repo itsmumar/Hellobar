@@ -95,7 +95,6 @@
       padding: 48px 24px;
     }
   }
-  
   #hellobar-takeover {
     .hb-headline-text {
       font-size: 34px;
@@ -114,6 +113,22 @@
 
     .hb-name-input {
       margin-bottom: 12px;
+    }
+    .hb-input-wrapper{
+      max-width:none;
+    }
+    .hb-content-wrapper {
+      max-width: 570px;
+      right: 0;
+      margin: auto;
+      padding: 0;
+    }
+  }
+  @media screen and (max-width: 640px){
+    #hellobar-takeover {
+      .hb-content-wrapper {
+        max-width: 325px;
+      }
     }
   }
 }
