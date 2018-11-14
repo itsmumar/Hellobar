@@ -227,13 +227,13 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       border-width: 1px;
     }  
     .hb-inner-content {
-      padding: 35px 10%;
+      padding: 35px 58px;
     } 
     .hb-input-wrapper{
       max-width: none;
     }
     .hb-headline-text {
-      font-size: 2.1em; 
+      font-size: 2em;
       text-align: center;
     } 
     [data-hb-editable-block="caption"] {
@@ -284,7 +284,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
       .hb-content-wrapper{
         .hb-inner-content {
-          padding: 48px 12%;
+          padding: 50px 30px;
           .hb-headline-text{
             font-size: 1.6em;
           }
