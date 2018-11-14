@@ -161,13 +161,7 @@ class SitesController < ApplicationController
     @next_bill = @site.bills.pending.where(description: nil).includes(:subscription).last
 
     @next_overage_bills = (@site.overage_count * 5) unless @site.overage_count == 0
-
-    if Settings.elastic_search_endpoint == 'http://es.com:9200'
-      @current_view_count = 50000
-    else
-      count = FetchTotalViewsForMonth.new(Site.where(id: @site.id)).call
-      @current_view_count = count[@site.id]
-    end
+    @current_view_count = @site.number_of_views
   end
 
   def check_free_overage
