@@ -20,6 +20,7 @@ class @PaymentConfirmationModal extends Modal
     if @options.successCallback
       @options.successCallback.call(@options.data)
     else
+      window.location.hash = ''
       window.location.reload(true)
 
     super
