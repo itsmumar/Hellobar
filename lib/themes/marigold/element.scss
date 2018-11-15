@@ -107,8 +107,8 @@
     }
 
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      padding-left: 48px;
-      padding-right: 48px;
+      padding-left: 43px;
+      padding-right: 43px;
     }
 
     .hb-headline-text {
@@ -123,7 +123,6 @@
 
     .hb-cta {
       font-size: 18px;
-      padding: 6%;
     }
 
     .hb-name-input {
@@ -132,6 +131,10 @@
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background{
         display: none;
+      }  
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        padding-left: 38px;
+        padding-right: 38px;
       }
     }
   }
@@ -149,6 +152,9 @@
   }
 
   #hellobar-takeover {
+    .hb-inner-content {
+      max-width: 540px;
+    }
     .hb-headline-text {
       font-size: 34px;
       line-height: 48px;
@@ -174,12 +180,20 @@
       padding-right: 0 ;
       padding-left: 30%;
     }
+    @media screen and (max-width: 840px) {
+      .hb-inner-content{
+        max-width: 488px;
+      }
+    }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background{
         display: none;
       }
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
         padding-left: 0;
+      }
+      .hb-inner-content{
+        max-width: 277px;
       }
     }
   }
