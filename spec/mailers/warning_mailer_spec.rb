@@ -15,7 +15,7 @@ RSpec.describe WarningMailer, type: :mailer do
     end
 
     it 'has correct subject' do
-      expect(subject).to have_subject("You are approaching your Hello Bar monthly view limit!")
+      expect(subject).to have_subject('You are approaching your Hello Bar monthly view limit!')
     end
 
     it 'is sent from hello bar contact email' do
@@ -41,7 +41,7 @@ RSpec.describe WarningMailer, type: :mailer do
     end
 
     it 'has correct subject' do
-      expect(subject).to have_subject("You are approaching your Hello Bar monthly view limit!")
+      expect(subject).to have_subject('You are approaching your Hello Bar monthly view limit!')
     end
 
     it 'is sent from hello bar contact email' do
