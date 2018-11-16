@@ -52,8 +52,19 @@ class BillingViewsReport
   def send_warning_email(site, number_of_views, limit, warning_level)
     if site.current_subscription&.paid?
       WarningMailer.warning_email(site, number_of_views, limit, warning_level).deliver_later
+
+    # TODO: disable this afer black friday
+    # Begin black friday thing
+    elsif site.warning_email_two == false && !site.current_subscription&.paid? # not warning email two yet so it must be one
+      WarningMailer.black_friday_one(site, number_of_views, limit, warning_level).deliver_later
+    elsif site.warning_email_three == false && !site.current_subscription&.paid?
+      WarningMailer.black_friday_two(site, number_of_views, limit, warning_level).deliver_later
     else
-      WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
+      WarningMailer.black_friday_three(site, number_of_views, limit, warning_level).deliver_later
+      # End of black friday thing
+
+      # else TODO: enable this after black friday
+      # WarningMailer.warning_free_email(site, number_of_views, limit, warning_level).deliver_later
     end
   end
 
