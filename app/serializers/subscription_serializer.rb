@@ -6,6 +6,22 @@ class SubscriptionSerializer < ActiveModel::Serializer
   delegate :credit_card, to: :object
   delegate :last_digits, to: :credit_card, prefix: true, allow_nil: true
 
+  def self.growth
+    new(Subscription::Growth.new(schedule: 'monthly')).to_json
+  end
+
+  def self.elite
+    new(Subscription::Elite.new(schedule: 'monthly')).to_json
+  end
+
+  def self.pro
+    new(Subscription::Pro.new(schedule: 'monthly')).to_json
+  end
+
+  def self.pro_special
+    new(Subscription::ProSpecial.new(schedule: 'yearly')).to_json
+  end
+
   def schedule
     object.values[:schedule]
   end

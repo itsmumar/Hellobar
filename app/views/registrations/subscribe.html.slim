@@ -36,7 +36,7 @@
           p You’re signing up for our #{@plan[0].titleize} #{@plan[1].titleize} Plan at #{subscription_cost(eval("Subscription::#{@plan[0].titleize}"), @plan[1].to_sym)}#{@plan[1] == 'monthly' ? '/mo' : '/yr'}.
           p = link_to 'Choose a different plan', '#', class: "different-plan", onclick: 'showPlans()'
       .wrapper
-        = hidden_field_tag :update_subscription, false
+        = hidden_field_tag :update_subscription, true
         = hidden_field_tag :site_id, current_user.sites.first.id
         = f.hidden_field :plan, value: params[:plan] || f.object.plan
         = render 'shared/modals/new_credit_card_form'

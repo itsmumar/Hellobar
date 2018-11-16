@@ -324,7 +324,7 @@ class Site < ApplicationRecord
   def number_of_views
     return 5000 if Settings.elastic_search_endpoint == 'http://es.com:9200'
     FetchTotalViewsForMonth.new([self]).call[id]
-  rescue => _
+  rescue Elasticsearch::Transport::Transport::ServerError
     0
   end
 
