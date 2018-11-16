@@ -27,6 +27,9 @@ $ ->
   $('.show-intercom-popup-cancellation').click ->
     Intercom('showNewMessage', "Hi, I’d like to make a change to my account please…")
 
+  $('.show-intercom-popup-custom-plan').click ->
+    Intercom('showNewMessage', "Hi, I'm interested in upgrading to a custom plan")
+
   $('.show-new-credit-card-modal').click ->
     new NewCreditCardModal(
       site: window.site

@@ -40,7 +40,6 @@
 #= require_self
 
 $ ->
-
   route = window.location.hash.split('-')[1]
   options = site: window.site
 
@@ -48,16 +47,20 @@ $ ->
     options.source = 'Change Plan'
     options.view = route
     new UpgradeAccountModal(options).open()
-  else if ["pro", "growth", "elite"].includes(route)
-    options.source = 'package-selected'
+  else
     switch route
       when 'growth'
-        options.package = <%= SubscriptionSerializer.new(Subscription::Growth.new(schedule: 'monthly')).to_json %>
+        options.package = <%= SubscriptionSerializer.growth %>
       when 'elite'
-        options.package = <%= SubscriptionSerializer.new(Subscription::Elite.new(schedule: 'monthly')).to_json %>
+        options.package = <%= SubscriptionSerializer.elite %>
       when 'pro'
-        options.package = <%= SubscriptionSerializer.new(Subscription::Pro.new(schedule: 'monthly')).to_json %>
-    new PaymentModal(options).open()
+        options.package = <%= SubscriptionSerializer.pro %>
+      when 'special'
+        options.package = <%= SubscriptionSerializer.pro_special %>
+
+    if options.package
+      options.source = 'package-selected'
+      new PaymentModal(options).open()
 
 
   #Tooltip
