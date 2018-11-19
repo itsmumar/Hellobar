@@ -14,7 +14,7 @@
   "element_types": ["Modal", "Slider", "Takeover", "Alert"],
   "defaults": {
     "Bar": {
-      "background_color": "FFFFFF",
+      "background_color": "808080",
       "border_color":"FFFFFF",
       "button_color": "FFFFFF",
       "cta_border_color":"FFFFFF",
@@ -35,7 +35,7 @@
       "text_field_text_color": "B3B3B3"
     },
     "Takeover": {
-      "background_color": "FFFFFF",
+      "background_color": "808080",
       "border_color":"FFFFFF",
       "button_color": "FFFFFF",
       "cta_border_color":"FFFFFF",
@@ -59,7 +59,7 @@
 
     },
     "Slider": {
-      "background_color": "FFFFFF",
+      "background_color": "808080",
       "border_color":"FFFFFF",
       "button_color": "FFFFFF",
       "cta_border_color":"FFFFFF",
@@ -82,7 +82,7 @@
       "text_field_text_color": "B3B3B3"
     },
     "Modal": {
-      "background_color": "FFFFFF",
+      "background_color": "808080",
       "border_color":"FFFFFF",
       "button_color": "FFFFFF",
       "cta_border_color":"FFFFFF",
@@ -105,7 +105,7 @@
       "text_field_text_color": "B3B3B3"
     },
     "Alert": {
-      "background_color": "FFFFFF",
+      "background_color": "808080",
       "border_color":"FFFFFF",
       "button_color": "FFFFFF",
       "cta_border_color":"FFFFFF",
