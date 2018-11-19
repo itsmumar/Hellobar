@@ -322,8 +322,8 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
         left: 50%;
         width: 100%;
         padding: 2em;
-        max-width: 598px;
-        right: 0;
+        max-width: 694px;
+        right: 50%;
         margin: auto;
         position: absolute;
         transform: translate(-50%, -50%);
@@ -368,6 +368,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       .hb-content-wrapper {
         .hb-inner-content {
           max-width: 540px;
+          padding: 0;
         }
       }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
