@@ -5,13 +5,13 @@ describe SubscribeContact do
   let(:double_optin) { contact_list.double_optin }
   let(:email) { 'email@contact.com' }
   let(:name) { 'Firstname Lastname' }
-  let(:contact) { SubscribeContactWorker::Contact.new(contact_list.id, email, name) }
+  let(:contact) { SubscribeContactWorker::Contact.new(contact_list&.id, email, name) }
   let(:service) { described_class.new(contact) }
   let(:provider) { double('ServiceProvider') }
 
   before do
     allow(ServiceProvider).to receive(:new)
-      .with(contact_list.identity, contact_list)
+      .with(contact_list&.identity, contact_list)
       .and_return provider
 
     allow(provider).to receive(:subscribe)
@@ -101,7 +101,7 @@ describe SubscribeContact do
   end
 
   context 'when contact list has been deleted' do
-    before { contact_list.destroy }
+    let(:contact_list) { nil }
 
     it 'does not raise error' do
       expect { service.call }.not_to raise_error

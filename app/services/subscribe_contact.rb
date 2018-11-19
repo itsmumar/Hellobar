@@ -1,7 +1,7 @@
 class SubscribeContact
   def initialize(contact)
     @contact_list = contact.contact_list
-    @provider = ServiceProvider.new(contact_list.identity, contact_list)
+    @provider = ServiceProvider.new(contact_list&.identity, contact_list)
     @email = contact.email
     @name = contact.fields
   end
