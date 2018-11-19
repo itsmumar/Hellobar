@@ -7,6 +7,7 @@ class SubscribeContact
   end
 
   def call
+    return if contact_list.blank?
     invalidate_cache
     subscribe
   end

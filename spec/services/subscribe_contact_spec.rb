@@ -99,4 +99,12 @@ describe SubscribeContact do
       service.call
     end
   end
+
+  context 'when contact list has been deleted' do
+    before { contact_list.destroy }
+
+    it 'does not raise error' do
+      expect { service.call }.not_to raise_error
+    end
+  end
 end
