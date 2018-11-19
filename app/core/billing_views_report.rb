@@ -55,9 +55,9 @@ class BillingViewsReport
 
     # TODO: disable this afer black friday
     # Begin black friday thing
-    elsif site.warning_email_two == false && !site.current_subscription&.paid? # not warning email two yet so it must be one
+    elsif !site.warning_email_two_sent && !site.current_subscription&.paid? # not warning email two yet so it must be one
       WarningMailer.black_friday_one(site, number_of_views, limit, warning_level).deliver_later
-    elsif site.warning_email_three == false && !site.current_subscription&.paid?
+    elsif !site.warning_email_three_sent && !site.current_subscription&.paid?
       WarningMailer.black_friday_two(site, number_of_views, limit, warning_level).deliver_later
     else
       WarningMailer.black_friday_three(site, number_of_views, limit, warning_level).deliver_later
