@@ -238,9 +238,12 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       width: 57%;
       margin-left: 43%;
     }
+    .hb-input-wrapper{
+      max-width: none;
+    }
 
     .hb-inner-content {
-      padding: 48px;
+      padding: 48px 58px; 
     }
 
     .hb-headline-text {
@@ -248,6 +251,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       margin-bottom: 20px;
       text-align: center;
     }
+     .hb-input-wrapper
 
     [data-hb-editable-block="caption"] {
       font-size: 1.5em;
@@ -358,6 +362,10 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     .hb-logo-wrapper {
       bottom: 2em;
     }
+    .questionslist {
+      margin: 0 auto;
+      max-width: 598px;
+    }
 
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
@@ -389,6 +397,9 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
       .hb-text-wrapper,
       .hb-input-wrapper {
+        max-width: 540px;
+      }
+      .questionslist {
         max-width: 540px;
       }
     }

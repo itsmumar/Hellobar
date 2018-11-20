@@ -418,4 +418,10 @@ describe Site do
       expect(GenerateStaticScriptJob).to have_been_enqueued
     end
   end
+
+  describe '#next_bill' do
+    it 'returns the first pending bill' do
+      expect(site.next_bill).to eql site.bills.pending.first
+    end
+  end
 end

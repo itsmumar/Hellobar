@@ -16,7 +16,7 @@ class SubscribeContactWorker
     end
 
     def contact_list
-      @contact_list ||= ContactList.find(id)
+      @contact_list ||= ContactList.find_by(id: id)
     end
 
     def cleanup(value)

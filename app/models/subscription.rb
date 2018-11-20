@@ -34,6 +34,13 @@ class Subscription < ApplicationRecord
   validates :site, presence: true, associated: true
 
   class << self
+    def from_plan(plan)
+      plan, schedule = plan.split('-', 2)
+      plan = 'free' if plan == 'starter'
+      klass = const_get plan.camelize
+      klass.new(schedule: schedule)
+    end
+
     def pro_or_growth_for(user)
       if user.created_at >= GROWTH_START_DATE
         Subscription::Growth

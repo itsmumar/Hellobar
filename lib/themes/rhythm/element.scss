@@ -78,18 +78,6 @@
       }
     }
   }
-
-  .builtin-email {
-    &:before {
-
-    }
-  }
-
-  .builtin-phone {
-    &:before {
-
-    }
-  } 
   .hb-cta {
     display: block;
     font-size: 1.2em;
@@ -126,7 +114,7 @@
       right: 0;
       bottom: 0;
       left: 0;
-      pointer-events: none; 
+      pointer-events: none;
     }
   }
 
@@ -214,17 +202,17 @@
     max-width: 50em;
     text-align: left;
 
-    .hb-content-wrapper:after { 
+    .hb-content-wrapper:after {
       margin: 0.5rem;
       border-width: 1px;
-    }  
+    }
     .hb-inner-content {
       padding: 10% 10% 10% 0;
-    }  
+    }
     .hb-headline-text {
-      font-size: 2.1em;  
+      font-size: 2.1em;
       margin-bottom: 20px;
-    } 
+    }
     [data-hb-editable-block="caption"] {
       font-size: 1em;
       margin: 15px auto;
@@ -235,7 +223,7 @@
       font-size: 0.9em;
       margin: 0 0 10px;
       text-align: left;
-    } 
+    }
     .hb-input-block {
       &:before {
         left: 16px;
@@ -249,7 +237,7 @@
         height: 3.5rem;
         padding: 0 0 0 10px;
       }
-    } 
+    }
     .icon-close {
       top: 19px;
       right: 19px;
@@ -271,10 +259,10 @@
       max-width: none;
     }
 
-    @media screen and (max-width: 640px) { 
+    @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
         margin-left: inherit;
-        width: auto;
+        width: 70%;
       }
       .hb-content-wrapper{
         .hb-inner-content {
@@ -283,15 +271,14 @@
             font-size: 1.6em;
           }
         }
-      }   
+      }
     }
   }
   @media screen and (max-width: 840px) {
     #hellobar-modal{
       width: calc(100% - 20px);
     }
-  } 
-  
+  }
   #hellobar-takeover {
     .hb-content-wrapper {
       top: 0;
@@ -308,7 +295,6 @@
       -webkit-transform: translate(0%, 0%);
       margin: 0;
       max-width: none;
-
       .hb-inner-content {
         top: 50%;
         left: 50%;
@@ -320,44 +306,34 @@
         -moz-transform: translate(-50%, -50%);
         -webkit-transform: translate(-50%, -50%);
       }
-    } 
-
+    }
     .hb-text-wrapper {
       max-width: none;
       margin: 0 auto;
     }
-
     .hb-input-wrapper {
       margin: 20px auto 0 0;
       max-width: 480px;
     }
-
     .hb-logo-wrapper {
       bottom: 2em;
     }
-
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 0;
     }
-
-    
-
     .hb-headline-text {
       font-size: 2.3em;
       margin-bottom: 20px;
     }
-
     [data-hb-editable-block="caption"] {
       font-size: 1.2em;
       margin: 20px auto;
       padding: 10px 0;
     }
-
     [data-hb-editable-block="content"] {
       font-size: 1em;
       margin: 0 0 10px;
     }
-
     .hb-input-block {
       input {
         font-size: 17px;
@@ -365,7 +341,6 @@
         padding: 0 0 0 10px;
       }
     }
-
     .hb-cta {
       font-size: 28px;
     }
@@ -376,8 +351,7 @@
       right: 40px;
       color: #ffffff;
     }
-    @media screen and (max-width: 640px) { 
-      
+    @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
         top: 0;
         left: 0;
@@ -407,14 +381,13 @@
         }
       }
       .hb-headline-text {
-        font-size: 1.5em; 
+        font-size: 1.5em;
       }
       [data-hb-editable-block="caption"] {
-        font-size: 0.8em; 
+        font-size: 0.8em;
       }
-  
       [data-hb-editable-block="content"] {
-        font-size: 0.7em; 
+        font-size: 0.7em;
       }
     }
   }
@@ -423,14 +396,14 @@
     .slider-content {
       padding: 25px 25px 10px;
       display: flex;
-      flex-direction: row;  
+      flex-direction: row;
       justify-content: flex-end;
 
       .hb-content-wrapper {
         .hb-text-wrapper {
           padding-right: 0;
         }
-      } 
+      }
     }
 
     .hb-text-wrapper {
@@ -473,7 +446,7 @@
       text-align: left;
       margin: 5px 25px 15px 20px;
       opacity: 0.2;
-      text-align: center; 
+      text-align: center;
 
       &:hover {
         opacity: 0.4;
@@ -491,32 +464,19 @@
       top: 14px;
       right: 14px;
       color: #ffffff;
-    }  
-    @media screen and (max-width: 640px) { 
-      &.bottom-right{
-        right: 10px;
-      } 
-      .hb-content-wrapper{
-        width: 100%;
-      }
     }
-
   }
 
   #hellobar-alert {
     #hb-answer1, #hb-answer2{
       padding: 5px;
     } 
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
-    } 
   }
-  @media screen and (max-width: 640px) { 
+  @media screen and (max-width: 640px) {
     #hellobar-alert {
       #hellobar-slider{
         max-width: calc(100% - 25px) !important;
       }
-    } 
+    }
   }
 }
