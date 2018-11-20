@@ -12,6 +12,7 @@ export default Ember.Component.extend({
   isEmailGoal: Ember.computed.equal('model.element_subtype', 'email'),
 
   selectedContactList: function () {
+    this.set('model.show_thankyou',true);
     const contactListId = this.get('model.contact_list_id');
     const contactLists = this.get('model.site.contact_lists');
     return _.find(contactLists, (contactList) => contactList.id === contactListId);
