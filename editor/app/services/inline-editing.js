@@ -418,7 +418,7 @@ export default Ember.Service.extend({
             var contentText = allSpans[i].innerHTML;
             if(!allSpans[i].children.item('span.here')) {
               $target.find("p").removeClass('noteditedstyle');
-              allSpans[i].innerHTML = "<span class='here'>" + contentText + "</span>"
+              allSpans[i].innerHTML = "<span class='here'>" + contentText + "</span>";
             }
           }
         }
