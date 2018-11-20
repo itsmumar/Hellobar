@@ -334,7 +334,7 @@ class Site < ApplicationRecord
   end
 
   def next_bill
-    bills.pending.first
+    bills.pending.first || bills.failed.first
   end
 
   private
