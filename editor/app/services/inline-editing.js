@@ -409,15 +409,26 @@ export default Ember.Service.extend({
       }, froalaOptions));
       $textFroala.on('froalaEditor.contentChanged', (e /*, editor */) => {
         const $target = $(e.currentTarget);
-      const content = $target.froalaEditor('html.get');
-      const blockId = $target.attr('data-hb-editable-block');
-      this.handleContentChange(blockId, content);
+        const content = $target.froalaEditor('html.get');
+        const blockId = $target.attr('data-hb-editable-block');
+        this.handleContentChange(blockId, content);
+        var allSpans = $target.find("p > span");
+        for (var i = 0; i < allSpans.length; i++) {
+          if (allSpans[i].style.fontSize) {
+            var contentText = allSpans[i].innerHTML;
+            if(!allSpans[i].children.item('span.here')) {
+              $target.find("p").removeClass('noteditedstyle');
+              allSpans[i].innerHTML = "<span class='here'>" + contentText + "</span>"
+            }
+          }
+        }
     });
       $textFroala.each(function () {
         const $editableElement = $(this);
         const editor = $editableElement.data('froala.editor');
         const newOptions = {};
         const placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
+        $editableElement.find('p').addClass('noteditedstyle');
         if (placeholder) {
           newOptions.placeholderText = placeholder;
         }
