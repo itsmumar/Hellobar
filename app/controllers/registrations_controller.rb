@@ -8,6 +8,7 @@ class RegistrationsController < ApplicationController
   def new
     cookies[:the_plan] = 'paid' if params[:plan].present? && params[:plan] =~ /(pro|growth|elite)/
     cookies[:utm_campaign] = params[:utm_campaign] if params[:utm_campaign].present?
+    cookies[:neil_signup] = 'true' if params[:utm_source] == 'neil'
     @form = RegistrationForm.new(params, cookies)
     @form.ignore_existing_site = @form.existing_site_url?
   end
