@@ -8,7 +8,6 @@ describe FetchSubscribers do
   let(:request) do
     {
       table_name: 'test_contacts',
-      index_name: 'ts-index',
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
