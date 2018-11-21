@@ -161,7 +161,7 @@
   .hb-headline-text .fr-view p{
     font-size: 100%;
   }
-  .hb-headline-text .fr-view p span > span.here,
+  .hb-headline-text .fr-view p span > span.subspan,
   .hb-headline-text .fr-view p.noteditedstyle{
     font-size: 80%;
   }

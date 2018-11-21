@@ -219,18 +219,15 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     .hb-input-wrapper{
       max-width: none;
     }
-    .hb-headline-text {
-      // font-size: 2em;
+    .hb-headline-text { 
       text-align: center;
     }
-    [data-hb-editable-block="caption"] {
-      //font-size: 1.3em;
+    [data-hb-editable-block="caption"] { 
       margin: 15px auto;
       text-align: center;
     }
 
-    [data-hb-editable-block="content"] {
-      // font-size: 1.2em;
+    [data-hb-editable-block="content"] { 
       margin: 0 0 10px;
       text-align: center;
 
