@@ -33,9 +33,9 @@ class RegistrationForm
   end
 
   def title
-    return default_title unless promotional_signup? || affiliate_signup? || paid_signup? || neil_signup?
-    return paid_title if paid_signup? && !neil_signup?
     return neil_title if neil_signup?
+    return default_title unless promotional_signup? || affiliate_signup? || paid_signup?
+    return paid_title if paid_signup? && !neil_signup?
     return promotional_signup_title unless affiliate_signup?
     return affiliate_signup_title unless partner?
 
@@ -43,11 +43,11 @@ class RegistrationForm
   end
 
   def cta
+    return neil_cta if neil_signup?
     return default_cta unless promotional_signup? || affiliate_signup? || paid_signup?
     return promotional_signup_cta unless affiliate_signup? || paid_signup?
     return affiliate_signup_cta unless partner? || paid_signup?
-    return paid_signup_cta if paid_signup? && !neil_signup?
-    return neil_cta if neil_signup?
+    return paid_signup_cta if paid_signup?
 
     partner_signup_cta
   end
