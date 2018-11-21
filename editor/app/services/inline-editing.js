@@ -412,20 +412,7 @@ export default Ember.Service.extend({
         const content = $target.froalaEditor('html.get');
         const blockId = $target.attr('data-hb-editable-block');
         this.handleContentChange(blockId, content);
-<<<<<<< HEAD
         this.addClassToSpanForResponsiveFonts($target);
-=======
-        var allSpans = $target.find("p > span");
-        for (var i = 0; i < allSpans.length; i++) {
-          if (allSpans[i].style.fontSize) {
-            var contentText = allSpans[i].innerHTML;
-            if(!allSpans[i].children.item('span.here')) {
-              $target.find("p").removeClass('noteditedstyle');
-              allSpans[i].innerHTML = "<span class='here'>" + contentText + "</span>";
-            }
-          }
-        }
->>>>>>> bc9a5fd9db06033187a8e67fa3a325f1d783cbad
     });
       $textFroala.each(function () {
         const $editableElement = $(this);
