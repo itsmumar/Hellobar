@@ -16,6 +16,7 @@ export default Ember.Component.extend({
   isTraffic: Ember.computed.equal('goal', 'traffic'),
   isAnnouncement: Ember.computed.equal('goal', 'announcement'),
   isSocial: function () {
+    this.set('model.show_thankyou',false);
     return _.startsWith(this.get('goal'), 'social');
   }.property('goal'),
 
