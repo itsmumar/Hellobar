@@ -165,6 +165,7 @@ export default Ember.Component.extend({
     'model.show_optional_caption',
     'model.show_optional_content',
     'model.show_branding',
+    'model.show_thankyou',
     'model.sound',
     'model.size',
     'model.text_color',
@@ -184,6 +185,7 @@ export default Ember.Component.extend({
     'model.text_field_background_opacity',
     'model.text_field_font_size',
     'model.text_field_font_family',
+    'model.thank_you_text',
     'isMobile'
   ),
 
@@ -227,7 +229,7 @@ export default Ember.Component.extend({
         subtype: this.get('model.element_subtype'),
         tab_side: 'right',
         template_name: (this.get('model.type') || 'bar').toLowerCase() + '_' + (this.get('model.element_subtype') || 'traffic'),
-        thank_you_text: 'Thanks for signing up!',
+        thank_you_text: this.get('model.thank_you_text') || 'Thanks for signing up!',
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,

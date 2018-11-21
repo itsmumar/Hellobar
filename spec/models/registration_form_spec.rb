@@ -70,5 +70,18 @@ describe RegistrationForm do
         expect(form.cta).to include 'Start Your 90 Day Free Trial'
       end
     end
+
+    context 'neil signup' do
+      let(:cookies) { Hash[neil_signup: 'true'] }
+
+      it 'displays neil signup title' do
+        expect(form.title)
+          .to include 'Hey Neil Patel Fans! Grab Your Cyber Monday 50% Off Deal (24 Hours Only)'
+      end
+
+      it 'displays neil signup cta' do
+        expect(form.cta).to include 'Sign Up & Save Now'
+      end
+    end
   end
 end
