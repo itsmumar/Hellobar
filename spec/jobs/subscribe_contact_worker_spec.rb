@@ -154,8 +154,8 @@ describe SubscribeContactWorker do
       context 'when contact list not found' do
         let(:contact) { make_contact(999, ' email@example.com ', '') }
 
-        it 'raises ActiveRecord::RecordNotFound' do
-          expect { contact.contact_list }.to raise_error ActiveRecord::RecordNotFound
+        it 'return nil' do
+          expect(contact.contact_list).to be_nil
         end
       end
     end

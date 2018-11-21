@@ -23,6 +23,10 @@ export default Ember.Component.extend({
   onlyTopBarStyleIsAvailable: Ember.computed.equal('model.element_subtype', 'call'),
   notOnlyTopBarStyleIsAvailable: Ember.computed.not('onlyTopBarStyleIsAvailable'),
 
+  checkThankYou: function () {
+    this.set('model.show_thankyou',false);
+  }.property('model.type'),
+
   actions: {
     select(type) {
       this.set('type', type);

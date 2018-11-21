@@ -125,7 +125,7 @@ class SiteElementsController < ApplicationController
       :phone_country_code, :phone_number, :placement, :pushes_page_down,
       :question, :remains_at_top, :rule_id, :show_branding, :size, :text_color,
       :thank_you_text, :theme_id, :type, :use_question, :show_optional_content,
-      :view_condition_attribute, :view_condition, :wiggle_button,
+      :view_condition_attribute, :view_condition, :wiggle_button, :show_thankyou,
       :use_default_image, :sound, :notification_delay, :trigger_color,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,

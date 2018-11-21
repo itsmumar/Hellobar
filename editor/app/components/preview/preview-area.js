@@ -165,6 +165,7 @@ export default Ember.Component.extend({
     'model.show_optional_caption',
     'model.show_optional_content',
     'model.show_branding',
+    'model.show_thankyou',
     'model.sound',
     'model.size',
     'model.text_color',

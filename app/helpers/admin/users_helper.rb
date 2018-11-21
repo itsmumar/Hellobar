@@ -29,6 +29,7 @@ module Admin::UsersHelper
   end
 
   def site_title(site)
+    return site.display_url unless site&.current_subscription
     trial_info = " (trial ends #{ site.current_subscription.trial_end_date.to_date })" if site.current_subscription&.trial_end_date
     subscription_name = site.deleted? ? 'Deleted' : site.current_subscription.values[:name]
     "#{ site.display_url } - #{ subscription_name }#{ trial_info }#{ active_subscription_name(site) }"

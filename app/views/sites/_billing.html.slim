@@ -107,8 +107,8 @@ section
 
 
 
-  - if ((@site.growth_or_pro? || @site.elite?) && !@site.current_subscription.currently_on_trial?)
-    ' Next bill is due on #{format_date(@site.current_subscription.bills.last.end_date)} and will total #{number_to_currency(@site.current_subscription.bills.last.amount)} for a #{@site.current_subscription.schedule} subscription.
+  - if @site.next_bill && ((@site.growth_or_pro? || @site.elite?) && !@site.current_subscription.currently_on_trial?)
+    ' Next bill is due on #{format_date(@site.next_bill.bill_at)} and will total #{number_to_currency(@site.next_bill.amount)} for a #{@site.current_subscription.schedule} subscription.
 
 
   - if @next_bill && @next_bill.amount > 0 || @next_overage_bills
