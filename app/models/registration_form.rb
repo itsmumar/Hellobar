@@ -33,8 +33,9 @@ class RegistrationForm
   end
 
   def title
+    return neil_title if neil_signup?
     return default_title unless promotional_signup? || affiliate_signup? || paid_signup?
-    return paid_title if paid_signup?
+    return paid_title if paid_signup? && !neil_signup?
     return promotional_signup_title unless affiliate_signup?
     return affiliate_signup_title unless partner?
 
@@ -42,6 +43,7 @@ class RegistrationForm
   end
 
   def cta
+    return neil_cta if neil_signup?
     return default_cta unless promotional_signup? || affiliate_signup? || paid_signup?
     return promotional_signup_cta unless affiliate_signup? || paid_signup?
     return affiliate_signup_cta unless partner? || paid_signup?
@@ -59,6 +61,10 @@ class RegistrationForm
 
   def paid_title
     I18n.t :paid_title, scope: :registration
+  end
+
+  def neil_title
+    I18n.t :neil_title, scope: :registration
   end
 
   def promotional_signup_title
@@ -79,6 +85,10 @@ class RegistrationForm
     duration = PromotionalPlan.new.duration
 
     I18n.t :paid_cta, scope: :registration, duration: duration
+  end
+
+  def neil_cta
+    I18n.t :neil_cta, scope: :registration
   end
 
   def affiliate_signup_title
@@ -112,6 +122,10 @@ class RegistrationForm
 
   def paid_signup?
     @cookies[:the_plan] == 'paid'
+  end
+
+  def neil_signup?
+    @cookies[:neil_signup] == 'true'
   end
 
   def promotional_signup?
