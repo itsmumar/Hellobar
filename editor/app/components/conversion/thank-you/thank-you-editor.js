@@ -60,9 +60,8 @@ export default Ember.Component.extend({
     changeAfterSubmitValue(selection) {
       const component = this;
 
-      if(selection.key == 'default_message')
-      {
-        this.set('model.thank_you_text', 'Thanks for signing up!')
+      if (selection.key === 'default_message') {
+        this.set('model.thank_you_text', 'Thanks for signing up!');
       }
 
       const setValue = () => {
