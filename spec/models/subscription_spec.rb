@@ -28,6 +28,18 @@ describe Subscription do
     end
   end
 
+  describe '.from_plan' do
+    it 'returns a new subscription' do
+      expect(Subscription.from_plan('growth-monthly')).to be_a Subscription::Growth
+      expect(Subscription.from_plan('elite-monthly')).to be_a Subscription::Elite
+      expect(Subscription.from_plan('pro_special-monthly')).to be_a Subscription::ProSpecial
+      expect(Subscription.from_plan('free-monthly')).to be_a Subscription::Free
+
+      expect(Subscription.from_plan('free-monthly')).to be_monthly
+      expect(Subscription.from_plan('free-yearly')).to be_yearly
+    end
+  end
+
   describe '.paid scope' do
     let!(:paid_subscription) { create(:subscription, :pro) }
     let!(:unpaid_subscription) { create(:subscription, :pro) }

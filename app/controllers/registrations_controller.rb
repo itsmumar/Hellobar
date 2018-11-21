@@ -6,7 +6,7 @@ class RegistrationsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :render_errors
 
   def new
-    cookies[:the_plan] = 'paid' if params[:plan].present? && params[:plan] =~ /(growth|elite)/
+    cookies[:the_plan] = 'paid' if params[:plan].present? && params[:plan] =~ /(pro|growth|elite)/
     cookies[:utm_campaign] = params[:utm_campaign] if params[:utm_campaign].present?
     @form = RegistrationForm.new(params, cookies)
     @form.ignore_existing_site = @form.existing_site_url?
@@ -27,7 +27,7 @@ class RegistrationsController < ApplicationController
   end
 
   def subscribe
-    @plan = params[:plan].split('-')
+    @subscription = Subscription.from_plan(params[:plan])
     @form = PaymentForm.new(params[:credit_card])
 
     render layout: 'static'

@@ -333,6 +333,10 @@ class Site < ApplicationRecord
     Time.current.to_date > subscriptions.last.trial_end_date.to_date if subscriptions.last&.trial_end_date
   end
 
+  def next_bill
+    bills.pending.first || bills.failed.first
+  end
+
   private
 
   def display_uri

@@ -20,6 +20,7 @@ export default Ember.Component.extend(HasTriggerOptions, ElementSubtype, {
   ],
 
   canWiggle: function () {
+    this.set('model.show_thankyou',false);
     const goal = this.get('model.element_subtype');
     const type = this.get('model.type');
     return type === 'Bar' && (goal === 'traffic' || goal  === 'email');

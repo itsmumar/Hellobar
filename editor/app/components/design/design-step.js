@@ -25,6 +25,7 @@ export default Ember.Component.extend({
   }.property('model.type'),
 
   propertiesComponentNameForGoal: function() {
+    this.set('model.show_thankyou',false);
     const goal = this.get('model.element_subtype');
 
     if (!goal) {

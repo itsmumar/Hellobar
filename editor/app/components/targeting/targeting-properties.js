@@ -32,6 +32,7 @@ export default Ember.Component.extend({
   cannotTarget: Ember.computed.not('canTarget'),
 
   selectedRule: function () {
+    this.set('model.show_thankyou',false);
     const ruleId = this.get('model.rule_id');
     const rules = this.get('rules');
     const selectedOption = _.find(rules, ({ id }) => id === ruleId);

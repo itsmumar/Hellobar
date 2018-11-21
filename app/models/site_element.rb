@@ -1,6 +1,8 @@
 class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
+  attr_writer :show_thankyou
+
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
   DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
   DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
@@ -292,6 +294,10 @@ class SiteElement < ApplicationRecord
         statistics = FetchSiteStatistics.new(site).call
         statistics.for_element(id)
       end
+  end
+
+  def show_thankyou
+    @show_thankyou || false
   end
 
   private
