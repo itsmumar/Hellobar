@@ -26,6 +26,9 @@
   background: rgba(0, 0, 0, 0.85);
 }
 
+
+
+
 /*-----------  Text  -----------*/
 
 #hellobar-modal .hb-text-wrapper .hb-secondary-text {
@@ -149,4 +152,13 @@
 .autodetect #hellobar-slider .hb-cta {
   padding-left: 8px;
   padding-right: 8px;
+}
+@media screen and (max-width: 640px) {
+  .hb-headline-text .fr-view p{
+    font-size: 100%;
+  }
+  .hb-headline-text .fr-view p span > span.subspan,
+  .hb-headline-text .fr-view p.noteditedstyle{
+    font-size: 80%;
+  }
 }

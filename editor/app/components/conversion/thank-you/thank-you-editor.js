@@ -59,6 +59,11 @@ export default Ember.Component.extend({
   actions: {
     changeAfterSubmitValue(selection) {
       const component = this;
+
+      if (selection.key === 'default_message') {
+        this.set('model.thank_you_text', 'Thanks for signing up!');
+      }
+
       const setValue = () => {
         this.set('afterSubmitOptionSelected', selection);
         this.set('model.settings.after_email_submit_action', selection.value);

@@ -186,7 +186,6 @@ export default Ember.Component.extend({
     'model.text_field_font_size',
     'model.text_field_font_family',
     'model.thank_you_text',
-    'model.settings.after_email_submit_action',
     'isMobile'
   ),
 
@@ -217,9 +216,6 @@ export default Ember.Component.extend({
     };
     const font = getFont();
     const currentTheme = this.get('theming.currentTheme');
-    const thankYouText = this.get('model.settings.after_email_submit_action') === 0 ?
-      this.get('model.default_email_thank_you_text') : this.get('model.thank_you_text');
-
     let previewElement = $.extend({}, this.get('model'), {
         animated: withAnimations && this.get('model.animated'),
         hide_destination: true,
@@ -233,7 +229,7 @@ export default Ember.Component.extend({
         subtype: this.get('model.element_subtype'),
         tab_side: 'right',
         template_name: (this.get('model.type') || 'bar').toLowerCase() + '_' + (this.get('model.element_subtype') || 'traffic'),
-        thank_you_text: thankYouText,
+        thank_you_text: this.get('model.thank_you_text') || 'Thanks for signing up!',
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,
