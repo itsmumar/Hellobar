@@ -154,11 +154,14 @@
   padding-right: 8px;
 }
 @media screen and (max-width: 640px) {
-  .hb-headline-text .fr-view p{
+  .hb-headline-text .fr-view p,
+  .hb-secondary-text .fr-view p{
     font-size: 100%;
   }
   .hb-headline-text .fr-view p span > span.subspan,
-  .hb-headline-text .fr-view p.noteditedstyle{
+  .hb-secondary-text .fr-view p span > span.subspan,
+  .hb-headline-text .fr-view p.noteditedstyle,
+  .hb-secondary-text .fr-view p.noteditedstyle{
     font-size: 80%;
   }
 }

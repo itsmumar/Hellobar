@@ -86,7 +86,6 @@
       fill: white;
     }
   }
-  #hellobar-bar,
   #hellobar-modal,
   #hellobar-takeover,
   #hellobar-slider {
@@ -98,72 +97,6 @@
       bottom: 0;
       left: 0;
       pointer-events: none;
-    }
-  }
-  #hellobar-bar {
-    .hb-text-wrapper {
-      margin-left: 10px;
-      margin-right: 10px;
-      padding-bottom: 4px;
-    }
-    .hb-headline-text {
-      font-size: 1.3em;
-      margin-bottom: 0;
-      text-transform: none;
-    }
-    .hb-input-block {
-      margin-bottom: 4px;
-      margin-top: 4px;
-      &:before {
-        left: 13px;
-        top: 11px;
-        width: 16px;
-        height: 16px;
-      }
-      input {
-        font-size: 15px;
-        height: 36px;
-        padding: 0 0 0 10px;
-      }
-    }
-    .hb-cta {
-      font-size: 18px;
-      margin: 4px 10px;
-      .hb-text-holder {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    }
-    .icon-close {
-      font-size: 15px;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-51%);
-    }
-    @media screen and (max-width: 640px) {
-      .hb-input-block {
-        &:before {
-          top: 14px;
-        }
-      }
-    }
-    @media screen and (max-width: 840px) {
-      .hb-headline-text {
-        font-size: 1.1em;
-      }
-      .hb-input-block {
-        margin-bottom: 0;
-        margin-top: 0;
-        input {
-          font-size: 13px;
-        }
-      }
-      .hb-cta {
-        font-size: 16px;
-        margin: 2px 6px;
-      }
     }
   }
   #hellobar-modal {
