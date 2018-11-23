@@ -108,3 +108,13 @@
   name: 'Oswald'
   value: "'Oswald', sans-serif"
   google_font: 'Oswald'
+-
+  id: pacifico
+  name: 'Pacifico'
+  value: "'Pacifico', cursive"
+  google_font: 'Pacifico'
+-
+  id: paytone_one
+  name: 'Paytone One'
+  value: "'Paytone One', sans-serif"
+  google_font: 'Paytone+One'
