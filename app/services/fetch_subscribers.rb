@@ -41,6 +41,7 @@ class FetchSubscribers
   def build_request
     query = {
       table_name: table_name,
+      index_name: INDEX_NAME,
       key_condition_expression: 'lid = :lidValue',
       expression_attribute_values: { ':lidValue' => contact_list.id },
       expression_attribute_names: { '#s' => 'status', '#e' => 'error' },
