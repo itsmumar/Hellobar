@@ -156,10 +156,18 @@ export default Ember.Component.extend({
       };
     }
 
+    // Close On Clicking iframe
+    let preview = $('#hellobar-preview-container iframe').prop('contentDocument')
+    $(preview).on('click', () => { this.$().spectrum('hide') })
+
     this.$().spectrum(opts);
   },
 
   willDestroyElement: function() {
     this.$().spectrum('destroy');
+
+    // Unbind iframe Click Event
+    let preview = $('#hellobar-preview-container iframe').prop('contentDocument')
+    $(preview).off('click')
   }
 });
