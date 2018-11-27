@@ -8,12 +8,8 @@
   min-height: 120px;
 }
 
-#hellobar-slider.show-branding .slider-content {
-  padding-bottom: 38px;
-}
-
 #hellobar-slider .slider-content {
-  padding: 18px 25px 20px;
+  padding: 18px 25px 10px;
 }
 
 #hellobar-slider .hb-content-wrapper {
@@ -49,19 +45,6 @@
   padding-right: 20px;
 }
 
-/*-----------  Call to Acton Button  -----------*/
-
-#hellobar-slider .hb-cta {
-  margin: 12px 0 0 0;
-  display: inline-block;
-  padding: 0;
-  font-size: 0.95em;
-}
-
-#hellobar-slider .hb-cta .hb-text-holder {
-  border-radius: inherit;
-}
-
 /*-----------  Logos  -----------*/
 
 #hellobar-slider .hb-logo-wrapper {
@@ -71,15 +54,10 @@
 }
 
 #hellobar-slider .hb-logo-wrapper.original, #hellobar-slider .hb-logo-wrapper.animated {
+  position: relative;
+  text-align: center;
   opacity: 0.2;
-  position: absolute;
-  right: -16px;
-  bottom: 0px;
 }
-
-#hellobar-slider.email .hb-logo-wrapper.original, #hellobar-slider.email .hb-logo-wrapper.animated {
-}
-
 #hellobar-slider .hb-logo-wrapper.original:hover, #hellobar-slider .hb-logo-wrapper.animated:hover {
   opacity: 0.4;
 }
@@ -125,7 +103,8 @@
   align-items: center;
   justify-content: center;
   max-width: 100%;
-  margin-top: 0.67em;
+  margin-top: 1em;
+  padding: 0;
 }
 
 #hellobar-slider .hb-input-wrapper.hb-both-inputs .hb-input-block {
