@@ -47,32 +47,13 @@
       max-width: none;
       margin: 0;
     }
-    input {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      &::-webkit-input-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-      &::-moz-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-      &:-ms-input-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-    }
   }
   .hb-cta {
-    display: block;
-    font-size: 1.2em;
     font-weight: 700;
-    margin-top: 1em;
     letter-spacing: 2px;
     box-shadow: 0px 4px 20px -7px black;
     max-width: inherit;
+
     &:hover {
       opacity: 0.95;
     }
@@ -143,15 +124,6 @@
       font-size: 14px;
       color: #ffffff;
     }
-    .hb-cta {
-      font-size: 19px;
-      padding: 6px;
-      .fr-wrapper{
-        .fr-element{
-          letter-spacing: 1px;
-        }
-      }
-    }
     .hb-input-wrapper{
       margin: 1.33em 0 auto 0;
       max-width: none;
@@ -163,10 +135,7 @@
       }
       .hb-content-wrapper{
         .hb-inner-content {
-          padding: 48px 12%;
-          .hb-headline-text{
-            font-size: 1.6em;
-          }
+          padding: 48px 38px;
         }
       }
     }
@@ -182,7 +151,7 @@
       left: 10%;
       padding: 0;
       height: 100%;
-      width: 40%;
+      width: 100%;
       font-size: 20px;
       text-align: left;
       transform: translate(0%, 0%);
@@ -190,7 +159,7 @@
       -moz-transform: translate(0%, 0%);
       -webkit-transform: translate(0%, 0%);
       margin: 0;
-      max-width: none;
+      max-width: 540px;
       .hb-inner-content {
         top: 50%;
         left: 50%;
@@ -215,7 +184,8 @@
       bottom: 2em;
     }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
-      padding-left: 43%;
+      margin-left: 10%;
+      max-width: 540px;
     }
     .hb-headline-text {
       font-size: 2.3em;
@@ -263,7 +233,7 @@
         margin: 0;
       }
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
-        padding-left: 0;
+        margin-left: 0%;
       }
       .hb-cta {
         font-size: 18px;

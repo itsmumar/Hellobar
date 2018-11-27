@@ -1,6 +1,6 @@
 .azuki {
   #hellobar-modal {
-    padding: 10px;
+    padding:  0 0 30px 0px;
     .hb-header {
       display: none;
     }
@@ -15,11 +15,10 @@
       display: flex;
       flex-direction: column;
     }
-
     .hb-content-wrapper{
       font-size: 14px;
       .hb-inner-content{
-        margin-top: 10px;
+        margin-top: 20px;
       }
       .hb-image-holder {
         .uploaded-image {
@@ -64,10 +63,6 @@
     .hb-name-input {
       margin-bottom: 5px;
     }
-    .hb-cta {
-      padding: 9px;
-      text-transform: uppercase;
-    }
     .icon-close {
       top: -24px;
       right: 0;
@@ -82,16 +77,8 @@
       background-position: center;
     }
     .hb-logo-wrapper {
-      opacity: 0.4;
-      position: absolute;
-      left: 0;
-      right: 0;
       margin-top: 1.75em;
-      svg{
-        *{
-          fill: #ffffff;
-        }
-      }
+      margin-bottom: -1.5em;
     }
     .questionslist {
       display: flex;
@@ -138,7 +125,6 @@
       }
     }
   }
-
   #hellobar-takeover {
     .image-background .hb-image-wrapper.background {
       height: 50%;
@@ -167,10 +153,6 @@
     }
     .hb-input-wrapper{
       max-width: 540px;
-      margin: 1.33em auto 0;
-    }
-    .hb-input-block input {
-      font-size: .7em;
     }
     .hb-name-input {
       margin-bottom: 12px;
@@ -178,9 +160,15 @@
     .hb-header{
       display: none;
     }
-    @media screen and (max-width:640px){
+  }
+  @media screen and (max-width:640px){
+    #hellobar-takeover {
+      font-size: 22px;
       .hb-image-wrapper{
         height: 35%;
+      }
+      .hb-content-wrapper{
+        top: 65%;
       }
     }
   }
@@ -193,9 +181,7 @@
     }
     .hb-image-wrapper.background ~ .slider-content {
       margin-top: 130px;
-      display: flex;
-      flex-direction: column;
-      padding: 15px 25px;
+      padding: 5px 25px;
     }
     .hb-image-wrapper{
       padding: 0px;
@@ -203,14 +189,8 @@
       height: 130px;
       background-position: center;
     }
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
-    }
-    .hb-cta {
-      padding: 12px
+    .hb-cta{
+      max-width: none;
     }
   }
 }
-

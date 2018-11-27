@@ -41,6 +41,7 @@
   margin-top: 2.75em;
   margin-bottom: -2.5em;
   font-size: 0.75em;
+  text-align: center;
 }
 
 #hellobar-modal .hb-logo-wrapper.original, #hellobar-modal .hb-logo-wrapper.animated {
@@ -91,13 +92,13 @@
 
 #hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 #hellobar-modal .hb-cta {
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #hellobar-modal .hb-cta .hb-text-holder {
@@ -154,14 +155,20 @@
   padding-right: 8px;
 }
 @media screen and (max-width: 640px) {
-  .hb-headline-text .fr-view p,
-  .hb-secondary-text .fr-view p{
+  #hellobar-modal .hb-headline-text .fr-view p,
+  #hellobar-takeover .hb-headline-text .fr-view p,
+  #hellobar-modal .hb-secondary-text .fr-view p,
+  #hellobar-takeover .hb-secondary-text .fr-view p{
     font-size: 100%;
   }
-  .hb-headline-text .fr-view p span > span.subspan,
-  .hb-secondary-text .fr-view p span > span.subspan,
-  .hb-headline-text .fr-view p.noteditedstyle,
-  .hb-secondary-text .fr-view p.noteditedstyle{
+  #hellobar-modal .hb-headline-text .fr-view p span > span.subspan,
+  #hellobar-modal .hb-secondary-text .fr-view p span > span.subspan,
+  #hellobar-modal .hb-headline-text .fr-view p.noteditedstyle,
+  #hellobar-modal .hb-secondary-text .fr-view p.noteditedstyle,
+  #hellobar-takeover .hb-headline-text .fr-view p span > span.subspan,
+  #hellobar-takeover .hb-secondary-text .fr-view p span > span.subspan,
+  #hellobar-takeover .hb-headline-text .fr-view p.noteditedstyle,
+  #hellobar-takeover .hb-secondary-text .fr-view p.noteditedstyle{
     font-size: 80%;
   }
 }
