@@ -158,7 +158,7 @@ export default Ember.Component.extend({
 
     // Close On Clicking iframe
     let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
-    $(preview).on('click', () => { this.$().spectrum('hide') });
+    $(preview).on('click', () => { this.$().spectrum('hide'); });
 
     this.$().spectrum(opts);
   },
