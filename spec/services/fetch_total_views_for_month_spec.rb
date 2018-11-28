@@ -2,7 +2,7 @@ describe FetchTotalViewsForMonth do
   let(:site) { create :site, :with_rule }
   let(:site_element) { create :site_element, site: site }
   let(:service) { FetchTotalViewsForMonth.new([site]) }
-  let(:search_url) { "#{ Settings.elastic_search_endpoint }/test_over_time/over_time_type/_search" }
+  let(:search_url) { "#{ Settings.elastic_search_endpoint }/test_over_time/test_over_time_type/_search" }
   let(:from_date) { WeirdDate.from_date(Date.current.beginning_of_month) }
   let(:to_date) { WeirdDate.from_date(Date.current.end_of_month) }
   let(:number_of_views) { 42 }
