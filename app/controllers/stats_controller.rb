@@ -11,13 +11,16 @@ class StatsController < ApplicationController
   private
 
   def mtd
+    beginning_of_webinars = Date.parse("October 5, 2018").midnight
     date = Date.current.beginning_of_month.midnight
     end_of_month = Date.current.end_of_month.end_of_day
     @mtd_paid = Subscription.where(created_at: date..end_of_month).non_free.where(trial_end_date: nil).count
     @mtd_trials = Subscription.where(created_at: date..end_of_month).non_free.count - @mtd_paid
     @mtd_elite = Subscription.where(created_at: date..end_of_month).non_free.elite.count
     @mtd_custom = Subscription.where(created_at: date..end_of_month).non_free.custom.count
-    @mtd_converted = Subscription.where(created_at: (date - 30.days)..end_of_month).ended_trial.paid.count
+    @mtd_pro_special = Subscription.where(created_at: date..end_of_month).non_free.pro_special.count
+    @mtd_converted = Subscription.where(trial_end_date: date..end_of_month).ended_trial.joins(:bills).merge(Bill.paid.non_free).distinct.count
+    @all_converted = Subscription.where(created_at: beginning_of_webinars..end_of_month).ended_trial.joins(:bills).merge(Bill.paid.non_free).distinct.count
   end
 
   def calculate_today
@@ -26,6 +29,7 @@ class StatsController < ApplicationController
     @today_trials = Subscription.where(created_at: date.midnight..date.end_of_day).non_free.count - @today_stats
     @today_elite = Subscription.where(created_at: date.midnight..date.end_of_day).elite.count
     @today_custom = Subscription.where(created_at: date.midnight..date.end_of_day).custom.count
+    @today_pro_special = Subscription.where(created_at: date.midnight..date.end_of_day).pro_special.count
   end
 
   def calculate_tomorrow
@@ -34,6 +38,7 @@ class StatsController < ApplicationController
     @yesterday_trials = Subscription.where(created_at: yesterday.midnight..yesterday.end_of_day).non_free.count - @yesterday_stats
     @yesterday_elite = Subscription.where(created_at: yesterday.midnight..yesterday.end_of_day).non_free.elite.count
     @yesterday_custom = Subscription.where(created_at: yesterday.midnight..yesterday.end_of_day).custom.count
+    @yesterday_pro_special = Subscription.where(created_at: yesterday.midnight..yesterday.end_of_day).pro_special.count
   end
 
   def calculate_day_before
@@ -42,5 +47,6 @@ class StatsController < ApplicationController
     @day_before_trials = Subscription.where(created_at: day_before.midnight..day_before.end_of_day).non_free.count - @day_before_stats
     @day_before_elite = Subscription.where(created_at: day_before.midnight..day_before.end_of_day).non_free.elite.count
     @day_before_custom = Subscription.where(created_at: day_before.midnight..day_before.end_of_day).custom.count
+    @day_before_pro_special = Subscription.where(created_at: day_before.midnight..day_before.end_of_day).pro_special.count
   end
 end
