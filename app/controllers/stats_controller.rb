@@ -11,7 +11,7 @@ class StatsController < ApplicationController
   private
 
   def mtd
-    beginning_of_webinars = Date.parse("October 5, 2018").midnight
+    beginning_of_webinars = Date.parse('October 5, 2018').midnight
     date = Date.current.beginning_of_month.midnight
     end_of_month = Date.current.end_of_month.end_of_day
     @mtd_paid = Subscription.where(created_at: date..end_of_month).non_free.where(trial_end_date: nil).count
