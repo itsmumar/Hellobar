@@ -5,6 +5,10 @@ class OverTimeIndex < Chewy::Index
     field :v, type: 'integer'
     field :sid, type: 'integer'
 
+    def self.type_name
+      "#{ Rails.env }_over_time_type"
+    end
+
     def conversions
       c
     end
