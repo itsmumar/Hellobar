@@ -7,8 +7,8 @@ describe SenderAddress do
   it { is_expected.to validate_presence_of :city }
   it { is_expected.to validate_presence_of :postal_code }
 
-  context "if in USA" do
-    before { allow(subject).to receive(:country).and_return("US") }
+  context 'if in USA' do
+    before { allow(subject).to receive(:country).and_return('US') }
     it { should validate_presence_of(:state) }
   end
 end

@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       end
 
       resources :emails, only: %i[create show update]
+
+      resources :sender_addresses, only: %i[create show update]
     end
 
     # Used by Lambda functions
