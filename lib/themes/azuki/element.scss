@@ -16,7 +16,6 @@
       flex-direction: column;
     }
     .hb-content-wrapper{
-      font-size: 14px;
       .hb-inner-content{
         margin-top: 20px;
       }
@@ -93,7 +92,6 @@
   }
   @media screen and (max-width:640px){
     #hellobar-modal {
-      width: calc(100% - 20px);
       .hb-text-wrapper{
         padding: 0 1.7em;
       }

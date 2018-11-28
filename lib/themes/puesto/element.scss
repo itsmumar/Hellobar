@@ -175,7 +175,6 @@
   }
   @media screen and (max-width: 640px) {
     #hellobar-modal {
-      width: calc(100% - 20px);
       padding: 1.5em;
       &.image-right{
         .hb-image-wrapper {
@@ -204,14 +203,9 @@
       max-width: 600px;
       margin: 0 auto;
     }
-
     .hb-input-wrapper {
       margin: 20px auto 0;
       max-width: 600px;
-    }
-
-    .hb-logo-wrapper {
-      bottom: 2em;
     }
     .uploaded-image {
       max-height: 300px;
@@ -241,11 +235,6 @@
       font-size: 0.7em;
       padding: .8em 1.33em;
     }
-    .icon-close {
-      font-size: 20px;
-      top: 40px;
-      right: 40px;
-    }
     .hb-input-wrapper{
       max-width: none;
     }
@@ -269,21 +258,6 @@
     @media screen and (max-width: 640px) {
       .hb-image-wrapper {
         display: none;
-      }
-      .hb-headline-text {
-        font-size: 1.2em;
-      }
-      [data-hb-editable-block="caption"] {
-        font-size: 0.8em;
-      }
-      [data-hb-editable-block="content"] {
-        font-size: 0.7em;
-      }
-      .hb-input-block {
-        input {
-          font-size: 16px;
-          height: 50px !important;
-        }
       }
       .hb-content-wrapper{
         padding: 1em;
@@ -331,45 +305,6 @@
     [data-hb-editable-block="caption"] {
       font-size: 1em;
     }
-    .hb-input-block {
-      &:before {
-        left: 16px;
-        top: 13px;
-        width: 16px;
-        height: 16px;
-      }
-      input {
-        font-size: 13px;
-        height: 40px;
-        padding: 0 0 0 10px;
-      }
-    }
-    .hb-cta {
-      font-size: 14px;
-      padding: 9px;
-      display: block;
-    }
-    .hb-logo-wrapper {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      text-align: center;
-      margin: 5px 25px 15px 20px;
-      opacity: 0.2;
-      &:hover {
-        opacity: 0.4;
-      }
-      svg {
-        width: 30px;
-        height: 20px;
-        border-radius: 3px;
-      }
-    }
-    .icon-close {
-      font-size: 12px;
-      top: 14px;
-      right: 14px;
-    }
     &.image-right {
       .hb-inner-content {
         width: 60%;
@@ -384,15 +319,6 @@
         float: none;
         display: table;
       }
-    }
-  }
-  #hellobar-alert {
-    #hb-answer1, #hb-answer2{
-      padding: 5px;
-    }
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
     }
   }
 }

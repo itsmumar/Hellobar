@@ -138,12 +138,6 @@
       }
     }
   }
-  @media screen and (max-width: 640px) {
-    #hellobar-modal{
-      width: calc(100% - 20px);
-    }
-  }
-
   #hellobar-modal.mobile {
     .hb-image-wrapper.background ~ .hb-content-wrapper {
       padding-left: 24px;

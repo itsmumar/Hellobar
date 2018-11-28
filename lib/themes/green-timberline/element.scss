@@ -2,15 +2,12 @@
   .hb-header {
     display: none;
   }
-
   #hellobar-slider {
     border-radius: 5px;
-
     .hb-headline-text {
       font-size: 16px;
       line-height: 20px;
     }
-
     .hb-secondary-text {
       font-size: 14px;
       line-height: 20px;
@@ -19,59 +16,48 @@
       padding-left: 8px;
       padding-right: 8px;
     }
-
     .slider-content {
       padding: 18px 25px 20px;
       font-size: 16px;
     }
-
     &.show-branding {
       .slider-content {
         padding-bottom: 38px;
       }
     }
   }
-
   #hellobar-modal {
     border-radius: 10px;
-
     .hb-headline-text {
       font-size: 28px;
       line-height: 40px;
     }
-
     .hb-secondary-text {
       font-size: 16px;
       line-height: 28px;
       margin-top: 15px;
     }
-
     .hb-cta {
       font-size: 18px;
       padding: 8px;
     }
-
     .hb-name-input {
       margin-bottom: 5px;
     }
   }
-
   #hellobar-takeover {
     .hb-headline-text {
       font-size: 34px;
       line-height: 48px;
     }
-
     .hb-secondary-text {
       font-size: 18px;
       line-height: 32px;
       margin-top: 15px;
     }
-
     .hb-input-block input {
       font-size: .7em;
     }
-
     .hb-name-input {
       margin-bottom: 12px;
     }

@@ -1,30 +1,28 @@
 .classic {
   #hellobar-modal {
+    .hb-text-wrapper{
+      .hb-headline-text{
+        font-size: 2em;
+      }
+    }
     .hb-name-input {
       margin-bottom: 5px;
     }
-    .hb-cta {
-      padding: 7px;
-    }
   }
-
   #hellobar-takeover {
     .hb-input-block input {
       font-size: .7em;
     }
-
     .hb-name-input {
       margin-bottom: 12px;
     }
   }
-
   #hellobar-slider {
     &.show-branding {
       .slider-content {
         padding-bottom: 38px;
       }
     }
-
     .hb-cta {
       padding: 7px;
       display: inline-flex;
@@ -34,6 +32,5 @@
     {
       padding: 7px;
     }
-
   }
 }

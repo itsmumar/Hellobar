@@ -2,20 +2,13 @@
   .hb-header {
     display: none;
   }
-  #hellobar-bar {
-    .hb-cta {
-      -webkit-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-      -moz-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-      box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-    }
+  .hb-cta {
+    -webkit-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
+    -moz-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
+    box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
   }
   #hellobar-slider {
     border-radius: 0px;
-    .hb-cta {
-      -webkit-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-      -moz-box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-      box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.34);
-    }
   }
   #hellobar-modal {
     border-radius: 10px;
@@ -31,10 +24,6 @@
     .hb-cta {
       font-size: 18px;
       border-radius: 10px;
-      -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
-      -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
-      box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
-      padding: 7px;
     }
     .hb-name-input {
       margin-bottom: 5px;
@@ -49,11 +38,6 @@
       font-size: 22px;
       line-height: 40px;
       margin-top: 15px;
-    }
-    .hb-cta {
-      -webkit-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
-      -moz-box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
-      box-shadow: 0px 3px 0px 0px rgba(0,0,0,0.34);
     }
     .hb-input-block input {
       font-size: .7em;

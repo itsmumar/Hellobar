@@ -37,12 +37,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       opacity: 0.95;
     }
   }
-  .hb-logo-wrapper {
-    opacity: 0.6;
-    svg {
-      fill: white;
-    }
-  }
   #hellobar-bar,
   #hellobar-modal,
   #hellobar-takeover,
@@ -207,9 +201,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       margin: 20px auto 0;
       max-width: 600px;
     }
-    .hb-logo-wrapper {
-      bottom: 2em;
-    }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
     }
@@ -259,11 +250,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     .hb-cta {
       font-size: 28px;
     }
-    .icon-close {
-      font-size: 20px;
-      top: 40px;
-      right: 40px;
-    }
   }
   #hellobar-slider {
     .slider-content {
@@ -293,47 +279,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     [data-hb-editable-block="caption"] {
       font-size: 1.2em;
     }
-    .hb-input-block {
-      &:before {
-        left: 16px;
-        top: 13px;
-        width: 16px;
-        height: 16px;
-      }
-      input {
-        font-size: 13px;
-        height: 40px;
-        padding: 0 0 0 5px;
-      }
-    }
-    .hb-cta {
-      font-size: 17px;
-      padding: 6px;
-      display: block;
-      display: inline-flex;
-      align-items: center;
-    }
-    .hb-logo-wrapper {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      text-align: center;
-      margin: 5px 25px 15px 20px;
-      opacity: 0.2;
-      &:hover {
-        opacity: 0.4;
-      }
-      svg {
-        width: 30px;
-        height: 20px;
-        border-radius: 3px;
-      }
-    }
-    .icon-close {
-      font-size: 12px;
-      top: 14px;
-      right: 14px;
-    }
     &.image-background {
       .slider-content {
         margin-left: 43%;
@@ -348,15 +293,8 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     }
   }
   #hellobar-alert {
-    #hb-answer1, #hb-answer2{
-      padding: 5px;
-    }
     .image-background .hb-image-wrapper.background {
       width: 45%;
-    }
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
     }
     #hellobar-slider.image-background {
       .slider-content {

@@ -123,11 +123,6 @@
       }
     }
   }
-  @media screen and (max-width: 640px) {
-    #hellobar-modal{
-      width: calc(100% - 20px);
-    }
-  }
   #hellobar-takeover {
     .hb-content-wrapper {
       top: 0;
@@ -165,9 +160,6 @@
       margin: 20px auto 0;
       max-width: none;
     }
-    .hb-logo-wrapper {
-      bottom: 2em;
-    }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
     }
@@ -182,19 +174,6 @@
     [data-hb-editable-block="content"] {
       font-size: 1em;
       margin: 0 0 10px;
-    }
-    .hb-input-block {
-      input {
-        font-size: 17px;
-        height: 6rem;
-        padding: 0;
-        text-align:center;
-      }
-    }
-    .icon-close {
-      font-size: 20px;
-      top: 40px;
-      right: 40px;
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
@@ -219,25 +198,6 @@
       }
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
         padding-left: 0;
-      }
-      .hb-cta {
-        font-size: 18px;
-        height: 3rem !important;
-      }
-      .hb-input-block {
-        input{
-          height: 3rem !important;
-        }
-      }
-      .hb-headline-text {
-        font-size: 1.5em;
-        margin-bottom: 20px;
-      }
-      [data-hb-editable-block="caption"] {
-        font-size: 0.8em;
-      }
-      [data-hb-editable-block="content"] {
-        font-size: 0.7em;
       }
     }
   }
@@ -267,61 +227,7 @@
       font-size: 1.5em;
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1.2em;
-    }
-    .hb-input-block {
-      &:before {
-        left: 16px;
-        top: 13px;
-        width: 16px;
-        height: 16px;
-      }
-      input {
-        font-size: 13px;
-        height: 40px;
-        padding: 0;
-        text-align: center;
-      }
-    }
-    .hb-cta {
-      font-size: 17px;
-      padding: 6px;
-      display: block;
-    }
-    .hb-logo-wrapper {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      text-align: center;
-      margin: 5px 25px 15px 20px;
-      opacity: 0.2;
-      &:hover {
-        opacity: 0.4;
-      }
-      svg {
-        width: 30px;
-        height: 20px;
-        border-radius: 3px;
-      }
-    }
-    .icon-close {
-      font-size: 12px;
-      top: 14px;
-      right: 14px;
-    }
-    @media screen and (max-width: 640px) {
-      &.bottom-right{
-        right: 10px;
-      }
-    }
-  }
-  #hellobar-alert {
-    #hb-answer1, #hb-answer2{
-      padding: 5px;
-    }
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
+      font-size: 1em;
     }
   }
   @media screen and (max-width: 640px) {

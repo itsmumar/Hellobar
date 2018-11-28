@@ -2,7 +2,6 @@
   .hb-header {
     display: none;
   }
-
   .hb-cta {
     width: 100%;
     text-overflow: ellipsis;
@@ -10,7 +9,6 @@
   }
   .answer {
     padding-left: 9%;
-
   }
   .hb-image-overlay{
     content: "";
@@ -28,19 +26,9 @@
   #hellobar-modal,
   #hellobar-takeover {
     border-radius: 0px;
-    .hb-secondary-text {
-      text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-      -moz-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-      -webkit-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-    }
-
     .hb-headline-text {
       letter-spacing: 1px;
-      text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-      -moz-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-      -webkit-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
     }
-
     .hb-cta {
       font-size: 18px;
       min-width: 7em;
@@ -52,7 +40,6 @@
       z-index: 100;
     }
   }
-
   #hellobar-slider {
     .hb-image-overlay{
       content: "";
@@ -70,22 +57,18 @@
       font-size: 16px;
       line-height: 20px;
     }
-
     .hb-secondary-text {
       font-size: 14px;
       line-height: 20px;
     }
-
     .hb-cta {
       font-size: 15px;
       min-width: 7em;
     }
-
     .slider-content {
       padding: 25px;
       font-size: 16px;
     }
-
     &.show-branding {
       .slider-content {
         padding-bottom: 38px;
@@ -100,21 +83,11 @@
       line-height: 40px;
       max-width: 34.5em;
     }
-
     .hb-secondary-text {
       font-size: 16px;
       line-height: 28px;
       margin-top: 15px;
     }
-
-    .hb-cta {
-      font-size: 18px;
-      padding: 4%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
     .hb-name-input {
       margin-bottom: 5px;
     }
@@ -135,7 +108,7 @@
     }
   }
   @media screen and (max-width:640px){
-    #hellobar-modal { 
+    #hellobar-modal {
       padding:40px;
     }
   }
@@ -156,17 +129,14 @@
       font-size: 1.4em;
       line-height: 36px;
     }
-
     .hb-secondary-text {
       font-size: 1em;
       line-height: 26px;
       margin-top: 15px;
     }
-
     .hb-input-block input {
       font-size: .7em;
     }
-
     .hb-name-input {
       margin-bottom: 12px;
     }
@@ -209,22 +179,6 @@
         height: auto;
         width: auto;
         position: absolute;
-      }
-      .icon-close {
-        top: 40px;
-        right: 40px;
-        z-index: 100;
-      }
-      .hb-content-wrapper{
-        max-width: 293px;
-      }
-      .hb-headline-text {
-        font-size: 1em;
-        line-height: 30px;
-      }
-      .hb-secondary-text {
-        font-size:0.8em;
-        line-height: 22px;
       }
     }
   }
