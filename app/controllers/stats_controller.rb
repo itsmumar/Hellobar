@@ -19,8 +19,8 @@ class StatsController < ApplicationController
     @mtd_elite = Subscription.where(created_at: date..end_of_month).non_free.elite.count
     @mtd_custom = Subscription.where(created_at: date..end_of_month).non_free.custom.count
     @mtd_pro_special = Subscription.where(created_at: date..end_of_month).non_free.pro_special.count
-    @mtd_converted = Subscription.where(trial_end_date: date..end_of_month).ended_trial.joins(:bills).merge(Bill.paid.non_free).distinct.count
-    @all_converted = Subscription.where(created_at: beginning_of_webinars..end_of_month).ended_trial.joins(:bills).merge(Bill.paid.non_free).distinct.count
+    @mtd_converted = Subscription.where(trial_end_date: date..end_of_month).paid.count
+    @all_converted = Subscription.where(trial_end_date: beginning_of_webinars..end_of_month).paid.count
   end
 
   def calculate_today
