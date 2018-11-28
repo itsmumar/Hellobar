@@ -39,23 +39,6 @@
   padding: 18px 25px 20px;
 }
 
-#hellobar-slider .hb-headline-text {
-  font-size: 100%;
-}
-
-#hellobar-slider .hb-content-wrapper {
-  text-align: left;
-}
-
-#hellobar-slider .hb-headline-text {
-  font-size: 100%;
-}
-
-#hellobar-slider .hb-secondary-text {
-  font-size: 0.85em;
-  margin-bottom: 8px;
-}
-
 /* ---- Alarm animation ---- */
 @keyframes alarm-swing {
   10% {

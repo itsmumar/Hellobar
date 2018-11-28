@@ -1,5 +1,5 @@
 .marble {
-      text-align: left;
+  text-align: left;
   .hb-header {
     display: none;
   }
@@ -27,14 +27,12 @@
       -moz-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
       -webkit-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
     }
-
     .hb-headline-text {
       letter-spacing: 1px;
       text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
       -moz-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
       -webkit-text-shadow: 0px 0px 5px rgba(0,0,0,0.2);
     }
-
     .hb-cta {
       font-size: 18px;
       margin-top: 1em;
@@ -49,26 +47,17 @@
       font-size: 1.8em;
       line-height: 1.3em;
     }
-
     .hb-secondary-text {
       font-size: 14px;
       line-height: 20px;
     }
-
     .hb-cta {
       font-size: 15px;
       min-width: 7em;
     }
-
     .slider-content {
       padding: 25px;
       font-size: 16px;
-    }
-
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
     }
     .hb-image-overlay{
       -webkit-mask-image: linear-gradient(to right, transparent 20%, black 80%);
@@ -79,7 +68,6 @@
       padding-right: 0;
     }
   }
-
   #hellobar-modal {
     padding: 40px;
     max-width: 45em;
@@ -106,7 +94,6 @@
     .answer{
       padding: .67em 1.33em;
     }
-
     .hb-name-input {
       margin-bottom: 5px;
     }
@@ -115,7 +102,6 @@
       z-index: 10;
       margin: 1.33em  0 0 auto;
       max-width: 18em;
-
     }
     .icon-close {
       top: -20px;
@@ -123,13 +109,11 @@
       z-index: 100;
     }
   }
-
   #hellobar-takeover {
     .hb-headline-text {
       font-size: 2em;
       line-height: 48px;
     }
-
     .hb-secondary-text {
       font-size: 1.125em;
       line-height: 32px;

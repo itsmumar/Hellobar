@@ -1,10 +1,5 @@
 .classic {
   #hellobar-modal {
-    .hb-text-wrapper{
-      .hb-headline-text{
-        font-size: 2em;
-      }
-    }
     .hb-name-input {
       margin-bottom: 5px;
     }
@@ -18,11 +13,6 @@
     }
   }
   #hellobar-slider {
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
-    }
     .hb-cta {
       padding: 7px;
       display: inline-flex;

@@ -17,11 +17,12 @@
 }
 
 #hellobar-slider .hb-headline-text {
-  font-size: 100%;
+  font-size: 1.4em;
+  margin: 0.5em 0;
 }
 
 #hellobar-slider .hb-secondary-text {
-  font-size: 0.85em;
+  font-size: 1em;
 }
 
 /*-----------  Close Buttons  -----------*/
@@ -223,6 +224,15 @@
   clear: both;
   content: '';
 }
+
+/*-----------  Social Traffic  -----------*/
+
+#hellobar-slider .hb-facebook-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+/*-----------  General Responsive  -----------*/
 
 @media screen and (max-width:640px){
   #hellobar-slider {

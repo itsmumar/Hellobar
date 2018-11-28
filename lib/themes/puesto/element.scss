@@ -36,20 +36,11 @@
     }
     &>*{
       &:first-child, &:last-child{
-        display: block;
+        display: flex;
       }
     }
   }
   .hb-input-block {
-    &:before {
-      background-repeat: no-repeat;
-      content: "";
-      position: absolute;
-      left: 29px;
-      top: 36px;
-      width: 24px;
-      height: 24px;
-    }
     input {
       appearance: none;
       -moz-appearance: none;
@@ -70,12 +61,14 @@
   }
   .hb-cta {
     font-family: 'Open Sans',sans-serif;
-    display: block;
+    display: flex;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
     letter-spacing: 1px;
     max-width: inherit;
+    justify-content: center;
+    align-items: center;
     &:hover {
       opacity: 0.95;
     }

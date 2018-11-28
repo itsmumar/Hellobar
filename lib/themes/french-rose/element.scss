@@ -20,52 +20,30 @@
     .hb-headline-text {
       letter-spacing: 1px;
     }
-    .hb-cta {
-      font-size: 18px;
-      min-width: 7em;
-      letter-spacing: 1px;
-      max-width: none;
-      display: inline-flex;
-      align-items: center;
-    }
   }
   #hellobar-slider {
     .hb-headline-text {
-      font-size: 16px;
-      line-height: 20px;
+      font-size: 1.3em;
     }
     .hb-secondary-text {
-      font-size: 14px;
-      line-height: 20px;
-    }
-    .hb-cta {
-      font-size: 15px;
-      min-width: 7em;
+      font-size: 1em;
     }
     .slider-content {
       padding: 18px 25px 20px;
-      font-size: 16px;
-    }
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
     }
   }
   #hellobar-modal {
     padding: 48px 58px;
     .hb-headline-text {
       font-size: 28px;
-      line-height: 40px;
     }
     .hb-secondary-text {
       font-size: 16px;
-      line-height: 28px;
       margin-top: 15px;
     }
     .hb-cta {
-      font-size: 18px;
-      padding: 4%;
+      font-size: 1.3em;
+      max-width: none;
     }
     .hb-input-wrapper {
       max-width: none;
