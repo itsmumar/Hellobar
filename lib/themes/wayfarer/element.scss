@@ -11,6 +11,13 @@
     max-width: 22.5em;
     padding: 4%;
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {
@@ -53,7 +60,6 @@
     padding: 40px;
     max-width: 45em;
     .hb-headline-text {
-      font-family: HoeflerText;
       font-size: 3em;
     }
     .hb-image-overlay{

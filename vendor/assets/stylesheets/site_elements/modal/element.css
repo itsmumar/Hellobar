@@ -151,6 +151,16 @@
   padding-left: 8px;
   padding-right: 8px;
 }
+
+/*----------- Questions Container  -----------*/
+
+#hellobar-modal .questionslist {
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/*-----------  Responsive  -----------*/
+
 @media screen and (max-width: 840px) {
   #hellobar-modal {
     width: calc(100% - 20px);

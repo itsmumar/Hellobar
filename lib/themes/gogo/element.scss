@@ -10,6 +10,14 @@
   .answer {
     padding-left: 9%;
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
+
   .hb-image-overlay{
     content: "";
     display: block;
@@ -45,10 +53,10 @@
       content: "";
       display: block;
       z-index: 100;
-      left: 15px;
-      right: 15px;
-      top: 15px;
-      bottom: 15px;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      bottom: 10px;
       height: auto;
       width: auto;
       position: absolute;
@@ -68,6 +76,15 @@
     .slider-content {
       padding: 25px;
       font-size: 16px;
+    }
+    .icon-close {
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    .hb-logo-wrapper{
+      z-index: 100;
+      bottom: 1.5em;
     }
   }
   #hellobar-modal {
@@ -177,4 +194,5 @@
       }
     }
   }
+  
 }

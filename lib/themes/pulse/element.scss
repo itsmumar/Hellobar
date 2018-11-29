@@ -48,6 +48,13 @@
       opacity: 0.95;
     }
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
   #hellobar-bar,
   #hellobar-modal,
   #hellobar-takeover,

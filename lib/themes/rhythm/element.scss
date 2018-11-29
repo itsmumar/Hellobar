@@ -26,6 +26,13 @@
     float: right;
     text-align: left;
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
   .hb-input-block {
     &:before {
       background-repeat: no-repeat;

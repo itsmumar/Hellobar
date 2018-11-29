@@ -86,8 +86,10 @@
     .hb-inner-content {
       padding: 35px 58px;
     }
-    .hb-input-wrapper{
-      max-width: none;
+    .hb-input-wrapper,
+    .hb-text-wrapper{
+      max-width: 540px;
+      margin: 0 auto;
     }
     [data-hb-editable-block="caption"] {
       margin: 15px auto;

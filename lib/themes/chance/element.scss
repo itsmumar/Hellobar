@@ -34,15 +34,6 @@
     text-align: left;
   }
   .hb-input-block {
-    &:before {
-      background-repeat: no-repeat;
-      content: "";
-      position: absolute;
-      left: 29px;
-      top: 36px;
-      width: 24px;
-      height: 24px;
-    }
     .hb-input-wrapper{
       max-width: none;
       margin: 0;
@@ -60,6 +51,13 @@
   }
   .icon-close {
     color: #ffffff;
+  }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
   }
   #hellobar-modal,
   #hellobar-takeover,

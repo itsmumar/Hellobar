@@ -10,6 +10,13 @@
   .answer {
     padding-left: 9%;
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {

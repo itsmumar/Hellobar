@@ -44,15 +44,6 @@
     }
   }
   .hb-input-block {
-    &:before {
-      background-repeat: no-repeat;
-      content: "";
-      position: absolute;
-      left: 29px;
-      top: 36px;
-      width: 24px;
-      height: 24px;
-    }
     input {
       appearance: none;
       -moz-appearance: none;

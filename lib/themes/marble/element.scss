@@ -18,6 +18,13 @@
     max-width: 22.5em;
     padding: 4%;
   }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
   #hellobar-slider,
   #hellobar-modal,
   #hellobar-takeover {
@@ -72,8 +79,11 @@
     padding: 40px;
     max-width: 45em;
     .hb-headline-text {
-      font-family: HoeflerText;
       font-size: 3em;
+    }
+    .hb-content-wrapper{
+      max-width: 18em;
+      margin: 0 0 0 auto;
     }
     .hb-image-overlay{
       -webkit-mask-image: linear-gradient(to right, transparent 20%, black 80%);
@@ -107,6 +117,14 @@
       top: -20px;
       right: 0px;
       z-index: 100;
+      color: #fff;
+    }
+    .hb-logo-wrapper{
+      svg {
+        path{
+          fill: #fff;
+        }
+      }
     }
   }
   #hellobar-takeover {
