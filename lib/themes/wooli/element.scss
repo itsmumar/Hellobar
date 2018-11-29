@@ -31,32 +31,24 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
 
   .image-background .hb-image-wrapper.background {
     width: 43%;
-    background-position: top center; 
+    background-position: top center;
+  }
+
+  .hb-content-wrapper {
+    text-align: left;
   }
 
   .hb-headline-text {
     font-size: 2em;
     text-align: left;
-    text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 15px;
   }
 
-  [data-hb-editable-block="caption"] {
-    font-weight: normal;
-    margin: 0 auto;
-    text-align: left;
-
-    &:empty {
-      display: none;
-    }
-  }
-
+  [data-hb-editable-block="caption"],
   [data-hb-editable-block="content"] {
     font-weight: normal;
     margin: 0 auto;
-    text-align: left;
-
     &:empty {
       display: none;
     }
@@ -243,7 +235,7 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
     }
 
     .hb-inner-content {
-      padding: 48px 58px; 
+      padding: 48px 58px;
     }
 
     .hb-headline-text {
@@ -445,11 +437,11 @@ $phone-input-icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
       }
 
       [data-hb-editable-block="caption"] {
-        font-size: 1em; 
+        font-size: 1em;
       }
 
       [data-hb-editable-block="content"] {
-        font-size: 0.8em; 
+        font-size: 0.8em;
       }
     }
   }
