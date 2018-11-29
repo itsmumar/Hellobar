@@ -1,5 +1,5 @@
 class Api::SenderAddressesController < Api::ApplicationController
-  before_action :find_address, except: %i[create]
+  before_action :find_address, except: %i[create index]
 
   def create
     address = SenderAddress.new(address_params)
@@ -8,8 +8,10 @@ class Api::SenderAddressesController < Api::ApplicationController
     render json: address
   end
 
-  def show
-    render json: @address
+  def index
+    site = Site.find(params[:site_id])
+
+    render json: site.sender_address
   end
 
   def update
@@ -24,6 +26,6 @@ class Api::SenderAddressesController < Api::ApplicationController
   end
 
   def address_params
-    params.require(:address).permit :site_id, :address_one, :address_two, :city, :state, :postal_code, :country
+    params.require(:sender_address).permit :site_id, :address_one, :address_two, :city, :state, :postal_code, :country
   end
 end
