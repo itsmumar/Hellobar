@@ -95,6 +95,7 @@ class StaticScriptModel
         bar_type = se.class.name.downcase
         template_names << [bar_type, subtype, category]
         template_names << [bar_type, 'question', category] if se.use_question?
+        template_names << [bar_type, 'thankyou', category]
       end
     end
 

@@ -186,6 +186,9 @@ export default Ember.Component.extend({
     'model.text_field_font_size',
     'model.text_field_font_family',
     'model.thank_you_text',
+    'model.conversion_font',
+    'model.conversion_font_color',
+    'model.conversion_font_size',
     'isMobile'
   ),
 
