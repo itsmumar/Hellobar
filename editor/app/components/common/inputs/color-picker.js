@@ -126,6 +126,15 @@ export default Ember.Component.extend({
       }
     };
 
+    let handler = () => {
+      let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
+      $(preview).on('click',
+        () => {
+          this.$().spectrum('hide');
+        }
+      );
+    }
+
     opts.change = updateFunction;
 
     if (this.get('moveFiresChange')) {
@@ -158,7 +167,19 @@ export default Ember.Component.extend({
 
     // Close On Clicking iframe
     let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
-    $(preview).on('click', () => { this.$().spectrum('hide'); });
+    $(preview).on('click',
+      () => {
+        this.$().spectrum('hide');
+      }
+    );
+
+    // Close On Clicking re-rendered iframe
+    let container = document.getElementById('hellobar-preview-container');
+    container.addEventListener('DOMNodeInserted',
+      event => {
+        setTimeout(handler, 10);
+      }
+    );
 
     this.$().spectrum(opts);
   },
