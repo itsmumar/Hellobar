@@ -126,15 +126,6 @@ export default Ember.Component.extend({
       }
     };
 
-    let handler = () => {
-      let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
-      $(preview).on('click',
-        () => {
-          this.$().spectrum('hide');
-        }
-      );
-    };
-
     opts.change = updateFunction;
 
     if (this.get('moveFiresChange')) {
@@ -165,21 +156,24 @@ export default Ember.Component.extend({
       };
     }
 
+    let hidePicker = () => {
+      this.$().spectrum('hide');
+    };
+
+    let iframeClickHandler = () => {
+      let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
+      $(preview).on('click', hidePicker);
+    };
+
     // Close On Clicking iframe
     let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
-    $(preview).on('click',
-      () => {
-        this.$().spectrum('hide');
-      }
-    );
+    $(preview).on('click', hidePicker);
 
     // Close On Clicking re-rendered iframe
     let container = document.getElementById('hellobar-preview-container');
-    container.addEventListener('DOMNodeInserted',
-      () => {
-        setTimeout(handler, 10);
-      }
-    );
+    container.addEventListener('DOMNodeInserted', () => {
+        setTimeout(iframeClickHandler, 10);
+    });
 
     this.$().spectrum(opts);
   },
