@@ -133,7 +133,7 @@ export default Ember.Component.extend({
           this.$().spectrum('hide');
         }
       );
-    }
+    };
 
     opts.change = updateFunction;
 
@@ -176,7 +176,7 @@ export default Ember.Component.extend({
     // Close On Clicking re-rendered iframe
     let container = document.getElementById('hellobar-preview-container');
     container.addEventListener('DOMNodeInserted',
-      event => {
+      () => {
         setTimeout(handler, 10);
       }
     );
