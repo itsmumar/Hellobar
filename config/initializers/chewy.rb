@@ -22,5 +22,6 @@ client.transport = faraday_client
 Thread.current[:chewy_client] = client
 
 Chewy.settings = {
-  host: Settings.elastic_search_endpoint
+  host: Settings.elastic_search_endpoint,
+  prefix: Rails.env
 }

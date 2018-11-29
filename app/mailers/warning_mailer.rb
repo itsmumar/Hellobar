@@ -8,7 +8,7 @@ class WarningMailer < ApplicationMailer
 
     users.each do |user|
       @user = user
-      mail(to: user.email, subject: "You're approaching your Hello Bar monthly view limit!")
+      mail(to: user.email, subject: 'You are approaching your Hello Bar monthly view limit!')
     end
   end
 
@@ -21,7 +21,7 @@ class WarningMailer < ApplicationMailer
 
     users.each do |user|
       @user = user
-      mail(to: user.email, subject: "You're approaching your Hello Bar monthly view limit!")
+      mail(to: user.email, subject: 'You are approaching your Hello Bar monthly view limit!')
     end
   end
 end
