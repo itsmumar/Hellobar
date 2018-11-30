@@ -16,9 +16,13 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
 
         .site-title
           | {{#if upgradeBenefit}}
-          |   To {{upgradeBenefit}} {{siteName}}
+          |   {{#if barslimitMessage}}
+          |     You have reached the limit of 10 popups. To create more, upgrade your account.
+          |   {{else}}
+          |     To {{upgradeBenefit}} {{siteName}}
+          |   {{/if}}
           | {{else}}
-          | To unlock the next level of Hello Bar, upgrade your subscription for {{siteName}}
+          |   To unlock the next level of Hello Bar, upgrade your subscription for {{siteName}}
           | {{/if}}
 
 
