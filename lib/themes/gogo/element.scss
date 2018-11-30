@@ -192,7 +192,14 @@
         width: auto;
         position: absolute;
       }
+      .hb-content-wrapper{
+        max-width: 277px;
+      }
+    }
+    .icon-close{
+      font-size: 24px;
+      top: 32px;
+      right: 32px;
     }
   }
-  
 }

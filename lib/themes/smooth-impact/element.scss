@@ -21,6 +21,9 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
   .hb-header {
     display: none;
   }
+  .hb-content-wrapper{
+    text-align: left;
+  }
   .image-background .hb-image-wrapper.background {
     width: 43%;
     background-position: top center;
@@ -108,17 +111,14 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     .hb-headline-text {
       font-size: 2.3em;
       margin-bottom: 20px;
-      text-align: center;
     }
     [data-hb-editable-block="caption"] {
       font-size: 1.5em;
       margin: 15px auto;
-      text-align: center;
     }
     [data-hb-editable-block="content"] {
       font-size: 1.1em;
       margin: 0 0 10px;
-      text-align: center;
     }
     &.image-background {
       .hb-headline-text,
@@ -167,7 +167,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       height: 100%;
       width: 100%;
       font-size: 24px;
-      text-align: center;
       transform: translate(0%, 0%);
       -o-transform: translate(0%, 0%);
       -moz-transform: translate(0%, 0%);
@@ -216,7 +215,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
         width: 100%;
         font-size: 24px;
         position: fixed;
-        text-align: center;
         transform: translate(0%, 0%);
         -o-transform: translate(0%, 0%);
         -moz-transform: translate(0%, 0%);

@@ -148,7 +148,6 @@
       height: 100%;
       width: 100%;
       font-size: 24px;
-      text-align: center;
       transform: translate(0%, 0%);
       -o-transform: translate(0%, 0%);
       -moz-transform: translate(0%, 0%);
@@ -201,7 +200,6 @@
         width: 100%;
         font-size: 24px;
         position: fixed;
-        text-align: center;
         transform: translate(0%, 0%);
         -o-transform: translate(0%, 0%);
         -moz-transform: translate(0%, 0%);
@@ -220,27 +218,14 @@
       }
     }
     .hb-headline-text {
-      font-size: 2.3em;
       margin-bottom: 20px;
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1.5em;
       margin: 20px auto;
       padding: 10px 0;
     }
     [data-hb-editable-block="content"] {
-      font-size: 1.1em;
       margin: 0 0 10px;
-    }
-    .hb-input-block {
-      input {
-        font-size: 17px;
-        height: 6rem;
-        padding: 0 0 0 10px;
-      }
-    }
-    .hb-cta {
-      font-size: 28px;
     }
   }
   #hellobar-slider {
