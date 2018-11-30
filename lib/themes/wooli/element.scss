@@ -20,25 +20,20 @@
     width: 43%;
     background-position: top center;
   }
+  .hb-content-wrapper {
+    text-align: left;
+  }
   .hb-headline-text {
     font-size: 2em;
     text-align: left;
-    text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 15px;
   }
-  [data-hb-editable-block="caption"] {
-    font-weight: normal;
-    margin: 0 auto;
-    text-align: left;
-    &:empty {
-      display: none;
-    }
-  }
+
+  [data-hb-editable-block="caption"],
   [data-hb-editable-block="content"] {
     font-weight: normal;
     margin: 0 auto;
-    text-align: left;
     &:empty {
       display: none;
     }

@@ -34,6 +34,9 @@
   position: absolute;
   width: 374px;
 }
+#hellobar-alert #hellobar-slider .hb-content-wrapper {
+  text-align: left;
+}
 
 #hellobar-alert #hellobar-slider .slider-content {
   padding: 18px 25px 20px;
