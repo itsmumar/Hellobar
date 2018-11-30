@@ -156,10 +156,33 @@ export default Ember.Component.extend({
       };
     }
 
+    let hidePicker = () => {
+      this.$().spectrum('hide');
+    };
+
+    let iframeClickHandler = () => {
+      let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
+      $(preview).on('click', hidePicker);
+    };
+
+    // Close On Clicking iframe
+    let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
+    $(preview).on('click', hidePicker);
+
+    // Close On Clicking re-rendered iframe
+    let container = document.getElementById('hellobar-preview-container');
+    container.addEventListener('DOMNodeInserted', () => {
+        setTimeout(iframeClickHandler, 10);
+    });
+
     this.$().spectrum(opts);
   },
 
   willDestroyElement: function() {
     this.$().spectrum('destroy');
+
+    // Unbind iframe Click Event
+    let preview = $('#hellobar-preview-container iframe').prop('contentDocument');
+    $(preview).off('click');
   }
 });
