@@ -14,7 +14,7 @@ class CreateAndPayOverageBill
 
   def create_bill_for_overage
     bill = Bill.create!(
-      subscription: @site.active_subscription,
+      subscription: @site.subscriptions.last,
       amount: @amount,
       description: 'Monthly View Limit Overage Fee',
       grace_period_allowed: true,
