@@ -134,7 +134,7 @@
   "image": {
     "default_url": "http://assets.hellobar.com/default-ebook.png",
     "upload_copy": "Recommended minimum is 200 x 300",
-    "position_default": "left",
+    "position_default": "background",
     "position_selectable": false
   },
   "advanced": true

@@ -9,18 +9,31 @@
     margin-bottom: 25px;
     margin-top: 10px;
   }
-  [data-hb-editable-block="caption"] {
-    font-weight: normal;
-    margin: 0 auto;
+  .hb-content-wrapper{
     text-align: left;
-    &:empty {
-      display: none;
-    }
   }
+  .image-background .hb-image-wrapper.background {
+    width: calc(43% - 3.5em);
+    background-position: center center;
+    background-size: initial;
+    display: flex;
+    top: 3.5em;
+    left: auto;
+    right: 1.75em;
+    bottom: 3.5em;
+    height: calc(100% - 7em);
+  }
+  .hb-content-wrapper{
+    text-align: left;
+  }
+  .hb-image-wrapper.background ~ .hb-content-wrapper {
+    width: 57%;
+    margin-right: 43%;
+  }
+  [data-hb-editable-block="caption"],
   [data-hb-editable-block="content"] {
     font-weight: normal;
     margin: 0 auto;
-    text-align: left;
     &:empty {
       display: none;
     }
@@ -31,7 +44,7 @@
     }
     &>*{
       &:first-child, &:last-child{
-        display: block;
+        display: flex;
       }
     }
   }
@@ -83,7 +96,10 @@
   #hellobar-modal {
     padding: 3.5em;
     max-width: 50em;
-    min-height: 20em;
+    min-height: 25.75em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .hb-content-wrapper:after {
       margin: 8px;
       border-width: 1px;
@@ -344,12 +360,16 @@
     }
   }
   #hellobar-slider {
+    .image-background .hb-image-wrapper.background{
+      background-size: contain;
+    }
     .slider-content {
       padding: 25px 25px 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       min-height: 250px;
+      width: 65%;
       .hb-content-wrapper {
         .hb-text-wrapper {
           padding-right: 0;
@@ -363,7 +383,6 @@
     .hb-text-wrapper {
       margin-bottom: 15px;
     }
-
     .hb-headline-text {
       font-size: 1.2em;
       margin-bottom: 15px;
@@ -386,14 +405,20 @@
         display: table;
       }
     }
-  }
-  #hellobar-alert {
-    #hb-answer1, #hb-answer2{
-      padding: 5px;
+    &.image-background{
+      .hb-image-wrapper.background{
+        background-size: contain;
+      }
     }
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
+    @media screen and (max-width: 640px) {
+      .slider-content {
+        width: 100%;
+      }
+      &.image-background{
+        .hb-image-wrapper.background{
+          display: none;
+        }
+      }
     }
   }
 }
