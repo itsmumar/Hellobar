@@ -17,7 +17,7 @@ class StatsController < ApplicationController
     @mtd_paid = Subscription.where(created_at: date..end_of_month).non_free.where(trial_end_date: nil).count
     @mtd_trials = Subscription.where(created_at: date..end_of_month).non_free.count - @mtd_paid
     @mtd_trials = calculate_trials(date, end_of_month)
-    @mtd_trial_cancels = calculate_trial_cancels(beginning_of_webinars, end_of_month)
+    @mtd_trial_cancels = calculate_trial_cancels(date, end_of_month)
     @mtd_elite = Subscription.where(created_at: date..end_of_month).non_free.elite.count
     @mtd_custom = Subscription.where(created_at: date..end_of_month).non_free.custom.count
     @mtd_pro_special = Subscription.where(created_at: date..end_of_month).non_free.pro_special.count
