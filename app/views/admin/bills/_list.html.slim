@@ -7,6 +7,7 @@
     tr
       th ID
       th Subscription
+      th Description
       th Amount
       th Status
       th Due At
@@ -22,6 +23,7 @@
       tr
         td= link_to(bill.id, admin_bill_path(bill))
         td= subscription_link(bill)
+        td= bill.description
         td
           = bill.amount
           - if user && context_for_trial(user, bill)
