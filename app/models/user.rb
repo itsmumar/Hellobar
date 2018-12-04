@@ -156,7 +156,7 @@ class User < ApplicationRecord
 
   def total_value
     values = []
-    self.subscriptions.each do |sub|
+    subscriptions.each do |sub|
       sub.bills.paid.pluck(:amount).each do |amount|
         values << amount
       end
