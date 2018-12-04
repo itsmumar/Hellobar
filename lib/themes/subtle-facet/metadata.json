@@ -33,7 +33,9 @@
       "text_field_border_width": 0, 
       "text_field_font_family": "kanit",
       "text_field_font_size": 18,
-      "text_field_text_color": "3B386B"  
+      "text_field_text_color": "3B386B",
+      "conversion_font_color": "FFF46E",
+      "conversion_font_size": 20
     }
   },
   "image": {
