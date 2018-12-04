@@ -7,6 +7,10 @@ class Admin::PartnersController < AdminController
     respond_with(@partners)
   end
 
+  def show
+    @users = Partner.find(params[:id]).users
+  end
+
   def new
     @partner = Partner.new
     respond_with(@partner)
