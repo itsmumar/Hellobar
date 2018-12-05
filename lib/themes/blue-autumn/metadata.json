@@ -30,7 +30,8 @@
       "text_field_border_width": 0, 
       "text_field_font_family": "open_sans",
       "text_field_font_size": 14,
-      "text_field_text_color": "b3b3b3"    
+      "text_field_text_color": "b3b3b3",
+      "conversion_font_color": "FFFFFF"
     },
     "Slider": {
       "background_color": "29b0e0",
