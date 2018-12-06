@@ -513,7 +513,7 @@ describe SiteElement do
     end
 
     it 'grabs font from headline, caption and link_text' do
-      expect(element.fonts).to match %w[HeadlineFont CaptionFont LinkTextFont]
+      expect(element.fonts).to match %w[HeadlineFont CaptionFont LinkTextFont Roboto]
     end
 
     context 'when no custom fonts are used' do
@@ -521,7 +521,8 @@ describe SiteElement do
         element.update(
           headline: 'Headline',
           caption: '',
-          link_text: nil
+          link_text: nil,
+          conversion_font: ''
         )
       end
 
