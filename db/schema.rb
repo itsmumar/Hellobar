@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181106222510) do
+ActiveRecord::Schema.define(version: 20181126235459) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -365,6 +365,20 @@ ActiveRecord::Schema.define(version: 20181106222510) do
 
   add_index "rules", ["site_id"], name: "index_rules_on_site_id", using: :btree
 
+  create_table "sender_addresses", force: :cascade do |t|
+    t.integer  "site_id",     limit: 4
+    t.string   "address_one", limit: 255
+    t.string   "address_two", limit: 255
+    t.string   "city",        limit: 255
+    t.string   "state",       limit: 255
+    t.string   "postal_code", limit: 255
+    t.string   "country",     limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "sender_addresses", ["site_id"], name: "index_sender_addresses_on_site_id", using: :btree
+
   create_table "sequence_steps", force: :cascade do |t|
     t.integer  "delay",           limit: 4,   default: 0, null: false
     t.integer  "sequence_id",     limit: 4,               null: false
@@ -574,7 +588,7 @@ ActiveRecord::Schema.define(version: 20181106222510) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"

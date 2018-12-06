@@ -31,7 +31,8 @@ class SiteElement < ApplicationRecord
     'social/follow_on_pinterest'      => 'Follows',
     'social/share_on_buffer'          => 'Shares',
     'social/share_on_linkedin'        => 'Shares',
-    'question'                        => 'Question'
+    'question'                        => 'Question',
+    'thankyou'                        => 'Thankyou'
   }.freeze
 
   SHORT_SUBTYPES = %w[traffic email call social announcement].freeze

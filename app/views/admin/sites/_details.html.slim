@@ -4,6 +4,10 @@
     div.site_section
       div.title Views in the Last 30 Days: #{ @stats&.views }
 
+    - if !site.auto_upgraded_at.nil?
+      div
+        | <strong>Auto-upgraded on #{ format_date(site.auto_upgraded_at) }</strong>
+
     - unless bills_for(site).empty?
       div.site_section
         div.title

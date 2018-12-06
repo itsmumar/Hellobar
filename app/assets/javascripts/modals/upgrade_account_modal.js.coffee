@@ -17,6 +17,7 @@ class @UpgradeAccountModal extends Modal
       siteName: @options.site.display_name,
       showFreePlus: @options.site.current_subscription.type == "free plus"
       upgradeBenefit: @options.upgradeBenefit
+      barslimitMessage: @options.upgradeBenefit == "create more bars"
     ))
 
   open: ->
