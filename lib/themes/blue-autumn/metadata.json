@@ -32,7 +32,8 @@
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3",
       "conversion_font_color": "FFFFFF",
-      "conversion_font_size": 18
+      "conversion_font_size": 18,
+      "conversion_font": "open_sans"
     },
     "Slider": {
       "background_color": "29b0e0",
@@ -57,7 +58,8 @@
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3",
       "conversion_font_color": "FFFFFF",
-      "conversion_font_size": 18
+      "conversion_font_size": 18,
+      "conversion_font": "open_sans"
     },
     "Modal": {
       "background_color": "29b0e0",
@@ -82,7 +84,8 @@
       "text_field_font_size": 14,
       "text_field_text_color": "b3b3b3",
       "conversion_font_color": "FFFFFF",
-      "conversion_font_size": 18
+      "conversion_font_size": 18,
+      "conversion_font": "open_sans"
     },
     "Takeover": {
       "background_color": "29b0e0",
@@ -107,7 +110,8 @@
       "text_field_font_size": 18,
       "text_field_text_color": "b3b3b3",
       "conversion_font_color": "FFFFFF",
-      "conversion_font_size": 18
+      "conversion_font_size": 18,
+      "conversion_font": "open_sans"
     },
     "Alert": {
       "background_color": "29b0e0", 
@@ -134,7 +138,8 @@
       "trigger_color": "29b0e0",
       "trigger_icon_color": "ffffff" ,
       "conversion_font_color": "FFFFFF",
-      "conversion_font_size": 18
+      "conversion_font_size": 18,
+      "conversion_font": "open_sans"
     }
   },
   "image": {
