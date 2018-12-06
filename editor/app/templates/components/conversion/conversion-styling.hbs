@@ -3,13 +3,15 @@
     <div class="panel-input__label">Font</div>
     <div class="panel-input__input">
       {{common/inputs/font-name selectedFont=model.conversion_font}}
+
     </div>
   </div>
 
   <div class="panel-input">
     <div class="panel-input__label">Font Color</div>
     <div class="panel-input__input">
-      {{common/inputs/color-picker color=model.conversion_font_color}}
+      {{selectedColorAndFont}}
+      {{common/inputs/color-picker color=model.text_color}}
     </div>
   </div>
 

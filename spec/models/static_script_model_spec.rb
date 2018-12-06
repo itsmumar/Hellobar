@@ -144,7 +144,7 @@ describe StaticScriptModel do
         %w[call traffic email announcement
            social/tweet_on_twitter social/follow_on_twitter social/like_on_facebook social/plus_one_on_google_plus
            social/pin_on_pinterest social/follow_on_pinterest social/share_on_buffer social/share_on_linkedin
-           question]
+           question thankyou]
       end
 
       let(:bar_types) { %w[Bar Modal Slider Takeover Alert] }
@@ -197,7 +197,7 @@ describe StaticScriptModel do
 
       it 'returns array of template names and markups' do
         expect(markups.all?(&:present?)).to be_truthy
-        expect(names).to match_array %w[bar_announcement]
+        expect(names).to match_array %w[bar_announcement bar_thankyou]
       end
     end
   end
@@ -348,7 +348,8 @@ describe StaticScriptModel do
       let!(:element) { create(:site_element, site: site, headline: headline) }
 
       it 'includes fonts' do
-        expect(json.dig(:rules, 0, :site_elements, 0)).to include fonts: ['HeadlineFont']
+        expect(json.dig(:rules, 0, :site_elements, 0))
+          .to include fonts: ['Roboto', 'HeadlineFont']
       end
     end
 

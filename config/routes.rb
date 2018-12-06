@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :contact_lists, only: [] do
+      resources :contact_lists, only: [:create] do
         resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
       end
 
@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       end
 
       resources :emails, only: %i[create show update]
+
+      resources :sender_addresses, only: %i[create index update]
     end
 
     # Used by Lambda functions

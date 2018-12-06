@@ -7,7 +7,7 @@ div.site-title
   - unless site.deleted?
     = link_to 'Contact Lists', admin_site_contact_lists_path(site)
     a.subscription_link data-siteid=site.id Change plan
-    - if site.current_subscription.paid?
+    - if site.current_subscription&.paid?
       a.free_days_link data-siteid=site.id Add free days
     a.regenerate_link data-url=regenerate_admin_site_path(site)
       | Regenerate script

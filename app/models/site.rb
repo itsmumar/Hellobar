@@ -47,6 +47,8 @@ class Site < ApplicationRecord
   has_one :content_upgrade_styles, inverse_of: :site
   has_many :credit_cards, -> { order(:created_at).distinct }, through: :subscriptions
 
+  has_one :sender_address
+
   scope :preload_for_script, lambda {
     preload(
       :site_elements, :active_site_elements,
