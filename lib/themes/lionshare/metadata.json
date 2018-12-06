@@ -17,6 +17,8 @@
       "background_color": "f8f8f8",
       "border_color":"feab00",
       "button_color": "feab00",
+      "conversion_font_color": "000000",
+      "conversion_font_size": 18,
       "cta_border_color":"feab00",
       "cta_border_radius": 4,
       "cta_border_width": 0,
@@ -32,14 +34,14 @@
       "text_field_border_width": 1,
       "text_field_font_family": "roboto",
       "text_field_font_size": 14,
-      "text_field_text_color": "9b9b9b",
-      "conversion_font_color": "000000",
-      "conversion_font_size": 18
+      "text_field_text_color": "9b9b9b"
     },
     "Takeover": {
       "background_color": "f8f8f8",
       "border_color":"feab00",
       "button_color": "feab00",
+      "conversion_font_color": "000000",
+      "conversion_font_size": 18,
       "cta_border_color":"feab00",
       "cta_border_radius": 4,
       "cta_border_width": 0,
@@ -58,14 +60,14 @@
       "text_field_border_width": 1,
       "text_field_font_family": "roboto",
       "text_field_font_size": 18,
-      "text_field_text_color": "9b9b9b",
-      "conversion_font_color": "000000",
-      "conversion_font_size": 18
+      "text_field_text_color": "9b9b9b"
     },
     "Slider": {
       "background_color": "f8f8f8",
       "border_color":"feab00",
       "button_color": "feab00",
+      "conversion_font_color": "000000",
+      "conversion_font_size": 18,
       "cta_border_color":"feab00",
       "cta_border_radius": 4,
       "cta_border_width": 0,
@@ -83,14 +85,14 @@
       "text_field_border_width": 1,
       "text_field_font_family": "roboto",
       "text_field_font_size": 14,
-      "text_field_text_color": "9b9b9b",
-      "conversion_font_color": "000000",
-      "conversion_font_size": 18
+      "text_field_text_color": "9b9b9b"
     },
     "Modal": {
       "background_color": "f8f8f8",
       "border_color":"feab00",
       "button_color": "feab00",
+      "conversion_font_color": "000000",
+      "conversion_font_size": 18,
       "cta_border_color":"feab00",
       "cta_border_radius": 4,
       "cta_border_width":0,
@@ -109,14 +111,14 @@
       "text_field_border_width": 1,
       "text_field_font_family": "roboto",
       "text_field_font_size": 14,
-      "text_field_text_color": "9b9b9b",
-      "conversion_font_color": "000000",
-      "conversion_font_size": 18
+      "text_field_text_color": "9b9b9b"
     },
     "Alert": {
       "background_color": "f8f8f8",
       "border_color":"feab00",
       "button_color": "feab00",
+      "conversion_font_color": "000000",
+      "conversion_font_size": 18,
       "cta_border_color":"feab00",
       "cta_border_radius": 4,
       "cta_border_width":0,
@@ -136,15 +138,13 @@
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
       "trigger_color": "ffffff",
-      "trigger_icon_color": "feab00",
-      "conversion_font_color": "000000",
-      "conversion_font_size": 18
+      "trigger_icon_color": "feab00"
     }
   },
   "image": {
     "default_url": "http://assets.hellobar.com/default-ebook.png",
     "upload_copy": "Recommended minimum is 200 x 300",
-    "position_default": "left",
+    "position_default": "background",
     "position_selectable": false
   },
   "advanced": true
