@@ -348,7 +348,8 @@ describe StaticScriptModel do
       let!(:element) { create(:site_element, site: site, headline: headline) }
 
       it 'includes fonts' do
-        expect(json.dig(:rules, 0, :site_elements, 0)).to include fonts: ['HeadlineFont']
+        expect(json.dig(:rules, 0, :site_elements, 0))
+          .to include fonts: ['Roboto', 'HeadlineFont']
       end
     end
 

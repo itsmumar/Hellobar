@@ -151,7 +151,7 @@ class SiteElement < ApplicationRecord
   end
 
   def fonts
-    fonts = [text_field_font_family]
+    fonts = [text_field_font_family, conversion_font]
     inline_fonts = (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/)
     (fonts + inline_fonts).flatten.compact.uniq - SYSTEM_FONTS
   end
