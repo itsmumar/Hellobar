@@ -8,11 +8,11 @@
       = active_link_to site_site_elements_path(current_site) do
         i.icon-manage
         | Manage
-    - if current_site.script_installed?
-      li
-        = active_link_to site_improve_path(current_site) do
-          i.icon-growthbars
-          | Analyze
+    /- if current_site.script_installed?
+    li
+      = active_link_to site_improve_path(current_site) do
+        i.icon-growthbars
+        | Analyze
     li
       = active_link_to site_contact_lists_path(current_site) do
         i.icon-contacts

@@ -108,7 +108,7 @@ class SitesController < ApplicationController
 
   def site_statistics
     @site_statistics ||=
-      FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+        FetchSiteStatisticsFromES.new(@site, Date.new(2015), Date.current).call
   end
 
   def site_params
