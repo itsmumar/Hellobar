@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181126235459) do
+ActiveRecord::Schema.define(version: 20181207194805) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20181126235459) do
     t.string   "authorization_code",   limit: 255
     t.string   "status",               limit: 20,                           default: "pending", null: false
     t.boolean  "one_time",                                                  default: false
+    t.integer  "view_count",           limit: 4
   end
 
   add_index "bills", ["bill_at"], name: "index_bills_on_type_and_bill_at", using: :btree
@@ -476,7 +477,7 @@ ActiveRecord::Schema.define(version: 20181126235459) do
     t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
-    t.integer  "conversion_font_size",          limit: 4,        default: 12,           null: false
+    t.integer  "conversion_font_size",          limit: 4,        default: 22,           null: false
     t.datetime "deactivated_at"
     t.string   "text_field_font_family",        limit: 255
     t.integer  "text_field_font_size",          limit: 4,        default: 14

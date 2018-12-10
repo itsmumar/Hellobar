@@ -21,7 +21,8 @@ class CreateAndPayOverageBill
       bill_at: (Time.current + 1.hour),
       start_date: Time.current,
       end_date: Time.current,
-      one_time: true
+      one_time: true,
+      view_count: site.number_of_views
     )
 
     # reset the overage counter for the new month
