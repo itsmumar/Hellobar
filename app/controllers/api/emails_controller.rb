@@ -17,6 +17,11 @@ class Api::EmailsController < Api::ApplicationController
     render json: @email
   end
 
+  def search
+    results = @email.search(params[:query])
+    render json: results
+  end
+
   private
 
   def site
