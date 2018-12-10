@@ -1,5 +1,6 @@
 describe 'Admin::Partners requests' do
   let!(:admin) { create(:admin) }
+  let!(:partner) { create :partner }
 
   before { stub_current_admin(admin) }
 
@@ -10,6 +11,13 @@ describe 'Admin::Partners requests' do
 
     it 'renders list of partners' do
       get admin_partners_path
+      expect(response).to be_success
+    end
+  end
+
+  describe 'GET #show' do
+    it 'allows admins to see a partner details' do
+      get admin_partner_path(partner)
       expect(response).to be_success
     end
   end

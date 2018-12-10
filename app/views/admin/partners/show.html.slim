@@ -1,0 +1,23 @@
+div.row
+  div.col-md-12
+
+    h1
+      | Referred Users
+
+    - if @users.empty?
+      h3
+        i none found
+
+    - else
+      table.table.table-striped.partners
+        tr
+          th Email
+          th URLs
+          th Total Billing
+
+
+        - @users.each do |user|
+          tr
+            td= link_to user.email, admin_user_path(user)
+            td= user.sites.pluck(:url).join(",")
+            td= number_to_currency(user.total_value)
