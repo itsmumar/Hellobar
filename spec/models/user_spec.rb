@@ -272,4 +272,18 @@ describe User do
       expect(user.valid_password?('wrong password')).to be(false)
     end
   end
+
+  describe '#total_value?' do
+    let(:user) { create(:user) }
+    let(:site) { create(:site, user: user) }
+    let(:credit_card) { create :credit_card }
+
+    before do
+      stub_cyber_source :purchase
+      ChangeSubscription.new(site, { subscription: 'pro' }, credit_card).call
+    end
+    it 'calculates the user total value so far' do
+      expect(user.total_value).to be(29)
+    end
+  end
 end

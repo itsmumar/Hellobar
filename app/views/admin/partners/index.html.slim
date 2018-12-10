@@ -19,6 +19,7 @@ div.row
           th Community
           th Affiliate ID
           th Require CC
+          th Users
           th Date Created
           th
 
@@ -31,6 +32,7 @@ div.row
             td= partner.community
             td= partner.affiliate_identifier
             td= yes_or_no(partner.require_credit_card)
+            td= link_to partner.users.count, admin_partner_path(partner)
             td= partner.created_at
             td
               = link_to 'Edit', edit_admin_partner_path(partner)
