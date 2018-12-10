@@ -1,17 +1,14 @@
 .subtle-facet {
   color: '#3A3A49';
-
   .hb-header {
     display: none;
   }
-
   .image-background .hb-image-wrapper.background {
     width: 43%;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
     background-position: top center;
   }
-
   #hellobar-takeover {
     .hb-content-wrapper {
       top: 0;
@@ -29,8 +26,7 @@
       max-width: none;
       background: url(https://assets.hellobar.com/subtle-facet-background.png);
       background-size: cover;
-      background-position: center,center;
-
+      background-position: center center;
       &:after {
         content: '';
         position: absolute;
@@ -44,7 +40,6 @@
         border-bottom-right-radius: 3px;
         pointer-events: none;
       }
-
       .hb-inner-content {
         top: 50%;
         left: 50%;
@@ -57,26 +52,70 @@
         -webkit-transform: translate(-50%, -50%);
       }
     }
-
     .hb-image-wrapper.background ~ .hb-content-wrapper {
       width: 57%;
       margin-left: 43%;
     }
-
     .hb-text-wrapper {
-      max-width: 600px;
+      max-width: 540px;
       margin: 0 auto;
     }
-
     .hb-input-wrapper {
       margin: 20px auto 0;
     }
-
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
       bottom: 2em;
+    } 
+    .hb-cta {
+      font-size: 28px;
+      font-weight: 700;
     }
-
+    .hb-input-block input {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      &::-webkit-input-placeholder {
+        color: #111E2E;
+      }
+      &::-moz-placeholder {
+        color: #111E2E;
+        opacity: 1;
+      }
+      &:-ms-input-placeholder {
+        color: #111E2E;
+      }
+    }
+    .hb-headline-text {
+      font-size: 3em;
+      line-height: 1;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hb-secondary-text {
+      font-size: 0.8em;
+      line-height: 1;
+      font-weight: 400;
+      max-width: 540px;
+      margin: 0 auto;
+      &:empty {
+        display: none;
+      }
+    }
+    .hb-input-block input {
+      font-size: .7em;
+      height: 6rem;
+    }
+    [data-hb-editable-block="caption"] {
+      border: 2px solid;
+      border-left: none;
+      border-right: none;
+      border-color: rgba(241, 241, 247, 0.3);
+      padding: 10px 0;
+      font-size: 1.5em;
+      margin: 20px auto;
+    }
     @media screen and (max-width: 840px) {
       .hb-image-wrapper { display: none; }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
@@ -99,138 +138,6 @@
       }
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
         padding-left: 0;
-      }
-    }
-
-    .hb-logo-wrapper {
-      opacity: 0.6;
-      svg {
-        fill: white;
-      }
-    }
-
-    .hb-cta {
-      display: block;
-      font-size: 28px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-top: 1em;
-      max-width: 550px;
-      letter-spacing: 2px;
-      padding: 16px;
-    }
-
-    .hb-input-block input {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-
-      &::-webkit-input-placeholder {
-        color: #111E2E;
-      }
-
-      &::-moz-placeholder {
-        color: #111E2E;
-        opacity: 1;
-      }
-
-      &:-ms-input-placeholder {
-        color: #111E2E;
-      }
-    }
-
-    .hb-headline-text {
-      font-size: 3em;
-      line-height: 1;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    @media screen and (max-width: 840px) {
-      .hb-headline-text {
-        font-size: 3em;
-      }
-    }
-
-    @media screen and (max-height: 700px) {
-      .hb-headline-text {
-        font-size: 3em;
-      }
-    }
-
-    @media screen and (max-width: 550px), screen and (max-height: 700px)  {
-      .hb-headline-text {
-        font-size: 2.5em;
-      }
-
-      .hb-secondary-text {
-        font-size: 0.8em;
-        font-weight: 400;
-      }
-
-      [data-hb-editable-block="caption"] {
-        font-size: 1.3em !important;
-      }
-
-      .hb-cta {
-        font-size: 23px;
-      }
-    }
-
-    .hb-secondary-text {
-      font-size: 0.8em;
-      line-height: 1;
-      font-weight: 400;
-      max-width: 540px;
-      margin: 0 auto;
-
-      &:empty {
-        display: none;
-      }
-    }
-
-    .hb-input-block input {
-      font-size: .7em;
-      height: 6rem;
-    }
-
-    [data-hb-editable-block="caption"] {
-      border: 2px solid;
-      border-left: none;
-      border-right: none;
-      border-color: rgba(241, 241, 247, 0.3);
-      padding: 10px 0;
-      font-size: 1.5em;
-      margin: 20px auto;
-    }
-
-    .icon-close {
-      font-size: 20px;
-      top: 40px;
-      right: 40px;
-    }
-
-    .hb-input-block {
-      &:before {
-
-        content: "";
-        position: absolute;
-        left: 27px;
-        top: 34px;
-        width: 24px;
-        height: 24px;
-        opacity: 0.4;
-      }
-
-      input {
-        padding: 0 0 0 7px;
-      }
-    }
-
-    .builtin-email {
-      &:before {
-
       }
     }
   }

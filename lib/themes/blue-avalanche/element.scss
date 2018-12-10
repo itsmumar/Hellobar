@@ -3,42 +3,6 @@
     display: none;
   }
 
-  #hellobar-bar {
-    .hb-cta {
-      font-weight: 400;
-    }
-  }
-
-  #hellobar-slider {
-    border-radius: 0px;
-
-    .hb-headline-text {
-      font-size: 16px;
-      line-height: 20px;
-    }
-
-    .hb-secondary-text {
-      font-size: 14px;
-      line-height: 20px;
-    }
-    .hb-cta {
-      padding-left: 8px;
-      padding-right: 8px;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .slider-content {
-      padding: 18px 25px 20px;
-    }
-
-    &.show-branding {
-      .slider-content {
-        padding-bottom: 38px;
-      }
-    }
-  }
-
   #hellobar-modal {
     border-radius: 10px;
 
@@ -50,11 +14,6 @@
       font-size: 20px;
       line-height: 34px;
       margin-top: 15px;
-    }
-
-    .hb-cta {
-      font-size: 18px;
-      padding: 7px;
     }
 
     .hb-name-input {
@@ -72,14 +31,6 @@
       font-size: 22px;
       line-height: 38px;
       margin-top: 15px;
-    }
-
-    .hb-cta {
-      font-weight: 400;
-    }
-
-    .hb-input-block input {
-      font-size: .7em;
     }
 
     .hb-name-input {

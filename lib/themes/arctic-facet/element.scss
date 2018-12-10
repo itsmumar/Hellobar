@@ -1,17 +1,14 @@
 .arctic-facet {
   color: '#CCC';
-
   .hb-header {
     display: none;
   }
-
   .image-background .hb-image-wrapper.background {
     width: 43%;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
     background-position: top center;
   }
-
   #hellobar-takeover {
     .hb-content-wrapper {
       top: 0;
@@ -29,8 +26,7 @@
       max-width: none;
       background: url(https://assets.hellobar.com/arctic-facet-background.png);
       background-size: cover;
-      background-position: center,center;
-
+      background-position: center center;
       &:after {
         content: '';
         position: absolute;
@@ -43,7 +39,6 @@
         border-radius: 5px;
         pointer-events: none;
       }
-
       .hb-inner-content {
         top: 50%;
         left: 50%;
@@ -56,27 +51,22 @@
         -webkit-transform: translate(-50%, -50%);
       }
     }
-
     .hb-image-wrapper.background ~ .hb-content-wrapper {
       width: 57%;
       margin-left: 43%;
     }
-
     .hb-text-wrapper {
       max-width: 600px;
       margin: 0 auto;
     }
-
     .hb-input-wrapper {
       margin: 30px auto 0;
       max-width: 600px;
     }
-
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
       bottom: 2em;
     }
-
     @media screen and (max-width: 840px) {
       .hb-image-wrapper { display: none; }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
@@ -101,14 +91,6 @@
         padding-left: 0;
       }
     }
-
-    .hb-logo-wrapper {
-      opacity: 0.6;
-      svg {
-        fill: white;
-      }
-    }
-
     .hb-cta {
       display: block;
       font-size: 28px;
@@ -119,7 +101,6 @@
       letter-spacing: 2px;
       padding: 16px;
     }
-
     .hb-input-block input {
       appearance: none;
       -moz-appearance: none;
@@ -138,50 +119,41 @@
         color: #111E2E;
       }
     }
-
     .hb-headline-text {
       font-size: 2.5em;
       line-height: 1;
       font-weight: 700;
       text-align: left;
     }
-
     @media screen and (max-width: 550px), screen and (max-height: 700px)  {
       .hb-headline-text {
         font-size: 2.1em;
       }
-
       .hb-secondary-text {
         font-size: 0.8em;
         font-weight: 400;
       }
-
       .hb-cta {
         font-size: 23px;
       }
     }
-
     .hb-secondary-text {
       font-size: 0.8em;
       line-height: 1;
       font-weight: 400;
       text-align: left;
-
       &:empty {
         display: none;
       }
     }
-
     .hb-input-block input {
       font-size: .7em;
       height: 6rem;
     }
-
     [data-hb-editable-block="caption"] {
       margin: 10px 0 20px;
       font-size: 1em;
     }
-
     .icon-close {
       font-size: 20px;
       top: 37px;
@@ -189,10 +161,8 @@
       color: #374555;
       text-shadow: 0px 0px 2px rgba(0,0,0,0.2);
     }
-
     .hb-input-block {
       &:before {
-
         background-repeat: no-repeat;
         content: "";
         position: absolute;
@@ -202,15 +172,8 @@
         height: 24px;
         opacity: 0.4;
       }
-
       input {
         padding: 0 0 0 7px;
-      }
-    }
-
-    .builtin-email {
-      &:before {
-
       }
     }
   }
