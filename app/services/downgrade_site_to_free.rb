@@ -10,7 +10,8 @@ class DowngradeSiteToFree
 
     return site.current_subscription if site.current_subscription&.free?
 
-    previous_subscription = site.current_subscription
+    # temporary disabling of this email
+    # previous_subscription = site.current_subscription
 
     create_free_subscription.tap do
       # send_notification(previous_subscription)

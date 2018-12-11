@@ -41,7 +41,7 @@ describe DowngradeSiteToFree, :freeze do
   end
 
   it 'sends notifications to all owners' do
-    previous_subscription = site.current_subscription
+    # previous_subscription = site.current_subscription
 
     # Testing out not sending this notification
     # site.users.each do |user|
