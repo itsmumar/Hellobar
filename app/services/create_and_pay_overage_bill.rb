@@ -17,21 +17,23 @@ class CreateAndPayOverageBill
     end
 
     put_to_slack_ok(bill)
+  # rubocop: disable Style/RescueStandardError
   rescue => e
     put_to_slack_error(bill)
     Raven.capture_exception(e)
   end
+  # rubocop: enable Style/RescueStandardError
 
   private
 
   attr_reader :site, :amount
 
   def put_to_slack_error(bill)
-    put_to_slack("Attempting to bill #{ bill.id}: #{ site.url } for $#{ amount }... Failed")
+    put_to_slack("Attempting to bill #{ bill.id }: #{ site.url } for $#{ amount }... Failed")
   end
 
   def put_to_slack_ok(bill)
-    put_to_slack("Attempting to bill #{ bill.id}: #{ site.url } for $#{ amount }... OK")
+    put_to_slack("Attempting to bill #{ bill.id }: #{ site.url } for $#{ amount }... OK")
   end
 
   def create_bill_for_overage
