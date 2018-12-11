@@ -18,7 +18,7 @@ class Api::EmailsController < Api::ApplicationController
   end
 
   def search
-    results = Email.search(params[:query])
+    results = site.emails.search(params[:query])
     render json: results
   end
 

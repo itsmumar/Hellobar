@@ -2,7 +2,6 @@ describe 'api/sites/:id/search requests' do
   let(:site) { create :site }
   let(:user) { create :user, site: site }
   let!(:email) { create :email, site: site }
-
   let(:headers) { api_headers_for_user(user) }
   let(:params) { Hash[format: :json] }
   let(:search_params) do
