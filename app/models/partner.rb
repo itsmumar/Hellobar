@@ -3,6 +3,7 @@ class Partner < ActiveRecord::Base
     foreign_key: :affiliate_identifier,
     primary_key: :affiliate_identifier,
     inverse_of: :partner
+  has_many :users, through: :affiliate_information
 
   validates :email, format: { with: Devise.email_regexp, allow_blank: true }
   validates :affiliate_identifier, presence: true, uniqueness: true

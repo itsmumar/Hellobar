@@ -5,7 +5,18 @@ set :output, standard: PREFIX + 'cron.log', error: PREFIX + 'cron.error.log'
 
 env :PATH, ENV['PATH']
 
-# All times are in UTC
+############################### ALL TIMES ARE IN UTC ####################################
+
+every 1.month, at: '1:00pm', roles: [:cron] do
+  # generate overage fee bills to be paid in next billing run
+  rake 'overage_fees:run'
+end
+
+every 1.month, at: '1:15pm', roles: [:cron] do
+  # reset the warning_email_sent fields to `true` on sites
+  rake 'reset_email_sent_fields:run'
+end
+
 every :day, at: '1:30pm', roles: [:cron] do
   rake 'intercom_refresh:start'
 end
@@ -14,8 +25,7 @@ every :day, at: '2:00pm', roles: [:cron] do
   rake 'billing:run'
 end
 
-# All times are in UTC
-every :day, at: '2:10pm', roles: [:cron] do
+every :day, at: '2:15pm', roles: [:cron] do
   rake 'monthly_views_tracker:check'
 end
 
@@ -49,15 +59,6 @@ end
 
 every 24.hours, at: '2:00am', roles: [:cron] do
   rake 'site:scripts:install_check:recently_created_not_installed'
-end
-
-# All times are in UTC
-every 1.month, at: 'start of the month at 3am', roles: [:cron] do
-  rake 'overage_fees:run' # generate overage fee bills to be paid in next billing run
-end
-
-every 1.month, at: 'start of the month at 4am', roles: [:cron] do
-  rake 'reset_email_sent_fields:run' # reset the warning_email_sent fields to `true` on sites
 end
 
 every 5.minutes, roles: %i[web worker] do
