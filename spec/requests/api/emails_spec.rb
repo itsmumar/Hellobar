@@ -21,4 +21,26 @@ describe 'api/sites/:id/search requests' do
       expect(json.count).to eql 1
     end
   end
+
+  context 'create a new email' do
+    let(:params) { Hash[format: :json] }
+    let(:email_params) do
+      {
+        site_id: site.id,
+        subject: 'Test Subject',
+        body: 'Test body over here',
+        from_name: 'Homer Simpson',
+        from_email: 'homer@springfieldpowerplant.com'
+      }
+    end
+
+    it 'post email params' do
+      post api_site_emails_path(site),
+        params.merge(email: email_params),
+        headers
+
+      expect(response).to be_successful
+      expect(json[:subject]).to eql 'Test Subject'
+    end
+  end
 end
