@@ -16,6 +16,9 @@
       "background_color": "012FFF",
       "border_color":"264AAE",
       "button_color": "264AAE",
+      "conversion_font": "open_sans",
+      "conversion_font_color": "7282B8",
+      "conversion_font_size": 18,
       "cta_border_color":"FFFFFF",
       "cta_border_radius": 4,
       "cta_border_width": 0,
@@ -33,11 +36,7 @@
       "text_field_border_width": 0,
       "text_field_font_size": 18,
       "text_field_text_color": "B3B3B3",
-      "text_field_font_family": "open_sans",
-      "conversion_font_color": "7282B8",
-      "conversion_font_size": 18,
-      "conversion_font": "open_sans"
-
+      "text_field_font_family": "open_sans"
     }
   },
   "image": {

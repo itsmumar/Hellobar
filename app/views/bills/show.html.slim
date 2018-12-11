@@ -38,7 +38,7 @@ main
     tr.thin_border
       td.left
         - if @bill.description == "Monthly View Limit Overage Fee"
-          | Monthly View Limit Overage Fees
+          | Monthly View Limit Overage Fees (#{@bill.view_count} views)
         - else
           | HelloBar #{@subscription.values[:name]} - #{@subscription.schedule.capitalize}
         br

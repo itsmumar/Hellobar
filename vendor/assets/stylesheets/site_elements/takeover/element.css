@@ -87,6 +87,7 @@
   position: absolute;
   text-align: center;
   width: 100%;
+  bottom: 2em;
 }
 
 #hellobar-takeover .hb-logo-wrapper.original, #hellobar-takeover .hb-logo-wrapper.animated {
