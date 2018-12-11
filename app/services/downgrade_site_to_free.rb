@@ -13,7 +13,7 @@ class DowngradeSiteToFree
     previous_subscription = site.current_subscription
 
     create_free_subscription.tap do
-      send_notification(previous_subscription)
+      # send_notification(previous_subscription)
     end
   end
 
