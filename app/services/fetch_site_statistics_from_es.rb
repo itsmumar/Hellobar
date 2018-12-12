@@ -16,67 +16,58 @@ class FetchSiteStatisticsFromES
   end
 
   def aggrigations
-    {
-        total: {
-            filter: {
-                terms: { sid: site_element_ids }
-            },
-            aggs: {
-                v: { sum: { field: "v" } }
-            }
+    agg = {
+      total: {
+        filter: {
+          terms: { sid: site_element_ids }
         },
-        call: {
-            filter: {
-                terms: { sid: site_element_ids('call') }
-            },
-            aggs: {
-                c: { sum: { field: "c" } }
-            }
-        },
-        email: {
-            filter: {
-                terms: { sid: site_element_ids('email') }
-            },
-            aggs: {
-                c: { sum: { field: "c" } }
-            }
-        },
-        traffic: {
-            filter: {
-                terms: { sid: site_element_ids('traffic') }
-            },
-            aggs: {
-                c: { sum: { field: "c" } }
-            }
-        },
-        social: {
-            filter: {
-                terms: { sid: site_element_ids('social') }
-            },
-            aggs: {
-                c: { sum: { field: "c" } }
-            }
+        aggs: {
+          v: { sum: { field: 'v' } }
         }
+      }
     }
+
+    %i[call email traffic social].each do |type|
+      agg[type] = {
+        filter: {
+          terms: { sid: site_element_ids(type.to_s) }
+        },
+        aggs: {
+          c: { sum: { field: 'c' } }
+        }
+      }
+    end
+
+    agg
   end
 
   def query
     OverTimeIndex.filter(
-        { terms: { sid: site_element_ids } }
+      terms: { sid: site_element_ids }
     )
   end
 
   def normalize result
     normalized = {}
     result.each do |k, v|
-      if v["c"]
-        normalized[k.to_sym] = v["c"]["value"]
-      else
-        normalized[k.to_sym] = v["v"]["value"]
-      end
+      value = v['c'] ? v['c']['value'] : v['v']['value']
+      normalized[k.to_sym] = value
     end
 
     normalized
+  end
+
+  def add_types hash
+    %i[call email traffic social].each do |type|
+      hash[type] = {
+        filter: {
+          terms: { sid: site_element_ids(type.to_s) }
+        },
+        aggs: {
+          c: { sum: { field: 'c' } }
+        }
+      }
+    end
   end
 
   def site_element_ids subtype = nil

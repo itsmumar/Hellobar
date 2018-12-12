@@ -15,37 +15,35 @@ class FetchGraphStatisticsFromES
   attr_reader :site, :start_date, :end_date, :type
 
   def fetch
-    raw_result = query.aggs(aggrigations).aggs["by_date"]["buckets"].sort_by { |row| row["key"] }
+    raw_result = query.aggs(aggrigations).aggs['by_date']['buckets'].sort_by { |row| row['key'] }
 
     raw_result.map do |rec|
       {
-          date: WeirdDate.to_date(rec["key"]).strftime('%-m/%d'),
-          value: rec["v"]["value"]
+        date: WeirdDate.to_date(rec['key']).strftime('%-m/%d'),
+        value: rec['v']['value']
       }
     end
-    #
-    # result.sort_by { |row| row[:date] }
   end
 
   def aggrigations
     {
-        by_date: {
-            terms: { field: 'date' },
-            aggs: {
-                v: { sum: { field: 'v' } }
-            }
+      by_date: {
+        terms: { field: 'date' },
+        aggs: {
+          v: { sum: { field: 'v' } }
         }
+      }
     }
   end
 
   def query
     OverTimeIndex.filter(
-        range: {
-            date: {
-                gte: WeirdDate.from_date(start_date),
-                lte: WeirdDate.from_date(end_date)
-            }
+      range: {
+        date: {
+          gte: WeirdDate.from_date(start_date),
+          lte: WeirdDate.from_date(end_date)
         }
+      }
     ).filter(terms: { sid: site_element_ids })
   end
 

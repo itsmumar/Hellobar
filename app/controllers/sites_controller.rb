@@ -107,7 +107,7 @@ class SitesController < ApplicationController
 
   def site_statistics_graph
     @site_statistics ||=
-        FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
+      FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
   end
 
   def site_statistics_totals
