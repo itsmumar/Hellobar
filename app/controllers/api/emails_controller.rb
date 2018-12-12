@@ -1,5 +1,5 @@
 class Api::EmailsController < Api::ApplicationController
-  before_action :find_email, except: %i[create]
+  before_action :find_email, except: %i[create search]
 
   def show
     render json: @email
@@ -17,6 +17,11 @@ class Api::EmailsController < Api::ApplicationController
     render json: @email
   end
 
+  def search
+    results = site.emails.search(params[:query])
+    render json: results
+  end
+
   private
 
   def site
@@ -28,6 +33,6 @@ class Api::EmailsController < Api::ApplicationController
   end
 
   def email_params
-    params.require(:email).permit(:from_name, :from_email, :subject, :body)
+    params.require(:email).permit(:from_name, :from_email, :subject, :body, :query)
   end
 end

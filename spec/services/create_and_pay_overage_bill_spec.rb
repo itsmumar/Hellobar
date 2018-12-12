@@ -13,6 +13,7 @@ describe CreateAndPayOverageBill do
     end
 
     it 'creates a new Bill' do
+      stub_request(:post, 'https://hooks.slack.com/services/')
       expect { service.call }
         .to change(Bill, :count).by(1)
 
