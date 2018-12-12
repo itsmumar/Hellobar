@@ -1,4 +1,10 @@
 class Email < ApplicationRecord
+  include SearchCop
+
+  search_scope :search do
+    attributes :subject
+  end
+
   belongs_to :site
   has_one :campaign, inverse_of: :email
   has_many :sequence_steps, as: :executable, dependent: :destroy, inverse_of: :executable
