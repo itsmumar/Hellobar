@@ -4,7 +4,7 @@ AmCharts.ready ->
     CE_SNAPSHOT_NAME="summary"
 
   # Render appropriate chart on click
-  $('body').on 'click', '.chart-block[data-chart]:not(.activated)', (event) ->
+  $('body').on 'click', '.chart-block[data-chart]:not(.activated), button', (event) ->
     # Don't allow clicking during loading
     return false if $('#amchart').hasClass('loading')
 
@@ -24,21 +24,24 @@ AmCharts.ready ->
     UrlParams.updateParam('chart', window.CurrentChart)
     $(".top-performers-wrapper").hide()
 
+    start = moment().subtract(29, 'days').format('MMMM D, YYYY')
+    end = moment().format('MMMM D, YYYY')
+
     switch window.CurrentChart
       when "views"
-        new ViewsChart({siteID, numDays})
+        new ViewsChart({siteID, numDays, start, end})
         $(".top-performers-wrapper.all").show()
       when "emails"
-        new EmailsChart({siteID, numDays})
+        new EmailsChart({siteID, numDays, start, end})
         $(".top-performers-wrapper.email").show()
       when "clicks"
-        new ClicksChart({siteID, numDays})
+        new ClicksChart({siteID, numDays, start, end})
         $(".top-performers-wrapper.traffic").show()
       when "social"
-        new SocialChart({siteID, numDays})
+        new SocialChart({siteID, numDays, start, end})
         $(".top-performers-wrapper.social").show()
       when "calls"
-        new CallsChart({siteID, numDays})
+        new CallsChart({siteID, numDays, start, end})
         $(".top-performers-wrapper.call").show()
 
   # Trigger current chart or default when applicatble
@@ -67,3 +70,76 @@ $ ->
       $(".top-performers-wrapper.calls").show()
     else
       $(".top-performers-wrapper.all").show()
+
+  start = moment().subtract(29, 'days')
+  end = moment()
+
+  cb = (start, end) ->
+    return false if $('#amchart').hasClass('loading')
+
+    # Set up charting canvas (if it doesn't exist)
+    $(@).parent().after('<div id="amchart"></div>') unless $('#amchart').length
+
+    # Toggle activated state
+    $(@).parent().find('.activated').removeClass('activated')
+    $(@).addClass('activated')
+
+    # Render appropriate chart
+    siteID = window.location.href.split('sites')[1][1]
+    numDays = $(@).attr('data-num-days')
+
+    UrlParams.updateParam('chart', UrlParams.fetch('chart'))
+    $(".top-performers-wrapper").hide()
+
+    start = start.format('MMMM D, YYYY')
+    end = end.format('MMMM D, YYYY')
+
+    switch window.CurrentChart
+      when "views"
+        new ViewsChart({siteID, numDays, start, end})
+        $(".top-performers-wrapper.all").show()
+      when "emails"
+        new EmailsChart({siteID, numDays, start, end})
+        $(".top-performers-wrapper.email").show()
+      when "clicks"
+        new ClicksChart({siteID, numDays, start, end})
+        $(".top-performers-wrapper.traffic").show()
+      when "social"
+        new SocialChart({siteID, numDays, start, end})
+        $(".top-performers-wrapper.social").show()
+      when "calls"
+        new CallsChart({siteID, numDays, start, end})
+        $(".top-performers-wrapper.call").show()
+    return
+
+  $('#reportrange').daterangepicker {
+    startDate: start
+    endDate: end
+    ranges:
+      'Today': [
+        moment()
+        moment()
+      ]
+      'Yesterday': [
+        moment().subtract(1, 'days')
+        moment().subtract(1, 'days')
+      ]
+      'Last 7 Days': [
+        moment().subtract(6, 'days')
+        moment()
+      ]
+      'Last 30 Days': [
+        moment().subtract(29, 'days')
+        moment()
+      ]
+      'This Month': [
+        moment().startOf('month')
+        moment().endOf('month')
+      ]
+      'Last Month': [
+        moment().subtract(1, 'month').startOf('month')
+        moment().subtract(1, 'month').endOf('month')
+      ]
+  }, cb
+  cb start, end
+  return
