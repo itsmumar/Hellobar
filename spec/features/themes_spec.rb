@@ -2,7 +2,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   given(:user) { create :user, :with_site }
   given(:site) { user.sites.first }
   given(:subtype) { 'Modal' }
-  given(:theme_id) { 'blue-autumn' }
+  given(:theme_id) { 'singapore' }
   given(:themes) { Theme.where(type: 'generic') }
   given(:theme) { themes.detect { |theme| theme.id == theme_id } }
   given(:url) { new_site_site_element_path(site) + '/#/goal' }
