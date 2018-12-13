@@ -99,37 +99,37 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
-          berlin/container.css
-          houston/container.css
           amsterdam/container.css
-          autodetect/container.css
-          singapore/container.css
-          portland/container.css
-          bucharest/container.css
-          minsk/container.css
-          madrid/container.css
-          kyoto/container.css
-          valencia/container.css
           austin/container.css
-          lyon/container.css
-          kawasaki/container.css
+          autodetect/container.css
           belgrade/container.css
-          nashville/container.css
-          edmonton/container.css
-          dublin/container.css
-          port-elizabeth/container.css
-          new-orleans/container.css
-          cologne/container.css
-          denpasar/container.css
-          winnipeg/container.css
-          tokyo/container.css
-          rosarito/container.css
-          oaxaca/container.css
-          gold-coast/container.css
-          salta/container.css
+          berlin/container.css
           bradford/container.css
           brooklyn/container.css
+          bucharest/container.css
+          cologne/container.css
+          denpasar/container.css
+          dublin/container.css
+          edmonton/container.css
+          gold-coast/container.css
+          houston/container.css
+          kawasaki/container.css
+          kyoto/container.css
+          lyon/container.css
+          madrid/container.css
+          minsk/container.css
+          nashville/container.css
+          new-orleans/container.css
+          oaxaca/container.css
+          port-elizabeth/container.css
+          portland/container.css
+          rosarito/container.css
+          salta/container.css
           sante-fe/container.css
+          singapore/container.css
+          tokyo/container.css
+          valencia/container.css
+          winnipeg/container.css
         ].join("\n")
     end
   end
