@@ -260,6 +260,9 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.datetime "deleted_at"
   end
 
+  add_index "emails", ["site_id"], name: "index_emails_on_site_id", using: :btree
+  add_index "emails", ["subject"], name: "index_emails_on_subject", using: :btree
+
   create_table "identities", force: :cascade do |t|
     t.integer  "site_id",     limit: 4
     t.string   "provider",    limit: 255
