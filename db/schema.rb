@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207194805) do
+ActiveRecord::Schema.define(version: 20181212152548) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -236,6 +236,18 @@ ActiveRecord::Schema.define(version: 20181207194805) do
   end
 
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
+
+  create_table "csv_uploads", force: :cascade do |t|
+    t.integer  "contact_list_id",  limit: 4
+    t.string   "csv_file_name",    limit: 255
+    t.string   "csv_content_type", limit: 255
+    t.integer  "csv_file_size",    limit: 4
+    t.datetime "csv_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "csv_uploads", ["contact_list_id"], name: "index_csv_uploads_on_contact_list_id", using: :btree
 
   create_table "emails", force: :cascade do |t|
     t.integer  "site_id",    limit: 4,     null: false

@@ -268,4 +268,47 @@ describe 'api/subscribers requests' do
       end
     end
   end
+
+  describe 'POST #upload' do
+    let(:csv) { fixture_file_upload 'subscribers.csv' }
+    let(:csv_params) { Hash[csv: csv] }
+
+    def send_request
+      post upload_api_site_contact_list_subscribers_path(site, contact_list),
+        params.merge(csv_params),
+        headers
+    end
+
+    it 'calls ImportSubscribersFromCsv' do
+      expect(ImportSubscribersFromCsv)
+        .to receive_service_call
+        .with(instance_of(ActionDispatch::Http::UploadedFile), contact_list)
+
+      send_request
+
+      expect(response).to be_successful
+      expect(json)
+        .to eql(
+          'message' => 'Subscribers has been uploaded successfully.'
+        )
+    end
+
+    context 'when csv is more than 5.kilobytes' do
+      let(:csv) { fixture_file_upload 'subscribers_huge.csv' }
+
+      it 'calls ImportSubscribersFromCsvAsync' do
+        expect(ImportSubscribersFromCsvAsync)
+          .to receive_service_call
+          .with(instance_of(ActionDispatch::Http::UploadedFile), contact_list)
+
+        send_request
+
+        expect(response).to be_successful
+        expect(json)
+          .to eql(
+            'message' => 'We need some time to import all of your subscribers. Please come back later'
+          )
+      end
+    end
+  end
 end

@@ -28,7 +28,11 @@ Rails.application.routes.draw do
       end
 
       resources :contact_lists, only: [:create] do
-        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
+        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show] do
+          collection do
+            post :upload
+          end
+        end
       end
 
       resources :sequences, except: %i[new edit] do
