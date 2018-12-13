@@ -1,0 +1,71 @@
+.bradford {
+  .hb-header {
+    display: none;
+  }
+  #hellobar-bar {
+    .hb-cta {
+      font-weight: 400;
+    }
+  }
+  #hellobar-slider {
+    border-radius: 0px;
+    .hb-headline-text {
+      font-size: 18px;
+      line-height: 22px;
+    }
+    .hb-secondary-text {
+      font-size: 16px;
+      line-height: 20px;
+    }
+    .hb-cta {
+      font-size: 16px;
+      padding-left: 8px;
+      padding-right: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .slider-content {
+      padding: 18px 25px 20px;
+    }
+  }
+  #hellobar-modal {
+    border-radius: 10px;
+    .hb-headline-text {
+      font-size: 34px;
+      line-height: 42px;
+    }
+    .hb-secondary-text {
+      font-size: 20px;
+      line-height: 34px;
+      margin-top: 15px;
+    }
+    .hb-cta {
+      font-size: 18px;
+      padding: 8px;
+    }
+    .hb-name-input {
+      margin-bottom: 5px;
+    }
+  }
+  #hellobar-takeover {
+    .hb-headline-text {
+      font-size: 40px;
+      line-height: 52px;
+    }
+    .hb-secondary-text {
+      font-size: 22px;
+      line-height: 38px;
+      margin-top: 15px;
+    }
+    .hb-cta {
+      font-weight: 400;
+    }
+    .hb-input-block input {
+      font-size: .7em;
+    }
+    .hb-name-input {
+      margin-bottom: 12px;
+    }
+  }
+}

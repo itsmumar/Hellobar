@@ -1,0 +1,284 @@
+@mixin frame {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 15px;
+  border: 2px solid rgba(241, 241, 247, 0.3);
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  pointer-events: none;
+}
+.sante-fe {
+  color: '#3A3A49';
+  .hb-header {
+    display: none;
+  }
+  .image-background .hb-image-wrapper.background {
+    width: 43%;
+    background-position: top center;
+  }
+  .hb-content-wrapper {
+    text-align: left;
+  }
+  .hb-headline-text {
+    font-size: 2em;
+    text-align: left;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+
+  [data-hb-editable-block="caption"],
+  [data-hb-editable-block="content"] {
+    font-weight: normal;
+    margin: 0 auto;
+    &:empty {
+      display: none;
+    }
+  }
+  .hb-input-block {
+    input {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      &::-webkit-input-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+      &::-moz-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+      &:-ms-input-placeholder {
+        color: white;
+        opacity: 0.25;
+      }
+    }
+  }
+  .hb-cta {
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 1em;
+    letter-spacing: 2px;
+    box-shadow: 0px 4px 20px -7px black;
+    max-width: inherit;
+    &:hover {
+      opacity: 0.95;
+    }
+  }
+  #hellobar-modal,
+  #hellobar-takeover,
+  #hellobar-slider {
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  }
+  #hellobar-modal {
+    padding: 0;
+    .hb-content-wrapper:after {
+      @include frame;
+      margin: 8px;
+      border-width: 1px;
+    }
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      width: 57%;
+      margin-left: 43%;
+    }
+    .hb-content-wrapper{
+      text-align: center;
+    }
+    .hb-input-wrapper{
+      max-width: none;
+    }
+    .hb-inner-content {
+      padding: 48px 58px;
+    }
+    .hb-headline-text {
+      font-size: 2.1em;
+      margin-bottom: 20px;
+    }
+    [data-hb-editable-block="caption"] {
+      font-size: 1.5em;
+      margin: 15px auto;
+    }
+    [data-hb-editable-block="content"] {
+      font-size: 1.1em;
+      margin: 0 0 10px;
+    }
+    &.image-background {
+      .hb-headline-text,
+      [data-hb-editable-block="content"],
+      [data-hb-editable-block="caption"] {
+        text-align: left;
+      }
+    }
+    .icon-close {
+      top: -20px;
+      right: 0px;
+      font-size: 14px;
+    }
+    .hb-cta {
+      font-size: 19px;
+      padding: 6px;
+    }
+    @media screen and (max-width: 700px) {
+      .hb-image-wrapper {
+        display: none;
+      }
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        margin-left: inherit;
+        width: auto;
+      }
+    }
+  }
+  #hellobar-takeover {
+    .hb-content-wrapper {
+      top: 0;
+      left: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-size: 24px;
+      transform: translate(0%, 0%);
+      -o-transform: translate(0%, 0%);
+      -moz-transform: translate(0%, 0%);
+      -webkit-transform: translate(0%, 0%);
+      margin: 0;
+      max-width: none;
+      .hb-inner-content {
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        padding: 2em;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+      }
+    }
+    .hb-content-wrapper:after {
+      @include frame;
+    }
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      width: 57%;
+      margin-left: 43%;
+    }
+    .hb-text-wrapper {
+      max-width: 598px;
+      margin: 0 auto;
+    }
+    .hb-input-wrapper {
+      margin: 20px auto 0;
+      max-width: 598px;
+    }
+    .questionslist {
+      margin: 0 auto;
+      max-width: 598px;
+    }
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-left: 43%;
+    }
+    @media screen and (max-width: 840px) {
+      .hb-image-wrapper {
+        display: none;
+      }
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        top: 0;
+        left: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 24px;
+        position: fixed;
+        transform: translate(0%, 0%);
+        -o-transform: translate(0%, 0%);
+        -moz-transform: translate(0%, 0%);
+        -webkit-transform: translate(0%, 0%);
+        margin: 0;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0;
+      }
+      .hb-text-wrapper,
+      .hb-input-wrapper {
+        max-width: 540px;
+      }
+      .questionslist {
+        max-width: 540px;
+      }
+    }
+    .hb-headline-text {
+      margin-bottom: 20px;
+    }
+    [data-hb-editable-block="caption"] {
+      margin: 20px auto;
+      padding: 10px 0;
+    }
+    [data-hb-editable-block="content"] {
+      margin: 0 0 10px;
+    }
+  }
+  #hellobar-slider {
+    .slider-content {
+      padding: 25px 25px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 250px;
+      .hb-content-wrapper {
+        .hb-text-wrapper {
+          padding-right: 0;
+        }
+      }
+      &:after {
+        @include frame;
+        margin: 5px;
+        border-width: 1px;
+      }
+    }
+    .hb-text-wrapper {
+      margin-bottom: 15px;
+    }
+    .hb-headline-text {
+      font-size: 1.5em;
+    }
+    [data-hb-editable-block="caption"] {
+      font-size: 1.2em;
+    }
+    &.image-background {
+      .slider-content {
+        margin-left: 43%;
+        &:after {
+          left: 43%;
+        }
+      }
+      .hb-logo-wrapper {
+        margin-right: 0;
+        margin-left: 43%;
+      }
+    }
+  }
+  #hellobar-alert {
+    .image-background .hb-image-wrapper.background {
+      width: 45%;
+    }
+    #hellobar-slider.image-background {
+      .slider-content {
+        margin-left: 45%;
+        &:after {
+          left: 45%;
+        }
+      }
+    }
+  }
+}
