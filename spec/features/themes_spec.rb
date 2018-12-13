@@ -55,7 +55,7 @@ feature 'Users can select a design theme for SiteElements', :js do
   end
 
   context 'with Modal type' do
-    context 'with smooth-impact theme' do
+    context 'with rosarito theme' do
       before do
         allow_any_instance_of(StaticScriptModel).to receive(:pro_secret).and_return 'random'
       end

@@ -99,37 +99,37 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
-          azuki/container.css
-          hellobar-classic/container.css
-          arctic-facet/container.css
+          berlin/container.css
+          houston/container.css
+          amsterdam/container.css
           autodetect/container.css
-          blue-autumn/container.css
-          blue-avalanche/container.css
-          chance/container.css
-          classy/container.css
-          cocina/container.css
-          dark-green-spring/container.css
-          evergreen-meadow/container.css
-          french-rose/container.css
-          gatsby/container.css
-          gogo/container.css
-          green-timberline/container.css
-          lionshare/container.css
-          mall/container.css
-          marble/container.css
-          marigold/container.css
-          puesto/container.css
-          pulse/container.css
-          resteo/container.css
-          rhythm/container.css
-          sling/container.css
-          smooth-impact/container.css
-          subtle-facet/container.css
-          tajima/container.css
-          tocaya/container.css
-          violet/container.css
-          wayfarer/container.css
-          wooli/container.css
+          singapore/container.css
+          portland/container.css
+          bucharest/container.css
+          minsk/container.css
+          madrid/container.css
+          kyoto/container.css
+          valencia/container.css
+          austin/container.css
+          lyon/container.css
+          kawasaki/container.css
+          belgrade/container.css
+          nashville/container.css
+          edmonton/container.css
+          dublin/container.css
+          port-elizabeth/container.css
+          new-orleans/container.css
+          cologne/container.css
+          denpasar/container.css
+          winnipeg/container.css
+          tokyo/container.css
+          rosarito/container.css
+          oaxaca/container.css
+          gold-coast/container.css
+          salta/container.css
+          bradford/container.css
+          brooklyn/container.css
+          sante-fe/container.css
         ].join("\n")
     end
   end
