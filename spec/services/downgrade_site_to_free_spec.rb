@@ -41,11 +41,12 @@ describe DowngradeSiteToFree, :freeze do
   end
 
   it 'sends notifications to all owners' do
-    previous_subscription = site.current_subscription
+    # previous_subscription = site.current_subscription
 
-    site.users.each do |user|
-      expect(SubscriptionMailer).to receive(:downgrade_to_free).with(site, user, previous_subscription).and_call_original
-    end
+    # Testing out not sending this notification
+    # site.users.each do |user|
+    #   expect(SubscriptionMailer).to receive(:downgrade_to_free).with(site, user, previous_subscription).and_call_original
+    # end
 
     service.call
   end

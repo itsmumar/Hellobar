@@ -17,12 +17,10 @@ class CreateAndPayOverageBill
     end
 
     put_to_slack_ok(bill)
-  # rubocop: disable Style/RescueStandardError
-  rescue => e
+  rescue StandardError => e
     put_to_slack_error(bill)
     Raven.capture_exception(e)
   end
-  # rubocop: enable Style/RescueStandardError
 
   private
 
