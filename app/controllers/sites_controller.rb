@@ -39,7 +39,7 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = site_statistics_graph
+        @totals = site_statistics_totals
         @recent_elements = @site.site_elements.active.recent(5)
       end
 
