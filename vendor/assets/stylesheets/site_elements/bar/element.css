@@ -56,6 +56,7 @@
   vertical-align: middle;
   margin: 0;
   width: auto;
+  white-space: normal;
 }
 
 #hellobar-bar .hb-cta .hb-text-holder {
