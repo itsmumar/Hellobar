@@ -1,7 +1,7 @@
 {
   "name": "Lyon",
   "type": "generic",
-  "id": "lyon",
+  "id": "gatsby",
   "fonts": [
     "josefin_sans",
     "oswald",

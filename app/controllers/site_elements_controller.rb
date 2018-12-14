@@ -31,7 +31,7 @@ class SiteElementsController < ApplicationController
       question: !@site.capabilities.leading_question?,
       closable: false,
       wiggle_button: false,
-      theme_id: 'rosarito',
+      theme_id: 'smooth-impact',
       text_field_font_family: SiteElement.columns_hash['font_id'].default,
       settings: { url: @site.url, url_to_like: @site.url, new_user: @site.users.first.new? }
     )

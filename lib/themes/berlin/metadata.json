@@ -1,7 +1,7 @@
 {
   "name": "Berlin",
   "type": "generic",
-  "id": "berlin",
+  "id": "azuki",
   "default_theme": true,
   "fonts": [
     "open_sans",

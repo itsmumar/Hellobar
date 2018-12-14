@@ -1,7 +1,7 @@
 {
   "name": "Houston",
   "type": "generic",
-  "id": "houston",
+  "id": "classic",
   "default_theme": true,
   "fonts": [
     "open_sans",
