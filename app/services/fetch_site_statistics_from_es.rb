@@ -60,6 +60,6 @@ class FetchSiteStatisticsFromES
   def site_element_ids subtype = nil
     return site.site_elements.ids unless subtype
 
-    site.site_elements.where("element_subtype like?", "#{subtype}%").ids
+    site.site_elements.where('element_subtype like?', "#{ subtype }%").ids
   end
 end
