@@ -99,11 +99,12 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
+          houston/container.css
+          berlin/container.css
           amsterdam/container.css
           austin/container.css
           autodetect/container.css
           belgrade/container.css
-          berlin/container.css
           bradford/container.css
           brooklyn/container.css
           bucharest/container.css
@@ -112,7 +113,6 @@ describe StaticScriptModel do
           dublin/container.css
           edmonton/container.css
           gold-coast/container.css
-          houston/container.css
           kawasaki/container.css
           kyoto/container.css
           lyon/container.css
