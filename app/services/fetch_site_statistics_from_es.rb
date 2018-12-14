@@ -57,22 +57,9 @@ class FetchSiteStatisticsFromES
     normalized
   end
 
-  def add_types hash
-    %i[call email traffic social].each do |type|
-      hash[type] = {
-        filter: {
-          terms: { sid: site_element_ids(type.to_s) }
-        },
-        aggs: {
-          c: { sum: { field: 'c' } }
-        }
-      }
-    end
-  end
-
   def site_element_ids subtype = nil
     return site.site_elements.ids unless subtype
 
-    site.site_elements.where(element_subtype: subtype).ids
+    site.site_elements.where("element_subtype like?", "#{subtype}%").ids
   end
 end

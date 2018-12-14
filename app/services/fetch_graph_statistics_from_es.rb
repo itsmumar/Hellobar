@@ -17,10 +17,11 @@ class FetchGraphStatisticsFromES
   def fetch
     raw_result = query.aggs(aggrigations).aggs['by_date']['buckets'].sort_by { |row| row['key'] }
 
+    field = (type.nil? || type == 'total') ? 'v' : 'c'
     raw_result.map do |rec|
       {
         date: WeirdDate.to_date(rec['key']).strftime('%-m/%d'),
-        value: rec['v']['value']
+        value: rec["#{field}"]['value']
       }
     end
   end

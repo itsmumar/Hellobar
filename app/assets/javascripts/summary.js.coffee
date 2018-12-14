@@ -4,7 +4,7 @@ AmCharts.ready ->
     CE_SNAPSHOT_NAME="summary"
 
   # Render appropriate chart on click
-  $('body').on 'click', '.chart-block[data-chart]:not(.activated), button', (event) ->
+  $('body').on 'click', '.chart-block[data-chart]:not(.activated)', (event) ->
     # Don't allow clicking during loading
     return false if $('#amchart').hasClass('loading')
 
@@ -74,7 +74,7 @@ $ ->
   start = moment().subtract(29, 'days')
   end = moment()
 
-  cb = (start, end) ->
+  callback = (start, end) ->
     return false if $('#amchart').hasClass('loading')
 
     # Set up charting canvas (if it doesn't exist)
@@ -140,6 +140,6 @@ $ ->
         moment().subtract(1, 'month').startOf('month')
         moment().subtract(1, 'month').endOf('month')
       ]
-  }, cb
-  cb start, end
+  }, callback
+  callback start, end
   return
