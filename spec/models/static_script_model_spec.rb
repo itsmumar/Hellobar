@@ -99,8 +99,8 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
-          houston/container.css
           berlin/container.css
+          houston/container.css
           amsterdam/container.css
           austin/container.css
           autodetect/container.css
