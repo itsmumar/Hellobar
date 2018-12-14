@@ -19,26 +19,26 @@ describe SettingsSerializer do
       let(:site) { create :site, :pro, user: user }
       let(:advanced_themes) do
         %w[
-          amsterdam
-          berlin
-          oaxaca
-          edmonton
-          new-orleans
-          salta
-          lyon
-          kawasaki
-          madrid
-          gold-coast
-          nashville
+          arctic-facet
+          azuki
+          subtle-facet
+          mall
+          puesto
+          tocaya
+          gatsby
+          gogo
+          cocina
+          tajima
+          lionshare
           new
-          denpasar
-          sante-fe
-          cologne
-          brooklyn
-          winnipeg
-          bucharest
-          tokyo
-          dublin
+          resteo
+          wooli
+          pulse
+          wayfarer
+          rhythm
+          chance
+          sling
+          marble
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
