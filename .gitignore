@@ -64,3 +64,6 @@ spec/examples.txt
 
 # Developer's config override
 config/initializers/local.rb
+
+# Ruby version manager
+.rvmrc
