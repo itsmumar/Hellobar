@@ -40,11 +40,9 @@
     }
   }
   .hb-cta {
-    display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
-    letter-spacing: 2px;
     box-shadow: 0px 4px 20px -7px black;
     max-width: inherit;
     &:hover {
@@ -95,25 +93,12 @@
     .hb-cta {
       font-size: 14px;
       margin: 4px 10px;
-      .hb-text-holder {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
     }
     .icon-close {
       font-size: 15px;
       top: 50%;
       right: 15px;
       transform: translateY(-51%);
-    }
-    @media screen and (max-width: 640px) {
-      .hb-input-block {
-        &:before {
-          top: 14px;
-        }
-      }
     }
     @media screen and (max-width: 840px) {
       .hb-headline-text {
@@ -129,6 +114,13 @@
       .hb-cta {
         font-size: 16px;
         margin: 2px 6px;
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .hb-input-block {
+        &:before {
+          top: 14px;
+        }
       }
     }
   }
@@ -158,18 +150,6 @@
     }
     .hb-input-wrapper{
       max-width: none;
-    }
-    .hb-cta {
-      font-size: 19px;
-      padding: 6px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .fr-wrapper{
-        .fr-element{
-          letter-spacing: 1px;
-        }
-      }
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
