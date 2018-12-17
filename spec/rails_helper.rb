@@ -33,6 +33,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.fixture_path = Rails.root.join('spec', 'fixtures')
+
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include StubsHelper
   config.include Paperclip::Shoulda::Matchers

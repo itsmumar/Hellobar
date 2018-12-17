@@ -4,6 +4,10 @@ describe 'Content upgrade requests' do
   let(:site_element) { site.site_elements.last }
   let!(:subscription) { create :subscription, :pro_managed, site: site }
 
+  def fixture_file_upload(path)
+    Rack::Test::UploadedFile.new(path, nil, false)
+  end
+
   context 'when unauthenticated' do
     describe 'GET :index' do
       it 'responds with a redirect to the login page' do
