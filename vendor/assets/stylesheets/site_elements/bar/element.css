@@ -57,6 +57,7 @@
   margin: 0;
   width: auto;
   white-space: normal;
+  padding: 0 1.33em;
 }
 
 #hellobar-bar .hb-cta .hb-text-holder {
