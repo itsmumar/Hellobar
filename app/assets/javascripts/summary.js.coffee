@@ -75,6 +75,7 @@ $ ->
   end = moment()
 
   callback = (start, end) ->
+    $('#reportrange span').html start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     return false if $('#amchart').hasClass('loading')
 
     # Set up charting canvas (if it doesn't exist)
