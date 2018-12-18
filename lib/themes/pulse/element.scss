@@ -41,7 +41,6 @@
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
-    letter-spacing: 2px;
     box-shadow: 0px 4px 20px -7px black;
     max-width: inherit;
     &:hover {
@@ -95,15 +94,6 @@
       font-size: 0.9em;
       margin: 0 0 10px;
       text-align: center;
-    }
-    .hb-cta {
-      font-size: 19px;
-      padding: 6px;
-      .fr-wrapper{
-        .fr-element{
-          letter-spacing: 1px;
-        }
-      }
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {

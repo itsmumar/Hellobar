@@ -68,11 +68,9 @@
     }
   }
   .hb-cta {
-    display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
-    letter-spacing: 2px;
     box-shadow: 0px 4px 20px -7px black;
     max-width: inherit;
     &:hover {
@@ -130,15 +128,6 @@
       right: 19px;
       font-size: 14px;
       color: #ffffff;
-    }
-    .hb-cta {
-      font-size: 19px;
-      padding: 6px;
-      .fr-wrapper{
-        .fr-element{
-          letter-spacing: 1px;
-        }
-      }
     }
     .hb-input-wrapper{
       margin: 1.33em 0 auto 0;
@@ -240,24 +229,6 @@
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
         padding-left: 0;
       }
-      .hb-cta {
-        font-size: 18px;
-        height: 3rem !important;
-      }
-      .hb-input-block {
-        input{
-          height: 3rem !important;
-        }
-      }
-      .hb-headline-text {
-        font-size: 1.5em;
-      }
-      [data-hb-editable-block="caption"] {
-        font-size: 0.8em;
-      }
-      [data-hb-editable-block="content"] {
-        font-size: 0.7em;
-      }
     }
   }
   #hellobar-slider {
@@ -274,12 +245,6 @@
     }
     .hb-text-wrapper {
       margin-bottom: 15px;
-    }
-    .hb-headline-text {
-      font-size: 1.5em;
-    }
-    [data-hb-editable-block="caption"] {
-      font-size: 1em;
     }
   }
 }
