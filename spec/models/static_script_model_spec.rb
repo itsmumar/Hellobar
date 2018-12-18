@@ -119,7 +119,7 @@ describe StaticScriptModel do
           cocina/container.css
           classy/container.css
           lionshare/container.css
-          lionshare/container.css
+          puesto/container.css
           subtle-facet/container.css
           marigold/container.css
           blue-avalanche/container.css
