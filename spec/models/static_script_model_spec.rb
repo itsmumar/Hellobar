@@ -100,36 +100,36 @@ describe StaticScriptModel do
           takeover/container.css
           alert/container.css
           azuki/container.css
-          hellobar-classic/container.css
+          classic/container.css
           arctic-facet/container.css
-          autodetect/container.css
-          blue-autumn/container.css
-          blue-avalanche/container.css
-          chance/container.css
-          classy/container.css
-          cocina/container.css
-          dark-green-spring/container.css
-          evergreen-meadow/container.css
           french-rose/container.css
-          gatsby/container.css
-          gogo/container.css
+          autodetect/container.css
           green-timberline/container.css
-          lionshare/container.css
-          mall/container.css
-          marble/container.css
-          marigold/container.css
-          puesto/container.css
-          pulse/container.css
-          resteo/container.css
-          rhythm/container.css
-          sling/container.css
-          smooth-impact/container.css
-          subtle-facet/container.css
-          tajima/container.css
-          tocaya/container.css
           violet/container.css
           wayfarer/container.css
+          chance/container.css
+          pulse/container.css
+          resteo/container.css
+          marble/container.css
+          mall/container.css
+          tajima/container.css
+          gogo/container.css
+          dark-green-spring/container.css
+          gatsby/container.css
+          cocina/container.css
+          classy/container.css
+          lionshare/container.css
+          lionshare/container.css
+          subtle-facet/container.css
+          marigold/container.css
+          blue-avalanche/container.css
+          smooth-impact/container.css
+          tocaya/container.css
           wooli/container.css
+          blue-autumn/container.css
+          sling/container.css
+          evergreen-meadow/container.css
+          rhythm/container.css
         ].join("\n")
     end
   end
