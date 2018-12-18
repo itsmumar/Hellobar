@@ -1,4 +1,10 @@
 class CreateSubscriber
+  class InvalidEmailError < StandardError
+    def initialize(email)
+      @message = %("#{ email }" is not a valid email address)
+    end
+  end
+
   def initialize(contact_list, params)
     @contact_list = contact_list
     @email = params.fetch(:email)&.downcase
@@ -6,6 +12,7 @@ class CreateSubscriber
   end
 
   def call
+    validate!
     create
     update_totals
     update_contact_list_cache
@@ -15,6 +22,10 @@ class CreateSubscriber
   private
 
   attr_reader :contact_list, :email, :name, :old_record
+
+  def validate!
+    raise InvalidEmailError, email if email !~ Devise.email_regexp
+  end
 
   def update_contact_list_cache
     contact_list.touch

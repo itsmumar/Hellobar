@@ -109,6 +109,13 @@ describe Subscription::Capabilities do
       expect(capabilities.upgrade_trigger).to be(::Float::INFINITY)
     end
 
+    specify 'Subscription::ProSpecial has advanced themes' do
+      subscription = build_stubbed :subscription, :pro_special
+      capabilities = subscription.capabilities
+
+      expect(capabilities.advanced_themes?).to be_falsey
+    end
+
     specify 'ProManaged plan has certain custom capabilities' do
       subscription = build_stubbed :subscription, :pro_managed
       capabilities = subscription.capabilities

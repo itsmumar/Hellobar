@@ -99,37 +99,37 @@ describe StaticScriptModel do
           slider/container.css
           takeover/container.css
           alert/container.css
-          berlin/container.css
-          houston/container.css
-          amsterdam/container.css
-          austin/container.css
+          azuki/container.css
+          hellobar-classic/container.css
+          arctic-facet/container.css
           autodetect/container.css
-          belgrade/container.css
-          bradford/container.css
-          brooklyn/container.css
-          bucharest/container.css
-          cologne/container.css
-          denpasar/container.css
-          dublin/container.css
-          edmonton/container.css
-          gold-coast/container.css
-          kawasaki/container.css
-          kyoto/container.css
-          lyon/container.css
-          madrid/container.css
-          minsk/container.css
-          nashville/container.css
-          new-orleans/container.css
-          oaxaca/container.css
-          port-elizabeth/container.css
-          portland/container.css
-          rosarito/container.css
-          salta/container.css
-          sante-fe/container.css
-          singapore/container.css
-          tokyo/container.css
-          valencia/container.css
-          winnipeg/container.css
+          blue-autumn/container.css
+          blue-avalanche/container.css
+          chance/container.css
+          classy/container.css
+          cocina/container.css
+          dark-green-spring/container.css
+          evergreen-meadow/container.css
+          french-rose/container.css
+          gatsby/container.css
+          gogo/container.css
+          green-timberline/container.css
+          lionshare/container.css
+          mall/container.css
+          marble/container.css
+          marigold/container.css
+          puesto/container.css
+          pulse/container.css
+          resteo/container.css
+          rhythm/container.css
+          sling/container.css
+          smooth-impact/container.css
+          subtle-facet/container.css
+          tajima/container.css
+          tocaya/container.css
+          violet/container.css
+          wayfarer/container.css
+          wooli/container.css
         ].join("\n")
     end
   end
