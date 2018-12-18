@@ -1,5 +1,4 @@
 .arctic-facet {
-  color: '#CCC';
   .hb-header {
     display: none;
   }
@@ -117,7 +116,6 @@
     }
     .hb-headline-text {
       font-size: 2.5em;
-      line-height: 1;
       font-weight: 700;
       text-align: left;
     }
@@ -135,7 +133,6 @@
     }
     .hb-secondary-text {
       font-size: 0.8em;
-      line-height: 1;
       font-weight: 400;
       text-align: left;
       &:empty {
