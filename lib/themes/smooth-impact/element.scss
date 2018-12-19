@@ -38,6 +38,9 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       opacity: 0.95;
     }
   }
+  .questionslist {
+    
+  }
   #hellobar-bar,
   #hellobar-modal,
   #hellobar-takeover,
@@ -191,12 +194,12 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       margin-left: 43%;
     }
     .hb-text-wrapper {
-      max-width: 600px;
+      max-width: 632px;
       margin: 0 auto;
     }
     .hb-input-wrapper {
       margin: 20px auto 0;
-      max-width: 600px;
+      max-width: 632px;
     }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
