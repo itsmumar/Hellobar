@@ -28,8 +28,14 @@
   width: 100%;
 }
 
+#hellobar-takeover .hb-text-wrapper {
+  max-width: 540px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 #hellobar-takeover .questionslist {
-  max-width: 600px;
+  max-width: 540px;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
