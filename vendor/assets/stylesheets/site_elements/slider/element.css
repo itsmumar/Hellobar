@@ -25,6 +25,19 @@
   font-size: 1em;
 }
 
+#hellobar-slider .hb-inner-content {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#hellobar-slider .questionslist {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
 /*-----------  Close Buttons  -----------*/
 
 #hellobar-slider .icon-close {
@@ -235,6 +248,7 @@
   width: 100%;
   text-align: center;
 }
+
 
 /*-----------  General Responsive  -----------*/
 

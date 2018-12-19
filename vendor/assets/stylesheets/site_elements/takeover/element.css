@@ -23,8 +23,16 @@
 }
 
 #hellobar-takeover .hb-inner-content {
-  max-width: 41em;
+  max-width: 600px;
   margin: 0 auto;
+  width: 100%;
+}
+
+#hellobar-takeover .questionslist {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 /*-----------  Close Buttons  -----------*/
@@ -145,3 +153,5 @@
 #hellobar-takeover.mobile .gdpr-consent-form p {
   font-size: 16px;
 }
+
+
