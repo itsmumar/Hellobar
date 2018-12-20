@@ -118,3 +118,8 @@
   name: 'Paytone One'
   value: "'Paytone One', sans-serif"
   google_font: 'Paytone+One'
+-
+  id: raleway
+  name: 'Raleway'
+  value: "'Raleway', sans-serif"
+  google_font: 'Raleway'
