@@ -31,6 +31,11 @@
   width: 100%;
 }
 
+#hellobar-slider.image-left .hb-inner-content,
+#hellobar-slider.image-right .hb-inner-content {
+  width: 50%;
+}
+
 #hellobar-slider .questionslist {
   max-width: 600px;
   margin-left: auto;
