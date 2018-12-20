@@ -27,6 +27,10 @@
   margin: 0 auto;
   width: 100%;
 }
+#hellobar-takeover.image-left .hb-inner-content,
+#hellobar-takeover.image-right .hb-inner-content {
+  width: 50%;
+}
 
 #hellobar-takeover .hb-text-wrapper {
   max-width: 540px;
