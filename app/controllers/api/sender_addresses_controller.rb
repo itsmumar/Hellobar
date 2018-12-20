@@ -15,8 +15,8 @@ class Api::SenderAddressesController < Api::ApplicationController
   end
 
   def update
-    @address.update!(email_params)
-    render json: @email
+    @address.update!(address_params)
+    render json: @address
   end
 
   private
