@@ -37,6 +37,7 @@ describe SettingsSerializer do
           wayfarer
           rhythm
           chance
+          seattle
           sling
           marble
         ]
