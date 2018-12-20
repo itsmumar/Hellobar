@@ -167,5 +167,5 @@
     "position_default": "background",
     "position_selectable": false
   },
-  "advanced": false
+  "advanced": true
 }
