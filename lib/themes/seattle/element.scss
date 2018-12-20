@@ -12,6 +12,8 @@
   .image-background .hb-image-wrapper.background {
     width: 43%;
     background-position: top center;
+    right: 0;
+    left: auto;
   }
   .hb-cta {
     display: block;
@@ -85,7 +87,7 @@
     }
     .hb-image-wrapper.background ~ .hb-content-wrapper {
       width: 57%;
-      margin-left: 43%;
+      margin-right: 43%;
     }
     .hb-inner-content {
       padding: 48px;
@@ -110,12 +112,6 @@
       }
     }
     .hb-input-block {
-      &:before {
-        left: 16px;
-        top: 19px;
-        width: 19px;
-        height: 19px;
-      }
       input {
         font-size: 16px;
         height: 3.5rem;
@@ -127,16 +123,12 @@
       right: 19px;
       font-size: 14px;
     }
-    .hb-cta {
-      font-size: 19px;
-      padding: 6px;
-    }
     @media screen and (max-width: 700px) {
       .hb-image-wrapper {
         display: none;
       }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
-        margin-left: inherit;
+        margin-right: inherit;
         width: auto;
       }
     }
