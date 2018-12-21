@@ -163,21 +163,23 @@
       margin: 0 0 10px;
     }
     @media screen and (max-width: 640px) {
-      .hb-image-wrapper.background ~ .hb-content-wrapper {
-        top: 0;
+      .hb-content-wrapper {
         left: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        font-size: 24px;
-        position: fixed;
-        text-align: left;
-        transform: translate(0%, 0%);
-        -o-transform: translate(0%, 0%);
-        -moz-transform: translate(0%, 0%);
-        -webkit-transform: translate(0%, 0%);
-        margin: 0;
-      }
+        .hb-image-wrapper.background ~ .hb-content-wrapper {
+          top: 0;
+          left: 0;
+          padding: 0;
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          text-align: left;
+          transform: translate(0%, 0%);
+          -o-transform: translate(0%, 0%);
+          -moz-transform: translate(0%, 0%);
+          -webkit-transform: translate(0%, 0%);
+          margin: 0;
+        }
+    }
       .hb-image-wrapper.background ~ .hb-logo-wrapper {
         margin-left: 0%;
       }
