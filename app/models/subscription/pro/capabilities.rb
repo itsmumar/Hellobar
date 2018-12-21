@@ -58,4 +58,8 @@ class Subscription::Pro::Capabilities < Subscription::Free::Capabilities
   def max_a_b_tests
     99999
   end
+
+  def advanced_themes?
+    true
+  end
 end
