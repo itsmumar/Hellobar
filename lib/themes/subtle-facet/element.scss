@@ -1,5 +1,4 @@
 .subtle-facet {
-  color: '#3A3A49';
   .hb-header {
     display: none;
   }
@@ -66,7 +65,7 @@
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
       bottom: 2em;
-    } 
+    }
     .hb-cta {
       font-size: 28px;
       font-weight: 700;
@@ -85,6 +84,10 @@
       &:-ms-input-placeholder {
         color: #111E2E;
       }
+    }
+    .questionslist{
+      max-width: 540px;
+      margin: 0 auto;
     }
     .hb-headline-text {
       font-size: 3em;

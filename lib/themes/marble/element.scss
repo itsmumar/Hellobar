@@ -3,13 +3,7 @@
   .hb-header {
     display: none;
   }
-  .hb-headline-text {
-    text-align: right;
-  }
-  [data-hb-editable-block="caption"]{
-    text-align: right;
-  }
-  [data-hb-editable-block="content"]{
+  .hb-content-wrapper {
     text-align: right;
   }
   .hb-cta {
@@ -159,14 +153,6 @@
   }
   @media screen and (max-width: 640px){
     #hellobar-takeover {
-      .hb-headline-text {
-        font-size: 1.4em;
-        line-height: 36px;
-      }
-      .hb-secondary-text {
-        font-size: 0.8em;
-        line-height: 26px;
-      }
       .hb-inner-content{
         margin: 0;
       }

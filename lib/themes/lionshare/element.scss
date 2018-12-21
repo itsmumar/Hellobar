@@ -70,6 +70,16 @@
       margin: 8px;
       border-width: 1px;
     }
+    .hb-inner-content {
+      width: 100%;
+    }
+    .hb-input-wrapper,
+    .hb-text-wrapper,
+    .questionslist {
+      max-width: 540px;
+      margin-left:auto;
+      margin-right:auto;
+    }
     .hb-headline-text{
       font-size: 1.7em;
     }
@@ -80,7 +90,6 @@
       font-size: 1em;
     }
     .hb-input-wrapper{
-      max-width: none;
       #hb-fields-form{
         display: flex;
         .hb-cta{
@@ -200,6 +209,9 @@
         margin: 0 auto 0 0;
       }
     }
+    .hb-inner-content{
+      width: 100%;
+    }
     .hb-content-wrapper {
       padding: 0;
       max-width: 40em;
@@ -299,6 +311,9 @@
     }
     .hb-text-wrapper {
       margin-bottom: 15px;
+    }
+    .hb-inner-content{
+      width: 100%;
     }
     .hb-headline-text {
       font-size: 1.2em;

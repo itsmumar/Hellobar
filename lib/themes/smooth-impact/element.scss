@@ -1,3 +1,4 @@
+
 $mask-color: hsla(0, 63%, 41%, 0.29);
 @mixin frame {
   content: '';
@@ -27,8 +28,15 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     width: 43%;
     background-position: top center;
   }
+  [data-hb-editable-block="caption"],
+  [data-hb-editable-block="content"] {
+    font-weight: normal;
+    margin: 0 auto;
+    &:empty {
+      display: none;
+    }
+  }
   .hb-cta {
-    display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
@@ -37,6 +45,9 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     &:hover {
       opacity: 0.95;
     }
+  }
+  .questionslist {
+    
   }
   #hellobar-bar,
   #hellobar-modal,
@@ -71,12 +82,6 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     }
     .hb-cta {
       font-size: 1em;
-      .hb-text-holder {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
     }
     .icon-close {
       font-size: 15px;
@@ -102,6 +107,12 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     .hb-image-wrapper.background ~ .hb-content-wrapper {
       width: 57%;
       margin-left: 43%;
+    }
+    .hb-input-wrapper,
+    .hb-text-wrapper,
+    .questionslist {
+      max-width: 540px;
+      margin: 0 auto;
     }
     .hb-inner-content {
       padding: 48px;
@@ -191,38 +202,17 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
       margin-left: 43%;
     }
     .hb-text-wrapper {
-      max-width: 600px;
+      max-width: 632px;
       margin: 0 auto;
     }
     .hb-input-wrapper {
       margin: 20px auto 0;
-      max-width: 600px;
+      max-width: 632px;
     }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-left: 43%;
     }
-    @media screen and (max-width: 840px) {
-      .hb-image-wrapper {
-        display: none;
-      }
-      .hb-image-wrapper.background ~ .hb-content-wrapper {
-        top: 0;
-        left: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        font-size: 24px;
-        position: fixed;
-        transform: translate(0%, 0%);
-        -o-transform: translate(0%, 0%);
-        -moz-transform: translate(0%, 0%);
-        -webkit-transform: translate(0%, 0%);
-        margin: 0;
-      }
-      .hb-image-wrapper.background ~ .hb-logo-wrapper {
-        padding-left: 0;
-      }
-    }
+    
     .hb-headline-text {
       font-size: 2.3em;
       margin-bottom: 20px;
@@ -245,6 +235,28 @@ $mask-color: hsla(0, 63%, 41%, 0.29);
     }
     .hb-cta {
       font-size: 28px;
+    }
+    @media screen and (max-width: 840px) {
+      .hb-image-wrapper {
+        display: none;
+      }
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        top: 0;
+        left: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 24px;
+        position: fixed;
+        transform: translate(0%, 0%);
+        -o-transform: translate(0%, 0%);
+        -moz-transform: translate(0%, 0%);
+        -webkit-transform: translate(0%, 0%);
+        margin: 0;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0;
+      }
     }
   }
   #hellobar-slider {
