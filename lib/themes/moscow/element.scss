@@ -58,6 +58,20 @@
       left: 0;
       pointer-events: none;
     }
+    .hb-text-wrapper{
+      display: flex;
+      flex-direction: column;
+      .hb-headline-text{
+        order: 1;
+        margin-top: 0;
+      }
+      &> *:nth-child(2){
+        order: 0;
+      }
+      &> *:nth-child(3){
+        order: 2;
+      }
+    }
   }
   #hellobar-modal {
     padding: 3.5em;
@@ -81,13 +95,28 @@
       margin-right:auto;
     }
     .hb-headline-text{
-      font-size: 2.3em;
+      font-size: 3em;
       font-weight: 900;
+      margin-bottom: 15px;
     }
     [data-hb-editable-block="caption"] {
       font-weight: 600;
-      margin: 0 auto 20px;
       font-size: 1.3em;
+      margin: 0 auto 20px;
+      .fr-element{
+        position: relative;
+        .noteditedstyle {
+          &:after{
+            content: "";
+            display: block;
+            border-bottom: 2px #7cdb00 solid;
+            left: 0;
+            width: 40%;
+            bottom: -10px;
+            position: absolute;
+          }
+        }
+      }
     }
     .icon-close {
       top: -20px;
@@ -96,7 +125,7 @@
       color: #ffffff;
     }
     .hb-cta{
-      font-weight: 400;
+      font-weight: 900;
     }
     &.image-right {
       .hb-inner-content {
@@ -141,7 +170,7 @@
   }
   @media screen and (max-width: 640px) {
     #hellobar-modal {
-      padding: 1.5em;
+      padding: 3em 1.5em;
       &.image-right{
         .hb-image-wrapper {
           display: none;
@@ -161,8 +190,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        top: 0;
-        bottom: 0;
       }
       .hb-image-wrapper {
         width: 43%;
@@ -173,7 +200,25 @@
         margin: 0 0 0 auto;
       }
     }
-
+    [data-hb-editable-block="caption"] {
+      font-weight: 600;
+      font-size: 2em;
+      margin: 0 auto 30px;
+      .fr-element{
+        position: relative;
+        .noteditedstyle {
+          &:after{
+            content: "";
+            display: block;
+            border-bottom: 2px #7cdb00 solid;
+            left: 0;
+            width: 40%;
+            bottom: -10px;
+            position: absolute;
+          }
+        }
+      }
+    }
     .hb-content-wrapper {
       padding: 0;
       max-width: 40em;
@@ -263,9 +308,29 @@
     }
     .hb-headline-text {
       font-size: 1.2em;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
     [data-hb-editable-block="caption"] {
+      font-weight: 600;
+      font-size: 2em;
+      margin: 0 auto 30px;
+      .fr-element{
+        position: relative;
+        .noteditedstyle {
+          &:after{
+            content: "";
+            display: block;
+            border-bottom: 2px #7cdb00 solid;
+            left: 0;
+            width: 40%;
+            bottom: -10px;
+            position: absolute;
+          }
+        }
+      }
+    }
+    [data-hb-editable-block="caption"],
+    .hb-cta {
       font-size: 1em;
     }
     &.image-right {
