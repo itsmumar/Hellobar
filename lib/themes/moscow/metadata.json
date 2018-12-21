@@ -14,7 +14,7 @@
   "element_types": ["Modal", "Slider", "Takeover", "Alert"],
   "defaults": {
     "Takeover": {
-      "background_color": "f8f8f8",
+      "background_color": "FFFFFF",
       "border_color":"7cdb00",
       "button_color": "7cdb00",
       "caption": "A cheat sheet for",
@@ -44,7 +44,7 @@
       "text_field_text_color": "333333"
     },
     "Slider": {
-      "background_color": "f8f8f8",
+      "background_color": "FFFFFF",
       "border_color":"7cdb00",
       "button_color": "7cdb00",
       "caption": "A cheat sheet for",
@@ -73,7 +73,7 @@
       "text_field_text_color": "333333"
     },
     "Modal": {
-      "background_color": "f8f8f8",
+      "background_color": "FFFFFF",
       "button_color": "7cdb00",
       "border_color":"7cdb00",
       "caption": "A cheat sheet for",
@@ -103,7 +103,7 @@
       "text_field_text_color": "333333"
     },
     "Alert": {
-      "background_color": "f8f8f8",
+      "background_color": "FFFFFF",
       "border_color":"7cdb00",
       "button_color": "7cdb00",
       "caption": "A cheat sheet for",
