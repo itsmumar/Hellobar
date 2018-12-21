@@ -73,6 +73,16 @@
       margin: 8px;
       border-width: 1px;
     }
+    .hb-inner-content {
+      width: 100%;
+    }
+    .hb-input-wrapper,
+    .hb-text-wrapper,
+    .questionslist {
+      max-width: 540px;
+      margin-left:auto;
+      margin-right:auto;
+    }
     .hb-headline-text{
       font-size: 3.7em;
     }
@@ -80,9 +90,6 @@
       font-weight: 600;
       margin: 0 auto 20px;
       font-size: 1.3em;
-    }
-    .hb-input-wrapper{
-      max-width: none;
     }
     .icon-close {
       top: -20px;
@@ -111,6 +118,10 @@
         padding-left: 0;
         z-index: 100;
       }
+    }
+    .hb-inner-content{
+      width: 100%;
+      max-width: 540px;
     }
     @media screen and (max-width: 840px) {
       .icon-close {
@@ -146,9 +157,12 @@
   }
   #hellobar-takeover {
     font-size: 17px;
+    .hb-inner-content{
+      width: 100%;
+      max-width: 600px;
+    }
     &.image-left {
       .hb-inner-content {
-        width: 100%;
         padding-left: 45%;
         position: absolute;
         z-index: 1000;
@@ -168,6 +182,9 @@
         margin: 0 auto 0 0;
       }
     }
+    .hb-inner-content{
+      width: 100%;
+    }
     .hb-content-wrapper {
       padding: 0;
       max-width: 40em;
@@ -177,12 +194,12 @@
       justify-content: center;
       align-items: center;
     }
-    .hb-text-wrapper {
+    .hb-input-wrapper {
+      margin: 20px auto 0;
       max-width: 600px;
-      margin: 0 auto;
       width: 100%;
     }
-    .hb-input-wrapper {
+    .hb-text-wrapper{
       margin: 20px auto 0;
       max-width: 600px;
       width: 100%;
@@ -200,8 +217,10 @@
       font-size: 1em;
       margin: 0 0 10px;
     }
-    .hb-input-wrapper{
-      max-width: none;
+    .questionslist {
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper {
@@ -229,7 +248,7 @@
   }
   #hellobar-slider {
     .slider-content {
-      padding: 15px;
+      padding: 25px 25px 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -246,6 +265,9 @@
     }
     .hb-text-wrapper {
       margin-bottom: 15px;
+    }
+    .hb-inner-content{
+      width: 100%;
     }
     .hb-headline-text {
       font-size: 1.2em;

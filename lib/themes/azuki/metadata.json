@@ -155,8 +155,8 @@
       "text_field_font_family": "open_sans",
       "text_field_font_size": 14,
       "text_field_text_color" : "53847e",
-      "triger_color": "ffffff",
-      "triger_icon_color": "53847e"
+      "trigger_color": "ffffff",
+      "trigger_icon_color": "53847e"
     }
   },
   "image": {
