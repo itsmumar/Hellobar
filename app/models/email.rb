@@ -17,7 +17,7 @@ class Email < ApplicationRecord
   acts_as_paranoid
 
   def body_with_footer
-    body + site.sender_address.present? ? email_footer : ''
+    body + (site.sender_address.present? ? email_footer : '')
   end
 
   private
