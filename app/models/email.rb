@@ -15,4 +15,20 @@ class Email < ApplicationRecord
   validates :body, presence: true
 
   acts_as_paranoid
+
+
+  def body_with_footer
+     body + email_footer
+  end
+
+  private
+  def email_footer
+   if address = site.sender_address
+     "<p style='background: #f9f9f9;padding: 10px; width: 100%; text-align: center; margin-top: 20px;'>
+       #{address.address_one}  #{address.address_two},
+       #{address.city}, #{address.state} #{address.postal_code},
+       #{address.country}
+      </p>"
+   end
+  end
 end

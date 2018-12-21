@@ -51,7 +51,7 @@ class SendCampaign
 
   def message_hash
     {
-      body: campaign.email.body,
+      body: campaign.email.body_with_footer,
       contactListId: contact_list.id,
       campaignId: campaign.id,
       environment: Rails.env,

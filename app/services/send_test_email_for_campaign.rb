@@ -35,7 +35,7 @@ class SendTestEmailForCampaign
 
   def message_hash
     {
-      body: campaign.email.body,
+      body: campaign.email.body_with_footer,
       contacts: contacts,
       environment: Rails.env,
       fromEmail: campaign.email.from_email,
