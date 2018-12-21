@@ -1,5 +1,6 @@
 class Api::CampaignsController < Api::ApplicationController
   before_action :find_campaign, except: %i[index create]
+  before_action :validate_sender_address, only: %i[create update]
 
   rescue_from Campaign::InvalidTransition, with: :handle_error
 
@@ -56,6 +57,12 @@ class Api::CampaignsController < Api::ApplicationController
   end
 
   private
+
+  def validate_sender_address
+    if site.sender_address.blank?
+      render json: { message: 'Please fill Physical Address in settings before creating or sending a campaign' }
+    end
+  end
 
   def site
     @site ||= current_user.sites.find(params[:site_id])
