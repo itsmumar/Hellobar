@@ -59,7 +59,7 @@ class Api::CampaignsController < Api::ApplicationController
   private
 
   def validate_sender_address
-    render json: { message: 'Please fill Physical Address in settings before creating or sending a campaign' } if site.sender_address.blank?
+    render json: { message: 'Please fill Physical Address in settings before sending a campaign' } if site.sender_address.blank?
   end
 
   def site
