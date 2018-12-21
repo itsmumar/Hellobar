@@ -20,7 +20,6 @@ class Api::SenderAddressesController < Api::ApplicationController
 
   private
 
-
   def set_site
     @site ||= current_user.sites.find(params[:site_id])
   end

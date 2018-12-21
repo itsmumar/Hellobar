@@ -16,19 +16,17 @@ class Email < ApplicationRecord
 
   acts_as_paranoid
 
-
   def body_with_footer
-     body + email_footer
+    body + site.sender_address.present? ? email_footer : ''
   end
 
   private
+
   def email_footer
-   if address = site.sender_address
-     "<p style='background: #f9f9f9;padding: 10px; width: 100%; text-align: center; margin-top: 20px;'>
-       #{address.address_one}  #{address.address_two},
-       #{address.city}, #{address.state} #{address.postal_code},
-       #{address.country}
-      </p>"
-   end
+    "<p style='background: #f9f9f9;padding: 10px; width: 100%; text-align: center; margin-top: 20px;'>
+    #{ site.sender_address.address_one }  #{ site.sender_address.address_two },
+    #{ site.sender_address.city }, #{ site.sender_address.state } #{ site.sender_address.postal_code },
+    #{ site.sender_address.country }
+    </p>"
   end
 end

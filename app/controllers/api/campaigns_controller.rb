@@ -35,7 +35,7 @@ class Api::CampaignsController < Api::ApplicationController
   def send_out
     SendCampaign.new(@campaign).call
 
-    render json: @campaign
+    render json: { message: 'Campaign sent.' }
   end
 
   def send_out_test_email
@@ -59,9 +59,7 @@ class Api::CampaignsController < Api::ApplicationController
   private
 
   def validate_sender_address
-    if site.sender_address.blank?
-      render json: { message: 'Please fill Physical Address in settings before creating or sending a campaign' }
-    end
+    render json: { message: 'Please fill Physical Address in settings before creating or sending a campaign' } if site.sender_address.blank?
   end
 
   def site
