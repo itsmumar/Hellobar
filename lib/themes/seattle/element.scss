@@ -14,7 +14,7 @@
   }
   .image-background .hb-image-wrapper.background {
     width: 43%;
-    background-position: top center;
+    background-position: center center;
     right: 0;
     left: auto;
   }
@@ -197,7 +197,8 @@
     }
     .hb-cta {
       max-width: 540px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
     }
     .icon-close {
       top: 19px;
@@ -301,7 +302,8 @@
     .hb-cta {
       font-size: 22px;
       max-width: 540px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
   @media screen and (max-width: 840px) {
@@ -379,14 +381,14 @@
         }
         .hb-image-wrapper.background {
           width: 100%;
-          background-position: top center;
+          background-position: center center;
           right: 0;
           left: auto;
           height: 40%;
         }
         .hb-image-wrapper{
           width: 100%;
-          background-position: top center;
+          background-position: center center;
           right: 0;
           left: 0;
           top: 0;
@@ -483,6 +485,7 @@
   }
   @media screen and (max-width:640px){
     #hellobar-slider {
+      max-width: 93% !important;
       &.image-background {
         .hb-image-wrapper{
           height: 180px;
