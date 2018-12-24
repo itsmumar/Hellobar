@@ -2,25 +2,23 @@
   .hb-header {
     display: none;
   }
-  .hb-headline-text {
+  .hb-content-wrapper{
     text-align: left;
-    text-transform: uppercase;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .hb-headline-text {
     font-weight: 700;
     margin-bottom: 35px;
     margin-top: 10px;
   }
-  [data-hb-editable-block="caption"] {
-    font-weight: normal;
-    margin: 0 auto;
-    text-align: left;
-    &:empty {
-      display: none;
-    }
-  }
+  [data-hb-editable-block="caption"],
   [data-hb-editable-block="content"] {
     font-weight: normal;
     margin: 0 auto;
-    text-align: left;
     &:empty {
       display: none;
     }
@@ -31,52 +29,23 @@
     }
     &>*{
       &:first-child, &:last-child{
-        display: block;
+        display: flex;
       }
     }
   }
   .hb-input-block {
     margin: 0;
-    &:before {
-      background-repeat: no-repeat;
-      content: "";
-      position: absolute;
-      left: 29px;
-      top: 36px;
-      width: 24px;
-      height: 24px;
-    }
-    input {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      &::-webkit-input-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-      &::-moz-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-      &:-ms-input-placeholder {
-        color: white;
-        opacity: 0.25;
-      }
-    }
   }
   .hb-cta {
-    display: block;
     font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
     letter-spacing: 1px;
     max-width: inherit;
-    padding: .67em 1.33em;
     &:hover {
       opacity: 0.95;
     }
   }
-  #hellobar-bar,
   #hellobar-modal,
   #hellobar-takeover,
   #hellobar-slider {
@@ -93,10 +62,23 @@
   #hellobar-modal {
     padding: 3.5em;
     max-width: 50em;
-    min-height: 20em;
+    min-height: 24em;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
     .hb-content-wrapper:after {
       margin: 8px;
       border-width: 1px;
+    }
+    .hb-inner-content {
+      width: 100%;
+    }
+    .hb-input-wrapper,
+    .hb-text-wrapper,
+    .questionslist {
+      max-width: 540px;
+      margin-left:auto;
+      margin-right:auto;
     }
     .hb-headline-text{
       font-size: 1.7em;
@@ -108,7 +90,6 @@
       font-size: 1em;
     }
     .hb-input-wrapper{
-      max-width: none;
       #hb-fields-form{
         display: flex;
         .hb-cta{
@@ -120,9 +101,6 @@
           letter-spacing: 0.5px;
         }
       }
-    }
-    .hb-cta{
-      padding: .9em 1.33em;
     }
     .uploaded-image {
       max-height: 300px;
@@ -149,10 +127,11 @@
     }
     &.image-right {
       .hb-inner-content {
-        width: 60%;
+        width: 100%;
+        padding-right: 40%;
       }
       .hb-image-wrapper {
-        width: 33%;
+        width: 30%;
         position: absolute;
         right: 3.5em;
         bottom: 3.5em;
@@ -160,21 +139,9 @@
         margin: auto;
         float: none;
         display: table;
-      }
-    }
-    &.image-left {
-      .hb-inner-content {
-        width: 60%;
-      }
-      .hb-image-wrapper {
-        width: 33%;
-        position: absolute;
-        left: 3.5em;
-        bottom: 3.5em;
-        top: 3.5em;
-        margin: auto;
-        float: none;
-        display: table;
+        padding-right: 0;
+        padding-left: 0;
+        z-index: 100;
       }
     }
     @media screen and (max-width: 840px) {
@@ -184,9 +151,6 @@
       }
     }
     @media screen and (max-width: 640px) {
-      .hb-headline-text {
-        font-size: 1.8em;
-      }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
         margin-left: inherit;
         width: auto;
@@ -194,7 +158,7 @@
       }
       &.image-right {
         .hb-inner-content {
-          width: 100%;
+          padding: 0;
         }
       }
       .hb-input-wrapper{
@@ -203,7 +167,6 @@
             width: 40%;
             margin: 0 0 0 2%;
             flex: 0 0 40%;
-            padding: 0.9em 0.5em;
           }
         }
       }
@@ -214,7 +177,6 @@
   }
   @media screen and (max-width: 640px) {
     #hellobar-modal {
-      width: calc(100% - 20px);
       padding: 1.5em;
       &.image-right{
         .hb-image-wrapper {
@@ -227,24 +189,42 @@
     font-size: 17px;
     &.image-right {
       .hb-inner-content {
-        width: 60%;
+        width: 100%;
+        padding-right: 35%;
+        position: absolute;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        bottom: 0;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 33%;
+        position: relative;
+        float: none;
+        padding-right: 0;
+        z-index: 100;
+        margin: 0 0 0 auto;
       }
     }
+    .hb-inner-content{
+      width: 100%;
+    }
     .hb-content-wrapper {
-      padding: 3em;
-      max-width: 50em;
+      padding: 0;
+      max-width: 40em;
       right: 0;
       margin: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .hb-text-wrapper {
       max-width: 600px;
       margin: 0 auto;
-    }
-    .hb-logo-wrapper {
-      bottom: 2em;
+      width: 100%;
     }
     .uploaded-image {
       max-height: 300px;
@@ -270,18 +250,15 @@
         padding: 0 0 0 10px;
       }
     }
-    .icon-close {
-      font-size: 20px;
-      top: 40px;
-      right: 40px;
-    }
     .questionslist {
       max-width: 600px;
       margin: 0 auto;
+      width: 100%;
     }
     .hb-input-wrapper{
       margin: 20px auto 0;
       max-width: 600px;
+      width: 100%;
       #hb-fields-form{
         display: flex;
         max-width: 600px;
@@ -292,54 +269,17 @@
           font-size: 16px;
           font-weight: 300;
           letter-spacing: 0.5px;
-          padding: .9em 1.33em;
         }
-      }
-    }
-    &.image-right {
-      .hb-inner-content {
-        width: 60%;
-      }
-      .hb-image-wrapper {
-        width: 36%;
-        position: absolute;
-        right: 0em;
-        bottom: 25px;
-        top: 25px;
-        margin: auto;
-        float: none;
-        display: table;
       }
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper {
         display: none;
       }
-      .hb-headline-text {
-        font-size: 1.2em;
-      }
-      [data-hb-editable-block="caption"] {
-        font-size: 1em;
-      }
-      [data-hb-editable-block="content"] {
-        font-size: 0.8em;
-      }
-      .hb-cta {
-        font-size: 22px;
-        height: 50px !important;
-      }
-      .hb-input-block {
-        input {
-          font-size: 16px;
-          height: 50px !important;
-        }
-      }
-      .hb-content-wrapper{
-        padding: 1em;
-      }
       &.image-right {
         .hb-inner-content {
-          width: 100%;
+          padding: 2em;
+          position: relative;
         }
       }
       .hb-input-wrapper{
@@ -382,7 +322,9 @@
     .hb-text-wrapper {
       margin-bottom: 15px;
     }
-
+    .hb-inner-content{
+      width: 100%;
+    }
     .hb-headline-text {
       font-size: 1.2em;
       margin-bottom: 15px;
@@ -390,51 +332,15 @@
     [data-hb-editable-block="caption"] {
       font-size: 1em;
     }
-    .hb-input-block {
-      &:before {
-        left: 16px;
-        top: 13px;
-        width: 16px;
-        height: 16px;
-      }
-      input {
-        font-size: 13px;
-        height: 40px;
-        padding: 0 0 0 10px;
-      }
-    }
-    .hb-cta {
-      font-size: 14px;
-      padding: 9px;
-      display: block;
-    }
-    .hb-logo-wrapper {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      text-align: center;
-      margin: 5px 25px 15px 20px;
-      opacity: 0.2;
-      &:hover {
-        opacity: 0.4;
-      }
-      svg {
-        width: 30px;
-        height: 20px;
-        border-radius: 3px;
-      }
-    }
-    .icon-close {
-      font-size: 12px;
-      top: 14px;
-      right: 14px;
-    }
     &.image-right {
       .hb-inner-content {
-        width: 60%;
+        width: 100%;
+        padding-right: 40%;
+        z-index: 1000;
+        position: relative;
       }
       .hb-image-wrapper {
-        width: 40%;
+        width: 36%;
         position: absolute;
         right: 0em;
         bottom: 25px;
@@ -442,16 +348,8 @@
         margin: auto;
         float: none;
         display: table;
+        z-index: 100;
       }
-    }
-  }
-  #hellobar-alert {
-    #hb-answer1, #hb-answer2{
-      padding: 5px;
-    }
-    #hellobar-slider {
-      max-width: 500px;
-      width: 500px;
     }
   }
 }

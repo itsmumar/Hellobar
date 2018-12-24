@@ -27,8 +27,12 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :contact_lists, only: [] do
-        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show]
+      resources :contact_lists, only: [:create] do
+        resources :subscribers, param: :email, email: /.+/, except: %i[new edit show] do
+          collection do
+            post :upload
+          end
+        end
       end
 
       resources :sequences, except: %i[new edit] do
@@ -41,7 +45,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :emails, only: %i[create show update]
+      resource :emails, only: %i[create show update] do
+        member do
+          post :search
+        end
+      end
 
       resources :sender_addresses, only: %i[create index update]
     end

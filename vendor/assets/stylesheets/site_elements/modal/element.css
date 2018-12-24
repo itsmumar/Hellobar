@@ -7,14 +7,12 @@
   max-width: 41em;
   text-align: center;
   font-size: 16px;
-
   transform: translateX(-50%);
   -o-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -webkit-transform: translateX(-50%);
 }
-
 /*-----------  Modal Background  -----------*/
 
 #hellobar-modal-background {
@@ -26,9 +24,6 @@
   text-align: left;
   background: rgba(0, 0, 0, 0.85);
 }
-
-
-
 
 /*-----------  Text  -----------*/
 
@@ -42,6 +37,7 @@
   margin-top: 2.75em;
   margin-bottom: -2.5em;
   font-size: 0.75em;
+  text-align: center;
 }
 
 #hellobar-modal .hb-logo-wrapper.original, #hellobar-modal .hb-logo-wrapper.animated {
@@ -80,7 +76,9 @@
 /*-----------  Close Buttons  -----------*/
 
 #hellobar-modal .icon-close {
-  font-size: 12px;
+  font-size: 14px;
+  top: 19px;
+  right: 19px;
 }
 
 /*-----------  Inputs  -----------*/
@@ -92,13 +90,13 @@
 
 #hellobar-modal .hb-input-wrapper .hb-cta {
   margin-top: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 #hellobar-modal .hb-cta {
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #hellobar-modal .hb-cta .hb-text-holder {
@@ -106,8 +104,7 @@
 }
 
 #hellobar-modal .hb-input-wrapper .hb-input-block input {
-  height: 35px;
-  font-size: 13px;
+  text-align: left;
 }
 
 /*----------- GDPR -----------*/
@@ -149,20 +146,41 @@
   padding: 10px;
 }
 
-.autodetect #hellobar-slider .answer {
-  padding-left: 8px;
-  padding-right: 8px;
-}
+.autodetect #hellobar-slider .answer,
 .autodetect #hellobar-slider .hb-cta {
   padding-left: 8px;
   padding-right: 8px;
 }
+
+/*----------- Questions Container  -----------*/
+
+#hellobar-modal .questionslist {
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/*-----------  Responsive  -----------*/
+
+@media screen and (max-width: 840px) {
+  #hellobar-modal {
+    width: calc(100% - 20px);
+  }
+}
 @media screen and (max-width: 640px) {
-  .hb-headline-text .fr-view p{
+  #hellobar-modal .hb-headline-text .fr-view p,
+  #hellobar-takeover .hb-headline-text .fr-view p,
+  #hellobar-modal .hb-secondary-text .fr-view p,
+  #hellobar-takeover .hb-secondary-text .fr-view p{
     font-size: 100%;
   }
-  .hb-headline-text .fr-view p span > span.subspan,
-  .hb-headline-text .fr-view p.noteditedstyle{
+  #hellobar-modal .hb-headline-text .fr-view p span > span.subspan,
+  #hellobar-modal .hb-secondary-text .fr-view p span > span.subspan,
+  #hellobar-modal .hb-headline-text .fr-view p.noteditedstyle,
+  #hellobar-modal .hb-secondary-text .fr-view p.noteditedstyle,
+  #hellobar-takeover .hb-headline-text .fr-view p span > span.subspan,
+  #hellobar-takeover .hb-secondary-text .fr-view p span > span.subspan,
+  #hellobar-takeover .hb-headline-text .fr-view p.noteditedstyle,
+  #hellobar-takeover .hb-secondary-text .fr-view p.noteditedstyle{
     font-size: 80%;
   }
 }

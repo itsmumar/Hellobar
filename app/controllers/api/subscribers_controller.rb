@@ -18,6 +18,16 @@ class Api::SubscribersController < Api::ApplicationController
     render json: fetch_subscribers
   end
 
+  def upload
+    if params[:csv].size < 5.kilobytes
+      ImportSubscribersFromCsv.new(params[:csv], contact_list).call
+      render json: { message: 'Subscribers has been uploaded successfully.' }
+    else
+      ImportSubscribersFromCsvAsync.new(params[:csv], contact_list).call
+      render json: { message: 'We need some time to import all of your subscribers. Please come back later' }
+    end
+  end
+
   private
 
   def site

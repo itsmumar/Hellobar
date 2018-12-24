@@ -1,5 +1,5 @@
 {
-  "name": "Subtle Facet",
+  "name": "Oaxaca",
   "type": "generic",
   "id": "subtle-facet",
   "fonts": [
@@ -16,6 +16,11 @@
       "background_color": "3A3A49",
       "border_color":"FEF035",
       "button_color": "FEF035",
+      "caption": "",
+      "content": "",
+      "conversion_font": "kanit",
+      "conversion_font_color": "FFF46E",
+      "conversion_font_size": 18,
       "cta_border_color":"FEF035",
       "cta_border_radius": 4,
       "cta_border_width": 0,
@@ -24,7 +29,9 @@
       "image_opacity": 100,
       "image_overlay_color": "FEF035",
       "image_overlay_opacity": 0,
+      "headline": "Join our mailing list to stay up to date on our upcoming events",
       "link_color": "3B386B",
+      "link_text": "Subscribe",
       "text_color": "FFF46E",
       "text_field_background_color": "FFFFFF",
       "text_field_background_opacity": 100,
@@ -33,9 +40,7 @@
       "text_field_border_width": 0,
       "text_field_font_family": "kanit",
       "text_field_font_size": 18,
-      "text_field_text_color": "3B386B",
-      "conversion_font_color": "FFF46E",
-      "conversion_font_size": 16
+      "text_field_text_color": "3B386B"
     }
   },
   "image": {

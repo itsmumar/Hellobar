@@ -154,6 +154,16 @@ class User < ApplicationRecord
     received_referral.present?
   end
 
+  def total_value
+    values = []
+    subscriptions.each do |sub|
+      sub.bills.paid.pluck(:amount).each do |amount|
+        values << amount
+      end
+    end
+    values.sum.to_i
+  end
+
   private
 
   def user_upgrade_policy
