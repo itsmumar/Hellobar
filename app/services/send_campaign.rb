@@ -50,14 +50,14 @@ class SendCampaign
   end
 
   def message_hash
-    {
-      body: campaign.email.body_with_footer,
+    email_hash.merge(
       contactListId: contact_list.id,
       campaignId: campaign.id,
-      environment: Rails.env,
-      fromEmail: campaign.email.from_email,
-      fromName: campaign.email.from_name,
-      subject: campaign.email.subject
-    }
+      environment: Rails.env
+    )
+  end
+
+  def email_hash
+    SendCampaignEmailSerializer.new(campaign.email).to_hash
   end
 end
