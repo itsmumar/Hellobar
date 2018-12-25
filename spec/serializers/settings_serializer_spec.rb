@@ -16,7 +16,7 @@ describe SettingsSerializer do
     end
 
     context 'when site has not got advanced_themes capability' do
-      let(:site) { create :site, :pro, user: user }
+      let(:site) { create :site, :free, user: user }
       let(:advanced_themes) do
         %w[
           arctic-facet
