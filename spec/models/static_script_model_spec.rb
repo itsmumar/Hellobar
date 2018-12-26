@@ -105,7 +105,6 @@ describe StaticScriptModel do
           french-rose/container.css
           autodetect/container.css
           green-timberline/container.css
-          hong-kong/container.css
           violet/container.css
           wayfarer/container.css
           chance/container.css
@@ -114,6 +113,7 @@ describe StaticScriptModel do
           marble/container.css
           mall/container.css
           tajima/container.css
+          hong-kong/container.css
           gogo/container.css
           dark-green-spring/container.css
           gatsby/container.css
