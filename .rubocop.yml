@@ -17,6 +17,7 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'editor/**/*'
     - 'backend-mock/**/*'
+    - 'app/serializers/send_campaign_email_serializer.rb'
 
 #### BEGIN STYLES
 

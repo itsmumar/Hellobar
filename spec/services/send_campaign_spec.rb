@@ -6,22 +6,12 @@ describe SendCampaign do
 
   describe '#call' do
     it 'calls SendSnsNotification with appropriate message' do
-      message_hash = {
-        body: campaign.email.body,
-        contactListId: contact_list.id,
-        campaignId: campaign.id,
-        environment: 'test',
-        fromEmail: campaign.email.from_email,
-        fromName: campaign.email.from_name,
-        subject: campaign.email.subject
-      }
-
       expect(SendSnsNotification).to receive_service_call
         .with(
           a_hash_including(
             topic_arn: a_string_matching(/arn:aws:sns:.+_latest/),
             subject: a_string_matching('sendCampaign'),
-            message_hash: message_hash
+            message_hash: a_hash_including(fromName: campaign.email.from_name)
           )
         )
 

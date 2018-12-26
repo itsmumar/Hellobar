@@ -34,13 +34,13 @@ class SendTestEmailForCampaign
   end
 
   def message_hash
-    {
-      body: campaign.email.body,
+    email_hash.merge(
       contacts: contacts,
-      environment: Rails.env,
-      fromEmail: campaign.email.from_email,
-      fromName: campaign.email.from_name,
-      subject: campaign.email.subject
-    }
+      environment: Rails.env
+    )
+  end
+
+  def email_hash
+    SendCampaignEmailSerializer.new(campaign.email).to_hash
   end
 end
