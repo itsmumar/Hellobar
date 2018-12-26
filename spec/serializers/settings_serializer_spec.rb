@@ -34,6 +34,7 @@ describe SettingsSerializer do
           lionshare
           moscow
           los-angeles
+          lionshare
           new
           resteo
           wooli
