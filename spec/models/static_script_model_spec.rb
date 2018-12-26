@@ -114,6 +114,7 @@ describe StaticScriptModel do
           mall/container.css
           tajima/container.css
           hong-kong/container.css
+          istanbul/container.css
           gogo/container.css
           dark-green-spring/container.css
           gatsby/container.css

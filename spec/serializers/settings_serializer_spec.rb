@@ -22,6 +22,7 @@ describe SettingsSerializer do
           arctic-facet
           azuki
           hong-kong
+          istanbul
           subtle-facet
           mall
           puesto
