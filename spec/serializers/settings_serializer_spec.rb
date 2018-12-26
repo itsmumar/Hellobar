@@ -86,4 +86,3 @@ describe SettingsSerializer do
     end
   end
 end
-

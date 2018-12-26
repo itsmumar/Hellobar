@@ -113,13 +113,13 @@ describe StaticScriptModel do
           resteo/container.css
           marble/container.css
           mall/container.css
-          moscow/container.css
           tajima/container.css
           gogo/container.css
           dark-green-spring/container.css
           gatsby/container.css
           cocina/container.css
           classy/container.css
+          moscow/container.css
           lionshare/container.css
           puesto/container.css
           subtle-facet/container.css
