@@ -6,9 +6,7 @@
     width: 100%;
     text-overflow: ellipsis;
     overflow-x: hidden;
-  }
-  .answer {
-    padding-left: 9%;
+    max-width: none;
   }
   .hb-logo-wrapper{
     svg {
@@ -17,15 +15,14 @@
       }
     }
   }
-
   .hb-image-overlay{
     content: "";
     display: block;
     z-index: 100;
-    left: 30px;
-    right: 30px;
-    top: 30px;
-    bottom: 30px;
+    left: 15px;
+    right: 15px;
+    top: 15px;
+    bottom: 15px;
     height: auto;
     width: auto;
     position: absolute;
@@ -34,15 +31,10 @@
   #hellobar-modal,
   #hellobar-takeover {
     border-radius: 0px;
-    .hb-headline-text {
-      letter-spacing: 1px;
-    }
     .hb-cta {
-      font-size: 18px;
-      min-width: 7em;
+      font-size: 1.3em;
       margin-top: 1em;
-      letter-spacing: 1px;
-      max-width: none;
+      font-weight: 800;
     }
     .hb-content-wrapper {
       z-index: 100;
@@ -53,29 +45,27 @@
       content: "";
       display: block;
       z-index: 100;
-      left: 10px;
-      right: 10px;
-      top: 10px;
-      bottom: 10px;
+      left: 5px;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
       height: auto;
       width: auto;
       position: absolute;
     }
     .hb-headline-text {
-      font-size: 16px;
-      line-height: 20px;
+      font-size: 1.6em;
+      margin-bottom: 1em;
     }
     .hb-secondary-text {
-      font-size: 14px;
-      line-height: 20px;
+      font-size: 1em;
     }
     .hb-cta {
-      font-size: 15px;
-      min-width: 7em;
+      font-size: 1em;
     }
     .slider-content {
       padding: 25px;
-      font-size: 16px;
+      font-size: 1em;
     }
     .icon-close {
       top: 20px;
@@ -91,14 +81,11 @@
     padding: 78px;
     max-width: 43.5em;
     .hb-headline-text {
-      font-size: 28px;
-      line-height: 40px;
-      max-width: 34.5em;
+      font-size: 1.9em;
     }
     .hb-secondary-text {
-      font-size: 16px;
-      line-height: 28px;
-      margin-top: 15px;
+      font-size: 1.2em;
+      margin-top: 20px;
     }
     .hb-name-input {
       margin-bottom: 5px;
@@ -109,8 +96,8 @@
       max-width: 34.5em;
     }
     .icon-close {
-      top: 40px;
-      right: 40px;
+      top: 25px;
+      right: 25px;
       z-index: 100;
     }
     .questionslist{
@@ -129,21 +116,19 @@
       content: "";
       display: block;
       z-index: 100;
-      left: 30px;
-      right: 30px;
-      top: 30px;
-      bottom: 30px;
+      left: 15px;
+      right: 15px;
+      top: 15px;
+      bottom: 15px;
       height: auto;
       width: auto;
       position: absolute;
     }
     .hb-headline-text {
       font-size: 1.4em;
-      line-height: 36px;
     }
     .hb-secondary-text {
       font-size: 1em;
-      line-height: 26px;
       margin-top: 15px;
     }
     .hb-input-block input {
@@ -152,9 +137,12 @@
     .hb-name-input {
       margin-bottom: 12px;
     }
+    .hb-cta{
+      font-size: 0.9em;
+    }
     .icon-close {
-      top: 60px;
-      right: 60px;
+      top: 30px;
+      right: 30px;
       z-index: 100;
     }
     .hb-content-wrapper{
@@ -170,10 +158,10 @@
         content: "";
         display: block;
         z-index: 100;
-        left: 15px;
-        right: 15px;
-        top: 15px;
-        bottom: 15px;
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
         height: auto;
         width: auto;
         position: absolute;
@@ -184,10 +172,10 @@
         content: "";
         display: block;
         z-index: 100;
-        left: 15px;
-        right: 15px;
-        top: 15px;
-        bottom: 15px;
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
         height: auto;
         width: auto;
         position: absolute;
