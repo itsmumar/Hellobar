@@ -30,6 +30,7 @@ describe SettingsSerializer do
           cocina
           tajima
           lionshare
+          moscow
           new
           resteo
           wooli
