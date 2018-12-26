@@ -21,6 +21,7 @@ describe SettingsSerializer do
         %w[
           arctic-facet
           azuki
+          hong-kong
           subtle-facet
           mall
           puesto
