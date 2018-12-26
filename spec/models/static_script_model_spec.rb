@@ -117,6 +117,7 @@ describe StaticScriptModel do
           istanbul/container.css
           gogo/container.css
           dark-green-spring/container.css
+          los-angeles/container.css
           gatsby/container.css
           cocina/container.css
           classy/container.css
