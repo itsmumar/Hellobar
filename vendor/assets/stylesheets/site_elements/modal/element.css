@@ -107,6 +107,12 @@
   text-align: left;
 }
 
+#hellobar-modal .hb-inner-content .answer{
+  max-width: 540px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 /*----------- GDPR -----------*/
 
 #hellobar-modal .gdpr-consent-form {
@@ -151,7 +157,6 @@
   padding-left: 8px;
   padding-right: 8px;
 }
-
 /*----------- Questions Container  -----------*/
 
 #hellobar-modal .questionslist {
