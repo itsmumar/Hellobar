@@ -45,6 +45,7 @@ describe SettingsSerializer do
           seattle
           sling
           marble
+          philadelphia
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
