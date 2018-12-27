@@ -120,8 +120,8 @@ describe StaticScriptModel do
           classy/container.css
           lionshare/container.css
           puesto/container.css
-          philadelphia/container.css
           subtle-facet/container.css
+          philadelphia/container.css
           marigold/container.css
           blue-avalanche/container.css
           smooth-impact/container.css
