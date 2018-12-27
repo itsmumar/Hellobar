@@ -47,7 +47,8 @@
 
 #hellobar-takeover .hb-inner-content .answer{
   max-width: 600px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
 }
 
