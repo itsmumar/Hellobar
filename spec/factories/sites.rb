@@ -10,6 +10,7 @@ FactoryBot.define do
 
     after :create do |site, evaluator|
       create(:rule, site: site) if evaluator.elements.present?
+      create(:sender_address, site_id: site.id)
 
       evaluator.elements.each do |element|
         create(:site_element, element, site: site)

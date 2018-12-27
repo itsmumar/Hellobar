@@ -419,7 +419,7 @@ export default Ember.Service.extend({
         const editor = $editableElement.data('froala.editor');
         const newOptions = {};
         const placeholder = $editableElement.attr('data-hb-inline-editor-placeholder');
-        $editableElement.find('p').addClass('noteditedstyle');
+        $editableElement.find('p').addClass('notedited');
         if (placeholder) {
           newOptions.placeholderText = placeholder;
         }
@@ -518,7 +518,7 @@ export default Ember.Service.extend({
       if (allSpans[i].style.fontSize) {
         var contentText = allSpans[i].innerHTML;
         if(!allSpans[i].children.item('span.subspan')) {
-          $target.find("p").removeClass('noteditedstyle');
+          $target.find("p").removeClass('notedited');
           allSpans[i].innerHTML = "<span class='subspan'>" + contentText + "</span>";
         }
       }
