@@ -6,7 +6,7 @@ describe 'api/sites/:id/search requests' do
   let(:params) { Hash[format: :json] }
   let(:search_params) do
     { query: 'Hello',
-      flag: 'drafts'}
+      flag: 'drafts' }
   end
 
   context 'search for an email' do

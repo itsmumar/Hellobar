@@ -16,7 +16,7 @@ class Email < ApplicationRecord
 
   acts_as_paranoid
 
-  scope :drafts, -> { joins(:campaign).where(campaigns: { status: [Campaign::DRAFT, Campaign::SENDING]}) }
-  scope :sent, -> { joins(:campaign).where(campaigns: { status: [Campaign::SENT] })}
-  scope :archived, -> { joins(:campaign).where(campaigns: { status: [Campaign::ARCHIVED] })}
+  scope :drafts, -> { joins(:campaign).where(campaigns: { status: [Campaign::DRAFT, Campaign::SENDING] }) }
+  scope :sent, -> { joins(:campaign).where(campaigns: { status: [Campaign::SENT] }) }
+  scope :archived, -> { joins(:campaign).where(campaigns: { status: [Campaign::ARCHIVED] }) }
 end
