@@ -45,8 +45,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :emails, only: %i[create show update] do
-        member do
+      resources :emails, only: %i[create show update] do
+        collection do
           post :search
         end
       end
