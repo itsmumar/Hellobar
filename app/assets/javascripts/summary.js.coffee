@@ -86,7 +86,7 @@ $ ->
     $(@).addClass('activated')
 
     # Render appropriate chart
-    siteID = window.location.href.split('sites')[1][1]
+    siteID = window.siteID
     numDays = $(@).attr('data-num-days')
 
     UrlParams.updateParam('chart', UrlParams.fetch('chart'))
