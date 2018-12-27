@@ -118,3 +118,8 @@
   name: 'Paytone One'
   value: "'Paytone One', sans-serif"
   google_font: 'Paytone+One'
+-
+  id: taviraj
+  name: 'Taviraj'
+  value: "'Taviraj', sans-serif"
+  google_font: 'Taviraj'

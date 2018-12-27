@@ -118,6 +118,7 @@ describe StaticScriptModel do
           gatsby/container.css
           cocina/container.css
           classy/container.css
+          mumbai/container.css
           lionshare/container.css
           puesto/container.css
           subtle-facet/container.css
