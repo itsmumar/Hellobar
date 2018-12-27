@@ -86,7 +86,6 @@ $ ->
     $(@).addClass('activated')
 
     # Render appropriate chart
-    siteID = window.siteID
     numDays = $(@).attr('data-num-days')
 
     UrlParams.updateParam('chart', UrlParams.fetch('chart'))
