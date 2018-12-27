@@ -12,7 +12,7 @@ describe FetchGraphStatisticsFromES do
     {
       aggs:
       {
-        by_date: { terms: { field: 'date' }, aggs: { v: { sum: { field: 'v' } } } }
+        by_date: { terms: { field: 'date' }, aggs: { total_views: { sum: { field: 'v' } } } }
       },
       query:
       {
@@ -42,10 +42,10 @@ describe FetchGraphStatisticsFromES do
             doc_count_error_upper_bound: 0,
             sum_other_doc_count: 0,
             buckets: [
-              { key: min_date, doc_count: 2, v: { value: 6 } },
-              { key: 14231, doc_count: 2, v: { value: 2 } },
-              { key: 16173, doc_count: 1, v: { value: 7 } },
-              { key: max_date, doc_count: 1, v: { value: 45 } }
+              { key: min_date, doc_count: 2, total_views: { value: 6 } },
+              { key: 14231, doc_count: 2, total_views: { value: 2 } },
+              { key: 16173, doc_count: 1, total_views: { value: 7 } },
+              { key: max_date, doc_count: 1, total_views: { value: 45 } }
             ]
           }
       }
