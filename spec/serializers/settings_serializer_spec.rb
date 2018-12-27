@@ -21,6 +21,8 @@ describe SettingsSerializer do
         %w[
           arctic-facet
           azuki
+          hong-kong
+          istanbul
           subtle-facet
           mall
           puesto
@@ -30,6 +32,9 @@ describe SettingsSerializer do
           cocina
           tajima
           lionshare
+          moscow
+          los-angeles
+          lionshare
           new
           resteo
           wooli
@@ -37,6 +42,7 @@ describe SettingsSerializer do
           wayfarer
           rhythm
           chance
+          seattle
           sling
           marble
         ]
