@@ -9,7 +9,7 @@
     "arial",
     "lato"
   ],
-  "element_types": ["Modal", "Slider", "Takeover", "Alert"],
+  "element_types": ["Modal", "Takeover"],
   "defaults": {
     "Bar": {
       "background_color": "0d262f",
