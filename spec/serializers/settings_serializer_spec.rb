@@ -45,6 +45,7 @@ describe SettingsSerializer do
           seattle
           sling
           marble
+          mumbai
           philadelphia
         ]
       end

@@ -122,6 +122,7 @@ describe StaticScriptModel do
           cocina/container.css
           classy/container.css
           moscow/container.css
+          mumbai/container.css
           lionshare/container.css
           puesto/container.css
           subtle-facet/container.css
