@@ -199,6 +199,7 @@
         align-items: center;
         top: 0;
         bottom: 0;
+        max-width: none;
       }
       .hb-image-wrapper {
         width: 33%;
@@ -304,7 +305,7 @@
   }
   #hellobar-slider {
     .slider-content {
-      padding: 25px 25px 10px;
+      padding: 20px 20px 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
