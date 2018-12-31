@@ -55,7 +55,7 @@
   value: "'Sintony',sans-serif"
   google_font: 'Sintony'
 -
-  id: unsupported_georgia
+  id: unsuprted_georgia
   name: 'Georgia Times'
   value: "Georgia,Times New Roman,Times,serif"
 -
@@ -128,3 +128,13 @@
   name: 'Raleway'
   value: "'Raleway', sans-serif"
   google_font: 'Raleway'
+-
+  id: poppins
+  name: 'Poppins'
+  value: "'Poppins', sans-serif"
+  google_font: 'Poppins'
+-
+  id: playfair_display
+  name: 'Playfair Display'
+  value: "'Playfair Display', sans-serif"
+  google_font: 'Playfair+Display'

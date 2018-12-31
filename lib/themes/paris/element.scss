@@ -1,4 +1,5 @@
 .paris {
+  color: #764cdd;
   #hello-bar {
     padding-bottom: 0;
     padding-top: 0;
@@ -8,12 +9,14 @@
   }
   .hb-content-wrapper{
     text-align: left;
+    font-family: 'Poppins', sans-serif;
   }
   .hb-headline-text {
-    font-weight: 300;
+    font-weight: 900;
+    font-family: 'Playfair Display', serif;
   }
   .image-background .hb-image-wrapper.background {
-    width: 43%;
+    width: 50%;
     background-position: center center;
     right: 0;
     left: auto;
@@ -91,6 +94,7 @@
       #hb-fields-form{
         position: relative;
         .hb-input-block{
+          font-style: italic;
           input {
             padding-left: 0;
           }
@@ -99,12 +103,13 @@
               position: absolute;
               top: auto;
               right: 0;
-              display: inline-flex;
+              display: flex;
               margin: 0;
               height: auto;
               padding: 0 10px;
               white-space: normal;
-              bottom: 8px;
+              bottom: 0;
+              width: 100%;
             }
           }
         }
@@ -163,14 +168,14 @@
       border-width: 1px;
     }
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      width: 57%;
-      margin-right: 43%;
+      width: 50%;
+      margin-right: 50%;
     }
     .hb-inner-content {
       padding: 48px;
     }
     .hb-headline-text {
-      font-size: 1.8em;
+      font-size: 2.2em;
       margin-bottom: 20px;
     }
     .hb-image-wrapper.background {
@@ -196,8 +201,7 @@
           }
           &:first-child {
             &+ .hb-cta{
-              min-height: 32px !important;
-              max-width: 100px;
+              max-width: 70%;
             }
           }
         }
@@ -219,11 +223,11 @@
       }
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1.5em;
+      font-size: 1em;
       margin: 15px auto;
     }
     [data-hb-editable-block="content"] {
-      font-size: 1.1em;
+      font-size: 1em;
       margin: 0 0 10px;
     }
     &.image-background {
@@ -280,8 +284,8 @@
       }
     }
     .hb-image-wrapper.background ~ .hb-content-wrapper {
-      width: 57%;
-      margin-right: 43%;
+      width: 50%;
+      margin-right: 50%;
     }
     .hb-text-wrapper,
     .questionslist {
@@ -293,7 +297,7 @@
       max-width: 600px;
     }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
-      padding-right: 43%;
+      padding-right: 50%;
     }
     .hb-input-wrapper{
       #hb-fields-form{
@@ -564,14 +568,14 @@
     }
     &.image-background {
       .slider-content {
-        margin-right: 43%;
+        margin-right: 50%;
         &:after {
-          right: 43%;
+          right: 50%;
         }
       }
       .hb-logo-wrapper {
         margin-left: 0;
-        margin-right: 43%;
+        margin-right: 50%;
       }
     }
   }
@@ -582,13 +586,13 @@
   }
   #hellobar-alert {
     .image-background .hb-image-wrapper.background {
-      width: 45%;
+      width: 50%;
     }
     #hellobar-slider.image-background {
       .slider-content {
-        margin-right: 45%;
+        margin-right: 50%;
         &:after {
-          right: 45%;
+          right: 50%;
         }
       }
     }
