@@ -110,6 +110,7 @@
               white-space: normal;
               bottom: 0;
               width: 100%;
+              white-space: nowrap;
             }
           }
         }
@@ -124,9 +125,6 @@
       #hb-fields-form{
         position: relative;
         .hb-input-block{
-          input {
-            padding-left: 0;
-          }
           &:first-child {
             &+ .hb-cta{
               max-width: none;
@@ -201,7 +199,8 @@
           }
           &:first-child {
             &+ .hb-cta{
-              max-width: 70%;
+              max-width: 90%;
+              right: -55%;
             }
           }
         }
@@ -577,11 +576,6 @@
         margin-left: 0;
         margin-right: 50%;
       }
-    }
-  }
-  @media screen and (max-width:640px){
-    #hellobar-slider {
-      max-width: 93% !important;
     }
   }
   #hellobar-alert {
