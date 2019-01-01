@@ -24,8 +24,8 @@ AmCharts.ready ->
     UrlParams.updateParam('chart', window.CurrentChart)
     $(".top-performers-wrapper").hide()
 
-    start = moment().subtract(29, 'days').format('MMMM D, YYYY')
-    end = moment().format('MMMM D, YYYY')
+    start = moment().subtract(29, 'days').format('YYYY-MM-DD')
+    end = moment().format('YYYY-MM-DD')
 
     switch window.CurrentChart
       when "views"
@@ -91,8 +91,8 @@ $ ->
     UrlParams.updateParam('chart', UrlParams.fetch('chart'))
     $(".top-performers-wrapper").hide()
 
-    start = start.format('MMMM D, YYYY')
-    end = end.format('MMMM D, YYYY')
+    start = start.format('YYYY-MM-DD')
+    end = end.format('YYYY-MM-DD')
 
     switch window.CurrentChart
       when "views"
