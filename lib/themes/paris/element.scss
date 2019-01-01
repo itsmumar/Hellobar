@@ -39,10 +39,9 @@
       border-right: 0 !important;
     }
   }
-  #hellobar-bar,
+  
   #hellobar-modal,
-  #hellobar-takeover,
-  #hellobar-slider {
+  #hellobar-takeover{
     &:before {
       content: '';
       position: absolute;
@@ -53,64 +52,28 @@
       pointer-events: none;
     }
   }
-  #hellobar-bar {
-    .hb-text-wrapper {
-      margin-left: 10px;
-      margin-right: 10px;
-      padding-bottom: 4px;
-    }
-    .hb-input-block {
-      margin-bottom: 4px;
-      margin-top: 4px;
-      &:before {
-        left: 13px;
-        top: 11px;
-        width: 16px;
-        height: 16px;
-      }
-    }
-    .hb-cta {
-      font-size: 1em;
-    }
-    .icon-close {
-      font-size: 15px;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-51%);
-    }
-    @media screen and (max-width: 640px) {
-      .hb-input-block {
-        &:before {
-          top: 14px;
-        }
-      }
-    }
-  }
   #hellobar-modal,
-  #hellobar-takeover,
-  #hellobar-slider,
-  #hellobar-alert {
-    .hb-input-wrapper{
-      #hb-fields-form{
-        position: relative;
-        .hb-input-block{
-          font-style: italic;
-          input {
-            padding-left: 0;
-          }
-          &:first-child {
-            &+ .hb-cta{
-              position: absolute;
-              top: auto;
-              right: 0;
-              display: flex;
-              margin: 0;
-              height: auto;
-              padding: 0 10px;
-              white-space: normal;
-              bottom: 0;
-              width: 100%;
-              white-space: nowrap;
+  #hellobar-takeover {
+    &.image-background{
+      .hb-input-wrapper{
+        #hb-fields-form{
+          position: relative;
+          .hb-input-block{
+            font-style: italic;
+            &:first-child {
+              &+ .hb-cta{
+                position: absolute;
+                top: auto;
+                right: 0;
+                display: flex;
+                margin: 0;
+                height: auto;
+                padding: 0 10px;
+                white-space: normal;
+                bottom: 0;
+                width: 100%;
+                white-space: nowrap;
+              }
             }
           }
         }
@@ -118,21 +81,21 @@
     }
   }
   #hellobar-modal.thank-you,
-  #hellobar-takeover.thank-you,
-  #hellobar-slider.thank-you,
-  #hellobar-alert.thank-you {
-    .hb-input-wrapper{
-      #hb-fields-form{
-        position: relative;
-        .hb-input-block{
-          &:first-child {
-            &+ .hb-cta{
-              max-width: none;
-              display: flex;
-              position: relative;
-              min-width: inherit !important;
-              justify-content: center;
-              align-items: center;
+  #hellobar-takeover.thank-you {
+    &.image-background{
+      .hb-input-wrapper{
+        #hb-fields-form{
+          position: relative;
+          .hb-input-block{
+            &:first-child {
+              &+ .hb-cta{
+                max-width: none;
+                display: flex;
+                position: relative;
+                min-width: inherit !important;
+                justify-content: center;
+                align-items: center;
+              }
             }
           }
         }
@@ -161,6 +124,9 @@
   }
   #hellobar-modal {
     padding: 0;
+    border-radius: 26px;
+    overflow: hidden;
+    max-width: 44em;
     .hb-content-wrapper:after {
       margin: 8px;
       border-width: 1px;
@@ -185,40 +151,44 @@
       margin: 0 auto;
       width: 100%;
     }
-    .hb-input-wrapper{
-      #hb-fields-form{
-        .hb-input-block{
-          &:first-child:nth-last-child(2),
-          &:first-child:nth-last-child(2) ~ .hb-input-block{
-            input {
-              padding-right: 110px;
-            }
-          }
-          input {
-            padding: 0px;
-          }
-          &:first-child {
-            &+ .hb-cta{
-              max-width: 90%;
-              right: -55%;
-            }
-          }
-        }
-      }
-    }
-    &.thank-you {
+    &.image-background{
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
+            &:first-child:nth-last-child(2),
+            &:first-child:nth-last-child(2) ~ .hb-input-block{
+              input {
+                padding-right: 100px;
+              }
+            }
             &:first-child {
               &+ .hb-cta{
-                min-height: 50px !important;
-                max-width: none;
-                width: 100%;
+                max-width: 80%;
+                right: -55%;
               }
             }
           }
         }
+      }
+      &.thank-you {
+        .hb-input-wrapper{
+          #hb-fields-form{
+            .hb-input-block{
+              &:first-child {
+                &+ .hb-cta{
+                  min-height: 50px !important;
+                  max-width: none;
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+      }
+      .hb-headline-text,
+      [data-hb-editable-block="content"],
+      [data-hb-editable-block="caption"] {
+        text-align: left;
       }
     }
     [data-hb-editable-block="caption"] {
@@ -227,14 +197,7 @@
     }
     [data-hb-editable-block="content"] {
       font-size: 1em;
-      margin: 0 0 10px;
-    }
-    &.image-background {
-      .hb-headline-text,
-      [data-hb-editable-block="content"],
-      [data-hb-editable-block="caption"] {
-        text-align: left;
-      }
+      margin: 0 0 20px;
     }
     .hb-cta {
       max-width: 540px;
@@ -242,17 +205,38 @@
       margin-right: auto;
     }
     .icon-close {
-      top: 19px;
-      right: 19px;
+      top: 20px;
+      right: 20px;
       font-size: 14px;
     }
     @media screen and (max-width: 640px) {
       .hb-inner-content {
-        padding: 48px 38px;
+        padding: 38px;
       }
       .hb-image-wrapper.background ~ .hb-content-wrapper {
         margin-right: inherit;
         width: auto;
+      }
+      &.image-background{
+        .hb-input-wrapper{
+          #hb-fields-form{
+            .hb-input-block{
+              &:first-child:nth-last-child(2),
+              &:first-child:nth-last-child(2) ~ .hb-input-block{
+                input {
+                  padding-right: 100px;
+                }
+              }
+              &:first-child {
+                &+ .hb-cta{
+                  max-width: 100%;
+                  right: 0;
+                  position: relative;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -263,7 +247,7 @@
       padding: 0;
       height: 100%;
       width: 100%;
-      font-size: 24px;
+      font-size: 20px;
       transform: translate(0%, 0%);
       -o-transform: translate(0%, 0%);
       -moz-transform: translate(0%, 0%);
@@ -298,37 +282,35 @@
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
       padding-right: 50%;
     }
-    .hb-input-wrapper{
-      #hb-fields-form{
-        .hb-input-block{
-          &:first-child:nth-last-child(2),
-          &:first-child:nth-last-child(2) ~ .hb-input-block{
-            input {
-              padding-right: 210px;
+    &.image-background{
+      .hb-input-wrapper{
+        #hb-fields-form{
+          .hb-input-block{
+            &:first-child:nth-last-child(2),
+            &:first-child:nth-last-child(2) ~ .hb-input-block{
+              input {
+                padding-right: 210px;
+              }
             }
-          }
-          input {
-            padding: 0px;
-          }
-          &:first-child {
-            &+ .hb-cta{
-              min-height: 60px !important;
-              max-width: 200px;
-              width: 100%;
+            &:first-child {
+              &+ .hb-cta{
+                max-width: 80%;
+                right: -55%;
+              }
             }
           }
         }
       }
-    }
-    &.thank-you {
-      .hb-input-wrapper{
-        #hb-fields-form{
-          .hb-input-block{
-            &:first-child {
-              &+ .hb-cta{
-                min-height: 76px !important;
-                max-width: none;
-                width: 100%;
+      &.thank-you {
+        .hb-input-wrapper{
+          #hb-fields-form{
+            .hb-input-block{
+              &:first-child {
+                &+ .hb-cta{
+                  min-height: 76px !important;
+                  max-width: none;
+                  width: 100%;
+                }
               }
             }
           }
@@ -356,7 +338,7 @@
       }
     }
     .hb-cta {
-      font-size: 22px;
+      font-size: 1.1em;
       max-width: 540px;
       margin-left: auto;
       margin-right: auto;
@@ -366,7 +348,7 @@
     #hellobar-takeover{
       &.image-background{
         .hb-image-wrapper.background ~ .hb-content-wrapper {
-          top: 250px;
+          top: 30%;
           left: 0;
           padding: 0;
           width: 100%;
@@ -377,6 +359,9 @@
           -moz-transform: translate(0%, 0%);
           -webkit-transform: translate(0%, 0%);
           margin: 0;
+          .hb-inner-content{
+            top: 40%;
+          }
         }
         .hb-image-wrapper.background ~ .hb-logo-wrapper {
           padding-right: 0;
@@ -386,31 +371,33 @@
           background-position: center center;
           right: 0;
           left: auto;
-          height: 50%;
+          height: 40%;
         }
-      }
-      .hb-input-wrapper{
-        #hb-fields-form{
-          .hb-input-block{
-            &:first-child {
-              &+ .hb-cta{
-                min-height: 60px !important;
-                max-width: 140px;
-                width: 100%;
-              }
-            }
-          }
-        }
-      }
-      &.thank-you {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
               &:first-child {
                 &+ .hb-cta{
-                  min-height: 50px !important;
                   max-width: none;
                   width: 100%;
+                  right: 0;
+                  top: 0;
+                  position: relative;
+                }
+              }
+            }
+          }
+        }
+        &.thank-you {
+          .hb-input-wrapper{
+            #hb-fields-form{
+              .hb-input-block{
+                &:first-child {
+                  &+ .hb-cta{
+                    min-height: 50px !important;
+                    max-width: none;
+                    width: 100%;
+                  }
                 }
               }
             }
@@ -430,7 +417,7 @@
           left: 0;
           padding: 0;
           width: 100%;
-          font-size: 16px;
+          font-size: 11px;
           position: fixed;
           transform: translate(0%, 0%);
           -o-transform: translate(0%, 0%);
@@ -459,35 +446,34 @@
           top: 0;
           height: 250px;
         }
-      }
-      .hb-input-wrapper{
-        #hb-fields-form{
-          .hb-input-block{
-            &:first-child:nth-last-child(2),
-            &:first-child:nth-last-child(2) ~ .hb-input-block{
-              input {
-                padding-right: 130px;
+        .hb-input-wrapper{
+          #hb-fields-form{
+            .hb-input-block{
+              &:first-child:nth-last-child(2),
+              &:first-child:nth-last-child(2) ~ .hb-input-block{
+                input {
+                  padding-right: 130px;
+                }
               }
-            }
-            &:first-child {
-              &+ .hb-cta{
-                min-height: 60px !important;
-                max-width: 120px;
-                width: 100%;
+              &:first-child {
+                &+ .hb-cta{
+                  min-height: none !important;
+                  max-width: none;
+                }
               }
             }
           }
         }
-      }
-      &.thank-you {
-        .hb-input-wrapper{
-          #hb-fields-form{
-            .hb-input-block{
-              &:first-child {
-                &+ .hb-cta{
-                  min-height: 50px !important;
-                  max-width: none;
-                  width: 100%;
+        &.thank-you {
+          .hb-input-wrapper{
+            #hb-fields-form{
+              .hb-input-block{
+                &:first-child {
+                  &+ .hb-cta{
+                    min-height: 50px !important;
+                    max-width: none;
+                    width: 100%;
+                  }
                 }
               }
             }
@@ -496,98 +482,6 @@
       }
       .hb-cta {
         font-size: 16px;
-      }
-    }
-  }
-  #hellobar-slider {
-    .slider-content {
-      padding: 25px 25px 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 250px;
-      .hb-content-wrapper {
-        .hb-text-wrapper {
-          padding-right: 0;
-        }
-      }
-      &:after {
-        margin: 5px;
-        border-width: 1px;
-      }
-    }
-    .hb-input-wrapper{
-      #hb-fields-form{
-        .hb-input-block{
-          &:first-child:nth-last-child(2),
-          &:first-child:nth-last-child(2) ~ .hb-input-block{
-            input {
-              padding-right: 80px;
-            }
-          }
-          input {
-            padding: 0px;
-          }
-          &:first-child {
-            &+ .hb-cta{
-              min-height: 32px !important;
-              max-width: 70px;
-              bottom: 4px;
-            }
-          }
-        }
-      }
-    }
-    &.thank-you {
-      .hb-input-wrapper{
-        #hb-fields-form{
-          .hb-input-block{
-            &:first-child {
-              &+ .hb-cta{
-                min-height: 50px !important;
-                max-width: none;
-                width: 100%;
-              }
-            }
-          }
-        }
-      }
-    }
-    .hb-text-wrapper {
-      margin-bottom: 15px;
-    }
-    .hb-headline-text {
-      font-size: 1.2em;
-    }
-    [data-hb-editable-block="caption"] {
-      font-size: 1.2em;
-    }
-    .hb-cta {
-      font-size: 1em;
-    }
-    &.image-background {
-      .slider-content {
-        margin-right: 50%;
-        &:after {
-          right: 50%;
-        }
-      }
-      .hb-logo-wrapper {
-        margin-left: 0;
-        margin-right: 50%;
-      }
-    }
-  }
-  #hellobar-alert {
-    .image-background .hb-image-wrapper.background {
-      width: 50%;
-    }
-    #hellobar-slider.image-background {
-      .slider-content {
-        margin-right: 50%;
-        &:after {
-          right: 50%;
-        }
       }
     }
   }
