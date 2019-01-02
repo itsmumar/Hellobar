@@ -129,8 +129,8 @@ describe StaticScriptModel do
           philadelphia/container.css
           marigold/container.css
           blue-avalanche/container.css
-          smooth-impact/container.css
           sydney/container.css
+          smooth-impact/container.css
           tocaya/container.css
           wooli/container.css
           seattle/container.css
