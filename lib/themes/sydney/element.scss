@@ -1,0 +1,223 @@
+.sydney {
+  .hb-header {
+    display: none;
+  }
+  .image-background .hb-image-wrapper.background {
+    background-position: top center;
+  }
+  .hb-content-wrapper{
+    text-align: left;
+  }
+  .hb-headline-text {
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+  }
+  [data-hb-editable-block="caption"],
+  [data-hb-editable-block="content"] {
+    font-weight: normal;
+    margin: 0 auto;
+    &:empty {
+      display: none;
+    }
+  }
+  .hb-cta {
+    display: block;
+    font-weight: 700;
+    margin-top: 1em;
+    box-shadow: 0px 4px 20px -7px black;
+    max-width: inherit;
+    &:hover {
+      opacity: 0.95;
+    }
+  }
+  .hb-logo-wrapper{
+    svg {
+      path{
+        fill: #fff;
+      }
+    }
+  }
+  #hellobar-modal,
+  #hellobar-takeover{
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .hb-text-wrapper{
+      width: 80%;
+    }
+    #hb-fields-form{
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      & > *{
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+      .hb-input-block {
+        margin-bottom: 0;
+      }
+      .hb-cta {
+        margin-top: 0;
+        width: 28%;
+        flex: 0 0 28%;
+        font-size: 0.7em;
+        padding: 0em 1em;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+    }
+  }
+  @media screen and (max-width: 640px) {
+    #hellobar-modal,
+    #hellobar-takeover{
+      #hb-fields-form{
+        flex-direction: column;
+        .hb-input-block{
+          margin-bottom: 15px;
+        }
+        .hb-cta {
+          margin-top: 0;
+          width: 100%;
+          flex: 0 0 100%;
+        }
+      }
+    }
+  }
+  #hellobar-modal {
+    padding: 0;
+    .hb-content-wrapper:after {
+      margin: 0.5rem;
+      border-width: 1px;
+    }
+    .hb-inner-content {
+      padding: 48px 58px;
+    }
+    .hb-input-wrapper{
+      max-width: none;
+    }
+    .hb-headline-text {
+      font-size: 2.1em;
+    }
+    [data-hb-editable-block="caption"] {
+      font-size: 1em;
+      margin: 15px auto;
+    }
+    [data-hb-editable-block="content"] {
+      font-size: 0.9em;
+      margin: 0 0 10px;
+    }
+    @media screen and (max-width: 640px) {
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        margin-left: inherit;
+        width: auto;
+      }
+      .hb-content-wrapper{
+        .hb-inner-content {
+          padding: 38px;
+        }
+      }
+      .hb-cta{
+        min-width: 47%;
+      }
+      .hb-text-wrapper{
+        width: 100%;
+      }
+    }
+  }
+  #hellobar-takeover {
+    .hb-content-wrapper {
+      top: 0;
+      left: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-size: 20px;
+      text-align: center;
+      transform: translate(0%, 0%);
+      -o-transform: translate(0%, 0%);
+      -moz-transform: translate(0%, 0%);
+      -webkit-transform: translate(0%, 0%);
+      margin: 0;
+      max-width: none;
+      .hb-inner-content {
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        padding: 0;
+        max-width: 600px;
+        right: 50%;
+        margin: auto;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+      }
+    }
+    .hb-text-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .hb-input-wrapper {
+      margin: 20px auto 0;
+      max-width: none;
+    }
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-left: 43%;
+    }
+    .hb-headline-text {
+      font-size: 2.3em;
+      margin-bottom: 20px;
+    }
+    [data-hb-editable-block="caption"] {
+      font-size: 1.2em;
+      margin: 20px auto;
+      padding: 10px 0;
+    }
+    [data-hb-editable-block="content"] {
+      font-size: 1em;
+      margin: 0 0 10px;
+    }
+    .hb-input-block {
+      input {
+        font-size: 17px;
+        height: 6rem;
+        padding: 0 0 0 10px;
+      }
+    }
+    .hb-cta {
+      font-size: 28px;
+    }
+    @media screen and (max-width: 640px) {
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        top: 0;
+        left: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-size: 24px;
+        position: fixed;
+        text-align: center;
+        transform: translate(0%, 0%);
+        -o-transform: translate(0%, 0%);
+        -moz-transform: translate(0%, 0%);
+        -webkit-transform: translate(0%, 0%);
+        margin: 0;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0;
+      }
+      .hb-content-wrapper{
+        .hb-inner-content{
+          max-width: 277px;
+        }
+      }
+    }
+  }
+}
