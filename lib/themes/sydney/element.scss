@@ -102,15 +102,16 @@
       max-width: none;
     }
     .hb-headline-text {
-      font-size: 2.1em;
+      font-size: 2.4em;
+      margin-bottom: 40px;
     }
     [data-hb-editable-block="caption"] {
       font-size: 1em;
-      margin: 15px auto;
+      margin: 15px auto 20px;
     }
     [data-hb-editable-block="content"] {
       font-size: 0.9em;
-      margin: 0 0 10px;
+      margin: 10px 0 10px;
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
@@ -138,7 +139,6 @@
       height: 100%;
       width: 100%;
       font-size: 20px;
-      text-align: center;
       transform: translate(0%, 0%);
       -o-transform: translate(0%, 0%);
       -moz-transform: translate(0%, 0%);
@@ -162,37 +162,27 @@
     }
     .hb-text-wrapper {
       max-width: 600px;
-      margin: 0 auto;
+      margin: 0 auto 0 0;
+    }
+    .questionslist {
+      max-width: 600px;
     }
     .hb-input-wrapper {
       margin: 20px auto 0;
       max-width: none;
-    }
-    .hb-image-wrapper.background ~ .hb-logo-wrapper {
-      padding-left: 43%;
     }
     .hb-headline-text {
       font-size: 2.3em;
       margin-bottom: 20px;
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1.2em;
+      font-size: 1em;
       margin: 20px auto;
       padding: 10px 0;
     }
     [data-hb-editable-block="content"] {
-      font-size: 1em;
+      font-size: 0.8em;
       margin: 0 0 10px;
-    }
-    .hb-input-block {
-      input {
-        font-size: 17px;
-        height: 6rem;
-        padding: 0 0 0 10px;
-      }
-    }
-    .hb-cta {
-      font-size: 28px;
     }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
@@ -201,22 +191,21 @@
         padding: 0;
         height: 100%;
         width: 100%;
-        font-size: 24px;
+        font-size: 18px;
         position: fixed;
-        text-align: center;
         transform: translate(0%, 0%);
         -o-transform: translate(0%, 0%);
         -moz-transform: translate(0%, 0%);
         -webkit-transform: translate(0%, 0%);
         margin: 0;
       }
-      .hb-image-wrapper.background ~ .hb-logo-wrapper {
-        padding-left: 0;
-      }
       .hb-content-wrapper{
         .hb-inner-content{
           max-width: 277px;
         }
+      }
+      .hb-text-wrapper{
+        width: 100%;
       }
     }
   }
