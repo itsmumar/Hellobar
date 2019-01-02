@@ -137,4 +137,4 @@
   id: playfair_display
   name: 'Playfair Display'
   value: "'Playfair Display', sans-serif"
-  google_font: 'Playfair+Display'
+  google_font: 'Playfair+Display:400,900'

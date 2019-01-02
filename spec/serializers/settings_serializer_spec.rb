@@ -47,6 +47,7 @@ describe SettingsSerializer do
           marble
           mumbai
           philadelphia
+          paris
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
