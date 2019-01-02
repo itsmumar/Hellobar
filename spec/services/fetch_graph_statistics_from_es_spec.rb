@@ -3,7 +3,7 @@ describe FetchGraphStatisticsFromES do
   let(:site_element) { create :site_element, site: site }
   let(:search_url) { "#{ Settings.elastic_search_endpoint }/test_over_time/test_over_time_type/_search" }
   let(:from_date) { Date.new(2015) }
-  let(:to_date) { Date.current.end_of_month }
+  let(:to_date) { Date.new(2018) }
   let(:service) { FetchGraphStatisticsFromES.new(site, from_date, to_date, 'total') }
   let(:min_date) { 180 }
   let(:max_date) { 180000 }
@@ -16,7 +16,7 @@ describe FetchGraphStatisticsFromES do
       },
       query:
       {
-        bool: { filter: [{ range: { date: { gte: 15001, lte: 18365 } } }, { terms: { sid: [] } }] }
+        bool: { filter: [{ range: { date: { gte: 15001, lte: 18001 } } }, { terms: { sid: [] } }] }
       }
     }
   end
