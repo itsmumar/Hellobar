@@ -55,7 +55,7 @@
   value: "'Sintony',sans-serif"
   google_font: 'Sintony'
 -
-  id: unsuprted_georgia
+  id: unsupported_georgia
   name: 'Georgia Times'
   value: "Georgia,Times New Roman,Times,serif"
 -
