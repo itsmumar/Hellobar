@@ -175,9 +175,7 @@
             .hb-input-block{
               &:first-child {
                 &+ .hb-cta{
-                  min-height: 50px !important;
-                  max-width: none;
-                  width: 100%;
+                  right: 0;
                 }
               }
             }
@@ -308,9 +306,7 @@
             .hb-input-block{
               &:first-child {
                 &+ .hb-cta{
-                  min-height: 76px !important;
-                  max-width: none;
-                  width: 100%;
+                  right: 0;
                 }
               }
             }
