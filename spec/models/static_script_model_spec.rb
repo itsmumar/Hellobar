@@ -126,6 +126,7 @@ describe StaticScriptModel do
           lionshare/container.css
           puesto/container.css
           subtle-facet/container.css
+          paris/container.css
           philadelphia/container.css
           marigold/container.css
           blue-avalanche/container.css
@@ -134,6 +135,7 @@ describe StaticScriptModel do
           wooli/container.css
           seattle/container.css
           blue-autumn/container.css
+          sydney/container.css
           sling/container.css
           evergreen-meadow/container.css
           rhythm/container.css
