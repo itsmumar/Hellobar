@@ -2,21 +2,21 @@ describe FetchGraphStatisticsFromES do
   let(:site) { create :site, :with_rule }
   let(:site_element) { create :site_element, site: site }
   let(:search_url) { "#{ Settings.elastic_search_endpoint }/test_over_time/test_over_time_type/_search" }
-  let(:from_date) { Date.new(2015) }
-  let(:to_date) { Date.new(2018) }
+  let(:from_date) { '2018-01-01'.to_date }
+  let(:to_date) { '2018-01-30'.to_date }
   let(:service) { FetchGraphStatisticsFromES.new(site, from_date, to_date, 'total') }
-  let(:min_date) { 180 }
-  let(:max_date) { 180000 }
+  let(:min_date) { 18001 }
+  let(:max_date) { 18030 }
 
   let(:request) do
     {
       aggs:
       {
-        by_date: { terms: { field: 'date' }, aggs: { total_views: { sum: { field: 'v' } } } }
+        by_date: { terms: { field: 'date', size: 30 }, aggs: { total_views: { sum: { field: 'v' } } } }
       },
       query:
       {
-        bool: { filter: [{ range: { date: { gte: 15001, lte: 18001 } } }, { terms: { sid: [] } }] }
+        bool: { filter: [{ range: { date: { gte: 18001, lte: 18030 } } }, { terms: { sid: [] } }] }
       }
     }
   end
@@ -43,8 +43,8 @@ describe FetchGraphStatisticsFromES do
             sum_other_doc_count: 0,
             buckets: [
               { key: min_date, doc_count: 2, total_views: { value: 6 } },
-              { key: 14231, doc_count: 2, total_views: { value: 2 } },
-              { key: 16173, doc_count: 1, total_views: { value: 7 } },
+              { key: 18002, doc_count: 2, total_views: { value: 2 } },
+              { key: 18003, doc_count: 1, total_views: { value: 7 } },
               { key: max_date, doc_count: 1, total_views: { value: 45 } }
             ]
           }
@@ -70,5 +70,9 @@ describe FetchGraphStatisticsFromES do
 
   it 'queries elastic search and first element in the array should be sorted to be the min date' do
     expect(service.call.first[:date]).to eql WeirdDate.to_date(min_date).strftime('%-m/%d')
+  end
+
+  it 'queries elastic search and should return data for missing dates also' do
+    expect(service.call.count).to eql((to_date - from_date + 1).to_i)
   end
 end
