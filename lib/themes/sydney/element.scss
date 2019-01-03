@@ -48,6 +48,17 @@
       left: 0;
       pointer-events: none;
     }
+    &.thank-you {
+      .hb-input-wrapper{
+        #hb-fields-form{
+          .hb-cta{
+            width: 100%;
+            max-width: none;
+            flex: 0 0 100%;
+          }
+        }
+      }
+    }
     .hb-text-wrapper{
       width: 80%;
     }
