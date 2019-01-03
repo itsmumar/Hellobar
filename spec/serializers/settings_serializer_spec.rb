@@ -47,6 +47,7 @@ describe SettingsSerializer do
           marble
           mumbai
           philadelphia
+          paris
           sydney
         ]
       end

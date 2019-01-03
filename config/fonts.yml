@@ -129,6 +129,16 @@
   value: "'Raleway', sans-serif"
   google_font: 'Raleway'
 -
+  id: poppins
+  name: 'Poppins'
+  value: "'Poppins', sans-serif"
+  google_font: 'Poppins'
+-
+  id: playfair_display
+  name: 'Playfair Display'
+  value: "'Playfair Display', sans-serif"
+  google_font: 'Playfair+Display:400,900'
+-
   id: quicksand
   name: 'Quicksand'
   value: "'Quicksand', sans-serif"
