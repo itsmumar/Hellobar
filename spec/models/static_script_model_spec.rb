@@ -134,6 +134,7 @@ describe StaticScriptModel do
           wooli/container.css
           seattle/container.css
           blue-autumn/container.css
+          sydney/container.css
           sling/container.css
           evergreen-meadow/container.css
           rhythm/container.css

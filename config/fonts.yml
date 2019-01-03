@@ -128,3 +128,8 @@
   name: 'Raleway'
   value: "'Raleway', sans-serif"
   google_font: 'Raleway'
+-
+  id: quicksand
+  name: 'Quicksand'
+  value: "'Quicksand', sans-serif"
+  google_font: 'Quicksand'
