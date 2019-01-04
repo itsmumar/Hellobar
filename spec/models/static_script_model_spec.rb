@@ -113,20 +113,29 @@ describe StaticScriptModel do
           marble/container.css
           mall/container.css
           tajima/container.css
+          hong-kong/container.css
+          istanbul/container.css
           gogo/container.css
           dark-green-spring/container.css
+          los-angeles/container.css
           gatsby/container.css
           cocina/container.css
           classy/container.css
+          moscow/container.css
+          mumbai/container.css
           lionshare/container.css
           puesto/container.css
           subtle-facet/container.css
+          paris/container.css
+          philadelphia/container.css
           marigold/container.css
           blue-avalanche/container.css
           smooth-impact/container.css
           tocaya/container.css
           wooli/container.css
+          seattle/container.css
           blue-autumn/container.css
+          sydney/container.css
           sling/container.css
           evergreen-meadow/container.css
           rhythm/container.css

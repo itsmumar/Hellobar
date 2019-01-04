@@ -1,0 +1,198 @@
+.los-angeles {
+  .hb-header {
+    display: none;
+  }
+  .image-background .hb-image-wrapper.background {
+    width: 40%;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    & ~ .slider-content {
+      margin-left: 40%;
+    }
+  }
+  .hb-cta {
+    width: 100%;
+    border-radius: 100px;
+    font-size: 0.9em;
+    font-weight: 800;
+  }
+  .hb-content-wrapper {
+    text-align: left;
+  }
+  #hellobar-slider,
+  #hellobar-modal,
+  #hellobar-takeover {
+    border-radius: 2px;
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      margin-left: 40%;
+      width: 60%;
+      padding: 3em
+    }
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-left: 40%;
+    }
+    .hb-cta {
+      font-size: 16px;
+      margin-top: 1em;
+      letter-spacing: 1px;
+      padding-left: 8px;
+      padding-right: 8px;
+      max-width: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .gdpr-consent-form {
+      padding-left: 5px;
+    }
+  }
+  @media screen and (max-width: 640px) {
+    #hellobar-modal,
+    #hellobar-takeover {
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        margin-left: 0%;
+        width: 100%;
+        padding: 1em;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0%;
+        padding-right: initial;
+      }
+    }
+  }
+  #hellobar-slider {
+    &.image-background {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .hb-image-wrapper.background ~ .slider-content {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .hb-headline-text {
+      font-size: 1.3em;
+    }
+    .hb-secondary-text {
+      font-size: 0.9em;
+    }
+    .hb-cta {
+      font-size: 0.8em;
+    }
+    .slider-content {
+      padding: 15px;
+    }
+  }
+  #hellobar-modal {
+    &.image-background {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+    .hb-headline-text {
+      font-size: 1.6em;
+      margin-bottom: 20px;
+    }
+    .hb-secondary-text {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .hb-name-input {
+      margin-bottom: 5px;
+    }
+    .hb-input-wrapper {
+      max-width: none
+    }
+    .hb-inner-content {
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+    @media screen and (max-width: 640px) {
+      .hb-image-wrapper.background{
+        display: none;
+      }
+      .hb-image-wrapper.background ~ .hb-content-wrapper {
+        padding-left: 42px;
+        padding-right: 42px;
+      }
+    }
+  }
+  #hellobar-modal.mobile {
+    .hb-image-wrapper.background ~ .hb-content-wrapper {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+  #hellobar-takeover {
+    .hb-inner-content {
+      max-width: 540px;
+    }
+    .hb-headline-text {
+      font-size: 1.7em;
+      margin-bottom: 20px;
+    }
+    .hb-secondary-text {
+      font-size: 0.8em;
+      margin-bottom: 20px;
+    }
+    .hb-cta {
+      font-size: 18px;
+    }
+    .hb-input-block input {
+      font-size: .7em;
+    }
+    .hb-name-input {
+      margin-bottom: 12px;
+    }
+    .hb-image-wrapper.background ~ .hb-logo-wrapper {
+      padding-right: 0 ;
+      padding-left: 40%;
+    }
+    @media screen and (max-width: 840px) {
+      .hb-inner-content{
+        max-width: 488px;
+      }
+    }
+    @media screen and (max-width: 640px) {
+      .hb-image-wrapper.background{
+        display: none;
+      }
+      .hb-image-wrapper.background ~ .hb-logo-wrapper {
+        padding-left: 0;
+      }
+      .hb-inner-content{
+        max-width: 277px;
+      }
+    }
+  }
+}
+.alert.marigold {
+  .image-background .hb-image-wrapper.background {
+    width: 45%;
+    & ~ .slider-content {
+      margin-left: 45%;
+      margin-right: auto;
+    }
+  }
+  #hellobar-slider {
+    .hb-image-wrapper.background ~ .slider-content {
+      padding: 10px 10px 10px 13px;
+    }
+    .hb-text-wrapper {
+      padding: 0;
+    }
+    .hb-cta .hb-text-holder {
+      padding: 0;
+    }
+    .gdpr-consent-form {
+      font-size: 11px;
+      padding-left: 0;
+      p {
+        margin-bottom: 1px;
+      }
+    }
+  }
+}
