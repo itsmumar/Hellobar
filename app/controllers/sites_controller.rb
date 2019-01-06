@@ -39,7 +39,7 @@ class SitesController < ApplicationController
         flash[:success] = 'Script successfully installed.' if params[:installed]
         session[:current_site] = @site.id
 
-        @totals = site_statistics
+        @totals = site_statistics_totals
         @recent_elements = @site.site_elements.active.recent(5)
       end
 
@@ -48,7 +48,7 @@ class SitesController < ApplicationController
   end
 
   def improve
-    @totals = site_statistics
+    @totals = site_statistics_totals
   end
 
   def update
@@ -81,8 +81,7 @@ class SitesController < ApplicationController
   end
 
   def chart_data
-    json = ChartDataSerializer.new(site_statistics, params).as_json
-    render json: json, root: false
+    render json: site_statistics_graph, root: false
   end
 
   def downgrade
@@ -106,9 +105,17 @@ class SitesController < ApplicationController
 
   private
 
-  def site_statistics
+  def site_statistics_graph
+    start_date = params['start_date'] || Time.zone.today - 29.days
+    end_date = params['end_date'] || Time.zone.today
+
     @site_statistics ||=
-      FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+      FetchGraphStatisticsFromES.new(@site, start_date, end_date, params[:type]).call
+  end
+
+  def site_statistics_totals
+    FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+    FetchSiteStatisticsFromES.new(@site).call
   end
 
   def site_params
