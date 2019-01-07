@@ -105,6 +105,7 @@ describe StaticScriptModel do
           french-rose/container.css
           autodetect/container.css
           green-timberline/container.css
+          bogota/container.css
           violet/container.css
           wayfarer/container.css
           chance/container.css
