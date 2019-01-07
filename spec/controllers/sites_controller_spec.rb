@@ -179,8 +179,6 @@ describe SitesController do
 
     before do
       stub_current_user(user)
-      expect(FetchSiteStatistics)
-        .to receive_service_call.with(site, days_limit: 90).and_return(statistics)
     end
 
     it 'should return the latest lifeteime totals' do
@@ -188,9 +186,9 @@ describe SitesController do
       get :chart_data, id: site_element.site.id, type: :total, days: 2
       json = JSON.parse(response.body)
 
-      expect(json.size).to eq(2)
+      expect(json.size).to eq(3)
       expect(json[0]['value']).to eq(12)
-      expect(json[1]['value']).to eq(18)
+      expect(json[1]['value']).to eq(12)
     end
 
     it 'should return the the max amount of data if requesting more days than there is data' do
