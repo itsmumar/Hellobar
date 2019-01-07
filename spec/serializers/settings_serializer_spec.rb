@@ -49,6 +49,7 @@ describe SettingsSerializer do
           philadelphia
           paris
           sydney
+          bogota
           mexico
         ]
       end
