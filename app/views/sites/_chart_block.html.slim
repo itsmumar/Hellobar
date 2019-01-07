@@ -1,13 +1,11 @@
-- statistics = totals.for_goal(type)
-- method = type == :total ? :views : :conversions
+- statistics = totals[type]
 
-- if statistics.empty? || !statistics.views?
+- if totals[:total] == 0
   div class="chart-block #{chart}"
     i class="icon-#{icon}"
     .chart-overview
       - case type
       - when :total
-
         = link_to 'Get More Views', new_site_site_element_path(site), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
       - when :email
         = link_to 'Collect Emails', new_site_site_element_path(site), 'data-prompt-upgrade' => site.capabilities.at_site_element_limit?, "data-upgrade-benefit" => "create more bars"
@@ -22,7 +20,7 @@
   div class="chart-block #{chart}" data-chart='#{chart}' data-site-id="#{site.id}" data-num-days="#{days}"
     i class="icon-#{icon}"
     .chart-overview
-      = number_to_human(statistics.send(method), units: { thousand: 'K', million: 'M', billion: 'B' })
+      = number_to_human(statistics, units: { thousand: 'K', million: 'M', billion: 'B' })
       - case type
       - when :total
         small views

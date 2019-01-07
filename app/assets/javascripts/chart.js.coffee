@@ -9,7 +9,7 @@ class @Chart
     @$el.removeClass().addClass(@type + ' loading')
 
   _fetchData: ->
-    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}").done((data) =>
+    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}&start_date=#{@options.start}&end_date=#{@options.end}").done((data) =>
         if data.length > 1
           @_renderData(data)
         else
