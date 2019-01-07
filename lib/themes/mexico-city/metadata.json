@@ -1,7 +1,7 @@
 {
-  "name": "Mexico",
+  "name": "Mexico City",
   "type": "generic",
-  "id": "mexico",
+  "id": "mexico-city",
   "fonts": [
     "playfair_display",
     "open_sans",
@@ -12,7 +12,7 @@
   "element_types": ["Modal", "Takeover"],
   "defaults": {
     "Bar": {
-      "background_color": "0d262f",
+      "background_color": "333333",
       "border_color":"f87c38",
       "button_color": "f87c38",
       "conversion_font": "playfair_display",
@@ -38,7 +38,7 @@
       "text_field_text_color": "FFFFFF"
     },
     "Slider": {
-      "background_color": "0d262f",
+      "background_color": "333333",
       "border_color":"f90645",
       "button_color": "f87c38",
       "caption": "",
@@ -67,7 +67,7 @@
       "text_field_text_color": "FFFFFF"
     },
     "Modal": {
-      "background_color": "0d262f",
+      "background_color": "333333",
       "border_color":"f87c38",
       "button_color": "f87c38",
       "caption": "",
@@ -97,7 +97,7 @@
       "text_field_text_color": "FFFFFF"
     },
     "Takeover": {
-      "background_color": "0d262f",
+      "background_color": "333333",
       "border_color":"f87c38",
       "button_color": "f87c38",
       "caption": "",
@@ -127,7 +127,7 @@
       "text_field_text_color": "FFFFFF"
     },
     "Alert": {
-      "background_color": "0d262f",
+      "background_color": "333333",
       "border_color":"f87c38",
       "button_color": "f87c38",
       "caption": "",
