@@ -17,7 +17,7 @@ class Subscription
           visit_overage_amount: 5.00, # $$$
           upsell_email_trigger: 300_000, # Send the email saying they should upgrade to save
           upgrade_trigger: 400_000,
-          discounts: [ # discounts are doubled from Pro
+          discounts: [ # discounts 
             DiscountRange.new(5, 0, 0, 0),
             DiscountRange.new(5, 1, 4, 40),
             DiscountRange.new(10, 2, 8, 80),
