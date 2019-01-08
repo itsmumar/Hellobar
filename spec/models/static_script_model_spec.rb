@@ -120,6 +120,7 @@ describe StaticScriptModel do
           los-angeles/container.css
           gatsby/container.css
           cocina/container.css
+          manila/container.css
           mexico-city/container.css
           classy/container.css
           moscow/container.css
