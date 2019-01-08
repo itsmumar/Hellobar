@@ -25,6 +25,9 @@ Rails.application.routes.draw do
           post :send_out_test_email
           post :archive
         end
+        collection do
+          post :upload_image_froala
+        end
       end
 
       resources :contact_lists, only: [:create] do

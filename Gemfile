@@ -67,6 +67,7 @@ gem 'font-awesome-sass'
 # Assets / Frontend
 gem 'active_link_to'
 gem 'autoprefixer-rails'
+gem 'aws-sdk'
 gem 'bootstrap-sass'
 gem 'clipboard-rails'
 gem 'coffee-rails'

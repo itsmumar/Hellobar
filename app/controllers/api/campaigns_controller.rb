@@ -1,5 +1,5 @@
 class Api::CampaignsController < Api::ApplicationController
-  before_action :find_campaign, except: %i[index create]
+  before_action :find_campaign, except: %i[index create upload_image_froala]
   before_action :validate_sender_address, only: %i[create update]
 
   rescue_from Campaign::InvalidTransition, with: :handle_error
@@ -54,6 +54,14 @@ class Api::CampaignsController < Api::ApplicationController
     @campaign.destroy
 
     render json: { message: 'Campaign successfully deleted.' }
+  end
+
+  def upload_image_froala
+    if params[:file]
+      @image = CustomPaperclip::UploadImage.new(photo: params.require(:file))
+      return render json: { link: @image.photo.url }.to_json if @image.save
+    end
+    render json: { link: nil }.to_json
   end
 
   private
