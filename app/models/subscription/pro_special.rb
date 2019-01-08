@@ -8,7 +8,7 @@ class Subscription
           type: 'pro_special',
           name: 'Pro Special',
           label: 'PSP',
-          monthly_amount: 1.0,
+          monthly_amount: 29.0,
           yearly_amount: 149.0,
           visit_warning_one: 40_000,
           visit_warning_two: ::Float::INFINITY,
