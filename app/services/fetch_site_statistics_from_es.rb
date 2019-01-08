@@ -1,6 +1,10 @@
 class FetchSiteStatisticsFromES
-  def initialize(site)
+  def initialize(site, start_date, end_date)
     @site = site
+    @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
+    @start_date ||= Time.zone.today - 29.days
+    @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
+    @end_date ||= Time.zone.today
   end
 
   def call
@@ -9,7 +13,7 @@ class FetchSiteStatisticsFromES
 
   private
 
-  attr_reader :site
+  attr_reader :site, :start_date, :end_date
 
   def fetch
     normalize(query.aggs(aggrigations).aggs)
@@ -43,8 +47,13 @@ class FetchSiteStatisticsFromES
 
   def query
     OverTimeIndex.filter(
-      terms: { sid: site_element_ids }
-    )
+      range: {
+        date: {
+          gte: WeirdDate.from_date(start_date),
+          lte: WeirdDate.from_date(end_date)
+        }
+      }
+    ).filter(terms: { sid: site_element_ids })
   end
 
   def normalize result

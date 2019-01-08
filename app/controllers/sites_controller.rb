@@ -106,16 +106,13 @@ class SitesController < ApplicationController
   private
 
   def site_statistics_graph
-    start_date = params['start_date'] || Time.zone.today - 29.days
-    end_date = params['end_date'] || Time.zone.today
-
     @site_statistics ||=
-      FetchGraphStatisticsFromES.new(@site, start_date, end_date, params[:type]).call
+      FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
   end
 
   def site_statistics_totals
     FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
-    FetchSiteStatisticsFromES.new(@site).call
+    FetchSiteStatisticsFromES.new(@site, params['start_date'], params['end_date']).call
   end
 
   def site_params

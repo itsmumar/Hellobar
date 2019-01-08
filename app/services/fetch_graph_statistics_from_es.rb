@@ -2,7 +2,9 @@ class FetchGraphStatisticsFromES
   def initialize(site, start_date, end_date, type)
     @site = site
     @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
+    @start_date ||= Time.zone.today - 29.days
     @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
+    @end_date ||= Time.zone.today
     @type = type
   end
 
