@@ -1,4 +1,15 @@
-.chart-wrapper
+script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
+script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+
+#reportrange[style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 33%; float: right"]
+  i.fa.fa-calendar
+  |
+  span.pl10
+  i.fa.fa-caret-down.pl10
+
+.chart-wrapper.chart-set
   = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: nil}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :call, chart: "calls", icon: "call", days: 7}
   = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: nil}
