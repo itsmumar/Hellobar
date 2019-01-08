@@ -34,6 +34,7 @@ export default Ember.Service.extend({
       "Marcellus SC, serif":'Marcellus SC',
       "'Martel', serif":'Martel',
       "'Merienda', cursive": 'Merienda',
+      "Metropolis, sans-serif":'Metropolis-Regular',
       "'Monoton', cursive": 'Monoton',
       "Montserrat,sans-serif": 'Montserrat',
       "Montserrat Alternates, sans-serif":'Montserrat Alternates',
