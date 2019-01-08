@@ -1,4 +1,6 @@
 class ChangeSubscription
+  ONE_DOLLAR_PRO_SPECIAL_END_DATE = Date.parse('2019-01-10')
+
   def initialize(site, params, credit_card = nil)
     @site = site
     @old_subscription = site.current_subscription
@@ -68,7 +70,18 @@ class ChangeSubscription
   def create_and_pay_bill_if_necessary(subscription)
     return if subscription_class == Subscription::Free
     bill = create_bill(subscription)
+    override_pro_special_monthly_price(bill)
     pay_bill(bill)
+  end
+
+  def override_pro_special_monthly_price(bill)
+    pro_special = subscription_class == Subscription::ProSpecial
+
+    return if Date.current > ONE_DOLLAR_PRO_SPECIAL_END_DATE
+    return unless pro_special && bill.subscription.monthly?
+
+    bill.amount = 1
+    bill.base_amount = nil
   end
 
   def create_subscription
