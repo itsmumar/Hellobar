@@ -1,6 +1,6 @@
 class Api::SenderAddressesController < Api::ApplicationController
   before_action :set_site
-  before_action :find_sender_address, except: %i[create index]
+  before_action :find_sender_address, only: :update
 
   def create
     address = @site.build_sender_address(address_params)
