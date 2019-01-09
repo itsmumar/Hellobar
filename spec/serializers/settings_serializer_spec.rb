@@ -50,7 +50,8 @@ describe SettingsSerializer do
           paris
           sydney
           bogota
-          mexico
+          manila
+          mexico-city
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }

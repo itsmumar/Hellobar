@@ -121,7 +121,8 @@ describe StaticScriptModel do
           los-angeles/container.css
           gatsby/container.css
           cocina/container.css
-          mexico/container.css
+          manila/container.css
+          mexico-city/container.css
           classy/container.css
           moscow/container.css
           mumbai/container.css

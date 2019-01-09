@@ -144,10 +144,10 @@ describe Bill do
 
       expected = []
       5.times { expected << 0 }
-      5.times { expected << 2 }
-      10.times { expected << 4 }
-      10.times { expected << 6 }
-      5.times { expected << 8 }
+      5.times { expected << 4 }
+      10.times { expected << 8 }
+      10.times { expected << 12 }
+      5.times { expected << 16 }
       expect(bills.map(&:discount)).to eq(expected)
     end
   end

@@ -1,4 +1,4 @@
-.mexico {
+.manila {
   .hb-header {
     display: none;
   }
@@ -6,6 +6,7 @@
     width: 100%;
     text-overflow: ellipsis;
     overflow-x: hidden;
+    font-weight: 700;
   }
   #hellobar-modal,
   #hellobar-takeover {
@@ -15,17 +16,12 @@
     }
     .hb-content-wrapper {
       z-index: 100;
-      padding: 40px 0;
-      border-top: 1px dashed #fff;
-      border-bottom: 1px dashed #fff;
-      &:before{
-        background:url("https://assets.hellobar.com/mexico-scissors.png");
-        width: 33px;
-        height: 26px;
-        content: "";
-        position: absolute;
-        top: -13px;
-        left: -20px;
+    }
+    .hb-input-wrapper{
+      .hb-input-block{
+        input{
+          padding: 0 20px;
+        }
       }
     }
   }
@@ -56,9 +52,6 @@
   @media screen and (max-width:640px){
     #hellobar-modal {
       padding:50px;
-      .hb-content-wrapper{
-        padding: 20px 0;
-      }
     }
   }
   #hellobar-takeover {
