@@ -84,6 +84,11 @@ class SitesController < ApplicationController
     render json: site_statistics_graph, root: false
   end
 
+  def tabs_data
+    @totals = site_statistics_totals
+    render layout: false
+  end
+
   def downgrade
     ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
     redirect_to site_path(@site)

@@ -21,6 +21,17 @@ class @Chart
         @$el.removeClass('loading')
       )
 
+    $.ajax("/sites/#{@options.siteID}/tabs_data?start_date=#{@options.start}&end_date=#{@options.end}").done((data) =>
+      @_renderTabs(data)
+    ).fail(=>
+      @_failedAttempt()
+    ).always(=>
+      @$el.removeClass('loading')
+    )
+
+  _renderTabs: (data) ->
+    $('.tabs-data').html(data)
+
   _renderData: (data) ->
     @chart = AmCharts.makeChart "amchart",
       type: "serial"

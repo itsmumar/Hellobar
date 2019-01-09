@@ -174,6 +174,7 @@ Rails.application.routes.draw do
   get 'sites/:id/preview_script', to: 'sites#preview_script', as: :preview_script
   get 'sites/:id/script', to: 'sites#script', as: :script
   get 'sites/:id/chart_data', to: 'sites#chart_data', as: :chart_data
+  get 'sites/:id/tabs_data', to: 'sites#tabs_data', as: :tabs_data
 
   get '/auth/:provider/callback', to: 'identities#store'
 
