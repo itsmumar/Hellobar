@@ -48,7 +48,7 @@
   id: montserrat
   name: 'Montserrat'
   value: "'Montserrat',sans-serif"
-  google_font: 'Montserrat'
+  google_font: 'Montserrat:400,700'
 -
   id: sintony
   name: 'Sintony'
