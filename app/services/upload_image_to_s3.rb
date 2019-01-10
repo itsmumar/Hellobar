@@ -1,83 +1,26 @@
 class UploadImageToS3
-  extend ActiveModel::Naming
-  extend ActiveModel::Callbacks
-  include ActiveModel::Validations
-  include ActiveModel::Model
-  include Paperclip::Glue
-
-  # Paperclip required callbacks
-  define_model_callbacks :save, only: [:after]
-  define_model_callbacks :commit, only: [:after]
-  define_model_callbacks :destroy, only: %i[before after]
-
-  ALLOWED_SIZE_RANGE = 1..1500.kilobytes.freeze
-  ALLOWED_CONTENT = ['image/jpeg', 'image/gif', 'image/png'].freeze
-
-  attr_accessor :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at, :id
-
-  has_attached_file :photo, bucket: Settings.s3_campaign_bucket,
-                    s3_region: Settings.aws_region,
-                    storage: :s3,
-                    path: 'emails/:folder_name/:id/:filename',
-                    url: ':s3_alias_url',
-                    s3_host_alias: Settings.s3_campaign_bucket
-
-  do_not_validate_attachment_file_type :photo
-
-  # validates_attachment :photo, presence: true, content_type: { content_type: ALLOWED_CONTENT }, size: { in: ALLOWED_SIZE_RANGE }
+  def initialize(photo)
+    @photo = photo
+    @uploaded_image = nil
+  end
 
   def call
-    return false if photo.blank?
-    run_callbacks :save do
-      self.id = Time.current.to_i
-    end
-    photo.url
-  end
-  # rubocop:disable UnusedBlockArgument
-  Paperclip.interpolates :folder_name do |attachment, style|
-    Date.current.strftime('%m-%d-%y')
-  end
-  # rubocop:enable UnusedBlockArgument
-
-  def to_model
-    self
+    @uploaded_image = s3_bucket.put_object(key: key_path,
+                      body: File.read(@photo.tempfile),
+                      acl: 'public-read',
+                      content_type: @photo.content_type)
+    cloud_front_url
   end
 
-  def valid?
-    true
+  def cloud_front_url
+    "https://#{ Settings.s3_campaign_bucket }/#{ @uploaded_image.key }"
   end
 
-  def new_record?
-    true
+  def key_path
+    "emails/#{ Date.current.strftime('%m-%d-%y') }/#{ Time.current.to_i }-#{ @photo.original_filename }"
   end
 
-  def destroyed?
-    true
-  end
-
-  def destroy
-    run_callbacks :destroy
-  end
-
-  def updated_at_short
-    Time.current.to_s(:autosave_time)
-  end
-
-  def errors
-    obj = Object.new
-
-    def obj.[](*)
-      []
-    end
-
-    def obj.full_messages
-      []
-    end
-
-    def obj.any?
-      false
-    end
-
-    obj
+  def s3_bucket
+    Aws::S3::Bucket.new(Settings.s3_campaign_bucket)
   end
 end

@@ -1,20 +1,20 @@
 describe UploadImageToS3 do
   let(:url) { 'valid-url' }
+  let(:photo) { fixture_file_upload('photo.jpg', 'application/jpg') }
 
   describe '#call' do
     before do
-      allow_any_instance_of(Paperclip::Attachment).to receive(:save).and_return(url)
+      stub_request(:put, /.*/).to_return(status: 200, body: '', headers: {})
     end
 
-    it 'returns false if photo is blank' do
-      service = UploadImageToS3.new(photo: nil)
-      expect(service.call).to eql false
+    it 'returns url with current date in the URL' do
+      url = UploadImageToS3.new(photo).call
+      expect(url).to include(Date.current.strftime('%m-%d-%y').to_s)
     end
 
-    it 'returns url for a successful photo upload' do
-      photo = fixture_file_upload('photo.jpg', 'application/jpg')
-      url = UploadImageToS3.new(photo: photo).call
-      expect(url).to eql url
+    it 'returns a valid URL' do
+      url = UploadImageToS3.new(photo).call
+      expect(url).to match(/https?:\/\/[\S]+/)
     end
   end
 end

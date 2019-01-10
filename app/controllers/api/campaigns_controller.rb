@@ -57,7 +57,7 @@ class Api::CampaignsController < Api::ApplicationController
 
   def upload_image_froala
     if params[:file]
-      @image_url = UploadImageToS3.new(photo: params.require(:file)).call
+      @image_url = UploadImageToS3.new(params.require(:file)).call
       return render json: { link: @image_url }.to_json
     end
     render json: { link: nil }.to_json
