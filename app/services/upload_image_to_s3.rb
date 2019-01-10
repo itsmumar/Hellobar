@@ -12,7 +12,7 @@ class UploadImageToS3
                       content_type: @photo.content_type)
     cloud_front_url
   end
-  
+
   private
 
   def cloud_front_url
