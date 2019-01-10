@@ -1,4 +1,4 @@
-class CustomPaperclip::UploadImage
+class UploadImageToS3
   extend ActiveModel::Naming
   extend ActiveModel::Callbacks
   include ActiveModel::Validations
@@ -18,23 +18,26 @@ class CustomPaperclip::UploadImage
   has_attached_file :photo, bucket: Settings.s3_campaign_bucket,
                     s3_region: Settings.aws_region,
                     storage: :s3,
-                    path: 'emails/:folder_name/:id/:filename'
+                    path: 'emails/:folder_name/:id/:filename',
+                    url: ':s3_alias_url',
+                    s3_host_alias: Settings.s3_campaign_bucket
 
   do_not_validate_attachment_file_type :photo
 
   # validates_attachment :photo, presence: true, content_type: { content_type: ALLOWED_CONTENT }, size: { in: ALLOWED_SIZE_RANGE }
 
-  def save
+  def call
     return false if photo.blank?
     run_callbacks :save do
       self.id = Time.current.to_i
     end
-    true
+    photo.url
   end
-
-  Paperclip.interpolates :folder_name do
+  # rubocop:disable UnusedBlockArgument
+  Paperclip.interpolates :folder_name do |attachment, style|
     Date.current.strftime('%m-%d-%y')
   end
+  # rubocop:enable UnusedBlockArgument
 
   def to_model
     self
