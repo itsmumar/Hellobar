@@ -3,8 +3,8 @@
   "type": "generic",
   "id": "lima",
   "fonts": [
-    "montserrat",
-    "open_sans",
+    "raleway",
+    "paytone_one",
     "helvetica",
     "arial",
     "georgia"
@@ -12,31 +12,31 @@
   "element_types": ["Bar"],
   "defaults": {
     "Bar": {
-      "background_color": "0fcb80",
-      "border_color":"067d4d",
-      "button_color": "FFFFFF",
-      "conversion_font": "montserrat",
+      "background_color": "4b518e",
+      "border_color":"FAC51C",
+      "button_color": "4b518e",
+      "conversion_font": "raleway",
       "conversion_font_color": "FFFFFF",
       "conversion_font_size": 18,
       "cta_border_color":"FFFFFF",
       "cta_border_radius": 28,
       "cta_border_width": 0,
       "cta_height": 27,
-      "font_id": "montserrat",
-      "headline": "Marketers! Are You Leaving Money On The Table? Download Our Checklist To Be Sure",
-      "link_color": "067D4D",
-      "link_text": "Download The Checklist",
+      "font_id": "raleway",
+      "headline": "Flash Sale: 20% Off Sitewide, Enter Code: '20savings' at checkout  >>>",
+      "link_color": "FAC51C",
+      "link_text": "SHOP NOW",
       "show_border": 0,
       "text_color": "FFFFFF",
       "text_field_background_color": "000000",
       "text_field_background_opacity": 0,
       "text_field_border_color": "FFFFFF",
-      "text_field_border_radius": 33,
-      "text_field_border_width": 1,
-      "text_field_font_family": "montserrat",
+      "text_field_border_radius": 0,
+      "text_field_border_width": 0,
+      "text_field_font_family": "paytone_one",
       "text_field_font_size": 10,
       "text_field_text_color": "FFFFFF"
     }
   },
-  "advanced": false
+  "advanced": true
 }

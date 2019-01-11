@@ -140,6 +140,25 @@ describe StaticScriptModel do
           sling/container.css
           evergreen-meadow/container.css
           rhythm/container.css
+          new-york/container.css
+          chicago/container.css
+          london/container.css
+          hanoi/container.css
+          lima/container.css
+          bangkok/container.css
+          toronto/container.css
+          barcelona/container.css
+          san-diego/container.css
+          seoul/container.css
+          karachi/container.css
+          cairo/container.css
+          lagos/container.css
+          jakarta/container.css
+          taipei/container.css
+          miami/container.css
+          bangalore/container.css
+          santiago/container.css
+          boston/container.css
         ].join("\n")
     end
   end
