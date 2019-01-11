@@ -48,7 +48,7 @@
   id: montserrat
   name: 'Montserrat'
   value: "'Montserrat',sans-serif"
-  google_font: 'Montserrat'
+  google_font: 'Montserrat:400,700'
 -
   id: sintony
   name: 'Sintony'
@@ -127,7 +127,7 @@
   id: raleway
   name: 'Raleway'
   value: "'Raleway', sans-serif"
-  google_font: 'Raleway'
+  google_font: 'Raleway:400,700'
 -
   id: poppins
   name: 'Poppins'

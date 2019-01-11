@@ -105,6 +105,7 @@ describe StaticScriptModel do
           french-rose/container.css
           autodetect/container.css
           green-timberline/container.css
+          bogota/container.css
           violet/container.css
           wayfarer/container.css
           chance/container.css
@@ -120,6 +121,7 @@ describe StaticScriptModel do
           los-angeles/container.css
           gatsby/container.css
           cocina/container.css
+          manila/container.css
           mexico-city/container.css
           classy/container.css
           moscow/container.css
