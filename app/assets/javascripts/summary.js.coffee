@@ -1,3 +1,6 @@
+start = moment().subtract(29, 'days').format('YYYY-MM-DD')
+end = moment().format('YYYY-MM-DD')
+
 AmCharts.ready ->
 
   if $('.statistics-page').length
@@ -23,9 +26,6 @@ AmCharts.ready ->
 
     UrlParams.updateParam('chart', window.CurrentChart)
     $(".top-performers-wrapper").hide()
-
-    start = moment().subtract(29, 'days').format('YYYY-MM-DD')
-    end = moment().format('YYYY-MM-DD')
 
     switch window.CurrentChart
       when "views"
@@ -74,7 +74,9 @@ $ ->
   start = moment().subtract(29, 'days')
   end = moment()
 
-  callback = (start, end) ->
+  callback = (start_date, end_date) ->
+    start = start_date
+    end = end_date
     $('#reportrange span').html start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     return false if $('#amchart').hasClass('loading')
 

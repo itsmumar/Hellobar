@@ -31,6 +31,10 @@ class @Chart
 
   _renderTabs: (data) ->
     $('.tabs-data').html(data)
+    if typeof(window.CurrentChart) == "undefined"
+      $(".chart-wrapper .chart-block").first().addClass('activated')
+    else
+      $('.chart-block.' + window.CurrentChart).addClass('activated')
 
   _renderData: (data) ->
     @chart = AmCharts.makeChart "amchart",

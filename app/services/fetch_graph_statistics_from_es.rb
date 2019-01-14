@@ -27,7 +27,7 @@ class FetchGraphStatisticsFromES
       }
     end
 
-    (start_date...end_date).to_a.each do |date|
+    (start_date..end_date).to_a.each do |date|
       next if response.map(&:values).map(&:first).include? date.strftime('%-m/%d')
       response << { date: date.strftime('%-m/%d'),
           key: WeirdDate.from_date(date),
