@@ -118,8 +118,9 @@ class SitesController < ApplicationController
   end
 
   def site_statistics_totals
-    return { call: 10.0, total: 120.0, social: 30.0, email: 30.0, traffic: 50.0 } if Settings.elastic_search_endpoint == 'http://es.com:9200'
     FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
+    return { call: 10.0, total: 120.0, social: 30.0, email: 30.0, traffic: 50.0 } if Settings.elastic_search_endpoint == 'http://es.com:9200'
+
     FetchSiteStatisticsFromES.new(@site, params['start_date'], params['end_date']).call
   end
 
