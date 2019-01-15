@@ -111,7 +111,7 @@ class SitesController < ApplicationController
   private
 
   def site_statistics_graph
-    return @site_statistics ||= (((params['start_date'] || Date.current - 7.days).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect { |date| { date: date.strftime('%-m/%d'), value: rand(100) } } if Settings.elastic_search_endpoint == 'http://es.com:9200'
+    return development_data_set if Settings.elastic_search_endpoint == 'http://es.com:9200'
 
     @site_statistics ||=
       FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
@@ -189,5 +189,12 @@ class SitesController < ApplicationController
       end
 
     RenderStaticScript.new(@site, **options).call
+  end
+
+  def development_data_set
+    @site_statistics ||=
+      (((params['start_date'] || 7.days.ago).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect {
+        |date| { date: date.strftime('%-m/%d'), value: rand(100) }
+      }
   end
 end

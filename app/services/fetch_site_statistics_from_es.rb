@@ -2,9 +2,9 @@ class FetchSiteStatisticsFromES
   def initialize(site, start_date, end_date)
     @site = site
     @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
-    @start_date ||= Time.zone.today - 29.days
+    @start_date ||= 29.days.ago
     @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
-    @end_date ||= Time.zone.today
+    @end_date ||= Time.current
   end
 
   def call
