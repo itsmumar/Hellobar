@@ -193,8 +193,8 @@ class SitesController < ApplicationController
 
   def development_data_set
     @site_statistics ||=
-      (((params['start_date'] || 7.days.ago).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect {
-        |date| { date: date.strftime('%-m/%d'), value: rand(100) }
-      }
+      (((params['start_date'] || 7.days.ago).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect do |date|
+        { date: date.strftime('%-m/%d'), value: rand(100) }
+      end
   end
 end
