@@ -132,6 +132,10 @@ $ ->
           moment().subtract(1, 'month').startOf('month')
           moment().subtract(1, 'month').endOf('month')
         ]
-    }, callback
-    callback start, end
+    }
+
+    $('#reportrange').on 'apply.daterangepicker', (ev, picker) ->
+      callback picker.startDate, picker.endDate
+
+    $('#reportrange span').html start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
     return
