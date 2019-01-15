@@ -1,6 +1,8 @@
 class @Chart
 
   constructor: (@options = {}) ->
+    @options.start = @options.start.format('YYYY-MM-DD')
+    @options.end = @options.end.format('YYYY-MM-DD')
     @_setupChart()
     @_fetchData()
 

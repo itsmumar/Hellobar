@@ -93,9 +93,6 @@ $ ->
     UrlParams.updateParam('chart', UrlParams.fetch('chart'))
     $(".top-performers-wrapper").hide()
 
-    start = start.format('YYYY-MM-DD')
-    end = end.format('YYYY-MM-DD')
-
     switch window.CurrentChart
       when "views"
         new ViewsChart({siteID, numDays, start, end})

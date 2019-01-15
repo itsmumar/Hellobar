@@ -111,11 +111,14 @@ class SitesController < ApplicationController
   private
 
   def site_statistics_graph
+    return @site_statistics ||= (((params['start_date'] || Date.current - 7.days).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect { |date| { date: date.strftime('%-m/%d'), value: rand(100) } } if Settings.elastic_search_endpoint == 'http://es.com:9200'
+
     @site_statistics ||=
       FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
   end
 
   def site_statistics_totals
+    return { call: 10.0, total: 120.0, social: 30.0, email: 30.0, traffic: 50.0 } if Settings.elastic_search_endpoint == 'http://es.com:9200'
     FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
     FetchSiteStatisticsFromES.new(@site, params['start_date'], params['end_date']).call
   end
