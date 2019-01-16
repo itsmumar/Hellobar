@@ -2,7 +2,9 @@ class FetchGraphStatisticsFromES
   def initialize(site, start_date, end_date, type)
     @site = site
     @start_date = start_date.is_a?(String) ? Date.parse(start_date) : start_date
+    @start_date ||= 29.days.ago
     @end_date = end_date.is_a?(String) ? Date.parse(end_date) : end_date
+    @end_date ||= Time.current
     @type = type
   end
 
@@ -25,7 +27,7 @@ class FetchGraphStatisticsFromES
       }
     end
 
-    (start_date...end_date).to_a.each do |date|
+    (start_date..end_date).to_a.each do |date|
       next if response.map(&:values).map(&:first).include? date.strftime('%-m/%d')
       response << { date: date.strftime('%-m/%d'),
           key: WeirdDate.from_date(date),

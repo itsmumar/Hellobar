@@ -9,7 +9,7 @@ class @Chart
     @$el.removeClass().addClass(@type + ' loading')
 
   _fetchData: ->
-    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}&start_date=#{@options.start}&end_date=#{@options.end}").done((data) =>
+    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}&start_date=#{@options.startDate}&end_date=#{@options.endDate}").done((data) =>
         if data.length > 1
           @_renderData(data)
         else
@@ -20,6 +20,21 @@ class @Chart
       ).always(=>
         @$el.removeClass('loading')
       )
+
+    $.ajax("/sites/#{@options.siteID}/tabs_data?start_date=#{@options.startDate}&end_date=#{@options.endDate}").done((data) =>
+      @_renderTabs(data)
+    ).fail(=>
+      @_failedAttempt()
+    ).always(=>
+      @$el.removeClass('loading')
+    )
+
+  _renderTabs: (data) ->
+    $('.tabs-data').html(data)
+    if typeof(window.CurrentChart) == "undefined"
+      $(".chart-wrapper .chart-block").first().addClass('activated')
+    else
+      $('.chart-block.' + window.CurrentChart).addClass('activated')
 
   _renderData: (data) ->
     @chart = AmCharts.makeChart "amchart",
