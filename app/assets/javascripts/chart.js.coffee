@@ -1,8 +1,6 @@
 class @Chart
 
   constructor: (@options = {}) ->
-    @options.start = @options.start.format('YYYY-MM-DD')
-    @options.end = @options.end.format('YYYY-MM-DD')
     @_setupChart()
     @_fetchData()
 
@@ -11,7 +9,7 @@ class @Chart
     @$el.removeClass().addClass(@type + ' loading')
 
   _fetchData: ->
-    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}&start_date=#{@options.start}&end_date=#{@options.end}").done((data) =>
+    $.ajax("/sites/#{@options.siteID}/chart_data.json?type=#{@chart_data_type}&days=#{@options.numDays}&start_date=#{@options.startDate}&end_date=#{@options.endDate}").done((data) =>
         if data.length > 1
           @_renderData(data)
         else
@@ -23,7 +21,7 @@ class @Chart
         @$el.removeClass('loading')
       )
 
-    $.ajax("/sites/#{@options.siteID}/tabs_data?start_date=#{@options.start}&end_date=#{@options.end}").done((data) =>
+    $.ajax("/sites/#{@options.siteID}/tabs_data?start_date=#{@options.startDate}&end_date=#{@options.endDate}").done((data) =>
       @_renderTabs(data)
     ).fail(=>
       @_failedAttempt()

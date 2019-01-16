@@ -1,5 +1,5 @@
-start = moment().subtract(29, 'days').format('YYYY-MM-DD')
-end = moment().format('YYYY-MM-DD')
+startDate = moment().subtract(29, 'days').format('YYYY-MM-DD')
+endDate = moment().format('YYYY-MM-DD')
 
 AmCharts.ready ->
 
@@ -29,19 +29,19 @@ AmCharts.ready ->
 
     switch window.CurrentChart
       when "views"
-        new ViewsChart({siteID, numDays, start, end})
+        new ViewsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.all").show()
       when "emails"
-        new EmailsChart({siteID, numDays, start, end})
+        new EmailsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.email").show()
       when "clicks"
-        new ClicksChart({siteID, numDays, start, end})
+        new ClicksChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.traffic").show()
       when "social"
-        new SocialChart({siteID, numDays, start, end})
+        new SocialChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.social").show()
       when "calls"
-        new CallsChart({siteID, numDays, start, end})
+        new CallsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.call").show()
 
   # Trigger current chart or default when applicatble
@@ -71,13 +71,8 @@ $ ->
     else
       $(".top-performers-wrapper.all").show()
 
-  start = moment().subtract(29, 'days')
-  end = moment()
-
-  callback = (start_date, end_date) ->
-    start = start_date
-    end = end_date
-    $('#reportrange span').html start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+  callback = () ->
+    $('#reportrange span').html (moment(startDate)).format('MMMM D, YYYY') + ' - ' + (moment(endDate)).format('MMMM D, YYYY')
     return false if $('#amchart').hasClass('loading')
 
     # Set up charting canvas (if it doesn't exist)
@@ -95,26 +90,26 @@ $ ->
 
     switch window.CurrentChart
       when "views"
-        new ViewsChart({siteID, numDays, start, end})
+        new ViewsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.all").show()
       when "emails"
-        new EmailsChart({siteID, numDays, start, end})
+        new EmailsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.email").show()
       when "clicks"
-        new ClicksChart({siteID, numDays, start, end})
+        new ClicksChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.traffic").show()
       when "social"
-        new SocialChart({siteID, numDays, start, end})
+        new SocialChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.social").show()
       when "calls"
-        new CallsChart({siteID, numDays, start, end})
+        new CallsChart({siteID, numDays, startDate, endDate})
         $(".top-performers-wrapper.call").show()
     return
 
   if $('#reportrange').length > 0
     $('#reportrange').daterangepicker {
-      startDate: start
-      endDate: end
+      startDate: moment().subtract(29, 'days')
+      endDate: moment()
       ranges:
         'Last 7 Days': [
           moment().subtract(6, 'days')
@@ -135,7 +130,9 @@ $ ->
     }
 
     $('#reportrange').on 'apply.daterangepicker', (ev, picker) ->
-      callback picker.startDate, picker.endDate
+      startDate = picker.startDate.format('YYYY-MM-DD')
+      endDate = picker.endDate.format('YYYY-MM-DD')
+      callback()
 
-    $('#reportrange span').html start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY')
+    $('#reportrange span').html (moment(startDate)).format('MMMM D, YYYY') + ' - ' + (moment(endDate)).format('MMMM D, YYYY')
     return
