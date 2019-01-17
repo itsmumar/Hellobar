@@ -1,0 +1,35 @@
+
+$mask-color: hsla(0, 63%, 41%, 0.29);
+
+.santiago {
+  #hellobar-bar {
+    font-size: 12px;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+      background: linear-gradient(to bottom, transparent 0%, $mask-color 100%);
+    }
+    .hb-input-wrapper{
+      .hb-input-block{
+        width: 15em;
+      }
+    }
+
+    .hb-text-wrapper{
+      .hb-headline-text{
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.1em;
+      }
+    }
+    .hb-cta{
+      padding: 0 1.6em;
+      font-size: 1.1em;
+      box-shadow: 0px 4px 20px -7px black;
+    }
+  }
+}

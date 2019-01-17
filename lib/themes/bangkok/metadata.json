@@ -1,0 +1,43 @@
+{
+  "name": "Bangkok",
+  "type": "generic",
+  "id": "bangkok",
+  "fonts": [
+    "rajdhani",
+    "source_pro",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Bar"],
+  "defaults": {
+    "Bar": {
+      "background_color": "f0482c",
+      "border_color":"94b2be",
+      "button_color": "94b2be",
+      "conversion_font": "rajdhani",
+      "conversion_font_color": "FFFFFF",
+      "conversion_font_size": 18,
+      "cta_border_color":"29b0e0",
+      "cta_border_radius": 4,
+      "cta_border_width": 0,
+      "cta_height": 27,
+      "font_id": "rajdhani",
+      "headline": "Want To Become An Expert In Hosting Webinars? Join Our Free Webinar Masterclass!",
+      "link_color": "FFFFFF",
+      "link_text": "Save me a spot!",
+      "show_border": 0,
+      "text_color": "FFFFFF",
+      "text_field_background_color": "FFFFFF",
+      "text_field_background_opacity": 100,
+      "text_field_border_color": "ABAAAA",
+      "text_field_border_radius": 4,
+      "text_field_border_width": 0,
+      "text_field_font_family": "rajdhani",
+      "text_field_font_size": 14,
+      "text_field_text_color": "b3b3b3"
+    }
+  },
+  "image": {},
+  "advanced": false
+}

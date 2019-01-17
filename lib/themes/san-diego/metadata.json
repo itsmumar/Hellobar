@@ -1,0 +1,42 @@
+{
+  "name": "San Diego",
+  "type": "generic",
+  "id": "san-diego",
+  "fonts": [
+    "martel",
+    "source_pro",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Bar"],
+  "defaults": {
+    "Bar": {
+      "background_color": "FFFFFF",
+      "border_color":"202020",
+      "button_color": "202020",
+      "conversion_font": "martel",
+      "conversion_font_size": 18,
+      "cta_border_color":"202020",
+      "cta_border_radius": 1,
+      "cta_border_width": 0,
+      "cta_height": 27,
+      "font_id": "martel",
+      "headline": "Business 101 Early Bird Special: $100 Savings!",
+      "link_color": "FFFFFF",
+      "link_text": "Save My Spot",
+      "show_border": 0,
+      "text_color": "585858",
+      "text_field_background_color": "000000",
+      "text_field_background_opacity": 10,
+      "text_field_border_color": "FFFFFF",
+      "text_field_border_radius": 1,
+      "text_field_border_width": 0,
+      "text_field_font_family": "martel",
+      "text_field_font_size": 10,
+      "text_field_text_color": "acabab"
+    }
+  },
+  "image": {},
+  "advanced": false
+}
