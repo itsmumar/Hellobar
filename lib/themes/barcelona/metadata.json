@@ -1,0 +1,45 @@
+{
+  "name": "Barcelona",
+  "type": "generic",
+  "id": "barcelona",
+  "fonts": [
+    "montserrat",
+    "kanit",
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Bar"],
+  "defaults": {
+    "Bar": {
+      "background_color": "3fac99",
+      "border_color":"4A47F2",
+      "button_color": "FFFFFF",
+      "conversion_font": "montserrat",
+      "conversion_font_color": "FFFFFF",
+      "conversion_font_size": 18,
+      "cta_border_color":"4A47F2",
+      "cta_border_radius":4,
+      "cta_border_width": 0,
+      "cta_height": 28,
+      "font_id": "montserrat",
+      "headline": "Free Shipping On All Orders Over $100... Enter Code 'SHIP2ME' At Checkout",
+      "link_color": "000000",
+      "link_text": "Start Shopping",
+      "show_border": 0,
+      "text_color": "FFFFFF",
+      "text_field_background_color": "FFFFFF",
+      "text_field_background_opacity": 10,
+      "text_field_border_color": "FFFFFF",
+      "text_field_border_radius": 4,
+      "text_field_border_width": 0,
+      "text_field_font_family": "montserrat",
+      "text_field_font_size": 14,
+      "text_field_text_color": "FFFFFF"
+    }
+  },
+  "image": {},
+  "advanced": false
+}
