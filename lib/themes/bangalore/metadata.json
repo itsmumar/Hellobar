@@ -30,11 +30,11 @@
       "link_text": "Save My Spot!",
       "show_border": 0,
       "text_color": "FFFFFF",
-      "text_field_background_color": "146eb6",
+      "text_field_background_color": "000000",
       "text_field_background_opacity": 10,
       "text_field_border_color": "FFFFFF",
       "text_field_border_radius": 3,
-      "text_field_border_width": 1,
+      "text_field_border_width": 0,
       "text_field_font_family": "lato",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF"

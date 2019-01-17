@@ -34,7 +34,7 @@
       "text_field_background_opacity": 100,
       "text_field_border_color": "2969B0",
       "text_field_border_radius": 4,
-      "text_field_border_width": 0,
+      "text_field_border_width": 1,
       "text_field_font_family": "rajdhani",
       "text_field_font_size": 14,
       "text_field_text_color": "2969B0"
