@@ -1,0 +1,64 @@
+
+.new-york {
+  #hello-bar {
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+  #hellobar-bar {
+    font-size: 16px;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .hb-content-wrapper{
+      text-align: center;
+    }
+    .hb-cta {
+      font-size: 0.75em;
+      font-weight: 700;
+      box-shadow: 0px 4px 20px -7px black;
+      max-width: inherit;
+      padding: 0 2em;
+      &:hover {
+        opacity: 0.95;
+      }
+    }
+
+    .hb-text-wrapper {
+      margin-left: 10px;
+      margin-right: 10px;
+      padding-bottom: 4px;
+      .hb-headline-text{
+        font-size: 1em;
+      }
+    }
+    .hb-input-block {
+      margin-bottom: 4px;
+      margin-top: 4px;
+      &:before {
+        left: 13px;
+        top: 11px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .icon-close {
+      font-size: 15px;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-51%);
+    }
+    @media screen and (max-width: 640px) {
+      .hb-input-block {
+        &:before {
+          top: 14px;
+        }
+      }
+    }
+  }
+}

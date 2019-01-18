@@ -1,0 +1,45 @@
+{
+  "name": "Santiago",
+  "type": "generic",
+  "id": "santiago",
+  "fonts": [
+    "lato",
+    "raleway",
+    "roboto",
+    "open_sans",
+    "helvetica",
+    "arial",
+    "georgia"
+  ],
+  "element_types": ["Bar"],
+  "defaults": {
+    "Bar": {
+      "background_color": "33b78e",
+      "border_color":"FFFFFF",
+      "button_color": "FFFFFF",
+      "conversion_font": "lato",
+      "conversion_font_color": "FFFFFF",
+      "conversion_font_size": 18,
+      "cta_border_color":"FFFFFF",
+      "cta_border_radius":0,
+      "cta_border_width": 0,
+      "cta_height": 28,
+      "font_id": "raleway",
+      "headline": "FREE Strategy Session: Learn About Social Media Strategies in 2018!",
+      "link_color": "00A885",
+      "link_text": "Schedule Now",
+      "show_border": 0,
+      "text_color": "FFFFFF",
+      "text_field_background_color": "000000",
+      "text_field_background_opacity": 10,
+      "text_field_border_color": "FFFFFF",
+      "text_field_border_radius": 0,
+      "text_field_border_width": 0,
+      "text_field_font_family": "lato",
+      "text_field_font_size": 14,
+      "text_field_text_color": "FFFFFF"
+    }
+  },
+  "image": {},
+  "advanced": false
+}

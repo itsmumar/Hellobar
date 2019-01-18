@@ -143,3 +143,33 @@
   name: 'Quicksand'
   value: "'Quicksand', sans-serif"
   google_font: 'Quicksand'
+-
+  id: rajdhani
+  name: 'Rajdhani'
+  value: "'Rajdhani', sans-serif"
+  google_font: 'Rajdhani'
+-
+  id: julius-sans-one
+  name: 'Julius Sans One'
+  value: "'Julius Sans One', sans-serif"
+  google_font: 'Julius+Sans+One'
+-
+  id: martel
+  name: 'Martel'
+  value: "'Martel', sans-serif"
+  google_font: 'Martel'
+-
+  id: bree-serif
+  name: 'Bree Serif'
+  value: "'Bree Serif', sans-serif"
+  google_font: 'Bree+Serif'
+-
+  id: abril-fatface
+  name: 'Abril Fatface'
+  value: "'Abril Fatface', sans-serif"
+  google_font: 'Abril+Fatface'
+-
+  id: poiret-one
+  name: 'Poiret One'
+  value: "'Poiret One', sans-serif"
+  google_font: 'Poiret+One'
