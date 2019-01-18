@@ -2,7 +2,7 @@
   id: open_sans # DO NOT CHANGE WITHOUT UPDATING THE FONT_ID COLUMN DEFAULT
   name: Open Sans
   value: "'Open Sans',sans-serif"
-  google_font: 'Open+Sans'
+  google_font: 'Open+Sans:400,600,700'
 -
   id: helvetica
   name: Helvetica
