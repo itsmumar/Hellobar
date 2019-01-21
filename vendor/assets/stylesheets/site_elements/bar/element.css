@@ -388,10 +388,3 @@
 #hellobar-bar.mobile .gdpr-consent-form {
   min-width: 360px;
 }
-
-/*-----------  Mobile Fix height  -----------*/
-@media screen and (max-width:640px){
-  #hellobar-bar {
-    min-height: 100%;
-  }
-}
