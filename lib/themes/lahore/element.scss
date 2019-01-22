@@ -14,7 +14,7 @@
   #hellobar-alert {
     border-radius: 0px;
     .hb-cta {
-      max-width: none;
+      max-width: 24em;
     }
 
     .hb-content-wrapper {
@@ -30,28 +30,29 @@
         }
       }
     }
+    .hb-headline-text,
+    .hb-secondary-text {
+      margin:0;
+      font-size: 2em;
+      font-weight: 600;
+    }
+    .hb-secondary-text{
+      font-weight: 400;
+    }
   }
   #hellobar-modal {
     padding: 78px;
     max-width: 43.5em;
-    .hb-headline-text {
-      font-size: 2em;
-      margin-bottom: 0.6em;
-      font-weight: 600;
-    }
-    .hb-secondary-text {
-      font-size: 1em;
-    }
     .hb-name-input {
       margin-bottom: 5px;
     }
     .hb-input-wrapper{
       position: relative;
       z-index: 10;
-      max-width: 34.5em;
+      max-width: 24em;
     }
     .questionslist{
-      max-width:34.5em;
+      max-width: 24em;
       margin-left: auto;
       margin-right: auto;
     }
@@ -62,27 +63,38 @@
     }
   }
   #hellobar-takeover {
-    .hb-headline-text {
-      font-size: 1.6em;
-      font-weight: 600;
+    .hb-input-block{
+      input {
+        font-size: 0.7em;
+      }
     }
-    .hb-secondary-text {
-      font-size: 0.8em;
-      margin-top: 15px;
+    .hb-headline-text,
+    .hb-secondary-text{
+      font-size: 1.5em;
     }
-    .hb-input-block input {
-      font-size: 0.7em;
+    .hb-input-wrapper{
+      position: relative;
+      z-index: 10;
+      max-width: 18em;
+    }
+    .hb-text-wrapper{
+      max-width: 27em;
     }
     .hb-name-input {
       margin-bottom: 12px;
     }
     .hb-content-wrapper{
-      max-width: 540px;
+      max-width: 27em;
       margin: auto;
       right: 0;
     }
     .hb-cta {
       font-size: 0.8em;
+    }
+    .questionslist{
+      max-width: 18em;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
   @media screen and (max-width: 640px){
@@ -91,6 +103,16 @@
         max-width: 277px;
         padding: 20px 0;
       }
+    }
+  }
+  #hellobar-slider{
+    .hb-headline-text{
+      font-size: 1.4em;
+      margin-bottom: 0.5em;
+    }
+    .hb-secondary-text{
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
     }
   }
 }
