@@ -8,6 +8,7 @@ class HandleSpamCampaign
   end
 
   def call
+    return if @statistics['recipients'].to_f.zero?
     @campaign.update_columns processed: processed?, spam: spam?
   end
 
@@ -22,10 +23,22 @@ class HandleSpamCampaign
   end
 
   def campaign_sending_score
-    messages_sent = @statistics['recipients'].to_f # handling division by 0.
-    spam_report_rate = (@statistics['reported'].to_f / messages_sent) * 100
-    bounce_rate = (@statistics['bounced'].to_f / messages_sent) * 100
-    unsubscribe_rate = (@statistics['unsubscribed'].to_f / messages_sent) * 100
     (spam_report_rate + bounce_rate + unsubscribe_rate) / 3
+  end
+
+  def messages_sent
+    @statistics['recipients'].to_f
+  end
+
+  def spam_report_rate
+    (@statistics['reported'].to_f / messages_sent) * 100
+  end
+
+  def bounce_rate
+    (@statistics['bounced'].to_f / messages_sent) * 100
+  end
+
+  def unsubscribe_rate
+    (@statistics['unsubscribed'].to_f / messages_sent) * 100
   end
 end
