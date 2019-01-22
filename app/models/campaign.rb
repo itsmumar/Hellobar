@@ -6,6 +6,8 @@ class Campaign < ApplicationRecord
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
   STATUSES = [DRAFT, SENDING, SENT, ARCHIVED].freeze
+  THREASHOLD_FOR_IS_PROCESSED = 0.9
+  MAX_THREASHOLD_SENDING_SCORE = 60
 
   INVALID_TRANSITION_TO_ARCHIVED = "Campaign can't be archived until it's sent.".freeze
 
@@ -24,9 +26,10 @@ class Campaign < ApplicationRecord
   scope :sent, -> { where(status: [SENT]) }
   scope :archived, -> { where(status: [ARCHIVED]) }
   scope :with_emails, -> { includes(:email) }
+  scope :unprocessed, -> { where(processed: false) }
 
   def statistics
-    FetchEmailStatistics.new(self).call
+    @statistics ||= FetchEmailStatistics.new(self).call
   end
 
   STATUSES.each do |key|

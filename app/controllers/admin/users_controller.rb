@@ -34,6 +34,15 @@ class Admin::UsersController < AdminController
     end
   end
 
+  def undo_spammer
+    user = User.find(params[:id])
+    user.campaigns.where(spam: true)
+        .map { |r| r.update_column(:spam, false) }
+
+    flash[:success] = "All spammed campaigns of user #{ user.id } (#{ user.email }) have been reset"
+    redirect_to admin_users_path
+  end
+
   def reset_password
     @user = User.with_deleted.find(params[:id])
     @user.send_reset_password_instructions
