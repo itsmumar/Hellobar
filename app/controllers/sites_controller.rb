@@ -84,6 +84,11 @@ class SitesController < ApplicationController
     render json: site_statistics_graph, root: false
   end
 
+  def tabs_data
+    @totals = site_statistics_totals
+    render layout: false
+  end
+
   def downgrade
     ChangeSubscription.new(@site, subscription: 'free', schedule: 'monthly').call
     redirect_to site_path(@site)
@@ -106,16 +111,17 @@ class SitesController < ApplicationController
   private
 
   def site_statistics_graph
-    start_date = params['start_date'] || Time.zone.today - 29.days
-    end_date = params['end_date'] || Time.zone.today
+    return development_data_set if Settings.elastic_search_endpoint == 'http://es.com:9200'
 
     @site_statistics ||=
-      FetchGraphStatisticsFromES.new(@site, start_date, end_date, params[:type]).call
+      FetchGraphStatisticsFromES.new(@site, params['start_date'], params['end_date'], params[:type]).call
   end
 
   def site_statistics_totals
     FetchSiteStatistics.new(@site, days_limit: @site.capabilities.num_days_improve_data).call
-    FetchSiteStatisticsFromES.new(@site).call
+    return { call: 10.0, total: 120.0, social: 30.0, email: 30.0, traffic: 50.0 } if Settings.elastic_search_endpoint == 'http://es.com:9200'
+
+    FetchSiteStatisticsFromES.new(@site, params['start_date'], params['end_date']).call
   end
 
   def site_params
@@ -184,5 +190,12 @@ class SitesController < ApplicationController
       end
 
     RenderStaticScript.new(@site, **options).call
+  end
+
+  def development_data_set
+    @site_statistics ||=
+      (((params['start_date'] || 7.days.ago).to_date)..(params['end_date'] || Date.current).to_date).to_a.collect do |date|
+        { date: date.strftime('%-m/%d'), value: rand(100) }
+      end
   end
 end

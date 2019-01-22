@@ -181,21 +181,20 @@ describe SitesController do
       stub_current_user(user)
     end
 
-    it 'should return the latest lifeteime totals' do
+    it 'should return the latest lifetime totals' do
       request.env['HTTP_ACCEPT'] = 'application/json'
-      get :chart_data, id: site_element.site.id, type: :total, days: 2
+      get :chart_data, id: site_element.site.id, type: :total
       json = JSON.parse(response.body)
 
-      expect(json.size).to eq(3)
-      expect(json[0]['value']).to eq(12)
-      expect(json[1]['value']).to eq(12)
+      expect(json.size).to eq(8)
     end
 
-    it 'should return the the max amount of data if requesting more days than there is data' do
+    it 'should return the data size equal to number of days' do
       request.env['HTTP_ACCEPT'] = 'application/json'
-      get :chart_data, id: site_element.site.id, type: :total, days: 10
+      get :chart_data, id: site_element.site.id, type: :total, days: 10, start_date: 10.days.ago, end_date: Time.current
       json = JSON.parse(response.body)
-      expect(json.size).to eq(3)
+
+      expect(json.size).to eq(11)
     end
   end
 

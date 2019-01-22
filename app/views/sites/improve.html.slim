@@ -9,12 +9,8 @@ link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/dateran
   span.pl10
   i.fa.fa-caret-down.pl10
 
-.chart-wrapper.chart-set
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :total, chart: "views", icon: "views", days: nil}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :call, chart: "calls", icon: "call", days: 7}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :email, chart: "emails", icon: "contacts", days: nil}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :traffic, chart: "clicks", icon: "clicks", days: nil}
-  = render "sites/chart_block", {site: @site, totals: @totals, type: :social, chart: "social", icon: "social", days: nil}
+.chart-wrapper.chart-set.tabs-data
+  = render "sites/tabs_block"
 
 - if current_site.free?
   .charting-cta

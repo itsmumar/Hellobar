@@ -1,5 +1,5 @@
 class Api::CampaignsController < Api::ApplicationController
-  before_action :find_campaign, except: %i[index create]
+  before_action :find_campaign, except: %i[index create upload_image_froala]
   before_action :validate_sender_address, :verify_is_spammer, only: %i[send_out send_out_test_email]
 
   rescue_from Campaign::InvalidTransition, with: :handle_error
@@ -54,6 +54,14 @@ class Api::CampaignsController < Api::ApplicationController
     @campaign.destroy
 
     render json: { message: 'Campaign successfully deleted.' }
+  end
+
+  def upload_image_froala
+    if params[:file]
+      @image_url = UploadImageToS3.new(params.require(:file)).call
+      return render json: { link: @image_url }.to_json
+    end
+    render json: { link: nil }.to_json
   end
 
   private
