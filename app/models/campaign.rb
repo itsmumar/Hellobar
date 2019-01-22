@@ -6,8 +6,6 @@ class Campaign < ApplicationRecord
   SENT = 'sent'.freeze
   ARCHIVED = 'archived'.freeze
   STATUSES = [DRAFT, SENDING, SENT, ARCHIVED].freeze
-  THREASHOLD_FOR_IS_PROCESSED = 0.9
-  MAX_THREASHOLD_SENDING_SCORE = 60
 
   INVALID_TRANSITION_TO_ARCHIVED = "Campaign can't be archived until it's sent.".freeze
 

@@ -1,4 +1,7 @@
 class HandleSpamCampaign
+  THREASHOLD_FOR_IS_PROCESSED = 0.9
+  MAX_THREASHOLD_SENDING_SCORE = 60
+
   def initialize(campaign)
     @campaign = campaign
     @statistics = campaign.statistics
@@ -11,11 +14,11 @@ class HandleSpamCampaign
   private
 
   def spam?
-    campaign_sending_score >= Campaign::MAX_THREASHOLD_SENDING_SCORE
+    campaign_sending_score >= MAX_THREASHOLD_SENDING_SCORE
   end
 
   def processed?
-    @statistics['delivered'].to_f / @statistics['recipients'].to_f >= Campaign::THREASHOLD_FOR_IS_PROCESSED
+    @statistics['delivered'].to_f / @statistics['recipients'].to_f >= THREASHOLD_FOR_IS_PROCESSED
   end
 
   def campaign_sending_score
