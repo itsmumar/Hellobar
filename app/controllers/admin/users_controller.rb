@@ -37,7 +37,7 @@ class Admin::UsersController < AdminController
   def undo_spammer
     user = User.find(params[:id])
     user.campaigns.where(spam: true)
-        .map { |r| r.update_column(:spam, false) }
+        .reorder(:id).update_all(spam: false)
 
     flash[:success] = "All spammed campaigns of user #{ user.id } (#{ user.email }) have been reset"
     redirect_to admin_users_path
