@@ -24,5 +24,9 @@ describe EmailSerializer do
     it 'includes body' do
       expect(json[:body]).to eq(email.body)
     end
+
+    it 'includes plain body' do
+      expect(json[:plain_body]).to eq(email.plain_body)
+    end
   end
 end
