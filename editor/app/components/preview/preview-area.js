@@ -242,9 +242,9 @@ export default Ember.Component.extend({
       }
     );
 
-    previewElement['thank_you_text'] = this.get('model.site.current_subscription.type') == 'free' ?
+    previewElement['thank_you_text'] = this.get('model.site.current_subscription.type') === 'free' ?
       this.get('model.default_email_thank_you_text') :
-      this.get('model.thank_you_text') || 'Thanks for signing up!'
+      this.get('model.thank_you_text') || 'Thanks for signing up!';
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
