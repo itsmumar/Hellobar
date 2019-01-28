@@ -127,7 +127,7 @@
   id: raleway
   name: 'Raleway'
   value: "'Raleway', sans-serif"
-  google_font: 'Raleway:400,700'
+  google_font: 'Raleway:300,400,700'
 -
   id: poppins
   name: 'Poppins'
