@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(version: 20190122094343) do
     t.datetime "sent_at"
     t.datetime "archived_at"
     t.integer  "email_id",        limit: 4
+    t.boolean  "spam",                        default: false
+    t.boolean  "processed",                   default: false
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree

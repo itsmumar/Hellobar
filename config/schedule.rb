@@ -61,6 +61,10 @@ every 24.hours, at: '2:00am', roles: [:cron] do
   rake 'site:scripts:install_check:recently_created_not_installed'
 end
 
+every 3.hours, roles: [:cron] do
+  rake 'campaign:verify_spam_campaigns'
+end
+
 every 5.minutes, roles: %i[web worker] do
   rake 'cloudwatch_metrics:send'
 end
