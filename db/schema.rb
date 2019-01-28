@@ -129,7 +129,6 @@ ActiveRecord::Schema.define(version: 20190122094343) do
     t.datetime "sent_at"
     t.datetime "archived_at"
     t.integer  "email_id",        limit: 4
-    t.boolean  "is_text",                     default: false
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
@@ -496,7 +495,6 @@ ActiveRecord::Schema.define(version: 20190122094343) do
     t.integer  "conversion_font_size",          limit: 4,        default: 22,           null: false
     t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.datetime "deactivated_at"
-    t.string   "button_hover_color",            limit: 255,      default: "3c3c3c"
     t.string   "text_field_font_family",        limit: 255
     t.integer  "text_field_font_size",          limit: 4,        default: 14
     t.boolean  "show_optional_caption",                          default: true,         null: false
@@ -608,7 +606,6 @@ ActiveRecord::Schema.define(version: 20190122094343) do
     t.datetime "updated_at"
   end
 
-  add_foreign_key "affiliate_information", "users"
   add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
