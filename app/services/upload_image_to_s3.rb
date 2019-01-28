@@ -20,7 +20,7 @@ class UploadImageToS3
   end
 
   def key_path
-    @key ||= "emails/#{ Date.current.strftime('%m-%d-%y') }/#{ Time.current.to_i }-#{ @photo.original_filename }"
+    @key ||= "emails/#{ Date.current.strftime('%m-%d-%y') }/#{ Time.current.to_i }-#{ @photo.original_filename.parameterize('-') }"
   end
 
   def s3_bucket
