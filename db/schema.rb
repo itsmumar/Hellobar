@@ -606,7 +606,6 @@ ActiveRecord::Schema.define(version: 20190122094343) do
     t.datetime "updated_at"
   end
 
-  add_foreign_key "billing_attempts", "credit_cards"
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"
