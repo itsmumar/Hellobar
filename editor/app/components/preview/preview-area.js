@@ -232,7 +232,6 @@ export default Ember.Component.extend({
         subtype: this.get('model.element_subtype'),
         tab_side: 'right',
         template_name: (this.get('model.type') || 'bar').toLowerCase() + '_' + (this.get('model.element_subtype') || 'traffic'),
-        thank_you_text: this.get('model.thank_you_text') || 'Thanks for signing up!',
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,
@@ -242,6 +241,10 @@ export default Ember.Component.extend({
         branding_url: 'https://www.hellobar.com?sid=preview'
       }
     );
+
+    previewElement['thank_you_text'] = this.get('model.site.current_subscription.type') === 'free' ?
+      this.get('model.default_email_thank_you_text') :
+      this.get('model.thank_you_text') || 'Thanks for signing up!';
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 
