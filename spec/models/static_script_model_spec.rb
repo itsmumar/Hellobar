@@ -118,6 +118,7 @@ describe StaticScriptModel do
           istanbul/container.css
           gogo/container.css
           dark-green-spring/container.css
+          lahore/container.css
           los-angeles/container.css
           gatsby/container.css
           cocina/container.css
@@ -136,6 +137,7 @@ describe StaticScriptModel do
           smooth-impact/container.css
           tocaya/container.css
           wooli/container.css
+          sao-paulo/container.css
           seattle/container.css
           blue-autumn/container.css
           sydney/container.css
