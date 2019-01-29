@@ -16,7 +16,7 @@ class UpsellMailer < ApplicationMailer
     @number_of_views = number_of_views
     @limit = limit
     users = site.owners_and_admins
-    hb_team = ['seth@hellobar.com', 'karen@hellobar.com', 'lindsey@hellobar.com', 'keith@neilpatel.com', 'mike@hellobar.com']
+    hb_team = ['seth@hellobar.com', 'karen@hellobar.com', 'lindsey@hellobar.com', 'ryan@hellobar.com', 'mike@hellobar.com']
 
     users.each do |user|
       @user = user
