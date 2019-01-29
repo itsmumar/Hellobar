@@ -1,5 +1,5 @@
 class SendCampaignEmailSerializer < ActiveModel::Serializer
-  attributes :fromName, :fromEmail, :subject, :body, :plain_body
+  attributes :fromName, :fromEmail, :subject, :body, :plainBody
 
   def body
     object.body + (object.site.sender_address.present? ?
