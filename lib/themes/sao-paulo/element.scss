@@ -19,7 +19,9 @@
     left: auto;
   }
   .hb-cta {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 0.8em;
     font-weight: 400;
     margin-top: 1em;
@@ -646,6 +648,9 @@
     &.image-background{
       .slider-content{
         width: 50%;
+      }
+      .hb-logo-wrapper{
+        padding-right: 50%;
       }
     }
     .hb-headline-text{
