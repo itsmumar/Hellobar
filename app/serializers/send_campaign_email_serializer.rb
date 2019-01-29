@@ -1,5 +1,5 @@
 class SendCampaignEmailSerializer < ActiveModel::Serializer
-  attributes :fromName, :fromEmail, :subject, :body
+  attributes :fromName, :fromEmail, :subject, :body, :plain_body
 
   def body
     object.body + (object.site.sender_address.present? ?
@@ -8,6 +8,10 @@ class SendCampaignEmailSerializer < ActiveModel::Serializer
     #{ object.site.sender_address.city }, #{ object.site.sender_address.state } #{ object.site.sender_address.postal_code },
     #{ object.site.sender_address.country }
     </p>" : '')
+  end
+
+  def plainBody
+    object.plain_body
   end
 
   def fromName
