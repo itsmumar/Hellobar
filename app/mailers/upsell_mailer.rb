@@ -18,7 +18,6 @@ class UpsellMailer < ApplicationMailer
     users = site.owners_and_admins
     hb_team = ['seth@hellobar.com', 'karen@hellobar.com', 'lindsey@hellobar.com', 'ryan@hellobar.com', 'mike@hellobar.com'].freeze
 
-
     mail(to: users.map(&:email).uniq, subject: 'You could be saving money by upgrading your Hello Bar Subscription')
 
     mail(to: hb_team, subject: 'Heads up! An Elite customer is paying a lot in overage fees')
