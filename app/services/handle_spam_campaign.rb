@@ -19,7 +19,11 @@ class HandleSpamCampaign
   end
 
   def processed?
-    @statistics['delivered'].to_f / @statistics['recipients'].to_f >= THREASHOLD_FOR_IS_PROCESSED
+    processed_rate >= THREASHOLD_FOR_IS_PROCESSED
+  end
+
+  def processed_rate
+    @statistics['submitted'].to_f / @statistics['recipients'].to_f
   end
 
   def campaign_sending_score

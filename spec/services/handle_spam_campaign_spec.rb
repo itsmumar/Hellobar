@@ -8,8 +8,8 @@ describe HandleSpamCampaign do
       'recipients' => BigDecimal(10),
       'reported' => BigDecimal(6),
       'bounced' => BigDecimal(9),
-      'delivered' => BigDecimal(9),
-      'submitted' => BigDecimal(1),
+      'delivered' => BigDecimal(4),
+      'submitted' => BigDecimal(10),
       'unsubscribed' => BigDecimal(9),
       'id' => BigDecimal(campaign.id),
       'type' => 'campaign'
@@ -23,8 +23,8 @@ describe HandleSpamCampaign do
       'recipients' => BigDecimal(10),
       'reported' => BigDecimal(2),
       'bounced' => BigDecimal(1),
-      'delivered' => BigDecimal(9),
-      'submitted' => BigDecimal(1),
+      'delivered' => BigDecimal(7),
+      'submitted' => BigDecimal(10),
       'unsubscribed' => BigDecimal(1),
       'id' => BigDecimal(campaign.id),
       'type' => 'campaign'
