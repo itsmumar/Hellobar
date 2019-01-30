@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :contact_lists, through: :sites
   has_many :subscriptions, through: :sites
   has_many :authentications, dependent: :destroy
+  has_many :campaigns, through: :sites
 
   has_one :received_referral, class_name: 'Referral', foreign_key: 'recipient_id',
     dependent: :destroy, inverse_of: :recipient
@@ -60,6 +61,10 @@ class User < ApplicationRecord
     subtype = most_viewed_site_element.try(:element_subtype)
     subtype = 'social' if subtype&.include?('social')
     subtype
+  end
+
+  def spammer?
+    campaigns.where(spam: true).exists?
   end
 
   def new?

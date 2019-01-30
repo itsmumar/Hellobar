@@ -137,6 +137,7 @@ describe StaticScriptModel do
           smooth-impact/container.css
           tocaya/container.css
           wooli/container.css
+          sao-paulo/container.css
           seattle/container.css
           blue-autumn/container.css
           sydney/container.css

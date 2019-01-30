@@ -195,6 +195,7 @@ Rails.application.routes.draw do
   namespace :admin do
     post 'users/:id/impersonate', to: 'users#impersonate', as: :impersonate_user
     delete 'users/unimpersonate', to: 'users#unimpersonate', as: :unimpersonate_user
+    post 'users/:id/undo_spammer', to: 'users#undo_spammer', as: :undo_spammer_user
 
     resources :admins, only: :index do
       member do

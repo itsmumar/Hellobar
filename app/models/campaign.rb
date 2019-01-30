@@ -24,9 +24,10 @@ class Campaign < ApplicationRecord
   scope :sent, -> { where(status: [SENT]) }
   scope :archived, -> { where(status: [ARCHIVED]) }
   scope :with_emails, -> { includes(:email) }
+  scope :unprocessed, -> { where(processed: false) }
 
   def statistics
-    FetchEmailStatistics.new(self).call
+    @statistics ||= FetchEmailStatistics.new(self).call
   end
 
   STATUSES.each do |key|

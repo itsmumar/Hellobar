@@ -23,6 +23,7 @@ feature 'Users can use site element targeting rule presets', :js do
       find('h6', text: 'Collect emails').click
       go_to_tab 'Type'
       find('h6', text: 'Bar').click
+      sleep 1
       go_to_tab 'Targeting'
     end
 

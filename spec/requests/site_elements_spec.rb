@@ -206,9 +206,9 @@ describe 'SiteElements requests' do
           expect(json).to include show_branding: true
         end
 
-        it 'sets `theme_id` to `smooth-impact`' do
+        it 'sets `theme_id` to `seattle`' do
           send_request
-          expect(json).to include theme_id: 'smooth-impact'
+          expect(json).to include theme_id: 'seattle'
         end
       end
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181212152548) do
+ActiveRecord::Schema.define(version: 20190122094343) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.datetime "sent_at"
     t.datetime "archived_at"
     t.integer  "email_id",        limit: 4
+    t.boolean  "spam",                        default: false
+    t.boolean  "processed",                   default: false
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
@@ -258,6 +260,7 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.text     "plain_body", limit: 65535
   end
 
   add_index "emails", ["site_id"], name: "index_emails_on_site_id", using: :btree
@@ -489,10 +492,10 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.string   "cta_border_color",              limit: 255,      default: "ffffff",     null: false
     t.integer  "cta_border_width",              limit: 4,        default: 0,            null: false
     t.integer  "cta_border_radius",             limit: 4,        default: 0,            null: false
-    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 22,           null: false
+    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.datetime "deactivated_at"
     t.string   "text_field_font_family",        limit: 255
     t.integer  "text_field_font_size",          limit: 4,        default: 14
