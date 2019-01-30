@@ -79,7 +79,6 @@ describe HandleSpamCampaign do
 
     it 'keeps the spam value as false' do
       HandleSpamCampaign.new(campaign).call
-      binding.pry
       expect(campaign.spam).to eq true
     end
 
