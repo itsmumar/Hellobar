@@ -1,21 +1,23 @@
 class HandleSpamCampaign
   THREASHOLD_FOR_IS_PROCESSED = 0.9
-  MAX_THREASHOLD_SENDING_SCORE = 60
+  MAX_THREASHOLD_SPAM_SCORE = 30
+  MAX_THREASHOLD_BOUNCE_RATE = 50
 
   def initialize(campaign)
     @campaign = campaign
-    @statistics = campaign.statistics
   end
 
   def call
-    return if @statistics['recipients'].to_f.zero?
-    @campaign.update_columns processed: processed?, spam: spam?
+    return if messages_sent.zero?
+    campaign.update_columns processed: processed?, spam: spam?
   end
 
   private
 
+  attr_reader :campaign
+
   def spam?
-    campaign_sending_score >= MAX_THREASHOLD_SENDING_SCORE
+    bounce_rate >= MAX_THREASHOLD_BOUNCE_RATE || spam_score >= MAX_THREASHOLD_SPAM_SCORE
   end
 
   def processed?
@@ -23,26 +25,26 @@ class HandleSpamCampaign
   end
 
   def processed_rate
-    @statistics['submitted'].to_f / @statistics['recipients'].to_f
+    statistics['submitted'].to_f / messages_sent
   end
 
-  def campaign_sending_score
-    (spam_report_rate + bounce_rate + unsubscribe_rate) / 3
+  def spam_score
+    (reported_and_unsubscribed / statistics['delivered'].to_f) * 100
+  end
+
+  def reported_and_unsubscribed
+    statistics['reported'].to_f + statistics['unsubscribed'].to_f
   end
 
   def messages_sent
-    @statistics['recipients'].to_f
-  end
-
-  def spam_report_rate
-    (@statistics['reported'].to_f / messages_sent) * 100
+    statistics['recipients'].to_f
   end
 
   def bounce_rate
-    (@statistics['bounced'].to_f / messages_sent) * 100
+    (statistics['bounced'].to_f / messages_sent) * 100
   end
 
-  def unsubscribe_rate
-    (@statistics['unsubscribed'].to_f / messages_sent) * 100
+  def statistics
+    campaign.statistics
   end
 end
