@@ -2,6 +2,9 @@
       <div class="hb-logo-wrapper {{hellobar('base.coloring').colorIsBright(siteElement.primary_color) ? 'hb-logo-inverted' : ''}} {{siteElement.brandingName()}}" >
         {{siteElement.renderBranding()}}
       </div>
+      <div class="no-thanks-wrapper">
+          <a onclick="{{siteElement.me}}.close()" style="{{siteElement.noThanksStyle()}}">No Thanks</a>
+      </div>
     </div>
   </div>
 

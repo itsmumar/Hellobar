@@ -1,0 +1,24 @@
+{{#common/panels/collapse-panel title="No Thanks Styling" show=false}}
+  <div class="panel-input">
+    <div class="panel-input__label">Font</div>
+    <div class="panel-input__input">
+      {{common/inputs/font-name selectedFont=model.no_thanks_font_family}}
+
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Font Color</div>
+    <div class="panel-input__input">
+      {{selectedColorAndFont}}
+      {{common/inputs/color-picker color=model.no_thanks_font_color}}
+    </div>
+  </div>
+
+  <div class="panel-input">
+    <div class="panel-input__label">Font Size</div>
+    <div class="panel-input__input">
+      {{common/inputs/number-input name="no_thanks_font_size" value=model.no_thanks_font_size max=48}}
+    </div>
+  </div>
+{{/common/panels/collapse-panel}}

@@ -38,6 +38,11 @@
   width: 100%;
 }
 
+#hellobar-takeover .no-thanks-wrapper {
+  text-align: center;
+  padding-top: 10px;
+}
+
 #hellobar-takeover .questionslist {
   max-width: 540px;
   margin-left: auto;

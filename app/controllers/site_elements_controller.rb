@@ -126,12 +126,13 @@ class SiteElementsController < ApplicationController
       :question, :remains_at_top, :rule_id, :show_branding, :size, :text_color,
       :thank_you_text, :theme_id, :type, :use_question, :show_optional_content,
       :view_condition_attribute, :view_condition, :wiggle_button, :show_thankyou,
-      :use_default_image, :sound, :notification_delay, :trigger_color,
+      :use_default_image, :sound, :notification_delay, :trigger_color, :show_nothanks,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,
       :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height,
       :text_field_border_color, :text_field_border_width, :text_field_font_size, :text_field_font_family, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
-      :conversion_font, :conversion_font_color, :conversion_font_size,
+      :conversion_font, :conversion_font_color, :conversion_font_size, :no_thanks_font_size,
+      :no_thanks_font_color, :no_thanks_font_family,
       settings: settings_keys
     )
   end

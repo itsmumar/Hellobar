@@ -81,6 +81,10 @@
   right: 19px;
 }
 
+#hellobar-modal .no-thanks-wrapper {
+  text-align: center;
+  padding-top: 10px;
+}
 /*-----------  Inputs  -----------*/
 
 #hellobar-modal .hb-input-wrapper {

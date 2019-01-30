@@ -38,6 +38,9 @@ class SiteElementSerializer < ActiveModel::Serializer
     :site_preview_image_tablet,
     :open_in_new_window, :placement, :default_email_thank_you_text,
     #
+    # no-thanks
+    :no_thanks_font_size, :no_thanks_font_color,
+    :no_thanks_font_family, :show_nothanks,
     # conversion
     :conversion_font, :conversion_font_color, :conversion_font_size
 

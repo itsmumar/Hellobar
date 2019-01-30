@@ -65,6 +65,10 @@ json.cache! site_element do
     :conversion_font,
     :conversion_font_color,
     :conversion_font_size,
+    :no_thanks_font_size,
+    :no_thanks_font_color,
+    :no_thanks_font_family,
+    :show_nothanks,
     # alert bar
     :sound,
     :notification_delay,
