@@ -16,17 +16,12 @@ class UpsellMailer < ApplicationMailer
     @number_of_views = number_of_views
     @limit = limit
     users = site.owners_and_admins
-    hb_team = ['seth@hellobar.com', 'karen@hellobar.com', 'lindsey@hellobar.com', 'ryan@hellobar.com', 'mike@hellobar.com']
+    hb_team = ['seth@hellobar.com', 'karen@hellobar.com', 'lindsey@hellobar.com', 'ryan@hellobar.com', 'mike@hellobar.com'].freeze
 
-    users.each do |user|
-      @user = user
-      mail(to: user.email, subject: 'You could be saving money by upgrading your Hello Bar Subscription')
-    end
 
-    hb_team.each do |user|
-      @user = user
-      mail(to: user, subject: 'Heads up! An Elite customer is paying a lot in overage fees')
-    end
+    mail(to: users.map(&:email).uniq, subject: 'You could be saving money by upgrading your Hello Bar Subscription')
+
+    mail(to: hb_team, subject: 'Heads up! An Elite customer is paying a lot in overage fees')
   end
 
   def auto_upgrade_email(site, number_of_views, limit)
