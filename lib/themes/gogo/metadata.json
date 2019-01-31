@@ -94,7 +94,10 @@
       "text_field_border_width": 1,
       "text_field_font_family": "source_pro",
       "text_field_font_size": 14,
-      "text_field_text_color": "FFFFFF"
+      "text_field_text_color": "FFFFFF",
+      "no_thanks_font_size":14,
+      "no_thanks_font_color":"FFFFFF",
+      "no_thanks_font_family":"open_sans"
     },
     "Takeover": {
       "background_color": "4D8589",
@@ -124,7 +127,10 @@
       "text_field_border_width": 1,
       "text_field_font_family": "source_pro",
       "text_field_font_size": 18,
-      "text_field_text_color": "FFFFFF"
+      "text_field_text_color": "FFFFFF",
+      "no_thanks_font_size":14,
+      "no_thanks_font_color":"FFFFFF",
+      "no_thanks_font_family":"open_sans"
     },
     "Alert": {
       "background_color": "4d8589",

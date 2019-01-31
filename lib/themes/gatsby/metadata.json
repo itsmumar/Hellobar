@@ -68,7 +68,10 @@
       "text_field_border_width": 1,
       "text_field_font_family": "josefin_sans",
       "text_field_font_size": 18,
-      "text_field_text_color": "b3b3b3"
+      "text_field_text_color": "b3b3b3",
+      "no_thanks_font_size":14,
+      "no_thanks_font_color":"C39651",
+      "no_thanks_font_family":"open_sans"
     },
     "Slider": {
       "background_color": "FFFFFF",
@@ -126,7 +129,10 @@
       "text_field_border_radius": 4,
       "text_field_border_width": 1,
       "text_field_font_size": 14,
-      "text_field_text_color": "b3b3b3"
+      "text_field_text_color": "b3b3b3",
+      "no_thanks_font_size":14,
+      "no_thanks_font_color":"C39651",
+      "no_thanks_font_family":"open_sans"
     },
     "Alert": {
       "background_color": "FFFFFF",
