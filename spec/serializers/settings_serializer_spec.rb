@@ -29,7 +29,6 @@ describe SettingsSerializer do
           tocaya
           gatsby
           gogo
-          cocina
           tajima
           lionshare
           moscow
