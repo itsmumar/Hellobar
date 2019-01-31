@@ -17,7 +17,7 @@ class FetchGraphStatisticsFromES
   attr_reader :site, :start_date, :end_date, :type
 
   def fetch
-    raw_result = query.aggs(aggrigations).aggs['by_date']['buckets']
+    raw_result = query.aggs(aggregations).aggs['by_date']['buckets']
 
     response = raw_result.map do |rec|
       {
@@ -37,7 +37,7 @@ class FetchGraphStatisticsFromES
     response.sort_by { |row| row[:key] }
   end
 
-  def aggrigations
+  def aggregations
     {
       by_date: {
         terms: { field: 'date', size: number_of_days },
