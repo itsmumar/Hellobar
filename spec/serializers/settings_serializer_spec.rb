@@ -29,7 +29,6 @@ describe SettingsSerializer do
           tocaya
           gatsby
           gogo
-          cocina
           tajima
           lionshare
           moscow
@@ -42,7 +41,6 @@ describe SettingsSerializer do
           wayfarer
           rhythm
           chance
-          seattle
           sling
           marble
           mumbai

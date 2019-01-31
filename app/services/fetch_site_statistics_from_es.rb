@@ -16,10 +16,10 @@ class FetchSiteStatisticsFromES
   attr_reader :site, :start_date, :end_date
 
   def fetch
-    normalize(query.aggs(aggrigations).aggs)
+    normalize(query.aggs(aggregations).aggs)
   end
 
-  def aggrigations
+  def aggregations
     agg = {
       total: {
         filter: {

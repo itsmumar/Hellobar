@@ -104,11 +104,17 @@ describe StaticScriptModel do
           arctic-facet/container.css
           french-rose/container.css
           autodetect/container.css
+          bangalore/container.css
+          bangkok/container.css
+          barcelona/container.css
           green-timberline/container.css
           bogota/container.css
+          boston/container.css
           violet/container.css
           wayfarer/container.css
           chance/container.css
+          cairo/container.css
+          chicago/container.css
           pulse/container.css
           resteo/container.css
           marble/container.css
@@ -116,19 +122,25 @@ describe StaticScriptModel do
           tajima/container.css
           hong-kong/container.css
           istanbul/container.css
+          jakarta/container.css
+          karachi/container.css
           gogo/container.css
           dark-green-spring/container.css
+          lagos/container.css
           lahore/container.css
+          lima/container.css
+          london/container.css
           los-angeles/container.css
           gatsby/container.css
-          cocina/container.css
           manila/container.css
           mexico-city/container.css
+          miami/container.css
           classy/container.css
           moscow/container.css
           mumbai/container.css
           lionshare/container.css
           puesto/container.css
+          new-york/container.css
           subtle-facet/container.css
           paris/container.css
           philadelphia/container.css
@@ -136,33 +148,19 @@ describe StaticScriptModel do
           blue-avalanche/container.css
           smooth-impact/container.css
           tocaya/container.css
+          san-diego/container.css
           wooli/container.css
+          santiago/container.css
           sao-paulo/container.css
           seattle/container.css
+          seoul/container.css
           blue-autumn/container.css
           sydney/container.css
+          taipei/container.css
           sling/container.css
+          toronto/container.css
           evergreen-meadow/container.css
           rhythm/container.css
-          new-york/container.css
-          chicago/container.css
-          london/container.css
-          hanoi/container.css
-          lima/container.css
-          bangkok/container.css
-          toronto/container.css
-          barcelona/container.css
-          san-diego/container.css
-          seoul/container.css
-          karachi/container.css
-          cairo/container.css
-          lagos/container.css
-          jakarta/container.css
-          taipei/container.css
-          miami/container.css
-          bangalore/container.css
-          santiago/container.css
-          boston/container.css
         ].join("\n")
     end
   end
