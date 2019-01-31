@@ -1,7 +1,7 @@
 class SiteElement < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
 
-  attr_writer :show_thankyou, :show_nothanks
+  attr_writer :show_thankyou
 
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
   DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
@@ -301,10 +301,6 @@ class SiteElement < ApplicationRecord
 
   def show_thankyou
     @show_thankyou || false
-  end
-
-  def show_nothanks
-    @show_nothanks || false
   end
 
   private

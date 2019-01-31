@@ -4,7 +4,9 @@
 {{component propertiesComponentNameForType model=model}}
 
 {{design/design-button-styling model=model}}
+{{#if (or isModal isTakeover)}}
 {{design/no-thanks-styling model=model}}
+{{/if}}
 {{#if isNotBar}}
   {{design/design-image model=model}}
 {{/if}}
