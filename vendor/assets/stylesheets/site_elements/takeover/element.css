@@ -41,6 +41,7 @@
 #hellobar-takeover .no-thanks-wrapper {
   text-align: center;
   padding-top: 10px;
+  cursor: pointer;
 }
 
 #hellobar-takeover .questionslist {

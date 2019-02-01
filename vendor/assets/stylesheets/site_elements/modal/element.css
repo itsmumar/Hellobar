@@ -84,6 +84,7 @@
 #hellobar-modal .no-thanks-wrapper {
   text-align: center;
   padding-top: 10px;
+  cursor: pointer;
 }
 /*-----------  Inputs  -----------*/
 
