@@ -51,6 +51,7 @@ describe SettingsSerializer do
           manila
           mexico-city
           lahore
+          atlanta
           sao-paulo
         ]
       end
