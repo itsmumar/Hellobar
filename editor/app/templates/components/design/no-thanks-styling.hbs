@@ -1,4 +1,16 @@
 {{#common/panels/collapse-panel title="No Thanks Styling" show=false}}
+<label class="no-thanks">
+  Show No, Thanks
+  {{common/checkboxes/toggle-switch switch=model.show_no_thanks}}
+</label>
+{{#if model.show_no_thanks}}
+  <label class="no-thanks-text">No Thanks Text</label>
+  {{input
+  name='no_thanks_text'
+  value=model.no_thanks_text
+  placeholder=model.no_thanks_text
+  maxlength=255
+  }}
   <div class="panel-input">
     <div class="panel-input__label">Font</div>
     <div class="panel-input__input">
@@ -20,4 +32,5 @@
       {{common/inputs/number-input name="no_thanks_font_size" value=model.no_thanks_font_size max=48}}
     </div>
   </div>
+{{/if}}
 {{/common/panels/collapse-panel}}

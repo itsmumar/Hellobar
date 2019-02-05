@@ -1,6 +1,6 @@
       {{siteElement.imageFor('bottom')}}
-      <div class="no-thanks-wrapper " style=" {{siteElement.questionOrAnswerOrThankYouIsShown() ? 'display: none;' : 'display: block;'}}">
-          <a onclick="{{siteElement.me}}.close()" style="{{siteElement.noThanksStyle()}}">No, Thanks</a>
+      <div class="no-thanks-wrapper " style=" {{siteElement.noThnaksIsShown() ? 'display: none;' : 'display: block;'}}">
+          <a onclick="{{siteElement.me}}.close()" style="{{siteElement.noThanksStyle()}}">{{siteElement.no_thanks_text}}</a>
       </div>
     </div>
     {{siteElement.imageFor('right')}}

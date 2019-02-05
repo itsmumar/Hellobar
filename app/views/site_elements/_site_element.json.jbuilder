@@ -68,6 +68,8 @@ json.cache! site_element do
     :no_thanks_font_size,
     :no_thanks_font_color,
     :no_thanks_font_family,
+    :show_no_thanks,
+    :no_thanks_text,
     # alert bar
     :sound,
     :notification_delay,
