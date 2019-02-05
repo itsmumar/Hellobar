@@ -19,7 +19,14 @@ describe FetchSiteStatisticsFromES do
       query: {
         bool: {
           filter: [
-            { range: { date: { gte: 15001, lte: 19031 } } },
+            {
+              range: {
+                date: {
+                  gte: WeirdDate.from_date(from_date),
+                  lte: WeirdDate.from_date(to_date)
+                }
+              }
+            },
             { terms: { sid: [] } }
           ]
         }
