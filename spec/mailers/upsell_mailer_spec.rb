@@ -32,7 +32,7 @@ RSpec.describe UpsellMailer, type: :mailer do
     end
 
     it 'set to be delivered to admin email' do
-      expect(mail).to deliver_to('mike@hellobar.com')
+      expect(mail).to deliver_to('karen@hellobar.com', 'lindsey@hellobar.com', 'mike@hellobar.com', 'ryan@hellobar.com', 'seth@hellobar.com')
     end
   end
 

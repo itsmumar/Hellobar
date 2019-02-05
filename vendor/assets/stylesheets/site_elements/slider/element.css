@@ -191,6 +191,9 @@
 
 /*----------- GDPR -----------*/
 
+#hellobar-slider .gdpr-consent-form{
+  word-break: break-all;
+}
 #hellobar-slider .gdpr-consent-form p {
   font-size: 13px;
   margin-bottom: 8px;
