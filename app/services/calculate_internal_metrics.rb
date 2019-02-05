@@ -63,7 +63,7 @@ class CalculateInternalMetrics
 
   def revenue
     @revenue ||=
-      Bill.paid.where('created_at >= ? AND created_at < ?',
+      Bill.not(description: 'Monthly View Limit Overage Fee').paid.where('created_at >= ? AND created_at < ?',
         beginning_of_last_week, beginning_of_current_week)
   end
 
