@@ -47,9 +47,7 @@
     }
   }
   #hellobar-modal,
-  #hellobar-takeover,
-  #hellobar-slider,
-  #hellobar-alert {
+  #hellobar-takeover{
     &.image-left{
       .hb-input-wrapper{
         #hb-fields-form{
@@ -93,9 +91,7 @@
     }
   }
   #hellobar-modal,
-  #hellobar-takeover,
-  #hellobar-slider,
-  #hellobar-alert {
+  #hellobar-takeover{
     .hb-input-wrapper{
       #hb-fields-form{
         position: relative;
@@ -122,9 +118,7 @@
     }
   }
   #hellobar-modal.thank-you,
-  #hellobar-takeover.thank-you,
-  #hellobar-slider.thank-you,
-  #hellobar-alert.thank-you {
+  #hellobar-takeover.thank-you{
     .hb-input-wrapper{
       #hb-fields-form{
         position: relative;
@@ -530,7 +524,7 @@
       margin-bottom: 15px;
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1em;
+      font-size: .8em;
     }
     &.image-left {
       .hb-inner-content {

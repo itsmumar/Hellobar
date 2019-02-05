@@ -116,6 +116,7 @@ describe StaticScriptModel do
           cairo/container.css
           chicago/container.css
           pulse/container.css
+          dallas/container.css
           resteo/container.css
           marble/container.css
           mall/container.css
