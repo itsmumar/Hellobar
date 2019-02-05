@@ -50,7 +50,7 @@
   #hellobar-takeover,
   #hellobar-slider,
   #hellobar-alert {
-    &.image-background{
+    &.image-left{
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
@@ -154,12 +154,33 @@
   }
   #hellobar-modal {
     padding: 3em;
-    max-width: 54em;
+    max-width: 44em;
     min-height: 24em;
     display: flex;
     justify-content: center;
     align-items: stretch;
-    &.image-background{
+    .hb-input-wrapper{
+      #hb-fields-form{
+        .hb-input-block{
+          &:first-child:nth-last-child(2),
+          &:first-child:nth-last-child(2) ~ .hb-input-block{
+            input {
+              width: 74%;
+            }
+          }
+          input {
+            width: 100%;
+          }
+          &:first-child {
+            &+ .hb-cta{
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+    &.image-left{
+      max-width: 54em;
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
@@ -169,31 +190,13 @@
                 width: 60%;
               }
             }
-            input {
-              width: 100%;
-            }
             &:first-child {
               &+ .hb-cta{
-                width: 45%;
-                margin: 0 0 0 3%;
+                width: 38%;
+                margin: 0 0 0 2%;
                 font-size: 16px;
                 font-weight: 300;
                 letter-spacing: 0.5px;
-              }
-            }
-          }
-        }
-      }
-      &.thank-you {
-        .hb-input-wrapper{
-          #hb-fields-form{
-            .hb-input-block{
-              &:first-child {
-                &+ .hb-cta{
-                  min-height: 50px !important;
-                  max-width: none;
-                  width: 100%;
-                }
               }
             }
           }
@@ -222,13 +225,7 @@
     [data-hb-editable-block="content"] {
       font-weight: 300;
       margin: 0 auto 20px;
-      font-size: 0.8em;
-    }
-    .icon-close {
-      top: -20px;
-      right: -20px;
-      font-size: 14px;
-      color: #ffffff;
+      font-size: 0.7em;
     }
     .hb-cta{
       font-weight: 700;
@@ -261,25 +258,6 @@
       width: 100%;
       max-width: 540px;
     }
-    @media screen and (max-width: 840px) {
-      .icon-close {
-        top: -30px;
-        right: 10px;
-      }
-      .hb-input-wrapper{
-        #hb-fields-form{
-          position: relative;
-          .hb-input-block{
-            &:first-child:nth-last-child(2),
-            &:first-child:nth-last-child(2) ~ .hb-input-block{
-              input {
-                width: 55%;
-              }
-            }
-          }
-        }
-      }
-    }
     @media screen and (max-width: 640px) {
       .hb-image-wrapper.background ~ .hb-content-wrapper {
         margin-left: inherit;
@@ -290,41 +268,58 @@
         .hb-inner-content {
           margin: 0;
         }
-      }
-      .icon-close {
-        right: 0px;
-      }
-    }
-  }
-  @media screen and (max-width: 640px) {
-    #hellobar-modal {
-      padding: 1.5em;
-      &.image-left{
         .hb-image-wrapper {
           display: none;
         }
       }
-      &.image-background{
+      .hb-input-wrapper{
+        #hb-fields-form{
+          position: relative;
+          .hb-input-block{
+            &:first-child:nth-last-child(2),
+            &:first-child:nth-last-child(2) ~ .hb-input-block{
+              input {
+                width: 100%;
+              }
+            }
+            &:first-child {
+              &+ .hb-cta{
+                position: relative;
+                width: 100%;
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+      &.image-left{
         .hb-input-wrapper{
           #hb-fields-form{
+            position: relative;
             .hb-input-block{
               &:first-child:nth-last-child(2),
               &:first-child:nth-last-child(2) ~ .hb-input-block{
                 input {
-                  padding-right: 100px;
+                  width: 100%;
                 }
               }
               &:first-child {
                 &+ .hb-cta{
-                  max-width: 100%;
-                  right: 0;
                   position: relative;
+                  width: 100%;
+                  margin: 0;
                 }
               }
             }
           }
         }
       }
+    }
+  }
+  @media screen and (max-width: 640px) {
+    #hellobar-modal {
+      padding: 1.5em;
+
     }
   }
   #hellobar-takeover {
@@ -398,7 +393,38 @@
           &:first-child:nth-last-child(2),
           &:first-child:nth-last-child(2) ~ .hb-input-block{
             input {
-              width: 66%;
+              width: 77%;
+            }
+          }
+          input {
+            width: 100%;
+          }
+          &:first-child {
+            &+ .hb-cta{
+              width: auto;
+            }
+          }
+        }
+      }
+    }
+    &.image-left{
+      .hb-input-wrapper{
+        #hb-fields-form{
+          .hb-input-block{
+            &:first-child:nth-last-child(2),
+            &:first-child:nth-last-child(2) ~ .hb-input-block{
+              input {
+                width: 62%;
+              }
+            }
+            &:first-child {
+              &+ .hb-cta{
+                width: 35%;
+                margin: 0 0 0 3%;
+                font-size: 16px;
+                font-weight: 300;
+                letter-spacing: 0.5px;
+              }
             }
           }
         }
@@ -408,18 +434,6 @@
     @media screen and (max-width: 840px) {
       .hb-content-wrapper{
         max-width: 43em;
-      }
-      .hb-input-wrapper{
-        #hb-fields-form{
-          .hb-input-block{
-            &:first-child:nth-last-child(2),
-            &:first-child:nth-last-child(2) ~ .hb-input-block{
-              input {
-                width: 60%;
-              }
-            }
-          }
-        }
       }
     }
     @media screen and (max-width: 640px) {
@@ -437,11 +451,41 @@
       }
       .hb-input-wrapper{
         #hb-fields-form{
+          position: relative;
           .hb-input-block{
             &:first-child:nth-last-child(2),
             &:first-child:nth-last-child(2) ~ .hb-input-block{
               input {
-                width: 55%;
+                width: 100%;
+              }
+            }
+            &:first-child {
+              &+ .hb-cta{
+                position: relative;
+                width: 100%;
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+      &.image-left{
+        .hb-input-wrapper{
+          #hb-fields-form{
+            position: relative;
+            .hb-input-block{
+              &:first-child:nth-last-child(2),
+              &:first-child:nth-last-child(2) ~ .hb-input-block{
+                input {
+                  width: 100%;
+                }
+              }
+              &:first-child {
+                &+ .hb-cta{
+                  position: relative;
+                  width: 100%;
+                  margin: 0;
+                }
               }
             }
           }
@@ -491,12 +535,12 @@
     &.image-left {
       .hb-inner-content {
         width: 100%;
-        padding-left: 40%;
+        padding-left: 50%;
         z-index: 1000;
         position: relative;
       }
       .hb-image-wrapper {
-        width: 36%;
+        width: 50%;
         position: absolute;
         left: 0em;
         bottom: 25px;
