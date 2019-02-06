@@ -17,6 +17,10 @@ every 1.month, at: '1:15pm', roles: [:cron] do
   rake 'reset_email_sent_fields:run'
 end
 
+every :day, at: '12:00am', roles: [:cron] do
+  rake 'daily_stats_to_slack:run'
+end
+
 every :day, at: '1:30pm', roles: [:cron] do
   rake 'intercom_refresh:start'
 end
