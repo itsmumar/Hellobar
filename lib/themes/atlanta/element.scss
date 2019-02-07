@@ -7,6 +7,9 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   #hellobar-modal,
   #hellobar-takeover,
