@@ -131,8 +131,7 @@ class SiteElementsController < ApplicationController
       :cta_border_color, :cta_border_width, :cta_border_radius, :cta_height, :show_no_thanks,
       :text_field_border_color, :text_field_border_width, :text_field_font_size, :text_field_font_family, :text_field_border_radius,
       :text_field_text_color, :text_field_background_opacity, :text_field_background_color,
-      :conversion_font, :conversion_font_color, :conversion_font_size, :no_thanks_font_size,
-      :no_thanks_font_color, :no_thanks_font_family,
+      :conversion_font, :conversion_font_color, :conversion_font_size,
       settings: settings_keys
     )
   end

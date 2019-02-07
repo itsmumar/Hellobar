@@ -3,34 +3,4 @@
   Show No, Thanks
   {{common/checkboxes/toggle-switch switch=model.show_no_thanks}}
 </label>
-{{#if model.show_no_thanks}}
-  <label class="no-thanks-text">No Thanks Text</label>
-  {{input
-  name='no_thanks_text'
-  value=model.no_thanks_text
-  placeholder=model.no_thanks_text
-  maxlength=255
-  }}
-  <div class="panel-input">
-    <div class="panel-input__label">Font</div>
-    <div class="panel-input__input">
-      {{common/inputs/font-name selectedFont=model.no_thanks_font_family}}
-    </div>
-  </div>
-
-  <div class="panel-input">
-    <div class="panel-input__label">Font Color</div>
-    <div class="panel-input__input">
-      {{selectedColorAndFont}}
-      {{common/inputs/color-picker color=model.no_thanks_font_color}}
-    </div>
-  </div>
-
-  <div class="panel-input">
-    <div class="panel-input__label">Font Size</div>
-    <div class="panel-input__input">
-      {{common/inputs/number-input name="no_thanks_font_size" value=model.no_thanks_font_size max=48}}
-    </div>
-  </div>
-{{/if}}
 {{/common/panels/collapse-panel}}

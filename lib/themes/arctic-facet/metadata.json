@@ -40,10 +40,7 @@
       "text_field_border_width": 0,
       "text_field_font_size": 18,
       "text_field_text_color": "B3B3B3",
-      "text_field_font_family": "open_sans",
-      "no_thanks_font_size":14,
-      "no_thanks_font_color":"7282B8",
-      "no_thanks_font_family":"open_sans"
+      "text_field_font_family": "open_sans"
     }
   },
   "image": {
