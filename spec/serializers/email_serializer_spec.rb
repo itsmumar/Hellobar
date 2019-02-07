@@ -21,6 +21,10 @@ describe EmailSerializer do
       expect(json[:subject]).to eq(email.subject)
     end
 
+    it 'includes preview text' do
+      expect(json[:preview_text]).to eq(email.preview_text)
+    end
+
     it 'includes body' do
       expect(json[:body]).to eq(email.body)
     end

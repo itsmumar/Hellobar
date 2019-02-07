@@ -7,6 +7,7 @@ describe SendTestEmailForCampaign do
     it 'calls SendSnsNotification with appropriate message' do
       message_hash = {
         plainBody: campaign.email.plain_body,
+        preview_text: campaign.email.preview_text,
         body: campaign.email.body,
         contacts: contacts,
         environment: 'test',
