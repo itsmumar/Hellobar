@@ -102,6 +102,7 @@ describe StaticScriptModel do
           azuki/container.css
           classic/container.css
           arctic-facet/container.css
+          atlanta/container.css
           french-rose/container.css
           autodetect/container.css
           bangalore/container.css
