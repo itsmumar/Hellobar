@@ -5,7 +5,6 @@ FactoryBot.define do
     subject 'Hello'
     body 'Test Campaign'
     plain_body 'Plain Body'
-    preview_text 'Preview Text'
     site
   end
 end
