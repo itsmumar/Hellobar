@@ -1,9 +1,11 @@
       {{siteElement.imageFor('bottom')}}
+      <div style="{{siteElement.isAnnouncement() ? 'display: none;' : 'display: block;'}}">
       <div class="no-thanks-wrapper hb-editable-block-with-full-formatting"
            data-hb-editable-block="no_thanks_text"
            style=" {{siteElement.noThaksIsShown() ? 'display: none;' : 'display: block;'}}">
           <div onclick="{{siteElement.me}}.close()" >{{siteElement.no_thanks_text}}</div>
-    </div>
+      </div>
+      </div>
     {{siteElement.imageFor('right')}}
   </div>
 
