@@ -158,7 +158,7 @@
     }
   },
   "image": {
-    "default_url": "https://assets.hellobar.com/gaudalajara-default.jpg",
+    "default_url": "https://assets.hellobar.com/guadalajara-default.jpg",
     "upload_copy": "Recommended minimum is 750 x 900",
     "position_default": "background",
     "position_selectable": false
