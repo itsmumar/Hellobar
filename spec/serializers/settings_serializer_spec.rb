@@ -52,7 +52,9 @@ describe SettingsSerializer do
           gaudalajara
           mexico-city
           lahore
+          atlanta
           sao-paulo
+          dallas
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }
