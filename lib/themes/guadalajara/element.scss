@@ -9,7 +9,7 @@
   border: 2px solid rgba(47,47,47, 1);
   pointer-events: none;
 }
-.gaudalajara {
+.guadalajara {
   text-align: center;
   #hello-bar {
     padding-bottom: 0;
@@ -91,6 +91,23 @@
       }
     }
   }
+  #hellobar-modal.thank-you,
+  #hellobar-takeover.thank-you{
+    .hb-input-wrapper{
+      #hb-fields-form{
+        position: relative;
+        .hb-input-block{
+          &:first-child {
+            &+ .hb-cta{
+              position: relative;
+              width: 100%;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
   #hellobar-modal {
     padding: 0;
     overflow: hidden;
@@ -155,8 +172,9 @@
       margin: 0 0 20px;
       opacity: 0.6;
     }
-    .hb-cta {
-      max-width: 540px;
+    .hb-cta,
+    .questionslist{
+      max-width: 26em;
       margin-left: auto;
       margin-right: auto;
     }
