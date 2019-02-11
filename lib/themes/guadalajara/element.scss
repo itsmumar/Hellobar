@@ -361,11 +361,30 @@
     }
   }
   #hellobar-slider {
-    .hb-headline-text{
-      font-size: 1.4em;
+    .slider-content{
+      &:after {
+        @include frame;
+        margin: 0.25rem;
+        border-width: 1px;
+      }
+      .hb-headline-text{
+        font-size: 1.4em;
+      }
+      .hb-content-wrapper{
+        text-align: center;
+      }
+      .hb-text-wrapper {
+        padding-right: 0;
+      }
     }
-    .hb-text-wrapper {
-      padding-right: 0;
+  }
+  #hellobar-alert{
+    #hellobar-slider {
+      .slider-content{
+        .hb-content-wrapper{
+          text-align: center;
+        }
+      }
     }
   }
 }
