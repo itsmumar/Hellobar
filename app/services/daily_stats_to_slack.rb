@@ -56,7 +56,21 @@ class DailyStatsToSlack
     avg_rev_run_rate = ((total_paid_sites_count * avg_rev_overall_per_user) * 12)
     net_new_sites = new_subs.count - @churned_subs.count
 
-    build_slack_message(new_subs.count, @churned_subs.count, net_new_sites, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
+    build_hash(new_subs.count, @churned_subs.count, net_new_sites, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
+    # build_slack_message(new_subs.count, @churned_subs.count, net_new_sites, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
+  end
+
+  def build_hash(new_subs_count, churned_sites_count, net_new_sites, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
+    options = {}
+    options[:new_subs_count] = new_subs_count
+    options[:churned_sites_count] = churned_sites_count
+    options[:net_new_sites] = net_new_sites
+    options[:total_paid_sites_count] = total_paid_sites_count
+    options[:avg_rev_today] = avg_rev_today
+    options[:avg_rev_run_rate] = avg_rev_run_rate
+    options[:new_sub_value] = new_sub_value
+    options[:churned_site_value] = churned_site_value
+    build_slack_message(options)
   end
 
   def month_ize_amounts(subscriptions)
@@ -69,12 +83,16 @@ class DailyStatsToSlack
   end
 
   # rubocop:disable Metrics/ParameterLists
-  def build_slack_message(new_subs, churned_subs, net_new_subs, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
-    # rubocop:disable Metrics/LineLength
-    put_to_slack("\n\n\n\n___________________________________________________________\n___________________________________________________________\nSTATS FOR #{ Date.yesterday }:\nNew Subscriptions: #{ new_subs }\nChurned Subscriptions: #{ churned_subs }\nNet New Subscriptions: #{ net_new_subs }\nTotal Paid Sites: #{ number_with_delimiter(total_paid_sites_count) }\n Avg Monthly Rev Per New Site: #{ number_to_currency(avg_rev_today, precision: 0) }\n Avg Annual Run Rate: #{ number_to_currency(avg_rev_run_rate, precision: 0) }\nValue of New Subs: $#{ new_sub_value }\nValue Lost to Churn: $#{ churned_site_value }")
-    # rubocop:enable Metrics/LineLength
-  end
+  # def build_slack_message(new_subs, churned_subs, net_new_subs, total_paid_sites_count, avg_rev_today, avg_rev_run_rate, new_sub_value, churned_site_value)
+  #   # rubocop:disable Metrics/LineLength
+  #   put_to_slack("\n\n\n\n___________________________________________________________\n___________________________________________________________\nSTATS FOR #{ Date.yesterday }:\nNew Subscriptions: #{ new_subs }\nChurned Subscriptions: #{ churned_subs }\nNet New Subscriptions: #{ net_new_subs }\nTotal Paid Sites: #{ number_with_delimiter(total_paid_sites_count) }\n Avg Monthly Rev Per New Site: #{ number_to_currency(avg_rev_today, precision: 0) }\n Avg Annual Run Rate: #{ number_to_currency(avg_rev_run_rate, precision: 0) }\nValue of New Subs: $#{ new_sub_value }\nValue Lost to Churn: $#{ churned_site_value }")
+  #   # rubocop:enable Metrics/LineLength
+  # end
   # rubocop:enable Metrics/ParameterLists
+
+  def build_slack_message(options = {})
+    msg = ""
+  end
 
   def put_to_slack(msg)
     PostToSlack.new(:daily_stats, text: msg.to_s).call
