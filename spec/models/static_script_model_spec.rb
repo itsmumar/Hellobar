@@ -121,8 +121,8 @@ describe StaticScriptModel do
           resteo/container.css
           marble/container.css
           mall/container.css
-          guadalajara/container.css
           tajima/container.css
+          guadalajara/container.css
           hong-kong/container.css
           istanbul/container.css
           jakarta/container.css
