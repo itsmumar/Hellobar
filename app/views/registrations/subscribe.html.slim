@@ -33,7 +33,14 @@
       h1 Billing Information
       - unless @subscription.free?
         .note
-          p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}.
+          - if @dollar_trial
+
+            p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at $1 for the first month and $149 per year after that.
+
+          - else
+
+            p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}.
+
           p = link_to 'Choose a different plan', '#', class: "different-plan", onclick: 'showPlans()'
       .wrapper
         = hidden_field_tag :update_subscription, true
