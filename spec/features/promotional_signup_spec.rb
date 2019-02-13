@@ -98,6 +98,28 @@ feature 'Promotional signup', :js do
     end
   end
 
+  context 'when it is a dollar trial' do
+    it 'should not say anything about after 30 days upgrade to annual' do
+      visit '/'
+
+      set_promotional_signup_cookie
+
+      visit users_sign_up_path(utm_campaign: 'not_dollar_trial')
+
+      expect(page).not_to have_content 'total: $1 for 30 days'
+    end
+
+    it 'should say after 30 days if the param is set' do
+      visit '/'
+
+      set_promotional_signup_cookie
+
+      visit users_sign_up_path(utm_campaign: 'dollar_trial')
+
+      expect(page).to have_content 'total: $1 for 30 days'
+    end
+  end
+
   private
 
   def set_promotional_signup_cookie
@@ -111,5 +133,9 @@ feature 'Promotional signup', :js do
   def add_cookie(name, value)
     browser = Capybara.current_session.driver.browser
     browser.manage.add_cookie name: name, value: value
+  end
+
+  def set_dollar_trial_cookie
+    add_cookie 'utm_campaign', 'dollar_trial'
   end
 end

@@ -49,6 +49,7 @@ describe SettingsSerializer do
           sydney
           bogota
           manila
+          guadalajara
           mexico-city
           lahore
           atlanta
