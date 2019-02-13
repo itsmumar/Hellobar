@@ -25,6 +25,8 @@ class SiteElement < ApplicationRecord
     'announcement'                    => 'Conversions',
     'social/tweet_on_twitter'         => 'Tweets',
     'social/follow_on_twitter'        => 'Follows',
+    'social/follow_on_youtube'        => 'Follows',
+    'social/follow_on_instagram'      => 'Follows',
     'social/like_on_facebook'         => 'Likes',
     'social/plus_one_on_google_plus'  => "+1's",
     'social/pin_on_pinterest'         => 'Pins',

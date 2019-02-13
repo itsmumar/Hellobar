@@ -92,6 +92,10 @@ module SiteElementsHelper
         { unit: 'tweet' }
       when 'social/follow_on_twitter'
         { unit: 'follower', verb: 'gained' }
+      when 'social/follow_on_instagram'
+        { unit: 'follower', verb: 'gained' }
+      when 'social/follow_on_youtube'
+        { unit: 'follower', verb: 'gained' }
       when 'social/like_on_facebook'
         { unit: 'like' }
       when 'social/share_on_linkedin', 'social/share_on_buffer'
