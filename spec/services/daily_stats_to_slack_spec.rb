@@ -7,11 +7,11 @@ describe DailyStatsToSlack, :freeze do
   let(:pay_service) { PayBill.new(bill) }
   let(:service) { DailyStatsToSlack.new }
 
-  before {
+  before do
     stub_cyber_source(:purchase)
     allow(Settings).to receive(:slack_channels).and_return 'daily_stats' => 'key'
     pay_service.call
-  }
+  end
 
   it 'has a message received by service' do
     Timecop.travel(1.day.from_now) do
