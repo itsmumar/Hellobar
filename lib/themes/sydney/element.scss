@@ -48,7 +48,8 @@
       left: 0;
       pointer-events: none;
     }
-    &.thank-you {
+    &.thank-you,
+    &.gdpr-showing {
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-cta{

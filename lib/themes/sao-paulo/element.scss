@@ -30,13 +30,6 @@
       opacity: 0.95;
     }
   }
-  .hb-input-block {
-    input {
-      border-top: 0 !important;
-      border-left: 0 !important;
-      border-right: 0 !important;
-    }
-  }
   #hellobar-modal,
   #hellobar-takeover{
     &:before {
@@ -98,24 +91,26 @@
     }
   }
   #hellobar-modal.thank-you,
-  #hellobar-takeover.thank-you {
-    &.image-background{
-      .hb-input-wrapper{
-        #hb-fields-form{
-          position: relative;
-          .hb-input-block{
-            input {
-              width: 64%;
-            }
-            &:first-child {
-              &+ .hb-cta{
-                max-width: none;
-                display: flex;
-                position: relative;
-                min-width: inherit !important;
-                justify-content: center;
-                align-items: center;
-              }
+  #hellobar-takeover.thank-you,
+  #hellobar-modal.gdpr-showing,
+  #hellobar-takeover.gdpr-showing {
+    .hb-input-wrapper{
+      #hb-fields-form{
+        position: relative;
+        .hb-input-block{
+          input {
+            width: 64%;
+          }
+          &:first-child {
+            &+ .hb-cta{
+              max-width: none;
+              display: flex;
+              position: relative;
+              min-width: inherit !important;
+              justify-content: center;
+              align-items: center;
+              margin: 0;
+              width: 100%;
             }
           }
         }
@@ -145,7 +140,7 @@
   #hellobar-modal {
     padding: 0;
     overflow: hidden;
-    max-width: 56em;
+    max-width: 48em;
     .hb-content-wrapper:after {
       margin: 8px;
       border-width: 1px;
@@ -155,7 +150,12 @@
       margin-right: 50%;
     }
     .hb-inner-content {
-      padding: 120px 50px;
+      padding: 80px 50px;
+    }
+    &.image-background{
+      .hb-inner-content {
+        padding: 120px 50px;
+      }
     }
     .hb-headline-text {
       font-size: 2em;
@@ -167,7 +167,8 @@
     .hb-text-wrapper,
     .hb-input-wrapper {
       max-width: 540px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
       width: 100%;
     }
     .hb-input-wrapper{
@@ -192,6 +193,7 @@
       }
     }
     &.image-background{
+      max-width: 56em;
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
@@ -216,7 +218,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
@@ -251,11 +254,6 @@
       max-width: 540px;
       margin-left: auto;
       margin-right: auto;
-    }
-    .icon-close {
-      top: 20px;
-      right: 20px;
-      font-size: 14px;
     }
     @media screen and (max-width: 840px) {
       &.image-background{
