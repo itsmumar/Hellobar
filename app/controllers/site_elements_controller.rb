@@ -144,7 +144,7 @@ class SiteElementsController < ApplicationController
       :message_to_tweet,
       :pinterest_description, :pinterest_full_name,
       :pinterest_image_url, :pinterest_url, :pinterest_user_url,
-      :redirect_url, :twitter_handle,
+      :redirect_url, :twitter_handle, :instagram_handle, :youtube_handle,
       :url, :url_to_like, :url_to_plus_one, :url_to_share, :url_to_tweet,
       :use_location_for_url
     ]

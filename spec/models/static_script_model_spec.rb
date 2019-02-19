@@ -176,8 +176,8 @@ describe StaticScriptModel do
 
       let(:bar_subtypes) do
         %w[call traffic email announcement
-           social/tweet_on_twitter social/follow_on_twitter social/like_on_facebook social/plus_one_on_google_plus
-           social/pin_on_pinterest social/follow_on_pinterest social/share_on_buffer social/share_on_linkedin
+           social/tweet_on_twitter social/follow_on_twitter social/like_on_facebook social/plus_one_on_google_plus social/follow_on_youtube
+           social/pin_on_pinterest social/follow_on_pinterest social/share_on_buffer social/share_on_linkedin social/follow_on_instagram
            question thankyou]
       end
 

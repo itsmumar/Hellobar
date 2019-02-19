@@ -155,6 +155,8 @@ export default Ember.Component.extend({
     'model.settings.pinterest_url',
     'model.settings.pinterest_user_url',
     'model.settings.twitter_handle',
+    'model.settings.instagram_handle',
+    'model.settings.youtube_handle',
     'model.settings.url_to_like',
     'model.settings.url_to_plus_one',
     'model.settings.url_to_share',

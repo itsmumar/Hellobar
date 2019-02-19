@@ -92,7 +92,9 @@
     }
   }
   #hellobar-modal.thank-you,
-  #hellobar-takeover.thank-you{
+  #hellobar-takeover.thank-you,
+  #hellobar-modal.gdpr-showing,
+  #hellobar-takeover.gdpr-showing{
     .hb-input-wrapper{
       #hb-fields-form{
         position: relative;
@@ -340,7 +342,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
