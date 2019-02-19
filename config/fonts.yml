@@ -122,7 +122,7 @@
   id: taviraj
   name: 'Taviraj'
   value: "'Taviraj', sans-serif"
-  google_font: 'Taviraj'
+  google_font: 'Taviraj:400,400i'
 -
   id: raleway
   name: 'Raleway'

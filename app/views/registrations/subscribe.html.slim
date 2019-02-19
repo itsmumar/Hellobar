@@ -33,14 +33,24 @@
       h1 Billing Information
       - unless @subscription.free?
         .note
-          p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}.
+          - if @dollar_trial
+
+            p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at $1 for the first month and $149 per year after that.
+
+          - else
+
+            p You’re signing up for our #{@subscription.name} #{@subscription.schedule.titleize} Plan at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}.
+
           p = link_to 'Choose a different plan', '#', class: "different-plan", onclick: 'showPlans()'
       .wrapper
         = hidden_field_tag :update_subscription, true
         = hidden_field_tag :site_id, current_user.sites.first.id
         = f.hidden_field :plan, value: params[:plan] || f.object.plan
         = render 'shared/modals/new_credit_card_form'
-        = submit_tag "Get Started at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}", class: 'btn btn-default btn-md md button'
+        - if @dollar_trial
+          = submit_tag "Get Started", class: 'btn btn-default btn-md md button'
+        - else
+          = submit_tag "Get Started at #{number_to_currency(@subscription.amount, precision: 0)}#{@subscription.monthly? ? '/mo' : '/yr'}", class: 'btn btn-default btn-md md button'
 
 = render "shared/modals/upgrade_modal"
 

@@ -501,7 +501,7 @@ describe ChangeSubscription, :freeze do
         expect(bill.amount).to eql 1
       end
 
-      context 'after 2019-01-24', freeze: '2019-01-25' do
+      context 'after 2019-02-19', freeze: '2019-02-20' do
         it 'does not change amount' do
           bill = change_subscription('pro_special', 'monthly')
           expect(bill.amount).to eql Subscription::ProSpecial.defaults[:monthly_amount]

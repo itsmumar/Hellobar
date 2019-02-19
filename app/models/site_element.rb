@@ -144,6 +144,10 @@ class SiteElement < ApplicationRecord
     self[:headline] = value
   end
 
+  def no_thanks_text=(value)
+    self[:no_thanks_text] = sanitize value
+  end
+
   def link_text=(value)
     self[:link_text] = sanitize value
   end
