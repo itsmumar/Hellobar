@@ -89,7 +89,7 @@ describe RegistrationForm do
 
       it 'displays bigcommerce signup title' do
         expect(form.title)
-          .to include 'Hey BigCommerce Fans! Get Your 30 Day Trial of Hello Bar for Just $1 (48 Hours Only)'
+          .to include 'Get Your 30 Day Trial of Hello Bar for Just $1 (48 Hours Only)'
       end
 
       it 'displays neil signup cta' do
