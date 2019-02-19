@@ -82,6 +82,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option operand "less_than" "is less than"}}
           | {{rule-option operand "greater_than" "is greater than"}}
           | {{rule-option operand "between" "is between"}}
+          | {{rule-option operand "keyword" "keyword"}}
       .rule_conditions_choices
         .choice-wrapper.select-wrapper.device-choice
           select.device.value name="rule[conditions_attributes][{{index}}][value]"
