@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181212152548) do
+ActiveRecord::Schema.define(version: 20190207111203) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -129,6 +129,8 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.datetime "sent_at"
     t.datetime "archived_at"
     t.integer  "email_id",        limit: 4
+    t.boolean  "spam",                        default: false
+    t.boolean  "processed",                   default: false
   end
 
   add_index "campaigns", ["deleted_at"], name: "index_campaigns_on_deleted_at", using: :btree
@@ -258,6 +260,7 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.text     "plain_body", limit: 65535
   end
 
   add_index "emails", ["site_id"], name: "index_emails_on_site_id", using: :btree
@@ -498,6 +501,8 @@ ActiveRecord::Schema.define(version: 20181212152548) do
     t.integer  "text_field_font_size",          limit: 4,        default: 14
     t.boolean  "show_optional_caption",                          default: true,         null: false
     t.boolean  "show_optional_content",                          default: true,         null: false
+    t.boolean  "show_no_thanks",                                 default: true
+    t.text     "no_thanks_text",                limit: 65535
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

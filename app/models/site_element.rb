@@ -25,6 +25,8 @@ class SiteElement < ApplicationRecord
     'announcement'                    => 'Conversions',
     'social/tweet_on_twitter'         => 'Tweets',
     'social/follow_on_twitter'        => 'Follows',
+    'social/follow_on_youtube'        => 'Follows',
+    'social/follow_on_instagram'      => 'Follows',
     'social/like_on_facebook'         => 'Likes',
     'social/plus_one_on_google_plus'  => "+1's",
     'social/pin_on_pinterest'         => 'Pins',
@@ -140,6 +142,10 @@ class SiteElement < ApplicationRecord
     value = sanitize value
     value = 'Hello. Add your message here.' if value.blank?
     self[:headline] = value
+  end
+
+  def no_thanks_text=(value)
+    self[:no_thanks_text] = sanitize value
   end
 
   def link_text=(value)

@@ -80,7 +80,9 @@
     }
   }
   #hellobar-modal.thank-you,
-  #hellobar-takeover.thank-you {
+  #hellobar-takeover.thank-you,
+  #hellobar-modal.gdpr-showing,
+  #hellobar-takeover.gdpr-showing {
     &.image-background{
       .hb-input-wrapper{
         #hb-fields-form{
@@ -94,6 +96,7 @@
                 min-width: inherit !important;
                 justify-content: center;
                 align-items: center;
+                margin: 0;
               }
             }
           }
@@ -157,7 +160,7 @@
             &:first-child:nth-last-child(2),
             &:first-child:nth-last-child(2) ~ .hb-input-block{
               input {
-                padding-right: 100px;
+                padding-right: 70px;
               }
             }
             &:first-child {
@@ -169,7 +172,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
@@ -208,6 +212,9 @@
       right: 20px;
       font-size: 14px;
     }
+    .gdpr-consent-form{
+      padding-left: 0;
+    }
     @media screen and (max-width: 640px) {
       .hb-inner-content {
         padding: 38px;
@@ -223,7 +230,7 @@
               &:first-child:nth-last-child(2),
               &:first-child:nth-last-child(2) ~ .hb-input-block{
                 input {
-                  padding-right: 100px;
+                  padding-right: 70px;
                 }
               }
               &:first-child {
@@ -300,7 +307,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
@@ -380,7 +388,8 @@
             }
           }
         }
-        &.thank-you {
+        &.thank-you,
+        &.gdpr-showing {
           .hb-input-wrapper{
             #hb-fields-form{
               .hb-input-block{
@@ -456,7 +465,8 @@
             }
           }
         }
-        &.thank-you {
+        &.thank-you,
+        &.gdpr-showing {
           .hb-input-wrapper{
             #hb-fields-form{
               .hb-input-block{

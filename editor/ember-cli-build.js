@@ -110,6 +110,11 @@ module.exports = function (defaults) {
   app.import('vendor/fonts/hellobar-icons.ttf', {destDir: fontsDir });
   app.import('vendor/fonts/hellobar-icons.woff', {destDir: fontsDir });
 
+  app.import('vendor/fonts/hellobar-new.eot', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-new.svg', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-new.ttf', {destDir: fontsDir });
+  app.import('vendor/fonts/hellobar-new.woff', {destDir: fontsDir });
+
   app.import('vendor/fonts/Metropolis-Regular.otf', {destDir: fontsDir });
 
   return app.toTree();

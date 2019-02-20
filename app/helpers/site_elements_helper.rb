@@ -90,7 +90,7 @@ module SiteElementsHelper
         { unit: 'view' }
       when 'social/tweet_on_twitter'
         { unit: 'tweet' }
-      when 'social/follow_on_twitter'
+      when 'social/follow_on_instagram', 'social/follow_on_twitter', 'social/follow_on_youtube', 'social/follow_on_pinterest'
         { unit: 'follower', verb: 'gained' }
       when 'social/like_on_facebook'
         { unit: 'like' }
@@ -100,8 +100,6 @@ module SiteElementsHelper
         { unit: 'plus one' }
       when 'social/pin_on_pinterest'
         { unit: 'pin' }
-      when 'social/follow_on_pinterest'
-        { unit: 'follower', verb: 'gained' }
       else
         raise "#{ element.element_subtype } not configured in this helper"
       end

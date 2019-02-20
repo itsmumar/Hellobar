@@ -20,13 +20,15 @@ class Campaign < ApplicationRecord
   validates :name, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
+  default_scope { order(created_at: :desc) }
   scope :drafts, -> { where(status: [DRAFT, SENDING]) }
   scope :sent, -> { where(status: [SENT]) }
   scope :archived, -> { where(status: [ARCHIVED]) }
   scope :with_emails, -> { includes(:email) }
+  scope :unprocessed, -> { where(processed: false) }
 
   def statistics
-    FetchEmailStatistics.new(self).call
+    @statistics ||= FetchEmailStatistics.new(self).call
   end
 
   STATUSES.each do |key|

@@ -29,7 +29,6 @@ describe SettingsSerializer do
           tocaya
           gatsby
           gogo
-          cocina
           tajima
           lionshare
           moscow
@@ -42,7 +41,6 @@ describe SettingsSerializer do
           wayfarer
           rhythm
           chance
-          seattle
           sling
           marble
           mumbai
@@ -51,8 +49,12 @@ describe SettingsSerializer do
           sydney
           bogota
           manila
+          guadalajara
           mexico-city
           lahore
+          atlanta
+          sao-paulo
+          dallas
         ]
       end
       let(:expected_themes) { Theme.sorted.reject { |theme| theme.id.in? advanced_themes } }

@@ -21,6 +21,10 @@
     = accept_terms_and_conditions_label
   = f.button :submit, @form.cta, class: 'button gray', name: 'signup_with_email'
 
+  - if params[:utm_campaign] == 'dollar_trial'
+    span.label Today's total: $1 for 30 days <br>
+    span.label After 30 days: <strike>$289</strike> $149 billed annually
+
   .strike
     span OR
 

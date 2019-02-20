@@ -155,6 +155,8 @@ export default Ember.Component.extend({
     'model.settings.pinterest_url',
     'model.settings.pinterest_user_url',
     'model.settings.twitter_handle',
+    'model.settings.instagram_handle',
+    'model.settings.youtube_handle',
     'model.settings.url_to_like',
     'model.settings.url_to_plus_one',
     'model.settings.url_to_share',
@@ -189,6 +191,8 @@ export default Ember.Component.extend({
     'model.conversion_font',
     'model.conversion_font_color',
     'model.conversion_font_size',
+    'model.show_no_thanks',
+    'model.no_thanks_text',
     'isMobile'
   ),
 
@@ -232,7 +236,6 @@ export default Ember.Component.extend({
         subtype: this.get('model.element_subtype'),
         tab_side: 'right',
         template_name: (this.get('model.type') || 'bar').toLowerCase() + '_' + (this.get('model.element_subtype') || 'traffic'),
-        thank_you_text: this.get('model.thank_you_text') || 'Thanks for signing up!',
         wiggle_button: this.get('model.wiggle_button'),
         wiggle_wait: 0,
         font: font.value,
@@ -242,6 +245,10 @@ export default Ember.Component.extend({
         branding_url: 'https://www.hellobar.com?sid=preview'
       }
     );
+
+    previewElement['thank_you_text'] = this.get('model.site.current_subscription.type') === 'free' ?
+      this.get('model.default_email_thank_you_text') :
+      this.get('model.thank_you_text') || 'Thanks for signing up!';
 
     previewElement = JSON.parse(JSON.stringify(previewElement));
 

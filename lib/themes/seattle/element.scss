@@ -114,7 +114,11 @@
   #hellobar-modal.thank-you,
   #hellobar-takeover.thank-you,
   #hellobar-slider.thank-you,
-  #hellobar-alert.thank-you {
+  #hellobar-alert.thank-you,
+  #hellobar-modal.gdpr-showing,
+  #hellobar-takeover.gdpr-showing,
+  #hellobar-slider.gdpr-showing,
+  #hellobar-alert.gdpr-showing {
     .hb-input-wrapper{
       #hb-fields-form{
         position: relative;
@@ -203,7 +207,8 @@
         }
       }
     }
-    &.thank-you {
+    &.thank-you,
+    &.gdpr-showing {
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
@@ -237,11 +242,6 @@
       max-width: 540px;
       margin-left: auto;
       margin-right: auto;
-    }
-    .icon-close {
-      top: 19px;
-      right: 19px;
-      font-size: 14px;
     }
     @media screen and (max-width: 640px) {
       .hb-inner-content {
@@ -317,7 +317,8 @@
         }
       }
     }
-    &.thank-you {
+    &.thank-you,
+    &.gdpr-showing {
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{
@@ -399,7 +400,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
@@ -476,7 +478,8 @@
           }
         }
       }
-      &.thank-you {
+      &.thank-you,
+      &.gdpr-showing {
         .hb-input-wrapper{
           #hb-fields-form{
             .hb-input-block{
@@ -535,7 +538,8 @@
         }
       }
     }
-    &.thank-you {
+    &.thank-you,
+    &.gdpr-showing {
       .hb-input-wrapper{
         #hb-fields-form{
           .hb-input-block{

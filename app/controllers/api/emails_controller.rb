@@ -33,6 +33,6 @@ class Api::EmailsController < Api::ApplicationController
   end
 
   def email_params
-    params.require(:email).permit(:from_name, :from_email, :subject, :body)
+    params.require(:email).permit(:from_name, :from_email, :subject, :body, :plain_body)
   end
 end

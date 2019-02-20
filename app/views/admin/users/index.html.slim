@@ -60,5 +60,8 @@ div.row
                 | Deleted
               - else
                 = link_to "impersonate", admin_impersonate_user_path(user), :method => :post
+              - if user.spammer?
+                | &nbsp; | &nbsp;
+                = link_to "Undo Spammer", admin_undo_spammer_user_path(user), :method => :post
 
       = paginate @users

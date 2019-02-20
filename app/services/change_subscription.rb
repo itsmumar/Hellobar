@@ -1,5 +1,5 @@
 class ChangeSubscription
-  ONE_DOLLAR_PRO_SPECIAL_END_DATE = Date.parse('2019-01-24')
+  ONE_DOLLAR_PRO_SPECIAL_END_DATE = Date.parse('2019-02-19')
 
   def initialize(site, params, credit_card = nil)
     @site = site
