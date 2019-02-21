@@ -2,7 +2,9 @@
 {{design/design-social-profile model=model}}
 
 {{component propertiesComponentNameForType model=model}}
-
+{{#if (or isModal isTakeover)}}
+  {{design/no-thanks-styling model=model}}
+{{/if}}
 {{#if isNotBar}}
   {{design/design-image model=model}}
 {{/if}}

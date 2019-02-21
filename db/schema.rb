@@ -493,15 +493,17 @@ ActiveRecord::Schema.define(version: 20190207082028) do
     t.string   "cta_border_color",              limit: 255,      default: "ffffff",     null: false
     t.integer  "cta_border_width",              limit: 4,        default: 0,            null: false
     t.integer  "cta_border_radius",             limit: 4,        default: 0,            null: false
+    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.string   "conversion_font",               limit: 255,      default: "Roboto",     null: false
     t.string   "conversion_font_color",         limit: 255,      default: "ffffff",     null: false
     t.integer  "conversion_font_size",          limit: 4,        default: 22,           null: false
-    t.integer  "cta_height",                    limit: 4,        default: 27,           null: false
     t.datetime "deactivated_at"
     t.string   "text_field_font_family",        limit: 255
     t.integer  "text_field_font_size",          limit: 4,        default: 14
     t.boolean  "show_optional_caption",                          default: true,         null: false
     t.boolean  "show_optional_content",                          default: true,         null: false
+    t.boolean  "show_no_thanks",                                 default: true
+    t.text     "no_thanks_text",                limit: 65535
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

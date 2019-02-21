@@ -171,8 +171,4 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                   .package-status
                     = choose_plan_button(Subscription::Growth.new)
 
-            td.trborder
-              .package-block.enterprise
-                .package-features
-                  .package-status(data-btn-prefix='Your ')
-                    = "{{#if showFreePlus}}#{choose_plan_button(Subscription::FreePlus.new)}{{else}}#{choose_plan_button(Subscription::Free.new)}{{/if}}".html_safe
+            

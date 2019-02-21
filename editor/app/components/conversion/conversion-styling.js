@@ -9,7 +9,6 @@ export default Ember.Component.extend({
    */
   model: null,
   selectedColorAndFont: function () {
-    console.log("hello");
     this.set('model.conversion_font_color',this.get('model.text_color'));
   }.property('model.text_color')
 });

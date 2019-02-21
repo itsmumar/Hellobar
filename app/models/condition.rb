@@ -39,6 +39,7 @@ class Condition < ApplicationRecord
     does_not_include: 'does not include',
     greater_than: 'is greater than',
     includes: 'includes',
+    keyword: 'keyword',
     is: 'is',
     is_not: 'is not',
     less_than: 'is less than'
@@ -173,7 +174,7 @@ class Condition < ApplicationRecord
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
       'UrlPathCondition'          => %w[is is_not includes does_not_include],
-      'UrlQueryCondition'         => %w[is is_not includes does_not_include],
+      'UrlQueryCondition'         => %w[is is_not includes does_not_include keyword],
       'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
       'UTMContentCondition'       => %w[is is_not includes does_not_include],
       'UTMMediumCondition'        => %w[is is_not includes does_not_include],

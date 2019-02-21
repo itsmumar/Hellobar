@@ -4,25 +4,32 @@ describe FetchSiteStatisticsFromES do
   let(:search_url) { "#{ Settings.elastic_search_endpoint }/test_over_time/test_over_time_type/_search" }
   let(:from_date) { Date.new(2015) }
   let(:to_date) { Date.current.end_of_month }
-  let(:service) { FetchSiteStatisticsFromES.new(site) }
+  let(:service) { FetchSiteStatisticsFromES.new(site, from_date, to_date) }
   let(:total) { 50 }
 
   let(:request) do
     {
-      aggs:
-      {
+      aggs: {
         total: { filter: { terms: { sid: [] } }, aggs: { v: { sum: { field: 'v' } } } },
         call: { filter: { terms: { sid: [] } }, aggs: { c: { sum: { field: 'c' } } } },
         email: { filter: { terms: { sid: [] } }, aggs: { c: { sum: { field: 'c' } } } },
         traffic: { filter: { terms: { sid: [] } }, aggs: { c: { sum: { field: 'c' } } } },
         social: { filter: { terms: { sid: [] } }, aggs: { c: { sum: { field: 'c' } } } }
       },
-      query:
-      {
-        bool:
-          {
-            filter: { terms: { sid: [] } }
-          }
+      query: {
+        bool: {
+          filter: [
+            {
+              range: {
+                date: {
+                  gte: WeirdDate.from_date(from_date),
+                  lte: WeirdDate.from_date(to_date)
+                }
+              }
+            },
+            { terms: { sid: [] } }
+          ]
+        }
       }
     }
   end

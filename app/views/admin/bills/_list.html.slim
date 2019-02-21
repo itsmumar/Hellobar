@@ -1,3 +1,12 @@
+div.color-des
+  span.dot.yellow-color
+  = "Yearly Renewal "
+  span.dot.blue-color
+  = "Monthly Renewal "
+  span.dot.orange-color
+  = "Overage"
+
+
 - if bills.empty?
   h3
     i none found
@@ -20,7 +29,7 @@
       th Coupons
 
     - bills.each do |bill|
-      tr
+      tr class="#{bill.description ? bill.description.parameterize("-") : 'no-class' }"
         td= link_to(bill.id, admin_bill_path(bill))
         td= subscription_link(bill)
         td= bill.description

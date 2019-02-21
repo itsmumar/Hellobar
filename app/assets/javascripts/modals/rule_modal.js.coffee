@@ -152,7 +152,7 @@ class @RuleModal extends Modal
     'ReferrerDomainCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'TimeCondition': ['before', 'after']
     'UrlPathCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'UrlQueryCondition': ['is', 'is_not', 'includes', 'does_not_include']
+    'UrlQueryCondition': ['is', 'is_not', 'includes', 'does_not_include', 'keyword']
     'UTMCampaignCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMContentCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']

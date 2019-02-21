@@ -6,6 +6,10 @@
   content: $content
   font-family: "hellobar"
 
+@mixin use-icon($content: "")
+  content: $content
+  font-family: "hellobar-new"
+
 @mixin use-hb-icon($content: "")
   content: $content
   font-family: "hellobar-icons"
@@ -16,6 +20,13 @@
   font-family: "hellobar"
   src: url(../hellobar.eot)
   src: url(../hellobar.eot?#iefix) format("embedded-opentype"), url(../hellobar.woff) format("woff"), url(../hellobar.ttf) format("truetype"), url(../hellobar.svg#hellobar) format("svg")
+  font-weight: normal
+  font-style: normal
+
+@font-face
+  font-family: "hellobar-new"
+  src: url(../hellobar-new.eot)
+  src: url(../hellobar-new.eot?#iefix) format("embedded-opentype"), url(../hellobar-new.woff) format("woff"), url(../hellobar-new.ttf) format("truetype"), url(../hellobar-new.svg#hellobar) format("svg")
   font-weight: normal
   font-style: normal
 
@@ -49,6 +60,17 @@
   font-weight: normal !important
   font-variant: normal !important
   text-transform: none !important
+  speak: none
+  line-height: 1
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+[class^='hb-']:before, [class*=' hb-']:before
+  font-family: 'hellobar-new'
+  font-style: normal
+  font-weight: normal
+  font-variant: normal
+  text-transform: none
   speak: none
   line-height: 1
   -webkit-font-smoothing: antialiased
@@ -243,3 +265,9 @@
 .icon-call:before
   content: "\""
   font-weight: bold !important
+
+.hb-instagram-circled:before
+  content: "["
+
+.hb-youtube-circled:before
+  content: "]"

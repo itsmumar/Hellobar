@@ -31,6 +31,7 @@ class RegistrationsController < ApplicationController
   def subscribe
     @subscription = Subscription.from_plan(params[:plan])
     @form = PaymentForm.new(params[:credit_card])
+    @dollar_trial = true if cookies[:dollar_trial] == 'true'
 
     render layout: 'static'
   end

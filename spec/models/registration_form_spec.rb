@@ -84,12 +84,12 @@ describe RegistrationForm do
       end
     end
 
-    context 'ask method signup' do
+    context 'dollar trial signup' do
       let(:cookies) { Hash[dollar_trial: 'true'] }
 
-      it 'displays ask method signup title' do
+      it 'displays bigcommerce signup title' do
         expect(form.title)
-          .to include 'Hey ASK Method Fans! Get Your 30 Day Trial of Hello Bar for Just $1 (48 Hours Only)'
+          .to include 'Get Your 30 Day Trial of Hello Bar for Just $1 (48 Hours Only)'
       end
 
       it 'displays neil signup cta' do
