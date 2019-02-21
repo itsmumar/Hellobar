@@ -64,7 +64,7 @@ class CalculateInternalMetrics
   def revenue
     @revenue ||=
       Bill.paid.where('created_at >= ? AND created_at < ?',
-        beginning_of_last_week, beginning_of_current_week)
+        beginning_of_last_week, beginning_of_current_week).where(description: [nil, 'Monthly Renewal'])
   end
 
   def revenue_sum
