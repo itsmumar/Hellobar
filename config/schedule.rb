@@ -33,6 +33,10 @@ every :monday, at: '2:30pm', roles: [:cron] do
   rake 'mailing:send_weekly_digest'
 end
 
+every :day, at: '2:45pm', roles: [:cron] do
+  rake 'daily_stats_to_slack:run'
+end
+
 every :tuesday, at: '3:00pm', roles: [:cron] do
   rake 'internal_metrics:summary'
 end
