@@ -173,7 +173,7 @@ class Condition < ApplicationRecord
       'ReferrerCondition'         => %w[is is_not includes does_not_include],
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
-      'UrlPathCondition'          => %w[is is_not includes does_not_include],
+      'UrlPathCondition'          => %w[is is_not includes does_not_include keyword],
       'UrlQueryCondition'         => %w[is is_not includes does_not_include keyword],
       'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
       'UTMContentCondition'       => %w[is is_not includes does_not_include],
