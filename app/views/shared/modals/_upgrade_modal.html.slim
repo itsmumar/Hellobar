@@ -171,4 +171,8 @@ script id="upgrade-account-modal-template" type="text/x-handlebars-template"
                   .package-status
                     = choose_plan_button(Subscription::Growth.new)
 
+      p.center
+        ' * All plans that exceed view limits are subject to overage charges
+        a.learn-more href="https://support.hellobar.com/billing-and-subscriptions/hello-bar-overage-fee-breakdown" target="_blank" Learn More
+
             
