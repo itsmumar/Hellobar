@@ -139,6 +139,15 @@
   text-transform: uppercase;
 }
 
+/*-----------  Social  -----------*/
+#hellobar-takeover .hb-social-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+
 /*----------- GDPR -----------*/
 
 #hellobar-takeover .gdpr-consent-form {
