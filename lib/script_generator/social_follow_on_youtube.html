@@ -1,6 +1,12 @@
 <div class="hb-social-wrapper hb-google-wrapper">
 
+  <div style="{{siteElement.model().settings.youtube_handle ? 'display: block;' : 'display: none;'}}">
     <span class="g-ytsubscribe" data-channel="{{siteElement.model().settings.youtube_handle}}" data-channelid="{{siteElement.model().settings.youtube_handle}}" data-layout="default" data-count="default" ></span>
     <script type="text/javascript" src="https://apis.google.com/js/platform.js"></script>
+  </div>
+
+  <div style="{{siteElement.model().settings.youtube_handle ? 'display: none;' : 'display: block;'}}">
+    <img src="https://assets.hellobar.com/youtube-button.png" alt="youtube-button" title="Subscribe" data-toggle="tooltip" data-placement="bottom" />
+  </div>
 
 </div>
