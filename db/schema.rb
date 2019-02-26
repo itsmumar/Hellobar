@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 20190207111203) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.text     "plain_body", limit: 65535
+    t.text     "preview_text", limit: 65535
   end
 
   add_index "emails", ["site_id"], name: "index_emails_on_site_id", using: :btree
