@@ -6,7 +6,17 @@ class SubscriptionsController < ApplicationController
 
   def create
     InitializeStripeAndSubscribe.new(charges_params, current_user, @site).call
-    redirect_to root_path
+
+    respond_to do |format|
+      format.json do
+        render json: current_site.current_subscription, serializer: SubscriptionSerializer
+      end
+      format.html do
+        redirect_to root_path
+      end
+
+    end
+
   end
 
   # updates subscription
