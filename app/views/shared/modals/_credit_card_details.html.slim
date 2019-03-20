@@ -5,8 +5,12 @@ script id="credit-card-details-template" type="text/x-handlebars-template"
     header Billing Information
 
     .credit-card
-      #linked-credit-cards
-      a#add-new-credit-card href="#" Add new credit card
+      -if current_user.credit_cards.present? && !current_user.stripe?
+        #linked-credit-cards
+        a#add-new-credit-card href="#" Add new credit card
+      -else
+        #linked-credit-cards
+        a#add-new-stripe href="#" Add new Card
 
 script id="linked-credit-cards-template" type="text/x-handlebars-template"
   label Use credit card on file

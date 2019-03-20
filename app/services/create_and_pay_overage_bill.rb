@@ -1,4 +1,6 @@
 class CreateAndPayOverageBill
+  DEFAULT_CURRENCY = 'usd'.freeze
+
   def initialize(site)
     @site = site
 
@@ -10,10 +12,20 @@ class CreateAndPayOverageBill
     return unless amount > 0
 
     bill = create_bill_for_overage
-
-    Bill.transaction do
-      PayBill.new(bill).call
+    if current_user.stripe?
+      customer = Stripe::Customer.retrieve(current_user.stripe_customer_id)
+      Stripe::Charge.create(
+        customer: customer.id,
+        amount: amount,
+        description: 'Monthly View Limit Overage Fee',
+        currency: DEFAULT_CURRENCY
+      )
       reset_overage_count
+    else
+      Bill.transaction do
+        PayBill.new(bill).call
+        reset_overage_count
+      end
     end
 
     put_to_slack_ok(bill)

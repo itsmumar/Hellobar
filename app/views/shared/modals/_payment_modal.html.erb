@@ -62,7 +62,11 @@
 
       <footer>
         <a class="button cancel">Cancel</a>
-        <a class="button submit">Confirm</a>
+        {{#if isStripe}}
+          <a class="button stripe">Confirm</a>
+        {{else}}
+          <a class="button submit">Confirm</a>
+        {{/if}}
       </footer>
     </div>
   </div>

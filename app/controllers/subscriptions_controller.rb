@@ -1,7 +1,13 @@
 class SubscriptionsController < ApplicationController
+  before_action :load_site, only: :create
   before_action :authenticate_user!
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
+
+  def create
+    InitializeStripeAndSubscribe.new(charges_params, current_user, @site).call
+    redirect_to root_path
+  end
 
   # updates subscription
   def update
@@ -18,6 +24,10 @@ class SubscriptionsController < ApplicationController
   end
 
   private
+
+  def charges_params
+    params.permit(:stripeToken, :plan, :schedule)
+  end
 
   def change_subscription(credit_card)
     subscription_service = ChangeSubscription.new(@site, params[:billing], credit_card)

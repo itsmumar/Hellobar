@@ -24,6 +24,7 @@ class @PaymentModal extends Modal
       isAnnual: @_isAnnual()
       isMonthly: @_isMonthly()
       isFree: @_isFree()
+      isStripe: @_isStripe()
       siteName: @options.site.display_name
       upgradeBenefit: @options.upgradeBenefit
       isElite: @options.package.name == "Enterprise"
@@ -100,10 +101,22 @@ class @PaymentModal extends Modal
     @_bindNewCreditCard()
     @_bindChangePlan()
     @_bindFormSubmission()
+    @_bindNewStripe()
 
   _bindChangeSchedule: ->
     @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
       @options.package.schedule = event.target.value
+
+  _bindNewStripe: ->
+    @$modal.on 'click', '#add-new-stripe', (event) =>
+      event.preventDefault()
+      options =
+        site: @options.site
+        package: @options.package
+
+      new NewStripeModal(options).open()
+
+      @close()
 
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
@@ -134,6 +147,26 @@ class @PaymentModal extends Modal
   # bind submission of credit card details
   _bindFormSubmission: ->
     @_unbindFormSubmission() # clear any existing event bindings to make sure we only have one at a time
+
+    @$modal.find('a.stripe').on 'click', (event) =>
+      @_unbindFormSubmission() # prevent double submissions
+      @_clearErrors()
+
+      $.ajax
+        dataType: 'json'
+        url: '/subscription'
+        method: 'POST'
+        data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id
+        success: (data, status, xhr) =>
+          options =
+            successCallback: @options.successCallback
+            data: data
+          @close()
+        error: (xhr, status, error) =>
+          @$modal.find("a.stripe").removeClass("cancel")
+          if xhr.responseJSON
+            @_displayErrors(xhr.responseJSON.errors)
+
 
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
@@ -191,6 +224,7 @@ class @PaymentModal extends Modal
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
+    @$modal.find('a.stripe').off('click')
 
   _isAnnual: ->
     @options.package.schedule == 'yearly'
@@ -201,6 +235,9 @@ class @PaymentModal extends Modal
   _isFree: ->
     !@options.package.requires_credit_card &&
       if @_isAnnual() then @options.package.yearly_amount == 0 else @options.package.monthly_amount == 0
+
+  _isStripe: ->
+    currentUser.stripe_customer_id != ''
 
   _linkedCreditCardId: ->
     parseInt(@$modal.find('select#linked-credit-card').val()) || @currentCreditCard.id

@@ -31,10 +31,10 @@ $ ->
     Intercom('showNewMessage', "Hi, I'm interested in upgrading to a custom plan")
 
   $('.show-new-credit-card-modal').click ->
-    new NewCreditCardModal(
+    options =
       site: window.site
-      updateSubscription: $(this).data().updateSubscription
-    ).open()
+      package: window.site.current_subscription
+    new NewStripeModal(options).open()
 
   $('.show-upgrade-modal').click ->
     options =

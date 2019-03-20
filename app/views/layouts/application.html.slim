@@ -16,6 +16,7 @@ html
   body#hb-application
     = render "shared/gtm_noscript"
     = render 'shared/amplitude'
+    = render 'shared/stripe'
 
     header.global-header
       = render "shared/header"
@@ -37,6 +38,7 @@ html
     = render "shared/modals/payment_modal"
     = render "shared/modals/payment_confirmation"
     = render "shared/modals/new_credit_card_modal"
+    = render "shared/modals/new_stripe_modal"
     = render "shared/modals/account_prompt"
     = render "shared/modals/add_team_member"
     = render "shared/modals/exit_intent"
