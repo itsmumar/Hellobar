@@ -1,5 +1,4 @@
 class CreateAndPayOverageBill
-
   def initialize(site)
     @site = site
 

@@ -35,12 +35,12 @@ class PayBill
     return bill.pay! if bill.amount.zero?
     raise MissingCreditCard, 'Could not pay bill without credit card' unless bill.credit_card_attached?
 
-    customer = Stripe::Customer.retrieve(bill.subscription.site.stripe_customer_id) #TODO: Pass current_user to this.
+    customer = Stripe::Customer.retrieve(bill.subscription.site.stripe_customer_id) # TODO: Pass current_user to this.
     Stripe::Charge.create(
-        customer: customer.id,
-        amount: bill.amount,
-        description: 'Monthly View Limit Overage Fee',
-        currency: DEFAULT_CURRENCY
+      customer: customer.id,
+      amount: bill.amount,
+      description: 'Monthly View Limit Overage Fee',
+      currency: DEFAULT_CURRENCY
     )
   end
 

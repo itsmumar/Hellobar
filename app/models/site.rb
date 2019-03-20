@@ -324,7 +324,7 @@ class Site < ApplicationRecord
   end
 
   def stripe_customer_id
-    users.where('stripe_customer_id is not NULL').first.try(:stripe_customer_id)
+    users.where.not(stripe_customer_id: nil).first.try(:stripe_customer_id)
   end
 
   def deactivated?
