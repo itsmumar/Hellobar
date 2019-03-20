@@ -2,6 +2,8 @@ class PayBill
   class Error < StandardError; end
   class MissingCreditCard < Error; end
 
+  DEFAULT_CURRENCY = 'usd'.freeze
+
   def initialize(bill)
     @bill = bill
     @credit_card = bill.subscription.credit_card
@@ -11,7 +13,12 @@ class PayBill
     return bill unless can_be_paid?
 
     set_final_amount
-    pay_bill
+    if bill.subscription.stripe?
+      pay_stripe_bill
+    else
+      pay_bill
+    end
+
     create_bill_for_next_period
     bill
   end
@@ -22,6 +29,19 @@ class PayBill
 
   def can_be_paid?
     bill.pending? || bill.failed?
+  end
+
+  def pay_stripe_bill
+    return bill.pay! if bill.amount.zero?
+    raise MissingCreditCard, 'Could not pay bill without credit card' unless bill.credit_card_attached?
+
+    customer = Stripe::Customer.retrieve(bill.subscription.site.stripe_customer_id) #TODO: Pass current_user to this.
+    Stripe::Charge.create(
+        customer: customer.id,
+        amount: bill.amount,
+        description: 'Monthly View Limit Overage Fee',
+        currency: DEFAULT_CURRENCY
+    )
   end
 
   def pay_bill

@@ -323,6 +323,10 @@ class Site < ApplicationRecord
     current_subscription.stripe_subscription_id.present?
   end
 
+  def stripe_customer_id
+    users.where('stripe_customer_id is not NULL').first.try(:stripe_customer_id)
+  end
+
   def deactivated?
     site_elements.where.not(deactivated_at: nil).any?
   end

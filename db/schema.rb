@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190207111203) do
+ActiveRecord::Schema.define(version: 20190320095944) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -219,22 +219,23 @@ ActiveRecord::Schema.define(version: 20190207111203) do
   end
 
   create_table "credit_cards", force: :cascade do |t|
-    t.string   "number",     limit: 255, null: false
+    t.string   "number",     limit: 255
     t.integer  "month",      limit: 4,   null: false
     t.integer  "year",       limit: 4,   null: false
-    t.string   "first_name", limit: 255, null: false
-    t.string   "last_name",  limit: 255, null: false
+    t.string   "first_name", limit: 255
+    t.string   "last_name",  limit: 255
     t.string   "brand",      limit: 255, null: false
-    t.string   "city",       limit: 255, null: false
-    t.string   "state",      limit: 255, null: false
-    t.string   "zip",        limit: 255, null: false
-    t.string   "address",    limit: 255, null: false
+    t.string   "city",       limit: 255
+    t.string   "state",      limit: 255
+    t.string   "zip",        limit: 255
+    t.string   "address",    limit: 255
     t.string   "country",    limit: 255, null: false
     t.string   "token",      limit: 255
     t.integer  "user_id",    limit: 4
     t.datetime "deleted_at"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.string   "stripe_id",  limit: 255
   end
 
   add_index "credit_cards", ["user_id"], name: "index_credit_cards_on_user_id", using: :btree
@@ -568,6 +569,7 @@ ActiveRecord::Schema.define(version: 20190207111203) do
     t.datetime "deleted_at"
     t.datetime "updated_at"
     t.decimal  "original_amount",                  precision: 7, scale: 2
+    t.string   "stripe_subscription_id", limit: 255
   end
 
   add_index "subscriptions", ["created_at"], name: "index_subscriptions_on_created_at", using: :btree
@@ -596,6 +598,7 @@ ActiveRecord::Schema.define(version: 20190207111203) do
     t.integer  "wordpress_user_id",                   limit: 4
     t.datetime "exit_intent_modal_last_shown_at"
     t.datetime "upgrade_suggest_modal_last_shown_at"
+    t.string   "stripe_customer_id",                  limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
@@ -610,7 +613,7 @@ ActiveRecord::Schema.define(version: 20190207111203) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
+  
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"
