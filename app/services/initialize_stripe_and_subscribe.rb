@@ -43,7 +43,8 @@ class InitializeStripeAndSubscribe
   def create_customer
     self.customer = Stripe::Customer.create(
       email: user.email,
-      source: stripe_token
+      source: stripe_token,
+      description: site.url
     )
     user.update(stripe_customer_id: customer.id)
   end
