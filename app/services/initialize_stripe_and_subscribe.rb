@@ -25,11 +25,11 @@ class InitializeStripeAndSubscribe
 
   def find_or_initialize_credit_card
     card = customer.sources.data.last
-    if stripe_token.blank?
-      self.credit_card = CreditCard.where(stripe_id: card.id).first
-    else
-      self.credit_card = CreditCard.create(user: user, stripe_id: card.id, month: card.exp_month, year: card.exp_year, brand: card.brand, country: card.country, number: card.last4)
-    end
+    self.credit_card = if stripe_token.blank?
+                         CreditCard.where(stripe_id: card.id).first
+                       else
+                         CreditCard.create(user: user, stripe_id: card.id, month: card.exp_month, year: card.exp_year, brand: card.brand, country: card.country, number: card.last4)
+                       end
   end
 
   def find_or_initialize_customer

@@ -627,6 +627,8 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     statistics2 (0.54)
+    stripe (3.3.1)
+      faraday (~> 0.9)
     syslogger (1.6.5)
     temple (0.8.0)
     terminal-notifier-guard (1.7.0)
@@ -797,6 +799,7 @@ DEPENDENCIES
   slim-rails
   sprockets
   sprockets-es6
+  stripe
   syslogger
   terminal-notifier-guard
   thin
