@@ -21,7 +21,7 @@ describe CreateAndPayOverageBill do
       expect(last_bill.amount).to eql(10)
       expect(last_bill.grace_period_allowed).to be_truthy
       expect(last_bill.description).to eql('Monthly View Limit Overage Fee')
-      expect(last_bill.status).to eql('pending')
+      expect(last_bill.status).to eql('paid')
       expect(last_bill.view_count).to eql(last_bill.site.number_of_views)
       expect(last_bill.one_time).to eql(true)
     end

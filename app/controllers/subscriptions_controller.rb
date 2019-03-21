@@ -14,9 +14,7 @@ class SubscriptionsController < ApplicationController
       format.html do
         redirect_to root_path
       end
-
     end
-
   end
 
   # updates subscription

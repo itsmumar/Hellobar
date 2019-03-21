@@ -94,7 +94,18 @@ class InitializeStripeAndSubscribe
     Subscription.transaction do
       subscription = create_subscription
       track_subscription_change(subscription)
+      create_bill(subscription)
     end
+  end
+
+  def create_bill(subscription)
+    Bill.create(subscription: subscription,
+             amount: subscription.amount,
+             grace_period_allowed: false,
+             bill_at: Time.current,
+             start_date: Time.current,
+             end_date: Time.current + subscription.period,
+             status: 'paid')
   end
 
   def create_subscription
