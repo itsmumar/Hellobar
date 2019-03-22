@@ -26,7 +26,10 @@ main
       div Invoice #: #{@bill.id}
       div Due #{@bill.bill_at.strftime('%b. %d, %Y')}
       - if @bill.paid?
-        div Paid On #{@bill.successful_billing_attempt.created_at.strftime('%b. %d, %Y')}
+        -if @bill.subscription.stripe?
+          div Paid On #{@bill.created_at.strftime('%b. %d, %Y')}
+        -else
+          div Paid On #{@bill.successful_billing_attempt.created_at.strftime('%b. %d, %Y')}
   br.clear
 
 

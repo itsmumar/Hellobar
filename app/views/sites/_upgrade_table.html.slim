@@ -21,8 +21,10 @@
   .card
     - if @site.current_subscription && @site.current_subscription.credit_card
       = @site.current_subscription.credit_card.number
-  .show-new-credit-card-modal
-    a Add New Credit Card
+  - if current_user.credit_cards.present? && !current_user.stripe?
+    = link_to 'Add new credit card', '#', class: 'show-new-credit-card-modal'
+  - else
+    = link_to 'Add new card', '#', class: 'show-new-stripe-modal'
 
 - if !@bills.empty?
   section

@@ -47,11 +47,25 @@ class PayRecurringBills
 
     report.attempt bill do
       if bill.credit_card_attached?
-        pay bill
+        if bill.subscription.stripe?
+          generate_invoice(bill)
+        else
+          pay bill
+        end
       else
         cannot_pay(bill)
       end
     end
+  end
+
+  def generate_invoice(bill)
+    Bill.create(subscription: bill.subscription,
+                amount: bill.amount,
+                grace_period_allowed: false,
+                bill_at: Time.current,
+                start_date: Time.current,
+                end_date: Time.current + bill.subscription.period,
+                status: 'paid')
   end
 
   def pay(bill)

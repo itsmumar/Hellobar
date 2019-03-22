@@ -36,6 +36,12 @@ $ ->
       updateSubscription: $(this).data().updateSubscription
     ).open()
 
+  $('.show-new-stripe-modal').click ->
+    options =
+      package: window.site.current_subscription
+      site: window.site
+    new NewStripeModal(options).open()
+
   $('.show-upgrade-modal').click ->
     options =
       site: window.site
