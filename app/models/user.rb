@@ -3,7 +3,7 @@ class User < ApplicationRecord
   SECRET_ACCESS_LIST = ['seth@hellobar.com', 'karen@hellobar.com',
                         'lindsey@hellobar.com', 'ryan@hellobar.com',
                         'keiran@hellobar.com', 'anton.sozontov@crossover.com',
-                        'raxeekh@gmail.com', 'ying@timelesspearl.com']
+                        'raxeekh@gmail.com', 'ying@timelesspearl.com'].freeze
 
   acts_as_paranoid
 
@@ -128,7 +128,7 @@ class User < ApplicationRecord
   end
 
   def secret_access?
-    SECRET_ACCESS_LIST.include?(self.email)
+    SECRET_ACCESS_LIST.include?(email)
   end
 
   def self.find_or_invite_by_email(email, _site)
