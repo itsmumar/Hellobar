@@ -69,6 +69,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{/if}}
           | {{rule-option segment "TimeCondition" "Time"}}
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
+          | {{rule-option segment "UrlKeywordCondition" "URL Keyword"}}
           | {{rule-option segment "UrlQueryCondition" "URL Query"}}
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
@@ -151,6 +152,9 @@ script#condition-partial type="text/x-handlebars-template"
 
         = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-choice"}  do |name, value|
           input.value name=name value=value type="url"  placeholder="/specific_path"
+
+        = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-keyword"}  do |name, value|
+          input.value name=name value=value type="url" placeholder="specific keyword"
 
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"

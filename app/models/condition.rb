@@ -3,29 +3,20 @@ class Condition < ApplicationRecord
 
   # class name: Hello::Segments::User key
   SEGMENTS = {
-    'DateCondition' => 'dt',
-    'DeviceCondition' => 'dv',
-    'EveryXSession' => 'ns',
-    'LastVisitCondition' => 'ls',
-    'LocationCityCondition' => 'gl_cty',
-    'LocationCountryCondition' => 'gl_ctr',
-    'LocationRegionCondition' => 'gl_rgn',
-    'NumberOfVisitsCondition' => 'nv',
-    'PreviousPageURL' => 'pp',
-    'ReferrerCondition' => 'rf',
-    'ReferrerDomainCondition' => 'rd',
-    'TimeCondition' => 'tc',
-    'UrlPathCondition' => 'pup',
-    'UrlQueryCondition' => 'pq',
-    'UTMCampaignCondition' => 'ad_ca',
-    'UTMContentCondition' => 'ad_co',
-    'UTMMediumCondition' => 'ad_me',
-    'UTMSourceCondition' => 'ad_so',
-    'UTMTermCondition' => 'ad_te'
+    'DateCondition' => 'dt',               'DeviceCondition' => 'dv',
+    'EveryXSession' => 'ns',               'LastVisitCondition' => 'ls',
+    'LocationCityCondition' => 'gl_cty',   'LocationCountryCondition' => 'gl_ctr',
+    'LocationRegionCondition' => 'gl_rgn', 'NumberOfVisitsCondition' => 'nv',
+    'PreviousPageURL' => 'pp',             'ReferrerCondition' => 'rf',
+    'ReferrerDomainCondition' => 'rd',     'TimeCondition' => 'tc',
+    'UrlPathCondition' => 'pup',           'UrlKeywordCondition' => 'puk',
+    'UrlQueryCondition' => 'pq',           'UTMCampaignCondition' => 'ad_ca',
+    'UTMContentCondition' => 'ad_co',      'UTMMediumCondition' => 'ad_me',
+    'UTMSourceCondition' => 'ad_so',       'UTMTermCondition' => 'ad_te'
   }.freeze
 
   MULTIPLE_CHOICE_SEGMENTS = %w[
-    UrlPathCondition LocationCountryCondition LocationRegionCondition LocationCityCondition
+    UrlPathCondition UrlKeywordCondition LocationCountryCondition LocationRegionCondition LocationCityCondition
     UTMCampaignCondition UTMContentCondition UTMMediumCondition UTMSourceCondition UTMTermCondition
   ].freeze
 
@@ -174,6 +165,7 @@ class Condition < ApplicationRecord
       'ReferrerDomainCondition'   => %w[is is_not includes does_not_include],
       'TimeCondition'             => %w[before after],
       'UrlPathCondition'          => %w[is is_not includes does_not_include keyword],
+      'UrlKeywordCondition'       => %w[keyword],
       'UrlQueryCondition'         => %w[is is_not includes does_not_include keyword],
       'UTMCampaignCondition'      => %w[is is_not includes does_not_include],
       'UTMContentCondition'       => %w[is is_not includes does_not_include],
