@@ -1,5 +1,5 @@
 feature 'Autofills management', :js do
-  given(:user) { create :user, :with_site }
+  given(:user) { create :user, :with_site, email: 'seth@hellobar.com' }
   given(:site) { user.sites.first }
   given!(:subscription) { create :subscription, :pro_managed, site: site }
 
