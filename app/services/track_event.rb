@@ -5,7 +5,8 @@ class TrackEvent
   end
 
   def call
-    track_with_intercom
+    # track_with_intercom
+    track_with_convertkit
     track_with_amplitude
     track_with_profitwell
   end
@@ -28,6 +29,11 @@ class TrackEvent
     SendEventToAmplitudeJob.perform_later event.to_s, args
   end
 
+  def track_with_convertkit
+    return unless convertkit_enabled?
+    SendEventToConvertkitJob.perform_later event.to_s, args
+  end
+
   def track_with_profitwell
     return unless profitwell_enabled?
 
@@ -39,6 +45,10 @@ class TrackEvent
   end
 
   def amplitude_enabled?
+    Rails.env.production?
+  end
+
+  def convertkit_enabled?
     Rails.env.production?
   end
 
