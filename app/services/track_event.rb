@@ -5,7 +5,7 @@ class TrackEvent
   end
 
   def call
-    # track_with_intercom
+    track_with_intercom
     track_with_convertkit
     track_with_amplitude
     track_with_profitwell
