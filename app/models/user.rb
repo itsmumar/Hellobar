@@ -1,5 +1,9 @@
 class User < ApplicationRecord
   NEW_TERMS_AND_CONDITIONS_EFFECTIVE_DATE = Date.new(2018, 10, 24)
+  SECRET_ACCESS_LIST = ['seth@hellobar.com', 'karen@hellobar.com',
+                        'lindsey@hellobar.com', 'ryan@hellobar.com',
+                        'keiran@hellobar.com', 'anton.sozontov@crossover.com',
+                        'raxeekh@gmail.com', 'ying@timelesspearl.com'].freeze
 
   acts_as_paranoid
 
@@ -121,6 +125,10 @@ class User < ApplicationRecord
 
   def name
     first_name || last_name ? "#{ first_name } #{ last_name }".strip : nil
+  end
+
+  def secret_access?
+    SECRET_ACCESS_LIST.include?(email)
   end
 
   def self.find_or_invite_by_email(email, _site)
