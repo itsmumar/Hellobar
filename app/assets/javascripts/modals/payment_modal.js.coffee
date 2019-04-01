@@ -237,7 +237,7 @@ class @PaymentModal extends Modal
       if @_isAnnual() then @options.package.yearly_amount == 0 else @options.package.monthly_amount == 0
 
   _isStripe: ->
-    currentUser.stripe_customer_id != ''
+    currentUser.stripe_customer_id != null
 
   _linkedCreditCardId: ->
     parseInt(@$modal.find('select#linked-credit-card').val()) || @currentCreditCard.id
