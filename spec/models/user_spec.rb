@@ -103,6 +103,19 @@ describe User do
     end
   end
 
+  describe '#secret_access?' do
+    let!(:user) { create(:user) }
+    let!(:secret_access_user) { create(:user, email: 'seth@hellobar.com') }
+
+    it 'returns false for non secret acess user' do
+      expect(user.secret_access?).to eq(false)
+    end
+
+    it 'returns true for secret acess user' do
+      expect(secret_access_user.secret_access?).to eq(true)
+    end
+  end
+
   describe '#most_viewed_site_element' do
     let!(:user) { create(:user) }
     let!(:site) { create(:site, :with_rule) }

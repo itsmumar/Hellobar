@@ -18,19 +18,19 @@
         i.icon-contacts
         | Contacts
 
-    - if current_site.capabilities.content_upgrades?
+    - if current_user.secret_access?
       li
         = active_link_to site_content_upgrades_path(current_site) do
           i.icon-opportunity
           | Content Upgrades
 
-    - if current_site.capabilities.autofills?
+    - if current_user.secret_access?
       li
         = active_link_to site_autofills_path(current_site) do
           i.icon-views
           | Autofills
 
-    - if current_site.capabilities.campaigns?
+    - if current_user.secret_access?
       li
         = active_link_to Settings.campaigns_url, active: false do
           i.icon-content
