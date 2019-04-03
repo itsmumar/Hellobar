@@ -6,6 +6,25 @@ class ConvertkitAnalyticsAdapter
     tag_subscriber(tag, user, params || {})
   end
 
+  # rubocop:disable Lint/UnneededDisable
+  # rubocop:disable Lint/UnusedMethodArgument
+
+  def untag_users(tag, users)
+    # TODO: Implement UnTag
+  end
+
+  def update_user(user:, params: {})
+    # TODO: Implement update user
+  end
+
+  # rubocop:enable Lint/UnusedMethodArgument, Lint/UnneededDisable
+  def tag_users(tag, users)
+    users.each do |user|
+      ctag = create_or_find_tag(tag)
+      tag_subscriber(ctag, user, {}) # TODO: Implement API End point to tag multiple users in one all
+    end
+  end
+
   private
 
   def list_tag
