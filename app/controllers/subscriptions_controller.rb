@@ -1,6 +1,7 @@
 class SubscriptionsController < ApplicationController
   before_action :load_site, only: :create
   before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: :stripe_webhook
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
@@ -15,6 +16,18 @@ class SubscriptionsController < ApplicationController
         redirect_to root_path
       end
     end
+  end
+
+  def stripe_webhook
+    event = Stripe::Webhook.construct_event(
+      request.body.read, request.env['HTTP_STRIPE_SIGNATURE'], Settings.stripe_signing_secret
+    )
+    StripeWebhook.new(event).call
+    return render json: {}, status: 200
+  rescue JSON::ParserError
+    return render json: nil, status: 400
+  rescue Stripe::SignatureVerificationError
+    return render json: nil, status: 400
   end
 
   # updates subscription

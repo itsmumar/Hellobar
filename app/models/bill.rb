@@ -1,5 +1,7 @@
 class Bill < ApplicationRecord
   include AASM
+  STRIPE_SOURCE = 'stripe'.freeze
+  CYBERSOURCE = 'cybersource'.freeze
 
   aasm column: :status do
     state :pending, initial: true

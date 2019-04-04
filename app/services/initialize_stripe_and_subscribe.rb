@@ -1,5 +1,6 @@
 class InitializeStripeAndSubscribe
   DEFAULT_CURRENCY = 'usd'.freeze
+  PAID_STATUS = 'paid'.freeze
 
   def initialize(params, user, site)
     @stripe_token = params[:stripeToken]
@@ -105,7 +106,8 @@ class InitializeStripeAndSubscribe
              bill_at: Time.current,
              start_date: Time.current,
              end_date: Time.current + subscription.period,
-             status: 'paid')
+             status: 'paid',
+             source: STRIPE_SOURCE)
   end
 
   def create_subscription

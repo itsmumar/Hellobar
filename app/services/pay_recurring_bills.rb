@@ -5,7 +5,13 @@ class PayRecurringBills
   # Find all pending bills which should be processed today
   def self.bills
     Bill
-      .where(status: [Bill::STATE_PENDING, Bill::STATE_FAILED])
+      .where(status: [Bill::STATE_PENDING, Bill::STATE_FAILED], source: CYBERSOURCE)
+      .where('DATE(bill_at) <= ?', Date.current)
+  end
+
+  def self.stripe_bills
+    Bill
+      .where(status: [Bill::STATE_PAID], source: STRIPE_SOURCE)
       .where('DATE(bill_at) <= ?', Date.current)
   end
 
@@ -19,6 +25,11 @@ class PayRecurringBills
     # find_each is not advised to be used here
     # as it could lead to endless looping
     self.class.bills.each do |bill|
+      report.count
+      handle bill
+    end
+
+    self.class.stripe_bills.each do |bill|
       report.count
       handle bill
     end
@@ -65,7 +76,8 @@ class PayRecurringBills
                 bill_at: Time.current,
                 start_date: Time.current,
                 end_date: Time.current + bill.subscription.period,
-                status: 'paid')
+                status: 'paid',
+                source: STRIPE_SOURCE)
   end
 
   def pay(bill)
