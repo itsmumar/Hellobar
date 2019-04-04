@@ -2,6 +2,7 @@ class ConvertkitAnalyticsAdapter
   include HTTParty
 
   def track(event:, user:, params:)
+    return if event.blank?
     tag = create_or_find_tag(event)
     tag_subscriber(tag, user, params || {})
   end
@@ -19,8 +20,9 @@ class ConvertkitAnalyticsAdapter
 
   # rubocop:enable Lint/UnusedMethodArgument, Lint/UnneededDisable
   def tag_users(tag, users)
+    return if users.blank? || tag.blank?
+    ctag = create_or_find_tag(tag)
     users.each do |user|
-      ctag = create_or_find_tag(tag)
       tag_subscriber(ctag, user, {}) # TODO: Implement API End point to tag multiple users in one all
     end
   end
