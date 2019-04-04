@@ -22,7 +22,7 @@ class CreateBillForNextPeriod
       bill_at: 3.days.until(bill.end_date),
       start_date: bill.end_date,
       end_date: bill.end_date + bill.subscription.period,
-      source: CYBERSOURCE
+      source: Bill::CYBERSOURCE
     )
   end
 end

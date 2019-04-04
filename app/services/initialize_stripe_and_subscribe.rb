@@ -22,7 +22,7 @@ class InitializeStripeAndSubscribe
 
   private
 
-  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription
+  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription, :bill
 
   def find_or_initialize_credit_card
     card = customer.sources.data.last
@@ -44,8 +44,7 @@ class InitializeStripeAndSubscribe
   def create_customer
     self.customer = Stripe::Customer.create(
       email: user.email,
-      source: stripe_token,
-      description: site.url
+      source: stripe_token
     )
     user.update(stripe_customer_id: customer.id)
   end
@@ -56,7 +55,9 @@ class InitializeStripeAndSubscribe
 
   def subscribe_to_plan
     if site.current_subscription.free? || site.current_subscription.currently_on_trial?
-      self.stripe_subscription = Stripe::Subscription.create(customer: customer.id, plan: stripe_plan_name)
+      self.stripe_subscription = Stripe::Subscription.create(customer: customer.id,
+                                                             plan: stripe_plan_name,
+                                                             metadata: meta_data)
     else
       self.stripe_subscription = Stripe::Subscription.retrieve(old_subscription.stripe_subscription_id)
       Stripe::Subscription.update(
@@ -71,6 +72,10 @@ class InitializeStripeAndSubscribe
       )
     end
     change_subscription
+  end
+
+  def meta_data
+    { site: site.url }
   end
 
   def stripe_plan_name
@@ -100,14 +105,25 @@ class InitializeStripeAndSubscribe
   end
 
   def create_bill(subscription)
-    Bill.create(subscription: subscription,
+    @bill = Bill.create(subscription: subscription,
              amount: subscription.amount,
              grace_period_allowed: false,
              bill_at: Time.current,
              start_date: Time.current,
              end_date: Time.current + subscription.period,
              status: 'paid',
-             source: STRIPE_SOURCE)
+             source: Bill::STRIPE_SOURCE)
+    create_bill_attempt
+  end
+
+  def create_bill_attempt
+    BillingAttempt.create!(
+      bill: bill,
+      action: BillingAttempt::CHARGE,
+      credit_card: credit_card,
+      status: BillingAttempt::SUCCESSFUL,
+      response: customer.id
+    )
   end
 
   def create_subscription

@@ -18,18 +18,6 @@ class SubscriptionsController < ApplicationController
     end
   end
 
-  def stripe_webhook
-    event = Stripe::Webhook.construct_event(
-      request.body.read, request.env['HTTP_STRIPE_SIGNATURE'], Settings.stripe_signing_secret
-    )
-    StripeWebhook.new(event).call
-    return render json: {}, status: 200
-  rescue JSON::ParserError
-    return render json: nil, status: 400
-  rescue Stripe::SignatureVerificationError
-    return render json: nil, status: 400
-  end
-
   # updates subscription
   def update
     load_site
@@ -42,6 +30,18 @@ class SubscriptionsController < ApplicationController
         render json: bill, serializer: BillSerializer, scope: { same_subscription: same_subscription }
       end
     end
+  end
+
+  def stripe_webhook
+    event = Stripe::Webhook.construct_event(
+      request.body.read, request.env['HTTP_STRIPE_SIGNATURE'], Settings.stripe_signing_secret
+    )
+    StripeWebhook.new(event).call
+    return render json: {}, status: 200
+  rescue JSON::ParserError
+    return render json: nil, status: 400
+  rescue Stripe::SignatureVerificationError
+    return render json: nil, status: 400
   end
 
   private

@@ -4,18 +4,19 @@ class PayBill
 
   DEFAULT_CURRENCY = 'usd'.freeze
 
-  def initialize(bill)
+  def initialize(bill, stripe = false)
     @bill = bill
     @credit_card = bill.subscription.credit_card
+    @stripe = stripe
   end
 
   def call
     return bill unless can_be_paid?
 
     set_final_amount
-    if bill.subscription.stripe?
+    if bill.subscription.stripe? && stripe
       pay_stripe_bill
-    else
+    elsif !bill.subscription.stripe?
       pay_bill
     end
 
@@ -25,7 +26,7 @@ class PayBill
 
   private
 
-  attr_reader :bill, :credit_card
+  attr_reader :bill, :credit_card, :stripe
 
   def can_be_paid?
     bill.pending? || bill.failed?
@@ -35,13 +36,31 @@ class PayBill
     return bill.pay! if bill.amount.zero?
     raise MissingCreditCard, 'Could not pay bill without credit card' unless bill.credit_card_attached?
 
-    customer = Stripe::Customer.retrieve(bill.subscription.site.stripe_customer_id) # TODO: Pass current_user to this.
-    Stripe::Charge.create(
-      customer: customer.id,
-      amount: bill.amount,
-      description: 'Monthly View Limit Overage Fee',
-      currency: DEFAULT_CURRENCY
-    )
+    begin
+      customer = Stripe::Customer.retrieve(bill.subscription.site.stripe_customer_id) # TODO: Pass current_user to this.
+      response = Stripe::Charge.create(
+        customer: customer.id,
+        amount: (bill.amount * 100),
+        description: 'Monthly View Limit Overage Fee',
+        currency: DEFAULT_CURRENCY
+      )
+
+      BillingAttempt.create!(
+        bill: bill,
+        action: BillingAttempt::CHARGE,
+        credit_card: credit_card,
+        status: BillingAttempt::SUCCESSFUL,
+        response: response.id
+      )
+    rescue StandardError
+      BillingAttempt.create!(
+        bill: bill,
+        action: BillingAttempt::CHARGE,
+        credit_card: credit_card,
+        status:  BillingAttempt::STATE_FAILED,
+        response: 'Stripe Error: Could not pay overage bill'
+      )
+    end
   end
 
   def pay_bill

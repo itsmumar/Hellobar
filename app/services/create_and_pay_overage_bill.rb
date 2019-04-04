@@ -12,7 +12,7 @@ class CreateAndPayOverageBill
     bill = create_bill_for_overage
 
     Bill.transaction do
-      PayBill.new(bill).call
+      PayBill.new(bill, true).call
       reset_overage_count
     end
 
@@ -45,7 +45,7 @@ class CreateAndPayOverageBill
       end_date: Time.current,
       one_time: true,
       view_count: site.number_of_views,
-      source: CYBERSOURCE
+      source: Bill::CYBERSOURCE
     )
   end
 

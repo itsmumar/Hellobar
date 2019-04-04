@@ -5,13 +5,13 @@ class PayRecurringBills
   # Find all pending bills which should be processed today
   def self.bills
     Bill
-      .where(status: [Bill::STATE_PENDING, Bill::STATE_FAILED], source: CYBERSOURCE)
+      .where(status: [Bill::STATE_PENDING, Bill::STATE_FAILED], source: Bill::CYBERSOURCE)
       .where('DATE(bill_at) <= ?', Date.current)
   end
 
   def self.stripe_bills
     Bill
-      .where(status: [Bill::STATE_PAID], source: STRIPE_SOURCE)
+      .where(status: [Bill::STATE_PAID], source: Bill::STRIPE_SOURCE)
       .where('DATE(bill_at) <= ?', Date.current)
   end
 
@@ -59,7 +59,7 @@ class PayRecurringBills
     report.attempt bill do
       if bill.credit_card_attached?
         if bill.subscription.stripe?
-          generate_invoice(bill)
+          create_stripe_bill(bill)
         else
           pay bill
         end
@@ -69,7 +69,7 @@ class PayRecurringBills
     end
   end
 
-  def generate_invoice(bill)
+  def create_stripe_bill(bill)
     Bill.create(subscription: bill.subscription,
                 amount: bill.amount,
                 grace_period_allowed: false,
@@ -77,7 +77,18 @@ class PayRecurringBills
                 start_date: Time.current,
                 end_date: Time.current + bill.subscription.period,
                 status: 'paid',
-                source: STRIPE_SOURCE)
+                source: Bill::STRIPE_SOURCE)
+    create_stripe_bill_attempt(bill)
+  end
+
+  def create_stripe_bill_attempt(bill)
+    BillingAttempt.create!(
+      bill: bill,
+      action: BillingAttempt::CHARGE,
+      credit_card: bill.subscription.credit_card,
+      status: BillingAttempt::SUCCESSFUL,
+      response: 'Stripe Bill Auto Generated'
+    )
   end
 
   def pay(bill)
