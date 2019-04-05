@@ -24,7 +24,6 @@ class @PaymentModal extends Modal
       isAnnual: @_isAnnual()
       isMonthly: @_isMonthly()
       isFree: @_isFree()
-      isStripe: @_isStripe()
       siteName: @options.site.display_name
       upgradeBenefit: @options.upgradeBenefit
       isElite: @options.package.name == "Enterprise"
@@ -235,9 +234,6 @@ class @PaymentModal extends Modal
   _isFree: ->
     !@options.package.requires_credit_card &&
       if @_isAnnual() then @options.package.yearly_amount == 0 else @options.package.monthly_amount == 0
-
-  _isStripe: ->
-    currentUser.stripe_customer_id != null
 
   _linkedCreditCardId: ->
     parseInt(@$modal.find('select#linked-credit-card').val()) || @currentCreditCard.id

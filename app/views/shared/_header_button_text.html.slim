@@ -1,5 +1,5 @@
 - if current_site.current_subscription&.currently_on_trial?
-  .show-new-credit-card-modal data={ source: "Add payment to trial" }
+  .show-new-stripe-modal data={ source: "Add payment to trial" }
     | Enter Payment Info
 - elsif text = upgrade_button_text(current_site)
   .show-upgrade-modal data={ source: "Menu Button: Want More Power" }

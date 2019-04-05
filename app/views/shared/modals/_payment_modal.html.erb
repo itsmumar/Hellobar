@@ -62,11 +62,11 @@
 
       <footer>
         <a class="button cancel">Cancel</a>
-        {{#if isStripe}}
+        <% if current_user.stripe? %>
           <a class="button stripe">Confirm</a>
-        {{else}}
+        <% else %>
           <a class="button submit">Confirm</a>
-        {{/if}}
+        <% end %>
       </footer>
     </div>
   </div>
