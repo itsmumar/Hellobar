@@ -2,6 +2,7 @@ class SubscriptionsController < ApplicationController
   before_action :load_site, only: :create
   before_action :authenticate_user!
   skip_before_action :authenticate_user!, only: :stripe_webhook
+  protect_from_forgery with: :null_session, only: :stripe_webhook
 
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
