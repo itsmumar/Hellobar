@@ -7,17 +7,13 @@ class StripeWebhook
       @event = event
       @customer_id = event.data.object.customer
       @user = User.find_by(stripe_customer_id: customer_id)
-      @site = user.sites.find_by(url: stripe_customer.description)
+      @site = @user.sites.find_by(url: stripe_customer.description)
       @subscription = site.current_subscription
       @bill = site.bills.last
     elsif event.type == 'customer.subscription.deleted'
       @event_type = event.type
-      @event = event
-      @customer_id = event.data.object.customer
       @user = User.find_by(stripe_customer_id: customer_id)
-      @site = user.sites.find_by(url: stripe_customer.description)
-      @subscription = site.current_subscription
-      @bill = site.bills.last
+      @site = @user.sites.find_by(url: stripe_customer.description)
     end
   end
 
@@ -28,6 +24,15 @@ class StripeWebhook
       cancelled_subscription
     end
   end
+
+  private
+
+  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event
+
+  def stripe_customer
+    @stripe_customer ||= Stripe::Customer.retrieve(customer_id)
+  end
+
 
   def failed_charge
     case event_type
@@ -42,14 +47,6 @@ class StripeWebhook
 
   def cancelled_subscription
     DowngradeSiteToFree.new(@site).call
-  end
-
-  private
-
-  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event
-
-  def stripe_customer
-    @stripe_customer ||= Stripe::Customer.retrieve(customer_id)
   end
 
   def create_bill
