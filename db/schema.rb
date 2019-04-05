@@ -254,15 +254,15 @@ ActiveRecord::Schema.define(version: 20190402141450) do
   add_index "csv_uploads", ["contact_list_id"], name: "index_csv_uploads_on_contact_list_id", using: :btree
 
   create_table "emails", force: :cascade do |t|
-    t.integer  "site_id",    limit: 4,     null: false
-    t.string   "from_name",  limit: 255,   null: false
-    t.string   "from_email", limit: 255,   null: false
-    t.string   "subject",    limit: 255,   null: false
-    t.text     "body",       limit: 65535, null: false
+    t.integer  "site_id",      limit: 4,     null: false
+    t.string   "from_name",    limit: 255,   null: false
+    t.string   "from_email",   limit: 255,   null: false
+    t.string   "subject",      limit: 255,   null: false
+    t.text     "body",         limit: 65535, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.text     "plain_body", limit: 65535
+    t.text     "plain_body",   limit: 65535
     t.text     "preview_text", limit: 65535
   end
 
@@ -557,19 +557,19 @@ ActiveRecord::Schema.define(version: 20190402141450) do
   add_index "sites", ["created_at"], name: "index_sites_on_created_at", using: :btree
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer  "site_id",              limit: 4
-    t.string   "type",                 limit: 255
-    t.decimal  "amount",                           precision: 7, scale: 2
-    t.integer  "visit_overage",        limit: 4
-    t.integer  "visit_overage_unit",   limit: 4
-    t.decimal  "visit_overage_amount",             precision: 5, scale: 2
+    t.integer  "site_id",                limit: 4
+    t.string   "type",                   limit: 255
+    t.decimal  "amount",                             precision: 7, scale: 2
+    t.integer  "visit_overage",          limit: 4
+    t.integer  "visit_overage_unit",     limit: 4
+    t.decimal  "visit_overage_amount",               precision: 5, scale: 2
     t.datetime "created_at"
     t.datetime "trial_end_date"
-    t.integer  "credit_card_id",       limit: 4
-    t.string   "schedule",             limit: 20,                          default: "monthly", null: false
+    t.integer  "credit_card_id",         limit: 4
+    t.string   "schedule",               limit: 20,                          default: "monthly", null: false
     t.datetime "deleted_at"
     t.datetime "updated_at"
-    t.decimal  "original_amount",                  precision: 7, scale: 2
+    t.decimal  "original_amount",                    precision: 7, scale: 2
     t.string   "stripe_subscription_id", limit: 255
   end
 
@@ -599,6 +599,7 @@ ActiveRecord::Schema.define(version: 20190402141450) do
     t.integer  "wordpress_user_id",                   limit: 4
     t.datetime "exit_intent_modal_last_shown_at"
     t.datetime "upgrade_suggest_modal_last_shown_at"
+    t.boolean  "hide_cookie_pop_up",                              default: false
     t.string   "stripe_customer_id",                  limit: 255
   end
 
@@ -614,7 +615,7 @@ ActiveRecord::Schema.define(version: 20190402141450) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  
+
   add_foreign_key "coupon_uses", "bills"
   add_foreign_key "coupon_uses", "coupons"
   add_foreign_key "credit_cards", "users"

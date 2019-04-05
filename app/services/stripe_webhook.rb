@@ -24,7 +24,7 @@ class StripeWebhook
   def call
     if @event_type == 'charge.failed'
       failed_charge
-    elsif @event_type = 'customer.subscription.deleted'
+    elsif @event_type == 'customer.subscription.deleted'
       cancelled_subscription
     end
   end
