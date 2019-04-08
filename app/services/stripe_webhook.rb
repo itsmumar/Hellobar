@@ -13,7 +13,7 @@ class StripeWebhook
       @subscription = site.current_subscription
       @bill = site.bills.last
     elsif event.type == CUSTOMER_SUBSCRIPTION_DELETED
-      @stripe_subscription_id = event.data.object.subscription
+      @stripe_subscription_id = event.data.object.id
       @event_type = event.type
       @user = User.find_by(stripe_customer_id: customer_id)
       @site = @user.sites.find_by(url: site_url)
