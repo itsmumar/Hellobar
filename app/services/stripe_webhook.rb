@@ -7,15 +7,16 @@ class StripeWebhook
       @event_type = event.type
       @event = event
       @customer_id = event.data.object.customer
+      @invoice_id = event.data.object.invoice
       @user = User.find_by(stripe_customer_id: customer_id)
-      @site = @user.sites.find_by(url: stripe_customer.description)
+      @site = @user.sites.find_by(url: site_url)
       @subscription = site.current_subscription
       @bill = site.bills.last
     elsif event.type == CUSTOMER_SUBSCRIPTION_DELETED
-      @customer_id = event.data.object.customer
+      @stripe_subscription_id = event.data.object.subscription
       @event_type = event.type
       @user = User.find_by(stripe_customer_id: customer_id)
-      @site = @user.sites.find_by(url: stripe_customer.description)
+      @site = @user.sites.find_by(url: site_url)
     end
   end
 
@@ -29,10 +30,26 @@ class StripeWebhook
 
   private
 
-  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event
+  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event, :stripe_subscription_id, :stripe_subscription, :site_url, :invoice_id
 
   def stripe_customer
     @stripe_customer ||= Stripe::Customer.retrieve(customer_id)
+  end
+
+  def stripe_subscription
+    if @event_type == CHARGE_FAILED
+      @stripe_subscription ||= Stripe::Subscription.retrieve(stripe_invoice.subscription)
+    elsif @event_type == CUSTOMER_SUBSCRIPTION_DELETED
+      @stripe_subscription ||= Stripe::Subscription.retrieve(stripe_subscription_id)
+    end
+  end
+
+  def stripe_invoice
+    @stripe_invoice ||= Stripe::Invoice.retrieve(invoice_id)
+  end
+
+  def site_url
+   @site_url = stripe_subscription.metadata.site
   end
 
   def failed_charge
