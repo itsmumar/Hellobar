@@ -74,6 +74,12 @@ Rails.application.routes.draw do
     end
 
     namespace :external do
+      resources :agency do
+        collection do
+          post :provision_account
+        end
+      end
+
       get '/me', to: 'user#show', as: :me
 
       resources :sites, only: %i[index] do
