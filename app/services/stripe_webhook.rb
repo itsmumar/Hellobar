@@ -30,7 +30,7 @@ class StripeWebhook
 
   private
 
-  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event, :stripe_subscription_id, :stripe_subscription, :site_url, :invoice_id
+  attr_accessor :event_type, :customer_id, :user, :site, :subscription, :bill, :event, :stripe_subscription_id, :invoice_id
 
   def stripe_customer
     @stripe_customer ||= Stripe::Customer.retrieve(customer_id)
@@ -49,7 +49,7 @@ class StripeWebhook
   end
 
   def site_url
-   @site_url = stripe_subscription.metadata.site
+    @site_url = stripe_subscription.metadata.site
   end
 
   def failed_charge
