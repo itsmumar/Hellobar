@@ -3,8 +3,8 @@ describe InitializeStripeAndSubscribe, :freeze do
   let(:site) { create :site, :free_subscription, user: user }
   let(:credit_card) { create :credit_card, user: user }
   let(:params) { { plan: 'growth', schedule: 'monthly', stripeToken: 'tok_br' } }
-  let(:subscription_to_return) { Stripe::Subscription.retrieve('sub_ElNmPXbnj5qx2s') }
-  let(:customer_to_return) { Stripe::Customer.retrieve('cus_ElNmwwy40tItiK') }
+  let(:subscription_to_return) { Stripe::Subscription.retrieve('sub_EpVGWq3yUIU3CS') }
+  let(:customer_to_return) { Stripe::Customer.retrieve('cus_EpVGcrZfgEsXYy') }
 
   before do
     WebMock.allow_net_connect!
@@ -17,7 +17,7 @@ describe InitializeStripeAndSubscribe, :freeze do
     context 'select growth monthly plan' do
       it 'create customer and subscription' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Growth'
         expect(site.current_subscription.schedule).to eql 'monthly'
@@ -28,7 +28,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'growth', schedule: 'yearly', stripeToken: 'tok_br' } }
       it 'create customer' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Growth'
         expect(site.current_subscription.schedule).to eql 'yearly'
@@ -39,7 +39,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'elite', schedule: 'monthly', stripeToken: 'tok_br' } }
       it 'create customer' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Elite'
         expect(site.current_subscription.schedule).to eql 'monthly'
@@ -50,7 +50,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'elite', schedule: 'yearly', stripeToken: 'tok_br' } }
       it 'create customer' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Elite'
         expect(site.current_subscription.schedule).to eql 'yearly'
@@ -60,14 +60,14 @@ describe InitializeStripeAndSubscribe, :freeze do
 
   describe '#when user has not stripe token and have stripe_customer_id' do
     before do
-      user.stripe_customer_id = 'cus_ElNmwwy40tItiK'
+      user.stripe_customer_id = 'cus_EpVGcrZfgEsXYy'
     end
 
     context 'select growth monthly plan' do
       let(:params) { { plan: 'growth', schedule: 'monthly' } }
       it 'retreive customer and change subscription' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Growth'
         expect(site.current_subscription.schedule).to eql 'monthly'
@@ -78,7 +78,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'growth', schedule: 'yearly' } }
       it 'retreive customer and change subscription' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Growth'
         expect(site.current_subscription.schedule).to eql 'yearly'
@@ -89,7 +89,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'elite', schedule: 'monthly' } }
       it 'retreive customer and change subscription' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Elite'
         expect(site.current_subscription.schedule).to eql 'monthly'
@@ -100,7 +100,7 @@ describe InitializeStripeAndSubscribe, :freeze do
       let(:params) { { plan: 'elite', schedule: 'yearly' } }
       it 'retreive customer and change subscription' do
         InitializeStripeAndSubscribe.new(params, user, site).call
-        expect(user.stripe_customer_id).to eql 'cus_ElNmwwy40tItiK'
+        expect(user.stripe_customer_id).to eql 'cus_EpVGcrZfgEsXYy'
         expect(site.current_subscription.stripe_subscription_id).not_to be_nil
         expect(site.current_subscription.type).to eql 'Subscription::Elite'
         expect(site.current_subscription.schedule).to eql 'yearly'
