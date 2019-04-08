@@ -118,7 +118,7 @@ class AnalyticsProvider
       user: user,
       params: params
     )
-    tag_users "agency_client", site.owners
+    tag_users 'agency_client', site.owners
     update_user(user: user, params: params)
   end
 
