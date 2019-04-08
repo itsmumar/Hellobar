@@ -62,11 +62,7 @@
 
       <footer>
         <a class="button cancel">Cancel</a>
-        <% if current_user.stripe? %>
-          <a class="button stripe">Confirm</a>
-        <% else %>
-          <a class="button submit">Confirm</a>
-        <% end %>
+        <a class="button <%=current_user.stripe? ? 'stripe': 'submit'%>">Confirm</a>
       </footer>
     </div>
   </div>
