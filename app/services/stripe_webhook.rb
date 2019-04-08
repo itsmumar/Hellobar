@@ -1,8 +1,9 @@
 class StripeWebhook
   CHARGE_FAILED = 'charge.failed'.freeze
+  CUSTOMER_SUBSCRIPTION_DELETED = 'customer.subscription.deleted'.freeze
 
   def initialize(event)
-    if event.type == 'charge.failed'
+    if event.type == CHARGE_FAILED
       @event_type = event.type
       @event = event
       @customer_id = event.data.object.customer
@@ -10,7 +11,8 @@ class StripeWebhook
       @site = @user.sites.find_by(url: stripe_customer.description)
       @subscription = site.current_subscription
       @bill = site.bills.last
-    elsif event.type == 'customer.subscription.deleted'
+    elsif event.type == CUSTOMER_SUBSCRIPTION_DELETED
+      @customer_id = event.data.object.customer
       @event_type = event.type
       @user = User.find_by(stripe_customer_id: customer_id)
       @site = @user.sites.find_by(url: stripe_customer.description)
@@ -18,9 +20,9 @@ class StripeWebhook
   end
 
   def call
-    if @event_type == 'charge.failed'
+    if @event_type == CHARGE_FAILED
       failed_charge
-    elsif @event_type == 'customer.subscription.deleted'
+    elsif @event_type == CUSTOMER_SUBSCRIPTION_DELETED
       cancelled_subscription
     end
   end
@@ -33,17 +35,18 @@ class StripeWebhook
     @stripe_customer ||= Stripe::Customer.retrieve(customer_id)
   end
 
-
   def failed_charge
-    case event_type
-    when CHARGE_FAILED
-      if bill.created_at > 3.days.ago
-        bill.update(status: 'failed')
-      else
-        create_bill
-      end
+    if bill.created_at > 3.days.ago
+      bill.update(status: 'failed')
+    else
+      create_bill
     end
+    # notify_admins
   end
+
+  # def notify_admins
+  #
+  # end
 
   def cancelled_subscription
     DowngradeSiteToFree.new(@site).call
