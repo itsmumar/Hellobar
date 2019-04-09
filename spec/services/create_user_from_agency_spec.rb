@@ -1,3 +1,2 @@
 describe CreateUserFromAgency do
-
 end
