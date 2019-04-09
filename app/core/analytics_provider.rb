@@ -106,6 +106,22 @@ class AnalyticsProvider
     update_user(user: user, params: params)
   end
 
+  def agency_client(site:, user:)
+    params = {
+      url: site.url,
+      site_id: site.id,
+      agency_name: agency
+    }
+
+    track(
+      event: 'agency-client',
+      user: user,
+      params: params
+    )
+    tag_users 'agency_client', site.owners
+    update_user(user: user, params: params)
+  end
+
   def installed_script(site:, user:)
     track(
       event: 'installed-script',
