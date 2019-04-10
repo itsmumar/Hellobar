@@ -14,7 +14,7 @@ class SubscriptionsController < ApplicationController
         render json: current_site.current_subscription, serializer: SubscriptionSerializer
       end
       format.html do
-        redirect_to root_path
+        redirect_to :back
       end
     end
   end

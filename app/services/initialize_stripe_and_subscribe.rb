@@ -36,9 +36,14 @@ class InitializeStripeAndSubscribe
   def find_or_initialize_customer
     if user.stripe?
       retrieve_customer(user.stripe_customer_id)
+      initialize_stripe_card if stripe_token.present?
     elsif stripe_token.present?
       create_customer
     end
+  end
+
+  def initialize_stripe_card
+    customer.sources.create(source: stripe_token)
   end
 
   def create_customer
