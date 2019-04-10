@@ -25,7 +25,7 @@ feature 'New credit card modal interaction', :js do
       expect(user.credit_cards.count).to eql(1)
     else
       user.stripe_customer_id = 'cutomer_id'
-      page.find('.show-new-stripe-modal').click
+      page.find('.show-new-stripe-credit-card-modal').click
     end
   end
 
