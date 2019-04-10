@@ -35,7 +35,7 @@ class @NewStripeModal extends Modal
       hiddenPlan = document.createElement('input')
       hiddenPlan.setAttribute 'type', 'hidden'
       hiddenPlan.setAttribute 'name', 'plan'
-      hiddenPlan.setAttribute 'value', package_details.type
+      hiddenPlan.setAttribute 'value', plan
       hiddenSchedule = document.createElement('input')
       hiddenSchedule.setAttribute 'type', 'hidden'
       hiddenSchedule.setAttribute 'name', 'schedule'
@@ -51,6 +51,10 @@ class @NewStripeModal extends Modal
     # Create a Stripe client.
     site_id= @options.site.id
     package_details= @options.package
+    if @options.billing_new_card
+      plan = 'free'
+    else
+      plan = package_details.type
     stripe = Stripe('<%= Settings.stripe_publishable_key %>')
     # Create an instance of Elements.
     elements = stripe.elements()
