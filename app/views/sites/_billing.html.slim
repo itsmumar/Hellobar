@@ -37,7 +37,7 @@ section
       -if current_user.credit_cards.present? && !current_user.stripe?
         = link_to 'Add new credit card', '#', class: 'show-new-credit-card-modal'
       -else
-        = link_to 'Add new card', '#', class: 'show-new-stripe-modal'
+        = link_to 'Add new card', '#', class: 'show-new-stripe-credit-card-modal'
 
 
   section

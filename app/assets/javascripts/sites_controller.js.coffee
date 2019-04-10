@@ -36,12 +36,11 @@ $ ->
       updateSubscription: $(this).data().updateSubscription
     ).open()
 
-  $('.show-new-stripe-modal').click ->
+  $('.show-new-stripe-credit-card-modal').click ->
     options =
       package: window.site.current_subscription
       site: window.site
-      billing_new_card: true
-    new NewStripeModal(options).open()
+    new NewStripeCreditCardModal(options).open()
 
   $('.show-upgrade-modal').click ->
     options =

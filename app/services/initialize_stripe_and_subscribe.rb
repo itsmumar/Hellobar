@@ -11,13 +11,13 @@ class InitializeStripeAndSubscribe
     @plan = params[:plan]
     @schedule = params[:schedule]
     @credit_card = nil
-    @old_subscription = site.current_subscription
+    @old_subscription = site.current_subscription if site.present?
   end
 
   def call
     find_or_initialize_customer
     find_or_initialize_credit_card
-    subscribe_to_plan if plan != 'free'
+    subscribe_to_plan if plan && plan != 'free'
   end
 
   private
