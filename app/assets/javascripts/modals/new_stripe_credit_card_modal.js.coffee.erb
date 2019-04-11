@@ -29,9 +29,31 @@ class @NewStripeCreditCardModal extends Modal
       hiddenInput.setAttribute 'name', 'stripeToken'
       hiddenInput.setAttribute 'value', token.id
       form.appendChild hiddenInput
-      # Submit the form
-      form.submit()
-      return
+      $form = $('#payment-form')
+
+      $.ajax
+        dataType: 'json'
+        url: '/subscription'
+        method: 'POST'
+        data: $form.serialize()
+        success: (data, status, xhr) =>
+          options =
+            package: package_details
+            site: window.site
+            credit_card_id: data.id
+            source: ''
+          new PaymentModal(options).open()
+          displayFlashMessage('Credit card has been successfully created.')
+          $('.js-credit-card-number').text(data.number)
+          @close()
+
+
+        error: (xhr, status, error) =>
+          @_bindFormSubmission() # rebind so they can enter valid info
+          @$modal.find("a.submit").removeClass("cancel")
+
+          if xhr.responseJSON
+            @_displayErrors(xhr.responseJSON.errors)
 
     # Create a Stripe client.
     site_id= @options.site.id

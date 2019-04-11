@@ -177,6 +177,8 @@ class @PaymentModal extends Modal
           @$modal.find("a.stripe").removeClass("cancel")
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
+      displayFlashMessage('You have successfully upgraded your plan.')
+      location.reload()
 
 
     @$modal.find('a.submit').on 'click', (event) =>

@@ -7,13 +7,14 @@ class SubscriptionsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
   def create
-    InitializeStripeAndSubscribe.new(charges_params, current_user, @site).call
+    response = InitializeStripeAndSubscribe.new(charges_params, current_user, @site).call
 
     respond_to do |format|
       format.json do
-        render json: current_site.current_subscription, serializer: SubscriptionSerializer
+        render json: response
       end
       format.html do
+        flash[:success] = 'Your are successfully subscribed'
         redirect_to :back
       end
     end

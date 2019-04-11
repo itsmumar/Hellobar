@@ -18,6 +18,7 @@ class InitializeStripeAndSubscribe
     find_or_initialize_customer
     find_or_initialize_credit_card
     subscribe_to_plan if plan && plan != 'free'
+    credit_card
   end
 
   private
