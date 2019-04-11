@@ -1,5 +1,4 @@
 class SubscriptionsController < ApplicationController
-  before_action :load_site, only: :create
   before_action :authenticate_user!
   skip_before_action :authenticate_user!, only: :stripe_webhook
   protect_from_forgery with: :null_session, only: :stripe_webhook
@@ -7,7 +6,7 @@ class SubscriptionsController < ApplicationController
   rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
 
   def create
-    response = InitializeStripeAndSubscribe.new(charges_params, current_user, @site).call
+    response = InitializeStripeAndSubscribe.new(charges_params, current_user, current_site).call
 
     respond_to do |format|
       format.json do

@@ -169,15 +169,13 @@ class @PaymentModal extends Modal
         method: 'POST'
         data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id
         success: (data, status, xhr) =>
-          options =
-            successCallback: @options.successCallback
-            data: data
+          displayFlashMessage('You have successfully upgraded your plan.')
           @close()
         error: (xhr, status, error) =>
           @$modal.find("a.stripe").removeClass("cancel")
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
-      displayFlashMessage('You have successfully upgraded your plan.')
+
       location.reload()
 
 

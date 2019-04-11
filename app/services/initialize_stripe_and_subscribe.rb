@@ -11,6 +11,7 @@ class InitializeStripeAndSubscribe
     @plan = params[:plan]
     @schedule = params[:schedule]
     @credit_card = nil
+    @card = nil
     @old_subscription = site.current_subscription if site.present?
   end
 
@@ -23,15 +24,15 @@ class InitializeStripeAndSubscribe
 
   private
 
-  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription, :bill
+  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription, :bill, :card
 
   def find_or_initialize_credit_card
-    card = customer.sources.data.last
     self.credit_card = if stripe_token.blank?
-                         CreditCard.where(stripe_id: card.id).first
+                         user.credit_cards.last
                        else
                          CreditCard.create(user: user, stripe_id: card.id, month: card.exp_month, year: card.exp_year, brand: card.brand, country: card.country, number: card.last4)
                        end
+    site.current_subscription.update(credit_card_id: credit_card.id) if site.try(:current_subscription)
   end
 
   def find_or_initialize_customer
@@ -44,7 +45,8 @@ class InitializeStripeAndSubscribe
   end
 
   def initialize_stripe_card
-    customer.sources.create(source: stripe_token)
+    self.card = customer.sources.create(source: stripe_token)
+    Stripe::Customer.update(customer.id, default_source: card.id)
   end
 
   def create_customer
@@ -53,6 +55,7 @@ class InitializeStripeAndSubscribe
       source: stripe_token
     )
     user.update(stripe_customer_id: customer.id)
+    self.card = customer.sources.data.last
   end
 
   def retrieve_customer(stripe_token)
