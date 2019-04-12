@@ -1,7 +1,7 @@
 describe InitializeStripeAndSubscribe, :freeze do
-  let(:user) { create :user }
+  let(:credit_card) { create :credit_card }
+  let(:user) { create :user, credit_cards: [credit_card] }
   let(:site) { create :site, :free_subscription, user: user }
-  let(:credit_card) { create :credit_card, user: user }
   let(:params) { { plan: 'growth', schedule: 'monthly', stripeToken: 'tok_br' } }
   let(:subscription_to_return) { Stripe::Subscription.retrieve('sub_EpVGWq3yUIU3CS') }
   let(:customer_to_return) { Stripe::Customer.retrieve('cus_EpVGcrZfgEsXYy') }

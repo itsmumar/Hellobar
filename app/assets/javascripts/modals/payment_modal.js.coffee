@@ -100,23 +100,11 @@ class @PaymentModal extends Modal
     @_bindNewCreditCard()
     @_bindChangePlan()
     @_bindFormSubmission()
-    @_bindNewStripe()
     @_bindNewStripeCard()
 
   _bindChangeSchedule: ->
     @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
       @options.package.schedule = event.target.value
-
-  _bindNewStripe: ->
-    @$modal.on 'click', '#add-new-stripe', (event) =>
-      event.preventDefault()
-      options =
-        site: @options.site
-        package: @options.package
-
-      new NewStripeModal(options).open()
-
-      @close()
 
   _bindNewStripeCard: ->
     @$modal.on 'click', '#add-new-stripe-card', (event) =>

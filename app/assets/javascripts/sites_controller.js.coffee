@@ -40,7 +40,7 @@ $ ->
     options =
       package: window.site.current_subscription
       site: window.site
-    new NewStripeCreditCardModal(options).open()
+    new NewStripeModal(options).open()
 
   $('.show-upgrade-modal').click ->
     options =

@@ -13,7 +13,6 @@ class SubscriptionsController < ApplicationController
         render json: response
       end
       format.html do
-        flash[:success] = 'Your are successfully subscribed'
         redirect_to :back
       end
     end

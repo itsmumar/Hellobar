@@ -28,24 +28,9 @@ class @NewStripeModal extends Modal
       hiddenInput.setAttribute 'type', 'hidden'
       hiddenInput.setAttribute 'name', 'stripeToken'
       hiddenInput.setAttribute 'value', token.id
-      hiddenSite = document.createElement('input')
-      hiddenSite.setAttribute 'type', 'hidden'
-      hiddenSite.setAttribute 'name', 'site_id'
-      hiddenSite.setAttribute 'value', site_id
-      hiddenPlan = document.createElement('input')
-      hiddenPlan.setAttribute 'type', 'hidden'
-      hiddenPlan.setAttribute 'name', 'plan'
-      hiddenPlan.setAttribute 'value', package_details.type
-      hiddenSchedule = document.createElement('input')
-      hiddenSchedule.setAttribute 'type', 'hidden'
-      hiddenSchedule.setAttribute 'name', 'schedule'
-      hiddenSchedule.setAttribute 'value', package_details.schedule
       form.appendChild hiddenInput
-      form.appendChild hiddenSite
-      form.appendChild hiddenPlan
-      form.appendChild hiddenSchedule
-      # Submit the form
       form.submit()
+      displayFlashMessage('Credit card has been successfully created.')
       return
 
     # Create a Stripe client.
