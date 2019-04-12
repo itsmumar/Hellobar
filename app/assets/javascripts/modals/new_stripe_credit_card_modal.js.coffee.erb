@@ -39,7 +39,7 @@ class @NewStripeCreditCardModal extends Modal
         success: (data, status, xhr) =>
           options =
             package: package_details
-            site: window.site
+            site: site
             credit_card_id: data.id
             source: ''
           new PaymentModal(options).open()
@@ -56,8 +56,8 @@ class @NewStripeCreditCardModal extends Modal
             @_displayErrors(xhr.responseJSON.errors)
 
     # Create a Stripe client.
-    site_id= @options.site.id
-    package_details= @options.package
+    site = @options.site
+    package_details = @options.package
     stripe = Stripe('<%= Settings.stripe_publishable_key %>')
     # Create an instance of Elements.
     elements = stripe.elements()

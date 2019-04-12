@@ -34,8 +34,6 @@ class @NewStripeModal extends Modal
       return
 
     # Create a Stripe client.
-    site_id= @options.site.id
-    package_details= @options.package
     stripe = Stripe('<%= Settings.stripe_publishable_key %>')
     # Create an instance of Elements.
     elements = stripe.elements()
