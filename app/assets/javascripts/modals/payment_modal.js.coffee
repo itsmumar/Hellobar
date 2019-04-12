@@ -159,12 +159,11 @@ class @PaymentModal extends Modal
         success: (data, status, xhr) =>
           displayFlashMessage('You have successfully upgraded your plan.')
           @close()
+          location.reload()
         error: (xhr, status, error) =>
           @$modal.find("a.stripe").removeClass("cancel")
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
-
-      location.reload()
 
 
     @$modal.find('a.submit').on 'click', (event) =>
