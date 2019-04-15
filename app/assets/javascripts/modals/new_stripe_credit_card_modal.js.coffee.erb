@@ -30,6 +30,7 @@ class @NewStripeCreditCardModal extends Modal
       hiddenInput.setAttribute 'value', token.id
       form.appendChild hiddenInput
       $form = $('#payment-form')
+      modal.find('button#add-btn').attr('disabled', true)
 
       $.ajax
         dataType: 'json'
@@ -42,20 +43,20 @@ class @NewStripeCreditCardModal extends Modal
             site: site
             credit_card_id: data.id
             source: ''
+          modal.find('a.cancel').click()
           new PaymentModal(options).open()
-          displayFlashMessage('Credit card has been successfully created.')
           $('.js-credit-card-number').text(data.number)
           @close()
-
+          displayFlashMessage('Credit card has been successfully created.')
 
         error: (xhr, status, error) =>
-          @_bindFormSubmission() # rebind so they can enter valid info
-          @$modal.find("a.submit").removeClass("cancel")
+          modal.find('button#add-btn').attr('disabled', false)
 
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
 
     # Create a Stripe client.
+    modal = @$modal
     site = @options.site
     package_details = @options.package
     stripe = Stripe('<%= Settings.stripe_publishable_key %>')

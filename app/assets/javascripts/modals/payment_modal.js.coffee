@@ -157,7 +157,6 @@ class @PaymentModal extends Modal
         method: 'POST'
         data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id
         success: (data, status, xhr) =>
-          displayFlashMessage('You have successfully upgraded your plan.')
           @close()
           location.reload()
         error: (xhr, status, error) =>
