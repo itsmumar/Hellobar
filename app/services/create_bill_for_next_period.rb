@@ -21,7 +21,8 @@ class CreateBillForNextPeriod
       grace_period_allowed: true,
       bill_at: 3.days.until(bill.end_date),
       start_date: bill.end_date,
-      end_date: bill.end_date + bill.subscription.period
+      end_date: bill.end_date + bill.subscription.period,
+      source: Bill::CYBERSOURCE
     )
   end
 end

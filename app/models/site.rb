@@ -319,6 +319,14 @@ class Site < ApplicationRecord
     script.generate
   end
 
+  def stripe?
+    current_subscription.stripe_subscription_id.present?
+  end
+
+  def stripe_customer_id
+    users.where.not(stripe_customer_id: nil).first.try(:stripe_customer_id)
+  end
+
   def deactivated?
     site_elements.where.not(deactivated_at: nil).any?
   end

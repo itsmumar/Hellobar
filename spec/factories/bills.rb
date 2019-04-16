@@ -7,6 +7,7 @@ FactoryBot.define do
     end_date { 1.month.from_now }
     sequence(:authorization_code) { |n| "authorization-#{ n }" }
     grace_period_allowed true
+    source Bill::CYBERSOURCE
 
     trait :free do
       amount 0

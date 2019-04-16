@@ -100,10 +100,22 @@ class @PaymentModal extends Modal
     @_bindNewCreditCard()
     @_bindChangePlan()
     @_bindFormSubmission()
+    @_bindNewStripeCard()
 
   _bindChangeSchedule: ->
     @$modal.find('[name="billing[schedule]"]').on 'change', (event) =>
       @options.package.schedule = event.target.value
+
+  _bindNewStripeCard: ->
+    @$modal.on 'click', '#add-new-stripe-card', (event) =>
+      event.preventDefault()
+      options =
+        site: @options.site
+        package: @options.package
+
+      new NewStripeCreditCardModal(options).open()
+
+      @close()
 
   _bindNewCreditCard: ->
     @$modal.on 'click', '#add-new-credit-card', (event) =>
@@ -134,6 +146,24 @@ class @PaymentModal extends Modal
   # bind submission of credit card details
   _bindFormSubmission: ->
     @_unbindFormSubmission() # clear any existing event bindings to make sure we only have one at a time
+
+    @$modal.find('a.stripe').on 'click', (event) =>
+      @_unbindFormSubmission() # prevent double submissions
+      @_clearErrors()
+
+      $.ajax
+        dataType: 'json'
+        url: '/subscription'
+        method: 'POST'
+        data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id
+        success: (data, status, xhr) =>
+          @close()
+          location.reload()
+        error: (xhr, status, error) =>
+          @$modal.find("a.stripe").removeClass("cancel")
+          if xhr.responseJSON
+            @_displayErrors(xhr.responseJSON.errors)
+
 
     @$modal.find('a.submit').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
@@ -191,6 +221,7 @@ class @PaymentModal extends Modal
 
   _unbindFormSubmission: ->
     @$modal.find('a.submit').off('click')
+    @$modal.find('a.stripe').off('click')
 
   _isAnnual: ->
     @options.package.schedule == 'yearly'

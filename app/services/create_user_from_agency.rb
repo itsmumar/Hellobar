@@ -23,7 +23,7 @@ class CreateUserFromAgency
 
   def create_site
     @site = CreateSite.new(site, @user, referral_token: '').call
-    ChangeSubscription.new(site, subscription: 'ProManaged', schedule: 'monthly').call
+    ChangeSubscription.new(@site, subscription: 'ProManaged', schedule: 'monthly').call
   end
 
   def site
