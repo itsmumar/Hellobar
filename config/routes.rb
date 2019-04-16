@@ -172,7 +172,7 @@ Rails.application.routes.draw do
   end
 
   resources :credit_cards, only: %i[index new create]
-  resource :subscription, only: %i[update]
+  resource :subscription, only: %i[update create]
   resources :bills, only: :show do
     put :pay, on: :member
   end
@@ -186,6 +186,7 @@ Rails.application.routes.draw do
   get 'sites/:id/tabs_data', to: 'sites#tabs_data', as: :tabs_data
 
   get '/auth/:provider/callback', to: 'identities#store'
+  post '/subscriptions/stripe_webhook', to: 'subscriptions#stripe_webhook'
 
   post '/contact_submissions/email_developer', to: 'contact_submissions#email_developer', as: 'email_developer_contact_submission'
   post '/contact_submissions/generic_message', to: 'contact_submissions#generic_message', as: 'generic_message_contact_submission'
