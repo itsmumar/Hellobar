@@ -41,7 +41,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     # no-thanks
     :show_no_thanks, :no_thanks_text,
     # conversion
-    :conversion_font, :conversion_font_color, :conversion_font_size, :conversion_cta_text
+    :conversion_font, :conversion_font_color, :conversion_font_size, :conversion_cta_text, :edit_conversion_cta_text
 
   SiteElement::QUESTION_DEFAULTS.each_key do |attr_name|
     define_method "#{ attr_name }_placeholder" do
