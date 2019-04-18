@@ -9,15 +9,24 @@ feature 'New credit card modal interaction', :js do
     sign_in user
   end
 
+  before do
+    user.stripe_customer_id = nil
+  end
+
   scenario 'adding new credit card' do
     visit edit_site_path(site)
-    page.find('.show-new-credit-card-modal').click
-    add_credit_card
-    wait_for_ajax
+    if user.credit_cards.present? && !user.stripe?
+      page.find('.show-new-credit-card-modal').click
+      add_credit_card
+      wait_for_ajax
 
-    expect(page.find('.flash-block.success').text)
-      .to eql('Credit card has been successfully created.')
-    expect(user.credit_cards.count).to eql(1)
+      expect(page.find('.flash-block.success').text)
+        .to eql('Credit card has been successfully created.')
+      expect(user.credit_cards.count).to eql(1)
+    else
+      user.stripe_customer_id = 'cutomer_id'
+      page.find('.show-new-stripe-credit-card-modal').click
+    end
   end
 
   def add_credit_card

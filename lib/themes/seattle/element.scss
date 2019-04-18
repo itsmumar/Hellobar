@@ -289,7 +289,7 @@
       margin: 0 auto;
     }
     .hb-input-wrapper {
-      margin: 20px auto 0;
+      margin: 0px auto;
       max-width: 600px;
     }
     .hb-image-wrapper.background ~ .hb-logo-wrapper {
@@ -334,17 +334,16 @@
       }
     }
     .hb-headline-text {
-      font-size: 2.3em;
-      margin-bottom: 20px;
+      font-size: 1.9em;
     }
     [data-hb-editable-block="caption"] {
-      font-size: 1.5em;
-      margin: 20px auto;
+      font-size: 1.2em;
+      margin: 0px auto;
       padding: 10px 0;
     }
     [data-hb-editable-block="content"] {
       font-size: 1.1em;
-      margin: 0 0 10px;
+      margin: 0 0 5px;
     }
     .hb-input-block {
       input {

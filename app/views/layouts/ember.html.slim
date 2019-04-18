@@ -21,6 +21,7 @@ html
     = csrf_meta_tags
 
   body#hb-editor.loading
+    = render 'shared/stripe'
     = render "shared/gtm_noscript"
     = render "shared/gtm_flash"
 
@@ -34,6 +35,7 @@ html
     = render "shared/modals/upgrade_modal"
     = render "shared/modals/payment_modal"
     = render "shared/modals/new_credit_card_modal"
+    = render "shared/modals/new_stripe_modal"
     = render "shared/modals/delay_tooltip"
     = render "shared/modals/payment_confirmation"
     = render "shared/modals/update_gdpr_settings_prompt_modal"
