@@ -46,5 +46,12 @@
 {{/if}}
 <label class="button-text">
   {{common/checkboxes/toggle-switch switch=model.edit_conversion_cta_text}}
-  <span>Enable Button text Editing</span>
+  <span>Enable "Close" Button Editing</span>
+  {{#common/hints/popup-hint-trigger}}
+    <p>If enabled, you will be able to<br/>
+      click-to-edit the text on the "close"<br/>
+      button on preview pane, on the<br/>
+      right. You will be able to change<br/>
+      it's text, color, font and more!</p>
+  {{/common/hints/popup-hint-trigger}}
 </label>
