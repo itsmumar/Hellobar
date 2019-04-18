@@ -243,7 +243,14 @@ export default Ember.Service.extend({
     }
   }.observes('model.use_question'),
 
-
+  promptUpgradeWhenConverstonCtaEdited: function () {
+    const EditOn = this.get('model.edit_conversion_cta_text');
+    const canEdit = this.get('model.site.capabilities.leading_question');
+    if (!canEdit && EditOn) {
+      this.set('model.edit_conversion_cta_text', false);
+      this.promptUpgrade('edit_conversion_cta_text', EditOn, 'enable Cta Text Editing , upgrade your subscription for');
+    }
+  }.observes('model.edit_conversion_cta_text'),
 //   document.getElementById('myDiv').onmousedown = function() {
 //   alert('New mouse down handler.');
 // };

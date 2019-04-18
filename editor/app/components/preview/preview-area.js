@@ -194,6 +194,7 @@ export default Ember.Component.extend({
     'model.show_no_thanks',
     'model.no_thanks_text',
     'model.conversion_cta_text',
+    'model.edit_conversion_cta_text',
     'isMobile'
   ),
 
