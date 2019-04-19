@@ -17,7 +17,9 @@
       "cta_height": 27,
       "text_field_border_width": 1,
       "text_field_font_size": 14,
-      "text_field_font_family": "libre_baskerville"
+      "text_field_font_family": "libre_baskerville",
+      "conversion_cta_text": "Close"
+
     },
     "Slider": {
       "font_id": "libre_baskerville",
@@ -25,7 +27,9 @@
       "cta_height": 30,
       "text_field_border_width": 1,
       "text_field_font_size": 14,
-      "text_field_font_family": "libre_baskerville"
+      "text_field_font_family": "libre_baskerville",
+      "conversion_cta_text": "Close"
+
     },
     "Modal": {
       "font_id": "libre_baskerville",
@@ -33,7 +37,9 @@
       "cta_height": 41,
       "text_field_border_width": 1,
       "text_field_font_size": 14,
-      "text_field_font_family": "libre_baskerville"
+      "text_field_font_family": "libre_baskerville",
+      "conversion_cta_text": "Close"
+
     },
     "Takeover": {
       "font_id": "libre_baskerville",
@@ -41,7 +47,9 @@
       "cta_height": 57,
       "text_field_border_width": 1,
       "text_field_font_size": 18,
-      "text_field_font_family": "libre_baskerville"
+      "text_field_font_family": "libre_baskerville",
+      "conversion_cta_text": "Close"
+
     },
     "Alert": {
       "font_id": "libre_baskerville",
@@ -49,7 +57,9 @@
       "cta_height": 30,
       "text_field_border_width": 1,
       "text_field_font_size": 14,
-      "text_field_font_family": "libre_baskerville"
+      "text_field_font_family": "libre_baskerville",
+      "conversion_cta_text": "Close"
+
     }
   },
   "image": {

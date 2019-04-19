@@ -34,7 +34,9 @@
       "text_field_border_width": 0,
       "text_field_font_family": "martel",
       "text_field_font_size": 10,
-      "text_field_text_color": "acabab"
+      "text_field_text_color": "acabab",
+      "conversion_cta_text": "Close"
+
     }
   },
   "image": {},
