@@ -61,6 +61,10 @@ class Subscription < ApplicationRecord
     end
   end
 
+  def stripe?
+    stripe_subscription_id.present?
+  end
+
   def name
     self.class.defaults[:name]
   end

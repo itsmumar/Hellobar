@@ -75,6 +75,10 @@ class User < ApplicationRecord
     sign_in_count == 1 && site_elements.empty?
   end
 
+  def stripe?
+    stripe_customer_id.present?
+  end
+
   def pro_managed?
     sites.any?(&:pro_managed?)
   end

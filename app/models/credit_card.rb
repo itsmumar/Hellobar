@@ -7,15 +7,19 @@ class CreditCard < ApplicationRecord
 
   acts_as_paranoid
 
-  validates :number, :last_digits, :month, :year, :first_name, :last_name, :brand, presence: true
-  validates :city, :zip, :address, :country, presence: true
-  validates :state, presence: true, if: -> { country == 'US' }
-  validates :number, format: { with: /\A(XXXX-){3}(\d{2,4})\Z/ }
+  validates :number, :last_digits, :month, :year, :first_name, :last_name, :brand, presence: true, if: -> { !stripe? }
+  validates :city, :zip, :address, :country, presence: true, if: -> { !stripe? }
+  validates :state, presence: true, if: -> { country == 'US' && !stripe? }
+  validates :number, format: { with: /\A(XXXX-){3}(\d{2,4})\Z/ }, if: -> { !stripe? }
 
   Address = Struct.new(:zip, :address, :city, :state, :country, :address1) # address1 is needed for ActiveMerchant
   composed_of :billing_address, class_name: 'CreditCard::Address', mapping: [
     %w[zip zip], %w[address address], %w[city city], %w[state state], %w[country country], %w[address address1]
   ]
+
+  def stripe?
+    stripe_id.present?
+  end
 
   def name
     "#{ first_name } #{ last_name }".strip
