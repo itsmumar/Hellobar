@@ -35,7 +35,9 @@
       "text_field_border_width": 1,
       "text_field_font_family": "montserrat",
       "text_field_font_size": 11,
-      "text_field_text_color": "9961a8"
+      "text_field_text_color": "9961a8",
+      "conversion_cta_text": "Close"
+
     }
   },
   "image": {},

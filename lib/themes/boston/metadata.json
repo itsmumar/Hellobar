@@ -34,7 +34,9 @@
       "text_field_border_width": 0,
       "text_field_font_family": "abril-fatface",
       "text_field_font_size": 14,
-      "text_field_text_color": "000000"
+      "text_field_text_color": "000000",
+      "conversion_cta_text": "Close"
+
     }
   },
   "image": {},

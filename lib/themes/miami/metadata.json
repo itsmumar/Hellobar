@@ -37,7 +37,9 @@
       "text_field_border_width": 0,
       "text_field_font_family": "poiret-one",
       "text_field_font_size": 14,
-      "text_field_text_color": "585858"
+      "text_field_text_color": "585858",
+      "conversion_cta_text": "Close"
+
     }
   },
   "image": {},
