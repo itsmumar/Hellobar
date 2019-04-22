@@ -78,7 +78,7 @@ export default Ember.Service.extend({
     const model = this.modelWithFormattedPhoneNumber();
 
     model.paused_at = publish ? null : new Date();
-    const ajaxParams = model.id ? {
+    const ajaxParams = (window.barID && model.id) ? {
       url: `/sites/${ model.site.id }/site_elements/${ model.id }.json`,
       method: 'PUT'
     } : {
@@ -94,6 +94,7 @@ export default Ember.Service.extend({
     }).done(function(data) {
       if (!model.id) {
         model.id = data.id;
+        window.barID = data.id;
       }
     });
   }
