@@ -109,7 +109,7 @@ class PayRecurringBills
 
   def cannot_pay(bill)
     report.cannot_pay
-    BillingMailer.no_credit_card(bill).deliver_later
+    # BillingMailer.no_credit_card(bill).deliver_later
   end
 
   def void(bill)
