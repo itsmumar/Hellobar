@@ -107,7 +107,7 @@ class PayRecurringBills
     BillingMailer.could_not_charge(bill).deliver_later
   end
 
-  def cannot_pay(bill)
+  def cannot_pay(_bill)
     report.cannot_pay
     # BillingMailer.no_credit_card(bill).deliver_later
   end
