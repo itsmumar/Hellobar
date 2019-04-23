@@ -22,7 +22,7 @@ feature 'Editing site element', :js do
     value = 'Dear I fear because were facing a problem'
     first('.ember-text-field').set(value)
 
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
 
     expect(page).to have_content(value)
   end
