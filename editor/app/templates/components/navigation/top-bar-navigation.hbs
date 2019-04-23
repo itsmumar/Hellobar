@@ -22,10 +22,10 @@
     <a class="action-buttons__button" {{action 'cancel'}}>{{if modelLogic.model.isSaved "Close" "Cancel"}}</a>
     {{#intro-js/step step=3 intro="<h5 class='text-color'>Save</h5><p class='text-color'>Click Save & Publish once your site element is ready to go live on your site. Not ready to publish? Click Save so that you can come back and finish your design later.</p><p class='text-color'>Click Save to keep your current styling and settings until you're ready to complete it.</p>"}}
       {{#if modelLogic.isNotPublished}}
-        <a class="action-buttons__button {{if modelLogic.isTypeSelected '' 'disabled'}}" {{action 'save'}}>Save</a>
+        <a class="action-buttons__button {{if modelLogic.isTypeSelected '' 'disabled'}}" {{action 'save'}}>Save & Pause</a>
       {{/if}}
       {{#unless modelLogic.model.site.deactivated}}
-         <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected '' 'disabled'}}" {{action 'saveAndPublish'}}>Save & Publish</a>
+         <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected '' 'disabled'}}" {{action 'saveAndPublish'}}>Publish Now</a>
       {{else}}
          <a class="action-buttons__button action-buttons__button--primary {{if modelLogic.isTypeSelected '' 'disabled'}}" {{action 'saveAndClose'}}>Save & Close</a>
       {{/unless}}
