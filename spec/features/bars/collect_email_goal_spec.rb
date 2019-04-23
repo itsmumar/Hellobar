@@ -19,7 +19,7 @@ feature 'Collect Email goal', :js do
   end
 
   scenario 'only built-in-email enabled' do
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -30,7 +30,7 @@ feature 'Collect Email goal', :js do
     go_to_tab 'Design'
     find('.collapse', text: 'Text Fields').click
     enable_input 'Phone'
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -41,7 +41,7 @@ feature 'Collect Email goal', :js do
     go_to_tab 'Design'
     find('.collapse', text: 'Text Fields').click
     enable_input 'Name'
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -53,7 +53,7 @@ feature 'Collect Email goal', :js do
     find('.collapse', text: 'Text Fields').click
     enable_input 'Phone'
     enable_input 'Name'
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
     expect(page).to have_content('Summary')
     se = SiteElement.last
     se_settings = se.settings['fields_to_collect'].map { |a| [a['type'], a['is_enabled']] }.to_h
@@ -73,7 +73,7 @@ feature 'Collect Email goal', :js do
     expect(page).to have_selector '.new-item-prototype > input'
     find('.new-item-prototype > input').set "Age\n"
 
-    find('a', text: 'Save & Publish').click
+    find('a', text: 'Publish Now').click
     expect(page).to have_content('Summary')
 
     find('a', text: 'Manage').click
