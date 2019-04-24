@@ -150,12 +150,13 @@ class @PaymentModal extends Modal
     @$modal.find('a.stripe').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_clearErrors()
+      discount_code = @$modal.find('input#discount_code').val()
 
       $.ajax
         dataType: 'json'
         url: '/subscription'
         method: 'POST'
-        data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id
+        data: plan: @options.package.type, schedule: @options.package.schedule, site_id: @options.site.id, discount_code: discount_code
         success: (data, status, xhr) =>
           @close()
           location.reload()

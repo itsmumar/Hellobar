@@ -13,6 +13,7 @@ class InitializeStripeAndSubscribe
     @credit_card = nil
     @card = nil
     @old_subscription = site.current_subscription if site.present?
+    @discount_code = params[:discount_code]
   end
 
   def call
@@ -24,7 +25,7 @@ class InitializeStripeAndSubscribe
 
   private
 
-  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription, :bill, :card
+  attr_accessor :user, :stripe_token, :customer, :credit_card, :site, :plan, :old_subscription, :schedule, :stripe_subscription, :bill, :card, :discount_code
 
   def find_or_initialize_credit_card
     self.credit_card = if stripe_token.blank?
@@ -66,6 +67,7 @@ class InitializeStripeAndSubscribe
     if site.current_subscription.free? || site.current_subscription.currently_on_trial?
       self.stripe_subscription = Stripe::Subscription.create(customer: customer.id,
                                                              plan: stripe_plan_name,
+                                                             coupon: discount_code,
                                                              metadata: meta_data)
     else
       self.stripe_subscription = Stripe::Subscription.retrieve(old_subscription.stripe_subscription_id)

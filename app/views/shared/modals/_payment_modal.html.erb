@@ -43,6 +43,12 @@
               </div>
 
               <a class="different-plan">Choose a different plan</a>
+              <% if current_user.credit_cards.blank? || current_user.stripe? %>
+                <div>
+                  <label class="discount-label">Discount Code</label>
+                  <input type="text" id="discount_code" name="discount_code" placeholder="Discount Code">
+                </div>
+              <% end %>
             </div>
 
             <div id="credit-card-details" class="credit_card_form">
