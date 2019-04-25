@@ -27,18 +27,34 @@ class RefundBill
   end
 
   def refund
-    response = make_refund_request
-
-    if response.success?
-      Bill.transaction do
-        transition_bill_status
-        create_success_billing_attempt(bill, response.authorization)
-        cancel_subscription
+    if subscription.stripe?
+      begin
+        response = make_stripe_refund_request
+        successful_refund(response.id)
+      rescue ArgumentError
+        failed_refund
       end
     else
-      create_failed_billing_attempt(bill)
-      raise InvalidRefund, 'Invalid response from payment gateway'
+      response = make_refund_request
+      if response.success?
+        successful_refund(response.authorization)
+      else
+        failed_refund
+      end
     end
+  end
+
+  def successful_refund(response)
+    Bill.transaction do
+      transition_bill_status
+      create_success_billing_attempt(bill, response)
+      cancel_subscription
+    end
+  end
+
+  def failed_refund
+    create_failed_billing_attempt(bill)
+    raise InvalidRefund, 'Invalid response from payment gateway'
   end
 
   def transition_bill_status
@@ -71,6 +87,14 @@ class RefundBill
     )
   end
 
+  def make_stripe_refund_request
+    customer = Stripe::Customer.retrieve subscription.site.stripe_customer_id
+    Stripe::Refund.create(
+      charge: customer.charges.data.last.id,
+      amount: stripe_amount_in_cents
+    )
+  end
+
   def make_refund_request
     gateway.refund(-amount, bill.authorization_code).tap do |response|
       BillingLogger.refund(bill, response.success?)
@@ -83,6 +107,10 @@ class RefundBill
         }
       end
     end
+  end
+  
+  def stripe_amount_in_cents
+    ((amount * - 1) * 100).to_i
   end
 
   def gateway

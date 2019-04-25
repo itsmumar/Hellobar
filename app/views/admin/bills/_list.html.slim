@@ -27,6 +27,7 @@ div.color-des
       th Credit Card
       th Extra days
       th Coupons
+      th Source
 
     - bills.each do |bill|
       tr class="#{bill.description ? bill.description.parameterize("-") : 'no-class' }"
@@ -65,3 +66,5 @@ div.color-des
           = bill_extra_days(bill)
         td
           = bill_coupons(bill)
+        td
+          = bill.source.to_s.titleize

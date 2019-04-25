@@ -152,11 +152,17 @@ class ChangeSubscription
   end
 
   def downgrade_site_to_free
+    delete_stripe_subscription if old_subscription.stripe?
     subscription = DowngradeSiteToFree.new(site).call
     track_subscription_change(subscription)
 
     # since the service has to return a bill
     # let's just return an new one
     subscription.bills.new
+  end
+
+  def delete_stripe_subscription
+    stripe_subscription = Stripe::Subscription.retrieve(old_subscription.stripe_subscription_id)
+    stripe_subscription.delete
   end
 end
