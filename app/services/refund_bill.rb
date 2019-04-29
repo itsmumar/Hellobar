@@ -108,7 +108,7 @@ class RefundBill
       end
     end
   end
-  
+
   def stripe_amount_in_cents
     ((amount * - 1) * 100).to_i
   end
