@@ -60,7 +60,7 @@ class PayRecurringBills
       if bill.credit_card_attached?
         if bill.subscription.stripe?
           create_stripe_bill(bill)
-        elsif bill.source.to_s == Bill::CYBERSOURCE
+        else
           pay bill
         end
       else
