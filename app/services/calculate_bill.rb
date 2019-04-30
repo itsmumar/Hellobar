@@ -66,6 +66,7 @@ class CalculateBill
       bill.amount = subscription.amount
       bill.grace_period_allowed = false
       bill.bill_at = Time.current
+      bill.source = subscription.stripe? ? Bill::STRIPE_SOURCE : Bill::CYBERSOURCE
 
       yield bill if block_given?
       bill.start_date = bill.bill_at
