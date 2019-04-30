@@ -148,6 +148,10 @@ class SiteElement < ApplicationRecord
     self[:no_thanks_text] = sanitize value
   end
 
+  def conversion_cta_text=(value)
+    self[:conversion_cta_text] = sanitize value
+  end
+
   def link_text=(value)
     self[:link_text] = sanitize value
   end
@@ -158,7 +162,7 @@ class SiteElement < ApplicationRecord
 
   def fonts
     fonts = [text_field_font_family, conversion_font]
-    inline_fonts = (headline.to_s + caption.to_s + link_text.to_s).scan(/font-family: "?(.*?)"?,/)
+    inline_fonts = (headline.to_s + caption.to_s + link_text.to_s + conversion_cta_text.to_s).scan(/font-family: "?(.*?)"?,/)
     (fonts + inline_fonts).flatten.select(&:present?).uniq - SYSTEM_FONTS
   end
 

@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190402141450) do
+ActiveRecord::Schema.define(version: 20190419074205) do
+
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -506,6 +507,8 @@ ActiveRecord::Schema.define(version: 20190402141450) do
     t.boolean  "show_optional_content",                          default: true,         null: false
     t.boolean  "show_no_thanks",                                 default: true
     t.text     "no_thanks_text",                limit: 65535
+    t.boolean  "edit_conversion_cta_text",                       default: false
+    t.text     "conversion_cta_text",           limit: 65535
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

@@ -193,6 +193,8 @@ export default Ember.Component.extend({
     'model.conversion_font_size',
     'model.show_no_thanks',
     'model.no_thanks_text',
+    'model.conversion_cta_text',
+    'model.edit_conversion_cta_text',
     'isMobile'
   ),
 
