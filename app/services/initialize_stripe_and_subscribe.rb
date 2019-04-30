@@ -125,7 +125,7 @@ class InitializeStripeAndSubscribe
     @bill = Bill.create(subscription: subscription,
              amount: discount_code.present? ? invoice_amount : subscription.amount,
              grace_period_allowed: false,
-             bill_at: Time.current,
+             bill_at: Time.current + subscription.period,
              start_date: Time.current,
              end_date: Time.current + subscription.period,
              status: 'paid',
