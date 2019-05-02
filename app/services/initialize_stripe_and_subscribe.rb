@@ -115,26 +115,15 @@ class InitializeStripeAndSubscribe
     end
   end
 
-  # invoice may not be available at this time, thus use coupon logic
-  def invoice_amount(subscription)
-    if discount_code.present?
-      begin
-        code = Stripe::Coupon.retrieve(discount_code)
-      rescue Stripe::InvalidRequestError
-        return subscription.amount
-      end
-      return format('%.2f', subscription.amount - calculate_discount(subscription.amount, code.percent_off)) if code.present? && code.valid?
-    end
-    subscription.amount
-  end
-
-  def calculate_discount(amount, percentage_off)
-    amount * (percentage_off / 100)
+  def invoice_amount
+    invoice = Stripe::Invoice.all(customer: customer.id)
+    amount = invoice.data.first.amount_paid
+    format('%.2f', amount.to_i / 100.0)
   end
 
   def create_bill(subscription)
     @bill = Bill.create(subscription: subscription,
-             amount: invoice_amount(subscription),
+             amount: discount_code.present? ? invoice_amount : subscription.amount,
              grace_period_allowed: false,
              bill_at: Time.current,
              start_date: Time.current,
