@@ -51,7 +51,7 @@ class PayRecurringBills
   def handle(bill)
     return PayBill.new(bill).call if bill.amount.zero?
     return void(bill) if !bill.subscription || !bill.site
-    return downgrade(bill) if expired? bill
+    return downgrade(bill) if expired?(bill) && bill.source.to_s == Bill::CYBERSOURCE
     return skip(bill) if skip? bill
 
     # Try to bill the person if he/she hasn't been within the last MIN_RETRY_TIME
@@ -73,7 +73,7 @@ class PayRecurringBills
     Bill.create(subscription: bill.subscription,
                 amount: bill.amount,
                 grace_period_allowed: false,
-                bill_at: Time.current,
+                bill_at: Time.current + bill.subscription.period,
                 start_date: Time.current,
                 end_date: Time.current + bill.subscription.period,
                 status: 'paid',
