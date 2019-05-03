@@ -4,10 +4,10 @@ describe TrackEvent do
   let(:params) { Hash[foo: 'foo', bar: 'bar'] }
   let(:service) { TrackEvent.new(event, **params) }
 
-  it 'enqueues SendEventToIntercomJob' do
+  it 'does not enqueue SendEventToIntercomJob' do
     service.call
     expect(SendEventToIntercomJob)
-      .to have_been_enqueued
+      .not_to have_been_enqueued
       .with(event.to_s, params)
   end
 
@@ -22,10 +22,10 @@ describe TrackEvent do
     before { allow(Rails.env).to receive(:edge?).and_return true }
     before { allow(Rails.env).to receive(:production?).and_return false }
 
-    it 'enqueues SendEventToIntercomJob' do
+    it 'does not enqueue SendEventToIntercomJob' do
       service.call
       expect(SendEventToIntercomJob)
-        .to have_been_enqueued
+        .not_to have_been_enqueued
         .with(event.to_s, params)
     end
 
