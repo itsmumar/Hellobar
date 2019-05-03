@@ -41,7 +41,7 @@ class TrackEvent
   end
 
   def intercom_enabled?
-    Rails.env.edge? || Rails.env.production?
+    false
   end
 
   def amplitude_enabled?
