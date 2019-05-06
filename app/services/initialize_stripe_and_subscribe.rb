@@ -69,6 +69,7 @@ class InitializeStripeAndSubscribe
                                                              plan: stripe_plan_name,
                                                              coupon: discount_code,
                                                              metadata: meta_data)
+      change_subscription_and_create_bill
     else
       self.stripe_subscription = Stripe::Subscription.retrieve(old_subscription.stripe_subscription_id)
       Stripe::Subscription.update(
@@ -81,8 +82,8 @@ class InitializeStripeAndSubscribe
           }
         ]
       )
+      change_subscription
     end
-    change_subscription
   end
 
   def meta_data
@@ -98,6 +99,13 @@ class InitializeStripeAndSubscribe
   end
 
   def change_subscription
+    Subscription.transaction do
+      subscription = create_subscription
+      track_subscription_change(subscription)
+    end
+  end
+
+  def change_subscription_and_create_bill
     cancel_subscription_if_it_is_free
     create_subscription_and_pay_bill
   end
@@ -121,6 +129,11 @@ class InitializeStripeAndSubscribe
     format('%.2f', amount.to_i / 100.0)
   end
 
+  def invoice_id
+    invoice = Stripe::Invoice.all(customer: customer.id)
+    invoice.data.first.id
+  end
+
   def create_bill(subscription)
     @bill = Bill.create(subscription: subscription,
              amount: discount_code.present? ? invoice_amount : subscription.amount,
@@ -129,7 +142,8 @@ class InitializeStripeAndSubscribe
              start_date: Time.current,
              end_date: Time.current + subscription.period,
              status: 'paid',
-             source: Bill::STRIPE_SOURCE)
+             source: Bill::STRIPE_SOURCE,
+             stripe_invoice_id: invoice_id)
     create_bill_attempt
   end
 
