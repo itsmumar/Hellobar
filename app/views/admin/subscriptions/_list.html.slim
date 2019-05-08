@@ -14,6 +14,7 @@
       th Credit Card
       th User
       th Created at
+      th Source
 
     - subscriptions.each do |subscription|
       tr
@@ -27,3 +28,4 @@
         td= subscription.credit_card && link_to(subscription.credit_card.last_digits, admin_credit_card_path(subscription.credit_card))
         td= subscription_owner_link(subscription)
         td.date= subscription.created_at
+        td= subscription.site.stripe_customer_id.present? ? 'Stripe' : 'Cybersource'

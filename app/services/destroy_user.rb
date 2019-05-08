@@ -10,7 +10,6 @@ class DestroyUser
       destroy_owned_sites
       user.update! status: User::DELETED
       user.destroy!
-      intercom.delete_user user.id
     end
   end
 
@@ -49,9 +48,5 @@ class DestroyUser
   def promote_first_user_to_owner(membership)
     first_site_user = membership.site.site_memberships.where.not(user_id: user.id).first
     first_site_user.update role: 'owner'
-  end
-
-  def intercom
-    IntercomGateway.new
   end
 end
