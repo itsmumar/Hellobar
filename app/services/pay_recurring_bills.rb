@@ -59,7 +59,8 @@ class PayRecurringBills
     report.attempt bill do
       if bill.credit_card_attached?
         if bill.subscription.stripe?
-          create_stripe_bill(bill)
+          invoice = Stripe::Invoice.all(customer: bill.site.stripe_customer_id)
+          create_stripe_bill(bill) if bill.stripe_invoice_id != invoice.data.first.id
         else
           pay bill
         end
@@ -69,9 +70,15 @@ class PayRecurringBills
     end
   end
 
+  def charge_amount(bill)
+    invoice = Stripe::Invoice.all(customer: bill.site.stripe_customer_id)
+    amount = invoice.data.first.amount_paid
+    format('%.2f', amount.to_i / 100.0)
+  end
+
   def create_stripe_bill(bill)
     Bill.create(subscription: bill.subscription,
-                amount: bill.amount,
+                amount: charge_amount(bill),
                 grace_period_allowed: false,
                 bill_at: Time.current + bill.subscription.period,
                 start_date: Time.current,
