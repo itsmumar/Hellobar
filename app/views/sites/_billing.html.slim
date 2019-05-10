@@ -15,6 +15,9 @@ section
           = bill_estimated_amount(@next_overage_bill)
         - if @next_bill
           = bill_estimated_amount(@next_bill)
+        - if @site.current_subscription.bills.present?
+          | $
+          = format('%.2f', @site.bills.last.amount)
         - else
           = number_to_currency(@site.current_subscription.values["#{@site.current_subscription.schedule}_amount".to_sym])
         '

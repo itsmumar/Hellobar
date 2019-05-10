@@ -47,7 +47,7 @@ class SubscriptionsController < ApplicationController
   private
 
   def charges_params
-    params.permit(:stripeToken, :plan, :schedule)
+    params.permit(:stripeToken, :plan, :schedule, :discount_code)
   end
 
   def change_subscription(credit_card)
