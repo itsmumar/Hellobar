@@ -2,6 +2,8 @@ describe DestroySite do
   describe '#call', :freeze do
     it 'marks the record as deleted and blanks out the site script' do
       site = create :site
+      create :subscription, :free, site: site
+      create :subscription, :pro, site: site
 
       expect(GenerateAndStoreStaticScript).to receive_service_call
         .with site, script_content: ''
