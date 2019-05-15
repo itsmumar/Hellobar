@@ -7,7 +7,7 @@ class DestroySite
   def call
     void_pending_bills
     override_script
-    delete_stripe_subscription if site.stripe? && site.current_subscription.stripe?
+    delete_stripe_subscription if site.stripe?
     site.destroy
     track_site_count
   end

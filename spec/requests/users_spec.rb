@@ -1,5 +1,5 @@
 describe 'Users requests' do
-  let(:user) { create :user, :with_site }
+  let(:user) { create :user, :with_subscription }
 
   context 'when unauthenticated' do
     before { create :credit_card, user: user }
