@@ -118,7 +118,7 @@ class SiteElementsController < ApplicationController
       :active_image_id, :animated,
       :answer1, :answer1caption, :answer1link_text, :answer1response,
       :answer2, :answer2caption, :answer2link_text, :answer2response,
-      :background_color,:cross_color, :border_color, :button_color, :content, :caption,
+      :background_color, :cross_color, :border_color, :button_color, :content, :caption,
       :closable, :contact_list_id, :element_subtype, :show_optional_caption,
       :email_placeholder, :font_id, :headline, :image_placement, :image_opacity,
       :link_color, :link_text, :name_placeholder, :open_in_new_window, :paused_at,
