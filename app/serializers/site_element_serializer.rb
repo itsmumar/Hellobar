@@ -10,7 +10,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     :preset_rule_name, :show_optional_content, :show_optional_caption, :show_thankyou,
     #
     # colors
-    :background_color, :border_color, :button_color, :link_color, :text_color,
+    :background_color, :border_color, :button_color, :link_color, :text_color,:cross_color,
     #
     # style
     :closable, :show_branding, :pushes_page_down, :remains_at_top,
