@@ -68,7 +68,8 @@
 
       <footer>
         <a class="button cancel">Cancel</a>
-        <a class="button <%=current_user.credit_cards.present? && current_user.stripe? ? 'stripe': 'submit'%>">Confirm</a>
+        <div class="show-loader"></div>
+        <a class="button <%=current_user.credit_cards.present? && !current_user.stripe? ? 'submit': 'stripe'%>">Confirm</a>
       </footer>
     </div>
   </div>
