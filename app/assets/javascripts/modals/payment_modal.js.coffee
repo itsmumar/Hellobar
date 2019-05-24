@@ -150,6 +150,8 @@ class @PaymentModal extends Modal
     @$modal.find('a.stripe').on 'click', (event) =>
       @_unbindFormSubmission() # prevent double submissions
       @_clearErrors()
+      @$modal.find('a.stripe').hide()
+      @$modal.find("div.show-loader").addClass("loader")
       discount_code = @$modal.find('input#discount_code').val()
 
       $.ajax
@@ -161,7 +163,8 @@ class @PaymentModal extends Modal
           @close()
           location.reload()
         error: (xhr, status, error) =>
-          @$modal.find("a.stripe").removeClass("cancel")
+          @$modal.find("div.show-loader").removeClass("loader")
+          @$modal.find('a.stripe').show()
           if xhr.responseJSON
             @_displayErrors(xhr.responseJSON.errors)
 
