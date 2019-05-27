@@ -25,7 +25,7 @@ section
         | .
       - if @site.requires_credit_card?
         - # only show "billing schedule" if user is on a plan that actually has one
-        = link_to 'Change plan or billing schedule', '#', class: 'show-upgrade-modal'
+        = link_to 'Change plan or billing schedule', '#', class: 'show-freshchat-popup'
 
 - if can_view_bills?(current_user, @site)
   section
