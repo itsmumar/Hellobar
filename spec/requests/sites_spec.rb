@@ -43,6 +43,7 @@ describe 'Sites requests' do
       end
 
       it 'destroys an existing site' do
+        create :subscription, :free, site: site
         expect {
           delete site_path(site)
         }.to change { Site.count }.by(-1)

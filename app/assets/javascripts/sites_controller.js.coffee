@@ -24,6 +24,9 @@ $ ->
       source: $(this).data('source')
     new PaymentModal(options).open()
 
+  $('.show-freshchat-popup').click ->
+    window.fcWidget.open({ name: "Support", replyText: "Hi, I’d like to make a change to my account please…"  });
+
   $('.show-intercom-popup-cancellation').click ->
     Intercom('showNewMessage', "Hi, I’d like to make a change to my account please…")
 
