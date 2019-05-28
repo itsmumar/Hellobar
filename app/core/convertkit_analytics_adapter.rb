@@ -4,12 +4,14 @@ class ConvertkitAnalyticsAdapter
   def track(event:, user:, params:)
     return if event.blank?
     tag = create_or_find_tag(event)
-    tag_subscriber(tag, user, params || {})
+    response = tag_subscriber(tag, user, params || {})
+    current_user = User.find(user.id)
+    current_user.update(convortkit_subscriber_id: response.subscription.subscriber.id)
   end
 
   # rubocop:disable Lint/UnneededDisable
   # rubocop:disable Lint/UnusedMethodArgument
-
+git
   def untag_users(tag, users)
     # TODO: Implement UnTag
   end
@@ -44,6 +46,12 @@ class ConvertkitAnalyticsAdapter
     }
   end
 
+  def remove_tag(tag, user)
+    self.class.post base_uri("tags/#{ tag['id'] }/unsubscribe"), body: {
+        api_key: Settings.convertkit_api_keys,
+        email: user.email
+    }
+  end
   def create_or_find_tag(event)
     tag = create_tag(event)
     return tag if tag['error'].blank?
@@ -53,8 +61,12 @@ class ConvertkitAnalyticsAdapter
     end
   end
 
+  def get_subscribber()
+
+  end
+
   def tag_subscriber(tag, user, params)
-    self.class.post base_uri("tags/#{ tag['id'] }/subscribe"), body: {
+     self.class.post base_uri("tags/#{ tag['id'] }/subscribe"), body: {
       api_key: Settings.convertkit_api_keys,
       email: user.email,
       first_name: user.first_name.to_s,
@@ -62,6 +74,13 @@ class ConvertkitAnalyticsAdapter
     }
   end
 
+  def verify_subscription_tag(event,tag,user)
+    case event
+    when 'installed-script'
+
+    end
+
+  end
   def base_uri(endpoint)
     "https://api.convertkit.com/v3/#{ endpoint }?api_secret=#{ Settings.convertkit_api_secret }"
   end
