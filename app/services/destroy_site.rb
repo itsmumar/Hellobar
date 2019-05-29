@@ -7,6 +7,7 @@ class DestroySite
   def call
     void_pending_bills
     override_script
+    delete_stripe_subscription if site.stripe?
     site.destroy
     track_site_count
   end
@@ -27,5 +28,10 @@ class DestroySite
     site.owners.each do |user|
       TrackEvent.new(:updated_site_count, user: user).call
     end
+  end
+
+  def delete_stripe_subscription
+    stripe_subscription = Stripe::Subscription.retrieve(site.current_subscription.stripe_subscription_id)
+    stripe_subscription.delete
   end
 end

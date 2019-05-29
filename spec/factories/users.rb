@@ -28,6 +28,13 @@ FactoryBot.define do
       end
     end
 
+    trait :with_subscription do
+      after(:create) do |user|
+        site = create :site, users: [user]
+        create :subscription, :free, site: site
+      end
+    end
+
     trait :with_pro_subscription do
       after(:create) do |user|
         subscription = create :subscription, :pro

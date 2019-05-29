@@ -8,7 +8,5 @@ export default Ember.Component.extend({
    * @property {object} Application model
    */
   model: null,
-  selectedColorAndFont: function () {
-    this.set('model.conversion_font_color',this.get('model.text_color'));
-  }.property('model.text_color')
+
 });
