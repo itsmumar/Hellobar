@@ -38,7 +38,8 @@
       "text_field_font_family": "josefin_sans",
       "text_field_font_size": 14,
       "text_field_text_color": "000000",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     }
   },
