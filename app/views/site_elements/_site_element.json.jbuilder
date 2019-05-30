@@ -78,6 +78,7 @@ json.cache! site_element do
     :cta_border_color,
     :cta_border_width,
     :cta_border_radius,
+    :cross_color,
     :cta_height
 
   json.font site_element.font.try(:value)

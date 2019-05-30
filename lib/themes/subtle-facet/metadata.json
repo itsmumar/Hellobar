@@ -41,7 +41,8 @@
       "text_field_font_family": "kanit",
       "text_field_font_size": 18,
       "text_field_text_color": "3B386B",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     }
   },

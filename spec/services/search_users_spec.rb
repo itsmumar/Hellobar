@@ -1,10 +1,10 @@
 describe SearchUsers do
   let!(:users) do
     [
-      create(:user, :with_site, :with_credit_card),
-      create(:user, :with_site, :with_credit_card),
-      create(:user, :with_site, :with_credit_card),
-      create(:user, :with_site, :with_credit_card)
+      create(:user, :with_credit_card, :with_subscription),
+      create(:user, :with_credit_card, :with_subscription),
+      create(:user, :with_credit_card, :with_subscription),
+      create(:user, :with_credit_card, :with_subscription)
     ]
   end
 
