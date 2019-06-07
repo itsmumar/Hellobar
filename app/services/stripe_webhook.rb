@@ -1,9 +1,10 @@
 class StripeWebhook
   CHARGE_FAILED = 'charge.failed'.freeze
   CUSTOMER_SUBSCRIPTION_DELETED = 'customer.subscription.deleted'.freeze
+  PAYMENT_FAILED = 'invoice.payment_failed'.freeze
 
   def initialize(event)
-    if event.type == CHARGE_FAILED
+    if event.type == CHARGE_FAILED || event.type == PAYMENT_FAILED
       @event_type = event.type
       @event = event
       @customer_id = event.data.object.customer
@@ -19,7 +20,7 @@ class StripeWebhook
   end
 
   def call
-    if @event_type == CHARGE_FAILED
+    if @event_type == CHARGE_FAILED || event.type == PAYMENT_FAILED
       failed_charge
     elsif @event_type == CUSTOMER_SUBSCRIPTION_DELETED
       cancelled_subscription
