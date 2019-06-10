@@ -1,10 +1,12 @@
 class StripeWebhook
-  CHARGE_FAILED = 'charge.failed'.freeze
   CUSTOMER_SUBSCRIPTION_DELETED = 'customer.subscription.deleted'.freeze
-  PAYMENT_FAILED = 'invoice.payment_failed'.freeze
+  PAID = 'paid'.freeze
+  FAILED = 'failed'.freeze
+  SUCCEEDED_CHARGE_TYPES = ['invoice.payment_succeeded', 'charge.succeeded'].freeze
+  FAILED_CHARGE_TYPES = ['invoice.payment_failed', 'charge.failed'].freeze
 
   def initialize(event)
-    if event.type == CHARGE_FAILED || event.type == PAYMENT_FAILED
+    if SUCCEEDED_CHARGE_TYPES.include?(event.type) || FAILED_CHARGE_TYPES.include?(event.type)
       @event_type = event.type
       @event = event
       @customer_id = event.data.object.customer
@@ -20,8 +22,10 @@ class StripeWebhook
   end
 
   def call
-    if @event_type == CHARGE_FAILED || event.type == PAYMENT_FAILED
+    if FAILED_CHARGE_TYPES.include?(@event_type)
       failed_charge
+    elsif SUCCEEDED_CHARGE_TYPES.include?(@event_type)
+      succeed_charge
     elsif @event_type == CUSTOMER_SUBSCRIPTION_DELETED
       cancelled_subscription
     end
@@ -36,7 +40,7 @@ class StripeWebhook
   end
 
   def stripe_subscription
-    if @event_type == CHARGE_FAILED
+    if FAILED_CHARGE_TYPES.include?(@event_type)
       @stripe_subscription ||= Stripe::Subscription.retrieve(stripe_invoice.subscription)
     elsif @event_type == CUSTOMER_SUBSCRIPTION_DELETED
       @stripe_subscription ||= Stripe::Subscription.retrieve(stripe_subscription_id)
@@ -51,17 +55,21 @@ class StripeWebhook
     @site_url ||= stripe_subscription.metadata.site
   end
 
+  def succeed_charge
+    bill.update(status: PAID) if bill && bill.status == FAILED
+    # notify_admins
+  end
+
   def failed_charge
     if bill.created_at > 3.days.ago
-      bill.update(status: 'failed')
+      bill.update(status: FAILED)
     else
       create_bill
     end
     # notify_admins
   end
 
-  # def notify_admins
-  #
+  # def notify_admins(user, message)
   # end
 
   def cancelled_subscription
@@ -75,7 +83,7 @@ class StripeWebhook
                 bill_at: Time.current,
                 start_date: Time.current,
                 end_date: Time.current,
-                status: 'failed',
+                status: FAILED,
                 source: Bill::STRIPE_SOURCE)
     create_bill_attempt
   end
@@ -85,7 +93,7 @@ class StripeWebhook
       bill: bill,
       action: BillingAttempt::CHARGE,
       credit_card: credit_card,
-      status:  BillingAttempt::STATE_FAILED,
+      status: BillingAttempt::STATE_FAILED,
       response: event.id
     )
   end
