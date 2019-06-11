@@ -11,7 +11,10 @@
             .underline
               | #{@site.owners.first.email}
       P Please enter credit card details by #{format_date(@site.current_subscription.trial_end_date)} to continue using Hello Bar Growth.
-      p The next bill is due on #{format_date(@site.next_bill.bill_at)} and will total #{number_to_currency(@site.next_bill.amount)} for a #{@site.current_subscription.schedule} subscription.
+      -if current_user.stripe?
+        p The next bill is due on #{format_date(@site.bills.last.end_date)} and will total #{number_to_currency(@site.current_subscription.amount)} for a #{@site.current_subscription.schedule} subscription.
+      -else
+        p The next bill is due on #{format_date(@site.next_bill.try(:bill_at))} and will total #{number_to_currency(@site.next_bill.try(:amount))} for a #{@site.current_subscription.schedule} subscription.
 
       div.centered
       .button.show-upgrade-modal
