@@ -90,6 +90,28 @@ class AnalyticsProvider
     )
   end
 
+  def inactive_user(_site:, user:)
+    track(
+      event: 'inactive',
+      user: user,
+      params: {
+        last_sign_in_at: user.last_sign_in_at
+      }
+    )
+  end
+
+  def active_user(site:, user:)
+    track(
+      event: 'active',
+      user: user,
+      params: {
+        last_sign_in_at: user.last_sign_in_at,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
   def created_site(site:, user:)
     params = {
       url: site.url,
@@ -146,6 +168,17 @@ class AnalyticsProvider
     )
   end
 
+  def not_installed_script(site:, user:)
+    track(
+      event: 'not-yet-installed-script',
+      user: user,
+      params: {
+        url:  site.url,
+        site_id: site.id
+      }
+    )
+  end
+
   def created_contact_list(contact_list:, user:)
     return if !contact_list || contact_list.deleted?
 
@@ -175,6 +208,42 @@ class AnalyticsProvider
         use_default_image: site_element.use_default_image,
         link_text: site_element.link_text,
         use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def ab_test_created(site_element:, user:)
+    site = site_element.site
+    track(
+      event: 'ab-test-created',
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def bar_not_created(user:, site:)
+    track(
+      event: 'not-yet-created-popup',
+      user: user,
+      params: {
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def ab_test_not_created(user:, site:)
+    track(
+      event: 'no-ab-test',
+      user: user,
+      params: {
         site_url: site.url,
         site_id: site.id
       }

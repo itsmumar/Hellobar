@@ -45,6 +45,10 @@ every 24.hours, at: '12:00pm', roles: [:cron] do
   rake 'intercom:prune_inactive_users'
 end
 
+every 24.hours, at: '12:00am', roles: [:cron] do
+  rake 'inactive_user:run'
+end
+
 every 24.hours, at: '1:00pm', roles: [:cron] do
   rake 'referrals:send_followups'
 end

@@ -162,7 +162,7 @@ module SiteElementsHelper
   end
 
   # rubocop: disable Rails/OutputSafety
-  def ab_test_icon(site_element)
+  def ab_test_icon(site_element, current_user)
     elements_in_group = site_element.rule.site_elements.select { |se| !se.paused? && !se.deactivated? && se.short_subtype == site_element.short_subtype && se.type == site_element.type }
     elements_in_group.sort_by!(&:created_at)
 
@@ -172,6 +172,7 @@ module SiteElementsHelper
     letter = (index + A_OFFSET).chr
     winner = elements_in_group.max_by(&:conversion_percentage)
     site_element.site.update(ab_test_running: true) if site_element.site.free?
+    TrackEvent.new(:ab_test_created, site_element: site_element, user: current_user).call if site_element.site.free?
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     else

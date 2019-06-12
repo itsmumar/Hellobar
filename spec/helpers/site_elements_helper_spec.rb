@@ -254,16 +254,16 @@ describe SiteElementsHelper do
   end
 
   describe 'ab_test_icon' do
+    let(:user) { create(:user) }
     before do
       allow_any_instance_of(FetchSiteStatistics)
         .to receive(:call).and_return(SiteStatistics.new)
     end
-
     it 'returns the A/B icon for paused bars' do
       se = create(:site_element, :traffic)
       se.pause!
 
-      expect(helper.ab_test_icon(se)).to include('icon-abtest')
+      expect(helper.ab_test_icon(se, user)).to include('icon-abtest')
     end
 
     it 'returns the bars indexed by letter' do
@@ -275,8 +275,8 @@ describe SiteElementsHelper do
       allow_any_instance_of(SiteElement).to receive(:total_conversions).and_return(250)
       allow_any_instance_of(SiteElement).to receive(:total_views).and_return(500)
 
-      expect(helper.ab_test_icon(se1)).to include("<span class='numbers'>A</span>")
-      expect(helper.ab_test_icon(se2)).to include("<span class='numbers'>B</span>")
+      expect(helper.ab_test_icon(se1, user)).to include("<span class='numbers'>A</span>")
+      expect(helper.ab_test_icon(se2, user)).to include("<span class='numbers'>B</span>")
     end
 
     it "uses icon-tip for the 'winning' bar" do
@@ -291,8 +291,8 @@ describe SiteElementsHelper do
 
       allow_any_instance_of(Rule).to receive(:site_elements).and_return([se1, se2])
 
-      expect(helper.ab_test_icon(se1)).to include('icon-tip')
-      expect(helper.ab_test_icon(se2)).to include('icon-circle')
+      expect(helper.ab_test_icon(se1, user)).to include('icon-tip')
+      expect(helper.ab_test_icon(se2, user)).to include('icon-circle')
     end
 
     it 'does not group elements that are in different rules' do
@@ -313,9 +313,9 @@ describe SiteElementsHelper do
 
       allow_any_instance_of(Site).to receive(:site_elements).and_return([variation1, variation2, variation3])
 
-      icon = helper.ab_test_icon(variation1)
-      icon2 = helper.ab_test_icon(variation2)
-      icon3 = helper.ab_test_icon(variation3)
+      icon = helper.ab_test_icon(variation1, user)
+      icon2 = helper.ab_test_icon(variation2, user)
+      icon3 = helper.ab_test_icon(variation3, user)
 
       expect(icon).to include('icon-circle')
       expect(icon2).to include('icon-circle')
@@ -328,9 +328,9 @@ describe SiteElementsHelper do
       variation2 = create(:site_element, :traffic, site: site)
       variation3 = create(:slider, :traffic, site: site)
 
-      icon1 = helper.ab_test_icon(variation1)
-      icon2 = helper.ab_test_icon(variation2)
-      icon3 = helper.ab_test_icon(variation3)
+      icon1 = helper.ab_test_icon(variation1, user)
+      icon2 = helper.ab_test_icon(variation2, user)
+      icon3 = helper.ab_test_icon(variation3, user)
 
       expect(icon1).to include('icon-circle')
       expect(icon2).to include('icon-circle')
