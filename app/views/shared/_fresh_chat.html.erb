@@ -4,7 +4,7 @@
     window.fcWidget.init({
         token: "53bd1861-7a25-4058-9a8c-c2d64af1fe8c",
         host: "https://wchat.freshchat.com",
-        email: "<%= current_user.email %>"
+        email: "<%= current_user.email if current_user %>"
     });
-    window.fcWidget.user.setProperties({ "SiteURL": "<%= current_site.url %>" });
+    window.fcWidget.user.setProperties({ "SiteURL": "<%= current_site.url if current_site %>" });
 </script>
