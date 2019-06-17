@@ -5,12 +5,17 @@
   </label>
 
   {{#if showQuestionFields}}
+
     {{#ivy-tabs selection=questionTabSelection as |tabs|}}
       {{#tabs.tablist as |tablist|}}
         {{#tablist.tab "TabQuestion" on-select=(action 'showQuestion')}}Question{{/tablist.tab}}
         {{#tablist.tab "TabAnswer1" on-select=(action 'showAnswer1')}}Answer 1{{/tablist.tab}}
         {{#tablist.tab "TabAnswer2" on-select=(action 'showAnswer2')}}Answer 2{{/tablist.tab}}
       {{/tabs.tablist}}
+      <label class="tab-content">
+        {{common/checkboxes/toggle-switch switch=model.use_redirect_url}}
+        <span>Add redirect URL to your answer</span>
+      </label>
 
       {{#tabs.tabpanel "TabQuestion"}}
         <div id="question" class="tab-content">
@@ -27,35 +32,49 @@
 
       {{#tabs.tabpanel "TabAnswer1"}}
         <div id="response1" class="tab-content">
-          <label>First Answer Headline</label>
-          {{input value=model.answer1response placeholder=model.answer1response_placeholder}}
+          {{#unless showRedirectFields}}
+            <label>First Answer Headline</label>
+            {{input value=model.answer1response placeholder=model.answer1response_placeholder}}
 
-          {{#unless isABar}}
-            <label>First Answer Caption</label>
-            {{input value=model.answer1caption placeholder="(optional)" maxlength=255}}
+            {{#unless isABar}}
+              <label>First Answer Caption</label>
+              {{input value=model.answer1caption placeholder="(optional)" maxlength=255}}
+            {{/unless}}
+
+            {{#unless hideLinkText}}
+              <label>First Answer Button Text</label>
+              {{input value=model.answer1link_text placeholder=model.answer1link_text_placeholder}}
+            {{/unless}}
           {{/unless}}
 
-          {{#unless hideLinkText}}
-            <label>First Answer Button Text</label>
-            {{input value=model.answer1link_text placeholder=model.answer1link_text_placeholder}}
-          {{/unless}}
+          {{#if showRedirectFields}}
+            <label>First Answer Redirect URL</label>
+            {{input value=model.answer1url placeholder="www.hellobar.com" maxlength=255}}
+          {{/if}}
         </div>
       {{/tabs.tabpanel}}
 
       {{#tabs.tabpanel "TabAnswer2"}}
         <div id="response2" class="tab-content">
-          <label>Second Answer Headline</label>
-          {{input value=model.answer2response placeholder=model.answer2response_placeholder}}
+          {{#unless showRedirectFields}}
+            <label>Second Answer Headline</label>
+            {{input value=model.answer2response placeholder=model.answer2response_placeholder}}
 
-          {{#unless isABar}}
-            <label>Second Answer Caption</label>
-            {{input value=model.answer2caption placeholder="(optional)" maxlength=255}}
+            {{#unless isABar}}
+              <label>Second Answer Caption</label>
+              {{input value=model.answer2caption placeholder="(optional)" maxlength=255}}
+            {{/unless}}
+
+            {{#unless hideLinkText}}
+              <label>Second Answer Button Text</label>
+              {{input value=model.answer2link_text placeholder=model.answer2link_text_placeholder}}
+            {{/unless}}
           {{/unless}}
 
-          {{#unless hideLinkText}}
-            <label>Second Answer Button Text</label>
-            {{input value=model.answer2link_text placeholder=model.answer2link_text_placeholder}}
-          {{/unless}}
+          {{#if showRedirectFields}}
+            <label>Second Answer Redirect URL</label>
+            {{input value=model.answer2url placeholder="www.hellobar.com" maxlength=255}}
+          {{/if}}
         </div>
       {{/tabs.tabpanel}}
     {{/ivy-tabs}}

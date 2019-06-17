@@ -15,6 +15,8 @@ export default Ember.Component.extend({
 
   showQuestionFields: Ember.computed.equal('model.use_question', true),
 
+  showRedirectFields: Ember.computed.equal('model.use_redirect_url', true),
+
   setQuestionDefaults: function () {
     if (this.get('model.use_question')) {
       if (!this.get('model.question')) {
