@@ -36,7 +36,8 @@
       "text_field_font_family": "source_pro",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "FFFFFF"
 
     },
     "Slider": {
@@ -67,7 +68,8 @@
       "text_field_font_family": "source_pro",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "FFFFFF"
 
     },
     "Modal": {
@@ -99,7 +101,8 @@
       "text_field_font_family": "source_pro",
       "text_field_font_size": 14,
       "text_field_text_color": "9b9b9b",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "FFFFFF"
 
     },
     "Takeover": {
@@ -131,8 +134,8 @@
       "text_field_font_family": "source_pro",
       "text_field_font_size": 18,
       "text_field_text_color": "9b9b9b",
-      "conversion_cta_text": "Close"
-
+      "conversion_cta_text": "Close",
+      "cross_color": "FFFFFF"
     },
     "Alert": {
       "background_color": "FFFFFF",
@@ -164,8 +167,8 @@
       "text_field_text_color": "9b9b9b",
       "trigger_color": "4d8589",
       "trigger_icon_color": "ffffff",
-      "conversion_cta_text": "Close"
-
+      "conversion_cta_text": "Close",
+      "cross_color": "FFFFFF"
     }
   },
   "image": {

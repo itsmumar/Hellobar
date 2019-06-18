@@ -38,7 +38,8 @@
       "text_field_font_family": "oswald",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     },
     "Takeover": {
@@ -70,7 +71,8 @@
       "text_field_font_family": "oswald",
       "text_field_font_size": 18,
       "text_field_text_color": "FFFFFF",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     },
     "Slider": {
@@ -101,7 +103,8 @@
       "text_field_font_family": "oswald",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     },
     "Modal": {
@@ -133,7 +136,8 @@
       "text_field_font_family": "oswald",
       "text_field_font_size": 14,
       "text_field_text_color": "FFFFFF",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
 
     },
     "Alert": {
@@ -166,7 +170,8 @@
       "text_field_text_color": "FFFFFF",
       "trigger_color": "ffffff",
       "trigger_icon_color": "4A47F2",
-      "conversion_cta_text": "Close"
+      "conversion_cta_text": "Close",
+      "cross_color": "000000"
     }
   },
   "image": {
