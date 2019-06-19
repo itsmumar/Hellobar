@@ -3,6 +3,8 @@
 <script>
     window.fcWidget.init({
         token: "53bd1861-7a25-4058-9a8c-c2d64af1fe8c",
-        host: "https://wchat.freshchat.com"
+        host: "https://wchat.freshchat.com",
+        email: "<%= current_user.present? ? current_user.email : 'N/A' %>"
     });
+    window.fcWidget.user.setProperties({ "SiteURL": "<%= current_site.present? ? current_site.url : 'N/A' %>" });
 </script>
