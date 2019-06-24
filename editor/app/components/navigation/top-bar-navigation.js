@@ -75,9 +75,9 @@ export default Ember.Component.extend({
 
     saveAndPublish () {
 
-      if(!this.get('modelLogic.isTypeSelected'))
+      if(!this.get('modelLogic.isTypeSelected')) {
         return;
-
+      }
       if(this.get('modelLogic.model.use_redirect_url')){
         if (this.get('modelLogic.model.answer1url') && this.get('modelLogic.model.answer2url')) {
           this.get('saveSiteElementService').saveAndPublish();
