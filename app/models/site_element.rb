@@ -48,6 +48,8 @@ class SiteElement < ApplicationRecord
   acts_as_paranoid
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
+  validates :answer2url, url: true
+  validates :answer1url, url: true
   validates :rule, association_exists: true
   validates :background_color, hex_color: true
   validates :border_color, hex_color: true
