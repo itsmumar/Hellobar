@@ -3,8 +3,7 @@ FactoryBot.define do
     transient do
       site nil
     end
-    sequence(:answer1url) { |i| "http://url-#{ i }.net" }
-    sequence(:answer2url) { |i| "http://url-#{ i }.net" }
+
     type 'Bar'
     theme_id 'classic'
     element_subtype 'announcement'

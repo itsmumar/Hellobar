@@ -48,8 +48,8 @@ class SiteElement < ApplicationRecord
   acts_as_paranoid
 
   validates :element_subtype, presence: true, inclusion: { in: BAR_TYPES.keys }
-  validates :answer2url, url: true
-  validates :answer1url, url: true
+  validates :answer2url, url: true, if: :use_redirect_url?
+  validates :answer1url, url: true, if: :use_redirect_url?
   validates :rule, association_exists: true
   validates :background_color, hex_color: true
   validates :border_color, hex_color: true
@@ -316,6 +316,10 @@ class SiteElement < ApplicationRecord
   end
 
   private
+
+  def use_redirect_url?
+    use_redirect_url
+  end
 
   def email?
     element_subtype == 'email'
