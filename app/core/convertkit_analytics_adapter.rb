@@ -75,23 +75,17 @@ class ConvertkitAnalyticsAdapter
     case event
     when 'installed-script'
       r_tag = find_tag('uninstalled-script')
-
     when 'uninstalled-script'
       r_tag = find_tag('installed-script')
-
     when 'created-popup'
       r_tag = find_tag('not-yet-created-popup')
-
     when 'inactive'
       r_tag = find_tag('active')
-
     when 'active'
       r_tag = find_tag('inactive')
-
     when 'ab-test-created'
       r_tag = find_tag('no-ab-test')
     end
-
     remove_tag(r_tag, user) if r_tag.present?
   end
 

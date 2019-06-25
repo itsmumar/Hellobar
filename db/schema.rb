@@ -603,6 +603,7 @@ ActiveRecord::Schema.define(version: 20190527063101) do
     t.integer  "wordpress_user_id",                   limit: 4
     t.datetime "exit_intent_modal_last_shown_at"
     t.datetime "upgrade_suggest_modal_last_shown_at"
+    t.boolean  "hide_cookie_pop_up",                              default: false
     t.string   "stripe_customer_id",                  limit: 255
     t.string   "convortkit_subscriber_id",            limit: 255
   end
