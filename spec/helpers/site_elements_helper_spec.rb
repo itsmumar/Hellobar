@@ -1,5 +1,4 @@
 describe SiteElementsHelper do
-
   before do
     @user = create(:user)
     allow(helper).to receive(:current_user).and_return(@user)
