@@ -57,6 +57,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{/if}}
           | {{rule-option segment "LocationCountryCondition" "Country"}}
           | {{rule-option segment "DateCondition" "date"}}
+          | {{rule-option segment "DaysOfWeekCondition" "Day of the week"}}
           | {{rule-option segment "LastVisitCondition" "days since last visit"}}
           | {{rule-option segment "DeviceCondition" "device"}}
           | {{rule-option segment "EveryXSession" "every Nth session"}}
@@ -71,7 +72,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
           | {{rule-option segment "UrlKeywordCondition" "URL Keyword"}}
           | {{rule-option segment "UrlQueryCondition" "URL Query"}}
-          | {{rule-option segment "DaysOfWeekCondition" "Day of the week"}}
+
 
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
