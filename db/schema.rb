@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190516085541) do
+ActiveRecord::Schema.define(version: 20190627094528) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -510,6 +510,7 @@ ActiveRecord::Schema.define(version: 20190516085541) do
     t.boolean  "edit_conversion_cta_text",                       default: false
     t.text     "conversion_cta_text",           limit: 65535
     t.string   "cross_color",                   limit: 255,      default: "ffffff",     null: false
+    t.boolean  "required_fields",                                default: false
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree

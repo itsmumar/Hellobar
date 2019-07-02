@@ -49,7 +49,10 @@
   {{/if}}
 
 </div>
-
+<label class="required-field">
+  {{common/checkboxes/toggle-switch switch=model.required_fields}}
+  <span>All Fields Required</span>
+</label>
 {{#if isBarType}}
   <div class="hint">
     In order to add custom fields please select Modal, Slider or Takeover type on Type tab.

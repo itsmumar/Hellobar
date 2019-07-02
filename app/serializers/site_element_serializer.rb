@@ -35,7 +35,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # other
     :updated_at, :size, :site_preview_image, :site_preview_image_mobile,
-    :site_preview_image_tablet,
+    :site_preview_image_tablet, :required_fields,
     :open_in_new_window, :placement, :default_email_thank_you_text,
     #
     # no-thanks
