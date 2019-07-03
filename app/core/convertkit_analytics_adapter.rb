@@ -4,7 +4,8 @@ class ConvertkitAnalyticsAdapter
   def track(event:, user:, params:)
     return if event.blank?
     tag = create_or_find_tag(event)
-    tag_subscriber(tag, user, params || {})
+    user = tag_subscriber(tag, user, params || {})
+    verify_subscription_tag(event, tag, user, params)
   end
 
   # rubocop:disable Lint/UnneededDisable
@@ -44,9 +45,17 @@ class ConvertkitAnalyticsAdapter
     }
   end
 
+  def remove_tag(_tag, user)
+    self.class.post base_uri("tags/# { tag['id'] }/unsubscribe"), body: { api_key: Settings. convertkit_api_keys, email: user.email }
+  end
+
   def create_or_find_tag(event)
     tag = create_tag(event)
     return tag if tag['error'].blank?
+    find_tag(event)
+  end
+
+  def find_tag(event)
     tags = list_tag
     tags['tags'].find do |t|
       return t if t['name'] == event
@@ -54,12 +63,30 @@ class ConvertkitAnalyticsAdapter
   end
 
   def tag_subscriber(tag, user, params)
-    self.class.post base_uri("tags/#{ tag['id'] }/subscribe"), body: {
-      api_key: Settings.convertkit_api_keys,
-      email: user.email,
-      first_name: user.first_name.to_s,
-      fields: params
-    }
+    response = self.class.post base_uri("tags/#{ tag['id'] }/subscribe"), body: { api_key: Settings.convertkit_api_keys,
+                                                                       email: user.email,
+                                                                       first_name: user.first_name.to_s,
+                                                                       fields: params }
+    user.update_column(:convortkit_subscriber_id, response['subscription']['subscriber']['id']) if user.convortkit_subscriber_id.blank?
+    user
+  end
+
+  def verify_subscription_tag(event, _tag, user, _params)
+    case event
+    when 'installed-script'
+      r_tag = find_tag('uninstalled-script')
+    when 'uninstalled-script'
+      r_tag = find_tag('installed-script')
+    when 'created-popup'
+      r_tag = find_tag('not-yet-created-popup')
+    when 'inactive'
+      r_tag = find_tag('active')
+    when 'active'
+      r_tag = find_tag('inactive')
+    when 'ab-test-created'
+      r_tag = find_tag('no-ab-test')
+    end
+    remove_tag(r_tag, user) if r_tag.present?
   end
 
   def base_uri(endpoint)
