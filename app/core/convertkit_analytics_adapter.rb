@@ -67,7 +67,7 @@ class ConvertkitAnalyticsAdapter
                                                                        email: user.email,
                                                                        first_name: user.first_name.to_s,
                                                                        fields: params }
-    user.update_column(:convortkit_subscriber_id, response["subscription"]["subscriber"]["id"]) if user.convortkit_subscriber_id.blank?
+    user.update_column(:convortkit_subscriber_id, response['subscription']['subscriber']['id']) if user.convortkit_subscriber_id.blank?
     user
   end
 
