@@ -26,6 +26,7 @@ class RegistrationsController < ApplicationController
     else
       signup_with_google
     end
+    track_event(params)
   end
 
   def subscribe
@@ -37,6 +38,21 @@ class RegistrationsController < ApplicationController
   end
 
   private
+
+  def track_event(params)
+    TrackEvent.new(:subscriber, user: @form.user, site: @form.site).call
+    TrackEvent.new(:bar_not_created, user: @form.user, site: @form.site).call
+    TrackEvent.new(:not_installed_script, user: @form.user, site: @form.site).call
+    TrackEvent.new(:ab_test_not_created, user: @form.user, site: @form.site).call
+    TrackEvent.new(:no_popup, user: @form.user, site: @form.site).call
+
+    if params[:plan].present?
+      TrackEvent.new("subscriber_#{ params[:plan] }".to_sym, user: @form.user, site: @form.site).call
+      TrackEvent.new(:subscriber_paid_user, user: @form.user, site: @form.site).call
+    else
+      TrackEvent.new(:subscriber_free_user, user: @form.user, site: @form.site).call
+    end
+  end
 
   def allowed_url?
     return true unless Site.banned_sites.include?(URI.parse(@form.site.url).host.downcase)
