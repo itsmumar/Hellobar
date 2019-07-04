@@ -305,6 +305,20 @@ class AnalyticsProvider
   def ab_test_created(site_element:, user:)
     site = site_element.site
     track(
+      event: 'ab-test-created',
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def ab_test_live(site_element:, user:)
+    site = site_element.site
+    track(
       event: 'ABTestLive',
       user: user,
       params: {
