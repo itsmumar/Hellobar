@@ -46,9 +46,9 @@ class RegistrationsController < ApplicationController
     TrackEvent.new(:ab_test_not_created, user: @form.user, site: @form.site).call
     TrackEvent.new(:no_popup, user: @form.user, site: @form.site).call
 
-    if params[:plan].present?
-      TrackEvent.new("subscriber_#{ params[:plan] }".to_sym, user: @form.user, site: @form.site).call
+    if params[:plan].present? || cookies[:promotional_signup] == 'true'
       TrackEvent.new(:subscriber_paid_user, user: @form.user, site: @form.site).call
+      TrackEvent.new("subscriber_#{ params[:plan].presence || PromotionalPlan.new.subscription_type }".to_sym, user: @form.user, site: @form.site).call
     else
       TrackEvent.new(:subscriber_free_user, user: @form.user, site: @form.site).call
     end

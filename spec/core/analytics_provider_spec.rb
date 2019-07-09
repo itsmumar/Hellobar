@@ -324,15 +324,15 @@ describe AnalyticsProvider do
     end
   end
 
-  describe '#inactive_user' do
-    let(:event) { 'inactive-user' }
+  describe '#Inactive_user' do
+    let(:event) { 'Inactive-user' }
 
-    it 'tracks "inactive_user"' do
+    it 'tracks "Inactive_user"' do
       expect(adapter)
         .to receive(:track)
-        .with(event: 'inactive', user: user, params: { last_sign_in_at: user.last_sign_in_at })
+        .with(event: 'Inactive', user: user, params: { last_sign_in_at: user.last_sign_in_at, site_url: site.url, site_id: site.id })
 
-      track(event, user: user, _site: site)
+      track(event, user: user, site: site)
     end
   end
 

@@ -178,12 +178,14 @@ class AnalyticsProvider
     )
   end
 
-  def inactive_user(_site:, user:)
+  def inactive_user(site:, user:)
     track(
-      event: 'inactive',
+      event: 'Inactive',
       user: user,
       params: {
-        last_sign_in_at: user.last_sign_in_at
+        last_sign_in_at: user.last_sign_in_at,
+        site_url: site.url,
+        site_id: site.id
       }
     )
   end
