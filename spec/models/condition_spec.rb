@@ -140,7 +140,7 @@ describe Condition do
         condition = create :condition, :days_of_week, value: ['2'], rule: Rule.new
 
         expect(condition).to be_valid
-        expect(condition.to_sentence).to eq('Days of the week every Tuesday')
+        expect(condition.to_sentence).to eq('Days of the week is Tuesday')
       end
     end
 

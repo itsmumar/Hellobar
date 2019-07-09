@@ -28,7 +28,7 @@ FactoryBot.define do
 
     trait :days_of_week do
       segment 'DaysOfWeekCondition'
-      operand 'every'
+      operand 'is'
       value ['2']
     end
 
