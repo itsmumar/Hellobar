@@ -172,7 +172,7 @@ class Condition < ApplicationRecord
       'UTMMediumCondition'        => %w[is is_not includes does_not_include],
       'UTMSourceCondition'        => %w[is is_not includes does_not_include],
       'UTMTermCondition'          => %w[is is_not includes does_not_include],
-      'DaysOfWeekCondition'       => %w[every]
+      'DaysOfWeekCondition'       => %w[is]
     }
 
     return if @operands[segment]&.include? operand

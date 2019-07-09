@@ -109,6 +109,14 @@ class @RuleModal extends Modal
         $($condition.find(classToEnable)
                     .find(".value > option[value=\"#{value}\"]")[index])
                     .attr('selected', 'selected')
+    else if conditionData.segment == 'DaysOfWeekCondition'
+      dataValue = (if typeof conditionData.value == "object" \
+      then conditionData.value \
+      else [conditionData.value]) || []
+      for value, index in dataValue
+        $($condition.find(classToEnable)
+          .find(".value > option[value=\"#{value}\"]")[index])
+          .attr('selected', 'selected')
     else if conditionData.segment == 'TimeCondition'
       # select the correct hour
       hourValue = conditionData.value?[0] || 0
@@ -159,7 +167,7 @@ class @RuleModal extends Modal
     'UTMMediumCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMSourceCondition': ['is', 'is_not', 'includes', 'does_not_include']
     'UTMTermCondition': ['is', 'is_not', 'includes', 'does_not_include']
-    'DaysOfWeekCondition': ['every']
+    'DaysOfWeekCondition': ['is']
 
   _segmentToClassMapping:
     'DateCondition': '.date-choice'

@@ -141,6 +141,9 @@ script#condition-partial type="text/x-handlebars-template"
                  locals: {class_name: "location-country-choice select-wrapper"} do |name|
           = rule_country_select(name)
 
+        .choice-wrapper.days-of-week-choice
+          .select-wrapper.days-of-week-choice
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(day_select_options), {disabled: true, class: 'value'}
         .choice-wrapper.time-choice
           .select-wrapper.time-select
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
@@ -161,9 +164,6 @@ script#condition-partial type="text/x-handlebars-template"
         = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-keyword"}  do |name, value|
           input.value name=name value=value type="url" placeholder="specific keyword"
 
-        .choice-wrapper.days-of-week-choice
-          .select-wrapper.days-of-week-choice
-            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(day_select_options), {disabled: true, class: 'value'}
 
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
