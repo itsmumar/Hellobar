@@ -608,6 +608,7 @@ ActiveRecord::Schema.define(version: 20190614071127) do
     t.datetime "upgrade_suggest_modal_last_shown_at"
     t.boolean  "hide_cookie_pop_up",                              default: false
     t.string   "stripe_customer_id",                  limit: 255
+    t.string   "convortkit_subscriber_id",            limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

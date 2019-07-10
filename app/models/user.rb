@@ -35,7 +35,7 @@ class User < ApplicationRecord
     foreign_key: 'sender_id', dependent: :destroy, inverse_of: :sender
 
   scope :wordpress_users, -> { where.not(wordpress_user_id: nil) }
-
+  scope :inactive_user, -> { where('last_sign_in_at < ?', 30.days.ago) }
   validates :email, uniqueness: { scope: :deleted_at, unless: :deleted? }
   validate :oauth_email_change, if: :oauth_user?
 
