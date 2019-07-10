@@ -135,6 +135,15 @@ describe Condition do
       end
     end
 
+    context 'is a DaysOfWeekCondition' do
+      it 'ordinalizes the value' do
+        condition = create :condition, :days_of_week, value: ['2'], rule: Rule.new
+
+        expect(condition).to be_valid
+        expect(condition.to_sentence).to eq('Days of the week is Tuesday')
+      end
+    end
+
     context 'is a UTMSourceCondition' do
       it 'outputs nice sentence' do
         condition = create :condition, :utm_source

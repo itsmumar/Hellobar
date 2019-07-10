@@ -26,6 +26,12 @@ FactoryBot.define do
       value '2'
     end
 
+    trait :days_of_week do
+      segment 'DaysOfWeekCondition'
+      operand 'is'
+      value ['2']
+    end
+
     trait :referrer do
       segment 'ReferrerCondition'
       operand 'is'

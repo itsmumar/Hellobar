@@ -57,6 +57,7 @@ script#condition-partial type="text/x-handlebars-template"
           | {{/if}}
           | {{rule-option segment "LocationCountryCondition" "Country"}}
           | {{rule-option segment "DateCondition" "date"}}
+          | {{rule-option segment "DaysOfWeekCondition" "Day of the week"}}
           | {{rule-option segment "LastVisitCondition" "days since last visit"}}
           | {{rule-option segment "DeviceCondition" "device"}}
           | {{rule-option segment "EveryXSession" "every Nth session"}}
@@ -71,6 +72,8 @@ script#condition-partial type="text/x-handlebars-template"
           | {{rule-option segment "UrlPathCondition" "URL Path"}}
           | {{rule-option segment "UrlKeywordCondition" "URL Keyword"}}
           | {{rule-option segment "UrlQueryCondition" "URL Query"}}
+
+
       .select-wrapper.optional.rule_conditions_operand
         select class="condition-operand" name="rule[conditions_attributes][{{index}}][operand]"
           | {{rule-option operand "every" "every"}}
@@ -90,6 +93,7 @@ script#condition-partial type="text/x-handlebars-template"
             | {{rule-option value "mobile" "mobile"}}
             | {{rule-option value "tablet" "tablet"}}
             | {{rule-option value "computer" "computer"}}
+
         .choice-wrapper.date-choice
           | {{#if is_between}}
           input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="date" value="{{value.[0]}}"
@@ -101,6 +105,7 @@ script#condition-partial type="text/x-handlebars-template"
         .choice-wrapper.x-sessions
           input.value.small disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="number" value="{{value}}"
           |  sessions
+
         .choice-wrapper.number-of-visits-choice.days-last-visit-choice
           | {{#if is_between}}
           input.between.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value][]" type="number" value="{{value.[0]}}"
@@ -136,6 +141,9 @@ script#condition-partial type="text/x-handlebars-template"
                  locals: {class_name: "location-country-choice select-wrapper"} do |name|
           = rule_country_select(name)
 
+        .choice-wrapper.days-of-week-choice
+          .select-wrapper.days-of-week-choice
+            = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select(day_select_options), {disabled: true, class: 'value'}
         .choice-wrapper.time-choice
           .select-wrapper.time-select
             = select_tag "rule[conditions_attributes][{{index}}][value][]", options_for_select((0..23).map{|i| i.to_s.rjust(2, '0') }), { disabled: true, class: 'value' }
@@ -155,6 +163,7 @@ script#condition-partial type="text/x-handlebars-template"
 
         = render layout: "shared/modals/multiple_choice_wrapper", locals: {class_name: "url-keyword"}  do |name, value|
           input.value name=name value=value type="url" placeholder="specific keyword"
+
 
         .choice-wrapper.url-query
           input.value disabled="disabled" name="rule[conditions_attributes][{{index}}][value]" type="text" value="{{value}}" placeholder="query=value"
