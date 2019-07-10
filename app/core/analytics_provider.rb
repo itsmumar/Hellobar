@@ -90,12 +90,102 @@ class AnalyticsProvider
     )
   end
 
-  def inactive_user(_site:, user:)
+  def live_popup(site_element:, user:)
+    site = site_element.site
     track(
-      event: 'inactive',
+      event: 'LivePopUp',
       user: user,
       params: {
-        last_sign_in_at: user.last_sign_in_at
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        theme_id: site_element.theme_id,
+        enable_gdpr: site_element.enable_gdpr,
+        show_branding: site_element.show_branding,
+        headline: site_element.headline,
+        use_default_image: site_element.use_default_image,
+        link_text: site_element.link_text,
+        use_question: site_element.use_question,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def no_popup(site:, user:)
+    track(
+      event: 'NoPopUp',
+      user: user,
+      params: {
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def subscriber(site:, user:)
+    track(
+      event: 'Subscribers',
+      user: user,
+      params: {
+        email: user.email,
+        first_name: user.first_name,
+        url: site.url
+      }
+    )
+  end
+
+  def subscriber_free_user(site:, user:)
+    track(
+      event: 'Subscribers Free User',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription_type: site.current_subscription.type
+      }
+    )
+  end
+
+  def subscriber_paid_user(site:, user:)
+    track(
+      event: 'Subscribers Paid User',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription_type: site.current_subscription.type
+      }
+    )
+  end
+
+  def subscriber_growth(site:, user:)
+    track(
+      event: 'Subscribers Growth',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription_type: site.current_subscription.type
+      }
+    )
+  end
+
+  def subscriber_elite(site:, user:)
+    track(
+      event: 'Subscribers Elite',
+      user: user,
+      params: {
+        site_url: site.url,
+        subscription_type: site.current_subscription.type
+      }
+    )
+  end
+
+  def inactive_user(site:, user:)
+    track(
+      event: 'Inactive',
+      user: user,
+      params: {
+        last_sign_in_at: user.last_sign_in_at,
+        site_url: site.url,
+        site_id: site.id
       }
     )
   end
@@ -218,6 +308,20 @@ class AnalyticsProvider
     site = site_element.site
     track(
       event: 'ab-test-created',
+      user: user,
+      params: {
+        goal: site_element.element_subtype,
+        type: site_element.type,
+        site_url: site.url,
+        site_id: site.id
+      }
+    )
+  end
+
+  def ab_test_live(site_element:, user:)
+    site = site_element.site
+    track(
+      event: 'ABTestLive',
       user: user,
       params: {
         goal: site_element.element_subtype,

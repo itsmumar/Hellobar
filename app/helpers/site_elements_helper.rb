@@ -172,6 +172,7 @@ module SiteElementsHelper
     winner = elements_in_group.max_by(&:conversion_percentage)
     site_element.site.update(ab_test_running: true) if site_element.site.free?
     TrackEvent.new(:ab_test_created, site_element: site_element, user: current_user).call if site_element.site.free?
+    TrackEvent.new(:ab_test_live, site_element: site_element, user: current_user).call if site_element.site.free?
     if difference_is_significant?(elements_in_group) && site_element == winner
       "<i class='testing-icon icon-tip #{ site_element.short_subtype }'><span class='numbers'>#{ letter }</span></i>".html_safe
     else

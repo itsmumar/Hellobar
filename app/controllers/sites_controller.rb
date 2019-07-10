@@ -157,6 +157,7 @@ class SitesController < ApplicationController
     TrackEvent.new(:bar_not_created, user: current_user, site: @site).call
     TrackEvent.new(:not_installed_script, user: current_user, site: @site).call
     TrackEvent.new(:ab_test_not_created, user: current_user, site: @site).call
+    TrackEvent.new(:no_popup, user: current_user, site: @site).call
   end
 
   def load_top_performers
