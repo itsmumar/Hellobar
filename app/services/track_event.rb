@@ -30,7 +30,7 @@ class TrackEvent
   end
 
   def track_with_convertkit
-    # return unless convertkit_enabled?
+    return unless convertkit_enabled?
     SendEventToConvertkitJob.perform_later event.to_s, args
   end
 
