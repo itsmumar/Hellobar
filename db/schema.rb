@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190516085541) do
+ActiveRecord::Schema.define(version: 20190614071127) do
 
   create_table "admin_login_attempts", force: :cascade do |t|
     t.string   "email",         limit: 255
@@ -510,6 +510,9 @@ ActiveRecord::Schema.define(version: 20190516085541) do
     t.boolean  "edit_conversion_cta_text",                       default: false
     t.text     "conversion_cta_text",           limit: 65535
     t.string   "cross_color",                   limit: 255,      default: "ffffff",     null: false
+    t.boolean  "use_redirect_url",                               default: false
+    t.string   "answer1url",                    limit: 255
+    t.string   "answer2url",                    limit: 255
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -605,6 +608,7 @@ ActiveRecord::Schema.define(version: 20190516085541) do
     t.datetime "upgrade_suggest_modal_last_shown_at"
     t.boolean  "hide_cookie_pop_up",                              default: false
     t.string   "stripe_customer_id",                  limit: 255
+    t.string   "convortkit_subscriber_id",            limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

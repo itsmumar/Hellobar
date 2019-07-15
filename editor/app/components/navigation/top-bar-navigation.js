@@ -81,9 +81,7 @@ export default Ember.Component.extend({
 
     save () {
       if (this.get('modelLogic.isTypeSelected')) {
-        this.get('saveSiteElementService').save().then(() => {
-          window.location = this.get('dashboardURL');
-      });
+        this.get('saveSiteElementService').save();
       }
     }
   }

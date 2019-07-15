@@ -22,5 +22,6 @@ class CreateSiteElement
 
   def track_event
     TrackEvent.new(:created_bar, site_element: site_element, user: current_user).call
+    TrackEvent.new(:live_popup, site_element: site_element, user: current_user).call if site.site_elements.count == 1
   end
 end

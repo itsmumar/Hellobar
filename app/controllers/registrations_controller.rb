@@ -38,6 +38,21 @@ class RegistrationsController < ApplicationController
 
   private
 
+  def track_event(user, site)
+    TrackEvent.new(:subscriber, user: user, site: site).call
+    TrackEvent.new(:bar_not_created, user: user, site: site).call
+    TrackEvent.new(:not_installed_script, user: user, site: site).call
+    TrackEvent.new(:ab_test_not_created, user: user, site: site).call
+    TrackEvent.new(:no_popup, user: user, site: site).call
+
+    if @form.plan.present? || cookies[:promotional_signup] == 'true'
+      TrackEvent.new(:subscriber_paid_user, user: @form.user, site: @form.site).call
+      TrackEvent.new("subscriber_#{ @form.plan.presence || PromotionalPlan.new.subscription_type }".to_sym, user: user, site: site).call
+    else
+      TrackEvent.new(:subscriber_free_user, user: user, site: site).call
+    end
+  end
+
   def allowed_url?
     return true unless Site.banned_sites.include?(URI.parse(@form.site.url).host.downcase)
   end
@@ -75,6 +90,7 @@ class RegistrationsController < ApplicationController
 
     site = CreateSite.new(@form.site, @form.user, cookies: cookies, referral_token: session[:referral_token]).call
     sign_in(@form.user)
+    track_event(user, site)
     if @form.plan.present?
       redirect_to subscribe_registration_path(@form.plan)
     else

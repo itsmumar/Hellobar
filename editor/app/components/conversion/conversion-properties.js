@@ -8,10 +8,14 @@ export default Ember.Component.extend({
    * @property {object} Application model
    */
   model: null,
+  preview: Ember.inject.service(),
 
   isEmailGoal: Ember.computed.equal('model.element_subtype', 'email'),
 
   selectedContactList: function () {
+    Ember.run.next(() => {
+      hellobar('base.preview').setAnswerToDisplay(null);
+    });
     this.set('model.show_thankyou',true);
     const contactListId = this.get('model.contact_list_id');
     const contactLists = this.get('model.site.contact_lists');
