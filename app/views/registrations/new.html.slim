@@ -19,7 +19,10 @@
   = f.label :accept_terms_and_conditions, accept_terms_and_conditions_label do
     = f.check_box :accept_terms_and_conditions
     = accept_terms_and_conditions_label
-  = f.button :submit, @form.cta, class: 'button gray', name: 'signup_with_email'
+  - if @form.affiliate_signup?
+    = f.button :submit, @form.cta, class: 'button gray', name: 'signup_with_email', onclick: "signupGrowSumo()"
+  - else
+    = f.button :submit, @form.cta, class: 'button gray', name: 'signup_with_email'
 
   - if params[:utm_campaign] == 'dollar_trial'
     span.label Today's total: $1 for 30 days <br>
