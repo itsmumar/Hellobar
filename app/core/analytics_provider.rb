@@ -184,8 +184,8 @@ class AnalyticsProvider
       user: user,
       params: {
         last_sign_in_at: user.last_sign_in_at,
-        site_url: site.url,
-        site_id: site.id
+        site_url: site.try(:url),
+        site_id: site.try(:id)
       }
     )
   end

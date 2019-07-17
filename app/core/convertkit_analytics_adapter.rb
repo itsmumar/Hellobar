@@ -45,8 +45,8 @@ class ConvertkitAnalyticsAdapter
     }
   end
 
-  def remove_tag(_tag, user)
-    self.class.post base_uri("tags/# { tag['id'] }/unsubscribe"), body: { api_key: Settings. convertkit_api_keys, email: user.email }
+  def remove_tag(tag, user)
+    self.class.post base_uri("tags/#{ tag['id'] }/unsubscribe"), body: { api_key: Settings. convertkit_api_keys, email: user.email }
   end
 
   def create_or_find_tag(event)
