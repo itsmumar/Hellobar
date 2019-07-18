@@ -13,6 +13,7 @@ describe ServiceProvider::Adapters do
       infusionsoft: ServiceProvider::Adapters::InfusionsoftOauth,
       infusion_soft: ServiceProvider::Adapters::Infusionsoft,
       iterable: ServiceProvider::Adapters::Iterable,
+      klaviyo: ServiceProvider::Adapters::Klaviyo,
       mad_mimi_api: ServiceProvider::Adapters::MadMimi,
       mad_mimi_form: ServiceProvider::Adapters::MadMimiForm,
       mailchimp: ServiceProvider::Adapters::MailChimp,
