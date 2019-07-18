@@ -25,6 +25,7 @@ describe ContactListsHelper, type: :helper do
         ['GetResponse', :get_response_api, options(requires_api_key: true)],
         ['Infusionsoft', :infusionsoft, options(oauth: true)],
         ['Iterable', :iterable, options(requires_api_key: true)],
+        ['Klaviyo', :klaviyo, options(requires_api_key: true)],
         ['MadMimi', :mad_mimi_api, options(requires_api_key: true, requires_username: true)],
         ['MailChimp', :mailchimp, options(oauth: true)],
         ['Maropost', :maropost, options(requires_account_id: true, requires_api_key: true)],
