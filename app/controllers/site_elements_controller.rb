@@ -116,15 +116,15 @@ class SiteElementsController < ApplicationController
   def site_element_params
     params.require(:site_element).permit(
       :active_image_id, :animated,
-      :answer1, :answer1caption, :answer1link_text, :answer1response,
-      :answer2, :answer2caption, :answer2link_text, :answer2response,
+      :answer1, :answer1caption, :answer1link_text, :answer1response, :answer1url,
+      :answer2, :answer2caption, :answer2link_text, :answer2response, :answer2url,
       :background_color, :cross_color, :border_color, :button_color, :content, :caption,
       :closable, :contact_list_id, :element_subtype, :show_optional_caption,
       :email_placeholder, :font_id, :headline, :image_placement, :image_opacity,
       :link_color, :link_text, :name_placeholder, :open_in_new_window, :paused_at,
       :phone_country_code, :phone_number, :placement, :pushes_page_down,
       :question, :remains_at_top, :rule_id, :show_branding, :size, :text_color,
-      :thank_you_text, :theme_id, :type, :use_question, :show_optional_content,
+      :thank_you_text, :theme_id, :type, :use_question, :show_optional_content, :use_redirect_url,
       :view_condition_attribute, :view_condition, :wiggle_button, :show_thankyou,
       :use_default_image, :sound, :notification_delay, :trigger_color, :no_thanks_text,
       :trigger_icon_color, :enable_gdpr, :image_overlay_color, :image_overlay_opacity,

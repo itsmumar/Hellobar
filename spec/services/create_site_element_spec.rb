@@ -8,11 +8,14 @@ describe CreateSiteElement do
     expect { service.call }.to change(SiteElement, :count).by(1)
   end
 
-  it 'calls TrackEvent with :created_bar event' do
+  it 'calls TrackEvent with :created_bar & live_popup event' do
     expect(TrackEvent)
       .to receive_service_call
       .with(:created_bar, site_element: instance_of(SiteElement), user: user)
 
+    expect(TrackEvent)
+      .to receive_service_call
+      .with(:live_popup, site_element: instance_of(SiteElement), user: user)
     service.call
   end
 

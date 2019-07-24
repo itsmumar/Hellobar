@@ -24,7 +24,7 @@ class SiteElementSerializer < ActiveModel::Serializer
     #
     # questions/answers/responses
     :question, :answer1, :answer2, :answer1response, :answer2response, :answer1caption, :answer2caption, :answer1link_text, :answer2link_text, :use_question,
-    :question_placeholder, :answer1_placeholder, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
+    :question_placeholder, :answer1_placeholder, :answer2url, :answer1url, :use_redirect_url, :answer2_placeholder, :answer1response_placeholder, :answer2response_placeholder, :answer1link_text_placeholder, :answer2link_text_placeholder,
     #
     # alert type
     :trigger_color, :trigger_icon_color, :notification_delay, :sound,

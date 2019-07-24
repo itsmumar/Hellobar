@@ -143,7 +143,7 @@ class SitesController < ApplicationController
 
   def create_site
     CreateSite.new(@site, current_user, cookies: cookies, referral_token: session[:referral_token]).call
-
+    track_event
     redirect_to new_site_site_element_path(@site)
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:error] = e.record.errors.full_messages
@@ -151,6 +151,13 @@ class SitesController < ApplicationController
   rescue CreateSite::DuplicateURLError => e
     flash[:error] = e.message
     return redirect_to site_path(e.existing_site)
+  end
+
+  def track_event
+    TrackEvent.new(:bar_not_created, user: current_user, site: @site).call
+    TrackEvent.new(:not_installed_script, user: current_user, site: @site).call
+    TrackEvent.new(:ab_test_not_created, user: current_user, site: @site).call
+    TrackEvent.new(:no_popup, user: current_user, site: @site).call
   end
 
   def load_top_performers

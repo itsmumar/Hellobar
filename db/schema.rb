@@ -511,6 +511,9 @@ ActiveRecord::Schema.define(version: 20190627094528) do
     t.text     "conversion_cta_text",           limit: 65535
     t.string   "cross_color",                   limit: 255,      default: "ffffff",     null: false
     t.boolean  "required_fields",                                default: false
+    t.boolean  "use_redirect_url",                               default: false
+    t.string   "answer1url",                    limit: 255
+    t.string   "answer2url",                    limit: 255
   end
 
   add_index "site_elements", ["contact_list_id"], name: "index_site_elements_on_contact_list_id", using: :btree
@@ -604,8 +607,8 @@ ActiveRecord::Schema.define(version: 20190627094528) do
     t.integer  "wordpress_user_id",                   limit: 4
     t.datetime "exit_intent_modal_last_shown_at"
     t.datetime "upgrade_suggest_modal_last_shown_at"
-    t.boolean  "hide_cookie_pop_up",                              default: false
     t.string   "stripe_customer_id",                  limit: 255
+    t.string   "convortkit_subscriber_id",            limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree

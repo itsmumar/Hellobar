@@ -46,6 +46,7 @@ class ServiceProvider
     register :infusionsoft, Adapters::InfusionsoftOauth
     register :infusion_soft, Adapters::Infusionsoft
     register :iterable, Adapters::Iterable
+    register :klaviyo, Adapters::Klaviyo
     register :mad_mimi_api, Adapters::MadMimi
     register :mad_mimi_form, Adapters::MadMimiForm
     register :mailchimp, Adapters::MailChimp

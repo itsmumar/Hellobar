@@ -312,6 +312,73 @@ describe AnalyticsProvider do
     end
   end
 
+  describe '#not_installed_script' do
+    let(:event) { 'not-installed-script' }
+
+    it 'tracks "not_installed_script"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'not-yet-installed-script', user: user, params: { url: site.url, site_id: site.id })
+
+      track(event, user: user, site: site)
+    end
+  end
+
+  describe '#Inactive_user' do
+    let(:event) { 'Inactive-user' }
+
+    it 'tracks "Inactive_user"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'Inactive', user: user, params: { last_sign_in_at: user.last_sign_in_at, site_url: site.url, site_id: site.id })
+
+      track(event, user: user, site: site)
+    end
+  end
+
+  describe '#ab_test_created' do
+    let(:event) { 'ab-test-created' }
+    let(:site_element) { create :site_element, type: 'Bar' }
+
+    it 'tracks "ab_test_created" for bar' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'ab-test-created', user: user,
+          params: {
+            goal: site_element.element_subtype,
+            type: site_element.type,
+            site_url: site_element.site.url,
+            site_id: site_element.site.id
+          })
+
+      track(event, user: user, site_element: site_element)
+    end
+  end
+
+  describe '#ab_test_not_created' do
+    let(:event) { 'ab-test-not-created' }
+
+    it 'tracks "ab_test_not_created"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'no-ab-test', user: user, params: { site_url: site.url, site_id: site.id })
+
+      track(event, user: user, site: site)
+    end
+  end
+
+  describe '#bar_not_created' do
+    let(:event) { 'bar-not-created' }
+
+    it 'tracks "bar_not_created"' do
+      expect(adapter)
+        .to receive(:track)
+        .with(event: 'not-yet-created-popup', user: user, params: { site_url: site.url, site_id: site.id })
+
+      track(event, user: user, site: site)
+    end
+  end
+
   describe '#created_contact_list' do
     let(:event) { 'created-contact-list' }
     let(:contact_list) { create :contact_list, :mailchimp }

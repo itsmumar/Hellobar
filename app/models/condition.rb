@@ -1,6 +1,5 @@
 class Condition < ApplicationRecord
   serialize :value
-
   # class name: Hello::Segments::User key
   SEGMENTS = {
     'DateCondition' => 'dt',               'DeviceCondition' => 'dv',
@@ -12,27 +11,24 @@ class Condition < ApplicationRecord
     'UrlPathCondition' => 'pup',           'UrlKeywordCondition' => 'puk',
     'UrlQueryCondition' => 'pq',           'UTMCampaignCondition' => 'ad_ca',
     'UTMContentCondition' => 'ad_co',      'UTMMediumCondition' => 'ad_me',
-    'UTMSourceCondition' => 'ad_so',       'UTMTermCondition' => 'ad_te'
+    'UTMSourceCondition' => 'ad_so',       'UTMTermCondition' => 'ad_te',
+    'DaysOfWeekCondition' => 'dw'
   }.freeze
 
   MULTIPLE_CHOICE_SEGMENTS = %w[
     UrlPathCondition UrlKeywordCondition LocationCountryCondition LocationRegionCondition LocationCityCondition
-    UTMCampaignCondition UTMContentCondition UTMMediumCondition UTMSourceCondition UTMTermCondition
+    UTMCampaignCondition UTMContentCondition UTMMediumCondition UTMSourceCondition UTMTermCondition DaysOfWeekCondition
   ].freeze
 
   PRECISE_SEGMENTS = %w[LocationRegionCondition LocationCityCondition].freeze
 
   # stored value: displayed value
   OPERANDS = {
-    after: 'is after',
-    before: 'is before',
-    between: 'is between',
-    does_not_include: 'does not include',
-    greater_than: 'is greater than',
-    includes: 'includes',
-    keyword: 'keyword',
-    is: 'is',
-    is_not: 'is not',
+    after: 'is after',                before: 'is before',
+    between: 'is between',            does_not_include: 'does not include',
+    greater_than: 'is greater than',  includes: 'includes',
+    keyword: 'keyword',               every: 'every',
+    is: 'is',                         is_not: 'is not',
     less_than: 'is less than'
   }.with_indifferent_access.freeze
 
@@ -86,7 +82,11 @@ class Condition < ApplicationRecord
 
   def to_sentence
     if MULTIPLE_CHOICE_SEGMENTS.include?(segment)
-      multiple_condition_sentence
+      if segment == 'DaysOfWeekCondition'
+        "#{ segment_data[:name] } #{ OPERANDS[operand] } #{ Date::DAYNAMES[value.first.to_i] }"
+      else
+        multiple_condition_sentence
+      end
     elsif segment == 'EveryXSession'
       every_x_sessions_sentence
     elsif segment == 'TimeCondition'
@@ -171,7 +171,8 @@ class Condition < ApplicationRecord
       'UTMContentCondition'       => %w[is is_not includes does_not_include],
       'UTMMediumCondition'        => %w[is is_not includes does_not_include],
       'UTMSourceCondition'        => %w[is is_not includes does_not_include],
-      'UTMTermCondition'          => %w[is is_not includes does_not_include]
+      'UTMTermCondition'          => %w[is is_not includes does_not_include],
+      'DaysOfWeekCondition'       => %w[is]
     }
 
     return if @operands[segment]&.include? operand
