@@ -113,6 +113,14 @@
   .pin
     transform: translate(430px, 0)!important
 
+@-moz-document url-prefix()
+  .step-wrapper
+    height: 90.5%
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
+  .step-wrapper
+    height: 90.5%
+
 .editor-wrapper .step-wrapper
   background-color: $white
   transition: all 0.5s
