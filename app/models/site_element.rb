@@ -14,7 +14,6 @@ class SiteElement < ApplicationRecord
     2 => :redirect
   }.freeze
 
-
   WHITELISTED_TAGS = %w[p strong em u a s sub sup img span ul ol li br hr table tbody tr th td blockquote].freeze
   WHITELISTED_ATTRS = %w[style class href target alt src data-hb-geolocation].freeze
 
@@ -107,7 +106,7 @@ class SiteElement < ApplicationRecord
 
   store :settings, coder: Hash
 
-  after_initialize :default_no_thanks_text, if: Proc.new { |se| se.no_thanks_text.blank? }
+  after_initialize :default_no_thanks_text, if: proc { |se| se.no_thanks_text.blank? }
 
   after_destroy :nullify_image_upload_reference
 
