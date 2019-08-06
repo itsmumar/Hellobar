@@ -54,6 +54,10 @@ class RegistrationForm
     partner_signup_cta
   end
 
+  def affiliate_signup?
+    affiliate_identifier.present? && visitor_identifier.present?
+  end
+
   private
 
   def default_title
@@ -144,10 +148,6 @@ class RegistrationForm
 
   def promotional_signup?
     @cookies[:promotional_signup] == 'true'
-  end
-
-  def affiliate_signup?
-    affiliate_identifier.present? && visitor_identifier.present?
   end
 
   def partner?
