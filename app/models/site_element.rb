@@ -3,6 +3,7 @@ class SiteElement < ApplicationRecord
 
   attr_writer :show_thankyou
 
+  DEFAULT_NO_THANK_YOU_TEXT = 'No, Thanks'.freeze
   SYSTEM_FONTS = %w[Arial Georgia Impact Tahoma Times\ New\ Roman Verdana].freeze
   DEFAULT_EMAIL_THANK_YOU = 'Thanks for signing up!'.freeze
   DEFAULT_FREE_EMAIL_BAR_THANK_YOU_TEXT = "#{ DEFAULT_EMAIL_THANK_YOU } If you would like this sort of bar on your site...".freeze
@@ -105,6 +106,8 @@ class SiteElement < ApplicationRecord
 
   store :settings, coder: Hash
 
+  after_initialize :default_no_thanks_text, if: proc { |se| se.no_thanks_text.blank? }
+
   after_destroy :nullify_image_upload_reference
 
   NOT_CLONEABLE_ATTRIBUTES = %i[
@@ -130,6 +133,10 @@ class SiteElement < ApplicationRecord
     define_method attr_name do
       self[attr_name].presence || QUESTION_DEFAULTS[attr_name] if use_question?
     end
+  end
+
+  def default_no_thanks_text
+    self.no_thanks_text = DEFAULT_NO_THANK_YOU_TEXT
   end
 
   def self.types

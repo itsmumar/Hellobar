@@ -16,6 +16,7 @@ html
     = csrf_meta_tags
 
   body#hb-static
+    = render "shared/grow_sumo"
     = render "shared/gtm_noscript"
     = render 'shared/amplitude'
     = render 'shared/shared_variables' if current_user.present?

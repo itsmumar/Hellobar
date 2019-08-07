@@ -56,6 +56,7 @@ json.cache! site_element do
     :wiggle_button,
     :wordpress_bar_id,
     :fonts,
+    :required_fields,
     :text_field_border_color,
     :text_field_border_width,
     :text_field_font_size,
